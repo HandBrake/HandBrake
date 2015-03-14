@@ -52,6 +52,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Ookii.Dialogs.Wpf;
 
+    using Execute = Caliburn.Micro.Execute;
     using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
 
     /// <summary>

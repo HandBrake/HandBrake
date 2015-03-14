@@ -22,6 +22,8 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using Execute = Caliburn.Micro.Execute;
+
     /// <summary>
     /// The when done service.
     /// </summary>

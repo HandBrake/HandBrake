@@ -1,10 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangedBase.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright company="HandBrake Project (http://handbrake.fr)" file="PropertyChangedBase.cs">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
 //   A base class that implements the infrastructure for property change notification and automatically performs UI thread marshalling.
-//   This class is a modified version of the caliburn micro 
+//   Borrowed from Caliburn Micro
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,72 +15,106 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq.Expressions;
     using System.Runtime.Serialization;
 
+    using HandBrake.ApplicationServices.Utilities.Interfaces;
+
     /// <summary>
-    /// Property Changed Base implimentation.
+    /// A base class that implements the infrastructure for property change notification and automatically performs UI thread marshalling.
     /// </summary>
-    [DataContract]
-    public class PropertyChangedBase : INotifyPropertyChanged
+    [Serializable]
+    public class PropertyChangedBase : INotifyPropertyChangedEx, INotifyPropertyChanged
     {
+        [NonSerialized]
+        private bool isNotifying;
+
         /// <summary>
-        /// Creates an instance of <see cref = "PropertyChangedBase" />.
+        /// Enables/Disables property change notification.
         /// </summary>
-        public PropertyChangedBase()
+        [Browsable(false)]
+        public bool IsNotifying
         {
-            IsNotifying = true;
+            get
+            {
+                return this.isNotifying;
+            }
+            set
+            {
+                this.isNotifying = value;
+            }
         }
 
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged = (param0, param1) => { };
 
         /// <summary>
-        /// Enables/Disables property change notification.
+        /// Creates an instance of <see cref="T:HandBrake.ApplicationServices.Utilities.PropertyChangedBase"/>.
         /// </summary>
-        public bool IsNotifying { get; set; }
+        public PropertyChangedBase()
+        {
+            this.IsNotifying = true;
+        }
 
         /// <summary>
         /// Raises a change notification indicating that all bindings should be refreshed.
         /// </summary>
-        public virtual void Refresh()
+        public void Refresh()
         {
-            NotifyOfPropertyChange(string.Empty);
+            this.NotifyOfPropertyChange(string.Empty);
         }
 
         /// <summary>
         /// Notifies subscribers of the property change.
         /// </summary>
-        /// <param name = "propertyName">Name of the property.</param>
-        public virtual void NotifyOfPropertyChange(string propertyName = null)
+        /// <param name="propertyName">Name of the property.</param>
+        public virtual void NotifyOfPropertyChange(string propertyName)
         {
-            if (IsNotifying)
-            {
-                OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-            }
+            if (!this.IsNotifying)
+                return;
+            Execute.OnUIThread((System.Action)(() => this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName))));
         }
 
         /// <summary>
         /// Notifies subscribers of the property change.
         /// </summary>
-        /// <typeparam name = "TProperty">The type of the property.</typeparam>
-        /// <param name = "property">The property expression.</param>
+        /// <typeparam name="TProperty">The type of the property.</typeparam><param name="property">The property expression.</param>
         public void NotifyOfPropertyChange<TProperty>(Expression<Func<TProperty>> property)
         {
-            NotifyOfPropertyChange(property.GetMemberInfo().Name);
+            this.NotifyOfPropertyChange(ExtensionMethods.GetMemberInfo((Expression)property).Name);
         }
 
         /// <summary>
-        /// Raises the <see cref="PropertyChanged" /> event directly.
+        /// Raises the <see cref="E:PropertyChanged"/> event directly.
         /// </summary>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            PropertyChangedEventHandler changedEventHandler = this.PropertyChanged;
+            if (changedEventHandler == null)
+                return;
+            changedEventHandler((object)this, e);
+        }
+
+        /// <summary>
+        /// Called when the object is deserialized.
+        /// </summary>
+        /// <param name="c">The streaming context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext c)
+        {
+            this.IsNotifying = true;
+        }
+
+        /// <summary>
+        /// Used to indicate whether or not the IsNotifying property is serialized to Xml.
+        /// </summary>
+        /// <returns>
+        /// Whether or not to serialize the IsNotifying property. The default is false.
+        /// </returns>
+        public virtual bool ShouldSerializeIsNotifying()
+        {
+            return false;
         }
     }
 }

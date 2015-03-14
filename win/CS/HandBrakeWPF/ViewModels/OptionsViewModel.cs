@@ -28,6 +28,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Ookii.Dialogs.Wpf;
 
+    using Execute = Caliburn.Micro.Execute;
+
     /// <summary>
     /// The Options View Model
     /// </summary>
