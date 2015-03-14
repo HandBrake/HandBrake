@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The meta data.
     /// </summary>
-    internal class MetaData
+    public class MetaData
     {
     }
 }

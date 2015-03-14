@@ -9,10 +9,9 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The QueueTask.

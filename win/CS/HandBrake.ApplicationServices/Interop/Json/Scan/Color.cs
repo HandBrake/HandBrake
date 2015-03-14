@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The color.
     /// </summary>
-    internal class Color
+    public class Color
     {
         /// <summary>
         /// Gets or sets the matrix.

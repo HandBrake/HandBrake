@@ -11,7 +11,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     using System;
 
-    using Caliburn.Micro;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// A Movie Chapter

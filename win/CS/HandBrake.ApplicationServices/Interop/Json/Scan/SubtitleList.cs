@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The subtitle list.
     /// </summary>
-    internal class SubtitleList
+    public class SubtitleList
     {
         /// <summary>
         /// Gets or sets the format.

@@ -13,8 +13,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
     using System.ComponentModel;
     using System.Globalization;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;

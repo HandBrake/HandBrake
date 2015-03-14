@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The par.
     /// </summary>
-    internal class PAR
+    public class PAR
     {
         /// <summary>
         /// Gets or sets the width.

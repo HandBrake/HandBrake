@@ -13,12 +13,12 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// An Encode Task

@@ -14,7 +14,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The root object.
     /// </summary>
-    internal class JsonScanObject
+    public class JsonScanObject
     {
         /// <summary>
         /// Gets or sets the main feature.

@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The duration.
     /// </summary>
-    internal class Duration
+    public class Duration
     {
         /// <summary>
         /// Gets or sets the hours.

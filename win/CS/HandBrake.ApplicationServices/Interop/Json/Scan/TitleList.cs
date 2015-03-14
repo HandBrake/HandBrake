@@ -14,7 +14,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The title list.
     /// </summary>
-    internal class TitleList
+    public class TitleList
     {
         /// <summary>
         /// Gets or sets the angle count.

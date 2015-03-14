@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The audio list.
     /// </summary>
-    internal class AudioList
+    public class AudioList
     {
         /// <summary>
         /// Gets or sets the bit rate.

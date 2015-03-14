@@ -12,9 +12,8 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The frame rate.
     /// </summary>
-    internal class FrameRate
+    public class FrameRate
     {
-
         /// <summary>
         /// Gets or sets the den.
         /// </summary>

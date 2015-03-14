@@ -11,9 +11,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Services.Scan.Model;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Subtitle Information

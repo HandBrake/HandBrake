@@ -14,7 +14,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
     /// <summary>
     /// The root object.
     /// </summary>
-    internal class JsonEncodeObject
+    public class JsonEncodeObject
     {
         /// <summary>
         /// Gets or sets the audio.

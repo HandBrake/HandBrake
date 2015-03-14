@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The chapter list.
     /// </summary>
-    internal class ChapterList
+    public class ChapterList
     {
         /// <summary>
         /// Gets or sets the duration.

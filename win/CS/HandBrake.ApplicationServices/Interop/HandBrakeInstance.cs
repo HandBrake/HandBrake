@@ -41,7 +41,7 @@ namespace HandBrake.ApplicationServices.Interop
     /// <summary>
     /// A wrapper for a HandBrake instance.
     /// </summary>
-    internal class HandBrakeInstance : IHandBrakeInstance, IDisposable
+    public class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {
         /// <summary>
         /// The number of MS between status polls when scanning.

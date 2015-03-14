@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The geometry.
     /// </summary>
-    internal class Geometry
+    public class Geometry
     {
         /// <summary>
         /// Gets or sets the height.
