@@ -912,6 +912,11 @@ static int avformatInit( hb_mux_object_t * m )
     snprintf(tool_string, sizeof(tool_string), "HandBrake %s %i",
              HB_PROJECT_VERSION, HB_PROJECT_BUILD);
     av_dict_set(&m->oc->metadata, "encoding_tool", tool_string, 0);
+    time_t now = time(NULL);
+    struct tm * now_utc = gmtime(&now);
+    char now_8601[24];
+    strftime(now_8601, sizeof(now_8601), "%FT%TZ", now_utc);
+    av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
 
     ret = avformat_write_header(m->oc, &av_opts);
     if( ret < 0 )
