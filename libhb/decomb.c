@@ -2094,7 +2094,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                  */
                 thread_args->segment_height[pp] =
                     (hb_image_height(init->pix_fmt, init->geometry.height, pp) -
-                    thread_args->segment_start[pp] + 3) & ~1;
+                    thread_args->segment_start[pp] + 3) & ~3;
             } else {
                 thread_args->segment_height[pp] = pv->segment_height[pp];
             }
