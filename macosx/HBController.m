@@ -1223,7 +1223,7 @@
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", nil)];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
-        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddTitlesToQueueAlertDone:returnCode:contextInfo:) contextInfo:(__bridge void *)(jobs)];
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddTitlesToQueueAlertDone:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(jobs)];
     }
     else
     {
@@ -1237,7 +1237,7 @@
 {
     if (returnCode == NSAlertSecondButtonReturn)
     {
-        NSArray *jobs = (__bridge NSArray *)contextInfo;
+        NSArray *jobs = CFBridgingRelease(contextInfo);
         [fQueueController addJobsFromArray:jobs];
     }
 }
@@ -1316,7 +1316,7 @@
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
                                                                                      videoSize:NSMakeSize(self.job.picture.width, self.job.picture.height)];
 
-    [NSApp beginSheet:addPresetController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:(__bridge void *)(addPresetController)];
+    [NSApp beginSheet:addPresetController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(addPresetController)];
 }
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
@@ -1327,7 +1327,6 @@
     {
         [presetManager addPreset:addPresetController.preset];
     }
-
 }
 
 - (HBPreset *)createPresetFromCurrentSettings
