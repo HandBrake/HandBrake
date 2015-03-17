@@ -32,7 +32,7 @@ struct hb_filter_private_s
 };
 
 // VOBSUB
-static int vobsub_init( hb_filter_object_t * filter, hb_filter_init_t * init );
+static int vobsub_post_init( hb_filter_object_t * filter, hb_job_t * job );
 
 static int vobsub_work( hb_filter_object_t * filter,
                         hb_buffer_t ** buf_in,
@@ -42,7 +42,7 @@ static void vobsub_close( hb_filter_object_t * filter );
 
 
 // SSA
-static int ssa_init( hb_filter_object_t * filter, hb_filter_init_t * init );
+static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job );
 
 static int ssa_work( hb_filter_object_t * filter,
                      hb_buffer_t ** buf_in,
@@ -52,7 +52,7 @@ static void ssa_close( hb_filter_object_t * filter );
 
 
 // SRT
-static int textsub_init( hb_filter_object_t * filter, hb_filter_init_t * init );
+static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job );
 
 static int textsub_work( hb_filter_object_t * filter,
                      hb_buffer_t ** buf_in,
@@ -62,7 +62,7 @@ static void textsub_close( hb_filter_object_t * filter );
 
 
 // PGS
-static int pgssub_init ( hb_filter_object_t * filter, hb_filter_init_t * init );
+static int pgssub_post_init( hb_filter_object_t * filter, hb_job_t * job );
 
 static int pgssub_work ( hb_filter_object_t * filter,
                       hb_buffer_t ** buf_in,
@@ -302,8 +302,7 @@ static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
     }
 }
 
-static int vobsub_init( hb_filter_object_t * filter,
-                        hb_filter_init_t * init )
+static int vobsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
     hb_filter_private_t * pv = filter->private_data;
 
@@ -451,8 +450,7 @@ static void ssa_log(int level, const char *fmt, va_list args, void *data)
     }
 }
 
-static int ssa_init( hb_filter_object_t * filter,
-                     hb_filter_init_t * init )
+static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
     hb_filter_private_t * pv = filter->private_data;
 
@@ -466,7 +464,7 @@ static int ssa_init( hb_filter_object_t * filter,
     ass_set_message_cb( pv->ssa, ssa_log, NULL );
 
     // Load embedded fonts
-    hb_list_t * list_attachment = init->job->list_attachment;
+    hb_list_t * list_attachment = job->list_attachment;
     int i;
     for ( i = 0; i < hb_list_count(list_attachment); i++ )
     {
@@ -513,11 +511,9 @@ static int ssa_init( hb_filter_object_t * filter,
         return 1;
     }
 
-    int width = init->geometry.width - ( pv->crop[2] + pv->crop[3] );
-    int height = init->geometry.height - ( pv->crop[0] + pv->crop[1] );
-    ass_set_frame_size( pv->renderer, width, height);
+    ass_set_frame_size( pv->renderer, job->width, job->height);
 
-    double par = (double)init->geometry.par.num / init->geometry.par.den;
+    double par = (double)job->par.num / job->par.den;
     ass_set_aspect_ratio( pv->renderer, 1, par );
 
     return 0;
@@ -554,7 +550,7 @@ static int ssa_work( hb_filter_object_t * filter,
     if (!pv->script_initialized)
     {
         // NOTE: The codec extradata is expected to be in MKV format
-        // I would like to initialize this in ssa_init, but when we are
+        // I would like to initialize this in ssa_post_init, but when we are
         // transcoding text subtitles to SSA, the extradata does not
         // get initialized until the decoder is initialized.  Since
         // decoder initialization happens after filter initialization,
@@ -591,18 +587,12 @@ static int ssa_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-static int textsub_init( hb_filter_object_t * filter,
-                     hb_filter_init_t * init )
+static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
-    hb_filter_private_t * pv = filter->private_data;
-
-    int width = init->geometry.width - pv->crop[2] - pv->crop[3];
-    int height = init->geometry.height - pv->crop[0] - pv->crop[1];
-
     // Text subtitles for which we create a dummy ASS header need
     // to have the header rewritten with the correct dimensions.
-    hb_subtitle_add_ssa_header(filter->subtitle, width, height);
-    return ssa_init(filter, init);
+    hb_subtitle_add_ssa_header(filter->subtitle, job->width, job->height);
+    return ssa_post_init(filter, job);
 }
 
 static void textsub_close( hb_filter_object_t * filter )
@@ -774,8 +764,7 @@ static void ApplyPGSSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
     }
 }
 
-static int pgssub_init( hb_filter_object_t * filter,
-                        hb_filter_init_t * init )
+static int pgssub_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
     hb_filter_private_t * pv = filter->private_data;
 
@@ -864,38 +853,7 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
         hb_log("rendersub: no subtitle marked for burn");
         return 1;
     }
-
-    switch( pv->type )
-    {
-        case VOBSUB:
-        {
-            return vobsub_init( filter, init );
-        } break;
-
-        case SSASUB:
-        {
-            return ssa_init( filter, init );
-        } break;
-
-        case SRTSUB:
-        case CC608SUB:
-        case UTF8SUB:
-        case TX3GSUB:
-        {
-            return textsub_init( filter, init );
-        } break;
-
-        case PGSSUB:
-        {
-            return pgssub_init( filter, init );
-        } break;
-
-        default:
-        {
-            hb_log("rendersub: unsupported subtitle format %d", pv->type );
-            return 1;
-        } break;
-    }
+    return 0;
 }
 
 static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
@@ -911,6 +869,37 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
     if (pv->crop[3] == -1)
         pv->crop[3] = job->crop[3];
 
+    switch( pv->type )
+    {
+        case VOBSUB:
+        {
+            return vobsub_post_init( filter, job );
+        } break;
+
+        case SSASUB:
+        {
+            return ssa_post_init( filter, job );
+        } break;
+
+        case SRTSUB:
+        case CC608SUB:
+        case UTF8SUB:
+        case TX3GSUB:
+        {
+            return textsub_post_init( filter, job );
+        } break;
+
+        case PGSSUB:
+        {
+            return pgssub_post_init( filter, job );
+        } break;
+
+        default:
+        {
+            hb_log("rendersub: unsupported subtitle format %d", pv->type );
+            return 1;
+        } break;
+    }
     return 0;
 }
 
