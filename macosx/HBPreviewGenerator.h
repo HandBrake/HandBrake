@@ -29,6 +29,7 @@
 /* Still image generator */
 - (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
 - (NSUInteger) imagesCount;
+- (CGSize)imageSize;
 - (void) purgeImageCache;
 
 - (NSString *)info;

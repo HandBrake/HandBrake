@@ -95,6 +95,11 @@
     [self.picturePreviews removeAllObjects];
 }
 
+- (CGSize)imageSize
+{
+    return CGSizeMake(self.job.picture.displayWidth, self.job.picture.height);
+}
+
 - (void) imagesSettingsDidChange
 {
     [self.delegate reloadPreviews];

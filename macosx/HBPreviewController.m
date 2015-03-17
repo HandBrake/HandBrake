@@ -237,6 +237,7 @@ typedef enum ViewMode : NSUInteger {
         [fPictureSlider setNumberOfTickMarks: generator.imagesCount];
 
         [self switchViewToMode:ViewModePicturePreview];
+        [self displayPreview];
     }
 }
 
@@ -349,7 +350,7 @@ typedef enum ViewMode : NSUInteger {
 /**
  * Resizes the entire window to accomodate a view of a particular size.
  */
-- (void) resizeWindowForViewSize: (NSSize) viewSize
+- (void)resizeWindowForViewSize:(NSSize)viewSize animate:(BOOL)performAnimation
 {
     NSSize currentSize = [[[self window] contentView] frame].size;
     NSRect frame = [[self window] frame];
@@ -420,9 +421,8 @@ typedef enum ViewMode : NSUInteger {
         }
     }
 
-    [[self window] setFrame:frame display:YES animate:YES];
+    [[self window] setFrame:frame display:YES animate:performAnimation];
 }
-
 
 /**
  * Enable/Disable an arbitrary number of UI elements.
@@ -652,57 +652,51 @@ typedef enum ViewMode : NSUInteger {
  */
 - (void) displayPreview
 {
-    CGImageRef fPreviewImage = NULL;
-
     if (self.window.isVisible)
     {
-        fPreviewImage = [self.generator copyImageAtIndex:self.pictureIndex shouldCache:YES];
+        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.pictureIndex shouldCache:YES];
         [self.pictureLayer setContents:(__bridge id)(fPreviewImage)];
         CFRelease(fPreviewImage);
     }
-    else
-    {
-        return;
-    }
 
-    /* Set the picture size display fields below the Preview Picture*/
-    NSSize imageScaledSize = NSMakeSize(CGImageGetWidth(fPreviewImage), CGImageGetHeight(fPreviewImage));
-    NSSize displaySize = imageScaledSize;
+    // Set the picture size display fields below the Preview Picture
+    NSSize imageScaledSize = [self.generator imageSize];
 
     if (self.backingScaleFactor != 1.0)
     {
         // HiDPI mode usually display everything
         // with douple pixel count, but we don't
         // want to double the size of the video
-        displaySize.height /= self.backingScaleFactor;
-        displaySize.width /= self.backingScaleFactor;
         imageScaledSize.height /= self.backingScaleFactor;
         imageScaledSize.width /= self.backingScaleFactor;
     }
 
     // Get the optimal view size for the image
-    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    NSSize viewSize = [self optimalViewSizeForImageSize:imageScaledSize];
     viewSize.width += BORDER_SIZE * 2;
     viewSize.height += BORDER_SIZE * 2;
 
     NSSize windowSize;
     if (self.scaleToScreen == YES)
+    {
         // Scale the window to the max possible size
         windowSize = [[[self window] screen] visibleFrame].size;
+    }
     else
+    {
         // Scale the window to the image size
         windowSize = viewSize;
+    }
 
-    [self resizeWindowForViewSize:windowSize];
+    [self resizeWindowForViewSize:windowSize animate:self.window.isVisible];
     NSSize areaSize = [[[self window] contentView] frame].size;
     areaSize.width -= BORDER_SIZE * 2;
     areaSize.height -= BORDER_SIZE * 2;
 
     if (self.scaleToScreen == YES)
     {
-        /* We are in Scale To Screen mode so, we have to get the ratio for height and width against the window
-         *size so we can scale from there.
-         */
+        // We are in Scale To Screen mode so, we have to get the ratio for height and width against the window
+        // size so we can scale from there.
         CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
         CGFloat areaAspectRatio = areaSize.width / areaSize.height;
 
@@ -744,25 +738,28 @@ typedef enum ViewMode : NSUInteger {
     [self.backLayer setBounds:CGRectMake(0, 0, viewSize.width + (BORDER_SIZE * 2), viewSize.height + (BORDER_SIZE * 2))];
     [self.pictureLayer setBounds:CGRectMake(0, 0, viewSize.width, viewSize.height)];
 
+    CGFloat scale = self.pictureLayer.frame.size.width / imageScaledSize.width;
     NSString *scaleString;
-    CGFloat scale = ( ( CGFloat )[self.pictureLayer frame].size.width) / ( ( CGFloat )imageScaledSize.width);
     if (scale * 100.0 != 100)
+    {
         scaleString = [NSString stringWithFormat:@" (%.0f%% actual size)", scale * 100.0];
+    }
     else
+    {
         scaleString = @"(Actual size)";
+    }
 
     if (_scaleToScreen == YES)
+    {
         scaleString = [scaleString stringByAppendingString:@" Scaled To Screen"];
+    }
 
-    /* Set the info fields in the hud controller */
-    [fInfoField setStringValue: [NSString stringWithFormat:
-                                 @"%@", self.generator.info]];
+    // Set the info fields in the hud controller
+    [fInfoField setStringValue:self.generator.info];
+    [fscaleInfoField setStringValue:scaleString];
 
-    [fscaleInfoField setStringValue: [NSString stringWithFormat:
-                                      @"%@", scaleString]];
-
-    /* Set the info field in the window title bar */
-    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@", self.generator.info, scaleString]];
+    // Set the info field in the window title bar
+    [self.window setTitle:[NSString stringWithFormat:@"Preview - %@ %@", self.generator.info, scaleString]];
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
