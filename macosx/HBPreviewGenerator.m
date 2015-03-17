@@ -19,7 +19,7 @@
 @property (unsafe_unretained, nonatomic, readonly) HBCore *scanCore;
 @property (unsafe_unretained, nonatomic, readonly) HBJob *job;
 
-@property (unsafe_unretained, nonatomic) HBCore *core;
+@property (nonatomic, strong) HBCore *core;
 
 @end
 
