@@ -46,7 +46,7 @@ extern NSString * const HBVideoChangedNotification;
 
 @property (nonatomic, readwrite) BOOL fastDecode;
 
-@property (nonatomic, readwrite, assign) HBJob *job;
+@property (nonatomic, readwrite, unsafe_unretained) HBJob *job;
 @property (nonatomic, readonly) NSString *completeTune;
 
 @end

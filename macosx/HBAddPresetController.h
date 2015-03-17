@@ -14,6 +14,6 @@
 
 - (instancetype)initWithPreset:(HBPreset *)preset videoSize:(NSSize)size;
 
-@property (readonly) HBPreset *preset;
+@property (nonatomic, readonly) HBPreset *preset;
 
 @end

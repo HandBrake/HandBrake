@@ -14,8 +14,8 @@
     self = [super init];
     if (self)
     {
-        _language = [value retain];
-        _iso639_2 = [code retain];
+        _language = value;
+        _iso639_2 = code;
     }
     return self;
 }
@@ -25,18 +25,10 @@
     HBLang *lang = [[self class] allocWithZone:zone];
 
     lang->_isSelected = self.isSelected;
-    lang->_language = [self.language retain];
-    lang->_iso639_2 = [self.iso639_2 retain];
+    lang->_language = self.language;
+    lang->_iso639_2 = self.iso639_2;
 
     return lang;
-}
-
-- (void)dealloc
-{
-    [_language release];
-    [_iso639_2 release];
-
-    [super dealloc];
 }
 
 - (NSString *)description
@@ -79,12 +71,11 @@
                 [internal addObject:item];
             }
             
-            [item release];
         }
 
         // Add the (Any) item.
-        HBLang *item = [[[HBLang alloc] initWithLanguage:@"(Any)"
-                                            iso639_2code:@"und"] autorelease];
+        HBLang *item = [[HBLang alloc] initWithLanguage:@"(Any)"
+                                            iso639_2code:@"und"];
         if ([languages containsObject:item.iso639_2])
         {
             item.isSelected = YES;
@@ -99,7 +90,6 @@
 
         [internal insertObjects:selected
                       atIndexes:[NSIndexSet indexSetWithIndexesInRange:(NSMakeRange(1, selected.count))]];
-        [selected release];
 
         _languagesArray = internal;
     }
@@ -109,7 +99,7 @@
 
 - (NSArray *)selectedLanguages
 {
-    NSMutableArray *selected = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *selected = [[NSMutableArray alloc] init];
     for (HBLang *lang in self.languagesArray)
     {
         if (lang.isSelected)
@@ -118,15 +108,9 @@
         }
     }
 
-    return [[selected copy] autorelease];
+    return [selected copy];
 }
 
-- (void)dealloc
-{
-    [_languagesArray release];
-
-    [super dealloc];
-}
 
 @end
 
@@ -203,7 +187,6 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
             }
 
             data = [NSKeyedArchiver archivedDataWithRootObject:unfilteredIndexes];
-            [filteredArray release];
         }
         else
         {
@@ -290,10 +273,8 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
 		id object = objects[removeIndex];
 
 		// Move the object
-		[object retain];
 		[self removeObjectAtArrangedObjectIndex:removeIndex];
 		[self insertObject:object atArrangedObjectIndex:insertIndex];
-		[object release];
 
 		thisIndex = [indexSet indexLessThanIndex:thisIndex];
     }

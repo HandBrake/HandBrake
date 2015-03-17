@@ -50,7 +50,6 @@ int	stdoutwrite(void *inFD, const char *buffer, int size)
     {
         NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
         [g_stdoutRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
-        [data release];
     }
     return size;
 }
@@ -61,7 +60,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
     {
         NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
         [g_stderrRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
-        [data release];
     }
     return size;
 }
@@ -101,7 +99,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 	if (![listeners containsObject:aListener])
 	{
 		[listeners addObject:aListener];
-		[aListener release];
 	}
 	
 	if ([listeners count] > 0)
@@ -115,7 +112,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 {
 	if ([listeners containsObject:aListener])
 	{
-		[aListener retain];
 		[listeners removeObject:aListener];
 	}
 
@@ -125,7 +121,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 	if ([listeners count] == 0)
 	{
 		[self stopRedirect];
-		[self autorelease];
 
 		if (self == g_stdoutRedirect)
 			g_stdoutRedirect = nil;
@@ -157,15 +152,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 		oldWriteFunc = NULL;
 	}
 	return self;
-}
-
-/**
- * Frees all the listeners and deallocs the object.
- */
-- (void)dealloc
-{
-	[listeners release];
-	[super dealloc];
 }
 
 /**
@@ -205,7 +191,6 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
     if (string)
     {
         [listeners makeObjectsPerformSelector:forwardingSelector withObject:string];
-        [string release];
     }
 }
 

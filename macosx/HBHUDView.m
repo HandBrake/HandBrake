@@ -54,7 +54,6 @@
     {
         // If NSVisualEffectView class is loaded
         // release ourself and return a NSVisualEffectView instance instead.
-        [self release];
         self = [[NSClassFromString(@"NSVisualEffectView") alloc] initWithFrame:frame];
         if (self)
         {

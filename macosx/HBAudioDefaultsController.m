@@ -12,13 +12,14 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 @interface HBAudioDefaultsController ()
 
-@property (nonatomic, readonly) HBAudioDefaults *settings;
+@property (nonatomic, readonly, strong) HBAudioDefaults *settings;
 
-@property (nonatomic, readonly) HBLanguagesSelection *languagesList;
-@property (assign) IBOutlet HBLanguageArrayController *tableController;
-@property (assign) IBOutlet NSButton *showAllButton;
+@property (nonatomic, readonly, strong) HBLanguagesSelection *languagesList;
 
-@property (assign) IBOutlet NSArrayController *tracksController;
+@property (unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
+@property (unsafe_unretained) IBOutlet NSButton *showAllButton;
+
+@property (unsafe_unretained) IBOutlet NSArrayController *tracksController;
 
 @end
 
@@ -29,7 +30,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
     self = [super initWithWindowNibName:@"AudioDefaults"];
     if (self)
     {
-        _settings = [settings retain];
+        _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
     }
     return self;
@@ -91,14 +92,11 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 - (void)dealloc
 {
-    [_settings release];
-    [_languagesList release];
 
     @try {
         [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
     } @catch (NSException * __unused exception) {}
 
-    [super dealloc];
 }
 
 @end

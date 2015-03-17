@@ -25,21 +25,21 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 {
     if (self == [HBFilters class])
     {
-        _HandBrake_denoiseTypesDict = [@{NSLocalizedString(@"Off", nil):      @"off",
+        _HandBrake_denoiseTypesDict = @{NSLocalizedString(@"Off", nil):      @"off",
                                NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
-                               NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"} retain];
+                               NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"};
 
-        _HandBrake_denoisePresetsDict = [@{NSLocalizedString(@"Custom", nil):     @"none",
+        _HandBrake_denoisePresetsDict = @{NSLocalizedString(@"Custom", nil):     @"none",
                                  NSLocalizedString(@"Ultralight", nil): @"ultralight",
                                  NSLocalizedString(@"Light", nil):      @"light",
                                  NSLocalizedString(@"Medium", nil) :    @"medium",
-                                 NSLocalizedString(@"Strong", nil) :    @"strong"} retain];
+                                 NSLocalizedString(@"Strong", nil) :    @"strong"};
 
-        _HandBrake_nlmeansTunesDict = [@{NSLocalizedString(@"None", nil):         @"none",
+        _HandBrake_nlmeansTunesDict = @{NSLocalizedString(@"None", nil):         @"none",
                                NSLocalizedString(@"Film", nil):         @"film",
                                NSLocalizedString(@"Grain", nil):        @"grain",
                                NSLocalizedString(@"High Motion", nil):  @"highmotion",
-                               NSLocalizedString(@"Animation", nil) :   @"animation"} retain];
+                               NSLocalizedString(@"Animation", nil) :   @"animation"};
     }
 }
 
@@ -82,8 +82,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 // Override setter to avoid nil values.
 - (void)setDetelecineCustomString:(NSString *)detelecineCustomString
 {
-    [_detelecineCustomString autorelease];
-
     if (detelecineCustomString)
     {
         _detelecineCustomString = [detelecineCustomString copy];
@@ -104,8 +102,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDeinterlaceCustomString:(NSString *)deinterlaceCustomString
 {
-    [_deinterlaceCustomString autorelease];
-
     if (deinterlaceCustomString)
     {
         _deinterlaceCustomString = [deinterlaceCustomString copy];
@@ -126,8 +122,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDecombCustomString:(NSString *)decombCustomString
 {
-    [_decombCustomString autorelease];
-
     if (decombCustomString)
     {
         _decombCustomString = [decombCustomString copy];
@@ -142,8 +136,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDenoise:(NSString *)denoise
 {
-    [_denoise autorelease];
-
     if (denoise)
     {
         _denoise = [denoise copy];
@@ -158,8 +150,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDenoisePreset:(NSString *)denoisePreset
 {
-    [_denoisePreset autorelease];
-
     if (denoisePreset)
     {
         _denoisePreset = [denoisePreset copy];
@@ -174,8 +164,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDenoiseTune:(NSString *)denoiseTune
 {
-    [_denoiseTune autorelease];
-
     if (denoiseTune)
     {
         _denoiseTune = [denoiseTune copy];
@@ -190,8 +178,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (void)setDenoiseCustomString:(NSString *)denoiseCustomString
 {
-    [_denoiseCustomString autorelease];
-
     if (denoiseCustomString)
     {
         _denoiseCustomString = [denoiseCustomString copy];

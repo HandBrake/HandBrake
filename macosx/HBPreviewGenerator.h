@@ -22,12 +22,12 @@
 
 @interface HBPreviewGenerator : NSObject
 
-@property (nonatomic, assign) id <HBPreviewGeneratorDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id <HBPreviewGeneratorDelegate> delegate;
 
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job;
 
 /* Still image generator */
-- (CGImageRef) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
+- (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache;
 - (NSUInteger) imagesCount;
 - (void) purgeImageCache;
 

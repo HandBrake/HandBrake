@@ -71,6 +71,11 @@
         // Add ourself as stderr/stdout listener
         [[HBOutputRedirect stderrRedirect] addListener:self];
         [[HBOutputRedirect stdoutRedirect] addListener:self];
+
+        // Lets report the HandBrake version number here to the activity log and text log file
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        NSString *versionStringFull = [NSString stringWithFormat:@"Handbrake Version: %@  (%@)", infoDict[@"CFBundleShortVersionString"], infoDict[@"CFBundleVersion"]];
+        [HBUtilities writeToActivityLog: "%s", versionStringFull.UTF8String];
     }
     return self;
 }
@@ -82,10 +87,6 @@
 {
     [[HBOutputRedirect stderrRedirect] removeListener:self];
     [[HBOutputRedirect stdoutRedirect] removeListener:self];
-    [outputTextStorage release];
-    [_outputFile release];
-
-    [super dealloc];
 }
 
 /**
@@ -115,7 +116,6 @@
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text];
 	/* Actually write the libhb output to the text view (outputTextStorage) */
     [outputTextStorage appendAttributedString:attributedString];
-    [attributedString release];
     
 	/* remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
     if (outputTextStorage.length > TextStorageUpperSizeLimit)

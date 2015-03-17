@@ -81,11 +81,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         }
 
     } @catch (NSException * __unused exception) {}
-
-    self.filters = nil;
-    self.picture = nil;
-
-    [super dealloc];
 }
 
 - (void)windowDidLoad

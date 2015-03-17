@@ -18,6 +18,6 @@
 #define decodeInteger(x) x = [decoder decodeIntegerForKey:OBJC_STRINGIFY(x)]
 #define decodeBool(x) x = [decoder decodeBoolForKey:OBJC_STRINGIFY(x)]
 #define decodeDouble(x) x = [decoder decodeDoubleForKey:OBJC_STRINGIFY(x)]
-#define decodeObject(x) x = [[decoder decodeObjectForKey:OBJC_STRINGIFY(x)] retain]
+#define decodeObject(x) x = [decoder decodeObjectForKey:OBJC_STRINGIFY(x)]
 
 #endif

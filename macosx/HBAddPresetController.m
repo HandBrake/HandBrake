@@ -12,17 +12,17 @@
 
 @interface HBAddPresetController ()
 
-@property (assign) IBOutlet NSTextField *name;
-@property (assign) IBOutlet NSTextField *desc;
+@property (unsafe_unretained) IBOutlet NSTextField *name;
+@property (unsafe_unretained) IBOutlet NSTextField *desc;
 
-@property (assign) IBOutlet NSPopUpButton *picSettingsPopUp;
-@property (assign) IBOutlet NSTextField *picWidth;
-@property (assign) IBOutlet NSTextField *picHeight;
-@property (assign) IBOutlet NSBox *picWidthHeightBox;
+@property (unsafe_unretained) IBOutlet NSPopUpButton *picSettingsPopUp;
+@property (unsafe_unretained) IBOutlet NSTextField *picWidth;
+@property (unsafe_unretained) IBOutlet NSTextField *picHeight;
+@property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
-@property (assign) IBOutlet NSButton *picFilters;
+@property (unsafe_unretained) IBOutlet NSButton *picFilters;
 
-@property (retain) HBPreset *preset;
+@property (nonatomic, strong) HBPreset *preset;
 @property NSSize size;
 
 @end
@@ -35,16 +35,10 @@
     if (self)
     {
         NSParameterAssert(preset);
-        _preset = [preset retain];
+        _preset = preset;
         _size = size;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.preset = nil;;
-    [super dealloc];
 }
 
 - (void)windowDidLoad {
@@ -104,14 +98,13 @@
         [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
         [alert setInformativeText:NSLocalizedString(@"You need to insert a name for the preset.", @"")];
         [alert runModal];
-        [alert release];
     }
     else
     {
         self.preset.name = self.name.stringValue;
         self.preset.presetDescription = self.desc.stringValue;
 
-        NSMutableDictionary *dict = [[self.preset.content mutableCopy] autorelease];
+        NSMutableDictionary *dict = [self.preset.content mutableCopy];
 
         dict[@"PresetName"] = self.name.stringValue;
         dict[@"PresetDescription"] = self.desc.stringValue;
@@ -126,7 +119,7 @@
         // Get whether or not to use the current Picture Filter settings for the preset
         dict[@"UsesPictureFilters"] = @(self.picFilters.state);
 
-        self.preset.content = [[dict copy] autorelease];
+        self.preset.content = [dict copy];
 
         [[self window] orderOut:nil];
         [NSApp endSheet:[self window] returnCode:NSModalResponseContinue];

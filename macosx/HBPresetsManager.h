@@ -27,7 +27,7 @@ extern NSString *HBPresetsChangedNotification;
 /**
  *  defaultPreset and its index path in the tree
  */
-@property (nonatomic, readwrite, retain) HBPreset *defaultPreset;
+@property (nonatomic, readwrite, strong) HBPreset *defaultPreset;
 
 /**
  *  Returs a HBPresetManager with the presets loaded at the passed URL.

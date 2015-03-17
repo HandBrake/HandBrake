@@ -37,22 +37,22 @@
 @property (nonatomic, readonly) HBDockTile *dockTile;
 @property (nonatomic, readwrite) double dockIconProgress;
 
-@property (assign) IBOutlet NSTextField *progressTextField;
-@property (assign) IBOutlet NSTextField *countTextField;
-@property (assign) IBOutlet HBQueueOutlineView *outlineView;
+@property (unsafe_unretained) IBOutlet NSTextField *progressTextField;
+@property (unsafe_unretained) IBOutlet NSTextField *countTextField;
+@property (unsafe_unretained) IBOutlet HBQueueOutlineView *outlineView;
 
 @property (nonatomic, readonly) NSMutableDictionary *descriptions;
 
 @property (nonatomic, readonly) HBDistributedArray *jobs;
-@property (nonatomic, retain)   HBJob *currentJob;
-@property (nonatomic, retain)   HBJobOutputFileWriter *currentLog;
+@property (nonatomic, strong)   HBJob *currentJob;
+@property (nonatomic, strong)   HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic, readwrite) BOOL stop;
 
 @property (nonatomic, readwrite) NSUInteger pendingItemsCount;
 @property (nonatomic, readwrite) NSUInteger workingItemsCount;
 
-@property (nonatomic, retain) NSArray *dragNodesArray;
+@property (nonatomic, strong) NSArray *dragNodesArray;
 
 @end
 
@@ -93,16 +93,6 @@
         [[self window] setDelegate:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [_core release];
-    [_jobs release];
-    [_currentJob release];
-
-    [_dockTile release];
-    [_descriptions release];
-    [_dragNodesArray release];
-
-    [super dealloc];
 }
 
 - (void)windowDidLoad
@@ -428,10 +418,9 @@
         insertIndex--;
     }
 
-    id object = [self.jobs[removeIndex] retain];
+    id object = self.jobs[removeIndex];
     [self.jobs removeObjectAtIndex:removeIndex];
     [self.jobs insertObject:object atIndex:insertIndex];
-    [object release];
 
     // We save all of the Queue data here
     // and it also gets sent back to the queue controller
@@ -458,7 +447,7 @@
         self.currentJob.state = HBJobStateWorking;
 
         // Tell HB to output a new activity log file for this encode
-        self.currentLog = [[[HBJobOutputFileWriter alloc] initWithJob:self.currentJob] autorelease];
+        self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:self.currentJob];
         [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
         [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
 
@@ -781,7 +770,6 @@
             [HBUtilities writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
             NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", fileURL.path, @"\")"]];
             [myScript executeAndReturnError: nil];
-            [myScript release];
         }
     }
 }
@@ -804,7 +792,6 @@
         [alert setInformativeText:NSLocalizedString(@"Your HandBrake queue is done!", @"")];
         [NSApp requestUserAttention:NSCriticalRequest];
         [alert runModal];
-        [alert release];
     }
 
     // If sleep has been selected
@@ -815,7 +802,6 @@
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:
                                        @"tell application \"Finder\" to sleep"];
         [scriptObject executeAndReturnError: &errorDict];
-        [scriptObject release];
     }
     // If Shutdown has been selected
     if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
@@ -824,7 +810,6 @@
         NSDictionary *errorDict;
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"Finder\" to shut down"];
         [scriptObject executeAndReturnError: &errorDict];
-        [scriptObject release];
     }
 }
 
@@ -876,8 +861,7 @@
         [alert beginSheetModalForWindow:targetWindow
                           modalDelegate:self
                          didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
-                            contextInfo:self.jobs[row]];
-        [alert release];
+                            contextInfo:(__bridge void *)(self.jobs[row])];
     }
     else if ([self.jobs[row] state] != HBJobStateWorking)
     {
@@ -943,7 +927,6 @@
         {
             [self.delegate showPreferencesWindow:nil];
         }
-        [alert release];
     }
     else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString:@"Shut Down Computer"])
     {
@@ -962,7 +945,6 @@
         {
             [self.delegate showPreferencesWindow:nil];
         }
-        [alert release];
     }
 }
 
@@ -1024,7 +1006,6 @@
                       modalDelegate:self
                      didEndSelector:@selector(didDimissCancel:returnCode:contextInfo:)
                         contextInfo:nil];
-    [alert release];
 }
 
 - (void)didDimissCancel:(NSAlert *)alert
@@ -1113,13 +1094,12 @@
         [alert beginSheetModalForWindow:docWindow
                           modalDelegate:self
                          didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
-                            contextInfo:job];
-        [alert release];
+                            contextInfo:(__bridge void *)(job)];
     }
     else
     { 
         // since we are not a currently encoding item, we can just be cancelled
-        HBJob *item = [[[self.jobs[row] representedObject] copy] autorelease];
+        HBJob *item = [[self.jobs[row] representedObject] copy];
         [self.controller rescanJobToMainWindow:item];
 
         // Now that source is loaded and settings applied, delete the queue item from the queue

@@ -37,7 +37,7 @@
  */
 
 @interface HBGenericDictionaryTransformer : NSValueTransformer
-@property (nonatomic, retain) NSDictionary *dict;
+@property (nonatomic, strong) NSDictionary *dict;
 @end
 
 @interface HBDenoisePresetTransformer : HBGenericDictionaryTransformer

@@ -11,7 +11,7 @@
 
 @interface HBAudioController ()
 
-@property (nonatomic, readwrite, retain) HBAudioDefaultsController *defaultsController;
+@property (nonatomic, readwrite, strong) HBAudioDefaultsController *defaultsController;
 
 @end
 
@@ -42,10 +42,10 @@
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    self.defaultsController = [[[HBAudioDefaultsController alloc] initWithSettings:self.audio.defaults] autorelease];
+    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:self.audio.defaults];
 
-	[NSApp beginSheet:[self.defaultsController window]
-       modalForWindow:[[self view] window]
+	[NSApp beginSheet:self.defaultsController.window
+       modalForWindow:self.view.window
         modalDelegate:self
        didEndSelector:@selector(sheetDidEnd)
           contextInfo:NULL];

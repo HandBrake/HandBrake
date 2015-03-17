@@ -20,9 +20,9 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @interface HBAudioDefaults : NSObject <NSCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBAudioTrackSelectionBehavior trackSelectionBehavior;
-@property (nonatomic, readwrite, retain) NSMutableArray *trackSelectionLanguages;
+@property (nonatomic, readwrite, strong) NSMutableArray *trackSelectionLanguages;
 
-@property (nonatomic, readwrite, retain) NSMutableArray *tracksArray;
+@property (nonatomic, readwrite, strong) NSMutableArray *tracksArray;
 
 /**
  *  Adds a new track preset.

@@ -18,6 +18,6 @@
 
 - (id)initWithDelegate:(id <HBPreviewControllerDelegate>)delegate;
 
-@property (nonatomic, retain) HBPreviewGenerator *generator;
+@property (nonatomic, strong) HBPreviewGenerator *generator;
 
 @end

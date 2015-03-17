@@ -18,8 +18,8 @@
 /// The HBCore used for encoding.
 @property (nonatomic, readonly) HBCore *core;
 
-@property (nonatomic, assign) HBController *controller;
-@property (nonatomic, assign) HBAppDelegate *delegate;
+@property (nonatomic, unsafe_unretained) HBController *controller;
+@property (nonatomic, unsafe_unretained) HBAppDelegate *delegate;
 
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;

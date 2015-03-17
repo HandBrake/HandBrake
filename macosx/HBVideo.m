@@ -162,15 +162,12 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setPreset:(NSString *)preset
 {
-    [_preset autorelease];
     _preset = [preset copy];
     [self postChangedNotification];
 }
 
 - (void)setTune:(NSString *)tune
 {
-    [_tune autorelease];
-
     if (![tune isEqualToString:@"none"])
     {
         _tune = [tune copy];
@@ -185,21 +182,18 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setProfile:(NSString *)profile
 {
-    [_profile autorelease];
     _profile = [profile copy];
     [self postChangedNotification];
 }
 
 - (void)setLevel:(NSString *)level
 {
-    [_level autorelease];
     _level = [level copy];
     [self postChangedNotification];
 }
 
 - (void)setVideoOptionExtra:(NSString *)videoOptionExtra
 {
-    [_videoOptionExtra autorelease];
     if (videoOptionExtra != nil)
     {
         _videoOptionExtra = [videoOptionExtra copy];
@@ -305,7 +299,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         }
     }
 
-    return [[temp copy] autorelease];
+    return [temp copy];
 }
 
 - (NSArray *)tunes
@@ -325,7 +319,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         }
     }
 
-    return [[temp copy] autorelease];
+    return [temp copy];
 }
 
 - (NSArray *)profiles
@@ -338,7 +332,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         [temp addObject:@(profiles[i])];
     }
 
-    return [[temp copy] autorelease];
+    return [temp copy];
 }
 
 - (NSArray *)levels
@@ -355,7 +349,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         [temp addObject:@"auto"];
     }
 
-    return [[temp copy] autorelease];
+    return [temp copy];
 }
 
 #pragma mark - NSCopying
@@ -497,7 +491,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         [string appendString:@"fastdecode"];
     }
 
-    return [string autorelease];
+    return string;
 }
 
 - (void)applyPreset:(NSDictionary *)preset

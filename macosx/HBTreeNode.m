@@ -18,12 +18,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_children release];
-    [super dealloc];
-}
-
 - (NSUInteger)countOfChildren
 {
     return self.children.count;
@@ -57,7 +51,7 @@
     NSMutableArray *indexesQueue = [[NSMutableArray alloc] init];
 
     [queue addObject:self];
-    [indexesQueue addObject:[[[NSIndexPath alloc] init] autorelease]];
+    [indexesQueue addObject:[[NSIndexPath alloc] init]];
 
     HBTreeNode *node = nil;
     while ((node = [queue lastObject]) != nil)
@@ -87,9 +81,6 @@
             [queue addObject:childNode];
         }
     }
-    
-    [queue release];
-    [indexesQueue release];
 }
 
 @end

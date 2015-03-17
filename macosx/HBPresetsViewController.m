@@ -13,20 +13,20 @@
 
 @interface HBPresetsViewController () <NSOutlineViewDelegate>
 
-@property (nonatomic, retain) HBPresetsManager *presets;
-@property (nonatomic, assign) IBOutlet NSTreeController *treeController;
+@property (nonatomic, strong) HBPresetsManager *presets;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTreeController *treeController;
 
 /**
  *  Helper var for drag & drop
  */
-@property (nonatomic, retain) NSArray *dragNodesArray;
+@property (nonatomic, strong) NSArray *dragNodesArray;
 
 /**
  *  The status (expanded or not) of the folders.
  */
-@property (nonatomic, retain) NSMutableArray *expandedNodes;
+@property (nonatomic, strong) NSMutableArray *expandedNodes;
 
-@property (assign) IBOutlet NSOutlineView *outlineView;
+@property (unsafe_unretained) IBOutlet NSOutlineView *outlineView;
 
 @end
 
@@ -39,20 +39,11 @@
     self = [super initWithNibName:@"Presets" bundle:nil];
     if (self)
     {
-        _presets = [presetManager retain];
+        _presets = presetManager;
         _expandedNodes = [[NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults]
                                                    objectForKey:@"HBPreviewViewExpandedStatus"]] mutableCopy];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.presets = nil;
-    self.dragNodesArray = nil;
-    self.expandedNodes = nil;
-    
-    [super dealloc];
 }
 
 - (void)loadView
@@ -135,7 +126,6 @@
 
     HBPreset *node = [[HBPreset alloc] initWithFolderName:@"New Folder" builtIn:NO];
     [self.treeController insertObject:node atArrangedObjectIndexPath:selectionIndexPath];
-    [node autorelease];
 }
 
 - (IBAction)setDefault:(id)sender

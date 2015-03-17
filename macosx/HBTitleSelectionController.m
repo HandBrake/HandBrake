@@ -12,7 +12,7 @@
 @property (nonatomic, readonly) NSArray *titles;
 @property (nonatomic, readonly) NSMutableArray *selection;
 
-@property (nonatomic, readonly) id<HBTitleSelectionDelegate> delegate;
+@property (nonatomic, readonly, unsafe_unretained) id<HBTitleSelectionDelegate> delegate;
 
 @end
 
@@ -23,7 +23,7 @@
     self = [super initWithWindowNibName:@"HBTitleSelection"];
     if (self)
     {
-        _titles = [titles retain];
+        _titles = titles;
         _selection = [[NSMutableArray alloc] initWithCapacity:titles.count];
         _delegate = delegate;
 
@@ -34,17 +34,6 @@
     }
 
     return self;
-}
-
-- (void)dealloc
-{
-    [_titles release];
-    _titles = nil;
-
-    [_selection release];
-    _selection = nil;
-
-    [super dealloc];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView

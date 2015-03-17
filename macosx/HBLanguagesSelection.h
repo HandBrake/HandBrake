@@ -52,6 +52,6 @@
  */
 @property (nonatomic, readwrite) BOOL isDragginEnabled;
 
-@property (assign) IBOutlet NSTableView *tableView;
+@property (unsafe_unretained) IBOutlet NSTableView *tableView;
 
 @end

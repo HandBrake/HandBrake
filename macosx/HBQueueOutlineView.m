@@ -91,7 +91,7 @@
         [rowIndexes addIndexes:selectedRowIndexes];
     }
 
-    return [[rowIndexes copy] autorelease];
+    return [rowIndexes copy];
 }
 
 @end

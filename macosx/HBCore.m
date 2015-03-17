@@ -43,7 +43,7 @@ static void hb_error_handler(const char *errmsg)
 @property (nonatomic, readonly) dispatch_queue_t updateTimerQueue;
 
 /// Current scanned titles.
-@property (nonatomic, readwrite, retain) NSArray *titles;
+@property (nonatomic, readwrite, strong) NSArray *titles;
 
 /// Progress handler.
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
@@ -72,7 +72,6 @@ static void hb_error_handler(const char *errmsg)
 + (void)closeGlobal
 {
     NSAssert(globalInitialized, @"[HBCore closeGlobal] global closed but not initialized");
-    [errorHandler release];
     hb_global_close();
 }
 
@@ -109,7 +108,6 @@ static void hb_error_handler(const char *errmsg)
         _hb_handle = hb_init(loggingLevel, 0);
         if (!_hb_handle)
         {
-            [self release];
             return nil;
         }
     }
@@ -129,14 +127,6 @@ static void hb_error_handler(const char *errmsg)
     hb_close(&_hb_handle);
     _hb_handle = NULL;
     free(_hb_state);
-
-    [_name release];
-    _name = nil;
-
-    [_titles release];
-    _titles = nil;
-
-    [super dealloc];
 }
 
 #pragma mark - Scan
@@ -255,10 +245,10 @@ static void hb_error_handler(const char *errmsg)
     for (int i = 0; i < hb_list_count(title_set->list_title); i++)
     {
         hb_title_t *title = (hb_title_t *) hb_list_item(title_set->list_title, i);
-        [titles addObject:[[[HBTitle alloc] initWithTitle:title featured:(title->index == title_set->feature)] autorelease]];
+        [titles addObject:[[HBTitle alloc] initWithTitle:title featured:(title->index == title_set->feature)]];
     }
 
-    self.titles = [[titles copy] autorelease];
+    self.titles = [titles copy];
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 
@@ -527,10 +517,9 @@ static void hb_error_handler(const char *errmsg)
     {
         // Retain the completion block, because it could be replaced
         // inside the same block.
-        HBCoreCompletionHandler completionHandler = [self.completionHandler retain];
+        HBCoreCompletionHandler completionHandler = self.completionHandler;
         self.completionHandler = nil;
         completionHandler(result);
-        [completionHandler release];
     }
 }
 

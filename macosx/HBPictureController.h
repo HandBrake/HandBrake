@@ -17,10 +17,10 @@
 
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic, readwrite, retain) HBFilters *filters;
-@property (nonatomic, readwrite, retain) HBPicture *picture;
+@property (nonatomic, readwrite, strong) HBFilters *filters;
+@property (nonatomic, readwrite, strong) HBPicture *picture;
 
-@property (nonatomic, readwrite, assign) id <HBPictureControllerDelegate> delegate;
+@property (nonatomic, readwrite, unsafe_unretained) id <HBPictureControllerDelegate> delegate;
 
 - (void)showPictureWindow;
 

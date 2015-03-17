@@ -13,6 +13,6 @@
  */
 @interface HBAudioController : NSViewController
 
-@property (nonatomic, readwrite, assign) HBAudio *audio;
+@property (nonatomic, readwrite, unsafe_unretained) HBAudio *audio;
 
 @end

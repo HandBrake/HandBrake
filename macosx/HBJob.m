@@ -17,7 +17,13 @@
 NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
 NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
+@interface HBJob ()
+@property (nonatomic, readonly) NSString *name;
+@end
+
 @implementation HBJob
+
+@synthesize uuid = _uuid;
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
 {
@@ -29,7 +35,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _title = title;
         _titleIdx = title.index;
 
-        _fileURL = [[NSURL fileURLWithPath:@(title.hb_title->path)] retain];
+        _name = [title.name copy];
+        _fileURL = [NSURL fileURLWithPath:@(title.hb_title->path)];
 
         _container = HB_MUX_MP4;
         _angle = 1;
@@ -44,7 +51,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         _chapterTitles = [title.chapters mutableCopy];
 
-        _uuid = [[[NSUUID UUID] UUIDString] retain];
+        _uuid = [[NSUUID UUID] UUIDString];
 
         [self applyPreset:preset];
     }
@@ -132,25 +139,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return retval;
 }
 
-- (void)dealloc
+- (NSString *)description
 {
-    [_audio release];
-    [_subtitles release];
-
-    [_fileURL release];
-    [_destURL release];
-
-    [_range release];
-    [_video release];
-    [_picture release];
-    [_filters release];
-
-    [_chapterTitles release];
-
-    [_uuid release];
-    [_presetName release];
-
-    [super dealloc];
+    return self.name;
 }
 
 #pragma mark - NSCopying
@@ -162,9 +153,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     if (copy)
     {
         copy->_state = HBJobStateReady;
+        copy->_name = [_name copy];
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
-        copy->_uuid = [[[NSUUID UUID] UUIDString] retain];
+        copy->_uuid = [[NSUUID UUID] UUIDString];
 
         copy->_fileURL = [_fileURL copy];
         copy->_destURL = [_destURL copy];
@@ -198,6 +190,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     [coder encodeInt:1 forKey:@"HBVideoVersion"];
 
     encodeInt(_state);
+    encodeObject(_name);
     encodeObject(_presetName);
     encodeInt(_titleIdx);
     encodeObject(_uuid);
@@ -227,6 +220,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     self = [super init];
 
     decodeInt(_state);
+    decodeObject(_name);
     decodeObject(_presetName);
     decodeInt(_titleIdx);
     decodeObject(_uuid);

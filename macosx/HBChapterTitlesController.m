@@ -13,7 +13,7 @@
 	IBOutlet NSTableColumn       * fChapterTableNameColumn;
 }
 
-@property (nonatomic, readwrite, retain) NSMutableArray *chapterTitles;
+@property (nonatomic, readwrite, strong) NSMutableArray *chapterTitles;
 
 @end
 
@@ -27,12 +27,6 @@
         _chapterTitles = [[NSMutableArray alloc] init];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_chapterTitles release];
-    [super dealloc];
 }
 
 - (void)setJob:(HBJob *)job
@@ -134,8 +128,7 @@ a timer to avoid interfering with the chain of events that handles the edit. */
         {
             chapterName = [[NSString alloc] initWithContentsOfURL:[panel URL] encoding:NSUTF8StringEncoding error:NULL];
             chaptersArray = [chapterName componentsSeparatedByString:@"\n"];
-            [chapterName release];
-            chaptersMutableArray = [[chaptersArray mutableCopy] autorelease];
+            chaptersMutableArray = [chaptersArray mutableCopy];
             chapters = [self numberOfRowsInTableView:fChapterTable];
             if ([chaptersMutableArray count] > 0)
             {

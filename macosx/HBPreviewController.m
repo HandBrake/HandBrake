@@ -93,22 +93,22 @@ typedef enum ViewMode : NSUInteger {
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp;
 }
 
-@property (nonatomic, assign) id <HBPreviewControllerDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id <HBPreviewControllerDelegate> delegate;
 
-@property (nonatomic) CALayer *backLayer;
-@property (nonatomic) CALayer *pictureLayer;
+@property (nonatomic, strong) CALayer *backLayer;
+@property (nonatomic, strong) CALayer *pictureLayer;
 
 @property (nonatomic) CGFloat backingScaleFactor;
 
 @property (nonatomic) ViewMode currentViewMode;
 @property (nonatomic) BOOL scaleToScreen;
 
-@property (nonatomic, retain) NSTimer *hudTimer;
+@property (nonatomic, strong) NSTimer *hudTimer;
 
 @property (nonatomic) NSUInteger pictureIndex;
 
-@property (nonatomic, retain) QTMovie *movie;
-@property (nonatomic, retain) NSTimer *movieTimer;
+@property (nonatomic, strong) QTMovie *movie;
+@property (nonatomic, strong) NSTimer *movieTimer;
 
 /* Pictures HUD actions */
 - (IBAction) previewDurationPopUpChanged: (id) sender;
@@ -134,22 +134,12 @@ typedef enum ViewMode : NSUInteger {
 {
 	if (self = [super initWithWindowNibName:@"PicturePreview"])
 	{
-        // NSWindowController likes to lazily load its window. However since
-        // this controller tries to set all sorts of outlets before the window
-        // is displayed, we need it to load immediately. The correct way to do
-        // this, according to the documentation, is simply to invoke the window
-        // getter once.
-        //
-        // If/when we switch a lot of this stuff to bindings, this can probably
-        // go away.
-        [self window];
         _delegate = delegate;
-
     }
 	return self;
 }
 
-- (void) awakeFromNib
+- (void)windowDidLoad
 {
     [[self window] setDelegate:self];
 
@@ -234,10 +224,9 @@ typedef enum ViewMode : NSUInteger {
     {
         _generator.delegate = nil;
         [_generator cancel];
-        [_generator autorelease];
     }
 
-    _generator = [generator retain];
+    _generator = generator;
 
     if (generator)
     {
@@ -248,7 +237,6 @@ typedef enum ViewMode : NSUInteger {
         [fPictureSlider setNumberOfTickMarks: generator.imagesCount];
 
         [self switchViewToMode:ViewModePicturePreview];
-        [self displayPreview];
     }
 }
 
@@ -529,18 +517,11 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) dealloc
 {
-    [_hudTimer invalidate];
-    [_hudTimer release];
-
-    [_movieTimer invalidate];
-    [_movieTimer release];
-
-    [_generator cancel];
-    [_generator release];
-
     [self removeMovieObservers];
 
-    [super dealloc];
+    [_hudTimer invalidate];
+    [_movieTimer invalidate];
+    [_generator cancel];
 }
 
 #pragma mark -
@@ -675,8 +656,9 @@ typedef enum ViewMode : NSUInteger {
 
     if (self.window.isVisible)
     {
-        fPreviewImage = [self.generator imageAtIndex:self.pictureIndex shouldCache:YES];
-        [self.pictureLayer setContents:(id)fPreviewImage];
+        fPreviewImage = [self.generator copyImageAtIndex:self.pictureIndex shouldCache:YES];
+        [self.pictureLayer setContents:(__bridge id)(fPreviewImage)];
+        CFRelease(fPreviewImage);
     }
     else
     {
@@ -848,7 +830,7 @@ typedef enum ViewMode : NSUInteger {
                                           @"QTMovieIsSteppableAttribute": @(YES),
                                           QTMovieApertureModeAttribute: QTMovieApertureModeClean};
 
-        QTMovie *movie = [[[QTMovie alloc] initWithAttributes:movieAttributes error:&outError] autorelease];
+        QTMovie *movie = [[QTMovie alloc] initWithAttributes:movieAttributes error:&outError];
 
 		if (!movie)
         {

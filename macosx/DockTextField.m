@@ -43,7 +43,6 @@
 
     NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:self.startColor endingColor:self.endColor];
     [gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
-    [gradient release];
     
     NSMutableDictionary *drawStringAttributes = [[NSMutableDictionary alloc] init];
 	[drawStringAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
@@ -56,7 +55,6 @@
 	[stringShadow setShadowOffset:shadowSize];
 	[stringShadow setShadowBlurRadius:6];
 	[drawStringAttributes setValue:stringShadow forKey:NSShadowAttributeName];
-	[stringShadow release];
 	
     NSString *MRString = _textToDisplay;
 	NSString *budgetString = [NSString stringWithFormat:@"%@", MRString];
@@ -65,7 +63,6 @@
 	centerPoint.x = (dirtyRect.size.width / 2) - (stringSize.width / 2);
 	centerPoint.y = dirtyRect.size.height / 2 - (stringSize.height / 2) - 2;
 	[budgetString drawAtPoint:centerPoint withAttributes:drawStringAttributes];
-	[drawStringAttributes release];
 }
 
 @end

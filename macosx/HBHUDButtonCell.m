@@ -10,9 +10,9 @@
 
 - (NSRect)drawTitle:(NSAttributedString *)title withFrame:(NSRect)frame inView:(NSView *)controlView
 {
-    NSAttributedString *attrLabel = [[[NSAttributedString alloc] initWithString:[title string]
+    NSAttributedString *attrLabel = [[NSAttributedString alloc] initWithString:[title string]
                                                                     attributes:@{ NSFontAttributeName:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:self.controlSize]],
-                                                                                  NSForegroundColorAttributeName: [NSColor whiteColor]}] autorelease];
+                                                                                  NSForegroundColorAttributeName: [NSColor whiteColor]}];
 
     return [super drawTitle:attrLabel withFrame:frame inView:controlView];
 }

@@ -54,7 +54,7 @@
                              bitrate:(int)bitrate
                           videoCodec:(uint32_t)codec
 {
-    NSMutableString *name = [[[NSMutableString alloc] init] autorelease];
+    NSMutableString *name = [[NSMutableString alloc] init];
     // The format array contains the tokens as NSString
     NSArray *format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
 
@@ -132,7 +132,7 @@
         }
     }
 
-    return [[name copy] autorelease];
+    return [name copy];
 }
 
 

@@ -31,18 +31,10 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_trackSelectionLanguages release];
-    [_tracksArray release];
-    [super dealloc];
-}
-
 - (void)addTrack
 {
     HBAudioTrackPreset *track = [[HBAudioTrackPreset alloc] initWithContainer:self.container];
     [self insertObject:track inTracksArrayAtIndex:[self countOfTracksArray]];
-    [track release];
 }
 
 - (NSArray *)audioEncoderFallbacks
@@ -58,7 +50,7 @@
             [fallbacks addObject:@(audio_encoder->name)];
         }
     }
-    return [fallbacks autorelease];
+    return fallbacks;
 }
 
 - (NSString *)isoCodeForNativeLang:(NSString *)language
@@ -168,7 +160,6 @@
         newTrack.drc = [track[@"AudioTrackDRCSlider"] floatValue];
         newTrack.gain = [track[@"AudioTrackGainSlider"] intValue];
         [self.tracksArray addObject:newTrack];
-        [newTrack release];
     }
 }
 
@@ -187,7 +178,7 @@
     {
         preset[@"AudioTrackSelectionBehavior"] = @"none";
     }
-    preset[@"AudioLanguageList"] = [[self.trackSelectionLanguages copy] autorelease];
+    preset[@"AudioLanguageList"] = [self.trackSelectionLanguages copy];
 
     // Passthru settings
     preset[@"AudioAllowAACPass"] = @(self.allowAACPassthru);
@@ -220,7 +211,6 @@
     }
 
     preset[@"AudioList"] = audioList;
-    [audioList release];
 }
 
 - (void)validateEncoderFallbackForVideoContainer:(int)container
@@ -257,10 +247,8 @@
     if (copy)
     {
         copy->_trackSelectionBehavior = _trackSelectionBehavior;
-        [copy->_trackSelectionLanguages release];
         copy->_trackSelectionLanguages = [_trackSelectionLanguages mutableCopy];
 
-        [copy->_tracksArray release];
         copy->_tracksArray = [[NSMutableArray alloc] initWithArray:_tracksArray copyItems:YES];
 
         copy->_allowAACPassthru = _allowAACPassthru;

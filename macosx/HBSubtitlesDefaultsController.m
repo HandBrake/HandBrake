@@ -15,8 +15,8 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 @property (nonatomic, readonly) HBSubtitlesDefaults *settings;
 
 @property (nonatomic, readonly) HBLanguagesSelection *languagesList;
-@property (assign) IBOutlet HBLanguageArrayController *tableController;
-@property (assign) IBOutlet NSButton *showAllButton;
+@property (unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
+@property (unsafe_unretained) IBOutlet NSButton *showAllButton;
 
 @end
 
@@ -27,7 +27,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
     self = [super initWithWindowNibName:@"SubtitlesDefaults"];
     if (self)
     {
-        _settings = [settings retain];
+        _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
     }
     return self;
@@ -74,14 +74,9 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (void)dealloc
 {
-    [_settings release];
-    [_languagesList release];
-
     @try {
         [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
     } @catch (NSException * __unused exception) {}
-
-    [super dealloc];
 }
 
 @end

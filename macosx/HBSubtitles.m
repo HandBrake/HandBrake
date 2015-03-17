@@ -85,23 +85,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     return self;
 }
 
-- (void)dealloc
-{
-    [_tracks release];
-    _tracks = nil;
-
-    [_defaults release];
-    _defaults = nil;
-
-    [_masterTrackArray release];
-    _masterTrackArray = nil;
-
-    [_foreignAudioSearchTrackName release];
-    _foreignAudioSearchTrackName = nil;
-
-    [super dealloc];
-}
-
 - (void)addAllTracks
 {
     [self.tracks removeAllObjects];
@@ -164,7 +147,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     newSubtitleTrack[keySubTrackBurned] = @0;
     newSubtitleTrack[keySubTrackDefault] = @0;
 
-    return [newSubtitleTrack autorelease];
+    return newSubtitleTrack;
 }
 
 /**
@@ -358,7 +341,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
             }
         }
         [self.tracks removeObjectsInArray:tracksToDelete];
-        [tracksToDelete release];
     }
 
     // Add an empty track
@@ -424,7 +406,6 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     }
     [self didChangeValueForKey:@"tracks"];
 
-    [tracksToDelete release];
 }
 
 #pragma mark - Languages
@@ -435,7 +416,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 {
     if (!_languagesArray)
     {
-        _languagesArray = [[self populateLanguageArray] retain];
+        _languagesArray = [self populateLanguageArray];
     }
 
     return _languagesArray;
@@ -443,7 +424,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (NSArray *)populateLanguageArray
 {
-    NSMutableArray *languages = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *languages = [[NSMutableArray alloc] init];
 
     for (const iso639_lang_t * lang = lang_get_next(NULL); lang != NULL; lang = lang_get_next(lang))
     {
@@ -454,7 +435,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
             _languagesArrayDefIndex = [languages count] - 1;
         }
     }
-    return [[languages copy] autorelease];
+    return [languages copy];
 }
 
 @synthesize charCodeArray = _charCodeArray;
@@ -464,11 +445,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     if (!_charCodeArray)
     {
         // populate the charCodeArray.
-        _charCodeArray = [@[@"ANSI_X3.4-1968", @"ANSI_X3.4-1986", @"ANSI_X3.4", @"ANSI_X3.110-1983", @"ANSI_X3.110", @"ASCII",
+        _charCodeArray = @[@"ANSI_X3.4-1968", @"ANSI_X3.4-1986", @"ANSI_X3.4", @"ANSI_X3.110-1983", @"ANSI_X3.110", @"ASCII",
                             @"ECMA-114", @"ECMA-118", @"ECMA-128", @"ECMA-CYRILLIC", @"IEC_P27-1", @"ISO-8859-1", @"ISO-8859-2",
                             @"ISO-8859-3", @"ISO-8859-4", @"ISO-8859-5", @"ISO-8859-6", @"ISO-8859-7", @"ISO-8859-8", @"ISO-8859-9",
                             @"ISO-8859-9E", @"ISO-8859-10", @"ISO-8859-11", @"ISO-8859-13", @"ISO-8859-14", @"ISO-8859-15", @"ISO-8859-16",
-                            @"UTF-7", @"UTF-8", @"UTF-16", @"UTF-16LE", @"UTF-16BE", @"UTF-32", @"UTF-32LE", @"UTF-32BE"] retain];
+                            @"UTF-7", @"UTF-8", @"UTF-16", @"UTF-16LE", @"UTF-16BE", @"UTF-32", @"UTF-32LE", @"UTF-32BE"];
     }
     return _charCodeArray;
 }
@@ -491,7 +472,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
             if (idx < _tracks.count)
             {
                 NSMutableDictionary *trackCopy = [obj copy];
-                [copy->_tracks addObject:[trackCopy autorelease]];
+                [copy->_tracks addObject:trackCopy];
             }
         }];
 

@@ -31,7 +31,7 @@
 
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath
 {
-    return [[[self alloc] initWithPath:aPath] autorelease];
+    return [[self alloc] initWithPath:aPath];
 }
 
 
@@ -40,20 +40,10 @@
     NSAssert(aPath, @"nil string passed to drive detector.");
 	if( self = [super init] )	
 	{
-        path = [aPath retain];
+        path = aPath;
         bsdName = nil;
 	}
     return self;
-}
-
-
-- (void)dealloc
-{
-    [path release];
-    path = nil;
-    [bsdName release];
-    bsdName = nil;
-    [super dealloc];
 }
 
 
@@ -90,7 +80,7 @@
         bsdName = [bsdName substringFromIndex:5];
     }
 
-    return [bsdName retain];
+    return bsdName;
 }
 
 

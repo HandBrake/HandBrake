@@ -33,7 +33,7 @@ extern NSString *keySubTrackSrtCharCode;
 
 @interface HBTitle ()
 
-@property (nonatomic, readwrite) NSString *name;
+@property (nonatomic, readwrite, strong) NSString *name;
 
 @property (nonatomic, readwrite) NSArray *audioTracks;
 @property (nonatomic, readwrite) NSArray *subtitlesTracks;
@@ -50,7 +50,6 @@ extern NSString *keySubTrackSrtCharCode;
     {
         if (!title)
         {
-            [self release];
             return nil;
         }
 
@@ -59,16 +58,6 @@ extern NSString *keySubTrackSrtCharCode;
     }
 
     return self;
-}
-
-- (void)dealloc
-{
-    [_name release];
-    [_audioTracks release];
-    [_subtitlesTracks release];
-    [_chapters release];
-
-    [super dealloc];
 }
 
 - (NSString *)name
@@ -82,8 +71,6 @@ extern NSString *keySubTrackSrtCharCode;
         {
             _name = [@(self.hb_title->path) lastPathComponent];
         }
-
-        [_name retain];
     }
 
     return _name;
@@ -232,6 +219,5 @@ extern NSString *keySubTrackSrtCharCode;
 
     return _chapters;
 }
-
 
 @end

@@ -20,7 +20,7 @@
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *presetDescription;
-@property (nonatomic, retain) NSDictionary *content;
+@property (nonatomic, strong) NSDictionary *content;
 
 @property (nonatomic) BOOL isDefault;
 @property (nonatomic, readonly) BOOL isBuiltIn;

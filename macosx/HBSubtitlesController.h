@@ -13,6 +13,6 @@
  */
 @interface HBSubtitlesController : NSViewController
 
-@property (nonatomic, readwrite, assign) HBSubtitles *subtitles;
+@property (nonatomic, readwrite, unsafe_unretained) HBSubtitles *subtitles;
 
 @end

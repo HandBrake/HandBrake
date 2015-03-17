@@ -31,7 +31,7 @@
             [encoders addObject:@(video_encoder->name)];
         }
     }
-    return [[encoders copy] autorelease];
+    return [encoders copy];
 }
 
 - (NSArray *)frameRates
@@ -64,7 +64,7 @@
 
         [framerates addObject:itemTitle];
     }
-    return [[framerates copy] autorelease];
+    return [framerates copy];
 }
 
 - (BOOL)fastDecodeSupported

@@ -18,10 +18,10 @@ static void *HBSubtitlesControllerContext = &HBSubtitlesControllerContext;
 @interface HBSubtitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 
 // IBOutles
-@property (assign) IBOutlet NSTableView *fTableView;
+@property (unsafe_unretained) IBOutlet NSTableView *fTableView;
 
 // Defaults
-@property (nonatomic, readwrite, retain) HBSubtitlesDefaultsController *defaultsController;
+@property (nonatomic, readwrite, strong) HBSubtitlesDefaultsController *defaultsController;
 
 // Cached table view's cells
 @property (nonatomic, readonly) NSPopUpButtonCell *languagesCell;
@@ -103,7 +103,7 @@ static void *HBSubtitlesControllerContext = &HBSubtitlesControllerContext;
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    self.defaultsController = [[[HBSubtitlesDefaultsController alloc] initWithSettings:self.subtitles.defaults] autorelease];
+    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:self.subtitles.defaults];
 
 	[NSApp beginSheet:[self.defaultsController window]
        modalForWindow:[[self view] window]
@@ -377,7 +377,7 @@ static void *HBSubtitlesControllerContext = &HBSubtitlesControllerContext;
             [[cellTrackPopup menu] addItemWithTitle:track[keySubTrackName] action:NULL keyEquivalent:@""];
         }
 
-        return [cellTrackPopup autorelease];
+        return cellTrackPopup;
     }
     else if ([[tableColumn identifier] isEqualToString:@"srt_lang"])
     {

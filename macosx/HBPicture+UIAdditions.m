@@ -104,7 +104,7 @@
      self.cropTop, self.cropBottom,
      self.cropLeft, self.cropRight];
 
-    return [[summary copy] autorelease];
+    return [summary copy];
 }
 
 @end

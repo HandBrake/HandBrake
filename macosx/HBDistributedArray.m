@@ -18,8 +18,8 @@
 
 - (instancetype)initWithObject:(id)object;
 
-@property (nonatomic, retain) id representedObject;
-@property (nonatomic, readonly) NSString *uuid;
+@property (nonatomic, strong) id representedObject;
+@property (unsafe_unretained, nonatomic, readonly) NSString *uuid;
 
 @end
 
@@ -27,15 +27,9 @@
 
 - (instancetype)initWithObject:(id)object
 {
-    _representedObject = [object retain];
+    _representedObject = object;
 
     return self;
-}
-
-- (void)dealloc
-{
-    [_representedObject release];
-    [super dealloc];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)selector
@@ -113,20 +107,13 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (void)dealloc
 {
+    [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+
     [self lock];
     [self synchronize];
     [self unlock];
 
-    [_fileURL release];
-    _fileURL = nil;
-    [_array release];
-    _array = nil;
-
-    [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
-
     sem_close(_mutex);
-
-    [super dealloc];
 }
 
 - (void)lock
@@ -277,7 +264,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     }
     else
     {
-        return [[[HBProxyArrayObject alloc] initWithObject:anObject] autorelease];
+        return [[HBProxyArrayObject alloc] initWithObject:anObject];
     }
 }
 

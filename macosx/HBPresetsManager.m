@@ -42,16 +42,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return self;
 }
 
-- (void)dealloc
-{
-    [_fileURL release];
-    [_defaultPreset release];
-
-    [_root release];
-
-    [super dealloc];
-}
-
 - (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset
 {
     __block NSIndexPath *retValue = nil;
@@ -61,12 +51,12 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     {
         if ([obj isEqualTo:preset])
         {
-            retValue = [idx retain];
+            retValue = idx;
             *stop = YES;
         }
     }];
 
-    return [retValue autorelease];
+    return retValue;
 }
 
 #pragma mark - HBTreeNode delegate
@@ -86,8 +76,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     {
         [self.root.children addObject:[self loadFromDict:child]];
     }
-
-    [presetsArray release];
 
     // If the preset list contains no leaf,
     // add back the built in presets.
@@ -115,7 +103,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 - (BOOL)savePresetsToURL:(NSURL *)url
 {
-    NSMutableArray *presetsArray = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
 
     for (HBPreset *node in self.root.children)
     {
@@ -142,8 +130,8 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     HBPreset *node = nil;
     if ([dict[@"Folder"] boolValue])
     {
-        node = [[[HBPreset alloc] initWithFolderName:dict[@"PresetName"]
-                                              builtIn:![dict[@"Type"] boolValue]] autorelease];
+        node = [[HBPreset alloc] initWithFolderName:dict[@"PresetName"]
+                                              builtIn:![dict[@"Type"] boolValue]];
 
         for (NSDictionary *child in dict[@"ChildrenArray"])
         {
@@ -152,9 +140,9 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     }
     else
     {
-        node = [[[HBPreset alloc] initWithName:dict[@"PresetName"]
+        node = [[HBPreset alloc] initWithName:dict[@"PresetName"]
                                         content:dict
-                                        builtIn:![dict[@"Type"] boolValue]] autorelease];
+                                        builtIn:![dict[@"Type"] boolValue]];
         node.isDefault = [dict[@"Default"] boolValue];
 
         if ([dict[@"Default"] boolValue])
@@ -190,10 +178,9 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         }
 
         output[@"ChildrenArray"] = childArray;
-        [childArray release];
     }
 
-    return [output autorelease];
+    return output;
 }
 
 #pragma mark - Presets Management
@@ -226,7 +213,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
                                                    builtIn:NO];
 
     [self.root insertObject:presetNode inChildrenAtIndex:[self.root countOfChildren]];
-    [presetNode release];
 
     [self savePresets];
 }
@@ -335,10 +321,9 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         if (_defaultPreset)
         {
             _defaultPreset.isDefault = NO;
-            [_defaultPreset autorelease];
         }
         defaultPreset.isDefault = YES;
-        _defaultPreset = [defaultPreset retain];
+        _defaultPreset = defaultPreset;
 
         [self nodeDidChange];
     }
@@ -372,13 +357,10 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
             // each time the app checks the version.
             presetDict[@"PresetBuildNumber"] = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
             [obj setContent:presetDict];
-            [presetDict release];
         }];
 
         [self.root insertObject:preset inChildrenAtIndex:0];
     }
-
-    [presetsArray release];
 
     // set a new Default preset
     [self selectNewDefault];
@@ -398,7 +380,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         }
     }
     [self.root.children removeObjectsInArray:nodeToRemove];
-    [nodeToRemove release];
     [self didChangeValueForKey:@"root"];
 }
 

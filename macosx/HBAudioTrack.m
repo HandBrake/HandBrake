@@ -324,37 +324,19 @@ static NSMutableArray *masterBitRateArray = nil;
     return masterSampleRateArray;
 }
 
-- (void) dealloc
-{
-    [_track release];
-    [_codec release];
-    [_mixdown release];
-    [_sampleRate release];
-    [_bitRate release];
-    [_drc release];
-    [_gain release];
-    [_videoContainerTag release];
-    [_codecs release];
-    [_mixdowns release];
-    [_bitRates release];
-
-    [super dealloc];
-}
-
 #pragma mark -
 #pragma mark Setters
 
 - (void)setVideoContainerTag:(NSNumber *)videoContainerTag
 {
-    [_videoContainerTag autorelease];
-    _videoContainerTag = [videoContainerTag retain];
+    _videoContainerTag = videoContainerTag;
     [self updateCodecs];
 }
 
 - (void)setTrack:(NSDictionary *)track
 {
     NSDictionary *oldValue = _track;
-    _track = [track retain];
+    _track = track;
     if (nil != _track)
     {
         [self updateCodecs];
@@ -372,29 +354,25 @@ static NSMutableArray *masterBitRateArray = nil;
             [self.delegate settingTrackToNone: self];
         }
     }
-    [oldValue release];
 }
 
 - (void)setCodec:(NSDictionary *)codec
 {
-    [_codec autorelease];
-    _codec = [codec retain];
+    _codec = codec;
     [self updateMixdowns: YES];
     [self updateBitRates: YES];
 }
 
 - (void)setMixdown:(NSDictionary *)mixdown
 {
-    [_mixdown autorelease];
-    _mixdown = [mixdown retain];
+    _mixdown = mixdown;
     [self updateBitRates: YES];
     [self.delegate mixdownChanged];
 }
 
 - (void)setSampleRate:(NSDictionary *)sampleRate
 {
-    [_sampleRate autorelease];
-    _sampleRate = [sampleRate retain];
+    _sampleRate = sampleRate;
     [self updateBitRates: NO];
 }
 
@@ -650,4 +628,3 @@ static NSMutableArray *masterBitRateArray = nil;
 }
 
 @end
-

@@ -16,10 +16,10 @@
 
 @property (nonatomic, readonly) NSMutableDictionary *picturePreviews;
 @property (nonatomic, readonly) NSUInteger imagesCount;
-@property (nonatomic, readonly) HBCore *scanCore;
-@property (nonatomic, readonly) HBJob *job;
+@property (unsafe_unretained, nonatomic, readonly) HBCore *scanCore;
+@property (unsafe_unretained, nonatomic, readonly) HBJob *job;
 
-@property (nonatomic) HBCore *core;
+@property (unsafe_unretained, nonatomic) HBCore *core;
 
 @end
 
@@ -41,6 +41,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.core cancelEncode];
+}
+
 #pragma mark -
 #pragma mark Preview images
 
@@ -49,28 +55,32 @@
  *
  * @param index picture index in title.
  */
-- (CGImageRef) imageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
+- (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
 {
     if (index >= self.imagesCount)
         return nil;
 
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    CGImageRef theImage = (CGImageRef)[self.picturePreviews objectForKey:@(index)];
+    CGImageRef theImage = (__bridge CGImageRef)[self.picturePreviews objectForKey:@(index)];
 
     if (!theImage)
     {
         HBFilters *filters = self.job.filters;
         BOOL deinterlace = (filters.deinterlace && !filters.useDecomb) || (filters.decomb && filters.useDecomb);
 
-        theImage = (CGImageRef)[(id)[self.scanCore copyImageAtIndex:index
+        theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
                                                        pictureFrame:self.job.picture
-                                                        deinterlace:deinterlace] autorelease];
+                                                        deinterlace:deinterlace];
         if (cache && theImage)
         {
-            [self.picturePreviews setObject:(id)theImage forKey:@(index)];
+            [self.picturePreviews setObject:(__bridge id)theImage forKey:@(index)];
         }
+    }
+    else
+    {
+        CFRetain(theImage);
     }
 
     return theImage;
@@ -149,7 +159,7 @@
     // See if there is an existing preview file, if so, delete it.
     [[NSFileManager defaultManager] removeItemAtURL:destURL error:NULL];
 
-    HBJob *job = [[self.job copy] autorelease];
+    HBJob *job = [self.job copy];
     job.title = self.job.title;
     job.destURL = destURL;
 
@@ -164,7 +174,7 @@
 
     // Init the libhb core
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-    self.core = [[[HBCore alloc] initWithLoggingLevel:loggingLevel] autorelease];
+    self.core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
     self.core.name = @"PreviewCore";
 
     // start the actual encode
@@ -220,20 +230,6 @@
     {
         [self.core cancelEncode];
     }
-}
-
-#pragma mark -
-
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-
-    [self.core cancelEncode];
-
-    [_picturePreviews release];
-    _picturePreviews = nil;
-
-    [super dealloc];
 }
 
 @end

@@ -33,21 +33,21 @@ extern NSString *keyAudioBitrate;
 
 @interface HBAudioTrack : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, retain) NSDictionary *track;
-@property (nonatomic, retain) NSDictionary *codec;
-@property (nonatomic, retain) NSDictionary *mixdown;
-@property (nonatomic, retain) NSDictionary *sampleRate;
-@property (nonatomic, retain) NSDictionary *bitRate;
-@property (nonatomic, retain) NSNumber *drc;
-@property (nonatomic, retain) NSNumber *gain;
-@property (nonatomic, retain) NSNumber *videoContainerTag;
-@property (nonatomic, assign) id<HBAudioTrackDataSource> dataSource;
-@property (nonatomic, assign) id<HBAudioTrackDelegate> delegate;
+@property (nonatomic, strong) NSDictionary *track;
+@property (nonatomic, strong) NSDictionary *codec;
+@property (nonatomic, strong) NSDictionary *mixdown;
+@property (nonatomic, strong) NSDictionary *sampleRate;
+@property (nonatomic, strong) NSDictionary *bitRate;
+@property (nonatomic, strong) NSNumber *drc;
+@property (nonatomic, strong) NSNumber *gain;
+@property (nonatomic, strong) NSNumber *videoContainerTag;
+@property (nonatomic, unsafe_unretained) id<HBAudioTrackDataSource> dataSource;
+@property (nonatomic, unsafe_unretained) id<HBAudioTrackDelegate> delegate;
 
-@property (nonatomic, retain) NSMutableArray *codecs;
-@property (nonatomic, retain) NSMutableArray *mixdowns;
+@property (nonatomic, strong) NSMutableArray *codecs;
+@property (nonatomic, strong) NSMutableArray *mixdowns;
 @property (nonatomic, readonly) NSArray *sampleRates;
-@property (nonatomic, retain) NSArray *bitRates;
+@property (nonatomic, strong) NSArray *bitRates;
 @property (nonatomic, readonly) BOOL enabled;
 
 - (void) setTrackFromIndex: (int) aValue;

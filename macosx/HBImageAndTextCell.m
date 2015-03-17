@@ -91,17 +91,10 @@ scaleProportionally(NSSize imageSize, NSRect canvasRect)
     return self; 
 }
 
-- (void)dealloc
-{
-    [image release];
-    image = nil;
-    [super dealloc];
-}
-
 - copyWithZone:(NSZone *)zone
 {
     HBImageAndTextCell *cell = (HBImageAndTextCell *)[super copyWithZone:zone];
-    cell->image = [image retain];
+    cell->image = image;
     return cell;
 }
 
@@ -109,8 +102,7 @@ scaleProportionally(NSSize imageSize, NSRect canvasRect)
 {
     if (anImage != image)
     {
-        [image release];
-        image = [anImage retain];
+        image = anImage;
     }
 }
 

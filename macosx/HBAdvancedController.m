@@ -94,8 +94,7 @@
 
 - (void)setVideoSettings:(HBVideo *)videoSettings
 {
-    [_videoSettings autorelease];
-    _videoSettings = [videoSettings retain];
+    _videoSettings = videoSettings;
 
     if (_videoSettings)
     {
@@ -153,10 +152,6 @@
     }
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
 
 /**
  * Populates the option widgets

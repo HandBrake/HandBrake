@@ -169,7 +169,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     {
         [encoders addObject:@(audio_encoder->name)];
     }
-    return [encoders autorelease];
+    return encoders;
 }
 
 - (NSArray *)mixdowns
@@ -184,7 +184,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
             [mixdowns addObject:@(mixdown->name)];
         }
     }
-    return [mixdowns autorelease];
+    return mixdowns;
 }
 
 - (NSArray *)samplerates
@@ -196,7 +196,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     {
         [samplerates addObject:@(audio_samplerate->name)];
     }
-    return [samplerates autorelease];
+    return samplerates;
 }
 
 - (NSArray *)bitrates
@@ -219,7 +219,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
             [bitrates addObject:@(audio_bitrate->name)];
         }
     }
-    return [bitrates autorelease];
+    return bitrates;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key

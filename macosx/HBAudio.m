@@ -19,8 +19,8 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 @interface HBAudio () <HBAudioTrackDataSource, HBAudioTrackDelegate>
 
-@property (nonatomic, readonly) NSDictionary *noneTrack;
-@property (nonatomic, readonly) NSArray *masterTrackArray;  // the master list of audio tracks from the title
+@property (nonatomic, readonly, strong) NSDictionary *noneTrack;
+@property (nonatomic, readonly, strong) NSArray *masterTrackArray;  // the master list of audio tracks from the title
 
 @property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
 
@@ -38,9 +38,9 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBAudioDefaults alloc] init];
 
-        _noneTrack = [@{keyAudioTrackIndex: @0,
+        _noneTrack = @{keyAudioTrackIndex: @0,
                         keyAudioTrackName: NSLocalizedString(@"None", @"None"),
-                        keyAudioInputCodec: @0} retain];
+                        keyAudioInputCodec: @0};
 
         NSMutableArray *sourceTracks = [NSMutableArray array];
         [sourceTracks addObject:_noneTrack];
@@ -50,23 +50,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [_tracks release];
-    _tracks = nil;
-
-    [_defaults release];
-    _defaults = nil;
-
-    [_noneTrack release];
-    _noneTrack = nil;
-
-    [_masterTrackArray release];
-    _masterTrackArray = nil;
-
-    [super dealloc];
 }
 
 - (void)addAllTracks
@@ -172,7 +155,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         {
             [self removeObjectFromTracksAtIndex: [self countOfTracks] - 1];
         }
-        [newAudio release];
 
         if (firstOnly)
         {
@@ -245,7 +227,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
                 firstTrack = self.defaults.secondaryEncoderMode ? YES : NO;
                 [tracksAdded addIndexes:tracksIndexes];
             }
-            [tracksIndexes release];
         }
 
         // If no preferred Language was found, add standard track 1
@@ -296,7 +277,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     [newAudio setTrack: self.noneTrack];
     [newAudio setDrc: @0.0f];
     [newAudio setGain: @0.0f];
-    [newAudio release];
 }
 
 #pragma mark -
@@ -382,7 +362,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
                 HBAudioTrack *trackCopy = [obj copy];
                 trackCopy.dataSource = copy;
                 trackCopy.delegate = copy;
-                [copy->_tracks addObject:[trackCopy autorelease]];
+                [copy->_tracks addObject:trackCopy];
             }
         }];
 

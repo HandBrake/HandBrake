@@ -76,7 +76,7 @@
         preset[@"SubtitleTrackSelectionBehavior"] = @"none";
     }
 
-    preset[@"SubtitleLanguageList"] = [[self.trackSelectionLanguages copy] autorelease];
+    preset[@"SubtitleLanguageList"] = [self.trackSelectionLanguages copy];
     preset[@"SubtitleAddCC"] = @(self.addCC);
     preset[@"SubtitleAddForeignAudioSearch"] = @(self.addForeignAudioSearch);
     preset[@"SubtitleAddForeignAudioSubtitle"] = @(self.addForeignAudioSubtitle);
@@ -111,7 +111,6 @@
     if (copy)
     {
         copy->_trackSelectionBehavior = _trackSelectionBehavior;
-        [copy->_trackSelectionLanguages release];
         copy->_trackSelectionLanguages = [_trackSelectionLanguages mutableCopy];
 
         copy->_addForeignAudioSearch = _addForeignAudioSearch;
@@ -162,10 +161,5 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_trackSelectionLanguages release];
-    [super dealloc];
-}
 
 @end

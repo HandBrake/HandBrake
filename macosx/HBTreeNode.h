@@ -26,7 +26,7 @@
 @property (nonatomic, readonly) NSMutableArray *children;
 @property (nonatomic) BOOL isLeaf;
 
-@property (nonatomic, assign) id<HBTreeNodeDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<HBTreeNodeDelegate> delegate;
 
 /**
  *  Executes a given block using each object in the tree, starting with the root object and continuing through the tree to the last object.

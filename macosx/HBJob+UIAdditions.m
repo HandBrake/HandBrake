@@ -69,7 +69,7 @@ static NSDictionary            *shortHeightAttr;
         [containers addObject:title];
     }
 
-    return [[containers copy] autorelease];
+    return [containers copy];
 }
 
 - (void)initStyles
@@ -77,22 +77,22 @@ static NSDictionary            *shortHeightAttr;
     if (!ps)
     {
         // Attributes
-        ps = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] retain];
+        ps = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         [ps setHeadIndent: 40.0];
         [ps setParagraphSpacing: 1.0];
         [ps setTabStops:@[]];    // clear all tabs
-        [ps addTabStop: [[[NSTextTab alloc] initWithType: NSLeftTabStopType location: 20.0] autorelease]];
+        [ps addTabStop: [[NSTextTab alloc] initWithType: NSLeftTabStopType location: 20.0]];
 
-        detailAttr = [@{NSFontAttributeName: [NSFont systemFontOfSize:10.0],
-                        NSParagraphStyleAttributeName: ps} retain];
+        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:10.0],
+                        NSParagraphStyleAttributeName: ps};
 
-        detailBoldAttr = [@{NSFontAttributeName: [NSFont boldSystemFontOfSize:10.0],
-                            NSParagraphStyleAttributeName: ps} retain];
+        detailBoldAttr = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:10.0],
+                            NSParagraphStyleAttributeName: ps};
 
-        titleAttr = [@{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSize]],
-                       NSParagraphStyleAttributeName: ps} retain];
+        titleAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSize]],
+                       NSParagraphStyleAttributeName: ps};
 
-        shortHeightAttr = [@{NSFontAttributeName: [NSFont systemFontOfSize:2.0]} retain];
+        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:2.0]};
     }
 }
 
@@ -150,7 +150,7 @@ static NSDictionary            *shortHeightAttr;
             }
         }
 
-        [finalString appendString:[NSString stringWithFormat:@"%@", self.fileURL.path.lastPathComponent] withAttributes:titleAttr];
+        [finalString appendString:[NSString stringWithFormat:@"%@", self.description] withAttributes:titleAttr];
 
         // lets add the output file name to the title string here
         NSString *outputFilenameString = self.destURL.lastPathComponent;
@@ -459,7 +459,7 @@ static NSDictionary            *shortHeightAttr;
         }
     }
     
-    return [finalString autorelease];
+    return finalString;
 }
 
 @end

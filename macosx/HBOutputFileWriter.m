@@ -36,8 +36,6 @@
 - (void)dealloc
 {
     fclose(f);
-    [_url release];
-    [super dealloc];
 }
 
 - (void)writeHeaderForReason:(NSString *)reason

@@ -15,7 +15,7 @@
     {
         _name = [title copy];
         _isBuiltIn = builtIn;
-        _content = [content retain];
+        _content = content;
         _presetDescription = [content[@"PresetDescription"] copy];
     }
     return self;
@@ -45,15 +45,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_name release];
-    [_content release];
-    [_presetDescription release];
-
-    [super dealloc];
-}
-
 - (id)copyWithZone:(NSZone *)zone
 {
     HBPreset *node = [[self class] allocWithZone:zone];
@@ -62,7 +53,7 @@
     node->_presetDescription = [self.presetDescription copy];
     for (HBPreset *children in self.children)
     {
-        [node.children addObject:[[children copy] autorelease]];
+        [node.children addObject:[children copy]];
     }
 
     return node;
@@ -75,7 +66,6 @@
 
 - (void)setName:(NSString *)name
 {
-    [_name autorelease];
     _name = [name copy];
 
     [self.delegate nodeDidChange];

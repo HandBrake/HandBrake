@@ -36,8 +36,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     IBOutlet NSTextField *fDisplayX264PresetsUnparseTextField;
 }
 
-@property (nonatomic, retain, readwrite) HBAdvancedController *advancedController;
-@property (nonatomic, readwrite, assign) HBVideo *video;
+@property (nonatomic, strong, readwrite) HBAdvancedController *advancedController;
+@property (nonatomic, readwrite, unsafe_unretained) HBVideo *video;
 
 @property (nonatomic, readwrite) BOOL presetViewEnabled;
 
@@ -52,7 +52,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     self = [self init];
     if (self)
     {
-        _advancedController = [advancedController retain];
+        _advancedController = advancedController;
     }
     return self;
 }
@@ -62,7 +62,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     self = [super initWithNibName:@"Video" bundle:nil];
     if (self)
     {
-        _labelColor = [[NSColor disabledControlTextColor] retain];
+        _labelColor = [NSColor disabledControlTextColor];
 
         // Observe the advanced tab pref shown/hided state.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
@@ -196,7 +196,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     // Replace the slider transformer with a new one,
     // configured with the new max/min/direction values.
     [fVidQualitySlider unbind:@"value"];
-    HBQualityTransformer *transformer = [[[HBQualityTransformer alloc] initWithReversedDirection:(direction != 0) min:minValue max:maxValue] autorelease];
+    HBQualityTransformer *transformer = [[HBQualityTransformer alloc] initWithReversedDirection:(direction != 0) min:minValue max:maxValue];
     [fVidQualitySlider bind:@"value" toObject:self withKeyPath:@"self.video.quality" options:@{NSValueTransformerBindingOption: transformer}];
 }
 
@@ -280,7 +280,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     // Bind the slider value to a custom value transformer,
     // done here because it can't be done in IB.
     [fPresetsSlider unbind:@"value"];
-    HBPresetsTransformer *transformer = [[[HBPresetsTransformer alloc] initWithEncoder:self.video.encoder] autorelease];
+    HBPresetsTransformer *transformer = [[HBPresetsTransformer alloc] initWithEncoder:self.video.encoder];
     [fPresetsSlider bind:@"value" toObject:self withKeyPath:@"self.video.preset" options:@{NSValueTransformerBindingOption: transformer}];
 }
 

@@ -18,15 +18,15 @@
 
 @interface HBAppDelegate ()
 
-@property (nonatomic, retain) HBPresetsManager *presetsManager;
-@property (assign) IBOutlet NSMenu *presetsMenu;
+@property (nonatomic, strong) HBPresetsManager *presetsManager;
+@property (unsafe_unretained) IBOutlet NSMenu *presetsMenu;
 
-@property (nonatomic, retain) HBPreferencesController *preferencesController;
-@property (nonatomic, retain) HBQueueController *queueController;
+@property (nonatomic, strong) HBPreferencesController *preferencesController;
+@property (nonatomic, strong) HBQueueController *queueController;
 
-@property (nonatomic, retain) HBOutputPanelController *outputPanel;
+@property (nonatomic, strong) HBOutputPanelController *outputPanel;
 
-@property (nonatomic, retain) HBController *mainController;
+@property (nonatomic, strong) HBController *mainController;
 
 @end
 
@@ -47,11 +47,6 @@
         [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
 
         _outputPanel = [[HBOutputPanelController alloc] init];
-
-        // Lets report the HandBrake version number here to the activity log and text log file
-        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-        NSString *versionStringFull = [NSString stringWithFormat:@"Handbrake Version: %@  (%@)", infoDict[@"CFBundleShortVersionString"], infoDict[@"CFBundleVersion"]];
-        [HBUtilities writeToActivityLog: "%s", versionStringFull.UTF8String];
 
         // we init the HBPresetsManager
         NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"UserPresets.plist"];
@@ -163,7 +158,6 @@
                 [self showQueueWindow:nil];
             }
 
-            [alert release];
         }
     }
     else
@@ -210,7 +204,6 @@
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         NSInteger result = [alert runModal];
-        [alert release];
 
         if (result == NSAlertFirstButtonReturn)
         {
@@ -232,7 +225,6 @@
         [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
         [alert setAlertStyle:NSCriticalAlertStyle];
         NSInteger result = [alert runModal];
-        [alert release];
         if (result == NSAlertFirstButtonReturn)
         {
             return NSTerminateNow;
@@ -250,9 +242,7 @@
 {
     [self.presetsManager savePresets];
 
-    [_mainController release];
     _mainController = nil;
-    [_queueController release];
     _queueController = nil;
 
     [HBCore closeGlobal];
@@ -314,7 +304,6 @@
                 [manager removeItemAtURL:fileURL error:NULL];
             }
         }
-        [manager release];
     }
 }
 
@@ -340,7 +329,6 @@
                 [HBUtilities writeToActivityLog: "Could not remove existing preview at : %s", url.lastPathComponent.UTF8String];
             }
         }
-        [manager release];
     }
 }
 
@@ -376,7 +364,6 @@
             [alert setMessageText:@"HandBrake has determined your built in presets are out of date…"];
             [alert setInformativeText:@"HandBrake will now update your built-in presets."];
             [alert runModal];
-            [alert release];
         }
         // when alert is dismissed, go ahead and update the built in presets
         [self.presetsManager generateBuiltInPresets];
@@ -398,7 +385,6 @@
             [self.presetsMenu removeItem:item];
         }
     }
-    [menuItems release];
 
     __block NSUInteger i = 0;
     __block BOOL builtInEnded = NO;
@@ -423,7 +409,6 @@
                  NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:[obj name]
                                                                                 attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
                  [item setAttributedTitle:newTitle];
-                 [newTitle release];
              }
              // Add a separator line after the last builtIn preset
              if ([obj isBuiltIn] == NO && builtInEnded == NO)
@@ -435,7 +420,6 @@
              item.indentationLevel = idx.length - 1;
 
              [self.presetsMenu addItem:item];
-             [item release];
          }
      }];
 }

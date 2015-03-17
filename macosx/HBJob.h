@@ -17,6 +17,8 @@
 #import "HBAudio.h"
 #import "HBSubtitles.h"
 
+#import "HBDistributedArray.h"
+
 extern NSString *HBContainerChangedNotification;
 extern NSString *HBChaptersChangedNotification;
 
@@ -33,32 +35,25 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 /**
  * HBJob
  */
-@interface HBJob : NSObject <NSCoding, NSCopying>
+@interface HBJob : NSObject <NSCoding, NSCopying, HBUniqueObject>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
 
 - (void)applyPreset:(HBPreset *)preset;
 - (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict;
 
-/**
- *  Current state of the job.
- */
+/// Current state of the job.
 @property (nonatomic, readwrite) HBJobState state;
-
-@property (nonatomic, readwrite, copy) NSString *presetName;
 
 @property (nonatomic, readwrite, assign) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
-@property (nonatomic, readonly) NSString *uuid;
 
-/**
- *  The file URL of the source.
- */
+@property (nonatomic, readwrite, copy) NSString *presetName;
+
+/// The file URL of the source.
 @property (nonatomic, readonly) NSURL *fileURL;
 
-/**
- *  The file URL at which the new file will be created.
- */
+/// The file URL at which the new file will be created.
 @property (nonatomic, readwrite, copy) NSURL *destURL;
 
 // Job settings
