@@ -153,23 +153,35 @@ int ghb_get_copy_mask(GhbValue *settings)
 
     if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
     {
-        mask |= HB_ACODEC_MP3;
+        mask |= HB_ACODEC_MP3_PASS;
     }
     if (ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
     {
-        mask |= HB_ACODEC_FFAAC;
+        mask |= HB_ACODEC_AAC_PASS;
     }
     if (ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
     {
-        mask |= HB_ACODEC_AC3;
+        mask |= HB_ACODEC_AC3_PASS;
     }
     if (ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
     {
-        mask |= HB_ACODEC_DCA;
+        mask |= HB_ACODEC_DCA_PASS;
     }
     if (ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
     {
-        mask |= HB_ACODEC_DCA_HD;
+        mask |= HB_ACODEC_DCA_HD_PASS;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowEAC3Pass"))
+    {
+        mask |= HB_ACODEC_EAC3_PASS;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowFLACPass"))
+    {
+        mask |= HB_ACODEC_FLAC_PASS;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowTRUEHDPass"))
+    {
+        mask |= HB_ACODEC_TRUEHD_PASS;
     }
     return mask;
 }
