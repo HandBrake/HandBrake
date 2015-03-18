@@ -511,7 +511,9 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
         return 1;
     }
 
-    ass_set_frame_size( pv->renderer, job->width, job->height);
+    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+    ass_set_frame_size( pv->renderer, width, height);
 
     double par = (double)job->par.num / job->par.den;
     ass_set_aspect_ratio( pv->renderer, 1, par );
@@ -591,7 +593,9 @@ static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
     // Text subtitles for which we create a dummy ASS header need
     // to have the header rewritten with the correct dimensions.
-    hb_subtitle_add_ssa_header(filter->subtitle, job->width, job->height);
+    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+    hb_subtitle_add_ssa_header(filter->subtitle, width, height);
     return ssa_post_init(filter, job);
 }
 
@@ -826,16 +830,6 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     hb_subtitle_t *subtitle;
     int ii;
 
-    pv->crop[0] = pv->crop[1] = pv->crop[2] = pv->crop[3] = -1;
-    if( filter->settings )
-    {
-        sscanf( filter->settings, "%d:%d:%d:%d",
-                &pv->crop[0],
-                &pv->crop[1],
-                &pv->crop[2],
-                &pv->crop[3]);
-    }
-
     // Find the subtitle we need
     for( ii = 0; ii < hb_list_count(init->job->list_subtitle); ii++ )
     {
@@ -860,14 +854,10 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    if (pv->crop[0] == -1)
-        pv->crop[0] = job->crop[0];
-    if (pv->crop[1] == -1)
-        pv->crop[1] = job->crop[1];
-    if (pv->crop[2] == -1)
-        pv->crop[2] = job->crop[2];
-    if (pv->crop[3] == -1)
-        pv->crop[3] = job->crop[3];
+    pv->crop[0] = job->crop[0];
+    pv->crop[1] = job->crop[1];
+    pv->crop[2] = job->crop[2];
+    pv->crop[3] = job->crop[3];
 
     switch( pv->type )
     {
