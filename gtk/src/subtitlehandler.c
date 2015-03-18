@@ -552,7 +552,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         // is foreign language.
         foreign_audio_search = FALSE;
         track = ghb_find_subtitle_track(title, pref_lang, 0);
-        if (track > 0)
+        if (track >= 0)
         {
             gboolean burn;
             hb_subtitle_t *subtitle;
