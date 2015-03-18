@@ -140,11 +140,17 @@
         "Mp4HttpOptimize": false,
         "Mp4iPodCompatible": false,
         "PictureKeepRatio": true,
-        "AudioAllowMP3Pass": true,
-        "AudioAllowAACPass": true,
+        "AudioAllowMP3Pass": false,
+        "AudioAllowAACPass": false,
         "AudioAllowAC3Pass": true,
-        "AudioAllowDTSPass": true,
-        "AudioAllowDTSHDPass": true,
+        "AudioAllowDTSPass": false,
+        "AudioAllowDTSHDPass": false,
+        "AudioAllowEAC3Pass": false,
+        "AudioAllowFLACPass": false,
+        "AudioAllowTRUEHDPass": false,
+        "AudioCopyMask": [
+            "copy:ac3"
+        ],
         "AudioEncoderFallback": "ffac3",
         "AudioLanguageList": [
             "und"
