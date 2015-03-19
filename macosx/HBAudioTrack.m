@@ -438,7 +438,7 @@ static NSMutableArray *masterBitRateArray = nil;
 
 // Because we have indicated that the binding for the gain validates immediately we can implement the
 // key value binding method to ensure the gain stays in our accepted range.
-- (BOOL)validateGain:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateGain:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 

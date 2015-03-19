@@ -77,7 +77,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (BOOL)validateWidth:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateWidth:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 
@@ -107,7 +107,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (BOOL)validateHeight:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateHeight:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     BOOL retval = YES;
 
@@ -191,25 +191,25 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (BOOL)validateCropTop:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateCropTop:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     [self validateVCrop:ioValue];
     return YES;
 }
 
-- (BOOL)validateCropBottom:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateCropBottom:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     [self validateVCrop:ioValue];
     return YES;
 }
 
-- (BOOL)validateCropLeft:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateCropLeft:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     [self validateHCrop:ioValue];
     return YES;
 }
 
-- (BOOL)validateCropRight:(id *)ioValue error:(NSError *)outError
+- (BOOL)validateCropRight:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
     [self validateHCrop:ioValue];
     return YES;
