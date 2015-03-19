@@ -131,10 +131,10 @@ static void hb_error_handler(const char *errmsg)
 
 #pragma mark - Scan
 
-- (BOOL)canScan:(NSURL *)url error:(NSError **)error
+- (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
-        if (*error) {
+        if (error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
                                          code:100
                                      userInfo:@{ NSLocalizedDescriptionKey: @"Unable to find the file at the specified URL" }];

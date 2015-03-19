@@ -84,7 +84,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
  *
  *  @return YES is the file at URL is scannable.
  */
-- (BOOL)canScan:(NSURL *)url error:(NSError **)error;
+- (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error;
 
 /**
  *  Initiates an asynchronous scan operation and returns immediately.
