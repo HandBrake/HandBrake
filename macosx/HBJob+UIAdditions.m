@@ -38,9 +38,9 @@ static NSDictionary            *shortHeightAttr;
 - (NSArray *)angles
 {
     NSMutableArray *angles = [NSMutableArray array];
-    for (int i = 0; i < self.title.angles; i++)
+    for (int i = 1; i <= self.title.angles; i++)
     {
-        [angles addObject:[NSString stringWithFormat: @"%d", i + 1]];
+        [angles addObject:[NSString stringWithFormat: @"%d", i]];
     }
     return angles;
 }
