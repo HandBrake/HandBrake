@@ -84,7 +84,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -215,7 +215,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -346,7 +346,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -477,7 +477,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -624,7 +624,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -771,7 +771,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -918,7 +918,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -1049,7 +1049,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -1180,7 +1180,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -1311,7 +1311,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -1457,7 +1457,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
@@ -1604,7 +1604,7 @@
 				<key>PictureDeinterlaceCustom</key>
 				<string></string>
 				<key>PictureDenoiseFilter</key>
-				<integer>off</integer>
+				<string>off</string>
 				<key>PictureDenoiseCustom</key>
 				<string></string>
 				<key>PictureDetelecine</key>
