@@ -63,7 +63,7 @@ All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>HBApplication</string>
     <key>SUFeedURL</key>
     <string>__HB_url_appcast</string>
 </dict>
