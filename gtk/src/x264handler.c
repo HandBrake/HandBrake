@@ -150,7 +150,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             gchar *sopts;
 
             sopts = sanitize_x264opts(ud, options);
-            ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
+            ghb_update_x264Option(ud, sopts);
             ghb_x264_parse_options(ud, sopts);
 
             GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
@@ -795,7 +795,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
         if (len > 0) result[len - 1] = 0;
         gchar *sopts;
         sopts = sanitize_x264opts(ud, result);
-        ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
+        ghb_update_x264Option(ud, sopts);
         ghb_x264_parse_options(ud, sopts);
         g_free(sopts);
         g_free(result);
@@ -1059,4 +1059,40 @@ void
 ghb_x264_init(signal_user_data_t *ud)
 {
     ud->x264_priv = ghb_settings_new();
+}
+
+gboolean
+ghb_background_refresh_x264Option(signal_user_data_t *ud)
+{
+    const char *opt;
+    opt = ghb_settings_get_const_string(ud->settings, "x264Option");
+
+    GtkWidget *widget;
+    GtkTextBuffer *buffer;
+    GtkTextIter start, end;
+    gchar *str;
+
+    widget = GHB_WIDGET(ud->builder, "x264Option");
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+    gtk_text_buffer_get_bounds(buffer, &start, &end);
+    str = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+
+    // If the value has changed, then update it
+    if (opt != NULL)
+    {
+        if (str == NULL || strcmp(str, opt))
+        {
+            ud->dont_clear_presets = 1;
+            ghb_ui_update(ud, "x264Option", ghb_string_value(opt));
+            ud->dont_clear_presets = 0;
+        }
+    }
+    free(str);
+    return FALSE;
+}
+
+void ghb_update_x264Option(signal_user_data_t *ud, const char *opt)
+{
+    ghb_settings_set_string(ud->settings, "x264Option", opt);
+    g_idle_add((GSourceFunc)ghb_background_refresh_x264Option, ud);
 }
