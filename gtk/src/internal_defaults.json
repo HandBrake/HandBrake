@@ -191,7 +191,7 @@
         "VideoQualityType": 2,
         "VideoQualitySlider": 0.59999999999999998,
         "x264Option": "",
-        "VideoPreset": "custom",
+        "VideoPreset": "medium",
         "VideoTune": "",
         "VideoProfile": "",
         "VideoLevel": "",
