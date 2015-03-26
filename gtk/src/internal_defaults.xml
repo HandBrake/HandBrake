@@ -358,7 +358,7 @@
         <key>x264Option</key>
         <string></string>
         <key>VideoPreset</key>
-        <string>custom</string>
+        <string>medium</string>
         <key>VideoTune</key>
         <string></string>
         <key>VideoProfile</key>
