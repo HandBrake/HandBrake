@@ -576,9 +576,15 @@ ghb_update_widget(GtkWidget *widget, const GValue *value)
     else if (type == GTK_TYPE_TEXT_VIEW)
     {
         g_debug("textview (%s)", str);
+        static int text_view_busy = 0;
         GtkTextBuffer *buffer = gtk_text_view_get_buffer(
                                                 GTK_TEXT_VIEW(widget));
-        gtk_text_buffer_set_text (buffer, str, -1);
+        if (!text_view_busy)
+        {
+            text_view_busy = 1;
+            gtk_text_buffer_set_text (buffer, str, -1);
+            text_view_busy = 0;
+        }
     }
     else if (type == GTK_TYPE_LABEL)
     {

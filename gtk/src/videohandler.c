@@ -20,6 +20,7 @@
 #include "presets.h"
 #include "preview.h"
 #include "hb-backend.h"
+#include "x264handler.h"
 
 int ghb_get_video_encoder(GValue *settings)
 {
@@ -165,9 +166,9 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         new_opts = hb_x264_param_unparse(
                         preset, tunes, opts, profile, level, w, h);
         if (new_opts)
-            ghb_ui_update(ud, "x264Option", ghb_string_value(new_opts));
+            ghb_update_x264Option(ud, new_opts);
         else
-            ghb_ui_update(ud, "x264Option", ghb_string_value(""));
+            ghb_update_x264Option(ud, "");
 
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
 
