@@ -761,7 +761,7 @@ save_queue_file(signal_user_data_t *ud)
                       GHB_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                       GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                       NULL);
-    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "queue.xml");
+    gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), "queue.json");
     if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
     {
         ghb_value_free(queue);
@@ -798,12 +798,10 @@ open_queue_file(signal_user_data_t *ud)
     gtk_file_filter_set_name(filter, _("All"));
     gtk_file_filter_add_pattern(filter, "*");
     gtk_file_chooser_add_filter(chooser, filter);
-    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterXML"));
-    gtk_file_filter_set_name(filter, "XML");
-    gtk_file_filter_add_pattern(filter, "*.xml");
-    gtk_file_filter_add_pattern(filter, "*.XML");
-    gtk_file_filter_add_pattern(filter, "*.plist");
-    gtk_file_filter_add_pattern(filter, "*.PLIST");
+    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "QueueFilterJSON"));
+    gtk_file_filter_set_name(filter, "JSON");
+    gtk_file_filter_add_pattern(filter, "*.JSON");
+    gtk_file_filter_add_pattern(filter, "*.json");
     gtk_file_chooser_add_filter(chooser, filter);
 
     if (gtk_dialog_run(GTK_DIALOG (dialog)) != GTK_RESPONSE_ACCEPT)
