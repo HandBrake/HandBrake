@@ -19,6 +19,7 @@
 #include "settings.h"
 #include "resources.h"
 #include "values.h"
+#include "data_res.h"
 
 static const gchar resource_str[] =
 #include "resource_data.h"
@@ -29,7 +30,43 @@ static GhbValue *resources;
 void
 ghb_resource_init()
 {
+    GhbValue *val;
+    gsize data_size;
+    GBytes *gbytes;
+    gconstpointer data;
+
     resources = ghb_json_parse(resource_str, sizeof(resource_str)-1);
+
+    ghb_data_register_resource();
+    GResource *data_res = ghb_data_get_resource();
+
+    gbytes = g_resource_lookup_data(data_res,
+                        "/org/handbrake/data/internal_defaults.json", 0, NULL);
+    data = g_bytes_get_data(gbytes, &data_size);
+    val = ghb_json_parse(data, data_size);
+    g_bytes_unref(gbytes);
+    ghb_dict_insert(resources, "internal-defaults", val);
+
+    gbytes = g_resource_lookup_data(data_res,
+                        "/org/handbrake/data/standard_presets.json", 0, NULL);
+    data = g_bytes_get_data(gbytes, &data_size);
+    val = ghb_json_parse(data, data_size);
+    g_bytes_unref(gbytes);
+    ghb_dict_insert(resources, "standard-presets", val);
+
+    gbytes = g_resource_lookup_data(data_res,
+                        "/org/handbrake/data/widget.deps", 0, NULL);
+    data = g_bytes_get_data(gbytes, &data_size);
+    val = ghb_json_parse(data, data_size);
+    g_bytes_unref(gbytes);
+    ghb_dict_insert(resources, "widget-deps", val);
+
+    gbytes = g_resource_lookup_data(data_res,
+                        "/org/handbrake/data/widget_reverse.deps", 0, NULL);
+    data = g_bytes_get_data(gbytes, &data_size);
+    val = ghb_json_parse(data, data_size);
+    g_bytes_unref(gbytes);
+    ghb_dict_insert(resources, "widget-reverse-deps", val);
 }
 
 GhbValue*

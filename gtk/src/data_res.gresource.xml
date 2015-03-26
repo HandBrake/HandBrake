@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/handbrake/data">
+    <file>internal_defaults.json</file>
+    <file>standard_presets.json</file>
+    <file>widget.deps</file>
+    <file>widget_reverse.deps</file>
+  </gresource>
+</gresources>

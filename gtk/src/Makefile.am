@@ -53,6 +53,8 @@ ghb_SOURCES = \
 	presets.c \
 	presets.h \
 	preview.c \
+	data_res.c \
+	data_res.h \
 	icon_res.c \
 	icon_res.h \
 	icons.c \
@@ -88,7 +90,15 @@ ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhandbrake.a
 
-resources.o: resource_data.h
+data_res.c : data_res.gresource.xml internal_defaults.json standard_presets.json
+	cp $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json .
+	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
+
+data_res.h : data_res.gresource.xml internal_defaults.json standard_presets.json
+	cp $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json .
+	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
+
+resources.o: resource_data.h data_res.h
 
 resource_data.h: resources.json
 	python2 $(srcdir)/quotestring.py resources.json resource_data.h
