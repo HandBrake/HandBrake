@@ -955,6 +955,7 @@ ghb_preset_to_settings(GValue *settings, GValue *preset)
     if (preset == NULL)
         preset = internal;
 
+    ghb_dict_remove(settings, "x264Option");
     init_settings_from_dict(settings, preset, NULL, TRUE);
 }
 
