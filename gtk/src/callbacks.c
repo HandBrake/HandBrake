@@ -3388,6 +3388,35 @@ ghb_timer_cb(gpointer data)
     return TRUE;
 }
 
+gboolean scroll_at_bottom(signal_user_data_t *ud, const char *scroll)
+{
+    GtkScrolledWindow *window;
+    GtkAdjustment *adj;
+    double val, upper, ps;
+
+    window = GTK_SCROLLED_WINDOW(GHB_WIDGET(ud->builder, scroll));
+    adj = gtk_scrolled_window_get_vadjustment(window);
+    val = gtk_adjustment_get_value(adj);
+    upper = gtk_adjustment_get_upper(adj);
+    ps = gtk_adjustment_get_page_size(adj);
+    return val >= upper - ps;
+}
+
+G_MODULE_EXPORT gboolean
+activity_scroll_to_bottom(signal_user_data_t *ud)
+{
+    GtkScrolledWindow *window;
+    GtkAdjustment *adj;
+    double upper, ps;
+
+    window = GTK_SCROLLED_WINDOW(GHB_WIDGET(ud->builder, "activity_scroll"));
+    adj = gtk_scrolled_window_get_vadjustment(window);
+    upper = gtk_adjustment_get_upper(adj);
+    ps = gtk_adjustment_get_page_size(adj);
+    gtk_adjustment_set_value(adj, upper - ps);
+    return FALSE;
+}
+
 G_MODULE_EXPORT gboolean
 ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 {
@@ -3396,7 +3425,6 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     GtkTextView *textview;
     GtkTextBuffer *buffer;
     GtkTextIter iter;
-    GtkTextMark *mark;
     GError *gerror = NULL;
     GIOStatus status;
 
@@ -3409,36 +3437,12 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
         length--;
     if (text != NULL && length > 0)
     {
-        GdkWindow *window;
-        gint width, height;
-        gint x, y;
         gboolean bottom = FALSE;
         gchar *utf8_text;
 
+        bottom = scroll_at_bottom(ud, "activity_scroll");
         textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
         buffer = gtk_text_view_get_buffer (textview);
-        // I would like to auto-scroll the window when the scrollbar
-        // is at the bottom,
-        // must determine whether the insert point is at
-        // the bottom of the window
-        window = gtk_text_view_get_window(textview, GTK_TEXT_WINDOW_TEXT);
-        if (window != NULL)
-        {
-            width = gdk_window_get_width(window);
-            height = gdk_window_get_height(window);
-            gtk_text_view_window_to_buffer_coords(textview,
-                GTK_TEXT_WINDOW_TEXT, width, height, &x, &y);
-            gtk_text_view_get_iter_at_location(textview, &iter, x, y);
-            if (gtk_text_iter_is_end(&iter))
-            {
-                bottom = TRUE;
-            }
-        }
-        else
-        {
-            // If the window isn't available, assume bottom
-            bottom = TRUE;
-        }
         gtk_text_buffer_get_end_iter(buffer, &iter);
         utf8_text = g_convert_with_fallback(text, -1, "UTF-8", "ISO-8859-1",
                                             "?", NULL, &length, NULL);
@@ -3447,10 +3451,16 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
             gtk_text_buffer_insert(buffer, &iter, utf8_text, -1);
             if (bottom)
             {
-                gtk_text_buffer_get_end_iter(buffer, &iter);
-                mark = gtk_text_buffer_create_mark(buffer, NULL, &iter, FALSE);
-                gtk_text_view_scroll_mark_onscreen(textview, mark);
-                gtk_text_buffer_delete_mark(buffer, mark);
+                static guint scroll_tok = 0;
+                GSource *source = NULL;
+                if (scroll_tok > 0)
+                    source = g_main_context_find_source_by_id(NULL, scroll_tok);
+                if (source != NULL)
+                {
+                    g_source_remove(scroll_tok);
+                }
+                scroll_tok = g_idle_add((GSourceFunc)activity_scroll_to_bottom,
+                                        ud);
             }
 #if defined(_WIN32)
             gsize one = 1;
