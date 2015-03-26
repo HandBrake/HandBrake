@@ -53,6 +53,8 @@ ghb_SOURCES = \
 	presets.c \
 	presets.h \
 	preview.c \
+	icon_res.c \
+	icon_res.h \
 	icons.c \
 	icons.h \
 	values.c \

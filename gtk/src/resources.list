@@ -1,18 +1,4 @@
 <resources>
-    <section name="icons">
-        <icon name="hb-icon" file="hb-icon.svg" />
-        <icon name="hb-start" file="hb-start.svg" />
-        <icon name="hb-pause" file="hb-pause.svg" />
-        <icon name="hb-stop" file="hb-stop.svg" />
-        <icon name="hb-add-queue" file="hb-add-queue.svg" />
-        <icon name="hb-queue" file="hb-showqueue.svg" />
-        <icon name="hb-picture" file="hb-picture.svg" />
-        <icon name="hb-activity" file="hb-activity.svg" />
-        <icon name="hb-source" file="hb-source.svg" />
-        <icon name="hb-remove" file="hb-remove.svg" />
-        <icon name="hb-complete" file="hb-complete.svg" />
-        <icon name="hb-edit" file="hb-edit.svg" />
-    </section>
     <json name="internal-defaults" file="internal_defaults.json" />
     <json name="standard-presets" file="standard_presets.json" />
     <json name="widget-deps" file="widget.deps" />

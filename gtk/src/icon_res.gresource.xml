@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/handbrake/icons/scalable/apps">
+    <file>hb-activity.svg</file>
+    <file>hb-add-queue.svg</file>
+    <file>hb-complete.svg</file>
+    <file>hb-edit.svg</file>
+    <file>hb-icon.svg</file>
+    <file>hb-pause.svg</file>
+    <file>hb-picture.svg</file>
+    <file>hb-remove.svg</file>
+    <file>hb-showqueue.svg</file>
+    <file>hb-source.svg</file>
+    <file>hb-start.svg</file>
+    <file>hb-stop.svg</file>
+  </gresource>
+</gresources>

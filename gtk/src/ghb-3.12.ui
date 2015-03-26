@@ -985,7 +985,7 @@ libx264 authors:
                         <property name="tooltip_text" translatable="yes">Show Queue</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Queue</property>
-                        <property name="icon_name">hb-queue</property>
+                        <property name="icon_name">hb-showqueue</property>
                         <signal name="toggled" handler="show_queue_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
