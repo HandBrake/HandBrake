@@ -90,11 +90,19 @@ ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhandbrake.a
 
-data_res.c : data_res.gresource.xml internal_defaults.json standard_presets.json
+icon_res.c : icon_res.gresource.xml $(icons_dep)
+	glib-compile-resources --generate --target=$@ --c-name ghb_icons --manual-register --sourcedir=$(srcdir) $<
+
+icon_res.h : icon_res.gresource.xml $(icons_dep)
+	glib-compile-resources --generate --target=$@ --c-name ghb_icons --manual-register --sourcedir=$(srcdir) $<
+
+icon_res.o: icon_res.c icon_res.h
+
+data_res.c : data_res.gresource.xml $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json widget.deps widget_reverse.deps
 	cp $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json .
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-data_res.h : data_res.gresource.xml internal_defaults.json standard_presets.json
+data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json widget.deps widget_reverse.deps
 	cp $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json .
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
@@ -107,7 +115,7 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python2 $(srcdir)/makedeps.py
 
-resources.json: create_resources resources.list $(icons_dep) internal_defaults.json standard_presets.json ghb.ui ghb-3.14.ui widget.deps widget_reverse.deps
+resources.json: create_resources resources.list ghb.ui ghb-3.14.ui
 	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.json
 
 CREATE_RES.c = \
