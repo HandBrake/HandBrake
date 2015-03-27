@@ -67,6 +67,7 @@
 #include "presets.h"
 #include "preview.h"
 #include "ghbcompositor.h"
+#include "ui_res.h"
 
 
 /*
@@ -89,9 +90,15 @@ GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
     guint res = 0;
-    GhbValue *gval;
     GError *error = NULL;
     const gchar *ghb_ui;
+    gsize data_size;
+
+    ghb_ui_register_resource();
+    GResource *ui_res = ghb_ui_get_resource();
+    GBytes *gbytes = g_resource_lookup_data(ui_res, "/org/handbrake/ui/ghb.ui",
+                                            0, NULL);
+    ghb_ui = g_bytes_get_data(gbytes, &data_size);
 
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
@@ -100,8 +107,6 @@ create_builder_or_die(const gchar * name)
         "%s");
     g_debug("create_builder_or_die()\n");
     GtkBuilder *xml = gtk_builder_new();
-    gval = ghb_resource_get("ghb-ui");
-    ghb_ui = ghb_value_const_string(gval);
     if (xml != NULL)
         res = gtk_builder_add_from_string(xml, ghb_ui, -1, &error);
     if (!xml || !res)

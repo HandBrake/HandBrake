@@ -21,10 +21,6 @@
 #include "values.h"
 #include "data_res.h"
 
-static const gchar resource_str[] =
-#include "resource_data.h"
-;
-
 static GhbValue *resources;
 
 void
@@ -35,7 +31,7 @@ ghb_resource_init()
     GBytes *gbytes;
     gconstpointer data;
 
-    resources = ghb_json_parse(resource_str, sizeof(resource_str)-1);
+    resources = ghb_dict_value_new();
 
     ghb_data_register_resource();
     GResource *data_res = ghb_data_get_resource();

@@ -55,6 +55,8 @@ ghb_SOURCES = \
 	preview.c \
 	data_res.c \
 	data_res.h \
+	ui_res.c \
+	ui_res.h \
 	icon_res.c \
 	icon_res.h \
 	icons.c \
@@ -106,30 +108,32 @@ data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json $(srcdir)/s
 	cp $(srcdir)/internal_defaults.json $(srcdir)/standard_presets.json .
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
-resources.o: resource_data.h data_res.h
+if GHB_GTK_3_14
+UI=ghb-3.14.ui
+else
+if GHB_GTK_3_12
+UI=ghb-3.12.ui
+else
+UI=ghb.ui
+endif
+endif
 
-resource_data.h: resources.json
-	python2 $(srcdir)/quotestring.py resources.json resource_data.h
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI)
+	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
+
+ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI)
+	cp $(srcdir)/$(UI) ghb.ui
+	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
+
+ui_res.o: ui_res.h ui_res.c
+
+main.o : ui_res.o
+
+resources.o: data_res.h
 
 widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python2 $(srcdir)/makedeps.py
-
-resources.json: create_resources resources.list ghb.ui ghb-3.14.ui
-	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.json
-
-CREATE_RES.c = \
-	create_resources.c \
-	plist.c \
-	values.c
-
-CREATE_RES.c.o = $(patsubst %.c,%-native.o,$(CREATE_RES.c))
-
-create_resources: $(CREATE_RES.c.o)
-	$(CC_FOR_BUILD) -g -o $@ $^ $(GHB_TOOLS_LIBS)
-
-$(CREATE_RES.c.o): %-native.o: %.c
-	$(CC_FOR_BUILD) $(GHB_TOOLS_CFLAGS) -g -c -o $@ $<
 
 ghbcellrenderertext.$(OBJEXT): marshalers.h
 
