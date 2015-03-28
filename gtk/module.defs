@@ -19,6 +19,9 @@ GTK.CONFIGURE.extra += --host=$(BUILD.spec) --disable-gst
 ifeq ($(HAS.dlfcn),1)
 	GTK.CONFIGURE.extra += --enable-dl
 endif
+ifeq ($(HAS.pthread),1)
+	GTK.CONFIGURE.extra += --enable-pthread
+endif
 endif
 
 ifeq (0,$(FEATURE.gtk.update.checks))
@@ -35,4 +38,8 @@ endif
 
 ifeq (1,$(FEATURE.x265))
 	GTK.CONFIGURE.extra += --enable-x265
+endif
+
+ifeq (1,$(FEATURE.qsv))
+	GTK.CONFIGURE.extra += --enable-qsv
 endif

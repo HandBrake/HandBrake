@@ -632,15 +632,20 @@ IoRedirect(signal_user_data_t *ud)
     // Set encoding to raw.
     g_io_channel_set_encoding(ud->activity_log, NULL, NULL);
     // redirect stderr to the writer end of the pipe
+
 #if defined(_WIN32)
-    _dup2(pfd[1], STDERR_FILENO);
-    // Non-console windows apps do not have a stderr->_file assigned properly
-    stderr->_file = STDERR_FILENO;
+    _dup2(pfd[1], _fileno(stderr));
 #else
     dup2(pfd[1], STDERR_FILENO);
 #endif
     setvbuf(stderr, NULL, _IONBF, 0);
+
+#if defined(_WIN32)
+    channel = g_io_channel_win32_new_fd(pfd[0]);
+#else
     channel = g_io_channel_unix_new(pfd[0]);
+#endif
+
     // I was getting an this error:
     // "Invalid byte sequence in conversion input"
     // Set disable encoding on the channel.
@@ -657,12 +662,16 @@ typedef struct
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 static gboolean ghb_debug = FALSE;
+static gboolean win32_console = FALSE;
 
 static GOptionEntry entries[] =
 {
     { "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, N_("The device or file to encode"), NULL },
     { "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, N_("The preset values to use for encoding"), NULL },
     { "debug",  'x', 0, G_OPTION_ARG_NONE, &ghb_debug, N_("Spam a lot"), NULL },
+#if defined(_WIN32)
+    { "console",'c', 0, G_OPTION_ARG_NONE, &win32_console, N_("Open a console for debug output"), NULL },
+#endif
     { NULL }
 };
 
@@ -812,6 +821,26 @@ main(int argc, char *argv[])
         g_clear_error(&error);
     }
     g_option_context_free(context);
+
+#if defined(_WIN32)
+    if (win32_console)
+    {
+        // Enable console logging
+        if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
+            close(STDOUT_FILENO);
+            freopen("CONOUT$", "w", stdout);
+            close(STDERR_FILENO);
+            freopen("CONOUT$", "w", stderr);
+        }
+    }
+    else
+    {
+        // Non-console windows apps do not have a stderr->_file
+        // assigned properly
+        stderr->_file = STDERR_FILENO;
+        stdout->_file = STDOUT_FILENO;
+    }
+#endif
 
     if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
     {

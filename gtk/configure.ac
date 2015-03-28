@@ -56,6 +56,10 @@ AC_ARG_ENABLE(dl,
 	AS_HELP_STRING([--enable-dl], [enable libdl]),
 	use_libdl=yes, use_libdl=no)
 
+AC_ARG_ENABLE(pthread,
+	AS_HELP_STRING([--enable-pthread], [enable libpthread]),
+	use_libpthread=yes, use_libpthread=no)
+
 AC_ARG_ENABLE(fdk-aac,
 	AS_HELP_STRING([--enable-fdk-aac], [enable fdk aac encoder]),
 	use_fdk_aac=yes, use_fdk_aac=no)
@@ -63,6 +67,10 @@ AC_ARG_ENABLE(fdk-aac,
 AC_ARG_ENABLE(x265,
 	AS_HELP_STRING([--enable-x265], [enable x265 encoder]),
 	use_x265=yes, use_x265=no)
+
+AC_ARG_ENABLE(qsv,
+	AS_HELP_STRING([--enable-qsv], [enable QSV encoder]),
+	use_qsv=yes, use_qsv=no)
 
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
@@ -153,22 +161,19 @@ PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
-AC_PATH_PROG(BUILD_PKG_CONFIG, pkg-config, no)
-if test x"$BUILD_PKG_CONFIG" = x"no"; then
-	AC_MSG_ERROR([You need to install pkg-config])
-fi
-
-GHB_TOOLS_CFLAGS=`$BUILD_PKG_CONFIG --cflags glib-2.0 gdk-pixbuf-2.0 gtk+-3.0 jansson`
-GHB_TOOLS_LIBS=`$BUILD_PKG_CONFIG --libs glib-2.0 gdk-pixbuf-2.0 jansson`
-
 HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson"
 
 case $host in
   *-*-mingw*)
     if test "x$use_libdl" = "xyes" ; then
-		HB_LIBS+=" -ldl -lpthreadGC2"
+		HB_LIBS+=" -ldl"
 	fi
-    HB_LIBS+=" -lpthreadGC2 -lregex"
+    if test "x$use_libpthread" = "xyes" ; then
+		HB_LIBS+=" -lpthread"
+    else
+        HB_LIBS+=" -lpthreadGC2"
+	fi
+    HB_LIBS+=" -lregex"
     ;;
   *)
     HB_LIBS+=" -ldl -lpthread"
@@ -183,9 +188,11 @@ if test "x$use_x265" = "xyes" ; then
     HB_LIBS+=" -lx265"
 fi
 
+if test "x$use_qsv" = "xyes" ; then
+    HB_LIBS+=" -lmfx"
+fi
+
 AC_SUBST(HB_LIBS)
-AC_SUBST(GHB_TOOLS_CFLAGS)
-AC_SUBST(GHB_TOOLS_LIBS)
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)
 

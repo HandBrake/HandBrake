@@ -623,7 +623,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 time_t t = time(NULL);
                 lt = localtime(&t);
                 st[0] = 0;
-                strftime(st, 6, "%R", lt);
+                strftime(st, 6, "%H:%M", lt);
                 g_string_append_printf(str, "%s", st);
                 p += strlen("{time}");
             }
@@ -634,7 +634,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 time_t t = time(NULL);
                 lt = localtime(&t);
                 dt[0] = 0;
-                strftime(dt, 11, "%F", lt);
+                strftime(dt, 11, "%Y-%m-%d", lt);
                 g_string_append_printf(str, "%s", dt);
                 p += strlen("{date}");
             }
