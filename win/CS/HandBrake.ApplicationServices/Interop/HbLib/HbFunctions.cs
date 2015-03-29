@@ -136,12 +136,6 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public static extern void hb_stop(IntPtr hbHandle);
 
 
-        /// Return Type: int
-        ///param0: hb_handle_t*
-        [DllImport("hb.dll", EntryPoint = "hb_get_scancount", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_get_scancount(IntPtr hbHandle);
-
-
         /// Return Type: void
         ///param0: hb_handle_t**
         [DllImport("hb.dll", EntryPoint = "hb_close", CallingConvention = CallingConvention.Cdecl)]

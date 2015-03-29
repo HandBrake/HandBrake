@@ -117,9 +117,6 @@ hb_interjob_t * hb_interjob_get( hb_handle_t * );
    Look at test/test.c to see how to use it. */
 void hb_get_state( hb_handle_t *, hb_state_t * );
 void hb_get_state2( hb_handle_t *, hb_state_t * );
-/* hb_get_scancount() is called by the MacGui in UpdateUI to
-   check for a new scan during HB_STATE_WORKING phase  */
-int hb_get_scancount( hb_handle_t * );
 
 /* hb_close()
    Aborts all current jobs if any, frees memory. */
