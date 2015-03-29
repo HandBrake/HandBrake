@@ -15,8 +15,6 @@ namespace HandBrakeWPF.Services.Presets
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
-    using System.Text.RegularExpressions;
     using System.Windows;
     using System.Xml.Serialization;
 
@@ -24,6 +22,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -37,7 +36,7 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        private static readonly int CurrentPresetVersion = 2;
+        private static readonly int CurrentPresetVersion = 3;
 
         /// <summary>
         /// User Preset Default Catgory Name
@@ -292,7 +291,9 @@ namespace HandBrakeWPF.Services.Presets
                             preset.Version = VersionHelper.GetVersion();
                             preset.UsePictureFilters = true; 
                             preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
-
+                            preset.AudioTrackBehaviours = new AudioBehaviours();
+                            preset.AudioTrackBehaviours.SelectedBehaviour = AudioBehaviourModes.FirstMatch;
+                            
                             if (preset.Name == "iPod")
                             {
                                 preset.Task.KeepDisplayAspect = true;
@@ -509,9 +510,9 @@ namespace HandBrakeWPF.Services.Presets
                         string fileName = RecoverFromCorruptedPresetFile(this.userPresetFile);
                         this.errorService.ShowMessageBox(
                             "HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn't get loaded on next launch."
-                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName,
-                            "Unable to load user presets.",
-                            MessageBoxButton.OK,
+                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName, 
+                            "Unable to load user presets.", 
+                            MessageBoxButton.OK, 
                             MessageBoxImage.Exclamation);
                         return;
                     }

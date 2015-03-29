@@ -16,35 +16,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
     /// </summary>
     public class AllowedPassthru
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The audio allow aac pass.
-        /// </summary>
-        private bool? audioAllowAACPass;
-
-        /// <summary>
-        /// The audio allow a c 3 pass.
-        /// </summary>
-        private bool? audioAllowAC3Pass;
-
-        /// <summary>
-        /// The audio allow dtshd pass.
-        /// </summary>
-        private bool? audioAllowDTSHDPass;
-
-        /// <summary>
-        /// The audio allow dts pass.
-        /// </summary>
-        private bool? audioAllowDTSPass;
-
-        /// <summary>
-        /// The audio allow m p 3 pass.
-        /// </summary>
-        private bool? audioAllowMP3Pass;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -57,6 +28,9 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
             this.AudioAllowDTSHDPass = true;
             this.AudioAllowDTSPass = true;
             this.AudioAllowMP3Pass = true;
+            this.AudioAllowEAC3Pass = true;
+            this.AudioAllowTrueHDPass = true;
+            this.AudioAllowFlacPass = true;
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
 
@@ -66,13 +40,16 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         /// <param name="initialValue">
         /// The initial Value.
         /// </param>
-        public AllowedPassthru(bool? initialValue)
+        public AllowedPassthru(bool initialValue)
         {
             this.AudioAllowAACPass = initialValue;
             this.AudioAllowAC3Pass = initialValue;
             this.AudioAllowDTSHDPass = initialValue;
             this.AudioAllowDTSPass = initialValue;
             this.AudioAllowMP3Pass = initialValue;
+            this.AudioAllowEAC3Pass = initialValue;
+            this.AudioAllowTrueHDPass = initialValue;
+            this.AudioAllowFlacPass = initialValue;
             this.AudioEncoderFallback = AudioEncoder.Ac3;
         }
 
@@ -90,6 +67,9 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
             this.AudioAllowDTSHDPass = initialValue.AudioAllowDTSHDPass;
             this.AudioAllowDTSPass = initialValue.AudioAllowDTSPass;
             this.AudioAllowMP3Pass = initialValue.AudioAllowMP3Pass;
+            this.AudioAllowEAC3Pass = initialValue.AudioAllowEAC3Pass;
+            this.AudioAllowTrueHDPass = initialValue.AudioAllowTrueHDPass;
+            this.AudioAllowFlacPass = initialValue.AudioAllowFlacPass;
             this.AudioEncoderFallback = initialValue.AudioEncoderFallback;
         }
 
@@ -100,77 +80,42 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowAACPass.
         /// </summary>
-        public bool? AudioAllowAACPass
-        {
-            get
-            {
-                return this.audioAllowAACPass ?? true;
-            }
-            set
-            {
-                this.audioAllowAACPass = value;
-            }
-        }
+        public bool AudioAllowAACPass { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowAC3Pass.
         /// </summary>
-        public bool? AudioAllowAC3Pass
-        {
-            get
-            {
-                return this.audioAllowAC3Pass ?? true;
-            }
-            set
-            {
-                this.audioAllowAC3Pass = value;
-            }
-        }
+        public bool AudioAllowAC3Pass { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowDTSHDPass.
         /// </summary>
-        public bool? AudioAllowDTSHDPass
-        {
-            get
-            {
-                return this.audioAllowDTSHDPass ?? true;
-            }
-            set
-            {
-                this.audioAllowDTSHDPass = value;
-            }
-        }
+        public bool AudioAllowDTSHDPass { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowDTSPass.
         /// </summary>
-        public bool? AudioAllowDTSPass
-        {
-            get
-            {
-                return this.audioAllowDTSPass ?? true;
-            }
-            set
-            {
-                this.audioAllowDTSPass = value;
-            }
-        }
+        public bool AudioAllowDTSPass { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowMP3Pass.
         /// </summary>
-        public bool? AudioAllowMP3Pass
-        {
-            get
-            {
-                return this.audioAllowMP3Pass ?? true;
-            }
-            set
-            {
-                this.audioAllowMP3Pass = value;
-            }
-        }
+        public bool AudioAllowMP3Pass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether audio allow true hd pass.
+        /// </summary>
+        public bool AudioAllowTrueHDPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether audio allow flac pass.
+        /// </summary>
+        public bool AudioAllowFlacPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether audio allow ea c 3 pass.
+        /// </summary>
+        public bool AudioAllowEAC3Pass { get; set; }
 
         /// <summary>
         /// Gets or sets AudioEncoderFallback.

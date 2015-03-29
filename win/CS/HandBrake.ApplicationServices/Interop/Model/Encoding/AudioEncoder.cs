@@ -46,6 +46,10 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("copy:ac3")]
         Ac3Passthrough,
 
+        [Display(Name = "E-AC3 Passthru")]
+        [ShortName("copy:eac3")]
+        EAc3Passthrough,
+
         [Display(Name = "DTS Passthru")]
         [ShortName("copy:dts")]
         DtsPassthrough,
@@ -53,6 +57,10 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "DTS-HD Passthru")]
         [ShortName("copy:dtshd")]
         DtsHDPassthrough,
+
+        [Display(Name = "TrueHD Passthru")]
+        [ShortName("copy:truehd")]
+        TrueHDPassthrough,
 
         [Display(Name = "AAC Passthru")]
         [ShortName("copy:aac")]
@@ -73,5 +81,9 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "FLAC 24-bit")]
         [ShortName("flac24")]
         ffflac24,
+
+        [Display(Name = "FLAC Passthru")]
+        [ShortName("copy:flac")]
+        FlacPassthru,
     }
 }

@@ -99,6 +99,9 @@ namespace HandBrakeWPF.Converters.Audio
                     case AudioEncoder.Passthrough:
                     case AudioEncoder.ffflac:
                     case AudioEncoder.ffflac24:
+                    case AudioEncoder.EAc3Passthrough:
+                    case AudioEncoder.TrueHDPassthrough:
+                    case AudioEncoder.FlacPassthru:
                         max = 1536; // Since we don't care, just set it to the max.
                         break;
                     case AudioEncoder.fdkaac:

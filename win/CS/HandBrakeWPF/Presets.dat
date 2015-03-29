@@ -117,6 +117,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -146,8 +149,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -241,6 +247,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -270,8 +279,11 @@
       "PictureSettingsDesc": "Resolution: x\r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -365,6 +377,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -394,8 +409,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -489,6 +507,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -518,8 +539,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -640,6 +664,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -669,8 +696,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -791,6 +821,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -820,8 +853,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -942,6 +978,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -971,8 +1010,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -1066,6 +1108,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -1095,8 +1140,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -1190,6 +1238,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -1219,8 +1270,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -1314,6 +1368,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -1343,8 +1400,11 @@
       "PictureSettingsDesc": "Resolution: x\r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -1438,6 +1498,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -1467,8 +1530,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   },
   {
@@ -1589,6 +1655,9 @@
         "AudioAllowDTSHDPass": true,
         "AudioAllowDTSPass": true,
         "AudioAllowMP3Pass": true,
+        "AudioAllowTrueHDPass": true,
+        "AudioAllowFlacPass": true,
+        "AudioAllowEAC3Pass": true,
         "AudioEncoderFallback": 4
       },
       "SubtitleTracks": [],
@@ -1618,8 +1687,11 @@
       "PictureSettingsDesc": "Anamorphic: Loose, Width: \r\nCrop Top: 0, Botton: 0, Left: 0, Right: 0"
     },
     "UsePictureFilters": true,
-    "Version": "svn5311 (Nightly Build)",
-    "AudioTrackBehaviours": null,
+    "Version": "svn6809 (Nightly Build)",
+    "AudioTrackBehaviours": {
+      "SelectedBehaviour": 1,
+      "SelectedLangauges": []
+    },
     "SubtitleTrackBehaviours": null
   }
 ]

@@ -20,7 +20,6 @@ namespace HandBrakeWPF.Startup
     using Castle.MicroKernel.Registration;
     using Castle.Windsor;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan;
@@ -99,6 +98,8 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<ISubtitlesViewModel>().ImplementedBy<SubtitlesViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IFiltersViewModel>().ImplementedBy<FiltersViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IVideoViewModel>().ImplementedBy<VideoViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+
+            // Overlay Panels
         }
 
         /// <summary>

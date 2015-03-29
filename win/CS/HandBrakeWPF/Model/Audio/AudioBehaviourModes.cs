@@ -16,7 +16,7 @@ namespace HandBrakeWPF.Model.Audio
     /// </summary>
     public enum AudioBehaviourModes
     {
-        [Display(Name = "None")]
+        [Display(Name = "No Audio")]
         None = 0,
 
         [Display(Name = "First Matching Selected Language")]

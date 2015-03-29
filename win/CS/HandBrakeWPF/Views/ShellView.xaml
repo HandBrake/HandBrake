@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:views="clr-namespace:HandBrakeWPF.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cal="http://www.caliburnproject.org"
         Title="{Data:Binding Path=WindowTitle}"
@@ -32,8 +31,17 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <ContentControl x:Name="MainViewModel"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-        <ContentControl x:Name="OptionsViewModel"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+        <ContentControl x:Name="MainViewModel"  Panel.ZIndex="0"  Visibility="{Binding ShowMainWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                        IsEnabled="{Binding IsMainPanelEnabled}" />
+        <ContentControl x:Name="OptionsViewModel"  Panel.ZIndex="0"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                        IsEnabled="{Binding IsMainPanelEnabled}" />
+
+        <DockPanel Background="Black" Opacity="0.60" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="1"
+               Visibility="{Binding ShowOverlayPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+        
+        <ContentControl x:Name="OverlayPanelViewModel"  Visibility="{Binding ShowOverlayPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="2" MinWidth="900" MinHeight="675"  />
+
 
     </Grid>
 </Window>

@@ -13,9 +13,9 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Windows;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
@@ -57,22 +57,26 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Vorbis);
                     encoders.Remove(AudioEncoder.ffflac);
                     encoders.Remove(AudioEncoder.ffflac24);
+                    encoders.Remove(AudioEncoder.FlacPassthru);
                 }
 
                 if (parameter != null && parameter.ToString() == "True")
                 {
                     encoders.Remove(AudioEncoder.DtsHDPassthrough);
                     encoders.Remove(AudioEncoder.DtsPassthrough);
+                    encoders.Remove(AudioEncoder.EAc3Passthrough);
                     encoders.Remove(AudioEncoder.AacPassthru);
                     encoders.Remove(AudioEncoder.Ac3Passthrough);
                     encoders.Remove(AudioEncoder.Mp3Passthru);
                     encoders.Remove(AudioEncoder.Passthrough);
+                    encoders.Remove(AudioEncoder.TrueHDPassthrough);
+                    encoders.Remove(AudioEncoder.FlacPassthru);
                 }
 
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 
-            if (values.Any())
+            if (values.Any() && values.First() != DependencyProperty.UnsetValue)
             {
                 return EnumHelper<AudioEncoder>.GetDisplay((AudioEncoder)values[0]);
             }

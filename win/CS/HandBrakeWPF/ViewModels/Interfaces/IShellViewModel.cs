@@ -17,6 +17,19 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     public interface IShellViewModel
     {
         /// <summary>
+        /// The show overlay.
+        /// </summary>
+        /// <param name="panel">
+        /// The panel.
+        /// </param>
+        void ShowOverlay(IOverlayPanel panel);
+
+        /// <summary>
+        /// The hide overlay.
+        /// </summary>
+        void HideOverlay();
+
+        /// <summary>
         /// Change the page displayed on this window.
         /// </summary>
         /// <param name="window">

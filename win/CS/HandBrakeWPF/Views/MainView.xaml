@@ -641,8 +641,13 @@
 
         <!-- Source Selection-->
         <Controls:SourceSelection Grid.Row="1" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="DarkGray"
-                                  Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}}" 
+                                  Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="1"
                                   />
+
+
+        <DockPanel Background="Black" Opacity="0.40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="0"
+                   Grid.Row="1"
+                   Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
         <!--  StatusPanel  -->
         <Controls:StatusPanel x:Name="loadingPanel"

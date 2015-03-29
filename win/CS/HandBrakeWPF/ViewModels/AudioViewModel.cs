@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -272,6 +273,14 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Reload the audio tracks based on the defaults.
+        /// </summary>
+        public void ReloadDefaults()
+        {
+            this.SetupTracks();
+        }
+
+        /// <summary>
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>
         public void RefreshTask()
@@ -300,6 +309,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowAudioDefaults()
         {
+            // OpenOverlayPanelCommand command = new OpenOverlayPanelCommand();
+            // command.Execute(new AudioDefaultsViewModel(this.WindowManager, this.UserSettingService));
             this.ShowAudioDefaultsPanel = !this.ShowAudioDefaultsPanel;
         }
 
@@ -507,6 +518,9 @@ namespace HandBrakeWPF.ViewModels
             // Step 4, Handle the default selection behaviour.
             switch (this.AudioBehaviours.SelectedBehaviour)
             {
+                case AudioBehaviourModes.None:
+                    this.Task.AudioTracks.Clear();
+                    break;
                 case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
                     this.AddFirstForSelectedLanguages();
                     break;

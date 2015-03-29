@@ -11,8 +11,8 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
-             d:DesignHeight="350"
-             d:DesignWidth="616"
+             d:DesignHeight="400"
+             d:DesignWidth="750"
              mc:Ignorable="d"
              x:Name="audioTab">
 
@@ -80,6 +80,11 @@
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
                     Content="{Binding SwitchDisplayTitle}" />
+
+                <Button MinWidth="65"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                    Content="Reload Defaults" />
 
 
             </StackPanel>
@@ -362,12 +367,21 @@
                           Content="AC3" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAC3Pass}" />
                 <CheckBox Margin="0,0,5,0"
+                          Content="E-AC3" VerticalAlignment="Center"
+                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowEAC3Pass}" />
+                <CheckBox Margin="0,0,5,0"
                           Content="DTS" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSPass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="DTSHD" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
-                
+                <CheckBox Margin="0,0,5,0"
+                          Content="TrueHD" VerticalAlignment="Center"
+                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowTrueHDPass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="FLAC" VerticalAlignment="Center"
+                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowFlacPass}" />
+  
                 <TextBlock Margin="15,0,5,0" Text="Otherwise use fallback encoder:" />
 
                 <ComboBox VerticalAlignment="Center" Width="100" Height="22" Margin="10,0,5,0">
