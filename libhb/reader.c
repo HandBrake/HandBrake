@@ -35,6 +35,7 @@ typedef struct
 
 struct hb_work_private_s
 {
+    hb_handle_t  * h;
     hb_job_t     * job;
     hb_title_t   * title;
     volatile int * die;
@@ -74,7 +75,7 @@ static int hb_reader_open( hb_work_private_t * r )
 {
     if ( r->title->type == HB_BD_TYPE )
     {
-        if ( !( r->bd = hb_bd_init( r->title->path ) ) )
+        if ( !( r->bd = hb_bd_init( r->h, r->title->path ) ) )
             return 1;
     }
     else if ( r->title->type == HB_DVD_TYPE )
@@ -85,7 +86,7 @@ static int hb_reader_open( hb_work_private_t * r )
     else if ( r->title->type == HB_STREAM_TYPE ||
               r->title->type == HB_FF_STREAM_TYPE )
     {
-        if ( !( r->stream = hb_stream_open( r->title->path, r->title, 0 ) ) )
+        if (!(r->stream = hb_stream_open(r->h, r->title->path, r->title, 0)))
             return 1;
     }
     else
@@ -103,6 +104,7 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     r = calloc( sizeof( hb_work_private_t ), 1 );
     w->private_data = r;
 
+    r->h     = job->h;
     r->job   = job;
     r->title = job->title;
     r->die   = job->die;

@@ -245,19 +245,19 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
     }
 
     /* OpenCL/DXVA2 */
-    if ((!pv->use_decomb && !pv->use_detelecine                       &&
+    if ((!pv->use_dxva &&
          !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
          in->f.fmt == pv->pix_fmt_out && in->f.width == pv->width_out &&
-         in->f.height == pv->height_out) || (pv->use_dxva &&
-                                             in->f.width  == pv->width_out &&
-                                             in->f.height == pv->height_out))
+         in->f.height == pv->height_out) ||
+        (pv->use_dxva && !pv->use_decomb && !pv->use_detelecine &&
+         in->f.width  == pv->width_out && in->f.height == pv->height_out))
     {
         *buf_out = in;
         *buf_in  = NULL;
         return HB_FILTER_OK;
     }
 
-    *buf_out = crop_scale( pv, in );
+    *buf_out = crop_scale(pv, in);
 
     return HB_FILTER_OK;
 }

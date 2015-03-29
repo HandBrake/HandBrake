@@ -144,7 +144,7 @@ static void work_func( void * _work )
     free( work );
 }
 
-hb_work_object_t * hb_get_work( int id )
+hb_work_object_t * hb_get_work( hb_handle_t *h, int id )
 {
     hb_work_object_t * w;
     for( w = hb_objects; w; w = w->next )
@@ -153,39 +153,40 @@ hb_work_object_t * hb_get_work( int id )
         {
             hb_work_object_t *wc = malloc( sizeof(*w) );
             *wc = *w;
+            wc->h = h;
             return wc;
         }
     }
     return NULL;
 }
 
-hb_work_object_t* hb_codec_decoder(int codec)
+hb_work_object_t* hb_codec_decoder(hb_handle_t *h, int codec)
 {
     if (codec & HB_ACODEC_FF_MASK)
     {
-        return hb_get_work(WORK_DECAVCODEC);
+        return hb_get_work(h, WORK_DECAVCODEC);
     }
     switch (codec)
     {
-        case HB_ACODEC_LPCM: return hb_get_work(WORK_DECLPCM);
+        case HB_ACODEC_LPCM: return hb_get_work(h, WORK_DECLPCM);
         default:             break;
     }
     return NULL;
 }
 
-hb_work_object_t* hb_codec_encoder(int codec)
+hb_work_object_t* hb_codec_encoder(hb_handle_t *h, int codec)
 {
     if (codec & HB_ACODEC_FF_MASK)
     {
-        return hb_get_work(WORK_ENCAVCODEC_AUDIO);
+        return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
     }
     switch (codec)
     {
-        case HB_ACODEC_AC3:     return hb_get_work(WORK_ENCAVCODEC_AUDIO);
-        case HB_ACODEC_LAME:    return hb_get_work(WORK_ENCLAME);
-        case HB_ACODEC_VORBIS:  return hb_get_work(WORK_ENCVORBIS);
-        case HB_ACODEC_CA_AAC:  return hb_get_work(WORK_ENC_CA_AAC);
-        case HB_ACODEC_CA_HAAC: return hb_get_work(WORK_ENC_CA_HAAC);
+        case HB_ACODEC_AC3:     return hb_get_work(h, WORK_ENCAVCODEC_AUDIO);
+        case HB_ACODEC_LAME:    return hb_get_work(h, WORK_ENCLAME);
+        case HB_ACODEC_VORBIS:  return hb_get_work(h, WORK_ENCVORBIS);
+        case HB_ACODEC_CA_AAC:  return hb_get_work(h, WORK_ENC_CA_AAC);
+        case HB_ACODEC_CA_HAAC: return hb_get_work(h, WORK_ENC_CA_HAAC);
         default:                break;
     }
     return NULL;
@@ -567,7 +568,7 @@ static void do_job(hb_job_t *job)
     hb_work_object_t *w;
     hb_work_object_t *sync;
     hb_work_object_t *muxer;
-    hb_work_object_t *reader = hb_get_work(WORK_READER);
+    hb_work_object_t *reader = hb_get_work(job->h, WORK_READER);
 
     hb_audio_t *audio;
     hb_subtitle_t *subtitle;
@@ -1225,7 +1226,7 @@ static void do_job(hb_job_t *job)
         hb_error("No video decoder set!");
         goto cleanup;
     }
-    hb_list_add(job->list_work, (w = hb_get_work(title->video_codec)));
+    hb_list_add(job->list_work, (w = hb_get_work(job->h, title->video_codec)));
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
@@ -1249,7 +1250,7 @@ static void do_job(hb_job_t *job)
             subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
             subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
-            w = hb_get_work( subtitle->codec );
+            w = hb_get_work( job->h, subtitle->codec );
             w->fifo_in = subtitle->fifo_in;
             w->fifo_out = subtitle->fifo_raw;
             w->subtitle = subtitle;
@@ -1286,29 +1287,29 @@ static void do_job(hb_job_t *job)
         switch( job->vcodec )
         {
         case HB_VCODEC_FFMPEG_MPEG4:
-            w = hb_get_work( WORK_ENCAVCODEC );
+            w = hb_get_work( job->h, WORK_ENCAVCODEC );
             w->codec_param = AV_CODEC_ID_MPEG4;
             break;
         case HB_VCODEC_FFMPEG_MPEG2:
-            w = hb_get_work( WORK_ENCAVCODEC );
+            w = hb_get_work( job->h, WORK_ENCAVCODEC );
             w->codec_param = AV_CODEC_ID_MPEG2VIDEO;
             break;
         case HB_VCODEC_FFMPEG_VP8:
-            w = hb_get_work( WORK_ENCAVCODEC );
+            w = hb_get_work( job->h, WORK_ENCAVCODEC );
             w->codec_param = AV_CODEC_ID_VP8;
             break;
         case HB_VCODEC_X264:
-            w = hb_get_work( WORK_ENCX264 );
+            w = hb_get_work( job->h, WORK_ENCX264 );
             break;
         case HB_VCODEC_QSV_H264:
-            w = hb_get_work( WORK_ENCQSV );
+            w = hb_get_work( job->h, WORK_ENCQSV );
             break;
         case HB_VCODEC_THEORA:
-            w = hb_get_work( WORK_ENCTHEORA );
+            w = hb_get_work( job->h, WORK_ENCTHEORA );
             break;
 #ifdef USE_X265
         case HB_VCODEC_X265:
-            w = hb_get_work( WORK_ENCX265 );
+            w = hb_get_work( job->h, WORK_ENCX265 );
             break;
 #endif
         }
@@ -1333,7 +1334,8 @@ static void do_job(hb_job_t *job)
             */
             if ( audio->priv.fifo_in )
             {
-                if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
+                w = hb_codec_decoder(job->h, audio->config.in.codec);
+                if (w == NULL)
                 {
                     hb_error("Invalid input codec: %d", audio->config.in.codec);
                     *job->done_error = HB_ERROR_WRONG_INPUT;
@@ -1357,7 +1359,8 @@ static void do_job(hb_job_t *job)
                 /*
                 * Add the encoder thread if not doing AC-3 pass through
                 */
-                if ( ( w = hb_codec_encoder( audio->config.out.codec ) ) == NULL )
+                w = hb_codec_encoder( job->h, audio->config.out.codec);
+                if (w == NULL)
                 {
                     hb_error("Invalid audio codec: %#x", audio->config.out.codec);
                     w = NULL;

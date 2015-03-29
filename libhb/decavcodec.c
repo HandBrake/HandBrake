@@ -1327,7 +1327,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 #endif
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
-        if (pv->frame->pkt_pts == AV_NOPTS_VALUE || hb_gui_use_hwd_flag == 1)
+        if (pv->frame->pkt_pts == AV_NOPTS_VALUE || hb_hwd_enabled(w->h))
         {
             pts = pv->pts_next;
         }

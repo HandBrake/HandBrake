@@ -144,6 +144,8 @@ typedef struct {
 
 struct hb_stream_s
 {
+    hb_handle_t * h;
+
     int     scan;
     int     frames;             /* video frames so far */
     int     errors;             /* total errors so far */
@@ -609,10 +611,6 @@ static int hb_stream_get_type(hb_stream_t *stream)
 
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
-#ifdef USE_HWD
-        if ( hb_gui_use_hwd_flag == 1 )
-            return 0;
-#endif
         int psize;
         if ( ( psize = hb_stream_check_for_ts(buf) ) != 0 )
         {
@@ -813,7 +811,8 @@ static void prune_streams(hb_stream_t *d)
  ***********************************************************************
  *
  **********************************************************************/
-hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
+hb_stream_t *
+hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
 {
     FILE *f = hb_fopen(path, "rb");
     if ( f == NULL )
@@ -839,13 +838,14 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
      * If it's something we can deal with (MPEG2 PS or TS) return a stream
      * reference structure & null otherwise.
      */
+    d->h = h;
     d->file_handle = f;
     d->title = title;
     d->scan = scan;
     d->path = strdup( path );
     if (d->path != NULL )
     {
-        if ( hb_stream_get_type( d ) != 0 )
+        if (!hb_hwd_enabled(d->h) && hb_stream_get_type( d ) != 0 )
         {
             if( !scan )
             {
@@ -925,7 +925,7 @@ static int new_pes( hb_stream_t * stream )
     return num;
 }
 
-hb_stream_t * hb_bd_stream_open( hb_title_t *title )
+hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title )
 {
     int ii;
 
@@ -936,6 +936,7 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
         return NULL;
     }
 
+    d->h = h;
     d->file_handle = NULL;
     d->title = title;
     d->path = NULL;
@@ -3924,10 +3925,10 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
     hb_buffer_close( &buf );
 }
 
-static int probe_dts_profile( hb_pes_stream_t *pes )
+static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
 {
     hb_work_info_t info;
-    hb_work_object_t *w = hb_codec_decoder( pes->codec );
+    hb_work_object_t *w = hb_codec_decoder( stream->h, pes->codec );
 
     w->codec_param = pes->codec_param;
     int ret = w->bsinfo( w, pes->probe_buf, &info );
@@ -3967,7 +3968,7 @@ static int probe_dts_profile( hb_pes_stream_t *pes )
     return 1;
 }
 
-static int do_probe( hb_pes_stream_t *pes, hb_buffer_t *buf )
+static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
 {
     // Check upper limit of per stream data to probe
     if ( pes->probe_buf == NULL )
@@ -3994,7 +3995,7 @@ static int do_probe( hb_pes_stream_t *pes, hb_buffer_t *buf )
     if ( pes->codec == HB_ACODEC_DCA_HD )
     {
         // We need to probe for the profile of DTS audio in this stream.
-        return probe_dts_profile( pes );
+        return probe_dts_profile( stream, pes );
     }
 
     // Probing is slow, so we don't want to re-probe the probe
@@ -4258,7 +4259,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
-        if ( do_probe( pes, buf ) )
+        if ( do_probe( stream, pes, buf ) )
         {
             probe--;
             if ( pes->stream_kind != N )
@@ -4336,7 +4337,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
-        if ( do_probe( pes, buf ) )
+        if ( do_probe( stream, pes, buf ) )
         {
             probe--;
             if ( pes->stream_kind != N )

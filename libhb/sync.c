@@ -141,7 +141,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
         pv->common->start_found = 1;
     }
 
-    ret = w = hb_get_work( WORK_SYNC_VIDEO );
+    ret = w = hb_get_work( job->h, WORK_SYNC_VIDEO );
     w->private_data = pv;
     w->fifo_in = job->fifo_raw;
 
@@ -1246,7 +1246,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     pv->common->ref++;
     pv->common->pts_count++;
 
-    w = hb_get_work( WORK_SYNC_AUDIO );
+    w = hb_get_work( job->h, WORK_SYNC_AUDIO );
     w->private_data = pv;
     w->audio = hb_list_item( job->list_audio, i );
     w->fifo_in = w->audio->priv.fifo_raw;

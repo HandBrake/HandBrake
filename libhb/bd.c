@@ -23,6 +23,7 @@ struct hb_bd_s
     hb_stream_t  * stream;
     int            chapter;
     int            next_chap;
+    hb_handle_t  * h;
 };
 
 /***********************************************************************
@@ -36,12 +37,13 @@ static int title_info_compare_mpls(const void *, const void *);
  ***********************************************************************
  *
  **********************************************************************/
-hb_bd_t * hb_bd_init( char * path )
+hb_bd_t * hb_bd_init( hb_handle_t *h, char * path )
 {
     hb_bd_t * d;
     int ii;
 
     d = calloc( sizeof( hb_bd_t ), 1 );
+    d->h = h;
 
     /* Open device */
     d->bd = bd_open( path, NULL );
@@ -635,7 +637,7 @@ int hb_bd_start( hb_bd_t * d, hb_title_t *title )
     bd_select_title( d->bd, d->title_info[title->index - 1]->idx );
     bd_get_event( d->bd, &event );
     d->chapter = 1;
-    d->stream = hb_bd_stream_open( title );
+    d->stream = hb_bd_stream_open( d->h, title );
     if ( d->stream == NULL )
     {
         return 0;

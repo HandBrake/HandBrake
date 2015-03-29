@@ -2432,6 +2432,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         }
     }
 
+    init->job->use_decomb = 1;
+
     return 0;
 }
 

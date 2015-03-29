@@ -71,6 +71,7 @@
 #define HB_DVD_READ_BUFFER_SIZE 2048
 
 typedef struct hb_handle_s hb_handle_t;
+typedef struct hb_hwd_s hb_hwd_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_dither_s hb_dither_t;
@@ -430,8 +431,6 @@ struct hb_title_set_s
     int           feature;    // Detected DVD feature title
 };
 
-extern int hb_gui_use_hwd_flag;
-
 typedef enum
 {
     HB_ANAMORPHIC_NONE,
@@ -581,8 +580,8 @@ struct hb_job_s
                                         //  to non-I frames).
     int use_opencl;
     int use_hwd;
-    int use_decomb;
-    int use_detelecine;
+    PRIVATE int use_decomb;
+    PRIVATE int use_detelecine;
 
 #ifdef USE_QSV
     // QSV-specific settings
@@ -1099,6 +1098,8 @@ struct hb_work_object_s
 
     hb_work_object_t  * next;
     int                 thread_sleep_interval;
+
+    hb_handle_t       * h;
 #endif
 };
 

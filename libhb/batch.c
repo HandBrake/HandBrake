@@ -12,8 +12,9 @@
 
 struct hb_batch_s
 {
-    char      * path;
-    hb_list_t * list_file;
+    char        * path;
+    hb_list_t   * list_file;
+    hb_handle_t * h;
 };
 
 static int compare_str(const void *a, const void *b)
@@ -26,7 +27,7 @@ static int compare_str(const void *a, const void *b)
  ***********************************************************************
  *
  **********************************************************************/
-hb_batch_t * hb_batch_init( char * path )
+hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
 {
     hb_batch_t    * d;
     hb_stat_t       sb;
@@ -81,6 +82,7 @@ hb_batch_t * hb_batch_init( char * path )
 
     // Create file list
     d = calloc( sizeof( hb_batch_t ), 1 );
+    d->h = h;
     d->list_file = hb_list_init();
     for (ii = 0; ii < count; ii++)
     {
@@ -128,7 +130,7 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
 
     hb_log( "batch: scanning %s", filename );
     title = hb_title_init( filename, t );
-    stream = hb_stream_open( filename, title, 1 );
+    stream = hb_stream_open(d->h, filename, title, 1);
     if ( stream == NULL )
     {
         hb_title_close( &title );

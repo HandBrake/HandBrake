@@ -309,7 +309,12 @@ int main( int argc, char ** argv )
 
 
     hb_system_sleep_prevent(h);
-    hb_gui_use_hwd_flag = use_hwd;
+
+    // FIXME: When hardware decode is enabled, the scan must be performed
+    // with hardware decode enabled because the decoder context used during
+    // encoding phase comes from the context used during scan.  This is
+    // broken by design and I would very much like to fix this someday.
+    hb_hwd_set_enable(h, use_hwd);
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
@@ -1672,9 +1677,6 @@ static int HandleEvents( hb_handle_t * h )
             job->grayscale   = grayscale;
             
             hb_filter_object_t * filter;
-
-            job->use_detelecine = detelecine;
-            job->use_decomb = decomb;
 
             /* Add selected filters */
             if( detelecine )

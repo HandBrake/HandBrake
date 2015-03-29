@@ -68,11 +68,31 @@ struct hb_handle_s
     hb_interjob_t * interjob;
 
     // power management opaque pointer
-    void *system_sleep_opaque;
-} ;
+    void         * system_sleep_opaque;
+
+    // When hardware decoding, scan must also use hardware so that
+    // libav hardware decode contest is used.  So set hardware
+    // decoding as a global property on the hb instance.
+    hb_hwd_t       hwd;
+};
 
 hb_work_object_t * hb_objects = NULL;
 int hb_instance_counter = 0;
+
+void hb_hwd_set_enable( hb_handle_t *h, uint8_t enable )
+{
+    h->hwd.enable = enable;
+}
+
+int hb_hwd_enabled( hb_handle_t *h )
+{
+    return h->hwd.enable;
+}
+
+hb_hwd_t * hb_hwd_get_context( hb_handle_t *h )
+{
+    return &h->hwd;
+}
 
 static void thread_func( void * );
 

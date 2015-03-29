@@ -11,6 +11,14 @@
 #include "extras/cl.h"
 
 /***********************************************************************
+ * Hardware Decode Context
+ **********************************************************************/
+struct hb_hwd_s
+{
+    uint8_t enable;
+};
+
+/***********************************************************************
  * common.c
  **********************************************************************/
 void hb_log( char * log, ... ) HB_WPRINTF(1,2);
@@ -259,9 +267,9 @@ hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
-hb_work_object_t * hb_get_work( int );
-hb_work_object_t * hb_codec_decoder( int );
-hb_work_object_t * hb_codec_encoder( int );
+hb_work_object_t * hb_get_work( hb_handle_t *, int );
+hb_work_object_t * hb_codec_decoder( hb_handle_t *, int );
+hb_work_object_t * hb_codec_encoder( hb_handle_t *, int );
 
 /***********************************************************************
  * sync.c
@@ -293,7 +301,7 @@ extern const hb_muxer_t hb_demux[];
  **********************************************************************/
 typedef struct hb_batch_s hb_batch_t;
 
-hb_batch_t  * hb_batch_init( char * path );
+hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path );
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
 hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
@@ -319,7 +327,7 @@ int          hb_dvd_angle_count( hb_dvd_t * d );
 void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
 int          hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
-hb_bd_t     * hb_bd_init( char * path );
+hb_bd_t     * hb_bd_init( hb_handle_t *h, char * path );
 int           hb_bd_title_count( hb_bd_t * d );
 hb_title_t  * hb_bd_title_scan( hb_bd_t * d, int t, uint64_t min_duration );
 int           hb_bd_start( hb_bd_t * d, hb_title_t *title );
@@ -333,9 +341,10 @@ void          hb_bd_close( hb_bd_t ** _d );
 void          hb_bd_set_angle( hb_bd_t * d, int angle );
 int           hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title );
 
-hb_stream_t * hb_bd_stream_open( hb_title_t *title );
+hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title );
 void hb_ts_stream_reset(hb_stream_t *stream);
-hb_stream_t * hb_stream_open( char * path, hb_title_t *title, int scan );
+hb_stream_t * hb_stream_open(hb_handle_t *h, char * path,
+                             hb_title_t *title, int scan);
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *, hb_title_t *);
 hb_buffer_t * hb_stream_read( hb_stream_t * );

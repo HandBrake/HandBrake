@@ -29,14 +29,13 @@ typedef struct
     int            store_previews;
 
     uint64_t       min_title_duration;
-
 } hb_scan_t;
 
 #define PREVIEW_READ_THRESH (1024 * 1024 * 10)
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title, int flush );
-static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
+static void LookForAudio(hb_scan_t *scan, hb_title_t *title, hb_buffer_t *b);
 static int  AllAudioOK( hb_title_t * title );
 static void UpdateState1(hb_scan_t *scan, int title);
 static void UpdateState2(hb_scan_t *scan, int title);
@@ -102,7 +101,7 @@ static void ScanFunc( void * _data )
     data->stream = NULL;
 
     /* Try to open the path as a DVD. If it fails, try as a file */
-    if( ( data->bd = hb_bd_init( data->path ) ) )
+    if( ( data->bd = hb_bd_init( data->h, data->path ) ) )
     {
         hb_log( "scan: BD has %d title(s)",
                 hb_bd_title_count( data->bd ) );
@@ -152,12 +151,12 @@ static void ScanFunc( void * _data )
                                            data->title_set->list_title );
         }
     }
-    else if ( ( data->batch = hb_batch_init( data->path ) ) )
+    else if ( ( data->batch = hb_batch_init( data->h, data->path ) ) )
     {
         if( data->title_index )
         {
             /* Scan this title only */
-            title = hb_batch_title_scan( data->batch, data->title_index );
+            title = hb_batch_title_scan(data->batch, data->title_index);
             if ( title )
             {
                 hb_list_add( data->title_set->list_title, title );
@@ -171,7 +170,7 @@ static void ScanFunc( void * _data )
                 hb_title_t * title;
 
                 UpdateState1(data, i + 1);
-                title = hb_batch_title_scan( data->batch, i + 1 );
+                title = hb_batch_title_scan(data->batch, i + 1);
                 if ( title != NULL )
                 {
                     hb_list_add( data->title_set->list_title, title );
@@ -190,7 +189,8 @@ static void ScanFunc( void * _data )
         if (data->title_index == 0)
             data->title_index = 1;
         hb_title_t * title = hb_title_init( data->path, data->title_index );
-        if ( (data->stream = hb_stream_open( data->path, title, 1 ) ) != NULL )
+        data->stream = hb_stream_open(data->h, data->path, title, 1);
+        if (data->stream != NULL)
         {
             title = hb_stream_title_scan( data->stream, title );
             if ( title )
@@ -545,11 +545,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     }
     else if (data->batch)
     {
-        stream = hb_stream_open( title->path, title, 0 );
+        stream = hb_stream_open(data->h, title->path, title, 0);
     }
     else if (data->stream)
     {
-        stream = hb_stream_open( data->path, title, 0 );
+        stream = hb_stream_open(data->h, data->path, title, 0);
     }
 
     if (title->video_codec == WORK_NONE)
@@ -557,7 +557,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_error("No video decoder set!");
         return 0;
     }
-    hb_work_object_t *vid_decoder = hb_get_work(title->video_codec);
+    hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
     vid_decoder->title = title;
     vid_decoder->init( vid_decoder, NULL );
@@ -734,7 +734,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 }
                 else if( ! AllAudioOK( title ) ) 
                 {
-                    LookForAudio( title, buf_es );
+                    LookForAudio( data, title, buf_es );
                     buf_es = NULL;
                 }
                 if ( buf_es )
@@ -1072,7 +1072,7 @@ skip_preview:
  * aren't (e.g., some European DVD Teletext streams use the same IDs as US ATSC
  * AC-3 audio).
  */
-static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
+static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
 {
     int i;
 
@@ -1108,7 +1108,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     }
     hb_fifo_push( audio->priv.scan_cache, b );
 
-    hb_work_object_t *w = hb_codec_decoder( audio->config.in.codec );
+    hb_work_object_t *w = hb_codec_decoder(scan->h, audio->config.in.codec);
 
     if ( w == NULL || w->bsinfo == NULL )
     {

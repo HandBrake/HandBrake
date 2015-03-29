@@ -29,6 +29,10 @@ void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose, int update_check );
 hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib
 
+void          hb_hwd_set_enable( hb_handle_t *h, uint8_t enable );
+int           hb_hwd_enabled( hb_handle_t *h );
+hb_hwd_t    * hb_hwd_get_context();
+
 /* hb_get_version() */
 char        * hb_get_version( hb_handle_t * );
 int           hb_get_build( hb_handle_t * );

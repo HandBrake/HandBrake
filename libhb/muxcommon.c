@@ -638,7 +638,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
 
     /* Initialize the work objects that will receive fifo data */
 
-    muxer = hb_get_work( WORK_MUX );
+    muxer = hb_get_work( job->h, WORK_MUX );
     muxer->private_data = calloc( sizeof( hb_work_private_t ), 1 );
     muxer->private_data->job = job;
     muxer->private_data->mux = mux;
@@ -652,7 +652,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     {
         hb_audio_t  *audio = hb_list_item( job->list_audio, i );
 
-        w = hb_get_work( WORK_MUX );
+        w = hb_get_work( job->h, WORK_MUX );
         w->private_data = calloc( sizeof( hb_work_private_t ), 1 );
         w->private_data->job = job;
         w->private_data->mux = mux;
@@ -672,7 +672,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
         if (subtitle->config.dest != PASSTHRUSUB)
             continue;
 
-        w = hb_get_work( WORK_MUX );
+        w = hb_get_work( job->h, WORK_MUX );
         w->private_data = calloc( sizeof( hb_work_private_t ), 1 );
         w->private_data->job = job;
         w->private_data->mux = mux;
