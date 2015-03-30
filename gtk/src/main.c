@@ -662,7 +662,9 @@ typedef struct
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 static gboolean ghb_debug = FALSE;
+#if defined(_WIN32)
 static gboolean win32_console = FALSE;
+#endif
 
 static GOptionEntry entries[] =
 {
