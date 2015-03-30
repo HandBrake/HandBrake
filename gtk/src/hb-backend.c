@@ -4244,7 +4244,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     );
     if (dict == NULL)
     {
-        printf("json pack job failure: %s\n", error.text);
+        g_warning("json pack job failure: %s", error.text);
         return;
     }
     const char *dest = ghb_settings_get_const_string(js, "destination");
@@ -4267,7 +4267,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "IpodAtom",         json_boolean(ipod_atom));
         if (mp4_dict == NULL)
         {
-            printf("json pack mp4 failure: %s\n", error.text);
+            g_warning("json pack mp4 failure: %s", error.text);
             return;
         }
         json_object_set_new(dest_dict, "Mp4Options", mp4_dict);
@@ -4284,7 +4284,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 "SeekPoints",       json_integer(seek_points));
             if (range_dict == NULL)
             {
-                printf("json pack live range failure: %s\n", error.text);
+                g_warning("json pack live range failure: %s", error.text);
                 return;
             }
         } break;
@@ -4296,7 +4296,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 "ChapterEnd",   json_integer(range_stop));
             if (range_dict == NULL)
             {
-                printf("json pack chapter range failure: %s\n", error.text);
+                g_warning("json pack chapter range failure: %s", error.text);
                 return;
             }
         } break;
@@ -4307,7 +4307,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 "PtsToStop",    json_integer(range_stop));
             if (range_dict == NULL)
             {
-                printf("json pack pts range failure: %s\n", error.text);
+                g_warning("json pack pts range failure: %s", error.text);
                 return;
             }
         } break;
@@ -4318,7 +4318,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 "FrameToStop",  json_integer(range_stop));
             if (range_dict == NULL)
             {
-                printf("json pack frame range failure: %s\n", error.text);
+                g_warning("json pack frame range failure: %s", error.text);
                 return;
             }
         } break;
@@ -4414,7 +4414,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                     "Name", json_string(name));
             if (chapter_dict == NULL)
             {
-                printf("json pack chapter failure: %s\n", error.text);
+                g_warning("json pack chapter failure: %s", error.text);
                 return;
             }
             json_array_append_new(chapter_list, chapter_dict);
@@ -4445,7 +4445,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                             "Settings", json_string(filter_str));
     if (filter_dict == NULL)
     {
-        printf("json pack scale filter failure: %s\n", error.text);
+        g_warning("json pack scale filter failure: %s", error.text);
         return;
     }
     json_array_append_new(filter_list, filter_dict);
@@ -4469,7 +4469,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                 "ID", json_integer(HB_FILTER_DETELECINE));
         if (filter_dict == NULL)
         {
-            printf("json pack detelecine filter failure: %s\n", error.text);
+            g_warning("json pack detelecine filter failure: %s", error.text);
             return;
         }
         if (filter_str != NULL)
@@ -4502,7 +4502,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                 "ID", json_integer(HB_FILTER_DECOMB));
         if (filter_dict == NULL)
         {
-            printf("json pack decomb filter failure: %s\n", error.text);
+            g_warning("json pack decomb filter failure: %s", error.text);
             return;
         }
         if (filter_str != NULL)
@@ -4530,7 +4530,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                 "ID", json_integer(HB_FILTER_DEINTERLACE));
         if (filter_dict == NULL)
         {
-            printf("json pack deinterlace filter failure: %s\n", error.text);
+            g_warning("json pack deinterlace filter failure: %s", error.text);
             return;
         }
         if (filter_str != NULL)
@@ -4557,7 +4557,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                 "Settings", json_string(filter_str));
             if (filter_dict == NULL)
             {
-                printf("json pack denoise filter failure: %s\n", error.text);
+                g_warning("json pack denoise filter failure: %s", error.text);
                 return;
             }
             json_array_append_new(filter_list, filter_dict);
@@ -4573,7 +4573,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                                 "Settings", json_string(filter_str));
             if (filter_dict == NULL)
             {
-                printf("json pack denoise filter failure: %s\n", error.text);
+                g_warning("json pack denoise filter failure: %s", error.text);
                 return;
             }
             json_array_append_new(filter_list, filter_dict);
@@ -4591,7 +4591,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                             "Settings", json_string(filter_str));
         if (filter_dict == NULL)
         {
-            printf("json pack deblock filter failure: %s\n", error.text);
+            g_warning("json pack deblock filter failure: %s", error.text);
             return;
         }
         json_array_append_new(filter_list, filter_dict);
@@ -4628,7 +4628,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                         "Settings", json_string(filter_str));
     if (filter_dict == NULL)
     {
-        printf("json pack vfr filter failure: %s\n", error.text);
+        g_warning("json pack vfr filter failure: %s", error.text);
         return;
     }
     json_array_append_new(filter_list, filter_dict);
@@ -4659,7 +4659,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "Encoder",              json_integer(acodec));
         if (audio_dict == NULL)
         {
-            printf("json pack audio failure: %s\n", error.text);
+            g_warning("json pack audio failure: %s", error.text);
             return;
         }
         if (aname != NULL && aname[0] != 0)
@@ -4761,7 +4761,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                     "Codeset",  json_string(code));
             if (subtitle_dict == NULL)
             {
-                printf("json pack srt failure: %s\n", error.text);
+                g_warning("json pack srt failure: %s", error.text);
                 return;
             }
             json_array_append_new(json_subtitle_list, subtitle_dict);
@@ -4805,7 +4805,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 "Burn",     json_boolean(burned));
             if (subtitle_dict == NULL)
             {
-                printf("json pack subtitle failure: %s\n", error.text);
+                g_warning("json pack subtitle failure: %s", error.text);
                 return;
             }
             json_array_append_new(json_subtitle_list, subtitle_dict);
