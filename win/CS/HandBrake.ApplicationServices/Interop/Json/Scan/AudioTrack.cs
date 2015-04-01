@@ -1,23 +1,33 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SubtitleList.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="AudioTrack.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The subtitle list.
+//   The audio list.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Interop.Json.Scan
 {
     /// <summary>
-    /// The subtitle list.
+    /// The audio list.
     /// </summary>
-    public class SubtitleList
+    public class AudioTrack
     {
         /// <summary>
-        /// Gets or sets the format.
+        /// Gets or sets the bit rate.
         /// </summary>
-        public int Format { get; set; }
+        public int BitRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the channel layout.
+        /// </summary>
+        public int ChannelLayout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
@@ -30,8 +40,13 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         public string LanguageCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the source.
+        /// Gets or sets the sample rate.
         /// </summary>
-        public int Source { get; set; }
+        public int SampleRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the codec.
+        /// </summary>
+        public int Codec { get; set; }
     }
 }

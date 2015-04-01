@@ -455,7 +455,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         internal static List<Title> ConvertTitles(JsonScanObject titles)
         {
             List<Title> titleList = new List<Title>();
-            foreach (TitleList title in titles.TitleList)
+            foreach (SourceTitle title in titles.TitleList)
             {
                 Title converted = new Title
                     {
@@ -480,7 +480,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
                     };
 
                 int currentTrack = 1;
-                foreach (ChapterList chapter in title.ChapterList)
+                foreach (ChapterTrack chapter in title.ChapterList)
                 {
                     string chapterName = !string.IsNullOrEmpty(chapter.Name) ? chapter.Name : string.Empty;
                     converted.Chapters.Add(new Chapter(currentTrack, chapterName, new TimeSpan(chapter.Duration.Hours, chapter.Duration.Minutes, chapter.Duration.Seconds)));
@@ -488,14 +488,14 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 }
 
                 int currentAudioTrack = 1;
-                foreach (AudioList track in title.AudioList)
+                foreach (AudioTrack track in title.AudioList)
                 {
                     converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.BitRate));
                     currentAudioTrack++;
                 }
 
                 int currentSubtitleTrack = 1;
-                foreach (SubtitleList track in title.SubtitleList)
+                foreach (SubtitleTrack track in title.SubtitleList)
                 {
                     SubtitleType convertedType = new SubtitleType();
 

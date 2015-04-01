@@ -24,6 +24,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the title list.
         /// </summary>
-        public List<TitleList> TitleList { get; set; }
+        public List<SourceTitle> TitleList { get; set; }
     }
 }

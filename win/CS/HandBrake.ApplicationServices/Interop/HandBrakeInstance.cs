@@ -247,7 +247,7 @@ namespace HandBrake.ApplicationServices.Interop
         [HandleProcessCorruptedStateExceptions]
         public BitmapImage GetPreview(PreviewSettings job, int previewNumber)
         {
-            TitleList title = this.Titles.TitleList.FirstOrDefault(t => t.Index == job.Title);
+            SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == job.Title);
             Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
             // Creat the Expected Output Geometry details for libhb.

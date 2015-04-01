@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TitleList.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SourceTitle.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -16,7 +16,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The title list.
     /// </summary>
-    public class TitleList
+    public class SourceTitle
     {
         /// <summary>
         /// Gets or sets the angle count.
@@ -26,12 +26,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the audio list.
         /// </summary>
-        public List<AudioList> AudioList { get; set; }
+        public List<AudioTrack> AudioList { get; set; }
 
         /// <summary>
         /// Gets or sets the chapter list.
         /// </summary>
-        public List<ChapterList> ChapterList { get; set; }
+        public List<ChapterTrack> ChapterList { get; set; }
 
         /// <summary>
         /// Gets or sets the color.
@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the subtitle list.
         /// </summary>
-        public List<SubtitleList> SubtitleList { get; set; }
+        public List<SubtitleTrack> SubtitleList { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

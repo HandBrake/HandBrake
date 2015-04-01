@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChapterList.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ChapterTrack.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
     /// <summary>
     /// The chapter list.
     /// </summary>
-    public class ChapterList
+    public class ChapterTrack
     {
         /// <summary>
         /// Gets or sets the duration.
