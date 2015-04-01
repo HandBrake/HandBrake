@@ -23,6 +23,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
+    using HandBrake.ApplicationServices.Utilities;
 
     using AudioTrack = HandBrake.ApplicationServices.Services.Encode.Model.Models.AudioTrack;
     using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitle;
@@ -296,15 +297,19 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Audio audio = new Audio();
 
-            // TODO Handled on the front-end ? Maybe we can offload logic.
-            //if (!string.IsNullOrEmpty(job.AudioEncoderFallback))
-            //{
-            //    HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(job.AudioEncoderFallback);
-            //    Validate.NotNull(audioEncoder, "Unrecognized fallback audio encoder: " + job.AudioEncoderFallback);
-            //    audio.FallbackEncoder = audioEncoder.Id;
-            //}
+            int copyMask = 0;
+            if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMask = (int)NativeConstants.HB_ACODEC_AAC_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_AC3_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMask |= (int)NativeConstants.HB_ACODEC_DCA_HD_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMask |= (int)NativeConstants.HB_ACODEC_DCA_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_EAC3_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMask |= (int)NativeConstants.HB_ACODEC_FLAC_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_MP3_PASS;
+            if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMask |= (int)NativeConstants.HB_ACODEC_TRUEHD_PASS;
 
-            audio.CopyMask = (int)NativeConstants.HB_ACODEC_ANY;
+            audio.CopyMask = copyMask; 
+            HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
+            audio.FallbackEncoder = audioEncoder.Id;
 
             audio.AudioList = new List<AudioList>();
             foreach (AudioTrack item in job.AudioTracks)
