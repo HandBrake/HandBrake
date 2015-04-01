@@ -9,7 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Interop.Json.Encode
 {
-    using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Shared;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the filter.
         /// </summary>
-        public Filter Filter { get; set; }
+        public Filters Filter { get; set; }
 
         /// <summary>
         /// Gets or sets the PAR
@@ -55,7 +54,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the subtitle.
         /// </summary>
-        public Subtitle Subtitle { get; set; }
+        public Subtitles Subtitle { get; set; }
 
         /// <summary>
         /// Gets or sets the video.

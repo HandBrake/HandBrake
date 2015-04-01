@@ -17,7 +17,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Helpers;
-    using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -26,8 +25,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
-    using AudioTrack = HandBrake.ApplicationServices.Services.Encode.Model.Models.AudioTrack;
-    using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitle;
 
     /// <summary>
     /// This factory takes the internal EncodeJob object and turns it into a set of JSON models
@@ -174,14 +171,14 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// The job.
         /// </param>
         /// <returns>
-        /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Encode.Subtitle"/>.
+        /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles"/>.
         /// </returns>
-        private static Subtitle CreateSubtitle(EncodeTask job)
+        private static Subtitles CreateSubtitle(EncodeTask job)
         {
-            Subtitle subtitle = new Subtitle
+            Subtitles subtitle = new Subtitles
                 {
                     Search =
-                        new Search
+                        new SubtitleSearch
                             {
                                 Enable = false, 
                                 Default = false, 
@@ -387,20 +384,20 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// The job.
         /// </param>
         /// <returns>
-        /// The <see cref="Filter"/>.
+        /// The <see cref="Filters"/>.
         /// </returns>
-        private static Filter CreateFilter(EncodeTask job)
+        private static Filters CreateFilter(EncodeTask job)
         {
-            Filter filter = new Filter
+            Filters filter = new Filters
                             {
-                                FilterList = new List<FilterList>(), 
+                                FilterList = new List<Filter>(), 
                                 Grayscale = job.Grayscale
                             };
 
             // Detelecine
             if (job.Detelecine != Detelecine.Off)
             {
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = job.CustomDetelecine };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = job.CustomDetelecine };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -421,7 +418,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     options = job.CustomDecomb;
                 }
 
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -450,7 +447,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     options = job.CustomDeinterlace;
                 }
 
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = options };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = options };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -469,13 +466,13 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
 
             string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
 
-            FilterList framerateShaper = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
+            Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
             filter.FilterList.Add(framerateShaper);
 
             // Deblock
             if (job.Deblock >= 5)
             {
-                FilterList filterItem = new FilterList { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.Deblock.ToString() };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.Deblock.ToString() };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -497,12 +494,12 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     settings = Marshal.PtrToStringAnsi(settingsPtr);
                 }
 
-                FilterList filterItem = new FilterList { ID = (int)id, Settings = settings };
+                Filter filterItem = new Filter { ID = (int)id, Settings = settings };
                 filter.FilterList.Add(filterItem);
             }
 
             // CropScale Filter
-            FilterList cropScale = new FilterList
+            Filter cropScale = new Filter
             {
                 ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE, 
                 Settings =
@@ -530,7 +527,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// The job.
         /// </param>
         /// <returns>
-        /// The <see cref="MetaData"/>.
+        /// The <see cref="Interop.Json.Encode.MetaData"/>.
         /// </returns>
         private static MetaData CreateMetaData(EncodeTask job)
         {

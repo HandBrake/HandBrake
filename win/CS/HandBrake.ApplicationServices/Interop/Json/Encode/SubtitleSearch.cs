@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Search.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SubtitleSearch.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
     /// <summary>
     /// The search.
     /// </summary>
-    public class Search
+    public class SubtitleSearch
     {
         /// <summary>
         /// Gets or sets a value indicating whether burn.

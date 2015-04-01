@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Subtitle.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="Subtitles.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,12 +14,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
     /// <summary>
     /// The subtitle.
     /// </summary>
-    public class Subtitle
+    public class Subtitles
     {
         /// <summary>
         /// Gets or sets the search.
         /// </summary>
-        public Search Search { get; set; }
+        public SubtitleSearch Search { get; set; }
 
         /// <summary>
         /// Gets or sets the subtitle list.
