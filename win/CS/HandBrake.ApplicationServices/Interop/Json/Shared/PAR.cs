@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
+namespace HandBrake.ApplicationServices.Interop.Json.Shared
 {
     /// <summary>
     /// The par.

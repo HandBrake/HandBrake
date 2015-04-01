@@ -108,11 +108,8 @@
     <Compile Include="Interop\Helpers\Validate.cs" />
     <Compile Include="Interop\Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
-    <Compile Include="Interop\Json\Anamorphic\AnamorphicResult.cs" />
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
-    <Compile Include="Interop\Json\Anamorphic\Geometry.cs" />
-    <Compile Include="Interop\Json\Anamorphic\PAR.cs" />
-    <Compile Include="Interop\Json\Anamorphic\SourceGeometry.cs" />
+    <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioList.cs" />
     <Compile Include="Interop\Json\Encode\ChapterList.cs" />
@@ -135,12 +132,10 @@
     <Compile Include="Interop\Json\Scan\ChapterList.cs" />
     <Compile Include="Interop\Json\Scan\Color.cs" />
     <Compile Include="Interop\Json\Scan\Duration.cs" />
-    <Compile Include="Interop\Json\Scan\Duration2.cs" />
     <Compile Include="Interop\Json\Scan\FrameRate.cs" />
-    <Compile Include="Interop\Json\Scan\Geometry.cs" />
+    <Compile Include="Interop\Json\Shared\Geometry.cs" />
     <Compile Include="Interop\Json\Scan\JsonScanObject.cs" />
     <Compile Include="Interop\Json\Scan\MetaData.cs" />
-    <Compile Include="Interop\Json\Scan\PAR.cs" />
     <Compile Include="Interop\Json\Scan\SubtitleList.cs" />
     <Compile Include="Interop\Json\Scan\TitleList.cs" />
     <Compile Include="Interop\Json\State\JsonState.cs" />

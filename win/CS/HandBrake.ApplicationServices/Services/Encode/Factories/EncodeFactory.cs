@@ -19,6 +19,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;

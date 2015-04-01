@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Interop.Json.Scan
+namespace HandBrake.ApplicationServices.Interop.Json.Shared
 {
     /// <summary>
     /// The geometry.

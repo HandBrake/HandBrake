@@ -28,6 +28,7 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Json.Scan;
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Json.State;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -35,7 +36,6 @@ namespace HandBrake.ApplicationServices.Interop
 
     using Newtonsoft.Json;
 
-    using Geometry = HandBrake.ApplicationServices.Interop.Json.Anamorphic.Geometry;
     using Size = HandBrake.ApplicationServices.Interop.Model.Size;
 
     /// <summary>

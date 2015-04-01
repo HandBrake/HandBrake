@@ -11,6 +11,8 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
 {
     using System.Collections.Generic;
 
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
+
     /// <summary>
     /// The title list.
     /// </summary>

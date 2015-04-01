@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the duration.
         /// </summary>
-        public Duration2 Duration { get; set; }
+        public Duration Duration { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

@@ -10,6 +10,7 @@
 namespace HandBrake.ApplicationServices.Interop.Json.Encode
 {
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
 
     /// <summary>
     /// The root object.

@@ -11,6 +11,8 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
 {
     using System.Collections.Generic;
 
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
+
     /// <summary>
     /// The dest geometry.
     /// </summary>

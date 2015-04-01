@@ -9,6 +9,8 @@
 
 namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
 {
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
+
     /// <summary>
     /// The geometry.
     /// </summary>
@@ -22,6 +24,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Anamorphic
         /// <summary>
         /// Gets or sets the source geometry.
         /// </summary>
-        public SourceGeometry SourceGeometry { get; set; }
+        public Geometry SourceGeometry { get; set; }
     }
 }

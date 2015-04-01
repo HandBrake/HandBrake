@@ -16,6 +16,10 @@ namespace HandBrake.ApplicationServices.Interop
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.HbLib;
+    using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// HandBrake Interop Utilities
@@ -289,6 +293,19 @@ namespace HandBrake.ApplicationServices.Interop
             string x264Settings = Marshal.PtrToStringAnsi(ptr);
 
             return x264Settings;
+        }
+
+        /// <summary>
+        /// Gets the final size and PAR of the video, given anamorphic inputs.
+        /// </summary>
+        /// <param name="anamorphicGeometry">Anamorphic inputs.</param>
+        /// <returns>The final size and PAR of the video.</returns>
+        public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
+        {
+            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
+            string result = Marshal.PtrToStringAnsi(json);
+            return JsonConvert.DeserializeObject<Geometry>(result);
         }
 
         /// <summary>

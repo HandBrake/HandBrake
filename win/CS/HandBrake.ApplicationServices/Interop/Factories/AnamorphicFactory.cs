@@ -9,17 +9,13 @@
 
 namespace HandBrake.ApplicationServices.Interop.Factories
 {
-    using System;
     using System.Collections.Generic;
-    using System.Runtime.InteropServices;
 
-    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
+    using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The anamorphic factory.
@@ -49,7 +45,7 @@ namespace HandBrake.ApplicationServices.Interop.Factories
         /// Keep Width or Height. (Not Display Aspect)
         /// </param>
         /// <returns>
-        /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Scan.Geometry"/>.
+        /// The <see cref="Geometry"/>.
         /// </returns>
         public static Geometry CreateGeometry(EncodeTask job, SourceVideoInfo title, KeepSetting keepWidthOrHeight) // Todo remove the need for these objects. Should use simpler objects.
         {
@@ -58,7 +54,7 @@ namespace HandBrake.ApplicationServices.Interop.Factories
             // Sanatise the Geometry First.
             AnamorphicGeometry anamorphicGeometry = new AnamorphicGeometry
             {
-                SourceGeometry = new SourceGeometry
+                SourceGeometry = new Geometry()
                                  {
                                     Width = title.Resolution.Width,
                                     Height = title.Resolution.Height,
@@ -93,19 +89,7 @@ namespace HandBrake.ApplicationServices.Interop.Factories
                 anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = title.ParVal.Width, Den = title.ParVal.Height };
             }
 
-            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
-            string result = Marshal.PtrToStringAnsi(json);
-            AnamorphicResult resultGeometry = JsonConvert.DeserializeObject<AnamorphicResult>(result);
-
-            // Setup the Destination Gemotry.
-            Geometry geometry = new Geometry
-                {
-                    Width = resultGeometry.Width,
-                    Height = resultGeometry.Height,
-                    PAR = resultGeometry.PAR
-                };
-            return geometry;
+            return HandBrakeUtils.GetAnamorphicSize(anamorphicGeometry);
         }
     }
 }
