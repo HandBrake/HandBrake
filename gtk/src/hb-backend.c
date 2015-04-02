@@ -2699,7 +2699,7 @@ ghb_build_advanced_opts_string(GhbValue *settings)
     }
 }
 
-void ghb_set_video_encoder_opts(json_t *dict, GhbValue *js)
+void ghb_set_video_encoder_opts(hb_dict_t *dict, GhbValue *js)
 {
     gint vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
     switch (vcodec)
@@ -2712,7 +2712,7 @@ void ghb_set_video_encoder_opts(json_t *dict, GhbValue *js)
             {
                 const char *opts;
                 opts = ghb_settings_get_const_string(js, "x264Option");
-                json_object_set_new(dict, "Options", json_string(opts));
+                hb_dict_set(dict, "Options", hb_value_string(opts));
             }
             else
             {
@@ -2740,15 +2740,15 @@ void ghb_set_video_encoder_opts(json_t *dict, GhbValue *js)
                 tunes = g_string_free(str, FALSE);
 
                 if (preset != NULL)
-                    json_object_set_new(dict, "Preset", json_string(preset));
+                    hb_dict_set(dict, "Preset", hb_value_string(preset));
                 if (tunes != NULL && strcasecmp(tune, "none"))
-                    json_object_set_new(dict, "Tune", json_string(tunes));
+                    hb_dict_set(dict, "Tune", hb_value_string(tunes));
                 if (profile != NULL && strcasecmp(profile, "auto"))
-                    json_object_set_new(dict, "Profile", json_string(profile));
+                    hb_dict_set(dict, "Profile", hb_value_string(profile));
                 if (level != NULL && strcasecmp(level, "auto"))
-                    json_object_set_new(dict, "Level", json_string(level));
+                    hb_dict_set(dict, "Level", hb_value_string(level));
                 if (opts != NULL)
-                    json_object_set_new(dict, "Options", json_string(opts));
+                    hb_dict_set(dict, "Options", hb_value_string(opts));
 
                 g_free(tunes);
             }
@@ -2762,7 +2762,7 @@ void ghb_set_video_encoder_opts(json_t *dict, GhbValue *js)
             opts = ghb_settings_get_const_string(js, "VideoOptionExtra");
             if (opts != NULL && opts[0])
             {
-                json_object_set_new(dict, "Options", json_string(opts));
+                hb_dict_set(dict, "Options", hb_value_string(opts));
             }
         } break;
 
@@ -4124,7 +4124,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 static void
 add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 {
-    json_t * dict;
+    hb_dict_t * dict;
     json_error_t error;
     int ii, count;
 
@@ -4216,30 +4216,30 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     // Filters {Grayscale, FilterList []}
     "s:{s:o, s:[]}"
     "}",
-        "SequenceID",           json_integer(unique_id),
+        "SequenceID",           hb_value_int(unique_id),
         "Destination",
-            "Mux",              json_integer(mux_id),
-            "ChapterMarkers",   json_boolean(chapter_markers),
+            "Mux",              hb_value_int(mux_id),
+            "ChapterMarkers",   hb_value_bool(chapter_markers),
             "ChapterList",
         "Source",
-            "Path",             json_string(path),
-            "Title",            json_integer(title_id),
-            "Angle",            json_integer(angle),
+            "Path",             hb_value_string(path),
+            "Title",            hb_value_int(title_id),
+            "Angle",            hb_value_int(angle),
         "PAR",
-            "Num",              json_integer(par.num),
-            "Den",              json_integer(par.den),
+            "Num",              hb_value_int(par.num),
+            "Den",              hb_value_int(par.den),
         "Video",
-            "Codec",            json_integer(vcodec),
+            "Codec",            hb_value_int(vcodec),
         "Audio",
-            "CopyMask",         json_integer(acodec_copy_mask),
-            "FallbackEncoder",  json_integer(acodec_fallback),
+            "CopyMask",         hb_value_int(acodec_copy_mask),
+            "FallbackEncoder",  hb_value_int(acodec_fallback),
             "AudioList",
         "Subtitle",
             "Search",
             "SubtitleList",
         "MetaData",
         "Filter",
-            "Grayscale",        json_boolean(grayscale),
+            "Grayscale",        hb_value_bool(grayscale),
             "FilterList"
     );
     if (dict == NULL)
@@ -4248,10 +4248,10 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         return;
     }
     const char *dest = ghb_settings_get_const_string(js, "destination");
-    json_t *dest_dict = json_object_get(dict, "Destination");
+    hb_dict_t *dest_dict = hb_dict_get(dict, "Destination");
     if (dest != NULL)
     {
-        json_object_set_new(dest_dict, "File", json_string(dest));
+        hb_dict_set(dest_dict, "File", hb_value_string(dest));
     }
     if (mux_id & HB_MUX_MASK_MP4)
     {
@@ -4261,27 +4261,27 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         {
             ipod_atom = ghb_settings_get_boolean(js, "Mp4iPodCompatible");
         }
-        json_t *mp4_dict;
+        hb_dict_t *mp4_dict;
         mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-            "Mp4Optimize",      json_boolean(mp4_optimize),
-            "IpodAtom",         json_boolean(ipod_atom));
+            "Mp4Optimize",      hb_value_bool(mp4_optimize),
+            "IpodAtom",         hb_value_bool(ipod_atom));
         if (mp4_dict == NULL)
         {
             g_warning("json pack mp4 failure: %s", error.text);
             return;
         }
-        json_object_set_new(dest_dict, "Mp4Options", mp4_dict);
+        hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
     }
-    json_t *source_dict = json_object_get(dict, "Source");
-    json_t *range_dict;
+    hb_dict_t *source_dict = hb_dict_get(dict, "Source");
+    hb_dict_t *range_dict;
     switch (p_to_p)
     {
         case -1: // Live preview range
         {
             range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
-                "StartAtPreview",   json_integer(range_start),
-                "PtsToStop",        json_integer(range_stop),
-                "SeekPoints",       json_integer(seek_points));
+                "StartAtPreview",   hb_value_int(range_start),
+                "PtsToStop",        hb_value_int(range_stop),
+                "SeekPoints",       hb_value_int(seek_points));
             if (range_dict == NULL)
             {
                 g_warning("json pack live range failure: %s", error.text);
@@ -4292,8 +4292,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         case 0: // Chapter range
         {
             range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "ChapterStart", json_integer(range_start),
-                "ChapterEnd",   json_integer(range_stop));
+                "ChapterStart", hb_value_int(range_start),
+                "ChapterEnd",   hb_value_int(range_stop));
             if (range_dict == NULL)
             {
                 g_warning("json pack chapter range failure: %s", error.text);
@@ -4303,8 +4303,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         case 1: // PTS range
         {
             range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "PtsToStart",   json_integer(range_start),
-                "PtsToStop",    json_integer(range_stop));
+                "PtsToStart",   hb_value_int(range_start),
+                "PtsToStop",    hb_value_int(range_stop));
             if (range_dict == NULL)
             {
                 g_warning("json pack pts range failure: %s", error.text);
@@ -4314,8 +4314,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         case 2: // Frame range
         {
             range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "FrameToStart", json_integer(range_start),
-                "FrameToStop",  json_integer(range_stop));
+                "FrameToStart", hb_value_int(range_start),
+                "FrameToStop",  hb_value_int(range_stop));
             if (range_dict == NULL)
             {
                 g_warning("json pack frame range failure: %s", error.text);
@@ -4323,13 +4323,13 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             }
         } break;
     }
-    json_object_set_new(source_dict, "Range", range_dict);
+    hb_dict_set(source_dict, "Range", range_dict);
 
-    json_t *video_dict = json_object_get(dict, "Video");
+    hb_dict_t *video_dict = hb_dict_get(dict, "Video");
     if (ghb_settings_get_boolean(js, "vquality_type_constant"))
     {
         double vquality = ghb_settings_get_double(js, "VideoQualitySlider");
-        json_object_set_new(video_dict, "Quality", json_real(vquality));
+        hb_dict_set(video_dict, "Quality", hb_value_double(vquality));
     }
     else if (ghb_settings_get_boolean(js, "vquality_type_bitrate"))
     {
@@ -4337,60 +4337,60 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         vbitrate = ghb_settings_get_int(js, "VideoAvgBitrate");
         twopass = ghb_settings_get_boolean(js, "VideoTwoPass");
         fastfirstpass = ghb_settings_get_boolean(js, "VideoTurboTwoPass");
-        json_object_set_new(video_dict, "Bitrate", json_integer(vbitrate));
-        json_object_set_new(video_dict, "TwoPass", json_boolean(twopass));
-        json_object_set_new(video_dict, "Turbo", json_boolean(fastfirstpass));
+        hb_dict_set(video_dict, "Bitrate", hb_value_int(vbitrate));
+        hb_dict_set(video_dict, "TwoPass", hb_value_bool(twopass));
+        hb_dict_set(video_dict, "Turbo", hb_value_bool(fastfirstpass));
     }
     ghb_set_video_encoder_opts(video_dict, js);
 
-    json_t *meta_dict = json_object_get(dict, "MetaData");
+    hb_dict_t *meta_dict = hb_dict_get(dict, "MetaData");
     const char * meta;
 
     meta = ghb_settings_get_const_string(js, "MetaName");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "Name", json_string(meta));
+        hb_dict_set(meta_dict, "Name", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaArtist");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "Artist", json_string(meta));
+        hb_dict_set(meta_dict, "Artist", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaAlbumArtist");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "AlbumArtist", json_string(meta));
+        hb_dict_set(meta_dict, "AlbumArtist", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaReleaseDate");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "ReleaseDate", json_string(meta));
+        hb_dict_set(meta_dict, "ReleaseDate", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaComment");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "Comment", json_string(meta));
+        hb_dict_set(meta_dict, "Comment", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaGenre");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "Genre", json_string(meta));
+        hb_dict_set(meta_dict, "Genre", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaDescription");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "Description", json_string(meta));
+        hb_dict_set(meta_dict, "Description", hb_value_string(meta));
     }
     meta = ghb_settings_get_const_string(js, "MetaLongDescription");
     if (meta && *meta)
     {
-        json_object_set_new(meta_dict, "LongDescription", json_string(meta));
+        hb_dict_set(meta_dict, "LongDescription", hb_value_string(meta));
     }
 
     // process chapter list
     if (chapter_markers)
     {
-        json_t *chapter_list = json_object_get(dest_dict, "ChapterList");
+        hb_value_array_t *chapter_list = hb_dict_get(dest_dict, "ChapterList");
         GhbValue *chapters;
         GhbValue *chapter;
         gint chap;
@@ -4400,7 +4400,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         count = ghb_array_len(chapters);
         for(chap = 0; chap < count; chap++)
         {
-            json_t *chapter_dict;
+            hb_dict_t *chapter_dict;
             gchar *name;
 
             name = NULL;
@@ -4411,21 +4411,21 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                 name = g_strdup_printf (_("Chapter %2d"), chap+1);
             }
             chapter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                    "Name", json_string(name));
+                                    "Name", hb_value_string(name));
             if (chapter_dict == NULL)
             {
                 g_warning("json pack chapter failure: %s", error.text);
                 return;
             }
-            json_array_append_new(chapter_list, chapter_dict);
+            hb_value_array_append(chapter_list, chapter_dict);
             g_free(name);
         }
     }
 
     // Create filter list
-    json_t *filters_dict = json_object_get(dict, "Filter");
-    json_t *filter_list = json_object_get(filters_dict, "FilterList");
-    json_t *filter_dict;
+    hb_dict_t *filters_dict = hb_dict_get(dict, "Filter");
+    hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
+    hb_dict_t *filter_dict;
     char *filter_str;
 
     // Crop scale filter
@@ -4441,14 +4441,14 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
                             width, height, crop[0], crop[1], crop[2], crop[3]);
     filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                            "ID",       json_integer(HB_FILTER_CROP_SCALE),
-                            "Settings", json_string(filter_str));
+                            "ID",       hb_value_int(HB_FILTER_CROP_SCALE),
+                            "Settings", hb_value_string(filter_str));
     if (filter_dict == NULL)
     {
         g_warning("json pack scale filter failure: %s", error.text);
         return;
     }
-    json_array_append_new(filter_list, filter_dict);
+    hb_value_array_append(filter_list, filter_dict);
     g_free(filter_str);
 
     // detelecine filter
@@ -4466,7 +4466,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             filter_str = ghb_settings_get_const_string(js, "PictureDetelecineCustom");
         }
         filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", json_integer(HB_FILTER_DETELECINE));
+                                "ID", hb_value_int(HB_FILTER_DETELECINE));
         if (filter_dict == NULL)
         {
             g_warning("json pack detelecine filter failure: %s", error.text);
@@ -4474,10 +4474,9 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         }
         if (filter_str != NULL)
         {
-            json_object_set_new(filter_dict, "Settings",
-                                json_string(filter_str));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
         }
-        json_array_append_new(filter_list, filter_dict);
+        hb_value_array_append(filter_list, filter_dict);
     }
 
     // Decomb filter
@@ -4499,7 +4498,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             filter_str = ghb_settings_get_const_string(js, "PictureDecombCustom");
         }
         filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", json_integer(HB_FILTER_DECOMB));
+                                "ID", hb_value_int(HB_FILTER_DECOMB));
         if (filter_dict == NULL)
         {
             g_warning("json pack decomb filter failure: %s", error.text);
@@ -4507,10 +4506,9 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         }
         if (filter_str != NULL)
         {
-            json_object_set_new(filter_dict, "Settings",
-                                json_string(filter_str));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
         }
-        json_array_append_new(filter_list, filter_dict);
+        hb_value_array_append(filter_list, filter_dict);
     }
 
     // Deinterlace filter
@@ -4527,7 +4525,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             filter_str = ghb_settings_get_const_string(js, "PictureDeinterlaceCustom");
         }
         filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", json_integer(HB_FILTER_DEINTERLACE));
+                                "ID", hb_value_int(HB_FILTER_DEINTERLACE));
         if (filter_dict == NULL)
         {
             g_warning("json pack deinterlace filter failure: %s", error.text);
@@ -4535,10 +4533,9 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         }
         if (filter_str != NULL)
         {
-            json_object_set_new(filter_dict, "Settings",
-                                json_string(filter_str));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
         }
-        json_array_append_new(filter_list, filter_dict);
+        hb_value_array_append(filter_list, filter_dict);
     }
 
     // Denoise filter
@@ -4553,14 +4550,14 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             const char *filter_str;
             filter_str = ghb_settings_get_const_string(js, "PictureDenoiseCustom");
             filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                                "ID",       json_integer(filter_id),
-                                "Settings", json_string(filter_str));
+                                "ID",       hb_value_int(filter_id),
+                                "Settings", hb_value_string(filter_str));
             if (filter_dict == NULL)
             {
                 g_warning("json pack denoise filter failure: %s", error.text);
                 return;
             }
-            json_array_append_new(filter_list, filter_dict);
+            hb_value_array_append(filter_list, filter_dict);
         }
         else
         {
@@ -4569,14 +4566,14 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             tune = ghb_settings_get_const_string(js, "PictureDenoiseTune");
             filter_str = hb_generate_filter_settings(filter_id, preset, tune);
             filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                                "ID",       json_integer(filter_id),
-                                "Settings", json_string(filter_str));
+                                "ID",       hb_value_int(filter_id),
+                                "Settings", hb_value_string(filter_str));
             if (filter_dict == NULL)
             {
                 g_warning("json pack denoise filter failure: %s", error.text);
                 return;
             }
-            json_array_append_new(filter_list, filter_dict);
+            hb_value_array_append(filter_list, filter_dict);
             g_free(filter_str);
         }
     }
@@ -4587,14 +4584,14 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     {
         filter_str = g_strdup_printf("%d", deblock);
         filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                            "ID",       json_integer(HB_FILTER_DEBLOCK),
-                            "Settings", json_string(filter_str));
+                            "ID",       hb_value_int(HB_FILTER_DEBLOCK),
+                            "Settings", hb_value_string(filter_str));
         if (filter_dict == NULL)
         {
             g_warning("json pack deblock filter failure: %s", error.text);
             return;
         }
-        json_array_append_new(filter_list, filter_dict);
+        hb_value_array_append(filter_list, filter_dict);
         g_free(filter_str);
     }
 
@@ -4624,26 +4621,26 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         filter_str = g_strdup_printf("%d:%d:%d", cfr, 27000000, vrate_den);
     }
     filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                        "ID",       json_integer(HB_FILTER_VFR),
-                        "Settings", json_string(filter_str));
+                        "ID",       hb_value_int(HB_FILTER_VFR),
+                        "Settings", hb_value_string(filter_str));
     if (filter_dict == NULL)
     {
         g_warning("json pack vfr filter failure: %s", error.text);
         return;
     }
-    json_array_append_new(filter_list, filter_dict);
+    hb_value_array_append(filter_list, filter_dict);
     g_free(filter_str);
 
     // Create audio list
-    json_t *audios_dict = json_object_get(dict, "Audio");
-    json_t *json_audio_list = json_object_get(audios_dict, "AudioList");
+    hb_dict_t *audios_dict = hb_dict_get(dict, "Audio");
+    hb_value_array_t *json_audio_list = hb_dict_get(audios_dict, "AudioList");
     const GhbValue *audio_list;
 
     audio_list = ghb_settings_get_value(js, "audio_list");
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
-        json_t *audio_dict;
+        hb_dict_t *audio_dict;
         GhbValue *asettings;
         int track, acodec, mixdown, samplerate;
         const char *aname;
@@ -4655,8 +4652,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         audio_dict = json_pack_ex(&error, 0,
             "{s:o, s:o}",
-            "Track",                json_integer(track),
-            "Encoder",              json_integer(acodec));
+            "Track",                hb_value_int(track),
+            "Encoder",              hb_value_int(acodec));
         if (audio_dict == NULL)
         {
             g_warning("json pack audio failure: %s", error.text);
@@ -4664,7 +4661,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         }
         if (aname != NULL && aname[0] != 0)
         {
-            json_object_set_new(audio_dict, "Name", json_string(aname));
+            hb_dict_set(audio_dict, "Name", hb_value_string(aname));
         }
 
         // It would be better if this were done in libhb for us, but its not yet.
@@ -4672,26 +4669,25 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         {
             gain = ghb_settings_get_double(asettings, "AudioTrackGainSlider");
             if (gain > 0)
-                json_object_set_new(audio_dict, "Gain", json_real(gain));
+                hb_dict_set(audio_dict, "Gain", hb_value_double(gain));
             drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
             if (drc < 1.0)
                 drc = 0.0;
             if (drc > 0)
-                json_object_set_new(audio_dict, "DRC", json_real(drc));
+                hb_dict_set(audio_dict, "DRC", hb_value_double(drc));
 
             mixdown = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
-            json_object_set_new(audio_dict, "Mixdown", json_integer(mixdown));
+            hb_dict_set(audio_dict, "Mixdown", hb_value_int(mixdown));
 
             samplerate = ghb_settings_audio_samplerate_rate(
                                             asettings, "AudioSamplerate");
-            json_object_set_new(audio_dict, "Samplerate",
-                                json_integer(samplerate));
+            hb_dict_set(audio_dict, "Samplerate", hb_value_int(samplerate));
             gboolean qe;
             qe = ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable");
             quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
             if (qe && quality != HB_INVALID_AUDIO_QUALITY)
             {
-                json_object_set_new(audio_dict, "Quality", json_real(quality));
+                hb_dict_set(audio_dict, "Quality", hb_value_double(quality));
             }
             else
             {
@@ -4699,24 +4695,23 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
                     ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
                 bitrate = hb_audio_bitrate_get_best(
                                         acodec, bitrate, samplerate, mixdown);
-                json_object_set_new(audio_dict, "Bitrate",
-                                    json_integer(bitrate));
+                hb_dict_set(audio_dict, "Bitrate", hb_value_int(bitrate));
             }
         }
 
-        json_array_append_new(json_audio_list, audio_dict);
+        hb_value_array_append(json_audio_list, audio_dict);
     }
 
     // Create subtitle list
-    json_t *subtitles_dict = json_object_get(dict, "Subtitle");
-    json_t *json_subtitle_list = json_object_get(subtitles_dict, "SubtitleList");
+    hb_dict_t *subtitles_dict = hb_dict_get(dict, "Subtitle");
+    hb_value_array_t *json_subtitle_list = hb_dict_get(subtitles_dict, "SubtitleList");
     const GhbValue *subtitle_list;
 
     subtitle_list = ghb_settings_get_value(js, "subtitle_list");
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
-        json_t *subtitle_dict;
+        hb_dict_t *subtitle_dict;
         gint track;
         gboolean force, burned, def, one_burned = FALSE;
         GhbValue *ssettings;
@@ -4752,25 +4747,25 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             }
             subtitle_dict = json_pack_ex(&error, 0,
                 "{s:o, s:o, s:o, s:{s:o, s:o, s:o}}",
-                "Default",  json_boolean(def),
-                "Burn",     json_boolean(burned),
-                "Offset",   json_integer(offset),
+                "Default",  hb_value_bool(def),
+                "Burn",     hb_value_bool(burned),
+                "Offset",   hb_value_int(offset),
                 "SRT",
-                    "Filename", json_string(filename),
-                    "Language", json_string(lang),
-                    "Codeset",  json_string(code));
+                    "Filename", hb_value_string(filename),
+                    "Language", hb_value_string(lang),
+                    "Codeset",  hb_value_string(code));
             if (subtitle_dict == NULL)
             {
                 g_warning("json pack srt failure: %s", error.text);
                 return;
             }
-            json_array_append_new(json_subtitle_list, subtitle_dict);
+            hb_value_array_append(json_subtitle_list, subtitle_dict);
         }
 
         track = ghb_settings_get_int(ssettings, "SubtitleTrack");
         if (track == -1)
         {
-            json_t *search = json_object_get(subtitles_dict, "Search");
+            hb_dict_t *search = hb_dict_get(subtitles_dict, "Search");
             if (burned && !one_burned)
             {
                 // Only allow one subtitle to be burned into the video
@@ -4780,10 +4775,10 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             {
                 burned = FALSE;
             }
-            json_object_set_new(search, "Enable", json_boolean(TRUE));
-            json_object_set_new(search, "Forced", json_boolean(force));
-            json_object_set_new(search, "Default", json_boolean(def));
-            json_object_set_new(search, "Burn", json_boolean(burned));
+            hb_dict_set(search, "Enable", hb_value_bool(TRUE));
+            hb_dict_set(search, "Forced", hb_value_bool(force));
+            hb_dict_set(search, "Default", hb_value_bool(def));
+            hb_dict_set(search, "Burn", hb_value_bool(burned));
         }
         else if (track >= 0)
         {
@@ -4799,21 +4794,21 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 
             subtitle_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o}",
-                "Track",    json_integer(track),
-                "Default",  json_boolean(def),
-                "Force",    json_boolean(force),
-                "Burn",     json_boolean(burned));
+                "Track",    hb_value_int(track),
+                "Default",  hb_value_bool(def),
+                "Force",    hb_value_bool(force),
+                "Burn",     hb_value_bool(burned));
             if (subtitle_dict == NULL)
             {
                 g_warning("json pack subtitle failure: %s", error.text);
                 return;
             }
-            json_array_append_new(json_subtitle_list, subtitle_dict);
+            hb_value_array_append(json_subtitle_list, subtitle_dict);
         }
     }
 
-    char *json_job = json_dumps(dict, JSON_INDENT(4));
-    json_decref(dict);
+    char *json_job = hb_value_get_json(dict);
+    hb_value_free(&dict);
 
     hb_add_json(h, json_job);
     free(json_job);
