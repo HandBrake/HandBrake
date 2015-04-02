@@ -68,6 +68,29 @@ hb_value_t * hb_value_bool(int value)
     return json_boolean(value);
 }
 
+hb_value_t * hb_value_json(const char *json)
+{
+    json_error_t error;
+    hb_value_t *val = json_loads(json, 0, &error);
+    if (val == NULL)
+    {
+        hb_error("hb_value_json: Failed, error %s", error.text);
+    }
+    return val;
+}
+
+hb_value_t * hb_value_read_json(const char *path)
+{
+    json_error_t error;
+    hb_value_t *val = json_load_file(path, 0, &error);
+    if (val == NULL)
+    {
+        hb_error("hb_value_read_json: Failed, path (%s), error %s",
+                 path, error.text);
+    }
+    return val;
+}
+
 static hb_value_t* xform_null(hb_value_type_t type)
 {
     switch (type)
@@ -170,10 +193,9 @@ static hb_value_t* xform_string(const hb_value_t *value, hb_value_type_t type)
         }
         case HB_VALUE_TYPE_BOOL:
         {
-            if (s != NULL &&
-                (!strcasecmp(s, "true") ||
-                 !strcasecmp(s, "yes")  ||
-                 !strcasecmp(s, "1")))
+            if (!strcasecmp(s, "true") ||
+                !strcasecmp(s, "yes")  ||
+                !strcasecmp(s, "1"))
             {
                 return json_true();
             }
@@ -181,17 +203,11 @@ static hb_value_t* xform_string(const hb_value_t *value, hb_value_type_t type)
         }
         case HB_VALUE_TYPE_INT:
         {
-            json_int_t i = 0;
-            if (s != NULL)
-                strtoll(s, NULL, 0);
-            return json_integer(i);
+            return json_integer(strtoll(s, NULL, 0));
         }
         case HB_VALUE_TYPE_DOUBLE:
         {
-            double d = 0.0;
-            if (s != NULL)
-                d = strtod(s, NULL);
-            return json_real(d);
+            return json_real(strtod(s, NULL));
         }
         case HB_VALUE_TYPE_STRING:
         {
@@ -397,6 +413,16 @@ hb_value_get_string_xform(const hb_value_t *value)
     result = strdup(json_string_value(v));
     json_decref(v);
     return result;
+}
+
+char * hb_value_get_json(hb_value_t *value)
+{
+    return json_dumps(value, JSON_INDENT(4) | JSON_SORT_KEYS);
+}
+
+int  hb_value_write_json(hb_value_t *value, const char *path)
+{
+    return json_dump_file(value, path, JSON_INDENT(4) | JSON_SORT_KEYS);
 }
 
 void hb_dict_free(hb_dict_t **_dict)

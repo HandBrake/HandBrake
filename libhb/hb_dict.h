@@ -92,6 +92,8 @@ hb_value_t * hb_value_string(const char *value);
 hb_value_t * hb_value_int(json_int_t value);
 hb_value_t * hb_value_double(double value);
 hb_value_t * hb_value_bool(int value);
+hb_value_t * hb_value_json(const char *json);
+hb_value_t * hb_value_read_json(const char *path);
 
 /* Transform hb_value_t from one type to another */
 hb_value_t * hb_value_xform(const hb_value_t *value, int type);
@@ -106,6 +108,10 @@ int          hb_value_get_bool(const hb_value_t *value);
 /* converts value type and returns an allocated string representation.
  * caller must free the returned string */
 char *       hb_value_get_string_xform(const hb_value_t *value);
+/* converts value to json string */
+char *       hb_value_get_json(hb_value_t *value);
+/* write json representation to a file */
+int          hb_value_write_json(hb_value_t *value, const char *path);
 
 /* specialized dict functions */
 /*
