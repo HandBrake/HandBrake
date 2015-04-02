@@ -3176,18 +3176,20 @@ ghb_backend_events(signal_user_data_t *ud)
             gchar *path = g_strdup_printf ("%d", index);
             if (gtk_tree_model_get_iter_from_string(store, &iter, path))
             {
-                if ((status.queue.state & GHB_STATE_WORKDONE) ||
-                    (status.queue.state & GHB_STATE_SCANDONE))
-                {
-                    gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
-                                       0, FALSE, -1);
-                }
-                else if (!(status.queue.state & GHB_STATE_PAUSED))
+                if (((status.queue.state & GHB_STATE_WORKING) ||
+                     (status.queue.state & GHB_STATE_SCANNING)) &&
+                    !(status.queue.state & GHB_STATE_PAUSED))
                 {
                     gint pulse;
                     gtk_tree_model_get(store, &iter, 4, &pulse, -1);
                     gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
                                        4, pulse+1, -1);
+                }
+                else if ((status.queue.state & GHB_STATE_WORKDONE) ||
+                         (status.queue.state & GHB_STATE_SCANDONE))
+                {
+                    gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
+                                       0, FALSE, -1);
                 }
             }
             g_free(path);
