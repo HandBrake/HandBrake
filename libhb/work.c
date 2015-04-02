@@ -299,7 +299,7 @@ void hb_display_job_info(hb_job_t *job)
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
-            if( filter->settings )
+            if( filter->settings && *filter->settings )
                 hb_log("     + %s (%s)", filter->name, filter->settings);
             else
                 hb_log("     + %s (default settings)", filter->name);
