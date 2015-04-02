@@ -1671,6 +1671,20 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
     return hb_mixdown_get_best(codec, layout, mixdown);
 }
 
+hb_mixdown_t* hb_mixdown_get_from_mixdown(int mixdown)
+{
+    int i;
+    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    {
+        if (hb_audio_mixdowns[i].item.amixdown == mixdown)
+        {
+            return &hb_audio_mixdowns[i].item;
+        }
+    }
+
+    return NULL;
+}
+
 int hb_mixdown_get_from_name(const char *name)
 {
     if (name == NULL || *name == '\0')
@@ -1758,6 +1772,20 @@ int hb_video_encoder_get_default(int muxer)
 
 fail:
     return 0;
+}
+
+hb_encoder_t * hb_video_encoder_get_from_codec(int codec)
+{
+    int i;
+    for (i = 0; i < hb_video_encoders_count; i++)
+    {
+        if (hb_video_encoders[i].item.codec == codec)
+        {
+            return &hb_video_encoders[i].item;
+        }
+    }
+
+    return NULL;
 }
 
 int hb_video_encoder_get_from_name(const char *name)
@@ -1924,6 +1952,20 @@ int hb_audio_encoder_get_default(int muxer)
     }
 
 fail:
+    return 0;
+}
+
+hb_encoder_t* hb_audio_encoder_get_from_codec(int codec)
+{
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_encoders[i].item.codec == codec)
+        {
+            return &hb_audio_encoders[i].item;
+        }
+    }
+
     return 0;
 }
 
@@ -2206,6 +2248,20 @@ int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
         }
     }
     return (out_codec & HB_ACODEC_PASS_MASK) ? out_codec : fallback;
+}
+
+hb_container_t* hb_container_get_from_format(int format)
+{
+    int i;
+    for (i = 0; i < hb_containers_count; i++)
+    {
+        if (hb_containers[i].item.format == format)
+        {
+            return &hb_containers[i].item;
+        }
+    }
+
+    return NULL;
 }
 
 int hb_container_get_from_name(const char *name)
