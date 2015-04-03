@@ -118,12 +118,12 @@ start_element(
         } break;
         case P_DICT:
         {
-            gval = ghb_dict_value_new();
+            gval = ghb_dict_new();
             g_queue_push_head(pd->stack, gval);
         } break;
         case P_ARRAY:
         {
-            gval = ghb_array_value_new(128);
+            gval = ghb_array_new();
             g_queue_push_head(pd->stack, gval);
         } break;
         case P_INTEGER:
@@ -166,11 +166,11 @@ start_element(
             if (pd->key == NULL)
             {
                 g_warning("No key for dictionary item");
-                ghb_value_free(gval);
+                ghb_value_free(&gval);
             }
             else
             {
-                ghb_dict_insert(current, pd->key, gval);
+                ghb_dict_set(current, pd->key, gval);
             }
         }
         else
@@ -243,7 +243,7 @@ end_element(
         case P_INTEGER:
         {
             gint64 val = g_strtod(pd->value, NULL);
-            gval = ghb_int64_value_new(val);
+            gval = ghb_int_value_new(val);
         } break;
         case P_REAL:
         {
@@ -256,11 +256,11 @@ end_element(
         } break;
         case P_TRUE:
         {
-            gval = ghb_boolean_value_new(TRUE);
+            gval = ghb_bool_value_new(TRUE);
         } break;
         case P_FALSE:
         {
-            gval = ghb_boolean_value_new(FALSE);
+            gval = ghb_bool_value_new(FALSE);
         } break;
         default:
         {
@@ -287,11 +287,11 @@ end_element(
             if (pd->key == NULL)
             {
                 g_warning("No key for dictionary item");
-                ghb_value_free(gval);
+                ghb_value_free(&gval);
             }
             else
             {
-                ghb_dict_insert(current, pd->key, gval);
+                ghb_dict_set(current, pd->key, gval);
             }
         }
         else
@@ -431,7 +431,7 @@ gval_write(FILE *file, GhbValue *gval)
         count = ghb_array_len(gval);
         for (ii = 0; ii < count; ii++)
         {
-            val = ghb_array_get_nth(gval, ii);
+            val = ghb_array_get(gval, ii);
             gval_write(file, val);
         }
         indent--;
@@ -446,7 +446,7 @@ gval_write(FILE *file, GhbValue *gval)
         indent_fprintf(file, indent, "<dict>\n");
         indent++;
 
-        ghb_dict_iter_init(gval, &iter);
+        iter = ghb_dict_iter_init(gval);
         while (ghb_dict_iter_next(gval, &iter, &key, &val))
         {
             indent_fprintf(file, indent, "<key>%s</key>\n", key);
@@ -459,7 +459,7 @@ gval_write(FILE *file, GhbValue *gval)
     else if (gtype == GHB_BOOL)
     {
         gchar *tag;
-        if (ghb_value_boolean(gval))
+        if (ghb_value_get_bool(gval))
         {
             tag = "true";
         }
@@ -471,17 +471,17 @@ gval_write(FILE *file, GhbValue *gval)
     }
     else if (gtype == GHB_DOUBLE)
     {
-        gdouble val = ghb_value_double(gval);
+        gdouble val = ghb_value_get_double(gval);
         indent_fprintf(file, indent, "<real>%.17g</real>\n", val);
     }
     else if (gtype == GHB_INT)
     {
-        gint64 val = ghb_value_int64(gval);
+        gint64 val = ghb_value_get_int(gval);
         indent_fprintf(file, indent, "<integer>%"PRId64"</integer>\n", val);
     }
     else if (gtype == GHB_STRING)
     {
-        const gchar *str = ghb_value_string(gval);
+        const gchar *str = ghb_value_get_string(gval);
         gchar *esc = g_markup_escape_text(str, -1);
         indent_fprintf(file, indent, "<string>%s</string>\n", esc);
         g_free(esc);

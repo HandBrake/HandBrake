@@ -115,23 +115,22 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
     gint count;
     gboolean result = TRUE;
     GhbValue *array, *data;
-    gchar *widget_name;
+    const gchar *widget_name;
 
     g_debug("dep_check () %s", name);
 
     if (rev_map == NULL) return TRUE;
-    array = ghb_dict_lookup(rev_map, name);
+    array = ghb_dict_get(rev_map, name);
     count = ghb_array_len(array);
     *out_hide = FALSE;
     for (ii = 0; ii < count; ii++)
     {
-        data = ghb_array_get_nth(array, ii);
-        widget_name = ghb_value_string(ghb_array_get_nth(data, 0));
+        data = ghb_array_get(array, ii);
+        widget_name = ghb_value_get_string(ghb_array_get(data, 0));
         widget = GHB_WIDGET(ud->builder, widget_name);
         dep_object = gtk_builder_get_object(ud->builder, name);
         if (widget != NULL && !gtk_widget_is_sensitive(widget))
         {
-            g_free(widget_name);
             continue;
         }
         if (dep_object == NULL)
@@ -146,11 +145,10 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
             gboolean sensitive = FALSE;
             gboolean die, hide;
 
-            die = ghb_value_boolean(ghb_array_get_nth(data, 2));
-            hide = ghb_value_boolean(ghb_array_get_nth(data, 3));
-            value = ghb_value_string(ghb_array_get_nth(data, 1));
-            values = g_strsplit(value, "|", 10);
-            g_free(value);
+            die = ghb_value_get_bool(ghb_array_get(data, 2));
+            hide = ghb_value_get_bool(ghb_array_get(data, 3));
+            const char *tmp = ghb_value_get_string(ghb_array_get(data, 1));
+            values = g_strsplit(tmp, "|", 10);
 
             if (widget)
                 value = ghb_widget_string(widget);
@@ -194,7 +192,6 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
             g_strfreev (values);
             g_free(value);
         }
-        g_free(widget_name);
     }
     return result;
 }
@@ -209,7 +206,7 @@ ghb_check_dependency(
     const gchar *name;
     GhbValue *array, *data;
     gint count, ii;
-    gchar *dep_name;
+    const gchar *dep_name;
     GType type;
 
     if (widget != NULL)
@@ -225,20 +222,19 @@ ghb_check_dependency(
     g_debug("ghb_check_dependency() %s", name);
 
     if (dep_map == NULL) return;
-    array = ghb_dict_lookup(dep_map, name);
+    array = ghb_dict_get(dep_map, name);
     count = ghb_array_len(array);
     for (ii = 0; ii < count; ii++)
     {
         gboolean sensitive;
         gboolean hide;
 
-        data = ghb_array_get_nth(array, ii);
-        dep_name = ghb_value_string(data);
+        data = ghb_array_get(array, ii);
+        dep_name = ghb_value_get_string(data);
         dep_object = gtk_builder_get_object(ud->builder, dep_name);
         if (dep_object == NULL)
         {
             g_message("Failed to find dependent widget %s", dep_name);
-            g_free(dep_name);
             continue;
         }
         sensitive = dep_check(ud, dep_name, &hide);
@@ -257,7 +253,6 @@ ghb_check_dependency(
                 gtk_widget_show_now(GTK_WIDGET(dep_object));
             }
         }
-        g_free(dep_name);
     }
 }
 
@@ -271,7 +266,7 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 
     g_debug("ghb_check_all_depencencies ()");
     if (rev_map == NULL) return;
-    ghb_dict_iter_init(rev_map, &iter);
+    iter = ghb_dict_iter_init(rev_map);
     while (ghb_dict_iter_next(rev_map, &iter, &dep_name, &value))
     {
         gboolean sensitive;
@@ -1141,10 +1136,10 @@ show_settings(GhbValue *settings)
     const gchar *key;
     GhbValue *gval;
 
-    ghb_dict_iter_init(settings, &iter);
+    iter = ghb_dict_iter_init(settings);
     while (ghb_dict_iter_next(settings, &iter, &key, &gval))
     {
-        char *str = ghb_value_string(gval);
+        char *str = ghb_value_get_string_xform(gval);
         printf("show key %s val %s\n", key, str);
         g_free(str);
     }
@@ -1918,7 +1913,7 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     if (count == 0)
         count = 1;
 
-    settings_array = ghb_array_value_new(count);
+    settings_array = ghb_array_new();
 
     preset = ghb_get_current_preset(ud);
     if (preset != NULL)
@@ -1944,14 +1939,14 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
         set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }
-    ghb_value_free(preset_path);
+    ghb_value_free(&preset_path);
     if (titleindex < 0 || titleindex >= count)
     {
         titleindex = 0;
     }
-    ghb_value_free(ud->settings_array);
+    ghb_value_free(&ud->settings_array);
     ud->settings_array = settings_array;
-    ud->settings = ghb_array_get_nth(ud->settings_array, titleindex);
+    ud->settings = ghb_array_get(ud->settings_array, titleindex);
 }
 
 static gboolean update_preview = FALSE;
@@ -1968,7 +1963,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     count = ghb_array_len(ud->settings_array);
     int idx = (titleindex >= 0 && titleindex < count) ? titleindex : 0;
-    ud->settings = ghb_array_get_nth(ud->settings_array, idx);
+    ud->settings = ghb_array_get(ud->settings_array, idx);
     ghb_load_settings(ud);
 
     ghb_audio_title_change(ud, title != NULL);
@@ -2691,7 +2686,7 @@ find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
     count = ghb_array_len(queue);
     for (ii = 0; ii < count; ii++)
     {
-        js = ghb_array_get_nth(queue, ii);
+        js = ghb_array_get(queue, ii);
         job_unique_id = ghb_settings_get_int(js, "job_unique_id");
         if (job_unique_id == unique_id)
         {
@@ -2850,7 +2845,7 @@ queue_pending_count(GhbValue *queue)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get_nth(queue, ii);
+        js = ghb_array_get(queue, ii);
         status = ghb_settings_get_int(js, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
@@ -2890,7 +2885,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get_nth(ud->queue, ii);
+        js = ghb_array_get(ud->queue, ii);
         status = ghb_settings_get_int(js, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
@@ -3142,11 +3137,11 @@ ghb_backend_events(signal_user_data_t *ud)
         if (title == NULL)
         {
             gtk_label_set_text(label, _("No Title Found"));
-            ghb_ui_update(ud, "title", ghb_int64_value(-1));
+            ghb_ui_update(ud, "title", ghb_int_value(-1));
         }
         else
         {
-            ghb_ui_update(ud, "title", ghb_int64_value(title->index));
+            ghb_ui_update(ud, "title", ghb_int_value(title->index));
         }
 
         if (ghb_queue_edit_settings != NULL)
@@ -3677,13 +3672,14 @@ chapter_refresh_list_row_ui(
     const hb_title_t *title,
     int index)
 {
-    gchar *chapter, *s_duration, *s_start;
+    const gchar *chapter;
+    gchar *s_duration, *s_start;
     gint hh, mm, ss;
     gint64 duration, start;
 
     // Update row with settings data
     g_debug("Updating chapter row ui");
-    chapter = ghb_value_string(ghb_array_get_nth(chapter_list, index));
+    chapter = ghb_value_get_string(ghb_array_get(chapter_list, index));
     duration = ghb_get_chapter_duration(title, index) / 90000;
     break_duration(duration, &hh, &mm, &ss);
     s_duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
@@ -3697,7 +3693,6 @@ chapter_refresh_list_row_ui(
         3, chapter,
         4, TRUE,
         -1);
-    g_free(chapter);
     g_free(s_duration);
     g_free(s_start);
 }
@@ -3815,7 +3810,7 @@ chapter_edited_cb(
     GhbValue *chapter;
 
     chapters = ghb_settings_get_value(ud->settings, "chapter_list");
-    chapter = ghb_array_get_nth(chapters, index-1);
+    chapter = ghb_array_get(chapters, index-1);
     ghb_string_value_set(chapter, text);
     if ((chapter_edit_key == GDK_KEY_Return || chapter_edit_key == GDK_KEY_Down) &&
         gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))

@@ -145,7 +145,7 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *setting
     {
         g_return_if_fail(tv != NULL);
         gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
-        subsettings = ghb_array_get_nth(subtitle_list, ii);
+        subsettings = ghb_array_get(subtitle_list, ii);
         subtitle_refresh_list_row_ui(tm, &ti, subsettings);
     }
 }
@@ -164,7 +164,7 @@ ghb_subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
     gint ii, count;
 
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
-    subsettings = ghb_array_get_nth(subtitle_list, index);
+    subsettings = ghb_array_get(subtitle_list, index);
     if (subsettings != NULL)
     {
         int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
@@ -182,7 +182,7 @@ ghb_subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
     {
         if (ii != index)
         {
-            subsettings = ghb_array_get_nth(subtitle_list, ii);
+            subsettings = ghb_array_get(subtitle_list, ii);
             int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
             if (track != -1)
             {
@@ -216,7 +216,7 @@ ghb_subtitle_exclusive_default_settings(GhbValue *settings, gint index)
     {
         if (ii != index)
         {
-            subtitle = ghb_array_get_nth(subtitle_list, ii);
+            subtitle = ghb_array_get(subtitle_list, ii);
             ghb_settings_set_boolean(subtitle, "SubtitleDefaultTrack", FALSE);
         }
     }
@@ -252,7 +252,7 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
     {
-        subtitle_list = ghb_array_value_new(8);
+        subtitle_list = ghb_array_new();
         ghb_settings_set_value(settings, "subtitle_list", subtitle_list);
     }
 
@@ -393,7 +393,7 @@ static GhbValue*  subtitle_add_track(
         return NULL;
     }
 
-    GhbValue *subsettings = ghb_dict_value_new();
+    GhbValue *subsettings = ghb_dict_new();
     ghb_settings_set_int(subsettings, "SubtitleTrack", track);
     ghb_settings_set_int(subsettings, "SubtitleSource", source);
 
@@ -526,8 +526,8 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     lang_count = ghb_array_len(lang_list);
     if (lang_count > 0)
     {
-        GhbValue *glang = ghb_array_get_nth(lang_list, 0);
-        pref_lang = ghb_value_const_string(glang);
+        GhbValue *glang = ghb_array_get(lang_list, 0);
+        pref_lang = ghb_value_get_string(glang);
     }
 
     if (pref_lang == NULL || !strncmp(pref_lang, "und", 4))
@@ -582,8 +582,8 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         // Find "best" subtitle based on subtitle preferences
         for (ii = 0; ii < lang_count; ii++)
         {
-            GhbValue *glang = ghb_array_get_nth(lang_list, ii);
-            const gchar *lang = ghb_value_const_string(glang);
+            GhbValue *glang = ghb_array_get(lang_list, ii);
+            const gchar *lang = ghb_value_get_string(glang);
 
             int next_track = 0;
             track = ghb_find_subtitle_track(title, lang, next_track);
@@ -717,7 +717,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
         if (row >= ghb_array_len(subtitle_list))
             return NULL;
 
-        subsettings = ghb_array_get_nth(subtitle_list, row);
+        subsettings = ghb_array_get(subtitle_list, row);
         if (index != NULL)
             *index = row;
     }
@@ -954,7 +954,7 @@ ghb_subtitle_list_refresh_selected(signal_user_data_t *ud)
         if (row >= ghb_array_len(subtitle_list))
             return;
 
-        subsettings = ghb_array_get_nth(subtitle_list, row);
+        subsettings = ghb_array_get(subtitle_list, row);
         subtitle_refresh_list_row_ui(tm, &ti, subsettings);
     }
 }
@@ -1044,11 +1044,11 @@ ghb_clear_subtitle_list_settings(GhbValue *settings)
     subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
     {
-        subtitle_list = ghb_array_value_new();
+        subtitle_list = ghb_array_new();
         ghb_settings_set_value(settings, "subtitle_list", subtitle_list);
     }
     else
-        ghb_array_value_reset(subtitle_list);
+        ghb_array_reset(subtitle_list);
 }
 
 static void
@@ -1123,7 +1123,7 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
 
         subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
         if (row >= 0 && row < ghb_array_len(subtitle_list))
-            subsettings = ghb_array_get_nth(subtitle_list, row);
+            subsettings = ghb_array_get(subtitle_list, row);
     }
     subtitle_update_dialog_widgets(ud, subsettings);
     if (subsettings)
@@ -1147,7 +1147,7 @@ static gboolean subtitle_is_one_burned(GhbValue *settings)
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
-        subsettings = ghb_array_get_nth(subtitle_list, ii);
+        subsettings = ghb_array_get(subtitle_list, ii);
         if (ghb_settings_get_boolean(subsettings, "SubtitleBurned"))
         {
             return TRUE;
@@ -1219,7 +1219,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         else
         {
-            ghb_value_free(backup);
+            ghb_value_free(&backup);
         }
     }
 }
@@ -1293,7 +1293,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
         gboolean burned;
         int source;
 
-        subsettings = ghb_array_get_nth(subtitle_list, ii);
+        subsettings = ghb_array_get(subtitle_list, ii);
         burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
         source = ghb_settings_get_boolean(subsettings, "SubtitleSource");
         burned = burned || !hb_subtitle_can_pass(source, mux->format);
@@ -1334,7 +1334,7 @@ ghb_reset_subtitles(signal_user_data_t *ud, GhbValue *settings)
     count = ghb_array_len(slist);
     for (ii = 0; ii < count; ii++)
     {
-        subtitle = ghb_value_dup(ghb_array_get_nth(slist, ii));
+        subtitle = ghb_value_dup(ghb_array_get(slist, ii));
         subtitle_add_to_settings(ud->settings, subtitle);
     }
     subtitle_refresh_list_ui(ud);
@@ -1397,11 +1397,11 @@ ghb_subtitle_set_pref_lang(GhbValue *settings)
     lang_list = ghb_settings_get_value(settings, "SubtitleLanguageList");
     if (ghb_array_len(lang_list) > 0)
     {
-        GhbValue *glang = ghb_array_get_nth(lang_list, 0);
+        GhbValue *glang = ghb_array_get(lang_list, 0);
         if (glang != NULL)
         {
             ghb_settings_set_string(settings, "PreferredLanguage",
-                                    ghb_value_const_string(glang));
+                                    ghb_value_get_string(glang));
             set = TRUE;
         }
     }
@@ -1484,7 +1484,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (ghb_array_len(lang_list) > 0)
         {
             const iso639_lang_t *lang;
-            GhbValue *entry = ghb_array_get_nth(lang_list, 0);
+            GhbValue *entry = ghb_array_get(lang_list, 0);
             lang = ghb_iso639_lookup_by_int(ghb_lookup_audio_lang(entry));
             subtitle_update_pref_lang(ud, lang);
         }
@@ -1525,7 +1525,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
     if (lang_list == NULL)
     {
-        lang_list = ghb_array_value_new(8);
+        lang_list = ghb_array_new();
         ghb_settings_set_value(ud->settings, "SubtitleLanguageList", lang_list);
     }
 
@@ -1533,7 +1533,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     count = ghb_array_len(lang_list);
     for (ii = 0; ii < count; )
     {
-        GhbValue *lang_val = ghb_array_get_nth(lang_list, ii);
+        GhbValue *lang_val = ghb_array_get(lang_list, ii);
         int idx = ghb_lookup_audio_lang(lang_val);
         if (ii == 0)
         {
@@ -1624,7 +1624,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         }
         else
         {
-            ghb_value_free(backup);
+            ghb_value_free(&backup);
         }
     }
 }

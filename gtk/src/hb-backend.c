@@ -771,8 +771,8 @@ find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
 
     if (ghb_value_type(gval) == GHB_STRING)
     {
-        gchar *str;
-        str = ghb_value_string(gval);
+        const gchar *str;
+        str = ghb_value_get_string(gval);
         for (ii = 0; ii < opts->count; ii++)
         {
             if (strcmp(opts->map[ii].shortOpt, str) == 0)
@@ -780,13 +780,12 @@ find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
                 break;
             }
         }
-        g_free(str);
         return ii;
     }
     else if (ghb_value_type(gval) == GHB_DOUBLE)
     {
         gdouble val;
-        val = ghb_value_double(gval);
+        val = ghb_value_get_double(gval);
         for (ii = 0; ii < opts->count; ii++)
         {
             if (opts->map[ii].ivalue == val)
@@ -800,7 +799,7 @@ find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
              ghb_value_type(gval) == GHB_BOOL)
     {
         gint64 val;
-        val = ghb_value_int64(gval);
+        val = ghb_value_get_int(gval);
         for (ii = 0; ii < opts->count; ii++)
         {
             if ((gint64)opts->map[ii].ivalue == val)
@@ -900,43 +899,37 @@ int
 ghb_lookup_audio_lang(const GhbValue *glang)
 {
     gint ii;
-    gchar *str;
+    const gchar *str;
 
-    str = ghb_value_string(glang);
+    str = ghb_value_get_string(glang);
     for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
     {
         if (ghb_language_table[ii].iso639_2 &&
             strcmp(ghb_language_table[ii].iso639_2, str) == 0)
         {
-            g_free(str);
             return ii;
         }
         if (ghb_language_table[ii].iso639_2b &&
             strcmp(ghb_language_table[ii].iso639_2b, str) == 0)
         {
-            g_free(str);
             return ii;
         }
         if (ghb_language_table[ii].iso639_1 &&
             strcmp(ghb_language_table[ii].iso639_1, str) == 0)
         {
-            g_free(str);
             return ii;
         }
         if (ghb_language_table[ii].native_name &&
             strcmp(ghb_language_table[ii].native_name, str) == 0)
         {
-            g_free(str);
             return ii;
         }
         if (ghb_language_table[ii].eng_name &&
             strcmp(ghb_language_table[ii].eng_name, str) == 0)
         {
-            g_free(str);
             return ii;
         }
     }
-    g_free(str);
     return -1;
 }
 
@@ -2037,7 +2030,7 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_get(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2086,7 +2079,7 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_get(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2123,7 +2116,7 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name)
 
     // Check if encoder has been set yet.
     // If not, bail
-    GhbValue *value = ghb_dict_lookup(ud->settings, "VideoEncoder");
+    GhbValue *value = ghb_dict_get(ud->settings, "VideoEncoder");
     if (value == NULL) return;
 
     int encoder = ghb_get_video_encoder(ud->settings);
@@ -2845,7 +2838,7 @@ ghb_get_chapters(const hb_title_t *title)
     gint count, ii;
     GhbValue *chapters = NULL;
 
-    chapters = ghb_array_value_new(0);
+    chapters = ghb_array_new();
 
     if (title == NULL) return chapters;
     count = hb_list_count( title->list_chapter );
@@ -2879,7 +2872,7 @@ ghb_ac3_in_audio_list(const GhbValue *audio_list)
         GhbValue *asettings;
         gint acodec;
 
-        asettings = ghb_array_get_nth(audio_list, ii);
+        asettings = ghb_array_get(audio_list, ii);
         acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         if (acodec & HB_ACODEC_AC3)
             return TRUE;
@@ -3939,7 +3932,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     count = ghb_array_len(slist);
     for (ii = 0; ii < count; ii++)
     {
-        subtitle = ghb_array_get_nth(slist, ii);
+        subtitle = ghb_array_get(slist, ii);
         track = ghb_settings_get_int(subtitle, "SubtitleTrack");
         source = ghb_settings_get_int(subtitle, "SubtitleSource");
         burned = track != -1 &&
@@ -4023,7 +4016,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         hb_audio_config_t *aconfig;
         int track, codec;
 
-        asettings = ghb_array_get_nth(audio_list, ii);
+        asettings = ghb_array_get(audio_list, ii);
         track = ghb_settings_get_int(asettings, "AudioTrack");
         codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         if (codec == HB_ACODEC_AUTO_PASS)
@@ -4404,8 +4397,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             gchar *name;
 
             name = NULL;
-            chapter = ghb_array_get_nth(chapters, chap);
-            name = ghb_value_string(chapter);
+            chapter = ghb_array_get(chapters, chap);
+            name = ghb_value_get_string_xform(chapter);
             if (name == NULL)
             {
                 name = g_strdup_printf (_("Chapter %2d"), chap+1);
@@ -4646,7 +4639,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         const char *aname;
         double gain, drc, quality;
 
-        asettings = ghb_array_get_nth(audio_list, ii);
+        asettings = ghb_array_get(audio_list, ii);
         track = ghb_settings_get_int(asettings, "AudioTrack");
         aname = ghb_settings_get_const_string(asettings, "AudioTrackName");
         acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
@@ -4717,7 +4710,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         GhbValue *ssettings;
         gint source;
 
-        ssettings = ghb_array_get_nth(subtitle_list, ii);
+        ssettings = ghb_array_get(subtitle_list, ii);
 
         force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
         burned = ghb_settings_get_boolean(ssettings, "SubtitleBurned");

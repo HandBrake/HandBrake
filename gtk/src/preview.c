@@ -768,7 +768,7 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         ghb_settings_set_value(js, "Preferences", ud->prefs);
         ghb_add_live_job(js, ud->preview->live_id);
         ghb_start_live_encode();
-        ghb_value_free(js);
+        ghb_value_free(&js);
     }
 }
 

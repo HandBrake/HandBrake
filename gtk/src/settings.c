@@ -34,7 +34,7 @@ debug_get_object(GtkBuilder* b, const gchar *n)
 GhbValue*
 ghb_settings_new()
 {
-    return ghb_dict_value_new();
+    return ghb_dict_new();
 }
 
 void
@@ -45,13 +45,13 @@ ghb_settings_set_value(
 {
     if (key == NULL || value == NULL)
         return;
-    ghb_dict_insert(settings, key, ghb_value_dup(value));
+    ghb_dict_set(settings, key, ghb_value_dup(value));
 }
 
 void
 ghb_settings_take_value(GhbValue *settings, const gchar *key, GhbValue *value)
 {
-    ghb_dict_insert(settings, key, value);
+    ghb_dict_set(settings, key, value);
 }
 
 void
@@ -62,7 +62,7 @@ ghb_settings_set_string(
 {
     GhbValue *value;
     value = ghb_string_value_new(sval);
-    ghb_dict_insert(settings, key, value);
+    ghb_dict_set(settings, key, value);
 }
 
 void
@@ -70,38 +70,38 @@ ghb_settings_set_double(GhbValue *settings, const gchar *key, gdouble dval)
 {
     GhbValue *value;
     value = ghb_double_value_new(dval);
-    ghb_dict_insert(settings, key, value);
+    ghb_dict_set(settings, key, value);
 }
 
 void
 ghb_settings_set_int64(GhbValue *settings, const gchar *key, gint64 ival)
 {
     GhbValue *value;
-    value = ghb_int64_value_new(ival);
-    ghb_dict_insert(settings, key, value);
+    value = ghb_int_value_new(ival);
+    ghb_dict_set(settings, key, value);
 }
 
 void
 ghb_settings_set_int(GhbValue *settings, const gchar *key, gint ival)
 {
     GhbValue *value;
-    value = ghb_int64_value_new((gint64)ival);
-    ghb_dict_insert(settings, key, value);
+    value = ghb_int_value_new((gint64)ival);
+    ghb_dict_set(settings, key, value);
 }
 
 void
 ghb_settings_set_boolean(GhbValue *settings, const gchar *key, gboolean bval)
 {
     GhbValue *value;
-    value = ghb_boolean_value_new(bval);
-    ghb_dict_insert(settings, key, value);
+    value = ghb_bool_value_new(bval);
+    ghb_dict_set(settings, key, value);
 }
 
 GhbValue*
 ghb_settings_get_value(const GhbValue *settings, const gchar *key)
 {
     GhbValue *value;
-    value = ghb_dict_lookup(settings, key);
+    value = ghb_dict_get(settings, key);
     if (value == NULL)
         g_debug("returning null (%s)", key);
     return value;
@@ -113,7 +113,7 @@ ghb_settings_get_boolean(const GhbValue *settings, const gchar *key)
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return FALSE;
-    return ghb_value_boolean(value);
+    return ghb_value_get_bool(value);
 }
 
 gint64
@@ -122,7 +122,7 @@ ghb_settings_get_int64(const GhbValue *settings, const gchar *key)
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
-    return ghb_value_int64(value);
+    return ghb_value_get_int(value);
 }
 
 gint
@@ -131,7 +131,7 @@ ghb_settings_get_int(const GhbValue *settings, const gchar *key)
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
-    return ghb_value_int(value);
+    return ghb_value_get_int(value);
 }
 
 gdouble
@@ -140,7 +140,7 @@ ghb_settings_get_double(const GhbValue *settings, const gchar *key)
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return 0;
-    return ghb_value_double(value);
+    return ghb_value_get_double(value);
 }
 
 const gchar*
@@ -148,7 +148,7 @@ ghb_settings_get_const_string(const GhbValue *settings, const gchar *key)
 {
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
-    return ghb_value_const_string(value);
+    return ghb_value_get_string(value);
 }
 
 gchar*
@@ -157,7 +157,7 @@ ghb_settings_get_string(const GhbValue *settings, const gchar *key)
     const GhbValue* value;
     value = ghb_settings_get_value(settings, key);
     if (value == NULL) return g_strdup("");
-    return ghb_value_string(value);
+    return ghb_value_get_string_xform(value);
 }
 
 gint
@@ -235,37 +235,37 @@ ghb_widget_value(GtkWidget *widget)
         bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
         if (bval)
         {
-            value = ghb_boolean_value_new(FALSE);
+            value = ghb_bool_value_new(FALSE);
         }
         else
         {
             bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-            value = ghb_boolean_value_new(bval);
+            value = ghb_bool_value_new(bval);
         }
     }
     else if (type == GTK_TYPE_CHECK_BUTTON)
     {
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-        value = ghb_boolean_value_new(bval);
+        value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_TOGGLE_TOOL_BUTTON)
     {
         gboolean bval;
         bval = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
-        value = ghb_boolean_value_new(bval);
+        value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_TOGGLE_BUTTON)
     {
         gboolean bval;
         bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-        value = ghb_boolean_value_new(bval);
+        value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_CHECK_MENU_ITEM)
     {
         gboolean bval;
         bval = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
-        value = ghb_boolean_value_new(bval);
+        value = ghb_bool_value_new(bval);
     }
     else if (type == GTK_TYPE_COMBO_BOX)
     {
@@ -367,8 +367,8 @@ ghb_widget_string(GtkWidget *widget)
     gchar *sval;
 
     value = ghb_widget_value(widget);
-    sval = ghb_value_string(value);
-    ghb_value_free(value);
+    sval = ghb_value_get_string_xform(value);
+    ghb_value_free(&value);
     return sval;
 }
 
@@ -379,8 +379,8 @@ ghb_widget_double(GtkWidget *widget)
     gdouble dval;
 
     value = ghb_widget_value(widget);
-    dval = ghb_value_double(value);
-    ghb_value_free(value);
+    dval = ghb_value_get_double(value);
+    ghb_value_free(&value);
     return dval;
 }
 
@@ -391,8 +391,8 @@ ghb_widget_int64(GtkWidget *widget)
     gint64 ival;
 
     value = ghb_widget_value(widget);
-    ival = ghb_value_int64(value);
-    ghb_value_free(value);
+    ival = ghb_value_get_int(value);
+    ghb_value_free(&value);
     return ival;
 }
 
@@ -403,8 +403,8 @@ ghb_widget_int(GtkWidget *widget)
     gint ival;
 
     value = ghb_widget_value(widget);
-    ival = (gint)ghb_value_int64(value);
-    ghb_value_free(value);
+    ival = (gint)ghb_value_get_int(value);
+    ghb_value_free(&value);
     return ival;
 }
 
@@ -415,8 +415,8 @@ ghb_widget_boolean(GtkWidget *widget)
     gboolean bval;
 
     value = ghb_widget_value(widget);
-    bval = ghb_value_boolean(value);
-    ghb_value_free(value);
+    bval = ghb_value_get_bool(value);
+    ghb_value_free(&value);
     return bval;
 }
 
@@ -455,9 +455,9 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     if (type == GHB_ARRAY || type == GHB_DICT)
         return;
     if (value == NULL) return;
-    str = tmp = ghb_value_string(value);
-    ival = ghb_value_int(value);
-    dval = ghb_value_double(value);
+    str = tmp = ghb_value_get_string_xform(value);
+    ival = ghb_value_get_int(value);
+    dval = ghb_value_get_double(value);
     type = G_OBJECT_TYPE(widget);
 
     if (str == NULL)

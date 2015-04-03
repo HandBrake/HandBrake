@@ -886,7 +886,7 @@ main(int argc, char *argv[])
 
     ud->globals = ghb_settings_new();
     ud->prefs = ghb_settings_new();
-    ud->settings_array = ghb_array_value_new(1);
+    ud->settings_array = ghb_array_new();
     ud->settings = ghb_settings_new();
     ghb_array_append(ud->settings_array, ud->settings);
 
@@ -1049,7 +1049,7 @@ main(int argc, char *argv[])
         if (preset)
         {
             ghb_select_preset(ud->builder, preset);
-            ghb_value_free(preset);
+            ghb_value_free(&preset);
         }
     }
     else
@@ -1230,11 +1230,11 @@ main(int argc, char *argv[])
     gtk_main();
     ghb_backend_close();
 
-    ghb_value_free(ud->queue);
-    ghb_value_free(ud->settings_array);
-    ghb_value_free(ud->prefs);
-    ghb_value_free(ud->globals);
-    ghb_value_free(ud->x264_priv);
+    ghb_value_free(&ud->queue);
+    ghb_value_free(&ud->settings_array);
+    ghb_value_free(&ud->prefs);
+    ghb_value_free(&ud->globals);
+    ghb_value_free(&ud->x264_priv);
 
     g_io_channel_unref(ud->activity_log);
     ghb_settings_close();

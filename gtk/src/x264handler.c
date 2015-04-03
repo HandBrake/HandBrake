@@ -366,7 +366,7 @@ x264_update_int_setting(signal_user_data_t *ud, const gchar *name, const gchar *
 
     if (val == NULL) return;
     ival = g_strtod (val, NULL);
-    ghb_settings_set_value(ud->x264_priv, name, ghb_int64_value(ival));
+    ghb_settings_set_value(ud->x264_priv, name, ghb_int_value(ival));
     ghb_check_dependency(ud, NULL, name);
 }
 
@@ -712,7 +712,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                     gval = ghb_widget_value(widget);
                     if (ghb_value_type(gval) == GHB_BOOL)
                     {
-                        if (ghb_value_boolean(gval))
+                        if (ghb_value_get_bool(gval))
                             val = g_strdup("1");
                         else
                             val = g_strdup("0");
@@ -721,7 +721,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                     {
                         val = ghb_widget_string(widget);
                     }
-                    ghb_value_free(gval);
+                    ghb_value_free(&gval);
                 }
                 if (type == X264_OPT_TRANS)
                 {
@@ -759,7 +759,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                 gval = ghb_widget_value(widget);
                 if (ghb_value_type(gval) == GHB_BOOL)
                 {
-                    if (ghb_value_boolean(gval))
+                    if (ghb_value_get_bool(gval))
                         val = g_strdup("1");
                     else
                         val = g_strdup("0");
@@ -768,7 +768,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
                 {
                     val = ghb_widget_string(widget);
                 }
-                ghb_value_free(gval);
+                ghb_value_free(&gval);
             }
             if (type == X264_OPT_TRANS)
             {

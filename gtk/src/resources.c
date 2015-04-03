@@ -31,7 +31,7 @@ ghb_resource_init()
     GBytes *gbytes;
     gconstpointer data;
 
-    resources = ghb_dict_value_new();
+    resources = ghb_dict_new();
 
     ghb_data_register_resource();
     GResource *data_res = ghb_data_get_resource();
@@ -39,42 +39,42 @@ ghb_resource_init()
     gbytes = g_resource_lookup_data(data_res,
                         "/org/handbrake/data/internal_defaults.json", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data, data_size);
+    val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
-    ghb_dict_insert(resources, "internal-defaults", val);
+    ghb_dict_set(resources, "internal-defaults", val);
 
     gbytes = g_resource_lookup_data(data_res,
                         "/org/handbrake/data/standard_presets.json", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data, data_size);
+    val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
-    ghb_dict_insert(resources, "standard-presets", val);
+    ghb_dict_set(resources, "standard-presets", val);
 
     gbytes = g_resource_lookup_data(data_res,
                         "/org/handbrake/data/widget.deps", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data, data_size);
+    val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
-    ghb_dict_insert(resources, "widget-deps", val);
+    ghb_dict_set(resources, "widget-deps", val);
 
     gbytes = g_resource_lookup_data(data_res,
                         "/org/handbrake/data/widget_reverse.deps", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data, data_size);
+    val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
-    ghb_dict_insert(resources, "widget-reverse-deps", val);
+    ghb_dict_set(resources, "widget-reverse-deps", val);
 }
 
 GhbValue*
 ghb_resource_get(const gchar *name)
 {
     GhbValue *result;
-    result = ghb_dict_lookup(resources, name);
+    result = ghb_dict_get(resources, name);
     return result;
 }
 
 void
 ghb_resource_free()
 {
-    ghb_value_free(resources);
+    ghb_value_free(&resources);
 }
