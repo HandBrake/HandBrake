@@ -153,7 +153,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
             if (widget)
                 value = ghb_widget_string(widget);
             else
-                value = ghb_settings_get_string(ud->settings, widget_name);
+                value = ghb_dict_get_string_xform(ud->settings, widget_name);
             while (values && values[jj])
             {
                 if (values[jj][0] == '>')
@@ -539,11 +539,11 @@ get_extension(signal_user_data_t *ud, GhbValue *settings)
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     if ((mux->format & HB_MUX_MASK_MP4) &&
-        ghb_settings_get_boolean(ud->prefs, "UseM4v"))
+        ghb_dict_get_bool(ud->prefs, "UseM4v"))
     {
         return "m4v";
     }
@@ -553,11 +553,11 @@ get_extension(signal_user_data_t *ud, GhbValue *settings)
 static gboolean
 check_name_template(signal_user_data_t *ud, const char *str)
 {
-    if (ghb_settings_get_boolean(ud->prefs, "auto_name"))
+    if (ghb_dict_get_bool(ud->prefs, "auto_name"))
     {
         const gchar *template;
 
-        template = ghb_settings_get_const_string(ud->prefs, "auto_name_template");
+        template = ghb_dict_get_string(ud->prefs, "auto_name_template");
         if (strstr(template, str) != NULL)
             return TRUE;
     }
@@ -573,26 +573,24 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
     extension = get_extension(ud, settings);
 
     g_debug("set_destination_settings");
-    if (ghb_settings_get_boolean(ud->prefs, "auto_name"))
+    if (ghb_dict_get_bool(ud->prefs, "auto_name"))
     {
         GString *str = g_string_new("");
-        gchar *p;
-        gchar *template;
+        const gchar *p;
 
-        p = template = ghb_settings_get_string(ud->prefs, "auto_name_template");
+        p = ghb_dict_get_string(ud->prefs, "auto_name_template");
         while (*p)
         {
             if (!strncmp(p, "{source}", strlen("{source}")))
             {
-                gchar *vol_name;
-                vol_name = ghb_settings_get_string(settings, "volume_label");
+                const gchar *vol_name;
+                vol_name = ghb_dict_get_string(settings, "volume_label");
                 g_string_append_printf(str, "%s", vol_name);
-                g_free(vol_name);
                 p += strlen("{source}");
             }
             else if (!strncmp(p, "{title}", strlen("{title}")))
             {
-                gint title = ghb_settings_get_int(settings, "title");
+                gint title = ghb_dict_get_int(settings, "title");
                 if (title >= 0)
                     g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
@@ -602,8 +600,8 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 if (ghb_settings_combo_int(settings, "PtoPType") == 0)
                 {
                     gint start, end;
-                    start = ghb_settings_get_int(settings, "start_point");
-                    end = ghb_settings_get_int(settings, "end_point");
+                    start = ghb_dict_get_int(settings, "start_point");
+                    end = ghb_dict_get_int(settings, "end_point");
                     if (start == end)
                         g_string_append_printf(str, "%d", start);
                     else
@@ -635,24 +633,24 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             }
             else if (!strncmp(p, "{quality}", strlen("{quality}")))
             {
-                if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
+                if (ghb_dict_get_bool(settings, "vquality_type_constant"))
                 {
                     gint vcodec;
                     const char *vqname;
                     double vquality;
                     vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
                     vqname = hb_video_quality_get_name(vcodec);
-                    vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
+                    vquality = ghb_dict_get_double(settings, "VideoQualitySlider");
                     g_string_append_printf(str, "%s%.3g", vqname, vquality);
                 }
                 p += strlen("{quality}");
             }
             else if (!strncmp(p, "{bitrate}", strlen("{bitrate}")))
             {
-                if (ghb_settings_get_boolean(settings, "vquality_type_bitrate"))
+                if (ghb_dict_get_bool(settings, "vquality_type_bitrate"))
                 {
                     int vbitrate;
-                    vbitrate = ghb_settings_get_int(settings, "VideoAvgBitrate");
+                    vbitrate = ghb_dict_get_int(settings, "VideoAvgBitrate");
                     g_string_append_printf(str, "%dkbps", vbitrate);
                 }
                 p += strlen("{bitrate}");
@@ -665,8 +663,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         }
         g_string_append_printf(str, ".%s", extension);
         filename = g_string_free(str, FALSE);
-        ghb_settings_set_string(settings, "dest_file", filename);
-        g_free(template);
+        ghb_dict_set_string(settings, "dest_file", filename);
         g_free(filename);
     }
 }
@@ -676,7 +673,7 @@ set_destination(signal_user_data_t *ud)
 {
     set_destination_settings(ud, ud->settings);
     ghb_ui_update(ud, "dest_file",
-        ghb_settings_get_value(ud->settings, "dest_file"));
+        ghb_dict_get_value(ud->settings, "dest_file"));
 }
 
 static gchar*
@@ -809,14 +806,14 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
     if (label != NULL)
     {
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_settings_set_string(ud->settings, "volume_label", label);
+        ghb_dict_set_string(ud->settings, "volume_label", label);
         g_free(label);
     }
     else
     {
         label = _("No Title Found");
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_settings_set_string(ud->settings, "volume_label", label);
+        ghb_dict_set_string(ud->settings, "volume_label", label);
         return FALSE;
     }
     return TRUE;
@@ -927,22 +924,22 @@ update_title_duration(signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     widget = GHB_WIDGET (ud->builder, "title_duration");
 
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         ghb_part_duration(title, start, end, &hh, &mm, &ss);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
         gint duration;
 
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         duration = end - start;
         break_duration(duration, &hh, &mm, &ss);
     }
@@ -953,8 +950,8 @@ update_title_duration(signal_user_data_t *ud)
             gint64 frames;
             gint duration;
 
-            start = ghb_settings_get_int(ud->settings, "start_point");
-            end = ghb_settings_get_int(ud->settings, "end_point");
+            start = ghb_dict_get_int(ud->settings, "start_point");
+            end = ghb_dict_get_int(ud->settings, "end_point");
             frames = end - start + 1;
             duration = frames * title->vrate.den / title->vrate.num;
             break_duration(duration, &hh, &mm, &ss);
@@ -978,7 +975,7 @@ void ghb_show_container_options(signal_user_data_t *ud)
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     gint enc = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
@@ -1045,7 +1042,7 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
     const hb_title_t * title;
     double val;
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
     // Reconfigure the UI combo boxes
@@ -1061,13 +1058,13 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
         vbound = title->geometry.height;
         hbound = title->geometry.width;
 
-        val = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+        val = ghb_dict_get_int(ud->settings, "PictureTopCrop");
         spin_configure(ud, "PictureTopCrop", val, 0, vbound);
-        val = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+        val = ghb_dict_get_int(ud->settings, "PictureBottomCrop");
         spin_configure(ud, "PictureBottomCrop", val, 0, vbound);
-        val = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+        val = ghb_dict_get_int(ud->settings, "PictureLeftCrop");
         spin_configure(ud, "PictureLeftCrop", val, 0, hbound);
-        val = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+        val = ghb_dict_get_int(ud->settings, "PictureRightCrop");
         spin_configure(ud, "PictureRightCrop", val, 0, hbound);
 
         gint duration = title->duration / 90000;
@@ -1076,16 +1073,16 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
         {
             gint num_chapters = hb_list_count(title->list_chapter);
 
-            val = ghb_settings_get_int(ud->settings, "start_point");
+            val = ghb_dict_get_int(ud->settings, "start_point");
             spin_configure(ud, "start_point", val, 1, num_chapters);
-            val = ghb_settings_get_int(ud->settings, "end_point");
+            val = ghb_dict_get_int(ud->settings, "end_point");
             spin_configure(ud, "end_point", val, 1, num_chapters);
         }
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
         {
-            val = ghb_settings_get_int(ud->settings, "start_point");
+            val = ghb_dict_get_int(ud->settings, "start_point");
             spin_configure(ud, "start_point", val, 0, duration-1);
-            val = ghb_settings_get_int(ud->settings, "end_point");
+            val = ghb_dict_get_int(ud->settings, "end_point");
             spin_configure(ud, "end_point", val, 0, duration);
         }
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
@@ -1094,13 +1091,13 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
             max_frames = (gdouble)duration *
                          title->vrate.num / title->vrate.den;
 
-            val = ghb_settings_get_int(ud->settings, "start_point");
+            val = ghb_dict_get_int(ud->settings, "start_point");
             spin_configure(ud, "start_point", val, 1, max_frames);
-            val = ghb_settings_get_int(ud->settings, "end_point");
+            val = ghb_dict_get_int(ud->settings, "end_point");
             spin_configure(ud, "end_point", val, 1, max_frames);
         }
 
-        val = ghb_settings_get_int(ud->settings, "angle");
+        val = ghb_dict_get_int(ud->settings, "angle");
         spin_configure(ud, "angle", val, 1, title->angle_count);
     }
 
@@ -1108,7 +1105,7 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
     int inverted, digits;
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    val = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
     ghb_scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
                         step, page, digits, inverted);
 }
@@ -1121,8 +1118,8 @@ check_chapter_markers(signal_user_data_t *ud)
 
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         gtk_widget_set_sensitive(widget, end > start);
     }
@@ -1157,17 +1154,17 @@ ghb_load_settings(signal_user_data_t * ud)
         return;
     busy = TRUE;
 
-    preset = ghb_settings_get_value(ud->settings, "preset");
-    preset_modified = ghb_settings_get_boolean(ud->settings, "preset_modified");
+    preset = ghb_dict_get_value(ud->settings, "preset");
+    preset_modified = ghb_dict_get_bool(ud->settings, "preset_modified");
     if (preset_modified)
     {
         ghb_clear_presets_selection(ud);
     }
     else
     {
-        ghb_settings_set_boolean(ud->settings, "preset_reload", TRUE);
+        ghb_dict_set_bool(ud->settings, "preset_reload", TRUE);
         ghb_select_preset(ud->builder, preset);
-        ghb_settings_set_boolean(ud->settings, "preset_reload", FALSE);
+        ghb_dict_set_bool(ud->settings, "preset_reload", FALSE);
     }
 
     ud->dont_clear_presets = TRUE;
@@ -1232,16 +1229,15 @@ start_scan(
     widget = GHB_WIDGET(ud->builder, "source_title_open");
     gtk_widget_set_sensitive(widget, FALSE);
     ghb_backend_scan(path, title_id, preview_count,
-            90000L * ghb_settings_get_int64(ud->prefs, "MinTitleDuration"));
+            90000L * ghb_dict_get_int(ud->prefs, "MinTitleDuration"));
 }
 
 gboolean
 ghb_idle_scan(signal_user_data_t *ud)
 {
-    gchar *path;
-    path = ghb_settings_get_string(ud->globals, "scan_source");
+    const gchar *path;
+    path = ghb_dict_get_string(ud->globals, "scan_source");
     ghb_do_scan(ud, path, 0, TRUE);
-    g_free(path);
     return FALSE;
 }
 
@@ -1266,7 +1262,7 @@ ghb_do_scan(
     {
         if (ghb_queue_edit_settings != NULL)
         {
-            title_id = ghb_settings_get_int(ghb_queue_edit_settings, "title");
+            title_id = ghb_dict_get_int(ghb_queue_edit_settings, "title");
             title = ghb_lookup_title(title_id, &titleindex);
             ghb_array_replace(ud->settings_array, titleindex,
                               ghb_queue_edit_settings);
@@ -1287,19 +1283,18 @@ ghb_do_scan(
     if (filename != NULL)
     {
         last_scan_file = g_strdup(filename);
-        ghb_settings_set_string(ud->globals, "scan_source", filename);
+        ghb_dict_set_string(ud->globals, "scan_source", filename);
         if (update_source_label(ud, filename))
         {
-            gchar *path;
+            const gchar *path;
             gint preview_count;
 
             show_scan_progress(ud);
-            path = ghb_settings_get_string(ud->globals, "scan_source");
+            path = ghb_dict_get_string(ud->globals, "scan_source");
             prune_logs(ud);
 
-            preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
+            preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
             start_scan(ud, path, title_id, preview_count);
-            g_free(path);
         }
         else
         {
@@ -1312,11 +1307,11 @@ static void
 do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
-    gchar *sourcename;
+    const gchar *sourcename;
     gint    response;
 
     g_debug("source_browse_clicked_cb ()");
-    sourcename = ghb_settings_get_string(ud->globals, "scan_source");
+    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
     GtkWidget *widget;
     widget = GHB_WIDGET(ud->builder, "single_title_box");
     if (single)
@@ -1352,20 +1347,19 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
             gint title_id;
 
             if (single)
-                title_id = ghb_settings_get_int(ud->settings, "single_title");
+                title_id = ghb_dict_get_int(ud->settings, "single_title");
             else
                 title_id = 0;
             ghb_do_scan(ud, filename, title_id, TRUE);
             if (strcmp(sourcename, filename) != 0)
             {
-                ghb_settings_set_string(ud->prefs, "default_source", filename);
+                ghb_dict_set_string(ud->prefs, "default_source", filename);
                 ghb_pref_save(ud->prefs, "default_source");
                 ghb_dvd_set_current(filename, ud);
             }
             g_free(filename);
         }
     }
-    g_free(sourcename);
 }
 
 G_MODULE_EXPORT void
@@ -1393,18 +1387,17 @@ G_MODULE_EXPORT void
 dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     const gchar *filename;
-    gchar *sourcename;
+    const gchar *sourcename;
 
-    sourcename = ghb_settings_get_string(ud->globals, "scan_source");
+    sourcename = ghb_dict_get_string(ud->globals, "scan_source");
     filename = gtk_buildable_get_name(GTK_BUILDABLE(widget));
     ghb_do_scan(ud, filename, 0, TRUE);
     if (strcmp(sourcename, filename) != 0)
     {
-        ghb_settings_set_string(ud->prefs, "default_source", filename);
+        ghb_dict_set_string(ud->prefs, "default_source", filename);
         ghb_pref_save(ud->prefs, "default_source");
         ghb_dvd_set_current(filename, ud);
     }
-    g_free(sourcename);
 }
 
 void
@@ -1499,16 +1492,15 @@ static gboolean update_default_destination = FALSE;
 G_MODULE_EXPORT void
 dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 {
-    gchar *dest_file, *dest_dir, *dest;
+    const gchar *dest_file, *dest_dir;
+    gchar *dest;
 
     g_debug("dest_dir_set_cb ()");
     ghb_widget_to_setting(ud->settings, (GtkWidget*)dest_chooser);
-    dest_file = ghb_settings_get_string(ud->settings, "dest_file");
-    dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
+    dest_file = ghb_dict_get_string(ud->settings, "dest_file");
+    dest_dir = ghb_dict_get_string(ud->settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_settings_set_string(ud->settings, "destination", dest);
-    g_free(dest_file);
-    g_free(dest_dir);
+    ghb_dict_set_string(ud->settings, "destination", dest);
     g_free(dest);
     update_default_destination = TRUE;
 }
@@ -1516,19 +1508,18 @@ dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 {
-    gchar *dest_file, *dest_dir, *dest;
+    const gchar *dest_file, *dest_dir;
+    gchar *dest;
 
     g_debug("dest_file_changed_cb ()");
     ghb_update_destination_extension(ud);
     ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
     // This signal goes off with ever keystroke, so I'm putting this
     // update on the timer.
-    dest_file = ghb_settings_get_string(ud->settings, "dest_file");
-    dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
+    dest_file = ghb_dict_get_string(ud->settings, "dest_file");
+    dest_dir = ghb_dict_get_string(ud->settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_settings_set_string(ud->settings, "destination", dest);
-    g_free(dest_file);
-    g_free(dest_dir);
+    ghb_dict_set_string(ud->settings, "destination", dest);
     g_free(dest);
     update_default_destination = TRUE;
 }
@@ -1538,13 +1529,13 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     GtkEntry *entry;
-    gchar *destname;
+    const gchar *destname;
     gchar *basename;
     GtkWindow *hb_window;
 
     g_debug("destination_browse_clicked_cb ()");
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    destname = ghb_settings_get_string(ud->settings, "destination");
+    destname = ghb_dict_get_string(ud->settings, "destination");
     dialog = gtk_file_chooser_dialog_new("Choose Destination",
                       hb_window,
                       GTK_FILE_CHOOSER_ACTION_SAVE,
@@ -1553,7 +1544,6 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
                       NULL);
     gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), destname);
     basename = g_path_get_basename(destname);
-    g_free(destname);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), basename);
     g_free(basename);
     if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
@@ -1663,10 +1653,10 @@ update_aspect_info(signal_user_data_t *ud)
     GtkWidget *widget;
     gchar *text;
 
-    text = ghb_settings_get_boolean(ud->settings, "PictureAutoCrop") ? _("On") : _("Off");
+    text = ghb_dict_get_bool(ud->settings, "PictureAutoCrop") ? _("On") : _("Off");
     widget = GHB_WIDGET(ud->builder, "crop_auto");
     gtk_label_set_text(GTK_LABEL(widget), text);
-    text = ghb_settings_get_boolean(ud->settings, "autoscale") ? _("On") : _("Off");
+    text = ghb_dict_get_bool(ud->settings, "autoscale") ? _("On") : _("Off");
     widget = GHB_WIDGET(ud->builder, "scale_auto");
     gtk_label_set_text(GTK_LABEL(widget), text);
     switch (ghb_settings_combo_int(ud->settings, "PicturePAR"))
@@ -1700,14 +1690,14 @@ update_crop_info(signal_user_data_t *ud)
     gint title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title != NULL)
     {
-        crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
-        crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
-        crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
-        crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+        crop[0] = ghb_dict_get_int(ud->settings, "PictureTopCrop");
+        crop[1] = ghb_dict_get_int(ud->settings, "PictureBottomCrop");
+        crop[2] = ghb_dict_get_int(ud->settings, "PictureLeftCrop");
+        crop[3] = ghb_dict_get_int(ud->settings, "PictureRightCrop");
         width = title->geometry.width - crop[2] - crop[3];
         height = title->geometry.height - crop[0] - crop[1];
         widget = GHB_WIDGET(ud->builder, "crop_dimensions");
@@ -1729,8 +1719,8 @@ update_scale_info(signal_user_data_t *ud)
     GtkWidget *widget;
     gchar *text;
 
-    gint width = ghb_settings_get_int(ud->settings, "scale_width");
-    gint height = ghb_settings_get_int(ud->settings, "scale_height");
+    gint width = ghb_dict_get_int(ud->settings, "scale_width");
+    gint height = ghb_dict_get_int(ud->settings, "scale_height");
     widget = GHB_WIDGET(ud->builder, "scale_dimensions");
     text = g_strdup_printf("%d x %d", width, height);
     gtk_label_set_text(GTK_LABEL(widget), text);
@@ -1746,7 +1736,7 @@ ghb_update_title_info(signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t * title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
@@ -1794,7 +1784,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     int title_id, titleindex;
     const hb_title_t * title;
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
     ghb_subtitle_set_pref_lang(settings);
@@ -1802,74 +1792,74 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     {
         gint num_chapters = hb_list_count(title->list_chapter);
 
-        ghb_settings_set_int(settings, "angle", 1);
-        ghb_settings_set_int(settings, "PtoPType", 0);
-        ghb_settings_set_int(settings, "start_point", 1);
-        ghb_settings_set_int(settings, "end_point", num_chapters);
-        ghb_settings_set_int(settings, "source_width", title->geometry.width);
-        ghb_settings_set_int(settings, "source_height", title->geometry.height);
-        ghb_settings_set_string(settings, "source", title->path);
+        ghb_dict_set_int(settings, "angle", 1);
+        ghb_dict_set_int(settings, "PtoPType", 0);
+        ghb_dict_set_int(settings, "start_point", 1);
+        ghb_dict_set_int(settings, "end_point", num_chapters);
+        ghb_dict_set_int(settings, "source_width", title->geometry.width);
+        ghb_dict_set_int(settings, "source_height", title->geometry.height);
+        ghb_dict_set_string(settings, "source", title->path);
         if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
         {
             if (title->name != NULL && title->name[0] != 0)
             {
-                ghb_settings_set_string(settings, "volume_label", title->name);
+                ghb_dict_set_string(settings, "volume_label", title->name);
             }
             else
             {
                 gchar *label = _("No Title Found");
-                ghb_settings_set_string(settings, "volume_label", label);
+                ghb_dict_set_string(settings, "volume_label", label);
             }
         }
         else
         {
-            ghb_settings_set_value(settings, "volume_label",
-                ghb_settings_get_value(ud->settings, "volume_label"));
+            ghb_dict_set(settings, "volume_label", ghb_value_dup(
+                    ghb_dict_get_value(ud->settings, "volume_label")));
         }
-        ghb_settings_set_int(settings, "scale_width",
+        ghb_dict_set_int(settings, "scale_width",
                              title->geometry.width - title->crop[2] - title->crop[3]);
 
         // If anamorphic or keep_aspect, the hight will
         // be automatically calculated
         gboolean keep_aspect;
         gint pic_par;
-        keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
+        keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
         pic_par = ghb_settings_combo_int(settings, "PicturePAR");
         if (!(keep_aspect || pic_par) || pic_par == 3)
         {
-            ghb_settings_set_int(settings, "scale_height",
+            ghb_dict_set_int(settings, "scale_height",
                              title->geometry.width - title->crop[0] - title->crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
-        ghb_settings_set_int(settings, "angle_count", title->angle_count);
+        ghb_dict_set_int(settings, "angle_count", title->angle_count);
 
-        ghb_settings_set_string(settings, "MetaName", title->name);
+        ghb_dict_set_string(settings, "MetaName", title->name);
         if (title->metadata)
         {
             if (title->metadata->name)
             {
-                ghb_settings_set_string(settings, "MetaName",
+                ghb_dict_set_string(settings, "MetaName",
                     title->metadata->name);
             }
-            ghb_settings_set_string(settings, "MetaArtist",
+            ghb_dict_set_string(settings, "MetaArtist",
                     title->metadata->artist);
-            ghb_settings_set_string(settings, "MetaReleaseDate",
+            ghb_dict_set_string(settings, "MetaReleaseDate",
                     title->metadata->release_date);
-            ghb_settings_set_string(settings, "MetaComment",
+            ghb_dict_set_string(settings, "MetaComment",
                     title->metadata->comment);
             if (!title->metadata->name && title->metadata->album)
             {
-                ghb_settings_set_string(settings, "MetaName",
+                ghb_dict_set_string(settings, "MetaName",
                     title->metadata->album);
             }
-            ghb_settings_set_string(settings, "MetaAlbumArtist",
+            ghb_dict_set_string(settings, "MetaAlbumArtist",
                     title->metadata->album_artist);
-            ghb_settings_set_string(settings, "MetaGenre",
+            ghb_dict_set_string(settings, "MetaGenre",
                     title->metadata->genre);
-            ghb_settings_set_string(settings, "MetaDescription",
+            ghb_dict_set_string(settings, "MetaDescription",
                     title->metadata->description);
-            ghb_settings_set_string(settings, "MetaLongDescription",
+            ghb_dict_set_string(settings, "MetaLongDescription",
                     title->metadata->long_description);
         }
         update_chapter_list_settings(settings);
@@ -1878,19 +1868,18 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     }
 
     set_destination_settings(ud, settings);
-    ghb_settings_set_value(settings, "dest_dir",
-                       ghb_settings_get_value(ud->prefs, "destination_dir"));
+    ghb_dict_set(settings, "dest_dir", ghb_value_dup(
+                 ghb_dict_get_value(ud->prefs, "destination_dir")));
 
-    char *dest_file, *dest_dir, *dest;
-    dest_file = ghb_settings_get_string(settings, "dest_file");
-    dest_dir = ghb_settings_get_string(settings, "dest_dir");
+    const char *dest_file, *dest_dir;
+    char *dest;
+    dest_file = ghb_dict_get_string(settings, "dest_file");
+    dest_dir = ghb_dict_get_string(settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_settings_set_string(settings, "destination", dest);
-    g_free(dest_file);
-    g_free(dest_dir);
+    ghb_dict_set_string(settings, "destination", dest);
     g_free(dest);
 
-    ghb_settings_set_int(settings, "preview_frame", 2);
+    ghb_dict_set_int(settings, "preview_frame", 2);
 }
 
 void
@@ -1927,15 +1916,15 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     for (ii = 0; ii < count; ii++)
     {
         int index;
-        GhbValue *settings = ghb_settings_new();
+        GhbValue *settings = ghb_dict_new();
 
         title = hb_list_item(list, ii);
         index = (title != NULL) ? title->index : -1;
 
         ghb_settings_init(settings, "Initialization");
         ghb_preset_to_settings(settings, preset);
-        ghb_settings_set_value(settings, "preset", preset_path);
-        ghb_settings_set_int(settings, "title", index);
+        ghb_dict_set(settings, "preset", ghb_value_dup(preset_path));
+        ghb_dict_set_int(settings, "title", index);
         set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }
@@ -1983,7 +1972,7 @@ title_reset_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     (void)title; // Silence "unused variable" warning
     load_all_titles(ud, titleindex);
@@ -2002,7 +1991,7 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
@@ -2043,13 +2032,13 @@ framerate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") != 0)
     {
-        if (!ghb_settings_get_boolean(ud->settings, "VideoFrameratePFR"))
+        if (!ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
         {
             ghb_ui_update(ud, "VideoFramerateCFR", ghb_boolean_value(TRUE));
         }
     }
     if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") == 0 &&
-        ghb_settings_get_boolean(ud->settings, "VideoFrameratePFR"))
+        ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
     {
         ghb_ui_update(ud, "VideoFramerateVFR", ghb_boolean_value(TRUE));
     }
@@ -2129,7 +2118,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
-    double vquality = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    double vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
     if (vquality < 1.0)
     {
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
@@ -2221,8 +2210,8 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start > end)
             ghb_ui_update(ud, "end_point", ghb_int_value(start));
         ghb_check_dependency(ud, widget, NULL);
@@ -2230,14 +2219,14 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // End may have been changed above, get it again
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         gtk_widget_set_sensitive(widget, end > start);
         update_title_duration(ud);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start >= end)
             ghb_ui_update(ud, "end_point", ghb_int_value(start+1));
         ghb_check_dependency(ud, widget, NULL);
@@ -2245,8 +2234,8 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start > end)
             ghb_ui_update(ud, "end_point", ghb_int_value(start));
         ghb_check_dependency(ud, widget, NULL);
@@ -2262,8 +2251,8 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start > end)
             ghb_ui_update(ud, "start_point", ghb_int_value(end));
         ghb_check_dependency(ud, widget, NULL);
@@ -2271,14 +2260,14 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             set_destination(ud);
         widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
         // Start may have been changed above, get it again
-        start = ghb_settings_get_int(ud->settings, "start_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
         gtk_widget_set_sensitive(widget, end > start);
         update_title_duration(ud);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start >= end)
             ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
         ghb_check_dependency(ud, widget, NULL);
@@ -2286,8 +2275,8 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
-        start = ghb_settings_get_int(ud->settings, "start_point");
-        end = ghb_settings_get_int(ud->settings, "end_point");
+        start = ghb_dict_get_int(ud->settings, "start_point");
+        end = ghb_dict_get_int(ud->settings, "end_point");
         if (start > end)
             ghb_ui_update(ud, "start_point", ghb_int_value(end));
         ghb_check_dependency(ud, widget, NULL);
@@ -2687,7 +2676,7 @@ find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
     for (ii = 0; ii < count; ii++)
     {
         js = ghb_array_get(queue, ii);
-        job_unique_id = ghb_settings_get_int(js, "job_unique_id");
+        job_unique_id = ghb_dict_get_int(js, "job_unique_id");
         if (job_unique_id == unique_id)
         {
             *job = js;
@@ -2702,13 +2691,14 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 {
     time_t  _now;
     struct tm *now;
-    gchar *log_path, *pos, *destname, *basename, *dest_dir;
+    gchar *log_path, *pos, *basename, *dest_dir;
+    const gchar *destname;
 
     _now = time(NULL);
     now = localtime(&_now);
-    destname = ghb_settings_get_string(js, "destination");
+    destname = ghb_dict_get_string(js, "destination");
     basename = g_path_get_basename(destname);
-    if (ghb_settings_get_boolean(ud->prefs, "EncodeLogLocation"))
+    if (ghb_dict_get_bool(ud->prefs, "EncodeLogLocation"))
     {
         dest_dir = g_path_get_dirname (destname);
     }
@@ -2716,7 +2706,6 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
     {
         dest_dir = ghb_get_user_config_dir("EncodeLogs");
     }
-    g_free(destname);
     pos = g_strrstr( basename, "." );
     if (pos != NULL)
     {
@@ -2756,16 +2745,16 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
 
     g_debug("submit_job");
     if (settings == NULL) return;
-    preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
-    path = ghb_settings_get_value(settings, "preset");
+    preset_modified = ghb_dict_get_bool(settings, "preset_modified");
+    path = ghb_dict_get_value(settings, "preset");
     preset = ghb_preset_path_string(path);
     type = ghb_preset_is_custom() ? "Custom " : "";
     modified = preset_modified ? "Modified " : "";
     ghb_log("%s%sPreset: %s", modified, type, preset);
     g_free(preset);
 
-    ghb_settings_set_int(settings, "job_unique_id", unique_id);
-    ghb_settings_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
+    ghb_dict_set_int(settings, "job_unique_id", unique_id);
+    ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
     start_new_log(ud, settings);
     ghb_add_job(settings, unique_id);
     ghb_start_queue();
@@ -2846,7 +2835,7 @@ queue_pending_count(GhbValue *queue)
     {
 
         js = ghb_array_get(queue, ii);
-        status = ghb_settings_get_int(js, "job_status");
+        status = ghb_dict_get_int(js, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             nn++;
@@ -2886,7 +2875,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     {
 
         js = ghb_array_get(ud->queue, ii);
-        status = ghb_settings_get_int(js, "job_status");
+        status = ghb_dict_get_int(js, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             ghb_inhibit_gsm(ud);
@@ -3057,7 +3046,7 @@ ghb_backend_events(signal_user_data_t *ud)
         status.queue.state == GHB_STATE_IDLE)
     {
         static gboolean prev_dvdnav;
-        gboolean dvdnav = ghb_settings_get_boolean(ud->prefs, "use_dvdnav");
+        gboolean dvdnav = ghb_dict_get_bool(ud->prefs, "use_dvdnav");
         if (dvdnav != prev_dvdnav)
         {
             hb_dvd_set_dvdnav(dvdnav);
@@ -3099,7 +3088,7 @@ ghb_backend_events(signal_user_data_t *ud)
     }
     else if (status.scan.state & GHB_STATE_SCANDONE)
     {
-        gchar *source;
+        const gchar *source;
         GtkProgressBar *scan_prog;
         GtkLabel *label;
 
@@ -3115,9 +3104,8 @@ ghb_backend_events(signal_user_data_t *ud)
         widget = GHB_WIDGET(ud->builder, "source_title_open");
         gtk_widget_set_sensitive(widget, TRUE);
 
-        source = ghb_settings_get_string(ud->globals, "scan_source");
+        source = ghb_dict_get_string(ud->globals, "scan_source");
         update_source_label(ud, source);
-        g_free(source);
 
         scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
         gtk_progress_bar_set_fraction (scan_prog, 1.0);
@@ -3148,10 +3136,10 @@ ghb_backend_events(signal_user_data_t *ud)
         {
             // Switch to the correct title in the list
             ghb_ui_update(ud, "title",
-                ghb_settings_get_value(ghb_queue_edit_settings, "title"));
+                ghb_dict_get_value(ghb_queue_edit_settings, "title"));
 
             // The above should cause the current title index to update
-            title_id = ghb_settings_get_int(ud->settings, "title");
+            title_id = ghb_dict_get_int(ud->settings, "title");
             title = ghb_lookup_title(title_id, &titleindex);
             ghb_array_replace(ud->settings_array, titleindex,
                               ghb_queue_edit_settings);
@@ -3269,8 +3257,8 @@ ghb_backend_events(signal_user_data_t *ud)
             g_io_channel_unref(ud->job_activity_log);
         ud->job_activity_log = NULL;
         if (js)
-            ghb_settings_set_int(js, "job_status", qstatus);
-        if (ghb_settings_get_boolean(ud->prefs, "RemoveFinishedJobs") &&
+            ghb_dict_set_int(js, "job_status", qstatus);
+        if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
             ghb_queue_remove_row(ud, index);
@@ -3330,18 +3318,17 @@ ghb_timer_cb(gpointer data)
     ghb_backend_events(ud);
     if (update_default_destination)
     {
-        gchar *dest, *dest_dir, *def_dest;
-        dest = ghb_settings_get_string(ud->settings, "destination");
-        dest_dir = g_path_get_dirname (dest);
-        def_dest = ghb_settings_get_string(ud->prefs, "destination_dir");
+        const gchar *dest, *def_dest;
+        gchar *dest_dir;
+        dest = ghb_dict_get_string(ud->settings, "destination");
+        dest_dir = g_path_get_dirname(dest);
+        def_dest = ghb_dict_get_string(ud->prefs, "destination_dir");
         if (strcmp(dest_dir, def_dest) != 0)
         {
-            ghb_settings_set_string (ud->prefs, "destination_dir", dest_dir);
+            ghb_dict_set_string(ud->prefs, "destination_dir", dest_dir);
             ghb_pref_save(ud->prefs, "destination_dir");
         }
-        g_free(dest);
         g_free(dest_dir);
-        g_free(def_dest);
         update_default_destination = FALSE;
     }
     if (update_preview)
@@ -3354,8 +3341,8 @@ ghb_timer_cb(gpointer data)
 #if !defined(_NO_UPDATE_CHECK)
     if (!appcast_busy)
     {
-        gchar *updates;
-        updates = ghb_settings_get_string(ud->prefs, "check_updates");
+        const gchar *updates;
+        updates = ghb_dict_get_string(ud->prefs, "check_updates");
         gint64 duration = 0;
         if (strcmp(updates, "daily") == 0)
             duration = 60 * 60 * 24;
@@ -3364,17 +3351,16 @@ ghb_timer_cb(gpointer data)
         else if (strcmp(updates, "monthly") == 0)
             duration = 60 * 60 * 24 * 7;
 
-        g_free(updates);
         if (duration != 0)
         {
             gint64 last;
             time_t tt;
 
-            last = ghb_settings_get_int64(ud->prefs, "last_update_check");
+            last = ghb_dict_get_int(ud->prefs, "last_update_check");
             time(&tt);
             if (last + duration < tt)
             {
-                ghb_settings_set_int64(ud->prefs,
+                ghb_dict_set_int(ud->prefs,
                                         "last_update_check", tt);
                 ghb_pref_save(ud->prefs, "last_update_check");
                 GHB_THREAD_NEW("Update Check", (GThreadFunc)ghb_check_update, ud);
@@ -3651,7 +3637,7 @@ show_presets_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     g_debug("show_presets_clicked_cb ()");
     frame = GHB_WIDGET (ud->builder, "presets_frame");
     ghb_widget_to_setting(ud->prefs, widget);
-    if (ghb_settings_get_boolean(ud->prefs, "show_presets"))
+    if (ghb_dict_get_bool(ud->prefs, "show_presets"))
     {
         gtk_widget_show_now(frame);
     }
@@ -3724,9 +3710,9 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    chapter_list = ghb_settings_get_value(ud->settings, "chapter_list");
+    chapter_list = ghb_dict_get_value(ud->settings, "chapter_list");
     count = ghb_array_len(chapter_list);
     if (count != tm_count)
     {
@@ -3757,11 +3743,11 @@ update_chapter_list_settings(GhbValue *settings)
     const hb_title_t *title;
 
     g_debug("update_chapter_list_settings ()");
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     chapters = ghb_get_chapters(title);
     if (chapters)
-        ghb_settings_take_value(settings, "chapter_list", chapters);
+        ghb_dict_set(settings, "chapter_list", chapters);
 }
 
 static gint chapter_edit_key = 0;
@@ -3809,7 +3795,7 @@ chapter_edited_cb(
     const GhbValue *chapters;
     GhbValue *chapter;
 
-    chapters = ghb_settings_get_value(ud->settings, "chapter_list");
+    chapters = ghb_dict_get_value(ud->settings, "chapter_list");
     chapter = ghb_array_get(chapters, index-1);
     ghb_string_value_set(chapter, text);
     if ((chapter_edit_key == GDK_KEY_Return || chapter_edit_key == GDK_KEY_Down) &&
@@ -3908,7 +3894,7 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("hbfd_toggled_cb");
     ghb_widget_to_setting(ud->prefs, widget);
-    gboolean hbfd = ghb_settings_get_boolean(ud->prefs, "hbfd");
+    gboolean hbfd = ghb_dict_get_bool(ud->prefs, "hbfd");
     ghb_hbfd(ud, hbfd);
     ghb_pref_save(ud->prefs, "hbfd");
 }
@@ -3933,7 +3919,7 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_pref_set(ud->prefs, name);
 
     gint preview_count;
-    preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
+    preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
     widget = GHB_WIDGET(ud->builder, "preview_frame");
     gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 }
@@ -3963,7 +3949,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     int inverted, digits;
 
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
-    val = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    val = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
     ghb_scale_configure(ud, "VideoQualitySlider", val, vqmin, vqmax,
                         step, page, digits, inverted);
 }
@@ -3985,11 +3971,11 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
 
-    gboolean hbfd = ghb_settings_get_boolean(ud->prefs, "hbfd_feature");
+    gboolean hbfd = ghb_dict_get_bool(ud->prefs, "hbfd_feature");
     if (hbfd)
     {
         const GhbValue *val;
-        val = ghb_settings_get_value(ud->prefs, "hbfd");
+        val = ghb_dict_get_value(ud->prefs, "hbfd");
         ghb_ui_settings_update(ud, ud->prefs, "hbfd", val);
     }
     widget = GHB_WIDGET(ud->builder, "hbfd");
@@ -4181,15 +4167,15 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         {
             GHB_THREAD_NEW("Cache Volume Names",
                     (GThreadFunc)ghb_cache_volnames, ud);
-            if (ghb_settings_get_boolean(ud->prefs, "AutoScan") &&
+            if (ghb_dict_get_bool(ud->prefs, "AutoScan") &&
                 ud->current_dvd_device != NULL &&
                 strcmp(device, ud->current_dvd_device) == 0)
             {
                 show_scan_progress(ud);
                 update_source_label(ud, device);
                 gint preview_count;
-                preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
-                ghb_settings_set_string(ud->globals, "scan_source", device);
+                preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
+                ghb_dict_set_string(ud->globals, "scan_source", device);
                 start_scan(ud, device, 0, preview_count);
             }
         }
@@ -4207,7 +4193,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
             {
                 ghb_hb_cleanup(TRUE);
                 prune_logs(ud);
-                ghb_settings_set_string(ud->globals, "scan_source", "/dev/null");
+                ghb_dict_set_string(ud->globals, "scan_source", "/dev/null");
                 start_scan(ud, "/dev/null", 0, 1);
             }
         }
@@ -4288,13 +4274,13 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     }
     if (g_drive_has_media(gd))
     {
-        if (ghb_settings_get_boolean(ud->prefs, "AutoScan"))
+        if (ghb_dict_get_bool(ud->prefs, "AutoScan"))
         {
             show_scan_progress(ud);
             update_source_label(ud, device);
             gint preview_count;
-            preview_count = ghb_settings_get_int(ud->prefs, "preview_count");
-            ghb_settings_set_string(ud->globals, "scan_source", device);
+            preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
+            ghb_dict_set_string(ud->globals, "scan_source", device);
             start_scan(ud, device, 0, preview_count);
         }
     }
@@ -4302,7 +4288,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     {
         ghb_hb_cleanup(TRUE);
         prune_logs(ud);
-        ghb_settings_set_string(ud->globals, "scan_source", "/dev/null");
+        ghb_dict_set_string(ud->globals, "scan_source", "/dev/null");
         start_scan(ud, "/dev/null", 0, 1);
     }
 }
@@ -4833,13 +4819,13 @@ tweak_setting_cb(
     gboolean allow_tweaks;
 
     g_debug("press %d %d", event->type, event->button);
-    allow_tweaks = ghb_settings_get_boolean(ud->prefs, "allow_tweaks");
+    allow_tweaks = ghb_dict_get_bool(ud->prefs, "allow_tweaks");
     if (allow_tweaks && event->type == GDK_BUTTON_PRESS && event->button == 3)
     { // Its a right mouse click
         GtkWidget *dialog;
         GtkEntry *entry;
         GtkResponseType response;
-        gchar *tweak = NULL;
+        const gchar *tweak = NULL;
 
         name = ghb_get_setting_key(widget);
         if (g_str_has_prefix(name, "tweak_"))
@@ -4851,14 +4837,13 @@ tweak_setting_cb(
             tweak_name = g_strdup_printf("tweak_%s", name);
         }
 
-        tweak = ghb_settings_get_string (ud->settings, tweak_name);
+        tweak = ghb_dict_get_string(ud->settings, tweak_name);
         dialog = GHB_WIDGET(ud->builder, "tweak_dialog");
         gtk_window_set_title(GTK_WINDOW(dialog), tweak_name);
         entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "tweak_setting"));
         if (tweak)
         {
             gtk_entry_set_text(entry, tweak);
-            g_free(tweak);
         }
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_hide(dialog);
@@ -4866,7 +4851,7 @@ tweak_setting_cb(
         {
             tweak = (gchar*)gtk_entry_get_text(entry);
             if (ghb_validate_filter_string(tweak, -1))
-                ghb_settings_set_string(ud->settings, tweak_name, tweak);
+                ghb_dict_set_string(ud->settings, tweak_name, tweak);
             else
             {
                 GtkWindow *hb_window;
@@ -4976,7 +4961,7 @@ process_appcast(signal_user_data_t *ud)
     ghb_appcast_parse(ud->appcast, &description, &build, &version);
     if (build)
         ibuild = g_strtod(build, NULL);
-    skip = ghb_settings_get_int(ud->prefs, "update_skip_version");
+    skip = ghb_dict_get_int(ud->prefs, "update_skip_version");
     if (description == NULL || build == NULL || version == NULL
         || ibuild <= hb_get_build(NULL) || skip == ibuild)
     {
@@ -5005,7 +4990,7 @@ process_appcast(signal_user_data_t *ud)
     if (response == GTK_RESPONSE_OK)
     {
         // Skip
-        ghb_settings_set_int(ud->prefs, "update_skip_version", ibuild);
+        ghb_dict_set_int(ud->prefs, "update_skip_version", ibuild);
         ghb_pref_save(ud->prefs, "update_skip_version");
     }
     g_free(msg);
@@ -5258,13 +5243,13 @@ window_configure_cb(
     if (gtk_widget_get_visible(widget))
     {
         gint w, h;
-        w = ghb_settings_get_int(ud->prefs, "window_width");
-        h = ghb_settings_get_int(ud->prefs, "window_height");
+        w = ghb_dict_get_int(ud->prefs, "window_width");
+        h = ghb_dict_get_int(ud->prefs, "window_height");
 
         if ( w != event->width || h != event->height )
         {
-            ghb_settings_set_int(ud->prefs, "window_width", event->width);
-            ghb_settings_set_int(ud->prefs, "window_height", event->height);
+            ghb_dict_set_int(ud->prefs, "window_width", event->width);
+            ghb_dict_set_int(ud->prefs, "window_height", event->height);
             ghb_pref_set(ud->prefs, "window_width");
             ghb_pref_set(ud->prefs, "window_height");
             ghb_prefs_store();

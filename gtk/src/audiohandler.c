@@ -61,12 +61,12 @@ static void audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *w
     gint titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
     if (asettings != NULL)
     {
-        track = ghb_settings_get_int(asettings, "AudioTrack");
+        track = ghb_dict_get_int(asettings, "AudioTrack");
         codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
         aconfig = ghb_get_audio_info(title, track);
     }
@@ -151,35 +151,35 @@ int ghb_get_copy_mask(GhbValue *settings)
 {
     gint mask = 0;
 
-    if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowMP3Pass"))
     {
         mask |= HB_ACODEC_MP3_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowAACPass"))
     {
         mask |= HB_ACODEC_AAC_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowAC3Pass"))
     {
         mask |= HB_ACODEC_AC3_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowDTSPass"))
     {
         mask |= HB_ACODEC_DCA_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowDTSHDPass"))
     {
         mask |= HB_ACODEC_DCA_HD_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowEAC3Pass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowEAC3Pass"))
     {
         mask |= HB_ACODEC_EAC3_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowFLACPass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowFLACPass"))
     {
         mask |= HB_ACODEC_FLAC_PASS;
     }
-    if (ghb_settings_get_boolean(settings, "AudioAllowTRUEHDPass"))
+    if (ghb_dict_get_bool(settings, "AudioAllowTRUEHDPass"))
     {
         mask |= HB_ACODEC_TRUEHD_PASS;
     }
@@ -201,7 +201,7 @@ int ghb_select_fallback(GhbValue *settings, int acodec)
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     fallback = ghb_settings_audio_encoder_codec(settings,
@@ -222,13 +222,13 @@ ghb_sanitize_audio_settings(GhbValue *settings, GhbValue *asettings)
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
-    track = ghb_settings_get_int(asettings, "AudioTrack");
+    track = ghb_dict_get_int(asettings, "AudioTrack");
     acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
     mix = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
     bitrate = ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
@@ -257,23 +257,23 @@ ghb_sanitize_audio_settings(GhbValue *settings, GhbValue *asettings)
             bitrate = 448;
         }
         mix = HB_AMIXDOWN_NONE;
-        ghb_settings_set_string(asettings, "AudioMixdown",
+        ghb_dict_set_string(asettings, "AudioMixdown",
                                 hb_mixdown_get_short_name(mix));
-        ghb_settings_set_string(asettings, "AudioSamplerate",
+        ghb_dict_set_string(asettings, "AudioSamplerate",
                                 ghb_audio_samplerate_get_short_name(0));
-        ghb_settings_set_double(asettings, "AudioTrackDRCSlider", 0.0);
+        ghb_dict_set_double(asettings, "AudioTrackDRCSlider", 0.0);
     }
     else
     {
         if (mix == HB_AMIXDOWN_NONE)
             mix = ghb_get_best_mix(aconfig, select_acodec, mix);
         bitrate = hb_audio_bitrate_get_best(select_acodec, bitrate, sr, mix);
-        ghb_settings_set_string(asettings, "AudioMixdown",
+        ghb_dict_set_string(asettings, "AudioMixdown",
                                 hb_mixdown_get_short_name(mix));
     }
-    ghb_settings_set_string(asettings, "AudioBitrate",
+    ghb_dict_set_string(asettings, "AudioBitrate",
                             ghb_audio_bitrate_get_short_name(bitrate));
-    ghb_settings_set_string(asettings, "AudioEncoder",
+    ghb_dict_set_string(asettings, "AudioEncoder",
                             hb_audio_encoder_get_short_name(select_acodec));
 }
 
@@ -290,9 +290,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
         hb_audio_config_t *aconfig;
         gboolean codec_defined_bitrate = FALSE;
 
-        title_id = ghb_settings_get_int(ud->settings, "title");
+        title_id = ghb_dict_get_int(ud->settings, "title");
         title = ghb_lookup_title(title_id, NULL);
-        track = ghb_settings_get_int(asettings, "AudioTrack");
+        track = ghb_dict_get_int(asettings, "AudioTrack");
         aconfig = ghb_get_audio_info(title, track);
 
         acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
@@ -320,15 +320,15 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
             ghb_set_bitrate_opts(ud->builder, low, high, -1);
         }
         ghb_ui_update(ud, "AudioEncoder",
-                      ghb_settings_get_value(asettings, "AudioEncoder"));
+                      ghb_dict_get_value(asettings, "AudioEncoder"));
         ghb_ui_update(ud, "AudioBitrate",
-                      ghb_settings_get_value(asettings, "AudioBitrate"));
+                      ghb_dict_get_value(asettings, "AudioBitrate"));
         ghb_ui_update(ud, "AudioSamplerate",
-                      ghb_settings_get_value(asettings, "AudioSamplerate"));
+                      ghb_dict_get_value(asettings, "AudioSamplerate"));
         ghb_ui_update(ud, "AudioMixdown",
-                      ghb_settings_get_value(asettings, "AudioMixdown"));
+                      ghb_dict_get_value(asettings, "AudioMixdown"));
         ghb_ui_update(ud, "AudioTrackDRCSlider",
-                      ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
+                      ghb_dict_get_value(asettings, "AudioTrackDRCSlider"));
         ghb_audio_list_refresh_selected(ud);
     }
 }
@@ -336,7 +336,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 void ghb_santiize_audio_tracks(signal_user_data_t *ud)
 {
     int ii;
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "audio_list");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "audio_list");
     int count = ghb_array_len(alist);
 
     for (ii = 0; ii < count; ii++)
@@ -350,15 +350,15 @@ void ghb_santiize_audio_tracks(signal_user_data_t *ud)
     if (asettings != NULL)
     {
         ghb_ui_update(ud, "AudioEncoder",
-                      ghb_settings_get_value(asettings, "AudioEncoder"));
+                      ghb_dict_get_value(asettings, "AudioEncoder"));
         ghb_ui_update(ud, "AudioBitrate",
-                      ghb_settings_get_value(asettings, "AudioBitrate"));
+                      ghb_dict_get_value(asettings, "AudioBitrate"));
         ghb_ui_update(ud, "AudioSamplerate",
-                      ghb_settings_get_value(asettings, "AudioSamplerate"));
+                      ghb_dict_get_value(asettings, "AudioSamplerate"));
         ghb_ui_update(ud, "AudioMixdown",
-                      ghb_settings_get_value(asettings, "AudioMixdown"));
+                      ghb_dict_get_value(asettings, "AudioMixdown"));
         ghb_ui_update(ud, "AudioTrackDRCSlider",
-                      ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
+                      ghb_dict_get_value(asettings, "AudioTrackDRCSlider"));
     }
 }
 
@@ -407,35 +407,35 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GhbValue *asettings)
 
         block_updates = TRUE;
         ghb_ui_update(ud, "AudioTrack",
-                      ghb_settings_get_value(asettings, "AudioTrack"));
+                      ghb_dict_get_value(asettings, "AudioTrack"));
         ghb_ui_update(ud, "AudioEncoder",
-                      ghb_settings_get_value(asettings, "AudioEncoder"));
+                      ghb_dict_get_value(asettings, "AudioEncoder"));
         ghb_ui_update(ud, "AudioBitrate",
-                      ghb_settings_get_value(asettings, "AudioBitrate"));
+                      ghb_dict_get_value(asettings, "AudioBitrate"));
         ghb_ui_update(ud, "AudioTrackName",
-                      ghb_settings_get_value(asettings, "AudioTrackName"));
+                      ghb_dict_get_value(asettings, "AudioTrackName"));
         ghb_ui_update(ud, "AudioSamplerate",
-                      ghb_settings_get_value(asettings, "AudioSamplerate"));
+                      ghb_dict_get_value(asettings, "AudioSamplerate"));
         ghb_ui_update(ud, "AudioMixdown",
-                      ghb_settings_get_value(asettings, "AudioMixdown"));
+                      ghb_dict_get_value(asettings, "AudioMixdown"));
         ghb_ui_update(ud, "AudioTrackDRCSlider",
-                      ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
-        drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+                      ghb_dict_get_value(asettings, "AudioTrackDRCSlider"));
+        drc = ghb_dict_get_double(asettings, "AudioTrackDRCSlider");
         s_drc = get_drc_string(drc);
         ghb_ui_update(ud, "AudioTrackDRCValue", ghb_string_value(s_drc));
         ghb_ui_update(ud, "AudioTrackGainSlider",
-                      ghb_settings_get_value(asettings, "AudioTrackGainSlider"));
-        gain = ghb_settings_get_double(asettings, "AudioTrackGainSlider");
+                      ghb_dict_get_value(asettings, "AudioTrackGainSlider"));
+        gain = ghb_dict_get_double(asettings, "AudioTrackGainSlider");
         s_gain = get_gain_string(gain);
         ghb_ui_update(ud, "AudioTrackGainValue", ghb_string_value(s_gain));
 
         ghb_ui_update(ud, "AudioTrackQuality",
-                      ghb_settings_get_value(asettings, "AudioTrackQuality"));
-        quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
+                      ghb_dict_get_value(asettings, "AudioTrackQuality"));
+        quality = ghb_dict_get_double(asettings, "AudioTrackQuality");
         s_quality = get_quality_string(asettings, quality);
         ghb_ui_update(ud, "AudioTrackQualityValue", ghb_string_value(s_quality));
         ghb_ui_update(ud, "AudioTrackQualityEnable",
-                  ghb_settings_get_value(asettings, "AudioTrackQualityEnable"));
+                  ghb_dict_get_value(asettings, "AudioTrackQualityEnable"));
         block_updates = FALSE;
     }
     audio_deps(ud, asettings, NULL);
@@ -453,11 +453,11 @@ ghb_get_user_audio_lang(GhbValue *settings, const hb_title_t *title, gint track)
     GhbValue *audio_list, *asettings;
     const gchar *lang;
 
-    audio_list = ghb_settings_get_value(settings, "audio_list");
+    audio_list = ghb_dict_get_value(settings, "audio_list");
     if (ghb_array_len(audio_list) <= track)
         return "und";
     asettings = ghb_array_get(audio_list, track);
-    track = ghb_settings_get_int(asettings, "AudioTrack");
+    track = ghb_dict_get_int(asettings, "AudioTrack");
     lang = ghb_get_source_audio_lang(title, track);
     return lang;
 }
@@ -500,31 +500,30 @@ audio_add_track(
     aconfig = ghb_get_audio_info(title, track);
     asettings = ghb_dict_new();
 
-    ghb_settings_set_int(asettings, "AudioTrack", track);
+    ghb_dict_set_int(asettings, "AudioTrack", track);
 
-    ghb_settings_set_string(asettings, "AudioEncoder",
-                            hb_audio_encoder_get_short_name(encoder));
+    ghb_dict_set_string(asettings, "AudioEncoder",
+                        hb_audio_encoder_get_short_name(encoder));
 
-    ghb_settings_set_boolean(asettings,
-                             "AudioTrackQualityEnable", enable_quality);
-    ghb_settings_set_double(asettings, "AudioTrackQuality", quality);
+    ghb_dict_set_bool(asettings, "AudioTrackQualityEnable", enable_quality);
+    ghb_dict_set_double(asettings, "AudioTrackQuality", quality);
 
-    ghb_settings_set_string(asettings, "AudioBitrate",
+    ghb_dict_set_string(asettings, "AudioBitrate",
         ghb_audio_bitrate_get_short_name(bitrate));
 
-    ghb_settings_set_string(asettings, "AudioSamplerate",
+    ghb_dict_set_string(asettings, "AudioSamplerate",
         ghb_audio_samplerate_get_short_name(samplerate));
 
     if (aconfig != NULL)
     {
         mix = ghb_get_best_mix(aconfig, encoder, mix);
     }
-    ghb_settings_set_string(asettings, "AudioMixdown",
-                            hb_mixdown_get_short_name(mix));
+    ghb_dict_set_string(asettings, "AudioMixdown",
+                        hb_mixdown_get_short_name(mix));
 
-    ghb_settings_set_double(asettings, "AudioTrackDRCSlider", drc);
+    ghb_dict_set_double(asettings, "AudioTrackDRCSlider", drc);
 
-    ghb_settings_set_double(asettings, "AudioTrackGainSlider", gain);
+    ghb_dict_set_double(asettings, "AudioTrackGainSlider", gain);
 
     ghb_sanitize_audio_settings(settings, asettings);
     audio_add_to_settings(settings, asettings);
@@ -552,7 +551,7 @@ audio_select_and_add_track(
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     gint copy_mask = ghb_get_copy_mask(settings);
@@ -565,10 +564,10 @@ audio_select_and_add_track(
     bitrate = ghb_settings_audio_bitrate_rate(audio, "AudioBitrate");
     samplerate = ghb_settings_audio_samplerate_rate(audio, "AudioSamplerate");
     mix = ghb_settings_mixdown_mix(audio, "AudioMixdown");
-    drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
-    gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
-    enable_quality = ghb_settings_get_boolean(audio, "AudioTrackQualityEnable");
-    quality = ghb_settings_get_double(audio, "AudioTrackQuality");
+    drc = ghb_dict_get_double(audio, "AudioTrackDRCSlider");
+    gain = ghb_dict_get_double(audio, "AudioTrackGainSlider");
+    enable_quality = ghb_dict_get_bool(audio, "AudioTrackQualityEnable");
+    quality = ghb_dict_get_double(audio, "AudioTrackQuality");
 
     track = ghb_find_audio_track(title, lang, start_track);
     if (track >= 0)
@@ -600,15 +599,15 @@ static void set_pref_audio_with_lang(
     const GhbValue *pref_audio, *audio_list;
     int count, ii, track, track_count, audio_count;
 
-    audio_list = ghb_settings_get_value(settings, "audio_list");
+    audio_list = ghb_dict_get_value(settings, "audio_list");
 
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    pref_audio = ghb_settings_get_value(settings, "AudioList");
+    pref_audio = ghb_dict_get_value(settings, "AudioList");
     audio_count = hb_list_count(title->list_audio);
     count = ghb_array_len(pref_audio);
     int next_track = 0;
@@ -633,11 +632,11 @@ static void set_pref_audio_with_lang(
             samplerate = ghb_settings_audio_samplerate_rate(audio,
                                                             "AudioSamplerate");
             mix = ghb_settings_mixdown_mix(audio, "AudioMixdown");
-            drc = ghb_settings_get_double(audio, "AudioTrackDRCSlider");
-            gain = ghb_settings_get_double(audio, "AudioTrackGainSlider");
-            enable_quality = ghb_settings_get_boolean(audio,
-                                                  "AudioTrackQualityEnable");
-            quality = ghb_settings_get_double(audio, "AudioTrackQuality");
+            drc = ghb_dict_get_double(audio, "AudioTrackDRCSlider");
+            gain = ghb_dict_get_double(audio, "AudioTrackGainSlider");
+            enable_quality = ghb_dict_get_bool(audio,
+                                               "AudioTrackQualityEnable");
+            quality = ghb_dict_get_double(audio, "AudioTrackQuality");
 
             // Check to see if:
             // 1. pref codec is passthru
@@ -699,7 +698,7 @@ ghb_set_pref_audio_settings(GhbValue *settings)
     // Clear the audio list
     ghb_clear_audio_list_settings(settings);
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (behavior == 0 || title == NULL)
     {
@@ -717,7 +716,7 @@ ghb_set_pref_audio_settings(GhbValue *settings)
                         free_audio_hash_key_value, free_audio_hash_key_value);
 
     // Find "best" audio based on audio preset defaults
-    lang_list = ghb_settings_get_value(settings, "AudioLanguageList");
+    lang_list = ghb_dict_get_value(settings, "AudioLanguageList");
 
     lang_count = ghb_array_len(lang_list);
     for (ii = 0; ii < lang_count; ii++)
@@ -726,10 +725,10 @@ ghb_set_pref_audio_settings(GhbValue *settings)
         gboolean mode;
         GhbValue *glang = ghb_array_get(lang_list, ii);
         lang = ghb_value_get_string(glang);
-        mode = ghb_settings_get_boolean(settings, "AudioSecondaryEncoderMode");
+        mode = ghb_dict_get_bool(settings, "AudioSecondaryEncoderMode");
         set_pref_audio_with_lang(title, settings, lang, behavior, mode, track_used);
     }
-    GhbValue *audio_list = ghb_settings_get_value(settings, "audio_list");
+    GhbValue *audio_list = ghb_dict_get_value(settings, "audio_list");
     if (audio_list == NULL || ghb_array_len(audio_list) == 0)
     {
         // No matching audio tracks found.  Add first track matching
@@ -764,7 +763,7 @@ audio_get_selected_settings(signal_user_data_t *ud, int *index)
         // find audio settings
         if (row < 0) return NULL;
 
-        audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+        audio_list = ghb_dict_get_value(ud->settings, "audio_list");
         if (row >= ghb_array_len(audio_list))
             return NULL;
 
@@ -790,8 +789,8 @@ audio_refresh_list_row_ui(
     info_src_2 = NULL;
     info_dst_2 = NULL;
 
-    const gchar *s_track;
-    gchar *s_drc, *s_gain, *s_br_quality, *s_sr, *s_track_name;
+    const gchar *s_track, *s_track_name;
+    gchar *s_drc, *s_gain, *s_br_quality, *s_sr;
     gdouble drc, gain;
     hb_audio_config_t *aconfig;
     int track, sr;
@@ -799,9 +798,9 @@ audio_refresh_list_row_ui(
     const hb_title_t *title;
     const hb_encoder_t *encoder;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    track = ghb_settings_get_int(settings, "AudioTrack");
+    track = ghb_dict_get_int(settings, "AudioTrack");
     aconfig = ghb_get_audio_info(title, track);
     if (aconfig == NULL)
     {
@@ -812,8 +811,8 @@ audio_refresh_list_row_ui(
     s_track = aconfig->lang.description;
     encoder = ghb_settings_audio_encoder(settings, "AudioEncoder");
 
-    double quality = ghb_settings_get_double(settings, "AudioTrackQuality");
-    if (ghb_settings_get_boolean(settings, "AudioTrackQualityEnable") &&
+    double quality = ghb_dict_get_double(settings, "AudioTrackQuality");
+    if (ghb_dict_get_bool(settings, "AudioTrackQualityEnable") &&
         quality != HB_INVALID_AUDIO_QUALITY)
     {
         s_br_quality = ghb_format_quality(_("Quality: "), encoder->codec, quality);
@@ -833,16 +832,16 @@ audio_refresh_list_row_ui(
 
     const hb_mixdown_t *mix;
     mix = ghb_settings_mixdown(settings, "AudioMixdown");
-    gain = ghb_settings_get_double(settings, "AudioTrackGainSlider");
+    gain = ghb_dict_get_double(settings, "AudioTrackGainSlider");
     s_gain = g_strdup_printf(_("%ddB"), (int)gain);
 
-    drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
+    drc = ghb_dict_get_double(settings, "AudioTrackDRCSlider");
     if (drc < 1.0)
         s_drc = g_strdup(_("Off"));
     else
         s_drc = g_strdup_printf("%.1f", drc);
 
-    s_track_name = ghb_settings_get_string(settings, "AudioTrackName");
+    s_track_name = ghb_dict_get_string(settings, "AudioTrackName");
 
     info_src = g_strdup_printf(_("<small>%d - %s (%.4gkHz)</small>"),
         track + 1, s_track, (double)aconfig->in.samplerate / 1000);
@@ -919,7 +918,6 @@ audio_refresh_list_row_ui(
     g_free(s_drc);
     g_free(s_gain);
     g_free(s_br_quality);
-    g_free(s_track_name);
 }
 
 void
@@ -947,7 +945,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
         gtk_tree_path_free(tp);
         if (row < 0) return;
 
-        audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+        audio_list = ghb_dict_get_value(ud->settings, "audio_list");
         if (row >= ghb_array_len(audio_list))
             return;
 
@@ -971,7 +969,7 @@ audio_refresh_list_ui(signal_user_data_t *ud)
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+    audio_list = ghb_dict_get_value(ud->settings, "audio_list");
     count = ghb_array_len(audio_list);
     if (count != tm_count)
     {
@@ -1038,7 +1036,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gint track;
         gint br, sr, mix;
 
-        title_id = ghb_settings_get_int(ud->settings, "title");
+        title_id = ghb_dict_get_int(ud->settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
 
         if (asettings != NULL)
@@ -1055,7 +1053,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             mix = HB_AMIXDOWN_NONE;
         }
 
-        track = ghb_settings_get_int(ud->settings, "AudioTrack");
+        track = ghb_dict_get_int(ud->settings, "AudioTrack");
         if (sr)
         {
             sr = ghb_find_closest_audio_samplerate(sr);
@@ -1113,16 +1111,16 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         int track;
         hb_audio_config_t *aconfig;
 
-        title_id = ghb_settings_get_int(ud->settings, "title");
+        title_id = ghb_dict_get_int(ud->settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
-        track = ghb_settings_get_int(ud->settings, "AudioTrack");
+        track = ghb_dict_get_int(ud->settings, "AudioTrack");
         aconfig = ghb_get_audio_info(title, track);
         if (aconfig != NULL)
         {
             char *desc;
             desc = g_strdup_printf("%d - %s", track + 1,
                                    aconfig->lang.description);
-            ghb_settings_set_string(asettings, "AudioTrackDescription", desc);
+            ghb_dict_set_string(asettings, "AudioTrackDescription", desc);
             g_free(desc);
         }
     }
@@ -1233,7 +1231,7 @@ quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t
     asettings = audio_get_selected_settings(ud, NULL);
     if (asettings != NULL)
     {
-        ghb_settings_set_double(asettings, "AudioTrackQuality", quality);
+        ghb_dict_set_double(asettings, "AudioTrackQuality", quality);
         ghb_audio_list_refresh_selected(ud);
     }
     ghb_live_reset(ud);
@@ -1306,11 +1304,11 @@ ghb_clear_audio_list_settings(GhbValue *settings)
     GhbValue *audio_list;
 
     g_debug("clear_audio_list_settings ()");
-    audio_list = ghb_settings_get_value(settings, "audio_list");
+    audio_list = ghb_dict_get_value(settings, "audio_list");
     if (audio_list == NULL)
     {
         audio_list = ghb_array_new();
-        ghb_settings_set_value(settings, "audio_list", audio_list);
+        ghb_dict_set(settings, "audio_list", audio_list);
     }
     else
         ghb_array_reset(audio_list);
@@ -1392,7 +1390,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
         gtk_tree_path_free(tp);
 
         if (row < 0) return;
-        audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+        audio_list = ghb_dict_get_value(ud->settings, "audio_list");
         if (row >= 0 && row < ghb_array_len(audio_list))
             asettings = ghb_array_get(audio_list, row);
     }
@@ -1408,22 +1406,22 @@ audio_add_to_settings(GhbValue *settings, GhbValue *asettings)
     gint titleindex;
     hb_audio_config_t *aconfig;
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    audio_list = ghb_settings_get_value(settings, "audio_list");
+    audio_list = ghb_dict_get_value(settings, "audio_list");
     if (audio_list == NULL)
     {
-        audio_list = ghb_array_new(8);
-        ghb_settings_set_value(settings, "audio_list", audio_list);
+        audio_list = ghb_array_new();
+        ghb_dict_set(settings, "audio_list", audio_list);
     }
 
-    int track = ghb_settings_get_int(asettings, "AudioTrack");
+    int track = ghb_dict_get_int(asettings, "AudioTrack");
     aconfig = ghb_get_audio_info(title, track);
     if (aconfig != NULL)
     {
         char *desc;
         desc = g_strdup_printf("%d - %s", track + 1, aconfig->lang.description);
-        ghb_settings_set_string(asettings, "AudioTrackDescription", desc);
+        ghb_dict_set_string(asettings, "AudioTrackDescription", desc);
         g_free(desc);
     }
 
@@ -1431,7 +1429,7 @@ audio_add_to_settings(GhbValue *settings, GhbValue *asettings)
     aname = ghb_dict_get(asettings, "AudioTrackName");
     if (aname == NULL)
     {
-        ghb_settings_set_string(asettings, "AudioTrackName", "");
+        ghb_dict_set_string(asettings, "AudioTrackName", "");
     }
     ghb_array_append(audio_list, asettings);
 }
@@ -1444,13 +1442,12 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
     // Back up settings in case we need to revert.
-    backup = ghb_value_dup(
-                ghb_settings_get_value(ud->settings, "audio_list"));
-    GhbValue *pref_audio = ghb_settings_get_value(ud->settings, "AudioList");
+    backup = ghb_value_dup(ghb_dict_get_value(ud->settings, "audio_list"));
+    GhbValue *pref_audio = ghb_dict_get_value(ud->settings, "AudioList");
     asettings = audio_select_and_add_track(title, ud->settings, pref_audio,
                                            "und", 0, 0);
     ghb_add_audio_to_ui(ud, asettings);
@@ -1464,7 +1461,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_settings_take_value(ud->settings, "audio_list", backup);
+            ghb_dict_set(ud->settings, "audio_list", backup);
             asettings = audio_get_selected_settings(ud, NULL);
             if (asettings != NULL)
             {
@@ -1489,9 +1486,9 @@ audio_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     ghb_clear_audio_list_settings(ud->settings);
     ghb_clear_audio_list_ui(ud->builder);
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    GhbValue *pref_audio = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *pref_audio = ghb_dict_get_value(ud->settings, "AudioList");
 
     int pref_count = ghb_array_len(pref_audio);
 
@@ -1509,7 +1506,7 @@ audio_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                                                    track);
             if (asettings != NULL)
             {
-                track = ghb_settings_get_int(asettings, "AudioTrack") + 1;
+                track = ghb_dict_get_int(asettings, "AudioTrack") + 1;
             }
         } while (asettings != NULL);
     }
@@ -1537,8 +1534,7 @@ audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_tree_selection_select_iter(ts, &ti);
 
         // Back up settings in case we need to revert.
-        backup = ghb_value_dup(
-                    ghb_settings_get_value(ud->settings, "audio_list"));
+        backup = ghb_value_dup(ghb_dict_get_value(ud->settings, "audio_list"));
 
         // Pop up the edit dialog
         GtkResponseType response;
@@ -1547,7 +1543,7 @@ audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_settings_take_value(ud->settings, "audio_list", backup);
+            ghb_dict_set(ud->settings, "audio_list", backup);
             asettings = audio_get_selected_settings(ud, NULL);
             if (asettings != NULL)
             {
@@ -1595,7 +1591,7 @@ audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
             gtk_tree_selection_select_iter(ts, &nextIter);
         }
 
-        audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+        audio_list = ghb_dict_get_value(ud->settings, "audio_list");
 
         // Get the row number
         indices = gtk_tree_path_get_indices (tp);
@@ -2049,7 +2045,7 @@ audio_def_setting_update(signal_user_data_t *ud, GtkWidget *widget)
     GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     int count = ghb_array_len(alist);
     if (!block_updates && index >= 0 && index < count)
     {
@@ -2085,7 +2081,7 @@ audio_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         idx = (intptr_t)g_object_get_data(G_OBJECT(label), "lang_idx");
         lang = ghb_iso639_lookup_by_int(idx);
         glang = ghb_string_value_new(lang->iso639_2);
-        alang_list = ghb_settings_get_value(ud->settings, "AudioLanguageList");
+        alang_list = ghb_dict_get_value(ud->settings, "AudioLanguageList");
         ghb_array_append(alang_list, glang);
         ghb_clear_presets_selection(ud);
     }
@@ -2119,7 +2115,7 @@ audio_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_list_box_insert(avail, label, idx);
 
         // Remove from preset language list
-        alang_list = ghb_settings_get_value(ud->settings, "AudioLanguageList");
+        alang_list = ghb_dict_get_value(ud->settings, "AudioLanguageList");
         ghb_array_remove(alang_list, index);
         ghb_clear_presets_selection(ud);
     }
@@ -2156,7 +2152,7 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget, gboolean se
     GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     int count = ghb_array_len(alist);
     if (index < 0 || index >= count)
         return;
@@ -2166,7 +2162,7 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget, gboolean se
     int codec = ghb_settings_audio_encoder_codec(adict, "AudioEncoder");
     int fallback = ghb_settings_audio_encoder_codec(ud->settings,
                                                     "AudioEncoderFallback");
-    gdouble quality = ghb_settings_get_double(adict, "AudioTrackQuality");
+    gdouble quality = ghb_dict_get_double(adict, "AudioTrackQuality");
 
     // Allow quality settings if the current encoder supports quality
     // or if the encoder is auto-passthru and the fallback encoder
@@ -2247,11 +2243,11 @@ audio_def_quality_enable_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     GhbValue *adict = ghb_array_get(alist, index);
 
     audio_def_settings_bitrate_show(GTK_WIDGET(row),
-                !ghb_settings_get_boolean(adict, "AudioTrackQualityEnable"));
+                !ghb_dict_get_bool(adict, "AudioTrackQualityEnable"));
     ghb_clear_presets_selection(ud);
 }
 
@@ -2265,7 +2261,7 @@ audio_def_quality_changed_cb(GtkWidget *widget, gdouble quality, signal_user_dat
                                            "AudioTrackQualityValue");
     gint index = gtk_list_box_row_get_index(row);
 
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     GhbValue *adict = ghb_array_get(alist, index);
     char *s_quality = get_quality_string(adict, quality);
     ghb_update_widget(quality_label, ghb_string_value(s_quality));
@@ -2306,7 +2302,7 @@ audio_def_setting_add_cb(GtkWidget *widget, signal_user_data_t *ud)
     GtkListBoxRow *row = audio_settings_get_row(widget);
 
     GhbValue *adict;
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     int count = ghb_array_len(alist);
     if (count > 0)
     {
@@ -2338,7 +2334,7 @@ audio_def_setting_remove_cb(GtkWidget *widget, signal_user_data_t *ud)
     GtkListBoxRow *row = audio_settings_get_row(widget);
     gint index = gtk_list_box_row_get_index(row);
 
-    GhbValue *alist = ghb_settings_get_value(ud->settings, "AudioList");
+    GhbValue *alist = ghb_dict_get_value(ud->settings, "AudioList");
     int count = ghb_array_len(alist);
     if (index < 0 || index >= count)
     {
@@ -2417,11 +2413,11 @@ audio_def_lang_list_init(signal_user_data_t *ud)
     // Clear selected languages.
     audio_def_selected_lang_list_clear(ud);
 
-    lang_list = ghb_settings_get_value(ud->settings, "AudioLanguageList");
+    lang_list = ghb_dict_get_value(ud->settings, "AudioLanguageList");
     if (lang_list == NULL)
     {
         lang_list = ghb_array_new();
-        ghb_settings_set_value(ud->settings, "AudioLanguageList", lang_list);
+        ghb_dict_set(ud->settings, "AudioLanguageList", lang_list);
     }
 
     int ii, count;
@@ -2464,11 +2460,11 @@ void ghb_audio_defaults_to_ui(signal_user_data_t *ud)
     audio_def_lang_list_init(ud);
 
     // Init the AudioList settings if necessary
-    alist = ghb_settings_get_value(ud->settings, "AudioList");
+    alist = ghb_dict_get_value(ud->settings, "AudioList");
     if (alist == NULL)
     {
         alist = ghb_array_new();
-        ghb_settings_set_value(ud->settings, "AudioList", alist);
+        ghb_dict_set(ud->settings, "AudioList", alist);
     }
 
     // Empty the current list

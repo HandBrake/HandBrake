@@ -884,10 +884,10 @@ main(int argc, char *argv[])
     g_log_set_handler("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
     //g_log_set_handler("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
 
-    ud->globals = ghb_settings_new();
-    ud->prefs = ghb_settings_new();
+    ud->globals = ghb_dict_new();
+    ud->prefs = ghb_dict_new();
     ud->settings_array = ghb_array_new();
-    ud->settings = ghb_settings_new();
+    ud->settings = ghb_dict_new();
     ghb_array_append(ud->settings_array, ud->settings);
 
     ud->builder = create_builder_or_die(BUILDER_NAME);
@@ -1029,16 +1029,15 @@ main(int argc, char *argv[])
     // empty title is initialized.
 
     gint logLevel;
-    logLevel = ghb_settings_get_int(ud->prefs, "LoggingLevel");
+    logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
     ghb_backend_init(logLevel);
 
-    if (ghb_settings_get_boolean(ud->prefs, "hbfd"))
+    if (ghb_dict_get_bool(ud->prefs, "hbfd"))
     {
         ghb_hbfd(ud, TRUE);
     }
-    gchar *source = ghb_settings_get_string(ud->prefs, "default_source");
+    const gchar *source = ghb_dict_get_string(ud->prefs, "default_source");
     ghb_dvd_set_current(source, ud);
-    g_free(source);
 
     // Populate the presets tree view
     ghb_presets_list_init(ud, NULL, 0);
@@ -1063,13 +1062,13 @@ main(int argc, char *argv[])
     if (dvd_device != NULL)
     {
         // Source overridden from command line option
-        ghb_settings_set_string(ud->globals, "scan_source", dvd_device);
+        ghb_dict_set_string(ud->globals, "scan_source", dvd_device);
         g_idle_add((GSourceFunc)ghb_idle_scan, ud);
     }
     else
     {
-        GhbValue *gval = ghb_settings_get_value(ud->prefs, "default_source");
-        ghb_settings_set_value(ud->globals, "scan_source", gval);
+        GhbValue *gval = ghb_dict_get_value(ud->prefs, "default_source");
+        ghb_dict_set(ud->globals, "scan_source", ghb_value_dup(gval));
     }
     // Reload and check status of the last saved queue
     g_idle_add((GSourceFunc)ghb_reload_queue, ud);
@@ -1091,8 +1090,8 @@ main(int argc, char *argv[])
     geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
     gtk_window_set_geometry_hints(GTK_WINDOW(ghb_window), ghb_window,
                                   &geo, geo_mask);
-    window_width = ghb_settings_get_int(ud->prefs, "window_width");
-    window_height = ghb_settings_get_int(ud->prefs, "window_height");
+    window_width = ghb_dict_get_int(ud->prefs, "window_width");
+    window_height = ghb_dict_get_int(ud->prefs, "window_height");
 
     /*
      * Filter objects in GtkBuilder xml

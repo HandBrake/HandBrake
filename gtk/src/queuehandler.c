@@ -91,17 +91,17 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Collect information for first line in the display
     // Volume (Title X, Chapters Y through Z, N Video Passes) --> Destination
-    title = ghb_settings_get_int(settings, "title");
-    start_point = ghb_settings_get_int(settings, "start_point");
-    end_point = ghb_settings_get_int(settings, "end_point");
-    vol_name = ghb_settings_get_const_string(settings, "volume_label");
-    dest = ghb_settings_get_const_string(settings, "destination");
+    title = ghb_dict_get_int(settings, "title");
+    start_point = ghb_dict_get_int(settings, "start_point");
+    end_point = ghb_dict_get_int(settings, "end_point");
+    vol_name = ghb_dict_get_string(settings, "volume_label");
+    dest = ghb_dict_get_string(settings, "destination");
     basename = g_path_get_basename(dest);
     escape = g_markup_escape_text(basename, -1);
     escape2 = g_markup_escape_text(vol_name, -1);
 
-    vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
-    two_pass = ghb_settings_get_boolean(settings, "VideoTwoPass");
+    vqtype = ghb_dict_get_bool(settings, "vquality_type_constant");
+    two_pass = ghb_dict_get_bool(settings, "VideoTwoPass");
 
     const gchar *points = _("Chapters");
     if (ghb_settings_combo_int(settings, "PtoPType") == 0)
@@ -141,7 +141,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     }
 
     // Set the job status icon
-    status = ghb_settings_get_int(settings, "job_status");
+    status = ghb_dict_get_int(settings, "job_status");
     const char *status_icon;
     switch (status)
     {
@@ -176,13 +176,13 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
-    path = ghb_settings_get_value(settings, "preset");
+    preset_modified = ghb_dict_get_bool(settings, "preset_modified");
+    path = ghb_dict_get_value(settings, "preset");
     preset = ghb_preset_path_string(path);
-    markers = ghb_settings_get_boolean(settings, "ChapterMarkers");
+    markers = ghb_dict_get_bool(settings, "ChapterMarkers");
 
     if (preset_modified)
     {
@@ -203,8 +203,8 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     gboolean ipod = FALSE, http = FALSE;
     if (mux->format & HB_MUX_MASK_MP4)
     {
-        ipod = ghb_settings_get_boolean(settings, "Mp4iPodCompatible");
-        http = ghb_settings_get_boolean(settings, "Mp4HttpOptimize");
+        ipod = ghb_dict_get_bool(settings, "Mp4iPodCompatible");
+        http = ghb_dict_get_bool(settings, "Mp4HttpOptimize");
     }
     if (http || ipod || markers)
     {
@@ -240,14 +240,14 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     int crop[4];
     gboolean keep_aspect;
 
-    width = ghb_settings_get_int(settings, "scale_width");
-    height = ghb_settings_get_int(settings, "scale_height");
-    pic_par = ghb_settings_get_int(settings, "PicturePAR");
-    keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
-    crop[0] = ghb_settings_get_int(settings, "PictureTopCrop");
-    crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
-    crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
-    crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
+    width = ghb_dict_get_int(settings, "scale_width");
+    height = ghb_dict_get_int(settings, "scale_height");
+    pic_par = ghb_dict_get_int(settings, "PicturePAR");
+    keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
+    crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+    crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+    crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+    crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
 
     gchar *aspect_desc;
     switch (pic_par)
@@ -286,8 +286,8 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     }
 
     gint source_width, source_height;
-    source_width = ghb_settings_get_int(settings, "source_width");
-    source_height = ghb_settings_get_int(settings, "source_height");
+    source_width = ghb_dict_get_int(settings, "source_width");
+    source_height = ghb_dict_get_int(settings, "source_height");
     XPRINT(_("<b>Picture:</b> <small>"));
     XPRINT(_("Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"),
            source_width, source_height, width, height, aspect_desc,
@@ -295,8 +295,8 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     if (pic_par)
     {
         int display_width, display_height;
-        display_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
-        display_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
+        display_width = ghb_dict_get_int(settings, "PictureDisplayWidth");
+        display_height = ghb_dict_get_int(settings, "PictureDisplayHeight");
         XPRINT(_(", Display %d x %d"),
                 display_width, display_height);
     }
@@ -312,26 +312,26 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     gboolean grayscale;
     gboolean filters;
 
-    decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
+    decomb_deint = ghb_dict_get_bool(settings, "PictureDecombDeinterlace");
     decomb = ghb_settings_combo_int(settings, "PictureDecomb");
     decomb_opt = ghb_settings_combo_option(settings, "PictureDecomb");
-    decomb_cust = ghb_settings_get_const_string(settings,
+    decomb_cust = ghb_dict_get_string(settings,
                                                 "PictureDecombCustom");
     deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
     deint_opt = ghb_settings_combo_option(settings, "PictureDeinterlace");
-    deint_cust = ghb_settings_get_const_string(settings,
+    deint_cust = ghb_dict_get_string(settings,
                                                "PictureDeinterlaceCustom");
     detel = ghb_settings_combo_int(settings, "PictureDetelecine");
-    detel_cust = ghb_settings_get_const_string(settings,
+    detel_cust = ghb_dict_get_string(settings,
                                                "PictureDetelecineCustom");
-    deblock = ghb_settings_get_int(settings, "PictureDeblock");
+    deblock = ghb_dict_get_int(settings, "PictureDeblock");
     denoise = ghb_settings_combo_int(settings, "PictureDenoiseFilter");
     denoise_opt = ghb_settings_combo_option(settings, "PictureDenoiseFilter");
     denoise_preset = ghb_settings_combo_option(settings, "PictureDenoisePreset");
     denoise_tune = ghb_settings_combo_option(settings, "PictureDenoiseTune");
-    denoise_cust = ghb_settings_get_const_string(settings,
+    denoise_cust = ghb_dict_get_string(settings,
                                                  "PictureDenoiseCustom");
-    grayscale = ghb_settings_get_boolean(settings, "VideoGrayScale");
+    grayscale = ghb_dict_get_bool(settings, "VideoGrayScale");
 
     filters = detel || (decomb_deint && decomb) || (!decomb_deint && deint) ||
               denoise || (deblock >= 5) || grayscale;
@@ -416,7 +416,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     if (fps->rate == 0)
     {
         const char *rate_mode;
-        if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
+        if (ghb_dict_get_bool(settings, "VideoFramerateCFR"))
             rate_mode = _("(constant)");
         else
             rate_mode = _("(variable)");
@@ -424,7 +424,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     }
     else
     {
-        if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
+        if (ghb_dict_get_bool(settings, "VideoFrameratePFR"))
         {
             XPRINT(_(", Framerate: Peak %s (may be lower)"), fps->name);
         }
@@ -439,7 +439,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     if (!vqtype)
     {
         // Has to be bitrate
-        vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
+        vqvalue = ghb_dict_get_int(settings, "VideoAvgBitrate");
         vq_desc = _("Bitrate:");
         vq_units = _("kbps");
         XPRINT(", %s %d%s",
@@ -448,7 +448,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     else
     {
         // Constant quality
-        vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
+        vqvalue = ghb_dict_get_double(settings, "VideoQualitySlider");
         vq_desc = _("Constant Quality:");
         vq_units = hb_video_quality_get_name(video_encoder->codec);
         XPRINT(", %s %.4g(%s)",
@@ -458,7 +458,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Next line in the display (Turbo setting)
     gboolean turbo;
-    turbo = ghb_settings_get_boolean(settings, "VideoTurboTwoPass");
+    turbo = ghb_dict_get_bool(settings, "VideoTurboTwoPass");
     if (!vqtype && two_pass && turbo)
     {
         XPRINT(_("<b>Turbo 1st Pass:</b> <small>On</small>\n"));
@@ -467,7 +467,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     // Next line in the display (Video Encoder Options)
     // Video Options: Preset - Tune - Profile - Level
     if (video_encoder->codec == HB_VCODEC_X264 &&
-        !ghb_settings_get_boolean(settings, "x264UseAdvancedOptions"))
+        !ghb_dict_get_bool(settings, "x264UseAdvancedOptions"))
     {
         const gchar *extra_opt = NULL;
 
@@ -478,13 +478,13 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
             const gchar *profile_opt, *level_opt;
             gboolean fastdecode, zerolatency;
 
-            preset_opt = ghb_settings_get_const_string(settings, "VideoPreset");
-            tune_opt = ghb_settings_get_const_string(settings, "VideoTune");
-            fastdecode = ghb_settings_get_boolean(settings, "x264FastDecode");
-            zerolatency = ghb_settings_get_boolean(settings, "x264ZeroLatency");
-            profile_opt = ghb_settings_get_const_string(settings, "VideoProfile");
-            level_opt = ghb_settings_get_const_string(settings, "VideoLevel");
-            extra_opt = ghb_settings_get_const_string(settings, "VideoOptionExtra");
+            preset_opt = ghb_dict_get_string(settings, "VideoPreset");
+            tune_opt = ghb_dict_get_string(settings, "VideoTune");
+            fastdecode = ghb_dict_get_bool(settings, "x264FastDecode");
+            zerolatency = ghb_dict_get_bool(settings, "x264ZeroLatency");
+            profile_opt = ghb_dict_get_string(settings, "VideoProfile");
+            level_opt = ghb_dict_get_string(settings, "VideoLevel");
+            extra_opt = ghb_dict_get_string(settings, "VideoOptionExtra");
 
             XPRINT(_("<b>Video Options:</b> <small>Preset: %s</small>"), preset_opt);
             if ((tune_opt != NULL && tune_opt[0] != 0) || zerolatency || fastdecode)
@@ -533,12 +533,11 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     {
         // Next line in the display (Video Encoder Options)
         // Video Advanced Options: detailed settings
-        gchar *opts = ghb_build_advanced_opts_string(settings);
+        const gchar *opts = ghb_build_advanced_opts_string(settings);
         if (opts != NULL && opts[0] != 0)
         {
             XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), opts);
         }
-        g_free(opts);
     }
 
     // Next line in the display (Audio)
@@ -548,7 +547,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     gint count, ii;
     const GhbValue *audio_list;
 
-    audio_list = ghb_settings_get_value(settings, "audio_list");
+    audio_list = ghb_dict_get_value(settings, "audio_list");
     count = ghb_array_len(audio_list);
     if (count == 1)
     {
@@ -560,15 +559,16 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     }
     for (ii = 0; ii < count; ii++)
     {
-        gchar *quality = NULL, *track;
+        const gchar *track;
+        gchar *quality = NULL;
         GhbValue *asettings;
         const hb_encoder_t *audio_encoder;
 
         asettings = ghb_array_get(audio_list, ii);
 
         audio_encoder = ghb_settings_audio_encoder(asettings, "AudioEncoder");
-        double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
-        if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
+        double q = ghb_dict_get_double(asettings, "AudioTrackQuality");
+        if (ghb_dict_get_bool(asettings, "AudioTrackQualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
             quality = ghb_format_quality(_("Quality: "), audio_encoder->codec, q);
@@ -580,7 +580,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         }
         const hb_rate_t *sr;
         sr = ghb_settings_audio_samplerate(asettings, "AudioSamplerate");
-        track = ghb_settings_get_string(asettings, "AudioTrackDescription");
+        track = ghb_dict_get_string(asettings, "AudioTrackDescription");
         const hb_mixdown_t *mix;
         mix = ghb_settings_mixdown(asettings, "AudioMixdown");
         if (count > 1)
@@ -595,7 +595,6 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
             XPRINT(_("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"),
              track, audio_encoder->name, mix->name, sr->name, quality);
         }
-        g_free(track);
         g_free(quality);
     }
     if (count > 0)
@@ -609,7 +608,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     //      ...
     const GhbValue *sub_list;
 
-    sub_list = ghb_settings_get_value(settings, "subtitle_list");
+    sub_list = ghb_dict_get_value(settings, "subtitle_list");
     count = ghb_array_len(sub_list);
     if (count == 1)
     {
@@ -622,16 +621,16 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     for (ii = 0; ii < count; ii++)
     {
         GhbValue *settings;
-        gchar *track;
+        const gchar *track;
         gboolean force, burn, def;
         gint source;
 
         settings = ghb_array_get(sub_list, ii);
-        track = ghb_settings_get_string(settings, "SubtitleTrackDescription");
-        source = ghb_settings_get_int(settings, "SubtitleSource");
-        force = ghb_settings_get_boolean(settings, "SubtitleForced");
-        burn = ghb_settings_get_boolean(settings, "SubtitleBurned");
-        def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
+        track = ghb_dict_get_string(settings, "SubtitleTrackDescription");
+        source = ghb_dict_get_int(settings, "SubtitleSource");
+        force = ghb_dict_get_bool(settings, "SubtitleForced");
+        burn = ghb_dict_get_bool(settings, "SubtitleBurned");
+        def = ghb_dict_get_bool(settings, "SubtitleDefaultTrack");
         if (count > 1)
             XPRINT("\t");
 
@@ -646,21 +645,19 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         else
         {
             gint offset;
-            gchar *filename, *basename, *code;
+            const gchar *filename, *code;
+            gchar *basename;
 
-            offset = ghb_settings_get_int(settings, "SrtOffset");
-            filename = ghb_settings_get_string(settings, "SrtFile");
+            offset = ghb_dict_get_int(settings, "SrtOffset");
+            filename = ghb_dict_get_string(settings, "SrtFile");
             basename = g_path_get_basename(filename);
-            code = ghb_settings_get_string(settings, "SrtCodeset");
+            code = ghb_dict_get_string(settings, "SrtCodeset");
 
             XPRINT(_("<small> %s (%s), %s, Offset (ms) %d%s</small>\n"),
                 track, code, basename, offset, def   ? " (Default)":"");
 
-            g_free(filename);
             g_free(basename);
-            g_free(code);
         }
-        g_free(track);
     }
 
     // Remove the final newline in the string
@@ -705,7 +702,7 @@ ghb_update_status(signal_user_data_t *ud, int status, int index)
     if (settings == NULL) // should never happen
         return;
 
-    if (ghb_settings_get_int(settings, "job_status") == GHB_QUEUE_RUNNING)
+    if (ghb_dict_get_int(settings, "job_status") == GHB_QUEUE_RUNNING)
         return; // Never change the status of currently running jobs
 
     GtkTreeView *treeview;
@@ -721,7 +718,7 @@ ghb_update_status(signal_user_data_t *ud, int status, int index)
     }
     g_free(path);
 
-    ghb_settings_set_int(settings, "job_status", status);
+    ghb_dict_set_int(settings, "job_status", status);
 }
 
 void
@@ -748,7 +745,7 @@ save_queue_file(signal_user_data_t *ud)
         GhbValue *settings = ghb_array_get(ud->queue, ii);
         if (settings == NULL)
             continue;
-        ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+        ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
     }
 
     GtkWidget *dialog;
@@ -824,8 +821,8 @@ open_queue_file(signal_user_data_t *ud)
             GhbValue *settings = ghb_array_get(queue, ii);
             ghb_value_incref(settings);
             ghb_array_remove(queue, ii);
-            ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-            ghb_settings_set_int(settings, "job_unique_id", 0);
+            ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+            ghb_dict_set_int(settings, "job_unique_id", 0);
 
             if (ud->queue == NULL)
                 ud->queue = ghb_array_new();
@@ -904,10 +901,10 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
 
-    title_id = ghb_settings_get_int(settings, "title");
+    title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL) return FALSE;
-    dest = ghb_settings_get_const_string(settings, "destination");
+    dest = ghb_dict_get_string(settings, "destination");
     count = ghb_array_len(ud->queue);
     for (ii = 0; ii < count; ii++)
     {
@@ -915,7 +912,7 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
         const gchar *filename;
 
         js = ghb_array_get(ud->queue, ii);
-        filename = ghb_settings_get_const_string(js, "destination");
+        filename = ghb_dict_get_string(js, "destination");
         if (strcmp(dest, filename) == 0)
         {
             message = g_strdup_printf(
@@ -1056,11 +1053,11 @@ queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
     // Copy current prefs into settings
     // The job should run with the preferences that existed
     // when the job was added to the queue.
-    ghb_settings_set_value(settings, "Preferences", ud->prefs);
+    ghb_dict_set(settings, "Preferences", ghb_value_dup(ud->prefs));
 
     // Make a copy of current settings to be used for the new job
-    ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-    ghb_settings_set_int(settings, "job_unique_id", 0);
+    ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+    ghb_dict_set_int(settings, "job_unique_id", 0);
 
     ghb_array_append(ud->queue, settings);
     add_to_queue_list(ud, settings, NULL);
@@ -1090,7 +1087,7 @@ title_multiple_can_select(GhbValue *settings_array, int index)
     const char *dest;
 
     settings = ghb_array_get(settings_array, index);
-    gdest = ghb_settings_get_value(settings, "destination");
+    gdest = ghb_dict_get_value(settings, "destination");
     dest = ghb_value_get_string(gdest);
     if (dest == NULL)
         return FALSE;
@@ -1102,7 +1099,7 @@ title_multiple_can_select(GhbValue *settings_array, int index)
         const char *tmp;
 
         settings = ghb_array_get(settings_array, ii);
-        gdest = ghb_settings_get_value(settings, "destination");
+        gdest = ghb_dict_get_value(settings, "destination");
         tmp = ghb_value_get_string(gdest);
         if (tmp != NULL && !strncmp(dest, tmp, PATH_MAX))
             return FALSE;
@@ -1251,7 +1248,7 @@ title_add_multiple_check_conflicts(signal_user_data_t *ud)
 
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_multiple_can_select(ud->settings_array, ii);
-        ghb_settings_set_boolean(settings, "title_selected", FALSE);
+        ghb_dict_set_bool(settings, "title_selected", FALSE);
         gtk_toggle_button_set_active(selected, FALSE);
         title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
         are_conflicts |= !can_select;
@@ -1294,7 +1291,7 @@ title_add_multiple_select_all_cb(GtkWidget *widget, signal_user_data_t *ud)
         selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
         settings = ghb_array_get(ud->settings_array, ii);
         can_select = title_multiple_can_select(ud->settings_array, ii);
-        ghb_settings_set_boolean(settings, "title_selected", can_select);
+        ghb_dict_set_bool(settings, "title_selected", can_select);
         gtk_toggle_button_set_active(selected, TRUE);
         title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
     }
@@ -1332,7 +1329,7 @@ title_add_multiple_clear_all_cb(GtkWidget *widget, signal_user_data_t *ud)
         row = GTK_WIDGET(gtk_list_box_get_row_at_index(list, ii));
         selected = GTK_TOGGLE_BUTTON(find_widget(row, "title_selected"));
         settings = ghb_array_get(ud->settings_array, ii);
-        ghb_settings_set_boolean(settings, "title_selected", FALSE);
+        ghb_dict_set_bool(settings, "title_selected", FALSE);
         gtk_toggle_button_set_active(selected, FALSE);
     }
     clear_select_all_busy = FALSE;
@@ -1349,7 +1346,7 @@ add_multiple_titles(signal_user_data_t *ud)
         GhbValue *settings;
 
         settings = ghb_value_dup(ghb_array_get(ud->settings_array, ii));
-        if (ghb_settings_get_boolean(settings, "title_selected"))
+        if (ghb_dict_get_bool(settings, "title_selected"))
         {
             queue_add(ud, settings, ii);
         }
@@ -1395,7 +1392,7 @@ title_selected_cb(GtkWidget *widget, signal_user_data_t *ud)
     selected = ghb_widget_boolean(widget);
     settings = ghb_array_get(ud->settings_array, index);
     can_select = title_multiple_can_select(ud->settings_array, index);
-    ghb_settings_set_boolean(settings, "title_selected",
+    ghb_dict_set_bool(settings, "title_selected",
                              selected && can_select);
 }
 
@@ -1403,7 +1400,8 @@ G_MODULE_EXPORT void
 title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue *settings;
-    gchar *dest_file, *dest_dir, *dest;
+    const gchar *dest_dir;
+    gchar *dest_file, *dest;
     GtkListBoxRow * row = title_get_row(widget);
     if (row == NULL)
         return;
@@ -1412,21 +1410,20 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
     dest_file = ghb_widget_string(widget);
     settings = ghb_array_get(ud->settings_array, index);
 
-    ghb_settings_set_string(settings, "dest_file", dest_file);
-    dest_dir = ghb_settings_get_string(settings, "dest_dir");
+    ghb_dict_set_string(settings, "dest_file", dest_file);
+    dest_dir = ghb_dict_get_string(settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_settings_set_string(settings, "destination", dest);
+    ghb_dict_set_string(settings, "destination", dest);
 
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.
     // Disable selection if it creates a confict!!!
     gboolean can_select;
     can_select = title_multiple_can_select(ud->settings_array, index);
-    ghb_settings_set_boolean(settings, "title_selected", can_select);
+    ghb_dict_set_bool(settings, "title_selected", can_select);
     title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
 
     g_free(dest_file);
-    g_free(dest_dir);
     g_free(dest);
 
     title_add_multiple_set_conflict_label(ud,
@@ -1437,7 +1434,8 @@ G_MODULE_EXPORT void
 title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue *settings;
-    gchar *dest_file, *dest_dir, *dest;
+    const gchar *dest_file;
+    gchar *dest_dir, *dest;
     GtkListBoxRow * row = title_get_row(widget);
     if (row == NULL)
         return;
@@ -1446,20 +1444,19 @@ title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
     dest_dir = ghb_widget_string(widget);
     settings = ghb_array_get(ud->settings_array, index);
 
-    ghb_settings_set_string(settings, "dest_dir", dest_dir);
-    dest_file = ghb_settings_get_string(settings, "dest_file");
+    ghb_dict_set_string(settings, "dest_dir", dest_dir);
+    dest_file = ghb_dict_get_string(settings, "dest_file");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
-    ghb_settings_set_string(settings, "destination", dest);
+    ghb_dict_set_string(settings, "destination", dest);
 
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.
     // Disable selection if it creates a confict!!!
     gboolean can_select;
     can_select = title_multiple_can_select(ud->settings_array, index);
-    ghb_settings_set_boolean(settings, "title_selected", can_select);
+    ghb_dict_set_bool(settings, "title_selected", can_select);
     title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
 
-    g_free(dest_file);
     g_free(dest_dir);
     g_free(dest);
 
@@ -1550,7 +1547,8 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         GtkLabel *label;
         GtkEntry *entry;
         GtkFileChooser *chooser;
-        gchar *title_label, *dest_dir, *dest_file;
+        gchar *title_label;
+        const gchar *dest_dir, *dest_file;
         int title_id, titleindex;
         const hb_title_t *title;
 
@@ -1560,7 +1558,7 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         chooser = GTK_FILE_CHOOSER(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
-        title_id = ghb_settings_get_int(settings, "title");
+        title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
         if (title != NULL)
         {
@@ -1571,16 +1569,14 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
             if (len > max_title_len)
                 max_title_len = len;
 
-            dest_file = ghb_settings_get_string(settings, "dest_file");
-            dest_dir = ghb_settings_get_string(settings, "dest_dir");
+            dest_file = ghb_dict_get_string(settings, "dest_file");
+            dest_dir = ghb_dict_get_string(settings, "dest_dir");
 
             gtk_label_set_markup(label, title_label);
             gtk_entry_set_text(entry, dest_file);
             gtk_file_chooser_set_filename(chooser, dest_dir);
 
             g_free(title_label);
-            g_free(dest_file);
-            g_free(dest_dir);
         }
 
         gtk_list_box_insert(list, row, -1);
@@ -1661,7 +1657,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         if (row >= ghb_array_len(ud->queue))
             return;
         settings = ghb_array_get(ud->queue, row);
-        status = ghb_settings_get_int(settings, "job_status");
+        status = ghb_dict_get_int(settings, "job_status");
         if (status == GHB_QUEUE_RUNNING)
         {
             // Ask if wants to stop encode.
@@ -1669,7 +1665,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
             {
                 return;
             }
-            unique_id = ghb_settings_get_int(settings, "job_unique_id");
+            unique_id = ghb_dict_get_int(settings, "job_unique_id");
             ghb_remove_job(unique_id);
         }
         // Remove the selected item
@@ -1697,7 +1693,7 @@ find_last_finished(GhbValue *queue)
     for (ii = 0; ii < count; ii++)
     {
         js = ghb_array_get(queue, ii);
-        status = ghb_settings_get_int(js, "job_status");
+        status = ghb_dict_get_int(js, "job_status");
         if (status != GHB_QUEUE_DONE && status != GHB_QUEUE_RUNNING)
         {
             return ii-1;
@@ -1743,7 +1739,7 @@ queue_drag_motion_cb(
     row = indices[0];
     gtk_tree_path_free(path);
     js = ghb_array_get(ud->queue, row);
-    status = ghb_settings_get_int(js, "job_status");
+    status = ghb_dict_get_int(js, "job_status");
     if (status != GHB_QUEUE_PENDING && status != GHB_QUEUE_CANCELED)
     {
         gdk_drag_status(ctx, 0, time);
@@ -1875,7 +1871,7 @@ queue_drag_cb(
                     break;
             }
             // Reset job to pending
-            ghb_settings_set_int(js, "job_status", GHB_QUEUE_PENDING);
+            ghb_dict_set_int(js, "job_status", GHB_QUEUE_PENDING);
             add_to_queue_list(ud, js, &iter);
 
             dstpath = gtk_tree_model_get_path (dstmodel, &iter);
@@ -1908,7 +1904,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     gboolean show_start, show_stop, paused;
 
     queue_count = ghb_array_len(ud->queue);
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
 
     queue_state = ghb_get_queue_state();
@@ -2028,7 +2024,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
         js = ghb_array_get(ud->queue, ii);
-        status = ghb_settings_get_int(js, "job_status");
+        status = ghb_dict_get_int(js, "job_status");
         if ((status == GHB_QUEUE_RUNNING) ||
             (status == GHB_QUEUE_PENDING))
         {
@@ -2087,7 +2083,7 @@ find_pid:
     for (ii = 0; ii < count; ii++)
     {
         settings = ghb_array_get(queue, ii);
-        status = ghb_settings_get_int(settings, "job_status");
+        status = ghb_dict_get_int(settings, "job_status");
         if (status != GHB_QUEUE_DONE && status != GHB_QUEUE_CANCELED)
         {
             unfinished++;
@@ -2115,7 +2111,7 @@ find_pid:
             for (ii = count-1; ii >= 0; ii--)
             {
                 settings = ghb_array_get(queue, ii);
-                status = ghb_settings_get_int(settings, "job_status");
+                status = ghb_dict_get_int(settings, "job_status");
                 if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
                 {
                     ghb_array_remove(queue, ii);
@@ -2125,8 +2121,8 @@ find_pid:
             for (ii = 0; ii < count; ii++)
             {
                 settings = ghb_array_get(queue, ii);
-                ghb_settings_set_int(settings, "job_unique_id", 0);
-                ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+                ghb_dict_set_int(settings, "job_unique_id", 0);
+                ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
                 add_to_queue_list(ud, settings, NULL);
             }
             ghb_queue_buttons_grey(ud);
@@ -2204,7 +2200,7 @@ queue_key_press_cb(
         if (row >= ghb_array_len(ud->queue))
             return FALSE;
         settings = ghb_array_get(ud->queue, row);
-        status = ghb_settings_get_int(settings, "job_status");
+        status = ghb_dict_get_int(settings, "job_status");
         if (status == GHB_QUEUE_RUNNING)
         {
             // Ask if wants to stop encode.
@@ -2212,7 +2208,7 @@ queue_key_press_cb(
             {
                 return TRUE;
             }
-            unique_id = ghb_settings_get_int(settings, "job_unique_id");
+            unique_id = ghb_dict_get_int(settings, "job_unique_id");
             ghb_remove_job(unique_id);
         }
         // Remove the selected item
@@ -2258,7 +2254,7 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         if (row >= ghb_array_len(ud->queue))
             return;
         ghb_queue_edit_settings = ghb_array_get(ud->queue, row);
-        status = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
+        status = ghb_dict_get_int(ghb_queue_edit_settings, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             // Remove the selected item
@@ -2271,10 +2267,9 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         {
             ghb_queue_edit_settings = ghb_value_dup(ghb_queue_edit_settings);
         }
-        gchar *source;
-        source = ghb_settings_get_string(ghb_queue_edit_settings, "source");
+        const gchar *source;
+        source = ghb_dict_get_string(ghb_queue_edit_settings, "source");
         ghb_do_scan(ud, source, 0, FALSE);
-        g_free(source);
 
         GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);

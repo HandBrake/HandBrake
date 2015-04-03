@@ -307,7 +307,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
         else
             height = gst_util_uint64_scale_int(width, den, num);
 
-        if (ghb_settings_get_boolean(ud->prefs, "reduce_hd_preview"))
+        if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
         {
             GdkScreen *ss;
             gint s_w, s_h;
@@ -762,10 +762,10 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
         ud->preview->encode_frame = frame;
         js = ghb_value_dup(ud->settings);
-        ghb_settings_set_string(js, "destination", name);
-        ghb_settings_set_int(js, "start_frame", ud->preview->frame);
+        ghb_dict_set_string(js, "destination", name);
+        ghb_dict_set_int(js, "start_frame", ud->preview->frame);
         ud->preview->live_id = 0;
-        ghb_settings_set_value(js, "Preferences", ud->prefs);
+        ghb_dict_set(js, "Preferences", ghb_value_dup(ud->prefs));
         ghb_add_live_job(js, ud->preview->live_id);
         ghb_start_live_encode();
         ghb_value_free(&js);
@@ -919,7 +919,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
 
     live_preview_stop(ud);
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL) return;
     widget = GHB_WIDGET (ud->builder, "preview_frame");
@@ -1153,17 +1153,17 @@ ghb_preview_set_visible(signal_user_data_t *ud)
     GtkWidget *widget;
     gboolean active;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    active = ghb_settings_get_boolean(ud->globals, "show_preview") &&
+    active = ghb_dict_get_bool(ud->globals, "show_preview") &&
              title != NULL;
     widget = GHB_WIDGET(ud->builder, "preview_window");
     gtk_widget_set_visible(widget, active);
     if (active)
     {
         gint x, y;
-        x = ghb_settings_get_int(ud->prefs, "preview_x");
-        y = ghb_settings_get_int(ud->prefs, "preview_y");
+        x = ghb_dict_get_int(ud->prefs, "preview_x");
+        y = ghb_dict_get_int(ud->prefs, "preview_y");
         if (x >= 0 && y >= 0)
             gtk_window_move(GTK_WINDOW(widget), x, y);
     }
@@ -1433,8 +1433,8 @@ preview_configure_cb(
     if (gtk_widget_get_visible(widget))
     {
         gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
-        ghb_settings_set_int(ud->prefs, "preview_x", x);
-        ghb_settings_set_int(ud->prefs, "preview_y", y);
+        ghb_dict_set_int(ud->prefs, "preview_x", x);
+        ghb_dict_set_int(ud->prefs, "preview_y", y);
         ghb_pref_set(ud->prefs, "preview_x");
         ghb_pref_set(ud->prefs, "preview_y");
         ghb_prefs_store();

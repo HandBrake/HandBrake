@@ -25,7 +25,7 @@
 int ghb_get_video_encoder(GhbValue *settings)
 {
     const char *encoder;
-    encoder = ghb_settings_get_const_string(settings, "VideoEncoder");
+    encoder = ghb_dict_get_string(settings, "VideoEncoder");
     return hb_video_encoder_get_from_name(encoder);
 }
 
@@ -86,42 +86,42 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
 
     int encoder = ghb_get_video_encoder(ud->settings);
-    int presetIndex = ghb_settings_get_int(ud->settings, "VideoPresetSlider");
+    int presetIndex = ghb_dict_get_int(ud->settings, "VideoPresetSlider");
     const char * const *video_presets;
     const char *preset;
     video_presets = hb_video_encoder_get_presets(encoder);
     if (video_presets != NULL)
     {
         preset = video_presets[presetIndex];
-        ghb_settings_set_string(ud->settings, "VideoPreset", preset);
+        ghb_dict_set_string(ud->settings, "VideoPreset", preset);
     }
 
-    if (!ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions") &&
+    if (!ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions") &&
         encoder == HB_VCODEC_X264)
     {
         GString *str = g_string_new("");
-        char *preset;
-        char *tune;
-        char *profile;
-        char *level;
-        char *opts;
+        const char *preset;
+        const char *tune;
+        const char *profile;
+        const char *level;
+        const char *opts;
         char *tunes;
 
-        preset = ghb_settings_get_string(ud->settings, "VideoPreset");
-        tune = ghb_settings_get_string(ud->settings, "VideoTune");
-        profile = ghb_settings_get_string(ud->settings, "VideoProfile");
-        level = ghb_settings_get_string(ud->settings, "VideoLevel");
-        opts = ghb_settings_get_string(ud->settings, "VideoOptionExtra");
+        preset  = ghb_dict_get_string(ud->settings, "VideoPreset");
+        tune    = ghb_dict_get_string(ud->settings, "VideoTune");
+        profile = ghb_dict_get_string(ud->settings, "VideoProfile");
+        level   = ghb_dict_get_string(ud->settings, "VideoLevel");
+        opts    = ghb_dict_get_string(ud->settings, "VideoOptionExtra");
 
         if (tune[0] && strcmp(tune, "none"))
         {
             g_string_append_printf(str, "%s", tune);
         }
-        if (ghb_settings_get_boolean(ud->settings, "x264FastDecode"))
+        if (ghb_dict_get_bool(ud->settings, "x264FastDecode"))
         {
             g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
         }
-        if (ghb_settings_get_boolean(ud->settings, "x264ZeroLatency"))
+        if (ghb_dict_get_bool(ud->settings, "x264ZeroLatency"))
         {
             g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
         }
@@ -129,15 +129,15 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 
         char * new_opts;
 
-        int w = ghb_settings_get_int(ud->settings, "scale_width");
-        int h = ghb_settings_get_int(ud->settings, "scale_height");
+        int w = ghb_dict_get_int(ud->settings, "scale_width");
+        int h = ghb_dict_get_int(ud->settings, "scale_height");
 
         if (w == 0 || h == 0)
         {
-            if (!ghb_settings_get_boolean(ud->settings, "autoscale"))
+            if (!ghb_dict_get_bool(ud->settings, "autoscale"))
             {
-                w = ghb_settings_get_int(ud->settings, "PictureWidth");
-                h = ghb_settings_get_int(ud->settings, "PictureHeight");
+                w = ghb_dict_get_int(ud->settings, "PictureWidth");
+                h = ghb_dict_get_int(ud->settings, "PictureHeight");
 
                 if (h == 0 && w != 0)
                 {
@@ -157,11 +157,11 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 
         if (!strcasecmp(profile, "auto"))
         {
-            profile[0] = 0;
+            profile = "";
         }
         if (!strcasecmp(level, "auto"))
         {
-            level[0] = 0;
+            level = "";
         }
         new_opts = hb_x264_param_unparse(
                         preset, tunes, opts, profile, level, w, h);
@@ -182,27 +182,21 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         g_free(new_tt);
         g_free(new_opts);
 
-        g_free(preset);
-        g_free(tune);
-        g_free(profile);
-        g_free(level);
-        g_free(opts);
         g_free(tunes);
     }
-    else if (ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    else if (ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
     {
-        char *opts = ghb_settings_get_string(ud->settings, "x264Option");
+        const char *opts = ghb_dict_get_string(ud->settings, "x264Option");
 
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
         char * new_tt;
         if (opts)
-            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""), tt, opts);
+            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
+                                     tt, opts);
         else
             new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
         gtk_widget_set_tooltip_text(eo, new_tt);
         g_free(new_tt);
-
-        g_free(opts);
     }
 
     ghb_check_dependency(ud, widget, NULL);
@@ -220,23 +214,22 @@ x264_use_advanced_options_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
 
-    if (ghb_settings_get_boolean(ud->prefs, "HideAdvancedVideoSettings") &&
-        ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    if (ghb_dict_get_bool(ud->prefs, "HideAdvancedVideoSettings") &&
+        ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
     {
         ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
         return;
     }
 
-    if (ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    if (ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
     {
         ghb_ui_update(ud, "VideoPresetSlider", ghb_int_value(5));
         ghb_ui_update(ud, "VideoTune", ghb_string_value("none"));
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
         ghb_ui_update(ud, "VideoLevel", ghb_string_value("auto"));
 
-        char *options = ghb_settings_get_string(ud->settings, "x264Option");
+        const char *options = ghb_dict_get_string(ud->settings, "x264Option");
         ghb_ui_update(ud, "VideoOptionExtra", ghb_string_value(options));
-        g_free(options);
     }
 
     ghb_check_dependency(ud, widget, NULL);

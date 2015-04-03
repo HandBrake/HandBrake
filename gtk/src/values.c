@@ -138,3 +138,89 @@ ghb_string_value_set(GhbValue *gval, const gchar *str)
     json_string_set(gval, str);
 }
 
+void
+ghb_dict_set_string(GhbValue *dict, const gchar *key, const gchar *sval)
+{
+    GhbValue *value;
+    value = ghb_string_value_new(sval);
+    ghb_dict_set(dict, key, value);
+}
+
+void
+ghb_dict_set_double(GhbValue *dict, const gchar *key, gdouble dval)
+{
+    GhbValue *value;
+    value = ghb_double_value_new(dval);
+    ghb_dict_set(dict, key, value);
+}
+
+void
+ghb_dict_set_int(GhbValue *dict, const gchar *key, gint64 ival)
+{
+    GhbValue *value;
+    value = ghb_int_value_new(ival);
+    ghb_dict_set(dict, key, value);
+}
+
+void
+ghb_dict_set_bool(GhbValue *dict, const gchar *key, gboolean bval)
+{
+    GhbValue *value;
+    value = ghb_bool_value_new(bval);
+    ghb_dict_set(dict, key, value);
+}
+
+GhbValue*
+ghb_dict_get_value(const GhbValue *dict, const gchar *key)
+{
+    GhbValue *value;
+    value = ghb_dict_get(dict, key);
+    if (value == NULL)
+        g_debug("returning null (%s)", key);
+    return value;
+}
+
+gboolean
+ghb_dict_get_bool(const GhbValue *dict, const gchar *key)
+{
+    const GhbValue* value;
+    value = ghb_dict_get_value(dict, key);
+    if (value == NULL) return FALSE;
+    return ghb_value_get_bool(value);
+}
+
+gint64
+ghb_dict_get_int(const GhbValue *dict, const gchar *key)
+{
+    const GhbValue* value;
+    value = ghb_dict_get_value(dict, key);
+    if (value == NULL) return 0;
+    return ghb_value_get_int(value);
+}
+
+gdouble
+ghb_dict_get_double(const GhbValue *dict, const gchar *key)
+{
+    const GhbValue* value;
+    value = ghb_dict_get_value(dict, key);
+    if (value == NULL) return 0;
+    return ghb_value_get_double(value);
+}
+
+const gchar*
+ghb_dict_get_string(const GhbValue *dict, const gchar *key)
+{
+    const GhbValue* value;
+    value = ghb_dict_get_value(dict, key);
+    return ghb_value_get_string(value);
+}
+
+gchar*
+ghb_dict_get_string_xform(const GhbValue *dict, const gchar *key)
+{
+    const GhbValue* value;
+    value = ghb_dict_get_value(dict, key);
+    if (value == NULL) return g_strdup("");
+    return ghb_value_get_string_xform(value);
+}
+

@@ -44,15 +44,15 @@ subtitle_refresh_list_row_ui(
     info_src_2 = NULL;
     info_dst_2 = NULL;
 
-    forced = ghb_settings_get_boolean(subsettings, "SubtitleForced");
-    burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
-    def = ghb_settings_get_boolean(subsettings, "SubtitleDefaultTrack");
+    forced = ghb_dict_get_bool(subsettings, "SubtitleForced");
+    burned = ghb_dict_get_bool(subsettings, "SubtitleBurned");
+    def = ghb_dict_get_bool(subsettings, "SubtitleDefaultTrack");
     info_src = g_strdup_printf("<small>%s</small>",
-        ghb_settings_get_const_string(subsettings, "SubtitleTrackDescription"));
-    if (ghb_settings_get_int(subsettings, "SubtitleSource") == SRTSUB)
+        ghb_dict_get_string(subsettings, "SubtitleTrackDescription"));
+    if (ghb_dict_get_int(subsettings, "SubtitleSource") == SRTSUB)
     {
         gint offset;
-        offset = ghb_settings_get_int(subsettings, "SrtOffset");
+        offset = ghb_dict_get_int(subsettings, "SrtOffset");
         if (offset != 0)
         {
             info_dst_2 = g_strdup_printf("Offset: %dms", offset);
@@ -131,7 +131,7 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *setting
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     count = ghb_array_len(subtitle_list);
     if (count != tm_count)
     {
@@ -163,11 +163,11 @@ ghb_subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
     GhbValue *subsettings;
     gint ii, count;
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     subsettings = ghb_array_get(subtitle_list, index);
     if (subsettings != NULL)
     {
-        int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+        int track = ghb_dict_get_int(subsettings, "SubtitleTrack");
         if (track == -1)
         {
             // Allow 2 tracks to be marked burned when one is
@@ -183,14 +183,14 @@ ghb_subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
         if (ii != index)
         {
             subsettings = ghb_array_get(subtitle_list, ii);
-            int track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+            int track = ghb_dict_get_int(subsettings, "SubtitleTrack");
             if (track != -1)
             {
                 // Allow 2 tracks to be marked burned when one is
                 // foreign audio search.  Extra burned track will be
                 // sanitized away if foreign audio search actually finds
                 // something.
-                ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
+                ghb_dict_set_bool(subsettings, "SubtitleBurned", FALSE);
             }
         }
     }
@@ -210,14 +210,14 @@ ghb_subtitle_exclusive_default_settings(GhbValue *settings, gint index)
     GhbValue *subtitle;
     gint ii, count;
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
         if (ii != index)
         {
             subtitle = ghb_array_get(subtitle_list, ii);
-            ghb_settings_set_boolean(subtitle, "SubtitleDefaultTrack", FALSE);
+            ghb_dict_set_bool(subtitle, "SubtitleDefaultTrack", FALSE);
         }
     }
 }
@@ -249,39 +249,39 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
     gboolean burned, forced, def;
     gint source;
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
     {
         subtitle_list = ghb_array_new();
-        ghb_settings_set_value(settings, "subtitle_list", subtitle_list);
+        ghb_dict_set(settings, "subtitle_list", subtitle_list);
     }
 
     // Validate some settings
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
-    source = ghb_settings_get_int(subsettings, "SubtitleSource");
-    burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
+    source = ghb_dict_get_int(subsettings, "SubtitleSource");
+    burned = ghb_dict_get_bool(subsettings, "SubtitleBurned");
     if (burned && !hb_subtitle_can_burn(source))
     {
         burned = FALSE;
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", burned);
     }
     if (!burned && !hb_subtitle_can_pass(source, mux->format))
     {
         burned = TRUE;
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
-        ghb_settings_set_boolean(subsettings, "SubtitleDefaultTrack", FALSE);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", burned);
+        ghb_dict_set_bool(subsettings, "SubtitleDefaultTrack", FALSE);
     }
-    def = ghb_settings_get_boolean(subsettings, "SubtitleDefaultTrack");
-    forced = ghb_settings_get_boolean(subsettings, "SubtitleForced");
+    def = ghb_dict_get_bool(subsettings, "SubtitleDefaultTrack");
+    forced = ghb_dict_get_bool(subsettings, "SubtitleForced");
     if (forced && !hb_subtitle_can_force(source))
     {
         forced = FALSE;
-        ghb_settings_set_boolean(subsettings, "SubtitleForced", forced);
+        ghb_dict_set_bool(subsettings, "SubtitleForced", forced);
     }
 
     ghb_array_append(subtitle_list, subsettings);
@@ -299,15 +299,15 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
 {
     char *desc = NULL;
 
-    if (ghb_settings_get_int(subsettings, "SubtitleSource") == SRTSUB)
+    if (ghb_dict_get_int(subsettings, "SubtitleSource") == SRTSUB)
     {
-        gchar *filename, *code;
+        const gchar *filename, *code;
         const gchar *lang;
 
         lang = ghb_settings_combo_option(subsettings, "SrtLanguage");
-        code = ghb_settings_get_string(subsettings, "SrtCodeset");
+        code = ghb_dict_get_string(subsettings, "SrtCodeset");
 
-        filename = ghb_settings_get_string(subsettings, "SrtFile");
+        filename = ghb_dict_get_string(subsettings, "SrtFile");
         if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
         {
             gchar *basename;
@@ -320,7 +320,6 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
         {
             desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
         }
-        g_free(code);
     }
     else
     {
@@ -329,9 +328,9 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
         int track;
         hb_subtitle_t *subtitle;
 
-        title_id = ghb_settings_get_int(settings, "title");
+        title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
-        track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+        track = ghb_dict_get_int(subsettings, "SubtitleTrack");
         if (track < 0)
         {
             desc = g_strdup(_("Foreign Audio Search"));
@@ -350,12 +349,12 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
 
     if (desc != NULL)
     {
-        ghb_settings_set_string(
+        ghb_dict_set_string(
             subsettings, "SubtitleTrackDescription", desc);
     }
     else
     {
-        ghb_settings_set_string(
+        ghb_dict_set_string(
             subsettings, "SubtitleTrackDescription", "Error!");
     }
 
@@ -394,31 +393,30 @@ static GhbValue*  subtitle_add_track(
     }
 
     GhbValue *subsettings = ghb_dict_new();
-    ghb_settings_set_int(subsettings, "SubtitleTrack", track);
-    ghb_settings_set_int(subsettings, "SubtitleSource", source);
+    ghb_dict_set_int(subsettings, "SubtitleTrack", track);
+    ghb_dict_set_int(subsettings, "SubtitleSource", source);
 
     // Set default SRT settings
-    gchar *pref_lang, *dir, *filename;
+    const gchar *pref_lang, *dir;
+    gchar *filename;
 
-    pref_lang = ghb_settings_get_string(settings, "PreferredLanguage");
-    ghb_settings_set_string(subsettings, "SrtLanguage", pref_lang);
-    g_free(pref_lang);
+    pref_lang = ghb_dict_get_string(settings, "PreferredLanguage");
+    ghb_dict_set_string(subsettings, "SrtLanguage", pref_lang);
 
-    ghb_settings_set_string(subsettings, "SrtCodeset", "UTF-8");
+    ghb_dict_set_string(subsettings, "SrtCodeset", "UTF-8");
 
-    dir = ghb_settings_get_string(ud->prefs, "SrtDir");
+    dir = ghb_dict_get_string(ud->prefs, "SrtDir");
     filename = g_strdup_printf("%s/none", dir);
-    ghb_settings_set_string(subsettings, "SrtFile", filename);
-    g_free(dir);
+    ghb_dict_set_string(subsettings, "SrtFile", filename);
     g_free(filename);
 
-    ghb_settings_set_int(subsettings, "SrtOffset", 0);
+    ghb_dict_set_int(subsettings, "SrtOffset", 0);
 
     subtitle_set_track_description(settings, subsettings);
 
     if (burn)
     {
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", TRUE);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", TRUE);
         if (track != -1)
         {
             // Allow 2 tracks to be marked burned when one is
@@ -430,24 +428,24 @@ static GhbValue*  subtitle_add_track(
     }
     else
     {
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", FALSE);
     }
     if (track == -1)
     {
         // Foreign audio search "track"
-        ghb_settings_set_boolean(subsettings, "SubtitleForced", TRUE);
+        ghb_dict_set_bool(subsettings, "SubtitleForced", TRUE);
     }
     else
     {
-        ghb_settings_set_boolean(subsettings, "SubtitleForced", FALSE);
+        ghb_dict_set_bool(subsettings, "SubtitleForced", FALSE);
     }
     if (default_track)
     {
-        ghb_settings_set_boolean(subsettings, "SubtitleDefaultTrack", TRUE);
+        ghb_dict_set_bool(subsettings, "SubtitleDefaultTrack", TRUE);
     }
     else
     {
-        ghb_settings_set_boolean(subsettings, "SubtitleDefaultTrack", FALSE);
+        ghb_dict_set_bool(subsettings, "SubtitleDefaultTrack", FALSE);
     }
     subtitle_add_to_settings(settings, subsettings);
 
@@ -465,7 +463,7 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
     gtk_widget_set_sensitive(w, show);
 
     int title_id, titleindex;
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     const hb_title_t *title = ghb_lookup_title(title_id, &titleindex);
     if (title != NULL)
     {
@@ -508,7 +506,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(settings, "FileFormat");
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     // Check to see if we need to add a subtitle track for foreign audio
@@ -518,11 +516,11 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     // chosen Preferred Language AND the Preferred Language is NOT Any (und).
     //
     audio_lang = ghb_get_user_audio_lang(settings, title, 0);
-    foreign_audio_search = ghb_settings_get_boolean(
+    foreign_audio_search = ghb_dict_get_bool(
                                 settings, "SubtitleAddForeignAudioSearch");
-    foreign_audio_subs = ghb_settings_get_boolean(
+    foreign_audio_subs = ghb_dict_get_bool(
                                 settings, "SubtitleAddForeignAudioSubtitle");
-    lang_list = ghb_settings_get_value(settings, "SubtitleLanguageList");
+    lang_list = ghb_dict_get_value(settings, "SubtitleLanguageList");
     lang_count = ghb_array_len(lang_list);
     if (lang_count > 0)
     {
@@ -542,8 +540,8 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
     burn_behavior = ghb_settings_combo_int(settings, "SubtitleBurnBehavior");
     burn_foreign = burn_behavior == 1 || burn_behavior == 3;
     burn_first   = burn_behavior == 2 || burn_behavior == 3;
-    burn_dvd = ghb_settings_get_boolean(settings, "SubtitleBurnDVDSub");
-    burn_bd = ghb_settings_get_boolean(settings, "SubtitleBurnBDSub");
+    burn_dvd = ghb_dict_get_bool(settings, "SubtitleBurnDVDSub");
+    burn_bd = ghb_dict_get_bool(settings, "SubtitleBurnBDSub");
 
     if (foreign_audio_subs &&
         (audio_lang == NULL || strncmp(audio_lang, pref_lang, 4)))
@@ -615,7 +613,7 @@ ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, 
         }
     }
 
-    if (ghb_settings_get_boolean(settings, "SubtitleAddCC"))
+    if (ghb_dict_get_bool(settings, "SubtitleAddCC"))
     {
         for (track = 0; track < sub_count; track++)
         {
@@ -713,7 +711,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
         gtk_tree_path_free(tp);
         if (row < 0) return NULL;
 
-        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+        subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
         if (row >= ghb_array_len(subtitle_list))
             return NULL;
 
@@ -737,10 +735,10 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         const char *mux_id;
         const hb_container_t *mux;
 
-        mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+        mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
         mux = ghb_lookup_container_by_name(mux_id);
 
-        int source = ghb_settings_get_int(subsettings, "SubtitleSource");
+        int source = ghb_dict_get_int(subsettings, "SubtitleSource");
 
         ghb_ui_update_from_settings(ud, "SubtitleTrack", subsettings);
         ghb_ui_update_from_settings(ud, "SrtLanguage", subsettings);
@@ -766,9 +764,9 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         gtk_widget_set_sensitive(widget,
                                     hb_subtitle_can_pass(source, mux->format));
 
-        burn = ghb_settings_get_int(subsettings, "SubtitleBurned");
-        force = ghb_settings_get_int(subsettings, "SubtitleForced");
-        def = ghb_settings_get_int(subsettings, "SubtitleDefaultTrack");
+        burn = ghb_dict_get_int(subsettings, "SubtitleBurned");
+        force = ghb_dict_get_int(subsettings, "SubtitleForced");
+        def = ghb_dict_get_int(subsettings, "SubtitleDefaultTrack");
 
         if (!hb_subtitle_can_burn(source))
         {
@@ -783,11 +781,11 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
             def = FALSE;
             burn = TRUE;
         }
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", burn);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", burn);
         ghb_ui_update(ud, "SubtitleBurned", ghb_boolean_value(burn));
-        ghb_settings_set_boolean(subsettings, "SubtitleForced", force);
+        ghb_dict_set_bool(subsettings, "SubtitleForced", force);
         ghb_ui_update(ud, "SubtitleForced", ghb_boolean_value(force));
-        ghb_settings_set_boolean(subsettings, "SubtitleDefaultTrack", def);
+        ghb_dict_set_bool(subsettings, "SubtitleDefaultTrack", def);
         ghb_ui_update(ud, "SubtitleDefaultTrack", ghb_boolean_value(def));
 
         // Hide regular subtitle widgets
@@ -839,9 +837,9 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gint track, source;
 
         ghb_widget_to_setting(subsettings, widget);
-        track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+        track = ghb_dict_get_int(subsettings, "SubtitleTrack");
         source = ghb_subtitle_track_source(ud->settings, track);
-        ghb_settings_set_int(subsettings, "SubtitleSource", source);
+        ghb_dict_set_int(subsettings, "SubtitleSource", source);
         subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
         ghb_subtitle_list_refresh_selected(ud);
@@ -866,7 +864,7 @@ subtitle_burned_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         ghb_widget_to_setting(subsettings, widget);
-        if (ghb_settings_get_boolean(subsettings, "SubtitleBurned"))
+        if (ghb_dict_get_bool(subsettings, "SubtitleBurned"))
         {
             ghb_ui_update(ud, "SubtitleDefaultTrack", ghb_boolean_value(FALSE));
             ghb_subtitle_exclusive_burn(ud, index);
@@ -887,7 +885,7 @@ subtitle_default_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         ghb_widget_to_setting(subsettings, widget);
-        if (ghb_settings_get_boolean(subsettings, "SubtitleDefaultTrack"))
+        if (ghb_dict_get_bool(subsettings, "SubtitleDefaultTrack"))
         {
             ghb_ui_update(ud, "SubtitleBurned", ghb_boolean_value(FALSE));
             ghb_subtitle_exclusive_default(ud, index);
@@ -906,17 +904,17 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     subsettings = subtitle_get_selected_settings(ud, NULL);
     if (subsettings != NULL)
     {
-        if (ghb_settings_get_boolean(ud->settings, "SubtitleSrtEnable"))
+        if (ghb_dict_get_bool(ud->settings, "SubtitleSrtEnable"))
         {
-            ghb_settings_set_int(subsettings, "SubtitleSource", SRTSUB);
+            ghb_dict_set_int(subsettings, "SubtitleSource", SRTSUB);
         }
         else
         {
             int track, source;
 
-            track = ghb_settings_get_int(subsettings, "SubtitleTrack");
+            track = ghb_dict_get_int(subsettings, "SubtitleTrack");
             source = ghb_subtitle_track_source(ud->settings, track);
-            ghb_settings_set_int(subsettings, "SubtitleSource", source);
+            ghb_dict_set_int(subsettings, "SubtitleSource", source);
         }
         subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
@@ -950,7 +948,7 @@ ghb_subtitle_list_refresh_selected(signal_user_data_t *ud)
         gtk_tree_path_free(tp);
         if (row < 0) return;
 
-        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+        subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
         if (row >= ghb_array_len(subtitle_list))
             return;
 
@@ -994,7 +992,8 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     subsettings = subtitle_get_selected_settings(ud, NULL);
     if (subsettings != NULL)
     {
-        gchar *filename, *dirname;
+        const gchar *filename;
+        gchar *dirname;
 
         ghb_widget_to_setting(subsettings, widget);
         subtitle_set_track_description(ud->settings, subsettings);
@@ -1002,19 +1001,18 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_live_reset(ud);
 
         // Update SrtDir preference
-        filename = ghb_settings_get_string(subsettings, "SrtFile");
+        filename = ghb_dict_get_string(subsettings, "SrtFile");
         if (g_file_test(filename, G_FILE_TEST_IS_DIR))
         {
-            ghb_settings_set_string(ud->prefs, "SrtDir", filename);
+            ghb_dict_set_string(ud->prefs, "SrtDir", filename);
         }
         else
         {
             dirname = g_path_get_dirname(filename);
-            ghb_settings_set_string(ud->prefs, "SrtDir", dirname);
+            ghb_dict_set_string(ud->prefs, "SrtDir", dirname);
             g_free(dirname);
         }
         ghb_pref_save(ud->prefs, "SrtDir");
-        g_free(filename);
     }
 }
 
@@ -1041,11 +1039,11 @@ ghb_clear_subtitle_list_settings(GhbValue *settings)
 {
     GhbValue *subtitle_list;
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
     {
         subtitle_list = ghb_array_new();
-        ghb_settings_set_value(settings, "subtitle_list", subtitle_list);
+        ghb_dict_set(settings, "subtitle_list", subtitle_list);
     }
     else
         ghb_array_reset(subtitle_list);
@@ -1121,14 +1119,14 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
         row = indices[0];
         gtk_tree_path_free(tp);
 
-        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+        subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
         if (row >= 0 && row < ghb_array_len(subtitle_list))
             subsettings = ghb_array_get(subtitle_list, row);
     }
     subtitle_update_dialog_widgets(ud, subsettings);
     if (subsettings)
     {
-        if (ghb_settings_get_boolean(subsettings, "SubtitleBurned"))
+        if (ghb_dict_get_bool(subsettings, "SubtitleBurned"))
         {
             ghb_subtitle_exclusive_burn(ud, row);
         }
@@ -1140,7 +1138,7 @@ static gboolean subtitle_is_one_burned(GhbValue *settings)
     GhbValue *subtitle_list, *subsettings;
     int count, ii;
 
-    subtitle_list = ghb_settings_get_value(settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(settings, "subtitle_list");
     if (subtitle_list == NULL)
         return FALSE;
 
@@ -1148,7 +1146,7 @@ static gboolean subtitle_is_one_burned(GhbValue *settings)
     for (ii = 0; ii < count; ii++)
     {
         subsettings = ghb_array_get(subtitle_list, ii);
-        if (ghb_settings_get_boolean(subsettings, "SubtitleBurned"))
+        if (ghb_dict_get_bool(subsettings, "SubtitleBurned"))
         {
             return TRUE;
         }
@@ -1167,7 +1165,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
@@ -1176,14 +1174,14 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     // Back up settings in case we need to revert.
     backup = ghb_value_dup(
-                ghb_settings_get_value(ud->settings, "subtitle_list"));
+                ghb_dict_get_value(ud->settings, "subtitle_list"));
 
     one_burned = subtitle_is_one_burned(ud->settings);
 
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     int count = hb_list_count(title->list_subtitle);
@@ -1209,7 +1207,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_settings_take_value(ud->settings, "subtitle_list", backup);
+            ghb_dict_set(ud->settings, "subtitle_list", backup);
             subsettings = subtitle_get_selected_settings(ud, NULL);
             if (subsettings != NULL)
             {
@@ -1233,7 +1231,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     const hb_title_t *title;
     int title_id, titleindex;
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
     {
@@ -1246,7 +1244,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     int count = hb_list_count(title->list_subtitle);
@@ -1265,7 +1263,7 @@ subtitle_reset_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     int title_id, titleindex;
     const hb_title_t *title;
 
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     ghb_set_pref_subtitle(title, ud);
 }
@@ -1278,14 +1276,14 @@ ghb_subtitle_prune(signal_user_data_t *ud)
     gint ii;
     gboolean one_burned = FALSE;
 
-    subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
     if (subtitle_list == NULL)
         return;
 
     const char *mux_id;
     const hb_container_t *mux;
 
-    mux_id = ghb_settings_get_const_string(ud->settings, "FileFormat");
+    mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
     for (ii = 0; ii < ghb_array_len(subtitle_list); )
@@ -1294,8 +1292,8 @@ ghb_subtitle_prune(signal_user_data_t *ud)
         int source;
 
         subsettings = ghb_array_get(subtitle_list, ii);
-        burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
-        source = ghb_settings_get_boolean(subsettings, "SubtitleSource");
+        burned = ghb_dict_get_bool(subsettings, "SubtitleBurned");
+        source = ghb_dict_get_bool(subsettings, "SubtitleSource");
         burned = burned || !hb_subtitle_can_pass(source, mux->format);
         if (burned && one_burned)
         {
@@ -1303,7 +1301,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
             continue;
         }
         one_burned = one_burned || burned;
-        ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
+        ghb_dict_set_bool(subsettings, "SubtitleBurned", burned);
         ii++;
     }
     subsettings = subtitle_get_selected_settings(ud, NULL);
@@ -1325,12 +1323,12 @@ ghb_reset_subtitles(signal_user_data_t *ud, GhbValue *settings)
     g_debug("ghb_reset_subtitles");
     ghb_clear_subtitle_list_settings(ud->settings);
     ghb_clear_subtitle_list_ui(ud->builder);
-    title_id = ghb_settings_get_int(ud->settings, "title");
+    title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
     if (title == NULL)
         return;
 
-    slist = ghb_settings_get_value(settings, "subtitle_list");
+    slist = ghb_dict_get_value(settings, "subtitle_list");
     count = ghb_array_len(slist);
     for (ii = 0; ii < count; ii++)
     {
@@ -1371,7 +1369,7 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
     gtk_label_set_text(label, str);
     g_free(str);
 
-    ghb_settings_set_string(ud->settings, "PreferredLanguage", code);
+    ghb_dict_set_string(ud->settings, "PreferredLanguage", code);
 
     button = GTK_BUTTON(GHB_WIDGET(ud->builder,
                                   "SubtitleAddForeignAudioSubtitle"));
@@ -1394,20 +1392,20 @@ ghb_subtitle_set_pref_lang(GhbValue *settings)
 {
     GhbValue *lang_list;
     gboolean set = FALSE;
-    lang_list = ghb_settings_get_value(settings, "SubtitleLanguageList");
+    lang_list = ghb_dict_get_value(settings, "SubtitleLanguageList");
     if (ghb_array_len(lang_list) > 0)
     {
         GhbValue *glang = ghb_array_get(lang_list, 0);
         if (glang != NULL)
         {
-            ghb_settings_set_string(settings, "PreferredLanguage",
+            ghb_dict_set_string(settings, "PreferredLanguage",
                                     ghb_value_get_string(glang));
             set = TRUE;
         }
     }
     if (!set)
     {
-        ghb_settings_set_string(settings, "PreferredLanguage", "und");
+        ghb_dict_set_string(settings, "PreferredLanguage", "und");
     }
 }
 
@@ -1438,7 +1436,7 @@ subtitle_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         idx = (intptr_t)g_object_get_data(G_OBJECT(label), "lang_idx");
         lang = ghb_iso639_lookup_by_int(idx);
         glang = ghb_string_value_new(lang->iso639_2);
-        lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
+        lang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
         if (ghb_array_len(lang_list) == 0)
         {
             subtitle_update_pref_lang(ud, lang);
@@ -1476,7 +1474,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_list_box_insert(avail, label, idx);
 
         // Remove from preset language list
-        lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
+        lang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
         ghb_array_remove(lang_list, index);
 
         ghb_clear_presets_selection(ud);
@@ -1522,11 +1520,11 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     // Clear selected languages.
     subtitle_def_selected_lang_list_clear(ud);
 
-    lang_list = ghb_settings_get_value(ud->settings, "SubtitleLanguageList");
+    lang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
     if (lang_list == NULL)
     {
         lang_list = ghb_array_new();
-        ghb_settings_set_value(ud->settings, "SubtitleLanguageList", lang_list);
+        ghb_dict_set(ud->settings, "SubtitleLanguageList", lang_list);
     }
 
     int ii, count;
@@ -1605,7 +1603,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 
         // Back up settings in case we need to revert.
         backup = ghb_value_dup(
-                    ghb_settings_get_value(ud->settings, "subtitle_list"));
+                    ghb_dict_get_value(ud->settings, "subtitle_list"));
 
         // Pop up the edit dialog
         GtkResponseType response;
@@ -1614,7 +1612,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_settings_take_value(ud->settings, "subtitle_list", backup);
+            ghb_dict_set(ud->settings, "subtitle_list", backup);
             subsettings = subtitle_get_selected_settings(ud, NULL);
             if (subsettings != NULL)
             {
@@ -1662,7 +1660,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
             gtk_tree_selection_select_iter(ts, &nextIter);
         }
 
-        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+        subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
 
         // Get the row number
         indices = gtk_tree_path_get_indices (tp);

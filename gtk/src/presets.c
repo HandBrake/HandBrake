@@ -47,7 +47,6 @@ static GhbValue *presetsPlist = NULL;
 static GhbValue *prefsPlist = NULL;
 static gboolean prefs_modified = FALSE;
 
-static const GhbValue* preset_dict_get_value(GhbValue *dict, const gchar *key);
 static void store_presets(void);
 static void store_prefs(void);
 
@@ -174,7 +173,7 @@ preset_path_from_indices(GhbValue *presets, gint *indices, gint len)
         name = ghb_dict_get(dict, "PresetName");
         if (name)
             ghb_array_append(path, ghb_value_dup(name));
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (!folder)
             break;
         presets = ghb_dict_get(dict, "ChildrenArray");
@@ -273,7 +272,7 @@ presets_get_dict(GhbValue *presets, gint *indices, gint len)
         dict = ghb_array_get(presets, indices[ii]);
         if (ii < len-1)
         {
-            folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+            folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
             if (!folder)
                 return NULL;
             presets = ghb_dict_get(dict, "ChildrenArray");
@@ -296,7 +295,7 @@ presets_get_folder(GhbValue *presets, gint *indices, gint len)
         count = ghb_array_len(presets);
         if (indices[ii] >= count) return NULL;
         dict = ghb_array_get(presets, indices[ii]);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (!folder)
             break;
         presets = ghb_dict_get(dict, "ChildrenArray");
@@ -316,7 +315,7 @@ plist_get_dict(GhbValue *presets, const gchar *name)
 static const gchar*
 preset_get_name(GhbValue *dict)
 {
-    return ghb_value_get_string(preset_dict_get_value(dict, "PresetName"));
+    return ghb_value_get_string(ghb_dict_get(dict, "PresetName"));
 }
 
 static gboolean
@@ -324,7 +323,7 @@ preset_folder_is_open(GhbValue *dict)
 {
     const GhbValue *gval;
 
-    gval = preset_dict_get_value(dict, "FolderOpen");
+    gval = ghb_dict_get(dict, "FolderOpen");
     if (gval != NULL)
         return ghb_value_get_bool(gval);
     return FALSE;
@@ -333,13 +332,13 @@ preset_folder_is_open(GhbValue *dict)
 gboolean
 ghb_preset_folder(GhbValue *dict)
 {
-    return ghb_value_get_int(preset_dict_get_value(dict, "Folder"));
+    return ghb_value_get_int(ghb_dict_get(dict, "Folder"));
 }
 
 gint
 ghb_preset_type(GhbValue *dict)
 {
-    return ghb_value_get_int(preset_dict_get_value(dict, "Type"));
+    return ghb_value_get_int(ghb_dict_get(dict, "Type"));
 }
 
 static void
@@ -443,7 +442,7 @@ single_find_pos(GhbValue *presets, const gchar *name, gint type)
         const gchar *str;
         dict = ghb_array_get(presets, ii);
         str = preset_get_name(dict);
-        ptype = ghb_value_get_int(preset_dict_get_value(dict, "Type"));
+        ptype = ghb_value_get_int(ghb_dict_get(dict, "Type"));
         if (strcasecmp(name, str) <= 0 && ptype == type)
         {
             return ii;
@@ -479,7 +478,7 @@ presets_find_pos(const GhbValue *path, gint type, gint *len)
             return NULL;
         }
         dict = ghb_array_get(nested, indices[ii]);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         nested = NULL;
         if (!folder)
             break;
@@ -502,7 +501,7 @@ preset_tree_depth(GhbValue *dict)
 {
     gboolean folder;
 
-    folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+    folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
     if (folder)
     {
         gint depth = 0;
@@ -532,7 +531,7 @@ preset_is_default(GhbValue *dict)
 {
     const GhbValue *val;
 
-    val = preset_dict_get_value(dict, "Default");
+    val = ghb_dict_get(dict, "Default");
     return ghb_value_get_bool(val);
 }
 
@@ -548,7 +547,7 @@ presets_clear_default(GhbValue *presets)
         gboolean folder;
 
         dict = ghb_array_get(presets, ii);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
         {
             GhbValue *nested;
@@ -580,12 +579,12 @@ presets_customize(GhbValue *presets)
 
         dict = ghb_array_get(presets, ii);
 
-        ptype = ghb_value_get_int(preset_dict_get_value(dict, "Type"));
+        ptype = ghb_value_get_int(ghb_dict_get(dict, "Type"));
         if (ptype != PRESETS_CUSTOM)
         {
             ghb_dict_set(dict, "Type", ghb_int_value_new(PRESETS_CUSTOM));
         }
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
         {
             GhbValue *nested;
@@ -609,7 +608,7 @@ presets_find_default2(GhbValue *presets, gint *len)
         gboolean folder;
 
         dict = ghb_array_get(presets, ii);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
         {
             GhbValue *nested;
@@ -680,7 +679,7 @@ ghb_preset_indices_from_path(
         if (ii < count-1)
         {
             dict = ghb_array_get(nested, indices[ii]);
-            folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+            folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
             if (!folder)
             {
                 g_free(indices);
@@ -762,47 +761,6 @@ presets_set_folder_open(gboolean open, gint *indices, gint len)
         ghb_dict_set(dict, "FolderOpen", ghb_bool_value_new(open));
     }
 }
-
-// Used for sorting dictionaries.
-gint
-key_cmp(gconstpointer a, gconstpointer b)
-{
-    gchar *stra = (gchar*)a;
-    gchar *strb = (gchar*)b;
-
-    return strcmp(stra, strb);
-}
-
-static const GhbValue*
-preset_dict_get_value(GhbValue *dict, const gchar *key)
-{
-    return ghb_dict_get(dict, key);
-}
-
-static const char * dict_get_string(GhbValue *dict, const char *key)
-{
-    GhbValue *gval = ghb_dict_get(dict, key);
-
-    if (gval == NULL)
-        return NULL;
-    return ghb_value_get_string(gval);
-}
-
-static gboolean dict_get_boolean(GhbValue *dict, const char *key)
-{
-    GhbValue *gval = ghb_dict_get(dict, key);
-
-    if (gval == NULL)
-        return FALSE;
-    return ghb_value_get_bool(gval);
-}
-
-const gchar*
-ghb_presets_get_description(GhbValue *pdict)
-{
-    return dict_get_string(pdict, "PresetDescription");
-}
-
 
 static void init_settings_from_dict(
     GhbValue *dest, GhbValue *template, GhbValue *dict, gboolean filter);
@@ -932,7 +890,7 @@ init_settings_from_dict(
             else
                 new_val = ghb_value_dup(val);
         }
-        ghb_settings_take_value(dest, key, new_val);
+        ghb_dict_set(dest, key, new_val);
     }
 
     if (filter || dict == NULL)
@@ -948,7 +906,7 @@ init_settings_from_dict(
         val = ghb_dict_get(template, key);
         if (val == NULL)
         {
-            ghb_settings_set_value(dest, key, gval);
+            ghb_dict_set(dest, key, ghb_value_dup(gval));
         }
     }
 }
@@ -1001,7 +959,7 @@ ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict)
     for (ii = 0; widget_priority_list[ii] != NULL; ii++)
     {
         key = widget_priority_list[ii];
-        gval = ghb_settings_get_value(tmp, key);
+        gval = ghb_dict_get_value(tmp, key);
         if (gval != NULL)
             ghb_ui_settings_update(ud, dict, key, gval);
     }
@@ -1024,7 +982,7 @@ ghb_preset_is_custom()
     const GhbValue *val;
 
     if (current_preset == NULL) return FALSE;
-    val = preset_dict_get_value(current_preset, "Type");
+    val = ghb_dict_get(current_preset, "Type");
     return (ghb_value_get_int(val) == 1);
 }
 
@@ -1056,13 +1014,13 @@ ghb_set_preset_settings_from_indices(
         gboolean folder;
 
         current_preset = dict;
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
             ghb_preset_to_settings(ud->settings, NULL);
         else
             ghb_preset_to_settings(ud->settings, dict);
         path = preset_path_from_indices(presetsPlist, indices, len);
-        ghb_settings_set_value(ud->settings, "preset", path);
+        ghb_dict_set(ud->settings, "preset", ghb_value_dup(path));
         ghb_value_free(&path);
     }
 }
@@ -1071,7 +1029,7 @@ static const GhbValue*
 curr_preset_get_value(const gchar *key)
 {
     if (current_preset == NULL) return NULL;
-    return preset_dict_get_value(current_preset, key);
+    return ghb_dict_get(current_preset, key);
 }
 
 void
@@ -1414,7 +1372,7 @@ ghb_prefs_save(GhbValue *settings)
     iter = ghb_dict_iter_init(dict);
     while (ghb_dict_iter_next(dict, &iter, &key, NULL))
     {
-        value = ghb_settings_get_value(settings, key);
+        value = ghb_dict_get_value(settings, key);
         if (value != NULL)
         {
             ghb_dict_set(pref_dict, key, ghb_value_dup(value));
@@ -1429,7 +1387,7 @@ ghb_pref_save(GhbValue *settings, const gchar *key)
 {
     const GhbValue *value, *value2;
 
-    value = ghb_settings_get_value(settings, key);
+    value = ghb_dict_get_value(settings, key);
     if (value != NULL)
     {
         GhbValue *dict;
@@ -1450,7 +1408,7 @@ ghb_pref_set(GhbValue *settings, const gchar *key)
 {
     const GhbValue *value, *value2;
 
-    value = ghb_settings_get_value(settings, key);
+    value = ghb_dict_get_value(settings, key);
     if (value != NULL)
     {
         GhbValue *dict;
@@ -1496,7 +1454,7 @@ ghb_settings_init(GhbValue *settings, const char *name)
     // pointer will break strict-aliasing rules"
     while (ghb_dict_iter_next(internal, &iter, &key, &gval))
     {
-        ghb_settings_set_value(settings, key, gval);
+        ghb_dict_set(settings, key, ghb_value_dup(gval));
     }
 }
 
@@ -1698,7 +1656,8 @@ ghb_presets_list_init(
         more_indices[len] = ii;
         def = preset_is_default(dict);
 
-        description = ghb_presets_get_description(dict);
+        description = ghb_value_get_string(
+                      ghb_dict_get(dict, "PresetDescription"));
         gtk_tree_store_append(store, &iter, piter);
         type = ghb_preset_type(dict);
         folder = ghb_preset_folder(dict);
@@ -1778,7 +1737,7 @@ presets_list_update_item(
     name = preset_get_name(dict);
     def = preset_is_default(dict);
 
-    description = ghb_presets_get_description(dict);
+    description = ghb_value_get_string(ghb_dict_get(dict, "PresetDescription"));
     type = ghb_preset_type(dict);
     folder = ghb_preset_folder(dict);
     color = get_preset_color(type, folder);
@@ -1842,7 +1801,7 @@ presets_list_insert(
     preset = preset_get_name(dict);
     def = preset_is_default(dict);
 
-    description = ghb_presets_get_description(dict);
+    description = ghb_value_get_string(ghb_dict_get(dict, "PresetDescription"));
     gtk_tree_store_insert(store, &iter, piter, indices[len-1]);
     type = ghb_preset_type(dict);
     folder = ghb_preset_folder(dict);
@@ -1896,7 +1855,7 @@ remove_std_presets(signal_user_data_t *ud)
         gint ptype;
 
         dict = ghb_array_get(presetsPlist, ii);
-        ptype = ghb_value_get_int(preset_dict_get_value(dict, "Type"));
+        ptype = ghb_value_get_int(ghb_dict_get(dict, "Type"));
         if (ptype == PRESETS_BUILTIN)
         {
             if (ghb_presets_remove(presetsPlist, &indices, 1))
@@ -2540,7 +2499,7 @@ import_xlat_preset(GhbValue *user_preset)
     list = ghb_dict_get(dict, "SubtitleLanguageList");
     if (list == NULL)
     {
-        list = ghb_array_new(8);
+        list = ghb_array_new();
         ghb_dict_set(dict, "SubtitleLanguageList", list);
     }
     if (ghb_array_len(list) == 0)
@@ -2576,29 +2535,29 @@ import_xlat_preset(GhbValue *user_preset)
     import_value_xlat(dict);
 
     // Fix up all the internal settings that are derived from preset values.
-    ghb_settings_set_boolean(dict, "PictureDeinterlaceDecomb",
-        !ghb_settings_get_boolean(dict, "PictureDecombDeinterlace"));
+    ghb_dict_set_bool(dict, "PictureDeinterlaceDecomb",
+        !ghb_dict_get_bool(dict, "PictureDecombDeinterlace"));
 
-    ghb_settings_set_value(dict, "scale_height",
-        ghb_settings_get_value(dict, "PictureHeight"));
+    ghb_dict_set(dict, "scale_height", ghb_value_dup(
+        ghb_dict_get_value(dict, "PictureHeight")));
 
-    ghb_settings_set_value(dict, "scale_width",
-        ghb_settings_get_value(dict, "PictureWidth"));
+    ghb_dict_set(dict, "scale_width", ghb_value_dup(
+        ghb_dict_get_value(dict, "PictureWidth")));
 
     gint uses_pic;
     gint vqtype;
 
-    uses_pic = ghb_settings_get_int(dict, "UsesPictureSettings");
-    vqtype = ghb_settings_get_int(dict, "VideoQualityType");
+    uses_pic = ghb_dict_get_int(dict, "UsesPictureSettings");
+    vqtype = ghb_dict_get_int(dict, "VideoQualityType");
 
     // "Use max" or "strict anamorphic" imply autoscale
     if (uses_pic == 2)
     {
-        ghb_settings_set_boolean(dict, "autoscale", TRUE);
+        ghb_dict_set_bool(dict, "autoscale", TRUE);
     }
     else if (uses_pic == 1)
     {
-        ghb_settings_set_boolean(dict, "autoscale", FALSE);
+        ghb_dict_set_bool(dict, "autoscale", FALSE);
     }
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
@@ -2607,55 +2566,55 @@ import_xlat_preset(GhbValue *user_preset)
     {
     case 0:
     {
-        ghb_settings_set_boolean(dict, "vquality_type_bitrate", TRUE);
-        ghb_settings_set_boolean(dict, "vquality_type_constant", FALSE);
+        ghb_dict_set_bool(dict, "vquality_type_bitrate", TRUE);
+        ghb_dict_set_bool(dict, "vquality_type_constant", FALSE);
     } break;
     case 1:
     {
-        ghb_settings_set_boolean(dict, "vquality_type_bitrate", TRUE);
-        ghb_settings_set_boolean(dict, "vquality_type_constant", FALSE);
+        ghb_dict_set_bool(dict, "vquality_type_bitrate", TRUE);
+        ghb_dict_set_bool(dict, "vquality_type_constant", FALSE);
     } break;
     case 2:
     {
-        ghb_settings_set_boolean(dict, "vquality_type_bitrate", FALSE);
-        ghb_settings_set_boolean(dict, "vquality_type_constant", TRUE);
+        ghb_dict_set_bool(dict, "vquality_type_bitrate", FALSE);
+        ghb_dict_set_bool(dict, "vquality_type_constant", TRUE);
     } break;
     default:
     {
-        ghb_settings_set_boolean(dict, "vquality_type_bitrate", FALSE);
-        ghb_settings_set_boolean(dict, "vquality_type_constant", TRUE);
+        ghb_dict_set_bool(dict, "vquality_type_bitrate", FALSE);
+        ghb_dict_set_bool(dict, "vquality_type_constant", TRUE);
     } break;
     }
 
-    const gchar *mode = ghb_settings_get_const_string(dict, "VideoFramerateMode");
+    const gchar *mode = ghb_dict_get_string(dict, "VideoFramerateMode");
     if (strcmp(mode, "cfr") == 0)
     {
-        ghb_settings_set_boolean(dict, "VideoFramerateCFR", TRUE);
-        ghb_settings_set_boolean(dict, "VideoFrameratePFR", FALSE);
-        ghb_settings_set_boolean(dict, "VideoFramerateVFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFramerateCFR", TRUE);
+        ghb_dict_set_bool(dict, "VideoFrameratePFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFramerateVFR", FALSE);
     }
     else if (strcmp(mode, "pfr") == 0)
     {
-        ghb_settings_set_boolean(dict, "VideoFramerateCFR", FALSE);
-        ghb_settings_set_boolean(dict, "VideoFrameratePFR", TRUE);
-        ghb_settings_set_boolean(dict, "VideoFramerateVFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFramerateCFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFrameratePFR", TRUE);
+        ghb_dict_set_bool(dict, "VideoFramerateVFR", FALSE);
     }
     else
     {
-        ghb_settings_set_boolean(dict, "VideoFramerateCFR", FALSE);
-        ghb_settings_set_boolean(dict, "VideoFrameratePFR", FALSE);
-        ghb_settings_set_boolean(dict, "VideoFramerateVFR", TRUE);
+        ghb_dict_set_bool(dict, "VideoFramerateCFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFrameratePFR", FALSE);
+        ghb_dict_set_bool(dict, "VideoFramerateVFR", TRUE);
     }
 
-    if (ghb_settings_get_boolean(dict, "x264UseAdvancedOptions"))
+    if (ghb_dict_get_bool(dict, "x264UseAdvancedOptions"))
     {
         // Force preset/tune/profile/level/opts to conform to option string
-        ghb_settings_set_string(dict, "VideoPreset", "medium");
-        ghb_settings_set_string(dict, "VideoTune", "none");
-        ghb_settings_set_string(dict, "VideoProfile", "auto");
-        ghb_settings_set_string(dict, "VideoLevel", "auto");
-        ghb_settings_set_value(dict, "VideoOptionExtra",
-            ghb_settings_get_value(dict, "x264Option"));
+        ghb_dict_set_string(dict, "VideoPreset", "medium");
+        ghb_dict_set_string(dict, "VideoTune", "none");
+        ghb_dict_set_string(dict, "VideoProfile", "auto");
+        ghb_dict_set_string(dict, "VideoLevel", "auto");
+        ghb_dict_set(dict, "VideoOptionExtra", ghb_value_dup(
+            ghb_dict_get_value(dict, "x264Option")));
     }
     else
     {
@@ -2667,40 +2626,40 @@ import_xlat_preset(GhbValue *user_preset)
     videoPresets = hb_video_encoder_get_presets(encoder);
     const char *videoPreset;
     if (ghb_dict_get(user_preset, "x264Preset") != NULL)
-        videoPreset = ghb_settings_get_const_string(dict, "x264Preset");
+        videoPreset = ghb_dict_get_string(dict, "x264Preset");
     else
-        videoPreset = ghb_settings_get_const_string(dict, "VideoPreset");
+        videoPreset = ghb_dict_get_string(dict, "VideoPreset");
     int ii;
     for (ii = 0; videoPreset && videoPresets && videoPresets[ii]; ii++)
     {
         if (!strcasecmp(videoPreset, videoPresets[ii]))
         {
-            ghb_settings_set_int(dict, "VideoPresetSlider", ii);
+            ghb_dict_set_int(dict, "VideoPresetSlider", ii);
             break;
         }
     }
     if (videoPreset != NULL)
-        ghb_settings_set_string(dict, "VideoPreset", videoPreset);
+        ghb_dict_set_string(dict, "VideoPreset", videoPreset);
 
     char *videoTune;
     if (ghb_dict_get(user_preset, "x264Tune") != NULL)
-        videoTune = ghb_settings_get_string(dict, "x264Tune");
+        videoTune = g_strdup(ghb_dict_get_string(dict, "x264Tune"));
     else
-        videoTune = ghb_settings_get_string(dict, "VideoTune");
+        videoTune = g_strdup(ghb_dict_get_string(dict, "VideoTune"));
     char *tune = NULL;
     char *saveptr;
     char * tok = strtok_r(videoTune, ",./-+", &saveptr);
-    ghb_settings_set_boolean(dict, "x264FastDecode", FALSE);
-    ghb_settings_set_boolean(dict, "x264ZeroLatency", FALSE);
+    ghb_dict_set_bool(dict, "x264FastDecode", FALSE);
+    ghb_dict_set_bool(dict, "x264ZeroLatency", FALSE);
     while (tok != NULL)
     {
         if (!strcasecmp(tok, "fastdecode"))
         {
-            ghb_settings_set_boolean(dict, "x264FastDecode", TRUE);
+            ghb_dict_set_bool(dict, "x264FastDecode", TRUE);
         }
         else if (!strcasecmp(tok, "zerolatency"))
         {
-            ghb_settings_set_boolean(dict, "x264ZeroLatency", TRUE);
+            ghb_dict_set_bool(dict, "x264ZeroLatency", TRUE);
         }
         else if (tune == NULL)
         {
@@ -2715,31 +2674,31 @@ import_xlat_preset(GhbValue *user_preset)
     g_free(videoTune);
     if (tune != NULL)
     {
-        ghb_settings_set_string(dict, "VideoTune", tune);
+        ghb_dict_set_string(dict, "VideoTune", tune);
         g_free(tune);
     }
 
     const char *videoProfile;
     if (ghb_dict_get(user_preset, "x264Profile") != NULL)
-        videoProfile = ghb_settings_get_const_string(dict, "x264Profile");
+        videoProfile = ghb_dict_get_string(dict, "x264Profile");
     else
-        videoProfile = ghb_settings_get_const_string(dict, "VideoProfile");
+        videoProfile = ghb_dict_get_string(dict, "VideoProfile");
     if (videoProfile != NULL)
-        ghb_settings_set_string(dict, "VideoProfile", videoProfile);
+        ghb_dict_set_string(dict, "VideoProfile", videoProfile);
 
     const char *videoLevel;
     if (ghb_dict_get(user_preset, "x264Level") != NULL)
-        videoLevel = ghb_settings_get_const_string(dict, "x264Level");
+        videoLevel = ghb_dict_get_string(dict, "x264Level");
     else
-        videoLevel = ghb_settings_get_const_string(dict, "VideoLevel");
+        videoLevel = ghb_dict_get_string(dict, "VideoLevel");
     if (videoLevel != NULL)
-        ghb_settings_set_string(dict, "VideoLevel", videoLevel);
+        ghb_dict_set_string(dict, "VideoLevel", videoLevel);
 
     if (ghb_dict_get(user_preset, "x264OptionExtra") != NULL)
     {
         const char *optionExtra;
-        optionExtra = ghb_settings_get_const_string(dict, "x264OptionExtra");
-        ghb_settings_set_string(dict, "VideoOptionExtra", optionExtra);
+        optionExtra = ghb_dict_get_string(dict, "x264OptionExtra");
+        ghb_dict_set_string(dict, "VideoOptionExtra", optionExtra);
     }
 
     return dict;
@@ -2758,7 +2717,7 @@ import_xlat_presets(GhbValue *presets)
     for (ii = 0; ii < count; ii++)
     {
         dict = ghb_array_get(presets, ii);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
         {
             GhbValue *nested;
@@ -2781,11 +2740,11 @@ export_xlat_preset(GhbValue *dict)
     gboolean autoscale, br, constant;
 
     g_debug("export_xlat_prest ()");
-    autoscale = ghb_value_get_bool(preset_dict_get_value(dict, "autoscale"));
+    autoscale = ghb_value_get_bool(ghb_dict_get(dict, "autoscale"));
     br = ghb_value_get_bool(
-                preset_dict_get_value(dict, "vquality_type_bitrate"));
+                ghb_dict_get(dict, "vquality_type_bitrate"));
     constant = ghb_value_get_bool(
-                preset_dict_get_value(dict, "vquality_type_constant"));
+                ghb_dict_get(dict, "vquality_type_constant"));
 
     if (autoscale)
     {
@@ -2807,11 +2766,11 @@ export_xlat_preset(GhbValue *dict)
         ghb_dict_set(dict, "VideoQualityType", ghb_int_value_new(2));
     }
 
-    if (ghb_value_get_bool(preset_dict_get_value(dict, "VideoFramerateCFR")))
+    if (ghb_value_get_bool(ghb_dict_get(dict, "VideoFramerateCFR")))
     {
         ghb_dict_set(dict, "VideoFramerateMode", ghb_string_value_new("cfr"));
     }
-    else if (ghb_value_get_bool(preset_dict_get_value(dict, "VideoFrameratePFR")))
+    else if (ghb_value_get_bool(ghb_dict_get(dict, "VideoFrameratePFR")))
     {
         ghb_dict_set(dict, "VideoFramerateMode", ghb_string_value_new("pfr"));
     }
@@ -2820,7 +2779,7 @@ export_xlat_preset(GhbValue *dict)
         ghb_dict_set(dict, "VideoFramerateMode", ghb_string_value_new("vfr"));
     }
 
-    if (ghb_value_get_int(preset_dict_get_value(dict, "PictureDeblock")) < 5)
+    if (ghb_value_get_int(ghb_dict_get(dict, "PictureDeblock")) < 5)
     {
         ghb_dict_set(dict, "PictureDeblock", ghb_int_value_new(0));
     }
@@ -2836,7 +2795,7 @@ export_xlat_preset(GhbValue *dict)
 
         adict = ghb_array_get(alist, ii);
         drc = ghb_value_get_double(
-                preset_dict_get_value(adict, "AudioTrackDRCSlider"));
+                ghb_dict_get(adict, "AudioTrackDRCSlider"));
         if (drc < 1.0)
         {
             ghb_dict_set(adict, "AudioTrackDRCSlider",
@@ -2844,7 +2803,7 @@ export_xlat_preset(GhbValue *dict)
         }
     }
 
-    if (ghb_value_get_bool(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
+    if (ghb_value_get_bool(ghb_dict_get(dict, "x264UseAdvancedOptions")))
     {
         ghb_dict_remove(dict, "VideoPreset");
         ghb_dict_remove(dict, "VideoTune");
@@ -2852,18 +2811,18 @@ export_xlat_preset(GhbValue *dict)
         ghb_dict_remove(dict, "VideoLevel");
         ghb_dict_remove(dict, "VideoOptionExtra");
     }
-    const char *tune = dict_get_string(dict, "VideoTune");
+    const char *tune = ghb_value_get_string(ghb_dict_get(dict, "VideoTune"));
     if (tune != NULL)
     {
         GString *str = g_string_new("");
         char *tunes;
 
         g_string_append_printf(str, "%s", tune);
-        if (dict_get_boolean(dict, "x264FastDecode"))
+        if (ghb_value_get_bool(ghb_dict_get(dict, "x264FastDecode")))
         {
             g_string_append_printf(str, ",%s", "fastdecode");
         }
-        if (dict_get_boolean(dict, "x264ZeroLatency"))
+        if (ghb_value_get_bool(ghb_dict_get(dict, "x264ZeroLatency")))
         {
             g_string_append_printf(str, ",%s", "zerolatency");
         }
@@ -2894,7 +2853,7 @@ export_xlat_presets(GhbValue *presets)
     for (ii = 0; ii < count; ii++)
     {
         dict = ghb_array_get(presets, ii);
-        folder = ghb_value_get_bool(preset_dict_get_value(dict, "Folder"));
+        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
         if (folder)
         {
             GhbValue *nested;
@@ -3018,7 +2977,7 @@ replace_standard_presets(GhbValue *presetsArray)
         gint ptype;
 
         dict = ghb_array_get(presetsArray, ii);
-        ptype = ghb_value_get_int(preset_dict_get_value(dict, "Type"));
+        ptype = ghb_value_get_int(ghb_dict_get(dict, "Type"));
         if (ptype == PRESETS_BUILTIN)
         {
             gint indices = 0;
@@ -3174,8 +3133,8 @@ settings_save(signal_user_data_t *ud, const GhbValue *path)
         }
     }
     current_preset = dict;
-    ghb_settings_set_int64(dict, "Type", PRESETS_CUSTOM);
-    ghb_settings_set_int64(dict, "PresetBuildNumber", hb_get_build(NULL));
+    ghb_dict_set_int(dict, "Type", PRESETS_CUSTOM);
+    ghb_dict_set_int(dict, "PresetBuildNumber", hb_get_build(NULL));
 
     ghb_dict_set(dict, "PresetName", ghb_string_value_new(name));
     if (replace)
@@ -3195,18 +3154,18 @@ settings_save(signal_user_data_t *ud, const GhbValue *path)
         ghb_dict_set(dict, "Default", ghb_bool_value_new(FALSE));
         presets_list_insert(ud, indices, len);
     }
-    if (!ghb_settings_get_boolean(ud->settings, "PictureWidthEnable"))
+    if (!ghb_dict_get_bool(ud->settings, "PictureWidthEnable"))
     {
         ghb_dict_remove(dict, "PictureWidth");
     }
-    if (!ghb_settings_get_boolean(ud->settings, "PictureHeightEnable"))
+    if (!ghb_dict_get_bool(ud->settings, "PictureHeightEnable"))
     {
         ghb_dict_remove(dict, "PictureHeight");
     }
     ghb_dict_set(dict, "autoscale",
         ghb_bool_value_new(
-            !ghb_settings_get_boolean(ud->settings, "PictureWidthEnable") &&
-            !ghb_settings_get_boolean(ud->settings, "PictureHeightEnable")
+            !ghb_dict_get_bool(ud->settings, "PictureWidthEnable") &&
+            !ghb_dict_get_bool(ud->settings, "PictureHeightEnable")
         )
     );
 
@@ -3250,7 +3209,7 @@ folder_save(signal_user_data_t *ud, const GhbValue *path)
         // Already exists, update its description
         dict = presets_get_dict(presetsPlist, indices, len);
         ghb_dict_set(dict, "PresetDescription",
-            ghb_value_dup(preset_dict_get_value(
+            ghb_value_dup(ghb_dict_get(
                 ud->settings, "PresetDescription")));
         presets_list_update_item(ud, indices, len, FALSE);
         g_free(indices);
@@ -3272,7 +3231,7 @@ folder_save(signal_user_data_t *ud, const GhbValue *path)
         }
     }
     ghb_dict_set(dict, "PresetDescription",
-        ghb_value_dup(preset_dict_get_value(
+        ghb_value_dup(ghb_dict_get(
             ud->settings, "PresetDescription")));
     ghb_dict_set(dict, "PresetName", ghb_string_value_new(name));
     folder = ghb_array_new();
@@ -3352,20 +3311,20 @@ update_subtitle_presets(signal_user_data_t *ud)
     GhbValue *slist, *dict;
     gint count, ii, source;
 
-    subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+    subtitle_list = ghb_dict_get_value(ud->settings, "subtitle_list");
     slist = ghb_array_new();
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
         subtitle = ghb_array_get(subtitle_list, ii);
-        source = ghb_settings_get_int(subtitle, "SubtitleSource");
+        source = ghb_dict_get_int(subtitle, "SubtitleSource");
         if (source != SRTSUB)
         {
             dict = ghb_value_dup(subtitle);
             ghb_array_append(slist, dict);
         }
     }
-    ghb_settings_take_value(ud->settings, "SubtitleList", slist);
+    ghb_dict_set(ud->settings, "SubtitleList", slist);
 }
 
 G_MODULE_EXPORT void
@@ -3396,7 +3355,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
     gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
-    exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
+    exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
     {
         exportDir = ".";
@@ -3464,11 +3423,11 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         ghb_value_free(&array);
 
-        exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
+        exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
         if (strcmp(dir, exportDir) != 0)
         {
-            ghb_settings_set_string(ud->prefs, "ExportDirectory", dir);
+            ghb_dict_set_string(ud->prefs, "ExportDirectory", dir);
             ghb_pref_save(ud->prefs, "ExportDirectory");
         }
         g_free(filename);
@@ -3535,7 +3494,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 GHB_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                 NULL);
 
-    exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
+    exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
     if (exportDir == NULL || exportDir[0] == '\0')
     {
         exportDir = ".";
@@ -3574,11 +3533,11 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         store_plist(filename, array);
         ghb_value_free(&array);
 
-        exportDir = ghb_settings_get_const_string(ud->prefs, "ExportDirectory");
+        exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
         if (strcmp(dir, exportDir) != 0)
         {
-            ghb_settings_set_string(ud->prefs, "ExportDirectory", dir);
+            ghb_dict_set_string(ud->prefs, "ExportDirectory", dir);
             ghb_pref_save(ud->prefs, "ExportDirectory");
         }
         g_free(dir);
@@ -3646,7 +3605,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         }
         ghb_array_append(dest, ghb_string_value_new(name));
         GhbValue *val = ghb_widget_value(GTK_WIDGET(desc));
-        ghb_settings_set_value(ud->settings, "PresetDescription", val);
+        ghb_dict_set(ud->settings, "PresetDescription", ghb_value_dup(val));
         folder_save(ud, dest);
         ghb_value_free(&dest);
     }
@@ -3668,7 +3627,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     g_debug("presets_save_clicked_cb ()");
     preset = get_selected_path(ud);
     if (preset == NULL)
-        preset = ghb_value_dup(ghb_settings_get_value(ud->settings, "preset"));
+        preset = ghb_value_dup(ghb_dict_get_value(ud->settings, "preset"));
 
     count = ghb_array_len(preset);
     if (count > 0)
@@ -3677,19 +3636,19 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         count = 1;
 
     desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
-    int width = ghb_settings_get_int(ud->settings, "PictureWidth");
-    int height = ghb_settings_get_int(ud->settings, "PictureHeight");
-    gboolean autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
+    int width = ghb_dict_get_int(ud->settings, "PictureWidth");
+    int height = ghb_dict_get_int(ud->settings, "PictureHeight");
+    gboolean autoscale = ghb_dict_get_bool(ud->settings, "autoscale");
     ghb_ui_update(ud, "PictureWidthEnable", ghb_boolean_value(!autoscale));
     ghb_ui_update(ud, "PictureHeightEnable", ghb_boolean_value(!autoscale));
     if (!width)
     {
-        width = ghb_settings_get_int(ud->settings, "scale_width");
+        width = ghb_dict_get_int(ud->settings, "scale_width");
         ghb_ui_update(ud, "PictureWidth", ghb_int_value(width));
     }
     if (!height)
     {
-        height = ghb_settings_get_int(ud->settings, "scale_height");
+        height = ghb_dict_get_int(ud->settings, "scale_height");
         ghb_ui_update(ud, "PictureHeight", ghb_int_value(height));
     }
     dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
@@ -3743,7 +3702,7 @@ presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     ghb_presets_reload(ud);
     // Updating the presets list shuffles things around
     // need to make sure the proper preset is selected
-    preset = ghb_settings_get_value(ud->settings, "preset");
+    preset = ghb_dict_get_value(ud->settings, "preset");
     ghb_select_preset(ud->builder, preset);
 }
 
@@ -4194,14 +4153,14 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
         len = gtk_tree_path_get_depth(treepath);
 
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
-        if (!folder && !ghb_settings_get_boolean(ud->settings, "preset_reload"))
+        if (!folder && !ghb_dict_get_bool(ud->settings, "preset_reload"))
         {
             ghb_set_preset_settings_from_indices(ud, indices, len);
-            ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
+            ghb_dict_set_bool(ud->settings, "preset_modified", FALSE);
             ghb_set_current_title_settings(ud);
             ghb_load_settings(ud);
         }
-        ghb_settings_set_boolean(ud->settings, "preset_reload", FALSE);
+        ghb_dict_set_bool(ud->settings, "preset_reload", FALSE);
 
         gtk_tree_path_free(treepath);
         gtk_widget_set_sensitive(widget, TRUE);
@@ -4224,7 +4183,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
     selection = gtk_tree_view_get_selection (treeview);
     gtk_tree_selection_unselect_all (selection);
-    ghb_settings_set_boolean(ud->settings, "preset_modified", TRUE);
+    ghb_dict_set_bool(ud->settings, "preset_modified", TRUE);
 }
 
 G_MODULE_EXPORT void

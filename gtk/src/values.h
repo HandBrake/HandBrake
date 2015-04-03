@@ -84,4 +84,16 @@ GhbValue* ghb_boolean_value(gboolean bval);
 void debug_show_value(GhbValue *gval);
 void debug_show_type(GhbType tp);
 
+void ghb_dict_set_string(GhbValue *dict, const gchar *key, const gchar *sval);
+void ghb_dict_set_double(GhbValue *dict, const gchar *key, gdouble dval);
+void ghb_dict_set_int(GhbValue *dict, const gchar *key, gint64 ival);
+void ghb_dict_set_bool(GhbValue *dict, const gchar *key, gboolean bval);
+
+GhbValue* ghb_dict_get_value(const GhbValue *dict, const gchar *key);
+gboolean ghb_dict_get_bool(const GhbValue *dict, const gchar *key);
+gint64 ghb_dict_get_int(const GhbValue *dict, const gchar *key);
+gdouble ghb_dict_get_double(const GhbValue *dict, const gchar *key);
+gchar* ghb_dict_get_string_xform(const GhbValue *dict, const gchar *key);
+const gchar* ghb_dict_get_string(const GhbValue *dict, const gchar *key);
+
 #endif // _GHB_VALUES_H_
