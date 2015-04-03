@@ -43,7 +43,7 @@ void              hb_dict_set(hb_dict_t * dict, const char * key,
 /* remove value from dictionary.  releases reference to value */
 int               hb_dict_remove(hb_dict_t * dict, const char * key);
 /* get value from dictionary.  value has borrowed reference */
-hb_value_t *      hb_dict_get(hb_dict_t * dict, const char * key);
+hb_value_t *      hb_dict_get(const hb_dict_t * dict, const char * key);
 
 /* dict iterator
  * hb_dict_iter_init(dict) returns an iter to the first key/value in the dict
@@ -52,6 +52,8 @@ hb_value_t *      hb_dict_get(hb_dict_t * dict, const char * key);
  */
 hb_dict_iter_t    hb_dict_iter_init(const hb_dict_t *dict);
 hb_dict_iter_t    hb_dict_iter_next(const hb_dict_t *dict, hb_dict_iter_t iter);
+int               hb_dict_iter_next_ex(hb_dict_t *dict, hb_dict_iter_t *iter,
+                                       const char **key, hb_value_t **val);
 /* get key from iter */
 const char *      hb_dict_iter_key(const hb_dict_iter_t iter);
 /* get value from iter.  value has borrowed reference */
@@ -82,7 +84,7 @@ size_t             hb_value_array_len(const hb_value_array_t *array);
 
 /* hb_value_t */
 int          hb_value_type(const hb_value_t *value);
-hb_value_t * hb_value_dup(hb_value_t *value);
+hb_value_t * hb_value_dup(const hb_value_t *value);
 void         hb_value_incref(hb_value_t *value);
 void         hb_value_decref(hb_value_t *value);
 void         hb_value_free(hb_value_t **value);
@@ -111,6 +113,7 @@ char *       hb_value_get_string_xform(const hb_value_t *value);
 /* converts value to json string */
 char *       hb_value_get_json(hb_value_t *value);
 /* write json representation to a file */
+int          hb_value_write_file_json(hb_value_t *value, FILE *file);
 int          hb_value_write_json(hb_value_t *value, const char *path);
 
 /* specialized dict functions */

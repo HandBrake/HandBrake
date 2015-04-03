@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <stdio.h>
 #include "hb.h"
 #include "hb_dict.h"
 
@@ -20,7 +21,7 @@ hb_value_type_t hb_value_type(const hb_value_t *value)
     return type;
 }
 
-hb_value_t * hb_value_dup(hb_value_t *value)
+hb_value_t * hb_value_dup(const hb_value_t *value)
 {
     if (value == NULL) return NULL;
     return json_deep_copy(value);
@@ -420,6 +421,11 @@ char * hb_value_get_json(hb_value_t *value)
     return json_dumps(value, JSON_INDENT(4) | JSON_SORT_KEYS);
 }
 
+int  hb_value_write_file_json(hb_value_t *value, FILE *file)
+{
+    return json_dumpf(value, file, JSON_INDENT(4) | JSON_SORT_KEYS);
+}
+
 int  hb_value_write_json(hb_value_t *value, const char *path)
 {
     return json_dump_file(value, path, JSON_INDENT(4) | JSON_SORT_KEYS);
@@ -445,7 +451,7 @@ int hb_dict_remove(hb_dict_t * dict, const char * key)
     return json_object_del(dict, key) == 0;
 }
 
-hb_value_t * hb_dict_get(hb_dict_t * dict, const char * key)
+hb_value_t * hb_dict_get(const hb_dict_t * dict, const char * key)
 {
     return json_object_get(dict, key);
 }
@@ -470,6 +476,20 @@ const char * hb_dict_iter_key(const hb_dict_iter_t iter)
 hb_value_t * hb_dict_iter_value(const hb_dict_iter_t iter)
 {
     return json_object_iter_value(iter);
+}
+
+int
+hb_dict_iter_next_ex(hb_dict_t *dict, hb_dict_iter_t *iter,
+                     const char **key, hb_value_t **val)
+{
+    if (*iter == NULL)
+        return 0;
+    if (key != NULL)
+        *key = json_object_iter_key(*iter);
+    if (val != NULL)
+        *val = json_object_iter_value(*iter);
+    *iter = json_object_iter_next(dict, *iter);
+    return 1;
 }
 
 hb_value_array_t*
