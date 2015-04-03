@@ -812,20 +812,6 @@ find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
     return opts->count;
 }
 
-static const gchar*
-lookup_generic_string(combo_opts_t *opts, const GhbValue *gval)
-{
-    gint ii;
-    const gchar *result = "";
-
-    ii = find_combo_entry(opts, gval);
-    if (ii < opts->count)
-    {
-        result = opts->map[ii].svalue;
-    }
-    return result;
-}
-
 static gint
 lookup_generic_int(combo_opts_t *opts, const GhbValue *gval)
 {
