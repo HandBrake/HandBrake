@@ -291,6 +291,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     job->areBframes = (param->bframes > 0) + (param->bframes   > 0 &&
                                               param->bBPyramid > 0);
 
+    /* Reset global variables before opening a new encoder */
+    x265_cleanup();
+
     pv->x265 = x265_encoder_open(param);
     if (pv->x265 == NULL)
     {
