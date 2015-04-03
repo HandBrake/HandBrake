@@ -2,8 +2,8 @@ __deps__ := FREETYPE LIBXML2 LIBICONV
 $(eval $(call import.MODULE.defs,FONTCONFIG,fontconfig,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FONTCONFIG))
 
-FONTCONFIG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fontconfig-2.8.0.tar.gz
-FONTCONFIG.EXTRACT.tarbase = fontconfig-2.8.0
+FONTCONFIG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fontconfig-2.11.93.tar.bz2
+FONTCONFIG.EXTRACT.tarbase = fontconfig-2.11.93
 
 #
 # Under MinGW:
@@ -94,6 +94,9 @@ FONTCONFIG.CONFIGURE.extra += \
     --with-fcpath=/etc/fonts \
     --with-cache-dir=/var/cache/fontconfig
 endif
+
+# work around Debian bug #768312
+FONTCONFIG.CONFIGURE.extra += --disable-docs
 
 # disable fc-cache test during install phase
 FONTCONFIG.INSTALL.extra = RUN_FC_CACHE_TEST=false
