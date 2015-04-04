@@ -18,6 +18,7 @@ extern "C" {
 #include "common.h"
 #include "hb_dict.h"
 #include "hb_json.h"
+#include "param.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
