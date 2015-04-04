@@ -4113,14 +4113,16 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 
     mux_id = mux->format;
 
-    int p_to_p = -1, seek_points, chapter_markers = 0;
-    int64_t range_start, range_stop;
+    int p_to_p = -1, range_seek_points = 0, chapter_markers = 0;
+    int64_t range_start = 0, range_end = 0;
     range_start = ghb_dict_get_int(js, "start_frame") + 1;
-    if (range_start)
+    const char *range_type = "chapter";
+    if (range_start != 0)
     {
+        range_type = "preview";
         GhbValue *prefs = ghb_dict_get_value(js, "Preferences");
-        seek_points = ghb_dict_get_int(prefs, "preview_count");
-        range_stop = ghb_dict_get_int(prefs, "live_duration") * 90000LL;
+        range_seek_points = ghb_dict_get_int(prefs, "preview_count");
+        range_end = ghb_dict_get_int(prefs, "live_duration") * 90000LL;
     }
     else
     {
@@ -4131,23 +4133,26 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             default:
             case 0: // Chapter range
             {
+                range_type = "chapter";
                 range_start = ghb_dict_get_int(js, "start_point");
-                range_stop  = ghb_dict_get_int(js, "end_point");
-                if (range_start == range_stop)
+                range_end  = ghb_dict_get_int(js, "end_point");
+                if (range_start == range_end)
                     chapter_markers = 0;
             } break;
             case 1: // PTS range
             {
                 double start, end;
+                range_type = "time";
                 start = ghb_dict_get_double(js, "start_point");
                 end   = ghb_dict_get_double(js, "end_point");
                 range_start = (int64_t)start * 90000;
-                range_stop  = (int64_t)end   * 90000 - range_start;
+                range_end  = (int64_t)end   * 90000 - range_start;
             } break;
             case 2: // Frame range
             {
+                range_type = "frame";
                 range_start = ghb_dict_get_int(js, "start_point") - 1;
-                range_stop  = ghb_dict_get_int(js, "end_point")   - 1 -
+                range_end  = ghb_dict_get_int(js, "end_point")   - 1 -
                               range_start;
             } break;
         }
@@ -4184,7 +4189,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     "s:{s:o, s:o, s:[]},"
     // Subtitles {Search {}, SubtitleList []}
     "s:{s:{}, s:[]},"
-    // MetaData
+    // Metadata
     "s:{},"
     // Filters {Grayscale, FilterList []}
     "s:{s:o, s:[]}"
@@ -4202,7 +4207,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "Num",              hb_value_int(par.num),
             "Den",              hb_value_int(par.den),
         "Video",
-            "Codec",            hb_value_int(vcodec),
+            "Encoder",          hb_value_int(vcodec),
         "Audio",
             "CopyMask",         hb_value_int(acodec_copy_mask),
             "FallbackEncoder",  hb_value_int(acodec_fallback),
@@ -4210,8 +4215,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         "Subtitle",
             "Search",
             "SubtitleList",
-        "MetaData",
-        "Filter",
+        "Metadata",
+        "Filters",
             "Grayscale",        hb_value_bool(grayscale),
             "FilterList"
     );
@@ -4246,57 +4251,21 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
     }
     hb_dict_t *source_dict = hb_dict_get(dict, "Source");
-    hb_dict_t *range_dict;
-    switch (p_to_p)
+    if (range_start || range_end)
     {
-        case -1: // Live preview range
+        hb_dict_t *range_dict = hb_dict_init();
+        hb_dict_set(range_dict, "Type", hb_value_string(range_type));
+        if (range_start)
+            hb_dict_set(range_dict, "Start", hb_value_int(range_start));
+        if (range_end)
+            hb_dict_set(range_dict, "End",   hb_value_int(range_end));
+        if (range_seek_points)
         {
-            range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
-                "StartAtPreview",   hb_value_int(range_start),
-                "PtsToStop",        hb_value_int(range_stop),
-                "SeekPoints",       hb_value_int(seek_points));
-            if (range_dict == NULL)
-            {
-                g_warning("json pack live range failure: %s", error.text);
-                return;
-            }
-        } break;
-        default:
-        case 0: // Chapter range
-        {
-            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "ChapterStart", hb_value_int(range_start),
-                "ChapterEnd",   hb_value_int(range_stop));
-            if (range_dict == NULL)
-            {
-                g_warning("json pack chapter range failure: %s", error.text);
-                return;
-            }
-        } break;
-        case 1: // PTS range
-        {
-            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "PtsToStart",   hb_value_int(range_start),
-                "PtsToStop",    hb_value_int(range_stop));
-            if (range_dict == NULL)
-            {
-                g_warning("json pack pts range failure: %s", error.text);
-                return;
-            }
-        } break;
-        case 2: // Frame range
-        {
-            range_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                "FrameToStart", hb_value_int(range_start),
-                "FrameToStop",  hb_value_int(range_stop));
-            if (range_dict == NULL)
-            {
-                g_warning("json pack frame range failure: %s", error.text);
-                return;
-            }
-        } break;
+            hb_dict_set(range_dict, "SeekPoints",
+                    hb_value_int(range_seek_points));
+        }
+        hb_dict_set(source_dict, "Range", range_dict);
     }
-    hb_dict_set(source_dict, "Range", range_dict);
 
     hb_dict_t *video_dict = hb_dict_get(dict, "Video");
     if (ghb_dict_get_bool(js, "vquality_type_constant"))
@@ -4316,7 +4285,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     }
     ghb_set_video_encoder_opts(video_dict, js);
 
-    hb_dict_t *meta_dict = hb_dict_get(dict, "MetaData");
+    hb_dict_t *meta_dict = hb_dict_get(dict, "Metadata");
     const char * meta;
 
     meta = ghb_dict_get_string(js, "MetaName");
@@ -4396,7 +4365,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     }
 
     // Create filter list
-    hb_dict_t *filters_dict = hb_dict_get(dict, "Filter");
+    hb_dict_t *filters_dict = hb_dict_get(dict, "Filters");
     hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
     hb_dict_t *filter_dict;
     char *filter_str;
