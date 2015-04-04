@@ -11,6 +11,7 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="350"
              d:DesignWidth="500"
              mc:Ignorable="d"
@@ -18,6 +19,15 @@
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
         <subtitles:SubtitleBehaviourConverter x:Key="subtitleBehaviourConverter" />
+        <subtitles:SubtitleBurnInBehaviourConverter x:Key="subtitleBurnInBehaviourConverter" />
+
+        <Style x:Key="LongToolTip" TargetType="TextBlock">
+            <Setter Property="Width" Value="400" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+            <Setter Property="Margin" Value="0,2,0,2" />
+        </Style>
+
     </UserControl.Resources>
 
     <Grid>
@@ -71,6 +81,13 @@
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
                     Content="{Binding SwitchDisplayTitle}" />
+
+            <Button MinWidth="65"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
+                    Content="Reload Defaults" />
+
+
         </StackPanel>
 
 
@@ -284,6 +301,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -299,9 +317,17 @@
                 <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBehaviourModeList, Converter={StaticResource subtitleBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBehaviour, Converter={StaticResource subtitleBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
-                <CheckBox Content="Add Closed Captions when available"  Grid.Column="3" Grid.Row="1" Margin="0,5,0,0" 
+                <TextBlock Text="Burn-In Behaviour:"  Grid.Column="2" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <ComboBox Name="burninBehaviour"  Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left"
+                          ItemsSource="{Binding SubtitleBurnInBehaviourModeList, Converter={StaticResource subtitleBurnInBehaviourConverter}}" 
+                          SelectedItem="{Binding SubtitleBehaviours.SelectedBurnInBehaviour, Converter={StaticResource subtitleBurnInBehaviourConverter}}" Width="210" Margin="0,5,5,0">
+                    <ComboBox.ToolTip>
+                        <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Subtitles_BurnInBehaviourModes}" />
+                    </ComboBox.ToolTip>
+                </ComboBox> 
+                <CheckBox Content="Add Closed Captions when available"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
-                <CheckBox Content="Add 'Foreign Audio Scan'"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
+                <CheckBox Content="Add 'Foreign Audio Scan'"  Grid.Column="3" Grid.Row="3" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
             </Grid>
 

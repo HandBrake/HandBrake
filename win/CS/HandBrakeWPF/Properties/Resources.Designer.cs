@@ -901,6 +901,18 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None - Only tracks where the container does not support the format will be burned in.
+        ///Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+        ///First Track - The first track will be burned in.
+        ///Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen..
+        /// </summary>
+        public static string Subtitles_BurnInBehaviourModes {
+            get {
+                return ResourceManager.GetString("Subtitles_BurnInBehaviourModes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated.
         /// </summary>
         public static string Updated {

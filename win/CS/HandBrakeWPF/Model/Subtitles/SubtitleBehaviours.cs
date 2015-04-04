@@ -19,25 +19,11 @@ namespace HandBrakeWPF.Model.Subtitles
     /// </summary>
     public class SubtitleBehaviours : PropertyChangedBase
     {
-        /// <summary>
-        /// The selected behaviour.
-        /// </summary>
         private SubtitleBehaviourModes selectedBehaviour;
-
-        /// <summary>
-        /// The selected langauges.
-        /// </summary>
         private BindingList<string> selectedLangauges;
-
-        /// <summary>
-        /// The add foreign audio scan track.
-        /// </summary>
         private bool addForeignAudioScanTrack;
-
-        /// <summary>
-        /// The add closed captions.
-        /// </summary>
         private bool addClosedCaptions;
+        private SubtitleBurnInBehaviourModes selectedBurnInBehaviour;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitleBehaviours"/> class.
@@ -45,6 +31,7 @@ namespace HandBrakeWPF.Model.Subtitles
         public SubtitleBehaviours()
         {
             this.SelectedBehaviour = SubtitleBehaviourModes.None;
+            this.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;
             this.SelectedLangauges = new BindingList<string>();
         }
 
@@ -57,6 +44,7 @@ namespace HandBrakeWPF.Model.Subtitles
         public SubtitleBehaviours(SubtitleBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.selectedBehaviour;
+            this.SelectedBurnInBehaviour = behaviours.selectedBurnInBehaviour;
             this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges.ToList());
         }
 
@@ -77,6 +65,26 @@ namespace HandBrakeWPF.Model.Subtitles
                 }
                 this.selectedBehaviour = value;
                 this.NotifyOfPropertyChange(() => this.SelectedBehaviour);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected burn in behaviour.
+        /// </summary>
+        public SubtitleBurnInBehaviourModes SelectedBurnInBehaviour
+        {
+            get
+            {
+                return this.selectedBurnInBehaviour;
+            }
+            set
+            {
+                if (value == this.selectedBurnInBehaviour)
+                {
+                    return;
+                }
+                this.selectedBurnInBehaviour = value;
+                this.NotifyOfPropertyChange(() => this.SelectedBurnInBehaviour);
             }
         }
 
@@ -151,6 +159,7 @@ namespace HandBrakeWPF.Model.Subtitles
             SubtitleBehaviours cloned = new SubtitleBehaviours
             {
                 SelectedBehaviour = this.selectedBehaviour,
+                SelectedBurnInBehaviour = this.selectedBurnInBehaviour,
                 SelectedLangauges = new BindingList<string>(),
                 AddClosedCaptions = this.addClosedCaptions,
                 AddForeignAudioScanTrack = this.addForeignAudioScanTrack,

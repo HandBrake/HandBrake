@@ -556,4 +556,10 @@ Please use the 'Extra Options' box on the 'Video' tab to input any additional en
     <value>You cannot overwrite the source file you want to convert.
 Please choose a different filename.</value>
   </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>None - Only tracks where the container does not support the format will be burned in.
+Foreign Audio Track - The Foreign Audio track will be burned in if available. 
+First Track - The first track will be burned in.
+Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+  </data>
 </root>

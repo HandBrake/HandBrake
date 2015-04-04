@@ -139,6 +139,7 @@
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />

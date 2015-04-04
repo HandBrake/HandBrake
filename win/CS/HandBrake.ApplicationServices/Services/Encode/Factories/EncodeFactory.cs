@@ -257,10 +257,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             }
             else
             {
-                video.Level = job.VideoLevel.ShortName;
+                video.Level = job.VideoLevel != null ? job.VideoLevel.ShortName : null;
                 video.Options = job.ExtraAdvancedArguments;
-                video.Preset = job.VideoPreset.ShortName;
-                video.Profile = job.VideoProfile.ShortName;
+                video.Preset = job.VideoPreset != null ? job.VideoPreset.ShortName : null;
+                video.Profile = job.VideoProfile != null ? job.VideoProfile.ShortName : null;
             }
 
             if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality) video.Quality = job.Quality;

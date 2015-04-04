@@ -193,6 +193,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets the subtitle burn in behaviour mode list.
+        /// </summary>
+        public BindingList<SubtitleBurnInBehaviourModes> SubtitleBurnInBehaviourModeList
+        {
+            get
+            {
+                return new BindingList<SubtitleBurnInBehaviourModes>(EnumHelper<SubtitleBurnInBehaviourModes>.GetEnumList().ToList());
+            }
+        }
+
+        /// <summary>
         /// Gets or sets AvailableLanguages.
         /// </summary>
         public BindingList<string> AvailableLanguages
@@ -418,6 +429,62 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
 
+            // Burn In Behaviour
+            if (this.Task.SubtitleTracks.Count >= 1)
+            {
+                bool burnInSet = false;
+                switch (this.SubtitleBehaviours.SelectedBurnInBehaviour)
+                {
+                    case SubtitleBurnInBehaviourModes.None:
+                        // Do Nothing. Only tracks where the container requires it will be burned in.
+                        break;
+                    case SubtitleBurnInBehaviourModes.ForeignAudio:
+                        foreach (var track in this.Task.SubtitleTracks)
+                        {
+                            // Set the Foreign Audio Track to burned-in
+                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            {
+                                track.Burned = true;
+                                this.SetBurnedToFalseForAllExcept(track);
+                                break;
+                            }
+                        }
+                        break;
+                    case SubtitleBurnInBehaviourModes.FirstTrack:                    
+                        foreach (var track in this.Task.SubtitleTracks)
+                        {
+                            // Set the first track.
+                            if (!burnInSet && track.SourceTrack.SubtitleType != SubtitleType.ForeignAudioSearch)
+                            {
+                                burnInSet = true;
+                                track.Burned = true;
+                                this.SetBurnedToFalseForAllExcept(track);
+                            }
+                        }                  
+                        break;
+                    case SubtitleBurnInBehaviourModes.ForeignAudioPreferred:
+                        foreach (var track in this.Task.SubtitleTracks)
+                        {
+                            // Set the first track.
+                            if (!burnInSet)
+                            {
+                                burnInSet = true;
+                                track.Burned = true;
+                                this.SetBurnedToFalseForAllExcept(track);
+                            }
+
+                            // But if there is a foreign audio track, prefer this to the first.
+                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            {
+                                track.Burned = true;
+                                this.SetBurnedToFalseForAllExcept(track);
+                                break;
+                            }
+                        }            
+                        break;
+                }
+            }
+
             // Add all closed captions if enabled.
             if (this.SubtitleBehaviours.AddClosedCaptions)
             {
@@ -489,6 +556,14 @@ namespace HandBrakeWPF.ViewModels
             this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
 
             this.SubtitleBehaviours.SelectedLangauges.Clear();
+        }
+
+        /// <summary>
+        /// Reload the audio tracks based on the defaults.
+        /// </summary>
+        public void ReloadDefaults()
+        {
+            this.AutomaticSubtitleSelection();
         }
 
         #endregion
@@ -592,9 +667,17 @@ namespace HandBrakeWPF.ViewModels
                                           SourceTrack = source,
                                       };
 
-            if ((source.SubtitleType == SubtitleType.PGS || source.SubtitleType == SubtitleType.ForeignAudioSearch)
-                && this.Task != null
-                && this.Task.OutputFormat == OutputFormat.Mp4)
+
+            // Burn-in Behaviours
+            if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
+                  || this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudioPreferred)
+            {
+                track.Burned = true;
+                this.SetBurnedToFalseForAllExcept(track);
+            }
+
+            // For MP4, PGS Subtitles must be burned in.
+            if (!track.Burned && (source.SubtitleType == SubtitleType.PGS) && this.Task != null && this.Task.OutputFormat == OutputFormat.Mp4)
             {
                 if (track.CanBeBurned)
                 {
@@ -670,6 +753,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Step 1, Set the behaviour mode
             this.SubtitleBehaviours.SelectedBehaviour = SubtitleBehaviourModes.None;
+            this.SubtitleBehaviours.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;
             this.SubtitleBehaviours.AddClosedCaptions = false;
             this.SubtitleBehaviours.AddForeignAudioScanTrack = false;
             this.SubtitleBehaviours.SelectedLangauges.Clear();
@@ -689,6 +773,7 @@ namespace HandBrakeWPF.ViewModels
             if (preset != null && preset.SubtitleTrackBehaviours != null)
             {
                 this.SubtitleBehaviours.SelectedBehaviour = preset.SubtitleTrackBehaviours.SelectedBehaviour;
+                this.SubtitleBehaviours.SelectedBurnInBehaviour = preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour;
                 this.SubtitleBehaviours.AddClosedCaptions = preset.SubtitleTrackBehaviours.AddClosedCaptions;
                 this.SubtitleBehaviours.AddForeignAudioScanTrack = preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
 
