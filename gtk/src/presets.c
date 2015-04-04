@@ -3721,6 +3721,7 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_get_selected(selection, &store, &iter))
     {
+        GtkWindow *hb_window;
         GtkWidget *dialog;
         GtkTreePath *path;
         gint *indices, len;
@@ -3732,7 +3733,8 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         len = gtk_tree_path_get_depth(path);
 
         folder = ghb_presets_get_folder(presetsPlist, indices, len);
-        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+        hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+        dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
                             GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
                             _("Confirm deletion of %s:\n\n%s"),
                             folder ? _("folder") : _("preset"),
