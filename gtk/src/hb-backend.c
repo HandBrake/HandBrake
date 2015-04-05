@@ -4187,8 +4187,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     "s:{s:o},"
     // Audio {CopyMask, FallbackEncoder, AudioList []}
     "s:{s:o, s:o, s:[]},"
-    // Subtitles {Search {}, SubtitleList []}
-    "s:{s:{}, s:[]},"
+    // Subtitles {Search {Enable}, SubtitleList []}
+    "s:{s:{s:o}, s:[]},"
     // Metadata
     "s:{},"
     // Filters {Grayscale, FilterList []}
@@ -4214,6 +4214,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "AudioList",
         "Subtitle",
             "Search",
+                "Enable",       hb_value_bool(FALSE),
             "SubtitleList",
         "Metadata",
         "Filters",
