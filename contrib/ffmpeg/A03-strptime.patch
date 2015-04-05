@@ -1,0 +1,134 @@
+diff --git a/configure b/configure
+index 33a7a85..0a93664 100755
+--- a/configure
++++ b/configure
+@@ -1467,7 +1467,6 @@ SYSTEM_FUNCS="
+     setrlimit
+     Sleep
+     strerror_r
+-    strptime
+     sysconf
+     sysctl
+     usleep
+@@ -4056,7 +4055,6 @@ check_func_headers time.h nanosleep || { check_func_headers time.h nanosleep -lr
+ check_func  sched_getaffinity
+ check_func  setrlimit
+ check_func  strerror_r
+-check_func  strptime
+ check_func  sysconf
+ check_func  sysctl
+ check_func  usleep
+diff --git a/libavformat/utils.c b/libavformat/utils.c
+index 94431e1..9626260 100644
+--- a/libavformat/utils.c
++++ b/libavformat/utils.c
+@@ -2914,21 +2914,14 @@ int ff_find_stream_index(AVFormatContext *s, int id)
+ 
+ int64_t ff_iso8601_to_unix_time(const char *datestr)
+ {
+-#if HAVE_STRPTIME
+     struct tm time1 = { 0 }, time2 = { 0 };
+     char *ret1, *ret2;
+-    ret1 = strptime(datestr, "%Y - %m - %d %T", &time1);
+-    ret2 = strptime(datestr, "%Y - %m - %dT%T", &time2);
++    ret1 = av_small_strptime(datestr, "%Y - %m - %d %H:%M:%S", &time1);
++    ret2 = av_small_strptime(datestr, "%Y - %m - %dT%H:%M:%S", &time2);
+     if (ret2 && !ret1)
+         return av_timegm(&time2);
+     else
+         return av_timegm(&time1);
+-#else
+-    av_log(NULL, AV_LOG_WARNING,
+-           "strptime() unavailable on this system, cannot convert "
+-           "the date string.\n");
+-    return 0;
+-#endif
+ }
+ 
+ int avformat_query_codec(const AVOutputFormat *ofmt, enum AVCodecID codec_id,
+diff --git a/libavutil/parseutils.c b/libavutil/parseutils.c
+index 414cd47..89d0ff9 100644
+--- a/libavutil/parseutils.c
++++ b/libavutil/parseutils.c
+@@ -399,11 +399,17 @@ static int date_get_num(const char **pp,
+     return val;
+ }
+ 
+-static const char *small_strptime(const char *p, const char *fmt, struct tm *dt)
++const char *av_small_strptime(const char *p, const char *fmt, struct tm *dt)
+ {
+     int c, val;
+ 
+     for(;;) {
++        /* consume time string until a non whitespace char is found */
++        while (av_isspace(*fmt)) {
++            while (av_isspace(*p))
++                p++;
++            fmt++;
++        }
+         c = *fmt++;
+         if (c == '\0') {
+             return p;
+@@ -517,7 +523,7 @@ int av_parse_time(int64_t *timeval, const char *timestr, int duration)
+ 
+         /* parse the year-month-day part */
+         for (i = 0; i < FF_ARRAY_ELEMS(date_fmt); i++) {
+-            q = small_strptime(p, date_fmt[i], &dt);
++            q = av_small_strptime(p, date_fmt[i], &dt);
+             if (q) {
+                 break;
+             }
+@@ -541,7 +547,7 @@ int av_parse_time(int64_t *timeval, const char *timestr, int duration)
+ 
+         /* parse the hour-minute-second part */
+         for (i = 0; i < FF_ARRAY_ELEMS(time_fmt); i++) {
+-            q = small_strptime(p, time_fmt[i], &dt);
++            q = av_small_strptime(p, time_fmt[i], &dt);
+             if (q) {
+                 break;
+             }
+@@ -553,7 +559,7 @@ int av_parse_time(int64_t *timeval, const char *timestr, int duration)
+             ++p;
+         }
+         /* parse timestr as HH:MM:SS */
+-        q = small_strptime(p, time_fmt[0], &dt);
++        q = av_small_strptime(p, time_fmt[0], &dt);
+         if (!q) {
+             char *o;
+             /* parse timestr as S+ */
+diff --git a/libavutil/parseutils.h b/libavutil/parseutils.h
+index 0844abb..94751d1 100644
+--- a/libavutil/parseutils.h
++++ b/libavutil/parseutils.h
+@@ -109,6 +109,31 @@ int av_parse_color(uint8_t *rgba_color, const char *color_string, int slen,
+ int av_parse_time(int64_t *timeval, const char *timestr, int duration);
+ 
+ /**
++ * Parse the input string p according to the format string fmt and
++ * store its results in the structure dt.
++ * This implementation supports only a subset of the formats supported
++ * by the standard strptime().
++ *
++ * In particular it actually supports the parameters:
++ * - %H: the hour as a decimal number, using a 24-hour clock, in the
++ * range '00' through '23'
++ * - %M: the minute as a decimal number, using a 24-hour clock, in the
++ * range '00' through '59'
++ * - %S: the second as a decimal number, using a 24-hour clock, in the
++ * range '00' through '59'
++ * - %Y: the year as a decimal number, using the Gregorian calendar
++ * - %m: the month as a decimal number, in the range '1' through '12'
++ * - %d: the day of the month as a decimal number, in the range '1'
++ * through '31'
++ * - %%: a literal '%'
++ *
++ * @return a pointer to the first character not processed in this
++ * function call, or NULL in case the function fails to match all of
++ * the fmt string and therefore an error occurred
++ */
++const char *av_small_strptime(const char *p, const char *fmt, struct tm *dt);
++
++/**
+  * Attempt to find a specific tag in a URL.
+  *
+  * syntax: '?tag1=val1&tag2=val2...'. Little URL decoding is done.
