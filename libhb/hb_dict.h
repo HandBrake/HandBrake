@@ -34,7 +34,7 @@ typedef void*      hb_dict_iter_t;
  * "key" must be a string with non-zero length (NULL and "" are invalid keys).
  * "value" must be an hb_value_t*
  */
-hb_dict_t *       hb_dict_init();
+hb_dict_t *       hb_dict_init(void);
 /* free dictionary and release references to all values it contains */
 void              hb_dict_free(hb_dict_t ** dict_ptr);
 /* add value to dictionary.  dictionary takes ownership of value */
@@ -60,7 +60,7 @@ const char *      hb_dict_iter_key(const hb_dict_iter_t iter);
 hb_value_t *      hb_dict_iter_value(const hb_dict_iter_t iter);
 
 /* hb_value_array_t */
-hb_value_array_t * hb_value_array_init();
+hb_value_array_t * hb_value_array_init(void);
 /* remove all elements of array */
 void               hb_value_array_clear(hb_value_array_t *array);
 /* get value from array.  value has borrowed reference */
