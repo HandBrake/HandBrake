@@ -110,6 +110,7 @@ static void work_func( void * _work )
             {
                 hb_job_close(&job);
                 hb_list_close(&passes);
+                *work->error = HB_ERROR_INIT;
                 *work->die = 1;
                 break;
             }
