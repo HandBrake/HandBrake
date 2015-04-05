@@ -109,6 +109,7 @@
     <Compile Include="Interop\Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
+    <Compile Include="Interop\Json\Encode\QSV.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioList.cs" />

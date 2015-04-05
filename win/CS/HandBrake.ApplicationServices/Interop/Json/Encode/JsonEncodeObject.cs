@@ -29,7 +29,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the filter.
         /// </summary>
-        public Filters Filter { get; set; }
+        public Filters Filters { get; set; }
 
         /// <summary>
         /// Gets or sets the PAR
@@ -39,7 +39,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the meta data.
         /// </summary>
-        public MetaData MetaData { get; set; }
+        public MetaData Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence id.

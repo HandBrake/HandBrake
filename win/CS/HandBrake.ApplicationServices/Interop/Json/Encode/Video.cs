@@ -9,17 +9,23 @@
 
 namespace HandBrake.ApplicationServices.Interop.Json.Encode
 {
-    using System;
-
     /// <summary>
     /// The video.
     /// </summary>
     public class Video
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Video"/> class.
+        /// </summary>
+        public Video()
+        {
+            this.QSV = new QSV();
+        }
+
+        /// <summary>
         /// Gets or sets the codec.
         /// </summary>
-        public int Codec { get; set; }
+        public int Encoder { get; set; }
 
         /// <summary>
         /// Gets or sets the level.
@@ -70,5 +76,20 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// Gets or sets the tune.
         /// </summary>
         public string Tune { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether open cl.
+        /// </summary>
+        public bool OpenCL { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether hw decode.
+        /// </summary>
+        public bool HWDecode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the qsv.
+        /// </summary>
+        public QSV QSV { get; set; }
     }
 }

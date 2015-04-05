@@ -1033,11 +1033,6 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetActualx264Query()
         {
-            if (!GeneralUtilities.IsLibHbPresent)
-            {
-                return string.Empty; // Feature is disabled.
-            }
-
             string preset = this.VideoPreset != null ? this.VideoPreset.ShortName : string.Empty;
             string profile = this.VideoProfile != null ? this.VideoProfile.ShortName : string.Empty; 
 

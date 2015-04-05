@@ -71,11 +71,6 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 try
                 {
-                    if (!GeneralUtilities.IsLibHbPresent)
-                    {
-                        return false; // Feature is disabled.
-                    }
-
                     return HBFunctions.hb_qsv_available() == 1;
                 }
                 catch (Exception)

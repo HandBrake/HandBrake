@@ -16,38 +16,19 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
     {
         /// <summary>
         /// Gets or sets the chapter end.
+        /// Type is "chapter", "time", "frame", or "preview".
         /// </summary>
-        public int? ChapterEnd { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets the chapter start.
         /// </summary>
-        public int? ChapterStart { get; set; }
+        public int? Start { get; set; }
 
         /// <summary>
         /// Gets or sets the frame to start.
         /// </summary>
-        public int? FrameToStart { get; set; }
-
-        /// <summary>
-        /// Gets or sets the frame to stop.
-        /// </summary>
-        public int? FrameToStop { get; set; }
-
-        /// <summary>
-        /// Gets or sets the pts to start.
-        /// </summary>
-        public int? PtsToStart { get; set; }
-
-        /// <summary>
-        /// Gets or sets the pts to stop.
-        /// </summary>
-        public int? PtsToStop { get; set; }
-
-        /// <summary>
-        /// Gets or sets the start at preview.
-        /// </summary>
-        public int? StartAtPreview { get; set; }
+        public int? End { get; set; }
 
         /// <summary>
         /// Gets or sets the seek points.

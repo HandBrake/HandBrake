@@ -49,22 +49,6 @@ namespace HandBrake.ApplicationServices.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether is lib hb present.
-        /// </summary>
-        public static bool IsLibHbPresent
-        {
-            get
-            {
-                if (isLibHbPresent == null)
-                {
-                    isLibHbPresent = File.Exists(Path.Combine(Application.StartupPath, "hb.dll"));
-                }
-
-                return isLibHbPresent.Value;
-            }
-        }
-
         #endregion
 
         #region Public Methods

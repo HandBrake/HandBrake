@@ -68,5 +68,10 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// Gets or sets the track.
         /// </summary>
         public int Track { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dither method.
+        /// </summary>
+        public int DitherMethod { get; set; }
     }
 }

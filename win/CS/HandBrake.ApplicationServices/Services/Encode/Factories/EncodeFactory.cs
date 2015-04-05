@@ -57,12 +57,12 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     SequenceID = 0, 
                     Audio = CreateAudio(job), 
                     Destination = CreateDestination(job), 
-                    Filter = CreateFilter(job), 
+                    Filters = CreateFilter(job), 
                     PAR = CreatePAR(job), 
-                    MetaData = CreateMetaData(job),
+                    Metadata = CreateMetaData(job),
                     Source = CreateSource(job, configuration), 
-                    Subtitle = CreateSubtitle(job), 
-                    Video = CreateVideo(job)
+                    Subtitle = CreateSubtitle(job),
+                    Video = CreateVideo(job, configuration)
                 };
 
             return encode;
@@ -86,21 +86,25 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             switch (job.PointToPointMode)
             {
                 case PointToPointMode.Chapters:
-                    range.ChapterEnd = job.EndPoint;
-                    range.ChapterStart = job.StartPoint;
+                    range.Type = "chapter";
+                    range.End = job.EndPoint;
+                    range.Start = job.StartPoint;
                     break;
                 case PointToPointMode.Seconds:
-                    range.PtsToStart = job.StartPoint * 90000;
-                    range.PtsToStop = (job.EndPoint - job.StartPoint) * 90000; 
+                    range.Type = "time";
+                    range.Start = job.StartPoint * 90000;
+                    range.End = (job.EndPoint - job.StartPoint) * 90000; 
                     break;
                 case PointToPointMode.Frames:
-                    range.FrameToStart = job.StartPoint;
-                    range.FrameToStop = job.EndPoint; 
+                    range.Type = "frame";
+                    range.Start = job.StartPoint;
+                    range.End = job.EndPoint; 
                     break;
                 case PointToPointMode.Preview:
-                    range.StartAtPreview = job.PreviewEncodeStartAt;
+                    range.Type = "preview";
+                    range.Start = job.PreviewEncodeStartAt;
                     range.SeekPoints = configuration.PreviewScanCount;
-                    range.PtsToStop = job.PreviewEncodeDuration * 90000; 
+                    range.End = job.PreviewEncodeDuration * 90000; 
                     break;
             }
 
@@ -202,7 +206,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     }
                     else
                     {
-                        SubtitleList track = new SubtitleList { Burn = item.Burned, Default = item.Default, Force = item.Forced, ID = item.SourceTrack.TrackNumber, Track = (item.SourceTrack.TrackNumber - 1) };
+                        SubtitleList track = new SubtitleList { Burn = item.Burned, Default = item.Default, Forced = item.Forced, ID = item.SourceTrack.TrackNumber, Track = (item.SourceTrack.TrackNumber - 1) };
                         subtitle.SubtitleList.Add(track);
                     }
                 }
@@ -236,10 +240,13 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <param name="job">
         /// The job.
         /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         /// <returns>
         /// The <see cref="Video"/>.
         /// </returns>
-        private static Video CreateVideo(EncodeTask job)
+        private static Video CreateVideo(EncodeTask job, HBConfiguration configuration)
         {
             Video video = new Video();
 
@@ -247,7 +254,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             Validate.NotNull(videoEncoder, "Video encoder " + job.VideoEncoder + " not recognized.");
             if (videoEncoder != null)
             {
-                video.Codec = videoEncoder.Id;
+                video.Encoder = videoEncoder.Id;
             }
 
             string advancedOptions = job.ShowAdvancedTab ? job.AdvancedEncoderOptions : string.Empty;
@@ -279,6 +286,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                 }
             }
 
+            video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;
+            video.HWDecode = configuration.EnableDxva;
+            video.QSV.Decode = !configuration.DisableQuickSyncDecoding;
+
             return video;
         }
 
@@ -295,17 +306,17 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Audio audio = new Audio();
 
-            int copyMask = 0;
-            if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMask = (int)NativeConstants.HB_ACODEC_AAC_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_AC3_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMask |= (int)NativeConstants.HB_ACODEC_DCA_HD_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMask |= (int)NativeConstants.HB_ACODEC_DCA_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_EAC3_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMask |= (int)NativeConstants.HB_ACODEC_FLAC_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMask |= (int)NativeConstants.HB_ACODEC_MP3_PASS;
-            if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMask |= (int)NativeConstants.HB_ACODEC_TRUEHD_PASS;
+            List<string> copyMaskList = new List<string>();
+            if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMaskList.Add("copy:aac");
+            if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add("copy:ac3");
+            if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add("copy:dtshd");
+            if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMaskList.Add("copy:dts");
+            if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add("copy:eac3");
+            if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMaskList.Add("copy:flac");
+            if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add("copy:mp3");
+            if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add("copy:truehd");
+            audio.CopyMask = copyMaskList.ToArray(); 
 
-            audio.CopyMask = copyMask; 
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
             audio.FallbackEncoder = audioEncoder.Id;
 

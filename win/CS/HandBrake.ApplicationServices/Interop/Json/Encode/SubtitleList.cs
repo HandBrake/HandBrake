@@ -27,7 +27,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets a value indicating whether force.
         /// </summary>
-        public bool Force { get; set; }
+        public bool Forced { get; set; }
 
         /// <summary>
         /// Gets or sets the id.
