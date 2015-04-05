@@ -101,6 +101,7 @@ struct s_write {
     int width;
     int height;
     int crop[4];
+    hb_rational_t par;
     uint8_t prev_font_style;
     uint8_t prev_font_color;
 };

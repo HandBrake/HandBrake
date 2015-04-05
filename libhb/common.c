@@ -3765,12 +3765,10 @@ void hb_subtitle_close( hb_subtitle_t **sub )
  *
  *********************************************************************/
 int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
-                               int w, int h)
+                               int fs, int w, int h)
 {
     // Free any pre-existing extradata
     free(subtitle->extradata);
-
-    int fs = h * .066;
 
     // SRT subtitles are represented internally as SSA
     // Create an SSA header

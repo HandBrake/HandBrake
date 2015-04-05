@@ -831,7 +831,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
      */
     int rows = 0, columns = 0;
     int min_row = 15, max_row = 0;
-    int min_col = 31, max_col = 0;
+    int min_col = 41, max_col = 0;
     for (i = 0; i < 15; i++)
     {
         if (data->row_used[i])
@@ -857,36 +857,59 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
     wb->prev_font_color = COL_WHITE;
     wb->enc_buffer_used = 0;
 
-    int cropped_width, cropped_height, font_size, safe_zone;
+    int cropped_width, cropped_height, font_size;
     int cell_width, cell_height;
+    int safe_x, safe_y;
+    int min_safe_x, min_safe_y;
+    double aspect;
 
-    // CC grid is 16 rows by 32 colums
+    cropped_height = wb->height - wb->crop[0] - wb->crop[1];
+    cropped_width = wb->width - wb->crop[2] - wb->crop[3];
+    aspect = (double)wb->width * wb->par.num /
+                    (wb->height * wb->par.den);
+
+    // CC grid is 16 rows by 32 colums (for 4:3 video)
     // Our SSA resolution is the title resolution
     // Tranlate CC grid to SSA coordinates
     // The numbers are tweaked to keep things off the very
     // edges of the screen and in the "safe" zone
-    cropped_height = wb->height - wb->crop[0] - wb->crop[1];
-    cropped_width = wb->width - wb->crop[2] - wb->crop[3];
+    int screen_columns = 32;
+    if (aspect >= 1.6)
+    {
+        // If the display aspect is close to or greater than 16:9
+        // then width of screen is 42 columns (see CEA-708)
+        screen_columns = 42;
+    }
     font_size = cropped_height * .066;
 
-    safe_zone = cropped_height * 0.025; 
-    cell_height = (wb->height - 2 * safe_zone) / 16; 
-    cell_width = (wb->width - 2 * safe_zone) / 32; 
+    safe_x = 0.1 * wb->width;
+    safe_y = 0.1 * wb->height;
+    min_safe_x = 0.025 * cropped_width;
+    min_safe_y = 0.025 * cropped_height;
+    cell_height = (wb->height - 2 * safe_y) / 16; 
+    cell_width  = (wb->width  - 2 * safe_x) / screen_columns; 
 
     char *pos;
     int y, x, top;
-    y = cell_height * (min_row + 1 + rows) + safe_zone - wb->crop[0];
-    x = cell_width * min_col + safe_zone - wb->crop[2];
+    int col = min_col;
+    if (aspect >= 1.6)
+    {
+        // If the display aspect is close to or greater than 16:9
+        // center the CC in about a 4:3 region
+        col += 5;
+    }
+    y = cell_height * (min_row + 1 + rows) + safe_y - wb->crop[0];
+    x = cell_width * col + safe_x - wb->crop[2];
     top = y - rows * font_size;
 
-    if (top < safe_zone)
-        y = (rows * font_size) + safe_zone;
-    if (y > cropped_height - safe_zone)
-        y = cropped_height - safe_zone;
-    if (x + columns * cell_width > cropped_width - safe_zone)
-        x = cropped_width - columns * cell_width - safe_zone;
-    if (x < safe_zone)
-        x = safe_zone;
+    if (top < min_safe_y)
+        y = (rows * font_size) + min_safe_y;
+    if (y > cropped_height - min_safe_y)
+        y = cropped_height - min_safe_y;
+    if (x + columns * cell_width > cropped_width - min_safe_x)
+        x = cropped_width - columns * cell_width - min_safe_x;
+    if (x < min_safe_x)
+        x = min_safe_x;
     pos = hb_strdup_printf("{\\a1\\pos(%d,%d)}", x, y);
 
     int line = 1;
@@ -1766,6 +1789,7 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
             pv->cc608->width = job->title->geometry.width;
             pv->cc608->height = job->title->geometry.height;
             memcpy(pv->cc608->crop, job->crop, sizeof(int[4]));
+            pv->cc608->par = job->title->geometry.par;
             retval = general_608_init(pv->cc608);
             if( !retval )
             {
@@ -1783,7 +1807,9 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
         // Generate generic SSA Script Info.
         int height = job->title->geometry.height - job->crop[0] - job->crop[1];
         int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-        hb_subtitle_add_ssa_header(w->subtitle, "Courier New", width, height);
+        int safe_height = 0.8 * height;
+        hb_subtitle_add_ssa_header(w->subtitle, "Courier New",
+                                   .08 * safe_height, width, height);
     }
     // When rendering subs, we need to push rollup subtitles out
     // asap (instead of waiting for a completed line) so that we
