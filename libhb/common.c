@@ -3764,7 +3764,8 @@ void hb_subtitle_close( hb_subtitle_t **sub )
  **********************************************************************
  *
  *********************************************************************/
-int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, int w, int h)
+int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
+                               int w, int h)
 {
     // Free any pre-existing extradata
     free(subtitle->extradata);
@@ -3784,9 +3785,9 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, int w, int h)
         "\r\n"
         "[V4+ Styles]\r\n"
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\r\n"
-        "Style: Default,Arial,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,2,3,2,20,20,20,0\r\n";
+        "Style: Default,%s,%d,&H00FFFFFF,&H00FFFFFF,&H000F0F0F,&H000F0F0F,0,0,0,0,100,100,0,0.00,1,2,3,2,20,20,20,0\r\n";
 
-    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, fs);
+    subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs);
     if (subtitle->extradata == NULL)
     {
         hb_error("hb_subtitle_add_ssa_header: malloc failed");

@@ -158,7 +158,8 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
-int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, int width, int height);
+int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
+                               int width, int height);
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );

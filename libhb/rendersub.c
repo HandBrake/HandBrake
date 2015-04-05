@@ -53,6 +53,7 @@ static void ssa_close( hb_filter_object_t * filter );
 
 // SRT
 static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job );
+static int cc608sub_post_init( hb_filter_object_t * filter, hb_job_t * job );
 
 static int textsub_work( hb_filter_object_t * filter,
                      hb_buffer_t ** buf_in,
@@ -589,13 +590,24 @@ static int ssa_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
+static int cc608sub_post_init( hb_filter_object_t * filter, hb_job_t * job )
+{
+    // Text subtitles for which we create a dummy ASS header need
+    // to have the header rewritten with the correct dimensions.
+    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+    // Use fixed widht font for CC
+    hb_subtitle_add_ssa_header(filter->subtitle, "Courier New", width, height);
+    return ssa_post_init(filter, job);
+}
+
 static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
 {
     // Text subtitles for which we create a dummy ASS header need
     // to have the header rewritten with the correct dimensions.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_subtitle_add_ssa_header(filter->subtitle, width, height);
+    hb_subtitle_add_ssa_header(filter->subtitle, "Arial", width, height);
     return ssa_post_init(filter, job);
 }
 
@@ -872,11 +884,15 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
         } break;
 
         case SRTSUB:
-        case CC608SUB:
         case UTF8SUB:
         case TX3GSUB:
         {
             return textsub_post_init( filter, job );
+        } break;
+
+        case CC608SUB:
+        {
+            return cc608sub_post_init( filter, job );
         } break;
 
         case PGSSUB:
