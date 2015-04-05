@@ -292,7 +292,7 @@ int main( int argc, char ** argv )
 
     /* Geeky */
     fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
-             hb_get_cpu_count( h ) > 1 ? "s" : "" );
+             hb_get_cpu_count() > 1 ? "s" : "" );
 
     /* Exit ASAP on Ctrl-C */
     signal( SIGINT, SigHandler );
