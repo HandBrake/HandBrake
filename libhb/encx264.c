@@ -1151,7 +1151,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     /*
      * if x264_encopts is NULL, x264_opts wasn't initialized
      */
-    if (x264_opts == NULL && (x264_opts = hb_dict_init(20)) == NULL)
+    if (x264_opts == NULL && (x264_opts = hb_dict_init()) == NULL)
     {
         return strdup("hb_x264_param_unparse: could not initialize hb_dict_t");
     }
