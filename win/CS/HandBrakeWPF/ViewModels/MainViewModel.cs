@@ -1520,9 +1520,10 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                saveFileDialog.InitialDirectory = Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination))
-                                                      ? Path.GetDirectoryName(this.CurrentTask.Destination) + "\\"
-                                                      : null;
+                if (Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination)))
+                {
+                    saveFileDialog.InitialDirectory = Path.GetDirectoryName(this.CurrentTask.Destination);
+                }
 
                 saveFileDialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
             }

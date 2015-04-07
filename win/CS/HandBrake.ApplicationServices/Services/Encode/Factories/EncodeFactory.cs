@@ -306,15 +306,15 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Audio audio = new Audio();
 
-            List<string> copyMaskList = new List<string>();
-            if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMaskList.Add("copy:aac");
-            if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add("copy:ac3");
-            if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add("copy:dtshd");
-            if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMaskList.Add("copy:dts");
-            if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add("copy:eac3");
-            if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMaskList.Add("copy:flac");
-            if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add("copy:mp3");
-            if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add("copy:truehd");
+            List<uint> copyMaskList = new List<uint>(); 
+            if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMaskList.Add(NativeConstants.HB_ACODEC_AAC_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_AC3_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add(NativeConstants.HB_ACODEC_DCA_HD_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMaskList.Add(NativeConstants.HB_ACODEC_DCA_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_EAC3_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMaskList.Add(NativeConstants.HB_ACODEC_FLAC_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_MP3_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(NativeConstants.HB_ACODEC_TRUEHD_PASS);
             audio.CopyMask = copyMaskList.ToArray(); 
 
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));

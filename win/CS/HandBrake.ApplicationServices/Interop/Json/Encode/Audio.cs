@@ -24,7 +24,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the copy mask.
         /// </summary>
-        public string[] CopyMask { get; set; }
+        public uint[] CopyMask { get; set; }
 
         /// <summary>
         /// Gets or sets the fallback encoder.
