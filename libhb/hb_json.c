@@ -1111,18 +1111,18 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 if (hb_value_type(acodec_copy_mask) == HB_VALUE_TYPE_STRING)
                 {
                     const char *s = hb_value_get_string(value);
-                    job->acodec_fallback |= hb_audio_encoder_get_from_name(s);
+                    job->acodec_copy_mask |= hb_audio_encoder_get_from_name(s);
                 }
                 else
                 {
-                    job->acodec_fallback |= hb_value_get_int(value);
+                    job->acodec_copy_mask |= hb_value_get_int(value);
                 }
             }
         }
         if (hb_value_type(acodec_copy_mask) == HB_VALUE_TYPE_STRING)
         {
             // Split the string at ','
-            char *s = strdup(hb_value_get_string(acodec_fallback));
+            char *s = strdup(hb_value_get_string(acodec_copy_mask));
             char *cur = s;
             while (cur != NULL && cur[0] != 0)
             {
@@ -1132,7 +1132,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     *next = 0;
                     next++;
                 }
-                job->acodec_fallback |= hb_audio_encoder_get_from_name(cur);
+                job->acodec_copy_mask |= hb_audio_encoder_get_from_name(cur);
                 cur = next;
             }
             free(s);
