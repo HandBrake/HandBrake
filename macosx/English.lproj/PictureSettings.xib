@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7528.3" systemVersion="14D113c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7528.3"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureController">
@@ -995,6 +995,11 @@
                             </tabViewItem>
                         </tabViewItems>
                         <connections>
+                            <binding destination="-2" name="hidden" keyPath="self.picture" id="W8S-DU-3XL">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNil</string>
+                                </dictionary>
+                            </binding>
                             <outlet property="delegate" destination="-2" id="420"/>
                         </connections>
                     </tabView>
@@ -1007,14 +1012,35 @@
                         </buttonCell>
                         <connections>
                             <action selector="showPreviewWindow:" target="-2" id="273"/>
+                            <binding destination="-2" name="hidden" keyPath="self.picture" id="zTd-kj-P5U">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNil</string>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="XmO-LR-1DQ">
+                        <rect key="frame" x="258" y="122" width="118" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Nothing to inspect" id="buq-K6-Wvy">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="hidden" keyPath="self.picture" id="00s-D3-JmF">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="hby-dR-NFK"/>
             </connections>
-            <point key="canvasLocation" x="-1.5" y="238"/>
+            <point key="canvasLocation" x="-807.5" y="98"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="vUw-ux-GVV"/>
     </objects>

@@ -315,30 +315,24 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 /**
  * Displays and brings the picture window to the front
  */
-- (void)showPictureWindow
+- (void)showWindow:(id)sender
 {
-    if ([[self window] isVisible])
+    if (self.window.isVisible)
     {
-        [[self window] close];
+        [self.window close];
     }
     else
     {
-        [self showWindow:self];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
+        [super showWindow:self];
     }
 
     [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
 }
 
-- (IBAction) showPreviewWindow: (id) sender
+- (IBAction)showPreviewWindow:(id)sender
 {
-    [self.delegate showPreviewWindow:sender];
-}
-
-- (void) windowWillClose: (NSNotification *)aNotification
-{
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PictureSizeWindowIsOpen"];
+    [self.previewWindow showWindow:sender];
 }
 
 @end

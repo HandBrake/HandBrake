@@ -9,19 +9,11 @@
 @class HBFilters;
 @class HBPicture;
 
-@protocol HBPictureControllerDelegate <NSObject>
-
-- (IBAction)showPreviewWindow:(id)sender;
-
-@end
-
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, readwrite, strong) HBFilters *filters;
 @property (nonatomic, readwrite, strong) HBPicture *picture;
 
-@property (nonatomic, readwrite, unsafe_unretained) id <HBPictureControllerDelegate> delegate;
-
-- (void)showPictureWindow;
+@property (nonatomic, readwrite, unsafe_unretained) NSWindowController *previewWindow;
 
 @end

@@ -84,6 +84,14 @@
     // Get the number of HandBrake instances currently running
     NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]].count;
 
+    // Open debug output window now if it was visible when HB was closed
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
+        [self showOutputPanel:nil];
+
+    // Open queue window now if it was visible when HB was closed
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
+        [self showQueueWindow:nil];
+
     [self showMainWindow:self];
 
     // Now we re-check the queue array to see if there are
@@ -165,14 +173,6 @@
         [self.mainController launchAction];
     }
 
-    // Open debug output window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
-        [self showOutputPanel:nil];
-
-    // Open queue window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
-        [self showQueueWindow:nil];
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Remove encodes logs older than a month
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBClearOldLogs"])
@@ -241,6 +241,9 @@
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
     [self.presetsManager savePresets];
+
+    [[NSUserDefaults standardUserDefaults] setBool:_queueController.window.isVisible forKey:@"QueueWindowIsOpen"];
+    [[NSUserDefaults standardUserDefaults] setBool:_outputPanel.window.isVisible forKey:@"OutputPanelIsOpen"];
 
     _mainController = nil;
     _queueController = nil;

@@ -29,7 +29,7 @@
 #import "HBCore.h"
 #import "HBJob.h"
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBPreviewControllerDelegate, HBPictureControllerDelegate, HBTitleSelectionDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate>
 
 @property (unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
@@ -73,10 +73,10 @@
         _core.name = @"ScanCore";
 
         // Inits the controllers
+        fPreviewController = [[HBPreviewController alloc] init];
         fPictureController = [[HBPictureController alloc] init];
-        [fPictureController setDelegate:self];
-
-        fPreviewController = [[HBPreviewController alloc] initWithDelegate:self];
+        fPictureController.previewWindow = fPreviewController;
+        fPreviewController.pictureSettingsWindow = fPictureController;
 
         fQueueController = queueController;
         fQueueController.controller = self;
@@ -346,9 +346,7 @@
         }
     }
 
-    if (action == @selector(showPicturePanel:) ||
-        action == @selector(showPreviewWindow:) ||
-        action == @selector(addToQueue:))
+    if (action == @selector(addToQueue:))
     {
         return (self.job != nil);
     }
@@ -360,9 +358,8 @@
 {
     SEL action = [menuItem action];
 
-    if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(addTitlesToQueue:) ||
-        action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:) ||
-        action == @selector(showPreviewWindow:))
+    if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) ||
+        action == @selector(addTitlesToQueue:) || action == @selector(showAddPresetPanel:))
     {
         return self.job && self.window.attachedSheet == nil;
     }
@@ -750,14 +747,6 @@
     }
 
     [self titlePopUpChanged:nil];
-
-    // Open preview window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
-        [self showPreviewWindow:nil];
-
-    // Open picture sizing window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
-        [self showPicturePanel:nil];
 
     if (self.jobFromQueue)
     {
@@ -1273,7 +1262,7 @@
  */
 - (IBAction)showPicturePanel:(id)sender
 {
-	[fPictureController showPictureWindow];
+	[fPictureController showWindow:sender];
 }
 
 - (IBAction)showPreviewWindow:(id)sender

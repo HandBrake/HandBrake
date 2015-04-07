@@ -93,8 +93,6 @@ typedef enum ViewMode : NSUInteger {
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp;
 }
 
-@property (nonatomic, unsafe_unretained) id <HBPreviewControllerDelegate> delegate;
-
 @property (nonatomic, strong) CALayer *backLayer;
 @property (nonatomic, strong) CALayer *pictureLayer;
 
@@ -130,12 +128,9 @@ typedef enum ViewMode : NSUInteger {
 
 @implementation HBPreviewController
 
-- (id)initWithDelegate:(id <HBPreviewControllerDelegate>)delegate
+- (instancetype)init
 {
-	if (self = [super initWithWindowNibName:@"PicturePreview"])
-	{
-        _delegate = delegate;
-    }
+    self = [super initWithWindowNibName:@"PicturePreview"];
 	return self;
 }
 
@@ -211,6 +206,8 @@ typedef enum ViewMode : NSUInteger {
     [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
     [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
 
+    [self hideHud];
+
     /* set the current scale factor */
     if( [[self window] respondsToSelector:@selector( backingScaleFactor )] )
         self.backingScaleFactor = [[self window] backingScaleFactor];
@@ -238,6 +235,11 @@ typedef enum ViewMode : NSUInteger {
 
         [self switchViewToMode:ViewModePicturePreview];
         [self displayPreview];
+    }
+    else
+    {
+        [self.pictureLayer setContents:nil];
+        self.window.title = NSLocalizedString(@"Preview", nil);
     }
 }
 
@@ -280,7 +282,6 @@ typedef enum ViewMode : NSUInteger {
     }
 
     [self.generator purgeImageCache];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
 }
 
 - (void) windowDidChangeBackingProperties: (NSNotification *) notification
@@ -613,6 +614,13 @@ typedef enum ViewMode : NSUInteger {
     }
 }
 
+- (void)hideHud
+{
+    [fPictureControlBox setHidden:YES];
+    [fMoviePlaybackControlBox setHidden:YES];
+    [fEncodingControlBox setHidden:YES];
+}
+
 - (void) startHudTimer
 {
 	if (self.hudTimer)
@@ -795,7 +803,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (IBAction) showPictureSettings: (id) sender
 {
-    [self.delegate showPicturePanel:self];
+    [self.pictureSettingsWindow showWindow:self];
 }
 
 #pragma mark -

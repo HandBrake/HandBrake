@@ -94,17 +94,8 @@
  */
 - (IBAction)showWindow:(id)sender
 {
-    if ([[self window] isVisible])
-    {
-        [[self window] close];
-    }
-    else
-    {
-        [textView scrollToEndOfDocument:self];
-        [super showWindow:sender];
-
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
-    }
+    [textView scrollToEndOfDocument:self];
+    [super showWindow:sender];
 }
 
 /**
@@ -181,11 +172,6 @@
 - (IBAction)clearActivityLogFile:(id)sender
 {
     [self.outputFile clear];
-}
-
-- (void)windowWillClose:(NSNotification *)aNotification
-{
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"OutputPanelIsOpen"];
 }
 
 @end

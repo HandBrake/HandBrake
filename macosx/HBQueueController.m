@@ -88,10 +88,6 @@
 
 - (void)dealloc
 {
-    // clear the delegate so that windowWillClose is not attempted
-    if ([[self window] delegate] == self)
-        [[self window] setDelegate:nil];
-
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -105,20 +101,6 @@
     // Don't allow autoresizing of main column, else the "delete" column will get
     // pushed out of view.
     [self.outlineView setAutoresizesOutlineColumn: NO];
-}
-
-- (void)windowWillClose:(NSNotification *)aNotification
-{
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"QueueWindowIsOpen"];
-}
-
-/**
- * Displays and brings the queue window to the front
- */
-- (IBAction)showWindow:(id)sender
-{
-    [super showWindow:sender];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QueueWindowIsOpen"];
 }
 
 #pragma mark Toolbar
