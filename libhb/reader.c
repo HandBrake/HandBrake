@@ -46,6 +46,7 @@ struct hb_work_private_s
 
     stream_timing_t *stream_timing;
     int64_t        scr_offset;
+    int            sub_scr_set;
     hb_psdemux_t   demux;
     int            scr_changes;
     uint32_t       sequence;
@@ -222,6 +223,21 @@ static int is_audio( hb_work_private_t *r, int id )
     for( i = 0; ( audio = hb_list_item( r->title->list_audio, i ) ); ++i )
     {
         if ( audio->id == id )
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static int is_subtitle( hb_work_private_t *r, int id )
+{
+    int i;
+    hb_subtitle_t *sub;
+
+    for( i = 0; ( sub = hb_list_item( r->title->list_subtitle, i ) ); ++i )
+    {
+        if ( sub->id == id )
         {
             return 1;
         }
@@ -604,6 +620,7 @@ void ReadLoop( void * _w )
                              ( st == r->stream_timing && !r->saw_audio ) )
                         {
                             new_scr_offset( r, buf );
+                            r->sub_scr_set = 0;
                         }
                         else
                         {
@@ -612,8 +629,26 @@ void ReadLoop( void * _w )
                             // frame but video & subtitles don't. Clear
                             // the timestamps so the decoder will generate
                             // them from the frame durations.
-                            buf->s.start = AV_NOPTS_VALUE;
-                            buf->s.renderOffset = AV_NOPTS_VALUE;
+                            if (is_subtitle(r, buf->s.id) &&
+                                buf->s.start != AV_NOPTS_VALUE)
+                            {
+                                if (!r->sub_scr_set)
+                                {
+                                    // We can't generate timestamps in the
+                                    // subtitle decoder as we can for
+                                    // audio & video.  So we need to make
+                                    // the closest guess that we can
+                                    // for the subtitles start time here.
+                                    int64_t last = r->stream_timing[0].last;
+                                    r->scr_offset = buf->s.start - last;
+                                    r->sub_scr_set = 1;
+                                }
+                            }
+                            else
+                            {
+                                buf->s.start = AV_NOPTS_VALUE;
+                                buf->s.renderOffset = AV_NOPTS_VALUE;
+                            }
                         }
                     }
                 }
