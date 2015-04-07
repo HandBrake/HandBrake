@@ -1119,7 +1119,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 }
             }
         }
-        if (hb_value_type(acodec_copy_mask) == HB_VALUE_TYPE_STRING)
+        else if (hb_value_type(acodec_copy_mask) == HB_VALUE_TYPE_STRING)
         {
             // Split the string at ','
             char *s = strdup(hb_value_get_string(acodec_copy_mask));
