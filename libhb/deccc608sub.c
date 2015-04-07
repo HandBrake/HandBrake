@@ -1662,7 +1662,7 @@ static int disCommand(unsigned char hi, unsigned char lo, struct s_write *wb)
                 handle_pac (hi,lo,wb);
             break;
         case 0x17:
-            if (lo>=0x21 && lo<=0x22)
+            if (lo>=0x21 && lo<=0x23)
                 handle_command (hi,lo,wb);
             if (lo>=0x2e && lo<=0x2f)
                 handle_text_attr (hi,lo,wb);
