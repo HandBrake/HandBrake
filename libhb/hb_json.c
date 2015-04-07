@@ -801,6 +801,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     }
 
     job = hb_job_init_by_index(h, titleindex);
+    if (job == NULL)
+    {
+        hb_error("hb_dict_to_job: Title %d doesn't exist", titleindex);
+        return NULL;
+    }
 
     hb_value_array_t *chapter_list = NULL;
     hb_value_array_t *audio_list = NULL;
