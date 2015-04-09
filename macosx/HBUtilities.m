@@ -122,7 +122,7 @@
             else
             {
                 // Append the right quality suffix for the selected codec (rf/qp)
-                [name appendString:[[NSString stringWithUTF8String:hb_video_quality_get_name(codec)] lowercaseString]];
+                [name appendString:[@(hb_video_quality_get_name(codec)) lowercaseString]];
                 [name appendString:[NSString stringWithFormat:@"%0.2f", quality]];
             }
         }

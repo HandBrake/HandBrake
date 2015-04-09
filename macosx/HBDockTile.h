@@ -10,7 +10,7 @@
 
 @interface HBDockTile : NSObject
 
-- (instancetype)initWithDockTile:(NSDockTile *)dockTile image:(NSImage *)image;
+- (instancetype)initWithDockTile:(NSDockTile *)dockTile image:(NSImage *)image NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Updates two DockTextFields on the dockTile,

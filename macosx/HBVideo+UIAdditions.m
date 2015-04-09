@@ -132,7 +132,7 @@
     // update the text field
     if (fX264PresetsUnparsedUTF8String != NULL)
     {
-        tmpString = [NSString stringWithUTF8String:fX264PresetsUnparsedUTF8String];
+        tmpString = @(fX264PresetsUnparsedUTF8String);
         free(fX264PresetsUnparsedUTF8String);
     }
     else

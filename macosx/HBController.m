@@ -69,8 +69,7 @@
     {
         // Init libhb
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-        _core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
-        _core.name = @"ScanCore";
+        _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"ScanCore"];
 
         // Inits the controllers
         fPreviewController = [[HBPreviewController alloc] init];
@@ -1323,7 +1322,7 @@
     NSMutableDictionary *preset = [NSMutableDictionary dictionary];
     NSDictionary *currentPreset = self.selectedPreset.content;
 
-    preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
+    preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
     preset[@"PresetName"] = self.job.presetName;
     preset[@"Folder"] = @NO;
 

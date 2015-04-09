@@ -16,6 +16,8 @@
 #import "HBCore.h"
 #import "HBController.h"
 
+#define PRESET_FILE @"UserPresets.plist"
+
 @interface HBAppDelegate ()
 
 @property (nonatomic, strong) HBPresetsManager *presetsManager;
@@ -49,7 +51,7 @@
         _outputPanel = [[HBOutputPanelController alloc] init];
 
         // we init the HBPresetsManager
-        NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"UserPresets.plist"];
+        NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:PRESET_FILE];
         _presetsManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
 
         _queueController = [[HBQueueController alloc] init];

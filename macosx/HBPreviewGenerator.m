@@ -15,7 +15,6 @@
 @interface HBPreviewGenerator ()
 
 @property (nonatomic, readonly) NSMutableDictionary *picturePreviews;
-@property (nonatomic, readonly) NSUInteger imagesCount;
 @property (unsafe_unretained, nonatomic, readonly) HBCore *scanCore;
 @property (unsafe_unretained, nonatomic, readonly) HBJob *job;
 
@@ -62,7 +61,7 @@
 
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    CGImageRef theImage = (__bridge CGImageRef)[self.picturePreviews objectForKey:@(index)];
+    CGImageRef theImage = (__bridge CGImageRef)(self.picturePreviews)[@(index)];
 
     if (!theImage)
     {
@@ -75,7 +74,7 @@
                                                         deinterlace:deinterlace];
         if (cache && theImage)
         {
-            [self.picturePreviews setObject:(__bridge id)theImage forKey:@(index)];
+            (self.picturePreviews)[@(index)] = (__bridge id)theImage;
         }
     }
     else
@@ -178,9 +177,8 @@
     job.video.twoPass = NO;
 
     // Init the libhb core
-    int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
-    self.core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
-    self.core.name = @"PreviewCore";
+    int level = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+    self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];
 
     // start the actual encode
     [self.core encodeJob:job

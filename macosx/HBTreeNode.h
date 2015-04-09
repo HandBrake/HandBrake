@@ -36,7 +36,7 @@
 - (void)enumerateObjectsUsingBlock:(void (^)(id obj, NSIndexPath *idx, BOOL *stop))block;
 
 // KVC Accessor Methods
-- (NSUInteger)countOfChildren;
+@property (nonatomic, readonly) NSUInteger countOfChildren;
 - (id)objectInChildrenAtIndex:(NSUInteger)index;
 - (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index;
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index;

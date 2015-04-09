@@ -238,7 +238,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
         if (parentNode.children.count > currIdx)
         {
-            parentNode = [parentNode.children objectAtIndex:currIdx];
+            parentNode = (parentNode.children)[currIdx];
         }
     }
 
@@ -246,7 +246,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     if (parentNode.children.count > currIdx)
     {
-        if ([[parentNode.children objectAtIndex:currIdx] isDefault])
+        if ([(parentNode.children)[currIdx] isDefault])
         {
             [parentNode removeObjectFromChildrenAtIndex:currIdx];
             // Try to select a new default preset
@@ -365,7 +365,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     // set a new Default preset
     [self selectNewDefault];
 
-    [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
+    [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
 }
 
 - (void)deleteBuiltInPresets

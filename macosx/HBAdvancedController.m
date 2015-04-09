@@ -416,7 +416,7 @@
         NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            thisOpt = currentOptsArray[loopcounter];
             
             NSRange splitOptRange = [thisOpt rangeOfString:@"="];
             if (splitOptRange.location != NSNotFound)
@@ -735,7 +735,7 @@
         NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            thisOpt = currentOptsArray[loopcounter];
             
             /* Verify the option sets a value */
             NSRange splitOptRange = [thisOpt rangeOfString:@"="];            
@@ -1332,7 +1332,7 @@
         NSUInteger currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            thisOpt = currentOptsArray[loopcounter];
             NSRange splitOptRange = [thisOpt rangeOfString:@"="];
             
             if (splitOptRange.location != NSNotFound)

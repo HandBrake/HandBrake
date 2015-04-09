@@ -20,7 +20,7 @@
  *  @param title    the libhb title to wrap.
  *  @param featured whether the title is the featured one or not.
  */
-- (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured;
+- (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly, getter=isFeatured) BOOL featured;

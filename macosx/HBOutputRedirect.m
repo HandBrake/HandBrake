@@ -35,7 +35,7 @@ static int stderrwrite(void *inFD, const char *buffer, int size);
 
 
 @interface HBOutputRedirect (Private)
-- (id)initWithStream:(FILE *)aStream selector:(SEL)aSelector;
+- (instancetype)initWithStream:(FILE *)aStream selector:(SEL)aSelector;
 - (void)startRedirect;
 - (void)stopRedirect;
 - (void)forwardOutput:(NSData *)data;
@@ -142,7 +142,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  *
  * @return New HBOutputRedirect object.
  */
-- (id)initWithStream:(FILE *)aStream selector:(SEL)aSelector
+- (instancetype)initWithStream:(FILE *)aStream selector:(SEL)aSelector
 {
 	if (self = [super init])
 	{

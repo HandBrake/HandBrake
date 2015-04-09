@@ -143,7 +143,7 @@
     encodeBool(_burnInBluraySubtitles);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

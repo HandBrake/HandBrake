@@ -41,9 +41,9 @@
 @end
 
 @interface HBPresetsTransformer : NSValueTransformer
-- (instancetype)initWithEncoder:(int)encoder;
+- (instancetype)initWithEncoder:(int)encoder NS_DESIGNATED_INITIALIZER;
 @end
 
 @interface HBQualityTransformer : NSValueTransformer
-- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max;
+- (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max NS_DESIGNATED_INITIALIZER;
 @end

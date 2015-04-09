@@ -17,9 +17,9 @@
 }
 
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath;
-- (HBDVDDetector *)initWithPath: (NSString *)aPath;
+- (HBDVDDetector *)initWithPath: (NSString *)aPath NS_DESIGNATED_INITIALIZER;
 
-- (BOOL)isVideoDVD;
-- (NSString *)devicePath;
+@property (nonatomic, getter=isVideoDVD, readonly) BOOL videoDVD;
+@property (nonatomic, readonly, copy) NSString *devicePath;
 
 @end

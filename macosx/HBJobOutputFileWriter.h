@@ -14,6 +14,6 @@
  */
 @interface HBJobOutputFileWriter : HBOutputFileWriter
 
-- (instancetype)initWithJob:(HBJob *)job;
+- (instancetype)initWithJob:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -277,7 +277,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     encodeInt(_container);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

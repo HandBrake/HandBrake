@@ -15,7 +15,7 @@
 @synthesize startColor = _startColor;
 @synthesize endColor = _endColor;
 
-- (id)initWithFrame:(NSRect)frame
+- (instancetype)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {

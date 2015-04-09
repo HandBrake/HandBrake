@@ -8,7 +8,7 @@
 
 @implementation HBExceptionAlertController
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithWindowNibName:@"ExceptionAlert"];
 }

@@ -159,7 +159,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     encodeInt(_frameStop);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

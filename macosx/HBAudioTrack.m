@@ -607,7 +607,7 @@ static NSMutableArray *masterBitRateArray = nil;
     encodeObject(_bitRates);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

@@ -8,23 +8,12 @@
 #import <Cocoa/Cocoa.h>
 
 @interface HBImageAndTextCell : NSTextFieldCell
-{
-@private
-    NSImage	             *image;
-    NSImageAlignment     imageAlignment;    // defaults to NSImageAlignTop. Supports NSImageAlignCenter & NSImageAlignBottom
-    NSSize               imageSpacing;      // horizontal and vertical spacing around the image 
-}
 
-- (void) setImage:(NSImage *)anImage;
-- (NSImage *) image;
-
-- (void) setImageAlignment:(NSImageAlignment)alignment;
-- (NSImageAlignment) imageAlignment;
-
-- (void)setImageSpacing:(NSSize)aSize;
-- (NSSize)imageSpacing;
+@property (strong) NSImage *image;
+@property (nonatomic) NSImageAlignment imageAlignment;
+@property (nonatomic) NSSize imageSpacing;
 
 - (void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-- (NSSize) cellSize;
+@property (readonly) NSSize cellSize;
 
 @end

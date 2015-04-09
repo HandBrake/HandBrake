@@ -387,7 +387,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     encodeObject(_defaults);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

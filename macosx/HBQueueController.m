@@ -77,8 +77,7 @@
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
 
         // Init a separate instance of libhb for the queue
-        _core = [[HBCore alloc] initWithLoggingLevel:loggingLevel];
-        _core.name = @"QueueCore";
+        _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
 
         [self loadQueueFile];
     }

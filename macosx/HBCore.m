@@ -81,21 +81,12 @@ static void hb_error_handler(const char *errmsg)
     hb_register_error_handler(&hb_error_handler);
 }
 
-/**
- * Initializes HBCore.
- */
 - (instancetype)init
 {
-    return [self initWithLoggingLevel:0];
+    return [self initWithLogLevel:0];
 }
 
-/**
- * Opens low level HandBrake library. This should be called once before other
- * functions HBCore are used.
- *
- * @param debugMode         If set to YES, libhb will print verbose debug output.
- */
-- (instancetype)initWithLoggingLevel:(int)loggingLevel
+- (instancetype)initWithLogLevel:(int)level
 {
     self = [super init];
     if (self)
@@ -105,13 +96,23 @@ static void hb_error_handler(const char *errmsg)
         _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
         _hb_state = malloc(sizeof(struct hb_state_s));
 
-        _hb_handle = hb_init(loggingLevel, 0);
+        _hb_handle = hb_init(level, 0);
         if (!_hb_handle)
         {
             return nil;
         }
     }
 
+    return self;
+}
+
+- (instancetype)initWithLogLevel:(int)level name:(NSString *)name
+{
+    self = [self initWithLogLevel:level];
+    if (self)
+    {
+        _name = [name copy];
+    }
     return self;
 }
 

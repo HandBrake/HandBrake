@@ -48,9 +48,8 @@
 {
     if (aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
     {
-        [self.chapterTitles replaceObjectAtIndex:rowIndex
-                                       withObject:[NSString
-                                                   stringWithString:anObject]];
+        (self.chapterTitles)[rowIndex] = [NSString
+                                                   stringWithString:anObject];
     }
 }
 
@@ -64,8 +63,7 @@
     }
     else
     {
-        return [NSString stringWithString:[self.chapterTitles
-                                           objectAtIndex:rowIndex]];
+        return [NSString stringWithString:(self.chapterTitles)[rowIndex]];
     }
     return @"__DATA ERROR__";
 }
@@ -81,11 +79,11 @@ a timer to avoid interfering with the chain of events that handles the edit. */
 
     // Edit the cell in the next row, same column
     row++;
-    textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] integerValue];
+    textMovement = [[notification userInfo][@"NSTextMovement"] integerValue];
     if( textMovement == NSReturnTextMovement && row < [chapterTable numberOfRows] )
     {
-        NSArray *info = [NSArray arrayWithObjects:chapterTable,
-            [NSNumber numberWithInteger:column], [NSNumber numberWithInteger:row], nil];
+        NSArray *info = @[chapterTable,
+            @(column), @(row)];
         /* The delay is unimportant; editNextRow: won't be called until the responder
         chain finishes because the event loop containing the timer is on this thread */
         [self performSelector:@selector(editNextRow:) withObject:info afterDelay:0.0];
@@ -94,9 +92,9 @@ a timer to avoid interfering with the chain of events that handles the edit. */
 
 - (void)editNextRow: (id) objects
 {
-    NSTableView *chapterTable = [objects objectAtIndex:0];
-    NSInteger column = [[objects objectAtIndex:1] integerValue];
-    NSInteger row = [[objects objectAtIndex:2] integerValue];
+    NSTableView *chapterTable = objects[0];
+    NSInteger column = [objects[1] integerValue];
+    NSInteger row = [objects[2] integerValue];
 
     if( row >= 0 && row < [chapterTable numberOfRows] )
     {
@@ -133,7 +131,7 @@ a timer to avoid interfering with the chain of events that handles the edit. */
             if ([chaptersMutableArray count] > 0)
             {
                 /* if last item is empty remove it */
-                if ([[chaptersMutableArray objectAtIndex:[chaptersArray count]-1] length] == 0)
+                if ([chaptersMutableArray[[chaptersArray count]-1] length] == 0)
                 {
                     [chaptersMutableArray removeLastObject];
                 }
@@ -154,12 +152,12 @@ a timer to avoid interfering with the chain of events that handles the edit. */
             for (i=0; i<chapters; i++)
             {
 
-                if([[chaptersMutableArray objectAtIndex:i] length] > 5)
+                if([chaptersMutableArray[i] length] > 5)
                 {
                     /* avoid a segfault */
                     /* Get the Range.location of the first comma in the line and then put everything after that into chapterTitle */
-                    NSRange firstCommaRange = [[chaptersMutableArray objectAtIndex:i] rangeOfString:@","];
-                    NSString *chapterTitle = [[chaptersMutableArray objectAtIndex:i] substringFromIndex:firstCommaRange.location + 1];
+                    NSRange firstCommaRange = [chaptersMutableArray[i] rangeOfString:@","];
+                    NSString *chapterTitle = [chaptersMutableArray[i] substringFromIndex:firstCommaRange.location + 1];
                     /* Since we store our chapterTitle commas as "\," for the cli, we now need to remove the escaping "\" from the title */
                     chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"\\," withString:@","];
                     [self tableView:fChapterTable

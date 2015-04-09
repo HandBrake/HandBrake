@@ -25,7 +25,7 @@
 
 - (id)objectInChildrenAtIndex:(NSUInteger)index
 {
-    return [self.children objectAtIndex:index];
+    return (self.children)[index];
 }
 
 - (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index

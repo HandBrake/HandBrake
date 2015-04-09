@@ -421,7 +421,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeBool(_fastDecode);
 }
 
-- (id)initWithCoder:(NSCoder *)decoder
+- (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 

@@ -61,7 +61,7 @@ extern NSString *keySubTrackLanguageIndex;
 
 @interface HBSubtitles (KVC)
 
-- (NSUInteger)countOfTracks;
+@property (nonatomic, readonly) NSUInteger countOfTracks;
 - (id)objectInTracksAtIndex:(NSUInteger)index;
 - (void)insertObject:(id)audioObject inTracksAtIndex:(NSUInteger)index;
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index;

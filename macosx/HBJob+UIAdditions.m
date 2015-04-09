@@ -64,7 +64,7 @@ static NSDictionary            *shortHeightAttr;
         }
         else
         {
-            title = [NSString stringWithUTF8String:container->name];
+            title = @(container->name);
         }
         [containers addObject:title];
     }

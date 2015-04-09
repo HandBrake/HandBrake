@@ -194,7 +194,7 @@ typedef enum ViewMode : NSUInteger {
     NSMutableDictionary *actions = [NSMutableDictionary
                                     dictionaryWithDictionary:[self.pictureLayer actions]];
 
-    [actions setObject:[NSNull null] forKey:@"contents"];
+    actions[@"contents"] = [NSNull null];
     [self.pictureLayer setActions:actions];
 
     [[[[self window] contentView] layer] insertSublayer:self.backLayer below: [fMovieView layer]];
@@ -289,8 +289,7 @@ typedef enum ViewMode : NSUInteger {
     NSWindow *theWindow = (NSWindow *)[notification object];
 
     CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
-    CGFloat oldBackingScaleFactor = [[[notification userInfo]
-                                      objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+    CGFloat oldBackingScaleFactor = [[notification userInfo][@"NSBackingPropertyOldScaleFactorKey"]
                                      doubleValue];
 
     if (newBackingScaleFactor != oldBackingScaleFactor)
@@ -855,7 +854,7 @@ typedef enum ViewMode : NSUInteger {
             if (subtitlesArray && [subtitlesArray count])
             {
                 // enable the first tx3g subtitle track
-                [[subtitlesArray objectAtIndex: 0] setEnabled: YES];
+                [subtitlesArray[0] setEnabled: YES];
             }
             else
             {
@@ -865,7 +864,7 @@ typedef enum ViewMode : NSUInteger {
                 {
                     // track 0 should be video, other video tracks should
                     // be subtitles; force-enable the first subs track
-                    [[subtitlesArray objectAtIndex: 1] setEnabled: YES];
+                    [subtitlesArray[1] setEnabled: YES];
                 }
             }
 

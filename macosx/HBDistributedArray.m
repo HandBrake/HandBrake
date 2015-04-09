@@ -292,7 +292,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject
 {
-    [self.array replaceObjectAtIndex:index withObject:[self wrapObjectIfNeeded:anObject]];
+    (self.array)[index] = [self wrapObjectIfNeeded:anObject];
 }
 
 - (NSUInteger)count
@@ -302,7 +302,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (id)objectAtIndex:(NSUInteger)index
 {
-    return [self.array objectAtIndex:index];
+    return (self.array)[index];
 }
 
 @end

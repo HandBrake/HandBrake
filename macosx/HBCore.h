@@ -62,9 +62,18 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
  * Opens low level HandBrake library. This should be called once before other
  * functions HBCore are used.
  *
- * @param loggingLevel         the desired libhb logging level.
+ * @param level         the desired libhb logging level.
  */
-- (instancetype)initWithLoggingLevel:(int)loggingLevel;
+- (instancetype)initWithLogLevel:(int)level NS_DESIGNATED_INITIALIZER;
+
+/**
+ *  Opens low level HandBrake library. This should be called once before other
+ *  functions HBCore are used.
+ *
+ *  @param level the desired libhb logging level
+ *  @param name  the instance debug name
+ */
+- (instancetype)initWithLogLevel:(int)level name:(NSString *)name;
 
 /**
  * Current state of HBCore.
@@ -123,7 +132,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
-                   deinterlace:(BOOL)deinterlace;
+                   deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
 
 /**
  *  Initiates an asynchronous encode operation and returns immediately.

@@ -41,6 +41,6 @@
  *  If the selected row indexes contain the clicked row index, it returns every selected row,
  *  otherwise it returns only the clicked row index.
  */
-- (NSIndexSet *)targetedRowIndexes;
+@property (nonatomic, readonly, copy) NSIndexSet *targetedRowIndexes;
 
 @end
