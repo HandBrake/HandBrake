@@ -609,7 +609,8 @@ static int textsub_post_init( hb_filter_object_t * filter, hb_job_t * job )
     // to have the header rewritten with the correct dimensions.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    hb_subtitle_add_ssa_header(filter->subtitle, "Arial", .066 * height,
+    hb_subtitle_add_ssa_header(filter->subtitle, "Arial",
+                               .066 * job->title->geometry.height,
                                width, height);
     return ssa_post_init(filter, job);
 }

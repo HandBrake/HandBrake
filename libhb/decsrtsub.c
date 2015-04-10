@@ -699,7 +699,8 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         // Generate generic SSA Script Info.
         int height = job->title->geometry.height - job->crop[0] - job->crop[1];
         int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-        hb_subtitle_add_ssa_header(w->subtitle, "Arial", .066 * height,
+        hb_subtitle_add_ssa_header(w->subtitle, "Arial",
+                                   .066 * job->title->geometry.height,
                                    width, height);
     }
     return retval;
