@@ -33,6 +33,8 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using Newtonsoft.Json;
 
@@ -353,6 +355,7 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
+            LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
             HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);
 
@@ -458,6 +461,7 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
+            LogHelper.LogMessage(new LogMessage(statusJson, LogMessageType.progressJson, LogLevel.debug));
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
             if (state != null && state.State == NativeConstants.HB_STATE_SCANNING)
@@ -478,6 +482,7 @@ namespace HandBrake.ApplicationServices.Interop
             {
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
+                LogHelper.LogMessage(new LogMessage(scanJson, LogMessageType.scanJson, LogLevel.debug));
                 this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
                 this.featureTitle = this.titles.MainFeature;
 
@@ -501,6 +506,9 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
+
+            LogHelper.LogMessage(new LogMessage(statusJson, LogMessageType.progressJson, LogLevel.debug));
+
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
             if (state != null && state.State == NativeConstants.HB_STATE_WORKING)

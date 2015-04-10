@@ -182,6 +182,10 @@
     <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
+    <Compile Include="Services\Logging\LogHelper.cs" />
+    <Compile Include="Services\Logging\Model\LogLevel.cs" />
+    <Compile Include="Services\Logging\Model\LogMessage.cs" />
+    <Compile Include="Services\Logging\Model\LogMessageType.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Utilities\Converters.cs" />

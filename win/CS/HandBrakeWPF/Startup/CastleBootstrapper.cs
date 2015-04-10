@@ -22,6 +22,7 @@ namespace HandBrakeWPF.Startup
 
     using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
+    using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Services.Scan;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
 
