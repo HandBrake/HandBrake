@@ -415,7 +415,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += " --nlmeans=\"strong\"";
                         break;
                     case DenoisePreset.Custom:
-                        query += string.Format(" --denoise=\"{0}\"", task.CustomDenoise);
+                        query += string.Format(" --nlmeans=\"{0}\"", task.CustomDenoise);
                         break;
                     default:
                         query += string.Empty;
