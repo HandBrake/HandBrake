@@ -880,7 +880,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         // then width of screen is 42 columns (see CEA-708)
         screen_columns = 42;
     }
-    font_size = cropped_height * .066;
+    font_size = wb->height * .8 * .066;
 
     safe_x = 0.1 * wb->width;
     safe_y = 0.1 * wb->height;
@@ -910,7 +910,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         x = cropped_width - columns * cell_width - min_safe_x;
     if (x < min_safe_x)
         x = min_safe_x;
-    pos = hb_strdup_printf("{\\a1\\pos(%d,%d)}", x, y);
+    pos = hb_strdup_printf("{\\an1\\pos(%d,%d)}", x, y);
 
     int line = 1;
     for (i = 0; i < 15; i++)
@@ -1808,9 +1808,9 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
         // Generate generic SSA Script Info.
         int height = job->title->geometry.height - job->crop[0] - job->crop[1];
         int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-        int safe_height = 0.8 * height;
+        int safe_height = 0.8 * job->title->geometry.height;
         hb_subtitle_add_ssa_header(w->subtitle, "Courier New",
-                                   .08 * safe_height, width, height);
+                                   .066 * safe_height, width, height);
     }
     // When rendering subs, we need to push rollup subtitles out
     // asap (instead of waiting for a completed line) so that we

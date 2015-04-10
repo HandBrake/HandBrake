@@ -596,10 +596,10 @@ static int cc608sub_post_init( hb_filter_object_t * filter, hb_job_t * job )
     // to have the header rewritten with the correct dimensions.
     int height = job->title->geometry.height - job->crop[0] - job->crop[1];
     int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-    int safe_height = 0.8 * height;
+    int safe_height = 0.8 * job->title->geometry.height;
     // Use fixed widht font for CC
     hb_subtitle_add_ssa_header(filter->subtitle, "Courier New",
-                               .08 * safe_height, width, height);
+                               .066 * safe_height, width, height);
     return ssa_post_init(filter, job);
 }
 
