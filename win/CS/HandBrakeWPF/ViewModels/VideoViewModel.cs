@@ -1160,6 +1160,11 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void HandleEncoderChange(VideoEncoder selectedEncoder)
         {
+            if (selectedEncoder != VideoEncoder.X264)
+            {
+                this.UseAdvancedTab = false;
+            }
+
             HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(selectedEncoder));
             if (encoder != null)
             {
