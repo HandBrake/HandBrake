@@ -72,6 +72,10 @@ ifeq (1,$(FEATURE.x265))
     LIBHB.GCC.D += USE_X265
 endif  
 
+ifeq (1,$(COMPAT.strtok_r))
+    LIBHB.GCC.D += HB_NEED_STRTOK_R
+endif
+
 ## required for <libdvdread/*.h>
 ifneq (,$(filter $(BUILD.arch),ppc ppc64))
 	LIBHB.GCC.D += WORDS_BIGENDIAN

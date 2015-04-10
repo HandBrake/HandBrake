@@ -16,6 +16,7 @@ extern "C" {
 
 #include "project.h"
 #include "common.h"
+#include "compat.h"
 #include "hb_dict.h"
 #include "hb_json.h"
 #include "param.h"

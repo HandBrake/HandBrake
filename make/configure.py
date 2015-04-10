@@ -1617,6 +1617,19 @@ int main()
         regex = LDProbe( 'static regex', '%s -static' % Tools.gcc.pathname, '-lregex', regex_test )
         regex.run()
 
+        strtok_r_test = """
+#include <string.h>
+
+int main ()
+{
+  char *saveptr;
+  strtok_r("String tok string", "tok", &saveptr);
+  return 0;
+}
+"""
+        strtok_r = LDProbe( 'static strtok_r', '%s -static' % Tools.gcc.pathname, '', strtok_r_test )
+        strtok_r.run()
+
     ## cfg hook before doc prep
     cfg.doc_ready()
 
@@ -1744,6 +1757,8 @@ int main()
             doc.add( 'HAS.iconv', 1 )
         if not regex.fail:
             doc.add( 'HAS.regex', 1 )
+        if strtok_r.fail:
+            doc.add( 'COMPAT.strtok_r', 1 )
 
     doc.addMake( '' )
     doc.addMake( '## define debug mode and optimize before other includes' )
