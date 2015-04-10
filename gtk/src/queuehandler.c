@@ -1912,7 +1912,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 
     show_stop = queue_state &
                 (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
-                 GHB_STATE_SCANNING | GHB_STATE_MUXING);
+                 GHB_STATE_SCANNING | GHB_STATE_MUXING | GHB_STATE_PAUSED);
     show_start = !(scan_state & GHB_STATE_SCANNING) &&
                     (title !=NULL || queue_count > 0);
 
