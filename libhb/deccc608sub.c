@@ -880,7 +880,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         // then width of screen is 42 columns (see CEA-708)
         screen_columns = 42;
     }
-    font_size = wb->height * .8 * .066;
+    font_size = wb->height * .8 * .08;
 
     safe_x = 0.1 * wb->width;
     safe_y = 0.1 * wb->height;
@@ -1810,7 +1810,7 @@ static int decccInit( hb_work_object_t * w, hb_job_t * job )
         int width = job->title->geometry.width - job->crop[2] - job->crop[3];
         int safe_height = 0.8 * job->title->geometry.height;
         hb_subtitle_add_ssa_header(w->subtitle, "Courier New",
-                                   .066 * safe_height, width, height);
+                                   .08 * safe_height, width, height);
     }
     // When rendering subs, we need to push rollup subtitles out
     // asap (instead of waiting for a completed line) so that we
