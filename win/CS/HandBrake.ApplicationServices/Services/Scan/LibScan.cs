@@ -86,7 +86,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <summary>
         /// The post scan operation.
         /// </summary>
-        private Action<bool> postScanOperation;
+        private Action<bool, Source> postScanOperation;
 
         #endregion
 
@@ -97,6 +97,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         {
             this.logging = new StringBuilder();
             this.header = GeneralUtilities.CreateLogHeader();
+            this.IsScanning = false;
         }
 
         #region Events
@@ -124,11 +125,6 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// Gets a value indicating whether IsScanning.
         /// </summary>
         public bool IsScanning { get; private set; }
-
-        /// <summary>
-        /// Gets the Souce Data.
-        /// </summary>
-        public Source SouceData { get; private set; }
 
         /// <summary>
         /// Gets ActivityLog.
@@ -165,7 +161,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <param name="configuraiton">
         /// The configuraiton.
         /// </param>
-        public void Scan(string sourcePath, int title, Action<bool> postAction, HBConfiguration configuraiton)
+        public void Scan(string sourcePath, int title, Action<bool, Source> postAction, HBConfiguration configuraiton)
         {
             // Try to cleanup any previous scan instances.
             if (this.instance != null)
@@ -326,7 +322,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 this.Stop();
 
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
+                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()", null));
             }
         }
 
@@ -370,20 +366,30 @@ namespace HandBrake.ApplicationServices.Services.Scan
             }
 
             // Process into internal structures.
+            Source sourceData = null;
             if (this.instance != null && this.instance.Titles != null)
             {
-                this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
+                sourceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
             }
 
             this.IsScanning = false;
 
             if (this.postScanOperation != null)
             {
-                this.postScanOperation(true);
+                try
+                {
+                    this.postScanOperation(true, sourceData);
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
+
+                this.postScanOperation = null; // Reset
             }
             else
             {
-                if (this.ScanCompleted != null) this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty));
+                if (this.ScanCompleted != null) this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty, sourceData));
             }
         }
 
@@ -445,9 +451,6 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// </summary>
         /// <param name="titles">
         /// The titles.
-        /// </param>
-        /// <param name="featureTitle">
-        /// The feature Title.
         /// </param>
         /// <returns>
         /// The convert titles.

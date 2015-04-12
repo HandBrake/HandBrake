@@ -65,11 +65,6 @@ namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
         bool IsScanning { get; }
 
         /// <summary>
-        /// Gets the Souce Data.
-        /// </summary>
-        Source SouceData { get; }
-
-        /// <summary>
         /// Gets ActivityLog.
         /// </summary>
         string ActivityLog { get; }
@@ -90,7 +85,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
         /// <param name="configuration">
         /// The configuraiton.
         /// </param>
-        void Scan(string sourcePath, int title, Action<bool> postAction, HBConfiguration configuration);
+        void Scan(string sourcePath, int title, Action<bool, Source> postAction, HBConfiguration configuration);
 
         /// <summary>
         /// Get a Preview image for the current job and preview number.

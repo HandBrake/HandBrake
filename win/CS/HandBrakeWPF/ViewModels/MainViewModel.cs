@@ -1811,13 +1811,16 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="successful">
         /// The successful.
         /// </param>
-        private void QueueEditAction(bool successful)
+        /// <param name="scannedSource">
+        /// The scanned Source.
+        /// </param>
+        private void QueueEditAction(bool successful, Source scannedSource)
         {
             /* TODO Fix this. */
             Execute.OnUIThread(() =>
                 {
                     // Copy all the Scan data into the UI
-                    this.scanService.SouceData.CopyTo(this.ScannedSource);
+                    scannedSource.CopyTo(this.ScannedSource);
                     this.NotifyOfPropertyChange(() => this.ScannedSource);
                     this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
 
@@ -1990,7 +1993,15 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            this.scanService.SouceData.CopyTo(this.ScannedSource);
+            if (e.ScannedSource != null)
+            {
+                e.ScannedSource.CopyTo(this.ScannedSource);
+            }
+            else
+            {
+                this.ScannedSource = null;
+            }
+
             Execute.OnUIThread(() =>
                 {
                     if (e.Successful)

@@ -19,9 +19,6 @@ namespace HandBrake.ApplicationServices.Model
         [Display(Name = "Lanczos (default)")]
         Lanczos = 0,
 
-        // [Display(Name = "Bicubic")]
-        // Bicubic,
-
         [Display(Name = "Bicubic (OpenCL)")]
         BicubicCl,
     }

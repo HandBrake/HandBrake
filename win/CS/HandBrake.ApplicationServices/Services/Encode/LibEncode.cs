@@ -147,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <summary>
         /// Kill the process
         /// </summary>
-        public override void Stop()
+        public void Stop()
         {
             try
             {

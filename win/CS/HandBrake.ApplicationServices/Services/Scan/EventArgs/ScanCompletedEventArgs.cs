@@ -10,12 +10,12 @@
 namespace HandBrake.ApplicationServices.Services.Scan.EventArgs
 {
     using System;
-    using System.Runtime.Serialization;
+
+    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     /// <summary>
     /// Scan Progress Event Args
     /// </summary>
-    [DataContract]
     public class ScanCompletedEventArgs : EventArgs
     {
         /// <summary>
@@ -30,36 +30,41 @@ namespace HandBrake.ApplicationServices.Services.Scan.EventArgs
         /// <param name="errorInformation">
         /// The error information.
         /// </param>
-        public ScanCompletedEventArgs(bool cancelled, Exception exception, string errorInformation)
+        /// <param name="scannedSource">
+        /// The scanned Source.
+        /// </param>
+        public ScanCompletedEventArgs(bool cancelled, Exception exception, string errorInformation, Source scannedSource)
         {
             this.Successful = !cancelled && exception == null && string.IsNullOrEmpty(errorInformation);
             this.Cancelled = cancelled;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
+            this.ScannedSource = scannedSource;
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Successful.
+        /// Gets a value indicating whether Successful.
         /// </summary>
-        [DataMember]
-        public bool Successful { get; set; }
+        public bool Successful { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Cancelled.
+        /// Gets a value indicating whether Cancelled.
         /// </summary>
-        [DataMember]
-        public bool Cancelled { get; set; }
+        public bool Cancelled { get; private set; }
 
         /// <summary>
-        /// Gets or sets Exception.
+        /// Gets the Exception.
         /// </summary>
-        [DataMember]
-        public Exception Exception { get; set; }
+        public Exception Exception { get; private set; }
 
         /// <summary>
-        /// Gets or sets ErrorInformation.
+        /// Gets ErrorInformation.
         /// </summary>
-        [DataMember]
-        public string ErrorInformation { get; set; }
+        public string ErrorInformation { get; private set; }
+
+        /// <summary>
+        /// Gets the scanned source.
+        /// </summary>
+        public Source ScannedSource { get; private set; }
     }
 }

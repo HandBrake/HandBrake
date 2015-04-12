@@ -175,14 +175,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
         #region Methods
 
         /// <summary>
-        /// A Stop Method to be implemeneted.
-        /// </summary>
-        public virtual void Stop()
-        {
-            // Do Nothing
-        }
-
-        /// <summary>
         /// Save a copy of the log to the users desired location or a default location
         /// if this feature is enabled in options.
         /// </summary>
