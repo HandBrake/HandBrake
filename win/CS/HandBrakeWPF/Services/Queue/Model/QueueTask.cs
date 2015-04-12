@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrakeWPF.Services.Queue.Model
 {
-
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -131,7 +131,7 @@ namespace HandBrake.ApplicationServices.Model
                 return false;
             }
 
-            return Equals((QueueTask)obj);
+            return this.Equals((QueueTask)obj);
         }
 
         /// <summary>

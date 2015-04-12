@@ -205,8 +205,6 @@
     <Compile Include="Services\Encode\Model\EncodeTask.cs" />
     <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
     <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
-    <Compile Include="Model\QueueItemStatus.cs" />
-    <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
     <Compile Include="Services\Scan\Model\Audio.cs" />
     <Compile Include="Services\Scan\Model\Chapter.cs" />

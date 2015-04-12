@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrakeWPF.Services.Queue
 {
     using System;
     using System.Collections.Generic;
@@ -16,23 +16,23 @@ namespace HandBrakeWPF.Services
     using System.Linq;
     using System.Xml.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Services.Queue.Model;
+
     using Execute = Caliburn.Micro.Execute;
-    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
     /// <summary>
     /// The HandBrake Queue
     /// </summary>
-    public class QueueProcessor : IQueueProcessor
+    public class QueueProcessor : Interfaces.IQueueProcessor
     {
         #region Constants and Fields
 
@@ -588,7 +588,7 @@ namespace HandBrakeWPF.Services
             if (job != null)
             {
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
-                this.EncodeService.Start(job);
+                this.EncodeService.Start(job.Task, job.Configuration);
             }
             else
             {

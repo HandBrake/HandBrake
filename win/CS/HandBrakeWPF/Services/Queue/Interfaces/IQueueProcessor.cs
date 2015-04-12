@@ -7,13 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Interfaces
+namespace HandBrakeWPF.Services.Queue.Interfaces
 {
     using System;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
+
+    using HandBrakeWPF.Services.Queue.Model;
 
     /// <summary>
     /// The Queue Processor

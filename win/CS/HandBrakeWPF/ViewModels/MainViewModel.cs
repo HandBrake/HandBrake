@@ -44,6 +44,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
@@ -53,7 +54,7 @@ namespace HandBrakeWPF.ViewModels
     using Ookii.Dialogs.Wpf;
 
     using Execute = Caliburn.Micro.Execute;
-    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// HandBrakes Main Window

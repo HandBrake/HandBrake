@@ -22,8 +22,9 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Queue.Model;
 
-    using IQueueProcessor = HandBrakeWPF.Services.Interfaces.IQueueProcessor;
+    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// Queue Recovery Helper

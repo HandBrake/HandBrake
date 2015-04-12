@@ -15,10 +15,10 @@ namespace HandBrake.ApplicationServices.Services.Encode
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
-    using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Factories;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     /// <summary>
     /// LibHB Implementation of IEncode
@@ -27,25 +27,11 @@ namespace HandBrake.ApplicationServices.Services.Encode
     {
         #region Private Variables
 
-        /// <summary>
-        /// Lock for the log file
-        /// </summary>
         private static readonly object LogLock = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
         private IHandBrakeInstance instance;
-
-        /// <summary>
-        /// The Start time of the current Encode;
-        /// </summary>
         private DateTime startTime;
-
-        /// <summary>
-        /// The Current Task
-        /// </summary>
-        private QueueTask currentTask;
+        private EncodeTask currentTask;
+        private HBConfiguration currentConfiguration;
 
         #endregion
 
@@ -57,22 +43,26 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
-        /// <param name="job">
-        /// The job.
+        /// <param name="task">
+        /// The task.
         /// </param>
-        public void Start(QueueTask job)
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void Start(EncodeTask task, HBConfiguration configuration)
         {
             try
             {
                 // Setup
                 this.startTime = DateTime.Now;
-                this.currentTask = job;
+                this.currentTask = task;
+                this.currentConfiguration = configuration;
 
                 // Create a new HandBrake instance
                 // Setup the HandBrake Instance
                 HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
                 HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
-                this.instance = HandBrakeInstanceManager.GetEncodeInstance(job.Configuration.Verbosity);
+                this.instance = HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                 this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
@@ -83,21 +73,21 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 }
      
                 this.IsEncoding = true;
-                this.SetupLogging(job, true);
+                this.SetupLogging();
 
                 // Verify the Destination Path Exists, and if not, create it.
-                this.VerifyEncodeDestinationPath(job);
+                this.VerifyEncodeDestinationPath(task);
 
                 ServiceLogMessage("Starting Encode ...");
 
                 // Get an EncodeJob object for the Interop Library
-                instance.StartEncode(EncodeFactory.Create(job.Task, job.Configuration));
+                instance.StartEncode(EncodeFactory.Create(task, configuration));
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);
 
                 // Set the Process Priority
-                switch (job.Configuration.ProcessPriority)
+                switch (configuration.ProcessPriority)
                 {
                     case "Realtime":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
@@ -124,7 +114,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 this.IsEncoding = false;
 
                 ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
-                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", job.Task.Source));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source));
             }
         }
 
@@ -254,7 +244,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
             HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
             
             // Handling Log Data 
-            this.ProcessLogs(this.currentTask.Task.Destination, this.currentTask.Configuration);
+            this.ProcessLogs(this.currentTask.Destination, this.currentConfiguration);
 
             // Cleanup
             this.ShutdownFileWriter();
@@ -262,8 +252,8 @@ namespace HandBrake.ApplicationServices.Services.Encode
             // Raise the Encode Completed EVent.
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Task.Destination)
-                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Task.Destination));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination));
         }
         #endregion
     }

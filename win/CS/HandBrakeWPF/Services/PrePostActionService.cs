@@ -20,6 +20,7 @@ namespace HandBrakeWPF.Services
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Execute = Caliburn.Micro.Execute;

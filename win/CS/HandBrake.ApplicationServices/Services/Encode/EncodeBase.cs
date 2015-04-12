@@ -11,15 +11,14 @@ namespace HandBrake.ApplicationServices.Services.Encode
 {
     using System;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Text;
-    using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
+    using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
@@ -237,13 +236,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <summary>
         /// Setup the logging.
         /// </summary>
-        /// <param name="encodeQueueTask">
-        /// The encode QueueTask.
-        /// </param>
-        /// <param name="isLibhb">
-        /// Indicates if this is libhb that is encoding or not.
-        /// </param>
-        protected void SetupLogging(QueueTask encodeQueueTask, bool isLibhb)
+        protected void SetupLogging()
         {
             this.ShutdownFileWriter();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
@@ -369,12 +362,12 @@ namespace HandBrake.ApplicationServices.Services.Encode
         /// <exception cref="Exception">
         /// If the creation fails, an exception is thrown.
         /// </exception>
-        protected void VerifyEncodeDestinationPath(QueueTask task)
+        protected void VerifyEncodeDestinationPath(EncodeTask task)
         {
             // Make sure the path exists, attempt to create it if it doesn't
             try
             {
-                string path = Directory.GetParent(task.Task.Destination).ToString();
+                string path = Directory.GetParent(task.Destination).ToString();
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

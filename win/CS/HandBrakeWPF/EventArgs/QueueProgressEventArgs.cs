@@ -13,6 +13,8 @@ namespace HandBrakeWPF.EventArgs
 
     using HandBrake.ApplicationServices.Model;
 
+    using HandBrakeWPF.Services.Queue.Model;
+
     /// <summary>
     /// Queue Progress Event Args
     /// </summary>

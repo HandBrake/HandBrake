@@ -22,6 +22,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Queue.Interfaces;
+    using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;

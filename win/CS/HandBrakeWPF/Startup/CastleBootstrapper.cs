@@ -36,6 +36,8 @@ namespace HandBrakeWPF.Startup
 
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Queue;
+    using HandBrakeWPF.Services.Queue.Interfaces;
 
     /// <summary>
     /// The Castle Bootstrapper

@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -638,7 +639,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted += this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
 
-            this.encodeService.Start((QueueTask)state);
+            this.encodeService.Start(((QueueTask)state).Task, ((QueueTask)state).Configuration);
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
         #endregion

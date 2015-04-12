@@ -154,7 +154,7 @@
     <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
-    <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
+    <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />
@@ -164,7 +164,10 @@
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\Presets\Model\PresetContainer.cs" />
     <Compile Include="Services\Presets\PresetService.cs" />
-    <Compile Include="Services\QueueProcessor.cs" />
+    <Compile Include="Services\Queue\Model\QueueTaskContainer.cs" />
+    <Compile Include="Services\Queue\QueueProcessor.cs" />
+    <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />
+    <Compile Include="Services\Queue\Model\QueueTask.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
