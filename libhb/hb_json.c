@@ -1222,7 +1222,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 }
                 else
                 {
-                    audio.out.dither_method = hb_value_get_int(mixdown);
+                    audio.out.dither_method = hb_value_get_int(dither);
                 }
             }
             if (audio.in.track >= 0)
