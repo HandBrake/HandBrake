@@ -5,10 +5,43 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBFilters+UIAdditions.h"
+#import "hb.h"
 
-extern NSDictionary *_HandBrake_denoiseTypesDict;
-extern NSDictionary *_HandBrake_denoisePresetsDict;
-extern NSDictionary *_HandBrake_nlmeansTunesDict;
+/**
+ *  Converts a hb_filter_param_t * array to a NSArray of NSString.
+ *
+ *  @param f a function which returns a hb_filter_param_t * array
+ *
+ *  @return a NSArray that contains the name field of hb_filter_param_t.
+ */
+static NSArray * filterParamsToNamesArray(hb_filter_param_t * (f)(int), int filter_id) {
+    NSMutableArray *presets = [NSMutableArray array];
+
+    for (hb_filter_param_t *preset = f(filter_id); preset->name != NULL; preset++)
+    {
+        [presets addObject:@(preset->name)];
+    }
+
+    return [presets copy];
+}
+
+/**
+ *  Converts a hb_filter_param_t * array to a NSDictionary, with name as the key and short_name as the value.
+ *
+ *  @param f a function which returns a hb_filter_param_t * array
+ *
+ *  @return a NSDictionary
+ */
+static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int filter_id) {
+    NSMutableDictionary *presets = [NSMutableDictionary dictionary];
+
+    for (hb_filter_param_t *preset = f(filter_id); preset->name != NULL; preset++)
+    {
+        [presets setObject:NSLocalizedString(@(preset->short_name), nil) forKey:@(preset->name)];
+    }
+
+    return [presets copy];
+}
 
 @implementation HBGenericDictionaryTransformer
 
@@ -98,32 +131,34 @@ extern NSDictionary *_HandBrake_nlmeansTunesDict;
 
 + (NSDictionary *)denoisePresetDict
 {
-    return _HandBrake_denoisePresetsDict;
+    return filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_NLMEANS);
 }
 
 + (NSDictionary *)nlmeansTunesDict
 {
-    return _HandBrake_nlmeansTunesDict;
+    return filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
 }
 
 + (NSDictionary *)denoiseTypesDict
 {
-    return _HandBrake_denoiseTypesDict;
+    return @{NSLocalizedString(@"Off", nil):      @"off",
+             NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
+             NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"};;
 }
 
 - (NSArray *)detelecineSettings
 {
-    return @[@"Off", @"Custom", @"Default"];
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
 }
 
 - (NSArray *)decombSettings
 {
-    return @[@"Off", @"Custom", @"Default", @"Fast", @"Bob"];
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DECOMB);
 }
 
 - (NSArray *)deinterlaceSettings
 {
-    return @[@"Off", @"Custom", @"Fast", @"Slow", @"Slower", @"Bob"];
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DEINTERLACE);
 }
 
 - (NSArray *)denoiseTypes
@@ -133,12 +168,12 @@ extern NSDictionary *_HandBrake_nlmeansTunesDict;
 
 - (NSArray *)denoisePresets
 {
-    return @[@"Custom", @"Ultralight", @"Light", @"Medium", @"Strong"];
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_NLMEANS);
 }
 
 - (NSArray *)denoiseTunes
 {
-    return @[@"None", @"Film", @"Grain", @"High Motion", @"Animation"];
+    return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
 }
 
 - (NSString *)summary
@@ -224,14 +259,14 @@ extern NSDictionary *_HandBrake_nlmeansTunesDict;
     /* Denoise */
     if (![self.denoise isEqualToString:@"off"])
     {
-        [summary appendFormat:@" - Denoise (%@", [[_HandBrake_denoiseTypesDict allKeysForObject:self.denoise] firstObject]];
-        if (![self.denoisePreset isEqualToString:@"none"])
+        [summary appendFormat:@" - Denoise (%@", self.denoise];
+        if (![self.denoisePreset isEqualToString:@"custom"])
         {
-            [summary appendFormat:@", %@", [[_HandBrake_denoisePresetsDict allKeysForObject:self.denoisePreset] firstObject]];
+            [summary appendFormat:@", %@", self.denoisePreset];
 
             if ([self.denoise isEqualToString:@"nlmeans"])
             {
-                [summary appendFormat:@", %@", [[_HandBrake_nlmeansTunesDict allKeysForObject:self.denoiseTune] firstObject]];
+                [summary appendFormat:@", %@", self.denoiseTune];
             }
         }
         else

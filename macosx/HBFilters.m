@@ -6,12 +6,9 @@
 
 #import "HBFilters.h"
 #import "NSCodingMacro.h"
+#include "hb.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
-
-NSDictionary *_HandBrake_denoiseTypesDict;
-NSDictionary *_HandBrake_denoisePresetsDict;
-NSDictionary *_HandBrake_nlmeansTunesDict;
 
 @interface HBFilters ()
 
@@ -20,28 +17,6 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
 @end
 
 @implementation HBFilters
-
-+ (void)initialize
-{
-    if (self == [HBFilters class])
-    {
-        _HandBrake_denoiseTypesDict = @{NSLocalizedString(@"Off", nil):      @"off",
-                               NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
-                               NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"};
-
-        _HandBrake_denoisePresetsDict = @{NSLocalizedString(@"Custom", nil):     @"none",
-                                 NSLocalizedString(@"Ultralight", nil): @"ultralight",
-                                 NSLocalizedString(@"Light", nil):      @"light",
-                                 NSLocalizedString(@"Medium", nil) :    @"medium",
-                                 NSLocalizedString(@"Strong", nil) :    @"strong"};
-
-        _HandBrake_nlmeansTunesDict = @{NSLocalizedString(@"None", nil):         @"none",
-                               NSLocalizedString(@"Film", nil):         @"film",
-                               NSLocalizedString(@"Grain", nil):        @"grain",
-                               NSLocalizedString(@"High Motion", nil):  @"highmotion",
-                               NSLocalizedString(@"Animation", nil) :   @"animation"};
-    }
-}
 
 - (instancetype)init
 {
@@ -423,31 +398,24 @@ NSDictionary *_HandBrake_nlmeansTunesDict;
         else
         {
             // New format, read the values directly
-            if ([[_HandBrake_denoiseTypesDict allValues] containsObject:preset[@"PictureDenoiseFilter"]])
+            if ([@[@"off", @"nlmeans", @"hqdn3d"] containsObject:preset[@"PictureDenoiseFilter"]])
             {
                 self.denoise = preset[@"PictureDenoiseFilter"];
             }
             else
             {
-                self.denoise = [[_HandBrake_denoiseTypesDict allValues] firstObject];
+                self.denoise = @"off";
             }
 
-            if ([[_HandBrake_denoisePresetsDict allValues] containsObject:preset[@"PictureDenoisePreset"]])
+            if (hb_validate_filter_preset(HB_FILTER_DENOISE, [preset[@"PictureDenoisePreset"] UTF8String], [preset[@"PictureDenoiseTune"] UTF8String]))
             {
                 self.denoisePreset = preset[@"PictureDenoisePreset"];
-            }
-            else
-            {
-                self.denoisePreset = [[_HandBrake_denoisePresetsDict allValues] firstObject];
-            }
-
-            if ([[_HandBrake_nlmeansTunesDict allValues] containsObject:preset[@"PictureDenoiseTune"]])
-            {
                 self.denoiseTune = preset[@"PictureDenoiseTune"];
             }
             else
             {
-                self.denoiseTune = [[_HandBrake_nlmeansTunesDict allKeys] firstObject];
+                self.denoisePreset = @"medium";
+                self.denoiseTune = @"none";
             }
 
             self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
