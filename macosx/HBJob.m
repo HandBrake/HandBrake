@@ -113,7 +113,6 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     _title = title;
     self.range.title = title;
-    self.picture.title = title;
 }
 
 - (void)setChaptersEnabled:(BOOL)chaptersEnabled

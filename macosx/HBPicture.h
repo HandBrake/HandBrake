@@ -41,7 +41,11 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readwrite) int cropLeft;
 @property (nonatomic, readwrite) int cropRight;
 
-@property (nonatomic, readwrite, unsafe_unretained) HBTitle *title;
+/**
+ *  Source size
+ */
+@property (nonatomic, readonly) int sourceWidth;
+@property (nonatomic, readonly) int sourceHeight;
 
 @end
 

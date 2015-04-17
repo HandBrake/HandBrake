@@ -52,13 +52,9 @@
 {
     NSString *sizeInfo = @"";
 
-    if (self.title)
-    {
-        hb_title_t *title = self.title.hb_title;
-        sizeInfo = [NSString stringWithFormat:
-                    @"Source: %dx%d, ",
-                    title->geometry.width, title->geometry.height];
-    }
+    sizeInfo = [NSString stringWithFormat:
+                @"Source: %dx%d, ",
+                self.sourceWidth, self.sourceHeight];
 
     if (self.anamorphicMode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
     {

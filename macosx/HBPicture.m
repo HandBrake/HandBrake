@@ -21,6 +21,14 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 @property (nonatomic, readwrite) int keep;
 @property (nonatomic, readwrite) BOOL darUpdated;
 
+@property (nonatomic, readonly) int sourceParNum;
+@property (nonatomic, readonly) int sourceParDen;
+
+@property (nonatomic, readonly) int autoCropTop;
+@property (nonatomic, readonly) int autoCropBottom;
+@property (nonatomic, readonly) int autoCropLeft;
+@property (nonatomic, readonly) int autoCropRight;
+
 @end
 
 @implementation HBPicture
@@ -33,9 +41,17 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         // Set some values if we ever need a fake instance
         _width = 1280;
         _height = 720;
+
+        _sourceWidth = 1280;
+        _sourceHeight = 720;
+
         _anamorphicMode = HB_ANAMORPHIC_NONE;
+
         _parWidth = 1;
         _parHeight = 1;
+        _sourceParNum = 1;
+        _sourceParDen = 1;
+
     }
     return self;
 }
@@ -45,9 +61,14 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     self = [self init];
     if (self)
     {
-        _title = title;
         _width = title.hb_title->geometry.width;
         _height = title.hb_title->geometry.height;
+
+        _sourceWidth = title.hb_title->geometry.width;
+        _sourceHeight = title.hb_title->geometry.height;
+
+        _sourceParNum = title.hb_title->geometry.par.num;
+        _sourceParDen = title.hb_title->geometry.par.den;
 
         [self validateSettings];
 
@@ -250,15 +271,14 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (void)setAutocrop:(BOOL)autocrop
 {
     _autocrop = autocrop;
-    if (self.title && autocrop && !self.isValidating)
+    if (autocrop && !self.isValidating)
     {
-        hb_title_t *title = self.title.hb_title;
         self.validating = YES;
         // Reset the crop values to those determined right after scan
-        self.cropTop    = title->crop[0];
-        self.cropBottom = title->crop[1];
-        self.cropLeft   = title->crop[2];
-        self.cropRight  = title->crop[3];
+        self.cropTop    = self.autoCropTop;
+        self.cropBottom = self.autoCropBottom;
+        self.cropLeft   = self.autoCropLeft;
+        self.cropRight  = self.autoCropRight;
         self.validating = NO;
         [self validateSettings];
     }
@@ -302,34 +322,22 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (int)maxWidth
 {
-    if (self.title)
-        return self.title.hb_title->geometry.width - self.cropRight - self.cropLeft;
-
-    return 0;
+    return self.sourceWidth - self.cropRight - self.cropLeft;
 }
 
 - (int)maxHeight
 {
-    if (self.title)
-        return self.title.hb_title->geometry.height - self.cropTop - self.cropBottom;
-
-    return 0;
+    return self.sourceHeight - self.cropTop - self.cropBottom;
 }
 
 - (int)maxVerticalCrop
 {
-    if (self.title)
-        return self.title.hb_title->geometry.height / 2 - 2;
-
-    return 0;
+    return self.sourceHeight / 2 - 2;
 }
 
 - (int)maxHorizontalCrop
 {
-    if (self.title)
-        return self.title.hb_title->geometry.width / 2 - 2;
-
-    return 0;
+    return self.sourceWidth / 2 - 2;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
@@ -381,16 +389,15 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 {
     self.validating = YES;
 
-    hb_title_t *title = self.title.hb_title;
-
     self.keep |= self.keepDisplayAspect * HB_KEEP_DISPLAY_ASPECT;
 
     hb_geometry_t srcGeo, resultGeo;
     hb_geometry_settings_t uiGeo;
 
-    srcGeo.width = title->geometry.width;
-    srcGeo.height = title->geometry.height;
-    srcGeo.par = title->geometry.par;
+    srcGeo.width = self.sourceWidth;
+    srcGeo.height = self.sourceHeight;
+    srcGeo.par.num = self.sourceParNum;
+    srcGeo.par.den = self.sourceParDen;
 
     uiGeo.mode = self.anamorphicMode;
     uiGeo.keep = self.keep;
@@ -403,8 +410,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     uiGeo.geometry.height =  self.height;
     // Modulus added to maxWidth/maxHeight to allow a small amount of
     // upscaling to the next mod boundary.
-    uiGeo.maxWidth = title->geometry.width - crop[2] - crop[3] + self.modulus - 1;
-    uiGeo.maxHeight = title->geometry.height - crop[0] - crop[1] + self.modulus - 1;
+    uiGeo.maxWidth = self.sourceWidth - crop[2] - crop[3] + self.modulus - 1;
+    uiGeo.maxHeight = self.sourceHeight - crop[0] - crop[1] + self.modulus - 1;
 
     hb_rational_t par = {self.parWidth, self.parHeight};
     uiGeo.geometry.par = par;
@@ -484,6 +491,16 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     encodeInt(_cropBottom);
     encodeInt(_cropLeft);
     encodeInt(_cropRight);
+
+    encodeInt(_autoCropTop);
+    encodeInt(_autoCropBottom);
+    encodeInt(_autoCropLeft);
+    encodeInt(_autoCropRight);
+
+    encodeInt(_sourceWidth);
+    encodeInt(_sourceHeight);
+    encodeInt(_sourceParNum);
+    encodeInt(_sourceParDen);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -506,6 +523,16 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     decodeInt(_cropBottom);
     decodeInt(_cropLeft);
     decodeInt(_cropRight);
+
+    decodeInt(_autoCropTop);
+    decodeInt(_autoCropBottom);
+    decodeInt(_autoCropLeft);
+    decodeInt(_autoCropRight);
+
+    decodeInt(_sourceWidth);
+    decodeInt(_sourceHeight);
+    decodeInt(_sourceParNum);
+    decodeInt(_sourceParDen);
 
     _notificationsEnabled = YES;
     
@@ -533,14 +560,13 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 {
     self.validating = YES;
     self.notificationsEnabled = NO;
-    hb_title_t *title = self.title.hb_title;
 
     /* Note: objectForKey:@"UsesPictureSettings" refers to picture size, which encompasses:
      * height, width, keep ar, anamorphic and crop settings.
      * picture filters are handled separately below.
      */
-    int maxWidth = title->geometry.width - self.cropLeft - self.cropRight;
-    int maxHeight = title->geometry.height - self.cropTop - self.cropBottom;
+    int maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
+    int maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
     int jobMaxWidth = 0, jobMaxHeight = 0;
 
     /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
@@ -565,15 +591,15 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         {
             self.autocrop = YES;
             /* Here we use the auto crop values determined right after scan */
-            self.cropTop    = title->crop[0];
-            self.cropBottom = title->crop[1];
-            self.cropLeft   = title->crop[2];
-            self.cropRight  = title->crop[3];
+            self.cropTop    = self.autoCropTop;
+            self.cropBottom = self.autoCropBottom;
+            self.cropLeft   = self.autoCropLeft;
+            self.cropRight  = self.autoCropRight;
         }
 
         // crop may have changed, reset maxWidth/maxHeight
-        maxWidth = title->geometry.width - self.cropLeft - self.cropRight;
-        maxHeight = title->geometry.height - self.cropTop - self.cropBottom;
+        maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
+        maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
 
         // Set modulus
         if (preset[@"PictureModulus"])
@@ -588,8 +614,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         // Assume max picture settings initially.
         self.keepDisplayAspect = [preset[@"PictureKeepRatio"] intValue];
         self.anamorphicMode = [preset[@"PicturePAR"] intValue];
-        self.width = title->geometry.width - self.cropLeft - self.cropRight;
-        self.height = title->geometry.height - self.cropTop - self.cropBottom;
+        self.width = self.sourceWidth - self.cropLeft - self.cropRight;
+        self.height = self.sourceHeight - self.cropTop - self.cropBottom;
 
         // Check to see if the objectForKey:@"UsesPictureSettings" is 2,
         // which means "Use max. picture size for source"
@@ -627,9 +653,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     hb_geometry_t srcGeo, resultGeo;
     hb_geometry_settings_t uiGeo;
 
-    srcGeo.width = title->geometry.width;
-    srcGeo.height = title->geometry.height;
-    srcGeo.par = title->geometry.par;
+    srcGeo.width = self.sourceWidth;
+    srcGeo.height = self.sourceHeight;
+    srcGeo.par.num = self.sourceParNum;
+    srcGeo.par.den = self.sourceParDen;
 
     uiGeo.mode = self.anamorphicMode;
     uiGeo.keep = self.keepDisplayAspect * HB_KEEP_DISPLAY_ASPECT;
