@@ -179,7 +179,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         for (NSView *view in uiElements)
             [view setHidden:NO];
 
-        if ([self.filters.denoisePreset isEqualToString:@"none"])
+        if ([self.filters.denoisePreset isEqualToString:@"custom"])
         {
             [fDenoiseTuneLabel setHidden:YES];
             [fDenoiseTunePopUp setHidden:YES];
