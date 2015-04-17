@@ -463,6 +463,16 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         copy->_cropLeft = _cropLeft;
         copy->_cropRight = _cropRight;
 
+        copy->_autoCropTop = _autoCropTop;
+        copy->_autoCropBottom = _autoCropBottom;
+        copy->_autoCropLeft = _autoCropLeft;
+        copy->_autoCropRight = _autoCropRight;
+
+        copy->_sourceWidth = _sourceWidth;
+        copy->_sourceHeight = _sourceHeight;
+        copy->_sourceParNum = _sourceParNum;
+        copy->_sourceParDen = _sourceParDen;
+
         copy->_notificationsEnabled = _notificationsEnabled;
     }
 
