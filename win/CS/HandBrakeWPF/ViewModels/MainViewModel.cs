@@ -1638,6 +1638,29 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.selectedPreset != null)
             {
+                if (this.selectedPreset.IsDefault)
+                {
+                    this.errorService.ShowMessageBox(
+                      "You can not delete the default preset. Please set another preset as default first.",
+                      Resources.Warning,
+                      MessageBoxButton.OK,
+                      MessageBoxImage.Information);
+
+                    return;
+                }
+
+                MessageBoxResult result =
+                this.errorService.ShowMessageBox(
+                   "Are you sure you want to delete the preset: " + this.selectedPreset.Name + " ?",
+                   Resources.Question,
+                   MessageBoxButton.YesNo,
+                   MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 this.presetService.Remove(this.selectedPreset);
             }
             else

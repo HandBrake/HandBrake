@@ -4,6 +4,8 @@
         xmlns:Controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -552,6 +554,15 @@
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
                              BorderBrush="LightGray"
                             >
+
+                        <i:Interaction.Triggers>
+                            <commands:InputBindingTrigger>
+                                <commands:InputBindingTrigger.InputBinding>
+                                    <KeyBinding Key="Delete"/>
+                                </commands:InputBindingTrigger.InputBinding>
+                                <Micro:ActionMessage MethodName="PresetRemove" />
+                            </commands:InputBindingTrigger>
+                        </i:Interaction.Triggers>
 
                         <ListBox.GroupStyle>
                             <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
