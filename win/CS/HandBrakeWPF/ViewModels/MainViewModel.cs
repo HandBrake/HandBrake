@@ -53,6 +53,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Ookii.Dialogs.Wpf;
 
+    using Action = System.Action;
     using Execute = Caliburn.Micro.Execute;
     using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
 
@@ -1045,6 +1046,17 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the static preview view model.
         /// </summary>
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
+
+        /// <summary>
+        /// Gets the cancel action.
+        /// </summary>
+        public Action CancelAction
+        {
+            get
+            {
+                return this.CancelScan;
+            }
+        }
 
         #endregion
 

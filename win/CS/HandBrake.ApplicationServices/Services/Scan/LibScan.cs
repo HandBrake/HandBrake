@@ -168,8 +168,12 @@ namespace HandBrake.ApplicationServices.Services.Scan
             {
                 try
                 {
-                    this.scanLog.Close();
-                    this.scanLog.Dispose();
+                    lock (LogLock)
+                    {
+                        this.scanLog.Close();
+                        this.scanLog.Dispose();
+                        this.scanLog = null;
+                    }
                     this.instance.Dispose();
                 }
                 catch (Exception)
@@ -227,10 +231,14 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 this.IsScanning = false;
                 this.instance.StopScan();
 
-                if (this.scanLog != null)
+                lock (LogLock)
                 {
-                    this.scanLog.Close();
-                    this.scanLog.Dispose();
+                    if (this.scanLog != null)
+                    {
+                        this.scanLog.Close();
+                        this.scanLog.Dispose();
+                        this.scanLog = null;
+                    }
                 }
             }
             catch (Exception)

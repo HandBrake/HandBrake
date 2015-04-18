@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Controls
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -23,6 +24,7 @@ namespace HandBrakeWPF.Controls
         public StatusPanel()
         {
             InitializeComponent();
+            this.Message = "Message";
         }
 
         /// <summary>
@@ -35,13 +37,25 @@ namespace HandBrakeWPF.Controls
         /// Dependancy Property for the Message Property
         /// </summary>
         public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message", typeof(string), typeof(StatusPanel), new UIPropertyMetadata(string.Empty));
+            DependencyProperty.Register("Message", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Loading..."));
 
         /// <summary>
         /// Dependancy Property for the submessage propery
         /// </summary>
         public static readonly DependencyProperty SubMessageProperty =
-            DependencyProperty.Register("SubMessage", typeof(string), typeof(StatusPanel), new UIPropertyMetadata(string.Empty));
+            DependencyProperty.Register("SubMessage", typeof(string), typeof(StatusPanel), new FrameworkPropertyMetadata("Please Wait", FrameworkPropertyMetadataOptions.AffectsRender));
+
+        /// <summary>
+        /// Dependancy Property for the submessage propery
+        /// </summary>
+        public static readonly DependencyProperty ActionProperty =
+            DependencyProperty.Register("CancelAction", typeof(Action), typeof(StatusPanel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, OnCancelActionSet));
+
+        /// <summary>
+        /// Dependancy Property for the submessage propery
+        /// </summary>
+        public static readonly DependencyProperty ActionTextProperty =
+            DependencyProperty.Register("ActionText", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Cancel"));
 
         /// <summary>
         /// Gets or sets a value indicating whether IsLoading.
@@ -68,6 +82,66 @@ namespace HandBrakeWPF.Controls
         {
             get { return (string)GetValue(SubMessageProperty); }
             set { SetValue(SubMessageProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the cancel action.
+        /// </summary>
+        public Action CancelAction
+        {
+            get { return (Action)GetValue(ActionProperty); }
+            set { SetValue(SubMessageProperty, value); }
+        }
+
+        /// <summary>
+        /// The on cancel action set.
+        /// </summary>
+        /// <param name="d">
+        /// The d.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void OnCancelActionSet(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+       
+        }
+
+        /// <summary>
+        /// Gets or sets the action text.
+        /// </summary>
+        public string ActionText
+        {
+            get { return (string)GetValue(ActionTextProperty); }
+            set { SetValue(ActionTextProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is action button visible.
+        /// </summary>
+        public bool IsActionButtonVisible
+        {
+            get
+            {
+                return true; // this.CancelAction != null;
+            }
+        }
+
+        /// <summary>
+        /// The status action button_ on click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void StatusActionButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (this.CancelAction != null)
+            {
+                this.CancelAction();
+            }
         }
     }
 }

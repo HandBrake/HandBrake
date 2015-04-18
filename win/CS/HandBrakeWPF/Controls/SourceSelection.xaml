@@ -15,11 +15,11 @@
         
         
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5,8,0,0">
-            <TextBlock Text="Source Selection" FontSize="14" FontWeight="Bold" /> 
+            <TextBlock Text="Source Selection" FontSize="26" FontFamily="Segoe UI Light" /> 
         </StackPanel>
 
         <!-- Title Specific Scan -->
-        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="5,5,0,0">
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="5,15,0,0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Optionally choose a specific title: " />
 
@@ -86,7 +86,7 @@
         </Grid>
 
         <!-- Cancel Window -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,10">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
             <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" Padding="8,2" />
         </StackPanel>
 

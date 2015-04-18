@@ -53,50 +53,51 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,10,0,0">
-            <Border BorderThickness="0 0 0 1" BorderBrush="LightGray" Margin="0,0,0,10">
-                <TextBlock Text="Preferences" FontSize="16" />
-            </Border>
+        <!-- Row 1 -->
+        <TextBlock Text="Options" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
 
-            <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}}" SelectedItem="{Binding SelectedTab}"
+        <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
+            <StackPanel Orientation="Vertical" Margin="11,5,-1,0">
+
+                <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}}" SelectedItem="{Binding SelectedTab}"
                      BorderThickness="0" Background="Transparent">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource tabNameConverter}}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource tabNameConverter}}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-        </StackPanel>
+            </StackPanel>
+        </Border>
 
-        <ScrollViewer Grid.Column="1">
+        <ScrollViewer Grid.Column="1" Grid.Row="1" >
             <StackPanel Orientation="Vertical">
 
-                <StackPanel Name="General" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="General" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.General}}">
 
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="General" FontSize="16" />
-                    </Border>
+                    <TextBlock Text="General" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="On Startup" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="On Startup" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="Check for Updates" IsChecked="{Binding CheckForUpdates}" />
                             <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20">
-                        <TextBlock Text="When Done" Grid.Column="0" FontSize="14" Margin="0,0,0,10" />
+                        <TextBlock Text="When Done" FontSize="14" Margin="0,0,0,10" />
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left" />
 
@@ -158,18 +159,16 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Name="Output" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="Output" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.OutputFiles}}">
 
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="Output Files" FontSize="16" />
-                    </Border>
+                    <TextBlock Text="Output Files" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Automatic File Naming" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="Automatic File Naming" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="Automatically name output files" IsChecked="{Binding AutomaticallyNameFiles}" />
 
                             <Grid Margin="0,5,0,0">
@@ -182,7 +181,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                
+
                                 <TextBlock VerticalAlignment="Center" Text="Default Path: " Grid.Column="0" Grid.Row="0" />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" 
                                          ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" Style="{StaticResource LongToolTipHolder}"  />
@@ -208,14 +207,12 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Video}}">
 
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="Video" FontSize="16" />
-                    </Border>
+                    <TextBlock Text="Video" FontSize="20" FontFamily="Segoe UI Light" />
 
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,20">
 
                         <TextBlock Text="Decoding" FontSize="14" Margin="0,10,0,10" />
 
@@ -232,7 +229,7 @@
                         </StackPanel>
 
                         <TextBlock Text="Scaling" FontSize="14" Margin="0,20,0,10" />
-                        
+
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                             <TextBlock Text="Choose Scaler: " Margin="0,0,5,0" VerticalAlignment="Center" />
                             <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
@@ -244,24 +241,23 @@
                             <TextBlock Text="{x:Static Properties:Resources.Video_ScalingModes}" TextWrapping="Wrap"
                                        Visibility="{Binding IsClScaling, Converter={StaticResource boolToVisConverter}}" />
                         </StackPanel>
-               
+
                     </StackPanel>
 
-             
+
                 </StackPanel>
 
-                <StackPanel  Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel  Name="Advanced" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="Advanced" FontSize="16" />
-                    </Border>
+
+                    <TextBlock Text="Advanced" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Advanced Options" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="Advanced Options" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
@@ -327,15 +323,13 @@
 
                 </StackPanel>
 
-                <StackPanel Name="Updates" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="Updates" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Updates}}">
 
 
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="Updates" FontSize="16" />
-                    </Border>
+                    <TextBlock Text="Updates" FontSize="20" FontFamily="Segoe UI Light" />
 
-                    <TextBlock Text="Current Version" Grid.Column="0" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="Current Version" FontSize="14" Margin="0,10,0,10"/>
 
                     <Grid Margin="20,10,0,20">
                         <Grid.ColumnDefinitions>
@@ -348,7 +342,7 @@
                         <TextBlock Grid.Column="1" Margin="0,0,0,1" VerticalAlignment="Bottom" Text="{Binding Version}" />
                     </Grid>
 
-                    <TextBlock Text="Updates" Grid.Column="0" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="Updates" FontSize="14" Margin="0,10,0,10"/>
 
                     <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
                         <Button Content="Check for Updates" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
@@ -358,20 +352,17 @@
                     <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
                         <ProgressBar Minimum="0" Maximum="100" Height="20" Width="400" Value="{Binding DownloadProgressPercentage}" 
                                  Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
-                        
+
                     </StackPanel>
 
                     <TextBlock Text="{Binding UpdateMessage}" Margin="20,5,10,0" VerticalAlignment="Center" TextWrapping="Wrap" />
 
                 </StackPanel>
 
-                <StackPanel Name="About" Orientation="Vertical" Margin="10,10,0,0"
+                <StackPanel Name="About" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.About}}">
 
-
-                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="About HandBrake" FontSize="16" />
-                    </Border>
+                    <TextBlock Text="About HandBrake" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <ContentControl x:Name="AboutViewModel" />
 
@@ -379,7 +370,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" >
+        <StackPanel HorizontalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="2" >
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
@@ -389,11 +380,10 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            
+
             <Button Content="Close" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" />
         </StackPanel>
-
-
     </Grid>
+
 </UserControl>

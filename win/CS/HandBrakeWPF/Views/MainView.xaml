@@ -641,24 +641,26 @@
 
         <!-- Source Selection-->
         <Controls:SourceSelection Grid.Row="1" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Stretch" BorderThickness="1" BorderBrush="DarkGray"
-                                  Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}}" Panel.ZIndex="1"
+                                  Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}" Panel.ZIndex="1"
                                   />
 
 
-        <DockPanel Background="Black" Opacity="0.40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="0"
+        <!--<DockPanel Background="Black" Opacity="0.40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="0"
                    Grid.Row="1"
-                   Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                   Visibility="{Binding ShowSourceSelection, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />-->
 
-        <!--  StatusPanel  -->
+        <!--  StatusPanel   Height="70" -->
         <Controls:StatusPanel x:Name="loadingPanel"
-                              Grid.Row="1"
-                              Grid.RowSpan="2"
-                              Height="70"
-                              VerticalAlignment="Bottom"
+                              Grid.Row="0"
+                              Grid.RowSpan="3"
+                              Visibility="{Binding ShowStatusWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false, TargetNullValue=Collapsed, FallbackValue=Collapsed}"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               Panel.ZIndex="10"
                               IsLoading="{Binding ShowStatusWindow}"
-                              Message="{Binding StatusLabel}"
-                              SubMessage="Please Wait ..."
+                              Message="Please wait ..."
+                              SubMessage="{Binding StatusLabel}"
+                              ActionText="Cancel"
+                              CancelAction="{Binding CancelAction}"
                               />
 
         <!--  Status Bar  -->
