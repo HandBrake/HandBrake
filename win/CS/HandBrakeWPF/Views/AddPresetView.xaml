@@ -43,35 +43,12 @@
             </Style>
         </Grid.Style>
 
-
+        <TextBlock Text="Add Preset" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+        
         <!--  Header  -->
-        <StackPanel Grid.Row="0"
-                    Height="30"
-                    Margin="0,0,0,10"
-                    Orientation="Horizontal">
-            <StackPanel.Style>
-                <Style TargetType="StackPanel">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                            <Setter Property="Background" Value="White" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            
-            <Image Width="24"
-                   Height="24"
-                   Margin="10,0,5,0"
-                   VerticalAlignment="Center"
-                   Source="Images/Add40.png" />
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                <TextBlock FontWeight="Bold" Text="Add a Preset" />
-            </StackPanel>
-        </StackPanel>
-
         <Grid Grid.Row="1" Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="120" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -89,7 +66,7 @@
             <!--  Name  -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Text="Preset Name:" />
+                       Text="Name:" />
             <TextBox Grid.Row="0"
                      Grid.Column="1"
                      Width="150"
@@ -97,21 +74,16 @@
                      Text="{Binding Preset.Name}" />
 
             <!--  Settings  -->
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"
-                       Margin="0,20,0,0"
-                       FontWeight="Bold"
-                       Text="Picture Settings:" />
-
-            <TextBlock Grid.Row="2"
+            <TextBlock Grid.Row="2" Margin="0,10,0,0"
                        Grid.Column="0"
                        Style="{StaticResource LongToolTipHolder}"
+                       VerticalAlignment="Center"
                        ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
-                       Text="Max Picture Size:" />
-            <ComboBox Grid.Row="2"
+                       Text="Save Picture Size:" />
+            <ComboBox Grid.Row="2" Margin="0,10,0,0"
                       Grid.Column="1"
                       Width="125"
-                      HorizontalAlignment="Left"
+                      HorizontalAlignment="Left" VerticalAlignment="Center"
                       Style="{StaticResource LongToolTipHolder}"
                       ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
                       ItemsSource="{Binding PictureSettingsModes,
@@ -142,11 +114,10 @@
 
             <!--  Description  -->
             <TextBlock Grid.Row="5"
-                       Grid.Column="0"
-                       FontWeight="Bold" Margin="0,10,0,0"
+                       Grid.Column="0" Margin="0,10,0,0"
                        Text="Description:" />
-            <TextBox Grid.Row="6"
-                     Grid.ColumnSpan="2" Margin="0,10,0,0"
+            <TextBox Grid.Row="5"
+                     Grid.Column="1" Margin="0,10,0,0"
                      HorizontalAlignment="Stretch"
                      Text="{Binding Preset.Description}" />
         </Grid>
@@ -172,13 +143,13 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="1"
-                    Margin="0,5,10,5"
+                    Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
                     Content="Cancel"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
-                    Margin="0,5,10,5"
+                    Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add"
                     IsDefault="True"
