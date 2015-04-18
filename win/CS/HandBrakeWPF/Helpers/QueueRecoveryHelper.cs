@@ -126,7 +126,21 @@ namespace HandBrakeWPF.Helpers
             {
                 foreach (string file in queueFiles)
                 {
-                    encodeQueue.RestoreQueue(appDataPath + file); // Start Recovery
+                    // Skip over the file if it belongs to another HandBrake instance.
+                    Match m = Regex.Match(file, @"([0-9]+).xml");
+                    if (m.Success)
+                    {
+                        int processId = int.Parse(m.Groups[1].ToString());
+                        if (processId != GeneralUtilities.ProcessId && GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
+                        {
+                            continue;
+                        }
+                    }
+
+                    // Recover the Queue
+                    encodeQueue.RestoreQueue(appDataPath + file); 
+
+                    // Cleanup
                     if (!file.Contains(GeneralUtilities.ProcessId.ToString(CultureInfo.InvariantCulture)))
                     {
                         try
