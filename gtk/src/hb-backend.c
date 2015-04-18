@@ -4015,11 +4015,10 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         if (codec == HB_ACODEC_AUTO_PASS)
             continue;
 
-        aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
-                                            title->list_audio, track );
-        if ( ghb_audio_is_passthru(codec) &&
+        aconfig = hb_list_audio_config_item(title->list_audio, track);
+        if (ghb_audio_is_passthru(codec) &&
             !(ghb_audio_can_passthru(aconfig->in.codec) &&
-             (aconfig->in.codec & codec)))
+              (aconfig->in.codec & codec)))
         {
             // Not supported.  AC3 is passthrough only, so input must be AC3
             message = g_strdup_printf(
@@ -4102,6 +4101,14 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             int amixdown = ghb_get_best_mix(aconfig, codec, mix->amixdown);
             ghb_dict_set_string(asettings, "AudioMixdown",
                                     hb_mixdown_get_short_name(amixdown));
+        }
+        int samplerate = ghb_settings_audio_samplerate_rate(asettings,
+                                                            "AudioSamplerate");
+        if (samplerate == 0)
+        {
+            samplerate = aconfig->in.samplerate;
+            ghb_dict_set_string(asettings, "AudioSamplerate",
+                            ghb_audio_samplerate_get_short_name(samplerate));
         }
     }
     return TRUE;
