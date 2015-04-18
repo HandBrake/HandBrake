@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ctr="clr-namespace:HandBrakeWPF.Controls"
              x:Class="HandBrakeWPF.Controls.StatusPanel"
-             FontFamily="S"
              >
 
     <UserControl.Resources>
