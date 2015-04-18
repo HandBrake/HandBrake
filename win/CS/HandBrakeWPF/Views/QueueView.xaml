@@ -11,6 +11,8 @@
         xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
         xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
         xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
+        xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
+        xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         Title="{Binding Title}"
         Width="700"
         Height="500"
@@ -190,7 +192,17 @@
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding QueueTasks, Mode=OneWay}"
+                 helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
                  SelectionMode="Extended">
+
+            <i:Interaction.Triggers>
+                <commands:InputBindingTrigger>
+                    <commands:InputBindingTrigger.InputBinding>
+                        <KeyBinding Key="Delete"/>
+                    </commands:InputBindingTrigger.InputBinding>
+                    <cal:ActionMessage MethodName="RemoveSelectedJobs" />
+                </commands:InputBindingTrigger>
+            </i:Interaction.Triggers>
 
             <ListBox.Style>
                 <Style TargetType="ListBox">
@@ -205,7 +217,8 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear All" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="Clear Selected" />                 
                     <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />

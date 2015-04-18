@@ -10,7 +10,9 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -94,6 +96,7 @@ namespace HandBrakeWPF.ViewModels
             this.Title = "Queue";
             this.JobsPending = "No encodes pending";
             this.JobStatus = "There are no jobs currently encoding";
+            this.SelectedItems = new BindingList<QueueTask>();
         }
 
         #endregion
@@ -178,6 +181,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected items.
+        /// </summary>
+        public BindingList<QueueTask> SelectedItems { get; set; } 
+
         #endregion
 
         #region Public Methods
@@ -251,13 +259,43 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// The remove selected jobs.
+        /// </summary>
+        public void RemoveSelectedJobs()
+        {
+            MessageBoxResult result =
+                  this.errorService.ShowMessageBox(
+                      "Are you sure you want to delete the selected jobs?",
+                      Resources.Question,
+                      MessageBoxButton.YesNo,
+                      MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            List<QueueTask> tasksToRemove = this.SelectedItems.ToList();
+            foreach (QueueTask job in tasksToRemove)
+            {
+                this.RemoveJob(job);
+            }
+        }
+
+        /// <summary>
         /// Remove a Job from the queue
         /// </summary>
-        /// <param name="task">
+        /// <param name="queueTask">
         /// The Job to remove from the queue
         /// </param>
-        public void RemoveJob(QueueTask task)
+        public void RemoveJob(object queueTask)
         {
+            QueueTask task = queueTask as QueueTask;
+            if (task == null)
+            {
+                return;
+            }
+
             if (task.Status == QueueItemStatus.InProgress)
             {
                 MessageBoxResult result =

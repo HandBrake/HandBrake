@@ -38,10 +38,6 @@
 
         <DockPanel Background="Black" Opacity="0.60" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="1"
                Visibility="{Binding ShowOverlayPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-        
-        <!--<ContentControl x:Name="OverlayPanelViewModel"  Visibility="{Binding ShowOverlayPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
-                        VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="2" MinWidth="900" MinHeight="675"  />-->
-
 
     </Grid>
 </Window>

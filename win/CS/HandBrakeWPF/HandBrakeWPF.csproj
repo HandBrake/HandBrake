@@ -128,6 +128,7 @@
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
+    <Compile Include="Commands\InputBindingTrigger.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
     <Compile Include="Commands\CloseOverlayPanelCommand.cs" />
