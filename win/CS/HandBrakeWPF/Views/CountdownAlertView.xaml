@@ -10,19 +10,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Height="40"
-                    Margin="0,0,0,10"
-                    Orientation="Horizontal">
-            <Image Width="24"
-                   Height="24"
-                   Margin="10,0,5,0"
-                   VerticalAlignment="Center"
-                   Source="../Views/Images/Advanced.png" />
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                <TextBlock FontWeight="Bold" Text="When Done Action" />
-            </StackPanel>
-        </StackPanel>
+
+        <TextBlock Text="When Done Action" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
         
         <TextBlock Text="{Binding NoticeMessage}" Grid.Row="1" Margin="40,0,10,0"/>
 

@@ -25,8 +25,7 @@
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          Background="#FFF1F0EF">
+          VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -36,25 +35,11 @@
         </Grid.RowDefinitions>
 
         <!--  Header  -->
-        <StackPanel Grid.Row="0"
-                    Height="42"
-                    Margin="0,0,0,0"
-                    Background="White"
-                    Orientation="Horizontal">
-            <Image Width="32"
-                   Height="32"
-                   Margin="10,0,5,0"
-                   VerticalAlignment="Center"
-                   Source="Images/AddToQueue_small.png" />
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                <TextBlock FontWeight="Bold" Text="Add to Queue" />
-                <TextBlock Text="Select multiple titles to add to the queue." />
-            </StackPanel>
-        </StackPanel>
+        <TextBlock Text="Add to Queue" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
 
         <!-- Text -->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,10,0">
-            <TextBlock Text="Select titles: " />
+        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,0,10,0">
+            <TextBlock Text="Choose titles: " />
         </StackPanel>
 
         <!-- Selection -->
@@ -63,13 +48,12 @@
                  MaxHeight="500"
                  Margin="10,10,10,10"
                  VerticalAlignment="Stretch"
-                 Background="LightGray"
+                 HorizontalAlignment="Stretch"
                  ItemsSource="{Binding TitleList}"
                  SelectionMode="Single">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Background" Value="WhiteSmoke" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -122,8 +106,7 @@
 
         <!--  Controls  -->
         <Grid Grid.Row="4"
-              Margin="0,20,0,0"
-              Background="LightGray">
+              Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -131,13 +114,13 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="1"
-                    Margin="0,5,10,5"
+                    Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
                     Content="Cancel"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
-                    Margin="0,5,10,5"
+                    Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Add]"
                     Content="Add"
                     IsDefault="True"
