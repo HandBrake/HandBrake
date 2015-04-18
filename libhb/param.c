@@ -437,7 +437,8 @@ generate_generic_settings(int filter_id, const char *preset, const char *tune)
         }
         else if (preset_entry->settings != NULL)
         {
-            opt = hb_strdup_printf("%s:%s", preset_entry->settings,
+            opt = hb_strdup_printf("%s%s%s", preset_entry->settings,
+                    tune_entry != NULL ? ":" : "",
                     tune_entry != NULL ? tune_entry->settings : "");
         }
     }
