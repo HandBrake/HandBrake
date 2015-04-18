@@ -724,6 +724,7 @@ resolve_drive_name(gchar *filename)
 static gboolean
 update_source_label(signal_user_data_t *ud, const gchar *source)
 {
+    GStatBuf stat_buf;
     gchar *label = NULL;
     gint len;
     gchar **path;
@@ -731,74 +732,81 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
     gchar *filename = g_strdup(source);
 
     g_debug("update_source_label()");
-    len = strlen(filename);
-    if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+    if (g_stat(filename, &stat_buf) == 0)
     {
-        // Skip dos drive letters
+        len = strlen(filename);
+        if (stat_buf.st_mode & S_IFDIR)
+        {
+            // Skip dos drive letters
 #if defined(_WIN32)
-        start = strchr(filename, ':');
+            start = strchr(filename, ':');
 #else
-        start = filename;
+            start = filename;
 #endif
-        label = resolve_drive_name(filename);
-        if (label != NULL)
-        {
-            if (uppers_and_unders(label))
+            label = resolve_drive_name(filename);
+            if (label != NULL)
             {
-                camel_convert(label);
-            }
-        }
-        else
-        {
-            if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
-            if (start != NULL)
-                start++;
-            else
-                start = filename;
-
-            path = g_strsplit(start, G_DIR_SEPARATOR_S, -1);
-            len = g_strv_length (path);
-            if ((len > 1) && (strcmp("VIDEO_TS", path[len-1]) == 0))
-            {
-                label = g_strdup(path[len-2]);
                 if (uppers_and_unders(label))
                 {
                     camel_convert(label);
                 }
             }
-            else if (len > 0)
+            else
             {
-                if (path[len-1][0] != 0)
+                if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
+                if (start != NULL)
+                    start++;
+                else
+                    start = filename;
+
+                path = g_strsplit(start, G_DIR_SEPARATOR_S, -1);
+                len = g_strv_length (path);
+                if ((len > 1) && (strcmp("VIDEO_TS", path[len-1]) == 0))
                 {
-                    label = g_strdup(path[len-1]);
+                    label = g_strdup(path[len-2]);
                     if (uppers_and_unders(label))
                     {
                         camel_convert(label);
                     }
                 }
+                else if (len > 0)
+                {
+                    if (path[len-1][0] != 0)
+                    {
+                        label = g_strdup(path[len-1]);
+                        if (uppers_and_unders(label))
+                        {
+                            camel_convert(label);
+                        }
+                    }
+                    else
+                        label = g_strdup("new_video");
+                }
                 else
                     label = g_strdup("new_video");
+                g_strfreev (path);
+            }
+        }
+        else if (stat_buf.st_mode & S_IFBLK)
+        {
+            // Is regular file or block dev.
+            // Check to see if it is a dvd image
+            label = ghb_dvd_volname (filename);
+            if (label == NULL)
+            {
+                label = get_file_label(filename);
             }
             else
-                label = g_strdup("new_video");
-            g_strfreev (path);
-        }
-    }
-    else
-    {
-        // Is regular file or block dev.
-        // Check to see if it is a dvd image
-        label = ghb_dvd_volname (filename);
-        if (label == NULL)
-        {
-            label = get_file_label(filename);
+            {
+                if (uppers_and_unders(label))
+                {
+                    camel_convert(label);
+                }
+            }
         }
         else
         {
-            if (uppers_and_unders(label))
-            {
-                camel_convert(label);
-            }
+            label = get_file_label(filename);
         }
     }
     g_free(filename);
