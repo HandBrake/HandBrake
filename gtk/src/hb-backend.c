@@ -4512,13 +4512,16 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         {
             const char *filter_str;
             filter_str = ghb_dict_get_string(js, "PictureDenoiseCustom");
-            filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                                "ID",       hb_value_int(filter_id),
-                                "Settings", hb_value_string(filter_str));
+            filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                       "ID", hb_value_int(filter_id));
             if (filter_dict == NULL)
             {
                 g_warning("json pack denoise filter failure: %s", error.text);
                 return;
+            }
+            if (filter_str != NULL)
+            {
+                hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
             }
             hb_value_array_append(filter_list, filter_dict);
         }
@@ -4528,13 +4531,22 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             preset = ghb_dict_get_string(js, "PictureDenoisePreset");
             tune = ghb_dict_get_string(js, "PictureDenoiseTune");
             filter_str = hb_generate_filter_settings(filter_id, preset, tune);
-            filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                                "ID",       hb_value_int(filter_id),
-                                "Settings", hb_value_string(filter_str));
+            if (filter_str == NULL)
+            {
+                g_warning("Invalid %s preset %s and/or tune %s",
+                    filter_id == HB_FILTER_HQDN3D ? "HQDN3D" : "NLMeans",
+                    preset, tune);
+            }
+            filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                       "ID", hb_value_int(filter_id));
             if (filter_dict == NULL)
             {
                 g_warning("json pack denoise filter failure: %s", error.text);
                 return;
+            }
+            if (filter_str != NULL)
+            {
+                hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
             }
             hb_value_array_append(filter_list, filter_dict);
             g_free(filter_str);
@@ -4546,13 +4558,16 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     if( deblock >= 5 )
     {
         filter_str = g_strdup_printf("%d", deblock);
-        filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                            "ID",       hb_value_int(HB_FILTER_DEBLOCK),
-                            "Settings", hb_value_string(filter_str));
+        filter_dict = json_pack_ex(&error, 0, "{s:o}",
+                                   "ID", hb_value_int(HB_FILTER_DEBLOCK));
         if (filter_dict == NULL)
         {
             g_warning("json pack deblock filter failure: %s", error.text);
             return;
+        }
+        if (filter_str != NULL)
+        {
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
         }
         hb_value_array_append(filter_list, filter_dict);
         g_free(filter_str);
