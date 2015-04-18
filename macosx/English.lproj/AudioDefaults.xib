@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14E7f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
@@ -184,7 +184,7 @@ DQ
                         </connections>
                     </button>
                     <button id="vUx-OV-W5T">
-                        <rect key="frame" x="548" y="404" width="151" height="18"/>
+                        <rect key="frame" x="548" y="404" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="sdZ-Rx-JoG">
@@ -198,7 +198,7 @@ DQ
                         </connections>
                     </button>
                     <button id="fzd-MO-xaB">
-                        <rect key="frame" x="548" y="386" width="151" height="18"/>
+                        <rect key="frame" x="548" y="386" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="cUX-iP-UAs">
@@ -212,7 +212,7 @@ DQ
                         </connections>
                     </button>
                     <button id="fgl-Ev-ELt">
-                        <rect key="frame" x="548" y="368" width="151" height="18"/>
+                        <rect key="frame" x="548" y="368" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="VnE-3R-bUf">
@@ -226,7 +226,7 @@ DQ
                         </connections>
                     </button>
                     <button id="E93-Md-aWa">
-                        <rect key="frame" x="548" y="350" width="151" height="18"/>
+                        <rect key="frame" x="548" y="350" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="8mC-Wx-myL">
@@ -240,7 +240,7 @@ DQ
                         </connections>
                     </button>
                     <button id="IxI-o9-jMs">
-                        <rect key="frame" x="548" y="332" width="151" height="18"/>
+                        <rect key="frame" x="548" y="332" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="LX6-kc-5vq">
@@ -521,9 +521,9 @@ DQ
                         </connections>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RtZ-Cz-5mG">
-                        <rect key="frame" x="18" y="198" width="205" height="14"/>
+                        <rect key="frame" x="18" y="198" width="252" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Encoder Settings:" id="007-WM-RmC">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio encoder settings for the selected tracks:" id="007-WM-RmC">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -548,6 +548,48 @@ DQ
                             <outlet property="nextKeyView" destination="sC2-52-liU" id="mmR-bd-cFG"/>
                         </connections>
                     </segmentedControl>
+                    <button id="os0-Jl-OXF">
+                        <rect key="frame" x="650" y="404" width="77" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="TrueHD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="z9d-P3-6UP">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="tU2-ar-p5a"/>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowTrueHDPassthru" id="3fh-cT-PtB"/>
+                            <outlet property="nextKeyView" destination="0HY-xB-cvO" id="TYi-8L-gT4"/>
+                        </connections>
+                    </button>
+                    <button id="0HY-xB-cvO">
+                        <rect key="frame" x="650" y="386" width="77" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="FLAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="naS-No-CdV">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="SFz-OO-EgN"/>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowFLACPassthru" id="wCD-CW-AEP"/>
+                            <outlet property="nextKeyView" destination="BK7-c4-kkk" id="Pt4-9c-oQl"/>
+                        </connections>
+                    </button>
+                    <button id="BK7-c4-kkk">
+                        <rect key="frame" x="650" y="368" width="77" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="EAC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="l4i-pd-Cbk" id="83N-qg-BsJ"/>
+                            <binding destination="-2" name="value" keyPath="self.settings.allowEAC3Passthru" id="vcL-wd-H1f"/>
+                            <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="scB-D1-Zvp"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>

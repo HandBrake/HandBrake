@@ -323,24 +323,37 @@
 
     if (audioDefaults.allowAACPassthru)
     {
-        job->acodec_copy_mask |= HB_ACODEC_FFAAC;
+        job->acodec_copy_mask |= HB_ACODEC_AAC_PASS;
     }
     if (audioDefaults.allowAC3Passthru)
     {
-        job->acodec_copy_mask |= HB_ACODEC_AC3;
+        job->acodec_copy_mask |= HB_ACODEC_AC3_PASS;
+    }
+    if (audioDefaults.allowEAC3Passthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_EAC3_PASS;
     }
     if (audioDefaults.allowDTSHDPassthru)
     {
-        job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
+        job->acodec_copy_mask |= HB_ACODEC_DCA_HD_PASS;
     }
     if (audioDefaults.allowDTSPassthru)
     {
-        job->acodec_copy_mask |= HB_ACODEC_DCA;
+        job->acodec_copy_mask |= HB_ACODEC_DCA_PASS;
     }
     if (audioDefaults.allowMP3Passthru)
     {
-        job->acodec_copy_mask |= HB_ACODEC_MP3;
+        job->acodec_copy_mask |= HB_ACODEC_MP3_PASS;
     }
+    if (audioDefaults.allowTrueHDPassthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_TRUEHD_PASS;
+    }
+    if (audioDefaults.allowFLACPassthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_FLAC_PASS;
+    }
+
     job->acodec_fallback = audioDefaults.encoderFallback;
 
     // Audio tracks and mixdowns

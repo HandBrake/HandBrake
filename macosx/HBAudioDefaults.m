@@ -119,9 +119,12 @@
     // Passthru settings
     self.allowAACPassthru = [preset[@"AudioAllowAACPass"] boolValue];
     self.allowAC3Passthru = [preset[@"AudioAllowAC3Pass"] boolValue];
+    self.allowEAC3Passthru = [preset[@"AudioAllowEAC3Pass"] boolValue];
     self.allowDTSHDPassthru = [preset[@"AudioAllowDTSHDPass"] boolValue];
     self.allowDTSPassthru= [preset[@"AudioAllowDTSPass"] boolValue];
     self.allowMP3Passthru = [preset[@"AudioAllowMP3Pass"] boolValue];
+    self.allowTrueHDPassthru = [preset[@"AudioAllowTrueHDPass"] boolValue];
+    self.allowFLACPassthru = [preset[@"AudioAllowFlacPass"] boolValue];
 
     self.secondaryEncoderMode = [preset[@"AudioSecondaryEncoderMode"] boolValue];
 
@@ -183,9 +186,12 @@
     // Passthru settings
     preset[@"AudioAllowAACPass"] = @(self.allowAACPassthru);
     preset[@"AudioAllowAC3Pass"] = @(self.allowAC3Passthru);
+    preset[@"AudioAllowEAC3Pass"] = @(self.allowEAC3Passthru);
     preset[@"AudioAllowDTSHDPass"] = @(self.allowDTSHDPassthru);
     preset[@"AudioAllowDTSPass"] = @(self.allowDTSPassthru);
     preset[@"AudioAllowMP3Pass"] = @(self.allowMP3Passthru);
+    preset[@"AudioAllowTrueHDPass"] = @(self.allowTrueHDPassthru);
+    preset[@"AudioAllowFlacPass"] = @(self.allowFLACPassthru);
 
     preset[@"AudioEncoderFallback"] = @(hb_audio_encoder_get_name(self.encoderFallback));
 
