@@ -110,6 +110,7 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
+		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
 		A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A91017B31A64440A00039BFB /* HBSubtitles.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
@@ -548,6 +549,7 @@
 				27D6C76B14B102DA00B785E4 /* libtheora.a in Frameworks */,
 				27D6C76D14B102DA00B785E4 /* libvorbis.a in Frameworks */,
 				27D6C76F14B102DA00B785E4 /* libvorbisenc.a in Frameworks */,
+				6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */,
 				22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */,
 				27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */,
 				27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */,

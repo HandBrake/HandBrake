@@ -7,6 +7,10 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifdef SYS_MINGW
+#define _WIN32_WINNT 0x600
+#endif
+
 #ifdef USE_PTHREAD
 #ifdef SYS_LINUX
 #define _GNU_SOURCE
@@ -50,6 +54,7 @@
 #include <wchar.h>
 #include <mbctype.h>
 #include <locale.h>
+#include <shlobj.h>
 #endif
 
 #ifdef SYS_SunOS
@@ -490,6 +495,62 @@ int hb_platform_init()
     init_cpu_info();
 
     return result;
+}
+
+/************************************************************************
+ * Get app data config directory
+ ***********************************************************************/
+void hb_get_user_config_directory( char path[512] )
+{
+    /* Create the base */
+#if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
+    WCHAR *wide_path;
+    SHGetKnownFolderPath(&FOLDERID_RoamingAppData, 0, NULL, &wide_path);
+    WideCharToMultiByte(CP_UTF8, 0, wide_path, -1, path, 512, NULL, NULL );
+    path[511] = 0;
+#elif defined( SYS_LINUX )
+    char *p;
+
+    if ((p = getenv("XDG_CONFIG_HOME")) != NULL)
+    {
+        strncpy(path, p, 511);
+        path[511] = 0;
+    }
+    else if ((p = getenv("HOME")) != NULL)
+    {
+        strncpy(path, p, 511);
+        path[511] = 0;
+        int len = strlen(path);
+        strncpy(path + len, "/.config", 511 - len - 1);
+        path[511] = 0;
+    }
+    else
+    {
+        hb_error("Failed to lookup user config directory!");
+        path[0] = 0;
+    }
+#elif defined( __APPLE__ )
+    osx_get_user_config_directory(path);
+#endif
+}
+
+/************************************************************************
+ * Get a user config filename for HB
+ ***********************************************************************/
+void hb_get_user_config_filename( char name[1024], char *fmt, ... )
+{
+    va_list args;
+
+    hb_get_user_config_directory( name );
+#if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
+    strcat( name, "\\" );
+#else
+    strcat( name, "/" );
+#endif
+
+    va_start( args, fmt );
+    vsnprintf( &name[strlen(name)], 1024 - strlen(name), fmt, args );
+    va_end( args );
 }
 
 /************************************************************************

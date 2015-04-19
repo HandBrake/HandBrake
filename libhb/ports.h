@@ -100,6 +100,11 @@ void hb_get_temporary_directory( char path[512] );
 void hb_get_tempory_filename( hb_handle_t *, char name[1024],
                               char * fmt, ... );
 
+#if defined( SYS_DARWIN )
+void osx_get_user_config_directory( char path[512] );
+#endif
+void hb_get_user_config_directory( char path[512] );
+void hb_get_user_config_filename( char name[1024], char *fmt, ... );
 /************************************************************************
  * Threads
  ***********************************************************************/

@@ -44,7 +44,7 @@ BUILD.out += $(TEST.install.exe)
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += IOKit CoreServices AudioToolbox
+    TEST.GCC.f += IOKit CoreServices AudioToolbox Foundation
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
@@ -65,7 +65,7 @@ ifeq (1,$(HAS.pthread))
 else
     TEST.GCC.l += pthreadGC2
 endif
-    TEST.GCC.l += iconv ws2_32 regex
+    TEST.GCC.l += iconv ws2_32 regex uuid
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.args.extra.exe++ += -static
 endif #   (1-mingw,$(BUILD.cross)-$(BUILD.system))

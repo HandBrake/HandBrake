@@ -173,7 +173,7 @@ case $host in
     else
         HB_LIBS+=" -lpthreadGC2"
 	fi
-    HB_LIBS+=" -lregex"
+    HB_LIBS+=" -lregex -luuid"
     ;;
   *)
     HB_LIBS+=" -ldl -lpthread"
