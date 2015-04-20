@@ -621,8 +621,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         hb_buffer_t * vid_buf = NULL;
 
-        int total_read = 0;
-        while (total_read < PREVIEW_READ_THRESH)
+        int total_read = 0, packets = 0;
+        while (total_read < PREVIEW_READ_THRESH ||
+               (!AllAudioOK(title) && packets < 10000))
         {
             if (data->bd)
             {
@@ -679,6 +680,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 goto skip_preview;
             }
             total_read += buf->size;
+            packets++;
 
             (hb_demux[title->demuxer])(buf, list_es, 0 );
 
