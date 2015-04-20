@@ -35,14 +35,14 @@
 						    Text="{Binding Message, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                            />
 
-                        <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" FontSize="12" FontFamily="Segoe UI Light" Margin="0,5" HorizontalAlignment="Left"
+                        <TextBlock SnapsToDevicePixels="True" VerticalAlignment="Top" FontSize="14" FontFamily="Segoe UI Light" Margin="0,5" HorizontalAlignment="Left"
 						    Text="{Binding SubMessage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
 						    TextWrapping="WrapWithOverflow"
                            />
                     </StackPanel>
              
                     <Button Content="{Binding ActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="0,10,0,0"
-                            x:Name="StatusActionButton" Click="StatusActionButton_OnClick" Padding="8,2" HorizontalAlignment="Right"
+                            x:Name="StatusActionButton" Click="StatusActionButton_OnClick" Padding="8,2" HorizontalAlignment="Right" IsDefault="True"
                             Visibility="{Binding IsActionButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
 
                 </StackPanel>
