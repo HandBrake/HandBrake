@@ -449,7 +449,7 @@ The previous user_presets.xml file was backed up.</value>
     <value>Scan failed: </value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>Scan Failed... See Activity Log for details.</value>
+    <value>Scan Failed... Please See Activity Log for details.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
     <value>Scanning source, please wait...</value>
@@ -561,5 +561,16 @@ Please choose a different filename.</value>
 Foreign Audio Track - The Foreign Audio track will be burned in if available. 
 First Track - The first track will be burned in.
 Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>No valid source or titles found.</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake will not be able to encode the seleteced source as it did not find a valid source with titles to encode. 
+This could be due to one of the following reasons:
+- The source file is not a valid video file or is in a format that HandBrake does not support.
+- The source may be copy protected or include DRM. Please note that HandBrake is not a ripper.
+
+The Activity log may have further information.</value>
   </data>
 </root>

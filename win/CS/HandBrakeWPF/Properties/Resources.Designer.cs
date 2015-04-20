@@ -613,7 +613,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scan Failed... See Activity Log for details..
+        ///   Looks up a localized string similar to Scan Failed... Please See Activity Log for details..
         /// </summary>
         public static string Main_ScanFailled_CheckLog {
             get {
@@ -636,6 +636,29 @@ namespace HandBrakeWPF.Properties {
         public static string Main_ScanningTitleXOfY {
             get {
                 return ResourceManager.GetString("Main_ScanningTitleXOfY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No valid source or titles found..
+        /// </summary>
+        public static string Main_ScanNoTitlesFound {
+            get {
+                return ResourceManager.GetString("Main_ScanNoTitlesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake will not be able to encode the seleteced source as it did not find a valid source with titles to encode. 
+        ///This could be due to one of the following reasons:
+        ///- The source file is not a valid video file or is in a format that HandBrake does not support.
+        ///- The source may be copy protected or include DRM. Please note that HandBrake is not a ripper.
+        ///
+        ///The Activity log may have further information..
+        /// </summary>
+        public static string Main_ScanNoTitlesFoundMessage {
+            get {
+                return ResourceManager.GetString("Main_ScanNoTitlesFoundMessage", resourceCulture);
             }
         }
         

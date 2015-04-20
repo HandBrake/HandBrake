@@ -138,6 +138,9 @@
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
+    <Compile Include="Controls\AlertPanel.xaml.cs">
+      <DependentUpon>AlertPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
@@ -366,6 +369,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\AlertPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -554,6 +561,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\File32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\information64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />

@@ -44,7 +44,7 @@
 
         <!-- Selection -->
         <ListBox Grid.Row="2"
-                 MinHeight="250"
+                 MinHeight="240"
                  MaxHeight="500"
                  Margin="10,10,10,10"
                  VerticalAlignment="Stretch"

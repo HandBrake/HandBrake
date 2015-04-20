@@ -670,6 +670,19 @@
                               CancelAction="{Binding CancelAction}"
                               />
 
+        <Controls:AlertPanel x:Name="alertPanel"
+                              Grid.Row="0"
+                              Grid.RowSpan="3"
+                              Visibility="{Binding ShowAlertWindow, Converter={StaticResource boolToVisConverter}, ConverterParameter=false, TargetNullValue=Collapsed, FallbackValue=Collapsed}"
+                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                              Panel.ZIndex="10"
+                              Message="{Binding AlertWindowHeader}"
+                              SubMessage="{Binding AlertWindowText}"
+                              ActionText="OK"
+                              DefaultAction="{Binding AlertWindowClose}">
+            
+        </Controls:AlertPanel>
+
         <!--  Status Bar  -->
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" MinHeight="32" >
 

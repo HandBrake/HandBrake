@@ -199,6 +199,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool canPause;
 
+        private bool showAlertWindow;
+
+        private string alertWindowHeader;
+
+        private string alertWindowText;
+
         #endregion
 
         /// <summary>
@@ -1058,6 +1064,77 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether show alert window.
+        /// </summary>
+        public bool ShowAlertWindow
+        {
+            get
+            {
+                return this.showAlertWindow;
+            }
+            set
+            {
+                if (value.Equals(this.showAlertWindow))
+                {
+                    return;
+                }
+                this.showAlertWindow = value;
+                this.NotifyOfPropertyChange(() => this.ShowAlertWindow);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether alert window header.
+        /// </summary>
+        public string AlertWindowHeader
+        {
+            get
+            {
+                return this.alertWindowHeader;
+            }
+            set
+            {
+                if (value == this.alertWindowHeader)
+                {
+                    return;
+                }
+                this.alertWindowHeader = value;
+                this.NotifyOfPropertyChange(() => this.AlertWindowHeader);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether alert window text.
+        /// </summary>
+        public string AlertWindowText
+        {
+            get
+            {
+                return this.alertWindowText;
+            }
+            set
+            {
+                if (value == this.alertWindowText)
+                {
+                    return;
+                }
+                this.alertWindowText = value;
+                this.NotifyOfPropertyChange(() => this.AlertWindowText);
+            }
+        }
+
+        /// <summary>
+        /// Gets the alert window close.
+        /// </summary>
+        public Action AlertWindowClose
+        {
+            get
+            {
+                return this.CloseAlertWindow;
+            }
+        }
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -1484,6 +1561,16 @@ namespace HandBrakeWPF.ViewModels
         public void CloseSourceSelection()
         {
             this.ShowSourceSelection = false;
+        }
+
+        /// <summary>
+        /// The close alert window.
+        /// </summary>
+        public void CloseAlertWindow()
+        {
+            this.ShowAlertWindow = false;
+            this.AlertWindowText = string.Empty;
+            this.AlertWindowHeader = string.Empty;
         }
 
         #endregion
@@ -1999,6 +2086,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// The open alert window.
+        /// </summary>
+        /// <param name="header">
+        /// The header.
+        /// </param>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        private void OpenAlertWindow(string header, string message)
+        {
+            this.ShowAlertWindow = true;
+            this.AlertWindowHeader = header;
+            this.AlertWindowText = message;
+        }
+
         #endregion
 
         #region Event Handlers
@@ -2043,8 +2146,11 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.NotifyOfPropertyChange(() => this.ScannedSource);
                         this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
-                        this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
-                                             ?? this.ScannedSource.Titles.FirstOrDefault();
+                        this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
+                    }
+                    else
+                    {
+                        this.OpenAlertWindow(Resources.Main_ScanNoTitlesFound, Resources.Main_ScanNoTitlesFoundMessage);
                     }
 
                     this.ShowStatusWindow = false;
@@ -2057,11 +2163,6 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.SourceLabel = Resources.Main_ScanCancelled;
                         this.StatusLabel = Resources.Main_ScanCancelled;
-                    }
-                    else if (e.Exception == null && e.ErrorInformation != null)
-                    {
-                        this.SourceLabel = Resources.Main_ScanFailed_NoReason + e.ErrorInformation;
-                        this.StatusLabel = Resources.Main_ScanFailed_NoReason + e.ErrorInformation;
                     }
                     else
                     {

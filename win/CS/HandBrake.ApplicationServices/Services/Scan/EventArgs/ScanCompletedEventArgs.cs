@@ -35,7 +35,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.EventArgs
         /// </param>
         public ScanCompletedEventArgs(bool cancelled, Exception exception, string errorInformation, Source scannedSource)
         {
-            this.Successful = !cancelled && exception == null && string.IsNullOrEmpty(errorInformation);
+            this.Successful = !cancelled && exception == null && string.IsNullOrEmpty(errorInformation) && scannedSource != null && scannedSource.Titles != null && scannedSource.Titles.Count > 0;
             this.Cancelled = cancelled;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
