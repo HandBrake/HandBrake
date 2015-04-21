@@ -236,7 +236,7 @@ int hb_validate_param_string(const char *regex_pattern, const char *param_string
 int hb_validate_filter_settings(int filter_id, const char *filter_param)
 {
     // Regex matches "number" followed by one or more ":number", where number is uint or ufloat
-    const char *hb_colon_separated_params_regex = "^((([0-9]+([.][0-9]+)?)|([.][0-9]+))((:(([0-9]+([.][0-9]+)?)|([.][0-9]+)))+)?)$";
+    const char *hb_colon_separated_params_regex = "^((([0-9]+([.,][0-9]+)?)|([.,][0-9]+))((:(([0-9]+([.,][0-9]+)?)|([.,][0-9]+)))+)?)$";
 
     const char *regex_pattern = NULL;
 
