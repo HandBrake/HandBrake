@@ -1682,6 +1682,7 @@ queue_delete_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_queue_remove_row_internal(ud, ii);
     }
     ghb_save_queue(ud->queue);
+    ghb_update_pending(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2175,6 +2176,7 @@ find_pid:
         }
         ghb_queue_buttons_grey(ud);
         ghb_save_queue(ud->queue);
+        ghb_update_pending(ud);
     }
     return FALSE;
 }

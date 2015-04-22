@@ -2856,6 +2856,7 @@ void
 ghb_update_pending(signal_user_data_t *ud)
 {
     GtkLabel *label;
+    GtkToolButton *button;
     gint pending;
     gchar *str;
 
@@ -2863,6 +2864,18 @@ ghb_update_pending(signal_user_data_t *ud)
     pending = queue_pending_count(ud->queue);
     str = g_strdup_printf(_("%d encode(s) pending"), pending);
     gtk_label_set_text(label, str);
+    g_free(str);
+
+    button = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    if (pending > 0)
+    {
+        str = g_strdup_printf(_("Queue (%d)"), pending);
+    }
+    else
+    {
+        str = g_strdup_printf(_("Queue"));
+    }
+    gtk_tool_button_set_label(button, str);
     g_free(str);
 }
 
