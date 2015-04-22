@@ -4774,7 +4774,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "{s:o, s:o, s:o, s:o}",
                 "Track",    hb_value_int(track),
                 "Default",  hb_value_bool(def),
-                "Force",    hb_value_bool(force),
+                "Forced",   hb_value_bool(force),
                 "Burn",     hb_value_bool(burned));
             if (subtitle_dict == NULL)
             {
