@@ -283,45 +283,6 @@ void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
             if ( buf->s.start >= 0 )
             {
                 int64_t fdelta;
-                if (state->last_scr != AV_NOPTS_VALUE)
-                {
-                    // Program streams have an SCR in every PACK header so they
-                    // can't lose their clock reference. But the PCR in
-                    // Transport streams is typically on <.1% of the packets.
-                    // If a PCR packet gets lost and it marks a clock
-                    // discontinuity then the data following it will be
-                    // referenced to the wrong clock & introduce huge gaps or
-                    // throw our A/V sync off. We try to protect against that
-                    // here by sanity checking timestamps against the current
-                    // reference clock and discarding packets where the DTS
-                    // is "too far" from its clock.
-                    fdelta = buf->s.start - state->last_scr - state->scr_delta;
-                    if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
-                    {
-                        // packet too far behind or ahead of its clock reference
-                        ++state->dts_drops;
-                        ++state->dts_drop_run;
-                        hb_buffer_t *tmp = buf->next;
-                        buf->next = NULL;
-                        hb_buffer_close( &buf );
-                        buf = tmp;
-                        continue;
-                    }
-                    else
-                    {
-                        // Some streams have no PCRs.  In these cases, we
-                        // will only get an "PCR" update if a large change
-                        // in DTS or PTS is detected.  So we need to update
-                        // our scr_delta with each valid timestamp so that
-                        // fdelta does not continually grow.
-                        state->scr_delta = buf->s.start - state->last_scr;
-                        if (state->dts_drop_run > 0)
-                        {
-                            hb_error("Packet clock reference error. Dropped %d frames.", state->dts_drop_run);
-                            state->dts_drop_run = 0;
-                        }
-                    }
-                }
                 if (buf->s.type == AUDIO_BUF || buf->s.type == VIDEO_BUF)
                 {
                     if ( state->last_pts >= 0 )
@@ -340,6 +301,36 @@ void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
                         }
                     }
                     state->last_pts = buf->s.start;
+                }
+                if (state->last_scr != AV_NOPTS_VALUE)
+                {
+                    // Program streams have an SCR in every PACK header so they
+                    // can't lose their clock reference. But the PCR in
+                    // Transport streams is typically on <.1% of the packets.
+                    // If a PCR packet gets lost and it marks a clock
+                    // discontinuity then the data following it will be
+                    // referenced to the wrong clock & introduce huge gaps or
+                    // throw our A/V sync off. We try to protect against that
+                    // here by sanity checking timestamps against the current
+                    // reference clock and discarding packets where the DTS
+                    // is "too far" from its clock.
+                    fdelta = buf->s.start - state->last_scr - state->scr_delta;
+                    if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
+                    {
+                        // packet too far behind or ahead of its clock reference
+                        buf->s.renderOffset = AV_NOPTS_VALUE;
+                        buf->s.start = AV_NOPTS_VALUE;
+                        buf->s.stop = AV_NOPTS_VALUE;
+                    }
+                    else
+                    {
+                        // Some streams have no PCRs.  In these cases, we
+                        // will only get an "PCR" update if a large change
+                        // in DTS or PTS is detected.  So we need to update
+                        // our scr_delta with each valid timestamp so that
+                        // fdelta does not continually grow.
+                        state->scr_delta = buf->s.start - state->last_scr;
+                    }
                 }
             }
 

@@ -770,10 +770,6 @@ void ReadLoop( void * _w )
     hb_list_empty( &list );
 
     hb_log( "reader: done. %d scr changes", r->demux.scr_changes );
-    if ( r->demux.dts_drops )
-    {
-        hb_log( "reader: %d drops because DTS out of range", r->demux.dts_drops );
-    }
 }
 
 static void UpdateState( hb_work_private_t  * r, int64_t start)

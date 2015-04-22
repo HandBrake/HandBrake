@@ -285,8 +285,6 @@ typedef struct {
     int64_t scr_delta;
     int64_t last_pts;       /* last pts we saw */
     int     scr_changes;    /* number of SCR discontinuities */
-    int     dts_drops;      /* number of drops because DTS too far from SCR */
-    int     dts_drop_run;   /* number of consecutive drops */
     int     new_chap;
 } hb_psdemux_t;
 
