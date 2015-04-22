@@ -1627,6 +1627,63 @@ queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_container_empty(GTK_CONTAINER(list));
 }
 
+static void
+ghb_queue_remove_row_internal(signal_user_data_t *ud, int row)
+{
+    GtkTreeView *treeview;
+    GtkTreeModel *store;
+    GtkTreeIter iter;
+
+    if (row < 0) return;
+    if (row >= ghb_array_len(ud->queue))
+        return;
+
+    GhbValue *settings = ghb_array_get(ud->queue, row);
+    int status = ghb_dict_get_int(settings, "job_status");
+    if (status == GHB_QUEUE_RUNNING)
+    {
+        // Ask if wants to stop encode.
+        if (!ghb_cancel_encode2(ud, NULL))
+        {
+            return;
+        }
+        int unique_id = ghb_dict_get_int(settings, "job_unique_id");
+        ghb_remove_job(unique_id);
+    }
+
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+    store = gtk_tree_view_get_model(treeview);
+
+    gchar *path = g_strdup_printf ("%d", row);
+    if (gtk_tree_model_get_iter_from_string(store, &iter, path))
+    {
+        gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
+    }
+    g_free(path);
+
+    ghb_array_remove(ud->queue, row);
+}
+
+void
+ghb_queue_remove_row(signal_user_data_t *ud, int row)
+{
+    ghb_queue_remove_row_internal(ud, row);
+    ghb_save_queue(ud->queue);
+}
+
+G_MODULE_EXPORT void
+queue_delete_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    int ii, count;
+
+    count = ghb_array_len(ud->queue);
+    for (ii = count - 1; ii >= 0; ii--)
+    {
+        ghb_queue_remove_row_internal(ud, ii);
+    }
+    ghb_save_queue(ud->queue);
+}
+
 G_MODULE_EXPORT void
 queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 {
@@ -2067,7 +2124,6 @@ ghb_reload_queue(signal_user_data_t *ud)
     gint pid;
     gint status;
     GhbValue *settings;
-    gchar *message;
 
     g_debug("ghb_reload_queue");
 
@@ -2096,70 +2152,31 @@ find_pid:
     }
     else
     {
-        GtkWindow *hb_window;
-        hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-        message = g_strdup_printf(
-                    _("You have %d unfinished job(s) in a saved queue.\n\n"
-                    "Would you like to reload them?"), unfinished);
-        if (ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
-                               message, _("No"), _("Yes")))
+        GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+        ud->queue = queue;
+        // First get rid of any old items we don't want
+        for (ii = count-1; ii >= 0; ii--)
         {
-            GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
-            ud->queue = queue;
-            // First get rid of any old items we don't want
-            for (ii = count-1; ii >= 0; ii--)
+            settings = ghb_array_get(queue, ii);
+            status = ghb_dict_get_int(settings, "job_status");
+            if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
             {
-                settings = ghb_array_get(queue, ii);
-                status = ghb_dict_get_int(settings, "job_status");
-                if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
-                {
-                    ghb_array_remove(queue, ii);
-                }
+                ghb_array_remove(queue, ii);
             }
-            count = ghb_array_len(queue);
-            for (ii = 0; ii < count; ii++)
-            {
-                settings = ghb_array_get(queue, ii);
-                ghb_dict_set_int(settings, "job_unique_id", 0);
-                ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-                add_to_queue_list(ud, settings, NULL);
-            }
-            ghb_queue_buttons_grey(ud);
-            ghb_save_queue(ud->queue);
         }
-        else
+        count = ghb_array_len(queue);
+        for (ii = 0; ii < count; ii++)
         {
-            ghb_value_free(&queue);
+            settings = ghb_array_get(queue, ii);
+            ghb_dict_set_int(settings, "job_unique_id", 0);
+            ghb_dict_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+            add_to_queue_list(ud, settings, NULL);
         }
-        g_free(message);
+        ghb_queue_buttons_grey(ud);
+        ghb_save_queue(ud->queue);
     }
     return FALSE;
-}
-
-void
-ghb_queue_remove_row(signal_user_data_t *ud, int row)
-{
-    GtkTreeView *treeview;
-    GtkTreeModel *store;
-    GtkTreeIter iter;
-
-    if (row < 0) return;
-    if (row >= ghb_array_len(ud->queue))
-        return;
-
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-    store = gtk_tree_view_get_model(treeview);
-
-    gchar *path = g_strdup_printf ("%d", row);
-    if (gtk_tree_model_get_iter_from_string(store, &iter, path))
-    {
-        gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
-    }
-    g_free(path);
-
-    ghb_array_remove(ud->queue, row);
-    ghb_save_queue(ud->queue);
 }
 
 G_MODULE_EXPORT gboolean
