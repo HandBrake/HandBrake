@@ -179,6 +179,7 @@ hb_image_t  * hb_image_init(int pix_fmt, int width, int height);
 hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
+void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
 int           hb_fifo_size( hb_fifo_t * );
 int           hb_fifo_size_bytes( hb_fifo_t * );
 int           hb_fifo_is_full( hb_fifo_t * );

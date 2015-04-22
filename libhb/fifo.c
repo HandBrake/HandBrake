@@ -26,6 +26,7 @@ struct hb_fifo_s
     int            wait_full;
     hb_cond_t    * cond_empty;
     int            wait_empty;
+    hb_cond_t    * cond_alert_full;
     uint32_t       capacity;
     uint32_t       thresh;
     uint32_t       size;
@@ -864,6 +865,11 @@ hb_fifo_t * hb_fifo_init( int capacity, int thresh )
     return f;
 }
 
+void hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c )
+{
+    f->cond_alert_full = c;
+}
+
 int hb_fifo_size_bytes( hb_fifo_t * f )
 {
     int ret = 0;
@@ -1055,6 +1061,8 @@ void hb_fifo_push_wait( hb_fifo_t * f, hb_buffer_t * b )
     if( f->size >= f->capacity )
     {
         f->wait_full = 1;
+        if (f->cond_alert_full != NULL)
+            hb_cond_broadcast( f->cond_alert_full );
         hb_cond_timedwait( f->cond_full, f->lock, FIFO_TIMEOUT );
     }
     if( f->size > 0 )
@@ -1089,6 +1097,11 @@ void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
     }
 
     hb_lock( f->lock );
+    if (f->size >= f->capacity &&
+        f->cond_alert_full != NULL)
+    {
+        hb_cond_broadcast( f->cond_alert_full );
+    }
     if( f->size > 0 )
     {
         f->last->next = b;
@@ -1124,6 +1137,11 @@ void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
     }
 
     hb_lock( f->lock );
+    if (f->size >= f->capacity &&
+        f->cond_alert_full != NULL)
+    {
+        hb_cond_broadcast( f->cond_alert_full );
+    }
 
     /*
      * If there are a chain of buffers prepend the lot

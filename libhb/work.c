@@ -163,16 +163,22 @@ hb_work_object_t * hb_get_work( hb_handle_t *h, int id )
 
 hb_work_object_t* hb_codec_decoder(hb_handle_t *h, int codec)
 {
+    hb_work_object_t * w = NULL;
     if (codec & HB_ACODEC_FF_MASK)
     {
-        return hb_get_work(h, WORK_DECAVCODEC);
+        w = hb_get_work(h, WORK_DECAVCODEC);
+        w->yield = 1;   // decoders yield to keep sync fifos more even
     }
     switch (codec)
     {
-        case HB_ACODEC_LPCM: return hb_get_work(h, WORK_DECLPCM);
-        default:             break;
+        case HB_ACODEC_LPCM:
+            w = hb_get_work(h, WORK_DECLPCM);
+            w->yield = 1;   // decoders yield to keep sync fifos more even
+            break;
+        default:
+            break;
     }
-    return NULL;
+    return w;
 }
 
 hb_work_object_t* hb_codec_encoder(hb_handle_t *h, int codec)
@@ -1228,6 +1234,7 @@ static void do_job(hb_job_t *job)
         goto cleanup;
     }
     hb_list_add(job->list_work, (w = hb_get_work(job->h, title->video_codec)));
+    w->yield = 1;   // decoders yield to keep sync fifos more even
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
@@ -1766,6 +1773,10 @@ static void work_loop( void * _w )
                     break;
                 }
             }
+        }
+        if (w->yield)
+        {
+            hb_yield();
         }
     }
     if ( buf_out )

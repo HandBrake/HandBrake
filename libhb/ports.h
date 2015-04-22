@@ -133,6 +133,8 @@ hb_thread_t * hb_thread_init( const char * name, thread_func_t *function,
 void          hb_thread_close( hb_thread_t ** );
 int           hb_thread_has_exited( hb_thread_t * );
 
+void          hb_yield(void);
+
 /************************************************************************
  * Mutexes
  ***********************************************************************/

@@ -1105,6 +1105,7 @@ struct hb_work_object_s
     hb_work_private_t * private_data;
 
     hb_thread_t       * thread;
+    int                 yield;
     volatile int      * done;
     int                 status;
     int                 codec_param;
