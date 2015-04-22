@@ -1135,6 +1135,28 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the add to queue label.
+        /// </summary>
+        public string QueueLabel
+        {
+            get
+            {
+                return string.Format(Resources.Main_QueueLabel, this.queueProcessor.Count > 0 ? string.Format(" ({0})", this.queueProcessor.Count) : string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Gets the start label.
+        /// </summary>
+        public string StartLabel
+        {
+            get
+            {
+                return this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
+            }
+        }
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -1295,7 +1317,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
@@ -1353,7 +1375,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1382,7 +1404,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSourceFirst, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -2303,6 +2325,8 @@ namespace HandBrakeWPF.ViewModels
               () =>
               {
                   this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
+                  this.NotifyOfPropertyChange(() => this.QueueLabel);
+                  this.NotifyOfPropertyChange(() => this.StartLabel);
               });
         }
 

@@ -14,7 +14,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Background="Black" Opacity="0.45" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Row="0" Background="Black" Opacity="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
         <Grid VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Stretch"
 			Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
@@ -51,7 +51,7 @@
             
         </Grid>
 
-        <StackPanel Grid.Row="2" Background="Black" Opacity="0.45" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Row="2" Background="Black" Opacity="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
 
     </Grid>
 

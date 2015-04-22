@@ -106,6 +106,6 @@
         </Grid>
             
 
-        <StackPanel Grid.Column="1" Background="Black" Opacity="0.45" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <StackPanel Grid.Column="1" Background="Black" Opacity="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </Grid>
 </UserControl>

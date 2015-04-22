@@ -6,6 +6,7 @@
              xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -97,7 +98,7 @@
                   VerticalAlignment="Top"
                   >
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Cancel Scan" Command="{Binding CancelScanCommand}" />
+                    <MenuItem Header="Choose Source" Micro:Message.Attach="[Event Click] = [Action SelectSourceWindow]" />
                     <Separator />
                     <MenuItem Header="_Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
@@ -201,7 +202,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Start"
+                               Content="{Binding StartLabel, FallbackValue='Start'}"
                                />
                     </StackPanel>
                 </Button>
@@ -264,7 +265,7 @@
                                                />
                                         <Label Margin="8,0,0,0"
                                                VerticalAlignment="Center"
-                                               Content="Add To Queue"
+                                               Content="Add to Queue"
                                                />
                                     </StackPanel>
                                     <Button.Style>
@@ -311,7 +312,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Show Queue"
+                               Content="{Binding QueueLabel, FallbackValue='Show Queue'}"
                                />
                     </StackPanel>
                 </Button>

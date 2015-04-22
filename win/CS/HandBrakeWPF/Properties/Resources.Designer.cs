@@ -394,7 +394,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose a destination for the file..
+        ///   Looks up a localized string similar to Please choose a destination for where you would like the encoded file to be saved..
         /// </summary>
         public static string Main_ChooseDestination {
             get {
@@ -439,7 +439,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot encode to a file with the same path and name as the source file. Please update the destination filename so that it does not match the source file..
+        ///   Looks up a localized string similar to You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file..
         /// </summary>
         public static string Main_MatchingFileOverwriteWarning {
             get {
@@ -586,6 +586,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Queue{0}.
+        /// </summary>
+        public static string Main_QueueLabel {
+            get {
+                return ResourceManager.GetString("Main_QueueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scan Cancelled..
         /// </summary>
         public static string Main_ScanCancelled {
@@ -663,20 +672,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encode..
+        ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encode. Click the &apos;Source&apos; button on the toolbar to continue..
         /// </summary>
         public static string Main_ScanSource {
             get {
                 return ResourceManager.GetString("Main_ScanSource", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must first scan a source and setup your job before adding to the queue..
-        /// </summary>
-        public static string Main_ScanSourceFirst {
-            get {
-                return ResourceManager.GetString("Main_ScanSourceFirst", resourceCulture);
             }
         }
         
@@ -723,6 +723,24 @@ namespace HandBrakeWPF.Properties {
         public static string Main_SourceDestinationMatchError {
             get {
                 return ResourceManager.GetString("Main_SourceDestinationMatchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Main_Start {
+            get {
+                return ResourceManager.GetString("Main_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Queue.
+        /// </summary>
+        public static string Main_StartQueue {
+            get {
+                return ResourceManager.GetString("Main_StartQueue", resourceCulture);
             }
         }
         

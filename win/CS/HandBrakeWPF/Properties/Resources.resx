@@ -368,9 +368,6 @@ In order to use the QuickSync encoder, you must:
   <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
     <value>Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn't support! Tracks are reset with every new source / title selected.</value>
   </data>
-  <data name="Main_ScanSourceFirst" xml:space="preserve">
-    <value>You must first scan a source and setup your job before adding to the queue.</value>
-  </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>You must turn on automatic file naming AND set a default path in preferences before you can add to the queue.</value>
   </data>
@@ -387,7 +384,7 @@ In order to use the QuickSync encoder, you must:
     <value>HandBrake is already encoding.</value>
   </data>
   <data name="Main_ChooseDestination" xml:space="preserve">
-    <value>Please choose a destination for the file.</value>
+    <value>Please choose a destination for where you would like the encoded file to be saved.</value>
   </data>
   <data name="Main_DestinationOverwrite" xml:space="preserve">
     <value>The current file already exists, do you wish to overwrite it?</value>
@@ -458,7 +455,7 @@ The previous user_presets.xml file was backed up.</value>
     <value>Scanning Title {0} of {1} ({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>You must first scan a source and setup your job before starting an encode.</value>
+    <value>You must first scan a source and setup your job before starting an encode. Click the 'Source' button on the toolbar to continue.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>Please select a preset.</value>
@@ -529,7 +526,7 @@ Non-Live Options: {date} {time} {quality} {bitrate}  (These only change if you s
 Not both at the same time!</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>You cannot encode to a file with the same path and name as the source file. Please update the destination filename so that it does not match the source file.</value>
+    <value>You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
     <value>Your system prevented HandBrake from launching a web browser.</value>
@@ -572,5 +569,14 @@ This could be due to one of the following reasons:
 - The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
 
 The Activity log may have further information.</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>Show Queue{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>Start Queue</value>
   </data>
 </root>

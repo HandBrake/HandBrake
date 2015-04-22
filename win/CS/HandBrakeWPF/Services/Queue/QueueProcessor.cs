@@ -25,7 +25,6 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Queue.Model;
 
     using Execute = Caliburn.Micro.Execute;
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
