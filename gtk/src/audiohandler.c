@@ -1933,7 +1933,7 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     scale = GTK_SCALE_BUTTON(gtk_scale_button_new(GTK_ICON_SIZE_BUTTON,
                                                   -20, 21, 1, gain_icons));
     gtk_widget_set_tooltip_markup(GTK_WIDGET(scale),
-      _("<b>Audio Gain:</b>\n"
+      _("<b>Audio Gain:</b> "
         "Adjust the amplification or attenuation of the output audio track."));
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
@@ -1964,12 +1964,12 @@ GtkWidget * ghb_create_audio_settings_row(signal_user_data_t *ud)
     scale = GTK_SCALE_BUTTON(gtk_scale_button_new(GTK_ICON_SIZE_BUTTON,
                                                   0.9, 4, 0.1, drc_icons));
     gtk_widget_set_tooltip_markup(GTK_WIDGET(scale),
-      _("<b>Dynamic Range Compression:</b>\n"
-        "Adjust the dynamic range of the output audio track.\n"
-        "For source audio that has a wide dynamic range,\n"
-        "very loud and very soft sequences, DRC allows you\n"
-        "to 'compress' the range by making loud sounds\n"
-        "softer and soft sounds louder.\n"));
+      _("<b>Dynamic Range Compression:</b> "
+        "Adjust the dynamic range of the output audio track.\n\n"
+        "For source audio that has a wide dynamic range "
+        "(very loud and very soft sequences),\n"
+        "DRC allows you to 'compress' the range by making "
+        "loud sounds softer and soft sounds louder."));
 
     gtk_widget_set_valign(GTK_WIDGET(scale), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(scale), "AudioTrackDRCSlider");

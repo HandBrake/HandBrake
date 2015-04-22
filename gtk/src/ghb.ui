@@ -2503,10 +2503,10 @@ This will be the resolution that most closely matches the source resolution afte
 &lt;small&gt;&lt;tt&gt;
 None   - Force pixel aspect ratio to 1:1.
 Loose  - Align dimensions to chosen 'Alignment' value
-     and pick pixel aspect ratio that preserves the
-     original display aspect ratio
+         and pick pixel aspect ratio that preserves the
+         original display aspect ratio
 Strict - Keep original source dimensions and pixel
-     aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
+         aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
                                             <signal name="changed" handler="scale_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
