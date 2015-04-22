@@ -10,7 +10,7 @@
 #import "HBSubtitlesDefaults.h"
 
 #import "HBTitle.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #include "lang.h"
 
 NSString *keySubTrackSelectionIndex = @"keySubTrackSelectionIndex";
@@ -484,6 +484,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBAudioVersion"];
@@ -503,11 +508,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
     decodeInt(_container);
 
-    decodeObject(_masterTrackArray);
-    decodeObject(_foreignAudioSearchTrackName);
-    decodeObject(_tracks);
+    decodeObject(_masterTrackArray, NSMutableArray);
+    decodeObject(_foreignAudioSearchTrackName, NSString);
+    decodeObject(_tracks, NSMutableArray);
 
-    decodeObject(_defaults);
+    decodeObject(_defaults, HBSubtitlesDefaults);
 
     return self;
 }

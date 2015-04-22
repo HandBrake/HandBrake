@@ -6,7 +6,7 @@
 
 #import "HBAudioDefaults.h"
 #import "HBAudioTrackPreset.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #import "hb.h"
 #import "lang.h"
 
@@ -259,9 +259,12 @@
 
         copy->_allowAACPassthru = _allowAACPassthru;
         copy->_allowAC3Passthru = _allowAC3Passthru;
+        copy->_allowEAC3Passthru = _allowEAC3Passthru;
         copy->_allowDTSHDPassthru = _allowDTSHDPassthru;
         copy->_allowDTSPassthru = _allowDTSPassthru;
         copy->_allowMP3Passthru = _allowMP3Passthru;
+        copy->_allowTrueHDPassthru = _allowTrueHDPassthru;
+        copy->_allowFLACPassthru = _allowFLACPassthru;
 
         copy->_encoderFallback = _encoderFallback;
         copy->_secondaryEncoderMode = _secondaryEncoderMode;
@@ -271,6 +274,11 @@
 }
 
 #pragma mark - NSCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
@@ -283,9 +291,12 @@
 
     encodeBool(_allowAACPassthru);
     encodeBool(_allowAC3Passthru);
+    encodeBool(_allowEAC3Passthru);
     encodeBool(_allowDTSHDPassthru);
     encodeBool(_allowDTSPassthru);
     encodeBool(_allowMP3Passthru);
+    encodeBool(_allowTrueHDPassthru);
+    encodeBool(_allowFLACPassthru);
 
     encodeInt(_encoderFallback);
     encodeBool(_secondaryEncoderMode);
@@ -296,15 +307,18 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
-    decodeObject(_trackSelectionLanguages);
+    decodeObject(_trackSelectionLanguages, NSMutableArray);
 
-    decodeObject(_tracksArray);
+    decodeObject(_tracksArray, NSMutableArray);
 
     decodeBool(_allowAACPassthru);
     decodeBool(_allowAC3Passthru);
+    decodeBool(_allowEAC3Passthru);
     decodeBool(_allowDTSHDPassthru);
     decodeBool(_allowDTSPassthru);
     decodeBool(_allowMP3Passthru);
+    decodeBool(_allowTrueHDPassthru);
+    decodeBool(_allowFLACPassthru);
 
     decodeInt(_encoderFallback);
     decodeBool(_secondaryEncoderMode);

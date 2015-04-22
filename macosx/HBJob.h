@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 /**
  * HBJob
  */
-@interface HBJob : NSObject <NSCoding, NSCopying, HBUniqueObject>
+@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBUniqueObject>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
 

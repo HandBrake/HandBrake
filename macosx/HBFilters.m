@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBFilters.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #include "hb.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
@@ -229,6 +229,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBFiltersVersion"];
@@ -258,18 +263,18 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     self = [super init];
 
     decodeInteger(_detelecine);
-    decodeObject(_detelecineCustomString);
+    decodeObject(_detelecineCustomString, NSString);
 
     decodeInteger(_deinterlace);
-    decodeObject(_deinterlaceCustomString);
+    decodeObject(_deinterlaceCustomString, NSString);
 
     decodeInteger(_decomb);
-    decodeObject(_decombCustomString);
+    decodeObject(_decombCustomString, NSString);
 
-    decodeObject(_denoise);
-    decodeObject(_denoisePreset);
-    decodeObject(_denoiseTune);
-    decodeObject(_denoiseCustomString);
+    decodeObject(_denoise, NSString);
+    decodeObject(_denoisePreset, NSString);
+    decodeObject(_denoiseTune, NSString);
+    decodeObject(_denoiseCustomString, NSString);
 
     decodeInteger(_deblock);
     decodeBool(_grayscale);

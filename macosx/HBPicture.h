@@ -14,7 +14,7 @@ extern NSString * const HBPictureChangedNotification;
 /**
  * HBPicture
  */
-@interface HBPicture : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBPicture : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 

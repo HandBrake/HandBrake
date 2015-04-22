@@ -6,7 +6,7 @@
 
 #import "HBVideo.h"
 #import "HBJob.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #include "hb.h"
 
 NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
@@ -391,6 +391,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBVideoVersion"];
@@ -441,12 +446,12 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeBool(_turboTwoPass);
 
     decodeBool(_advancedOptions);
-    decodeObject(_preset);
-    decodeObject(_tune);
-    decodeObject(_profile);
-    decodeObject(_level);
+    decodeObject(_preset, NSString);
+    decodeObject(_tune, NSString);
+    decodeObject(_profile, NSString);
+    decodeObject(_level, NSString);
 
-    decodeObject(_videoOptionExtra);
+    decodeObject(_videoOptionExtra, NSString);
 
     decodeBool(_fastDecode);
 

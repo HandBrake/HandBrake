@@ -7,7 +7,7 @@
 #import "HBPicture.h"
 #import "HBTitle.h"
 
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 
 #include "hb.h"
 
@@ -480,6 +480,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 }
 
 #pragma mark - NSCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {

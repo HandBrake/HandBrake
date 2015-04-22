@@ -14,7 +14,7 @@ extern NSString * const HBVideoChangedNotification;
 /**
  *  HBVideo
  */
-@interface HBVideo : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBVideo : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithJob:(HBJob *)job;
 

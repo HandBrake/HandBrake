@@ -113,6 +113,7 @@
 		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
 		A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A91017B31A64440A00039BFB /* HBSubtitles.m */; };
+		A9160A351AE7A165009A7818 /* HBCodingUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9160A341AE7A165009A7818 /* HBCodingUtilities.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
 		A91806711A4807B000FC9BED /* HBRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A91806701A4807B000FC9BED /* HBRange.m */; };
 		A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */; };
@@ -369,6 +370,8 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
 		A91017B31A64440A00039BFB /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
+		A9160A331AE7A165009A7818 /* HBCodingUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCodingUtilities.h; sourceTree = "<group>"; };
+		A9160A341AE7A165009A7818 /* HBCodingUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBCodingUtilities.m; sourceTree = "<group>"; };
 		A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBChapterTitlesController.h; sourceTree = "<group>"; };
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
@@ -436,7 +439,6 @@
 		A990D9061A64562200139032 /* HBJob+HBJobConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBJobConversion.m"; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
-		A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSCodingMacro.h; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBUtilities.m; sourceTree = "<group>"; };
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
@@ -967,7 +969,8 @@
 				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
 				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
 				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
-				A9A2A77F1A4737DD006C219C /* NSCodingMacro.h */,
+				A9160A331AE7A165009A7818 /* HBCodingUtilities.h */,
+				A9160A341AE7A165009A7818 /* HBCodingUtilities.m */,
 				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
 			);
 			name = Core;
@@ -1277,6 +1280,7 @@
 			files = (
 				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
+				A9160A351AE7A165009A7818 /* HBCodingUtilities.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A932E273198834130047D13E /* HBAudioDefaults.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,

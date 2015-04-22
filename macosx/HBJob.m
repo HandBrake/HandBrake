@@ -10,7 +10,7 @@
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 
 #include "hb.h"
 
@@ -184,6 +184,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBVideoVersion"];
@@ -216,36 +221,41 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
-    self = [super init];
+    int version = [decoder decodeIntForKey:@"HBVideoVersion"];
 
-    decodeInt(_state);
-    decodeObject(_name);
-    decodeObject(_presetName);
-    decodeInt(_titleIdx);
-    decodeObject(_uuid);
+    if (version == 1 && (self = [super init]))
+    {
+        decodeInt(_state);
+        decodeObject(_name, NSString);
+        decodeObject(_presetName, NSString);
+        decodeInt(_titleIdx);
+        decodeObject(_uuid, NSString);
 
-    decodeObject(_fileURL);
-    decodeObject(_destURL);
+        decodeObject(_fileURL, NSURL);
+        decodeObject(_destURL, NSURL);
 
-    decodeInt(_container);
-    decodeInt(_angle);
-    decodeBool(_mp4HttpOptimize);
-    decodeBool(_mp4iPodCompatible);
+        decodeInt(_container);
+        decodeInt(_angle);
+        decodeBool(_mp4HttpOptimize);
+        decodeBool(_mp4iPodCompatible);
 
-    decodeObject(_range);
-    decodeObject(_video);
-    decodeObject(_picture);
-    decodeObject(_filters);
+        decodeObject(_range, HBRange);
+        decodeObject(_video, HBVideo);
+        decodeObject(_picture, HBPicture);
+        decodeObject(_filters, HBFilters);
 
-    _video.job = self;
+        _video.job = self;
 
-    decodeObject(_audio);
-    decodeObject(_subtitles);
+        decodeObject(_audio, HBAudio);
+        decodeObject(_subtitles, HBSubtitles);
 
-    decodeBool(_chaptersEnabled);
-    decodeObject(_chapterTitles);
+        decodeBool(_chaptersEnabled);
+        decodeObject(_chapterTitles, NSMutableArray);
 
-    return self;
+        return self;
+    }
+
+    return nil;
 }
 
 @end

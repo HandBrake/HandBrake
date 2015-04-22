@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBSubtitlesDefaults.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 
 @implementation HBSubtitlesDefaults
 
@@ -127,6 +127,11 @@
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBSubtitlesDefaultsVersion"];
@@ -148,7 +153,7 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
-    decodeObject(_trackSelectionLanguages);
+    decodeObject(_trackSelectionLanguages, NSMutableArray);
 
     decodeBool(_addForeignAudioSearch);
     decodeBool(_addForeignAudioSubtitle);

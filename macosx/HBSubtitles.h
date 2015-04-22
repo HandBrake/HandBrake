@@ -27,7 +27,7 @@ extern NSString *keySubTrackLanguageIndex;
 @class HBTitle;
 @class HBSubtitlesDefaults;
 
-@interface HBSubtitles : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBSubtitles : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 

@@ -6,7 +6,7 @@
 
 #import "HBRange.h"
 #import "HBTitle.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 
 NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
@@ -142,6 +142,11 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 }
 
 #pragma mark - NSCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {

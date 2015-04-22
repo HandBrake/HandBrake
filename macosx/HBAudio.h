@@ -13,7 +13,7 @@
 
 extern NSString *HBAudioChangedNotification;
 
-@interface HBAudio : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBAudio : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 

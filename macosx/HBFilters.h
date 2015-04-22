@@ -12,7 +12,7 @@ extern NSString * const HBFiltersChangedNotification;
 /**
  *  Filters settings.
  */
-@interface HBFilters : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBFilters : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) NSInteger detelecine;
 @property (nonatomic, readwrite, copy) NSString *detelecineCustomString;

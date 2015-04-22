@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
  *  HBAudioSettings
  *  Stores the audio defaults settings.
  */
-@interface HBAudioDefaults : NSObject <NSCoding, NSCopying, HBPresetCoding>
+@interface HBAudioDefaults : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBAudioTrackSelectionBehavior trackSelectionBehavior;
 @property (nonatomic, readwrite, strong) NSMutableArray *trackSelectionLanguages;

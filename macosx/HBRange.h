@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
     HBRangePreviewIndex,
 };
 
-@interface HBRange : NSObject <NSCoding, NSCopying>
+@interface HBRange : NSObject <NSSecureCoding, NSCopying>
 
 - (instancetype)initWithTitle:(HBTitle *)title;
 

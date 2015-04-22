@@ -11,7 +11,7 @@
 #import "HBAudioTrackPreset.h"
 #import "HBAudioDefaults.h"
 
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 
 #include "hb.h"
 
@@ -374,6 +374,11 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBAudioVersion"];
@@ -393,9 +398,9 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
     decodeInt(_container);
 
-    decodeObject(_noneTrack);
-    decodeObject(_masterTrackArray);
-    decodeObject(_tracks);
+    decodeObject(_noneTrack, NSDictionary);
+    decodeObject(_masterTrackArray, NSArray);
+    decodeObject(_tracks, NSMutableArray);
 
     for (HBAudioTrack *track in _tracks)
     {
@@ -403,7 +408,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         track.delegate = self;
     }
 
-    decodeObject(_defaults);
+    decodeObject(_defaults, HBAudioDefaults);
 
     return self;
 }

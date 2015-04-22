@@ -31,7 +31,7 @@ extern NSString *keyAudioMixdown;
 extern NSString *keyAudioSamplerate;
 extern NSString *keyAudioBitrate;
 
-@interface HBAudioTrack : NSObject <NSCoding, NSCopying>
+@interface HBAudioTrack : NSObject <NSSecureCoding, NSCopying>
 
 @property (nonatomic, strong) NSDictionary *track;
 @property (nonatomic, strong) NSDictionary *codec;

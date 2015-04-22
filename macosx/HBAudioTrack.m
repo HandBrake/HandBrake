@@ -7,7 +7,7 @@
 #import "HBAudioTrack.h"
 #import "HBAudioController.h"
 #import "HBJob.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #import "hb.h"
 
 NSString *keyAudioTrackIndex = @"keyAudioTrackIndex";
@@ -589,6 +589,11 @@ static NSMutableArray *masterBitRateArray = nil;
 
 #pragma mark - NSCoding
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:1 forKey:@"HBAudioTrackVersion"];
@@ -611,18 +616,18 @@ static NSMutableArray *masterBitRateArray = nil;
 {
     self = [super init];
 
-    decodeObject(_track);
-    decodeObject(_codec);
-    decodeObject(_mixdown);
-    decodeObject(_sampleRate);
-    decodeObject(_bitRate);
-    decodeObject(_drc);
-    decodeObject(_gain);
-    decodeObject(_videoContainerTag);
+    decodeObject(_track, NSDictionary);
+    decodeObject(_codec, NSDictionary);
+    decodeObject(_mixdown, NSDictionary);
+    decodeObject(_sampleRate, NSDictionary);
+    decodeObject(_bitRate, NSDictionary);
+    decodeObject(_drc, NSNumber);
+    decodeObject(_gain, NSNumber);
+    decodeObject(_videoContainerTag, NSNumber);
 
-    decodeObject(_codecs);
-    decodeObject(_mixdowns);
-    decodeObject(_bitRates);
+    decodeObject(_codecs, NSMutableArray);
+    decodeObject(_mixdowns, NSMutableArray);
+    decodeObject(_bitRates, NSArray);
 
     return self;
 }

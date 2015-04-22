@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAudioTrackPreset.h"
-#import "NSCodingMacro.h"
+#import "HBCodingUtilities.h"
 #include "hb.h"
 
 #define DEFAULT_SAMPLERATE 48000
@@ -261,6 +261,11 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 }
 
 #pragma mark - NSCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
