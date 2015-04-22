@@ -9,7 +9,7 @@
 
 #include "hb.h"
 
-static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
+static inline int check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
 {
     /*
      * This section of code implements the timing model of
@@ -38,14 +38,17 @@ static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
     // we declare a discontinuity if there's a gap of more than
     // 'tol'ms between the last scr & this or if this scr goes back
     // by more than half a frame time.
+    int discontinuity = 0;
     int64_t scr_delta = scr - state->last_scr;
     if (state->last_scr == AV_NOPTS_VALUE ||
         scr_delta > 90*tol || scr_delta < -90*10)
     {
         ++state->scr_changes;
         state->last_pts = AV_NOPTS_VALUE;
+        discontinuity = 1;
     }
     state->last_scr = scr;
+    return discontinuity;
 }
 
 static inline void save_chap( hb_psdemux_t *state, hb_buffer_t *buf )
@@ -246,14 +249,29 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
 // start contains the pts (if any), renderOffset contains the dts (if any)
 // and stop contains the pcr (if it changed).
 void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
-                   hb_psdemux_t *state, int pcr_tolerance)
+                   hb_psdemux_t *state, int tolerance)
 {
     while ( buf )
     {
         save_chap( state, buf );
         if ( state )
         {
-            if ( buf->s.discontinuity )
+            int discontinuity = 0;
+            // we're keeping track of timing (i.e., not in scan)
+            // check if there's a new pcr in this packet
+            if ( buf->s.pcr >= 0 )
+            {
+                // we have a new pcr
+                discontinuity = check_mpeg_scr( state, buf->s.pcr, tolerance );
+                buf->s.pcr = AV_NOPTS_VALUE;
+                // Some streams have consistantly bad PCRs or SCRs
+                // So filter out the offset
+                if ( buf->s.start >= 0 )
+                    state->scr_delta = buf->s.start - state->last_scr;
+                else
+                    state->scr_delta = 0;
+            }
+            if ( !discontinuity && buf->s.discontinuity )
             {
                 // Buffer has been flagged as a discontinuity.  This happens
                 // when a blueray changes clips.
@@ -262,48 +280,47 @@ void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
                 state->scr_delta = 0;
             }
 
-            // we're keeping track of timing (i.e., not in scan)
-            // check if there's a new pcr in this packet
-            if ( buf->s.pcr >= 0 )
-            {
-                // we have a new pcr
-                check_mpeg_scr( state, buf->s.pcr, pcr_tolerance );
-                buf->s.pcr = AV_NOPTS_VALUE;
-                // Some streams have consistantly bad PCRs or SCRs
-                // So filter out the offset
-                if ( buf->s.start >= 0 )
-                    state->scr_delta = buf->s.start - state->last_scr;
-            }
             if ( buf->s.start >= 0 )
             {
-                // Program streams have an SCR in every PACK header so they
-                // can't lose their clock reference. But the PCR in Transport
-                // streams is typically on <.1% of the packets. If a PCR
-                // packet gets lost and it marks a clock discontinuity then
-                // the data following it will be referenced to the wrong
-                // clock & introduce huge gaps or throw our A/V sync off.
-                // We try to protect against that here by sanity checking
-                // timestamps against the current reference clock and discarding
-                // packets where the DTS is "too far" from its clock.
-                int64_t fdelta = buf->s.start - state->last_scr - state->scr_delta;
-                if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
+                int64_t fdelta;
+                if (state->last_scr != AV_NOPTS_VALUE)
                 {
-                    // packet too far behind or ahead of its clock reference
-                    ++state->dts_drops;
-                    hb_buffer_t *tmp = buf->next;
-                    buf->next = NULL;
-                    hb_buffer_close( &buf );
-                    buf = tmp;
-                    continue;
-                }
-                else
-                {
-                    // Some streams have no PCRs.  In these cases, we
-                    // will only get an "PCR" update if a large change
-                    // in DTS or PTS is detected.  So we need to update
-                    // our scr_delta with each valid timestamp so that
-                    // fdelta does not continually grow.
-                    state->scr_delta = buf->s.start - state->last_scr;
+                    // Program streams have an SCR in every PACK header so they
+                    // can't lose their clock reference. But the PCR in
+                    // Transport streams is typically on <.1% of the packets.
+                    // If a PCR packet gets lost and it marks a clock
+                    // discontinuity then the data following it will be
+                    // referenced to the wrong clock & introduce huge gaps or
+                    // throw our A/V sync off. We try to protect against that
+                    // here by sanity checking timestamps against the current
+                    // reference clock and discarding packets where the DTS
+                    // is "too far" from its clock.
+                    fdelta = buf->s.start - state->last_scr - state->scr_delta;
+                    if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
+                    {
+                        // packet too far behind or ahead of its clock reference
+                        ++state->dts_drops;
+                        ++state->dts_drop_run;
+                        hb_buffer_t *tmp = buf->next;
+                        buf->next = NULL;
+                        hb_buffer_close( &buf );
+                        buf = tmp;
+                        continue;
+                    }
+                    else
+                    {
+                        // Some streams have no PCRs.  In these cases, we
+                        // will only get an "PCR" update if a large change
+                        // in DTS or PTS is detected.  So we need to update
+                        // our scr_delta with each valid timestamp so that
+                        // fdelta does not continually grow.
+                        state->scr_delta = buf->s.start - state->last_scr;
+                        if (state->dts_drop_run > 0)
+                        {
+                            hb_error("Packet clock reference error. Dropped %d frames.", state->dts_drop_run);
+                            state->dts_drop_run = 0;
+                        }
+                    }
                 }
                 if (buf->s.type == AUDIO_BUF || buf->s.type == VIDEO_BUF)
                 {
@@ -312,10 +329,11 @@ void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
                         fdelta = buf->s.start - state->last_pts;
                         if ( fdelta < -5 * 90000LL || fdelta > 5 * 90000LL )
                         {
-                            // Packet too far from last. This may be a NZ TV broadcast
-                            // as they like to change the PCR without sending a PCR
-                            // update. Since it may be a while until they actually tell
-                            // us the new PCR use the PTS as the PCR.
+                            // Packet too far from last. This may be a NZ TV
+                            // broadcast as they like to change the PCR without
+                            // sending a PCR update. Since it may be a while
+                            // until they actually tell us the new PCR use the
+                            // PTS as the PCR.
                             ++state->scr_changes;
                             state->last_scr = buf->s.start;
                             state->scr_delta = 0;
@@ -361,7 +379,7 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
         save_chap( state, buf );
         if ( state )
         {
-            // if we don't have a time offset yet, 
+            // if we don't have a time offset yet,
             // use this timestamp as the offset.
             if (state->scr_changes == 0 &&
                 (buf->s.start != AV_NOPTS_VALUE ||

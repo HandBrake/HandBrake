@@ -286,6 +286,7 @@ typedef struct {
     int64_t last_pts;       /* last pts we saw */
     int     scr_changes;    /* number of SCR discontinuities */
     int     dts_drops;      /* number of drops because DTS too far from SCR */
+    int     dts_drop_run;   /* number of consecutive drops */
     int     new_chap;
 } hb_psdemux_t;
 
@@ -354,7 +355,8 @@ int          hb_stream_seek_ts( hb_stream_t * stream, int64_t ts );
 int          hb_stream_seek_chapter( hb_stream_t *, int );
 int          hb_stream_chapter( hb_stream_t * );
 
-hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
+hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
+                                int chapter, int discontinuity );
 void hb_stream_set_need_keyframe( hb_stream_t *stream, int need_keyframe );
 
 

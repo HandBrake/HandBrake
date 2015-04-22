@@ -698,7 +698,7 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
     uint8_t buf[192];
     BD_EVENT event;
     uint64_t pos;
-    hb_buffer_t * b;
+    hb_buffer_t * out = NULL;
     uint8_t discontinuity;
     int new_chap = 0;
 
@@ -753,13 +753,9 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
             }
         }
         // buf+4 to skip the BD timestamp at start of packet
-        b = hb_ts_decode_pkt( d->stream, buf+4 );
-        if ( b )
-        {
-            b->s.discontinuity = discontinuity;
-            b->s.new_chap = new_chap;
-            return b;
-        }
+        out = hb_ts_decode_pkt( d->stream, buf+4, new_chap, discontinuity );
+        if (out != NULL)
+            return out;
     }
     return NULL;
 }
