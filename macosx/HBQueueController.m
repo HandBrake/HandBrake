@@ -341,7 +341,7 @@
  * This method will clear the queue of any encodes that are not still pending
  * this includes both successfully completed encodes as well as cancelled encodes
  */
-- (void)clearEncodedJobs
+- (void)removeCompletedJobs
 {
     [self.jobs beginTransaction];
     [self removeItemsUsingBlock:^BOOL(HBJob *item) {

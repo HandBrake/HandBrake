@@ -31,6 +31,8 @@
 - (BOOL)jobExistAtURL:(NSURL *)url;
 
 - (void)removeAllJobs;
+- (void)removeCompletedJobs;
+
 - (void)setEncodingJobsAsPending;
 
 - (IBAction)rip:(id)sender;

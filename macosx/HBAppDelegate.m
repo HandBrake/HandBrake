@@ -90,15 +90,8 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
         [self showOutputPanel:nil];
 
-    // Open queue window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
-        [self showQueueWindow:nil];
-
-    [self showMainWindow:self];
-
     // Now we re-check the queue array to see if there are
-    // any remaining encodes to be done in it and ask the
-    // user if they want to reload the queue
+    // any remaining encodes to be done
     if (self.queueController.count)
     {
         // On Screen Notification
@@ -114,64 +107,19 @@
         }
         else
         {
-            if (self.queueController.workingItemsCount > 0 || self.queueController.pendingItemsCount > 0)
-            {
-                NSString *alertTitle;
-
-                if (self.queueController.workingItemsCount > 0)
-                {
-                    alertTitle = [NSString stringWithFormat:
-                                  NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item(s) and %d Pending Item(s) In Your Queue.", @""),
-                                  self.queueController.workingItemsCount, self.queueController.pendingItemsCount];
-                }
-                else
-                {
-                    alertTitle = [NSString stringWithFormat:
-                                  NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
-                                  self.queueController.pendingItemsCount];
-                }
-
-                alert = [[NSAlert alloc] init];
-                [alert setMessageText:alertTitle];
-                [alert setInformativeText:NSLocalizedString(@"Do you want to reload them ?", nil)];
-                [alert addButtonWithTitle:NSLocalizedString(@"Reload Queue", nil)];
-                [alert addButtonWithTitle:NSLocalizedString(@"Empty Queue", nil)];
-                [alert setAlertStyle:NSCriticalAlertStyle];
-            }
-            else
-            {
-                // Since we addressed any pending or previously encoding items above, we go ahead and make sure
-                // the queue is empty of any finished items or cancelled items.
-                [self.queueController removeAllJobs];
-                [self.mainController launchAction];
-            }
+            [self.queueController setEncodingJobsAsPending];
+            [self.queueController removeCompletedJobs];
         }
-
-        if (alert)
-        {
-            NSModalResponse response = [alert runModal];
-
-            if (response == NSAlertSecondButtonReturn)
-            {
-                [HBUtilities writeToActivityLog:"didDimissReloadQueue NSAlertSecondButtonReturn Chosen"];
-                [self.queueController removeAllJobs];
-                [self.mainController launchAction];
-            }
-            else
-            {
-                [HBUtilities writeToActivityLog:"didDimissReloadQueue NSAlertFirstButtonReturn Chosen"];
-                if (instances == 1)
-                {
-                    [self.queueController setEncodingJobsAsPending];
-                }
-
-                [self showQueueWindow:nil];
-            }
-
-        }
+        [self showMainWindow:self];
+        [self showQueueWindow:self];
     }
     else
     {
+        // Open queue window now if it was visible when HB was closed
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
+            [self showQueueWindow:nil];
+
+        [self showMainWindow:self];
         [self.mainController launchAction];
     }
 
@@ -207,26 +155,6 @@
 
         NSInteger result = [alert runModal];
 
-        if (result == NSAlertFirstButtonReturn)
-        {
-            return NSTerminateNow;
-        }
-        else
-        {
-            return NSTerminateCancel;
-        }
-    }
-
-    // Warn if items still in the queue
-    else if (self.queueController.pendingItemsCount > 0)
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil)];
-        [alert setInformativeText:NSLocalizedString(@"There are pending encodes in your queue. Do you want to quit anyway?",nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        NSInteger result = [alert runModal];
         if (result == NSAlertFirstButtonReturn)
         {
             return NSTerminateNow;
