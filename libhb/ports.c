@@ -1078,7 +1078,7 @@ void hb_clock_gettime( struct timespec *tp )
 
 void hb_yield(void)
 {
-    pthread_yield();
+    sched_yield();
 }
 
 void hb_cond_timedwait( hb_cond_t * c, hb_lock_t * lock, int msec )
