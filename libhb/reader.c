@@ -455,19 +455,7 @@ void ReadLoop( void * _w )
     } 
     else if ( r->stream && r->job->pts_to_start )
     {
-        int64_t pts_to_start = r->job->pts_to_start;
-        
-        // Find out what the first timestamp of the stream is
-        // and then seek to the appropriate offset from it
-        if ( ( buf = hb_stream_read( r->stream ) ) )
-        {
-            if (buf->s.start != AV_NOPTS_VALUE)
-            {
-                pts_to_start += buf->s.start;
-            }
-        }
-        
-        if ( hb_stream_seek_ts( r->stream, pts_to_start ) >= 0 )
+        if ( hb_stream_seek_ts( r->stream, r->job->pts_to_start ) >= 0 )
         {
             // Seek takes us to the nearest I-frame before the timestamp
             // that we want.  So we will retrieve the start time of the
@@ -475,12 +463,9 @@ void ReadLoop( void * _w )
             // inspect the reset of the frames in sync.
             r->start_found = 2;
             r->duration -= r->job->pts_to_start;
-            r->job->pts_to_start = pts_to_start;
-            hb_buffer_close(&buf);
         }
         // hb_stream_seek_ts does nothing for TS streams and will return
-        // an error.  In this case, the current buf remains valid and
-        // gets processed below.
+        // an error.
     } 
     else if( r->stream )
     {

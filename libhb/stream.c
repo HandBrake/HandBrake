@@ -5746,10 +5746,11 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
     AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
-    double tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
+    double tsconv = (double)90000. * s->time_base.num / s->time_base.den;
+    int64_t offset = 90000L * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
 
-    buf->s.start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
-    buf->s.renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
+    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv) - offset;
+    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv) - offset;
     if ( buf->s.renderOffset >= 0 && buf->s.start == AV_NOPTS_VALUE )
     {
         buf->s.start = buf->s.renderOffset;
