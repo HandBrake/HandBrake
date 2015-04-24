@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBTOOL,libtool,AUTOCONF AUTOMAKE))
+$(eval $(call import.MODULE.defs,LIBTOOL,libtool,AUTOCONF AUTOMAKE PKGCONFIG))
 $(eval $(call import.CONTRIB.defs,LIBTOOL))
 
 LIBTOOL.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libtool-2.4.2.tar.bz2
