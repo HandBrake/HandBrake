@@ -205,6 +205,8 @@ namespace HandBrakeWPF.ViewModels
 
         private string alertWindowText;
 
+        private bool hasSource;
+
         #endregion
 
         /// <summary>
@@ -258,6 +260,7 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = new EncodeTask();
             this.CurrentTask.PropertyChanged += this.CurrentTask_PropertyChanged;
             this.ScannedSource = new Source();
+            this.HasSource = false;
 
             // Setup Events
             this.scanService.ScanStared += this.ScanStared;
@@ -1154,6 +1157,26 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether has source.
+        /// </summary>
+        public bool HasSource
+        {
+            get
+            {
+                return this.hasSource;
+            }
+            set
+            {
+                if (value.Equals(this.hasSource))
+                {
+                    return;
+                }
+                this.hasSource = value;
+                this.NotifyOfPropertyChange(() => this.HasSource);
             }
         }
 
@@ -2168,6 +2191,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.NotifyOfPropertyChange(() => this.ScannedSource);
                         this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
+                        this.HasSource = true;
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
                     }
                     else

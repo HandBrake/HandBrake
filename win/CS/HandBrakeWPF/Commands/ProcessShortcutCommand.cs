@@ -78,20 +78,20 @@ namespace HandBrakeWPF.Commands
                     mainViewModel.AddToQueue();
                 }
 
-                // Scan a File (Ctrl+F)
-                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.F)
+                // Scan a File (Alt+O)
+                if (gesture.Modifiers == ModifierKeys.Alt && gesture.Key == Key.O)
                 {
-                    mainViewModel.FileScan();
-                    MessageBox.Show("Please use Ctrl-O in future. Ctrl-F is being deprecated in favour of something more standard. :)");
+                    mainViewModel.SelectSourceWindow();
                 }
 
+                // Scan a File (Ctrl+O)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.O)
                 {
                     mainViewModel.FileScan();
                 }
 
-                // Scan a Folder (Ctrl+R)
-                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.R)
+                // Scan a Folder (Ctrl+Shift+O)
+                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)  && gesture.Key == Key.O)
                 {
                     mainViewModel.FolderScan();
                 }

@@ -6,7 +6,6 @@
              xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
-             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -349,7 +348,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1"  IsEnabled="{Binding ShowSourceSelection, Converter={StaticResource booleanConverter}, ConverterParameter=true}">
+        <Grid Grid.Row="1"  IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="700"/>
                 <ColumnDefinition Width="Auto" />
