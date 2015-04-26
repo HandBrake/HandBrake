@@ -1089,9 +1089,9 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
         {
             val = ghb_dict_get_int(ud->settings, "start_point");
-            spin_configure(ud, "start_point", val, 0, duration-1);
+            spin_configure(ud, "start_point", val, 0, duration * 2 - 1);
             val = ghb_dict_get_int(ud->settings, "end_point");
-            spin_configure(ud, "end_point", val, 0, duration);
+            spin_configure(ud, "end_point", val, 0, duration * 2);
         }
         else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
         {
@@ -2021,8 +2021,8 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
     {
-        spin_configure(ud, "start_point", 0, 0, duration-1);
-        spin_configure(ud, "end_point", duration, 0, duration);
+        spin_configure(ud, "start_point", 0, 0, duration * 2 - 1);
+        spin_configure(ud, "end_point", duration, 0, duration * 2);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
