@@ -1100,9 +1100,9 @@ ghb_set_widget_ranges(signal_user_data_t *ud, GhbValue *settings)
                          title->vrate.num / title->vrate.den;
 
             val = ghb_dict_get_int(ud->settings, "start_point");
-            spin_configure(ud, "start_point", val, 1, max_frames);
+            spin_configure(ud, "start_point", val, 1, max_frames * 2);
             val = ghb_dict_get_int(ud->settings, "end_point");
-            spin_configure(ud, "end_point", val, 1, max_frames);
+            spin_configure(ud, "end_point", val, 1, max_frames * 2);
         }
 
         val = ghb_dict_get_int(ud->settings, "angle");
@@ -2028,8 +2028,8 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         gdouble max_frames = (gdouble)duration *
                              title->vrate.num / title->vrate.den;
-        spin_configure(ud, "start_point", 1, 1, max_frames);
-        spin_configure(ud, "end_point", max_frames, 1, max_frames);
+        spin_configure(ud, "start_point", 1, 1, max_frames * 2);
+        spin_configure(ud, "end_point", max_frames, 1, max_frames * 2);
     }
 }
 
