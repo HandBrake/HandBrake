@@ -480,7 +480,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
             "Type",  hb_value_string("frame"),
             "Start", hb_value_int(job->frame_to_start),
-            "Stop",  hb_value_int(job->frame_to_stop));
+            "End",   hb_value_int(job->frame_to_stop));
     }
     else
     {
