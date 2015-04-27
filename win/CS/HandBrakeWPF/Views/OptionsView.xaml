@@ -386,7 +386,7 @@
                 </Style>
             </StackPanel.Style>
 
-            <Button Content="&#60; Back" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" Style="{StaticResource }"
+            <Button Content="&#60; Back" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
                     HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" FontWeight="Bold" />
         </StackPanel>
     </Grid>
