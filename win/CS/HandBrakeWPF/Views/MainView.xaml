@@ -18,8 +18,8 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
 
         <Style TargetType="Button">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Padding" Value="5,1" />
+
+            <Setter Property="Padding" Value="8,2" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinHeight" Value="22" />
@@ -97,7 +97,7 @@
                   VerticalAlignment="Top"
                   >
                 <MenuItem Header="_File">
-                    <MenuItem Header="Choose Source" Micro:Message.Attach="[Event Click] = [Action SelectSourceWindow]" />
+                    <MenuItem Header="Choose Source" Micro:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
                     <MenuItem Header="_Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
@@ -122,7 +122,7 @@
                 </MenuItem>
 
 
-                <MenuItem Header="_Presets" x:Name="presetMenu">
+                <MenuItem Header="_Presets" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
                     <MenuItem Header="_Presets" ItemsSource="{Binding Presets}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="MenuItem">
@@ -150,7 +150,7 @@
                 </MenuItem>
 
                 <MenuItem Header="_Help">
-                    <MenuItem Header="_HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]">
+                    <MenuItem Header="_HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
@@ -460,7 +460,7 @@
                     </TextBox>
                     <Button Name="DestinationBrowser"
                             Grid.Column="2"
-                            Margin="8,0,0,0"
+                            Margin="8,0,0,0" FontWeight="Bold"
                             Content="Browse"
                             Micro:Message.Attach="[Event Click] = [Action BrowseDestination]"
                             />

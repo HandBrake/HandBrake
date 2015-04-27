@@ -7,8 +7,7 @@
 
     <UserControl.Resources>
         <Style TargetType="Button">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Padding" Value="5,1" />
+            <Setter Property="Padding" Value="8,2" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinHeight" Value="22" />
@@ -44,6 +43,7 @@
                 <x:Type TypeName="local:OptionsTab" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
     </UserControl.Resources>
 
     <Grid>
@@ -59,7 +59,12 @@
         </Grid.RowDefinitions>
 
         <!-- Row 1 -->
-        <TextBlock Text="Options" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
+        <StackPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock Text="Options" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
+
+        </StackPanel>
+        
+   
 
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
             <StackPanel Orientation="Vertical" Margin="11,5,-1,0">
@@ -370,7 +375,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel HorizontalAlignment="Stretch" Grid.Row="2" Grid.ColumnSpan="2" >
+        <StackPanel HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="0" >
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
@@ -381,8 +386,8 @@
                 </Style>
             </StackPanel.Style>
 
-            <Button Content="Close" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
-                    HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" />
+            <Button Content="&#60; Back" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" Style="{StaticResource }"
+                    HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" FontWeight="Bold" />
         </StackPanel>
     </Grid>
 

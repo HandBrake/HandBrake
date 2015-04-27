@@ -96,6 +96,12 @@ namespace HandBrakeWPF.Commands
                     mainViewModel.FolderScan();
                 }
 
+                // Launch Help (F1)
+                if (gesture.Key == Key.F1)
+                {
+                    mainViewModel.LaunchHelp();
+                }
+
                 if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.G)
                 {
                     GC.Collect();
