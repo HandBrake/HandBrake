@@ -735,7 +735,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
     if (g_stat(filename, &stat_buf) == 0)
     {
         len = strlen(filename);
-        if (stat_buf.st_mode & S_IFDIR)
+        if (S_ISDIR(stat_buf.st_mode))
         {
             // Skip dos drive letters
 #if defined(_WIN32)
@@ -787,7 +787,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
                 g_strfreev (path);
             }
         }
-        else if (stat_buf.st_mode & S_IFBLK)
+        else if (S_ISBLK(stat_buf.st_mode))
         {
             // Is regular file or block dev.
             // Check to see if it is a dvd image
