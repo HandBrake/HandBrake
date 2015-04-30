@@ -15,7 +15,9 @@ static BOOL useSecureCoding;
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if(!initialized && self == [HBCodingUtilities class]) {
+
+    if (!initialized && self == [HBCodingUtilities class])
+    {
         useSecureCoding = NSProtocolFromString(@"NSSecureCoding") ? YES : NO;
     }
 }
