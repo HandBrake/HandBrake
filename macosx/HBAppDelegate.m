@@ -90,26 +90,25 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
         [self showOutputPanel:nil];
 
+    // On Screen Notification
+    // We check to see if there is already another instance of hb running.
+    if (instances > 1)
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", nil)];
+        [alert setInformativeText:NSLocalizedString(@"The queue will be shared between the instances.", nil)];
+        [alert runModal];
+    }
+    else
+    {
+        [self.queueController setEncodingJobsAsPending];
+        [self.queueController removeCompletedJobs];
+    }
+
     // Now we re-check the queue array to see if there are
     // any remaining encodes to be done
     if (self.queueController.count)
     {
-        // On Screen Notification
-        // We check to see if there is already another instance of hb running.
-        // Note: hbInstances == 1 means we are the only instance of HandBrake.app
-        NSAlert *alert = nil;
-        if (instances > 1)
-        {
-            alert = [[NSAlert alloc] init];
-            [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
-            [alert setInformativeText:NSLocalizedString(@"HandBrake will now load up the existing queue.", nil)];
-            [alert addButtonWithTitle:NSLocalizedString(@"Reload Queue", nil)];
-        }
-        else
-        {
-            [self.queueController setEncodingJobsAsPending];
-            [self.queueController removeCompletedJobs];
-        }
         [self showMainWindow:self];
         [self showQueueWindow:self];
     }
