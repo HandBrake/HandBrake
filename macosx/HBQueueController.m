@@ -17,6 +17,8 @@
 #import "HBJob.h"
 #import "HBJob+UIAdditions.h"
 
+#import "HBStateFormatter.h"
+
 #import "HBDistributedArray.h"
 
 #import "HBDockTile.h"
@@ -496,6 +498,8 @@
  */
 - (void)performScan:(NSURL *)scanURL titleIdx:(NSInteger)index
 {
+    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+
     // Only scan 10 previews before an encode - additional previews are
     // only useful for autocrop and static previews, which are already taken care of at this point
     [self.core scanURL:scanURL
@@ -503,13 +507,7 @@
               previews:10
            minDuration:0
        progressHandler:^(HBState state, hb_state_t hb_state) {
-           NSMutableString *status = [NSMutableString stringWithFormat:
-                                      NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                                      hb_state.param.scanning.title_cur, hb_state.param.scanning.title_count];
-           if (hb_state.param.scanning.preview_cur)
-           {
-               [status appendFormat:@", preview %d…", hb_state.param.scanning.preview_cur];
-           }
+           NSString *status = [formatter stateToString:hb_state title:nil];
 
            self.progressTextField.stringValue = status;
            [self.controller setQueueInfo:status progress:0 hidden:NO];
@@ -542,105 +540,43 @@
     // Reset the title in the job.
     self.currentJob.title = self.core.titles[0];
 
+    HBStateFormatter *converter = [[HBStateFormatter alloc] init];
+    NSString *destinationName = self.currentJob.destURL.lastPathComponent;
+
     // We should be all setup so let 'er rip
     [self.core encodeJob:self.currentJob
          progressHandler:^(HBState state, hb_state_t hb_state) {
-             NSMutableString *string = nil;
-             CGFloat progress = 0;
-             #define p hb_state.param.working
-             switch (state)
+             NSString *string = [converter stateToString:hb_state title:destinationName];
+             CGFloat progress = [converter stateToPercentComplete:hb_state];
+
+             if (state == HBStateWorking)
              {
-                 case HBStateSearching:
+                 // Update dock icon
+                 if (self.dockIconProgress < 100.0 * progress)
                  {
-                     string = [NSMutableString stringWithFormat:
-                               NSLocalizedString(@"Searching for start point… :  %.2f %%", @""),
-                               100.0 * p.progress];
+                     // ETA format is [XX]X:XX:XX when ETA is greater than one hour
+                     // [X]X:XX when ETA is greater than 0 (minutes or seconds)
+                     // When these conditions doesn't applied (eg. when ETA is undefined)
+                     // we show just a tilde (~)
 
-                     if (p.seconds > -1)
-                     {
-                         [string appendFormat:NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
-                     }
-
-                     break;
-                 }
-                 case HBStateWorking:
-                 {
-                     if (p.pass_id == HB_PASS_SUBTITLE)
-                     {
-                         string = [NSMutableString stringWithFormat:
-                                   NSLocalizedString(@"Encoding: %@ \nPass %d %@ of %d, %.2f %%", nil),
-                                   self.currentJob.destURL.lastPathComponent,
-                                   p.pass,
-                                   NSLocalizedString(@"(subtitle scan)", nil),
-                                   p.pass_count, 100.0 * p.progress];
-                     }
+                     #define p hb_state.param.working
+                     NSString *etaStr;
+                     if (p.hours > 0)
+                         etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
+                     else if (p.minutes > 0 || p.seconds > 0)
+                         etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
                      else
-                     {
-                         string = [NSMutableString stringWithFormat:
-                                   NSLocalizedString(@"Encoding: %@ \nPass %d of %d, %.2f %%", nil),
-                                   self.currentJob.destURL.lastPathComponent,
-                                   p.pass, p.pass_count, 100.0 * p.progress];
-                     }
+                         etaStr = @"~";
+                     #undef p
 
-                     if (p.seconds > -1)
-                     {
-                         if (p.rate_cur > 0.0)
-                         {
-                             [string appendFormat:
-                              NSLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @""),
-                              p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
-                         }
-                         else
-                         {
-                             [string appendFormat:
-                              NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @""),
-                              p.hours, p.minutes, p.seconds];
-                         }
-                     }
-
-                     progress = (p.progress + p.pass - 1) / p.pass_count;
-
-                     // Update dock icon
-                     if (self.dockIconProgress < 100.0 * progress)
-                     {
-                         // ETA format is [XX]X:XX:XX when ETA is greater than one hour
-                         // [X]X:XX when ETA is greater than 0 (minutes or seconds)
-                         // When these conditions doesn't applied (eg. when ETA is undefined)
-                         // we show just a tilde (~)
-
-                         NSString *etaStr = @"";
-                         if (p.hours > 0)
-                             etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
-                         else if (p.minutes > 0 || p.seconds > 0)
-                             etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
-                         else
-                             etaStr = @"~";
-
-                         [self.dockTile updateDockIcon:progress withETA:etaStr];
-
-                         self.dockIconProgress += dockTileUpdateFrequency;
-                     }
-
-                     break;
+                     [self.dockTile updateDockIcon:progress withETA:etaStr];
+                     self.dockIconProgress += dockTileUpdateFrequency;
                  }
-                 case HBStateMuxing:
-                 {
-                     string = [NSMutableString stringWithString:NSLocalizedString(@"Muxing…", @"")];
-
-                     // Update dock icon
-                     [self.dockTile updateDockIcon:1.0 withETA:@""];
-
-                     break;
-                 }
-                 case HBStatePaused:
-                 {
-                     string = [NSMutableString stringWithString:NSLocalizedString(@"Paused", @"")];
-                     break;
-                 }
-                 default:
-                     break;
              }
-             #undef p
+             else if (state == HBStateMuxing)
+             {
+                 [self.dockTile updateDockIcon:1.0 withETA:@""];
+             }
 
              // Update text field
              self.progressTextField.stringValue = string;

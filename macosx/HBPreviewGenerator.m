@@ -10,6 +10,7 @@
 
 #import "HBCore.h"
 #import "HBJob.h"
+#import "HBStateFormatter.h"
 #import "HBPicture+UIAdditions.h"
 
 @interface HBPreviewGenerator ()
@@ -180,46 +181,28 @@
     int level = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];
 
+    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+    formatter.twoLines = NO;
+    formatter.showPassNumber = NO;
+
     // start the actual encode
     [self.core encodeJob:job
          progressHandler:^(HBState state, hb_state_t hb_state) {
-        switch (state) {
-            case HBStateWorking:
-            {
-                NSMutableString *info = [NSMutableString stringWithFormat: @"Encoding preview:  %.2f %%", 100.0 * hb_state.param.working.progress];
-
-                if (hb_state.param.working.seconds > -1)
-                {
-                    [info appendFormat:@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-                     hb_state.param.working.rate_cur, hb_state.param.working.rate_avg, hb_state.param.working.hours,
-                     hb_state.param.working.minutes, hb_state.param.working.seconds];
-                }
-
-                double progress = 100.0 * hb_state.param.working.progress;
-                
-                [self.delegate updateProgress:progress info:info];
-                break;
-            }
-            case HBStateMuxing:
-                [self.delegate updateProgress:100.0 info:@"Muxing Preview…"];
-                break;
-
-            default:
-                break;
-        }
-    }
-    completionHandler:^(BOOL success) {
-        // Encode done, call the delegate and close libhb handle
-        if (success)
-        {
-            [self.delegate didCreateMovieAtURL:destURL];
-        }
-        else
-        {
-            [self.delegate didCancelMovieCreation];
-        }
-        self.core = nil;
-    }];
+             [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state] * 100
+                                      info:[formatter stateToString:hb_state title:@"preview"]];
+         }
+       completionHandler:^(BOOL success) {
+           // Encode done, call the delegate and close libhb handle
+           if (success)
+           {
+               [self.delegate didCreateMovieAtURL:destURL];
+           }
+           else
+           {
+               [self.delegate didCancelMovieCreation];
+           }
+           self.core = nil;
+       }];
 
     return YES;
 }

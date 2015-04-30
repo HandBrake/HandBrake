@@ -28,6 +28,7 @@
 
 #import "HBCore.h"
 #import "HBJob.h"
+#import "HBStateFormatter.h"
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate>
 
@@ -678,29 +679,17 @@
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
         int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
 
+        HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+
         [self.core scanURL:scanURL
                titleIndex:scanTitleNum
             previews:hb_num_previews minDuration:min_title_duration_seconds
         progressHandler:^(HBState state, hb_state_t hb_state)
         {
-            #define p hb_state.param.scanning
-            if (p.preview_cur)
-            {
-                fSrcDVD2Field.stringValue = [NSString stringWithFormat:
-                                             NSLocalizedString( @"Scanning title %d of %d, preview %d…", @"" ),
-                                             p.title_cur, p.title_count,
-                                             p.preview_cur];
-            }
-            else
-            {
-                fSrcDVD2Field.stringValue = [NSString stringWithFormat:
-                                             NSLocalizedString( @"Scanning title %d of %d…", @"" ),
-                                             p.title_cur, p.title_count];
-            }
+            fSrcDVD2Field.stringValue = [formatter stateToString:hb_state title:nil];
             fScanIndicator.hidden = NO;
             fScanHorizontalLine.hidden = YES;
-            fScanIndicator.doubleValue = 100.0 * p.progress;
-        #undef p
+            fScanIndicator.doubleValue = [formatter stateToPercentComplete:hb_state];
         }
     completionHandler:^(BOOL success)
         {

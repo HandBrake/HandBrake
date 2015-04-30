@@ -156,6 +156,7 @@
 		A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */; };
 		A9706CBA1AC1452800BAEAA8 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9706CB81AC1452800BAEAA8 /* ExceptionAlert.xib */; };
 		A971281F1A2C75180088C076 /* HBTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A971281E1A2C75180088C076 /* HBTitle.m */; };
+		A975C08E1AE8C5270061870D /* HBStateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A975C08D1AE8C5270061870D /* HBStateFormatter.m */; };
 		A983494F1A9A64B80059CB94 /* presets.plist in Resources */ = {isa = PBXBuildFile; fileRef = A983494E1A9A64B80059CB94 /* presets.plist */; };
 		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
 		A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9906B2B1A710920001D82D5 /* HBQueueController.m */; };
@@ -431,6 +432,8 @@
 		A9706CB91AC1452800BAEAA8 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ExceptionAlert.xib; sourceTree = "<group>"; };
 		A971281D1A2C75180088C076 /* HBTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitle.h; sourceTree = "<group>"; };
 		A971281E1A2C75180088C076 /* HBTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitle.m; sourceTree = "<group>"; };
+		A975C08C1AE8C5270061870D /* HBStateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBStateFormatter.h; sourceTree = "<group>"; };
+		A975C08D1AE8C5270061870D /* HBStateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBStateFormatter.m; sourceTree = "<group>"; };
 		A983494E1A9A64B80059CB94 /* presets.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = presets.plist; sourceTree = "<group>"; };
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
@@ -972,6 +975,8 @@
 				A9160A331AE7A165009A7818 /* HBCodingUtilities.h */,
 				A9160A341AE7A165009A7818 /* HBCodingUtilities.m */,
 				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
+				A975C08C1AE8C5270061870D /* HBStateFormatter.h */,
+				A975C08D1AE8C5270061870D /* HBStateFormatter.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1334,6 +1339,7 @@
 				46AB433515F98A2B009C0961 /* DockTextField.m in Sources */,
 				A9DEC87F1A23DF6F00C79B48 /* HBJob.m in Sources */,
 				A9E2FD271A21BC4A000E8D3F /* HBAddPresetController.m in Sources */,
+				A975C08E1AE8C5270061870D /* HBStateFormatter.m in Sources */,
 				A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */,
 				A9597A2A1A49749D00007771 /* HBRange+UIAdditions.m in Sources */,
 			);
