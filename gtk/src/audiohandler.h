@@ -41,5 +41,6 @@ void ghb_init_audio_defaults_ui(signal_user_data_t *ud);
 void ghb_audio_defaults_to_ui(signal_user_data_t *ud);
 GtkListBoxRow* ghb_find_lang_row(GtkListBox *list_box, int lang_idx);
 void ghb_audio_title_change(signal_user_data_t *ud, gboolean title_valid);
+void ghb_clear_audio_selection(GtkBuilder *builder);
 
 #endif // _AUDIOHANDLER_H_

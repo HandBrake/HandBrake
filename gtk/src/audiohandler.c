@@ -1315,6 +1315,20 @@ ghb_clear_audio_list_settings(GhbValue *settings)
 }
 
 void
+ghb_clear_audio_selection(GtkBuilder *builder)
+{
+    GtkTreeView *tv;
+    GtkTreeSelection *tsel;
+
+    g_debug("clear_audio_list_ui ()");
+    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "audio_list_view"));
+    // Clear tree selection so that updates are not triggered
+    // that cause a recursive attempt to clear the tree selection (crasher)
+    tsel = gtk_tree_view_get_selection(tv);
+    gtk_tree_selection_unselect_all(tsel);
+}
+
+void
 ghb_clear_audio_list_ui(GtkBuilder *builder)
 {
     GtkTreeView *tv;

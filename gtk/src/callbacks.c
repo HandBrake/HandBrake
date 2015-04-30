@@ -1183,6 +1183,8 @@ ghb_load_settings(signal_user_data_t * ud)
     ghb_show_container_options(ud);
     check_chapter_markers(ud);
 
+    ghb_clear_audio_selection(ud->builder);
+    ghb_clear_subtitle_selection(ud->builder);
     ghb_settings_to_ui(ud, ud->settings);
     ghb_audio_defaults_to_ui(ud);
     ghb_subtitle_defaults_to_ui(ud);

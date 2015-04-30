@@ -1049,6 +1049,19 @@ ghb_clear_subtitle_list_settings(GhbValue *settings)
         ghb_array_reset(subtitle_list);
 }
 
+void
+ghb_clear_subtitle_selection(GtkBuilder *builder)
+{
+    GtkTreeView *tv;
+    GtkTreeSelection *tsel;
+
+    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "subtitle_list_view"));
+    // Clear tree selection so that updates are not triggered
+    // that cause a recursive attempt to clear the tree selection (crasher)
+    tsel = gtk_tree_view_get_selection(tv);
+    gtk_tree_selection_unselect_all(tsel);
+}
+
 static void
 ghb_clear_subtitle_list_ui(GtkBuilder *builder)
 {
