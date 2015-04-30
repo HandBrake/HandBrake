@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7525" systemVersion="14D105g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7525"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -56,7 +56,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <progressIndicator verticalHuggingPriority="750" maxValue="100" bezeled="NO" style="bar" id="1373">
+                    <progressIndicator verticalHuggingPriority="750" maxValue="1" bezeled="NO" style="bar" id="1373">
                         <rect key="frame" x="18" y="-26" width="910" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </progressIndicator>
@@ -465,7 +465,7 @@
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
-                    <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="bar" id="3203">
+                    <progressIndicator hidden="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" id="3203">
                         <rect key="frame" x="386" y="542.0000000420406" width="541" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
@@ -577,16 +577,16 @@
                         </popUpButtonCell>
                         <accessibility description="Angle"/>
                         <connections>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="-2" name="selectedValue" keyPath="self.job.angle" previousBinding="If4-Fp-R0g" id="sbX-LU-uOW">
                                 <dictionary key="options">
                                     <string key="NSNullPlaceholder" base64-UTF8="YES">
 IA
 </string>
-                                </dictionary>
-                            </binding>
-                            <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
                             <binding destination="-2" name="content" keyPath="self.job.angles" id="If4-Fp-R0g"/>
@@ -665,7 +665,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="782" y="-190"/>
+            <point key="canvasLocation" x="943" y="-87"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>

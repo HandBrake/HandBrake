@@ -580,13 +580,13 @@
 
              // Update text field
              self.progressTextField.stringValue = string;
-             [self.controller setQueueInfo:string progress:progress * 100.0 hidden:NO];
+             [self.controller setQueueInfo:string progress:progress hidden:NO];
          }
      completionHandler:^(BOOL success) {
          NSString *info = NSLocalizedString(@"Encode Finished.", @"");
 
          self.progressTextField.stringValue = info;
-         [self.controller setQueueInfo:info progress:100.0 hidden:YES];
+         [self.controller setQueueInfo:info progress:1.0 hidden:YES];
 
          // Restore dock icon
          [self.dockTile updateDockIcon:-1.0 withETA:@""];

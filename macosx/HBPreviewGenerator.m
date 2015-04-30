@@ -188,7 +188,7 @@
     // start the actual encode
     [self.core encodeJob:job
          progressHandler:^(HBState state, hb_state_t hb_state) {
-             [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state] * 100
+             [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state]
                                       info:[formatter stateToString:hb_state title:@"preview"]];
          }
        completionHandler:^(BOOL success) {
