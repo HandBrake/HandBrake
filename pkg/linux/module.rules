@@ -77,12 +77,26 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)vivid && dput handbrake-snapshots handbrake_$(HB.version)ppa1~vivid1_source.changes )
 	(cd $(STAGE.out.src/)utopic && dput handbrake-snapshots handbrake_$(HB.version)ppa1~utopic1_source.changes )
 	(cd $(STAGE.out.src/)trusty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~trusty1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)vivid/$(PKG.deb.basename)
+	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)vivid/$(PKG.deb.basename)/version.txt
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)vivid/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)vivid/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/control.vivid $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/rules.vivid $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/rules
+	echo "handbrake ($(HB.version)ppa1~vivid1) vivid; urgency=low" > $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)vivid/$(PKG.src.deb.tar) -C $(STAGE.out.src/)vivid $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)vivid/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)utopic/$(PKG.deb.basename)
 	svn info $(HB.repo.url)@$(HB.repo.rev) >   $(STAGE.out.src/)utopic/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)utopic/$(PKG.deb.basename)
