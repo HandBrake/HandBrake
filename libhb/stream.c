@@ -4951,6 +4951,7 @@ void hb_ts_stream_reset(hb_stream_t *stream)
             stream->ts.list[i].buf->size = 0;
         stream->ts.list[i].skipbad = 1;
         stream->ts.list[i].continuity = -1;
+        stream->ts.list[i].pes_info_valid = 0;
     }
 
     stream->need_keyframe = 1;
