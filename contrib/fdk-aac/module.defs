@@ -3,6 +3,11 @@ $(eval $(call import.CONTRIB.defs,FDKAAC))
 
 FDKAAC.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fdk-aac-v0.1.1-6-gbae4553.tar.bz2
 
+# fdk-aac configure script fails to add compiler optimizations if the
+# CFLAGS env variable is set during configure.  Since we set it, we
+# also need to set the desired optimization option
+FDKAAC.GCC.args.extra += $(FDKAAC.GCC.args.O.$(FDKAAC.GCC.O))
+
 ## optional static libs need to be marked
 FDKAAC.OSL.libs  = fdk-aac
 FDKAAC.OSL.files = $(foreach i,$(FDKAAC.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
