@@ -61,14 +61,21 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     self = [self init];
     if (self)
     {
-        _width = title.hb_title->geometry.width;
-        _height = title.hb_title->geometry.height;
+        hb_title_t *hb_title = title.hb_title;
 
-        _sourceWidth = title.hb_title->geometry.width;
-        _sourceHeight = title.hb_title->geometry.height;
+        _width = hb_title->geometry.width;
+        _height = hb_title->geometry.height;
 
-        _sourceParNum = title.hb_title->geometry.par.num;
-        _sourceParDen = title.hb_title->geometry.par.den;
+        _sourceWidth = hb_title->geometry.width;
+        _sourceHeight = hb_title->geometry.height;
+
+        _sourceParNum = hb_title->geometry.par.num;
+        _sourceParDen = hb_title->geometry.par.den;
+
+        _autoCropTop    = hb_title->crop[0];
+        _autoCropBottom = hb_title->crop[1];
+        _autoCropLeft   = hb_title->crop[2];
+        _autoCropRight  = hb_title->crop[3];
 
         [self validateSettings];
 
