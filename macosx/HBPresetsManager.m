@@ -342,7 +342,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     [self deleteBuiltInPresets];
 
     // Load the built-in presets from the app bundle Resources folder.
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"presets" withExtension:@".plist"];
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"presets" withExtension:@"plist"];
     NSArray *presetsArray = [[NSArray alloc] initWithContentsOfURL:fileURL];
 
     for (NSDictionary *child in presetsArray.reverseObjectEnumerator)
