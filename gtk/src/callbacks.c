@@ -1245,9 +1245,12 @@ start_scan(
 gboolean
 ghb_idle_scan(signal_user_data_t *ud)
 {
-    const gchar *path;
-    path = ghb_dict_get_string(ud->globals, "scan_source");
+    gchar *path;
+    // ghb_do_scan replaces "scan_source" key in dict, so we must
+    // make a copy of the string.
+    path = g_strdup(ghb_dict_get_string(ud->globals, "scan_source"));
     ghb_do_scan(ud, path, 0, TRUE);
+    g_free(path);
     return FALSE;
 }
 
