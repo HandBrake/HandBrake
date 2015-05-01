@@ -535,7 +535,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_out = in;
@@ -1564,7 +1564,7 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
 #endif
         flushDelayQueue(pv);
         if (pv->list_subtitle != NULL)
-            cc_send_to_decoder(pv, hb_buffer_init(0));
+            cc_send_to_decoder(pv, hb_buffer_eof_init());
     }
 }
 
@@ -1810,11 +1810,11 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = NULL;
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
-    if ( in->size == 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         if (pv->context != NULL && pv->context->codec != NULL)
         {
-            decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
+            decodeVideo(w, in->data, 0, 0, pts, dts, 0);
         }
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
@@ -1841,7 +1841,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         if ( codec == NULL )
         {
             hb_log( "decavcodecvWork: failed to find codec for id (%d)", w->codec_param );
-            *buf_out = hb_buffer_init( 0 );;
+            *buf_out = hb_buffer_eof_init();
             return HB_WORK_DONE;
         }
 
@@ -1882,7 +1882,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             av_dict_free( &av_opts );
             hb_log( "decavcodecvWork: avcodec_open failed" );
-            *buf_out = hb_buffer_init( 0 );;
+            *buf_out = hb_buffer_eof_init();
             return HB_WORK_DONE;
         }
         av_dict_free( &av_opts );

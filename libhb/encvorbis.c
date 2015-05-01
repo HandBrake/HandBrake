@@ -256,21 +256,20 @@ int encvorbisWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                    hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_buffer_t * in = *buf_in;
     hb_buffer_t * buf;
 
-    if ( (*buf_in)->size <= 0 )
+    *buf_in = NULL;
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input - send it downstream & say we're done */
-        *buf_out = *buf_in;
-        *buf_in = NULL;
+        *buf_out = in;
        return HB_WORK_DONE;
     }
 
     hb_list_add( pv->list, *buf_in );
-    *buf_in = NULL;
 
     *buf_out = buf = Encode( w );
-
     while( buf )
     {
         buf->next = Encode( w );

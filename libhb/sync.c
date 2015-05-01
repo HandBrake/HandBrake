@@ -600,7 +600,7 @@ static void flushSubtitles(hb_work_private_t *pv)
         }
         if (subtitle->config.dest == PASSTHRUSUB)
         {
-            hb_fifo_push(subtitle->fifo_out, hb_buffer_init(0));
+            hb_fifo_push(subtitle->fifo_out, hb_buffer_eof_init());
         }
     }
 }
@@ -624,7 +624,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     next = *buf_in;
     *buf_in = NULL;
 
-    if (next->size == 0)
+    if (next->s.flags & HB_BUF_FLAG_EOF)
     {
         if (sync->cur != NULL)
         {
@@ -738,7 +738,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                pv->common->count_frames);
         hb_buffer_close(&sync->cur);
         hb_buffer_close(&next);
-        *buf_out = hb_buffer_init(0);
+        *buf_out = hb_buffer_eof_init();
         flushSubtitles(pv);
         // Unblock anybody waiting on this threads last PTS
         setSyncPTS(pv, INT64_MAX, 0);
@@ -754,7 +754,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                sync->cur->s.start);
         hb_buffer_close(&sync->cur);
         hb_buffer_close( &next );
-        *buf_out = hb_buffer_init(0);
+        *buf_out = hb_buffer_eof_init();
         flushSubtitles(pv);
         // Unblock anybody waiting on this threads last PTS
         setSyncPTS(pv, INT64_MAX, 0);
@@ -874,7 +874,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // muxer or renderer filter.
         while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
         {
-            if (sub->size > 0)
+            if (!(next->s.flags & HB_BUF_FLAG_EOF))
             {
                 out = sanitizeSubtitle(pv, i, sub);
                 if (out != NULL)
@@ -1013,7 +1013,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_in = NULL;
 
     /* if the next buffer is an eof send it downstream */
-    if ( buf->size <= 0 )
+    if (buf->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = buf;
         // Unblock anybody waiting on this threads last PTS
@@ -1064,7 +1064,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (job->frame_to_stop && pv->common->count_frames >= job->frame_to_stop)
     {
         hb_buffer_close( &buf );
-        *buf_out = hb_buffer_init(0);
+        *buf_out = hb_buffer_eof_init();
         // Unblock anybody waiting on this threads last PTS
         setSyncPTS(pv, INT64_MAX, sync->index+1);
         return HB_WORK_DONE;
@@ -1072,7 +1072,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (job->pts_to_stop && sync->next_start >= job->pts_to_stop)
     {
         hb_buffer_close( &buf );
-        *buf_out = hb_buffer_init(0);
+        *buf_out = hb_buffer_eof_init();
         // Unblock anybody waiting on this threads last PTS
         setSyncPTS(pv, INT64_MAX, sync->index+1);
         return HB_WORK_DONE;

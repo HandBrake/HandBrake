@@ -439,7 +439,7 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->s.start/90, in->s.stop/90, in->size, in->data);
 #endif
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;

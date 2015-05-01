@@ -469,7 +469,8 @@ static int hb_vfr_work( hb_filter_object_t * filter,
 
     *buf_in = NULL;
     *buf_out = NULL;
-    if( in->size <= 0 )
+
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         hb_buffer_t *head = NULL, *tail = NULL, *next;
         int counter = 2;

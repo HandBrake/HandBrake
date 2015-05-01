@@ -366,7 +366,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( buf->size <= 0 )
+    if (buf->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF - mark this track as done
         hb_buffer_close( &buf );

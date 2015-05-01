@@ -608,7 +608,7 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
 
     *buf_in = NULL;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         while(1){
             sts = process_frame(in->qsv_details.qsv_atom, qsv, pv);

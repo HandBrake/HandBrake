@@ -662,7 +662,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_out = NULL;
 
-    if( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF on input. Flush any frames still in the decoder then
         // send the eof downstream to tell the muxer we're done.

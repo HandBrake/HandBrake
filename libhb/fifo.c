@@ -447,6 +447,13 @@ hb_buffer_t * hb_buffer_init( int size )
     return hb_buffer_init_internal(size, 0);
 }
 
+hb_buffer_t * hb_buffer_eof_init(void)
+{
+    hb_buffer_t * buf = hb_buffer_init(0);
+    buf->s.flags = HB_BUF_FLAG_EOF;
+    return buf;
+}
+
 void hb_buffer_realloc( hb_buffer_t * b, int size )
 {
     if ( size > b->alloc || b->data == NULL )

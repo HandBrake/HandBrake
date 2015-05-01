@@ -189,7 +189,7 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t *in = *buf_in;
     hb_buffer_t *buf = NULL;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_out = in;

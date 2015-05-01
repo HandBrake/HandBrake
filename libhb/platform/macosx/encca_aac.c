@@ -503,19 +503,19 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
                      hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
+    hb_buffer_t * in = *buf_in;
     hb_buffer_t *buf;
 
-    if ((*buf_in)->size <= 0)
+    *buf_in = NULL;
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF on input. Finish encoding what we have buffered then send
         // it & the eof downstream.
-        *buf_out = Flush(w, *buf_in);
-        *buf_in = NULL;
+        *buf_out = Flush(w, in);
         return HB_WORK_DONE;
     }
 
-    hb_list_add(pv->list, *buf_in);
-    *buf_in = NULL;
+    hb_list_add(pv->list, in);
 
     *buf_out = buf = Encode(w);
 

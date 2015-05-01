@@ -336,7 +336,7 @@ static int vobsub_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * sub;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_in = NULL;
         *buf_out = in;
@@ -563,7 +563,7 @@ static int ssa_work( hb_filter_object_t * filter,
                                   filter->subtitle->extradata_size);
         pv->script_initialized = 1;
     }
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_in = NULL;
         *buf_out = in;
@@ -659,7 +659,7 @@ static int textsub_work(hb_filter_object_t * filter,
         pv->script_initialized = 1;
     }
 
-    if (in->size <= 0)
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_in = NULL;
         *buf_out = in;
@@ -817,7 +817,7 @@ static int pgssub_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * sub;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_in = NULL;
         *buf_out = in;

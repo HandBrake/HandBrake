@@ -2523,7 +2523,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * last = NULL, * out = NULL;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;

@@ -445,7 +445,7 @@ static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
     if(!in->qsv_details.filter_details)
         in->qsv_details.filter_details = pv;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;
@@ -559,7 +559,7 @@ static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * out = *buf_out;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;

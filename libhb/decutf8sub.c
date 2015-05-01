@@ -48,10 +48,15 @@ static int decutf8Work(hb_work_object_t * w,
                        hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
     hb_work_private_t * pv = w->private_data;
-    // Pass the packets through without modification
+    hb_buffer_t * in = *buf_in;
     hb_buffer_t *out = *buf_in;
 
-    out->s.frametype = HB_FRAME_SUBTITLE;
+    *buf_in = NULL;
+    if (in->s.flags & HB_BUF_FLAG_EOF)
+    {
+        *buf_out = in;
+        return HB_WORK_DONE;
+    }
 
     // Warn if the subtitle's duration has not been passed through by the
     // demuxer, which will prevent the subtitle from displaying at all
@@ -61,12 +66,9 @@ static int decutf8Work(hb_work_object_t * w,
     }
 
     hb_srt_to_ssa(out, ++pv->line);
-
-    *buf_in  = NULL;
+    out->s.frametype = HB_FRAME_SUBTITLE;
     *buf_out = out;
 
-    if (out->size == 0)
-        return HB_WORK_DONE;
     return HB_WORK_OK;
 }
 

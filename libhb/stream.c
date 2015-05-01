@@ -5712,12 +5712,9 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         // following them to preserve the timing (since the packing puts two
         // or more frames in what looks like one avi frame). The contents and
         // size of these null frames are ignored by the ff_h263_decode_frame
-        // as long as they're < 20 bytes. We need a positive size so we use
-        // one byte if we're given a zero or negative size. We don't know
-        // if the pkt data points anywhere reasonable so we just stick a
-        // byte of zero in our outbound buf.
-        buf = hb_buffer_init( 1 );
-        *buf->data = 0;
+        // as long as they're < 20 bytes. Zero length buffers are also
+        // use by theora to indicate duplicate frames.
+        buf = hb_buffer_init( 0 );
     }
     else
     {

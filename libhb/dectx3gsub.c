@@ -267,7 +267,7 @@ static int dectx3gWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_log( "dectx3gsub: subtitle packet lacks duration" );
     }
 
-    if (in->size == 0)
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;

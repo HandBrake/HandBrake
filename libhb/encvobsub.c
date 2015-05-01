@@ -36,9 +36,9 @@ int encsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // Invalid source, send EOF, this shouldn't ever happen
         hb_log("encvobsub: invalid subtitle source");
         hb_buffer_close( buf_in );
-        *buf_out = hb_buffer_init(0);
+        *buf_out = hb_buffer_eof_init();
     }
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_out = in;

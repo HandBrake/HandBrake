@@ -83,6 +83,19 @@ struct hb_buffer_settings_s
 #define HB_FRAME_KEY      0x0F
 #define HB_FRAME_REF      0xF0
     uint8_t       frametype;
+
+// Picture flags used by filters
+#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
+#define PIC_FLAG_REPEAT_FIRST_FIELD 0x0100
+#endif
+#ifndef PIC_FLAG_TOP_FIELD_FIRST
+#define PIC_FLAG_TOP_FIELD_FIRST    0x0008
+#endif
+#ifndef PIC_FLAG_PROGRESSIVE_FRAME
+#define PIC_FLAG_PROGRESSIVE_FRAME  0x0010
+#endif
+#define PIC_FLAG_REPEAT_FRAME       0x0200
+#define HB_BUF_FLAG_EOF             0x0400
     uint16_t      flags;
 };
 
@@ -165,6 +178,7 @@ void hb_buffer_pool_init( void );
 void hb_buffer_pool_free( void );
 
 hb_buffer_t * hb_buffer_init( int size );
+hb_buffer_t * hb_buffer_eof_init( void );
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int w, int h);
 void          hb_buffer_init_planes( hb_buffer_t * b );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
@@ -457,19 +471,6 @@ extern hb_filter_object_t hb_filter_qsv;
 extern hb_filter_object_t hb_filter_qsv_pre;
 extern hb_filter_object_t hb_filter_qsv_post;
 #endif
-
-// Picture flags used by filters
-#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
-#define PIC_FLAG_REPEAT_FIRST_FIELD 256
-#endif
-#ifndef PIC_FLAG_TOP_FIELD_FIRST
-#define PIC_FLAG_TOP_FIELD_FIRST 8
-#endif
-#ifndef PIC_FLAG_PROGRESSIVE_FRAME
-#define PIC_FLAG_PROGRESSIVE_FRAME 16
-#endif
-
-#define PIC_FLAG_REPEAT_FRAME 512
 
 extern hb_work_object_t * hb_objects;
 

@@ -433,7 +433,7 @@ static hb_buffer_t * deint_fast(hb_filter_private_t * pv, hb_buffer_t * in)
     if (in == NULL)
     {
         // Flushing final buffers.  Append EOS marker buffer.
-        dst = hb_buffer_init(0);
+        dst = hb_buffer_eof_init();
         if (first == NULL)
         {
             first = dst;
@@ -583,7 +583,7 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * last = NULL, * out = NULL;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
         *buf_in = NULL;

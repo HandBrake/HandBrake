@@ -735,20 +735,20 @@ void ReadLoop( void * _w )
     // send empty buffers downstream to video & audio decoders to signal we're done.
     if( !*r->die && !r->job->done )
     {
-        push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
+        push_buf(r, r->job->fifo_mpeg2, hb_buffer_eof_init());
 
         hb_audio_t *audio;
         for( n = 0; (audio = hb_list_item( r->job->list_audio, n)); ++n )
         {
             if ( audio->priv.fifo_in )
-                push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
+                push_buf(r, audio->priv.fifo_in, hb_buffer_eof_init());
         }
 
         hb_subtitle_t *subtitle;
         for( n = 0; (subtitle = hb_list_item( r->job->list_subtitle, n)); ++n )
         {
             if ( subtitle->fifo_in && subtitle->source == VOBSUB)
-                push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
+                push_buf(r, subtitle->fifo_in, hb_buffer_eof_init());
         }
     }
 

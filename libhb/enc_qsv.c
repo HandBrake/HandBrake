@@ -1744,7 +1744,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
      * EOF on input. Flush the decoder, then send the
      * EOF downstream to let the muxer know we're done.
      */
-    if (in->size <= 0)
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         qsv_enc_work(pv, NULL, NULL);
         hb_list_add(pv->encoded_frames, in);

@@ -536,7 +536,7 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
     hb_work_private_t *pv = w->private_data;
     hb_buffer_t       *in = *buf_in;
 
-    if (in->size <= 0)
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         uint32_t nnal;
         x265_nal *nal;

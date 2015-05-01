@@ -225,7 +225,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     int frame_width, frame_height;
 
-    if ( in->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         // EOF on input - send it downstream & say we're done.
         // XXX may need to flush packets via a call to

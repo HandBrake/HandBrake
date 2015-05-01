@@ -186,7 +186,7 @@ int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * buf;
 
-    if ( (*buf_in)->size <= 0 )
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input - send it downstream & say we're done */
 
