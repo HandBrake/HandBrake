@@ -88,7 +88,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     else if (self.type == HBRangeTypeFrames)
     {
         hb_title_t *title = self.title.hb_title;
-        int duration = (self.frameStop - self.frameStart) / (title->vrate.num / title->vrate.den);
+        int duration = (self.frameStop - self.frameStart) / (title->vrate.num / (double)title->vrate.den);
         return [NSString stringWithFormat: @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60, duration % 60];
     }
 
