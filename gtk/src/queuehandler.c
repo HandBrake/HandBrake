@@ -2281,6 +2281,7 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
             // Remove the corresponding item from the queue list
             ghb_value_incref(ghb_queue_edit_settings);
             ghb_array_remove(ud->queue, row);
+            ghb_update_pending(ud);
         }
         else
         {
