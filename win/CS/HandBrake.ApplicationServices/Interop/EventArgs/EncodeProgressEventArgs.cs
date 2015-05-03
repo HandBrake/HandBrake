@@ -40,5 +40,10 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         /// Gets or sets the current encoding pass. (-1: subtitle scan, 1: first pass, 2: second pass)
         /// </summary>
         public int Pass { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pass count.
+        /// </summary>
+        public int PassCount { get; set; }
     }
 }

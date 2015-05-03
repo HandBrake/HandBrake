@@ -219,6 +219,7 @@ namespace HandBrake.ApplicationServices.Services.Encode
                 EstimatedTimeLeft = e.EstimatedTimeLeft, 
                 PercentComplete = e.FractionComplete * 100, 
                 Task = e.Pass, 
+                TaskCount = e.PassCount,
                 ElapsedTime = DateTime.Now - this.startTime, 
             };
 

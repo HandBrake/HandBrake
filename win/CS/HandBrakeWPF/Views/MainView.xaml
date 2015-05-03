@@ -36,32 +36,6 @@
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
 
-        <Style TargetType="ListBoxItem">
-            <Setter Property="Padding" Value="0,2,0,2" />
-            <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding IsBuildIn}" Value="True" />
-                        <Condition Binding="{Binding DataContext.UseSystemColours, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Foreground" Value="DarkBlue" />
-                </MultiDataTrigger>
-                <!--<DataTrigger Binding="{Binding IsBuildIn}" Value="True">
-                    <Setter Property="Foreground" Value="DarkBlue" />
-                </DataTrigger>-->
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                </Trigger>
-                <DataTrigger Binding="{Binding IsDefault}" Value="True" >
-                    <Setter Property="FontStyle" Value="Italic" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsDefault}" Value="False" >
-                    <Setter Property="FontStyle" Value="Normal" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -554,7 +528,35 @@
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
                              BorderBrush="LightGray"
                             >
+                        <ListBox.Resources>
 
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0,2,0,2" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsBuildIn}" Value="True" />
+                                            <Condition Binding="{Binding DataContext.UseSystemColours, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Foreground" Value="DarkBlue" />
+                                    </MultiDataTrigger>
+                                    <!--<DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                                        <Setter Property="Foreground" Value="DarkBlue" />
+                                    </DataTrigger>-->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True" >
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="False" >
+                                        <Setter Property="FontStyle" Value="Normal" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Resources>
+                        
                         <i:Interaction.Triggers>
                             <commands:InputBindingTrigger>
                                 <commands:InputBindingTrigger.InputBinding>

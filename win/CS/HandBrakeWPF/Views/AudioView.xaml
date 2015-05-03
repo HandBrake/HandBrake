@@ -57,13 +57,20 @@
         <Grid Grid.Row="1" Margin="10,5,10,0" Grid.Column="0"
               Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                
+                <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
                     <splitButton:SplitMenuButton.ItemSource>
                         <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
                         <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
@@ -71,23 +78,22 @@
                     </splitButton:SplitMenuButton.ItemSource>
                 </splitButton:SplitMenuButton>
 
-                <Button MinWidth="65"
+                <Button MinWidth="65" Grid.Column="1"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
                     Content="Clear" />
-                
-                <Button MinWidth="65"
+
+                <Button MinWidth="65" Grid.Column="3"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action ShowAudioDefaults]"
                     Content="{Binding SwitchDisplayTitle}" />
 
-                <Button MinWidth="65"
-                    Margin="0,0,10,0"
+                <Button MinWidth="65" Grid.Column="4"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
                     Content="Reload Defaults" />
 
 
-            </StackPanel>
+            </Grid>
         </Grid>
 
         <!-- Row 2 -->
@@ -176,8 +182,7 @@
                             </Grid.RowDefinitions>
 
                             <!--  Row 1  -->
-                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
-                            <ComboBox Grid.Column="1" Height="22" Width="100" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="1" Height="22" Width="135" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
 
@@ -282,7 +287,7 @@
         </ListBox>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0"
-              Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+              Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false, FallbackValue=Collapsed}">
 
             <Grid Margin="5,0,0,0" >
                 <Grid.RowDefinitions>

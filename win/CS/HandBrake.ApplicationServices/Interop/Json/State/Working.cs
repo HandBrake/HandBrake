@@ -22,12 +22,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.State
         /// <summary>
         /// Gets or sets the job.
         /// </summary>
-        public int Job { get; set; }
+        public int Pass { get; set; }
 
         /// <summary>
         /// Gets or sets the job count.
         /// </summary>
-        public int JobCount { get; set; }
+        public int PassCount { get; set; }
 
         /// <summary>
         /// Gets or sets the minutes.

@@ -521,7 +521,8 @@ namespace HandBrake.ApplicationServices.Interop
                         CurrentFrameRate = state.Working.Rate, 
                         AverageFrameRate = state.Working.RateAvg, 
                         EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds), 
-                        Pass = 1, // TODO
+                        Pass = state.Working.Pass,
+                        PassCount = state.Working.PassCount
                     };
 
                     this.EncodeProgress(this, progressEventArgs);

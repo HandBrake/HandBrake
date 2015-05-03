@@ -57,9 +57,19 @@
                 />
 
         <!-- Row 1 -->
-        <StackPanel Grid.Row="1" Margin="10,5,10,0" Orientation="Horizontal"
+        <Grid Grid.Row="1" Margin="10,5,10,0"
                     Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" >
-            <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
                 <splitButton:SplitMenuButton.ItemSource>
                     <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
                     <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
@@ -68,27 +78,24 @@
                 </splitButton:SplitMenuButton.ItemSource>
             </splitButton:SplitMenuButton>
 
-            <Button MinWidth="75"
+            <Button MinWidth="75" Grid.Column="1"
                     cal:Message.Attach="[Event Click] = [Action Import]"
                     Content="Import SRT"
                     Margin="0,0,10,0"/>
-            <Button MinWidth="65"
+            <Button MinWidth="65" Grid.Column="2"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
                     Content="Clear" />
 
-            <Button MinWidth="65"
+            <Button MinWidth="65" Grid.Column="4"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
                     Content="{Binding SwitchDisplayTitle}" />
 
-            <Button MinWidth="65"
-                    Margin="0,0,10,0"
+            <Button MinWidth="65" Grid.Column="5"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
                     Content="Reload Defaults" />
-
-
-        </StackPanel>
+        </Grid>
 
 
         <!-- Row 2 -->
@@ -173,9 +180,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-  
-                            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Text="Source" />
-                            <ComboBox Grid.Column="1" Height="22" Width="200" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="1" Height="22" Width="235" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SourceTrack}" />
 
