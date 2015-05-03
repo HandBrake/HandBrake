@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Commands
         public CancelScanCommand(IScan ssw)
         {
             this.scanServiceWrapper = ssw;
-            this.scanServiceWrapper.ScanStared += this.ScanServiceWrapperScanStared;
+            this.scanServiceWrapper.ScanStarted += this.ScanServiceWrapperScanStared;
             this.scanServiceWrapper.ScanCompleted += this.ScanServiceWrapperScanCompleted;
         }
 

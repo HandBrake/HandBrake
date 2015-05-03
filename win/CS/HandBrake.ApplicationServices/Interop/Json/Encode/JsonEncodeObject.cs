@@ -39,7 +39,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the meta data.
         /// </summary>
-        public MetaData Metadata { get; set; }
+        public Metadata Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence id.

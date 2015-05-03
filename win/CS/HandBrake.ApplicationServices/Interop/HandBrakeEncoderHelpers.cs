@@ -36,7 +36,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Video framerates in pts.
         /// </summary>
-        private static List<HBRate> videoFramerates; 
+        private static List<HBRate> videoFramerates;
 
         /// <summary>
         /// List of HandBrake mixdowns.
@@ -46,7 +46,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// List of HandBrake containers.
         /// </summary>
-        private static List<HBContainer> containers; 
+        private static List<HBContainer> containers;
 
         /// <summary>
         /// The audio bitrates.
@@ -56,7 +56,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Audio sample rates in Hz.
         /// </summary>
-        private static List<HBRate> audioSampleRates; 
+        private static List<HBRate> audioSampleRates;
 
         /// <summary>
         /// Initializes static members of the HandBrakeEncoderHelpers class.
@@ -112,7 +112,7 @@ namespace HandBrake.ApplicationServices.Interop
 
                 return videoFramerates;
             }
-        } 
+        }
 
         /// <summary>
         /// Gets a list of supported mixdowns.
@@ -260,6 +260,67 @@ namespace HandBrake.ApplicationServices.Interop
         }
 
         /// <summary>
+        /// Returns true if the subtitle source type can be set to forced only.
+        /// </summary>
+        /// <param name="source">The subtitle source type (SSA, VobSub, etc)</param>
+        /// <returns>True if the subtitle source type can be set to forced only.</returns>
+        public static bool SubtitleCanSetForcedOnly(int source)
+        {
+            return HBFunctions.hb_subtitle_can_force(source) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the subtitle source type can be burned in.
+        /// </summary>
+        /// <param name="source">The subtitle source type (SSA, VobSub, etc)</param>
+        /// <returns>True if the subtitle source type can be burned in.</returns>
+        public static bool SubtitleCanBurn(int source)
+        {
+            return HBFunctions.hb_subtitle_can_burn(source) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the subtitle type can be passed through using the given muxer.
+        /// </summary>
+        /// <param name="subtitleSourceType">The subtitle source type (SSA, VobSub, etc)</param>
+        /// <param name="muxer">The ID of the muxer.</param>
+        /// <returns>True if the subtitle type can be passed through with the given muxer.</returns>
+        public static bool SubtitleCanPassthrough(int subtitleSourceType, int muxer)
+        {
+            return HBFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
+        }
+
+        /// <summary>
+        /// Gets the subtitle source type's name.
+        /// </summary>
+        /// <param name="source">The subtitle source type (SSA, VobSub, etc).</param>
+        /// <returns>The name of the subtitle source.</returns>
+        public static string GetSubtitleSourceName(int source)
+        {
+            switch ((hb_subtitle_s_subsource)source)
+            {
+                case hb_subtitle_s_subsource.CC608SUB:
+                    return "CC608";
+                case hb_subtitle_s_subsource.CC708SUB:
+                    return "CC708";
+                case hb_subtitle_s_subsource.SRTSUB:
+                    return "SRT";
+                case hb_subtitle_s_subsource.SSASUB:
+                    return "SSA";
+                case hb_subtitle_s_subsource.TX3GSUB:
+                    return "TX3G";
+                case hb_subtitle_s_subsource.UTF8SUB:
+                    return "UTF8";
+                case hb_subtitle_s_subsource.VOBSUB:
+                    return "VobSub";
+                case hb_subtitle_s_subsource.PGSSUB:
+                    return "PGS";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Determines if the given encoder is compatible with the given track.
         /// </summary>
         /// <param name="codecId">
@@ -310,7 +371,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </returns>
         public static bool MixdownHasCodecSupport(HBMixdown mixdown, HBAudioEncoder encoder)
         {
-            return HBFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint) encoder.Id) > 0;
+            return HBFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint)encoder.Id) > 0;
         }
 
         /// <summary>
@@ -431,9 +492,9 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new VideoQualityLimits
                 {
-                    Low = low, 
-                    High = high, 
-                    Granularity = granularity, 
+                    Low = low,
+                    High = high,
+                    Granularity = granularity,
                     Ascending = direction == 0
                 };
         }
@@ -478,7 +539,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </returns>
         public static int GetDefaultBitrate(HBAudioEncoder encoder, int sampleRate, HBMixdown mixdown)
         {
-            return HBFunctions.hb_audio_bitrate_get_default((uint) encoder.Id, sampleRate, mixdown.Id);
+            return HBFunctions.hb_audio_bitrate_get_default((uint)encoder.Id, sampleRate, mixdown.Id);
         }
 
         /// <summary>
@@ -498,9 +559,9 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new RangeLimits
             {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
+                Low = low,
+                High = high,
+                Granularity = granularity,
                 Ascending = direction == 0
             };
         }
@@ -522,9 +583,9 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new RangeLimits
             {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
+                Low = low,
+                High = high,
+                Granularity = granularity,
                 Ascending = direction == 0
             };
         }

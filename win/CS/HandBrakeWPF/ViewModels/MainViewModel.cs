@@ -263,7 +263,7 @@ namespace HandBrakeWPF.ViewModels
             this.HasSource = false;
 
             // Setup Events
-            this.scanService.ScanStared += this.ScanStared;
+            this.scanService.ScanStarted += this.ScanStared;
             this.scanService.ScanCompleted += this.ScanCompleted;
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
@@ -1223,7 +1223,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.Stop();
 
             // Unsubscribe from Events.
-            this.scanService.ScanStared -= this.ScanStared;
+            this.scanService.ScanStarted -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;
             this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
 

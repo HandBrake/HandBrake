@@ -26,12 +26,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the audio list.
         /// </summary>
-        public List<AudioTrack> AudioList { get; set; }
+        public List<SourceAudioTrack> AudioList { get; set; }
 
         /// <summary>
         /// Gets or sets the chapter list.
         /// </summary>
-        public List<ChapterTrack> ChapterList { get; set; }
+        public List<SourceChapter> ChapterList { get; set; }
 
         /// <summary>
         /// Gets or sets the color.
@@ -71,7 +71,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the meta data.
         /// </summary>
-        public MetaData MetaData { get; set; }
+        public SourceMetadata MetaData { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the subtitle list.
         /// </summary>
-        public List<SubtitleTrack> SubtitleList { get; set; }
+        public List<SourceSubtitleTrack> SubtitleList { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

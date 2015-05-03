@@ -61,6 +61,11 @@ namespace HandBrake.ApplicationServices.Interop
         private IntPtr hbHandle;
 
         /// <summary>
+        /// The number of previews created during scan.
+        /// </summary>
+        private int previewCount;
+
+        /// <summary>
         /// The timer to poll for scan status.
         /// </summary>
         private Timer scanPollTimer;
@@ -120,7 +125,18 @@ namespace HandBrake.ApplicationServices.Interop
         {
             get
             {
-                return this.Handle;
+                return this.hbHandle;
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of previews created during scan.
+        /// </summary>
+        public int PreviewCount
+        {
+            get
+            {
+                return this.previewCount;
             }
         }
 
@@ -200,6 +216,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// </param>
         public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
         {
+            this.previewCount = previewCount;
+
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
@@ -237,7 +255,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <remarks>
         /// Only incorporates sizing and aspect ratio into preview image.
         /// </remarks>
-        /// <param name="job">
+        /// <param name="settings">
         /// The encode job to preview.
         /// </param>
         /// <param name="previewNumber">
@@ -247,41 +265,46 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public BitmapImage GetPreview(PreviewSettings job, int previewNumber)
+        public BitmapImage GetPreview(PreviewSettings settings, int previewNumber)
         {
-            SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == job.Title);
+            SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
             Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
-            // Creat the Expected Output Geometry details for libhb.
+            // Create the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
-                crop = new[] { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right }, 
+                crop = new[] { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right }, 
                 itu_par = 0, 
-                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (job.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
-                maxWidth = job.MaxWidth ?? 0, 
-                maxHeight = job.MaxHeight ?? 0, 
-                mode = (int)(hb_anamorphic_mode_t)job.Anamorphic, 
-                modulus = job.Modulus ?? 16, 
+                keep = settings.KeepDisplayAspect ? 0x04 : 0,
+                maxWidth = settings.MaxWidth, 
+                maxHeight = settings.MaxHeight, 
+                mode = (int)(hb_anamorphic_mode_t)settings.Anamorphic, 
+                modulus = settings.Modulus ?? 16, 
                 geometry = new hb_geometry_s
                 {
-                    height = job.Height ?? 0, 
-                    width = job.Width ?? 0, 
-                    par = job.Anamorphic != Anamorphic.Custom
+                    height = settings.Height, 
+                    width = settings.Width, 
+                    par = settings.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.Geometry.PAR.Den, num = title.Geometry.PAR.Num }
-                        : new hb_rational_t { den = job.PixelAspectY, num = job.PixelAspectX }
+                        : new hb_rational_t { den = settings.PixelAspectY, num = settings.PixelAspectX }
                 }
             };
 
-            // Sanatise the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(job, new SourceVideoInfo(new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)), AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH); // TODO this keep isn't right.
-            int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
+            // Sanitize the input.
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(
+                settings,
+                new SourceVideoInfo(
+                    new Size(title.Geometry.Width, title.Geometry.Height),
+                    new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)));
+            int width = resultGeometry.Width;
             int height = resultGeometry.Height;
-            uiGeometry.geometry.height = resultGeometry.Height; // Prased the height now.
-            int outputWidth = width;
-            int outputHeight = height;
-           
+            uiGeometry.geometry.width = width;
+            uiGeometry.geometry.height = height;
+            uiGeometry.geometry.par.num = settings.PixelAspectX;
+            uiGeometry.geometry.par.den = settings.PixelAspectY;
+
             // Fetch the image data from LibHb
-            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, job.Title, previewNumber, ref uiGeometry, 0);
+            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, 0);
             hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
 
             // Copy the filled image buffer to a managed array.
@@ -292,8 +315,8 @@ namespace HandBrake.ApplicationServices.Interop
             byte[] managedBuffer = new byte[imageBufferSize];
             Marshal.Copy(image.plane[0].data, managedBuffer, 0, imageBufferSize);
 
-            var bitmap = new Bitmap(outputWidth, outputHeight);
-            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, outputWidth, outputHeight), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
+            var bitmap = new Bitmap(width, height);
+            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
             IntPtr ptr = bitmapData.Scan0; // Pointer to the first pixel.
             for (int i = 0; i < image.height; i++)
@@ -301,7 +324,7 @@ namespace HandBrake.ApplicationServices.Interop
                 try
                 {
                     Marshal.Copy(managedBuffer, i * stride_width, ptr, stride_width);
-                    ptr = IntPtr.Add(ptr, outputWidth * 4);
+                    ptr = IntPtr.Add(ptr, width * 4);
                 }
                 catch (Exception exc)
                 {
@@ -341,6 +364,18 @@ namespace HandBrake.ApplicationServices.Interop
         }
 
         /// <summary>
+        /// Determines if DRC can be applied to the given track with the given encoder.
+        /// </summary>
+        /// <param name="trackNumber">The track Number.</param>
+        /// <param name="encoder">The encoder to use for DRC.</param>
+        /// <param name="title">The title.</param>
+        /// <returns>True if DRC can be applied to the track with the given encoder.</returns>
+        public bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
+        {
+            return HBFunctions.hb_audio_can_apply_drc2(this.hbHandle, title, trackNumber, encoder.Id) > 0;
+        }
+
+        /// <summary>
         /// Starts an encode with the given job.
         /// </summary>
         /// <param name="encodeObject">
@@ -355,7 +390,6 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
-            LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
             HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);
 
@@ -429,6 +463,17 @@ namespace HandBrake.ApplicationServices.Interop
 
             this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the object is disposed.
+        /// </summary>
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.disposed;
+            }
         }
 
         /// <summary>

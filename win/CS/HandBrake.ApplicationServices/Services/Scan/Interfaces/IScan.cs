@@ -47,7 +47,7 @@ namespace HandBrake.ApplicationServices.Services.Scan.Interfaces
         /// <summary>
         /// Scan has Started
         /// </summary>
-        event EventHandler ScanStared;
+        event EventHandler ScanStarted;
 
         /// <summary>
         /// Scan has completed

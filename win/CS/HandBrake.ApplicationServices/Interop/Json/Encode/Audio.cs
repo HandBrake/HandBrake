@@ -19,7 +19,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the audio list.
         /// </summary>
-        public List<AudioList> AudioList { get; set; }
+        public List<AudioTrack> AudioList { get; set; }
 
         /// <summary>
         /// Gets or sets the copy mask.

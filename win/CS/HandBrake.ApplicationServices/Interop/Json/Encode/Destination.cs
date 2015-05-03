@@ -19,7 +19,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the chapter list.
         /// </summary>
-        public List<ChapterList> ChapterList { get; set; }
+        public List<Chapter> ChapterList { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether chapter markers.

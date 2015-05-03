@@ -17,6 +17,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Helpers;
+    using HandBrake.ApplicationServices.Interop.Json;
+    using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -25,6 +27,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
+    using AudioTrack = HandBrake.ApplicationServices.Services.Encode.Model.Models.AudioTrack;
+    using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles;
 
     /// <summary>
     /// This factory takes the internal EncodeJob object and turns it into a set of JSON models
@@ -50,17 +54,17 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <returns>
         /// The <see cref="JsonEncodeObject"/>.
         /// </returns>
-        internal static JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration) 
+        internal static JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration)
         {
             JsonEncodeObject encode = new JsonEncodeObject
                 {
-                    SequenceID = 0, 
-                    Audio = CreateAudio(job), 
-                    Destination = CreateDestination(job), 
-                    Filters = CreateFilter(job), 
-                    PAR = CreatePAR(job), 
-                    Metadata = CreateMetaData(job),
-                    Source = CreateSource(job, configuration), 
+                    SequenceID = 0,
+                    Audio = CreateAudio(job),
+                    Destination = CreateDestination(job),
+                    Filters = CreateFilters(job),
+                    PAR = CreatePAR(job),
+                    Metadata = CreateMetadata(job),
+                    Source = CreateSource(job, configuration),
                     Subtitle = CreateSubtitle(job),
                     Video = CreateVideo(job, configuration)
                 };
@@ -87,30 +91,30 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             {
                 case PointToPointMode.Chapters:
                     range.Type = "chapter";
-                    range.End = job.EndPoint;
                     range.Start = job.StartPoint;
+                    range.End = job.EndPoint;
                     break;
                 case PointToPointMode.Seconds:
                     range.Type = "time";
                     range.Start = job.StartPoint * 90000;
-                    range.End = (job.EndPoint - job.StartPoint) * 90000; 
+                    range.End = (job.EndPoint - job.StartPoint) * 90000;
                     break;
                 case PointToPointMode.Frames:
                     range.Type = "frame";
                     range.Start = job.StartPoint;
-                    range.End = job.EndPoint; 
+                    range.End = job.EndPoint;
                     break;
                 case PointToPointMode.Preview:
                     range.Type = "preview";
                     range.Start = job.PreviewEncodeStartAt;
                     range.SeekPoints = configuration.PreviewScanCount;
-                    range.End = job.PreviewEncodeDuration * 90000; 
+                    range.End = job.PreviewEncodeDuration * 90000;
                     break;
             }
 
             Source source = new Source
             {
-                Title = job.Title, 
+                Title = job.Title,
                 Range = range,
                 Angle = job.Angle,
                 Path = job.Source,
@@ -131,22 +135,22 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Destination destination = new Destination
             {
-                File = job.Destination, 
+                File = job.Destination,
                 Mp4Options = new Mp4Options
                                  {
-                                     IpodAtom = job.IPod5GSupport, 
+                                     IpodAtom = job.IPod5GSupport,
                                      Mp4Optimize = job.OptimizeMP4
-                                 }, 
+                                 },
                 ChapterMarkers = job.IncludeChapterMarkers,
                 Mux = HBFunctions.hb_container_get_from_name(job.OutputFormat == OutputFormat.Mp4 ? "av_mp4" : "av_mkv"), // TODO tidy up.
-                ChapterList = new List<ChapterList>()
+                ChapterList = new List<Chapter>()
             };
 
             if (job.IncludeChapterMarkers)
             {
                 foreach (ChapterMarker item in job.ChapterNames)
                 {
-                    ChapterList chapter = new ChapterList { Name = item.ChapterName };
+                    Chapter chapter = new Chapter { Name = item.ChapterName };
                     destination.ChapterList.Add(chapter);
                 }
             }
@@ -177,22 +181,22 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <returns>
         /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles"/>.
         /// </returns>
-        private static Subtitles CreateSubtitle(EncodeTask job)
+        private static Subtitle CreateSubtitle(EncodeTask job)
         {
             Subtitles subtitle = new Subtitles
                 {
                     Search =
                         new SubtitleSearch
                             {
-                                Enable = false, 
-                                Default = false, 
-                                Burn = false, 
+                                Enable = false,
+                                Default = false,
+                                Burn = false,
                                 Forced = false
-                            }, 
-                    SubtitleList = new List<SubtitleList>()
+                            },
+                    SubtitleList = new List<HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack>()
                 };
 
-            foreach (SubtitleTrack item in job.SubtitleTracks)
+            foreach (HandBrake.ApplicationServices.Services.Encode.Model.Models.SubtitleTrack item in job.SubtitleTracks)
             {
                 if (!item.IsSrtSubtitle)
                 {
@@ -206,13 +210,21 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     }
                     else
                     {
-                        SubtitleList track = new SubtitleList { Burn = item.Burned, Default = item.Default, Forced = item.Forced, ID = item.SourceTrack.TrackNumber, Track = (item.SourceTrack.TrackNumber - 1) };
+                        HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack track = new HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack
+                        {
+                            Burn = item.Burned,
+                            Default = item.Default,
+                            Forced = item.Forced,
+                            ID = item.SourceTrack.TrackNumber,
+                            Track = (item.SourceTrack.TrackNumber - 1)
+                        };
+
                         subtitle.SubtitleList.Add(track);
                     }
                 }
                 else
                 {
-                    SubtitleList track = new SubtitleList
+                    HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack track = new HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack
                     {
                         Track = -1, // Indicates SRT
                         Default = item.Default,
@@ -228,7 +240,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     };
 
                     subtitle.SubtitleList.Add(track);
-                }     
+                }
             }
 
             return subtitle;
@@ -306,7 +318,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Audio audio = new Audio();
 
-            List<uint> copyMaskList = new List<uint>(); 
+            List<uint> copyMaskList = new List<uint>();
             if (job.AllowedPassthruOptions.AudioAllowAACPass) copyMaskList.Add(NativeConstants.HB_ACODEC_AAC_PASS);
             if (job.AllowedPassthruOptions.AudioAllowAC3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_AC3_PASS);
             if (job.AllowedPassthruOptions.AudioAllowDTSHDPass) copyMaskList.Add(NativeConstants.HB_ACODEC_DCA_HD_PASS);
@@ -315,27 +327,27 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMaskList.Add(NativeConstants.HB_ACODEC_FLAC_PASS);
             if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_MP3_PASS);
             if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(NativeConstants.HB_ACODEC_TRUEHD_PASS);
-            audio.CopyMask = copyMaskList.ToArray(); 
+            audio.CopyMask = copyMaskList.ToArray();
 
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
             audio.FallbackEncoder = audioEncoder.Id;
 
-            audio.AudioList = new List<AudioList>();
+            audio.AudioList = new List<Interop.Json.Encode.AudioTrack>();
             foreach (AudioTrack item in job.AudioTracks)
             {
-                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(ApplicationServices.Utilities.Converters.GetCliAudioEncoder(item.Encoder) );
+                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(ApplicationServices.Utilities.Converters.GetCliAudioEncoder(item.Encoder));
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(ApplicationServices.Utilities.Converters.GetCliMixDown(item.MixDown));
                 Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + ApplicationServices.Utilities.Converters.GetCliMixDown(item.MixDown));
 
-                AudioList audioTrack = new AudioList
+                HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack
                     {
                         Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
-                        DRC = item.DRC, 
-                        Encoder = encoder.Id, 
-                        Gain = item.Gain, 
-                        Mixdown = mixdown.Id, 
+                        DRC = item.DRC,
+                        Encoder = encoder.Id,
+                        Gain = item.Gain,
+                        Mixdown = mixdown.Id,
                         NormalizeMixLevel = false,
                         Samplerate = GetSampleRateRaw(item.SampleRate),
                         Name = item.TrackName,
@@ -355,9 +367,9 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                     //}
 
                     //if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
-                   // {
-                        audioTrack.Bitrate = item.Bitrate;
-                   // }
+                    // {
+                    audioTrack.Bitrate = item.Bitrate;
+                    // }
                 }
 
                 audio.AudioList.Add(audioTrack);
@@ -397,11 +409,11 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// <returns>
         /// The <see cref="Filters"/>.
         /// </returns>
-        private static Filters CreateFilter(EncodeTask job)
+        private static Filters CreateFilters(EncodeTask job)
         {
             Filters filter = new Filters
                             {
-                                FilterList = new List<Filter>(), 
+                                FilterList = new List<Filter>(),
                                 Grayscale = job.Grayscale
                             };
 
@@ -512,15 +524,15 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             // CropScale Filter
             Filter cropScale = new Filter
             {
-                ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE, 
+                ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE,
                 Settings =
                     string.Format(
-                        "{0}:{1}:{2}:{3}:{4}:{5}", 
-                        job.Width, 
-                        job.Height, 
-                        job.Cropping.Top, 
-                        job.Cropping.Bottom, 
-                        job.Cropping.Left, 
+                        "{0}:{1}:{2}:{3}:{4}:{5}",
+                        job.Width,
+                        job.Height,
+                        job.Cropping.Top,
+                        job.Cropping.Bottom,
+                        job.Cropping.Left,
                         job.Cropping.Right)
             };
             filter.FilterList.Add(cropScale);
@@ -538,11 +550,11 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         /// The job.
         /// </param>
         /// <returns>
-        /// The <see cref="Interop.Json.Encode.MetaData"/>.
+        /// The <see cref="Metadata"/>.
         /// </returns>
-        private static MetaData CreateMetaData(EncodeTask job)
+        private static Metadata CreateMetadata(EncodeTask job)
         {
-            MetaData metaData = new MetaData();
+            Metadata metaData = new Metadata();
 
             /* TODO  NOT SUPPORTED YET. */
             return metaData;

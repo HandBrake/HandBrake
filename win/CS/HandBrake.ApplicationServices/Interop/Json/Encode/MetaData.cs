@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
     /// <summary>
     ///     The meta data.
     /// </summary>
-    public class MetaData
+    public class Metadata
     {
         /// <summary>
         ///     Gets or sets the album artist.

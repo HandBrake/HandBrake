@@ -105,7 +105,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
         /// <summary>
         /// Scan has Started
         /// </summary>
-        public event EventHandler ScanStared;
+        public event EventHandler ScanStarted;
 
         /// <summary>
         /// Scan has completed
@@ -321,8 +321,8 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 this.ServiceLogMessage("Starting Scan ...");
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
 
-                if (this.ScanStared != null)
-                    this.ScanStared(this, System.EventArgs.Empty);
+                if (this.ScanStarted != null)
+                    this.ScanStarted(this, System.EventArgs.Empty);
             }
             catch (Exception exc)
             {
@@ -491,7 +491,7 @@ namespace HandBrake.ApplicationServices.Services.Scan
                     };
 
                 int currentTrack = 1;
-                foreach (ChapterTrack chapter in title.ChapterList)
+                foreach (SourceChapter chapter in title.ChapterList)
                 {
                     string chapterName = !string.IsNullOrEmpty(chapter.Name) ? chapter.Name : string.Empty;
                     converted.Chapters.Add(new Chapter(currentTrack, chapterName, new TimeSpan(chapter.Duration.Hours, chapter.Duration.Minutes, chapter.Duration.Seconds)));
@@ -499,14 +499,14 @@ namespace HandBrake.ApplicationServices.Services.Scan
                 }
 
                 int currentAudioTrack = 1;
-                foreach (AudioTrack track in title.AudioList)
+                foreach (SourceAudioTrack track in title.AudioList)
                 {
                     converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.BitRate));
                     currentAudioTrack++;
                 }
 
                 int currentSubtitleTrack = 1;
-                foreach (SubtitleTrack track in title.SubtitleList)
+                foreach (SourceSubtitleTrack track in title.SubtitleList)
                 {
                     SubtitleType convertedType = new SubtitleType();
 

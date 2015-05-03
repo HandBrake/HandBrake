@@ -23,16 +23,11 @@ namespace HandBrake.ApplicationServices.Interop
 
     using Newtonsoft.Json;
 
-    /// <summary>
+	/// <summary>
     /// HandBrake Interop Utilities
     /// </summary>
     public static class HandBrakeUtils
     {
-        /// <summary>
-        /// Estimated overhead in bytes for each frame in output container.
-        /// </summary>
-        internal const int ContainerOverheadPerFrame = 6;
-
         /// <summary>
         /// The callback for log messages from HandBrake.
         /// </summary>
@@ -297,19 +292,19 @@ namespace HandBrake.ApplicationServices.Interop
             return x264Settings;
         }
 
-        /// <summary>
-        /// Gets the final size and PAR of the video, given anamorphic inputs.
-        /// </summary>
-        /// <param name="anamorphicGeometry">Anamorphic inputs.</param>
-        /// <returns>The final size and PAR of the video.</returns>
-        public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
-        {
-            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
-            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
-            string result = Marshal.PtrToStringAnsi(json);
-            return JsonConvert.DeserializeObject<Geometry>(result);
-        }
+		/// <summary>
+		/// Gets the final size and PAR of the video, given anamorphic inputs.
+		/// </summary>
+		/// <param name="anamorphicGeometry">Anamorphic inputs.</param>
+		/// <returns>The final size and PAR of the video.</returns>
+		public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
+		{
+			string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+			LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
+			IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
+			string result = Marshal.PtrToStringAnsi(json);
+			return JsonConvert.DeserializeObject<Geometry>(result);
+		}
 
         /// <summary>
         /// Sends the message logged event to any registered listeners.

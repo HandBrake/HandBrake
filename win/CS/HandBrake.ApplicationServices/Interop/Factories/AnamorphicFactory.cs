@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Interop.Factories
     using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Services.Encode.Model;
 
     /// <summary>
@@ -51,10 +52,10 @@ namespace HandBrake.ApplicationServices.Interop.Factories
         {
             int settingMode = (int)keepWidthOrHeight + (job.KeepDisplayAspect ? 0x04 : 0);
 
-            // Sanatise the Geometry First.
+            // Sanitize the Geometry First.
             AnamorphicGeometry anamorphicGeometry = new AnamorphicGeometry
             {
-                SourceGeometry = new Geometry()
+                SourceGeometry = new Geometry
                                  {
                                     Width = title.Resolution.Width,
                                     Height = title.Resolution.Height,
@@ -83,6 +84,59 @@ namespace HandBrake.ApplicationServices.Interop.Factories
             if (job.Anamorphic == Anamorphic.Custom)
             {
                 anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = job.PixelAspectX, Den = job.PixelAspectY };
+            }
+            else
+            {
+                anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = title.ParVal.Width, Den = title.ParVal.Height };
+            }
+
+            return HandBrakeUtils.GetAnamorphicSize(anamorphicGeometry);
+        }
+
+        /// <summary>
+        /// Finds output geometry for the given preview settings and title.
+        /// </summary>
+        /// <param name="settings">The preview settings.</param>
+        /// <param name="title">Information on the title to consider.</param>
+        /// <returns></returns>
+        public static Geometry CreateGeometry(PreviewSettings settings, SourceVideoInfo title)
+        {
+            int settingMode = settings.KeepDisplayAspect ? 0x04 : 0;
+
+            // Sanitize the Geometry First.
+            AnamorphicGeometry anamorphicGeometry = new AnamorphicGeometry
+            {
+                SourceGeometry = new Geometry
+                {
+                    Width = title.Resolution.Width,
+                    Height = title.Resolution.Height,
+                    PAR = new PAR { Num = title.ParVal.Width, Den = title.ParVal.Height }
+                },
+                DestSettings = new DestSettings
+                {
+                    AnamorphicMode = (int)settings.Anamorphic,
+                    Geometry =
+                    {
+                        Width = settings.Width,
+                        Height = settings.Height,
+                        PAR = new PAR
+                        {
+                            Num = settings.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : settings.PixelAspectX,
+                            Den = settings.Anamorphic != Anamorphic.Custom ? title.ParVal.Height : settings.PixelAspectY,
+                        }
+                    },
+                    Keep = settingMode,
+                    Crop = new List<int> { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right },
+                    Modulus = settings.Modulus ?? 16,
+                    MaxWidth = settings.MaxWidth,
+                    MaxHeight = settings.MaxHeight,
+                    ItuPAR = false
+                }
+            };
+
+            if (settings.Anamorphic == Anamorphic.Custom)
+            {
+                anamorphicGeometry.DestSettings.Geometry.PAR = new PAR { Num = settings.PixelAspectX, Den = settings.PixelAspectY };
             }
             else
             {

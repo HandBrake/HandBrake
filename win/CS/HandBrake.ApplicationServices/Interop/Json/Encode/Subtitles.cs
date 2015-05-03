@@ -24,6 +24,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the subtitle list.
         /// </summary>
-        public List<SubtitleList> SubtitleList { get; set; }
+        public List<SubtitleTrack> SubtitleList { get; set; }
     }
 }

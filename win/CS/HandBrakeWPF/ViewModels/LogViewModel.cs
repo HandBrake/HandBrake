@@ -132,7 +132,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted += EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.EncodeServiceEncodeStatusChanged;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
-            this.scanService.ScanStared += this.scanService_ScanStared;
+            this.scanService.ScanStarted += this.scanService_ScanStared;
             this.encodeService.EncodeStarted += this.encodeService_EncodeStarted;
             base.OnActivate();
 
@@ -185,7 +185,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeCompleted -= EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.EncodeServiceEncodeStatusChanged;
             this.scanService.ScanStatusChanged -= this.ScanServiceScanStatusChanged;
-            this.scanService.ScanStared -= this.scanService_ScanStared;
+            this.scanService.ScanStarted -= this.scanService_ScanStared;
             this.encodeService.EncodeStarted -= this.encodeService_EncodeStarted;
 
             base.OnDeactivate(close);
