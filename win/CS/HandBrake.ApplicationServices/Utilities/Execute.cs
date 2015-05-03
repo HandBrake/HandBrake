@@ -27,7 +27,7 @@ namespace HandBrake.ApplicationServices.Utilities
         private static bool? inDesignMode;
 
         /// <summary>
-        /// Indicates whether or not the framework is in design-time mode.
+        /// Gets a value indicating whether or not the framework is in design-time mode.
         /// </summary>
         public static bool InDesignMode
         {
@@ -72,6 +72,12 @@ namespace HandBrake.ApplicationServices.Utilities
             Execute.dispatcher = (Dispatcher)null;
         }
 
+        /// <summary>
+        /// The validate dispatcher.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Not initialized with dispatcher.
+        /// </exception>
         private static void ValidateDispatcher()
         {
             if (Execute.dispatcher == null)
@@ -91,7 +97,12 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Executes the action on the UI thread asynchronously.
         /// </summary>
-        /// <param name="action">The action to execute.</param>
+        /// <param name="action">
+        /// The action to execute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public static Task OnUIThreadAsync(this System.Action action)
         {
             Execute.ValidateDispatcher();
@@ -112,6 +123,12 @@ namespace HandBrake.ApplicationServices.Utilities
             return (Task)taskSource.Task;
         }
 
+        /// <summary>
+        /// The check access.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private static bool CheckAccess()
         {
             if (Execute.dispatcher != null)

@@ -667,7 +667,6 @@ namespace HandBrakeWPF.ViewModels
                                           SourceTrack = source,
                                       };
 
-
             // Burn-in Behaviours
             if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
                   || this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudioPreferred)

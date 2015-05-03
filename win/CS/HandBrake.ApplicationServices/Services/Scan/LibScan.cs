@@ -538,7 +538,6 @@ namespace HandBrake.ApplicationServices.Services.Scan
                             break;
                     }
 
-
                     bool canBurn = HBFunctions.hb_subtitle_can_burn(track.Source) > 0;
                     bool canSetForcedOnly = HBFunctions.hb_subtitle_can_force(track.Source) > 0;
 

@@ -279,7 +279,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.AdvancedEncoderOptions = kvp.Value;
                     break;
 
-
                 // Preset Information
                 case "PresetBuildNumber":
                     preset.Version = kvp.Value;

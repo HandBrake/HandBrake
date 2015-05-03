@@ -19,19 +19,17 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Scan.Interfaces;
     using HandBrake.ApplicationServices.Services.Scan.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Encode;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
-    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -126,15 +124,19 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService)
+        /// <param name="errorService">
+        /// The error Service.
+        /// </param>
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
-            this.Title = Properties.Resources.Preview;
+            this.Title = Resources.Preview;
             this.PreviewNotAvailable = true;
 
             // Live Preview
             this.userSettingService = userSettingService;
+            this.errorService = errorService;
             this.encodeService = new LibEncode(); // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
@@ -410,7 +412,7 @@ namespace HandBrakeWPF.ViewModels
             this.Task = task;
             this.UpdatePreviewFrame();
             this.DisplayName = "Picture Preview";
-            this.Title = Properties.Resources.Preview;
+            this.Title = Resources.Preview;
             this.ScannedSource = scannedSource;
         }
 
@@ -446,6 +448,7 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 PreviewNotAvailable = true;
+                Debug.WriteLine(exc);
             }
 
             if (image != null)
@@ -470,13 +473,13 @@ namespace HandBrakeWPF.ViewModels
             if (ea.NewSize.Width > workArea.Width)
             {
                 this.Width = (int)Math.Round(workArea.Width, 0) - 20;
-                this.Title = Properties.Resources.Preview_Scaled;
+                this.Title = Resources.Preview_Scaled;
             }
 
             if (ea.NewSize.Height > workArea.Height)
             {
                 this.Height = (int)Math.Round(workArea.Height, 0) - 20;
-                this.Title = Properties.Resources.Preview_Scaled;
+                this.Title = Resources.Preview_Scaled;
             }
         }
         #endregion
@@ -514,21 +517,21 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception)
             {
                 this.IsEncoding = false;
-                this.errorService.ShowMessageBox("Unable to delete previous preview file. You may need to restart the application.",
+                this.errorService.ShowMessageBox("Unable to delete previous preview file. You may need to restart the application.", 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a preview.",
+                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a preview.", 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             EncodeTask encodeTask = new EncodeTask(this.Task)
             {
-                PreviewEncodeDuration = this.Duration,
-                PreviewEncodeStartAt = this.SelectedPreviewImage,
+                PreviewEncodeDuration = this.Duration, 
+                PreviewEncodeStartAt = this.SelectedPreviewImage, 
                 PointToPointMode = PointToPointMode.Preview
             };
 
@@ -561,6 +564,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Private Methods
+
         /// <summary>
         /// Play the Encoded file
         /// </summary>
@@ -600,7 +604,7 @@ namespace HandBrakeWPF.ViewModels
                             }
                             else
                             {
-                                this.errorService.ShowMessageBox("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\")",
+                                this.errorService.ShowMessageBox("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\")", 
                                                                  Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
                         }
@@ -614,7 +618,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else
                 {
-                    this.errorService.ShowMessageBox("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.",
+                    this.errorService.ShowMessageBox("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", 
                                  Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
@@ -631,7 +635,7 @@ namespace HandBrakeWPF.ViewModels
             // Make sure we are not already encoding and if we are then display an error.
             if (encodeService.IsEncoding)
             {
-                this.errorService.ShowMessageBox("Handbrake is already encoding a video! Only one file can be encoded at any one time.",
+                this.errorService.ShowMessageBox("Handbrake is already encoding a video! Only one file can be encoded at any one time.", 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -645,6 +649,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Event Handlers
+
         /// <summary>
         /// Handle Encode Progress Events
         /// </summary>

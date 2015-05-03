@@ -27,7 +27,7 @@ namespace HandBrake.ApplicationServices.Utilities
         private bool isNotifying;
 
         /// <summary>
-        /// Enables/Disables property change notification.
+        /// Gets or sets a value indicating whether the Enables/Disables property change notification.
         /// </summary>
         [Browsable(false)]
         public bool IsNotifying
@@ -48,6 +48,7 @@ namespace HandBrake.ApplicationServices.Utilities
         public event PropertyChangedEventHandler PropertyChanged = (param0, param1) => { };
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyChangedBase"/> class. 
         /// Creates an instance of <see cref="T:HandBrake.ApplicationServices.Utilities.PropertyChangedBase"/>.
         /// </summary>
         public PropertyChangedBase()

@@ -154,8 +154,6 @@ namespace HandBrake.ApplicationServices.Utilities
             }
         }
 
-
-
         /// <summary>
         /// Get the GUI equiv to a GUI audio encoder string
         /// </summary>
@@ -231,7 +229,6 @@ namespace HandBrake.ApplicationServices.Utilities
         #endregion
 
         #region Video
-
 
         /// <summary>
         /// Get the Video Encoder for a given string

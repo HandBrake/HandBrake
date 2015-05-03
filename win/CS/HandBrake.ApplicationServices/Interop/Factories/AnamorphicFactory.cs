@@ -64,14 +64,16 @@ namespace HandBrake.ApplicationServices.Interop.Factories
                 DestSettings = new DestSettings
                                {
                                     AnamorphicMode = (int)job.Anamorphic,
-                                    Geometry = { 
-                                                Width = job.Width ?? 0, Height = job.Height ?? 0,
-                                                PAR = new PAR
-                                                      {
-                                                          Num = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : job.PixelAspectX,
-                                                          Den = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Height : job.PixelAspectY,
-                                                      } 
-                                               },
+                                    Geometry =
+                                    {
+                                        Width = job.Width ?? 0,
+                                        Height = job.Height ?? 0,
+                                        PAR = new PAR
+                                              {
+                                                  Num = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Width : job.PixelAspectX,
+                                                  Den = job.Anamorphic != Anamorphic.Custom ? title.ParVal.Height : job.PixelAspectY,
+                                              }
+                                    },
                                     Keep = settingMode,
                                     Crop = new List<int> { job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right },
                                     Modulus = job.Modulus ?? 16,
@@ -98,7 +100,7 @@ namespace HandBrake.ApplicationServices.Interop.Factories
         /// </summary>
         /// <param name="settings">The preview settings.</param>
         /// <param name="title">Information on the title to consider.</param>
-        /// <returns></returns>
+        /// <returns>Geometry Information</returns>
         public static Geometry CreateGeometry(PreviewSettings settings, SourceVideoInfo title)
         {
             int settingMode = settings.KeepDisplayAspect ? 0x04 : 0;

@@ -148,7 +148,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IPod5GSupport ? "1" : "0");
             AddEncodeElement(xmlWriter, "PictureAutoCrop", "integer", "1");
             
-
             // Filters
             AddEncodeElement(xmlWriter, "PictureDeblock", "integer", parsed.Deblock.ToString());
 
@@ -157,7 +156,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             AddEncodeElement(xmlWriter, "PictureDecomb", "integer", ((int)parsed.Decomb).ToString());
             AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.Deinterlace == Deinterlace.Custom ? parsed.CustomDeinterlace : string.Empty);
             AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", ((int)parsed.Deinterlace).ToString());
-
 
             AddEncodeElement(xmlWriter, "PictureDenoiseFilter", "string", parsed.Denoise.ToString().ToLower());
             AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.DenoisePreset == DenoisePreset.Custom ? parsed.CustomDenoise : string.Empty);
@@ -211,7 +209,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             AddEncodeElement(xmlWriter, "VideoOptionExtra", "string", parsed.ExtraAdvancedArguments);
             AddEncodeElement(xmlWriter, "x264UseAdvancedOptions", "integer", parsed.ShowAdvancedTab ? "1" : "0");
-
 
             int videoQualityType = 0;
             if (parsed.VideoBitrate != null) videoQualityType = 1;

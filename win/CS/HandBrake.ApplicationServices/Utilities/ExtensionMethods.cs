@@ -1,20 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ExtensionMethods.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   The extension methods.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Linq.Expressions;
     using System.Reflection;
 
+    /// <summary>
+    /// The extension methods.
+    /// </summary>
     public static class ExtensionMethods
     {
         /// <summary>
         /// Converts an expression into a <see cref="MemberInfo"/>.
         /// </summary>
-        /// <param name="expression">The expression to convert.</param>
-        /// <returns>The member info.</returns>
+        /// <param name="expression">
+        /// The expression to convert.
+        /// </param>
+        /// <returns>
+        /// The member info.
+        /// </returns>
         public static MemberInfo GetMemberInfo(this Expression expression)
         {
             var lambda = (LambdaExpression)expression;
@@ -30,6 +41,5 @@ namespace HandBrake.ApplicationServices.Utilities
 
             return memberExpression.Member;
         }
-
     }
 }

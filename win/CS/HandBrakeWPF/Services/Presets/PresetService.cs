@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Services.Presets
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -318,6 +319,7 @@ namespace HandBrakeWPF.Services.Presets
                     catch (Exception exc)
                     {
                         // Do Nothing.
+                        Debug.WriteLine(exc);
                     }
                 }
             }
@@ -446,6 +448,7 @@ namespace HandBrakeWPF.Services.Presets
                         catch (Exception exc)
                         {
                             // Do Nothing.
+                            Debug.WriteLine(exc);
                         }
                     }
                 }
@@ -478,6 +481,7 @@ namespace HandBrakeWPF.Services.Presets
                         catch (Exception exc)
                         {
                             // Do Nothing
+                            Debug.WriteLine(exc);
                         }
                     }
 
@@ -500,6 +504,7 @@ namespace HandBrakeWPF.Services.Presets
                         catch (Exception exc)
                         {
                             createBackup = true;
+                            Debug.WriteLine(exc);
                         }
                     }
 

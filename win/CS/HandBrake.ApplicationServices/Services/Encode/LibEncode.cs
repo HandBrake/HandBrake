@@ -164,7 +164,6 @@ namespace HandBrake.ApplicationServices.Services.Encode
             }
         }
 
-
         #region HandBrakeInstance Event Handlers.
 
         /// <summary>

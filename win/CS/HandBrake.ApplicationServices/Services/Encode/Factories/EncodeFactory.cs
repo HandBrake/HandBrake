@@ -356,17 +356,17 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                 if (!item.IsPassthru)
                 {
                     // TODO Impiment Quality and Compression. We only support bitrate right now.
-                    //if (item.EncodeRateType == AudioEncodeRateType.Quality)
-                    //{
+                    // if (item.EncodeRateType == AudioEncodeRateType.Quality)
+                    // {
                     //    audioTrack.Quality = item.Quality;
-                    //}
+                    // }
 
-                    //if (item.EncodeRateType == AudioEncodeRateType.Compression)
-                    //{
+                    // if (item.EncodeRateType == AudioEncodeRateType.Compression)
+                    // {
                     //    audioTrack.CompressionLevel = item.Compression;
-                    //}
+                    // }
 
-                    //if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
+                    // if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
                     // {
                     audioTrack.Bitrate = item.Bitrate;
                     // }

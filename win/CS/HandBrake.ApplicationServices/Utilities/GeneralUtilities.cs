@@ -29,11 +29,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
 
-        /// <summary>
-        /// The is lib hb present.
-        /// </summary>
-        private static bool? isLibHbPresent;
-
         #endregion
 
         #region Properties

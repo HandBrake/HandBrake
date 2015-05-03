@@ -104,7 +104,6 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private static void OnCancelActionSet(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-       
         }
 
         /// <summary>

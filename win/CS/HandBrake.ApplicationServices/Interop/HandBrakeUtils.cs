@@ -23,7 +23,7 @@ namespace HandBrake.ApplicationServices.Interop
 
     using Newtonsoft.Json;
 
-	/// <summary>
+    /// <summary>
     /// HandBrake Interop Utilities
     /// </summary>
     public static class HandBrakeUtils
@@ -223,12 +223,12 @@ namespace HandBrake.ApplicationServices.Interop
         public static bool IsH264LevelValid(string level, int width, int height, int fpsNumerator, int fpsDenominator, bool interlaced, bool fakeInterlaced)
         {
             return HBFunctions.hb_check_h264_level(
-                level, 
-                width, 
-                height, 
-                fpsNumerator, 
-                fpsDenominator, 
-                interlaced ? 1 : 0, 
+                level,
+                width,
+                height,
+                fpsNumerator,
+                fpsDenominator,
+                interlaced ? 1 : 0,
                 fakeInterlaced ? 1 : 0) == 0;
         }
 
@@ -260,12 +260,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// The full x264 options string from the given inputs.
         /// </returns>
         public static string CreateX264OptionsString(
-            string preset, 
-            IList<string> tunes, 
-            string extraOptions, 
-            string profile, 
-            string level, 
-            int width, 
+            string preset,
+            IList<string> tunes,
+            string extraOptions,
+            string profile,
+            string level,
+            int width,
             int height)
         {
             if (width <= 0)
@@ -279,12 +279,12 @@ namespace HandBrake.ApplicationServices.Interop
             }
 
             IntPtr ptr = HBFunctions.hb_x264_param_unparse(
-                preset, 
-                string.Join(",", tunes), 
-                extraOptions, 
-                profile, 
-                level, 
-                width, 
+                preset,
+                string.Join(",", tunes),
+                extraOptions,
+                profile,
+                level,
+                width,
                 height);
 
             string x264Settings = Marshal.PtrToStringAnsi(ptr);
@@ -292,19 +292,19 @@ namespace HandBrake.ApplicationServices.Interop
             return x264Settings;
         }
 
-		/// <summary>
-		/// Gets the final size and PAR of the video, given anamorphic inputs.
-		/// </summary>
-		/// <param name="anamorphicGeometry">Anamorphic inputs.</param>
-		/// <returns>The final size and PAR of the video.</returns>
-		public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
-		{
-			string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-			LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
-			IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
-			string result = Marshal.PtrToStringAnsi(json);
-			return JsonConvert.DeserializeObject<Geometry>(result);
-		}
+        /// <summary>
+        /// Gets the final size and PAR of the video, given anamorphic inputs.
+        /// </summary>
+        /// <param name="anamorphicGeometry">Anamorphic inputs.</param>
+        /// <returns>The final size and PAR of the video.</returns>
+        public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
+        {
+            string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
+            IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
+            string result = Marshal.PtrToStringAnsi(json);
+            return JsonConvert.DeserializeObject<Geometry>(result);
+        }
 
         /// <summary>
         /// Sends the message logged event to any registered listeners.

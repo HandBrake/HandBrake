@@ -1220,7 +1220,6 @@ namespace HandBrakeWPF.ViewModels
                     this.VideoLevel = VideoLevel.Auto;
                 }
                 
-
                 // Setup Presets.
                 this.VideoPresets.Clear();
                 if (encoder.Presets != null)
@@ -1246,7 +1245,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
             this.SetQualitySliderBounds();
-
 
             // Update control display
             this.UseAdvancedTab = selectedEncoder != VideoEncoder.QuickSync && this.UseAdvancedTab;
