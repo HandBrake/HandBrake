@@ -41,7 +41,7 @@
         job->pts_to_start = start_seconds * 90000LL;
         // Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds
         int stop_seconds = self.range.secondsStop;
-        job->pts_to_stop = stop_seconds * 90000LL;
+        job->pts_to_stop = (stop_seconds - start_seconds) * 90000LL;
     }
     else if (self.range.type == HBRangeTypeFrames)
     {
@@ -52,7 +52,7 @@
         job->frame_to_start = start_frame;
         // get the frame to stop on from the end frame field
         int stop_frame = self.range.frameStop;
-        job->frame_to_stop = stop_frame;
+        job->frame_to_stop = stop_frame - start_frame;
     }
     else if (self.range.type == HBRangePreviewIndex)
     {
