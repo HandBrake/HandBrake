@@ -4290,8 +4290,7 @@ fWorkingCount = 0;
     [fSrcTimeEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration]];
     /* For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively */
     [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
-    //[fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", ((title->hours * 3600) + (title->minutes * 60) + (title->seconds)) * 24]];
-    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->rate / title->rate_base)]];    
+    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", (title->duration / 90000.) * (title->rate / (double)title->rate_base)]];    
 
     /* Update encode start / stop variables */
 
@@ -4455,7 +4454,7 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t*)
     hb_list_item( list, (int)[fSrcTitlePopUp indexOfSelectedItem] );
     
-    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / title->rate_base);
+    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / (double)title->rate_base);
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
                                          @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
                                          duration % 60]];
