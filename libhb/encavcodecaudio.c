@@ -163,6 +163,13 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     {
         context->global_quality = audio->config.out.quality * FF_QP2LAMBDA;
         context->flags |= CODEC_FLAG_QSCALE;
+        if (audio->config.out.codec == HB_ACODEC_FDK_AAC ||
+            audio->config.out.codec == HB_ACODEC_FDK_HAAC)
+        {
+            char vbr[2];
+            snprintf(vbr, 2, "%.1g", audio->config.out.quality);
+            av_dict_set(&av_opts, "vbr", vbr, 0);
+        }
     }
 
     if (audio->config.out.compression_level >= 0)

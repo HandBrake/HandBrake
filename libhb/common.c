@@ -1288,6 +1288,21 @@ void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
 {
     switch (codec)
     {
+        case HB_ACODEC_FFAAC:
+            *direction   = 0;
+            *granularity = 1.;
+            *low         = 1.;
+            *high        = 10.;
+            break;
+
+        case HB_ACODEC_FDK_HAAC:
+        case HB_ACODEC_FDK_AAC:
+            *direction   = 0;
+            *granularity = 1.;
+            *low         = 1.;
+            *high        = 5.;
+            break;
+
         case HB_ACODEC_LAME:
             *direction   = 1;
             *granularity = 0.5;
@@ -1333,6 +1348,13 @@ float hb_audio_quality_get_default(uint32_t codec)
 {
     switch (codec)
     {
+        case HB_ACODEC_FFAAC:
+            return 5.;
+
+        case HB_ACODEC_FDK_HAAC:
+        case HB_ACODEC_FDK_AAC:
+            return 3.;
+
         case HB_ACODEC_LAME:
             return 2.;
 
