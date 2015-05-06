@@ -84,6 +84,7 @@ size_t             hb_value_array_len(const hb_value_array_t *array);
 
 /* hb_value_t */
 int          hb_value_type(const hb_value_t *value);
+int          hb_value_is_number(const hb_value_t *value);
 hb_value_t * hb_value_dup(const hb_value_t *value);
 void         hb_value_incref(hb_value_t *value);
 void         hb_value_decref(hb_value_t *value);

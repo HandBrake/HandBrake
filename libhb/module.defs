@@ -47,6 +47,12 @@ endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
+ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
+LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
+else
+LIBHB.GCC.I += /usr/include/libxml2
+endif
+
 ifeq ($(BUILD.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
 else ifeq ($(BUILD.system),darwin)

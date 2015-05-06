@@ -262,6 +262,9 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "Vorbis (vorbis)",    "libvorbis",  NULL,                          HB_ACODEC_VORBIS,                      HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_VORBIS,     },
     { { "FLAC (ffmpeg)",      "ffflac",     NULL,                          HB_ACODEC_FFFLAC,                      HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_FLAC,       },
     { { "FLAC (24-bit)",      "ffflac24",   NULL,                          HB_ACODEC_FFFLAC24,                    HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_FLAC,       },
+    // generic names
+    { { "AAC",                "aac",        NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
+    { { "HE-AAC",             "haac",       NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC_HE,     },
     // actual encoders
     { { "AAC (CoreAudio)",    "ca_aac",     "AAC (Apple AudioToolbox)",    HB_ACODEC_CA_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    "HE-AAC (Apple AudioToolbox)", HB_ACODEC_CA_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
@@ -1793,7 +1796,7 @@ int hb_video_encoder_get_default(int muxer)
     }
 
 fail:
-    return 0;
+    return HB_VCODEC_INVALID;
 }
 
 hb_encoder_t * hb_video_encoder_get_from_codec(int codec)
@@ -1826,7 +1829,7 @@ int hb_video_encoder_get_from_name(const char *name)
     }
 
 fail:
-    return 0;
+    return HB_VCODEC_INVALID;
 }
 
 const char* hb_video_encoder_get_name(int encoder)
@@ -1937,10 +1940,10 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
     }
 
     // passthru tracks are often the second audio from the same source track
-    // if we don't have an encoder matching the passthru codec, return 0
+    // if we don't have an encoder matching the passthru codec, return INVALID
     // dropping the track, as well as ensuring that there is at least one
     // audio track in the output is then up to the UIs
-    return 0;
+    return HB_ACODEC_INVALID;
 }
 
 int hb_audio_encoder_get_default(int muxer)
@@ -1974,7 +1977,7 @@ int hb_audio_encoder_get_default(int muxer)
     }
 
 fail:
-    return 0;
+    return HB_ACODEC_INVALID;
 }
 
 hb_encoder_t* hb_audio_encoder_get_from_codec(int codec)
@@ -1988,7 +1991,7 @@ hb_encoder_t* hb_audio_encoder_get_from_codec(int codec)
         }
     }
 
-    return 0;
+    return NULL;
 }
 
 int hb_audio_encoder_get_from_name(const char *name)
@@ -2007,7 +2010,7 @@ int hb_audio_encoder_get_from_name(const char *name)
     }
 
 fail:
-    return 0;
+    return HB_ACODEC_INVALID;
 }
 
 const char* hb_audio_encoder_get_name(int encoder)
@@ -2302,7 +2305,7 @@ int hb_container_get_from_name(const char *name)
     }
 
 fail:
-    return 0;
+    return HB_MUX_INVALID;
 }
 
 int hb_container_get_from_extension(const char *extension)
@@ -2320,7 +2323,7 @@ int hb_container_get_from_extension(const char *extension)
     }
 
 fail:
-    return 0;
+    return HB_MUX_INVALID;
 }
 
 const char* hb_container_get_name(int format)

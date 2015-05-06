@@ -24,7 +24,7 @@ typedef struct iso639_lang_t
 extern "C" {
 #endif
 /* find language, match any of names in lang struct */
-iso639_lang_t * lang_lookup( const char * str );
+const iso639_lang_t * lang_lookup( const char * str );
 
 /* find language associated with ISO-639-1 language code */
 iso639_lang_t * lang_for_code( int code );

@@ -1655,6 +1655,9 @@ int hb_global_init()
      */
     hb_buffer_pool_init();
 
+    // Initialize the builtin presets hb_dict_t
+    hb_presets_builtin_init();
+
     return result;
 }
 
@@ -1667,6 +1670,8 @@ void hb_global_close()
     DIR * dir;
     struct dirent * entry;
     
+    hb_presets_free();
+
     /* Find and remove temp folder */
     memset( dirname, 0, 1024 );
     hb_get_temporary_directory( dirname );

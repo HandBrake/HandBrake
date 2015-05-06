@@ -119,10 +119,10 @@ combo_opts_t when_complete_opts =
 
 static options_map_t d_par_opts[] =
 {
-    {N_("Off"),    "0", 0, "0"},
-    {N_("Strict"), "1", 1, "1"},
-    {N_("Loose"),  "2", 2, "2"},
-    {N_("Custom"), "3", 3, "3"},
+    {N_("Off"),    "off",    0, "0"},
+    {N_("Strict"), "strict", 1, "1"},
+    {N_("Loose"),  "loose",  2, "2"},
+    {N_("Custom"), "custom", 3, "3"},
 };
 combo_opts_t par_opts =
 {
@@ -1242,9 +1242,9 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
     gtk_list_store_set(store, &iter,
                        0, str,
                        1, TRUE,
-                       2, "source",
+                       2, "auto",
                        3, 0.0,
-                       4, "source",
+                       4, "auto",
                        -1);
     g_free(str);
 
@@ -1285,7 +1285,7 @@ ghb_audio_samplerate_get_short_name(int rate)
     const char *name;
     name = hb_audio_samplerate_get_name(rate);
     if (name == NULL)
-        name = "source";
+        name = "auto";
     return name;
 }
 
@@ -1293,7 +1293,7 @@ const hb_rate_t*
 ghb_lookup_audio_samplerate(const char *name)
 {
     // Check for special "Same as source" value
-    if (!strncmp(name, "source", 8))
+    if (!strncmp(name, "auto", 8))
         return &sas_rate;
 
     // First find an enabled rate
@@ -1354,9 +1354,9 @@ video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
     gtk_list_store_set(store, &iter,
                        0, _("Same as source"),
                        1, TRUE,
-                       2, "source",
+                       2, "auto",
                        3, 0.0,
-                       4, "source",
+                       4, "auto",
                        -1);
 
     const hb_rate_t *rate;
@@ -1394,7 +1394,7 @@ const hb_rate_t*
 ghb_lookup_video_framerate(const char *name)
 {
     // Check for special "Same as source" value
-    if (!strncmp(name, "source", 8))
+    if (!strncmp(name, "auto", 8))
         return &sas_rate;
 
     // First find an enabled rate

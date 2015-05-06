@@ -21,6 +21,11 @@ hb_value_type_t hb_value_type(const hb_value_t *value)
     return type;
 }
 
+int hb_value_is_number(const hb_value_t *value)
+{
+    return json_is_number(value);
+}
+
 hb_value_t * hb_value_dup(const hb_value_t *value)
 {
     if (value == NULL) return NULL;

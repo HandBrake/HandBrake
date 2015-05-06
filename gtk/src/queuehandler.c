@@ -236,13 +236,14 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Next line in the display (Picture settings)
     // Picture: Source: W x H, Output W x H (Animorphic), Display W x H
-    int width, height, pic_par;
+    const char *pic_par;
+    int width, height;
     int crop[4];
     gboolean keep_aspect;
 
     width = ghb_dict_get_int(settings, "scale_width");
     height = ghb_dict_get_int(settings, "scale_height");
-    pic_par = ghb_dict_get_int(settings, "PicturePAR");
+    pic_par = ghb_dict_get_string(settings, "PicturePAR");
     keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
     crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
     crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
@@ -250,9 +251,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
 
     gchar *aspect_desc;
-    switch (pic_par)
-    {
-    case 0:
+    if (pic_par == NULL || !strcasecmp(pic_par, "off"))
     {
         if (keep_aspect)
         {
@@ -262,27 +261,18 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         {
             aspect_desc = _("(Aspect Lost)");
         }
-    } break;
-
-    case 1:
+    }
+    else if (!strcasecmp(pic_par, "strict") || !strcasecmp(pic_par, "loose"))
     {
         aspect_desc = _("(Anamorphic)");
-    } break;
-
-    case 2:
-    {
-        aspect_desc = _("(Anamorphic)");
-    } break;
-
-    case 3:
+    }
+    else if (!strcasecmp(pic_par, "custom"))
     {
         aspect_desc = _("(Custom Anamorphic)");
-    } break;
-
-    default:
+    }
+    else
     {
         aspect_desc = "";
-    } break;
     }
 
     gint source_width, source_height;

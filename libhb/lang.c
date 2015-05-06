@@ -202,9 +202,15 @@ static const iso639_lang_t languages[] =
 
 static const int lang_count = sizeof(languages) / sizeof(languages[0]);
 
-iso639_lang_t * lang_lookup( const char * str )
+const iso639_lang_t * lang_lookup( const char * str )
 {
     iso639_lang_t * lang;
+
+    // We use "Any" as a synonym for undefined
+    if (!strcasecmp("any", str))
+    {
+        return &languages[0];
+    }
 
     for (lang = (iso639_lang_t*) languages; lang->eng_name; lang++)
     {

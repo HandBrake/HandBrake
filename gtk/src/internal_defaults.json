@@ -12,7 +12,7 @@
         "AudioTrackGainSlider": 0.0,
         "AudioTrackDRCSlider": 0.0,
         "AudioMixdown": "dpl2",
-        "AudioSamplerate": "source",
+        "AudioSamplerate": "auto",
         "AudioTrackName": "",
         "angle_count": 1,
         "angle": 1,
@@ -105,7 +105,6 @@
         "window_height": 1
     },
     "Presets": {
-        "PresetBuildNumber": "",
         "PictureAutoCrop": true,
         "ChapterMarkers": true,
         "FileFormat": "mp4",
@@ -129,12 +128,12 @@
         "PictureDenoiseCustom": "",
         "PictureDetelecine": "off",
         "PictureDetelecineCustom": "",
-        "PicturePAR": 2,
+        "PicturePAR": "loose",
         "PicturePARWidth": 853,
         "PicturePARHeight": 720,
         "PictureHeight": 0,
         "PictureWidth": 0,
-        "VideoFramerate": "source",
+        "VideoFramerate": "auto",
         "VideoFramerateMode": "vfr",
         "VideoGrayScale": false,
         "Mp4HttpOptimize": false,
@@ -151,7 +150,7 @@
         "AudioCopyMask": [
             "copy:ac3"
         ],
-        "AudioEncoderFallback": "ffac3",
+        "AudioEncoderFallback": "ac3",
         "AudioLanguageList": [
             "und"
         ],
@@ -164,7 +163,7 @@
                 "AudioTrackGainSlider": 0.0,
                 "AudioTrackDRCSlider": 0.0,
                 "AudioMixdown": "dpl2",
-                "AudioSamplerate": "source"
+                "AudioSamplerate": "auto"
             }
         ],
         "AudioSecondaryEncoderMode": true,

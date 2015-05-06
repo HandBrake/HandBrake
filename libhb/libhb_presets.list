@@ -1,0 +1,9 @@
+<resources>
+    <section name="PresetTemplate">
+        <integer name="VersionMajor" value="10" />
+        <integer name="VersionMinor" value="0" />
+        <integer name="VersionMicro" value="0" />
+        <json name="Preset" file="preset_template.json" />
+    </section>
+    <json name="PresetBuiltin" file="preset_builtin.json" />
+</resources>

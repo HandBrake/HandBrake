@@ -1973,39 +1973,6 @@ value_map_t decomb_xlat[] =
 };
 
 static GhbValue*
-export_value_xlat2(value_map_t *value_map, GhbValue *lin_val, GhbType mac_type)
-{
-    GhbValue *gval;
-
-    if (lin_val == NULL) return NULL;
-    gint ii;
-    gchar *str;
-    GhbValue *sval;
-
-    str = ghb_value_get_string_xform(lin_val);
-    for (ii = 0; value_map[ii].mac_val; ii++)
-    {
-        if (strcmp(str, value_map[ii].lin_val) == 0)
-        {
-            sval = ghb_string_value_new(value_map[ii].mac_val);
-            g_free(str);
-            gval = ghb_value_xform(sval, mac_type);
-            if (gval == NULL)
-            {
-                g_warning("can't transform");
-                ghb_value_free(&sval);
-                return NULL;
-            }
-            ghb_value_free(&sval);
-            return gval;
-        }
-    }
-    g_debug("Can't map value: (%s)", str);
-    g_free(str);
-    return NULL;
-}
-
-static GhbValue*
 export_value_video_framerate(GhbValue *lin_val)
 {
     GhbValue *sval = NULL;
@@ -2045,7 +2012,7 @@ export_value_mixdown(GhbValue *lin_val)
     const gchar *mix;
 
     str = ghb_value_get_string(lin_val);
-    mix = hb_mixdown_get_name(hb_mixdown_get_from_name(str));
+    mix = hb_mixdown_get_short_name(hb_mixdown_get_from_name(str));
     if (mix != NULL)
         sval = ghb_string_value_new(mix);
 
@@ -2060,7 +2027,7 @@ export_value_video_encoder(GhbValue *lin_val)
     const gchar *enc;
 
     str = ghb_value_get_string(lin_val);
-    enc = hb_video_encoder_get_name(hb_video_encoder_get_from_name(str));
+    enc = hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(str));
     if (enc != NULL)
         sval = ghb_string_value_new(enc);
 
@@ -2075,7 +2042,7 @@ export_value_audio_encoder(GhbValue *lin_val)
     const gchar *enc;
 
     str = ghb_value_get_string(lin_val);
-    enc = hb_audio_encoder_get_name(hb_audio_encoder_get_from_name(str));
+    enc = hb_audio_encoder_get_short_name(hb_audio_encoder_get_from_name(str));
     if (enc != NULL)
         sval = ghb_string_value_new(enc);
 
@@ -2090,7 +2057,7 @@ export_value_container(GhbValue *lin_val)
     const gchar *mux;
 
     str = ghb_value_get_string(lin_val);
-    mux = hb_container_get_name(hb_container_get_from_name(str));
+    mux = hb_container_get_short_name(hb_container_get_from_name(str));
     if (mux != NULL)
         sval = ghb_string_value_new(mux);
 
@@ -2104,6 +2071,12 @@ export_value_xlat(GhbValue *dict)
     GhbValue *lin_val, *gval;
     const gchar *key;
 
+    // Convert PictureModulus to correct data type
+    key = "PictureModulus";
+    lin_val = ghb_dict_get(dict, key);
+    gval = ghb_value_xform(lin_val, GHB_INT);
+    if (gval)
+        ghb_dict_set(dict, key, gval);
     key = "VideoEncoder";
     lin_val = ghb_dict_get(dict, key);
     gval = export_value_video_encoder(lin_val);
@@ -2119,28 +2092,6 @@ export_value_xlat(GhbValue *dict)
     gval = export_value_video_framerate(lin_val);
     if (gval)
         ghb_dict_set(dict, key, gval);
-    key = "PictureDetelecine";
-    lin_val = ghb_dict_get(dict, key);
-    gval = export_value_xlat2(detel_xlat, lin_val, GHB_INT);
-    if (gval)
-        ghb_dict_set(dict, key, gval);
-    key = "PictureDecomb";
-    lin_val = ghb_dict_get(dict, key);
-    gval = export_value_xlat2(decomb_xlat, lin_val, GHB_INT);
-    if (gval)
-        ghb_dict_set(dict, key, gval);
-    key = "PictureDeinterlace";
-    lin_val = ghb_dict_get(dict, key);
-    gval = export_value_xlat2(deint_xlat, lin_val, GHB_INT);
-    if (gval)
-        ghb_dict_set(dict, key, gval);
-#if 0
-    key = "PictureDenoisePreset";
-    lin_val = ghb_dict_get(dict, key);
-    gval = export_value_xlat2(denoise_xlat, lin_val, GHB_INT);
-    if (gval)
-        ghb_dict_set(dict, key, gval);
-#endif
 
     gint count, ii;
     GhbValue *alist;
@@ -2803,6 +2754,41 @@ export_xlat_preset(GhbValue *dict)
         }
     }
 
+    GhbValue *copy_mask = ghb_array_new();
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowMP3Pass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:mp3"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowAACPass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:aac"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowAC3Pass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:ac3"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowDTSPass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:dts"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowDTSHDPass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:dtshd"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowEAC3Pass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:eac3"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowFLACPass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:flac"));
+    }
+    if (ghb_value_get_bool(ghb_dict_get(dict, "AudioAllowTRUEHDPass")))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:truehd"));
+    }
+    ghb_dict_set(dict, "AudioCopyMask", copy_mask);
+
     if (ghb_value_get_bool(ghb_dict_get(dict, "x264UseAdvancedOptions")))
     {
         ghb_dict_remove(dict, "VideoPreset");
@@ -2841,30 +2827,49 @@ export_xlat_preset(GhbValue *dict)
     export_value_xlat(dict);
 }
 
+static void export_xlat_presets(GhbValue *presets);
+
+static void
+export_xlat_dict(GhbValue *dict)
+{
+    gboolean folder;
+    folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
+    if (folder)
+    {
+        GhbValue *nested;
+
+        nested = ghb_dict_get(dict, "ChildrenArray");
+        export_xlat_presets(nested);
+    }
+    else
+    {
+        export_xlat_preset(dict);
+    }
+}
+
 static void
 export_xlat_presets(GhbValue *presets)
 {
     gint count, ii;
     GhbValue *dict;
-    gboolean folder;
 
     if (presets == NULL) return;
-    count = ghb_array_len(presets);
-    for (ii = 0; ii < count; ii++)
+    if (ghb_value_type(presets) == GHB_DICT)
     {
-        dict = ghb_array_get(presets, ii);
-        folder = ghb_value_get_bool(ghb_dict_get(dict, "Folder"));
-        if (folder)
+        export_xlat_dict(presets);
+    }
+    else if (ghb_value_type(presets) == GHB_ARRAY)
+    {
+        count = ghb_array_len(presets);
+        for (ii = 0; ii < count; ii++)
         {
-            GhbValue *nested;
-
-            nested = ghb_dict_get(dict, "ChildrenArray");
-            export_xlat_presets(nested);
+            dict = ghb_array_get(presets, ii);
+            export_xlat_dict(dict);
         }
-        else
-        {
-            export_xlat_preset(dict);
-        }
+    }
+    else
+    {
+        g_warning("export_xlat_presets: Invalid presets format");
     }
 }
 
@@ -2933,8 +2938,6 @@ ghb_presets_reload(signal_user_data_t *ud)
 
         std_dict = ghb_array_get(std_presets, ii);
         copy_dict = ghb_value_dup(std_dict);
-        ghb_dict_set(copy_dict, "PresetBuildNumber",
-                        ghb_int_value_new(hb_get_build(NULL)));
         ghb_presets_insert(presetsPlist, copy_dict, &indices, 1);
         presets_list_insert(ud, &indices, 1);
     }
@@ -3009,8 +3012,6 @@ replace_standard_presets(GhbValue *presetsArray)
 
         std_dict = ghb_array_get(std_presets, ii);
         copy_dict = ghb_value_dup(std_dict);
-        ghb_dict_set(copy_dict, "PresetBuildNumber",
-                        ghb_int_value_new(hb_get_build(NULL)));
         ghb_presets_insert(presetsArray, copy_dict, &indices, 1);
     }
     ghb_value_free(&std_presets);
@@ -3026,7 +3027,6 @@ update_standard_presets(signal_user_data_t *ud, GhbValue *presetsArray)
     {
         GhbValue *dict;
         const GhbValue *gval;
-        gint64 build;
         gint type;
 
         dict = ghb_array_get(presetsArray, ii);
@@ -3041,6 +3041,10 @@ update_standard_presets(signal_user_data_t *ud, GhbValue *presetsArray)
         type = ghb_value_get_int(gval);
         if (type == 0)
         {
+            // TODO: check preset version
+#if 0
+            gint64 build;
+
             gval = ghb_dict_get(dict, "PresetBuildNumber");
             if (gval == NULL)
             {
@@ -3056,6 +3060,7 @@ update_standard_presets(signal_user_data_t *ud, GhbValue *presetsArray)
                 replace_standard_presets(presetsArray);
                 return 1;
             }
+#endif
         }
     }
     return 0;
@@ -3134,7 +3139,6 @@ settings_save(signal_user_data_t *ud, const GhbValue *path)
     }
     current_preset = dict;
     ghb_dict_set_int(dict, "Type", PRESETS_CUSTOM);
-    ghb_dict_set_int(dict, "PresetBuildNumber", hb_get_build(NULL));
 
     ghb_dict_set(dict, "PresetName", ghb_string_value_new(name));
     if (replace)
@@ -3499,7 +3503,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     {
         exportDir = ".";
     }
-    filename = g_strdup_printf("%s.plist", name);
+    filename = g_strdup_printf("%s.json", name);
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), filename);
     g_free(filename);
@@ -3515,7 +3519,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_ACCEPT)
     {
-        GhbValue *export, *dict, *array;
+        GhbValue *export, *dict;
         gchar  *dir;
 
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -3524,14 +3528,9 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         dict = presets_get_dict(presetsPlist, indices, len);
 
         export = ghb_value_dup(dict);
-        array = ghb_array_new();
-        ghb_array_append(array, export);
-        presets_clear_default(array);
-        presets_customize(array);
-        export_xlat_presets(array);
-
-        store_plist(filename, array);
-        ghb_value_free(&array);
+        export_xlat_presets(export);
+        hb_preset_write_json(export, filename);
+        ghb_value_free(&export);
 
         exportDir = ghb_dict_get_string(ud->prefs, "ExportDirectory");
         dir = g_path_get_dirname(filename);
