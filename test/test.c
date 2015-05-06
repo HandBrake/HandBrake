@@ -1448,6 +1448,7 @@ static char** str_width_split( const char *str, int width )
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
         *ret = NULL;
         return ret;
     }
@@ -1472,7 +1473,8 @@ static char** str_width_split( const char *str, int width )
     }
     count++;
     ret = calloc( ( count + 1 ), sizeof(char*) );
-
+    if ( ret == NULL ) return ret;
+    
     pos = str;
     end = pos + width;
     for (ii = 0; ii < count - 1 && end < str + len; ii++)
@@ -1584,6 +1586,7 @@ static char *strndup_quote(char *str, char q, int len)
     int str_len = strlen( str );
     int src = 0, dst = 0;
     res = malloc( len > str_len ? str_len + 1 : len + 1 );
+    if ( res == NULL ) return res;
 
     while (str[src] != 0 && src < len)
     {
@@ -1625,6 +1628,7 @@ static char** str_split( char *str, char delem )
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
         *ret = NULL;
         return ret;
     }
@@ -1639,6 +1643,7 @@ static char** str_split( char *str, char delem )
     }
 
     ret = calloc( ( count + 1 ), sizeof(char*) );
+    if ( ret == NULL ) return ret;
 
     pos = str;
     for ( i = 0; i < count - 1; i++ )
@@ -1983,6 +1988,12 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         free( input );
                         input = malloc( strlen( "/dev/" ) + strlen( devName ) + 1 );
+                        if( input == NULL )
+                        {
+                            fprintf( stderr, "ERROR: malloc() failed while attempting to set device path.\n" );
+                            free( devName );
+                            return -1;
+                        }
                         sprintf( input, "/dev/%s", devName );
                     }
                     free( devName );
