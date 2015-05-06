@@ -3570,14 +3570,14 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
 static int add_audio(hb_value_array_t *list, hb_title_t *title, int track)
 {
     // Check that the track exists
-    if (hb_list_item(title->list_audio, track) == NULL)
+    if (hb_list_item(title->list_audio, track-1) == NULL)
     {
         fprintf(stderr, "Warning: Could not find audio track %d, skipped\n",
-                track + 1);
+                track);
         return -1;
     }
     hb_dict_t *audio_dict = hb_dict_init();
-    hb_dict_set(audio_dict, "Track", hb_value_int(track));
+    hb_dict_set(audio_dict, "Track", hb_value_int(track-1));
     hb_value_array_append(list, audio_dict);
 
     return 0;
