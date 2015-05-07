@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7528.3" systemVersion="14D113c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7528.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureController">
@@ -71,11 +71,11 @@
                         <tabViewItems>
                             <tabViewItem label="Size" identifier="1" id="282">
                                 <view key="view" id="285">
-                                    <rect key="frame" x="10" y="28" width="638" height="175"/>
+                                    <rect key="frame" x="10" y="19" width="638" height="184"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box title="Box" borderType="none" titlePosition="noTitle" id="436">
-                                            <rect key="frame" x="14" y="40" width="358" height="126"/>
+                                            <rect key="frame" x="14" y="49" width="358" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
                                                 <rect key="frame" x="0.0" y="0.0" width="358" height="126"/>
@@ -354,14 +354,14 @@
                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </box>
                                         <box borderType="none" titlePosition="noTitle" id="7">
-                                            <rect key="frame" x="374" y="40" width="254" height="126"/>
+                                            <rect key="frame" x="374" y="49" width="254" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView">
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="126"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="12">
-                                                        <rect key="frame" x="169" y="63" width="15" height="22"/>
+                                                        <rect key="frame" x="169" y="55" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="152">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -377,7 +377,7 @@
                                                         </connections>
                                                     </stepper>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="15">
-                                                        <rect key="frame" x="232" y="53" width="15" height="22"/>
+                                                        <rect key="frame" x="232" y="45" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="155">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -393,24 +393,24 @@
                                                         </connections>
                                                     </stepper>
                                                     <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
-                                                        <rect key="frame" x="64" y="92" width="90" height="31"/>
+                                                        <rect key="frame" x="64" y="84" width="90" height="43"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="cellSize" width="90" height="14"/>
+                                                        <size key="cellSize" width="90" height="20"/>
                                                         <size key="intercellSpacing" width="2" height="3"/>
-                                                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="178" customClass="HBHUDButtonCell">
+                                                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="178" customClass="HBHUDButtonCell">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <cells>
                                                             <column>
-                                                                <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="mini" state="on" inset="2" id="17" customClass="HBHUDButtonCell">
+                                                                <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="17" customClass="HBHUDButtonCell">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
                                                                 </buttonCell>
-                                                                <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="mini" inset="2" id="18" customClass="HBHUDButtonCell">
+                                                                <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="small" inset="2" id="18" customClass="HBHUDButtonCell">
                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
                                                                 </buttonCell>
                                                             </column>
                                                         </cells>
@@ -423,7 +423,7 @@
                                                         </connections>
                                                     </matrix>
                                                     <textField verticalHuggingPriority="750" id="13">
-                                                        <rect key="frame" x="131" y="66" width="36" height="16"/>
+                                                        <rect key="frame" x="131" y="58" width="36" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="153">
                                                             <font key="font" metaFont="miniSystem"/>
@@ -445,7 +445,7 @@
                                                         </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" id="10">
-                                                        <rect key="frame" x="131" y="39" width="36" height="16"/>
+                                                        <rect key="frame" x="131" y="31" width="36" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="150">
                                                             <font key="font" metaFont="miniSystem"/>
@@ -467,7 +467,7 @@
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="19">
-                                                        <rect key="frame" x="110" y="50" width="15" height="22"/>
+                                                        <rect key="frame" x="110" y="46" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="156">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -482,30 +482,8 @@
                                                             <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="2Rh-om-NkW"/>
                                                         </connections>
                                                     </stepper>
-                                                    <textField verticalHuggingPriority="750" id="9">
-                                                        <rect key="frame" x="194" y="56" width="36" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="149">
-                                                            <font key="font" metaFont="miniSystem"/>
-                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="yw7-7Q-sse">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="lou-1C-A2w">
-                                                                <dictionary key="options">
-                                                                    <string key="NSNullPlaceholder">0</string>
-                                                                    <bool key="NSValidatesImmediately" value="YES"/>
-                                                                </dictionary>
-                                                            </binding>
-                                                        </connections>
-                                                    </textField>
                                                     <textField verticalHuggingPriority="750" id="11">
-                                                        <rect key="frame" x="72" y="53" width="36" height="16"/>
+                                                        <rect key="frame" x="72" y="49" width="36" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="151">
                                                             <font key="font" metaFont="miniSystem"/>
@@ -527,7 +505,7 @@
                                                         </connections>
                                                     </textField>
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="14">
-                                                        <rect key="frame" x="169" y="36" width="15" height="22"/>
+                                                        <rect key="frame" x="169" y="28" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="154">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -550,6 +528,28 @@
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                    </textField>
+                                                    <textField verticalHuggingPriority="750" id="9">
+                                                        <rect key="frame" x="194" y="48" width="36" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="149">
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="yw7-7Q-sse">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="lou-1C-A2w">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">0</string>
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                             </view>
