@@ -36,7 +36,7 @@ static void CrashMyApplication()
     {
         @autoreleasepool
         {
-        // Create a string based on the exception
+            // Create a string based on the exception
             NSString *exceptionMessage = [NSString stringWithFormat:@"%@\nReason: %@\nUser Info: %@", exception.name, exception.reason, exception.userInfo];
             // Always log to console for history
 
