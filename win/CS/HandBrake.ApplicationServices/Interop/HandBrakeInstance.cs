@@ -274,8 +274,8 @@ namespace HandBrake.ApplicationServices.Interop
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
                 crop = new[] { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right }, 
-                itu_par = 0, 
-                keep = settings.KeepDisplayAspect ? 0x04 : 0,
+                itu_par = 0,
+                keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (settings.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
                 maxWidth = settings.MaxWidth, 
                 maxHeight = settings.MaxHeight, 
                 mode = (int)(hb_anamorphic_mode_t)settings.Anamorphic, 
@@ -291,13 +291,10 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             // Sanitize the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(
-                settings,
-                new SourceVideoInfo(
-                    new Size(title.Geometry.Width, title.Geometry.Height),
-                    new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)));
-            int width = resultGeometry.Width;
+            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(settings, new SourceVideoInfo(new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)));
+            int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
             int height = resultGeometry.Height;
+
             uiGeometry.geometry.width = width;
             uiGeometry.geometry.height = height;
             uiGeometry.geometry.par.num = settings.PixelAspectX;

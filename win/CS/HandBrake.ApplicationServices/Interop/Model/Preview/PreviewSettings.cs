@@ -30,6 +30,17 @@ namespace HandBrake.ApplicationServices.Interop.Model.Preview
         /// <param name="task">The task.</param>
         public PreviewSettings(EncodeTask task)
         {
+            this.Cropping = new Cropping(task.Cropping);
+            this.MaxWidth = task.MaxWidth ?? 0;
+            this.MaxHeight = task.MaxHeight ?? 0;
+            this.KeepDisplayAspect = task.KeepDisplayAspect;
+            this.TitleNumber = task.Title;
+            this.Anamorphic = task.Anamorphic;
+            this.Modulus = task.Modulus;
+            this.Width = task.Width ?? 0;
+            this.Height = task.Height ?? 0;
+            this.PixelAspectX = task.PixelAspectX;
+            this.PixelAspectY = task.PixelAspectY;
         }
 
         /// <summary>

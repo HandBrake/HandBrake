@@ -2258,14 +2258,35 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
+                        long length = 0;
+                        double filesize = 0;
+                        try
+                        {
+                             length = new System.IO.FileInfo(this.Destination).Length;
+                            if (length != 0)
+                            {
+                                length = length / 1024 / 1024; // MB
+                            }
+
+                            double portionLeft = 100 / e.PercentComplete;
+
+                            filesize = Math.Round( length * portionLeft, 1);
+
+                        }
+                        catch (Exception ee)
+                        {
+                            Debug.WriteLine(ee);
+                        }
+
                         this.ProgramStatusLabel =
-                            string.Format("{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\\:mm\\:ss}" + Resources.Main_JobsPending_addon,
+                            string.Format("{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\\:mm\\:ss}   Filesize: {6}MB" + Resources.Main_JobsPending_addon,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,
                                 e.EstimatedTimeLeft,
                                 e.ElapsedTime,
-                                this.queueProcessor.Count);
+                                this.queueProcessor.Count,
+                                filesize);
 
                         if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
                         {
