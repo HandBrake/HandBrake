@@ -97,6 +97,11 @@ extern NSString *keySubTrackSrtCharCode;
     }
 }
 
+- (NSURL *)url
+{
+    return [NSURL fileURLWithPath:@(_hb_title->path)];
+}
+
 - (int)index
 {
     return self.hb_title->index;
@@ -114,7 +119,7 @@ extern NSString *keySubTrackSrtCharCode;
 
 - (int)frames
 {
-    return (self.hb_title->duration / 90000.) * (self.hb_title->vrate.num / (double)self.hb_title->vrate.den);
+    return (int) ((self.hb_title->duration / 90000.) * (self.hb_title->vrate.num / (double)self.hb_title->vrate.den));
 }
 
 - (NSString *)timeCode
@@ -122,6 +127,47 @@ extern NSString *keySubTrackSrtCharCode;
     return [NSString stringWithFormat:@"%02dh%02dm%02ds",
             self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
 }
+
+- (int)width
+{
+    return _hb_title->geometry.width;
+}
+
+- (int)height
+{
+    return _hb_title->geometry.height;
+}
+
+- (int)parWidth
+{
+    return _hb_title->geometry.par.num;
+}
+
+- (int)parHeight
+{
+    return _hb_title->geometry.par.den;
+}
+
+- (int)autoCropTop
+{
+    return _hb_title->crop[0];
+}
+
+- (int)autoCropBottom
+{
+    return _hb_title->crop[1];
+}
+
+- (int)autoCropLeft
+{
+    return _hb_title->crop[2];
+}
+
+- (int)autoCropRight
+{
+    return _hb_title->crop[3];
+}
+
 
 - (NSArray *)audioTracks
 {

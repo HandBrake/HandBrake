@@ -36,7 +36,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _titleIdx = title.index;
 
         _name = [title.name copy];
-        _fileURL = [NSURL fileURLWithPath:@(title.hb_title->path)];
+        _fileURL = title.url;
 
         _container = HB_MUX_MP4;
         _angle = 1;

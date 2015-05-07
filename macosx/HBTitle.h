@@ -26,6 +26,8 @@
 @property (nonatomic, readonly, getter=isFeatured) BOOL featured;
 @property (nonatomic, readonly, getter=isStream) BOOL stream;
 
+@property (nonatomic, readonly) NSURL *url;
+
 @property (nonatomic, readonly) hb_title_t *hb_title;
 
 @property (nonatomic, readonly) int index;
@@ -34,6 +36,17 @@
 @property (nonatomic, readonly) int frames;
 
 @property (nonatomic, readonly) NSString *timeCode;
+
+@property (nonatomic, readonly) int width;
+@property (nonatomic, readonly) int height;
+
+@property (nonatomic, readonly) int parWidth;
+@property (nonatomic, readonly) int parHeight;
+
+@property (nonatomic, readonly) int autoCropTop;
+@property (nonatomic, readonly) int autoCropBottom;
+@property (nonatomic, readonly) int autoCropLeft;
+@property (nonatomic, readonly) int autoCropRight;
 
 @property (nonatomic, readonly) NSArray *audioTracks;
 @property (nonatomic, readonly) NSArray *subtitlesTracks;
