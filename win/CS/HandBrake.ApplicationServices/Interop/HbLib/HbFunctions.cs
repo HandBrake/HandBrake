@@ -432,5 +432,14 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         // char* hb_get_preview_params_json(int title_idx, int preview_idx, int deinterlace, hb_geometry_settings_t *settings)
         [DllImport("hb.dll", EntryPoint = "hb_get_preview_params_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview_params_json(int title_idx, int preview_idx, int deinterlace, ref hb_geometry_settings_s settings);
+        
+        //void         hb_presets_builtin_init(void);
+        [DllImport("hb.dll", EntryPoint = "hb_presets_builtin_init", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void hb_presets_builtin_init();
+
+        // char       * hb_presets_builtin_get_json(void); // Get list of HandBrake builtin presets as json string
+        [DllImport("hb.dll", EntryPoint = "hb_presets_builtin_get_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_presets_builtin_get_json();
+
     }
 }
