@@ -3740,7 +3740,10 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 fprintf(stderr, "Dropping excess audio encoders\n");
             }
         }
-        acodec = hb_audio_encoder_get_default(mux);
+        if (ii != 1)
+        {
+            acodec = hb_audio_encoder_get_default(mux);
+        }
         for (; ii < track_count; ii++)
         {
             // We have fewer inputs than audio tracks, use the
