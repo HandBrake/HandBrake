@@ -4061,12 +4061,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             {
                 for (track = first - 1; track < last; track++)
                 {
-                    add_sub(subtitle_array, title, track, &one_burned);
+                    add_sub(subtitle_array, title, track-1, &one_burned);
                 }
             }
             else if (sscanf(subtracks[ii], "%d", &track) == 1)
             {
-                add_sub(subtitle_array, title, track, &one_burned);
+                add_sub(subtitle_array, title, track-1, &one_burned);
             }
             else
             {
