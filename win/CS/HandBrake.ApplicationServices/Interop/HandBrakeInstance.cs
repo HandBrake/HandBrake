@@ -48,12 +48,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// The number of MS between status polls when scanning.
         /// </summary>
-        private const double ScanPollIntervalMs = 200;
+        private const double ScanPollIntervalMs = 250;
 
         /// <summary>
         /// The number of MS between status polls when encoding.
         /// </summary>
-        private const double EncodePollIntervalMs = 200;
+        private const double EncodePollIntervalMs = 250;
 
         /// <summary>
         /// The native handle to the HandBrake instance.

@@ -40,7 +40,7 @@ namespace HandBrakeWPF.ViewModels
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
         /*
-         * Hard Code "None" in the Models for Tune.
+         * Hard Code "None" in the Models for Tune.t
          * Test Everything         */
 
         #region Constants and Fields
