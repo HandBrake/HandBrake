@@ -620,6 +620,17 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     // We do not want to add the same track with the same settings twice
     behavior.used = calloc(source_subtitle_count, sizeof(*behavior.used));
 
+    // Since this function can be called multiple times, we need to
+    // initialize the "used" array from the existing subtitles in the list.
+    int count, ii;
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_value_t *sub = hb_value_array_get(list, ii);
+        int track = hb_value_get_int(hb_dict_get(sub, "Track"));
+        behavior.used[track] = 1;
+    }
+
     const char *s;
     s = hb_value_get_string(hb_dict_get(preset,
                                         "SubtitleTrackSelectionBehavior"));
@@ -659,7 +670,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
 
     // Add tracks for all languages in the language list
     hb_value_array_t *lang_list = hb_dict_get(preset, "SubtitleLanguageList");
-    int count = hb_value_array_len(lang_list);
+    count = hb_value_array_len(lang_list);
     const char *pref_lang = "und";
     if (count > 0)
     {

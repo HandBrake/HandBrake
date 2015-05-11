@@ -4077,6 +4077,42 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
         }
     }
+    else
+    {
+        if (subdefault > 0)
+        {
+            // "Default" flag can not be applied till after subtitles have
+            // been selected.  Apply it here if subtitle selection was
+            // made by the preset.
+            hb_value_t *sub_dict = hb_dict_get(job_dict, "Subtitle");
+            hb_value_t *sub_list = hb_dict_get(sub_dict, "SubtitleList");
+            if (hb_value_array_len(sub_list) >= subdefault)
+            {
+                hb_value_t *sub = hb_value_array_get(sub_list, subdefault - 1);
+                hb_dict_set(sub, "Default", hb_value_bool(1));
+            }
+        }
+
+        if (subforce != NULL)
+        {
+            // "Forced" flag is not set during preset initialization except
+            // for "foreign audio" subtitles.  Set additional request forced
+            // subtitle tracks here.
+            hb_value_t *sub_dict = hb_dict_get(job_dict, "Subtitle");
+            hb_value_t *sub_list = hb_dict_get(sub_dict, "SubtitleList");
+
+            int ii;
+            for (ii = 0; subforce[ii] != NULL; ii++ )
+            {
+                int idx = strtol(subforce[ii], NULL, 0) - 1;
+                if (idx >= 0 && hb_value_array_len(sub_list) > idx)
+                {
+                    hb_value_t *sub = hb_value_array_get(sub_list, idx);
+                    hb_dict_set(sub, "Forced", hb_value_bool(1));
+                }
+            }
+        }
+    }
 
     if (srtfile != NULL)
     {
