@@ -32,7 +32,7 @@ typedef struct
 
 } hb_scan_t;
 
-#define PREVIEW_READ_THRESH (1024 * 1024 * 10)
+#define PREVIEW_READ_THRESH (1024 * 1024 * 300)
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title, int flush );
