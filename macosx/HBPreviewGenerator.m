@@ -15,7 +15,7 @@
 
 @interface HBPreviewGenerator ()
 
-@property (nonatomic, readonly) NSMutableDictionary *picturePreviews;
+@property (nonatomic, readonly) NSCache *picturePreviews;
 @property (unsafe_unretained, nonatomic, readonly) HBCore *scanCore;
 @property (unsafe_unretained, nonatomic, readonly) HBJob *job;
 
@@ -32,7 +32,11 @@
     {
         _scanCore = core;
         _job = job;
-        _picturePreviews = [[NSMutableDictionary alloc] init];
+
+        _picturePreviews = [[NSCache alloc] init];
+        // Limit the cache to 60 1080p previews, the cost is in pixels
+        _picturePreviews.totalCostLimit = 60 * 1920 * 1080;
+
         _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
@@ -62,7 +66,7 @@
 
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    CGImageRef theImage = (__bridge CGImageRef)(self.picturePreviews)[@(index)];
+    CGImageRef theImage = (__bridge CGImageRef)([self.picturePreviews objectForKey:@(index)]);
 
     if (!theImage)
     {
@@ -75,7 +79,9 @@
                                                         deinterlace:deinterlace];
         if (cache && theImage)
         {
-            (self.picturePreviews)[@(index)] = (__bridge id)theImage;
+            // The cost is the number of pixels of the image
+            NSUInteger previewCost = CGImageGetWidth(theImage) * CGImageGetHeight(theImage);
+            [self.picturePreviews setObject:(__bridge id)(theImage) forKey:@(index) cost:previewCost];
         }
     }
     else
