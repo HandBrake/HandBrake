@@ -791,7 +791,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
         {
             // Is regular file or block dev.
             // Check to see if it is a dvd image
-            label = ghb_dvd_volname (filename);
+            label = ghb_dvd_volname(filename);
             if (label == NULL)
             {
                 label = get_file_label(filename);
@@ -808,6 +808,10 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
         {
             label = get_file_label(filename);
         }
+    }
+    else
+    {
+        label = get_file_label(filename);
     }
     g_free(filename);
     GtkWidget *widget = GHB_WIDGET (ud->builder, "volume_label");

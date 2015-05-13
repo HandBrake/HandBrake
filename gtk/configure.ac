@@ -97,6 +97,8 @@ IT_PROG_INTLTOOL([0.35.0])
 
 AM_PROG_LIBTOOL
 
+AC_SYS_LARGEFILE
+
 case $host in
   *-*-mingw*)
     GHB_PACKAGES="gthread-2.0 gio-2.0 gmodule-2.0"
