@@ -1759,12 +1759,12 @@ static int ParseOptions( int argc, char ** argv )
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
-            { "optimize",    no_argument,       &mp4_optimize, 1 },
+            { "optimize",    no_argument,       NULL,        'O' },
             { "no-optimize", no_argument,       &mp4_optimize, 0 },
-            { "ipod-atom",   no_argument,       &ipod_atom,    1 },
+            { "ipod-atom",   no_argument,       NULL,        'I' },
             { "no-ipod-atom",no_argument,       &ipod_atom,    0 },
-            { "use-opencl",  no_argument,       &use_opencl,   1 },
-            { "use-hwd",     no_argument,       &use_hwd,      1 },
+            { "use-opencl",  no_argument,       NULL,        'P' },
+            { "use-hwd",     no_argument,       NULL,        'U' },
             { "no-hwd",      no_argument,       &use_hwd,      0 },
 
             { "title",       required_argument, NULL,    't' },
@@ -1816,7 +1816,7 @@ static int ParseOptions( int argc, char ** argv )
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
             { "decomb",      optional_argument, NULL,    '5' },
             { "no-decomb",   no_argument,       &decomb_disable,      1 },
-            { "grayscale",   no_argument,       &grayscale,    1 },
+            { "grayscale",   no_argument,       NULL,        'g' },
             { "no-grayscale",no_argument,       &grayscale,    0 },
             { "rotate",      optional_argument, NULL,   ROTATE_FILTER },
             { "non-anamorphic",  no_argument, &anamorphic_mode, 0 },
@@ -1982,6 +1982,18 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'o':
                 output = strdup( optarg );
+                break;
+            case 'O':
+                mp4_optimize = 1;
+                break;
+            case 'I':
+                ipod_atom = 1;
+                break;
+            case 'P':
+                use_opencl = 1;
+                break;
+            case 'U':
+                use_hwd = 1;
                 break;
             case 't':
                 titleindex = atoi( optarg );
@@ -2226,6 +2238,9 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     decomb = strdup("default");
                 }
+                break;
+            case 'g':
+                grayscale = 1;
                 break;
             case ROTATE_FILTER:
                 free(rotate);
