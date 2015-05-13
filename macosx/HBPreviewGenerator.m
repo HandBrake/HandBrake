@@ -108,6 +108,10 @@
 
 - (void) imagesSettingsDidChange
 {
+    // Purge the existing picture previews so they get recreated the next time
+    // they are needed.
+
+    [self purgeImageCache];
     [self.delegate reloadPreviews];
 }
 

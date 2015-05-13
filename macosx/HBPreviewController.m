@@ -247,9 +247,6 @@ typedef enum ViewMode : NSUInteger {
 {
     if (self.generator)
     {
-        // Purge the existing picture previews so they get recreated the next time
-        // they are needed.
-        [self.generator purgeImageCache];
         [self switchViewToMode:ViewModePicturePreview];
         [self displayPreview];
     }
