@@ -3662,8 +3662,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         hb_dict_set(range_dict, "Type", hb_value_string(range_type));
         if (range_start)
             hb_dict_set(range_dict, "Start", hb_value_int(range_start));
+        else
+            hb_dict_remove(range_dict, "Start");
         if (range_end)
             hb_dict_set(range_dict, "End",   hb_value_int(range_end));
+        else
+            hb_dict_remove(range_dict, "End");
         if (range_seek_points)
             hb_dict_set(range_dict, "SeekPoints",
                     hb_value_int(range_seek_points));

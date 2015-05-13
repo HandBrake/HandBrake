@@ -1655,6 +1655,8 @@ static void UpdateSearchState( hb_work_object_t * w, int64_t start )
         return;
     }
 
+    hb_get_state2(pv->job->h, &state);
+
 #define p state.param.working
     state.state = HB_STATE_SEARCHING;
     if ( pv->job->frame_to_start )
