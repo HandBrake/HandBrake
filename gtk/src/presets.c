@@ -951,7 +951,9 @@ ghb_prefs_load(signal_user_data_t *ud)
     GhbValue *internalDict;
 
     internalDict = ghb_resource_get("internal-defaults");
-    prefsDict    = read_config_file("preferences");
+    prefsDict    = read_config_file("preferences.json");
+    if (prefsDict == NULL)
+        prefsDict    = read_config_file("preferences");
     if (prefsDict == NULL)
         prefsDict = ghb_dict_new();
     dict     = ghb_dict_get(prefsDict, "Preferences");
@@ -1475,7 +1477,7 @@ static guint prefs_timeout_id = 0;
 static gboolean
 delayed_store_prefs(gpointer data)
 {
-    write_config_file("preferences", prefsDict);
+    write_config_file("preferences.json", prefsDict);
     prefs_timeout_id = 0;
     return FALSE;
 }
