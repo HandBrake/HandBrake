@@ -414,7 +414,7 @@
 
     // Detelecine
     hb_filter_object_t *filter;
-    if (self.filters.detelecine)
+    if (![self.filters.detelecine isEqualToString:@"off"])
     {
         int filter_id = HB_FILTER_DETELECINE;
         const char *filter_str = hb_generate_filter_settings(filter_id,
