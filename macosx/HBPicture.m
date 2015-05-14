@@ -498,7 +498,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     encodeInt(_width);
     encodeInt(_height);
 
-    encodeInt(_keepDisplayAspect);
+    encodeBool(_keepDisplayAspect);
     encodeInt(_anamorphicMode);
     encodeInt(_modulus);
 
@@ -530,7 +530,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     decodeInt(_width);
     decodeInt(_height);
 
-    decodeInt(_keepDisplayAspect);
+    decodeBool(_keepDisplayAspect);
     decodeInt(_anamorphicMode);
     decodeInt(_modulus);
 
