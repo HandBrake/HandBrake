@@ -842,7 +842,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_restore">
-                        <property name="label" translatable="yes">_Update Built-in Presets</property>
+                        <property name="label" translatable="yes">_Reload Built-in Presets</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -7574,7 +7574,7 @@ on the Video tab instead.</property>
 Check this if you want the queue to clean itself up by deleting completed jobs.</property>
                             <property name="halign">start</property>
                             <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">6</property>

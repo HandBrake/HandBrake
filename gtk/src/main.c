@@ -798,7 +798,6 @@ int
 main(int argc, char *argv[])
 {
     signal_user_data_t *ud;
-    GhbValue *preset;
     GError *error = NULL;
     GOptionContext *context;
 
@@ -1011,13 +1010,15 @@ main(int argc, char *argv[])
     ghb_settings_init(ud->prefs, "Preferences");
     ghb_settings_init(ud->globals, "Globals");
     ghb_settings_init(ud->settings, "Initialization");
+    ghb_settings_init(ud->settings, "OneTimeInitialization");
     // Load user preferences file
     ghb_prefs_load(ud);
     // Store user preferences into ud->prefs
     ghb_prefs_to_settings(ud->prefs);
 
-    // Load all settings with default preset values
-    ghb_settings_init(ud->settings, "Presets");
+    int logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
+    ghb_backend_init(logLevel);
+
     // Load the presets files
     ghb_presets_load(ud);
     // Note that ghb_preset_to_settings(ud->settings) is called when
@@ -1028,9 +1029,6 @@ main(int argc, char *argv[])
     // Note that ghb_settings_to_ui(ud->settings) happens when initial
     // empty title is initialized.
 
-    gint logLevel;
-    logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
-    ghb_backend_init(logLevel);
 
     if (ghb_dict_get_bool(ud->prefs, "hbfd"))
     {
@@ -1040,16 +1038,11 @@ main(int argc, char *argv[])
     ghb_dvd_set_current(source, ud);
 
     // Populate the presets tree view
-    ghb_presets_list_init(ud, NULL, 0);
+    ghb_presets_list_init(ud, NULL);
     // Get the first preset name
     if (arg_preset != NULL)
     {
-        preset = ghb_parse_preset_path(arg_preset);
-        if (preset)
-        {
-            ghb_select_preset(ud->builder, preset);
-            ghb_value_free(&preset);
-        }
+        ghb_select_preset(ud->builder, arg_preset);
     }
     else
     {

@@ -168,10 +168,9 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Next line in the display
     // Preset: PresetName
-    gchar *preset;
+    const char *name;
     gboolean markers;
     gboolean preset_modified;
-    const GhbValue *path;
 
     const char *mux_id;
     const hb_container_t *mux;
@@ -180,19 +179,17 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     mux = ghb_lookup_container_by_name(mux_id);
 
     preset_modified = ghb_dict_get_bool(settings, "preset_modified");
-    path = ghb_dict_get_value(settings, "preset");
-    preset = ghb_preset_path_string(path);
+    name = ghb_dict_get_string(settings, "PresetFullName");
     markers = ghb_dict_get_bool(settings, "ChapterMarkers");
 
     if (preset_modified)
     {
-        XPRINT(_("<b>Modified Preset Based On:</b> <small>%s</small>\n"), preset);
+        XPRINT(_("<b>Modified Preset Based On:</b> <small>%s</small>\n"), name);
     }
     else
     {
-        XPRINT(_("<b>Preset:</b> <small>%s</small>\n"), preset);
+        XPRINT(_("<b>Preset:</b> <small>%s</small>\n"), name);
     }
-    g_free(preset);
 
     // Next line in the display (Container type)
     // Format: XXX Container

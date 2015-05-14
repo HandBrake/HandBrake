@@ -1,9 +1,21 @@
 {
     "Globals": {
         "show_preview": false,
-        "scan_source": ""
+        "scan_source": "",
+        "volume_label": "New Video"
+    },
+    "OneTimeInitialization": {
+        "title": "none"
     },
     "Initialization": {
+        "AudioAllowMP3Pass": false,
+        "AudioAllowAACPass": false,
+        "AudioAllowAC3Pass": false,
+        "AudioAllowDTSPass": false,
+        "AudioAllowDTSHDPass": false,
+        "AudioAllowEAC3Pass": false,
+        "AudioAllowFLACPass": false,
+        "AudioAllowTRUEHDPass": false,
         "AudioBitrate": "192",
         "AudioEncoder": "copy:ac3",
         "AudioTrack": 0,
@@ -28,16 +40,9 @@
         "MetaGenre": "",
         "MetaDescription": "",
         "MetaLongDescription": "",
-        "preset": [
-            "Regular",
-            "Normal"
-        ],
+        "PresetFullName": "/Regular/Normal",
         "preset_modified": false,
         "preset_reload": false,
-        "preset_selection": [
-            "Regular",
-            "Normal"
-        ],
         "PictureDisplayWidth": 720,
         "PictureDisplayHeight": 480,
         "PtoPType": "chapter",
@@ -46,7 +51,6 @@
         "single_title": 1,
         "start_point": 1.0,
         "start_frame": -1,
-        "title": 0,
         "title_selected": false,
         "volume_label": "New Video",
         "audio_list": [],
@@ -103,98 +107,5 @@
         "SrtDir": "",
         "window_width": 1,
         "window_height": 1
-    },
-    "Presets": {
-        "PictureAutoCrop": true,
-        "ChapterMarkers": true,
-        "FileFormat": "mp4",
-        "Folder": false,
-        "PictureLooseCrop": false,
-        "PictureModulus": 2,
-        "PictureDeblock": 0,
-        "PictureDecombDeinterlace": true,
-        "PictureDecomb": "off",
-        "PictureDecombCustom": "",
-        "Default": false,
-        "PictureBottomCrop": 0,
-        "PictureLeftCrop": 0,
-        "PictureRightCrop": 0,
-        "PictureTopCrop": 0,
-        "PictureDeinterlace": "off",
-        "PictureDeinterlaceCustom": "",
-        "PictureDenoiseFilter": "off",
-        "PictureDenoisePreset": "medium",
-        "PictureDenoiseTune": "none",
-        "PictureDenoiseCustom": "",
-        "PictureDetelecine": "off",
-        "PictureDetelecineCustom": "",
-        "PicturePAR": "loose",
-        "PicturePARWidth": 853,
-        "PicturePARHeight": 720,
-        "PictureHeight": 0,
-        "PictureWidth": 0,
-        "VideoFramerate": "auto",
-        "VideoFramerateMode": "vfr",
-        "VideoGrayScale": false,
-        "Mp4HttpOptimize": false,
-        "Mp4iPodCompatible": false,
-        "PictureKeepRatio": true,
-        "AudioAllowMP3Pass": false,
-        "AudioAllowAACPass": false,
-        "AudioAllowAC3Pass": true,
-        "AudioAllowDTSPass": false,
-        "AudioAllowDTSHDPass": false,
-        "AudioAllowEAC3Pass": false,
-        "AudioAllowFLACPass": false,
-        "AudioAllowTRUEHDPass": false,
-        "AudioCopyMask": [
-            "copy:ac3"
-        ],
-        "AudioEncoderFallback": "ac3",
-        "AudioLanguageList": [
-            "und"
-        ],
-        "AudioList": [
-            {
-                "AudioBitrate": "192",
-                "AudioEncoder": "copy:ac3",
-                "AudioTrackQualityEnable": false,
-                "AudioTrackQuality": -1.0,
-                "AudioTrackGainSlider": 0.0,
-                "AudioTrackDRCSlider": 0.0,
-                "AudioMixdown": "dpl2",
-                "AudioSamplerate": "auto"
-            }
-        ],
-        "AudioSecondaryEncoderMode": true,
-        "AudioTrackSelectionBehavior": "first",
-        "PresetDescription": "",
-        "PresetName": "Name Missing",
-        "Type": 1,
-        "SubtitleLanguageList": [
-            "und"
-        ],
-        "SubtitleTrackSelectionBehavior": "none",
-        "SubtitleAddCC": false,
-        "SubtitleAddForeignAudioSearch": false,
-        "SubtitleAddForeignAudioSubtitle": false,
-        "SubtitleBurnBehavior": "none",
-        "SubtitleBurnDVDSub": false,
-        "SubtitleBurnBDSub": false,
-        "VideoTurboTwoPass": false,
-        "UsesPictureFilters": true,
-        "UsesPictureSettings": 2,
-        "VideoTwoPass": false,
-        "VideoAvgBitrate": 1800,
-        "VideoEncoder": "x264",
-        "VideoQualityType": 2,
-        "VideoQualitySlider": 0.59999999999999998,
-        "x264Option": "",
-        "VideoPreset": "medium",
-        "VideoTune": "",
-        "VideoProfile": "",
-        "VideoLevel": "",
-        "x264UseAdvancedOptions": false,
-        "VideoOptionExtra": ""
     }
 }

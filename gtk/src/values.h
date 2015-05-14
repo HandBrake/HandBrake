@@ -84,6 +84,8 @@ GhbValue* ghb_boolean_value(gboolean bval);
 void debug_show_value(GhbValue *gval);
 void debug_show_type(GhbType tp);
 
+void ghb_dict_copy(GhbValue *dst, const GhbValue *src);
+
 void ghb_dict_set_string(GhbValue *dict, const gchar *key, const gchar *sval);
 void ghb_dict_set_double(GhbValue *dict, const gchar *key, gdouble dval);
 void ghb_dict_set_int(GhbValue *dict, const gchar *key, gint64 ival);

@@ -44,13 +44,6 @@ ghb_resource_init()
     ghb_dict_set(resources, "internal-defaults", val);
 
     gbytes = g_resource_lookup_data(data_res,
-                        "/org/handbrake/data/standard_presets.json", 0, NULL);
-    data = g_bytes_get_data(gbytes, &data_size);
-    val = ghb_json_parse(data);
-    g_bytes_unref(gbytes);
-    ghb_dict_set(resources, "standard-presets", val);
-
-    gbytes = g_resource_lookup_data(data_res,
                         "/org/handbrake/data/widget.deps", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
     val = ghb_json_parse(data);

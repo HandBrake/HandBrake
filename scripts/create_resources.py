@@ -58,7 +58,7 @@ def start_element_handler(tag, attr):
         elif fname == None:
             print >> sys.stderr, ( "Error: No such plist file %s" % fbase )
             sys.exit(1)
-    elif tag == "string":
+    elif tag == "text":
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
@@ -72,6 +72,9 @@ def start_element_handler(tag, attr):
         elif fname == None:
             print >> sys.stderr, ( "Error: No such string file %s" % fbase )
             sys.exit(1)
+    elif tag == "string":
+        key = attr["name"]
+        val = attr["value"]
 
     if val != None:
         if type(current) == types.DictType:

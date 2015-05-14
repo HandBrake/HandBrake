@@ -1,4 +1,4 @@
-/* hb_preset.c
+/* preset.c
 
    Copyright (c) 2003-2015 HandBrake Team
    This file is part of the HandBrake source code
@@ -28,8 +28,253 @@ int hb_preset_version_micro;
 
 static hb_value_t *hb_preset_template = NULL;
 static hb_value_t *hb_presets = NULL;
-static hb_value_t *hb_presets_custom = NULL;
 static hb_value_t *hb_presets_builtin = NULL;
+
+static void preset_clean(hb_value_t *preset, hb_value_t *template);
+static void preset_import(hb_value_t *preset, int major, int minor, int micro);
+
+enum
+{
+    PRESET_DO_SUCCESS,
+    PRESET_DO_FAIL,
+    PRESET_DO_PARTIAL,
+    PRESET_DO_NEXT,
+    PRESET_DO_SKIP,
+    PRESET_DO_DELETE,
+    PRESET_DO_DONE
+};
+
+typedef struct
+{
+    hb_preset_index_t path;
+} preset_do_context_t;
+
+typedef struct
+{
+    preset_do_context_t  do_ctx;
+    hb_value_t          *template;
+} preset_clean_context_t;
+
+typedef struct
+{
+    preset_do_context_t  do_ctx;
+    int                  major;
+    int                  minor;
+    int                  micro;
+} preset_import_context_t;
+
+typedef struct
+{
+    preset_do_context_t  do_ctx;
+    const char          *name;
+    int                  recurse;
+    int                  last_match_idx;
+} preset_search_context_t;
+
+typedef int (*preset_do_f)(hb_value_t *preset, preset_do_context_t *ctx);
+
+static int preset_cmp_idx(hb_value_t *preset, int idx, const char *name)
+{
+    const char *next, *preset_name;
+    int  ii, len;
+
+    // Strip leading '/'
+    if (name[0] == '/')
+        name++;
+
+    // Find the part of the "name" path we want to match.
+    for (ii = 0; ii < idx; ii++)
+    {
+        next = strchr(name, '/');
+        if (next == NULL)
+            return PRESET_DO_SKIP;
+        next++;
+        name = next;
+    }
+
+    // Find the end of the part we want to match
+    next = strchr(name, '/');
+    if (next != NULL)
+        len = next - name;
+    else
+        len = strlen(name);
+    if (len <= 0)
+        return PRESET_DO_SKIP;
+
+    preset_name = hb_value_get_string(hb_dict_get(preset, "PresetName"));
+    if (strlen(preset_name) > len)
+        len = strlen(preset_name);
+
+    // If match found and it's the last component of the "name", success!
+    if (!strncmp(name, preset_name, len))
+    {
+        if (name[len] == 0)
+            return PRESET_DO_SUCCESS;
+        else
+            return PRESET_DO_PARTIAL;
+    }
+    return PRESET_DO_NEXT;
+}
+
+static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
+{
+    preset_search_context_t *ctx = (preset_search_context_t*)do_ctx;
+    int idx, result;
+
+    idx = ctx->do_ctx.path.depth - 1;
+    if (ctx->last_match_idx >= 0 && idx > ctx->last_match_idx)
+    {
+        // If there was a previous partial match, try to continue the match
+        idx -= ctx->last_match_idx;
+    }
+
+    result = preset_cmp_idx(preset, idx, ctx->name);
+    if (ctx->recurse && result == PRESET_DO_SKIP)
+    {
+        result = preset_cmp_idx(preset, 0, ctx->name);
+        ctx->last_match_idx = idx;
+    }
+    if (result == PRESET_DO_PARTIAL)
+    {
+        return PRESET_DO_NEXT;
+    }
+    else
+    {
+        ctx->last_match_idx = -1;
+    }
+
+    return result;
+}
+
+static int do_preset_import(hb_value_t *preset, preset_do_context_t *do_ctx)
+{
+    preset_import_context_t *ctx = (preset_import_context_t*)do_ctx;
+    preset_import(preset, ctx->major, ctx->minor, ctx->micro);
+    return PRESET_DO_NEXT;
+}
+
+static int do_preset_clean(hb_value_t *preset, preset_do_context_t *do_ctx)
+{
+    preset_clean_context_t *ctx = (preset_clean_context_t*)do_ctx;
+    preset_clean(preset, ctx->template);
+    return PRESET_DO_NEXT;
+}
+
+static int do_delete_builtin(hb_value_t *preset, preset_do_context_t *ctx)
+{
+    if (hb_value_get_int(hb_dict_get(preset, "Type")) == 0)
+        return PRESET_DO_DELETE;
+    return PRESET_DO_NEXT;
+}
+
+static int do_clear_default(hb_value_t *preset, preset_do_context_t *ctx)
+{
+    hb_dict_set(preset, "Default", hb_value_bool(0));
+    return PRESET_DO_NEXT;
+}
+
+static int do_find_default(hb_value_t *preset, preset_do_context_t *ctx)
+{
+    if (!hb_value_get_bool(hb_dict_get(preset, "Folder")) &&
+        hb_value_get_bool(hb_dict_get(preset, "Default")))
+    {
+        return PRESET_DO_SUCCESS;
+    }
+    return PRESET_DO_NEXT;
+}
+
+static int presets_do(preset_do_f do_func, hb_value_t *preset,
+                      preset_do_context_t *ctx)
+{
+    int result;
+    hb_value_t *next;
+
+    if (hb_value_type(preset) == HB_VALUE_TYPE_ARRAY)
+    {
+        // An array of presets, clean each one
+        int ii;
+
+        for (ii = 0; ii < hb_value_array_len(preset); )
+        {
+            ctx->path.index[ctx->path.depth-1] = ii;
+            next = hb_value_array_get(preset, ii);
+            result = presets_do(do_func, next, ctx);
+            if (result == PRESET_DO_DELETE)
+            {
+                hb_value_array_remove(preset, ii);
+                continue;
+            }
+            ii++;
+            if (result != PRESET_DO_NEXT)
+                return result;
+        }
+        return PRESET_DO_NEXT;
+    }
+    else if (hb_value_type(preset) == HB_VALUE_TYPE_DICT &&
+             hb_dict_get(preset, "VersionMajor") != NULL)
+    {
+        // A packaged preset list
+        next = hb_dict_get(preset, "PresetList");
+        return presets_do(do_func, next, ctx);
+    }
+    else if (hb_value_type(preset) == HB_VALUE_TYPE_DICT &&
+             hb_value_get_bool(hb_dict_get(preset, "Folder")))
+    {
+        // Perform do_func on the folder...
+        result = do_func(preset, ctx);
+        if (result != PRESET_DO_NEXT)
+            return result;
+
+        // Then perform preset action on the children of the folder
+        ctx->path.depth++;
+        next = hb_dict_get(preset, "ChildrenArray");
+        result = presets_do(do_func, next, ctx);
+        if (result == PRESET_DO_SUCCESS)
+            return result;
+        ctx->path.depth--;
+        return result;
+    }
+    else if (hb_value_type(preset) == HB_VALUE_TYPE_DICT &&
+             hb_dict_get(preset, "PresetName") != NULL)
+    {
+        // An individual, non-folder, preset
+        return do_func(preset, ctx);
+    }
+    else
+    {
+        hb_error("Error: invalid preset format in presets_do()");
+        return PRESET_DO_NEXT;
+    }
+    return PRESET_DO_DONE;
+}
+
+hb_preset_index_t* hb_preset_index_init(const int *index, int depth)
+{
+    hb_preset_index_t *path;
+    path = malloc(sizeof(hb_preset_index_t));
+    path->depth = depth;
+    if (index != NULL)
+        memcpy(path->index, index, depth * sizeof(int));
+    return path;
+}
+
+hb_preset_index_t* hb_preset_index_dup(const hb_preset_index_t *path)
+{
+    if (path == NULL)
+        return NULL;
+    return hb_preset_index_init(path->index, path->depth);
+}
+
+void hb_preset_index_append(hb_preset_index_t *dst,
+                            const hb_preset_index_t *src)
+{
+    int ii;
+    for (ii = 0; ii < src->depth &&
+                 dst->depth < HB_MAX_PRESET_FOLDER_DEPTH; ii++, dst->depth++)
+    {
+        dst->index[dst->depth] = src->index[ii];
+    }
+}
 
 static int get_job_mux(hb_dict_t *job_dict)
 {
@@ -59,13 +304,14 @@ static int get_job_mux(hb_dict_t *job_dict)
     return mux;
 }
 
-static int get_audio_copy_mask(hb_dict_t * preset)
+static int get_audio_copy_mask(const hb_dict_t * preset)
 {
     int mask = HB_ACODEC_PASS_FLAG;
 
     hb_value_array_t *copy_mask_array = hb_dict_get(preset, "AudioCopyMask");
     if (copy_mask_array != NULL)
     {
+        mask = HB_ACODEC_PASS_FLAG;
         int count = hb_value_array_len(copy_mask_array);
         int ii;
         for (ii = 0; ii < count; ii++)
@@ -98,25 +344,6 @@ static int get_audio_copy_mask(hb_dict_t * preset)
             }
             mask |= codec;
         }
-    }
-    else
-    {
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowMP3Pass")) *
-                HB_ACODEC_MP3;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowAACPass")) *
-                HB_ACODEC_FFAAC;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowAC3Pass")) *
-                HB_ACODEC_AC3;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowDTSPass")) *
-                HB_ACODEC_DCA;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowDTSHDPass")) *
-                HB_ACODEC_DCA_HD;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowEAC3Pass")) *
-                HB_ACODEC_FFEAC3;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowFLACPass")) *
-                HB_ACODEC_FFFLAC;
-        mask |= hb_value_get_bool(hb_dict_get(preset, "AudioAllowTRUEHDPass")) *
-                HB_ACODEC_FFTRUEHD;
     }
     return mask;
 }
@@ -158,7 +385,7 @@ static int find_audio_track(const hb_title_t *title,
     return -1;
 }
 
-static int validate_audio_encoders(hb_dict_t *preset)
+static int validate_audio_encoders(const hb_dict_t *preset)
 {
     hb_value_array_t * encoder_list = hb_dict_get(preset, "AudioList");
     int count = hb_value_array_len(encoder_list);
@@ -264,7 +491,7 @@ static int sanitize_audio_codec(int in_codec, int out_codec,
     return codec;
 }
 
-static void add_audio_for_lang(hb_value_array_t *list, hb_dict_t *preset,
+static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                                hb_title_t *title, int mux, int copy_mask,
                                int fallback, const char *lang,
                                int behavior, int mode, hb_dict_t *track_dict)
@@ -383,7 +610,7 @@ static void add_audio_for_lang(hb_value_array_t *list, hb_dict_t *preset,
 // This function assumes that Mux has already been initialized in
 // the job_dict
 int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
-                            hb_dict_t *preset, hb_dict_t *job_dict)
+                            const hb_dict_t *preset, hb_dict_t *job_dict)
 {
     hb_title_t *title = hb_find_title_by_index(h, title_index);
     if (title == NULL)
@@ -557,7 +784,7 @@ static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
 // This function assumes that the AudioList and Mux have already been
 // initialized in the job_dict
 int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
-                                hb_dict_t *preset, hb_dict_t *job_dict)
+                                const hb_dict_t *preset, hb_dict_t *job_dict)
 {
     hb_title_t *title = hb_find_title_by_index(h, title_index);
     if (title == NULL)
@@ -812,7 +1039,8 @@ static int get_video_framerate(hb_value_t *rate_value)
  *                        in json representation of a title.
  * @param preset        - Preset to initialize job with
  */
-hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index, hb_dict_t *preset)
+hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
+                              const hb_dict_t *preset)
 {
     hb_title_t *title = hb_find_title_by_index(h, title_index);
     if (title == NULL)
@@ -1433,6 +1661,8 @@ dict_clean(hb_value_t *dict, hb_value_t *template)
     if (val != NULL)
         preset_name = hb_value_get_string(val);
 
+    // Remove keys that are not in the template and translate compatible
+    // data types to the types used in the template.
     for (iter = hb_dict_iter_init(tmp);
          iter != HB_DICT_ITER_DONE;
          iter = hb_dict_iter_next(tmp, iter))
@@ -1506,6 +1736,28 @@ dict_clean(hb_value_t *dict, hb_value_t *template)
         }
     }
     hb_value_free(&tmp);
+
+    if (!hb_value_get_bool(hb_dict_get(dict, "Folder")))
+    {
+        // Add key/value pairs that are in the template but not in the dict.
+        for (iter = hb_dict_iter_init(template);
+             iter != HB_DICT_ITER_DONE;
+             iter = hb_dict_iter_next(template, iter))
+        {
+            key          = hb_dict_iter_key(iter);
+            template_val = hb_dict_iter_value(iter);
+
+            if (hb_value_type(template_val) != HB_VALUE_TYPE_ARRAY &&
+                hb_value_type(template_val) != HB_VALUE_TYPE_DICT)
+            {
+                val = hb_dict_get(dict, key);
+                if (val == NULL)
+                {
+                    hb_dict_set(dict, key, hb_value_dup(template_val));
+                }
+            }
+        }
+    }
 }
 
 static void preset_clean(hb_value_t *preset, hb_value_t *template)
@@ -1538,6 +1790,11 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
         val = hb_value_string(mux);
         hb_dict_set(preset, "FileFormat", val);
     }
+    else
+    {
+        const hb_container_t *c = hb_container_get_next(NULL);
+        muxer = c->format;
+    }
     val = hb_dict_get(preset, "VideoEncoder");
     if (val != NULL)
     {
@@ -1564,10 +1821,13 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             int fr = hb_video_framerate_get_from_name(s);
             if (fr < 0)
             {
+                if (strcasecmp(s, "same as source"))
+                {
+                    hb_error("Preset %s: Invalid video framerate (%s)",
+                             preset_name, s);
+                }
                 val = hb_value_string("auto");
                 hb_dict_set(preset, "VideoFramerate", val);
-                hb_error("Preset %s: Invalid video framerate (%s)",
-                         preset_name, s);
             }
         }
     }
@@ -1609,7 +1869,7 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             }
             enc = hb_audio_encoder_get_short_name(acodec);
             val = hb_value_string(enc);
-            hb_dict_set(preset, "AudioEncoder", val);
+            hb_dict_set(adict, "AudioEncoder", val);
         }
         val = hb_dict_get(adict, "AudioSamplerate");
         if (val != NULL)
@@ -1618,13 +1878,13 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             s = hb_value_get_string(val);
             if (strcasecmp(s, "auto"))
             {
-                int sr = hb_video_framerate_get_from_name(s);
+                int sr = hb_audio_samplerate_get_from_name(s);
                 if (sr < 0)
                 {
-                    val = hb_value_string("auto");
-                    hb_dict_set(preset, "AudioSamplerate", val);
                     hb_error("Preset %s: Invalid audio samplerate (%s)",
                              preset_name, s);
+                    val = hb_value_string("auto");
+                    hb_dict_set(adict, "AudioSamplerate", val);
                 }
             }
         }
@@ -1650,57 +1910,320 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
 
 static void presets_clean(hb_value_t *presets, hb_value_t *template)
 {
-    if (hb_value_type(presets) == HB_VALUE_TYPE_ARRAY)
+    preset_clean_context_t ctx;
+    ctx.do_ctx.path.depth = 1;
+    ctx.template = template;
+    presets_do(do_preset_clean, presets, (preset_do_context_t*)&ctx);
+}
+
+void hb_presets_clean(hb_value_t *preset)
+{
+    presets_clean(preset, hb_preset_template);
+}
+
+static const char* import_indexed_filter(int filter_id, int index)
+{
+    hb_filter_param_t *filter_presets;
+    filter_presets = hb_filter_param_get_presets(filter_id);
+
+    int ii;
+    for (ii = 0; filter_presets[ii].name != NULL; ii++)
     {
-        // An array of presets, clean each one
-        int ii, count;
-        count = hb_value_array_len(presets);
-        for (ii = 0; ii < count; ii++)
+        if (filter_presets[ii].index == index)
+            break;
+    }
+    return filter_presets[ii].short_name;
+}
+
+static void import_decomb(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDecomb");
+    if (hb_value_is_number(val))
+    {
+        const char *s;
+        int index = hb_value_get_int(val);
+        s = import_indexed_filter(HB_FILTER_DECOMB, index);
+        if (s != NULL)
         {
-            hb_value_t *preset = hb_value_array_get(presets, ii);
-            preset_clean(preset, template);
+            hb_dict_set(preset, "PictureDecomb", hb_value_string(s));
+        }
+        else
+        {
+            hb_error("Invalid decomb index %d", index);
+            hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
         }
     }
-    else if (hb_value_type(presets) == HB_VALUE_TYPE_DICT &&
-             hb_dict_get(presets, "VersionMajor") != NULL)
+}
+
+static void import_deint(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlace");
+    if (hb_value_is_number(val))
     {
-        // A packaged preset list
-        hb_value_t *list = hb_dict_get(presets, "PresetList");
-        presets_clean(list, template);
+        const char *s;
+        int index = hb_value_get_int(val);
+        s = import_indexed_filter(HB_FILTER_DEINTERLACE, index);
+        if (s != NULL)
+        {
+            hb_dict_set(preset, "PictureDeinterlace", hb_value_string(s));
+        }
+        else
+        {
+            hb_error("Invalid deinterlace index %d", index);
+            hb_dict_set(preset, "PictureDeinterlace", hb_value_string("off"));
+        }
     }
-    else if (hb_value_type(presets) == HB_VALUE_TYPE_DICT &&
-             hb_dict_get(presets, "PresetName") != NULL)
+}
+
+static void import_detel(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDetelecine");
+    if (hb_value_is_number(val))
     {
-        // An individual preset
-        preset_clean(presets, template);
+        const char *s;
+        int index = hb_value_get_int(val);
+        s = import_indexed_filter(HB_FILTER_DETELECINE, index);
+        if (s != NULL)
+        {
+            hb_dict_set(preset, "PictureDetelecine", hb_value_string(s));
+        }
+        else
+        {
+            hb_error("Invalid detelecine index %d", index);
+            hb_dict_set(preset, "PictureDetelecine", hb_value_string("off"));
+        }
     }
-    else
+}
+
+static void import_denoise(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDenoise");
+    if (hb_value_is_number(val))
     {
-        hb_error("Error: invalid preset format in presets_clean()");
+        const char *s;
+        int index = hb_value_get_int(val);
+        s = import_indexed_filter(HB_FILTER_HQDN3D, index);
+        if (s != NULL)
+        {
+            hb_dict_set(preset, "PictureDenoiseFilter",
+                        hb_value_string("hqdn3d"));
+            hb_dict_set(preset, "PictureDenoisePreset", hb_value_string(s));
+        }
+        else
+        {
+            if (index != 0)
+                hb_error("Invalid denoise index %d", index);
+            hb_dict_set(preset, "PictureDenoiseFilter", hb_value_string("off"));
+        }
     }
+}
+
+static void import_pic(hb_value_t *preset)
+{
+    if (hb_value_get_bool(hb_dict_get(preset, "UsesMaxPictureSettings")))
+    {
+        // UsesMaxPictureSettings was deprecated
+        hb_dict_set(preset, "UsesPictureSettings", hb_value_int(2));
+    }
+
+    hb_value_t *val = hb_dict_get(preset, "PicturePAR");
+    if (hb_value_is_number(val))
+    {
+        const char *s;
+        int pic_par = hb_value_get_int(val);
+        switch (pic_par)
+        {
+            default:
+            case 0:
+                s = "off";
+                break;
+            case 1:
+                s = "strict";
+                break;
+            case 2:
+                s = "loose";
+                break;
+            case 3:
+                s = "custom";
+                break;
+        }
+        hb_dict_set(preset, "PicturePAR", hb_value_string(s));
+    }
+}
+
+static void import_audio(hb_value_t *preset)
+{
+    hb_value_t *copy = hb_dict_get(preset, "AudioCopyMask");
+    if (copy != NULL)
+        return;
+
+    copy = hb_value_array_init();
+    hb_dict_set(preset, "AudioCopyMask", copy);
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowMP3Pass")))
+        hb_value_array_append(copy, hb_value_string("copy:mp3"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowAACPass")))
+        hb_value_array_append(copy, hb_value_string("copy:aac"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowAC3Pass")))
+        hb_value_array_append(copy, hb_value_string("copy:ac3"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowDTSPass")))
+        hb_value_array_append(copy, hb_value_string("copy:dts"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowDTSHDPass")))
+        hb_value_array_append(copy, hb_value_string("copy:dtshd"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowEAC3Pass")))
+        hb_value_array_append(copy, hb_value_string("copy:eac3"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowFLACPass")))
+        hb_value_array_append(copy, hb_value_string("copy:flac"));
+    if (hb_value_get_bool(hb_dict_get(preset, "AudioAllowTRUEHDPass")))
+        hb_value_array_append(copy, hb_value_string("copy:truehd"));
+}
+
+static void import_video(hb_value_t *preset)
+{
+    hb_value_t *val;
+
+    if ((val = hb_dict_get(preset, "x264Preset")) != NULL)
+         hb_dict_set(preset, "VideoPreset", hb_value_dup(val));
+    if ((val = hb_dict_get(preset, "x264Tune")) != NULL)
+         hb_dict_set(preset, "VideoTune", hb_value_dup(val));
+    if ((val = hb_dict_get(preset, "h264Profile")) != NULL)
+         hb_dict_set(preset, "VideoProfile", hb_value_dup(val));
+    if ((val = hb_dict_get(preset, "h264Level")) != NULL)
+         hb_dict_set(preset, "VideoLevel", hb_value_dup(val));
+    if ((val = hb_dict_get(preset, "x264OptionExtra")) != NULL)
+        hb_dict_set(preset, "VideoOptionExtra", hb_value_dup(val));
+
+    if (hb_value_get_int(hb_dict_get(preset, "VideoQualityType")) == 0)
+    {
+        // Target size no longer supported
+        hb_dict_set(preset, "VideoQualityType", hb_value_int(1));
+    }
+
+    if (hb_value_get_bool(hb_dict_get(preset, "VideoFrameratePFR")))
+    {
+        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("pfr"));
+    }
+    else if (hb_value_get_bool(hb_dict_get(preset, "VideoFramerateCFR")))
+    {
+        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("cfr"));
+    }
+    else if (hb_value_get_bool(hb_dict_get(preset, "VideoFramerateVFR")))
+    {
+        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("vfr"));
+    }
+
+    const char *enc;
+    int codec;
+    enc = hb_value_get_string(hb_dict_get(preset, "VideoEncoder"));
+    codec = hb_video_encoder_get_from_name(enc);
+    if (codec & HB_VCODEC_FFMPEG_MASK)
+    {
+        if ((val = hb_dict_get(preset, "lavcOption")) != NULL)
+            hb_dict_set(preset, "VideoOptionExtra", hb_value_dup(val));
+    }
+}
+
+static void preset_import(hb_value_t *preset, int major, int minor, int micro)
+{
+    if (!hb_value_get_bool(hb_dict_get(preset, "Folder")))
+    {
+        if (major == 0 && minor == 0 && micro == 0)
+        {
+            // Convert legacy presets (before versioning introduced)
+            import_video(preset);
+            import_pic(preset);
+            import_audio(preset);
+            import_decomb(preset);
+            import_deint(preset);
+            import_detel(preset);
+            import_denoise(preset);
+        }
+        preset_clean(preset, hb_preset_template);
+    }
+}
+
+int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
+{
+    *major = 0; *minor = 0; *micro = 0;
+    if (hb_value_type(preset) == HB_VALUE_TYPE_DICT)
+    {
+        // Is this a single preset or a packaged collection of presets?
+        hb_value_t *val = hb_dict_get(preset, "PresetName");
+        if (val == NULL)
+        {
+            val = hb_dict_get(preset, "VersionMajor");
+            if (val != NULL)
+            {
+                *major = hb_value_get_int(hb_dict_get(preset, "VersionMajor"));
+                *minor = hb_value_get_int(hb_dict_get(preset, "VersionMinor"));
+                *micro = hb_value_get_int(hb_dict_get(preset, "VersionMicro"));
+                return 0;
+            }
+        }
+    }
+    return -1;
+}
+
+void hb_presets_import(hb_value_t *preset)
+{
+    preset_import_context_t ctx;
+
+    ctx.do_ctx.path.depth = 1;
+    hb_presets_version(preset, &ctx.major, &ctx.minor, &ctx.micro);
+    presets_do(do_preset_import, preset, (preset_do_context_t*)&ctx);
+}
+
+char * hb_presets_import_json(const char *json)
+{
+    hb_value_t * dict = hb_value_json(json);
+    if (dict == NULL)
+        return NULL;
+
+    hb_presets_import(dict);
+    char * result = hb_value_get_json(dict);
+    hb_value_free(&dict);
+    return result;
+}
+
+char * hb_presets_clean_json(const char *json)
+{
+    hb_value_t * dict = hb_value_json(json);
+    if (dict == NULL)
+        return NULL;
+
+    presets_clean(dict, hb_preset_template);
+    char * result = hb_value_get_json(dict);
+    hb_value_free(&dict);
+    return result;
 }
 
 // Note that unpackage does not make any copies.
 // In one increases the reference count.
-static hb_value_t * preset_unpackage(hb_value_t *packaged_presets)
+static hb_value_t * presets_unpackage(const hb_value_t *packaged_presets)
 {
-    // TODO: Verify compatible version number.
-    //       Do any desired legacy translations.
-    if (hb_value_type(packaged_presets) == HB_VALUE_TYPE_ARRAY)
+    // Do any legacy translations.
+    hb_value_t *tmp = hb_value_dup(packaged_presets);
+    hb_presets_import(tmp);
+    if (hb_value_type(tmp) == HB_VALUE_TYPE_ARRAY)
     {
         // Not packaged
-        hb_value_incref(packaged_presets);
-        return packaged_presets;
+        return tmp;
     }
-    hb_value_t *presets = hb_dict_get(packaged_presets, "PresetList");
+    if (hb_dict_get(tmp, "PresetName") != NULL)
+    {
+        // Bare single preset
+        return tmp;
+    }
+    hb_value_t *presets = hb_dict_get(tmp, "PresetList");
     hb_value_incref(presets);
+    hb_value_free(&tmp);
     return presets;
 }
 
-static hb_value_t * preset_package(hb_value_t *presets)
+static hb_value_t * presets_package(const hb_value_t *presets)
 {
     hb_dict_t *packaged_presets;
-    if (hb_dict_get(presets, "VersionMajor") == NULL)
+    if (hb_value_type(presets) != HB_VALUE_TYPE_DICT ||
+        hb_dict_get(presets, "VersionMajor") == NULL)
     {
         // Preset is not packaged
         packaged_presets = hb_dict_init();
@@ -1711,14 +2234,14 @@ static hb_value_t * preset_package(hb_value_t *presets)
         hb_dict_set(packaged_presets, "VersionMicro",
                     hb_value_int(hb_preset_version_micro));
 
-        // TODO: What else to we want in the preset containers header?
+        // TODO: What else do we want in the preset containers header?
+        hb_dict_t *tmp = hb_value_dup(presets);
         if (hb_value_type(presets) == HB_VALUE_TYPE_DICT)
         {
-            hb_value_array_t *tmp = hb_value_array_init();
-            hb_value_array_append(tmp, presets);
-            presets = tmp;
+            hb_value_array_t *array = hb_value_array_init();
+            hb_value_array_append(array, tmp);
+            tmp = array;
         }
-        hb_dict_t *tmp = hb_value_dup(presets);
         presets_clean(tmp, hb_preset_template);
         hb_dict_set(packaged_presets, "PresetList", tmp);
     }
@@ -1745,12 +2268,17 @@ void hb_presets_builtin_init(void)
     hb_preset_template = hb_value_dup(hb_dict_get(template, "Preset"));
 
     hb_presets_builtin = hb_value_dup(hb_dict_get(dict, "PresetBuiltin"));
+    hb_presets_clean(hb_presets_builtin);
+
+    hb_presets = hb_value_array_init();
     hb_value_free(&dict);
+}
 
-    // Make a dup, never change contents of hb_presets_builtin
-    hb_presets = hb_value_dup(hb_presets_builtin);
-    hb_presets_custom = hb_value_array_init();
-
+void hb_presets_current_version(int *major, int* minor, int *micro)
+{
+    *major = hb_preset_version_major;
+    *minor = hb_preset_version_minor;
+    *micro = hb_preset_version_micro;
 }
 
 int hb_presets_gui_init(void)
@@ -1761,29 +2289,12 @@ int hb_presets_gui_init(void)
 #if defined(HB_PRESET_JSON_FILE)
     hb_get_user_config_filename(path, "%s", HB_PRESET_JSON_FILE);
     dict = hb_value_read_json(path);
-    if (dict != NULL)
-    {
-        hb_value_t *preset = preset_unpackage(dict);
-        // Unpackaging does some validity checks and can fail
-        if (preset == NULL)
-            return -1;
-        int result = hb_presets_add(preset);
-        hb_value_free(&preset);
-        hb_value_free(&dict);
-        return result;
-    }
 #endif
 #if defined(HB_PRESET_PLIST_FILE)
     if (dict == NULL)
     {
         hb_get_user_config_filename(path, "%s", HB_PRESET_PLIST_FILE);
         dict = hb_plist_parse_file(path);
-        if (dict != NULL)
-        {
-            int result = hb_presets_add(dict);
-            hb_value_free(&dict);
-            return result;
-        }
     }
 #endif
     if (dict == NULL)
@@ -1796,6 +2307,15 @@ int hb_presets_gui_init(void)
         hb_error("Attempted: %s", HB_PRESET_PLIST_FILE);
 #endif
         return -1;
+    }
+    else
+    {
+        preset_do_context_t ctx;
+        ctx.path.depth = 1;
+        presets_do(do_delete_builtin, dict, &ctx);
+        int result = hb_presets_add(dict);
+        hb_value_free(&dict);
+        return result;
     }
     return -1;
 }
@@ -1811,49 +2331,31 @@ char * hb_presets_builtin_get_json(void)
     return json;
 }
 
-static hb_value_t * preset_lookup(hb_value_t *list, const char *name,
-                                  int def, int folder, int recurse)
+// Lookup a preset in the preset list.  The "name" may contain '/'
+// separators to explicitely specify a preset within the preset lists
+// folder structure.
+//
+// If 'recurse' is specified, a recursive search for the first component
+// in the name will be performed.
+//
+// I assume that the actual preset name does not include any '/'
+//
+// A reference to the preset is returned
+static hb_preset_index_t * preset_lookup_path(const char *name, int recurse)
 {
-    int count = hb_value_array_len(list);
-    int ii;
-    for (ii = 0; ii < count; ii++)
-    {
-        int d;
-        const char *n;
-        hb_dict_t *preset_dict = hb_value_array_get(list, ii);
-        n = hb_value_get_string(hb_dict_get(preset_dict, "PresetName"));
-        d = hb_value_get_bool(hb_dict_get(preset_dict, "Default"));
-        if (hb_value_get_bool(hb_dict_get(preset_dict, "Folder")))
-        {
-            if (folder && !def && n != NULL && !strncmp(name, n, 80))
-                return preset_dict;
+    preset_search_context_t ctx;
+    int result;
 
-            if (recurse)
-            {
-                hb_value_array_t *children;
-                children = hb_dict_get(preset_dict, "ChildrenArray");
-                if (children == NULL)
-                    continue;
-                preset_dict = preset_lookup(children, name, def,
-                                            folder, recurse);
-                if (preset_dict != NULL)
-                    return preset_dict;
-            }
-        }
-        else if (!folder)
-        {
-            if (!def && n != NULL && !strncmp(n, name, 80))
-            {
-                // preset is not a folder and we found a matching preset name
-                return preset_dict;
-            }
-            else if (def && d)
-            {
-                return preset_dict;
-            }
-        }
-    }
-    return NULL;
+    ctx.do_ctx.path.depth = 1;
+    ctx.name = name;
+    ctx.recurse = recurse;
+    ctx.last_match_idx = -1;
+    result = presets_do(do_preset_search, hb_presets,
+                        (preset_do_context_t*)&ctx);
+    if (result != PRESET_DO_SUCCESS)
+        ctx.do_ctx.path.depth = 0;
+
+    return hb_preset_index_dup(&ctx.do_ctx.path);
 }
 
 // Lookup a preset in the preset list.  The "name" may contain '/'
@@ -1864,182 +2366,128 @@ static hb_value_t * preset_lookup(hb_value_t *list, const char *name,
 // in the name will be performed.
 //
 // I assume that the actual preset name does not include any '/'
-hb_value_t * hb_preset_get(const char *name, int recurse)
+//
+// A copy of the preset is returned
+hb_preset_index_t * hb_preset_search_index(const char *name, int recurse)
 {
-    if (name == NULL || name[0] == 0)
-    {
-        // bad input.
-        return NULL;
-    }
-
-    char *tmp = strdup(name);
-    char *part, *next;
-    hb_value_t *list;
-
-    list = hb_presets;
-    part = tmp;
-    next = strchr(name, '/');
-    if (next == NULL)
-    {
-        // Only preset name was specified, so do a recursive search
-        hb_value_t *preset = preset_lookup(list, part, 0, 0, recurse);
-        free(tmp);
-        if (preset == NULL)
-        {
-            return NULL;
-        }
-        return hb_value_dup(preset);
-    }
-    // Found folder separator in name, do explicit path search
-    while (part)
-    {
-        *next = 0;
-        next++;
-        if (next[0] == 0)
-        {
-            // name ends in a folder separator '/'. Invalid input
-            free(tmp);
-            return NULL;
-        }
-
-        // We have a folder part.  Lookup the folder.
-        // First try non-recursive so that we match top level folders first
-        hb_dict_t *folder = preset_lookup(list, part, 0, 1, 0);
-        if (folder == NULL && recurse)
-        {
-            // Try a recursive search for the folder
-            folder = preset_lookup(list, part, 0, 1, recurse);
-        }
-        if (folder == NULL)
-        {
-            // Not found
-            free(tmp);
-            return NULL;
-        }
-        list = hb_dict_get(folder, "ChildrenArray");
-        if (list == NULL)
-        {
-            // Folder found, but it has no children
-            free(tmp);
-            return NULL;
-        }
-        // Folder found, continue the search
-        part = next;
-        next = strchr(name, '/');
-        if (next == NULL)
-        {
-            // We have reached the final component of the path
-            // which is the preset name.  Do a non-recursive search.
-            // If the preset is not in the specified folder, will
-            // return NULL
-            hb_value_t *preset = preset_lookup(list, part, 0, 0, 0);
-            free(tmp);
-            if (preset == NULL)
-            {
-                return NULL;
-            }
-            return hb_value_dup(preset);
-        }
-    }
-    // This should never be reached, but some compilers might complain
-    // without a final return.
-    free(tmp);
-    return NULL;
+    return preset_lookup_path(name, recurse);
 }
 
-char * hb_preset_get_json(const char *name, int recurse)
+hb_value_t * hb_preset_search(const char *name, int recurse)
+{
+    hb_preset_index_t *path = preset_lookup_path(name, recurse);
+    hb_value_t *preset = hb_preset_get(path);
+    free(path);
+    return preset;
+}
+
+char * hb_preset_search_json(const char *name, int recurse)
 {
     hb_value_t * preset;
     char *json;
-    preset = hb_preset_get(name, recurse);
+    preset = hb_preset_search(name, recurse);
     if (preset == NULL)
         return NULL;
     json = hb_value_get_json(preset);
-    hb_value_free(&preset);
     return json;
 }
 
-static hb_dict_t * find_first_preset(hb_value_array_t *list)
+static hb_preset_index_t * lookup_default_index(hb_value_t *list)
 {
-    int count, ii;
-    count = hb_value_array_len(list);
-    for (ii = 0; ii < count; ii++)
-    {
-        hb_dict_t *preset_dict = hb_value_array_get(list, ii);
-        if (hb_value_get_bool(hb_dict_get(preset_dict, "Folder")))
-        {
-            hb_value_array_t *children;
-            children = hb_dict_get(preset_dict, "ChildrenArray");
-            if (children == NULL)
-                continue;
-            preset_dict = find_first_preset(children);
-            if (preset_dict != NULL)
-                return preset_dict;
-        }
-        else
-        {
-            return preset_dict;
-        }
-    }
-    return NULL;
+    preset_do_context_t ctx;
+    int result;
+
+    ctx.path.depth = 1;
+    result = presets_do(do_find_default, list, &ctx);
+    if (result != PRESET_DO_SUCCESS)
+        ctx.path.depth = 0;
+    return hb_preset_index_dup(&ctx.path);
+}
+
+hb_preset_index_t * hb_presets_get_default_index(void)
+{
+    hb_preset_index_t *path = lookup_default_index(hb_presets);
+    return path;
 }
 
 hb_dict_t * hb_presets_get_default(void)
 {
-    // Look for preset with 'Default' flag set
-    hb_value_t *preset =  preset_lookup(hb_presets, NULL, 1, 0, 1);
-    if (preset == NULL)
-    {
-        // Look for preset named 'Normal' flag set
-        preset =  preset_lookup(hb_presets, "Normal", 0, 0, 1);
-        if (preset == NULL)
-        {
-            // Just grab the first preset available
-            preset = find_first_preset(hb_presets);
-            if (preset == NULL)
-                return NULL;
-        }
-    }
-    return hb_value_dup(preset);
+    hb_preset_index_t *path = hb_presets_get_default_index();
+    return hb_preset_get(path);
 }
 
 char * hb_presets_get_default_json(void)
 {
-    hb_value_t *preset =  preset_lookup(hb_presets, NULL, 1, 0, 1);
-    if (preset == NULL)
-        return NULL;
-    return hb_value_get_json(preset);
+    // Look for default preset
+    hb_value_t *def = hb_presets_get_default();
+    return hb_value_get_json(def);
 }
 
-// Return:
-//      0 upon success
-//      1 if preset name could not be found
-int hb_presets_set_default(const char *name, int recurse)
+void hb_presets_clear_default()
 {
-    hb_value_t *preset =  preset_lookup(hb_presets, NULL, 1, 0, 1);
-    if (preset != NULL)
+    preset_do_context_t ctx;
+    ctx.path.depth = 1;
+    presets_do(do_clear_default, hb_presets, &ctx);
+}
+
+void hb_presets_builtin_update(void)
+{
+    preset_do_context_t ctx;
+    hb_preset_index_t *path;
+    hb_value_t *builtin;
+    int ii;
+
+    ctx.path.depth = 1;
+    presets_do(do_delete_builtin, hb_presets, &ctx);
+
+    builtin = hb_value_dup(hb_presets_builtin);
+    path = lookup_default_index(hb_presets);
+    if (path != NULL && path->depth != 0)
     {
-        // Mark old defalt as not
-        hb_dict_set(preset, "Default", hb_value_bool(0));
+        // The "Default" preset is an existing custom preset.
+        // Clear the default preset in builtins
+        ctx.path.depth = 1;
+        presets_do(do_clear_default, builtin, &ctx);
     }
-    preset = preset_lookup(hb_presets, name, 0, 0, recurse);
-    if (preset == NULL)
-        return -1;
-    hb_dict_set(preset, "Default", hb_value_bool(1));
-    return 0;
+    free(path);
+
+    for (ii = hb_value_array_len(builtin) - 1; ii >= 0; ii--)
+    {
+        hb_value_t *dict;
+        dict = hb_value_array_get(builtin, ii);
+        hb_value_incref(dict);
+        hb_value_array_insert(hb_presets, 0, dict);
+    }
+    hb_value_free(&builtin);
 }
 
 int hb_presets_add(hb_value_t *preset)
 {
+    hb_preset_index_t *path;
+    int                added = 0;
+
     if (preset == NULL)
         return -1;
-    // TODO: validity checking of input preset
+
+    preset = presets_unpackage(preset);
+    if (preset == NULL)
+        return -1;
+
+    path = lookup_default_index(preset);
+    if (path != NULL && path->depth != 0)
+    {
+        // There is a "Default" preset in the preset(s) being added.
+        // Clear any existing default preset.
+        hb_presets_clear_default();
+    }
+    free(path);
+
+    int index = hb_value_array_len(hb_presets);
     if (hb_value_type(preset) == HB_VALUE_TYPE_DICT)
     {
         // A standalone preset or folder of presets.  Add to preset array.
-        // Only allow custom presets to be added
-        if (hb_value_get_int(hb_dict_get(preset, "Type")) == 1)
-            hb_value_array_append(hb_presets_custom, hb_value_dup(preset));
+        hb_value_array_append(hb_presets, hb_value_dup(preset));
+        added++;
     }
     else if (hb_value_type(preset) == HB_VALUE_TYPE_ARRAY)
     {
@@ -2049,48 +2497,69 @@ int hb_presets_add(hb_value_t *preset)
         for (ii = 0; ii < count; ii++)
         {
             hb_value_t *value = hb_value_array_get(preset, ii);
-            hb_value_array_append(hb_presets_custom, hb_value_dup(value));
+            hb_value_array_append(hb_presets, hb_value_dup(value));
+            added++;
         }
     }
 
-    // Reconstruct global list
-    hb_value_decref(hb_presets);
-    hb_presets = hb_value_dup(hb_presets_builtin);
-    // Append custom presets
-    int count = hb_value_array_len(hb_presets_custom);
-    int ii;
-    for (ii = 0; ii < count; ii++)
+    hb_value_free(&preset);
+    if (added == 0)
     {
-        hb_value_t *value = hb_value_array_get(hb_presets_custom, ii);
-        // Only allow custom presets to be added
-        if (hb_value_get_int(hb_dict_get(value, "Type")) == 1)
-            hb_value_array_append(hb_presets, hb_value_dup(value));
+        return -1;
     }
-    return 0;
+
+    return index;
 }
 
 int hb_presets_add_json(const char *json)
 {
-    hb_value_t *packaged_preset = hb_value_json(json);
-    hb_value_t *preset = preset_unpackage(packaged_preset);
+    hb_value_t *preset = hb_value_json(json);
     if (preset == NULL)
         return -1;
     int result = hb_presets_add(preset);
     hb_value_free(&preset);
-    hb_value_free(&packaged_preset);
     return result;
+}
+
+int hb_presets_version_file(const char *filename,
+                            int *major, int *minor, int *micro)
+{
+    int result;
+
+    hb_value_t *preset = hb_value_read_json(filename);
+    if (preset == NULL)
+        preset = hb_plist_parse_file(filename);
+    if (preset == NULL)
+        return -1;
+
+    result = hb_presets_version(preset, major, minor, micro);
+    hb_value_free(&preset);
+
+    return result;
+}
+
+hb_value_t* hb_presets_read_file(const char *filename)
+{
+    hb_value_t *preset = hb_value_read_json(filename);
+    if (preset == NULL)
+        preset = hb_plist_parse_file(filename);
+    if (preset == NULL)
+        return NULL;
+
+    return preset;
 }
 
 int hb_presets_add_file(const char *filename)
 {
-    hb_value_t *packaged_preset = hb_value_read_json(filename);
-    hb_value_t *preset = preset_unpackage(packaged_preset);
-    // Unpackaging does some validity checks and can fail
+    hb_value_t *preset = hb_value_read_json(filename);
+    if (preset == NULL)
+        preset = hb_plist_parse_file(filename);
     if (preset == NULL)
         return -1;
+
     int result = hb_presets_add(preset);
     hb_value_free(&preset);
-    hb_value_free(&packaged_preset);
+
     return result;
 }
 
@@ -2169,7 +2638,7 @@ int hb_presets_add_path(char * path)
     {
         int res = hb_presets_add_file(files[ii]);
         // return success if any one of the files is successfully loaded
-        if (res == 0)
+        if (res >= 0)
             result = res;
     }
     hb_closedir( dir );
@@ -2180,17 +2649,20 @@ int hb_presets_add_path(char * path)
 
 hb_value_t * hb_presets_get(void)
 {
-    return hb_value_dup(hb_presets);
+    return hb_presets;
 }
 
 char * hb_presets_get_json(void)
 {
-    return hb_value_get_json(hb_presets);
+    char * result;
+    hb_value_t *presets = hb_presets_get();
+    result = hb_value_get_json(presets);
+    return result;
 }
 
-int hb_preset_write_json(hb_value_t *preset, const char *path)
+int hb_presets_write_json(const hb_value_t *preset, const char *path)
 {
-    hb_value_t *packaged_preset = preset_package(preset);
+    hb_value_t *packaged_preset = presets_package(preset);
     // Packaging does some validity checks and can fail
     if (packaged_preset == NULL)
         return -1;
@@ -2199,21 +2671,247 @@ int hb_preset_write_json(hb_value_t *preset, const char *path)
     return result;
 }
 
-char * hb_preset_package_json(hb_value_t *preset)
+char * hb_presets_package_json(const hb_value_t *preset)
 {
-    hb_value_t *packaged_preset = preset_package(preset);
+    hb_value_t *packaged_preset = presets_package(preset);
     // Packaging does some validity checks and can fail
     if (packaged_preset == NULL)
         return NULL;
-    char *json = hb_value_get_json(packaged_preset);
+    char *out_json = hb_value_get_json(packaged_preset);
     hb_value_free(&packaged_preset);
-    return json;
+    return out_json;
+}
+
+char * hb_presets_json_package(const char *in_json)
+{
+    hb_value_t *preset = hb_value_json(in_json);
+    hb_value_t *packaged_preset = presets_package(preset);
+    // Packaging does some validity checks and can fail
+    if (packaged_preset == NULL)
+        return NULL;
+    char *out_json = hb_value_get_json(packaged_preset);
+    hb_value_free(&packaged_preset);
+    hb_value_free(&preset);
+    return out_json;
 }
 
 void hb_presets_free(void)
 {
     hb_value_free(&hb_preset_template);
     hb_value_free(&hb_presets);
-    hb_value_free(&hb_presets_custom);
     hb_value_free(&hb_presets_builtin);
+}
+
+hb_value_t *
+hb_presets_get_folder_children(const hb_preset_index_t *path)
+{
+    int ii, count, folder;
+    hb_value_t *dict;
+
+    if (path == NULL)
+        return hb_presets;
+
+    hb_value_t *presets = hb_presets;
+    for (ii = 0; ii < path->depth; ii++)
+    {
+        count = hb_value_array_len(presets);
+        if (path->index[ii] >= count) return NULL;
+        dict = hb_value_array_get(presets, path->index[ii]);
+        folder = hb_value_get_bool(hb_dict_get(dict, "Folder"));
+        if (!folder)
+            break;
+        presets = hb_dict_get(dict, "ChildrenArray");
+    }
+    if (ii < path->depth)
+        return NULL;
+    return presets;
+}
+
+hb_value_t *
+hb_preset_get(const hb_preset_index_t *path)
+{
+    hb_value_t *folder = NULL;
+
+    if (path == NULL || path->depth <= 0)
+        return NULL;
+
+    hb_preset_index_t folder_path = *path;
+    folder_path.depth--;
+    folder = hb_presets_get_folder_children(&folder_path);
+    if (folder)
+    {
+        if (hb_value_array_len(folder) <= path->index[path->depth-1])
+        {
+            hb_error("hb_preset_get: not found");
+        }
+        else
+        {
+            return hb_value_array_get(folder, path->index[path->depth-1]);
+        }
+    }
+    else
+    {
+        hb_error("hb_preset_get: not found");
+    }
+    return NULL;
+}
+
+int
+hb_preset_set(const hb_preset_index_t *path, const hb_value_t *dict)
+{
+    hb_value_t *folder = NULL;
+
+    if (dict == NULL || path == NULL || path->depth <= 0)
+        return -1;
+
+    hb_preset_index_t folder_path = *path;
+    folder_path.depth--;
+    folder = hb_presets_get_folder_children(&folder_path);
+    if (folder)
+    {
+        if (hb_value_array_len(folder) <= path->index[path->depth-1])
+        {
+            hb_error("hb_preset_replace: not found");
+            return -1;
+        }
+        else
+        {
+            hb_value_t *dup = hb_value_dup(dict);
+            presets_clean(dup, hb_preset_template);
+            hb_value_array_set(folder, path->index[path->depth-1], dup);
+        }
+    }
+    else
+    {
+        hb_error("hb_preset_replace: not found");
+        return -1;
+    }
+    return 0;
+}
+
+int hb_preset_insert(const hb_preset_index_t *path, const hb_value_t *dict)
+{
+    hb_value_t *folder = NULL;
+
+    if (dict == NULL || path == NULL || path->depth < 0)
+        return -1;
+
+    int index = path->index[path->depth - 1];
+    hb_preset_index_t folder_path = *path;
+    folder_path.depth--;
+    folder = hb_presets_get_folder_children(&folder_path);
+    if (folder)
+    {
+        hb_value_t *dup = hb_value_dup(dict);
+        presets_clean(dup, hb_preset_template);
+        if (hb_value_array_len(folder) <= index)
+        {
+            index = hb_value_array_len(folder);
+            hb_value_array_append(folder, dup);
+        }
+        else
+        {
+            hb_value_array_insert(folder, index, dup);
+        }
+    }
+    else
+    {
+        hb_error("hb_preset_insert: not found");
+        return -1;
+    }
+    return index;
+}
+
+int hb_preset_append(const hb_preset_index_t *path, const hb_value_t *dict)
+{
+    hb_value_t *folder = NULL;
+
+    if (dict == NULL)
+        return -1;
+
+    folder = hb_presets_get_folder_children(path);
+    if (folder)
+    {
+        int index;
+        hb_value_t *dup = hb_value_dup(dict);
+        presets_clean(dup, hb_preset_template);
+        index = hb_value_array_len(folder);
+        hb_value_array_append(folder, dup);
+        return index;
+    }
+    else
+    {
+        hb_error("hb_preset_append: not found");
+        return -1;
+    }
+    return 0;
+}
+
+int
+hb_preset_delete(const hb_preset_index_t *path)
+{
+    hb_value_t *folder = NULL;
+
+    if (path == NULL)
+        return -1;
+
+    hb_preset_index_t folder_path = *path;
+    folder_path.depth--;
+    folder = hb_presets_get_folder_children(&folder_path);
+    if (folder)
+    {
+        if (hb_value_array_len(folder) <= path->index[path->depth-1])
+        {
+            hb_error("hb_preset_delete: not found");
+            return -1;
+        }
+        else
+        {
+            hb_value_array_remove(folder, path->index[path->depth-1]);
+        }
+    }
+    else
+    {
+        hb_error("hb_preset_delete: not found");
+        return -1;
+    }
+    return 0;
+}
+
+int hb_preset_move(const hb_preset_index_t *src_path,
+                   const hb_preset_index_t *dst_path)
+{
+    hb_value_t *src_folder = NULL;
+    hb_value_t *dst_folder = NULL;
+
+    hb_preset_index_t src_folder_path = *src_path;
+    hb_preset_index_t dst_folder_path = *dst_path;
+    src_folder_path.depth--;
+    dst_folder_path.depth--;
+    src_folder = hb_presets_get_folder_children(&src_folder_path);
+    dst_folder = hb_presets_get_folder_children(&dst_folder_path);
+    if (src_folder == NULL || dst_folder == NULL)
+    {
+        hb_error("hb_preset_move: not found");
+        return -1;
+    }
+
+    hb_value_t *dict;
+    int         src_index, dst_index;
+
+    src_index = src_path->index[src_path->depth-1];
+    dst_index = dst_path->index[src_path->depth-1];
+    dict      = hb_value_array_get(src_folder, src_index);
+    hb_value_incref(dict);
+    hb_value_array_remove(src_folder, src_index);
+
+    // Be careful about indexes in the case that they are in the same folder
+    if (src_folder == dst_folder && src_index < dst_index)
+        dst_index--;
+    if (hb_value_array_len(dst_folder) <= dst_index)
+        hb_value_array_append(dst_folder, dict);
+    else
+        hb_value_array_insert(dst_folder, dst_index, dict);
+
+    return 0;
 }

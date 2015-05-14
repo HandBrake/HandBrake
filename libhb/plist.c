@@ -1,3 +1,12 @@
+/* plist.c
+
+   Copyright (c) 2003-2015 HandBrake Team
+   This file is part of the HandBrake source code
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -454,10 +463,18 @@ text_data(
 {
     char *text = (char*)xtext;
     parse_data_t *pd = (parse_data_t*)ud;
-    if (pd->value) free(pd->value);
-    pd->value = malloc(len + 1);
-    strncpy(pd->value, text, len);
-    pd->value[len] = 0;
+
+    int pos = 0;
+    if (pd->value != NULL)
+    {
+        pos = strlen(pd->value);
+    }
+    char *tmp = realloc(pd->value, pos + len + 1);
+    if (tmp == NULL)
+        return;
+    pd->value = tmp;
+    strncpy(pd->value + pos, text, len);
+    pd->value[pos + len] = 0;
 }
 
 static void

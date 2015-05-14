@@ -818,14 +818,14 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
     if (label != NULL)
     {
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->settings, "volume_label", label);
+        ghb_dict_set_string(ud->globals, "volume_label", label);
         g_free(label);
     }
     else
     {
         label = _("No Title Found");
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->settings, "volume_label", label);
+        ghb_dict_set_string(ud->globals, "volume_label", label);
         return FALSE;
     }
     return TRUE;
@@ -1158,7 +1158,7 @@ show_settings(GhbValue *settings)
 void
 ghb_load_settings(signal_user_data_t * ud)
 {
-    GhbValue *preset;
+    const char *fullname;
     gboolean preset_modified;
     static gboolean busy = FALSE;
 
@@ -1166,7 +1166,7 @@ ghb_load_settings(signal_user_data_t * ud)
         return;
     busy = TRUE;
 
-    preset = ghb_dict_get_value(ud->settings, "preset");
+    fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
     preset_modified = ghb_dict_get_bool(ud->settings, "preset_modified");
     if (preset_modified)
     {
@@ -1175,9 +1175,22 @@ ghb_load_settings(signal_user_data_t * ud)
     else
     {
         ghb_dict_set_bool(ud->settings, "preset_reload", TRUE);
-        ghb_select_preset(ud->builder, preset);
+        ghb_select_preset(ud->builder, fullname);
         ghb_dict_set_bool(ud->settings, "preset_reload", FALSE);
     }
+
+    busy = FALSE;
+
+    ghb_load_post_settings(ud);
+}
+
+void
+ghb_load_post_settings(signal_user_data_t * ud)
+{
+    static gboolean busy = FALSE;
+    if (busy)
+        return;
+    busy = TRUE;
 
     ud->dont_clear_presets = TRUE;
     ud->scale_busy = TRUE;
@@ -1831,7 +1844,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         else
         {
             ghb_dict_set(settings, "volume_label", ghb_value_dup(
-                    ghb_dict_get_value(ud->settings, "volume_label")));
+                    ghb_dict_get_value(ud->globals, "volume_label")));
         }
         ghb_dict_set_int(settings, "scale_width",
                              title->geometry.width - title->crop[2] - title->crop[3]);
@@ -1909,7 +1922,7 @@ static void
 load_all_titles(signal_user_data_t *ud, int titleindex)
 {
     gint ii, count;
-    GhbValue *preset, *preset_path = NULL;
+    GhbValue *preset;
     GhbValue *settings_array;
     const hb_title_t *title;
 
@@ -1924,28 +1937,21 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     preset = ghb_get_current_preset(ud);
     if (preset != NULL)
     {
-        preset_path = ghb_get_current_preset_path(ud);
-    }
-    else
-    {
-        preset = ud->settings;
+        ghb_preset_to_settings(ud->settings, preset);
+        ghb_value_free(&preset);
     }
     for (ii = 0; ii < count; ii++)
     {
         int index;
-        GhbValue *settings = ghb_dict_new();
+        GhbValue *settings = ghb_value_dup(ud->settings);
 
         title = hb_list_item(list, ii);
         index = (title != NULL) ? title->index : -1;
 
-        ghb_settings_init(settings, "Initialization");
-        ghb_preset_to_settings(settings, preset);
-        ghb_dict_set(settings, "preset", ghb_value_dup(preset_path));
         ghb_dict_set_int(settings, "title", index);
         set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }
-    ghb_value_free(&preset_path);
     if (titleindex < 0 || titleindex >= count)
     {
         titleindex = 0;
@@ -2755,20 +2761,18 @@ static void
 submit_job(signal_user_data_t *ud, GhbValue *settings)
 {
     static gint unique_id = 1;
-    gchar *type, *modified, *preset;
-    const GhbValue *path;
+    gchar *type, *modified;
+    const char *name;
     GhbValue *js;
     gboolean preset_modified;
 
     g_debug("submit_job");
     if (settings == NULL) return;
     preset_modified = ghb_dict_get_bool(settings, "preset_modified");
-    path = ghb_dict_get_value(settings, "preset");
-    preset = ghb_preset_path_string(path);
-    type = ghb_preset_is_custom() ? "Custom " : "";
+    name = ghb_dict_get_string(settings, "PresetFullName");
+    type = ghb_dict_get_int(settings, "Type") == 1 ? "Custom " : "";
     modified = preset_modified ? "Modified " : "";
-    ghb_log("%s%sPreset: %s", modified, type, preset);
-    g_free(preset);
+    ghb_log("%s%sPreset: %s", modified, type, name);
 
     ghb_dict_set_int(settings, "job_unique_id", unique_id);
     ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
@@ -3155,7 +3159,7 @@ ghb_backend_events(signal_user_data_t *ud)
         if (title == NULL)
         {
             gtk_label_set_text(label, _("No Title Found"));
-            ghb_ui_update(ud, "title", ghb_int_value(-1));
+            ghb_ui_update(ud, "title", ghb_string_value("none"));
         }
         else
         {

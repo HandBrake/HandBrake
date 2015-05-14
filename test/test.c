@@ -255,7 +255,7 @@ int main( int argc, char ** argv )
     char        * version;
 
     hb_global_init();
-
+    hb_presets_builtin_update();
 
     // Get utf8 command line if windows
     get_argv_utf8(&argc, &argv);
@@ -326,12 +326,12 @@ int main( int argc, char ** argv )
         }
         if (preset_export_file != NULL)
         {
-            hb_preset_write_json(preset_dict, preset_export_file);
+            hb_presets_write_json(preset_dict, preset_export_file);
         }
         else
         {
             char *json;
-            json = hb_preset_package_json(preset_dict);
+            json = hb_presets_package_json(preset_dict);
             fprintf(stdout, "%s\n", json);
         }
         // If the user requested to export a preset, but not to
@@ -2776,7 +2776,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 
     if (preset_name != NULL)
     {
-        preset = hb_preset_get(preset_name, 1 /*recurse*/);
+        preset = hb_preset_search(preset_name, 1 /*recurse*/);
         if (preset == NULL)
         {
             fprintf(stderr, "Invalid preset %s\n"
@@ -2794,6 +2794,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         fprintf(stderr, "Error loading presets! Aborting.\n");
         return NULL;
     }
+    preset = hb_value_dup(preset);
 
     int subtitle_track_count = count_subtitles(subtracks);
     // Apply any overrides that can be made directly to the preset

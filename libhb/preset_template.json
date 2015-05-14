@@ -1,12 +1,4 @@
     {
-        "AudioAllowMP3Pass": false,
-        "AudioAllowAACPass": false,
-        "AudioAllowAC3Pass": true,
-        "AudioAllowDTSPass": false,
-        "AudioAllowDTSHDPass": false,
-        "AudioAllowEAC3Pass": false,
-        "AudioAllowFLACPass": false,
-        "AudioAllowTRUEHDPass": false,
         "AudioCopyMask": [
         ],
         "AudioEncoderFallback": "ac3",
@@ -15,7 +7,7 @@
         ],
         "AudioList": [
             {
-                "AudioBitrate": "192",
+                "AudioBitrate": 192,
                 "AudioCompressionLevel": -1.0,
                 "AudioDitherMethod": "auto",
                 "AudioEncoder": "copy:ac3",
@@ -31,9 +23,12 @@
         "AudioSecondaryEncoderMode": true,
         "AudioTrackSelectionBehavior": "first",
         "ChapterMarkers": true,
+        "ChildrenArray": [
+        ],
         "Default": false,
         "FileFormat": "mp4",
         "Folder": false,
+        "FolderOpen": false,
         "Mp4HttpOptimize": false,
         "Mp4iPodCompatible": false,
         "PictureAutoCrop": true,

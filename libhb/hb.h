@@ -20,6 +20,7 @@ extern "C" {
 #include "hb_dict.h"
 #include "hb_json.h"
 #include "preset.h"
+#include "plist.h"
 #include "param.h"
 
 /* hb_init()

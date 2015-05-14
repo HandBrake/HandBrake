@@ -32,10 +32,9 @@ hb_value_t * hb_value_dup(const hb_value_t *value)
     return json_deep_copy(value);
 }
 
-void hb_value_incref(hb_value_t *value)
+hb_value_t* hb_value_incref(hb_value_t *value)
 {
-    if (value == NULL) return;
-    json_incref(value);
+    return json_incref(value);
 }
 
 void hb_value_decref(hb_value_t *value)
@@ -89,11 +88,6 @@ hb_value_t * hb_value_read_json(const char *path)
 {
     json_error_t error;
     hb_value_t *val = json_load_file(path, 0, &error);
-    if (val == NULL)
-    {
-        hb_error("hb_value_read_json: Failed, path (%s), error %s",
-                 path, error.text);
-    }
     return val;
 }
 
@@ -484,7 +478,7 @@ hb_value_t * hb_dict_iter_value(const hb_dict_iter_t iter)
 }
 
 int
-hb_dict_iter_next_ex(hb_dict_t *dict, hb_dict_iter_t *iter,
+hb_dict_iter_next_ex(const hb_dict_t *dict, hb_dict_iter_t *iter,
                      const char **key, hb_value_t **val)
 {
     if (*iter == NULL)
@@ -493,7 +487,7 @@ hb_dict_iter_next_ex(hb_dict_t *dict, hb_dict_iter_t *iter,
         *key = json_object_iter_key(*iter);
     if (val != NULL)
         *val = json_object_iter_value(*iter);
-    *iter = json_object_iter_next(dict, *iter);
+    *iter = json_object_iter_next((hb_dict_t*)dict, *iter);
     return 1;
 }
 

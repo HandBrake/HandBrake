@@ -52,7 +52,8 @@ hb_value_t *      hb_dict_get(const hb_dict_t * dict, const char * key);
  */
 hb_dict_iter_t    hb_dict_iter_init(const hb_dict_t *dict);
 hb_dict_iter_t    hb_dict_iter_next(const hb_dict_t *dict, hb_dict_iter_t iter);
-int               hb_dict_iter_next_ex(hb_dict_t *dict, hb_dict_iter_t *iter,
+int               hb_dict_iter_next_ex(const hb_dict_t *dict,
+                                       hb_dict_iter_t *iter,
                                        const char **key, hb_value_t **val);
 /* get key from iter */
 const char *      hb_dict_iter_key(const hb_dict_iter_t iter);
@@ -86,7 +87,7 @@ size_t             hb_value_array_len(const hb_value_array_t *array);
 int          hb_value_type(const hb_value_t *value);
 int          hb_value_is_number(const hb_value_t *value);
 hb_value_t * hb_value_dup(const hb_value_t *value);
-void         hb_value_incref(hb_value_t *value);
+hb_value_t * hb_value_incref(hb_value_t *value);
 void         hb_value_decref(hb_value_t *value);
 void         hb_value_free(hb_value_t **value);
 

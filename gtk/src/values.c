@@ -224,3 +224,32 @@ ghb_dict_get_string_xform(const GhbValue *dict, const gchar *key)
     return ghb_value_get_string_xform(value);
 }
 
+void
+ghb_dict_copy(GhbValue *dst, const GhbValue *src)
+{
+    GhbDictIter iter;
+    const char *key;
+    GhbValue *val, *dst_val;
+
+    iter = ghb_dict_iter_init(src);
+    while (ghb_dict_iter_next(src, &iter, &key, &val))
+    {
+        dst_val = ghb_dict_get(dst, key);
+        if (ghb_value_type(val) == GHB_DICT)
+        {
+            if (dst_val == NULL || ghb_value_type(dst_val) != GHB_DICT)
+            {
+                dst_val = ghb_value_dup(val);
+                ghb_dict_set(dst, key, dst_val);
+            }
+            else if (ghb_value_type(dst_val) == GHB_DICT)
+            {
+                ghb_dict_copy(dst_val, val);
+            }
+        }
+        else
+        {
+            ghb_dict_set(dst, key, ghb_value_dup(val));
+        }
+    }
+}
