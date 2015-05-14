@@ -75,7 +75,6 @@
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",
         @"x264CqSliderFractional":          @"0.50",
-        @"AlertBuiltInPresetUpdate":        @"YES",
         @"SendCompletedEncodeToApp":        @"MetaX",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],

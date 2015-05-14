@@ -281,23 +281,6 @@
 
 #pragma mark - Presets Menu actions
 
-- (void)checkBuiltInsForUpdates
-{
-    // if we have built in presets to update, then do so AlertBuiltInPresetUpdate
-    //if ([self.presetsManager checkBuiltInsForUpdates])
-    //{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AlertBuiltInPresetUpdate"] == YES)
-        {
-            // Show an alert window that built in presets will be updated
-            [NSApp requestUserAttention:NSCriticalRequest];
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"HandBrake has determined your built in presets are out of date…"];
-            [alert setInformativeText:@"HandBrake will now update your built-in presets."];
-            [alert runModal];
-        }
-    //}
-}
-
 /**
  *  Adds the presets list to the menu.
  */
