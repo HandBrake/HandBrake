@@ -20,6 +20,7 @@
 #define HB_PRESET_JSON_FILE     "HandBrake\\user_presets.json"
 #elif defined(SYS_DARWIN)
 #define HB_PRESET_PLIST_FILE    "HandBrake/UserPresets.plist"
+#define HB_PRESET_JSON_FILE     "HandBrake/UserPresets.json"
 #endif
 
 int hb_preset_version_major;
