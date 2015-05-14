@@ -14,15 +14,15 @@ extern NSString * const HBFiltersChangedNotification;
  */
 @interface HBFilters : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
-@property (nonatomic, readwrite) NSInteger detelecine;
+@property (nonatomic, readwrite, copy) NSString *detelecine;
 @property (nonatomic, readwrite, copy) NSString *detelecineCustomString;
 
 @property (nonatomic, readwrite) BOOL useDecomb;
 
-@property (nonatomic, readwrite) NSInteger deinterlace;
+@property (nonatomic, readwrite, copy) NSString *deinterlace;
 @property (nonatomic, readwrite, copy) NSString *deinterlaceCustomString;
 
-@property (nonatomic, readwrite) NSInteger decomb;
+@property (nonatomic, readwrite, copy) NSString *decomb;
 @property (nonatomic, readwrite, copy) NSString *decombCustomString;
 
 @property (nonatomic, readwrite, copy) NSString *denoise;

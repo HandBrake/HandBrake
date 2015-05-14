@@ -33,13 +33,18 @@
     [self.children insertObject:presetObject atIndex:index];
     [presetObject setDelegate:self.delegate];
 
-    [self.delegate nodeDidChange];
+    for (HBTreeNode *node in self.children)
+    {
+        node.delegate = self.delegate;
+    }
+
+    [self.delegate nodeDidChange:self];
 }
 
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index
 {
     [self.children removeObjectAtIndex:index];
-    [self.delegate nodeDidChange];
+    [self.delegate nodeDidChange:self];
 }
 
 #pragma mark - Enumeration
@@ -79,6 +84,56 @@
         for (id childNode in [node.children reverseObjectEnumerator])
         {
             [queue addObject:childNode];
+        }
+    }
+}
+
+- (NSIndexPath *)indexPathOfObject:(id)obj
+{
+    __block NSIndexPath *retValue = nil;
+
+    // Visit the whole tree to find the index path.
+    [self enumerateObjectsUsingBlock:^(id obj2, NSIndexPath *idx, BOOL *stop)
+    {
+         if ([obj2 isEqualTo:obj])
+         {
+             retValue = idx;
+             *stop = YES;
+         }
+     }];
+
+    return retValue;
+}
+
+- (void)removeObjectAtIndexPath:(NSIndexPath *)idx
+{
+    HBTreeNode *parentNode = self;
+
+    // Find the object parent array
+    // and delete it.
+    NSUInteger currIdx = 0;
+    NSUInteger i = 0;
+    for (i = 0; i < idx.length - 1; i++)
+    {
+        currIdx = [idx indexAtPosition:i];
+
+        if (parentNode.children.count > currIdx)
+        {
+            parentNode = (parentNode.children)[currIdx];
+        }
+    }
+
+    currIdx = [idx indexAtPosition:i];
+
+    if (parentNode.children.count > currIdx)
+    {
+        id removedNode = parentNode.children[currIdx];
+
+        [parentNode removeObjectFromChildrenAtIndex:currIdx];
+
+        if ([self.delegate respondsToSelector:@selector(treeDidRemoveNode:)])
+        {
+            [self.delegate treeDidRemoveNode:removedNode];
         }
     }
 }

@@ -51,7 +51,7 @@
 @property (nonatomic, strong) HBJob *jobFromQueue;
 
 /// The current selected preset.
-@property (nonatomic, strong) HBPreset *selectedPreset;
+@property (nonatomic, strong) HBPreset *currentPreset;
 @property (nonatomic) BOOL customPreset;
 
 ///  The HBCore used for scanning.
@@ -82,7 +82,6 @@
         fQueueController.controller = self;
 
         presetManager = manager;
-        _selectedPreset = presetManager.defaultPreset;
     }
 
     return self;
@@ -397,7 +396,7 @@
     }
     if (action == @selector(selectPresetFromMenu:))
     {
-        if ([menuItem.representedObject isEqualTo:self.selectedPreset])
+        if ([menuItem.representedObject isEqualTo:self.currentPreset])
         {
             menuItem.state = NSOnState;
         }
@@ -625,7 +624,7 @@
     // Save the current settings
     if (self.job)
     {
-        self.selectedPreset = [self createPresetFromCurrentSettings];
+        self.currentPreset = [self createPresetFromCurrentSettings];
     }
 
     self.job = nil;
@@ -833,7 +832,11 @@
     // If there is already a title load, save the current settings to a preset
     if (self.job)
     {
-        self.selectedPreset = [self createPresetFromCurrentSettings];
+        self.currentPreset = [self createPresetFromCurrentSettings];
+    }
+    else
+    {
+        self.currentPreset = fPresetsView.selectedPreset;
     }
 
     HBTitle *title = self.core.titles[fSrcTitlePopUp.indexOfSelectedItem];
@@ -846,7 +849,7 @@
     }
     else
     {
-        self.job = [[HBJob alloc] initWithTitle:title andPreset:self.selectedPreset];
+        self.job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
         self.job.destURL = [self destURLForJob:self.job];
     }
 
@@ -1271,7 +1274,7 @@
 {
     if (preset != nil && self.job)
     {
-        self.selectedPreset = preset;
+        self.currentPreset = preset;
 
         // Remove the job observer so we don't update the file name
         // too many times while the preset is being applied
@@ -1309,7 +1312,7 @@
 - (HBPreset *)createPresetFromCurrentSettings
 {
     NSMutableDictionary *preset = [NSMutableDictionary dictionary];
-    NSDictionary *currentPreset = self.selectedPreset.content;
+    NSDictionary *currentPreset = self.currentPreset.content;
 
     preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
     preset[@"PresetName"] = self.job.presetName;
@@ -1317,7 +1320,7 @@
 
 	// Set whether or not this is a user preset or factory 0 is factory, 1 is user
     preset[@"Type"] = @1;
-    preset[@"Default"] = @0;
+    preset[@"Default"] = @NO;
 
     // Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
     preset[@"UsesPictureSettings"] = currentPreset[@"UsesPictureSettings"];
@@ -1337,38 +1340,23 @@
 #pragma mark -
 #pragma mark Import Export Preset(s)
 
-- (IBAction) browseExportPresetFile: (id) sender
+- (IBAction)browseExportPresetFile:(id)sender
 {
     // Open a panel to let the user choose where and how to save the export file
     NSSavePanel *panel = [NSSavePanel savePanel];
 	// We get the current file name and path from the destination field here
     NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
-    [panel setDirectoryURL:defaultExportDirectory];
-    [panel setNameFieldStringValue:@"HB_Export.plist"];
-    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result) {
-        if( result == NSOKButton )
+    panel.directoryURL = defaultExportDirectory;
+    panel.nameFieldStringValue = [NSString stringWithFormat:@"%@.json", fPresetsView.selectedPreset.name];
+
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
+    {
+        if (result == NSOKButton)
         {
-            NSURL *exportPresetsFile = [panel URL];
-            NSURL *presetExportDirectory = [exportPresetsFile URLByDeletingLastPathComponent];
+            NSURL *presetExportDirectory = [panel.URL URLByDeletingLastPathComponent];
             [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
 
-            // We check for the presets.plist
-            if ([[NSFileManager defaultManager] fileExistsAtPath:[exportPresetsFile path]] == 0)
-            {
-                [[NSFileManager defaultManager] createFileAtPath:[exportPresetsFile path] contents:nil attributes:nil];
-            }
-
-            NSMutableArray *presetsToExport = [[NSMutableArray alloc] initWithContentsOfURL:exportPresetsFile];
-            if (presetsToExport == nil)
-            {
-                presetsToExport = [[NSMutableArray alloc] init];
-                // now get and add selected presets to export
-            }
-            if (fPresetsView.selectedPreset != nil)
-            {
-                [presetsToExport addObject:[fPresetsView.selectedPreset content]];
-                [presetsToExport writeToURL:exportPresetsFile atomically:YES];
-            }
+            [fPresetsView.selectedPreset writeToURL:panel.URL atomically:YES format:HBPresetFormatJson removeRoot:NO];
         }
     }];
 }
@@ -1376,43 +1364,31 @@
 - (IBAction)browseImportPresetFile:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection:NO];
-    [panel setCanChooseFiles:YES];
-    [panel setCanChooseDirectories:NO];
-    [panel setAllowedFileTypes:@[@"plist", @"xml"]];
+    panel.allowsMultipleSelection = YES;
+    panel.canChooseFiles = YES;
+    panel.canChooseDirectories = NO;
+    panel.allowedFileTypes = @[@"plist", @"xml", @"json"];
 
-    NSURL *sourceDirectory;
 	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"];
+		panel.directoryURL = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"];
 	}
 	else
 	{
-		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+		panel.directoryURL = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
 	}
 
-    // set this for allowed file types, not sure if we should allow xml or not.
-    [panel setDirectoryURL:sourceDirectory];
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
     {
-        NSURL *importPresetsFile = [panel URL];
-        NSURL *importPresetsDirectory = [importPresetsFile URLByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setURL:importPresetsDirectory forKey:@"LastPresetImportDirectoryURL"];
+        [[NSUserDefaults standardUserDefaults] setURL:panel.directoryURL forKey:@"LastPresetImportDirectoryURL"];
 
-        // NOTE: here we need to do some sanity checking to verify we do not hose up our presets file
-        NSMutableArray *presetsToImport = [[NSMutableArray alloc] initWithContentsOfURL:importPresetsFile];
-        // iterate though the new array of presets to import and add them to our presets array
-        for (NSMutableDictionary *dict in presetsToImport)
+        for (NSURL *url in panel.URLs)
         {
-            // make any changes to the incoming preset we see fit
-            // make sure the incoming preset is not tagged as default
-            dict[@"Default"] = @0;
-            // prepend "(imported) to the name of the incoming preset for clarification since it can be changed
-            NSString *prependedName = [@"(import) " stringByAppendingString:dict[@"PresetName"]] ;
-            dict[@"PresetName"] = prependedName;
-
-            // actually add the new preset to our presets array
-            [presetManager addPresetFromDictionary:dict];
+            HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url];
+            if (import)
+            {
+                [presetManager addPreset:import];
+            }
         }
     }];
 }
@@ -1423,7 +1399,7 @@
 - (IBAction)selectDefaultPreset:(id)sender
 {
     [self applyPreset:presetManager.defaultPreset];
-    [fPresetsView setSelection:_selectedPreset];
+    [fPresetsView setSelection:_currentPreset];
 }
 
 - (IBAction)insertFolder:(id)sender

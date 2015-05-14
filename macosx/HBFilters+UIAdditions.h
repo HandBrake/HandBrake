@@ -12,9 +12,17 @@
 /**
  *  Getters to get the possible values for the filters.
  */
++ (NSDictionary *)detelecinePresetsDict;
++ (NSDictionary *)decombPresetsDict;
++ (NSDictionary *)deinterlacePresetsDict;
+
 + (NSDictionary *)denoisePresetDict;
 + (NSDictionary *)nlmeansTunesDict;
 + (NSDictionary *)denoiseTypesDict;
+
+- (BOOL)customDetelecineSelected;
+- (BOOL)customDecombSelected;
+- (BOOL)customDeinterlaceSelected;
 
 @property (nonatomic, readonly) NSArray *detelecineSettings;
 @property (nonatomic, readonly) NSArray *deinterlaceSettings;
@@ -38,6 +46,15 @@
 
 @interface HBGenericDictionaryTransformer : NSValueTransformer
 @property (nonatomic, strong) NSDictionary *dict;
+@end
+
+@interface HBDetelecineTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBDecombTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBDeinterlaceTransformer : HBGenericDictionaryTransformer
 @end
 
 @interface HBDenoisePresetTransformer : HBGenericDictionaryTransformer

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
@@ -204,7 +204,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="44">
                                                         <rect key="frame" x="143" y="103" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="169">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="169">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -254,7 +254,7 @@
                                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="46">
                                                         <rect key="frame" x="143" y="78" width="15" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="171">
+                                                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="171">
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </stepperCell>
                                                         <connections>
@@ -589,9 +589,9 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="hidden" keyPath="self.filters.detelecine" id="GeL-Hh-N04">
+                                                            <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="xn5-rR-hyv">
                                                                 <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -605,8 +605,12 @@
                                                             <menu key="menu" title="OtherViews" id="349"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="-2" name="selectedIndex" keyPath="self.filters.detelecine" previousBinding="pGd-yk-F9V" id="nJ6-iy-GiP"/>
-                                                            <binding destination="-2" name="content" keyPath="self.filters.detelecineSettings" id="pGd-yk-F9V"/>
+                                                            <binding destination="-2" name="selectedValue" keyPath="self.filters.detelecine" previousBinding="rmK-X3-zA9" id="x5y-hX-luP">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBDetelecineTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="contentValues" keyPath="self.filters.detelecineSettings" id="rmK-X3-zA9"/>
                                                         </connections>
                                                     </popUpButton>
                                                     <textField verticalHuggingPriority="750" id="343">
@@ -618,9 +622,9 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="-2" name="hidden" keyPath="self.filters.detelecine" id="BLn-QV-lw8">
+                                                            <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="fF2-eT-6RN">
                                                                 <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="value" keyPath="self.filters.detelecineCustomString" id="gSO-TA-w8P">
@@ -693,9 +697,9 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.decomb" id="SgL-u6-Y9a">
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="pks-wo-Nne">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                     </connections>
@@ -709,7 +713,11 @@
                                                                         <menu key="menu" title="OtherViews" id="322"/>
                                                                     </popUpButtonCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.decomb" previousBinding="Rky-63-XUy" id="0LF-hS-iFS"/>
+                                                                        <binding destination="-2" name="selectedValue" keyPath="self.filters.decomb" previousBinding="Rky-63-XUy" id="TQt-JS-VHx">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBDecombTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
                                                                         <binding destination="-2" name="contentValues" keyPath="self.filters.decombSettings" id="Rky-63-XUy"/>
                                                                     </connections>
                                                                 </popUpButton>
@@ -722,9 +730,9 @@
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.decomb" id="akE-8W-aND">
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="nJx-xP-xY9">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                         <binding destination="-2" name="value" keyPath="self.filters.decombCustomString" id="y3W-Df-Jgn">
@@ -764,9 +772,9 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlace" id="rIM-KR-bUf">
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="Nh0-4S-cCl">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                     </connections>
@@ -780,7 +788,11 @@
                                                                         <menu key="menu" title="OtherViews" id="336"/>
                                                                     </popUpButtonCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.deinterlace" previousBinding="hol-Lh-FVF" id="5jK-2w-2Fq"/>
+                                                                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlace" previousBinding="hol-Lh-FVF" id="xvF-2Y-wvz">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">HBDeinterlaceTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
                                                                         <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceSettings" id="hol-Lh-FVF"/>
                                                                     </connections>
                                                                 </popUpButton>
@@ -793,9 +805,9 @@
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlace" id="7f6-Fd-pfo">
+                                                                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="CFf-Mz-6Hc">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">HBCustomFilterTransformer</string>
+                                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                         <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="aSX-hF-LBO">

@@ -5,8 +5,21 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPreset.h"
+#include "preset.h"
 
 @implementation HBPreset
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _name = @"New Preset";
+        _presetDescription = @"";
+        self.isLeaf = YES;
+    }
+    return self;
+}
 
 - (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
 {
@@ -15,7 +28,7 @@
     {
         _name = [title copy];
         _isBuiltIn = builtIn;
-        _content = content;
+        _content = [content copy];
         _presetDescription = [content[@"PresetDescription"] copy];
     }
     return self;
@@ -33,16 +46,148 @@
     return self;
 }
 
-- (instancetype)init
+- (instancetype)initWithDictionary:(NSDictionary *)dict
 {
-    self = [super init];
-    if (self)
+    NSParameterAssert(dict);
+
+    if ([dict[@"Folder"] boolValue])
     {
-        _name = @"New Preset";
-        _presetDescription = @"";
-        self.isLeaf = YES;
+        self = [self initWithFolderName:dict[@"PresetName"] builtIn:![dict[@"Type"] boolValue]];
+
+        for (NSDictionary *childDict in [dict[@"ChildrenArray"] reverseObjectEnumerator])
+        {
+            HBPreset *childPreset = [[HBPreset alloc] initWithDictionary:childDict];
+            [self insertObject:childPreset inChildrenAtIndex:0];
+        }
     }
+    else
+    {
+        self = [self initWithName:dict[@"PresetName"]
+                          content:dict
+                          builtIn:![dict[@"Type"] boolValue]];
+        self.isDefault = [dict[@"Default"] boolValue];
+    }
+
     return self;
+}
+
+- (instancetype)initWithContentsOfURL:(NSURL *)url
+{
+    NSArray *presetsArray;
+    NSString *presetsJson;
+
+    if ([url.pathExtension isEqualToString:@"json"])
+    {
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+        presetsJson = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+    else
+    {
+        NSArray *array = [[NSArray alloc] initWithContentsOfURL:url];
+        if ([NSJSONSerialization isValidJSONObject:array])
+        {
+            NSData *data = [NSJSONSerialization dataWithJSONObject:array options:0 error:NULL];
+            presetsJson = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        }
+    }
+
+    // Run the json through the libhb import function
+    // to avoid importing unknowns keys.
+    if (presetsJson.length) {
+        char *importedJson = hb_presets_import_json(presetsJson.UTF8String);
+
+        if (importedJson)
+        {
+            NSData *modernizedData = [NSData dataWithBytes:importedJson length:strlen(importedJson)];
+            id importedPresets = [NSJSONSerialization JSONObjectWithData:modernizedData options:0 error:NULL];
+
+            if ([importedPresets isKindOfClass:[NSDictionary class]])
+            {
+                presetsArray = importedPresets[@"PresetList"];
+            }
+            else if ([importedPresets isKindOfClass:[NSArray class]])
+            {
+                presetsArray = importedPresets;
+            }
+        }
+    }
+
+    if (presetsArray.count)
+    {
+        self = [self initWithFolderName:@"Imported Presets" builtIn:NO];
+
+        if (self)
+        {
+            for (NSDictionary *dict in presetsArray)
+            {
+                HBPreset *preset = [[HBPreset alloc] initWithDictionary:dict];
+                [self.children addObject:preset];
+            }
+        }
+        return self;
+    }
+
+    return nil;
+}
+
+- (NSDictionary *)dictionary
+{
+    NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
+    [output addEntriesFromDictionary:self.content];
+
+    output[@"PresetName"] = self.name;
+    output[@"PresetDescription"] = self.presetDescription;
+    output[@"Folder"] = [NSNumber numberWithBool:!self.isLeaf];
+    output[@"Type"] = @(!self.isBuiltIn);
+    output[@"Default"] = @(self.isDefault);
+
+    if (!self.isLeaf)
+    {
+        NSMutableArray *childArray = [[NSMutableArray alloc] init];
+        for (HBPreset *child in self.children)
+        {
+            [childArray addObject:[child dictionary]];
+        }
+
+        output[@"ChildrenArray"] = childArray;
+    }
+
+    return output;
+}
+
+- (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot;
+{
+    BOOL success = NO;
+    NSArray *presetList;
+
+    if (removeRoot)
+    {
+        presetList = self.dictionary[@"ChildrenArray"];
+    }
+    else
+    {
+        presetList = @[self.dictionary];
+    }
+
+    int major, minor, micro;
+    hb_presets_current_version(&major, &minor, &micro);
+
+    NSDictionary *dict = @{ @"PresetList": presetList,
+                            @"VersionMajor": @(major),
+                            @"VersionMicro": @(minor),
+                            @"VersionMinor": @(micro) };
+
+    if (format == HBPresetFormatPlist)
+    {
+        success = [dict writeToURL:url atomically:atomically];
+    }
+    else
+    {
+        NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:NULL];
+        success = [jsonPreset writeToURL:url atomically:atomically];
+    }
+
+    return success;
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -51,6 +196,7 @@
     node->_name = [self.name copy];
     node->_content = [self.content copy];
     node->_presetDescription = [self.presetDescription copy];
+
     for (HBPreset *children in self.children)
     {
         [node.children addObject:[children copy]];
@@ -64,11 +210,36 @@
     return self.name.hash + self.isBuiltIn + self.isLeaf;
 }
 
+- (void)cleanUp
+{
+    // Run the libhb clean function
+    NSData *presetData = [NSJSONSerialization dataWithJSONObject:self.dictionary options:0 error:NULL];
+    NSString *presetJson = [[NSString alloc] initWithData:presetData encoding:NSUTF8StringEncoding];
+
+    if (presetJson.length)
+    {
+        char *cleanedJson = hb_presets_clean_json(presetJson.UTF8String);
+
+        NSData *cleanedData = [NSData dataWithBytes:cleanedJson length:strlen(cleanedJson)];
+        NSDictionary *cleanedDict = [NSJSONSerialization JSONObjectWithData:cleanedData options:0 error:NULL];
+
+        if ([cleanedDict isKindOfClass:[NSDictionary class]])
+        {
+            self.content = cleanedDict;
+        }
+    }
+}
+
 - (void)setName:(NSString *)name
 {
     _name = [name copy];
+    [self.delegate nodeDidChange:self];
+}
 
-    [self.delegate nodeDidChange];
+- (void)setIsDefault:(BOOL)isDefault
+{
+    _isDefault = isDefault;
+    [self.delegate nodeDidChange:self];
 }
 
 #pragma mark - KVC

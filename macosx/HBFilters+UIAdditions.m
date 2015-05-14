@@ -67,6 +67,42 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+@implementation HBDetelecineTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters detelecinePresetsDict];
+
+    return self;
+}
+
+@end
+
+@implementation HBDecombTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters decombPresetsDict];
+
+    return self;
+}
+
+@end
+
+@implementation HBDeinterlaceTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters deinterlacePresetsDict];
+
+    return self;
+}
+
+@end
+
 @implementation HBDenoisePresetTransformer
 
 - (instancetype)init
@@ -125,25 +161,72 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+static NSDictionary *detelecinePresetsDict = nil;
+static NSDictionary *decombPresetsDict = nil;
+static NSDictionary *deinterlacePresetsDict = nil;
+
+static NSDictionary *denoisePresetDict = nil;
+static NSDictionary *nlmeansTunesDict = nil;
+static NSDictionary *denoiseTypesDict = nil;
+
 @implementation HBFilters (UIAdditions)
 
 #pragma mark - Valid values
 
++ (NSDictionary *)detelecinePresetsDict
+{
+    if (!detelecinePresetsDict)
+    {
+        detelecinePresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
+    }
+    return detelecinePresetsDict;
+}
+
++ (NSDictionary *)decombPresetsDict
+{
+    if (!decombPresetsDict)
+    {
+        decombPresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_DECOMB);
+    }
+    return decombPresetsDict;
+}
+
++ (NSDictionary *)deinterlacePresetsDict
+{
+    if (!deinterlacePresetsDict)
+    {
+        deinterlacePresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_DEINTERLACE);
+    }
+    return deinterlacePresetsDict;
+}
+
 + (NSDictionary *)denoisePresetDict
 {
-    return filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_NLMEANS);
+    if (!denoisePresetDict)
+    {
+        denoisePresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_NLMEANS);
+    }
+    return denoisePresetDict;
 }
 
 + (NSDictionary *)nlmeansTunesDict
 {
-    return filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
+    if (!nlmeansTunesDict)
+    {
+        nlmeansTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
+    }
+    return nlmeansTunesDict;
 }
 
 + (NSDictionary *)denoiseTypesDict
 {
-    return @{NSLocalizedString(@"Off", nil):      @"off",
-             NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
-             NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"};;
+    if (!denoiseTypesDict)
+    {
+        denoiseTypesDict = @{NSLocalizedString(@"Off", nil):      @"off",
+                             NSLocalizedString(@"NLMeans", nil):  @"nlmeans",
+                             NSLocalizedString(@"HQDN3D", nil):   @"hqdn3d"};;
+    }
+    return denoiseTypesDict;
 }
 
 - (NSArray *)detelecineSettings
@@ -176,97 +259,80 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
     return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
 }
 
+- (BOOL)customDetelecineSelected
+{
+    return [self.detelecine isEqualToString:@"custom"] ? YES : NO;
+}
+
+- (BOOL)customDecombSelected
+{
+    return [self.decomb isEqualToString:@"custom"] ? YES : NO;
+}
+
+- (BOOL)customDeinterlaceSelected
+{
+    return [self.deinterlace isEqualToString:@"custom"] ? YES : NO;
+}
+
 - (NSString *)summary
 {
     NSMutableString *summary = [NSMutableString string];
 
-    /* Detelecine */
-    switch (self.detelecine)
+    // Detelecine
+    if (![self.detelecine isEqualToString:@"off"])
     {
-        case 1:
+        if ([self.detelecine isEqualToString:@"custom"])
+        {
             [summary appendFormat:@" - Detelecine (%@)", self.detelecineCustomString];
-            break;
-
-        case 2:
-            [summary appendString:@" - Detelecine (Default)"];
-            break;
-
-        default:
-            break;
-    }
-
-    if (self.useDecomb)
-    {
-        /* Decomb */
-        switch (self.decomb)
-        {
-            case 1:
-                [summary appendFormat:@" - Decomb (%@)", self.decombCustomString];
-                break;
-
-            case 2:
-                [summary appendString:@" - Decomb (Default)"];
-                break;
-
-            case 3:
-                [summary appendString:@" - Decomb (Fast)"];
-                break;
-
-            case 4:
-                [summary appendString:@" - Decomb (Bob)"];
-                break;
-
-            default:
-                break;
         }
-    }
-    else
-    {
-        /* Deinterlace */
-        switch (self.deinterlace)
+        else
         {
-            case 1:
-                [summary appendFormat:@" - Deinterlace (%@)", self.deinterlaceCustomString];
-                break;
-
-            case 2:
-                [summary appendString:@" - Deinterlace (Fast)"];
-                break;
-
-            case 3:
-                [summary appendString:@" - Deinterlace (Slow)"];
-                break;
-
-            case 4:
-                [summary appendString:@" - Deinterlace (Slower)"];
-                break;
-
-            case 5:
-                [summary appendString:@" - Deinterlace (Bob)"];
-                break;
-
-            default:
-                break;
+            [summary appendFormat:@" - Detelecine (%@)", [[[HBFilters detelecinePresetsDict] allKeysForObject:self.detelecine] firstObject]];
         }
     }
 
-    /* Deblock */
+    if (self.useDecomb && ![self.decomb isEqualToString:@"off"])
+    {
+        // Decomb
+        if ([self.decomb isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@" - Decomb (%@)", self.decombCustomString];
+        }
+        else
+        {
+            [summary appendFormat:@" - Decomb (%@)", [[[HBFilters decombPresetsDict] allKeysForObject:self.decomb] firstObject]];
+        }
+    }
+    else if (![self.deinterlace isEqualToString:@"off"])
+    {
+        // Deinterlace
+        if ([self.deinterlace isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@" - Deinterlace (%@)", self.deinterlaceCustomString];
+        }
+        else
+        {
+            [summary appendFormat:@" - Deinterlace (%@)", [[[HBFilters deinterlacePresetsDict] allKeysForObject:self.deinterlace] firstObject]];
+        }
+    }
+
+    // Deblock
     if (self.deblock > 0)
     {
         [summary appendFormat:@" - Deblock (%ld)", self.deblock];
     }
 
-    /* Denoise */
+    // Denoise
     if (![self.denoise isEqualToString:@"off"])
     {
-        [summary appendFormat:@" - Denoise (%@", self.denoise];
+        [summary appendFormat:@" - Denoise (%@", [[[HBFilters denoiseTypesDict] allKeysForObject:self.denoise] firstObject]];
         if (![self.denoisePreset isEqualToString:@"custom"])
         {
-            [summary appendFormat:@", %@", self.denoisePreset];
+            [summary appendFormat:@", %@", [[[HBFilters denoisePresetDict] allKeysForObject:self.denoisePreset] firstObject]];
 
             if ([self.denoise isEqualToString:@"nlmeans"])
             {
-                [summary appendFormat:@", %@", self.denoiseTune];
+                [summary appendFormat:@", %@", [[[HBFilters nlmeansTunesDict] allKeysForObject:self.denoiseTune] firstObject]];
             }
         }
         else
@@ -278,7 +344,7 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
     }
 
-    /* Grayscale */
+    // Grayscale
     if (self.grayscale)
     {
         [summary appendString:@" - Grayscale"];

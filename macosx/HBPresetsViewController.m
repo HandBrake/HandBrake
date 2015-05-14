@@ -244,9 +244,9 @@
 /**
  *  draggingSourceOperationMaskForLocal <NSDraggingSource override>
  */
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
-	return NSDragOperationMove;
+    return NSDragOperationMove;
 }
 
 /**
@@ -330,7 +330,7 @@
         // the KVC accessors method for the root node.
         if (indexPath.length == 1)
         {
-            [self.presets performSelector:@selector(nodeDidChange)];
+            [self.presets performSelector:@selector(nodeDidChange:) withObject:nil];
         }
 	}
 

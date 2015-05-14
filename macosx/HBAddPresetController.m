@@ -8,6 +8,7 @@
 
 #import "HBAddPresetController.h"
 #import "HBPreset.h"
+
 #include "hb.h"
 
 @interface HBAddPresetController ()
@@ -120,6 +121,8 @@
         dict[@"UsesPictureFilters"] = @(self.picFilters.state);
 
         self.preset.content = [dict copy];
+
+        [self.preset cleanUp];
 
         [[self window] orderOut:nil];
         [NSApp endSheet:[self window] returnCode:NSModalResponseContinue];

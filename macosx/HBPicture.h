@@ -21,7 +21,7 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readwrite) int width;
 @property (nonatomic, readwrite) int height;
 
-@property (nonatomic, readwrite) int keepDisplayAspect;
+@property (nonatomic, readwrite) BOOL keepDisplayAspect;
 @property (nonatomic, readwrite) int anamorphicMode;
 @property (nonatomic, readwrite) int modulus;
 

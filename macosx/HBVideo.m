@@ -509,9 +509,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
     {
-        if (self.encoder == HB_VCODEC_X264 &&
-            (!preset[@"x264UseAdvancedOptions"] ||
-             [preset[@"x264UseAdvancedOptions"] intValue]))
+        if (self.encoder == HB_VCODEC_X264 && [preset[@"x264UseAdvancedOptions"] boolValue])
         {
             // preset does not use the x264 preset system, reset the widgets.
             self.preset = @"medium";
@@ -520,18 +518,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
             self.level = @"auto";
             self.fastDecode = NO;
 
-            // x264UseAdvancedOptions is not set (legacy preset)
-            // or set to 1 (enabled), so we use the old advanced panel.
-            if (preset[@"x264Option"])
-            {
-                // we set the advanced options string here if applicable.
-                self.videoOptionExtra = preset[@"x264Option"];
-                self.advancedOptions = YES;
-            }
-            else
-            {
-                self.videoOptionExtra = nil;
-            }
+            self.videoOptionExtra = preset[@"VideoOptionExtra"];
+            self.advancedOptions = YES;
         }
         else
         {
@@ -540,24 +528,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
             // disable the advanced panel
             self.advancedOptions = NO;
 
-            if (preset[@"x264Preset"])
-            {
-                // Read the old x264 preset keys
-                self.preset = preset[@"x264Preset"];
-                self.tune   = preset[@"x264Tune"];
-                self.videoOptionExtra = preset[@"x264OptionExtra"];
-                self.profile = preset[@"h264Profile"];
-                self.level   = preset[@"h264Level"];
-            }
-            else
-            {
-                // Read the new preset keys (0.10)
-                self.preset = preset[@"VideoPreset"];
-                self.tune   = preset[@"VideoTune"];
-                self.videoOptionExtra = preset[@"VideoOptionExtra"];
-                self.profile = preset[@"VideoProfile"];
-                self.level   = preset[@"VideoLevel"];
-            }
+            self.preset = preset[@"VideoPreset"];
+            self.tune   = preset[@"VideoTune"];
+            self.videoOptionExtra = preset[@"VideoOptionExtra"];
+            self.profile = preset[@"VideoProfile"];
+            self.level   = preset[@"VideoLevel"];
 
             if ([self.tune rangeOfString:@"fastdecode"].location != NSNotFound)
             {
@@ -573,15 +548,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
     else
     {
-        if (preset[@"lavcOption"])
-        {
-            // Load the old format
-            self.videoOptionExtra = preset[@"lavcOption"];
-        }
-        else
-        {
-            self.videoOptionExtra = preset[@"VideoOptionExtra"];
-        }
+        self.videoOptionExtra = preset[@"VideoOptionExtra"];
     }
 
     int qualityType = [preset[@"VideoQualityType"] intValue] - 1;
@@ -600,7 +567,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     self.quality = [preset[@"VideoQualitySlider"] floatValue];
 
     // Video framerate
-    if ([preset[@"VideoFramerate"] isEqualToString:@"Same as source"])
+    if ([preset[@"VideoFramerate"] isEqualToString:@"auto"])
     {
         // Now set the Video Frame Rate Mode to either vfr or cfr according to the preset.
         if (!preset[@"VideoFramerateMode"] ||
@@ -645,24 +612,26 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)writeToPreset:(NSMutableDictionary *)preset
 {
-    preset[@"VideoEncoder"] = @(hb_video_encoder_get_name(self.encoder));
+    preset[@"VideoEncoder"] = @(hb_video_encoder_get_short_name(self.encoder));
 
-    // x264 Options, this will either be advanced panel or the video tabs x264 presets panel with modded option string
-    if (self.advancedOptions)
+    if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
     {
-        // use the old advanced panel.
-        preset[@"x264UseAdvancedOptions"] = @1;
-        preset[@"x264Option"] = self.videoOptionExtra;
-    }
-    else if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
-    {
-        // use the new preset system.
-        preset[@"x264UseAdvancedOptions"] = @0;
         preset[@"VideoPreset"]      = self.preset;
         preset[@"VideoTune"]        = [self completeTune];
         preset[@"VideoOptionExtra"] = self.videoOptionExtra;
         preset[@"VideoProfile"]     = self.profile;
         preset[@"VideoLevel"]       = self.level;
+
+        // x264 Options, this will either be advanced panel or the video tabs x264 presets panel with modded option string
+        if (self.advancedOptions)
+        {
+            // use the old advanced panel.
+            preset[@"x264UseAdvancedOptions"] = @YES;
+        }
+        else
+        {
+            preset[@"x264UseAdvancedOptions"] = @NO;
+        }
     }
     else
     {
@@ -684,7 +653,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
     if (self.frameRate == 0) // Same as source is selected
     {
-        preset[@"VideoFramerate"] = @"Same as source";
+        preset[@"VideoFramerate"] = @"auto";
 
         if (self.frameRateMode == 0)
         {

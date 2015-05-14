@@ -24,7 +24,7 @@
 @property (nonatomic, readwrite) int sampleRate;
 @property (nonatomic, readwrite) int bitRate;
 
-@property (nonatomic, readwrite) int gain;
+@property (nonatomic, readwrite) double gain;
 @property (nonatomic, readwrite) double drc;
 
 /**

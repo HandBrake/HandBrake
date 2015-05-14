@@ -305,7 +305,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (void)setKeepDisplayAspect:(int)keepDisplayAspect
+- (void)setKeepDisplayAspect:(BOOL)keepDisplayAspect
 {
     _keepDisplayAspect = keepDisplayAspect;
     if (!self.isValidating)
@@ -564,7 +564,25 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (void)writeToPreset:(NSMutableDictionary *)preset
 {
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
-    preset[@"PicturePAR"]       = @(self.anamorphicMode);
+
+    switch (self.anamorphicMode) {
+        case HB_ANAMORPHIC_NONE:
+            preset[@"PicturePAR"] = @"none";
+            break;
+        case HB_ANAMORPHIC_LOOSE:
+            preset[@"PicturePAR"] = @"loose";
+            break;
+        case HB_ANAMORPHIC_STRICT:
+            preset[@"PicturePAR"] = @"strict";
+            break;
+        case HB_ANAMORPHIC_CUSTOM:
+            preset[@"PicturePAR"] = @"custom";
+            break;
+        default:
+            preset[@"PicturePAR"] = @"loose";
+            break;
+    }
+
     preset[@"PictureModulus"]   = @(self.modulus);
 
     // Set crop settings
@@ -597,7 +615,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     {
         // If Cropping is set to custom, then recall all four crop values from
         // when the preset was created and apply them
-        if ([preset[@"PictureAutoCrop"]  intValue] == 0)
+        if ([preset[@"PictureAutoCrop"] intValue] == 0)
         {
             self.autocrop = NO;
 
@@ -632,17 +650,33 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         }
 
         // Assume max picture settings initially.
-        self.keepDisplayAspect = [preset[@"PictureKeepRatio"] intValue];
-        self.anamorphicMode = [preset[@"PicturePAR"] intValue];
+        self.keepDisplayAspect = [preset[@"PictureKeepRatio"] boolValue];
+
+        if ([preset[@"PicturePAR"] isEqualToString:@"none"])
+        {
+            self.anamorphicMode = HB_ANAMORPHIC_NONE;
+        }
+        else if ([preset[@"PicturePAR"] isEqualToString:@"strict"])
+        {
+            self.anamorphicMode = HB_ANAMORPHIC_STRICT;
+        }
+        else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
+        {
+            self.anamorphicMode = HB_ANAMORPHIC_CUSTOM;
+        }
+        else
+        {
+            self.anamorphicMode = HB_ANAMORPHIC_LOOSE;
+        }
+
         self.width = self.sourceWidth - self.cropLeft - self.cropRight;
         self.height = self.sourceHeight - self.cropTop - self.cropBottom;
 
-        // Check to see if the objectForKey:@"UsesPictureSettings" is 2,
+        // Check to see if the "UsesPictureSettings" is 2,
         // which means "Use max. picture size for source"
         // If not 2 it must be 1 here which means "Use the picture
         // size specified in the preset"
-        if ([preset[@"UsesPictureSettings"] intValue] != 2 &&
-            [preset[@"UsesMaxPictureSettings"] intValue] != 1)
+        if ([preset[@"UsesPictureSettings"] intValue] != 2)
         {
              // if the preset specifies neither max. width nor height
              // (both are 0), use the max. picture size
@@ -653,7 +687,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
             {
                 jobMaxWidth  = [preset[@"PictureWidth"] intValue];
             }
-            if ([preset[@"PictureHeight"]  intValue] > 0)
+            if ([preset[@"PictureHeight"] intValue] > 0)
             {
                 jobMaxHeight  = [preset[@"PictureHeight"] intValue];
             }

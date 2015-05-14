@@ -13,7 +13,10 @@
  */
 @protocol HBTreeNodeDelegate <NSObject>
 
-- (void)nodeDidChange;
+- (void)nodeDidChange:(id)node;
+
+@optional
+- (void)treeDidRemoveNode:(id)node;
 
 @end
 
@@ -35,7 +38,24 @@
  */
 - (void)enumerateObjectsUsingBlock:(void (^)(id obj, NSIndexPath *idx, BOOL *stop))block;
 
+/**
+ *  Returns the index path of an object in the tree.
+ *
+ *  @param obj the object of the wanted NSIndexPath
+ *
+ *  @return The index path whose corresponding value is equal to the preset. Returns nil if not found.
+ */
+- (NSIndexPath *)indexPathOfObject:(id)obj;
+
+/**
+ *  Removes the object at the specified index path.
+ *
+ *  @param idx the NSIndexPath of the object to delete.
+ */
+- (void)removeObjectAtIndexPath:(NSIndexPath *)idx;
+
 // KVC Accessor Methods
+
 @property (nonatomic, readonly) NSUInteger countOfChildren;
 - (id)objectInChildrenAtIndex:(NSUInteger)index;
 - (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index;

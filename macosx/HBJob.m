@@ -61,14 +61,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)applyPreset:(HBPreset *)preset
 {
-    if (preset.isDefault)
-    {
-        self.presetName = [NSString stringWithFormat:@"%@ (Default)", preset.name];
-    }
-    else
-    {
-        self.presetName = preset.name;
-    }
+    self.presetName = preset.name;
 
     NSDictionary *content = preset.content;
 
@@ -87,7 +80,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict
 {
-    dict[@"FileFormat"] = @(hb_container_get_name(self.container));
+    dict[@"FileFormat"] = @(hb_container_get_short_name(self.container));
     dict[@"ChapterMarkers"] = @(self.chaptersEnabled);
     // MP4 specifics options.
     dict[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);

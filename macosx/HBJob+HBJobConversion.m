@@ -417,30 +417,30 @@
     if (self.filters.detelecine)
     {
         int filter_id = HB_FILTER_DETELECINE;
-        const char *filter_str = hb_generate_filter_settings_by_index(filter_id,
-                                                                      (int)self.filters.detelecine,
-                                                                      self.filters.detelecineCustomString.UTF8String);
+        const char *filter_str = hb_generate_filter_settings(filter_id,
+                                                             self.filters.detelecine.UTF8String,
+                                                             self.filters.detelecineCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
         hb_add_filter(job, filter, filter_str);
     }
 
-    if (self.filters.useDecomb && self.filters.decomb)
+    if (self.filters.useDecomb && ![self.filters.decomb isEqualToString:@"off"])
     {
         // Decomb
         int filter_id = HB_FILTER_DECOMB;
-        const char *filter_str = hb_generate_filter_settings_by_index(filter_id,
-                                                                      (int)self.filters.decomb,
-                                                                      self.filters.decombCustomString.UTF8String);
+        const char *filter_str = hb_generate_filter_settings(filter_id,
+                                                             self.filters.decomb.UTF8String,
+                                                             self.filters.decombCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
         hb_add_filter(job, filter, filter_str);
     }
-    else if (!self.filters.useDecomb && self.filters.deinterlace)
+    else if (!self.filters.useDecomb && [self.filters.deinterlace isEqualToString:@"off"])
     {
         // Deinterlace
         int filter_id = HB_FILTER_DEINTERLACE;
-        const char *filter_str = hb_generate_filter_settings_by_index(filter_id,
-                                                                      (int)self.filters.deinterlace,
-                                                                      self.filters.deinterlaceCustomString.UTF8String);
+        const char *filter_str = hb_generate_filter_settings(filter_id,
+                                                             self.filters.deinterlace.UTF8String,
+                                                             self.filters.deinterlaceCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
         hb_add_filter(job, filter, filter_str);
     }

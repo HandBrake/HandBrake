@@ -276,7 +276,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     encodeInt(_sampleRate);
     encodeInt(_bitRate);
 
-    encodeInt(_gain);
+    encodeDouble(_gain);
     encodeDouble(_drc);
 
     encodeInt(_container);
@@ -291,7 +291,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     decodeInt(_sampleRate);
     decodeInt(_bitRate);
 
-    decodeInt(_gain);
+    decodeDouble(_gain);
     decodeDouble(_drc);
 
     decodeInt(_container);

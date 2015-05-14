@@ -39,23 +39,9 @@ extern NSString *HBPresetsChangedNotification;
 - (instancetype)initWithURL:(NSURL *)url;
 
 /**
- *  Checks the version number of the builtin presets.
- *
- *  @return YES if the builtin presets are out of date.
- */
-- (BOOL)checkBuiltInsForUpdates;
-
-/**
  *  Saves the presets to disk.
  */
 - (BOOL)savePresets;
-
-/**
- *  Adds a given preset to the manager.
- *
- *  @param preset the preset dict.
- */
-- (void)addPresetFromDictionary:(NSDictionary *)preset;
 
 /**
  *  Adds a given preset to the manager.

@@ -9,6 +9,8 @@
 
 #import "HBUtilities.h"
 
+#include "preset.h"
+
 NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 @interface HBPresetsManager () <HBTreeNodeDelegate>
@@ -42,39 +44,88 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return self;
 }
 
-- (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset
-{
-    __block NSIndexPath *retValue = nil;
-
-    // Visit the whole tree to find the index path.
-    [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
-    {
-        if ([obj isEqualTo:preset])
-        {
-            retValue = idx;
-            *stop = YES;
-        }
-    }];
-
-    return retValue;
-}
-
 #pragma mark - HBTreeNode delegate
 
-- (void)nodeDidChange
+- (void)nodeDidChange:(id)node
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
 }
 
+- (void)treeDidRemoveNode:(id)node
+{
+    if (node == self.defaultPreset)
+    {
+        // Select a new default preset
+        [self selectNewDefault];
+    }
+}
+
 #pragma mark - Load/Save
+
+/**
+ *  Loads the old presets format (0.10 and earlier) plist
+ *
+ *  @param url the url of the plist
+ */
+- (void)loadOldPresetsFromURL:(NSURL *)url
+{
+    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url];
+
+    for (HBPreset *preset in oldPresets.children)
+    {
+        [self.root.children addObject:preset];
+    }
+}
+
+- (BOOL)checkIfOutOfDate:(NSDictionary *)dict
+{
+    int major, minor, micro;
+    hb_presets_current_version(&major, &minor, &micro);
+
+    if (major != [dict[@"VersionMajor"] intValue] ||
+        minor != [dict[@"VersionMinor"] intValue] ||
+        micro != [dict[@"VersionMicro"] intValue])
+    {
+        return YES;
+    }
+    return NO;
+}
 
 - (BOOL)loadPresetsFromURL:(NSURL *)url
 {
-    NSArray *presetsArray = [[NSArray alloc] initWithContentsOfURL:url];
+    NSData *presetData = [[NSData alloc] initWithContentsOfURL:url];
 
-    for (NSDictionary *child in presetsArray)
+    // Try to load to load the old presets file
+    // if the new one is empty
+    if (presetData == nil)
     {
-        [self.root.children addObject:[self loadFromDict:child]];
+        [self loadOldPresetsFromURL:[url.URLByDeletingPathExtension URLByAppendingPathExtension:@"plist"]];
+        [self generateBuiltInPresets];
+    }
+    else
+    {
+        const char *json = [[NSString alloc] initWithData:presetData encoding:NSUTF8StringEncoding].UTF8String;
+        const char *cleanedJson = hb_presets_clean_json(json);
+
+        NSData *cleanedData = [NSData dataWithBytes:cleanedJson length:strlen(cleanedJson)];
+        NSDictionary *presetsDict = [NSJSONSerialization JSONObjectWithData:cleanedData options:0 error:NULL];
+
+        if ([self checkIfOutOfDate:presetsDict])
+        {
+            const char *updatedJson = hb_presets_import_json(cleanedJson);
+            NSData *updatedData = [NSData dataWithBytes:updatedJson length:strlen(cleanedJson)];
+            presetsDict = [NSJSONSerialization JSONObjectWithData:updatedData options:0 error:NULL];
+        }
+
+        for (NSDictionary *child in presetsDict[@"PresetList"])
+        {
+            [self.root.children addObject:[[HBPreset alloc] initWithDictionary:child]];
+        }
+
+        if ([self checkIfOutOfDate:presetsDict])
+        {
+            [self generateBuiltInPresets];
+        }
     }
 
     // If the preset list contains no leaf,
@@ -93,26 +144,14 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         [self generateBuiltInPresets];
     }
 
-    if (self.defaultPreset == nil)
-    {
-        [self selectNewDefault];
-    }
+    [self selectNewDefault];
 
     return YES;
 }
 
 - (BOOL)savePresetsToURL:(NSURL *)url
 {
-    NSMutableArray *presetsArray = [[NSMutableArray alloc] init];
-
-    for (HBPreset *node in self.root.children)
-    {
-        [presetsArray addObject:[self convertToDict:node]];
-    }
-
-    return [presetsArray writeToURL:url atomically:YES];
-    
-    return YES;
+    return [self.root writeToURL:url atomically:YES format:HBPresetFormatJson removeRoot:YES];
 }
 
 - (BOOL)savePresets
@@ -120,105 +159,15 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return [self savePresetsToURL:self.fileURL];
 }
 
-#pragma mark - NSDictionary conversions
-
-/**
- *  Converts the NSDictionary to a HBPreset object,
- */
-- (HBPreset *)loadFromDict:(NSDictionary *)dict
-{
-    HBPreset *node = nil;
-    if ([dict[@"Folder"] boolValue])
-    {
-        node = [[HBPreset alloc] initWithFolderName:dict[@"PresetName"]
-                                              builtIn:![dict[@"Type"] boolValue]];
-
-        for (NSDictionary *child in dict[@"ChildrenArray"])
-        {
-            [node.children addObject:[self loadFromDict:child]];
-        }
-    }
-    else
-    {
-        node = [[HBPreset alloc] initWithName:dict[@"PresetName"]
-                                        content:dict
-                                        builtIn:![dict[@"Type"] boolValue]];
-        node.isDefault = [dict[@"Default"] boolValue];
-
-        if ([dict[@"Default"] boolValue])
-        {
-            self.defaultPreset = node;
-        }
-    }
-
-    node.delegate = self;
-
-    return node;
-}
-
-/**
- *  Converts the HBPreset and its childrens to a NSDictionary.
- */
-- (NSDictionary *)convertToDict:(HBPreset *)node
-{
-    NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
-    [output addEntriesFromDictionary:node.content];
-
-    output[@"PresetName"] = node.name;
-    output[@"Folder"] = @(!node.isLeaf);
-    output[@"Type"] = @(!node.isBuiltIn);
-    output[@"Default"] = @(node.isDefault);
-
-    if (!node.isLeaf)
-    {
-        NSMutableArray *childArray = [[NSMutableArray alloc] init];
-        for (HBPreset *child in node.children)
-        {
-            [childArray addObject:[self convertToDict:child]];
-        }
-
-        output[@"ChildrenArray"] = childArray;
-    }
-
-    return output;
-}
-
 #pragma mark - Presets Management
-
-- (BOOL)checkBuiltInsForUpdates
-{
-    __block BOOL retValue = NO;
-
-    [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
-        NSDictionary *dict = [obj content];
-
-        if ([obj isBuiltIn] && [obj isLeaf])
-        {
-            if (!dict[@"PresetBuildNumber"] ||
-                [dict[@"PresetBuildNumber"] intValue] < [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue])
-            {
-                retValue = YES;
-                *stop = YES;
-            }
-        }
-    }];
-
-    return retValue;
-}
-
-- (void)addPresetFromDictionary:(NSDictionary *)preset
-{
-    HBPreset *presetNode = [[HBPreset alloc] initWithName:preset[@"PresetName"]
-                                                   content:preset
-                                                   builtIn:NO];
-
-    [self.root insertObject:presetNode inChildrenAtIndex:[self.root countOfChildren]];
-
-    [self savePresets];
-}
 
 - (void)addPreset:(HBPreset *)preset
 {
+    // Make sure no preset has the default flag enabled.
+    [preset enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
+        [obj setIsDefault:NO];
+    }];
+
     [self.root insertObject:preset inChildrenAtIndex:[self.root countOfChildren]];
 
     [self savePresets];
@@ -226,38 +175,15 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 - (void)deletePresetAtIndexPath:(NSIndexPath *)idx
 {
-    HBPreset *parentNode = self.root;
-
-    // Find the preset parent array
-    // and delete it.
-    NSUInteger currIdx = 0;
-    NSUInteger i = 0;
-    for (i = 0; i < idx.length - 1; i++)
-    {
-        currIdx = [idx indexAtPosition:i];
-
-        if (parentNode.children.count > currIdx)
-        {
-            parentNode = (parentNode.children)[currIdx];
-        }
-    }
-
-    currIdx = [idx indexAtPosition:i];
-
-    if (parentNode.children.count > currIdx)
-    {
-        if ([(parentNode.children)[currIdx] isDefault])
-        {
-            [parentNode removeObjectFromChildrenAtIndex:currIdx];
-            // Try to select a new default preset
-            [self selectNewDefault];
-        }
-        else
-        {
-            [parentNode removeObjectFromChildrenAtIndex:currIdx];
-        }
-    }
+    [self.root removeObjectAtIndexPath:idx];
 }
+
+- (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset
+{
+    return [self.root indexPathOfObject:preset];
+}
+
+#pragma mark - Default preset
 
 /**
  *  Private method to select a new default after the default preset is deleted
@@ -290,12 +216,15 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
             *stop = YES;
         }
 
-        if ([obj isDefault]) {
+        if ([obj isDefault])
+        {
+            self.defaultPreset = obj;
             defaultAlreadySetted = YES;
         }
     }];
 
-    if (defaultAlreadySetted) {
+    if (defaultAlreadySetted)
+    {
         return;
     }
     else if (normalPreset)
@@ -308,7 +237,8 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         self.defaultPreset = firstUserPreset;
         firstUserPreset.isDefault = YES;
     }
-    else if (firstBuiltInPreset) {
+    else if (firstBuiltInPreset)
+    {
         self.defaultPreset = firstBuiltInPreset;
         firstBuiltInPreset.isDefault = YES;
     }
@@ -324,8 +254,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         }
         defaultPreset.isDefault = YES;
         _defaultPreset = defaultPreset;
-
-        [self nodeDidChange];
     }
 }
 
@@ -333,39 +261,43 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 /**
  * Built-in preset folders at the root of the hierarchy
-*
+ *
  * Note: the built-in presets will *not* sort themselves alphabetically,
  * so they will appear in the order you create them.
  */
 - (void)generateBuiltInPresets
 {
-    [self deleteBuiltInPresets];
+    // Load the built-in presets from libhb.
+    const char *presets = hb_presets_builtin_get_json();
+    NSData *presetsData = [NSData dataWithBytes:presets length:strlen(presets)];
 
-    // Load the built-in presets from the app bundle Resources folder.
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"presets" withExtension:@"plist"];
-    NSArray *presetsArray = [[NSArray alloc] initWithContentsOfURL:fileURL];
+    NSError *error = nil;
+    NSArray *presetsArray = [NSJSONSerialization JSONObjectWithData:presetsData options:NSJSONReadingAllowFragments error:&error];
 
-    for (NSDictionary *child in presetsArray.reverseObjectEnumerator)
+    if (presetsArray.count == 0)
     {
-        HBPreset *preset = [self loadFromDict:child];
+        [HBUtilities writeToActivityLog:"failed to update built-in presets"];
 
-        [preset enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
+        if (error)
         {
-            NSMutableDictionary *presetDict = [[obj content] mutableCopy];
-
-            // Set the current version in the built-in presets, to they won't be reupdated
-            // each time the app checks the version.
-            presetDict[@"PresetBuildNumber"] = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
-            [obj setContent:presetDict];
-        }];
-
-        [self.root insertObject:preset inChildrenAtIndex:0];
+            [HBUtilities writeToActivityLog:"Error raised:\n%s", error.localizedFailureReason];
+        }
     }
+    else
+    {
+        [self deleteBuiltInPresets];
 
-    // set a new Default preset
-    [self selectNewDefault];
+        for (NSDictionary *child in presetsArray.reverseObjectEnumerator)
+        {
+            HBPreset *preset = [[HBPreset alloc] initWithDictionary:child];
+            [self.root insertObject:preset inChildrenAtIndex:0];
+        }
 
-    [HBUtilities writeToActivityLog: "built in presets updated to build number: %d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
+        // set a new Default preset
+        [self selectNewDefault];
+
+        [HBUtilities writeToActivityLog: "built-in presets updated"];
+    }
 }
 
 - (void)deleteBuiltInPresets

@@ -16,7 +16,7 @@
 #import "HBCore.h"
 #import "HBController.h"
 
-#define PRESET_FILE @"UserPresets.plist"
+#define PRESET_FILE @"UserPresets.json"
 
 @interface HBAppDelegate ()
 
@@ -77,8 +77,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-    // Updates built-ins presets if needed
-    [self checkBuiltInsForUpdates];
     [self buildPresetsMenu];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
@@ -286,9 +284,9 @@
 - (void)checkBuiltInsForUpdates
 {
     // if we have built in presets to update, then do so AlertBuiltInPresetUpdate
-    if ([self.presetsManager checkBuiltInsForUpdates])
-    {
-        if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertBuiltInPresetUpdate"] == YES)
+    //if ([self.presetsManager checkBuiltInsForUpdates])
+    //{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AlertBuiltInPresetUpdate"] == YES)
         {
             // Show an alert window that built in presets will be updated
             [NSApp requestUserAttention:NSCriticalRequest];
@@ -297,9 +295,7 @@
             [alert setInformativeText:@"HandBrake will now update your built-in presets."];
             [alert runModal];
         }
-        // when alert is dismissed, go ahead and update the built in presets
-        [self.presetsManager generateBuiltInPresets];
-    }
+    //}
 }
 
 /**
@@ -336,7 +332,7 @@
                  item.representedObject = obj;
              }
              // Make the default preset font bold.
-             if ([obj isDefault])
+             if ([obj isEqualTo:self.presetsManager.defaultPreset])
              {
                  NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:[obj name]
                                                                                 attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];

@@ -117,14 +117,41 @@
     }
 
     // Passthru settings
-    self.allowAACPassthru = [preset[@"AudioAllowAACPass"] boolValue];
-    self.allowAC3Passthru = [preset[@"AudioAllowAC3Pass"] boolValue];
-    self.allowEAC3Passthru = [preset[@"AudioAllowEAC3Pass"] boolValue];
-    self.allowDTSHDPassthru = [preset[@"AudioAllowDTSHDPass"] boolValue];
-    self.allowDTSPassthru= [preset[@"AudioAllowDTSPass"] boolValue];
-    self.allowMP3Passthru = [preset[@"AudioAllowMP3Pass"] boolValue];
-    self.allowTrueHDPassthru = [preset[@"AudioAllowTrueHDPass"] boolValue];
-    self.allowFLACPassthru = [preset[@"AudioAllowFlacPass"] boolValue];
+    for (NSString *copyMask in preset[@"AudioCopyMask"])
+    {
+        if ([copyMask isEqualToString:@"copy:aac"])
+        {
+            self.allowAACPassthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:ac3"])
+        {
+            self.allowAC3Passthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:eac3"])
+        {
+            self.allowEAC3Passthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:dtshd"])
+        {
+            self.allowDTSHDPassthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:dts"])
+        {
+            self.allowDTSPassthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:mp3"])
+        {
+            self.allowMP3Passthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:truehd"])
+        {
+            self.allowTrueHDPassthru = YES;
+        }
+        else if ([copyMask isEqualToString:@"copy:flac"])
+        {
+            self.allowFLACPassthru = YES;
+        }
+    }
 
     self.secondaryEncoderMode = [preset[@"AudioSecondaryEncoderMode"] boolValue];
 
@@ -160,8 +187,8 @@
         }
         newTrack.bitRate = [track[@"AudioBitrate"] intValue];
 
-        newTrack.drc = [track[@"AudioTrackDRCSlider"] floatValue];
-        newTrack.gain = [track[@"AudioTrackGainSlider"] intValue];
+        newTrack.drc = [track[@"AudioTrackDRCSlider"] doubleValue];
+        newTrack.gain = [track[@"AudioTrackGainSlider"] doubleValue];
         [self.tracksArray addObject:newTrack];
     }
 }
@@ -184,16 +211,42 @@
     preset[@"AudioLanguageList"] = [self.trackSelectionLanguages copy];
 
     // Passthru settings
-    preset[@"AudioAllowAACPass"] = @(self.allowAACPassthru);
-    preset[@"AudioAllowAC3Pass"] = @(self.allowAC3Passthru);
-    preset[@"AudioAllowEAC3Pass"] = @(self.allowEAC3Passthru);
-    preset[@"AudioAllowDTSHDPass"] = @(self.allowDTSHDPassthru);
-    preset[@"AudioAllowDTSPass"] = @(self.allowDTSPassthru);
-    preset[@"AudioAllowMP3Pass"] = @(self.allowMP3Passthru);
-    preset[@"AudioAllowTrueHDPass"] = @(self.allowTrueHDPassthru);
-    preset[@"AudioAllowFlacPass"] = @(self.allowFLACPassthru);
+    NSMutableArray *copyMask = [NSMutableArray array];
+    if (self.allowAACPassthru)
+    {
+        [copyMask addObject:@"copy:aac"];
+    }
+    if (self.allowAC3Passthru)
+    {
+        [copyMask addObject:@"copy:ac3"];
+    }
+    if (self.allowEAC3Passthru)
+    {
+        [copyMask addObject:@"copy:eac3"];
+    }
+    if (self.allowDTSHDPassthru)
+    {
+        [copyMask addObject:@"copy:dtshd"];
+    }
+    if (self.allowDTSPassthru)
+    {
+        [copyMask addObject:@"copy:dts"];
+    }
+    if (self.allowMP3Passthru)
+    {
+        [copyMask addObject:@"copy:mp3"];
+    }
+    if (self.allowTrueHDPassthru)
+    {
+        [copyMask addObject:@"copy:truehd"];
+    }
+    if (self.allowFLACPassthru)
+    {
+        [copyMask addObject:@"copy:flac"];
+    }
+    preset[@"AudioCopyMask"] = [copyMask copy];
 
-    preset[@"AudioEncoderFallback"] = @(hb_audio_encoder_get_name(self.encoderFallback));
+    preset[@"AudioEncoderFallback"] = @(hb_audio_encoder_get_short_name(self.encoderFallback));
 
     preset[@"AudioSecondaryEncoderMode"] = @(self.secondaryEncoderMode);
 
@@ -201,13 +254,13 @@
 
     for (HBAudioTrackPreset *track in self.tracksArray)
     {
-        NSString *sampleRate = @"Auto";
+        NSString *sampleRate = @"auto";
         if (hb_audio_samplerate_get_name(track.sampleRate))
         {
             sampleRate = @(hb_audio_samplerate_get_name(track.sampleRate));
         }
-        NSDictionary *newTrack = @{@"AudioEncoder": @(hb_audio_encoder_get_name(track.encoder)),
-                                   @"AudioMixdown": @(hb_mixdown_get_name(track.mixdown)),
+        NSDictionary *newTrack = @{@"AudioEncoder": @(hb_audio_encoder_get_short_name(track.encoder)),
+                                   @"AudioMixdown": @(hb_mixdown_get_short_name(track.mixdown)),
                                    @"AudioSamplerate": sampleRate,
                                    @"AudioBitrate": @(track.bitRate),
                                    @"AudioTrackDRCSlider": @(track.drc),
