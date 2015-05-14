@@ -71,7 +71,8 @@
     if (!theImage)
     {
         HBFilters *filters = self.job.filters;
-        BOOL deinterlace = (filters.deinterlace && !filters.useDecomb) || (filters.decomb && filters.useDecomb);
+        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"] && !filters.useDecomb) ||
+                           (![filters.decomb isEqualToString:@"off"] && filters.useDecomb);
 
         theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
