@@ -968,13 +968,23 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index, hb_dict_t *preset
     int width = hb_value_get_int(hb_dict_get(preset, "PictureForceWidth"));
     int height = hb_value_get_int(hb_dict_get(preset, "PictureForceHeight"));
     if (width > 0)
+    {
         geo.geometry.width = width;
+        geo.keep |= HB_KEEP_WIDTH;
+    }
     else
+    {
         geo.geometry.width -= geo.crop[2] + geo.crop[3];
+    }
     if (height > 0)
+    {
         geo.geometry.height = height;
+        geo.keep |= HB_KEEP_HEIGHT;
+    }
     else
+    {
         geo.geometry.height -= geo.crop[0] + geo.crop[1];
+    }
     if (geo.mode == HB_ANAMORPHIC_CUSTOM && !keep_aspect)
     {
         int dar_width;
