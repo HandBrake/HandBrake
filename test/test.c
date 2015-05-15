@@ -1941,7 +1941,7 @@ static int ParseOptions( int argc, char ** argv )
                 while (optind < argc && argv[optind][0] != '-')
                 {
                     int result = hb_presets_add_path(argv[optind]);
-                    if (result != 0)
+                    if (result < 0)
                     {
                         fprintf(stderr, "Preset import failed, file (%s)\n",
                                 argv[optind]);
