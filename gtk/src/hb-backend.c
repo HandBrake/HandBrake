@@ -1079,6 +1079,27 @@ grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
     }
 }
 
+static void grey_passthru(signal_user_data_t *ud, hb_audio_config_t *aconfig)
+{
+    const hb_encoder_t *enc;
+
+    if (aconfig == NULL)
+        return;
+
+    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
+         enc = hb_audio_encoder_get_next(enc))
+    {
+        if (!(enc->codec & HB_ACODEC_PASS_FLAG))
+            continue;
+        if ((enc->codec & HB_ACODEC_MASK) !=
+            (aconfig->in.codec & HB_ACODEC_MASK))
+        {
+            grey_builder_combo_box_item(ud->builder, "AudioEncoder",
+                enc->codec, TRUE);
+        }
+    }
+}
+
 void
 ghb_grey_combo_options(signal_user_data_t *ud)
 {
@@ -1133,27 +1154,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
                 enc->codec, FALSE);
         }
     }
-
-    if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_MP3)
-    {
-        grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_MP3_PASS, TRUE);
-    }
-    if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_FFAAC)
-    {
-        grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AAC_PASS, TRUE);
-    }
-    if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_AC3)
-    {
-        grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
-    }
-    if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA)
-    {
-        grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
-    }
-    if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA_HD)
-    {
-        grey_builder_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
-    }
+    grey_passthru(ud, aconfig);
 
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
@@ -2844,25 +2845,6 @@ ghb_get_chapters(const hb_title_t *title)
     return chapters;
 }
 
-gboolean
-ghb_ac3_in_audio_list(const GhbValue *audio_list)
-{
-    gint count, ii;
-
-    count = ghb_array_len(audio_list);
-    for (ii = 0; ii < count; ii++)
-    {
-        GhbValue *asettings;
-        gint acodec;
-
-        asettings = ghb_array_get(audio_list, ii);
-        acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
-        if (acodec & HB_ACODEC_AC3)
-            return TRUE;
-    }
-    return FALSE;
-}
-
 static char custom_audio_bitrate_str[8];
 static hb_rate_t custom_audio_bitrate =
 {
@@ -4010,8 +3992,8 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         int track, codec;
 
         asettings = ghb_array_get(audio_list, ii);
-        track = ghb_dict_get_int(asettings, "AudioTrack");
-        codec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
+        track = ghb_dict_get_int(asettings, "Track");
+        codec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         if (codec == HB_ACODEC_AUTO_PASS)
             continue;
 
@@ -4046,7 +4028,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
                 codec = HB_ACODEC_FFAAC;
             }
             const char *name = hb_audio_encoder_get_short_name(codec);
-            ghb_dict_set_string(asettings, "AudioEncoder", name);
+            ghb_dict_set_string(asettings, "Encoder", name);
         }
         gchar *a_unsup = NULL;
         gchar *mux_s = NULL;
@@ -4074,11 +4056,11 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             }
             g_free(message);
             const char *name = hb_audio_encoder_get_short_name(codec);
-            ghb_dict_set_string(asettings, "AudioEncoder", name);
+            ghb_dict_set_string(asettings, "Encoder", name);
         }
 
         const hb_mixdown_t *mix;
-        mix = ghb_settings_mixdown(asettings, "AudioMixdown");
+        mix = ghb_settings_mixdown(asettings, "Mixdown");
 
         const gchar *mix_unsup = NULL;
         if (!hb_mixdown_is_supported(mix->amixdown, codec, aconfig->in.channel_layout))
@@ -4099,15 +4081,15 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             }
             g_free(message);
             int amixdown = ghb_get_best_mix(aconfig, codec, mix->amixdown);
-            ghb_dict_set_string(asettings, "AudioMixdown",
+            ghb_dict_set_string(asettings, "Mixdown",
                                     hb_mixdown_get_short_name(amixdown));
         }
         int samplerate = ghb_settings_audio_samplerate_rate(asettings,
-                                                            "AudioSamplerate");
+                                                            "Samplerate");
         if (samplerate == 0)
         {
             samplerate = aconfig->in.samplerate;
-            ghb_dict_set_string(asettings, "AudioSamplerate",
+            ghb_dict_set_string(asettings, "Samplerate",
                             ghb_audio_samplerate_get_short_name(samplerate));
         }
     }
@@ -4625,9 +4607,9 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         double gain, drc, quality;
 
         asettings = ghb_array_get(audio_list, ii);
-        track = ghb_dict_get_int(asettings, "AudioTrack");
-        aname = ghb_dict_get_string(asettings, "AudioTrackName");
-        acodec = ghb_settings_audio_encoder_codec(asettings, "AudioEncoder");
+        track = ghb_dict_get_int(asettings, "Track");
+        aname = ghb_dict_get_string(asettings, "Name");
+        acodec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         audio_dict = json_pack_ex(&error, 0,
             "{s:o, s:o}",
             "Track",                hb_value_int(track),
@@ -4645,24 +4627,24 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
         // It would be better if this were done in libhb for us, but its not yet.
         if (!ghb_audio_is_passthru(acodec))
         {
-            gain = ghb_dict_get_double(asettings, "AudioTrackGainSlider");
+            gain = ghb_dict_get_double(asettings, "Gain");
             if (gain > 0)
                 hb_dict_set(audio_dict, "Gain", hb_value_double(gain));
-            drc = ghb_dict_get_double(asettings, "AudioTrackDRCSlider");
+            drc = ghb_dict_get_double(asettings, "DRC");
             if (drc < 1.0)
                 drc = 0.0;
             if (drc > 0)
                 hb_dict_set(audio_dict, "DRC", hb_value_double(drc));
 
-            mixdown = ghb_settings_mixdown_mix(asettings, "AudioMixdown");
+            mixdown = ghb_settings_mixdown_mix(asettings, "Mixdown");
             hb_dict_set(audio_dict, "Mixdown", hb_value_int(mixdown));
 
             samplerate = ghb_settings_audio_samplerate_rate(
-                                            asettings, "AudioSamplerate");
+                                            asettings, "Samplerate");
             hb_dict_set(audio_dict, "Samplerate", hb_value_int(samplerate));
             gboolean qe;
-            qe = ghb_dict_get_bool(asettings, "AudioTrackQualityEnable");
-            quality = ghb_dict_get_double(asettings, "AudioTrackQuality");
+            qe = ghb_dict_get_bool(asettings, "QualityEnable");
+            quality = ghb_dict_get_double(asettings, "Quality");
             if (qe && quality != HB_INVALID_AUDIO_QUALITY)
             {
                 hb_dict_set(audio_dict, "Quality", hb_value_double(quality));
@@ -4670,7 +4652,7 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             else
             {
                 int bitrate =
-                    ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
+                    ghb_settings_audio_bitrate_rate(asettings, "Bitrate");
                 bitrate = hb_audio_bitrate_get_best(
                                         acodec, bitrate, samplerate, mixdown);
                 hb_dict_set(audio_dict, "Bitrate", hb_value_int(bitrate));

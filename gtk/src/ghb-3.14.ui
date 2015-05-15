@@ -9144,7 +9144,7 @@ Players may use this in the audio selection list.</property>
                 <property name="truncate_multiline">True</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <signal name="changed" handler="audio_widget_changed_cb" swapped="no"/>
+                <signal name="changed" handler="audio_name_changed_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="top_attach">1</property>
@@ -9293,7 +9293,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="tooltip_text" translatable="yes">Enable bitrate setting</property>
                         <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="audio_quality_radio_changed_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -9334,7 +9333,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Set the bitrate to encode this track with.</property>
-                    <signal name="changed" handler="audio_widget_changed_cb" swapped="no"/>
+                    <signal name="changed" handler="audio_bitrate_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -9349,7 +9348,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
-                      <object class="GtkScaleButton" id="AudioTrackQuality">
+                      <object class="GtkScaleButton" id="AudioTrackQualityX">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">GTK_ALIGN_CENTER</property>
@@ -9427,7 +9426,7 @@ weather-clear</property>
                 <property name="valign">GTK_ALIGN_CENTER</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip_text" translatable="yes">Set the sample rate of the output audio track.</property>
-                <signal name="changed" handler="audio_widget_changed_cb" swapped="no"/>
+                <signal name="changed" handler="audio_samplerate_changed_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="top_attach">1</property>

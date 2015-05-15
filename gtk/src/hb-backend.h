@@ -123,7 +123,6 @@ gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
 void ghb_part_duration(
     const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
-gboolean ghb_ac3_in_audio_list(const GhbValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);

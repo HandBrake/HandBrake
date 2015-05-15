@@ -553,23 +553,23 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
         asettings = ghb_array_get(audio_list, ii);
 
-        audio_encoder = ghb_settings_audio_encoder(asettings, "AudioEncoder");
-        double q = ghb_dict_get_double(asettings, "AudioTrackQuality");
-        if (ghb_dict_get_bool(asettings, "AudioTrackQualityEnable") &&
+        audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
+        double q = ghb_dict_get_double(asettings, "Quality");
+        if (ghb_dict_get_bool(asettings, "QualityEnable") &&
             q != HB_INVALID_AUDIO_QUALITY)
         {
             quality = ghb_format_quality(_("Quality: "), audio_encoder->codec, q);
         }
         else
         {
-            int br = ghb_settings_audio_bitrate_rate(asettings, "AudioBitrate");
+            int br = ghb_settings_audio_bitrate_rate(asettings, "Bitrate");
             quality = g_strdup_printf(_("Bitrate: %d"), br);
         }
         const hb_rate_t *sr;
-        sr = ghb_settings_audio_samplerate(asettings, "AudioSamplerate");
-        track = ghb_dict_get_string(asettings, "AudioTrackDescription");
+        sr = ghb_settings_audio_samplerate(asettings, "Samplerate");
+        track = ghb_dict_get_string(asettings, "Description");
         const hb_mixdown_t *mix;
-        mix = ghb_settings_mixdown(asettings, "AudioMixdown");
+        mix = ghb_settings_mixdown(asettings, "Mixdown");
         if (count > 1)
             XPRINT("\n\t");
 
