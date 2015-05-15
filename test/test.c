@@ -1298,16 +1298,11 @@ if (hb_qsv_available())
 "   -7, --deblock           Deblock video with pp7 filter\n"
 "         <QP:M>            (default 5:2)\n"
 "       --no-deblock        Disable preset deblock filter\n"
-"       --rotate     <mode> Rotate image or flip its axes.\n"
-"                           Modes: (can be combined)\n"
-"                              0 disable rotate\n"
-"                              1 vertical flip\n"
-"                              2 horizontal flip\n"
-"                              4 rotate clockwise 90 degrees\n"
-"                           More Examples:\n"
-"                              3 horiz + vert (aka rotate 180')\n"
-"                              7 horiz + vert + 90' (aka rotate 270')\n"
-"                           Default: 3 (vertical and horizontal flip)\n"
+"        --rotate           Rotate image or flip its axes.\n"
+"         <angle>:<mirror>  Angle rotates clockwise, can be one of:\n"
+"                              0, 90, 180, 270\n"
+"                           Mirror flips the image on the x axis.\n"
+"                           Default: 180:0 (rotate 180 degrees)\n"
 "   -g, --grayscale         Grayscale encoding\n"
 "       --no-grayscale      Disable preset 'grayscale'\n"
 "\n"
@@ -2250,7 +2245,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    rotate = strdup("3");
+                    rotate = strdup("180:0");
                 }
                 break;
             case KEEP_DISPLAY_ASPECT:

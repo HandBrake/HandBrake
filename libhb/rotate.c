@@ -12,9 +12,25 @@
 #include "taskset.h"
 
 #define MODE_DEFAULT     3
-// Mode 1: Flip vertically (y0 becomes yN and yN becomes y0)
-// Mode 2: Flip horizontally (x0 becomes xN and xN becomes x0)
-// Mode 3: Flip both horizontally and vertically (modes 1 and 2 combined)
+// Settings:
+//  degrees:mirror
+//
+//  degrees - Rotation angle, may be one of 90, 180, or 270
+//  mirror  - Mirror image around x axis
+//
+// Examples:
+// Mode 180:1 Mirror then rotate 180'
+// Mode   0:1 Mirror
+// Mode 180:0 Rotate 180'
+// Mode  90:0 Rotate 90'
+// Mode 270:0 Rotate 270'
+//
+// Legacy Mode Examples (also accepted):
+// Mode 1: Flip vertically (y0 becomes yN and yN becomes y0) (aka 180:1)
+// Mode 2: Flip horizontally (x0 becomes xN and xN becomes x0) (aka 0:1)
+// Mode 3: Flip both horizontally and vertically (aka 180:0)
+// Mode 4: Rotate 90' (aka 90:0)
+// Mode 7: Flip horiz & vert plus Rotate 90' (aka 270:0)
 
 typedef struct rotate_arguments_s {
     hb_buffer_t *dst;
@@ -221,13 +237,38 @@ static int hb_rotate_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->mode     = MODE_DEFAULT;
+    int degrees = MODE_DEFAULT, mirror = 0, num_params = 0;
 
     if( filter->settings )
     {
-        sscanf( filter->settings, "%d",
-                &pv->mode );
+        num_params = sscanf(filter->settings, "%d:%d", &degrees, &mirror);
     }
+    switch (degrees)
+    {
+        case 0:
+            pv->mode = 0;
+            break;
+        case 90:
+            pv->mode = 4;
+            break;
+        case 180:
+            pv->mode = 3;
+            break;
+        case 270:
+            pv->mode = 7;
+            break;
+        default:
+            if (degrees & ~7)
+            {
+                // Unsupported rotation angle
+                hb_error("Unsupported rotate mode %d", degrees);
+            }
+            // Legacy "mode" supplied in settings
+            pv->mode = degrees & 7;
+            break;
+    }
+    if (num_params > 1 && mirror)
+        pv->mode ^= 2;
 
     pv->cpu_count = hb_get_cpu_count();
 
@@ -293,19 +334,30 @@ static int hb_rotate_info( hb_filter_object_t * filter,
     info->out.geometry.height = pv->height;
     info->out.geometry.par = pv->par;
     int pos = 0;
-    if( pv->mode & 1 )
-        pos += sprintf( &info->human_readable_desc[pos], "flip vertical" );
-    if( pv->mode & 2 )
+
+    int mirror_x = !!(pv->mode & 2);
+    int mirror_y = !!(pv->mode & 1);
+    int degrees = 0;
+    if (mirror_y)
     {
-        if( pos )
-            pos += sprintf( &info->human_readable_desc[pos], "/" );
-        pos += sprintf( &info->human_readable_desc[pos], "flip horizontal" );
+        degrees += 180;
+        mirror_x ^= 1;
+        mirror_y ^= 1;
     }
-    if( pv->mode & 4 )
+    degrees += !!(pv->mode & 4) * 90;
+
+    if (degrees > 0)
     {
-        if( pos )
-            pos += sprintf( &info->human_readable_desc[pos], "/" );
-        pos += sprintf( &info->human_readable_desc[pos], "rotate 90" );
+        sprintf(&info->human_readable_desc[pos], "Rotate %d%s", degrees,
+                mirror_x ? " / mirror image" : "");
+    }
+    else if (mirror_x)
+    {
+        sprintf(&info->human_readable_desc[pos], "Mirror image");
+    }
+    else
+    {
+        sprintf(&info->human_readable_desc[pos], "No rotation or mirror!");
     }
     return 0;
 }
@@ -342,6 +394,13 @@ static int hb_rotate_work( hb_filter_object_t * filter,
         *buf_out = in;
         *buf_in = NULL;
         return HB_FILTER_DONE;
+    }
+    if (pv->mode == 0)
+    {
+        // Short circuit case where filter does nothing
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_OK;
     }
 
     int width_out, height_out;
