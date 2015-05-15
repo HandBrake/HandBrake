@@ -434,7 +434,7 @@
         filter = hb_filter_init(filter_id);
         hb_add_filter(job, filter, filter_str);
     }
-    else if (!self.filters.useDecomb && [self.filters.deinterlace isEqualToString:@"off"])
+    else if (!self.filters.useDecomb && ![self.filters.deinterlace isEqualToString:@"off"])
     {
         // Deinterlace
         int filter_id = HB_FILTER_DEINTERLACE;
