@@ -116,7 +116,18 @@
         }
     }
 
-    // Passthru settings
+    // Auto Passthru settings
+    // first, disable all encoders
+    self.allowAACPassthru    = NO;
+    self.allowAC3Passthru    = NO;
+    self.allowDTSPassthru    = NO;
+    self.allowDTSHDPassthru  = NO;
+    self.allowEAC3Passthru   = NO;
+    self.allowFLACPassthru   = NO;
+    self.allowMP3Passthru    = NO;
+    self.allowTrueHDPassthru = NO;
+
+    // then, enable allowed passthru encoders
     for (NSString *copyMask in preset[@"AudioCopyMask"])
     {
         int allowedPassthru = hb_video_encoder_get_from_name(copyMask.UTF8String);
