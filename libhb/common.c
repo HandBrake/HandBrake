@@ -989,6 +989,20 @@ fail:
 void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
                                  int *low, int *high)
 {
+    /*
+     * samplerate == 0 means "auto" (same as source) and the UIs know the source
+     * samplerate -- except where there isn't a source (audio defaults panel);
+     * but we have enough info to return the global bitrate limits for this
+     * mixdown, since the first/last samplerate are known to us and non-zero.
+     */
+    if (samplerate == 0)
+    {
+        int dummy;
+        hb_audio_bitrate_get_limits(codec, hb_audio_rates_first_item->rate, mixdown, low, &dummy);
+        hb_audio_bitrate_get_limits(codec, hb_audio_rates_last_item->rate, mixdown, &dummy, high);
+        return;
+    }
+
     /* samplerate, sr_shift */
     int sr_shift;
     samplerate = hb_audio_samplerate_get_best(codec, samplerate, &sr_shift);
