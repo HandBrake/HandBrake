@@ -119,37 +119,38 @@
     // Passthru settings
     for (NSString *copyMask in preset[@"AudioCopyMask"])
     {
-        if ([copyMask isEqualToString:@"copy:aac"])
+        int allowedPassthru = hb_video_encoder_get_from_name(copyMask.UTF8String);
+        if (allowedPassthru & HB_ACODEC_PASS_FLAG)
         {
-            self.allowAACPassthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:ac3"])
-        {
-            self.allowAC3Passthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:eac3"])
-        {
-            self.allowEAC3Passthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:dtshd"])
-        {
-            self.allowDTSHDPassthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:dts"])
-        {
-            self.allowDTSPassthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:mp3"])
-        {
-            self.allowMP3Passthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:truehd"])
-        {
-            self.allowTrueHDPassthru = YES;
-        }
-        else if ([copyMask isEqualToString:@"copy:flac"])
-        {
-            self.allowFLACPassthru = YES;
+            switch (allowedPassthru)
+            {
+                case HB_ACODEC_AAC_PASS:
+                    self.allowAACPassthru = YES;
+                    break;
+                case HB_ACODEC_AC3_PASS:
+                    self.allowAC3Passthru = YES;
+                    break;
+                case HB_ACODEC_DCA_PASS:
+                    self.allowDTSPassthru = YES;
+                    break;
+                case HB_ACODEC_DCA_HD_PASS:
+                    self.allowDTSHDPassthru = YES;
+                    break;
+                case HB_ACODEC_EAC3_PASS:
+                    self.allowEAC3Passthru = YES;
+                    break;
+                case HB_ACODEC_FLAC_PASS:
+                    self.allowFLACPassthru = YES;
+                    break;
+                case HB_ACODEC_MP3_PASS:
+                    self.allowMP3Passthru = YES;
+                    break;
+                case HB_ACODEC_TRUEHD_PASS:
+                    self.allowTrueHDPassthru = YES;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -214,35 +215,35 @@
     NSMutableArray *copyMask = [NSMutableArray array];
     if (self.allowAACPassthru)
     {
-        [copyMask addObject:@"copy:aac"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_AAC_PASS))];
     }
     if (self.allowAC3Passthru)
     {
-        [copyMask addObject:@"copy:ac3"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_AC3_PASS))];
     }
     if (self.allowEAC3Passthru)
     {
-        [copyMask addObject:@"copy:eac3"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_EAC3_PASS))];
     }
     if (self.allowDTSHDPassthru)
     {
-        [copyMask addObject:@"copy:dtshd"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_DCA_HD_PASS))];
     }
     if (self.allowDTSPassthru)
     {
-        [copyMask addObject:@"copy:dts"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_DCA_PASS))];
     }
     if (self.allowMP3Passthru)
     {
-        [copyMask addObject:@"copy:mp3"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_MP3_PASS))];
     }
     if (self.allowTrueHDPassthru)
     {
-        [copyMask addObject:@"copy:truehd"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_TRUEHD_PASS))];
     }
     if (self.allowFLACPassthru)
     {
-        [copyMask addObject:@"copy:flac"];
+        [copyMask addObject:@(hb_audio_encoder_get_short_name(HB_ACODEC_FLAC_PASS))];
     }
     preset[@"AudioCopyMask"] = [copyMask copy];
 
