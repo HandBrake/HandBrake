@@ -87,17 +87,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 - (void)validateBitrate
 {
-    int minBitRate = 0;
-    int maxBitRate = 0;
-
-    int sampleRate = self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE;
-
-    hb_audio_bitrate_get_limits(self.encoder, sampleRate, self.mixdown, &minBitRate, &maxBitRate);
-
-    if (self.bitRate < minBitRate || self.bitRate > maxBitRate)
-    {
-        self.bitRate = maxBitRate;
-    }
+    self.bitRate = hb_audio_bitrate_get_best(self.encoder, self.bitRate, self.sampleRate, self.mixdown);
 }
 
 - (BOOL)mixdownEnabled
@@ -204,10 +194,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     int minBitRate = 0;
     int maxBitRate = 0;
 
-    // If the samplerate is "Auto" pass a fake sampleRate to get the bitrates
-    int sampleRate = self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE;
-
-    hb_audio_bitrate_get_limits(self.encoder, sampleRate, self.mixdown, &minBitRate, &maxBitRate);
+    hb_audio_bitrate_get_limits(self.encoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
 
     NSMutableArray *bitrates = [[NSMutableArray alloc] init];
     for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
