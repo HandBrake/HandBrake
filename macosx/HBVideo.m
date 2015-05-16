@@ -504,8 +504,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     self.notificationsEnabled = NO;
 
     // map legacy encoder names via libhb.
-    const char *strValue = hb_video_encoder_sanitize_name([preset[@"VideoEncoder"] UTF8String]);
-    self.encoder = hb_video_encoder_get_from_name(strValue);
+    self.encoder = hb_video_encoder_get_from_name([preset[@"VideoEncoder"] UTF8String]);
 
     if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
     {

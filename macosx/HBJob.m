@@ -65,7 +65,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     NSDictionary *content = preset.content;
 
-    self.container = hb_container_get_from_name(hb_container_sanitize_name([content[@"FileFormat"] UTF8String]));
+    self.container = hb_container_get_from_name([content[@"FileFormat"] UTF8String]);
 
     // MP4 specifics options.
     self.mp4HttpOptimize = [content[@"Mp4HttpOptimize"] boolValue];
