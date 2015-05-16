@@ -311,8 +311,8 @@ int hb_validate_filter_settings(int filter_id, const char *filter_param)
     if (filter_param == NULL)
         return 0;
 
-    // Regex matches "number" followed by one or more ":number", where number is uint or ufloat
-    const char *hb_colon_separated_params_regex = "^((([0-9]+([.,][0-9]+)?)|([.,][0-9]+))((:(([0-9]+([,.][0-9]+)?)|([,.][0-9]+)))+)?)$";
+    // Regex matches "number" followed by one or more ":number", where number is int or float
+    const char *hb_colon_separated_params_regex = "^(((([\\-])?[0-9]+([.,][0-9]+)?)|(([\\-])?[.,][0-9]+))((:((([\\-])?[0-9]+([,.][0-9]+)?)|(([\\-])?[,.][0-9]+)))+)?)$";
 
     const char *regex_pattern = NULL;
 
