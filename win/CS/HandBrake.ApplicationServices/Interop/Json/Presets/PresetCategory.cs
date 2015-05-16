@@ -22,11 +22,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public List<Preset> ChildrenArray { get; set; }
 
         /// <summary>
-        /// Gets or sets the default.
-        /// </summary>
-        public int Default { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether folder.
         /// </summary>
         public bool Folder { get; set; }

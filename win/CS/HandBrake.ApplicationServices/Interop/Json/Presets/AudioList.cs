@@ -17,7 +17,17 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the audio bitrate.
         /// </summary>
-        public string AudioBitrate { get; set; }
+        public int AudioBitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio compression level.
+        /// </summary>
+        public double AudioCompressionLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio dither method.
+        /// </summary>
+        public string AudioDitherMethod { get; set; }
 
         /// <summary>
         /// Gets or sets the audio encoder.
@@ -30,23 +40,33 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string AudioMixdown { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether audio normalize mix level.
+        /// </summary>
+        public bool AudioNormalizeMixLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets the audio samplerate.
         /// </summary>
         public string AudioSamplerate { get; set; }
 
         /// <summary>
-        /// Gets or sets the audio track.
+        /// Gets or sets a value indicating whether audio track quality enable.
         /// </summary>
-        public int AudioTrack { get; set; }
+        public bool AudioTrackQualityEnable { get; set; }
 
         /// <summary>
-        /// Gets or sets the audio track drc slider.
+        /// Gets or sets the audio track quality.
         /// </summary>
-        public double AudioTrackDRCSlider { get; set; }
+        public double AudioTrackQuality { get; set; }
 
         /// <summary>
         /// Gets or sets the audio track gain slider.
         /// </summary>
         public double AudioTrackGainSlider { get; set; }
+
+        /// <summary>
+        /// Gets or sets the audio track drc slider.
+        /// </summary>
+        public double AudioTrackDRCSlider { get; set; }
     }
 }

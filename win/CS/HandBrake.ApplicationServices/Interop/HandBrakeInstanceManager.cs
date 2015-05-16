@@ -21,6 +21,24 @@ namespace HandBrake.ApplicationServices.Interop
     {
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance encodeInstance;
+        private static HandBrakeInstance masterInstance;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="HandBrakeInstanceManager"/> class.
+        /// </summary>
+        static HandBrakeInstanceManager()
+        {
+            masterInstance = new HandBrakeInstance();
+            masterInstance.Initialize(2);
+        }
+
+        /// <summary>
+        /// The init.
+        /// </summary>
+        public static void Init()
+        {
+            // Nothing to do. Triggers static constructor.
+        }
 
         /// <summary>
         /// Gets the scanInstance.
@@ -68,6 +86,17 @@ namespace HandBrake.ApplicationServices.Interop
             encodeInstance = newInstance;
 
             return encodeInstance;
+        }
+
+        /// <summary>
+        /// Gets the master instance.
+        /// </summary>
+        public static IHandBrakeInstance MasterInstance
+        {
+            get
+            {
+                return masterInstance;
+            }
         }
 
         /// <summary>

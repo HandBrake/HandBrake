@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </summary>
         static HandBrakePresetService()
         {
-            HBFunctions.hb_presets_builtin_init();
+            HandBrakeInstanceManager.Init();
         }
 
         /// <summary>

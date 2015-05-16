@@ -12,34 +12,14 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
     using System.Collections.Generic;
 
     /// <summary>
-    /// The preset.
+    ///     The preset.
     /// </summary>
     public class Preset
     {
         /// <summary>
-        /// Gets or sets the audio allow aac pass.
+        /// Gets or sets the audio copy mask.
         /// </summary>
-        public int AudioAllowAACPass { get; set; }
-
-        /// <summary>
-        /// Gets or sets the audio allow a c 3 pass.
-        /// </summary>
-        public int AudioAllowAC3Pass { get; set; }
-
-        /// <summary>
-        /// Gets or sets the audio allow dtshd pass.
-        /// </summary>
-        public int AudioAllowDTSHDPass { get; set; }
-
-        /// <summary>
-        /// Gets or sets the audio allow dts pass.
-        /// </summary>
-        public int AudioAllowDTSPass { get; set; }
-
-        /// <summary>
-        /// Gets or sets the audio allow m p 3 pass.
-        /// </summary>
-        public int AudioAllowMP3Pass { get; set; }
+        public List<object> AudioCopyMask { get; set; }
 
         /// <summary>
         /// Gets or sets the audio encoder fallback.
@@ -47,19 +27,39 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string AudioEncoderFallback { get; set; }
 
         /// <summary>
+        /// Gets or sets the audio language list.
+        /// </summary>
+        public List<string> AudioLanguageList { get; set; }
+
+        /// <summary>
         /// Gets or sets the audio list.
         /// </summary>
         public List<AudioList> AudioList { get; set; }
 
         /// <summary>
-        /// Gets or sets the chapter markers.
+        /// Gets or sets a value indicating whether audio secondary encoder mode.
         /// </summary>
-        public int ChapterMarkers { get; set; }
+        public bool AudioSecondaryEncoderMode { get; set; }
 
         /// <summary>
-        /// Gets or sets the default.
+        /// Gets or sets the audio track selection behavior.
         /// </summary>
-        public int Default { get; set; }
+        public string AudioTrackSelectionBehavior { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether chapter markers.
+        /// </summary>
+        public bool ChapterMarkers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children array.
+        /// </summary>
+        public List<object> ChildrenArray { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether default.
+        /// </summary>
+        public bool Default { get; set; }
 
         /// <summary>
         /// Gets or sets the file format.
@@ -72,24 +72,49 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public bool Folder { get; set; }
 
         /// <summary>
-        /// Gets or sets the mp 4 http optimize.
+        /// Gets or sets a value indicating whether folder open.
         /// </summary>
-        public int Mp4HttpOptimize { get; set; }
+        public bool FolderOpen { get; set; }
 
         /// <summary>
-        /// Gets or sets the mp 4 i pod compatible.
+        /// Gets or sets a value indicating whether mp 4 http optimize.
         /// </summary>
-        public int Mp4iPodCompatible { get; set; }
+        public bool Mp4HttpOptimize { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture auto crop.
+        /// Gets or sets a value indicating whether mp 4 i pod compatible.
         /// </summary>
-        public int PictureAutoCrop { get; set; }
+        public bool Mp4iPodCompatible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether picture auto crop.
+        /// </summary>
+        public bool PictureAutoCrop { get; set; }
 
         /// <summary>
         /// Gets or sets the picture bottom crop.
         /// </summary>
         public int PictureBottomCrop { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture left crop.
+        /// </summary>
+        public int PictureLeftCrop { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture right crop.
+        /// </summary>
+        public int PictureRightCrop { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture top crop.
+        /// </summary>
+        public int PictureTopCrop { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture dar width.
+        /// </summary>
+        public int PictureDARWidth { get; set; }
 
         /// <summary>
         /// Gets or sets the picture deblock.
@@ -99,7 +124,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the picture decomb.
         /// </summary>
-        public int PictureDecomb { get; set; }
+        public string PictureDecomb { get; set; }
 
         /// <summary>
         /// Gets or sets the picture decomb custom.
@@ -107,14 +132,14 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PictureDecombCustom { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture decomb deinterlace.
+        /// Gets or sets a value indicating whether picture decomb deinterlace.
         /// </summary>
-        public int PictureDecombDeinterlace { get; set; }
+        public bool PictureDecombDeinterlace { get; set; }
 
         /// <summary>
         /// Gets or sets the picture deinterlace.
         /// </summary>
-        public int PictureDeinterlace { get; set; }
+        public string PictureDeinterlace { get; set; }
 
         /// <summary>
         /// Gets or sets the picture deinterlace custom.
@@ -132,9 +157,19 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PictureDenoiseFilter { get; set; }
 
         /// <summary>
+        /// Gets or sets the picture denoise preset.
+        /// </summary>
+        public string PictureDenoisePreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture denoise tune.
+        /// </summary>
+        public string PictureDenoiseTune { get; set; }
+
+        /// <summary>
         /// Gets or sets the picture detelecine.
         /// </summary>
-        public int PictureDetelecine { get; set; }
+        public string PictureDetelecine { get; set; }
 
         /// <summary>
         /// Gets or sets the picture detelecine custom.
@@ -142,19 +177,19 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PictureDetelecineCustom { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture height.
+        /// Gets or sets a value indicating whether picture itu par.
         /// </summary>
-        public int PictureHeight { get; set; }
+        public bool PictureItuPAR { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture keep ratio.
+        /// Gets or sets a value indicating whether picture keep ratio.
         /// </summary>
-        public int PictureKeepRatio { get; set; }
+        public bool PictureKeepRatio { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture left crop.
+        /// Gets or sets a value indicating whether picture loose crop.
         /// </summary>
-        public int PictureLeftCrop { get; set; }
+        public bool PictureLooseCrop { get; set; }
 
         /// <summary>
         /// Gets or sets the picture modulus.
@@ -167,19 +202,39 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PicturePAR { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture right crop.
+        /// Gets or sets the picture par width.
         /// </summary>
-        public int PictureRightCrop { get; set; }
+        public int PicturePARWidth { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture top crop.
+        /// Gets or sets the picture par height.
         /// </summary>
-        public int PictureTopCrop { get; set; }
+        public int PicturePARHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture rotate.
+        /// </summary>
+        public int PictureRotate { get; set; }
 
         /// <summary>
         /// Gets or sets the picture width.
         /// </summary>
         public int PictureWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture height.
+        /// </summary>
+        public int PictureHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture force height.
+        /// </summary>
+        public int PictureForceHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture force width.
+        /// </summary>
+        public int PictureForceWidth { get; set; }
 
         /// <summary>
         /// Gets or sets the preset description.
@@ -197,9 +252,9 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public int Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the uses picture filters.
+        /// Gets or sets a value indicating whether uses picture filters.
         /// </summary>
-        public int UsesPictureFilters { get; set; }
+        public bool UsesPictureFilters { get; set; }
 
         /// <summary>
         /// Gets or sets the uses picture settings.
@@ -207,9 +262,54 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public int UsesPictureSettings { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether subtitle add cc.
+        /// </summary>
+        public bool SubtitleAddCC { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether subtitle add foreign audio search.
+        /// </summary>
+        public bool SubtitleAddForeignAudioSearch { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether subtitle add foreign audio subtitle.
+        /// </summary>
+        public bool SubtitleAddForeignAudioSubtitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subtitle burn behavior.
+        /// </summary>
+        public string SubtitleBurnBehavior { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether subtitle burn bd sub.
+        /// </summary>
+        public bool SubtitleBurnBDSub { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether subtitle burn dvd sub.
+        /// </summary>
+        public bool SubtitleBurnDVDSub { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subtitle language list.
+        /// </summary>
+        public List<object> SubtitleLanguageList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subtitle track selection behavior.
+        /// </summary>
+        public string SubtitleTrackSelectionBehavior { get; set; }
+
+        /// <summary>
         /// Gets or sets the video avg bitrate.
         /// </summary>
-        public string VideoAvgBitrate { get; set; }
+        public int VideoAvgBitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video color matrix code.
+        /// </summary>
+        public int VideoColorMatrixCode { get; set; }
 
         /// <summary>
         /// Gets or sets the video encoder.
@@ -227,9 +327,34 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string VideoFramerateMode { get; set; }
 
         /// <summary>
-        /// Gets or sets the video gray scale.
+        /// Gets or sets a value indicating whether video gray scale.
         /// </summary>
-        public int VideoGrayScale { get; set; }
+        public bool VideoGrayScale { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether video hw decode.
+        /// </summary>
+        public bool VideoHWDecode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video scaler.
+        /// </summary>
+        public string VideoScaler { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video preset.
+        /// </summary>
+        public string VideoPreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video tune.
+        /// </summary>
+        public string VideoTune { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video profile.
+        /// </summary>
+        public string VideoProfile { get; set; }
 
         /// <summary>
         /// Gets or sets the video level.
@@ -242,14 +367,9 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string VideoOptionExtra { get; set; }
 
         /// <summary>
-        /// Gets or sets the video preset.
+        /// Gets or sets the video quality type.
         /// </summary>
-        public string VideoPreset { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video profile.
-        /// </summary>
-        public string VideoProfile { get; set; }
+        public int VideoQualityType { get; set; }
 
         /// <summary>
         /// Gets or sets the video quality slider.
@@ -257,24 +377,24 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public double VideoQualitySlider { get; set; }
 
         /// <summary>
-        /// Gets or sets the video quality type.
+        /// Gets or sets a value indicating whether video qsv decode.
         /// </summary>
-        public int VideoQualityType { get; set; }
+        public bool VideoQSVDecode { get; set; }
 
         /// <summary>
-        /// Gets or sets the video tune.
+        /// Gets or sets the video qsv async depth.
         /// </summary>
-        public string VideoTune { get; set; }
+        public int VideoQSVAsyncDepth { get; set; }
 
         /// <summary>
-        /// Gets or sets the video turbo two pass.
+        /// Gets or sets a value indicating whether video two pass.
         /// </summary>
-        public int VideoTurboTwoPass { get; set; }
+        public bool VideoTwoPass { get; set; }
 
         /// <summary>
-        /// Gets or sets the video two pass.
+        /// Gets or sets a value indicating whether video turbo two pass.
         /// </summary>
-        public int VideoTwoPass { get; set; }
+        public bool VideoTurboTwoPass { get; set; }
 
         /// <summary>
         /// Gets or sets the x 264 option.
@@ -282,8 +402,8 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string x264Option { get; set; }
 
         /// <summary>
-        /// Gets or sets the x 264 use advanced options.
+        /// Gets or sets a value indicating whether x 264 use advanced options.
         /// </summary>
-        public int x264UseAdvancedOptions { get; set; }
+        public bool x264UseAdvancedOptions { get; set; }
     }
 }
