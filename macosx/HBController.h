@@ -107,11 +107,6 @@
 - (IBAction)rip:(id)sender;
 - (IBAction)pause:(id)sender;
 
-// Preset Methods
-// Export / Import Presets
-- (IBAction)browseExportPresetFile:(id)sender;
-- (IBAction)browseImportPresetFile:(id)sender;
-
 - (IBAction)selectPresetFromMenu:(id)sender;
 
 // Manage User presets

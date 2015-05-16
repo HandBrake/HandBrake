@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C106a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -272,13 +272,13 @@
                             <menuItem title="Import…" tag="-1" id="5192">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="browseImportPresetFile:" target="-1" id="keX-1B-XYZ"/>
+                                    <action selector="importPreset:" target="-1" id="zab-p5-wEn"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export…" tag="-1" id="5188">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="browseExportPresetFile:" target="-1" id="kJa-oi-hY2"/>
+                                    <action selector="exportPreset:" target="-1" id="koR-bb-R5s"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Update Built-in Presets" tag="-1" id="1950">

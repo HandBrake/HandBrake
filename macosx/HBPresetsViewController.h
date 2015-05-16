@@ -16,11 +16,14 @@
 
 @end
 
-@interface HBPresetsViewController : NSViewController
+@interface HBPresetsViewController : NSViewController <NSUserInterfaceValidations>
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager;
 
 @property (nonatomic, readwrite, unsafe_unretained) id<HBPresetsViewControllerDelegate> delegate;
+
+- (IBAction)exportPreset:(id)sender;
+- (IBAction)importPreset:(id)sender;
 
 - (void)deselect;
 - (void)setSelection:(HBPreset *)preset;

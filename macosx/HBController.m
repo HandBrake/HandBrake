@@ -406,6 +406,10 @@
         }
         return (self.job != nil);
     }
+    if (action == @selector(exportPreset:))
+    {
+        return [fPresetsView validateUserInterfaceItem:menuItem];
+    }
 
     return YES;
 }
@@ -1340,57 +1344,14 @@
 #pragma mark -
 #pragma mark Import Export Preset(s)
 
-- (IBAction)browseExportPresetFile:(id)sender
+- (IBAction)exportPreset:(id)sender
 {
-    // Open a panel to let the user choose where and how to save the export file
-    NSSavePanel *panel = [NSSavePanel savePanel];
-	// We get the current file name and path from the destination field here
-    NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
-    panel.directoryURL = defaultExportDirectory;
-    panel.nameFieldStringValue = [NSString stringWithFormat:@"%@.json", fPresetsView.selectedPreset.name];
-
-    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
-    {
-        if (result == NSOKButton)
-        {
-            NSURL *presetExportDirectory = [panel.URL URLByDeletingLastPathComponent];
-            [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
-
-            [fPresetsView.selectedPreset writeToURL:panel.URL atomically:YES format:HBPresetFormatJson removeRoot:NO];
-        }
-    }];
+    [fPresetsView exportPreset:sender];
 }
 
-- (IBAction)browseImportPresetFile:(id)sender
+- (IBAction)importPreset:(id)sender
 {
-    NSOpenPanel *panel = [NSOpenPanel openPanel];
-    panel.allowsMultipleSelection = YES;
-    panel.canChooseFiles = YES;
-    panel.canChooseDirectories = NO;
-    panel.allowedFileTypes = @[@"plist", @"xml", @"json"];
-
-	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"])
-	{
-		panel.directoryURL = [[NSUserDefaults standardUserDefaults] URLForKey:@"LastPresetImportDirectoryURL"];
-	}
-	else
-	{
-		panel.directoryURL = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
-	}
-
-    [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
-    {
-        [[NSUserDefaults standardUserDefaults] setURL:panel.directoryURL forKey:@"LastPresetImportDirectoryURL"];
-
-        for (NSURL *url in panel.URLs)
-        {
-            HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url];
-            if (import)
-            {
-                [presetManager addPreset:import];
-            }
-        }
-    }];
+    [fPresetsView importPreset:sender];
 }
 
 #pragma mark -
