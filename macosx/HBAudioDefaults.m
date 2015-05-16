@@ -170,8 +170,7 @@
     if (preset[@"AudioEncoderFallback"])
     {
         // map legacy encoder names via libhb
-        const char *strValue = hb_audio_encoder_sanitize_name([preset[@"AudioEncoderFallback"] UTF8String]);
-        self.encoderFallback = hb_audio_encoder_get_from_name(strValue);
+        self.encoderFallback = hb_audio_encoder_get_from_name([preset[@"AudioEncoderFallback"] UTF8String]);
     }
 
     [self.tracksArray removeAllObjects];
