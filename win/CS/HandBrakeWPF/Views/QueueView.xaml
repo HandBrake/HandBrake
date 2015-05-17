@@ -18,7 +18,6 @@
         Height="500"
         MinWidth="350"
         MinHeight="250"
-        Style="{StaticResource windowStyle}"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
@@ -204,16 +203,6 @@
                 </commands:InputBindingTrigger>
             </i:Interaction.Triggers>
 
-            <ListBox.Style>
-                <Style TargetType="ListBox">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                            <Setter Property="Background" Value="LightGray" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.Style>
-
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
@@ -279,12 +268,7 @@
 
                         </Setter.Value>
                     </Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding DataContext.UseSystemColours, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="False">
-                            <Setter Property="Background" Value="WhiteSmoke" />
-                        </DataTrigger>
-                    </Style.Triggers>
-
+          
                 </Style>
             </ListBox.ItemContainerStyle>
 

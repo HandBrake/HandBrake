@@ -127,7 +127,6 @@
     <Compile Include="AppArguments.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
-    <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
@@ -217,7 +216,6 @@
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
-    <Compile Include="Helpers\AppStyleHelper.cs" />
     <Compile Include="Helpers\PictureSize.cs" />
     <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Model\SelectionTitle.cs" />

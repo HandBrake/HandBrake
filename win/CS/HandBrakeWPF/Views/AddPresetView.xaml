@@ -33,16 +33,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                        <Setter Property="Background" Value="#FFF1F0EF" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
-
         <TextBlock Text="Add Preset" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
         
         <!--  Header  -->
@@ -125,16 +115,6 @@
         <!--  Controls  -->
         <Grid Grid.Row="3"
               Margin="0,20,0,0">
-
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                            <Setter Property="Background" Value="LightGray" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

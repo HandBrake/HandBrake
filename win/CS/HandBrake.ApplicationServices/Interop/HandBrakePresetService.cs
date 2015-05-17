@@ -26,15 +26,8 @@ namespace HandBrake.ApplicationServices.Interop
     public class HandBrakePresetService
     {
         /// <summary>
-        /// Initializes static members of the <see cref="HandBrakePresetService"/> class.
-        /// </summary>
-        static HandBrakePresetService()
-        {
-            HandBrakeInstanceManager.Init();
-        }
-
-        /// <summary>
         /// The get built in presets.
+        /// Requires an hb_init to have been invoked.
         /// </summary>
         /// <returns>
         /// The <see cref="string"/>.

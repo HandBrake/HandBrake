@@ -273,11 +273,6 @@ namespace HandBrakeWPF.ViewModels
         private bool removePunctuation;
 
         /// <summary>
-        /// The use system colours for styles.
-        /// </summary>
-        private bool useSystemColoursForStyles;
-
-        /// <summary>
         /// The reset when done action.
         /// </summary>
         private bool resetWhenDoneAction;
@@ -566,21 +561,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether use system colours.
-        /// </summary>
-        public bool UseSystemColoursForStylesForStyles
-        {
-            get
-            {
-                return this.useSystemColoursForStyles;
-            }
-            set
-            {
-                this.useSystemColoursForStyles = value;
-                this.NotifyOfPropertyChange(() => UseSystemColoursForStylesForStyles);
-            }
-        }
 
         #endregion
 
@@ -1387,7 +1367,6 @@ namespace HandBrakeWPF.ViewModels
             this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
             this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
-            this.UseSystemColoursForStylesForStyles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseSystemColours);
             this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
 
             // #############################
@@ -1517,7 +1496,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
-            this.userSettingService.SetUserSetting(UserSettingConstants.UseSystemColours, this.UseSystemColoursForStylesForStyles);
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
 
             /* Output Files */

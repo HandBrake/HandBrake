@@ -16,14 +16,12 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -287,7 +285,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.NotifyOfPropertyChange(() => this.Task);
 
-            if (Task.OutputFormat == OutputFormat.Mp4)
+            if (this.Task.OutputFormat == OutputFormat.Mp4)
             {
                 foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.Vorbis))
                 {
@@ -321,7 +319,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedAvailableToMove.Count > 0)
             {
-                List<string> copiedList = SelectedAvailableToMove.ToList();
+                List<string> copiedList = this.SelectedAvailableToMove.ToList();
                 foreach (string item in copiedList)
                 {
                     this.AvailableLanguages.Remove(item);
@@ -339,7 +337,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedLangaugesToMove.Count > 0)
             {
-                List<string> copiedList = SelectedLangaugesToMove.ToList();
+                List<string> copiedList = this.SelectedLangaugesToMove.ToList();
                 foreach (string item in copiedList)
                 {
                     this.AudioBehaviours.SelectedLangauges.Remove(item);
@@ -404,7 +402,7 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateTask(EncodeTask task)
         {
             this.Task = task;
-            this.NotifyOfPropertyChange(() => Task.AudioTracks);
+            this.NotifyOfPropertyChange(() => this.Task.AudioTracks);
             this.NotifyOfPropertyChange(() => this.Task);
         }
 

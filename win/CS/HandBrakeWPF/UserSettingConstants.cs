@@ -162,11 +162,6 @@ namespace HandBrakeWPF
         public const string ShowPresetPanel = "ShowPresetPanel";
 
         /// <summary>
-        /// The use system colours.
-        /// </summary>
-        public const string UseSystemColours = "UseSystemColours";
-
-        /// <summary>
         /// The reset when done action.
         /// </summary>
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";

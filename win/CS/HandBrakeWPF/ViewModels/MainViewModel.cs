@@ -273,8 +273,9 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
             this.Presets = this.presetService.Presets;
-            this.CancelScanCommand = new CancelScanCommand(this.scanService);
             this.Drives = new BindingList<SourceMenuItem>();
+
+            HandBrakeInstanceManager.Init();
         }
 
         #region View Model Properties
@@ -668,11 +669,6 @@ namespace HandBrakeWPF.ViewModels
                     };
             }
         }
-
-        /// <summary>
-        /// Gets or sets the cancel scan command.
-        /// </summary>
-        public CancelScanCommand CancelScanCommand { get; set; }
 
         /// <summary>
         /// Gets or sets Destination.

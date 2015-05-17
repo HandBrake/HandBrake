@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -61,17 +60,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.title = value;
                 this.NotifyOfPropertyChange("Title");
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether use system colours.
-        /// </summary>
-        public bool UseSystemColours
-        {
-            get
-            {
-                return AppStyleHelper.UseSystemColours;
             }
         }
 

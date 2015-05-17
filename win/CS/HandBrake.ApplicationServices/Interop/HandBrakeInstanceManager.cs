@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Interop
     /// The HandBrake Instance manager.
     /// Only supports scanning right now.
     /// </summary>
-    internal static class HandBrakeInstanceManager
+    public static class HandBrakeInstanceManager
     {
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance encodeInstance;
@@ -49,7 +49,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetScanInstance(int verbosity)
+        internal static IHandBrakeInstance GetScanInstance(int verbosity)
         {
             if (scanInstance != null)
             {
@@ -73,7 +73,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetEncodeInstance(int verbosity)
+        internal static IHandBrakeInstance GetEncodeInstance(int verbosity)
         {
             if (encodeInstance != null)
             {
@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Gets the master instance.
         /// </summary>
-        public static IHandBrakeInstance MasterInstance
+        internal static IHandBrakeInstance MasterInstance
         {
             get
             {
@@ -102,7 +102,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Gets the last scan scan instance.
         /// </summary>
-        public static IHandBrakeInstance LastScanScanInstance
+        internal static IHandBrakeInstance LastScanScanInstance
         {
             get
             {
@@ -124,7 +124,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Gets the last encode scan instance.
         /// </summary>
-        public static IHandBrakeInstance LastEncodeScanInstance
+        internal static IHandBrakeInstance LastEncodeScanInstance
         {
             get
             {

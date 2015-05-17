@@ -7,7 +7,6 @@
         Height="380"
         MinWidth="680"
         MinHeight="380"
-        Style="{StaticResource windowStyle}"
         FontSize="11"
         TextOptions.TextFormattingMode="Display"
         WindowStartupLocation="CenterOwner">
@@ -22,16 +21,6 @@
         <StackPanel Grid.Row="0"
                     Margin="0,0,0,0"
                     Orientation="Horizontal">
-
-            <StackPanel.Style>
-                <Style TargetType="StackPanel">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                            <Setter Property="Background" Value="White" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
 
             <Image Width="64"
                    Height="64"
@@ -77,16 +66,6 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UseSystemColours}" Value="False">
-                            <Setter Property="Background" Value="LightGray" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
 
             <Button Grid.Column="1"
                     Margin="5"

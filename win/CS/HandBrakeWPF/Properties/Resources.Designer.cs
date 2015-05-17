@@ -963,8 +963,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WARNING: This feature is experimental and has known issues. Suitable for testing only!
-        ///Accelerates H.264, MPEG-4, VC1 and WMV3 only and can provide a small improvement on low end hardware..
+        ///   Looks up a localized string similar to Accelerates H.264, MPEG-4, VC1 and WMV3  and can provide a small speed improvement on lower end hardware..
         /// </summary>
         public static string Video_DxvaDecode {
             get {
@@ -1102,13 +1101,13 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to QuickSync hardware not detected! 
+        ///   Looks up a localized string similar to QuickSync hardware not detected or enabled! 
         ///
         ///In order to use the QuickSync encoder, you must:
         ///
         ///- Have a Intel CPU with HD Graphics and QuickSync support. 4th Generation Haswell or newer parts are recommended for best quality.
-        ///- Have the HD Graphics enabled. 
-        ///- On older versions of windows before 8.x, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required..
+        ///- Have the HD Graphics enabled.
+        ///- On older versions of windows before 8, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required..
         /// </summary>
         public static string Video_QuickSyncNotAvailable {
             get {
@@ -1117,7 +1116,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WARNING: OpenCL scaling is still in beta.  It is only available for modern graphics cards that support OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use.  Performance gain up to 5%. Minor decrease in quality in some cases..
+        ///   Looks up a localized string similar to Requires a graphics card that supports OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use. Performance gain up to 5%. Minor decrease in quality in some cases..
         /// </summary>
         public static string Video_ScalingModes {
             get {
