@@ -1,5 +1,13 @@
     {
         "AudioCopyMask": [
+            "copy:aac",
+            "copy:ac3",
+            "copy:dts",
+            "copy:dtshd",
+            "copy:eac3",
+            "copy:flac",
+            "copy:mp3",
+            "copy:truehd"
         ],
         "AudioEncoderFallback": "ac3",
         "AudioLanguageList": [

@@ -1747,15 +1747,10 @@ dict_clean(hb_value_t *dict, hb_value_t *template)
         {
             key          = hb_dict_iter_key(iter);
             template_val = hb_dict_iter_value(iter);
-
-            if (hb_value_type(template_val) != HB_VALUE_TYPE_ARRAY &&
-                hb_value_type(template_val) != HB_VALUE_TYPE_DICT)
+            val          = hb_dict_get(dict, key);
+            if (val == NULL)
             {
-                val = hb_dict_get(dict, key);
-                if (val == NULL)
-                {
-                    hb_dict_set(dict, key, hb_value_dup(template_val));
-                }
+                hb_dict_set(dict, key, hb_value_dup(template_val));
             }
         }
     }
