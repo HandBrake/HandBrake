@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <development version="5100" identifier="xcode"/>
+        <deployment identifier="macosx"/>
+        <development version="6000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
@@ -81,7 +82,7 @@
                     </scroller>
                     <accessibility description="Presets"/>
                 </scrollView>
-                <button toolTip="Create a new preset based on the current settings." verticalHuggingPriority="750" id="kfi-wq-mgV">
+                <button toolTip="Create a new custom preset based on the currently selected settings." verticalHuggingPriority="750" id="kfi-wq-mgV">
                     <rect key="frame" x="3" y="3" width="24" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" borderStyle="border" inset="3" id="OJ3-1k-3DY">
@@ -92,19 +93,6 @@
                     <connections>
                         <action selector="addNewPreset:" target="-2" id="TYV-vH-8hk"/>
                         <binding destination="-2" name="enabled" keyPath="self.enabled" id="lmV-Y3-JoF"/>
-                    </connections>
-                </button>
-                <button toolTip="Delete the current selection" verticalHuggingPriority="750" id="b3V-8w-euU">
-                    <rect key="frame" x="26" y="3" width="24" height="23"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="Kb1-6u-550">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="systemBold"/>
-                    </buttonCell>
-                    <accessibility description="Delete"/>
-                    <connections>
-                        <action selector="deletePreset:" target="-2" id="b6N-h7-25y"/>
-                        <binding destination="ohT-Pp-wBT" name="enabled" keyPath="canRemove" id="WNd-yX-UEH"/>
                     </connections>
                 </button>
                 <popUpButton verticalHuggingPriority="750" id="Ybq-Zt-sta">
@@ -148,6 +136,19 @@
                     </popUpButtonCell>
                     <accessibility description="Additional Options"/>
                 </popUpButton>
+                <button toolTip="Delete the current selection" verticalHuggingPriority="750" id="b3V-8w-euU">
+                    <rect key="frame" x="26" y="3" width="24" height="23"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="only" alignment="left" borderStyle="border" inset="3" id="Kb1-6u-550">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="systemBold"/>
+                    </buttonCell>
+                    <accessibility description="Delete"/>
+                    <connections>
+                        <action selector="deletePreset:" target="-2" id="b6N-h7-25y"/>
+                        <binding destination="ohT-Pp-wBT" name="enabled" keyPath="canRemove" id="WNd-yX-UEH"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="58" y="345.5"/>
         </customView>

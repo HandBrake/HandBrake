@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
+        <deployment identifier="macosx"/>
+        <development version="6000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
@@ -42,6 +42,7 @@
                 <textField verticalHuggingPriority="750" id="A3o-Zx-OfM">
                     <rect key="frame" x="507" y="241" width="78" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="eQl-KB-XJu">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="TQJ-nd-2BX">
                             <real key="minimum" value="0.0"/>
@@ -118,6 +119,7 @@
                 <popUpButton verticalHuggingPriority="750" id="9tc-EO-QMd">
                     <rect key="frame" x="110" y="258" width="149" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Output framerate. 'Same as source' variable framerate is recommended. Peak framerate is 'same as source' VFR with a peak rate. VFR is incompatible with some players.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -146,6 +148,7 @@
                 <button id="bnV-aE-FVh">
                     <rect key="frame" x="379" y="222" width="124" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Perform 2-pass encoding. 'Bitrate' rate control is a prerequisite. During the 1st pass, statistics about the video are collected. Then in the second pass, those statistics are used to make bitrate allocation decisions.</string>
                     <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -168,7 +171,7 @@
                         <binding destination="-2" name="value" keyPath="self.video.twoPass" id="mOJ-b3-YKx"/>
                     </connections>
                 </button>
-                <button id="olm-zg-k9Y">
+                <button toolTip="During the 1st pass of a 2-pass encode, use settings that speed things along." id="olm-zg-k9Y">
                     <rect key="frame" x="504" y="222" width="107" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
@@ -274,10 +277,12 @@
                             <buttonCell type="radio" title="Constant Quality" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="au3-pU-KX6">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
+                                <mutableString key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</mutableString>
                             </buttonCell>
                             <buttonCell type="radio" title="Average Bitrate (kbps):" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6tI-Qz-3bJ">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
+                                <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
                             </buttonCell>
                         </column>
                     </cells>
@@ -334,6 +339,7 @@
                 <slider verticalHuggingPriority="750" id="GPu-Ht-bKg">
                     <rect key="frame" x="382" y="265" width="518" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <mutableString key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</mutableString>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>

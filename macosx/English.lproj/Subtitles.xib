@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C94b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
@@ -28,7 +28,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="884" height="27"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
@@ -169,7 +169,7 @@
                                         <action selector="addAll:" target="-2" id="tuS-uF-dje"/>
                                     </connections>
                                 </menuItem>
-                                <menuItem title="Add External SRT…" id="HW0-PS-t0U">
+                                <menuItem title="Add External SRT…" toolTip="Add new SRT subtitle to the list." id="HW0-PS-t0U">
                                     <connections>
                                         <action selector="browseImportSrtFile:" target="-2" id="dog-BP-my4"/>
                                     </connections>
@@ -224,7 +224,7 @@
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="231" y="438"/>
+            <point key="canvasLocation" x="373" y="444"/>
         </customView>
         <menu id="KgC-dn-Hq2">
             <items>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
+        <deployment identifier="macosx"/>
+        <development version="6000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
@@ -58,7 +58,7 @@ Gw
                             <action selector="cancel:" target="-2" id="Ygd-gd-Yd0"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="aKg-n4-OUS">
+                    <textField toolTip="Enter a name for the preset (will be displayed in the preset drawer)." verticalHuggingPriority="750" id="aKg-n4-OUS">
                         <rect key="frame" x="20" y="229" width="298" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
@@ -73,6 +73,7 @@ Gw
                     <popUpButton verticalHuggingPriority="750" id="z6B-ig-ouq">
                         <rect key="frame" x="128" y="180" width="193" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <mutableString key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').\n'Custom': choose the maximum width and height allowed by the preset (has no effect if the preset specifies Strict anamorphic).\n'Source maximum': use the source dimensions.</mutableString>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Mi7-V1-sSf">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -113,6 +114,7 @@ Gw
                     <textField verticalHuggingPriority="750" id="8kl-Sh-Gh7">
                         <rect key="frame" x="20" y="61" width="298" height="41"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Enter a description for the preset. The description will be shown when hovering the mouse over the preset name in the preset drawer.</string>
                         <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HKY-Cq-VyU">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -131,7 +133,7 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button id="zJI-d5-0k8">
+                    <button toolTip="If enabled, the preset will store the currently selected picture filters." id="zJI-d5-0k8">
                         <rect key="frame" x="128" y="132" width="24" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="a3h-LA-LEO">
@@ -175,6 +177,7 @@ Gw
                                 <textField verticalHuggingPriority="750" id="gOg-oO-8ar">
                                     <rect key="frame" x="3" y="6" width="52" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <string key="toolTip">Select the maximum width allowed by the preset (has no effect if the preset specifies Strict anamorphic). 0 means no limit is placed on the width.</string>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="ExG-3m-WxY">
                                         <font key="font" metaFont="miniSystem"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -193,6 +196,7 @@ Gw
                                 <textField verticalHuggingPriority="750" id="Mga-dS-8BF">
                                     <rect key="frame" x="82" y="6" width="52" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <string key="toolTip">Select the maximum height allowed by the preset (has no effect if the preset specifies Strict anamorphic).  0 means no limit is placed on the height.</string>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="tBe-1m-0r9">
                                         <font key="font" metaFont="miniSystem"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
