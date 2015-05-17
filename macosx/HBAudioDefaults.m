@@ -130,7 +130,7 @@
     // then, enable allowed passthru encoders
     for (NSString *copyMask in preset[@"AudioCopyMask"])
     {
-        int allowedPassthru = hb_video_encoder_get_from_name(copyMask.UTF8String);
+        int allowedPassthru = hb_audio_encoder_get_from_name(copyMask.UTF8String);
         if (allowedPassthru & HB_ACODEC_PASS_FLAG)
         {
             switch (allowedPassthru)
