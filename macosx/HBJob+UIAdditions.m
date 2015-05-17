@@ -321,9 +321,24 @@ static NSDictionary            *shortHeightAttr;
             {
                 // we are using the x264 system
                 encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", self.video.preset]];
-                if (self.video.tune.length)
+
+                if (self.video.tune.length || self.video.fastDecode)
                 {
-                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", self.video.tune]];
+                    encoderPresetInfo = [encoderPresetInfo stringByAppendingString:@" - Tune: "];
+
+                    if (self.video.tune.length)
+                    {
+                        encoderPresetInfo = [encoderPresetInfo stringByAppendingString: [NSString stringWithFormat:@"%@", self.video.tune]];
+
+                        if (self.video.fastDecode)
+                        {
+                            encoderPresetInfo = [encoderPresetInfo stringByAppendingString:@","];
+                        }
+                    }
+                    if (self.video.fastDecode)
+                    {
+                        encoderPresetInfo = [encoderPresetInfo stringByAppendingString:@"fastdecode"];
+                    }
                 }
                 if (self.video.videoOptionExtra.length)
                 {
