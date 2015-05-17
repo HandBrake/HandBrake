@@ -23,7 +23,7 @@
 /**
  *  HBTreeNode
  */
-@interface HBTreeNode : NSObject
+@interface HBTreeNode : NSObject <NSCopying>
 
 // NSTreeController required properties
 @property (nonatomic, readonly) NSMutableArray *children;

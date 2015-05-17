@@ -192,15 +192,10 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    HBPreset *node = [[self class] allocWithZone:zone];
+    HBPreset *node = [super copyWithZone:zone];
     node->_name = [self.name copy];
     node->_content = [self.content copy];
     node->_presetDescription = [self.presetDescription copy];
-
-    for (HBPreset *children in self.children)
-    {
-        [node.children addObject:[children copy]];
-    }
 
     return node;
 }

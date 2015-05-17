@@ -18,6 +18,20 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    HBTreeNode *node = [[self class] allocWithZone:zone];
+    node->_children = [[NSMutableArray alloc] init];
+    node->_isLeaf = self.isLeaf;
+
+    for (HBTreeNode *children in self.children)
+    {
+        [node.children addObject:[children copy]];
+    }
+
+    return node;
+}
+
 - (NSUInteger)countOfChildren
 {
     return self.children.count;

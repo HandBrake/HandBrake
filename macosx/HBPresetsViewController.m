@@ -88,10 +88,12 @@
 - (IBAction)exportPreset:(id)sender
 {
     // Find the current selection, it can be a folder too.
-    HBPreset *selectedPreset = [[self.treeController selectedObjects] firstObject];
+    HBPreset *selectedPreset = [[[self.treeController selectedObjects] firstObject] copy];
 
     // Open a panel to let the user choose where and how to save the export file
     NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.title = NSLocalizedString(@"Export presets", nil);
+
     // We get the current file name and path from the destination field here
     NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
     panel.directoryURL = defaultExportDirectory;
@@ -112,6 +114,7 @@
 - (IBAction)importPreset:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.title = NSLocalizedString(@"Import presets", nil);
     panel.allowsMultipleSelection = YES;
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
