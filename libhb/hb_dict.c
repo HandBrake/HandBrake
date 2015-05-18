@@ -415,7 +415,7 @@ hb_value_get_string_xform(const hb_value_t *value)
     return result;
 }
 
-char * hb_value_get_json(hb_value_t *value)
+char * hb_value_get_json(const hb_value_t *value)
 {
     return json_dumps(value, JSON_INDENT(4) | JSON_SORT_KEYS);
 }

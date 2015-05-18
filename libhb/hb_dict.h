@@ -113,7 +113,7 @@ int          hb_value_get_bool(const hb_value_t *value);
  * caller must free the returned string */
 char *       hb_value_get_string_xform(const hb_value_t *value);
 /* converts value to json string */
-char *       hb_value_get_json(hb_value_t *value);
+char *       hb_value_get_json(const hb_value_t *value);
 /* write json representation to a file */
 int          hb_value_write_file_json(hb_value_t *value, FILE *file);
 int          hb_value_write_json(hb_value_t *value, const char *path);
