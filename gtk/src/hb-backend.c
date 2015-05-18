@@ -1014,19 +1014,6 @@ fail:
     return "und";
 }
 
-static gint
-search_audio_bitrates(gint rate)
-{
-    const hb_rate_t *hbrate;
-    for (hbrate = hb_audio_bitrate_get_next(NULL); hbrate != NULL;
-         hbrate = hb_audio_bitrate_get_next(hbrate))
-    {
-        if (hbrate->rate == rate)
-            return 1;
-    }
-    return 0;
-}
-
 static gboolean find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter);
 
 static void
@@ -2845,51 +2832,6 @@ ghb_get_chapters(const hb_title_t *title)
     return chapters;
 }
 
-static char custom_audio_bitrate_str[8];
-static hb_rate_t custom_audio_bitrate =
-{
-    .name = custom_audio_bitrate_str,
-    .rate = 0
-};
-
-static void
-audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
-{
-    GtkTreeIter iter;
-    GtkListStore *store;
-    gchar *str;
-
-    g_debug("audio_bitrate_opts_add ()\n");
-
-    if (rate >= 0 && rate < 8) return;
-
-    custom_audio_bitrate.rate = rate;
-    if (rate < 0)
-    {
-        snprintf(custom_audio_bitrate_str, 8, _("N/A"));
-    }
-    else
-    {
-        snprintf(custom_audio_bitrate_str, 8, "%d", rate);
-    }
-
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
-    if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
-    {
-        str = g_strdup_printf ("<small>%s</small>", custom_audio_bitrate.name);
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           0, str,
-                           1, TRUE,
-                           2, custom_audio_bitrate.name,
-                           3, (gdouble)rate,
-                           4, custom_audio_bitrate.name,
-                           -1);
-        g_free(str);
-    }
-}
-
 void
 ghb_audio_bitrate_opts_filter(
     GtkComboBox *combo,
@@ -2921,52 +2863,8 @@ ghb_audio_bitrate_opts_filter(
     }
 }
 
-static void
-audio_bitrate_opts_update(
-    GtkBuilder *builder,
-    const gchar *name,
-    gint first_rate,
-    gint last_rate,
-    gint extra_rate)
-{
-    GtkTreeIter iter;
-    GtkListStore *store;
-    gdouble ivalue;
-    gboolean done = FALSE;
-
-    g_debug("audio_bitrate_opts_clean ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    ghb_audio_bitrate_opts_filter(combo, first_rate, last_rate);
-
-    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
-    if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
-    {
-        do
-        {
-            gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &ivalue, -1);
-            if (!search_audio_bitrates(ivalue) && (ivalue != extra_rate))
-            {
-                done = !gtk_list_store_remove(store, &iter);
-            }
-            else
-            {
-                done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
-            }
-        } while (!done);
-    }
-    if (extra_rate > 0 && !search_audio_bitrates(extra_rate))
-    {
-        audio_bitrate_opts_add(builder, name, extra_rate);
-    }
-    else
-    {
-        custom_audio_bitrate.rate = 0;
-        custom_audio_bitrate_str[0] = 0;
-    }
-}
-
 void
-ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra)
+ghb_audio_bitrate_opts_set(GtkComboBox *combo)
 {
     GtkTreeIter iter;
     GtkListStore *store;
@@ -2991,46 +2889,18 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra)
                            -1);
         g_free(str);
     }
-    if (extra && custom_audio_bitrate.rate != 0)
-    {
-        gtk_list_store_append(store, &iter);
-        str = g_strdup_printf ("<small>%s</small>", custom_audio_bitrate.name);
-        gtk_list_store_set(store, &iter,
-                           0, str,
-                           1, TRUE,
-                           2, custom_audio_bitrate.name,
-                           3, (gdouble)custom_audio_bitrate.rate,
-                           4, custom_audio_bitrate.name,
-                           -1);
-        g_free(str);
-    }
 }
 
 static void
 audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    ghb_audio_bitrate_opts_set(combo, TRUE);
-}
-
-void
-ghb_set_bitrate_opts(
-    GtkBuilder *builder,
-    gint first_rate,
-    gint last_rate,
-    gint extra_rate)
-{
-    audio_bitrate_opts_update(builder, "AudioBitrate", first_rate, last_rate, extra_rate);
+    ghb_audio_bitrate_opts_set(combo);
 }
 
 const char*
 ghb_audio_bitrate_get_short_name(int rate)
 {
-    if (rate == custom_audio_bitrate.rate)
-    {
-        return custom_audio_bitrate.name;
-    }
-
     const hb_rate_t *hb_rate, *first;
     for (first = hb_rate = hb_audio_bitrate_get_next(NULL); hb_rate != NULL;
          hb_rate = hb_audio_bitrate_get_next(hb_rate))
@@ -3047,8 +2917,8 @@ const hb_rate_t*
 ghb_lookup_audio_bitrate(const char *name)
 {
     // Now find the matching rate info
-    const hb_rate_t *hb_rate, *first;
-    for (first = hb_rate = hb_audio_bitrate_get_next(NULL); hb_rate != NULL;
+    const hb_rate_t *hb_rate;
+    for (hb_rate = hb_audio_bitrate_get_next(NULL); hb_rate != NULL;
          hb_rate = hb_audio_bitrate_get_next(hb_rate))
     {
         if (!strncmp(name, hb_rate->name, 8))
@@ -3057,13 +2927,17 @@ ghb_lookup_audio_bitrate(const char *name)
         }
     }
     // Return a default rate if nothing matches
-    return first;
+    return NULL;
 }
 
 int
 ghb_lookup_audio_bitrate_rate(const char *name)
 {
-    return ghb_lookup_audio_bitrate(name)->rate;
+    const hb_rate_t *rate;
+    rate = ghb_lookup_audio_bitrate(name);
+    if (rate == NULL)
+        return 0;
+    return rate->rate;
 }
 
 int
@@ -4084,14 +3958,6 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             ghb_dict_set_string(asettings, "Mixdown",
                                     hb_mixdown_get_short_name(amixdown));
         }
-        int samplerate = ghb_settings_audio_samplerate_rate(asettings,
-                                                            "Samplerate");
-        if (samplerate == 0)
-        {
-            samplerate = aconfig->in.samplerate;
-            ghb_dict_set_string(asettings, "Samplerate",
-                            ghb_audio_samplerate_get_short_name(samplerate));
-        }
     }
     return TRUE;
 }
@@ -4593,74 +4459,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 
     // Create audio list
     hb_dict_t *audios_dict = hb_dict_get(dict, "Audio");
-    hb_value_array_t *json_audio_list = hb_dict_get(audios_dict, "AudioList");
-    const GhbValue *audio_list;
-
-    audio_list = ghb_dict_get_value(js, "audio_list");
-    count = ghb_array_len(audio_list);
-    for (ii = 0; ii < count; ii++)
-    {
-        hb_dict_t *audio_dict;
-        GhbValue *asettings;
-        int track, acodec, mixdown, samplerate;
-        const char *aname;
-        double gain, drc, quality;
-
-        asettings = ghb_array_get(audio_list, ii);
-        track = ghb_dict_get_int(asettings, "Track");
-        aname = ghb_dict_get_string(asettings, "Name");
-        acodec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
-        audio_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o}",
-            "Track",                hb_value_int(track),
-            "Encoder",              hb_value_int(acodec));
-        if (audio_dict == NULL)
-        {
-            g_warning("json pack audio failure: %s", error.text);
-            return;
-        }
-        if (aname != NULL && aname[0] != 0)
-        {
-            hb_dict_set(audio_dict, "Name", hb_value_string(aname));
-        }
-
-        // It would be better if this were done in libhb for us, but its not yet.
-        if (!ghb_audio_is_passthru(acodec))
-        {
-            gain = ghb_dict_get_double(asettings, "Gain");
-            if (gain > 0)
-                hb_dict_set(audio_dict, "Gain", hb_value_double(gain));
-            drc = ghb_dict_get_double(asettings, "DRC");
-            if (drc < 1.0)
-                drc = 0.0;
-            if (drc > 0)
-                hb_dict_set(audio_dict, "DRC", hb_value_double(drc));
-
-            mixdown = ghb_settings_mixdown_mix(asettings, "Mixdown");
-            hb_dict_set(audio_dict, "Mixdown", hb_value_int(mixdown));
-
-            samplerate = ghb_settings_audio_samplerate_rate(
-                                            asettings, "Samplerate");
-            hb_dict_set(audio_dict, "Samplerate", hb_value_int(samplerate));
-            gboolean qe;
-            qe = ghb_dict_get_bool(asettings, "QualityEnable");
-            quality = ghb_dict_get_double(asettings, "Quality");
-            if (qe && quality != HB_INVALID_AUDIO_QUALITY)
-            {
-                hb_dict_set(audio_dict, "Quality", hb_value_double(quality));
-            }
-            else
-            {
-                int bitrate =
-                    ghb_settings_audio_bitrate_rate(asettings, "Bitrate");
-                bitrate = hb_audio_bitrate_get_best(
-                                        acodec, bitrate, samplerate, mixdown);
-                hb_dict_set(audio_dict, "Bitrate", hb_value_int(bitrate));
-            }
-        }
-
-        hb_value_array_append(json_audio_list, audio_dict);
-    }
+    hb_dict_set(audios_dict, "AudioList",
+                ghb_value_dup(ghb_dict_get(js, "audio_list")));
 
     // Create subtitle list
     hb_dict_t *subtitles_dict = hb_dict_get(dict, "Subtitle");

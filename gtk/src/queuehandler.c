@@ -562,11 +562,15 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         }
         else
         {
-            int br = ghb_settings_audio_bitrate_rate(asettings, "Bitrate");
+            int br = ghb_dict_get_int(asettings, "Bitrate");
             quality = g_strdup_printf(_("Bitrate: %d"), br);
         }
-        const hb_rate_t *sr;
-        sr = ghb_settings_audio_samplerate(asettings, "Samplerate");
+        const char *sr_name;
+        int sr_rate = ghb_dict_get_int(asettings, "Samplerate");
+        sr_name = hb_audio_samplerate_get_name(sr_rate);
+        if (sr_name == NULL)
+            sr_name = "Auto";
+
         track = ghb_dict_get_string(asettings, "Description");
         const hb_mixdown_t *mix;
         mix = ghb_settings_mixdown(asettings, "Mixdown");
@@ -580,7 +584,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         else
         {
             XPRINT(_("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"),
-             track, audio_encoder->name, mix->name, sr->name, quality);
+             track, audio_encoder->name, mix->name, sr_name, quality);
         }
         g_free(quality);
     }

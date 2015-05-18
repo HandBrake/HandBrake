@@ -126,8 +126,6 @@ gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);
-void ghb_set_bitrate_opts(
-    GtkBuilder *builder, gint first_rate, gint last_rate, gint extra_rate);
 void ghb_grey_combo_options(signal_user_data_t *ud);
 void ghb_update_ui_combo_box(
     signal_user_data_t *ud, const gchar *name,
@@ -163,7 +161,7 @@ void ghb_init_lang_list_box(GtkListBox *list_box);
 
 void ghb_init_combo_box(GtkComboBox *combo);
 void ghb_audio_encoder_opts_set(GtkComboBox *combo);
-void ghb_audio_bitrate_opts_set(GtkComboBox *combo, gboolean extra);
+void ghb_audio_bitrate_opts_set(GtkComboBox *combo);
 void ghb_audio_bitrate_opts_filter(GtkComboBox *combo, gint first_rate, gint last_rate);
 void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
@@ -201,12 +199,13 @@ const hb_rate_t* ghb_lookup_audio_samplerate(const char *name);
 int ghb_lookup_audio_samplerate_rate(const char *name);
 int ghb_settings_audio_samplerate_rate(
     const GhbValue *settings, const char *name);
+int ghb_settings_audio_bitrate_rate(
+    const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_settings_audio_samplerate(
     const GhbValue *settings, const char *name);
 const char* ghb_audio_samplerate_get_short_name(int rate);
 const hb_rate_t* ghb_lookup_audio_bitrate(const char *name);
 int ghb_lookup_audio_bitrate_rate(const char *name);
-int ghb_settings_audio_bitrate_rate(const GhbValue *settings, const char *name);
 const hb_rate_t* ghb_settings_audio_bitrate(
     const GhbValue *settings, const char *name);
 const char* ghb_audio_bitrate_get_short_name(int rate);
