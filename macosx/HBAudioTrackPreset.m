@@ -56,6 +56,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 {
     _encoder = encoder;
     [self validateMixdown];
+    [self validateSamplerate];
     [self validateBitrate];
 }
 
@@ -85,9 +86,34 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
 }
 
+- (void)validateSamplerate
+{
+    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    {
+        self.sampleRate = 0; // Auto (same as source)
+    }
+    else if (self.sampleRate)
+    {
+        self.sampleRate = hb_audio_samplerate_get_best(self.encoder, self.sampleRate, NULL);
+    }
+}
+
 - (void)validateBitrate
 {
-    self.bitRate = hb_audio_bitrate_get_best(self.encoder, self.bitRate, self.sampleRate, self.mixdown);
+    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    {
+        self.bitRate = -1;
+    }
+    else if (self.bitRate == -1) // switching from passthru
+    {
+        self.bitRate = hb_audio_bitrate_get_default(self.encoder,
+                                                    self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE,
+                                                    self.mixdown);
+    }
+    else
+    {
+        self.bitRate = hb_audio_bitrate_get_best(self.encoder, self.bitRate, self.sampleRate, self.mixdown);
+    }
 }
 
 - (BOOL)mixdownEnabled
@@ -184,7 +210,11 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
          audio_samplerate != NULL;
          audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
     {
-        [samplerates addObject:@(audio_samplerate->name)];
+        int rate = audio_samplerate->rate;
+        if (rate == hb_audio_samplerate_get_best(self.encoder, rate, NULL))
+        {
+            [samplerates addObject:@(audio_samplerate->name)];
+        }
     }
     return samplerates;
 }
@@ -400,6 +430,12 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 - (id)transformedValue:(id)value
 {
+    // treat -1 as a special invalid value
+    // e.g. passthru has no bitrate since we have no source
+    if ([value intValue] == -1)
+    {
+        return @"N/A";
+    }
     return [value stringValue];
 }
 

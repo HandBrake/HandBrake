@@ -33,7 +33,6 @@ NSString *keyAudioBitrate = @"bitrate";
 
 static NSMutableArray *masterCodecArray = nil;
 static NSMutableArray *masterMixdownArray = nil;
-static NSMutableArray *masterSampleRateArray = nil;
 static NSMutableArray *masterBitRateArray = nil;
 
 @interface NSArray (HBAudioSupport)
@@ -108,20 +107,6 @@ static NSMutableArray *masterBitRateArray = nil;
         {
             [masterMixdownArray addObject:@{keyAudioMixdownName: @(mixdown->name),
                                             keyAudioMixdown:     @(mixdown->amixdown)}];
-        }
-
-        // Note that for the Auto value we use 0 for the sample rate because our controller will give back the track's
-        // input sample rate when it finds this 0 value as the selected sample rate.  We do this because the input
-        // sample rate depends on the track, which means it depends on the title, so cannot be nicely set up here.
-        masterSampleRateArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        [masterSampleRateArray addObject:@{keyAudioSampleRateName: @"Auto",
-                                           keyAudioSamplerate:     @0}];
-        for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
-             audio_samplerate != NULL;
-             audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
-        {
-            [masterSampleRateArray addObject:@{keyAudioSampleRateName: @(audio_samplerate->name),
-                                               keyAudioSamplerate:     @(audio_samplerate->rate)}];
         }
 
         masterBitRateArray = [[NSMutableArray alloc] init]; // knowingly leaked
@@ -234,6 +219,22 @@ static NSMutableArray *masterBitRateArray = nil;
     }
 }
 
+- (void)validateSamplerate
+{
+    int codec      = [self.codec[keyAudioCodec] intValue];
+    int samplerate = [self.sampleRate[keyAudioSamplerate] intValue];
+
+    if (codec & HB_ACODEC_PASS_FLAG)
+    {
+        [self setSampleRateFromName:@"Auto"];
+    }
+    else if (samplerate)
+    {
+        samplerate = hb_audio_samplerate_get_best(codec, samplerate, NULL);
+        [self setSampleRateFromName:@(hb_audio_samplerate_get_name(samplerate))];
+    }
+}
+
 - (void) updateBitRates: (BOOL) shouldSetDefault
 
 {
@@ -321,7 +322,29 @@ static NSMutableArray *masterBitRateArray = nil;
 
 - (NSArray *) sampleRates
 {
-    return masterSampleRateArray;
+    NSMutableArray *samplerates = [[NSMutableArray alloc] init];
+
+    /*
+     * Note that for the Auto value we use 0 for the sample rate because our controller will give back the track's
+     * input sample rate when it finds this 0 value as the selected sample rate.  We do this because the input
+     * sample rate depends on the track, which means it depends on the title, so cannot be nicely set up here.
+     */
+    [samplerates addObject:@{keyAudioSampleRateName: @"Auto",
+                             keyAudioSamplerate:     @0}];
+
+    int codec = [self.codec[keyAudioCodec] intValue];
+    for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
+         audio_samplerate != NULL;
+         audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
+    {
+        int rate = audio_samplerate->rate;
+        if (rate == hb_audio_samplerate_get_best(codec, rate, NULL))
+        {
+            [samplerates addObject:@{keyAudioSampleRateName: @(audio_samplerate->name),
+                                     keyAudioSamplerate:     @(rate)}];
+        }
+    }
+    return samplerates;
 }
 
 #pragma mark -
@@ -359,6 +382,7 @@ static NSMutableArray *masterBitRateArray = nil;
 - (void)setCodec:(NSDictionary *)codec
 {
     _codec = codec;
+    [self validateSamplerate];
     [self updateMixdowns: YES];
     [self updateBitRates: YES];
 }
