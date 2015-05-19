@@ -1564,6 +1564,14 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
 
 int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
 {
+    /*
+     * Where there isn't a source (e.g. audio defaults panel), we have no input
+     * layout; assume remix support, as the mixdown will be sanitized later on.
+     */
+    if (!layout)
+    {
+        return 1;
+    }
     switch (mixdown)
     {
         // stereo + front left/right of center
