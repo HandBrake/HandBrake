@@ -30,14 +30,14 @@
 
 void ghb_set_pref_subtitle_settings(signal_user_data_t *ud, const hb_title_t *title, GhbValue *settings);
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GhbValue *settings);
-void ghb_reset_subtitles(signal_user_data_t *ud, GhbValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
-void ghb_subtitle_list_refresh_selected(signal_user_data_t *ud);
 void ghb_subtitle_list_refresh_all(signal_user_data_t *ud);
 void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud);
 void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud);
 void ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show);
 void ghb_subtitle_set_pref_lang(GhbValue *settings);
 void ghb_clear_subtitle_selection(GtkBuilder *builder);
+GhbValue *ghb_get_subtitle_list(GhbValue *settings);
+GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
 
 #endif // _SUBTITLEHANDLER_H_

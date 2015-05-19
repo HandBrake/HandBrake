@@ -2225,39 +2225,27 @@ subtitle_track_opts_set(
     {
         count = hb_list_count( title->list_subtitle );
     }
-    if (count > 0)
+    for (ii = 0; ii < count; ii++)
     {
+        gchar *opt;
+        char idx[4];
+
+        subtitle = hb_list_item(title->list_subtitle, ii);
+        opt = g_strdup_printf("%d - %s (%s)", ii+1, subtitle->lang,
+                              hb_subsource_name(subtitle->source));
+        snprintf(idx, 4, "%d", ii);
+
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           0, _("Foreign Audio Search"),
-                           1, TRUE,
-                           2, "-1",
-                           3, -1.0,
-                           4, "auto",
-                           -1);
-
-        for (ii = 0; ii < count; ii++)
-        {
-            gchar *opt;
-            char idx[4];
-
-            subtitle = hb_list_item(title->list_subtitle, ii);
-            opt = g_strdup_printf("%d - %s (%s)", ii+1, subtitle->lang,
-                                  hb_subsource_name(subtitle->source));
-            snprintf(idx, 4, "%d", ii);
-
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter,
-                        0, opt,
-                        1, TRUE,
-                        2, idx,
-                        3, (gdouble)ii,
-                        4, idx,
-                        -1);
-            g_free(opt);
-        }
+                    0, opt,
+                    1, TRUE,
+                    2, idx,
+                    3, (gdouble)ii,
+                    4, idx,
+                    -1);
+        g_free(opt);
     }
-    else
+    if (count <= 0)
     {
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
@@ -3777,15 +3765,14 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     gint count, ii, source, track;
     gboolean burned, one_burned = FALSE;
 
-    slist = ghb_dict_get_value(settings, "subtitle_list");
+    slist = ghb_get_subtitle_list(settings);
     count = ghb_array_len(slist);
     for (ii = 0; ii < count; ii++)
     {
         subtitle = ghb_array_get(slist, ii);
-        track = ghb_dict_get_int(subtitle, "SubtitleTrack");
-        source = ghb_dict_get_int(subtitle, "SubtitleSource");
-        burned = track != -1 &&
-                 ghb_dict_get_bool(subtitle, "SubtitleBurned");
+        track = ghb_dict_get_int(subtitle, "Track");
+        source = ghb_dict_get_int(subtitle, "Source");
+        burned = track != -1 && ghb_dict_get_bool(subtitle, "Burn");
         if (burned && one_burned)
         {
             // MP4 can only handle burned vobsubs.  make sure there isn't
@@ -3810,12 +3797,13 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         if (source == SRTSUB)
         {
             const gchar *filename;
+            GhbValue *srt = ghb_dict_get(subtitle, "SRT");
 
-            filename = ghb_dict_get_string(subtitle, "SrtFile");
+            filename = ghb_dict_get_string(srt, "Filename");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
                 message = g_strdup_printf(
-                _("Srt file does not exist or not a regular file.\n\n"
+                _("SRT file does not exist or not a regular file.\n\n"
                     "You should choose a valid file.\n"
                     "If you continue, this subtitle will be ignored."));
                 if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING, message,
@@ -3967,7 +3955,6 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 {
     hb_dict_t * dict;
     json_error_t error;
-    int ii, count;
 
     // Assumes that the UI has reduced geometry settings to only the
     // necessary PAR value
@@ -4462,110 +4449,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     hb_dict_set(audios_dict, "AudioList",
                 ghb_value_dup(ghb_dict_get(js, "audio_list")));
 
-    // Create subtitle list
-    hb_dict_t *subtitles_dict = hb_dict_get(dict, "Subtitle");
-    hb_value_array_t *json_subtitle_list = hb_dict_get(subtitles_dict, "SubtitleList");
-    const GhbValue *subtitle_list;
-
-    subtitle_list = ghb_dict_get_value(js, "subtitle_list");
-    count = ghb_array_len(subtitle_list);
-    for (ii = 0; ii < count; ii++)
-    {
-        hb_dict_t *subtitle_dict;
-        gint track;
-        gboolean force, burned, def, one_burned = FALSE;
-        GhbValue *ssettings;
-        gint source;
-
-        ssettings = ghb_array_get(subtitle_list, ii);
-
-        force = ghb_dict_get_bool(ssettings, "SubtitleForced");
-        burned = ghb_dict_get_bool(ssettings, "SubtitleBurned");
-        def = ghb_dict_get_bool(ssettings, "SubtitleDefaultTrack");
-        source = ghb_dict_get_int(ssettings, "SubtitleSource");
-
-        if (source == SRTSUB)
-        {
-            const gchar *filename, *lang, *code;
-            int offset;
-            filename = ghb_dict_get_string(ssettings, "SrtFile");
-            if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
-            {
-                continue;
-            }
-            offset = ghb_dict_get_int(ssettings, "SrtOffset");
-            lang = ghb_dict_get_string(ssettings, "SrtLanguage");
-            code = ghb_dict_get_string(ssettings, "SrtCodeset");
-            if (burned && !one_burned && hb_subtitle_can_burn(SRTSUB))
-            {
-                // Only allow one subtitle to be burned into the video
-                one_burned = TRUE;
-            }
-            else
-            {
-                burned = FALSE;
-            }
-            subtitle_dict = json_pack_ex(&error, 0,
-                "{s:o, s:o, s:o, s:{s:o, s:o, s:o}}",
-                "Default",  hb_value_bool(def),
-                "Burn",     hb_value_bool(burned),
-                "Offset",   hb_value_int(offset),
-                "SRT",
-                    "Filename", hb_value_string(filename),
-                    "Language", hb_value_string(lang),
-                    "Codeset",  hb_value_string(code));
-            if (subtitle_dict == NULL)
-            {
-                g_warning("json pack srt failure: %s", error.text);
-                return;
-            }
-            hb_value_array_append(json_subtitle_list, subtitle_dict);
-        }
-
-        track = ghb_dict_get_int(ssettings, "SubtitleTrack");
-        if (track == -1)
-        {
-            hb_dict_t *search = hb_dict_get(subtitles_dict, "Search");
-            if (burned && !one_burned)
-            {
-                // Only allow one subtitle to be burned into the video
-                one_burned = TRUE;
-            }
-            else
-            {
-                burned = FALSE;
-            }
-            hb_dict_set(search, "Enable", hb_value_bool(TRUE));
-            hb_dict_set(search, "Forced", hb_value_bool(force));
-            hb_dict_set(search, "Default", hb_value_bool(def));
-            hb_dict_set(search, "Burn", hb_value_bool(burned));
-        }
-        else if (track >= 0)
-        {
-            if (burned && !one_burned && hb_subtitle_can_burn(source))
-            {
-                // Only allow one subtitle to be burned into the video
-                one_burned = TRUE;
-            }
-            else
-            {
-                burned = FALSE;
-            }
-
-            subtitle_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o}",
-                "Track",    hb_value_int(track),
-                "Default",  hb_value_bool(def),
-                "Forced",   hb_value_bool(force),
-                "Burn",     hb_value_bool(burned));
-            if (subtitle_dict == NULL)
-            {
-                g_warning("json pack subtitle failure: %s", error.text);
-                return;
-            }
-            hb_value_array_append(json_subtitle_list, subtitle_dict);
-        }
-    }
+    GhbValue *subtitle_dict = ghb_get_subtitle_settings(js);
+    hb_dict_set(dict, "Subtitle", ghb_value_dup(subtitle_dict));
 
     char *json_job = hb_value_get_json(dict);
     hb_value_free(&dict);

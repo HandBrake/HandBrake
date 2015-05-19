@@ -55,7 +55,12 @@
         "volume_label": "New Video",
         "audio_list": [],
         "chapter_list": [],
-        "subtitle_list": [],
+        "Subtitle": {
+            "Search": {
+                "Enable": false
+            },
+            "SubtitleList": []
+        },
         "vquality_type_bitrate": false,
         "vquality_type_constant": false,
         "SrtLanguage": "und",

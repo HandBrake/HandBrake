@@ -5062,6 +5062,23 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkToolButton" id="subtitle_add_fas">
+                                    <property name="visible">True</property>
+                                    <property name="sensitive">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="is_important">True</property>
+                                    <property name="label" translatable="yes">Foreign Audio Search</property>
+                                    <property name="icon_name">list-add</property>
+                                    <property name="tooltip_text" translatable="yes">Add an extra pass to the encode which searches
+for subtitle candidates that provide subtitles for
+segments of the audio that are in a foreign language.</property>
+                                    <signal name="clicked" handler="subtitle_add_fas_clicked_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkToolButton" id="subtitle_reset">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
@@ -8650,6 +8667,7 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
+    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -8848,7 +8866,7 @@ SRTs come in all flavours of character sets.
 We translate the character set to UTF-8.
 The source's character code is needed in order to perform this translation.</property>
                     <property name="has_entry">True</property>
-                    <signal name="changed" handler="srt_changed_cb" swapped="no"/>
+                    <signal name="changed" handler="srt_codeset_changed_cb" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry1">
                         <property name="can_focus">True</property>
@@ -8888,7 +8906,7 @@ The source's character code is needed in order to perform this translation.</pro
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment31</property>
-                    <signal name="value-changed" handler="srt_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="srt_offset_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
@@ -9040,6 +9058,7 @@ in your output.</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
+    <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
