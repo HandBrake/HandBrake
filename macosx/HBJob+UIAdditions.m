@@ -7,6 +7,7 @@
 #import "HBJob+UIAdditions.h"
 
 #import "HBAttributedStringAdditions.h"
+#import "HBTitle.h"
 #import "HBJob.h"
 #import "HBAudioTrack.h"
 #import "HBAudioDefaults.h"

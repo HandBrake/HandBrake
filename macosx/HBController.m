@@ -27,6 +27,7 @@
 #import "HBAddPresetController.h"
 
 #import "HBCore.h"
+#import "HBTitle.h"
 #import "HBJob.h"
 #import "HBStateFormatter.h"
 

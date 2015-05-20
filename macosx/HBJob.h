@@ -6,8 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HBPreset.h"
-#import "HBTitle.h"
+@class HBPreset;
+@class HBTitle;
 
 #import "HBRange.h"
 #import "HBVideo.h"

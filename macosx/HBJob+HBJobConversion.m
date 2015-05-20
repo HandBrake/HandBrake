@@ -9,6 +9,8 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioTrack.h"
 
+#import "HBTitle.h"
+
 @implementation HBJob (HBJobConversion)
 
 /**

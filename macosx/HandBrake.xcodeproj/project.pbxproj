@@ -161,6 +161,8 @@
 		A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9906B2B1A710920001D82D5 /* HBQueueController.m */; };
 		A990D9071A64562200139032 /* HBJob+HBJobConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A990D9061A64562200139032 /* HBJob+HBJobConversion.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
+		A9A24B2D1B09F6FD00AD1FAB /* HBPresetsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */; };
+		A9A24B2F1B09F87400AD1FAB /* HBJobTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A24B2E1B09F87400AD1FAB /* HBJobTests.m */; };
 		A9AA447A1970664A00D7DEFC /* HBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AA44791970664A00D7DEFC /* HBUtilities.m */; };
 		A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
@@ -234,6 +236,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 273F216E14ADD2170021BE6D;
 			remoteInfo = external;
+		};
+		A95B8D991B09F16700F2F152 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 273F203814ADBC200021BE6D;
+			remoteInfo = HandBrake;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -423,6 +432,8 @@
 		A95512881A320A12001BFC6F /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = external/contrib/lib/libjansson.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
+		A95B8D931B09F16700F2F152 /* HandBrake Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandBrake Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A95B8D961B09F16700F2F152 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeCanceled@2x.png"; sourceTree = "<group>"; };
 		A9706CB21AC1436F00BAEAA8 /* HBApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBApplication.h; sourceTree = "<group>"; };
 		A9706CB31AC1436F00BAEAA8 /* HBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBApplication.m; sourceTree = "<group>"; };
@@ -440,6 +451,8 @@
 		A990D9061A64562200139032 /* HBJob+HBJobConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBJobConversion.m"; sourceTree = "<group>"; };
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
+		A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsTests.m; sourceTree = "<group>"; };
+		A9A24B2E1B09F87400AD1FAB /* HBJobTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobTests.m; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBUtilities.m; sourceTree = "<group>"; };
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
@@ -600,6 +613,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A95B8D901B09F16700F2F152 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -646,6 +666,7 @@
 			children = (
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
+				A95B8D941B09F16700F2F152 /* HandBrake Tests */,
 				273F200014ADAE950021BE6D /* Products */,
 				27D6C72314B1013400B785E4 /* Products (external) */,
 				273F20CD14ADC8E60021BE6D /* Resources */,
@@ -661,6 +682,7 @@
 			children = (
 				273F1FFF14ADAE950021BE6D /* HandBrakeCLI */,
 				273F203914ADBC210021BE6D /* HandBrake.app */,
+				A95B8D931B09F16700F2F152 /* HandBrake Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -945,6 +967,24 @@
 			name = "UI Bindings Additions";
 			sourceTree = "<group>";
 		};
+		A95B8D941B09F16700F2F152 /* HandBrake Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A9A24B2E1B09F87400AD1FAB /* HBJobTests.m */,
+				A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */,
+				A95B8D951B09F16700F2F152 /* Supporting Files */,
+			);
+			path = "HandBrake Tests";
+			sourceTree = "<group>";
+		};
+		A95B8D951B09F16700F2F152 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A95B8D961B09F16700F2F152 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		A98C29C51977C00000AF5DED /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -1142,6 +1182,24 @@
 			productReference = 273F203914ADBC210021BE6D /* HandBrake.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A95B8D921B09F16700F2F152 /* HandBrake Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A95B8D9D1B09F16800F2F152 /* Build configuration list for PBXNativeTarget "HandBrake Tests" */;
+			buildPhases = (
+				A95B8D8F1B09F16700F2F152 /* Sources */,
+				A95B8D901B09F16700F2F152 /* Frameworks */,
+				A95B8D911B09F16700F2F152 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A95B8D9A1B09F16700F2F152 /* PBXTargetDependency */,
+			);
+			name = "HandBrake Tests";
+			productName = "HandBrake Tests";
+			productReference = A95B8D931B09F16700F2F152 /* HandBrake Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1149,6 +1207,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0630;
+				TargetAttributes = {
+					A95B8D921B09F16700F2F152 = {
+						CreatedOnToolsVersion = 6.3.1;
+						TestTargetID = 273F203814ADBC200021BE6D;
+					};
+				};
 			};
 			buildConfigurationList = 273F1FE314AD9DA40021BE6D /* Build configuration list for PBXProject "HandBrake" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1166,6 +1230,7 @@
 				273F203814ADBC200021BE6D /* HandBrake */,
 				273F1FFE14ADAE950021BE6D /* HandBrakeCLI */,
 				273F216E14ADD2170021BE6D /* external */,
+				A95B8D921B09F16700F2F152 /* HandBrake Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1262,6 +1327,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A95B8D911B09F16700F2F152 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1341,6 +1413,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A95B8D8F1B09F16700F2F152 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9A24B2D1B09F6FD00AD1FAB /* HBPresetsTests.m in Sources */,
+				A9A24B2F1B09F87400AD1FAB /* HBJobTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1353,6 +1434,11 @@
 			isa = PBXTargetDependency;
 			target = 273F216E14ADD2170021BE6D /* external */;
 			targetProxy = 2781697014B02B1B00A28B61 /* PBXContainerItemProxy */;
+		};
+		A95B8D9A1B09F16700F2F152 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 273F203814ADBC200021BE6D /* HandBrake */;
+			targetProxy = A95B8D991B09F16700F2F152 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1653,6 +1739,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
@@ -1678,6 +1765,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
@@ -1705,6 +1793,103 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = external;
+			};
+			name = release;
+		};
+		A95B8D9B1B09F16800F2F152 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "HandBrake Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandBrake.app/Contents/MacOS/HandBrake";
+			};
+			name = debug;
+		};
+		A95B8D9C1B09F16800F2F152 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "HandBrake Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HandBrake.app/Contents/MacOS/HandBrake";
 			};
 			name = release;
 		};
@@ -1743,6 +1928,15 @@
 			buildConfigurations = (
 				273F217214ADD2170021BE6D /* debug */,
 				273F217314ADD2170021BE6D /* release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = release;
+		};
+		A95B8D9D1B09F16800F2F152 /* Build configuration list for PBXNativeTarget "HandBrake Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A95B8D9B1B09F16800F2F152 /* debug */,
+				A95B8D9C1B09F16800F2F152 /* release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = release;

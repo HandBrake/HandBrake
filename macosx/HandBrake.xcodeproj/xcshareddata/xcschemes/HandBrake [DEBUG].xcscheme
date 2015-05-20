@@ -34,6 +34,20 @@
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A95B8D921B09F16700F2F152"
+               BuildableName = "HandBrake Tests.xctest"
+               BlueprintName = "HandBrake Tests"
+               ReferencedContainer = "container:HandBrake.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -42,6 +56,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A95B8D921B09F16700F2F152"
+               BuildableName = "HandBrake Tests.xctest"
+               BlueprintName = "HandBrake Tests"
+               ReferencedContainer = "container:HandBrake.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

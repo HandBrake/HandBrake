@@ -10,6 +10,8 @@
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
+#import "HBTitle.h"
+
 #include <dlfcn.h>
 
 static BOOL globalInitialized = NO;

@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBJob.h"
+#import "HBTitle.h"
 #import "HBPreset.h"
 
 #import "HBAudioDefaults.h"
