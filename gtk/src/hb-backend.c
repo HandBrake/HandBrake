@@ -947,6 +947,21 @@ static hb_handle_t * h_scan = NULL;
 static hb_handle_t * h_queue = NULL;
 static hb_handle_t * h_live = NULL;
 
+hb_handle_t* ghb_scan_handle(void)
+{
+    return h_scan;
+}
+
+hb_handle_t* ghb_queue_handle(void)
+{
+    return h_queue;
+}
+
+hb_handle_t* ghb_live_handle(void)
+{
+    return h_live;
+}
+
 extern void hb_get_temporary_directory(char path[512]);
 
 gchar*
@@ -3761,8 +3776,8 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         return FALSE;
     }
 
-    const GhbValue *slist, *subtitle;
-    gint count, ii, source, track;
+    const GhbValue *slist, *subtitle, *srt;
+    gint count, ii, track;
     gboolean burned, one_burned = FALSE;
 
     slist = ghb_get_subtitle_list(settings);
@@ -3771,7 +3786,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     {
         subtitle = ghb_array_get(slist, ii);
         track = ghb_dict_get_int(subtitle, "Track");
-        source = ghb_dict_get_int(subtitle, "Source");
+        srt = ghb_dict_get(subtitle, "SRT");
         burned = track != -1 && ghb_dict_get_bool(subtitle, "Burn");
         if (burned && one_burned)
         {
@@ -3794,10 +3809,9 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         {
             one_burned = TRUE;
         }
-        if (source == SRTSUB)
+        if (srt != NULL)
         {
             const gchar *filename;
-            GhbValue *srt = ghb_dict_get(subtitle, "SRT");
 
             filename = ghb_dict_get_string(srt, "Filename");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
@@ -3845,7 +3859,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
     const GhbValue *audio_list;
     gint count, ii;
 
-    audio_list = ghb_dict_get_value(settings, "audio_list");
+    audio_list = ghb_get_audio_list(settings);
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
@@ -4022,10 +4036,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     par.num = ghb_dict_get_int(js, "PicturePARWidth");
     par.den = ghb_dict_get_int(js, "PicturePARHeight");
 
-    int vcodec, acodec_copy_mask, acodec_fallback, grayscale;
+    int vcodec, grayscale;
     vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
-    acodec_copy_mask = ghb_get_copy_mask(js);
-    acodec_fallback = ghb_settings_audio_encoder_codec(js, "AudioEncoderFallback");
     grayscale   = ghb_dict_get_bool(js, "VideoGrayScale");
 
     dict = json_pack_ex(&error, 0,
@@ -4040,10 +4052,6 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     "s:{s:o, s:o},"
     // Video {Codec}
     "s:{s:o},"
-    // Audio {CopyMask, FallbackEncoder, AudioList []}
-    "s:{s:o, s:o, s:[]},"
-    // Subtitles {Search {Enable}, SubtitleList []}
-    "s:{s:{s:o}, s:[]},"
     // Metadata
     "s:{},"
     // Filters {Grayscale, FilterList []}
@@ -4063,14 +4071,6 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
             "Den",              hb_value_int(par.den),
         "Video",
             "Encoder",          hb_value_int(vcodec),
-        "Audio",
-            "CopyMask",         hb_value_int(acodec_copy_mask),
-            "FallbackEncoder",  hb_value_int(acodec_fallback),
-            "AudioList",
-        "Subtitle",
-            "Search",
-                "Enable",       hb_value_bool(FALSE),
-            "SubtitleList",
         "Metadata",
         "Filters",
             "Grayscale",        hb_value_bool(grayscale),
@@ -4445,9 +4445,8 @@ add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
     g_free(filter_str);
 
     // Create audio list
-    hb_dict_t *audios_dict = hb_dict_get(dict, "Audio");
-    hb_dict_set(audios_dict, "AudioList",
-                ghb_value_dup(ghb_dict_get(js, "audio_list")));
+    hb_dict_t *audios_dict = ghb_get_audio_settings(js);
+    hb_dict_set(dict, "Audio", ghb_value_dup(audios_dict));
 
     GhbValue *subtitle_dict = ghb_get_subtitle_settings(js);
     hb_dict_set(dict, "Subtitle", ghb_value_dup(subtitle_dict));

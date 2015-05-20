@@ -212,4 +212,8 @@ const char* ghb_audio_bitrate_get_short_name(int rate);
 hb_audio_config_t* ghb_get_audio_info(const hb_title_t *title, gint track);
 hb_subtitle_t* ghb_get_subtitle_info(const hb_title_t *title, gint track);
 
+hb_handle_t* ghb_scan_handle(void);
+hb_handle_t* ghb_queue_handle(void);
+hb_handle_t* ghb_live_handle(void);
+
 #endif // _HBBACKEND_H_

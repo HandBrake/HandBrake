@@ -1319,6 +1319,44 @@ ghb_remove_old_queue_file(int pid)
     g_free(name);
 }
 
+GhbValue* ghb_create_copy_mask(GhbValue *settings)
+{
+    GhbValue *copy_mask = ghb_array_new();
+    if (ghb_dict_get_bool(settings, "AudioAllowMP3Pass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:mp3"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowAACPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:aac"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowAC3Pass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:ac3"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowDTSPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:dts"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowDTSHDPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:dtshd"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowEAC3Pass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:eac3"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowFLACPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:flac"));
+    }
+    if (ghb_dict_get_bool(settings, "AudioAllowTRUEHDPass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:truehd"));
+    }
+    return copy_mask;
+}
+
 // Translate internal values to preset key, value pairs
 static GhbValue*
 settings_to_preset(GhbValue *settings)
@@ -1397,39 +1435,7 @@ settings_to_preset(GhbValue *settings)
         }
     }
 
-    GhbValue *copy_mask = ghb_array_new();
-    if (ghb_dict_get_bool(preset, "AudioAllowMP3Pass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:mp3"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowAACPass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:aac"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowAC3Pass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:ac3"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowDTSPass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:dts"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowDTSHDPass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:dtshd"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowEAC3Pass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:eac3"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowFLACPass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:flac"));
-    }
-    if (ghb_dict_get_bool(preset, "AudioAllowTRUEHDPass"))
-    {
-        ghb_array_append(copy_mask, ghb_string_value_new("copy:truehd"));
-    }
+    GhbValue *copy_mask = ghb_create_copy_mask(preset);
     ghb_dict_set(preset, "AudioCopyMask", copy_mask);
 
     if (ghb_dict_get_bool(preset, "x264UseAdvancedOptions"))

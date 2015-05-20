@@ -542,7 +542,8 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             out_codec = sanitize_audio_codec(aconfig->in.codec, out_codec,
                                              copy_mask, fallback, mux);
             hb_dict_set(audio_dict, "Track", hb_value_int(track));
-            hb_dict_set(audio_dict, "Encoder", hb_value_int(out_codec));
+            hb_dict_set(audio_dict, "Encoder", hb_value_string(
+                        hb_audio_encoder_get_short_name(out_codec)));
             if (hb_dict_get(encoder_dict, "AudioTrackName") != NULL)
             {
                 hb_dict_set(audio_dict, "Name", hb_value_dup(
@@ -633,6 +634,11 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
     }
 
     hb_dict_t *audio_dict = hb_dict_get(job_dict, "Audio");
+    if (audio_dict == NULL)
+    {
+        audio_dict = hb_dict_init();
+        hb_dict_set(job_dict, "Audio", audio_dict);
+    }
     int copy_mask = get_audio_copy_mask(preset);
     if (copy_mask == HB_ACODEC_INVALID)
     {
@@ -825,6 +831,11 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         return 0;
 
     hb_dict_t *subtitle_dict = hb_dict_get(job_dict, "Subtitle");
+    if (subtitle_dict == NULL)
+    {
+        subtitle_dict = hb_dict_init();
+        hb_dict_set(job_dict, "Subtitle", subtitle_dict);
+    }
     hb_value_array_t *list = hb_dict_get(subtitle_dict, "SubtitleList");
     if (list == NULL)
     {

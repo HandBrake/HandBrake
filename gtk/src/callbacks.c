@@ -1630,8 +1630,8 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 static void
 update_acodec(signal_user_data_t *ud)
 {
-    ghb_santiize_audio_tracks(ud);
-    ghb_grey_combo_options (ud);
+    ghb_audio_list_refresh_all(ud);
+    ghb_grey_combo_options(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1820,6 +1820,11 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     ghb_subtitle_set_pref_lang(settings);
     if (title != NULL)
     {
+        GhbValue *job_dict;
+
+        job_dict = hb_preset_job_init(ghb_scan_handle(), title_id, settings);
+        ghb_dict_set(settings, "Job", job_dict);
+
         gint num_chapters = hb_list_count(title->list_chapter);
 
         ghb_dict_set_int(settings, "angle", 1);
@@ -1893,8 +1898,6 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
                     title->metadata->long_description);
         }
         update_chapter_list_settings(settings);
-        ghb_set_pref_audio_settings(settings);
-        ghb_set_pref_subtitle_settings(ud, title, settings);
     }
 
     set_destination_settings(ud, settings);
@@ -1942,13 +1945,10 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     }
     for (ii = 0; ii < count; ii++)
     {
-        int index;
         GhbValue *settings = ghb_value_dup(ud->settings);
 
         title = hb_list_item(list, ii);
-        index = (title != NULL) ? title->index : -1;
-
-        ghb_dict_set_int(settings, "title", index);
+        ghb_dict_set_int(settings, "title", title ? title->index : -1);
         set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }

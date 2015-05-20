@@ -535,7 +535,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     gint count, ii;
     const GhbValue *audio_list;
 
-    audio_list = ghb_dict_get_value(settings, "audio_list");
+    audio_list = ghb_get_audio_list(settings);
     count = ghb_array_len(audio_list);
     if (count == 1)
     {
@@ -598,12 +598,12 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     // Subtitle Tracks: count
     //      Subtitle description(Subtitle options)
     //      ...
-    const GhbValue *sub_settings, *sub_list, *sub_search;
+    const GhbValue *sub_dict, *sub_list, *sub_search;
     gboolean search;
 
-    sub_settings = ghb_get_subtitle_settings(settings);
-    sub_list = ghb_dict_get(sub_settings, "SubtitleList");
-    sub_search = ghb_dict_get(sub_settings, "Search");
+    sub_dict = ghb_get_subtitle_settings(settings);
+    sub_list = ghb_dict_get(sub_dict, "SubtitleList");
+    sub_search = ghb_dict_get(sub_dict, "Search");
     search = ghb_dict_get_bool(sub_search, "Enable");
     count = ghb_array_len(sub_list);
     if (count + search == 1)
@@ -633,21 +633,20 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     }
     for (ii = 0; ii < count; ii++)
     {
-        GhbValue *settings;
+        GhbValue *subsettings, *srt;
         const gchar *track;
         gboolean force, burn, def;
-        gint source;
 
-        settings = ghb_array_get(sub_list, ii);
-        track  = ghb_dict_get_string(settings, "Description");
-        source = ghb_dict_get_int(settings, "Source");
-        force  = ghb_dict_get_bool(settings, "Forced");
-        burn   = ghb_dict_get_bool(settings, "Burn");
-        def    = ghb_dict_get_bool(settings, "Default");
+        subsettings = ghb_array_get(sub_list, ii);
+        track  = ghb_dict_get_string(subsettings, "Description");
+        srt    = ghb_dict_get(subsettings, "SRT");
+        force  = ghb_dict_get_bool(subsettings, "Forced");
+        burn   = ghb_dict_get_bool(subsettings, "Burn");
+        def    = ghb_dict_get_bool(subsettings, "Default");
         if (count + search > 1)
             XPRINT("\t");
 
-        if (source != SRTSUB)
+        if (srt == NULL)
         {
             XPRINT("<small>%s%s%s%s</small>\n", track,
                     force ? _(" (Forced Only)") : "",
@@ -657,21 +656,10 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         }
         else
         {
-            GhbValue *srt;
-            gint offset;
-            const gchar *filename, *code;
-            gchar *basename;
+            int offset = ghb_dict_get_int(subsettings, "Offset");
 
-            srt = ghb_dict_get(settings, "SRT");
-            offset = ghb_dict_get_int(settings, "Offset");
-            filename = ghb_dict_get_string(srt, "File");
-            basename = g_path_get_basename(filename);
-            code = ghb_dict_get_string(srt, "Codeset");
-
-            XPRINT(_("<small> %s (%s), %s, Offset (ms) %d%s</small>\n"),
-                track, code, basename, offset, def   ? " (Default)":"");
-
-            g_free(basename);
+            XPRINT(_("<small> %s, Offset (ms) %d%s</small>\n"),
+                   track, offset, def ? " (Default)" : "");
         }
     }
 

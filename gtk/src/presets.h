@@ -44,5 +44,6 @@ void ghb_preset_to_settings(GhbValue *settings, GhbValue *preset);
 void ghb_prefs_to_settings(GhbValue *settings);
 GhbValue* ghb_read_settings_file(const gchar *path);
 void ghb_write_settings_file(const gchar *path, GhbValue *dict);
+GhbValue* ghb_create_copy_mask(GhbValue *settings);
 
 #endif // _GHB_PRESETS_H_
