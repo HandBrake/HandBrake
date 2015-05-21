@@ -66,15 +66,9 @@
     {
         _descriptions = [[NSMutableDictionary alloc] init];
 
-        // Workaround to avoid a bug in Snow Leopard
-        // we can switch back to [[NSApplication sharedApplication] applicationIconImage]
-        // when we won't support it anymore.
-        NSImage *appIcon = [NSImage imageNamed:@"HandBrake"];
-        [appIcon setSize:NSMakeSize(1024, 1024)];
-
         // Load the dockTile and instiante initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
-                                                  image:appIcon];
+                                                  image:[[NSApplication sharedApplication] applicationIconImage]];
 
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
 
