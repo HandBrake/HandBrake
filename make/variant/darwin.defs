@@ -1,4 +1,4 @@
-UB.xcconfigs = osx106.i386 osx106.x86_64
+UB.xcconfigs = osx107.i386 osx107.x86_64
 UB.builds    = $(wildcard $(foreach n,$(UB.xcconfigs),$(SRC/)build.$n))
 UB.first     = $(word 1,$(UB.xcconfigs))
 UB.more      = $(wordlist 2,999,$(UB.xcconfigs))
