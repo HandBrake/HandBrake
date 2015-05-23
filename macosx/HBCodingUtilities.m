@@ -18,7 +18,7 @@ static BOOL useSecureCoding;
 
     if (!initialized && self == [HBCodingUtilities class])
     {
-        useSecureCoding = NSProtocolFromString(@"NSSecureCoding") ? YES : NO;
+        useSecureCoding = [NSCoder instancesRespondToSelector:@selector(decodeObjectOfClass:forKey:)] ? YES : NO;
     }
 }
 
