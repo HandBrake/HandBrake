@@ -1125,7 +1125,7 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
     hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
     hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));
     hb_dict_set(dest_dict, "Mux", hb_value_dup(mux_value));
-    if (mux == HB_MUX_MASK_MP4)
+    if (mux & HB_MUX_MASK_MP4)
     {
         hb_dict_t *mp4_dict = hb_dict_init();
         hb_dict_set(mp4_dict, "Mp4Optimize",
