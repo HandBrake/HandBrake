@@ -533,7 +533,7 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              title->geometry.width, title->geometry.height,
              title->geometry.par.num, title->geometry.par.den,
              (float)title->dar.num / title->dar.den,
-             (float)title->vrate.num / title->vrate.num );
+             (float)title->vrate.num / title->vrate.den );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
 
