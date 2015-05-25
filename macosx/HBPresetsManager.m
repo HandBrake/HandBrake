@@ -322,6 +322,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
         if ([obj isDefault]) {
             defaultAlreadySetted = YES;
+            self.defaultPreset = obj;
         }
     }];
 
