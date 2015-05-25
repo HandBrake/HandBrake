@@ -267,7 +267,7 @@ int encvorbisWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
        return HB_WORK_DONE;
     }
 
-    hb_list_add( pv->list, *buf_in );
+    hb_list_add( pv->list, in );
 
     *buf_out = buf = Encode( w );
     while( buf )
