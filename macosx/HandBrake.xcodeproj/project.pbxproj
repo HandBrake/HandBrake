@@ -155,6 +155,9 @@
 		A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467D16BC2AD800C307BC /* pause-p.pdf */; };
 		A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467E16BC2AD800C307BC /* play-p.pdf */; };
 		A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* prev-p.pdf */; };
+		A9F10FE01B131DA5004A9895 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F10FDE1B131DA5004A9895 /* ExceptionAlert.xib */; };
+		A9F10FE31B131DBA004A9895 /* HBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F10FE21B131DBA004A9895 /* HBApplication.m */; };
+		A9F10FE61B131DD8004A9895 /* HBExceptionAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F10FE51B131DD8004A9895 /* HBExceptionAlertController.m */; };
 		A9F2EB6F196F12C800066546 /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EB6D196F12C800066546 /* Audio.xib */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F4728D1976BAA70009EC65 /* HBSubtitlesDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */; };
@@ -397,6 +400,11 @@
 		A9E1467D16BC2AD800C307BC /* pause-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "pause-p.pdf"; sourceTree = "<group>"; };
 		A9E1467E16BC2AD800C307BC /* play-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-p.pdf"; sourceTree = "<group>"; };
 		A9E1467F16BC2AD800C307BC /* prev-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "prev-p.pdf"; sourceTree = "<group>"; };
+		A9F10FDF1B131DA5004A9895 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ExceptionAlert.xib; sourceTree = "<group>"; };
+		A9F10FE11B131DBA004A9895 /* HBApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBApplication.h; sourceTree = "<group>"; };
+		A9F10FE21B131DBA004A9895 /* HBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBApplication.m; sourceTree = "<group>"; };
+		A9F10FE41B131DD8004A9895 /* HBExceptionAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBExceptionAlertController.h; sourceTree = "<group>"; };
+		A9F10FE51B131DD8004A9895 /* HBExceptionAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBExceptionAlertController.m; sourceTree = "<group>"; };
 		A9F2EB6E196F12C800066546 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Audio.xib; sourceTree = "<group>"; };
 		A9F472861976B7F30009EC65 /* HBSubtitlesDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesDefaultsController.h; sourceTree = "<group>"; };
 		A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesDefaultsController.m; sourceTree = "<group>"; };
@@ -627,6 +635,10 @@
 				273F209E14ADBE670021BE6D /* HBOutputRedirect.m */,
 				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
 				A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */,
+				A9F10FE11B131DBA004A9895 /* HBApplication.h */,
+				A9F10FE21B131DBA004A9895 /* HBApplication.m */,
+				A9F10FE41B131DD8004A9895 /* HBExceptionAlertController.h */,
+				A9F10FE51B131DD8004A9895 /* HBExceptionAlertController.m */,
 				A9B34D711976844500871B7D /* UI Views */,
 				273F20BD14ADC09F0021BE6D /* main.mm */,
 			);
@@ -728,6 +740,7 @@
 			children = (
 				273F217C14ADDDA10021BE6D /* InfoPlist.strings */,
 				273F217E14ADDDA10021BE6D /* MainMenu.xib */,
+				A9F10FDE1B131DA5004A9895 /* ExceptionAlert.xib */,
 				A9CF25EF1990D62C0023F727 /* Presets.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
 				A9F2EB6D196F12C800066546 /* Audio.xib */,
@@ -1058,6 +1071,7 @@
 				A9252C0C1A173D4800B8B7F8 /* RevealPressed@2x.png in Resources */,
 				A9204DC71A16C5AB007CA74C /* DeletePressed@2x.png in Resources */,
 				D2BCB11816F5152C0084604C /* presets@2x.png in Resources */,
+				A9F10FE01B131DA5004A9895 /* ExceptionAlert.xib in Resources */,
 				A91C025F1A166BE300DEA6F3 /* EncodeWorking5@2x.png in Resources */,
 				A91C025C1A166BE300DEA6F3 /* EncodeWorking2@2x.png in Resources */,
 				A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */,
@@ -1095,6 +1109,8 @@
 			files = (
 				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
+				A9F10FE61B131DD8004A9895 /* HBExceptionAlertController.m in Sources */,
+				A9F10FE31B131DBA004A9895 /* HBApplication.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A932E273198834130047D13E /* HBAudioDefaults.m in Sources */,
 				A9523937199A6AAE00588AEF /* HBFilters.m in Sources */,
@@ -1255,6 +1271,14 @@
 				A9DC6C55196F0517002AE6B4 /* English */,
 			);
 			name = Subtitles.xib;
+			sourceTree = "<group>";
+		};
+		A9F10FDE1B131DA5004A9895 /* ExceptionAlert.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9F10FDF1B131DA5004A9895 /* English */,
+			);
+			name = ExceptionAlert.xib;
 			sourceTree = "<group>";
 		};
 		A9F2EB6D196F12C800066546 /* Audio.xib */ = {
