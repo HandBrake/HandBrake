@@ -1010,6 +1010,15 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     GValue *asettings;
 
     ghb_widget_to_setting(ud->settings, widget);
+    asettings = audio_get_selected_settings(ud, NULL);
+    if (!block_updates && asettings != NULL)
+    {
+        ghb_widget_to_setting(asettings, widget);
+        audio_deps(ud, asettings, widget);
+        ghb_audio_list_refresh_selected(ud);
+        ghb_live_reset(ud);
+    }
+
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     float low, high, gran, defval;
@@ -1033,7 +1042,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         return;
     }
 
-    asettings = audio_get_selected_settings(ud, NULL);
     if (ghb_audio_is_passthru(prev_acodec) &&
         !ghb_audio_is_passthru(acodec))
     {
@@ -1085,13 +1093,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
                       ghb_string_value(hb_mixdown_get_short_name(mix)));
     }
     prev_acodec = acodec;
-    if (asettings != NULL)
-    {
-        ghb_widget_to_setting(asettings, widget);
-        audio_deps(ud, asettings, widget);
-        ghb_audio_list_refresh_selected(ud);
-        ghb_live_reset(ud);
-    }
 }
 
 G_MODULE_EXPORT void
