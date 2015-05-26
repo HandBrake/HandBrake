@@ -112,7 +112,7 @@
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
     <Compile Include="Interop\Json\Encode\QSV.cs" />
     <Compile Include="Interop\Json\Presets\AudioList.cs" />
-    <Compile Include="Interop\Json\Presets\Preset.cs" />
+    <Compile Include="Interop\Json\Presets\HBPreset.cs" />
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />

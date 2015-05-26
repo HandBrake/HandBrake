@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Preset.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="HBPreset.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,7 +14,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
     /// <summary>
     ///     The preset.
     /// </summary>
-    public class Preset
+    public class HBPreset
     {
         /// <summary>
         /// Gets or sets the audio copy mask.
@@ -294,7 +294,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the subtitle language list.
         /// </summary>
-        public List<object> SubtitleLanguageList { get; set; }
+        public List<string> SubtitleLanguageList { get; set; }
 
         /// <summary>
         /// Gets or sets the subtitle track selection behavior.

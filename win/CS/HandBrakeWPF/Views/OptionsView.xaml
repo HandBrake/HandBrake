@@ -153,7 +153,6 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Disable preset update notification on startup" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
                             <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="Show Advanced Encoder Options Tab" IsChecked="{Binding ShowAdvancedTab}" />
                         </StackPanel>

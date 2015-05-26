@@ -72,11 +72,6 @@ namespace HandBrakeWPF
         public const string MinTitleLength = "MinTitleLength";
 
         /// <summary>
-        /// Preset Notification
-        /// </summary>
-        public const string PresetNotification = "presetNotification";
-
-        /// <summary>
         /// Skip Version
         /// </summary>
         public const string Skipversion = "skipversion";

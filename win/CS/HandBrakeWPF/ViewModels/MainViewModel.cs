@@ -1192,10 +1192,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the presets.
             this.presetService.Load();
-            if (this.presetService.CheckIfPresetsAreOutOfDate())
-                if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
-                    this.errorService.ShowMessageBox(Resources.Main_PresetUpdateNotification,
-                                    Resources.Notice, MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Queue Recovery
             QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);

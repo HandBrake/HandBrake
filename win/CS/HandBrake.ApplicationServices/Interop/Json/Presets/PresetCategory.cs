@@ -19,7 +19,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the children array.
         /// </summary>
-        public List<Preset> ChildrenArray { get; set; }
+        public List<HBPreset> ChildrenArray { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether folder.

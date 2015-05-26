@@ -118,11 +118,6 @@ namespace HandBrakeWPF.ViewModels
         private bool disableLibdvdNav;
 
         /// <summary>
-        /// The disable p reset update check notification.
-        /// </summary>
-        private bool disablePresetUpdateCheckNotification;
-
-        /// <summary>
         /// The growl after encode.
         /// </summary>
         private bool growlAfterEncode;
@@ -898,23 +893,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether disablePresetUpdateCheckNotification.
-        /// </summary>
-        public bool DisablePresetUpdateCheckNotification
-        {
-            get
-            {
-                return this.disablePresetUpdateCheckNotification;
-            }
-
-            set
-            {
-                this.disablePresetUpdateCheckNotification = value;
-                this.NotifyOfPropertyChange("DisablePresetUpdateCheckNotification");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets LogVerbosityOptions.
         /// </summary>
         public BindingList<int> LogVerbosityOptions
@@ -1449,7 +1427,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Minimise to Tray
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
-            this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue);
             this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
 
@@ -1526,7 +1503,6 @@ namespace HandBrakeWPF.ViewModels
 
             /* Advanced */
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
-            userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
