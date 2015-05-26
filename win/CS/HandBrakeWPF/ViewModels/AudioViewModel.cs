@@ -119,6 +119,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets the audio track default behaviour mode list.
+        /// </summary>
+        public BindingList<AudioTrackDefaultsMode> AudioTrackDefaultBehaviourModeList
+        {
+            get
+            {
+                return new BindingList<AudioTrackDefaultsMode>(EnumHelper<AudioTrackDefaultsMode>.GetEnumList().ToList());
+            }
+        }
+
+        /// <summary>
         /// Gets or sets AudioBitrates.
         /// </summary>
         public IEnumerable<int> AudioBitrates { get; set; }
@@ -240,7 +251,7 @@ namespace HandBrakeWPF.ViewModels
         public void Add()
         {
             // Add the first track if available.
-            this.Add(null);
+            this.Add(null, false);
         }
 
         /// <summary>
@@ -455,14 +466,39 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="sourceTrack">
         /// The source track.
         /// </param>
-        private void Add(Audio sourceTrack)
+        /// <param name="useBehaviourTemplateMode">
+        /// The use Behaviour Template Mode.
+        /// </param>
+        private void Add(Audio sourceTrack, bool useBehaviourTemplateMode)
         {
             if (this.SourceTracks != null)
             {
                 Audio track = sourceTrack ?? this.GetPreferredAudioTrack();
                 if (track != null)
                 {
-                    this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
+                    if (!useBehaviourTemplateMode)
+                    {
+                        this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
+                        return;
+                    }
+
+                    switch (this.AudioBehaviours.SelectedTrackDefaultBehaviour)
+                    {
+                        case AudioTrackDefaultsMode.None:
+                            this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
+                            break;
+                        case AudioTrackDefaultsMode.FirstTrack:
+                            AudioTrack template = this.currentPreset.Task.AudioTracks.FirstOrDefault();
+                            this.Task.AudioTracks.Add(template != null ? new AudioTrack(template, false) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
+                            break;
+                        case AudioTrackDefaultsMode.AllTracks:
+                            foreach (AudioTrack tmpl in this.currentPreset.Task.AudioTracks)
+                            {
+                                this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, false) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
+                            }
+
+                            break;
+                    }
                 }
             }
         }
@@ -480,7 +516,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!found)
                 {
                     // If it doesn't, add it.
-                    this.Add(sourceTrack);
+                    this.Add(sourceTrack, true);
                 }
             }
         }
@@ -510,7 +546,7 @@ namespace HandBrakeWPF.ViewModels
             // Step 3, Setup the tracks from the preset
             foreach (AudioTrack track in this.currentPreset.Task.AudioTracks)
             {
-                this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = this.GetPreferredAudioTrack() });
+                this.Task.AudioTracks.Add(new AudioTrack(track, false) { ScannedTrack = this.GetPreferredAudioTrack() });
             }
            
             // Step 4, Handle the default selection behaviour.
@@ -552,7 +588,7 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     // If it doesn't, add it.
-                    this.Add(sourceTrack);
+                    this.Add(sourceTrack, true);
                 }
             }
         }
@@ -570,7 +606,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!found)
                 {
                     // If it doesn't, add it.
-                    this.Add(sourceTrack);
+                    this.Add(sourceTrack, true);
                 }
             }
         }
@@ -648,6 +684,7 @@ namespace HandBrakeWPF.ViewModels
             if (preset != null && preset.AudioTrackBehaviours != null)
             {
                 this.AudioBehaviours.SelectedBehaviour = preset.AudioTrackBehaviours.SelectedBehaviour;
+                this.AudioBehaviours.SelectedTrackDefaultBehaviour = preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour;
 
                 foreach (string selectedItem in preset.AudioTrackBehaviours.SelectedLangauges)
                 {

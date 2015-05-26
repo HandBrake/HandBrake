@@ -66,7 +66,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             foreach (AudioTrack track in task.AudioTracks)
             {
-                this.AudioTracks.Add(new AudioTrack(track));
+                this.AudioTracks.Add(new AudioTrack(track, true));
             }
 
             this.ChapterNames = new ObservableCollection<ChapterMarker>();

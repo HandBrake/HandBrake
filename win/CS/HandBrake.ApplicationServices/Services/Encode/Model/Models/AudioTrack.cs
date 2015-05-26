@@ -94,7 +94,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         /// <param name="track">
         /// The track.
         /// </param>
-        public AudioTrack(AudioTrack track)
+        /// <param name="setScannedTrack">
+        /// The set Scanned Track.
+        /// </param>
+        public AudioTrack(AudioTrack track, bool setScannedTrack)
         {
             this.bitrate = track.Bitrate;
             this.drc = track.DRC;
@@ -102,7 +105,10 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
             this.gain = track.Gain;
             this.mixDown = track.MixDown;
             this.sampleRate = track.SampleRate;
-            this.scannedTrack = track.ScannedTrack ?? new Audio();
+            if (setScannedTrack)
+            {
+                this.scannedTrack = track.ScannedTrack ?? new Audio();
+            }
             this.TrackName = track.TrackName;
         }
 

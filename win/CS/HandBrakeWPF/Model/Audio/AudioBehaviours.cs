@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Model.Audio
 {
     using System.ComponentModel;
     using System.Linq;
+    using System.Windows.Media.Animation;
 
     using Caliburn.Micro;
 
@@ -29,12 +30,15 @@ namespace HandBrakeWPF.Model.Audio
         /// </summary>
         private BindingList<string> selectedLangauges;
 
+        private AudioTrackDefaultsMode trackDefaultBehaviour;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioBehaviours"/> class.
         /// </summary>
         public AudioBehaviours()
         {
             this.SelectedBehaviour = AudioBehaviourModes.None;
+            this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.FirstTrack;
             this.SelectedLangauges = new BindingList<string>();
         }
 
@@ -47,6 +51,7 @@ namespace HandBrakeWPF.Model.Audio
         public AudioBehaviours(AudioBehaviours behaviours)
         {
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
+            this.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
             this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges.ToList());
         }
 
@@ -68,6 +73,26 @@ namespace HandBrakeWPF.Model.Audio
                 }
                 this.selectedBehaviour = value;
                 this.NotifyOfPropertyChange(() => this.SelectedBehaviour);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the track default behaviour.
+        /// </summary>
+        public AudioTrackDefaultsMode SelectedTrackDefaultBehaviour
+        {
+            get
+            {
+                return this.trackDefaultBehaviour;
+            }
+            set
+            {
+                if (value == this.trackDefaultBehaviour)
+                {
+                    return;
+                }
+                this.trackDefaultBehaviour = value;
+                this.NotifyOfPropertyChange(() => this.SelectedTrackDefaultBehaviour);
             }
         }
 
@@ -102,7 +127,8 @@ namespace HandBrakeWPF.Model.Audio
             AudioBehaviours cloned = new AudioBehaviours
                        {
                            SelectedBehaviour = this.selectedBehaviour,
-                           SelectedLangauges = new BindingList<string>()
+                           SelectedLangauges = new BindingList<string>(),
+                           SelectedTrackDefaultBehaviour = this.SelectedTrackDefaultBehaviour
                        };
 
             foreach (var item in this.SelectedLangauges)
