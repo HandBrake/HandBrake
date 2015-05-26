@@ -367,7 +367,15 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     th_encode_packetout( pv->ctx, 0, &op );
 
-    buf = hb_buffer_init(op.bytes);
+    // Theora can generate 0 length output for duplicate frames.
+    // Since we use 0 length buffers to indicate end of stream, we
+    // can't allow 0 lenth buffers. 
+    //
+    // As a work-around, always allocate an extra byte for theora buffers.
+    //
+    // This is fixed correctly in svn trunk by using a end of stream flag
+    // instead of 0 length buffer.
+    buf = hb_buffer_init(op.bytes + 1);
     memcpy(buf->data, op.packet, op.bytes);
     buf->f.fmt = AV_PIX_FMT_YUV420P;
     buf->f.width = frame_width;

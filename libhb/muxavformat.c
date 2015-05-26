@@ -1057,6 +1057,19 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
             duration = 0;
     }
 
+    // Theora can generate 0 length output for duplicate frames.
+    // Since we use 0 length buffers to indicate end of stream, we
+    // can't allow 0 lenth buffers. 
+    //
+    // As a work-around, always allocate an extra byte for theora buffers.
+    // Remove this extra byte here.
+    //
+    // This is fixed correctly in svn trunk by using a end of stream flag
+    // instead of 0 length buffer.
+    if (track->type == MUX_TYPE_VIDEO && job->vcodec == HB_VCODEC_THEORA)
+    {
+        buf->size--;
+    }
     av_init_packet(&pkt);
     pkt.data = buf->data;
     pkt.size = buf->size;
