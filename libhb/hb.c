@@ -602,6 +602,26 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 {
     hb_title_t * title;
 
+    // Check if scanning is necessary.
+    if (!strcmp(h->title_set.path, path))
+    {
+        // Current title_set path matches requested path.
+        // Check if the requested title has already been scanned.
+        int ii;
+        for (ii = 0; ii < hb_list_count(h->title_set.list_title); ii++)
+        {
+            title = hb_list_item(h->title_set.list_title, ii);
+            if (title->index == title_index)
+            {
+                // Title has already been scanned.
+                hb_lock( h->state_lock );
+                h->state.state = HB_STATE_SCANDONE;
+                hb_unlock( h->state_lock );
+                return;
+            }
+        }
+    }
+
     h->scan_die = 0;
 
     /* Clean up from previous scan */

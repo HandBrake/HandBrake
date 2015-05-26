@@ -434,6 +434,7 @@ struct hb_title_set_s
 {
     hb_list_t   * list_title;
     int           feature;    // Detected DVD feature title
+    char          path[1024];
 };
 
 typedef enum

@@ -288,6 +288,15 @@ static void ScanFunc( void * _data )
         title      = hb_list_item( data->title_set->list_title, i );
         title->flags |= HBTF_SCAN_COMPLETE;
     }
+    if (hb_list_count(data->title_set->list_title) > 0)
+    {
+        strncpy(data->title_set->path, data->path, 1024);
+        data->title_set->path[1023] = 0;
+    }
+    else
+    {
+        data->title_set->path[0] = 0;
+    }
 
 finish:
 

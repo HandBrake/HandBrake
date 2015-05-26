@@ -391,8 +391,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:o,"
     // Destination {Mux, ChapterMarkers, ChapterList}
     "s:{s:o, s:o, s:[]},"
-    // Source {Title, Angle}
-    "s:{s:o, s:o,},"
+    // Source {Path, Title, Angle}
+    "s:{s:o, s:o, s:o,},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
     // Video {Codec, QSV {Decode, AsyncDepth}}
@@ -412,6 +412,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "ChapterMarkers",   hb_value_bool(job->chapter_markers),
             "ChapterList",
         "Source",
+            "Path",             hb_value_string(job->title->path),
             "Title",            hb_value_int(job->title->index),
             "Angle",            hb_value_int(job->angle),
         "PAR",
@@ -753,11 +754,12 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     // Wait for scan to complete
     hb_state_t state;
-    do
+    hb_get_state2(h, &state);
+    while (state.state == HB_STATE_SCANNING)
     {
         hb_snooze(50);
         hb_get_state2(h, &state);
-    } while (state.state == HB_STATE_SCANNING);
+    }
 }
 
 static int validate_audio_codec_mux(int codec, int mux, int track)
