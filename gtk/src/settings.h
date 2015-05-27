@@ -80,6 +80,23 @@ enum
     GHB_QUEUE_DONE,
 };
 
+GhbValue *ghb_get_job_settings(GhbValue *settings);
+GhbValue* ghb_get_job_source_settings(GhbValue *settings);
+GhbValue* ghb_get_job_range_settings(GhbValue *settings);
+GhbValue* ghb_get_job_par_settings(GhbValue *settings);
+GhbValue* ghb_get_job_dest_settings(GhbValue *settings);
+GhbValue* ghb_get_job_video_settings(GhbValue *settings);
+GhbValue* ghb_get_job_metadata_settings(GhbValue *settings);
+GhbValue* ghb_get_job_chapter_list(GhbValue *settings);
+GhbValue* ghb_get_job_mp4_settings(GhbValue *settings);
+GhbValue *ghb_get_job_audio_settings(GhbValue *settings);
+GhbValue *ghb_get_job_audio_list(GhbValue *settings);
+GhbValue *ghb_get_job_subtitle_settings(GhbValue *settings);
+GhbValue *ghb_get_job_subtitle_list(GhbValue *settings);
+GhbValue *ghb_get_job_subtitle_search(GhbValue *settings);
+GhbValue* ghb_get_job_filter_settings(GhbValue *settings);
+GhbValue* ghb_get_job_filter_list(GhbValue *settings);
+
 void ghb_settings_copy(
     GhbValue *settings, const gchar *key, const GhbValue *value);
 gint ghb_settings_combo_int(const GhbValue *settings, const gchar *key);

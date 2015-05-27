@@ -33,57 +33,6 @@ static void add_to_subtitle_list_ui(signal_user_data_t *ud, GhbValue *settings);
 static void clear_subtitle_list_settings(GhbValue *settings);
 static void clear_subtitle_list_ui(GtkBuilder *builder);
 
-static GhbValue *get_sub_settings(GhbValue *settings)
-{
-    GhbValue *sub, *job;
-    job = ghb_get_job_settings(settings);
-    sub = ghb_dict_get(job, "Subtitle");
-    if (sub == NULL)
-    {
-        sub = ghb_dict_new();
-        ghb_dict_set(job, "Subtitle", sub);
-    }
-    return sub;
-}
-
-GhbValue *ghb_get_subtitle_settings(GhbValue *settings)
-{
-    return get_sub_settings(settings);
-}
-
-
-static GhbValue *get_sub_list(GhbValue *settings)
-{
-    GhbValue *sub_dict, *sub_list = NULL;
-    sub_dict = get_sub_settings(settings);
-    sub_list = ghb_dict_get(sub_dict, "SubtitleList");
-    if (sub_list == NULL)
-    {
-        sub_list = ghb_array_new();
-        ghb_dict_set(sub_dict, "SubtitleList", sub_list);
-    }
-    return sub_list;
-}
-
-GhbValue *ghb_get_subtitle_list(GhbValue *settings)
-{
-    return get_sub_list(settings);
-}
-
-static GhbValue *get_sub_search(GhbValue *settings)
-{
-    GhbValue *sub_dict, *sub_search = NULL;
-    sub_dict = get_sub_settings(settings);
-    sub_search = ghb_dict_get(sub_dict, "Search");
-    if (sub_search == NULL)
-    {
-        sub_search = ghb_dict_new();
-        ghb_dict_set(sub_dict, "Search", sub_search);
-        ghb_dict_set_bool(sub_search, "Enable", 0);
-    }
-    return sub_search;
-}
-
 static int get_sub_source(GhbValue *settings, GhbValue *subsettings)
 {
     if (ghb_dict_get(subsettings, "SRT") != NULL)
@@ -218,8 +167,8 @@ subtitle_refresh_list_ui_from_settings(signal_user_data_t *ud, GhbValue *setting
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    subtitle_list = get_sub_list(settings);
-    subtitle_search = get_sub_search(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
+    subtitle_search = ghb_get_job_subtitle_search(settings);
     search = ghb_dict_get_bool(subtitle_search, "Enable");
     count = ghb_array_len(subtitle_list);
     if (count + search != tm_count)
@@ -260,7 +209,7 @@ subtitle_exclusive_burn_settings(GhbValue *settings, gint index)
     GhbValue *subsettings;
     gint ii, count;
 
-    subtitle_list = get_sub_list(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
@@ -286,7 +235,7 @@ subtitle_exclusive_default_settings(GhbValue *settings, gint index)
     GhbValue *subtitle;
     gint ii, count;
 
-    subtitle_list = get_sub_list(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
     count = ghb_array_len(subtitle_list);
     for (ii = 0; ii < count; ii++)
     {
@@ -325,7 +274,7 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
     gboolean burn, forced, def;
     gint source;
 
-    subtitle_list = get_sub_list(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
     if (subtitle_list == NULL)
     {
         g_warning("No subtitle list!");
@@ -625,7 +574,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
         row = indices[0];
         gtk_tree_path_free(tp);
 
-        subtitle_search = get_sub_search(ud->settings);
+        subtitle_search = ghb_get_job_subtitle_search(ud->settings);
         search = ghb_dict_get_bool(subtitle_search, "Enable");
         if (search)
         {
@@ -638,7 +587,7 @@ subtitle_get_selected_settings(signal_user_data_t *ud, int *index)
             row--;
         }
 
-        subtitle_list = get_sub_list(ud->settings);
+        subtitle_list = ghb_get_job_subtitle_list(ud->settings);
         if (row < 0 || row >= ghb_array_len(subtitle_list))
             return NULL;
 
@@ -984,8 +933,8 @@ clear_subtitle_list_settings(GhbValue *settings)
 {
     GhbValue *subtitle_list, *subtitle_search;
 
-    subtitle_list = get_sub_list(settings);
-    subtitle_search = get_sub_search(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
+    subtitle_search = ghb_get_job_subtitle_search(settings);
     ghb_array_reset(subtitle_list);
     ghb_dict_set_bool(subtitle_search, "Enable", 0);
 }
@@ -1070,7 +1019,7 @@ static gboolean subtitle_is_one_burned(GhbValue *settings)
     GhbValue *subtitle_list, *subsettings;
     int count, ii;
 
-    subtitle_list = get_sub_list(settings);
+    subtitle_list = ghb_get_job_subtitle_list(settings);
     if (subtitle_list == NULL)
         return FALSE;
 
@@ -1105,7 +1054,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     }
 
     // Back up settings in case we need to revert.
-    backup = ghb_value_dup(get_sub_settings(ud->settings));
+    backup = ghb_value_dup(ghb_get_job_subtitle_settings(ud->settings));
     one_burned = subtitle_is_one_burned(ud->settings);
 
     const char *mux_id;
@@ -1153,14 +1102,14 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     GhbValue *subtitle_search, *backup;
 
-    subtitle_search = get_sub_search(ud->settings);
+    subtitle_search = ghb_get_job_subtitle_search(ud->settings);
     if (ghb_dict_get_bool(subtitle_search, "Enable"))
     {
         // Foreign audio search is already enabled
         return;
     }
 
-    backup = ghb_value_dup(get_sub_settings(ud->settings));
+    backup = ghb_value_dup(ghb_get_job_subtitle_settings(ud->settings));
 
     ghb_dict_set_bool(subtitle_search, "Enable", 1);
     ghb_dict_set_bool(subtitle_search, "Forced", 1);
@@ -1256,7 +1205,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
     gint ii;
     gboolean one_burned = FALSE;
 
-    subtitle_list = get_sub_list(ud->settings);
+    subtitle_list = ghb_get_job_subtitle_list(ud->settings);
     if (subtitle_list == NULL)
         return;
 
@@ -1555,7 +1504,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_tree_selection_select_iter(ts, &ti);
 
         // Back up settings in case we need to revert.
-        backup = ghb_value_dup(get_sub_settings(ud->settings));
+        backup = ghb_value_dup(ghb_get_job_subtitle_settings(ud->settings));
 
         // Pop up the edit dialog
         GtkResponseType response;
@@ -1612,8 +1561,8 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
             gtk_tree_selection_select_iter(ts, &nextIter);
         }
 
-        subtitle_search = get_sub_search(ud->settings);
-        subtitle_list = get_sub_list(ud->settings);
+        subtitle_search = ghb_get_job_subtitle_search(ud->settings);
+        subtitle_list = ghb_get_job_subtitle_list(ud->settings);
 
         // Get the row number
         indices = gtk_tree_path_get_indices(tp);

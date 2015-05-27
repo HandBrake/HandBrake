@@ -305,21 +305,24 @@ static int get_job_mux(hb_dict_t *job_dict)
     return mux;
 }
 
-static int get_audio_copy_mask(const hb_dict_t * preset)
+static hb_value_t* get_audio_copy_mask(const hb_dict_t * preset, int *mask)
 {
-    int mask = HB_ACODEC_PASS_FLAG;
+    int copy_mask;
+    hb_value_array_t *out_copy_mask, *in_copy_mask;
 
-    hb_value_array_t *copy_mask_array = hb_dict_get(preset, "AudioCopyMask");
-    if (copy_mask_array != NULL)
+    if (mask != NULL)
+        *mask = 0;
+    in_copy_mask  = hb_dict_get(preset, "AudioCopyMask");
+    out_copy_mask = hb_value_array_init();
+    if (in_copy_mask != NULL)
     {
-        mask = HB_ACODEC_PASS_FLAG;
-        int count = hb_value_array_len(copy_mask_array);
-        int ii;
+        int count, ii;
+        count = hb_value_array_len(in_copy_mask);
         for (ii = 0; ii < count; ii++)
         {
             int codec;
             hb_value_t *value;
-            value = hb_value_array_get(copy_mask_array, ii);
+            value = hb_value_array_get(in_copy_mask, ii);
             if (hb_value_type(value) == HB_VALUE_TYPE_STRING)
             {
                 char *tmp = NULL;
@@ -335,7 +338,8 @@ static int get_audio_copy_mask(const hb_dict_t * preset)
                     hb_error("Invalid audio codec in autopassthru copy mask (%s)", s);
                     hb_error("Codec name is invalid or can not be copied");
                     free(tmp);
-                    return HB_ACODEC_INVALID;
+                    hb_value_free(&out_copy_mask);
+                    return NULL;
                 }
                 free(tmp);
             }
@@ -343,10 +347,14 @@ static int get_audio_copy_mask(const hb_dict_t * preset)
             {
                 codec = hb_value_get_int(value);
             }
-            mask |= codec;
+            hb_value_array_append(out_copy_mask, hb_value_string(
+                hb_audio_encoder_get_short_name(codec)));
+            copy_mask |= codec;
         }
     }
-    return mask;
+    if (mask != NULL)
+        *mask = copy_mask;
+    return out_copy_mask;
 }
 
 static hb_dict_t * source_audio_track_used(hb_dict_t *track_dict, int track)
@@ -535,7 +543,8 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             }
             // Save the encoder value before sanitizing.  This value is
             // useful to the frontends.
-            hb_dict_set(audio_dict, "PresetEncoder", hb_value_int(out_codec));
+            hb_dict_set(audio_dict, "PresetEncoder",
+                hb_value_string(hb_audio_encoder_get_short_name(out_codec)));
 
             hb_audio_config_t *aconfig;
             aconfig = hb_list_audio_config_item(title->list_audio, track);
@@ -639,13 +648,14 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
         audio_dict = hb_dict_init();
         hb_dict_set(job_dict, "Audio", audio_dict);
     }
-    int copy_mask = get_audio_copy_mask(preset);
-    if (copy_mask == HB_ACODEC_INVALID)
+    int copy_mask;
+    hb_value_t *copy_mask_array = get_audio_copy_mask(preset, &copy_mask);
+    if (copy_mask_array == NULL)
     {
         return -1;
     }
     int fallback = 0;
-    hb_dict_set(audio_dict, "CopyMask", hb_value_int(copy_mask));
+    hb_dict_set(audio_dict, "CopyMask", copy_mask_array);
     hb_value_t *fallback_value = hb_dict_get(preset, "AudioEncoderFallback");
     if (fallback_value != NULL)
     {
@@ -1041,32 +1051,389 @@ static int get_video_framerate(hb_value_t *rate_value)
     return rate;
 }
 
-/**
- * Initialize an hb_job_t and return a hb_dict_t representation of the job.
- * This dict will have key/value pairs compatible with json jobs.
- * @param h             - Pointer to hb_handle_t instance that contains the
- *                        specified title_index
- * @param title_index   - Index of hb_title_t to use for job initialization.
- *                        Index comes from title->index or "Index" key
- *                        in json representation of a title.
- * @param preset        - Preset to initialize job with
- */
-hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
-                              const hb_dict_t *preset)
+int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
-    hb_title_t *title = hb_find_title_by_index(h, title_index);
-    if (title == NULL)
+    hb_value_t *filters_dict, *filter_list, *filter_dict;
+    char *filter_str;
+
+    // Create new filters
+    filters_dict = hb_dict_init();
+    hb_dict_set(job_dict, "Filters", filters_dict);
+    filter_list = hb_value_array_init();
+    hb_dict_set(filters_dict, "FilterList", filter_list);
+
+    hb_dict_set(filters_dict, "Grayscale", hb_value_xform(
+                hb_dict_get(preset, "VideoGrayScale"), HB_VALUE_TYPE_BOOL));
+
+    // Detelecine filter
+    hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
+    if (detel_val != NULL)
     {
-        hb_error("Invalid title index (%d)", title_index);
-        return NULL;
+        const char *custom;
+        custom = hb_value_get_string(hb_dict_get(preset,
+                                                "PictureDetelecineCustom"));
+        if (hb_value_type(detel_val) == HB_VALUE_TYPE_STRING)
+        {
+            filter_str = hb_generate_filter_settings(
+                HB_FILTER_DETELECINE, hb_value_get_string(detel_val), custom);
+        }
+        else
+        {
+            filter_str = hb_generate_filter_settings_by_index(
+                HB_FILTER_DETELECINE, hb_value_get_int(detel_val), custom);
+        }
+        if (filter_str == NULL)
+        {
+            char *s = hb_value_get_string_xform(detel_val);
+            hb_error("Invalid detelecine filter settings (%s)", s);
+            free(s);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DETELECINE));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
     }
 
-    hb_job_t *job = hb_job_init(title);
-    hb_dict_t *job_dict = hb_job_to_dict(job);
-    hb_job_close(&job);
+    // Decomb or deinterlace filters
+    int decomb_or_deint;
+    decomb_or_deint = hb_value_get_bool(hb_dict_get(preset,
+                                                   "PictureDecombDeinterlace"));
+    hb_value_t *decomb_val = hb_dict_get(preset, "PictureDecomb");
+    if (decomb_or_deint && decomb_val != NULL)
+    {
+        const char *custom;
+        custom = hb_value_get_string(hb_dict_get(preset,
+                                                "PictureDecombCustom"));
+        if (hb_value_type(decomb_val) == HB_VALUE_TYPE_STRING)
+        {
+            filter_str = hb_generate_filter_settings(
+                HB_FILTER_DECOMB, hb_value_get_string(decomb_val), custom);
+        }
+        else
+        {
+            filter_str = hb_generate_filter_settings_by_index(
+                HB_FILTER_DECOMB, hb_value_get_int(decomb_val), custom);
+        }
+        if (filter_str == NULL)
+        {
+            char *s = hb_value_get_string_xform(decomb_val);
+            hb_error("Invalid decomb filter settings (%s)", s);
+            free(s);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
+    }
 
-    // Now apply preset settings to the job dict
+    hb_value_t *deint_val = hb_dict_get(preset, "PictureDeinterlace");
+    if (!decomb_or_deint && deint_val != NULL)
+    {
+        const char *custom;
+        custom = hb_value_get_string(hb_dict_get(preset,
+                                                "PictureDeinterlaceCustom"));
+        if (hb_value_type(deint_val) == HB_VALUE_TYPE_STRING)
+        {
+            filter_str = hb_generate_filter_settings(
+                HB_FILTER_DEINTERLACE, hb_value_get_string(deint_val), custom);
+        }
+        else
+        {
+            filter_str = hb_generate_filter_settings_by_index(
+                HB_FILTER_DEINTERLACE, hb_value_get_int(deint_val), custom);
+        }
+        if (filter_str == NULL)
+        {
+            char *s = hb_value_get_string_xform(deint_val);
+            hb_error("Invalid deinterlace filter settings (%s)", s);
+            free(s);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
+    }
 
+    // Denoise filter
+    int denoise;
+    hb_value_t *denoise_value = hb_dict_get(preset, "PictureDenoiseFilter");
+    denoise = hb_value_type(denoise_value) == HB_VALUE_TYPE_STRING ? (
+        !strcasecmp(hb_value_get_string(denoise_value), "off") ? 0 :
+        !strcasecmp(hb_value_get_string(denoise_value), "nlmeans") ? 1 : 2) :
+        hb_value_get_int(denoise_value);
+
+    if (denoise != 0)
+    {
+        int filter_id = denoise == 1 ? HB_FILTER_NLMEANS : HB_FILTER_HQDN3D;
+        const char *denoise_preset, *denoise_tune;
+        denoise_preset = hb_value_get_string(
+                            hb_dict_get(preset, "PictureDenoisePreset"));
+        if (denoise_preset != NULL)
+        {
+            if (strcasecmp(denoise_preset, "custom"))
+                denoise_tune   = hb_value_get_string(
+                            hb_dict_get(preset, "PictureDenoiseTune"));
+            else
+                denoise_tune = hb_value_get_string(
+                            hb_dict_get(preset, "PictureDeinterlaceCustom"));
+
+            filter_str = hb_generate_filter_settings(
+                                filter_id, denoise_preset, denoise_tune);
+            if (filter_str == NULL)
+            {
+                hb_error("Invalid denoise filter settings (%s%s%s)",
+                         denoise_preset,
+                         denoise_tune ? "," : "",
+                         denoise_tune ? denoise_tune : "");
+                return -1;
+            }
+            else if (filter_str != hb_filter_off)
+            {
+                filter_dict = hb_dict_init();
+                hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+                hb_dict_set(filter_dict, "Settings",
+                            hb_value_string(filter_str));
+                hb_value_array_append(filter_list, filter_dict);
+                free(filter_str);
+            }
+        }
+    }
+
+    // Deblock filter
+    char *deblock = hb_value_get_string_xform(
+                        hb_dict_get(preset, "PictureDeblock"));
+    if (deblock != NULL)
+    {
+        filter_str = hb_generate_filter_settings(HB_FILTER_DEBLOCK,
+                                                 deblock, NULL);
+        if (filter_str == NULL)
+        {
+            hb_error("Invalid deblock filter settings (%s)", deblock);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEBLOCK));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
+    }
+    free(deblock);
+
+    // Rotate filter
+    char *rotate = hb_value_get_string_xform(
+                        hb_dict_get(preset, "PictureRotate"));
+    if (rotate != NULL)
+    {
+        filter_str = hb_generate_filter_settings(HB_FILTER_ROTATE,
+                                                 rotate, NULL);
+        if (filter_str == NULL)
+        {
+            hb_error("Invalid rotate filter settings (%s)", rotate);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_ROTATE));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
+    }
+    free(rotate);
+
+    hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
+    int vrate_den = get_video_framerate(fr_value);
+    if (vrate_den < 0)
+    {
+        char *str = hb_value_get_string_xform(fr_value);
+        hb_error("Invalid video framerate (%s)", str);
+        free(str);
+        return -1;
+    }
+
+    int fr_mode;
+    hb_value_t *fr_mode_value = hb_dict_get(preset, "VideoFramerateMode");
+    fr_mode = hb_value_type(fr_mode_value) == HB_VALUE_TYPE_STRING ? (
+        !strcasecmp(hb_value_get_string(fr_mode_value), "cfr") ? 1 :
+        !strcasecmp(hb_value_get_string(fr_mode_value), "pfr") ? 2 : 0) :
+        hb_value_get_int(fr_mode_value);
+
+    if (vrate_den == 0)
+        filter_str = hb_strdup_printf("%d", fr_mode);
+    else
+        filter_str = hb_strdup_printf("%d:%d:%d", fr_mode, 27000000, vrate_den);
+
+    filter_dict = hb_dict_init();
+    hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
+    hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+    hb_value_array_append(filter_list, filter_dict);
+    free(filter_str);
+
+    return 0;
+}
+
+int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
+{
+    hb_dict_t    *dest_dict, *video_dict, *qsv;
+    hb_value_t   *value, *vcodec_value, *color_value;
+    int           mux, vcodec, vqtype;
+    hb_encoder_t *encoder;
+
+    dest_dict    = hb_dict_get(job_dict, "Destination");
+    mux          = hb_container_get_from_name(hb_value_get_string(
+                                                hb_dict_get(dest_dict, "Mux")));
+    vcodec_value = hb_dict_get(preset, "VideoEncoder");
+    if (hb_value_type(vcodec_value) == HB_VALUE_TYPE_STRING)
+    {
+        vcodec = hb_video_encoder_get_from_name(
+                    hb_value_get_string(vcodec_value));
+    }
+    else
+    {
+        vcodec = hb_value_get_int(vcodec_value);
+    }
+    encoder = hb_video_encoder_get_from_codec(vcodec);
+    if (encoder == NULL)
+    {
+        char *str = hb_value_get_string_xform(vcodec_value);
+        hb_error("Invalid video encoder (%s)", str);
+        free(str);
+        return -1;
+    }
+    if (!(encoder->muxers & mux))
+    {
+        hb_error("Incompatible video encoder (%s) for muxer (%s)",
+                  hb_video_encoder_get_name(vcodec),
+                  hb_container_get_name(mux));
+        return -1;
+    }
+
+    video_dict = hb_dict_get(job_dict, "Video");
+    hb_dict_set(video_dict, "Encoder", hb_value_string(encoder->short_name));
+
+    if ((color_value = hb_dict_get(preset, "VideoColorMatrixCode")) != NULL)
+        hb_dict_set(video_dict, "ColorMatrixCode", hb_value_dup(color_value));
+    hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
+
+    if (vcodec == HB_VCODEC_X264 &&
+        hb_value_get_bool(hb_dict_get(preset, "x264UseAdvancedOptions")))
+    {
+        hb_dict_set(video_dict, "Options",
+                    hb_value_dup(hb_dict_get(preset, "x264Option")));
+    }
+    else
+    {
+        if ((value = hb_dict_get(preset, "VideoPreset")) != NULL)
+            hb_dict_set(video_dict, "Preset", hb_value_dup(value));
+        if ((value = hb_dict_get(preset, "VideoProfile")) != NULL)
+            hb_dict_set(video_dict, "Profile", hb_value_dup(value));
+        if ((value = hb_dict_get(preset, "VideoLevel")) != NULL)
+            hb_dict_set(video_dict, "Level", hb_value_dup(value));
+        if ((value = hb_dict_get(preset, "VideoTune")) != NULL)
+            hb_dict_set(video_dict, "Tune", hb_value_dup(value));
+        if ((value = hb_dict_get(preset, "VideoOptionExtra")) != NULL)
+            hb_dict_set(video_dict, "Options", hb_value_dup(value));
+    }
+
+    vqtype = hb_value_get_int(hb_dict_get(preset, "VideoQualityType"));
+    if (vqtype == 2)        // Constant quality
+    {
+        hb_dict_set(video_dict, "Quality",
+                    hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
+                                   HB_VALUE_TYPE_DOUBLE));
+        hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+    }
+    else if (vqtype == 1)   // ABR
+    {
+        hb_dict_set(video_dict, "Bitrate",
+                    hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
+                                   HB_VALUE_TYPE_INT));
+        hb_dict_set(video_dict, "TwoPass",
+                    hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
+                                   HB_VALUE_TYPE_BOOL));
+        hb_dict_set(video_dict, "Turbo",
+                    hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
+                                   HB_VALUE_TYPE_BOOL));
+        hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+    }
+    else
+    {
+        value = hb_dict_get(preset, "VideoQualitySlider");
+        if (value != NULL && hb_value_get_double(value) >= 0)
+        {
+            hb_dict_set(video_dict, "Quality",
+                        hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
+            hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+        }
+        else
+        {
+            hb_dict_set(video_dict, "Bitrate",
+                        hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
+                                       HB_VALUE_TYPE_INT));
+            hb_dict_set(video_dict, "TwoPass",
+                        hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
+                                       HB_VALUE_TYPE_BOOL));
+            hb_dict_set(video_dict, "Turbo",
+                        hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
+                                       HB_VALUE_TYPE_BOOL));
+            hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+        }
+    }
+    qsv = hb_dict_get(video_dict, "QSV");
+    if (qsv == NULL)
+    {
+        qsv = hb_dict_init();
+        hb_dict_set(video_dict, "QSV", qsv);
+    }
+    if ((value = hb_dict_get(preset, "VideoQSVDecode")) != NULL)
+    {
+        hb_dict_set(qsv, "Decode",
+                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
+    }
+    if ((value = hb_dict_get(preset, "VideoQSVAsyncDepth")) != NULL)
+    {
+        hb_dict_set(qsv, "AsyncDepth",
+                    hb_value_xform(value, HB_VALUE_TYPE_INT));
+    }
+
+    if ((value = hb_dict_get(preset, "VideoScaler")) != NULL)
+    {
+        const char *s = hb_value_get_string(value);
+        if (strcasecmp(s, "opencl"))
+        {
+            hb_dict_set(video_dict, "OpenCL", hb_value_bool(1));
+        }
+    }
+    if ((value = hb_dict_get(preset, "VideoHWDecode")) != NULL)
+    {
+        hb_dict_set(video_dict, "HWDecode",
+                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
+    }
+
+    return 0;
+}
+
+int hb_preset_apply_mux(const hb_dict_t *preset, hb_dict_t *job_dict)
+{
     hb_value_t *mux_value = hb_dict_get(preset, "FileFormat");
     int mux;
     if (hb_value_type(mux_value) == HB_VALUE_TYPE_STRING)
@@ -1086,60 +1453,46 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
         char *str = hb_value_get_string_xform(mux_value);
         hb_error("Invalid container (%s)", str);
         free(str);
-        goto fail;
+        return -1;
     }
 
-    hb_value_t *vcodec_value = hb_dict_get(preset, "VideoEncoder");
-    int vcodec;
-    if (hb_value_type(vcodec_value) == HB_VALUE_TYPE_STRING)
-    {
-        vcodec = hb_video_encoder_get_from_name(
-                    hb_value_get_string(vcodec_value));
-    }
-    else
-    {
-        vcodec = hb_value_get_int(vcodec_value);
-    }
-    hb_encoder_t *encoder = hb_video_encoder_get_from_codec(vcodec);
-    if (encoder == NULL)
-    {
-        char *str = hb_value_get_string_xform(vcodec_value);
-        hb_error("Invalid video encoder (%s)", str);
-        free(str);
-        goto fail;
-    }
-    if (!(encoder->muxers & mux))
-    {
-        hb_error("Incompatible video encoder (%s) for muxer (%s)",
-                  hb_video_encoder_get_name(vcodec),
-                  hb_container_get_name(mux));
-        goto fail;
-    }
-
-    int chapters;
-    chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
-    if (hb_list_count(title->list_chapter) <= 1)
-        chapters = 0;
-
-    // Set "Destination" settings in job
     hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
-    hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));
-    hb_dict_set(dest_dict, "Mux", hb_value_dup(mux_value));
+    hb_dict_set(dest_dict, "Mux", hb_value_string(container->short_name));
+
     if (mux & HB_MUX_MASK_MP4)
     {
         hb_dict_t *mp4_dict = hb_dict_init();
         hb_dict_set(mp4_dict, "Mp4Optimize",
                     hb_value_xform(hb_dict_get(preset, "Mp4HttpOptimize"),
                                    HB_VALUE_TYPE_BOOL));
-        if (vcodec == HB_VCODEC_X264)
-        {
-            hb_dict_set(mp4_dict, "IpodAtom",
-                        hb_value_xform(hb_dict_get(preset, "Mp4iPodCompatible"),
-                                       HB_VALUE_TYPE_BOOL));
-        }
+        hb_dict_set(mp4_dict, "IpodAtom",
+                    hb_value_xform(hb_dict_get(preset, "Mp4iPodCompatible"),
+                                   HB_VALUE_TYPE_BOOL));
         hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
     }
-    dest_dict = NULL;
+
+    return 0;
+}
+
+int hb_preset_apply_title(hb_handle_t *h, int title_index,
+                          const hb_dict_t *preset, hb_dict_t *job_dict)
+{
+    // Apply preset settings  that requires the title
+    hb_title_t *title = hb_find_title_by_index(h, title_index);
+    if (title == NULL)
+        return -1;
+
+    int chapters;
+    chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
+    if (title != NULL && hb_list_count(title->list_chapter) <= 1)
+        chapters = 0;
+
+    // Set "Destination" settings in job
+    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
+    hb_dict_set(dest_dict, "ChapterMarkers", hb_value_bool(chapters));
+
+    hb_dict_t *filters_dict = hb_dict_get(job_dict, "Filters");
+    hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
 
     // Calculate default job geometry settings
     hb_geometry_t srcGeo, resultGeo;
@@ -1248,22 +1601,6 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
     hb_dict_set(par_dict, "Den", hb_value_int(resultGeo.par.den));
     par_dict = NULL;
 
-    // Filters
-    hb_dict_t *filters_dict = hb_dict_get(job_dict, "Filters");
-    if (filters_dict == NULL)
-    {
-        filters_dict = hb_dict_init();
-        hb_dict_set(job_dict, "Filters", filters_dict);
-    }
-    hb_dict_set(filters_dict, "Grayscale", hb_value_xform(
-                hb_dict_get(preset, "VideoGrayScale"), HB_VALUE_TYPE_BOOL));
-    hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
-    if (filter_list == NULL)
-    {
-        filter_list = hb_value_array_init();
-        hb_dict_set(filters_dict, "FilterList", filter_list);
-    }
-
     hb_dict_t *filter_dict;
     char *filter_str;
 
@@ -1279,364 +1616,6 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
     free(filter_str);
     hb_value_array_append(filter_list, filter_dict);
 
-    // Detelecine filter
-    hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
-    if (detel_val != NULL)
-    {
-        const char *custom;
-        custom = hb_value_get_string(hb_dict_get(preset,
-                                                "PictureDetelecineCustom"));
-        if (hb_value_type(detel_val) == HB_VALUE_TYPE_STRING)
-        {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DETELECINE, hb_value_get_string(detel_val), custom);
-        }
-        else
-        {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DETELECINE, hb_value_get_int(detel_val), custom);
-        }
-        if (filter_str == NULL)
-        {
-            char *s = hb_value_get_string_xform(detel_val);
-            hb_error("Invalid detelecine filter settings (%s)", s);
-            free(s);
-            goto fail;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DETELECINE));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-
-    // Decomb or deinterlace filters
-    int decomb_or_deint;
-    decomb_or_deint = hb_value_get_bool(hb_dict_get(preset,
-                                                   "PictureDecombDeinterlace"));
-    hb_value_t *decomb_val = hb_dict_get(preset, "PictureDecomb");
-    if (decomb_or_deint && decomb_val != NULL)
-    {
-        const char *custom;
-        custom = hb_value_get_string(hb_dict_get(preset,
-                                                "PictureDecombCustom"));
-        if (hb_value_type(decomb_val) == HB_VALUE_TYPE_STRING)
-        {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DECOMB, hb_value_get_string(decomb_val), custom);
-        }
-        else
-        {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DECOMB, hb_value_get_int(decomb_val), custom);
-        }
-        if (filter_str == NULL)
-        {
-            char *s = hb_value_get_string_xform(decomb_val);
-            hb_error("Invalid decomb filter settings (%s)", s);
-            free(s);
-            goto fail;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-
-    hb_value_t *deint_val = hb_dict_get(preset, "PictureDeinterlace");
-    if (!decomb_or_deint && deint_val != NULL)
-    {
-        const char *custom;
-        custom = hb_value_get_string(hb_dict_get(preset,
-                                                "PictureDeinterlaceCustom"));
-        if (hb_value_type(deint_val) == HB_VALUE_TYPE_STRING)
-        {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DEINTERLACE, hb_value_get_string(deint_val), custom);
-        }
-        else
-        {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DEINTERLACE, hb_value_get_int(deint_val), custom);
-        }
-        if (filter_str == NULL)
-        {
-            char *s = hb_value_get_string_xform(deint_val);
-            hb_error("Invalid deinterlace filter settings (%s)", s);
-            free(s);
-            goto fail;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-
-    // Denoise filter
-    int denoise;
-    hb_value_t *denoise_value = hb_dict_get(preset, "PictureDenoiseFilter");
-    denoise = hb_value_type(denoise_value) == HB_VALUE_TYPE_STRING ? (
-        !strcasecmp(hb_value_get_string(denoise_value), "off") ? 0 :
-        !strcasecmp(hb_value_get_string(denoise_value), "nlmeans") ? 1 : 2) :
-        hb_value_get_int(denoise_value);
-
-    if (denoise != 0)
-    {
-        int filter_id = denoise == 1 ? HB_FILTER_NLMEANS : HB_FILTER_HQDN3D;
-        const char *denoise_preset, *denoise_tune;
-        denoise_preset = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDenoisePreset"));
-        if (denoise_preset != NULL)
-        {
-            if (strcasecmp(denoise_preset, "custom"))
-                denoise_tune   = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDenoiseTune"));
-            else
-                denoise_tune = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDeinterlaceCustom"));
-
-            filter_str = hb_generate_filter_settings(
-                                filter_id, denoise_preset, denoise_tune);
-            if (filter_str == NULL)
-            {
-                hb_error("Invalid denoise filter settings (%s%s%s)",
-                         denoise_preset,
-                         denoise_tune ? "," : "",
-                         denoise_tune ? denoise_tune : "");
-                goto fail;
-            }
-            else if (filter_str != hb_filter_off)
-            {
-                filter_dict = hb_dict_init();
-                hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
-                hb_dict_set(filter_dict, "Settings",
-                            hb_value_string(filter_str));
-                hb_value_array_append(filter_list, filter_dict);
-                free(filter_str);
-            }
-        }
-    }
-
-    // Deblock filter
-    char *deblock = hb_value_get_string_xform(
-                        hb_dict_get(preset, "PictureDeblock"));
-    if (deblock != NULL)
-    {
-        filter_str = hb_generate_filter_settings(HB_FILTER_DEBLOCK,
-                                                 deblock, NULL);
-        if (filter_str == NULL)
-        {
-            hb_error("Invalid deblock filter settings (%s)", deblock);
-            goto fail;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEBLOCK));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-    free(deblock);
-
-    // Rotate filter
-    char *rotate = hb_value_get_string_xform(
-                        hb_dict_get(preset, "PictureRotate"));
-    if (rotate != NULL)
-    {
-        filter_str = hb_generate_filter_settings(HB_FILTER_ROTATE,
-                                                 rotate, NULL);
-        if (filter_str == NULL)
-        {
-            hb_error("Invalid rotate filter settings (%s)", rotate);
-            goto fail;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_ROTATE));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-    free(rotate);
-
-    hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
-    int vrate_den = get_video_framerate(fr_value);
-    if (vrate_den < 0)
-    {
-        char *str = hb_value_get_string_xform(fr_value);
-        hb_error("Invalid video framerate (%s)", str);
-        free(str);
-        goto fail;
-    }
-
-    int fr_mode;
-    hb_value_t *fr_mode_value = hb_dict_get(preset, "VideoFramerateMode");
-    fr_mode = hb_value_type(fr_mode_value) == HB_VALUE_TYPE_STRING ? (
-        !strcasecmp(hb_value_get_string(fr_mode_value), "cfr") ? 1 :
-        !strcasecmp(hb_value_get_string(fr_mode_value), "pfr") ? 2 : 0) :
-        hb_value_get_int(fr_mode_value);
-
-    if (hb_value_get_bool(hb_dict_get(preset, "x264ZeroLatency")))
-        fr_mode = 1;
-
-    if (vrate_den == 0)
-        filter_str = hb_strdup_printf("%d", fr_mode);
-    else
-        filter_str = hb_strdup_printf("%d:%d:%d", fr_mode, 27000000, vrate_den);
-
-    filter_dict = hb_dict_init();
-    hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
-    hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-    hb_value_array_append(filter_list, filter_dict);
-    free(filter_str);
-
-    // Video encoder settings
-    hb_dict_t *video_dict = hb_dict_get(job_dict, "Video");
-    hb_value_t *color_value;
-    if ((color_value = hb_dict_get(preset, "VideoColorMatrixCode")) != NULL)
-        hb_dict_set(video_dict, "ColorMatrixCode", hb_value_dup(color_value));
-    hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
-    switch (vcodec)
-    {
-        case HB_VCODEC_X264:
-        {
-            if (hb_value_get_bool(
-                hb_dict_get(preset, "x264UseAdvancedOptions")))
-            {
-                hb_dict_set(video_dict, "Options",
-                            hb_value_dup(hb_dict_get(preset, "x264Option")));
-                break;
-            }
-        }
-        // Falling through to next case...
-
-        case HB_VCODEC_X265:
-        {
-            hb_value_t *value, *array;
-            if ((value = hb_dict_get(preset, "VideoPreset")) != NULL)
-                hb_dict_set(video_dict, "Preset", hb_value_dup(value));
-            if ((value = hb_dict_get(preset, "VideoProfile")) != NULL)
-                hb_dict_set(video_dict, "Profile", hb_value_dup(value));
-            if ((value = hb_dict_get(preset, "VideoLevel")) != NULL)
-                hb_dict_set(video_dict, "Level", hb_value_dup(value));
-            if ((value = hb_dict_get(preset, "VideoOptionExtra")) != NULL)
-                hb_dict_set(video_dict, "Options", hb_value_dup(value));
-            array = hb_value_array_init();
-            if ((value = hb_dict_get(preset, "VideoTune")) != NULL)
-                hb_value_array_append(array, hb_value_dup(value));
-            if (vcodec == HB_VCODEC_X264)
-            {
-                if (hb_value_get_bool(hb_dict_get(preset, "x264FastDecode")))
-                    hb_value_array_append(array, hb_value_string("fastdecode"));
-                if (hb_value_get_bool(hb_dict_get(preset, "x264ZeroLatency")))
-                    hb_value_array_append(array, hb_value_string("zerolatency"));
-            }
-            if (hb_value_array_len(array) > 0)
-            hb_dict_set(video_dict, "Tune",
-                        hb_value_xform(array, HB_VALUE_TYPE_STRING));
-            hb_value_decref(array);
-        } break;
-
-        case HB_VCODEC_FFMPEG_MPEG2:
-        case HB_VCODEC_FFMPEG_MPEG4:
-        case HB_VCODEC_FFMPEG_VP8:
-        {
-            hb_value_t *value;
-            if ((value = hb_dict_get(preset, "VideoOptionExtra")) != NULL)
-                hb_dict_set(video_dict, "Options", hb_value_dup(value));
-        } break;
-
-        case HB_VCODEC_THEORA:
-        default:
-        {
-        } break;
-    }
-    int vqtype = hb_value_get_int(hb_dict_get(preset, "VideoQualityType"));
-    if (vqtype == 2)        // Constant quality
-    {
-        hb_dict_set(video_dict, "Quality",
-                    hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
-                                   HB_VALUE_TYPE_DOUBLE));
-    }
-    else if (vqtype == 1)   // ABR
-    {
-        hb_dict_set(video_dict, "Bitrate",
-                    hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
-                                   HB_VALUE_TYPE_INT));
-        hb_dict_set(video_dict, "TwoPass",
-                    hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
-                                   HB_VALUE_TYPE_BOOL));
-        hb_dict_set(video_dict, "Turbo",
-                    hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
-                                   HB_VALUE_TYPE_BOOL));
-    }
-    else
-    {
-        hb_value_t *value = hb_dict_get(preset, "VideoQualitySlider");
-        if (value != NULL && hb_value_get_double(value) >= 0)
-            hb_dict_set(video_dict, "Quality",
-                        hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
-        else
-        {
-            hb_dict_set(video_dict, "Bitrate",
-                        hb_value_xform(hb_dict_get(preset, "VideoAvgBitrate"),
-                                       HB_VALUE_TYPE_INT));
-            hb_dict_set(video_dict, "TwoPass",
-                        hb_value_xform(hb_dict_get(preset, "VideoTwoPass"),
-                                       HB_VALUE_TYPE_BOOL));
-            hb_dict_set(video_dict, "Turbo",
-                        hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
-                                       HB_VALUE_TYPE_BOOL));
-        }
-    }
-    hb_dict_t *qsv = hb_dict_get(video_dict, "QSV");
-    if (qsv == NULL)
-    {
-        qsv = hb_dict_init();
-        hb_dict_set(video_dict, "QSV", qsv);
-    }
-    hb_value_t *value;
-    if ((value = hb_dict_get(preset, "VideoQSVDecode")) != NULL)
-    {
-        hb_dict_set(qsv, "Decode",
-                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
-    }
-    if ((value = hb_dict_get(preset, "VideoQSVAsyncDepth")) != NULL)
-    {
-        hb_dict_set(qsv, "AsyncDepth",
-                    hb_value_xform(value, HB_VALUE_TYPE_INT));
-    }
-
-    if ((value = hb_dict_get(preset, "VideoScaler")) != NULL)
-    {
-        const char *s = hb_value_get_string(value);
-        if (strcasecmp(s, "opencl"))
-        {
-            hb_dict_set(video_dict, "OpenCL", hb_value_bool(1));
-        }
-    }
-    if ((value = hb_dict_get(preset, "VideoHWDecode")) != NULL)
-    {
-        hb_dict_set(video_dict, "HWDecode",
-                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
-    }
-    video_dict = NULL;
-
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
     {
@@ -1648,11 +1627,52 @@ hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
     {
         goto fail;
     }
+    return 0;
+
+fail:
+    return -1;
+}
+
+/**
+ * Initialize an hb_job_t and return a hb_dict_t representation of the job.
+ * This dict will have key/value pairs compatible with json jobs.
+ * @param h             - Pointer to hb_handle_t instance that contains the
+ *                        specified title_index
+ * @param title_index   - Index of hb_title_t to use for job initialization.
+ *                        Index comes from title->index or "Index" key
+ *                        in json representation of a title.
+ * @param preset        - Preset to initialize job with
+ */
+hb_dict_t* hb_preset_job_init(hb_handle_t *h, int title_index,
+                              const hb_dict_t *preset)
+{
+    hb_title_t *title = hb_find_title_by_index(h, title_index);
+    if (title == NULL)
+    {
+        hb_error("Invalid title index (%d)", title_index);
+        return NULL;
+    }
+
+    hb_job_t *job = hb_job_init(title);
+    hb_dict_t *job_dict = hb_job_to_dict(job);
+    hb_job_close(&job);
+
+    if (hb_preset_apply_mux(preset, job_dict) < 0)
+        goto fail;
+
+    if (hb_preset_apply_video(preset, job_dict) < 0)
+        goto fail;
+
+    if (hb_preset_apply_filters(preset, job_dict) < 0)
+        goto fail;
+
+    if (hb_preset_apply_title(h, title_index, preset, job_dict) < 0)
+        goto fail;
 
     return job_dict;
 
 fail:
-    hb_dict_free(&job_dict);
+    hb_value_free(&job_dict);
     return NULL;
 }
 
@@ -2098,6 +2118,28 @@ static void import_video(hb_value_t *preset)
          hb_dict_set(preset, "VideoLevel", hb_value_dup(val));
     if ((val = hb_dict_get(preset, "x264OptionExtra")) != NULL)
         hb_dict_set(preset, "VideoOptionExtra", hb_value_dup(val));
+
+    // Remove invalid "none" tune from VideoTune.  Frontends should
+    // be removing this before saving a preset.
+    if ((val = hb_dict_get(preset, "VideoTune")) != NULL)
+    {
+        const char *tune;
+        tune = hb_value_get_string(val);
+        // "none" is not a valid tune, but is used by HandBrake
+        // to indicate no tune options.
+        if (tune != NULL && !strncasecmp(tune, "none", 4))
+        {
+            tune += 4;
+            if (tune[0] == ',')
+            {
+                tune++;
+            }
+        }
+        if (tune != NULL)
+        {
+            hb_dict_set(preset, "VideoTune", hb_value_string(tune));
+        }
+    }
 
     if (hb_value_get_int(hb_dict_get(preset, "VideoQualityType")) == 0)
     {

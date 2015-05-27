@@ -1170,7 +1170,7 @@ This is often the feature title of a DVD.</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <property name="adjustment">adjustment27</property>
                                 <property name="halign">end</property>
-                                <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                <signal name="value-changed" handler="title_angle_changed_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1498,7 +1498,7 @@ This is often the feature title of a DVD.</property>
 This allows a player to initiate playback before downloading the entire file.</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="http_opt_changed_cb" swapped="no"/>
+                                <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -6214,7 +6214,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_name_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">0</property>
@@ -6251,7 +6251,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_artist_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -6288,7 +6288,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_album_artist_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">2</property>
@@ -6325,7 +6325,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_release_date_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">3</property>
@@ -6362,7 +6362,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_comment_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">4</property>
@@ -6399,7 +6399,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_genre_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">5</property>
@@ -6436,7 +6436,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
-                            <signal name="changed" handler="meta_setting_widget_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="meta_description_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="top_attach">6</property>

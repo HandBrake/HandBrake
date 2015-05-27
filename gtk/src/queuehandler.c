@@ -535,7 +535,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     gint count, ii;
     const GhbValue *audio_list;
 
-    audio_list = ghb_get_audio_list(settings);
+    audio_list = ghb_get_job_audio_list(settings);
     count = ghb_array_len(audio_list);
     if (count == 1)
     {
@@ -601,7 +601,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     const GhbValue *sub_dict, *sub_list, *sub_search;
     gboolean search;
 
-    sub_dict = ghb_get_subtitle_settings(settings);
+    sub_dict = ghb_get_job_subtitle_settings(settings);
     sub_list = ghb_dict_get(sub_dict, "SubtitleList");
     sub_search = ghb_dict_get(sub_dict, "Search");
     search = ghb_dict_get_bool(sub_search, "Enable");
@@ -1040,6 +1040,43 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
     return TRUE;
 }
 
+void ghb_finalize_job(GhbValue *settings)
+{
+    GhbValue *preset, *job;
+
+    preset = ghb_settings_to_preset(settings);
+    job    = ghb_dict_get(settings, "Job");
+
+    // Apply selected preset settings
+    hb_preset_apply_mux(preset, job);
+    hb_preset_apply_video(preset, job);
+    hb_preset_apply_filters(preset, job);
+
+    // Add scale filter since the above does not
+    GhbValue *filter_list, *filter_dict;
+    int width, height, crop[4];
+    char *filter_str;
+
+    filter_list = ghb_get_job_filter_list(settings);
+    width = ghb_dict_get_int(settings, "scale_width");
+    height = ghb_dict_get_int(settings, "scale_height");
+
+    crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+    crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+    crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+    crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
+
+    filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
+                            width, height, crop[0], crop[1], crop[2], crop[3]);
+    filter_dict = ghb_dict_new();
+    ghb_dict_set_int(filter_dict, "ID", HB_FILTER_CROP_SCALE);
+    ghb_dict_set_string(filter_dict, "Settings", filter_str);
+    hb_value_array_append(filter_list, filter_dict);
+    g_free(filter_str);
+
+    ghb_value_free(&preset);
+}
+
 static gboolean
 queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
@@ -1052,6 +1089,8 @@ queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 
     if (ud->queue == NULL)
         ud->queue = ghb_array_new();
+
+    ghb_finalize_job(settings);
 
     // Copy current prefs into settings
     // The job should run with the preferences that existed
@@ -1417,6 +1456,8 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
     dest_dir = ghb_dict_get_string(settings, "dest_dir");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
     ghb_dict_set_string(settings, "destination", dest);
+    GhbValue *dest_dict = ghb_get_job_dest_settings(settings);
+    ghb_dict_set_string(dest_dict, "File", dest);
 
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.
@@ -1451,6 +1492,8 @@ title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
     dest_file = ghb_dict_get_string(settings, "dest_file");
     dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
     ghb_dict_set_string(settings, "destination", dest);
+    GhbValue *dest_dict = ghb_get_job_dest_settings(settings);
+    ghb_dict_set_string(dest_dict, "File", dest);
 
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.

@@ -90,13 +90,12 @@ float ghb_vquality_default(signal_user_data_t *ud);
 void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_backend_close(void);
-void ghb_add_job(GhbValue *js, gint unique_id);
+void ghb_add_job(hb_handle_t *h, GhbValue *js, gint unique_id);
 void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);
 void ghb_stop_queue(void);
 void ghb_pause_queue(void);
 
-void ghb_add_live_job(GhbValue *js, gint unique_id);
 void ghb_start_live_encode();
 void ghb_stop_live_encode();
 
@@ -117,7 +116,6 @@ void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(GhbValue *settings, gint mode);
 void ghb_picture_settings_deps(signal_user_data_t *ud);
-GhbValue* ghb_get_chapters(const hb_title_t *title);
 gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
 void ghb_part_duration(

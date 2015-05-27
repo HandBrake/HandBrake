@@ -31,43 +31,6 @@ static void ghb_adjust_audio_rate_combos(signal_user_data_t *ud);
 
 static gboolean block_updates = FALSE;
 
-static GhbValue *get_audio_settings(GhbValue *settings)
-{
-    GhbValue *audio, *job;
-    job = ghb_get_job_settings(settings);
-    audio = ghb_dict_get(job, "Audio");
-    if (audio == NULL)
-    {
-        audio = ghb_dict_new();
-        ghb_dict_set(job, "Audio", audio);
-    }
-    return audio;
-}
-
-GhbValue *ghb_get_audio_settings(GhbValue *settings)
-{
-    return get_audio_settings(settings);
-}
-
-
-static GhbValue *get_audio_list(GhbValue *settings)
-{
-    GhbValue *audio_dict, *audio_list = NULL;
-    audio_dict = get_audio_settings(settings);
-    audio_list = ghb_dict_get(audio_dict, "AudioList");
-    if (audio_list == NULL)
-    {
-        audio_list = ghb_array_new();
-        ghb_dict_set(audio_dict, "AudioList", audio_list);
-    }
-    return audio_list;
-}
-
-GhbValue *ghb_get_audio_list(GhbValue *settings)
-{
-    return get_audio_list(settings);
-}
-
 static void enable_quality_widget(signal_user_data_t *ud, int acodec)
 {
     GtkWidget *widget1, *widget2;
@@ -457,7 +420,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 void ghb_sanitize_audio_tracks(signal_user_data_t *ud)
 {
     int ii;
-    GhbValue *alist = get_audio_list(ud->settings);
+    GhbValue *alist = ghb_get_job_audio_list(ud->settings);
     int count = ghb_array_len(alist);
 
     for (ii = 0; ii < count; ii++)
@@ -574,7 +537,7 @@ ghb_get_user_audio_lang(GhbValue *settings, const hb_title_t *title, gint track)
     GhbValue *audio_list, *asettings;
     const gchar *lang;
 
-    audio_list = get_audio_list(settings);
+    audio_list = ghb_get_job_audio_list(settings);
     if (ghb_array_len(audio_list) <= track)
         return "und";
     asettings = ghb_array_get(audio_list, track);
@@ -735,7 +698,7 @@ audio_get_selected_settings(signal_user_data_t *ud, int *index)
         // find audio settings
         if (row < 0) return NULL;
 
-        audio_list = get_audio_list(ud->settings);
+        audio_list = ghb_get_job_audio_list(ud->settings);
         if (row >= ghb_array_len(audio_list))
             return NULL;
 
@@ -921,7 +884,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
         gtk_tree_path_free(tp);
         if (row < 0) return;
 
-        audio_list = get_audio_list(ud->settings);
+        audio_list = ghb_get_job_audio_list(ud->settings);
         if (row >= ghb_array_len(audio_list))
             return;
 
@@ -945,7 +908,7 @@ audio_refresh_list_ui(signal_user_data_t *ud)
 
     tm_count = gtk_tree_model_iter_n_children(tm, NULL);
 
-    audio_list = get_audio_list(ud->settings);
+    audio_list = ghb_get_job_audio_list(ud->settings);
     count = ghb_array_len(audio_list);
     if (count != tm_count)
     {
@@ -1187,7 +1150,7 @@ audio_passthru_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting(ud->settings, widget);
     copy_mask = ghb_create_copy_mask(ud->settings);
-    audio = get_audio_settings(ud->settings);
+    audio = ghb_get_job_audio_settings(ud->settings);
     ghb_dict_set(audio, "CopyMask", copy_mask);
     ghb_clear_presets_selection(ud);
 }
@@ -1281,7 +1244,7 @@ ghb_clear_audio_list_settings(GhbValue *settings)
     GhbValue *audio_list;
 
     g_debug("clear_audio_list_settings ()");
-    audio_list = get_audio_list(settings);
+    audio_list = ghb_get_job_audio_list(settings);
     ghb_array_reset(audio_list);
 }
 
@@ -1375,7 +1338,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *ts, signal_user_data_t *ud)
         gtk_tree_path_free(tp);
 
         if (row < 0) return;
-        audio_list = get_audio_list(ud->settings);
+        audio_list = ghb_get_job_audio_list(ud->settings);
         if (row >= 0 && row < ghb_array_len(audio_list))
             asettings = ghb_array_get(audio_list, row);
     }
@@ -1393,7 +1356,7 @@ audio_add_to_settings(GhbValue *settings, GhbValue *asettings)
 
     title_id = ghb_dict_get_int(settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    audio_list = get_audio_list(settings);
+    audio_list = ghb_get_job_audio_list(settings);
 
     int track = ghb_dict_get_int(asettings, "Track");
     aconfig = ghb_get_audio_info(title, track);
@@ -1420,8 +1383,8 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     title = ghb_lookup_title(title_id, &titleindex);
 
     // Back up settings in case we need to revert.
-    audio_dict = get_audio_settings(ud->settings);
-    backup = ghb_value_dup(get_audio_list(ud->settings));
+    audio_dict = ghb_get_job_audio_settings(ud->settings);
+    backup = ghb_value_dup(ghb_get_job_audio_list(ud->settings));
     GhbValue *pref_audio = ghb_dict_get_value(ud->settings, "AudioList");
     asettings = audio_select_and_add_track(title, ud->settings, pref_audio,
                                            "und", 0, 0);
@@ -1508,9 +1471,9 @@ audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 
         gtk_tree_selection_select_iter(ts, &ti);
 
-        audio_dict = get_audio_settings(ud->settings);
+        audio_dict = ghb_get_job_audio_settings(ud->settings);
         // Back up settings in case we need to revert.
-        backup = ghb_value_dup(get_audio_list(ud->settings));
+        backup = ghb_value_dup(ghb_get_job_audio_list(ud->settings));
 
         // Pop up the edit dialog
         GtkResponseType response;
@@ -1567,7 +1530,7 @@ audio_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
             gtk_tree_selection_select_iter(ts, &nextIter);
         }
 
-        audio_list = get_audio_list(ud->settings);
+        audio_list = ghb_get_job_audio_list(ud->settings);
 
         // Get the row number
         indices = gtk_tree_path_get_indices (tp);
@@ -2215,7 +2178,7 @@ G_MODULE_EXPORT void
 audio_fallback_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    GhbValue *audio = get_audio_settings(ud->settings);
+    GhbValue *audio = ghb_get_job_audio_settings(ud->settings);
     ghb_dict_set(audio, "FallbackEncoder", ghb_value_dup(
                  ghb_dict_get(ud->settings, "AudioEncoderFallback")));
     audio_def_set_all_limits(ud);

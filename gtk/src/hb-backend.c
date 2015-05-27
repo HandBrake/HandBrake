@@ -36,6 +36,7 @@
 #include "videohandler.h"
 #include "x264handler.h"
 #include "preview.h"
+#include "presets.h"
 #include "values.h"
 #include "lang.h"
 #include "jansson.h"
@@ -2365,33 +2366,6 @@ ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start)
     return -1;
 }
 
-#if 0
-static void
-generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
-{
-    GtkTreeIter iter;
-    GtkListStore *store;
-    gint ii;
-
-    g_debug("generic_opts_set ()\n");
-    if (name == NULL || opts == NULL) return;
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
-    gtk_list_store_clear(store);
-    for (ii = 0; ii < opts->count; ii++)
-    {
-        gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter,
-                           0, gettext(opts->map[ii].option),
-                           1, TRUE,
-                           2, opts->map[ii].shortOpt,
-                           3, opts->map[ii].ivalue,
-                           4, opts->map[ii].svalue,
-                           -1);
-    }
-}
-#endif
-
 static void
 small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 {
@@ -2666,80 +2640,6 @@ ghb_build_advanced_opts_string(GhbValue *settings)
     }
 }
 
-void ghb_set_video_encoder_opts(hb_dict_t *dict, GhbValue *js)
-{
-    gint vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
-    switch (vcodec)
-    {
-        case HB_VCODEC_X265:
-        case HB_VCODEC_X264:
-        {
-            if (vcodec == HB_VCODEC_X264 &&
-                ghb_dict_get_bool(js, "x264UseAdvancedOptions"))
-            {
-                const char *opts;
-                opts = ghb_dict_get_string(js, "x264Option");
-                hb_dict_set(dict, "Options", hb_value_string(opts));
-            }
-            else
-            {
-                const char *preset, *tune, *profile, *level, *opts;
-                GString *str = g_string_new("");
-                preset = ghb_dict_get_string(js, "VideoPreset");
-                tune = ghb_dict_get_string(js, "VideoTune");
-                profile = ghb_dict_get_string(js, "VideoProfile");
-                level = ghb_dict_get_string(js, "VideoLevel");
-                opts = ghb_dict_get_string(js, "VideoOptionExtra");
-                char *tunes;
-
-                g_string_append_printf(str, "%s", tune);
-                if (vcodec == HB_VCODEC_X264)
-                {
-                    if (ghb_dict_get_bool(js, "x264FastDecode"))
-                    {
-                        g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
-                    }
-                    if (ghb_dict_get_bool(js, "x264ZeroLatency"))
-                    {
-                        g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
-                    }
-                }
-                tunes = g_string_free(str, FALSE);
-
-                if (preset != NULL)
-                    hb_dict_set(dict, "Preset", hb_value_string(preset));
-                if (tunes != NULL && strcasecmp(tune, "none"))
-                    hb_dict_set(dict, "Tune", hb_value_string(tunes));
-                if (profile != NULL && strcasecmp(profile, "auto"))
-                    hb_dict_set(dict, "Profile", hb_value_string(profile));
-                if (level != NULL && strcasecmp(level, "auto"))
-                    hb_dict_set(dict, "Level", hb_value_string(level));
-                if (opts != NULL)
-                    hb_dict_set(dict, "Options", hb_value_string(opts));
-
-                g_free(tunes);
-            }
-        } break;
-
-        case HB_VCODEC_FFMPEG_MPEG2:
-        case HB_VCODEC_FFMPEG_MPEG4:
-        case HB_VCODEC_FFMPEG_VP8:
-        {
-            const char *opts;
-            opts = ghb_dict_get_string(js, "VideoOptionExtra");
-            if (opts != NULL && opts[0])
-            {
-                hb_dict_set(dict, "Options", hb_value_string(opts));
-            }
-        } break;
-
-        case HB_VCODEC_THEORA:
-        default:
-        {
-        } break;
-    }
-}
-
 void
 ghb_part_duration(const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 {
@@ -2803,36 +2703,6 @@ ghb_get_chapter_start(const hb_title_t *title, gint chap)
         start += chapter->duration;
     }
     return start;
-}
-
-GhbValue*
-ghb_get_chapters(const hb_title_t *title)
-{
-    hb_chapter_t * chapter;
-    gint count, ii;
-    GhbValue *chapters = NULL;
-
-    chapters = ghb_array_new();
-
-    if (title == NULL) return chapters;
-    count = hb_list_count( title->list_chapter );
-    for (ii = 0; ii < count; ii++)
-    {
-        chapter = hb_list_item(title->list_chapter, ii);
-        if (chapter == NULL) break;
-        if (chapter->title == NULL || chapter->title[0] == 0)
-        {
-            gchar *str;
-            str = g_strdup_printf (_("Chapter %2d"), ii+1);
-            ghb_array_append(chapters, ghb_string_value_new(str));
-            g_free(str);
-        }
-        else
-        {
-            ghb_array_append(chapters, ghb_string_value_new(chapter->title));
-        }
-    }
-    return chapters;
 }
 
 void
@@ -3504,6 +3374,11 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
     ghb_dict_set_int(settings, "PicturePARHeight", resultGeo.par.den);
     ghb_dict_set_int(settings, "PictureDisplayWidth", disp_width);
     ghb_dict_set_int(settings, "PictureDisplayHeight", resultGeo.height);
+
+    // Update Job PAR
+    GhbValue *par = ghb_get_job_par_settings(settings);
+    ghb_dict_set_int(par, "Num", resultGeo.par.num);
+    ghb_dict_set_int(par, "Den", resultGeo.par.den);
 }
 
 void
@@ -3780,7 +3655,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     gint count, ii, track;
     gboolean burned, one_burned = FALSE;
 
-    slist = ghb_get_subtitle_list(settings);
+    slist = ghb_get_job_subtitle_list(settings);
     count = ghb_array_len(slist);
     for (ii = 0; ii < count; ii++)
     {
@@ -3859,7 +3734,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
     const GhbValue *audio_list;
     gint count, ii;
 
-    audio_list = ghb_get_audio_list(settings);
+    audio_list = ghb_get_job_audio_list(settings);
     count = ghb_array_len(audio_list);
     for (ii = 0; ii < count; ii++)
     {
@@ -3964,510 +3839,18 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
     return TRUE;
 }
 
-static void
-add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
+void
+ghb_add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
 {
-    hb_dict_t * dict;
-    json_error_t error;
+    GhbValue *job;
+    char     *json_job;
 
-    // Assumes that the UI has reduced geometry settings to only the
-    // necessary PAR value
-
-    const char *mux_name;
-    const hb_container_t *mux;
-    int mux_id;
-
-    mux_name = ghb_dict_get_string(js, "FileFormat");
-    mux = ghb_lookup_container_by_name(mux_name);
-
-    mux_id = mux->format;
-
-    int p_to_p = -1, range_seek_points = 0, chapter_markers = 0;
-    int64_t range_start = 0, range_end = 0;
-    range_start = ghb_dict_get_int(js, "start_frame") + 1;
-    const char *range_type = "chapter";
-    if (range_start != 0)
-    {
-        range_type = "preview";
-        GhbValue *prefs = ghb_dict_get_value(js, "Preferences");
-        range_seek_points = ghb_dict_get_int(prefs, "preview_count");
-        range_end = ghb_dict_get_int(prefs, "live_duration") * 90000LL;
-    }
-    else
-    {
-        chapter_markers = ghb_dict_get_bool(js, "ChapterMarkers");
-        p_to_p = ghb_settings_combo_int(js, "PtoPType");
-        switch (p_to_p)
-        {
-            default:
-            case 0: // Chapter range
-            {
-                range_type = "chapter";
-                range_start = ghb_dict_get_int(js, "start_point");
-                range_end  = ghb_dict_get_int(js, "end_point");
-                if (range_start == range_end)
-                    chapter_markers = 0;
-            } break;
-            case 1: // PTS range
-            {
-                double start, end;
-                range_type = "time";
-                start = ghb_dict_get_double(js, "start_point");
-                end   = ghb_dict_get_double(js, "end_point");
-                range_start = (int64_t)start * 90000;
-                range_end  = (int64_t)end   * 90000 - range_start;
-            } break;
-            case 2: // Frame range
-            {
-                range_type = "frame";
-                range_start = ghb_dict_get_int(js, "start_point") - 1;
-                range_end  = ghb_dict_get_int(js, "end_point")   - 1 -
-                              range_start;
-            } break;
-        }
-    }
-
-    const char *path = ghb_dict_get_string(js, "source");
-    int title_id = ghb_dict_get_int(js, "title");
-
-    int angle = ghb_dict_get_int(js, "angle");
-
-    hb_rational_t par;
-    par.num = ghb_dict_get_int(js, "PicturePARWidth");
-    par.den = ghb_dict_get_int(js, "PicturePARHeight");
-
-    int vcodec, grayscale;
-    vcodec = ghb_settings_video_encoder_codec(js, "VideoEncoder");
-    grayscale   = ghb_dict_get_bool(js, "VideoGrayScale");
-
-    dict = json_pack_ex(&error, 0,
-    "{"
-    // SequenceID
-    "s:o,"
-    // Destination {Mux, ChapterMarkers, ChapterList}
-    "s:{s:o, s:o, s[]},"
-    // Source {Path, Title, Angle}
-    "s:{s:o, s:o, s:o,},"
-    // PAR {Num, Den}
-    "s:{s:o, s:o},"
-    // Video {Codec}
-    "s:{s:o},"
-    // Metadata
-    "s:{},"
-    // Filters {Grayscale, FilterList []}
-    "s:{s:o, s:[]}"
-    "}",
-        "SequenceID",           hb_value_int(unique_id),
-        "Destination",
-            "Mux",              hb_value_int(mux_id),
-            "ChapterMarkers",   hb_value_bool(chapter_markers),
-            "ChapterList",
-        "Source",
-            "Path",             hb_value_string(path),
-            "Title",            hb_value_int(title_id),
-            "Angle",            hb_value_int(angle),
-        "PAR",
-            "Num",              hb_value_int(par.num),
-            "Den",              hb_value_int(par.den),
-        "Video",
-            "Encoder",          hb_value_int(vcodec),
-        "Metadata",
-        "Filters",
-            "Grayscale",        hb_value_bool(grayscale),
-            "FilterList"
-    );
-    if (dict == NULL)
-    {
-        g_warning("json pack job failure: %s", error.text);
-        return;
-    }
-    const char *dest = ghb_dict_get_string(js, "destination");
-    hb_dict_t *dest_dict = hb_dict_get(dict, "Destination");
-    if (dest != NULL)
-    {
-        hb_dict_set(dest_dict, "File", hb_value_string(dest));
-    }
-    if (mux_id & HB_MUX_MASK_MP4)
-    {
-        int mp4_optimize, ipod_atom = 0;
-        mp4_optimize = ghb_dict_get_bool(js, "Mp4HttpOptimize");
-        if (vcodec == HB_VCODEC_X264)
-        {
-            ipod_atom = ghb_dict_get_bool(js, "Mp4iPodCompatible");
-        }
-        hb_dict_t *mp4_dict;
-        mp4_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-            "Mp4Optimize",      hb_value_bool(mp4_optimize),
-            "IpodAtom",         hb_value_bool(ipod_atom));
-        if (mp4_dict == NULL)
-        {
-            g_warning("json pack mp4 failure: %s", error.text);
-            return;
-        }
-        hb_dict_set(dest_dict, "Mp4Options", mp4_dict);
-    }
-    hb_dict_t *source_dict = hb_dict_get(dict, "Source");
-    if (range_start || range_end)
-    {
-        hb_dict_t *range_dict = hb_dict_init();
-        hb_dict_set(range_dict, "Type", hb_value_string(range_type));
-        if (range_start)
-            hb_dict_set(range_dict, "Start", hb_value_int(range_start));
-        if (range_end)
-            hb_dict_set(range_dict, "End",   hb_value_int(range_end));
-        if (range_seek_points)
-        {
-            hb_dict_set(range_dict, "SeekPoints",
-                    hb_value_int(range_seek_points));
-        }
-        hb_dict_set(source_dict, "Range", range_dict);
-    }
-
-    hb_dict_t *video_dict = hb_dict_get(dict, "Video");
-    if (ghb_dict_get_bool(js, "vquality_type_constant"))
-    {
-        double vquality = ghb_dict_get_double(js, "VideoQualitySlider");
-        hb_dict_set(video_dict, "Quality", hb_value_double(vquality));
-    }
-    else if (ghb_dict_get_bool(js, "vquality_type_bitrate"))
-    {
-        int vbitrate, twopass, fastfirstpass;
-        vbitrate = ghb_dict_get_int(js, "VideoAvgBitrate");
-        twopass = ghb_dict_get_bool(js, "VideoTwoPass");
-        fastfirstpass = ghb_dict_get_bool(js, "VideoTurboTwoPass");
-        hb_dict_set(video_dict, "Bitrate", hb_value_int(vbitrate));
-        hb_dict_set(video_dict, "TwoPass", hb_value_bool(twopass));
-        hb_dict_set(video_dict, "Turbo", hb_value_bool(fastfirstpass));
-    }
-    ghb_set_video_encoder_opts(video_dict, js);
-
-    hb_dict_t *meta_dict = hb_dict_get(dict, "Metadata");
-    const char * meta;
-
-    meta = ghb_dict_get_string(js, "MetaName");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "Name", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaArtist");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "Artist", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaAlbumArtist");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "AlbumArtist", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaReleaseDate");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "ReleaseDate", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaComment");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "Comment", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaGenre");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "Genre", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaDescription");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "Description", hb_value_string(meta));
-    }
-    meta = ghb_dict_get_string(js, "MetaLongDescription");
-    if (meta && *meta)
-    {
-        hb_dict_set(meta_dict, "LongDescription", hb_value_string(meta));
-    }
-
-    // process chapter list
-    if (chapter_markers)
-    {
-        hb_value_array_t *chapter_list = hb_dict_get(dest_dict, "ChapterList");
-        GhbValue *chapters;
-        GhbValue *chapter;
-        gint chap;
-        gint count;
-
-        chapters = ghb_dict_get_value(js, "chapter_list");
-        count = ghb_array_len(chapters);
-        for(chap = 0; chap < count; chap++)
-        {
-            hb_dict_t *chapter_dict;
-            gchar *name;
-
-            name = NULL;
-            chapter = ghb_array_get(chapters, chap);
-            name = ghb_value_get_string_xform(chapter);
-            if (name == NULL)
-            {
-                name = g_strdup_printf (_("Chapter %2d"), chap+1);
-            }
-            chapter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                    "Name", hb_value_string(name));
-            if (chapter_dict == NULL)
-            {
-                g_warning("json pack chapter failure: %s", error.text);
-                return;
-            }
-            hb_value_array_append(chapter_list, chapter_dict);
-            g_free(name);
-        }
-    }
-
-    // Create filter list
-    hb_dict_t *filters_dict = hb_dict_get(dict, "Filters");
-    hb_value_array_t *filter_list = hb_dict_get(filters_dict, "FilterList");
-    hb_dict_t *filter_dict;
-    char *filter_str;
-
-    // Crop scale filter
-    int width, height, crop[4];
-    width = ghb_dict_get_int(js, "scale_width");
-    height = ghb_dict_get_int(js, "scale_height");
-
-    crop[0] = ghb_dict_get_int(js, "PictureTopCrop");
-    crop[1] = ghb_dict_get_int(js, "PictureBottomCrop");
-    crop[2] = ghb_dict_get_int(js, "PictureLeftCrop");
-    crop[3] = ghb_dict_get_int(js, "PictureRightCrop");
-
-    filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
-                            width, height, crop[0], crop[1], crop[2], crop[3]);
-    filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                            "ID",       hb_value_int(HB_FILTER_CROP_SCALE),
-                            "Settings", hb_value_string(filter_str));
-    if (filter_dict == NULL)
-    {
-        g_warning("json pack scale filter failure: %s", error.text);
-        return;
-    }
-    hb_value_array_append(filter_list, filter_dict);
-    g_free(filter_str);
-
-    // detelecine filter
-    gint detel = ghb_settings_combo_int(js, "PictureDetelecine");
-    if (detel)
-    {
-        const char *filter_str = NULL;
-        if (detel != 1)
-        {
-            if (detel_opts.map[detel].svalue != NULL)
-                filter_str = detel_opts.map[detel].svalue;
-        }
-        else
-        {
-            filter_str = ghb_dict_get_string(js, "PictureDetelecineCustom");
-        }
-        filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", hb_value_int(HB_FILTER_DETELECINE));
-        if (filter_dict == NULL)
-        {
-            g_warning("json pack detelecine filter failure: %s", error.text);
-            return;
-        }
-        if (filter_str != NULL)
-        {
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-        }
-        hb_value_array_append(filter_list, filter_dict);
-    }
-
-    // Decomb filter
-    gboolean decomb_deint;
-    gint decomb, deint;
-    decomb_deint = ghb_dict_get_bool(js, "PictureDecombDeinterlace");
-    decomb = ghb_settings_combo_int(js, "PictureDecomb");
-    deint = ghb_settings_combo_int(js, "PictureDeinterlace");
-    if (decomb_deint && decomb)
-    {
-        const char *filter_str = NULL;
-        if (decomb != 1)
-        {
-            if (decomb_opts.map[decomb].svalue != NULL)
-                filter_str = decomb_opts.map[decomb].svalue;
-        }
-        else
-        {
-            filter_str = ghb_dict_get_string(js, "PictureDecombCustom");
-        }
-        filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", hb_value_int(HB_FILTER_DECOMB));
-        if (filter_dict == NULL)
-        {
-            g_warning("json pack decomb filter failure: %s", error.text);
-            return;
-        }
-        if (filter_str != NULL)
-        {
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-        }
-        hb_value_array_append(filter_list, filter_dict);
-    }
-
-    // Deinterlace filter
-    if ( !decomb_deint && deint )
-    {
-        const char *filter_str = NULL;
-        if (deint != 1)
-        {
-            if (deint_opts.map[deint].svalue != NULL)
-                filter_str = deint_opts.map[deint].svalue;
-        }
-        else
-        {
-            filter_str = ghb_dict_get_string(js, "PictureDeinterlaceCustom");
-        }
-        filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "ID", hb_value_int(HB_FILTER_DEINTERLACE));
-        if (filter_dict == NULL)
-        {
-            g_warning("json pack deinterlace filter failure: %s", error.text);
-            return;
-        }
-        if (filter_str != NULL)
-        {
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-        }
-        hb_value_array_append(filter_list, filter_dict);
-    }
-
-    // Denoise filter
-    if (strcmp(ghb_dict_get_string(js, "PictureDenoiseFilter"), "off"))
-    {
-        int filter_id = HB_FILTER_HQDN3D;
-        if (!strcmp(ghb_dict_get_string(js, "PictureDenoiseFilter"), "nlmeans"))
-            filter_id = HB_FILTER_NLMEANS;
-
-        if (!strcmp(ghb_dict_get_string(js, "PictureDenoisePreset"), "custom"))
-        {
-            const char *filter_str;
-            filter_str = ghb_dict_get_string(js, "PictureDenoiseCustom");
-            filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                       "ID", hb_value_int(filter_id));
-            if (filter_dict == NULL)
-            {
-                g_warning("json pack denoise filter failure: %s", error.text);
-                return;
-            }
-            if (filter_str != NULL)
-            {
-                hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            }
-            hb_value_array_append(filter_list, filter_dict);
-        }
-        else
-        {
-            const char *preset, *tune;
-            preset = ghb_dict_get_string(js, "PictureDenoisePreset");
-            tune = ghb_dict_get_string(js, "PictureDenoiseTune");
-            filter_str = hb_generate_filter_settings(filter_id, preset, tune);
-            if (filter_str == NULL)
-            {
-                g_warning("Invalid %s preset %s and/or tune %s",
-                    filter_id == HB_FILTER_HQDN3D ? "HQDN3D" : "NLMeans",
-                    preset, tune);
-            }
-            filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                       "ID", hb_value_int(filter_id));
-            if (filter_dict == NULL)
-            {
-                g_warning("json pack denoise filter failure: %s", error.text);
-                return;
-            }
-            if (filter_str != NULL)
-            {
-                hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            }
-            hb_value_array_append(filter_list, filter_dict);
-            g_free(filter_str);
-        }
-    }
-
-    // Deblock filter
-    gint deblock = ghb_dict_get_int(js, "PictureDeblock");
-    if( deblock >= 5 )
-    {
-        filter_str = g_strdup_printf("%d", deblock);
-        filter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                   "ID", hb_value_int(HB_FILTER_DEBLOCK));
-        if (filter_dict == NULL)
-        {
-            g_warning("json pack deblock filter failure: %s", error.text);
-            return;
-        }
-        if (filter_str != NULL)
-        {
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-        }
-        hb_value_array_append(filter_list, filter_dict);
-        g_free(filter_str);
-    }
-
-    // VFR filter
-    gint vrate_den = ghb_settings_video_framerate_rate(js, "VideoFramerate");
-    gint cfr;
-    if (ghb_dict_get_bool(js, "VideoFrameratePFR"))
-        cfr = 2;
-    else if (ghb_dict_get_bool(js, "VideoFramerateCFR"))
-        cfr = 1;
-    else
-        cfr = 0;
-
-    // x264 zero latency requires CFR encode
-    if (ghb_dict_get_bool(js, "x264ZeroLatency"))
-    {
-        cfr = 1;
-        ghb_log("zerolatency x264 tune selected, forcing constant framerate");
-    }
-
-    if (vrate_den == 0)
-    {
-        filter_str = g_strdup_printf("%d", cfr);
-    }
-    else
-    {
-        filter_str = g_strdup_printf("%d:%d:%d", cfr, 27000000, vrate_den);
-    }
-    filter_dict = json_pack_ex(&error, 0, "{s:o, s:o}",
-                        "ID",       hb_value_int(HB_FILTER_VFR),
-                        "Settings", hb_value_string(filter_str));
-    if (filter_dict == NULL)
-    {
-        g_warning("json pack vfr filter failure: %s", error.text);
-        return;
-    }
-    hb_value_array_append(filter_list, filter_dict);
-    g_free(filter_str);
-
-    // Create audio list
-    hb_dict_t *audios_dict = ghb_get_audio_settings(js);
-    hb_dict_set(dict, "Audio", ghb_value_dup(audios_dict));
-
-    GhbValue *subtitle_dict = ghb_get_subtitle_settings(js);
-    hb_dict_set(dict, "Subtitle", ghb_value_dup(subtitle_dict));
-
-    char *json_job = hb_value_get_json(dict);
-    hb_value_free(&dict);
+    job      = ghb_dict_get(js, "Job");
+    ghb_dict_set_int(job, "SequenceID", unique_id);
+    json_job = hb_value_get_json(job);
 
     hb_add_json(h, json_job);
     free(json_job);
-}
-
-void
-ghb_add_job(GhbValue *js, gint unique_id)
-{
-    add_job(h_queue, js, unique_id);
-}
-
-void
-ghb_add_live_job(GhbValue *js, gint unique_id)
-{
-    add_job(h_live, js, unique_id);
 }
 
 void

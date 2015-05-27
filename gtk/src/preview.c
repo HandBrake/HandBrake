@@ -39,6 +39,7 @@
 #include "hb-backend.h"
 #include "preview.h"
 #include "values.h"
+#include "queuehandler.h"
 #include "hb.h"
 
 #define PREVIEW_STATE_IMAGE 0
@@ -759,14 +760,25 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     else
     {
         GhbValue *js;
+        GhbValue *range, *dest;
 
         ud->preview->encode_frame = frame;
         js = ghb_value_dup(ud->settings);
-        ghb_dict_set_string(js, "destination", name);
-        ghb_dict_set_int(js, "start_frame", ud->preview->frame);
+
+        ghb_finalize_job(js);
+        range = ghb_get_job_range_settings(js);
+        dest = ghb_get_job_dest_settings(js);
+
+        ghb_dict_set_string(dest, "File", name);
+        ghb_dict_set_string(range, "Type", "preview");
+        ghb_dict_set_int(range, "Start", ud->preview->frame);
+        ghb_dict_set_int(range, "End",
+            ghb_dict_get_int(ud->prefs, "live_duration") * 90000);
+        ghb_dict_set_int(range, "SeekPoints",
+            ghb_dict_get_int(ud->prefs, "preview_count"));
+
         ud->preview->live_id = 0;
-        ghb_dict_set(js, "Preferences", ghb_value_dup(ud->prefs));
-        ghb_add_live_job(js, ud->preview->live_id);
+        ghb_add_job(ghb_live_handle(), js, ud->preview->live_id);
         ghb_start_live_encode();
         ghb_value_free(&js);
     }

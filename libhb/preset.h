@@ -114,6 +114,23 @@ hb_value_t * hb_presets_get(void);
 // Get list of all presets registered with libhb as json string
 char       * hb_presets_get_json(void);
 
+// Apply preset Muxer settings to a job
+int hb_preset_apply_mux(const hb_dict_t *preset, hb_dict_t *job_dict);
+
+// Apply preset Video settings to a job
+int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict);
+
+// Apply preset Filter settings to a job
+//
+// Note that this does not apply scale filter settings.  A title is
+// required to set the default scale filter settings, so this filter
+// is applied in hb_preset_apply_title()
+int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict);
+
+// Apply preset settings that require a title to a job
+int hb_preset_apply_title(hb_handle_t *h, int title_index,
+                          const hb_dict_t *preset, hb_dict_t *job_dict);
+
 // Initialize a job from the given title and preset
 hb_dict_t  * hb_preset_job_init(hb_handle_t *h, int title_index,
                                 const hb_dict_t *preset);

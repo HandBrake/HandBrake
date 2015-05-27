@@ -289,14 +289,7 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     vqtype = ghb_dict_get_int(settings, "VideoQualityType");
 
     // "Use max" or "strict anamorphic" imply autoscale
-    if (uses_pic == 2)
-    {
-        ghb_dict_set_bool(settings, "autoscale", TRUE);
-    }
-    else if (uses_pic == 1)
-    {
-        ghb_dict_set_bool(settings, "autoscale", FALSE);
-    }
+    ghb_dict_set_bool(settings, "autoscale", uses_pic == 2);
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
@@ -1358,8 +1351,8 @@ GhbValue* ghb_create_copy_mask(GhbValue *settings)
 }
 
 // Translate internal values to preset key, value pairs
-static GhbValue*
-settings_to_preset(GhbValue *settings)
+GhbValue*
+ghb_settings_to_preset(GhbValue *settings)
 {
     GhbValue *preset = ghb_value_dup(settings);
 
@@ -1446,26 +1439,28 @@ settings_to_preset(GhbValue *settings)
         ghb_dict_remove(preset, "VideoLevel");
         ghb_dict_remove(preset, "VideoOptionExtra");
     }
+
+    GString *str = g_string_new("");
+    const char *sep = "";
     const char *tune = ghb_dict_get_string(preset, "VideoTune");
-    if (tune != NULL)
+    if (tune != NULL && strcasecmp(tune, "none"))
     {
-        GString *str = g_string_new("");
-        char *tunes;
-
         g_string_append_printf(str, "%s", tune);
-        if (ghb_dict_get_bool(preset, "x264FastDecode"))
-        {
-            g_string_append_printf(str, ",%s", "fastdecode");
-        }
-        if (ghb_dict_get_bool(preset, "x264ZeroLatency"))
-        {
-            g_string_append_printf(str, ",%s", "zerolatency");
-        }
-        tunes = g_string_free(str, FALSE);
-        ghb_dict_set_string(preset, "VideoTune", tunes);
-
-        g_free(tunes);
+        sep = ",";
     }
+    if (ghb_dict_get_bool(preset, "x264FastDecode"))
+    {
+        g_string_append_printf(str, "%s%s", sep, "fastdecode");
+        sep = ",";
+    }
+    if (ghb_dict_get_bool(preset, "x264ZeroLatency"))
+    {
+        g_string_append_printf(str, "%s%s", sep, "zerolatency");
+    }
+    char *tunes;
+    tunes = g_string_free(str, FALSE);
+    ghb_dict_set_string(preset, "VideoTune", tunes);
+    g_free(tunes);
 
     GhbValue *in_val, *out_val;
 
@@ -1563,7 +1558,7 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
             replace = TRUE;
         }
     }
-    dict = settings_to_preset(ud->settings);
+    dict = ghb_settings_to_preset(ud->settings);
     ghb_dict_set_string(dict, "PresetName", name);
     if (replace)
     {

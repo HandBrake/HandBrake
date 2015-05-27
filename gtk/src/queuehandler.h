@@ -31,5 +31,6 @@
 void ghb_queue_buttons_grey(signal_user_data_t *ud);
 gboolean ghb_reload_queue(signal_user_data_t *ud);
 void ghb_queue_remove_row(signal_user_data_t *ud, int row);
+void ghb_finalize_job(GhbValue *settings);
 
 #endif // _QUEUEHANDLER_H_
