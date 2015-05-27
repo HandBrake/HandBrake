@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,PKGCONFIG LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.8.0.tar.bz2
+LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.8.1.tar.bz2
 
 ifneq (max,$(LIBBLURAY.GCC.g))
 	LIBBLURAY.CONFIGURE.extra += --disable-debug
