@@ -2204,7 +2204,7 @@ chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     GhbValue *dest;
     int start, end;
-    bool markers;
+    gboolean markers;
     dest     = ghb_get_job_dest_settings(ud->settings);
     markers  = ghb_dict_get_bool(ud->settings, "ChapterMarkers");
     start    = ghb_dict_get_int(ud->settings, "start_point");
@@ -2342,7 +2342,7 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_widget_set_sensitive(widget, end > start);
         update_title_duration(ud);
 
-        bool markers;
+        gboolean markers;
         markers  = ghb_dict_get_int(ud->settings, "ChapterMarkers");
         markers &= (end > start);
         ghb_dict_set_bool(dest, "ChapterMarkers", markers);
@@ -2406,7 +2406,7 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_widget_set_sensitive(widget, end > start);
         update_title_duration(ud);
 
-        bool markers;
+        gboolean markers;
         markers  = ghb_dict_get_int(ud->settings, "ChapterMarkers");
         markers &= (end > start);
         ghb_dict_set_bool(dest, "ChapterMarkers", markers);
