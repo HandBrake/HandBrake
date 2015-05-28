@@ -2040,6 +2040,10 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
     tunes = hb_video_encoder_get_tunes(encoder);
 
     while (tunes && tunes[count]) count++;
+    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoTune");
+    gtk_widget_set_visible(w, count > 0);
+    w = GHB_WIDGET(ud->builder, "VideoTuneLabel");
+    gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
     g_debug("video_tune_opts_set ()\n");
@@ -2089,6 +2093,10 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
     profiles = hb_video_encoder_get_profiles(encoder);
 
     while (profiles && profiles[count]) count++;
+    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoProfile");
+    gtk_widget_set_visible(w, count > 0);
+    w = GHB_WIDGET(ud->builder, "VideoProfileLabel");
+    gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
     g_debug("video_profile_opts_set ()\n");
@@ -2130,10 +2138,7 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name)
     gtk_widget_set_visible(w, count > 0);
     w = GHB_WIDGET(ud->builder, "VideoLevelLabel");
     gtk_widget_set_visible(w, count > 0);
-    if (count <= 0)
-    {
-        return;
-    }
+    if (count <= 0) return;
 
     g_debug("video_level_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));

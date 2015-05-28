@@ -57,12 +57,17 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     // Set the range of the preset slider
     int encoder = ghb_get_video_encoder(ud->settings);
     GtkWidget *presetSlider = GHB_WIDGET(ud->builder, "VideoPresetSlider");
+    GtkWidget *presetLabel = GHB_WIDGET(ud->builder, "VideoPresetLabel");
     const char * const *video_presets;
     int count = 0;
     video_presets = hb_video_encoder_get_presets(encoder);
     while (video_presets && video_presets[count]) count++;
+    gtk_widget_set_visible(presetSlider, count > 0);
+    gtk_widget_set_visible(presetLabel, count > 0);
     if (count)
+    {
         gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
+    }
 
     // Advanced options are only for x264
     if (encoder != HB_VCODEC_X264)
