@@ -2126,7 +2126,14 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name)
     levels = hb_video_encoder_get_levels(encoder);
 
     while (levels && levels[count]) count++;
-    if (count == 0) return;
+    GtkWidget *w = GHB_WIDGET(ud->builder, "VideoLevel");
+    gtk_widget_set_visible(w, count > 0);
+    w = GHB_WIDGET(ud->builder, "VideoLevelLabel");
+    gtk_widget_set_visible(w, count > 0);
+    if (count <= 0)
+    {
+        return;
+    }
 
     g_debug("video_level_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));

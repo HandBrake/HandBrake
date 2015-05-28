@@ -63,8 +63,6 @@ dep_map = (
     DepEntry("VideoEncoder", "VideoTuneLabel", "x264|x265", False, True),
     DepEntry("VideoEncoder", "VideoProfile", "x264|x265", False, True),
     DepEntry("VideoEncoder", "VideoProfileLabel", "x264|x265", False, True),
-    DepEntry("VideoEncoder", "VideoLevel", "x264|x265", False, True),
-    DepEntry("VideoEncoder", "VideoLevelLabel", "x264|x265", False, True),
     DepEntry("VideoEncoder", "x264FastDecode", "x264", False, True),
     DepEntry("VideoEncoder", "x264UseAdvancedOptions", "x264", False, True),
     DepEntry("HideAdvancedVideoSettings", "x264UseAdvancedOptions", "1", True, True),
