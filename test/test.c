@@ -3231,6 +3231,26 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 
     if (vcodec != NULL)
     {
+        const char *s;
+        int old, new;
+
+        s = hb_value_get_string(hb_dict_get(preset, "VideoEncoder"));
+        old = hb_video_encoder_get_from_name(s);
+        new = hb_video_encoder_get_from_name(vcodec);
+        if (old != new)
+        {
+            // If the user explicitly changes a video encoder, remove the
+            // preset VideoPreset, VideoTune, VideoProfile, VideoLevel, and
+            // VideoOptionExtra.
+            //
+            // Use defaults for the encoder since these settings may not be
+            // compatible across encoders.
+            hb_dict_remove(preset, "VideoPreset");
+            hb_dict_remove(preset, "VideoTune");
+            hb_dict_remove(preset, "VideoProfile");
+            hb_dict_remove(preset, "VideoLevel");
+            hb_dict_remove(preset, "VideoOptionExtra");
+        }
         hb_dict_set(preset, "VideoEncoder", hb_value_string(vcodec));
     }
     if (encoder_preset != NULL)

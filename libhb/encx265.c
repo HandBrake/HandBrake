@@ -105,6 +105,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (x265_param_default_preset(param,
                                   job->encoder_preset, job->encoder_tune) < 0)
     {
+        hb_error("encx265: x265_param_default_preset failed. Preset (%s) Tune (%s)", job->encoder_preset, job->encoder_tune);
         goto fail;
     }
 

@@ -3304,6 +3304,10 @@ void hb_job_set_encoder_preset(hb_job_t *job, const char *preset)
 {
     if (job != NULL)
     {
+        if (preset == NULL || preset[0] == 0)
+        {
+            preset = NULL;
+        }
         hb_update_str(&job->encoder_preset, preset);
     }
 }
@@ -3312,6 +3316,10 @@ void hb_job_set_encoder_tune(hb_job_t *job, const char *tune)
 {
     if (job != NULL)
     {
+        if (tune == NULL || tune[0] == 0)
+        {
+            tune = NULL;
+        }
         hb_update_str(&job->encoder_tune, tune);
     }
 }
@@ -3320,6 +3328,10 @@ void hb_job_set_encoder_options(hb_job_t *job, const char *options)
 {
     if (job != NULL)
     {
+        if (options == NULL || options[0] == 0)
+        {
+            options = NULL;
+        }
         hb_update_str(&job->encoder_options, options);
     }
 }
@@ -3328,6 +3340,10 @@ void hb_job_set_encoder_profile(hb_job_t *job, const char *profile)
 {
     if (job != NULL)
     {
+        if (profile == NULL || profile[0] == 0)
+        {
+            profile = NULL;
+        }
         hb_update_str(&job->encoder_profile, profile);
     }
 }
@@ -3336,6 +3352,10 @@ void hb_job_set_encoder_level(hb_job_t *job, const char *level)
 {
     if (job != NULL)
     {
+        if (level == NULL || level[0] == 0)
+        {
+            level = NULL;
+        }
         hb_update_str(&job->encoder_level, level);
     }
 }
