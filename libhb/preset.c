@@ -1418,7 +1418,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     if ((value = hb_dict_get(preset, "VideoScaler")) != NULL)
     {
         const char *s = hb_value_get_string(value);
-        if (strcasecmp(s, "opencl"))
+        if (!strcasecmp(s, "opencl"))
         {
             hb_dict_set(video_dict, "OpenCL", hb_value_bool(1));
         }
