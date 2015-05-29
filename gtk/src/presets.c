@@ -276,6 +276,10 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     ghb_dict_set_bool(settings, "PictureDeinterlaceDecomb",
         !ghb_dict_get_bool(settings, "PictureDecombDeinterlace"));
 
+    int width, height;
+    width = ghb_dict_get_int(settings, "PictureWidth");
+    height = ghb_dict_get_int(settings, "PictureHeight");
+
     ghb_dict_set(settings, "scale_height", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureHeight")));
 
@@ -288,8 +292,8 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
     vqtype = ghb_dict_get_int(settings, "VideoQualityType");
 
-    // "Use max" or "strict anamorphic" imply autoscale
-    ghb_dict_set_bool(settings, "autoscale", uses_pic == 2);
+    ghb_dict_set_bool(settings, "autoscale",
+                      uses_pic == 2 || (width == 0 && height == 0));
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
