@@ -69,7 +69,16 @@
 
 - (BOOL)fastDecodeSupported
 {
-    return (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265);
+    const char * const *tunes = hb_video_encoder_get_tunes(self.encoder);
+
+    for (int i = 0; tunes != NULL && tunes[i] != NULL; i++)
+    {
+        if (!strcasecmp(tunes[i], "fastdecode"))
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (BOOL)turboTwoPassSupported

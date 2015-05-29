@@ -104,15 +104,15 @@
         job->ipod_atom = self.mp4iPodCompatible;
     }
 
-    job->twopass = self.video.twoPass;
-    if (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265)
+    if (self.video.twoPass && (self.video.encoder == HB_VCODEC_X264 ||
+                               self.video.encoder == HB_VCODEC_X265))
     {
-        // set fastfirstpass if 2-pass and Turbo are enabled
-        if (self.video.twoPass)
-        {
-            job->fastfirstpass = self.video.turboTwoPass;
-        }
+        job->fastfirstpass = self.video.turboTwoPass;
+    }
+    job->twopass = self.video.twoPass;
 
+    if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
+    {
         // advanced x264/x265 options
         NSString   *tmpString;
         // translate zero-length strings to NULL for libhb

@@ -331,6 +331,10 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     {
         [temp addObject:@(profiles[i])];
     }
+    if (!temp.count)
+    {
+        [temp addObject:@"auto"];
+    }
 
     return [temp copy];
 }
@@ -506,7 +510,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     // map legacy encoder names via libhb.
     self.encoder = hb_video_encoder_get_from_name([preset[@"VideoEncoder"] UTF8String]);
 
-    if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
+    if (hb_video_encoder_get_presets(self.encoder) != NULL)
     {
         if (self.encoder == HB_VCODEC_X264 && [preset[@"x264UseAdvancedOptions"] boolValue])
         {
@@ -613,7 +617,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 {
     preset[@"VideoEncoder"] = @(hb_video_encoder_get_short_name(self.encoder));
 
-    if (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265)
+    if (hb_video_encoder_get_presets(self.encoder) != NULL)
     {
         preset[@"VideoPreset"]      = self.preset;
         preset[@"VideoTune"]        = [self completeTune];

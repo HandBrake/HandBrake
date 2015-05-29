@@ -209,7 +209,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 {
     self.advancedController.hidden = YES;
 
-    if (self.video.encoder == HB_VCODEC_X264 || self.video.encoder == HB_VCODEC_X265)
+    if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
     {
         [self toggleAdvancedOptionsCheckBoxForEncoder:self.video.encoder];
 
