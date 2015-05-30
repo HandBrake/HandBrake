@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *  @return An initialized preset—which might be different than the original receiver—that contains the preset at URL,
  *  or nil if there is an error or if the contents of the resource are not and HandBrake preset.
  */
-- (instancetype)initWithContentsOfURL:(NSURL *)url;
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)url;
 
 /**
  *  Writes a property list or json representation of the contents of the preset to a given URL.

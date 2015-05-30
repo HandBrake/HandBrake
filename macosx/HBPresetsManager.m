@@ -8,6 +8,7 @@
 #import "HBPreset.h"
 
 #import "HBUtilities.h"
+#import "NSJSONSerialization+HBAdditions.h"
 
 #include "preset.h"
 
@@ -105,17 +106,17 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     else
     {
         const char *json = [[NSString alloc] initWithData:presetData encoding:NSUTF8StringEncoding].UTF8String;
-        const char *cleanedJson = hb_presets_clean_json(json);
-
-        NSData *cleanedData = [NSData dataWithBytes:cleanedJson length:strlen(cleanedJson)];
-        NSDictionary *presetsDict = [NSJSONSerialization JSONObjectWithData:cleanedData options:0 error:NULL];
+        char *cleanedJson = hb_presets_clean_json(json);
+        NSDictionary *presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
 
         if ([self checkIfOutOfDate:presetsDict])
         {
-            const char *updatedJson = hb_presets_import_json(cleanedJson);
-            NSData *updatedData = [NSData dataWithBytes:updatedJson length:strlen(cleanedJson)];
-            presetsDict = [NSJSONSerialization JSONObjectWithData:updatedData options:0 error:NULL];
+            char *updatedJson = hb_presets_import_json(cleanedJson);
+            presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:updatedJson options:0 error:NULL];
+            free(updatedJson);
         }
+
+        free(cleanedJson);
 
         for (NSDictionary *child in presetsDict[@"PresetList"])
         {

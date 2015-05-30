@@ -7,6 +7,8 @@
 #import "HBPreset.h"
 #include "preset.h"
 
+#import "NSJSONSerialization+HBAdditions.h"
+
 @implementation HBPreset
 
 - (instancetype)init
@@ -74,7 +76,7 @@
     return self;
 }
 
-- (instancetype)initWithContentsOfURL:(NSURL *)url
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)url
 {
     NSArray *presetsArray;
     NSString *presetsJson;
@@ -89,8 +91,7 @@
         NSArray *array = [[NSArray alloc] initWithContentsOfURL:url];
         if ([NSJSONSerialization isValidJSONObject:array])
         {
-            NSData *data = [NSJSONSerialization dataWithJSONObject:array options:0 error:NULL];
-            presetsJson = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            presetsJson = [NSJSONSerialization HB_StringWithJSONObject:array options:0 error:NULL];
         }
     }
 
@@ -101,8 +102,7 @@
 
         if (importedJson)
         {
-            NSData *modernizedData = [NSData dataWithBytes:importedJson length:strlen(importedJson)];
-            id importedPresets = [NSJSONSerialization JSONObjectWithData:modernizedData options:0 error:NULL];
+            id importedPresets = [NSJSONSerialization HB_JSONObjectWithUTF8String:importedJson options:0 error:NULL];
 
             if ([importedPresets isKindOfClass:[NSDictionary class]])
             {
@@ -113,6 +113,8 @@
                 presetsArray = importedPresets;
             }
         }
+
+        free(importedJson);
     }
 
     if (presetsArray.count)
@@ -211,15 +213,13 @@
 - (void)cleanUp
 {
     // Run the libhb clean function
-    NSData *presetData = [NSJSONSerialization dataWithJSONObject:self.dictionary options:0 error:NULL];
-    NSString *presetJson = [[NSString alloc] initWithData:presetData encoding:NSUTF8StringEncoding];
+    NSString *presetJson = [NSJSONSerialization HB_StringWithJSONObject:self.dictionary options:0 error:NULL];
 
     if (presetJson.length)
     {
         char *cleanedJson = hb_presets_clean_json(presetJson.UTF8String);
-
-        NSData *cleanedData = [NSData dataWithBytes:cleanedJson length:strlen(cleanedJson)];
-        NSDictionary *cleanedDict = [NSJSONSerialization JSONObjectWithData:cleanedData options:0 error:NULL];
+        NSDictionary *cleanedDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
+        free(cleanedJson);
 
         if ([cleanedDict isKindOfClass:[NSDictionary class]])
         {
