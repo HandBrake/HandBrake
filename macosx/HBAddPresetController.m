@@ -118,7 +118,7 @@
         dict[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
 
         // Get whether or not to use the current Picture Filter settings for the preset
-        dict[@"UsesPictureFilters"] = @(self.picFilters.state);
+        dict[@"UsesPictureFilters"] = @((BOOL) self.picFilters.state);
 
         self.preset.content = [dict copy];
 
