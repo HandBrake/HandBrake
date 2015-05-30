@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class HBPreset;
 
 @interface HBAddPresetController : NSWindowController
@@ -17,3 +19,5 @@
 @property (nonatomic, readonly) HBPreset *preset;
 
 @end
+
+NS_ASSUME_NONNULL_END

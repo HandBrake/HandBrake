@@ -13,7 +13,7 @@
  */
 @interface HBAdvancedController : NSViewController
 
-@property (nonatomic, readwrite, strong) HBVideo *videoSettings;
+@property (nonatomic, readwrite, weak) HBVideo *videoSettings;
 
 @property (nonatomic, readwrite, getter=isHidden) BOOL hidden;
 @property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;

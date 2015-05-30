@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class HBCore;
 @class HBJob;
 
@@ -22,12 +24,12 @@
 
 @interface HBPreviewGenerator : NSObject
 
-@property (nonatomic, unsafe_unretained) id <HBPreviewGeneratorDelegate> delegate;
+@property (nonatomic, weak, nullable) id <HBPreviewGeneratorDelegate> delegate;
 
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
 /* Still image generator */
-- (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache CF_RETURNS_RETAINED;
+- (nullable CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache CF_RETURNS_RETAINED;
 @property (nonatomic, readonly) NSUInteger imagesCount;
 @property (nonatomic, readonly) CGSize imageSize;
 - (void) purgeImageCache;
@@ -39,3 +41,5 @@
 - (void) cancel;
 
 @end
+
+NS_ASSUME_NONNULL_END

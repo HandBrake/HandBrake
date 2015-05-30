@@ -16,6 +16,6 @@
 
 - (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController;
 
-@property (nonatomic, readwrite, unsafe_unretained) HBJob *job;
+@property (nonatomic, readwrite, weak) HBJob *job;
 
 @end

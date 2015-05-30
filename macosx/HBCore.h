@@ -11,6 +11,8 @@
 @class HBPicture;
 @class HBTitle;
 
+NS_ASSUME_NONNULL_BEGIN
+
 // These constants specify the current state of HBCore.
 typedef NS_ENUM(NSUInteger, HBState) {
     HBStateIdle      = HB_STATE_IDLE,        ///< HB is doing nothing
@@ -116,7 +118,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 /**
  *  An array of HBTitles found by the latest scan.
  */
-@property (nonatomic, readonly) NSArray *titles;
+@property (nonatomic, readonly, nullable) NSArray *titles;
 
 /**
  *  This function converts an image created by libhb (specified via index)
@@ -129,10 +131,10 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
  *
  *  @return a CGImageRef of the wanted image, NULL if the index is out of bounds.
  */
-- (CGImageRef)copyImageAtIndex:(NSUInteger)index
-                      forTitle:(HBTitle *)title
-                  pictureFrame:(HBPicture *)frame
-                   deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
+- (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index
+                               forTitle:(HBTitle *)title
+                           pictureFrame:(HBPicture *)frame
+                            deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
 
 /**
  *  Initiates an asynchronous encode operation and returns immediately.
@@ -162,3 +164,5 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 - (void)resume;
 
 @end
+
+NS_ASSUME_NONNULL_END

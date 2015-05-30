@@ -7,6 +7,8 @@
 #import <Cocoa/Cocoa.h>
 #import <Growl/Growl.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class HBAppDelegate;
 @class HBController;
 @class HBOutputPanelController;
@@ -18,8 +20,8 @@
 /// The HBCore used for encoding.
 @property (nonatomic, readonly) HBCore *core;
 
-@property (nonatomic, unsafe_unretained) HBController *controller;
-@property (nonatomic, unsafe_unretained) HBAppDelegate *delegate;
+@property (nonatomic, weak, nullable) HBController *controller;
+@property (nonatomic, weak, nullable) HBAppDelegate *delegate;
 
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;
@@ -41,3 +43,6 @@
 - (IBAction)togglePauseResume:(id)sender;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #include "hb.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Instances of HBStateFormatter format and conver a hb_state_t struct to a textual representation.
  */
@@ -18,7 +20,7 @@
  *  @param s     hb_state_t
  *  @param title the title of the current job
  */
-- (NSString *)stateToString:(hb_state_t)s title:(NSString *)title;
+- (NSString *)stateToString:(hb_state_t)s title:(nullable NSString *)title;
 
 /**
  *  Returns a CGFloat containing the completion percent.
@@ -39,3 +41,5 @@
 @property (nonatomic, readwrite) BOOL showPassNumber;
 
 @end
+
+NS_ASSUME_NONNULL_END

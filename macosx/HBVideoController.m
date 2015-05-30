@@ -37,7 +37,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 }
 
 @property (nonatomic, strong, readwrite) HBAdvancedController *advancedController;
-@property (nonatomic, readwrite, unsafe_unretained) HBVideo *video;
+@property (nonatomic, readwrite, weak) HBVideo *video;
 
 @property (nonatomic, readwrite) BOOL presetViewEnabled;
 

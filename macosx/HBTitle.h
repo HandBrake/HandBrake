@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #include "hb.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * HBTitles is an interface to the low-level hb_title_t.
  * the properties are lazy-loaded.
@@ -53,3 +55,5 @@
 @property (nonatomic, readonly) NSArray *chapters;
 
 @end
+
+NS_ASSUME_NONNULL_END

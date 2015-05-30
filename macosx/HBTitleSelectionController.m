@@ -12,7 +12,7 @@
 @property (nonatomic, readonly) NSArray *titles;
 @property (nonatomic, readonly) NSMutableArray *selection;
 
-@property (nonatomic, readonly, unsafe_unretained) id<HBTitleSelectionDelegate> delegate;
+@property (nonatomic, readonly, weak) id<HBTitleSelectionDelegate> delegate;
 
 @end
 

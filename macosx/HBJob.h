@@ -19,6 +19,8 @@
 
 #import "HBDistributedArray.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *HBContainerChangedNotification;
 extern NSString *HBChaptersChangedNotification;
 
@@ -45,7 +47,7 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 /// Current state of the job.
 @property (nonatomic, readwrite) HBJobState state;
 
-@property (nonatomic, readwrite, assign) HBTitle *title;
+@property (nonatomic, readwrite, assign, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
 
 @property (nonatomic, readwrite, copy) NSString *presetName;
@@ -75,3 +77,5 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) NSMutableArray *chapterTitles;
 
 @end
+
+NS_ASSUME_NONNULL_END

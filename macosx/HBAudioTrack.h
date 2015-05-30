@@ -41,8 +41,8 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, strong) NSNumber *drc;
 @property (nonatomic, strong) NSNumber *gain;
 @property (nonatomic, strong) NSNumber *videoContainerTag;
-@property (nonatomic, unsafe_unretained) id<HBAudioTrackDataSource> dataSource;
-@property (nonatomic, unsafe_unretained) id<HBAudioTrackDelegate> delegate;
+@property (nonatomic, weak) id<HBAudioTrackDataSource> dataSource;
+@property (nonatomic, weak) id<HBAudioTrackDelegate> delegate;
 
 @property (nonatomic, strong) NSMutableArray *codecs;
 @property (nonatomic, strong) NSMutableArray *mixdowns;

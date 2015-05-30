@@ -4,7 +4,9 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @class HBPreset;
 
@@ -64,7 +66,7 @@ extern NSString *HBPresetsChangedNotification;
  *
  *  @return The index path whose corresponding value is equal to the preset. Returns nil if not found.
  */
-- (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset;
+- (nullable NSIndexPath *)indexPathOfPreset:(HBPreset *)preset;
 
 /**
  *  Adds back the built in presets.
@@ -72,3 +74,5 @@ extern NSString *HBPresetsChangedNotification;
 - (void)generateBuiltInPresets;
 
 @end
+
+NS_ASSUME_NONNULL_END

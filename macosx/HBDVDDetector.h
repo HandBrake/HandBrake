@@ -7,14 +7,11 @@
  * It may be used under the terms of the GNU General Public License.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface HBDVDDetector : NSObject
-{
-    NSString *path;
-    NSString *bsdName;
-}
 
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath;
 - (HBDVDDetector *)initWithPath: (NSString *)aPath NS_DESIGNATED_INITIALIZER;
@@ -23,3 +20,5 @@
 @property (nonatomic, readonly, copy) NSString *devicePath;
 
 @end
+
+NS_ASSUME_NONNULL_END

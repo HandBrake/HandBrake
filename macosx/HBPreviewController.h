@@ -11,6 +11,6 @@
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, strong) HBPreviewGenerator *generator;
-@property (nonatomic, readwrite, unsafe_unretained) NSWindowController *pictureSettingsWindow;
+@property (nonatomic, readwrite, weak) NSWindowController *pictureSettingsWindow;
 
 @end

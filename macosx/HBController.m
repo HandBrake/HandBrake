@@ -58,7 +58,7 @@
 ///  The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
 
-@property (unsafe_unretained, nonatomic, readwrite) NSColor *labelColor;
+@property (nonatomic, readwrite) NSColor *labelColor;
 
 @end
 

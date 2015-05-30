@@ -14,6 +14,6 @@
 @property (nonatomic, readwrite, strong) HBFilters *filters;
 @property (nonatomic, readwrite, strong) HBPicture *picture;
 
-@property (nonatomic, readwrite, unsafe_unretained) NSWindowController *previewWindow;
+@property (nonatomic, readwrite, weak) NSWindowController *previewWindow;
 
 @end

@@ -9,6 +9,8 @@
 
 @class HBJob;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString * const HBVideoChangedNotification;
 
 /**
@@ -46,7 +48,9 @@ extern NSString * const HBVideoChangedNotification;
 
 @property (nonatomic, readwrite) BOOL fastDecode;
 
-@property (nonatomic, readwrite, unsafe_unretained) HBJob *job;
+@property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readonly) NSString *completeTune;
 
 @end
+
+NS_ASSUME_NONNULL_END

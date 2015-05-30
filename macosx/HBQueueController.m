@@ -751,7 +751,7 @@
     {
         // We pause the encode here so that it doesn't finish right after and then
         // screw up the sync while the window is open
-        [self togglePauseResume:nil];
+        [self togglePauseResume:self];
 
         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", nil)];
 
@@ -790,7 +790,7 @@
     // state, if it paused, it will resume encoding and vice versa.
     // In this case, we are paused from the calling window, so calling
     // [self togglePauseResume:nil]; Again will resume encoding
-    [self togglePauseResume:nil];
+    [self togglePauseResume:self];
 
     if (returnCode == NSAlertSecondButtonReturn)
     {
@@ -986,7 +986,7 @@
     {
         // We pause the encode here so that it doesn't finish right after and then
         // screw up the sync while the window is open
-        [self togglePauseResume:nil];
+        [self togglePauseResume:self];
         NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
         NSWindow *docWindow = nil;

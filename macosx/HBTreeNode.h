@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Notify a delegate that something changed in the tree.
  *  KVO observing a tree looked complicated an expensive, so this is a lightweight
@@ -29,7 +31,7 @@
 @property (nonatomic, readonly) NSMutableArray *children;
 @property (nonatomic) BOOL isLeaf;
 
-@property (nonatomic, unsafe_unretained) id<HBTreeNodeDelegate> delegate;
+@property (nonatomic, weak) id<HBTreeNodeDelegate> delegate;
 
 /**
  *  Executes a given block using each object in the tree, starting with the root object and continuing through the tree to the last object.
@@ -45,7 +47,7 @@
  *
  *  @return The index path whose corresponding value is equal to the preset. Returns nil if not found.
  */
-- (NSIndexPath *)indexPathOfObject:(id)obj;
+- (nullable NSIndexPath *)indexPathOfObject:(id)obj;
 
 /**
  *  Removes the object at the specified index path.
@@ -62,3 +64,6 @@
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

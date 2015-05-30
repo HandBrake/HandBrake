@@ -6,6 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBTitleSelectionDelegate <NSObject>
 
 - (void)didSelectIndexes:(NSIndexSet *)indexes;
@@ -17,3 +19,5 @@
 - (instancetype)initWithTitles:(NSArray *)titles delegate:(id<HBTitleSelectionDelegate>)delegate;
 
 @end
+
+NS_ASSUME_NONNULL_END

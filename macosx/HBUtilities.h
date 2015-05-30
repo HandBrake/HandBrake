@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBUtilities : NSObject
 
 /**
@@ -16,7 +18,7 @@
 /**
  *  Returns the url of the current <user>/Library/Application Support/HandBrake folder.
  */
-+ (NSURL *)appSupportURL;
++ (nullable NSURL *)appSupportURL;
 /**
  *  Writes a message to standard error.
  *  The message will show up in the output panel and in the activity log.
@@ -46,3 +48,6 @@
                           videoCodec:(uint32_t)codec;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

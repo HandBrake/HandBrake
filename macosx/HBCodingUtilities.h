@@ -21,6 +21,8 @@
 
 #define decodeObjectOrFail(x, class) x = [HBCodingUtilities decodeObjectOfClass:class forKey:OBJC_STRINGIFY(x) decoder:decoder]; if (x == nil) {NSLog(@"Failed to decode: %@", OBJC_STRINGIFY(x)); goto fail;}
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBCodingUtilities : NSObject
 
 /**
@@ -37,6 +39,8 @@
  *
  *  @return the decoder object.
  */
-+ (id)decodeObjectOfClass:(Class)aClass forKey:(NSString *)key decoder:(NSCoder *)decoder;
++ (nullable id)decodeObjectOfClass:(Class)aClass forKey:(NSString *)key decoder:(NSCoder *)decoder;
 
 @end
+
+NS_ASSUME_NONNULL_END

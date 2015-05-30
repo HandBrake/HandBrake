@@ -28,6 +28,10 @@
 
 
 @implementation HBDVDDetector
+{
+    NSString *path;
+    NSString *bsdName;
+}
 
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath
 {

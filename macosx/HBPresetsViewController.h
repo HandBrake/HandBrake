@@ -20,7 +20,7 @@
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager;
 
-@property (nonatomic, readwrite, unsafe_unretained) id<HBPresetsViewControllerDelegate> delegate;
+@property (nonatomic, readwrite, weak) id<HBPresetsViewControllerDelegate> delegate;
 
 - (IBAction)exportPreset:(id)sender;
 - (IBAction)importPreset:(id)sender;
@@ -30,7 +30,7 @@
 
 - (IBAction)insertFolder:(id)sender;
 
-@property (unsafe_unretained, nonatomic, readonly) HBPreset *selectedPreset;
+@property (nonatomic, readonly, weak) HBPreset *selectedPreset;
 @property (nonatomic, readonly) NSUInteger indexOfSelectedItem;
 
 @property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;

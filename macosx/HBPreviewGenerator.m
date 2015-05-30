@@ -16,8 +16,8 @@
 @interface HBPreviewGenerator ()
 
 @property (nonatomic, readonly) NSCache *picturePreviews;
-@property (unsafe_unretained, nonatomic, readonly) HBCore *scanCore;
-@property (unsafe_unretained, nonatomic, readonly) HBJob *job;
+@property (nonatomic, readonly, weak) HBCore *scanCore;
+@property (nonatomic, readonly, strong) HBJob *job;
 
 @property (nonatomic, strong) HBCore *core;
 

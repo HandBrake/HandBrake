@@ -29,7 +29,10 @@
         _name = [title copy];
         _isBuiltIn = builtIn;
         _content = [content copy];
-        _presetDescription = [content[@"PresetDescription"] copy];
+        if ([content[@"PresetDescription"] isKindOfClass:[NSString class]])
+        {
+            _presetDescription = [content[@"PresetDescription"] copy];
+        }
     }
     return self;
 }

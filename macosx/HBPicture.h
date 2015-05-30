@@ -9,6 +9,8 @@
 
 @class HBTitle;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString * const HBPictureChangedNotification;
 
 /**
@@ -49,3 +51,4 @@ extern NSString * const HBPictureChangedNotification;
 
 @end
 
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 @class HBTitle;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *HBRangeChangedNotification;
 
 typedef NS_ENUM(NSUInteger, HBRangeType) {
@@ -42,6 +44,8 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
 
 @property (nonatomic, readonly) NSString *duration;
 
-@property (nonatomic, readwrite, unsafe_unretained) HBTitle *title;
+@property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import "HBTreeNode.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, HBPresetFormat) {
     HBPresetFormatPlist,
     HBPresetFormatJson,
@@ -60,7 +62,7 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 /**
  *  A long textual description of the preset.
  */
-@property (nonatomic, copy) NSString *presetDescription;
+@property (nonatomic, copy, nullable) NSString *presetDescription;
 
 /**
  *  Whether the preset is one of the HandBrake built-in ones or not.
@@ -75,7 +77,7 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 /**
  *  The actual content of the preset.
  */
-@property (nonatomic, strong) NSDictionary *content;
+@property (nonatomic, strong, nullable) NSDictionary *content;
 
 /**
  *  A dictionary representation of the preset.
@@ -83,3 +85,6 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 @property (readonly, copy) NSDictionary *dictionary;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

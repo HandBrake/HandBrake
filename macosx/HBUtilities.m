@@ -23,7 +23,7 @@
     NSURL *appSupportURL = [[[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask]
                              firstObject] URLByAppendingPathComponent:@"HandBrake"];
 
-    if (![fileManager fileExistsAtPath:appSupportURL.path])
+    if (appSupportURL && ![fileManager fileExistsAtPath:appSupportURL.path])
     {
         [fileManager createDirectoryAtPath:appSupportURL.path withIntermediateDirectories:YES attributes:nil error:NULL];
     }
