@@ -189,7 +189,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
-- (void)setDeblock:(NSInteger)deblock
+- (void)setDeblock:(int)deblock
 {
     _deblock = deblock;
     [self postChangedNotification];
@@ -306,7 +306,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObject(_denoiseTune, NSString);
     decodeObject(_denoiseCustomString, NSString);
 
-    decodeInteger(_deblock);
+    decodeInt(_deblock);
     decodeBool(_grayscale);
 
     decodeBool(_useDecomb);

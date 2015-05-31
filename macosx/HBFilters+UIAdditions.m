@@ -319,7 +319,7 @@ static NSDictionary *denoiseTypesDict = nil;
     // Deblock
     if (self.deblock > 0)
     {
-        [summary appendFormat:@" - Deblock (%ld)", self.deblock];
+        [summary appendFormat:@" - Deblock (%d)", self.deblock];
     }
 
     // Denoise

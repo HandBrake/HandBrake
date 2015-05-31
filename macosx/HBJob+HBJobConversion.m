@@ -479,7 +479,7 @@
     if (self.filters.deblock)
     {
         filter = hb_filter_init(HB_FILTER_DEBLOCK);
-        hb_add_filter(job, filter, [NSString stringWithFormat:@"%ld", (long)self.filters.deblock].UTF8String);
+        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d", self.filters.deblock].UTF8String);
     }
 
     // Add Crop/Scale filter
