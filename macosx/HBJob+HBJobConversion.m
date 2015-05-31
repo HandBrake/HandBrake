@@ -454,7 +454,7 @@
         if ([self.filters.denoise isEqualToString:@"nlmeans"])
             filter_id = HB_FILTER_NLMEANS;
 
-        if ([self.filters.denoisePreset isEqualToString:@"none"])
+        if ([self.filters.denoisePreset isEqualToString:@"custom"])
         {
             const char *filter_str;
             filter_str = self.filters.denoiseCustomString.UTF8String;
