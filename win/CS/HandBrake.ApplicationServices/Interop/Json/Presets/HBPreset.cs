@@ -219,12 +219,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the picture width.
         /// </summary>
-        public int PictureWidth { get; set; }
+        public int? PictureWidth { get; set; }
 
         /// <summary>
         /// Gets or sets the picture height.
         /// </summary>
-        public int PictureHeight { get; set; }
+        public int? PictureHeight { get; set; }
 
         /// <summary>
         /// Gets or sets the picture force height.

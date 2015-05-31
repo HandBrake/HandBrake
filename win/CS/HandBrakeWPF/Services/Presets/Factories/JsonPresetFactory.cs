@@ -9,9 +9,11 @@
 
 namespace HandBrakeWPF.Services.Presets.Factories
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Globalization;
 
+    using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
@@ -32,266 +34,270 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// <summary>
         /// The create preset.
         /// </summary>
-        /// <param name="preset">
+        /// <param name="importedPreset">
         /// The preset.
         /// </param>
         /// <returns>
         /// The <see cref="Preset"/>.
         /// </returns>
-        public static Preset ImportPreset(HandBrake.ApplicationServices.Interop.Json.Presets.HBPreset preset)
+        public static Preset ImportPreset(HBPreset importedPreset)
         {
-            EncodeTask task = new EncodeTask();
-            Preset parsedPreset = new Preset();
-            parsedPreset.Name = preset.PresetName;
-            parsedPreset.Description = preset.PresetDescription;
-            parsedPreset.UsePictureFilters = preset.UsesPictureFilters;
-            parsedPreset.PictureSettingsMode = (PresetPictureSettingsMode)preset.UsesPictureSettings;
-            parsedPreset.UseDeinterlace = preset.PictureDecombDeinterlace;
-            parsedPreset.Task = new EncodeTask();
+            Preset preset = new Preset();
+            preset.Name = importedPreset.PresetName;
+            preset.Description = importedPreset.PresetDescription;
+            preset.UsePictureFilters = importedPreset.UsesPictureFilters;
+            preset.UseDeinterlace = importedPreset.PictureDecombDeinterlace;
+            preset.Task = new EncodeTask();
 
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
-            /* Output Settings */ 
-            task.OptimizeMP4 = preset.Mp4HttpOptimize;
-            task.IPod5GSupport = preset.Mp4iPodCompatible;
-            task.OutputFormat = GetFileFormat(preset.FileFormat.Replace("file", string.Empty).Trim()); // TOOD null check.
+            /* Output Settings */
+            preset.Task.OptimizeMP4 = importedPreset.Mp4HttpOptimize;
+            preset.Task.IPod5GSupport = importedPreset.Mp4iPodCompatible;
+            preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim()); // TOOD null check.
 
-            /* Picture Settings */ 
-            task.Cropping = new Cropping(preset.PictureTopCrop, preset.PictureBottomCrop, preset.PictureLeftCrop, preset.PictureRightCrop);
-            task.HasCropping = preset.PictureAutoCrop;
-            task.Width = preset.PictureWidth;
-            task.Height = preset.PictureHeight;
-            task.Modulus = preset.PictureModulus;
-            task.KeepDisplayAspect = preset.PictureKeepRatio;
-            switch (preset.PicturePAR)
+            /* Picture Settings */
+            preset.PictureSettingsMode = (PresetPictureSettingsMode)importedPreset.UsesPictureSettings;
+            preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
+            preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
+            preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
+            preset.Task.HasCropping = importedPreset.PictureAutoCrop;
+
+            preset.Task.Modulus = importedPreset.PictureModulus;
+            preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
+            switch (importedPreset.PicturePAR)
             {
                 case "custom":
-                    task.Anamorphic = Anamorphic.Custom;
+                    preset.Task.Anamorphic = Anamorphic.Custom;
                     break;
                 case "loose":
-                    task.Anamorphic = Anamorphic.Loose;
+                    preset.Task.Anamorphic = Anamorphic.Loose;
                     break;
                 case "strict":
-                    task.Anamorphic = Anamorphic.Strict;
+                    preset.Task.Anamorphic = Anamorphic.Strict;
                     break;
                 default:
-                    task.Anamorphic = Anamorphic.Loose;
+                    preset.Task.Anamorphic = Anamorphic.Loose;
                     break;
             }
 
-            /* Filter Settings */ 
-            task.Grayscale = preset.VideoGrayScale;
-            task.Deblock = preset.PictureDeblock;
-            switch (preset.PictureDecomb)
+            /* Filter Settings */
+            preset.Task.Grayscale = importedPreset.VideoGrayScale;
+            preset.Task.Deblock = importedPreset.PictureDeblock;
+            switch (importedPreset.PictureDecomb)
             {
                 case "custom":
-                    task.Decomb = Decomb.Custom;
+                    preset.Task.Decomb = Decomb.Custom;
                     break;
                 case "default":
-                    task.Decomb = Decomb.Default;
+                    preset.Task.Decomb = Decomb.Default;
                     break;
                 case "bob":
-                    task.Decomb = Decomb.Bob;
+                    preset.Task.Decomb = Decomb.Bob;
                     break;
                 case "fast":
-                    task.Decomb = Decomb.Fast;
+                    preset.Task.Decomb = Decomb.Fast;
                     break;
 
                 default:
-                    task.Decomb = Decomb.Off;
+                    preset.Task.Decomb = Decomb.Off;
                     break;
             }
 
-            task.CustomDecomb = preset.PictureDecombCustom;
+            preset.Task.CustomDecomb = importedPreset.PictureDecombCustom;
 
-            switch (preset.PictureDeinterlace)
+            switch (importedPreset.PictureDeinterlace)
             {
                 case "custom":
-                    task.Deinterlace = Deinterlace.Custom;
+                    preset.Task.Deinterlace = Deinterlace.Custom;
                     break;
                 case "bob":
-                    task.Deinterlace = Deinterlace.Bob;
+                    preset.Task.Deinterlace = Deinterlace.Bob;
                     break;
                 case "gast":
-                    task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.Deinterlace = Deinterlace.Fast;
                     break;
                 case "slow":
-                    task.Deinterlace = Deinterlace.Slow;
+                    preset.Task.Deinterlace = Deinterlace.Slow;
                     break;
                 case "slower":
-                    task.Deinterlace = Deinterlace.Slower;
+                    preset.Task.Deinterlace = Deinterlace.Slower;
                     break;
                 default:
-                    task.Deinterlace = Deinterlace.Off;
+                    preset.Task.Deinterlace = Deinterlace.Off;
                     break;
             }
 
-            task.CustomDeinterlace = preset.PictureDetelecineCustom;
-            task.CustomDenoise = preset.PictureDenoiseCustom;
-            task.CustomDetelecine = preset.PictureDetelecineCustom;
+            preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
+            preset.Task.CustomDenoise = importedPreset.PictureDenoiseCustom;
+            preset.Task.CustomDetelecine = importedPreset.PictureDetelecineCustom;
 
-            switch (preset.PictureDetelecine)
+            switch (importedPreset.PictureDetelecine)
             {
                 case "custom":
-                    task.Detelecine = Detelecine.Custom;
+                    preset.Task.Detelecine = Detelecine.Custom;
                     break;
                 case "default":
-                    task.Detelecine = Detelecine.Default;
+                    preset.Task.Detelecine = Detelecine.Default;
                     break;
                 default:
-                    task.Detelecine = Detelecine.Off;
+                    preset.Task.Detelecine = Detelecine.Off;
                     break;
             }
 
-            switch (preset.PictureDenoiseFilter)
+            switch (importedPreset.PictureDenoiseFilter)
             {
                 case "nlmeans":
-                    task.Denoise = Denoise.NLMeans;
+                    preset.Task.Denoise = Denoise.NLMeans;
                     break;
                 case "hqdn3d":
-                    task.Denoise = Denoise.hqdn3d;
+                    preset.Task.Denoise = Denoise.hqdn3d;
                     break;
                 default:
-                    task.Denoise = Denoise.Off;
+                    preset.Task.Denoise = Denoise.Off;
                     break;
             }
 
-            switch (preset.PictureDenoisePreset)
+            switch (importedPreset.PictureDenoisePreset)
             {
                 case "custom":
-                    task.DenoisePreset = DenoisePreset.Custom;
+                    preset.Task.DenoisePreset = DenoisePreset.Custom;
                     break;
                 case "light":
-                    task.DenoisePreset = DenoisePreset.Light;
+                    preset.Task.DenoisePreset = DenoisePreset.Light;
                     break;
                 case "medium":
-                    task.DenoisePreset = DenoisePreset.Medium;
+                    preset.Task.DenoisePreset = DenoisePreset.Medium;
                     break;
                 case "strong":
-                    task.DenoisePreset = DenoisePreset.Strong;
+                    preset.Task.DenoisePreset = DenoisePreset.Strong;
                     break;
                 case "ultralight":
-                    task.DenoisePreset = DenoisePreset.Ultralight;
+                    preset.Task.DenoisePreset = DenoisePreset.Ultralight;
                     break;
                 case "weak":
-                    task.DenoisePreset = DenoisePreset.Weak;
+                    preset.Task.DenoisePreset = DenoisePreset.Weak;
                     break;
             }
 
-            switch (preset.PictureDenoiseTune)
+            switch (importedPreset.PictureDenoiseTune)
             {
                 case "animation":
-                    task.DenoiseTune = DenoiseTune.Animation;
+                    preset.Task.DenoiseTune = DenoiseTune.Animation;
                     break;
                 case "film":
-                    task.DenoiseTune = DenoiseTune.Film;
+                    preset.Task.DenoiseTune = DenoiseTune.Film;
                     break;
                 case "grain":
-                    task.DenoiseTune = DenoiseTune.Grain;
+                    preset.Task.DenoiseTune = DenoiseTune.Grain;
                     break;
                 case "highnotion":
-                    task.DenoiseTune = DenoiseTune.HighMotion;
+                    preset.Task.DenoiseTune = DenoiseTune.HighMotion;
                     break;
 
                 default:
-                    task.DenoiseTune = DenoiseTune.None;
+                    preset.Task.DenoiseTune = DenoiseTune.None;
                     break;
             }
 
-            /* Video Settings */ 
-            task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(preset.VideoEncoder);
-            task.VideoBitrate = preset.VideoAvgBitrate;
-            task.TwoPass = preset.VideoTwoPass;
-            task.TurboFirstPass = preset.VideoTurboTwoPass;
-            task.ExtraAdvancedArguments = preset.VideoOptionExtra;
-            task.Quality = double.Parse(preset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
-            task.VideoEncodeRateType = (VideoEncodeRateType)preset.VideoQualityType;
-            task.VideoLevel = new VideoLevel(preset.VideoLevel, preset.VideoLevel);
-            task.VideoPreset = new VideoPreset(preset.VideoPreset, preset.VideoPreset);
-            string[] split = preset.VideoTune.Split(',');
-            foreach (var item in split)
+            /* Video Settings */
+            preset.Task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(importedPreset.VideoEncoder);
+            preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
+            preset.Task.TwoPass = importedPreset.VideoTwoPass;
+            preset.Task.TurboFirstPass = importedPreset.VideoTurboTwoPass;
+            preset.Task.ExtraAdvancedArguments = importedPreset.VideoOptionExtra;
+            preset.Task.Quality = double.Parse(importedPreset.VideoQualitySlider.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+            preset.Task.VideoEncodeRateType = (VideoEncodeRateType)importedPreset.VideoQualityType;
+            preset.Task.VideoLevel = new VideoLevel(importedPreset.VideoLevel, importedPreset.VideoLevel);
+            preset.Task.VideoPreset = new VideoPreset(importedPreset.VideoPreset, importedPreset.VideoPreset);
+
+            if (!string.IsNullOrEmpty(importedPreset.VideoTune))
             {
-                task.VideoTunes.Add(new VideoTune(item, item));
+                string[] split = importedPreset.VideoTune.Split(',');
+                foreach (var item in split)
+                {
+                    preset.Task.VideoTunes.Add(new VideoTune(item, item));
+                }
             }
-            task.Framerate = preset.VideoFramerate == "auto" || string.IsNullOrEmpty(preset.VideoFramerate)
+            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
                                  ? (double?)null
-                                 : double.Parse(preset.VideoFramerate, CultureInfo.InvariantCulture);
-            string parsedValue = preset.VideoFramerateMode;
+                                 : double.Parse(importedPreset.VideoFramerate, CultureInfo.InvariantCulture);
+            string parsedValue = importedPreset.VideoFramerateMode;
             switch (parsedValue)
             {
                 case "vfr":
-                    task.FramerateMode = FramerateMode.VFR;
+                    preset.Task.FramerateMode = FramerateMode.VFR;
                     break;
                 case "cfr":
-                    task.FramerateMode = FramerateMode.CFR;
+                    preset.Task.FramerateMode = FramerateMode.CFR;
                     break;
                 default:
-                    task.FramerateMode = FramerateMode.PFR;
+                    preset.Task.FramerateMode = FramerateMode.PFR;
                     break;
             }
 
             /* Audio Settings */ 
-            parsedPreset.AudioTrackBehaviours = new AudioBehaviours();
-            task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(preset.AudioEncoderFallback);
-            parsedPreset.AudioTrackBehaviours.SelectedBehaviour = preset.AudioTrackSelectionBehavior == "all"
+            preset.AudioTrackBehaviours = new AudioBehaviours();
+            preset.Task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
+            preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
                                                                      ? AudioBehaviourModes.AllMatching
-                                                                     : preset.AudioTrackSelectionBehavior == "first"
+                                                                     : importedPreset.AudioTrackSelectionBehavior == "first"
                                                                            ? AudioBehaviourModes.FirstMatch
                                                                            : AudioBehaviourModes.None;
 
-            if (preset.AudioCopyMask != null)
+            if (importedPreset.AudioCopyMask != null)
             {
-                foreach (var item in preset.AudioCopyMask)
+                foreach (var item in importedPreset.AudioCopyMask)
                 {
                     AudioEncoder encoder = EnumHelper<AudioEncoder>.GetValue(item.ToString());
                     switch (encoder)
                     {
                         case AudioEncoder.AacPassthru:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.Ac3Passthrough:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.EAc3Passthrough:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.DtsHDPassthrough:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.DtsPassthrough:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.FlacPassthru:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.Mp3Passthru:
-                            task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                     }
                 }
             }
 
-            if (preset.AudioLanguageList != null)
+            if (importedPreset.AudioLanguageList != null)
             {
-                foreach (var item in preset.AudioLanguageList)
+                foreach (var item in importedPreset.AudioLanguageList)
                 {
-                    parsedPreset.AudioTrackBehaviours.SelectedLangauges.Add(item);
+                    preset.AudioTrackBehaviours.SelectedLangauges.Add(item);
                 }
             }
 
-            task.AudioTracks = new ObservableCollection<AudioTrack>();
+            preset.Task.AudioTracks = new ObservableCollection<AudioTrack>();
 
-            if (preset.AudioList != null)
+            if (importedPreset.AudioList != null)
             {
-                foreach (var audioTrack in preset.AudioList)
+                foreach (var audioTrack in importedPreset.AudioList)
                 {
                     AudioTrack track = new AudioTrack();
                     track.Bitrate = audioTrack.AudioBitrate;
 
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
-                    track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
-                    track.MixDown = Converters.GetAudioMixDown(audioTrack.AudioMixdown);
+                    track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);  
+                    track.MixDown = Converters.GetAudioMixDown(Converters.GetMixDown(audioTrack.AudioMixdown)); // TODO refactor
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
@@ -301,31 +307,31 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     track.Gain = (int)audioTrack.AudioTrackGainSlider;
                     track.DRC = audioTrack.AudioTrackDRCSlider;
 
-                    task.AudioTracks.Add(track);
+                    preset.Task.AudioTracks.Add(track);
                 }
             }
 
 
             /* Subtitle Settings */ 
-            parsedPreset.SubtitleTrackBehaviours = new SubtitleBehaviours();
+            preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
 
             // parsedPreset.SubtitleTrackBehaviours.SelectedBehaviour = preset.SubtitleTrackSelectionBehavior;
-            parsedPreset.SubtitleTrackBehaviours.AddClosedCaptions = preset.SubtitleAddCC;
-            parsedPreset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = preset.SubtitleAddForeignAudioSearch;
-            if (preset.SubtitleLanguageList != null)
+            preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
+            preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
+            if (importedPreset.SubtitleLanguageList != null)
             {
-                foreach (var item in preset.SubtitleLanguageList)
+                foreach (var item in importedPreset.SubtitleLanguageList)
                 {
-                    parsedPreset.SubtitleTrackBehaviours.SelectedLangauges.Add(item);
+                    preset.SubtitleTrackBehaviours.SelectedLangauges.Add(item);
                 }
             }
 
             /* Chapter Marker Settings */ 
-            task.IncludeChapterMarkers = preset.ChapterMarkers;
+            preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
 
             /* Advanced Settings */ 
-            task.ShowAdvancedTab = preset.x264UseAdvancedOptions;
-            task.AdvancedEncoderOptions = preset.x264Option;
+            preset.Task.ShowAdvancedTab = importedPreset.x264UseAdvancedOptions;
+            preset.Task.AdvancedEncoderOptions = importedPreset.x264Option;
 
             /* Not Supported Yet */ 
             // public int VideoColorMatrixCode { get; set; }
@@ -352,7 +358,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public int PictureDARWidth { get; set; }
             // public int Type { get; set; }
 
-            return parsedPreset;
+            return preset;
         }
 
         /// <summary>

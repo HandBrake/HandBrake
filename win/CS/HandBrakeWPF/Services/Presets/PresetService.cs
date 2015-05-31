@@ -15,16 +15,17 @@ namespace HandBrakeWPF.Services.Presets
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Windows;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
-    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
@@ -122,7 +123,15 @@ namespace HandBrakeWPF.Services.Presets
                 this.UpdateBuiltInPresets();
             }
 
+            // Load the presets from file
             this.LoadPresets();
+
+            // Check they are up-to-date.
+            if (this.CheckIfPresetsAreOutOfDate())
+            {
+                this.UpdateBuiltInPresets();
+                this.LoadPresets(); // Reload again.
+            }
         }
 
         /// <summary>
@@ -277,54 +286,41 @@ namespace HandBrakeWPF.Services.Presets
             // Clear the current built in Presets and now parse the tempory Presets file.
             this.ClearBuiltIn();
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HandBrakeWPF.Presets.dat"))
+            IList<PresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
+
+            foreach (var item in presetCategories)
             {
-                using (StreamReader reader = new StreamReader(stream))
+                foreach (var hbpreset in item.ChildrenArray)
                 {
-                    // New Preset Format.
-                    try
+                    Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
+                    preset.Version = VersionHelper.GetVersion();
+                    preset.UsePictureFilters = true;
+                    preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
+                    preset.Category = item.PresetName;
+
+                    if (preset.Name == "iPod")
                     {
-                        string json = reader.ReadToEnd();
-                        var presetList = JsonConvert.DeserializeObject<List<Preset>>(json);
-
-                        foreach (Preset preset in presetList)
-                        {
-                            preset.Version = VersionHelper.GetVersion();
-                            preset.UsePictureFilters = true; 
-                            preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
-                            preset.AudioTrackBehaviours = new AudioBehaviours();
-                            preset.AudioTrackBehaviours.SelectedBehaviour = AudioBehaviourModes.FirstMatch;
-                            
-                            if (preset.Name == "iPod")
-                            {
-                                preset.Task.KeepDisplayAspect = true;
-                            }
-
-                            preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
-
-                            if (preset.Name == "Normal")
-                            {
-                                preset.IsDefault = true;
-                            }
-
-                            this.presets.Add(preset);
-                        }
-
-                        // Verify we have presets.
-                        if (this.presets.Count == 0)
-                        {
-                            throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", new Exception(json));
-                        }
+                        preset.Task.KeepDisplayAspect = true;
                     }
-                    catch (Exception exc)
+
+                    preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
+
+                    if (preset.Name == "Normal")
                     {
-                        // Do Nothing.
-                        Debug.WriteLine(exc);
+                        preset.IsDefault = true;
                     }
+
+                    this.presets.Add(preset);
                 }
             }
 
-            // Finally, Create a new or update the current Presets.xml file
+            // Verify we have presets.
+            if (this.presets.Count == 0)
+            {
+                throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", null);
+            }
+
+            // Store the changes to disk
             this.UpdatePresetFiles();
         }
 
@@ -537,7 +533,7 @@ namespace HandBrakeWPF.Services.Presets
                 // We did a preset convertion, so save the updates.
                 if (updatePresets)
                 {
-                    UpdatePresetFiles();
+                    this.UpdatePresetFiles();
                 }
             }
             catch (Exception exc)
@@ -564,11 +560,11 @@ namespace HandBrakeWPF.Services.Presets
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
 
                 // Built-in Presets
-                
+
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     string presetsJson = JsonConvert.SerializeObject(this.presets.Where(p => p.IsBuildIn).ToList(), Formatting.Indented, settings);
-                     using (StreamWriter writer = new StreamWriter(strm))
+                    using (StreamWriter writer = new StreamWriter(strm))
                     {
                         writer.WriteLine(presetsJson);
                     }

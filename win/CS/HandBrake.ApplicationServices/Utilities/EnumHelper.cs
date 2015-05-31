@@ -81,12 +81,13 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 string currDescription = GetDescription(val);
                 string currDisplay = GetDisplay(val);
-                if (currDescription == description || currDisplay == description)
+                string shortName = GetShortName(val);
+                if (currDescription == description || currDisplay == description || shortName == description)
                 {
                     return val;
                 }
-                
-                if (insensitiveCase && (currDescription.ToLower() == description.ToLower() || currDisplay.ToLower() == description.ToLower()))
+
+                if (insensitiveCase && (currDescription.ToLower() == description.ToLower() || currDisplay.ToLower() == description.ToLower() || shortName.ToLower() == description.ToLower()))
                 {
                     return val;
                 }
