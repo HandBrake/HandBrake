@@ -3346,6 +3346,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "PictureForceHeight", hb_value_int(height));
     }
+    if (crop[0] >= 0 || crop[1] >= 0 || crop[2] >= 0 || crop[3] >= 0)
+    {
+        hb_dict_set(preset, "PictureAutoCrop", hb_value_bool(0));
+    }
     if (crop[0] >= 0)
     {
         hb_dict_set(preset, "PictureTopCrop", hb_value_int(crop[0]));
