@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#include "hb.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,22 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface HBTitle : NSObject
 
-/**
- *  Returns an HBTitle object initialized with a given title.
- *  It must be called only inside HBCore.
- *
- *  @param title    the libhb title to wrap.
- *  @param featured whether the title is the featured one or not.
- */
-- (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured NS_DESIGNATED_INITIALIZER;
-
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly, getter=isFeatured) BOOL featured;
 @property (nonatomic, readonly, getter=isStream) BOOL stream;
 
 @property (nonatomic, readonly) NSURL *url;
-
-@property (nonatomic, readonly) hb_title_t *hb_title;
 
 @property (nonatomic, readonly) int index;
 @property (nonatomic, readonly) int angles;

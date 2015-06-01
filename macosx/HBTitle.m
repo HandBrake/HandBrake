@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitle.h"
+#import "HBTitlePrivate.h"
 
 #include "lang.h"
 
@@ -33,6 +34,7 @@ extern NSString *keySubTrackSrtCharCode;
 
 @interface HBTitle ()
 
+@property (nonatomic, readonly) hb_title_t *hb_title;
 @property (nonatomic, readwrite, strong) NSString *name;
 
 @property (nonatomic, readwrite) NSArray *audioTracks;
@@ -42,6 +44,12 @@ extern NSString *keySubTrackSrtCharCode;
 @end
 
 @implementation HBTitle
+
+/*- (instancetype)init
+{
+    NSAssert(false, @"[HBTitle init] should not be called");
+    return nil;
+}*/
 
 - (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured
 {

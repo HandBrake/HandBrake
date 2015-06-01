@@ -9,7 +9,7 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioTrack.h"
 
-#import "HBTitle.h"
+#import "HBTitlePrivate.h"
 
 @implementation HBJob (HBJobConversion)
 
@@ -19,6 +19,7 @@
 - (hb_job_t *)hb_job
 {
     NSAssert(self.title, @"HBJob: calling hb_job without a valid title loaded");
+    NSAssert(self.destURL, @"HBJob: calling hb_job without a valid destination");
 
     hb_title_t *title = self.title.hb_title;
     hb_job_t *job = hb_job_init(title);

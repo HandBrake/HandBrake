@@ -158,6 +158,7 @@
 		A971281F1A2C75180088C076 /* HBTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A971281E1A2C75180088C076 /* HBTitle.m */; };
 		A975C08E1AE8C5270061870D /* HBStateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A975C08D1AE8C5270061870D /* HBStateFormatter.m */; };
 		A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */; };
+		A98FD5931B19C63800FCC7A5 /* HBMockTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A98FD5921B19C63800FCC7A5 /* HBMockTitle.m */; };
 		A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9906B2B1A710920001D82D5 /* HBQueueController.m */; };
 		A990D9071A64562200139032 /* HBJob+HBJobConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A990D9061A64562200139032 /* HBJob+HBJobConversion.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
@@ -447,6 +448,9 @@
 		A975C08D1AE8C5270061870D /* HBStateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBStateFormatter.m; sourceTree = "<group>"; };
 		A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBLanguagesSelection.h; sourceTree = "<group>"; };
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
+		A98FD5911B19C63800FCC7A5 /* HBMockTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBMockTitle.h; sourceTree = "<group>"; };
+		A98FD5921B19C63800FCC7A5 /* HBMockTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBMockTitle.m; sourceTree = "<group>"; };
+		A98FD5941B19C6E400FCC7A5 /* HBTitlePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitlePrivate.h; sourceTree = "<group>"; };
 		A9906B2B1A710920001D82D5 /* HBQueueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueController.m; sourceTree = "<group>"; };
 		A990D9051A64562200139032 /* HBJob+HBJobConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+HBJobConversion.h"; sourceTree = "<group>"; };
 		A990D9061A64562200139032 /* HBJob+HBJobConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBJobConversion.m"; sourceTree = "<group>"; };
@@ -975,6 +979,8 @@
 		A95B8D941B09F16700F2F152 /* HandBrake Tests */ = {
 			isa = PBXGroup;
 			children = (
+				A98FD5911B19C63800FCC7A5 /* HBMockTitle.h */,
+				A98FD5921B19C63800FCC7A5 /* HBMockTitle.m */,
 				A9A24B2E1B09F87400AD1FAB /* HBJobTests.m */,
 				A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */,
 				A95B8D951B09F16700F2F152 /* Supporting Files */,
@@ -997,6 +1003,7 @@
 				A9DEC8731A23C87500C79B48 /* HBCore.m */,
 				A971281D1A2C75180088C076 /* HBTitle.h */,
 				A971281E1A2C75180088C076 /* HBTitle.m */,
+				A98FD5941B19C6E400FCC7A5 /* HBTitlePrivate.h */,
 				A9DEC87D1A23DF6F00C79B48 /* HBJob.h */,
 				A9DEC87E1A23DF6F00C79B48 /* HBJob.m */,
 				A990D9051A64562200139032 /* HBJob+HBJobConversion.h */,
@@ -1423,6 +1430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A98FD5931B19C63800FCC7A5 /* HBMockTitle.m in Sources */,
 				A9A24B2D1B09F6FD00AD1FAB /* HBPresetsTests.m in Sources */,
 				A9A24B2F1B09F87400AD1FAB /* HBJobTests.m in Sources */,
 			);

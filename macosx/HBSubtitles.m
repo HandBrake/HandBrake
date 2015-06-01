@@ -11,7 +11,9 @@
 
 #import "HBTitle.h"
 #import "HBCodingUtilities.h"
+
 #include "lang.h"
+#include "common.h"
 
 NSString *keySubTrackSelectionIndex = @"keySubTrackSelectionIndex";
 NSString *keySubTrackName = @"keySubTrackName";

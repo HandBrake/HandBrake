@@ -10,7 +10,7 @@
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
-#import "HBTitle.h"
+#import "HBTitlePrivate.h"
 
 #include <dlfcn.h>
 
