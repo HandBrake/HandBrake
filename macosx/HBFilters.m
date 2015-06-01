@@ -282,7 +282,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_denoiseTune);
     encodeObject(_denoiseCustomString);
 
-    encodeInteger(_deblock);
+    encodeInt(_deblock);
     encodeBool(_grayscale);
 
     encodeBool(_useDecomb);

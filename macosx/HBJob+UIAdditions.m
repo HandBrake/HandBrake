@@ -556,7 +556,11 @@ static NSDictionary            *shortHeightAttr;
 
 - (id)reverseTransformedValue:(id)value
 {
-    return [NSURL fileURLWithPath:value];
+    if (value)
+    {
+        return [NSURL fileURLWithPath:value];
+    }
+    return nil;
 }
 
 @end
