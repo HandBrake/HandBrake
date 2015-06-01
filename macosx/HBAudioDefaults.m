@@ -95,22 +95,22 @@
     if ([preset[@"Type"] intValue] == 0)
     {
         self.trackSelectionBehavior = HBAudioTrackSelectionBehaviorFirst;
-        if (self.trackSelectionLanguages.count == 0)
+        if (self.trackSelectionLanguages.count == 0 || [self.trackSelectionLanguages.firstObject isEqualToString:@"und"])
         {
-            if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
-            {
-                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
-                if (lang)
-                {
-                    [self.trackSelectionLanguages addObject:lang];
-                }
-            }
             if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
             {
                 NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"]];
                 if (lang)
                 {
-                    [self.trackSelectionLanguages addObject:lang];
+                    [self.trackSelectionLanguages insertObject:lang atIndex:0];
+                }
+            }
+            if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
+            {
+                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
+                if (lang)
+                {
+                    [self.trackSelectionLanguages insertObject:lang atIndex:0];
                 }
             }
         }
