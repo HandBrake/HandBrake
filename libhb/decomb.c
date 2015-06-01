@@ -2025,7 +2025,9 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     // Make segment sizes an even number of lines
     int height = hb_image_height(init->pix_fmt, init->geometry.height, 0);
-    pv->segment_height[0] = (height / pv->cpu_count) & ~1;
+    // Each segment must begin on the even "parity" row.
+    // I.e. each segment of each plane must begin on an even row.
+    pv->segment_height[0] = (height / pv->cpu_count) & ~3;
     pv->segment_height[1] = hb_image_height(init->pix_fmt, pv->segment_height[0], 1);
     pv->segment_height[2] = hb_image_height(init->pix_fmt, pv->segment_height[0], 2);
 
@@ -2093,8 +2095,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                  * Final segment
                  */
                 thread_args->segment_height[pp] =
-                    (hb_image_height(init->pix_fmt, init->geometry.height, pp) -
-                    thread_args->segment_start[pp] + 3) & ~3;
+                    ((hb_image_height(init->pix_fmt, init->geometry.height, pp)
+                     + 3) & ~3) - thread_args->segment_start[pp];
             } else {
                 thread_args->segment_height[pp] = pv->segment_height[pp];
             }
@@ -2515,6 +2517,28 @@ static void hb_decomb_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
+// Fill rows above height with copy of last row to prevent color distortion
+// during blending
+static void fill_stride(hb_buffer_t * buf)
+{
+    int pp, ii;
+
+    for (pp = 0; pp < 3; pp++)
+    {
+        uint8_t * src, * dst;
+
+        src = buf->plane[pp].data + (buf->plane[pp].height - 1) *
+              buf->plane[pp].stride;
+        dst = buf->plane[pp].data + buf->plane[pp].height *
+              buf->plane[pp].stride;
+        for (ii = 0; ii < 3; ii++)
+        {
+            memcpy(dst, src, buf->plane[pp].stride);
+            dst += buf->plane[pp].stride;
+        }
+    }
+}
+
 static int hb_decomb_work( hb_filter_object_t * filter,
                            hb_buffer_t ** buf_in,
                            hb_buffer_t ** buf_out )
@@ -2532,6 +2556,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
     /* Store current frame in yadif cache */
     *buf_in = NULL;
+    fill_stride(in);
     store_ref(pv, in);
 
     // yadif requires 3 buffers, prev, cur, and next.  For the first
