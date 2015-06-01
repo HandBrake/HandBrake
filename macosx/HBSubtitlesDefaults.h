@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import "HBPresetCoding.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, HBSubtitleTrackSelectionBehavior) {
     HBSubtitleTrackSelectionBehaviorNone,
     HBSubtitleTrackSelectionBehaviorFirst,
@@ -34,3 +36,5 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackBurnInBehavior) {
 @property (nonatomic, readwrite) BOOL burnInBluraySubtitles;
 
 @end
+
+NS_ASSUME_NONNULL_END

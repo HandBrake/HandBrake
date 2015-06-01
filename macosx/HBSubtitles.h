@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import "HBPresetCoding.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *keySubTrackSelectionIndex;
 extern NSString *keySubTrackName;
 extern NSString *keySubTrackIndex;
@@ -67,4 +69,6 @@ extern NSString *keySubTrackLanguageIndex;
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END
 

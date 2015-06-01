@@ -11,6 +11,8 @@
 @class HBAudioTrack;
 @class HBAudioDefaults;
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString *HBAudioChangedNotification;
 
 @interface HBAudio : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
@@ -26,7 +28,7 @@ extern NSString *HBAudioChangedNotification;
 
 - (BOOL)anyCodecMatches:(int)codec;
 - (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
-- (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
+- (void)switchingTrackFromNone:(nullable HBAudioTrack *)noLongerNoneTrack;
 
 - (void)containerChanged:(int)container;
 
@@ -40,3 +42,5 @@ extern NSString *HBAudioChangedNotification;
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

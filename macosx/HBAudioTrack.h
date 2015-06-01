@@ -10,6 +10,8 @@
 @protocol HBAudioTrackDataSource;
 @protocol HBAudioTrackDelegate;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  Audio track dicts keys.
  */
@@ -34,15 +36,15 @@ extern NSString *keyAudioBitrate;
 @interface HBAudioTrack : NSObject <NSSecureCoding, NSCopying>
 
 @property (nonatomic, strong) NSDictionary *track;
-@property (nonatomic, strong) NSDictionary *codec;
+@property (nonatomic, strong, nullable) NSDictionary *codec;
 @property (nonatomic, strong) NSDictionary *mixdown;
 @property (nonatomic, strong) NSDictionary *sampleRate;
 @property (nonatomic, strong) NSDictionary *bitRate;
 @property (nonatomic, strong) NSNumber *drc;
 @property (nonatomic, strong) NSNumber *gain;
 @property (nonatomic, strong) NSNumber *videoContainerTag;
-@property (nonatomic, weak) id<HBAudioTrackDataSource> dataSource;
-@property (nonatomic, weak) id<HBAudioTrackDelegate> delegate;
+@property (nonatomic, weak, nullable) id<HBAudioTrackDataSource> dataSource;
+@property (nonatomic, weak, nullable) id<HBAudioTrackDelegate> delegate;
 
 @property (nonatomic, strong) NSMutableArray *codecs;
 @property (nonatomic, strong) NSMutableArray *mixdowns;
@@ -68,3 +70,5 @@ extern NSString *keyAudioBitrate;
 - (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
 - (void)mixdownChanged;
 @end
+
+NS_ASSUME_NONNULL_END

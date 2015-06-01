@@ -6,6 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  HBAudioTrackPreset
  *  a KVO enabled class used in the Audio Defaults panels,
@@ -36,6 +38,8 @@
 @property (nonatomic, readonly) NSArray *bitrates;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 /**
  *  A series of value trasformers to bridge the libhb enums

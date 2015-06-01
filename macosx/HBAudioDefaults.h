@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import "HBPresetCoding.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
     HBAudioTrackSelectionBehaviorNone,
     HBAudioTrackSelectionBehaviorFirst,
@@ -46,3 +48,5 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 - (void)validateEncoderFallbackForVideoContainer:(int)container;
 
 @end
+
+NS_ASSUME_NONNULL_END
