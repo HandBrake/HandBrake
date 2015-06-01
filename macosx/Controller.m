@@ -4290,7 +4290,7 @@ fWorkingCount = 0;
     [fSrcTimeEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration]];
     /* For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively */
     [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
-    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", (title->duration / 90000.) * (title->rate / (double)title->rate_base)]];    
+    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", (int)((title->duration / 90000.) * (title->rate / (double)title->rate_base))]];
 
     /* Update encode start / stop variables */
 
