@@ -672,6 +672,7 @@ presets_add_config_file(const gchar *name)
             hb_presets_builtin_update();
             store_presets();
         }
+        hb_value_free(&preset);
         return 0;
     }
     return -1;

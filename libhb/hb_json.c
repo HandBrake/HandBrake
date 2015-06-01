@@ -744,6 +744,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     if (result < 0)
     {
         hb_error("json unpack failure, failed to find title: %s", error.text);
+        hb_value_free(&dict);
         return;
     }
 
@@ -760,6 +761,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
         hb_snooze(50);
         hb_get_state2(h, &state);
     }
+    hb_value_free(&dict);
 }
 
 static int validate_audio_codec_mux(int codec, int mux, int track)
