@@ -1194,12 +1194,8 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.Load();
 
             // Queue Recovery
-            bool isRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
-            if (isRecovered)
-            {
-                this.HasSource = true;
-            }
-
+            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+    
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Log Cleaning
@@ -1988,9 +1984,10 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
 
                     // Select the Users Title
-                    this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.TitleNumber == this.CurrentTask.Title);
+                    this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault();
                     this.CurrentTask = new EncodeTask(queueEditTask);
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
+                    this.HasSource = true;
 
                     // Update the Main Window
                     this.NotifyOfPropertyChange(() => this.Destination);
