@@ -1944,6 +1944,7 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
 
         case HB_ACODEC_FLAC_PASS:
             gid = HB_GID_ACODEC_FLAC;
+            break;
 
         case HB_ACODEC_MP3_PASS:
             gid = HB_GID_ACODEC_MP3;
