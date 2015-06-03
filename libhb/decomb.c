@@ -2687,6 +2687,7 @@ void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src)
     filter.tap[4] = -1;
     filter.normalize = 3;
 
+    fill_stride(src);
     for (pp = 0; pp < 3; pp++)
     {
         int yy;
