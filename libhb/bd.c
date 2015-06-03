@@ -304,7 +304,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->hours    = title->duration / 90000 / 3600;
     title->minutes  = ( ( title->duration / 90000 ) % 3600 ) / 60;
     title->seconds  = ( title->duration / 90000 ) % 60;
-    hb_log( "bd: duration is %02d:%02d:%02d (%"PRId64" ms)",
+    hb_log( "bd: duration is %02d:%02d:%02d (%"PRIu64" ms)",
             title->hours, title->minutes, title->seconds,
             title->duration / 90 );
 
@@ -524,7 +524,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             // Validate start time
             if (ti->chapters[ii+1].start < ti->chapters[ii].start)
             {
-                hb_log("bd: chapter %d invalid start %"PRId64, ii+1,
+                hb_log("bd: chapter %d invalid start %"PRIu64"", ii+1,
                        ti->chapters[ii+1].start);
                 ti->chapters[ii+1].start = ti->chapters[ii].start +
                                            chapter->duration;
@@ -532,7 +532,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             if (ti->chapters[ii+1].start - ti->chapters[ii].start !=
                 chapter->duration)
             {
-                hb_log("bd: chapter %d invalid duration %"PRId64, ii+1,
+                hb_log("bd: chapter %d invalid duration %"PRIu64"", ii+1,
                        chapter->duration);
                 chapter->duration = ti->chapters[ii+1].start -
                                     ti->chapters[ii].start;
@@ -542,7 +542,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         {
             if (ti->duration - ti->chapters[ii].start != chapter->duration)
             {
-                hb_log("bd: chapter %d invalid duration %"PRId64, ii+1,
+                hb_log("bd: chapter %d invalid duration %"PRIu64"", ii+1,
                        chapter->duration);
                 chapter->duration = ti->duration - ti->chapters[ii].start;
             }
@@ -553,7 +553,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         chapter->minutes = ( seconds % 3600 ) / 60;
         chapter->seconds = ( seconds % 60 );
 
-        hb_log( "bd: chap %d packet=%"PRIu64", %"PRId64" ms",
+        hb_log( "bd: chap %d packet=%"PRIu64", %"PRIu64" ms",
                 chapter->index,
                 chapter->block_start,
                 chapter->duration / 90 );
@@ -907,10 +907,10 @@ static int next_packet( BLURAY *bd, uint8_t *pkt )
         uint64_t pos2 = align_to_next_packet(bd, pkt);
         if ( pos2 == 0 )
         {
-            hb_log( "next_packet: eof while re-establishing sync @ %"PRId64, pos );
+            hb_log( "next_packet: eof while re-establishing sync @ %"PRIu64"", pos );
             return 0;
         }
-        hb_log( "next_packet: sync lost @ %"PRId64", regained after %"PRId64" bytes",
+        hb_log( "next_packet: sync lost @ %"PRIu64", regained after %"PRIu64" bytes",
                  pos, pos2 );
     }
 }
