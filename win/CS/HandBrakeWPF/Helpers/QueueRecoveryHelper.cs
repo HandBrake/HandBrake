@@ -104,7 +104,7 @@ namespace HandBrakeWPF.Helpers
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public static void RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService)
+        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
             List<string> queueFiles = CheckQueueRecovery();
@@ -124,6 +124,7 @@ namespace HandBrakeWPF.Helpers
 
             if (result == MessageBoxResult.Yes)
             {
+                bool isRecovered = false;
                 foreach (string file in queueFiles)
                 {
                     // Skip over the file if it belongs to another HandBrake instance.
@@ -138,7 +139,8 @@ namespace HandBrakeWPF.Helpers
                     }
 
                     // Recover the Queue
-                    encodeQueue.RestoreQueue(appDataPath + file); 
+                    encodeQueue.RestoreQueue(appDataPath + file);
+                    isRecovered = true;
 
                     // Cleanup
                     if (!file.Contains(GeneralUtilities.ProcessId.ToString(CultureInfo.InvariantCulture)))
@@ -155,6 +157,8 @@ namespace HandBrakeWPF.Helpers
                         }
                     }
                 }
+
+                return isRecovered;
             }
             else
             {
@@ -177,6 +181,8 @@ namespace HandBrakeWPF.Helpers
                         File.Delete(Path.Combine(appDataPath, file));
                     }
                 }
+
+                return false;
             }
         }
     }

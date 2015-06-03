@@ -1194,7 +1194,11 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.Load();
 
             // Queue Recovery
-            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            bool isRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            if (isRecovered)
+            {
+                this.HasSource = true;
+            }
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
