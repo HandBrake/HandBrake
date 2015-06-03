@@ -307,7 +307,7 @@ static int get_job_mux(hb_dict_t *job_dict)
 
 static hb_value_t* get_audio_copy_mask(const hb_dict_t * preset, int *mask)
 {
-    int copy_mask;
+    int copy_mask = 0;
     hb_value_array_t *out_copy_mask, *in_copy_mask;
 
     if (mask != NULL)
