@@ -217,7 +217,7 @@ static void hb_trim_end( char *text )
         return;
     }
 
-    int i = strlen(text) - 1;
+    int i;
 
     for( i = strlen(text) - 1; i >= 0 && is_white(text[i]) ; i-- )
     {
