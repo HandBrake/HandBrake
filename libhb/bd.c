@@ -524,7 +524,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             // Validate start time
             if (ti->chapters[ii+1].start < ti->chapters[ii].start)
             {
-                hb_log("bd: chapter %d invalid start %lld", ii+1,
+                hb_log("bd: chapter %d invalid start %"PRId64, ii+1,
                        ti->chapters[ii+1].start);
                 ti->chapters[ii+1].start = ti->chapters[ii].start +
                                            chapter->duration;
@@ -532,7 +532,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             if (ti->chapters[ii+1].start - ti->chapters[ii].start !=
                 chapter->duration)
             {
-                hb_log("bd: chapter %d invalid duration %lld", ii+1,
+                hb_log("bd: chapter %d invalid duration %"PRId64, ii+1,
                        chapter->duration);
                 chapter->duration = ti->chapters[ii+1].start -
                                     ti->chapters[ii].start;
@@ -542,7 +542,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         {
             if (ti->duration - ti->chapters[ii].start != chapter->duration)
             {
-                hb_log("bd: chapter %d invalid duration %lld", ii+1,
+                hb_log("bd: chapter %d invalid duration %"PRId64, ii+1,
                        chapter->duration);
                 chapter->duration = ti->duration - ti->chapters[ii].start;
             }
