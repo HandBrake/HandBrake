@@ -754,7 +754,6 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                     }
                     if( title_set->feature == title->index )
                     {
-                        main_feature_time = title_time;
                         main_feature_pos = i;
                         main_feature_idx = title->index;
                         break;
@@ -3653,8 +3652,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         range_type = "chapter";
         int chapter_count = hb_list_count(title->list_chapter);
         range_start = MAX(1, chapter_start);
-        range_end   = MIN(chapter_count, chapter_end);
-        range_end   = MAX(chapter_start, chapter_end);
+        range_end   = MAX(chapter_start, MIN(chapter_count, chapter_end));
     }
     else if (start_at_preview)
     {
@@ -3706,11 +3704,11 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     hb_dict_t *audios_dict = hb_dict_get(job_dict, "Audio");
     hb_value_array_t * audio_array = hb_dict_get(audios_dict, "AudioList");
     hb_dict_t *audio_dict;
-    int track_count = hb_value_array_len(audio_array);
 
     /* Grab audio tracks */
     if (atracks != NULL)
     {
+        int track_count;
         int ii;
         if (atracks[0] != NULL && strcasecmp("none", atracks[0]))
         {
