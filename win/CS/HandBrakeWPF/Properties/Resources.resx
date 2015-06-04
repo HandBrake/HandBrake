@@ -578,4 +578,13 @@ The Activity log may have further information.</value>
   <data name="Main_StartQueue" xml:space="preserve">
     <value>Start Queue</value>
   </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>You can not delete the default preset. Please set another preset as default first.</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>Are you sure you want to delete the preset: </value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}</value>
+  </data>
 </root>

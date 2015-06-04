@@ -21,7 +21,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Services.Encode.Model;
@@ -1765,7 +1764,7 @@ namespace HandBrakeWPF.ViewModels
                 if (this.selectedPreset.IsDefault)
                 {
                     this.errorService.ShowMessageBox(
-                      "You can not delete the default preset. Please set another preset as default first.",
+                      Resources.MainViewModel_CanNotDeleteDefaultPreset,
                       Resources.Warning,
                       MessageBoxButton.OK,
                       MessageBoxImage.Information);
@@ -1775,7 +1774,7 @@ namespace HandBrakeWPF.ViewModels
 
                 MessageBoxResult result =
                 this.errorService.ShowMessageBox(
-                   "Are you sure you want to delete the preset: " + this.selectedPreset.Name + " ?",
+                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?",
                    Resources.Question,
                    MessageBoxButton.YesNo,
                    MessageBoxImage.Question);
@@ -2252,7 +2251,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
-                            string.Format("{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\\:mm\\:ss}" + Resources.Main_JobsPending_addon,
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,

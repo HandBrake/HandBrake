@@ -159,6 +159,11 @@
     <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
+    <Compile Include="Properties\ResourcesUI.Designer.cs">
+      <DependentUpon>ResourcesUI.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
     <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
@@ -354,6 +359,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\ResourcesUI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesUI.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

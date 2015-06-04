@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
         Width="525"
         Height="600"
@@ -25,13 +26,13 @@
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
-                        <TextBlock Margin="2,0,0,0" Text="Copy to clipboard" />
+                        <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:ResourcesUI.LogView_CopyClipboard}" />
                     </StackPanel>
                 </Button>
                 <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/folder.png" />
-                        <TextBlock Margin="2,0,0,0" Text="Open Log Directory" />
+                        <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:ResourcesUI.LogView_OpenLogDir}" />
                     </StackPanel>
                 </Button>
 
@@ -41,7 +42,7 @@
             <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Margin="0,3,0,0">
                 <TabItem>
                     <TabItem.Header>
-                        <TextBlock Text="Encode Log" Padding="4">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_EncodeLog}" Padding="4">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -64,7 +65,7 @@
 
                 <TabItem>
                     <TabItem.Header>
-                        <TextBlock Text="Scan Log" Padding="4">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_ScanLog}" Padding="4">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

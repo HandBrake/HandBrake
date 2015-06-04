@@ -34,11 +34,11 @@
                 <StackPanel Grid.Row="0"
                             Margin="5,10,0,0"
                             Orientation="Horizontal">
-                    <TextBlock Margin="0,0,5,0" FontSize="16" FontFamily="Segoe UI Light" Text="Version: " />
+                    <TextBlock Margin="0,0,5,0" FontSize="16" FontFamily="Segoe UI Light" Text="{x:Static Properties:ResourcesUI.MainView_AudioTab}" />
                     <TextBlock Margin="0,0,0,1" FontSize="16" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" Text="{Binding Version}" />
                 </StackPanel>
 
-                <TextBlock Grid.Row="1" Margin="5,10,0,5" Text="License: " />
+                <TextBlock Grid.Row="1" Margin="5,10,0,5" Text="{x:Static Properties:ResourcesUI.AboutView_License}" />
 
                 <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="2" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />

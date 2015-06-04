@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d" >
@@ -13,7 +14,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Chapter Markers" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
+        <TextBlock Text="{x:Static Properties:ResourcesUI.ChaptersView_ChapterMarkers}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
 
         <Grid Grid.Row="1" Margin="10,5,10,0">
             <Grid.ColumnDefinitions>
@@ -22,9 +23,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <CheckBox Content="Create chapter markers" IsChecked="{Binding IncludeChapterMarkers}" Grid.Column="0" VerticalAlignment="Center" />
-            <Button Content="Import" Name="import" Grid.Column="2" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Import]" />
-            <Button Content="Export" Name="export" Grid.Column="3" Width="75" cal:Message.Attach="[Event Click] = [Action Export]" />
+            <CheckBox Content="{x:Static Properties:ResourcesUI.ChaptersView_CreateChapterMarkers}" IsChecked="{Binding IncludeChapterMarkers}" Grid.Column="0" VerticalAlignment="Center" />
+            <Button Content="{x:Static Properties:ResourcesUI.ChaptersView_Import}" Name="import" Grid.Column="2" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Import]" />
+            <Button Content="{x:Static Properties:ResourcesUI.ChaptersView_Export}" Name="export" Grid.Column="3" Width="75" cal:Message.Attach="[Event Click] = [Action Export]" />
         </Grid>
 
         <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Task.ChapterNames}" 
@@ -38,16 +39,16 @@
             </DataGrid.CellStyle>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Import Names" cal:Message.Attach="[Event Click] = [Action Import]" />
-                    <MenuItem Header="Export Names" cal:Message.Attach="[Event Click] = [Action Export]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.ChapterView_ImportNames}" cal:Message.Attach="[Event Click] = [Action Import]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.ChapterView_ExportNames}" cal:Message.Attach="[Event Click] = [Action Export]" />
                     <Separator />
-                    <MenuItem Header="Reset Chapter Names" cal:Message.Attach="[Event Click] = [Action Reset]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.ChapterView_ResetChapterNames}" cal:Message.Attach="[Event Click] = [Action Reset]" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Chapter Number" Width="120" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Duration" Width="100" Binding="{Binding Duration}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
+                <DataGridTextColumn Header="{x:Static Properties:ResourcesUI.ChaptersView_ChapterNumber}" Width="120" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
+                <DataGridTextColumn Header="{x:Static Properties:ResourcesUI.ChaptersView_Duration}" Width="100" Binding="{Binding Duration}" IsReadOnly="True" />
+                <DataGridTextColumn Header="{x:Static Properties:ResourcesUI.ChaptersView_ChapterName}"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
             </DataGrid.Columns>
         </DataGrid>
 

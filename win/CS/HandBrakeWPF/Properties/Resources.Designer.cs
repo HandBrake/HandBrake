@@ -781,6 +781,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can not delete the default preset. Please set another preset as default first..
+        /// </summary>
+        public static string MainViewModel_CanNotDeleteDefaultPreset {
+            get {
+                return ResourceManager.GetString("MainViewModel_CanNotDeleteDefaultPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}.
+        /// </summary>
+        public static string MainViewModel_EncodeStatusChanged_StatusLabel {
+            get {
+                return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the preset: .
+        /// </summary>
+        public static string MainViewModel_PresetRemove_AreYouSure {
+            get {
+                return ResourceManager.GetString("MainViewModel_PresetRemove_AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
         public static string Notice {

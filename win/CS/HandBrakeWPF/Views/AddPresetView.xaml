@@ -33,8 +33,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Add Preset" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
-        
+        <TextBlock Text="{x:Static Properties:ResourcesUI.AddPresetView_AddPreset}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+
         <!--  Header  -->
         <Grid Grid.Row="1" Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
@@ -56,7 +56,7 @@
             <!--  Name  -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Text="Name:" />
+                       Text="{x:Static Properties:ResourcesUI.AddPresetView_Name}" />
             <TextBox Grid.Row="0"
                      Grid.Column="1"
                      Width="150"
@@ -64,12 +64,12 @@
                      Text="{Binding Preset.Name}" />
 
             <!--  Settings  -->
-            <TextBlock Grid.Row="2" Margin="0,10,0,0"
+            <TextBlock Grid.Row="2" Margin="0,10,10,0"
                        Grid.Column="0"
                        Style="{StaticResource LongToolTipHolder}"
                        VerticalAlignment="Center"
                        ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
-                       Text="Save Picture Size:" />
+                       Text="{x:Static Properties:ResourcesUI.AddPresetView_SavePictureSize}" />
             <ComboBox Grid.Row="2" Margin="0,10,0,0"
                       Grid.Column="1"
                       Width="125"
@@ -99,13 +99,13 @@
             <CheckBox Grid.Row="4"
                       Grid.Column="0" Grid.ColumnSpan="2"
                       Margin="0,10,0,0"
-                      Content="Save Video Filter Settings"
+                      Content="{x:Static Properties:ResourcesUI.AddPresetView_SaveVideoFilters}"
                       IsChecked="{Binding Preset.UsePictureFilters}" />
 
             <!--  Description  -->
             <TextBlock Grid.Row="5"
                        Grid.Column="0" Margin="0,10,0,0"
-                       Text="Description:" />
+                       Text="{x:Static Properties:ResourcesUI.AddPresetView_Description}" />
             <TextBox Grid.Row="5"
                      Grid.Column="1" Margin="0,10,0,0"
                      HorizontalAlignment="Stretch"
@@ -115,7 +115,7 @@
         <!--  Controls  -->
         <Grid Grid.Row="3"
               Margin="0,20,0,0">
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -125,13 +125,13 @@
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
-                    Content="Cancel"
+                    Content="{x:Static Properties:ResourcesUI.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Add]"
-                    Content="Add"
+                    Content="{x:Static Properties:ResourcesUI.Generic_Add}"
                     IsDefault="True"
                     Padding="8,2" />
         </Grid>

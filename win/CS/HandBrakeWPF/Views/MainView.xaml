@@ -6,6 +6,7 @@
              xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              AllowDrop="True"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -155,7 +156,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Source"
+                               Content="{x:Static Properties:ResourcesUI.MainView_Source}"
                                />
                     </StackPanel>
                 </Button>
@@ -175,7 +176,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding StartLabel, FallbackValue='Start'}"
+                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}"
                                />
                     </StackPanel>
                 </Button>
@@ -194,7 +195,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Stop"
+                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}"
                                />
                     </StackPanel>
                 </Button>
@@ -213,7 +214,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Pause"
+                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}"
                                />
                     </StackPanel>
                 </Button>
@@ -238,7 +239,7 @@
                                                />
                                         <Label Margin="8,0,0,0"
                                                VerticalAlignment="Center"
-                                               Content="Add to Queue"
+                                               Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}"
                                                />
                                     </StackPanel>
                                     <Button.Style>
@@ -285,7 +286,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='Show Queue'}"
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"
                                />
                     </StackPanel>
                 </Button>
@@ -341,18 +342,18 @@
                             VerticalAlignment="Stretch"
                             >
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Source" FontWeight="Bold" />
+                        <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" />
                         <Label Content="{Binding Path=SourceLabel}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Margin="8,0,0,0" Content="Title" />
+                        <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
                         <ComboBox Name="Titles"
                                   MinWidth="100"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding ScannedSource.Titles}"
                                   SelectedItem="{Binding Path=SelectedTitle}"
                                   />
-                        <Label Margin="8,0,0,0" Content="Angle" />
+                        <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
                         <ComboBox Name="Angles"
                                   MinWidth="60"
@@ -382,7 +383,7 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="4,0,0,0" Content="through" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_through}" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
                                   Margin="4,0,0,0"
@@ -399,7 +400,7 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="4,0,0,0" Content="Duration" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" />
                         <Label Margin="4,0,0,0" Content="{Binding Duration}" />
 
                     </StackPanel>
@@ -412,14 +413,14 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         >
-                <Label Content="Destination" FontWeight="Bold" />
+                <Label Content="{x:Static Properties:ResourcesUI.MainView_Destination}" FontWeight="Bold" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Label Margin="8,0,0,0" Content="File" />
+                    <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_File}" />
                     <TextBox Name="Destination"
                              Grid.Column="1"
                              Margin="8,0,0,0"
@@ -447,9 +448,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         >
-                <Label Content="Output Settings" FontWeight="Bold" />
+                <Label Content="{x:Static Properties:ResourcesUI.MainView_OutputSettings}" FontWeight="Bold" />
                 <StackPanel Orientation="Horizontal">
-                    <Label Margin="8,0,0,0" Content="Container" />
+                    <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Container}" />
                     <ComboBox Name="Container"
                               MinWidth="100"
                               Margin="8,0,0,0"
@@ -459,7 +460,7 @@
                     <CheckBox Name="WebOptimized"
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
-                              Content="Web Optimized"
+                              Content="{x:Static Properties:ResourcesUI.MainView_WebOptimized}"
                               IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
@@ -468,7 +469,7 @@
                     <CheckBox Name="iPod5G"
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
-                              Content="iPod 5G Support"
+                              Content="{x:Static Properties:ResourcesUI.MainView_iPod5G}"
                               IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
@@ -485,25 +486,25 @@
                         VerticalAlignment="Stretch"
                         MinHeight="350" MinWidth="720"
                         >
-                <TabItem Name="pictureTab" Header="Picture">
+                <TabItem Name="pictureTab" Header="{x:Static Properties:ResourcesUI.MainView_PictureTab}">
                     <ContentControl x:Name="PictureSettingsViewModel" />
                 </TabItem>
-                <TabItem Name="filtersTab" Header="Filters">
+                <TabItem Name="filtersTab" Header="{x:Static Properties:ResourcesUI.MainView_FiltersTab}">
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
-                <TabItem Name="videoTab" Header="Video">
+                <TabItem Name="videoTab" Header="{x:Static Properties:ResourcesUI.MainView_VideoTab}">
                     <ContentControl x:Name="VideoViewModel" />
                 </TabItem>
-                <TabItem Name="audioTab" Header="Audio">
+                <TabItem Name="audioTab" Header="{x:Static Properties:ResourcesUI.MainView_AudioTab}">
                     <ContentControl x:Name="AudioViewModel" />
                 </TabItem>
-                <TabItem Name="subtitlesTab" Header="Subtitles">
+                <TabItem Name="subtitlesTab" Header="{x:Static Properties:ResourcesUI.MainView_SubtitlesTab}">
                     <ContentControl x:Name="SubtitleViewModel" />
                 </TabItem>
-                <TabItem Name="chaptersTab" Header="Chapters">
+                <TabItem Name="chaptersTab" Header="{x:Static Properties:ResourcesUI.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="Advanced" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
+                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
@@ -590,7 +591,7 @@
                                     <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource textBlockOrangeStyle}"
-                                               Text="Add"
+                                               Text="{x:Static Properties:ResourcesUI.Generic_Add}"
                                                />
                                 </StackPanel>
                             </Button.Content>
@@ -606,7 +607,7 @@
                                     <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource textBlockOrangeStyle}"
-                                               Text="Remove"
+                                               Text="{x:Static Properties:ResourcesUI.MainView_Remove}"
                                                />
                                 </StackPanel>
                             </Button.Content>
@@ -623,18 +624,18 @@
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="Options"
+                                                   Text="{x:Static Properties:ResourcesUI.MainView_Options}"
                                                    />
                                     </StackPanel>
                                 </MenuItem.Header>
-                                <MenuItem Header="Set Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
-                                <MenuItem Header="Update Selected Preset" Micro:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" Micro:Message.Attach="[Event Click] = [Action PresetUpdate]" />
                                 <Separator />
-                                <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Import}" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Export}" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
                                 <Separator />
-                                <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </MenuItem>
                         </Menu>
                     </ToolBar>
