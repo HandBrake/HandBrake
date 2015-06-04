@@ -94,7 +94,6 @@
     // If the preset is one of the built in, set some additional options
     if ([preset[@"Type"] intValue] == 0)
     {
-        self.trackSelectionBehavior = HBAudioTrackSelectionBehaviorFirst;
         if (self.trackSelectionLanguages.count == 0 || [self.trackSelectionLanguages.firstObject isEqualToString:@"und"])
         {
             if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
