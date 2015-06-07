@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
@@ -31,7 +32,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
                 <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
                 Value="{Binding SelectedPreviewImage}"
                 VerticalAlignment="Center"
@@ -41,13 +41,13 @@
                 />
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
-                    <Button Content="Live Preview" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
-                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="Duration:" />
+                    <Button Content="{x:Static Properties:ResourcesUI.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
+                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:ResourcesUI.StaticPreviewView_Duration}" />
                     <ComboBox Width="60"
                       ItemsSource="{Binding AvailableDurations}"
                       SelectedItem="{Binding Duration}" />
 
-                    <CheckBox VerticalAlignment="Center" Content="Use system default player" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+                    <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">

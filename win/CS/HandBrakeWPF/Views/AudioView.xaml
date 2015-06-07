@@ -11,6 +11,7 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              d:DesignHeight="800"
              d:DesignWidth="750"
              mc:Ignorable="d"
@@ -70,19 +71,19 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                
-                <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
+
+                <splitButton:SplitMenuButton Content="{x:Static Properties:ResourcesUI.Shared_AddTrack}" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
                     <splitButton:SplitMenuButton.ItemSource>
-                        <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
-                        <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                        <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
                     </splitButton:SplitMenuButton.ItemSource>
                 </splitButton:SplitMenuButton>
 
                 <Button MinWidth="65" Grid.Column="1"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
-                    Content="Clear" />
+                    Content="{x:Static Properties:ResourcesUI.Generic_Clear}" />
 
                 <Button MinWidth="65" Grid.Column="3"
                     Margin="0,0,10,0"
@@ -91,7 +92,7 @@
 
                 <Button MinWidth="65" Grid.Column="4"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
-                    Content="Reload Defaults" />
+                    Content="{x:Static Properties:ResourcesUI.AudioView_ReloadDefaults}" />
 
 
             </Grid>
@@ -99,7 +100,7 @@
 
         <!-- Row 2 -->
 
-        <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" Grid.RowSpan="1"
+        <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" 
                  Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
                  Margin="10,10,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
@@ -117,13 +118,13 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
-                    <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                    <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
                     <Separator />
-                    <MenuItem Header="Clear All" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
                     <Separator />
-                    <MenuItem Header="Configure Default Behaviours" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -173,7 +174,7 @@
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding ScannedTrack}" />
 
-                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="Codec" />
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Codec}" />
                             <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
                                 <ComboBox.SelectedItem>
                                     <MultiBinding Converter="{StaticResource audioEncoderConverter}">
@@ -188,7 +189,7 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Bitrate"
+                            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Bitrate}"
                                        Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding TrackReference, Converter={StaticResource audioBitrateConverter}}"
                                       SelectedItem="{Binding Bitrate}"
@@ -196,7 +197,7 @@
 
 
                             <!--  Row 2  -->
-                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Mixdown"
+                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.AudioMixdowns, Converter={StaticResource enumComboConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -241,28 +242,28 @@
                         <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsChecked, ElementName=advancedOptionsToggle, Converter={StaticResource boolToVisConverter}}">
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
 
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="Samplerate"
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Samplerate}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                                 <ComboBox Width="70" Height="22" Margin="5,0,5,0"
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="DRC"
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_DRC}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
                                 <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
                                                     Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                                <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="Gain"
+                                <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Gain}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
                                 <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left"
                                                     Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                                <TextBlock Text="Track Name:" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackName}" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,5,0" />
                                 <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="138" Height="22" />
 
                             </StackPanel>
@@ -292,19 +293,19 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Audio -->
-                <TextBlock Text="Track Selection Behaviour:" Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
                 <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
                           ItemsSource="{Binding AudioBehaviourModeList, Converter={StaticResource audioBehaviourConverter}}" 
                           SelectedItem="{Binding AudioBehaviours.SelectedBehaviour, Converter={StaticResource audioBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
-                
-                
-                <TextBlock Text="Track Setting Default Behaviour:" Grid.Column="0" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+
+
+                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
                 <ComboBox Name="audioTrackBeahaviorMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
                           ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
                           SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,5,5,0" />
             </Grid>
 
-            <TextBlock Text="Choose Languages:" Margin="5,10,0,0" />
+            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="5,10,0,0" />
 
             <Grid Margin="20,5,0,0">
                 <Grid.ColumnDefinitions>
@@ -320,7 +321,7 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <TextBlock Text="Available Languages:" Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
                             <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120" />
@@ -328,14 +329,14 @@
 
                         <DockPanel Grid.Column="1" Margin="10,0,10,0">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                                <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                             </StackPanel>
                         </DockPanel>
 
                         <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="Chosen Languages:"  Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
                             <ListBox Name="selectedLangauges" ItemsSource="{Binding AudioBehaviours.SelectedLangauges}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120"
@@ -347,11 +348,11 @@
                 </StackPanel>
             </Grid>
 
-            <TextBlock Text="'Auto Passthru' Behaviour:" FontWeight="Bold" Margin="0,10,0,5" />
+            <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_AutoPassthruBehaviour}" FontWeight="Bold" Margin="0,10,0,5" />
             <StackPanel Margin="10,5,0,0"
                         Orientation="Vertical">
-                <TextBlock Margin="5,0,5,0" Text="When 'Auto Passthru' is selected as the audio codec." VerticalAlignment="Center" />
-                <TextBlock Margin="5,0,5,0" Text="Allow passthru of:" VerticalAlignment="Center" />
+                <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_WhenAutoPassthru}" VerticalAlignment="Center" />
+                <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_AllowPassThruOf}" VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Margin="15,5,0,0"
                         Orientation="Horizontal">
@@ -379,8 +380,8 @@
                 <CheckBox Margin="0,0,5,0"
                           Content="FLAC" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowFlacPass}" />
-  
-                <TextBlock Margin="15,0,5,0" Text="Otherwise use fallback encoder:" />
+
+                <TextBlock Margin="15,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
 
                 <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="10,0,5,0">
                     <ComboBox.SelectedItem>

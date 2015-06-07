@@ -68,10 +68,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
-            <splitButton:SplitMenuButton Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
+
+            <splitButton:SplitMenuButton Content="{x:Static Properties:ResourcesUI.Shared_AddTrack}" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
                 <splitButton:SplitMenuButton.ItemSource>
-                    <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
                     <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
                     <MenuItem Header="Add All Remaining Closed Captions" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
                     <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
@@ -80,12 +80,12 @@
 
             <Button MinWidth="75" Grid.Column="1"
                     cal:Message.Attach="[Event Click] = [Action Import]"
-                    Content="Import SRT"
+                    Content="{x:Static Properties:ResourcesUI.SubtitlesView_ImportSRT}"
                     Margin="0,0,10,0"/>
             <Button MinWidth="65" Grid.Column="2"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
-                    Content="Clear" />
+                    Content="{x:Static Properties:ResourcesUI.Generic_Clear}" />
 
             <Button MinWidth="65" Grid.Column="4"
                     Margin="0,0,10,0"
@@ -94,7 +94,7 @@
 
             <Button MinWidth="65" Grid.Column="5"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
-                    Content="Reload Defaults" />
+                    Content="{x:Static Properties:ResourcesUI.Shared_ReloadDefaults}" />
         </Grid>
 
 
@@ -117,14 +117,14 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
-                    <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                    <MenuItem Header="Add All Remaining Closed Captions" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
-                    <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
                     <Separator />
-                    <MenuItem Header="Clear All" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
                     <Separator />
-                    <MenuItem Header="Configure Default Behaviours" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -304,25 +304,25 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Subtitles -->
-                <TextBlock Text="Track Selection Behaviour:"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SubtitlesView_TrackSelectionBehaviour}"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBehaviourModeList, Converter={StaticResource subtitleBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBehaviour, Converter={StaticResource subtitleBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
-                <TextBlock Text="Burn-In Behaviour:"  Grid.Column="2" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SubtitlesView_BurnInBehaviour}"  Grid.Column="2" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <ComboBox Name="burninBehaviour"  Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBurnInBehaviourModeList, Converter={StaticResource subtitleBurnInBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBurnInBehaviour, Converter={StaticResource subtitleBurnInBehaviourConverter}}" Width="210" Margin="0,5,5,0">
                     <ComboBox.ToolTip>
                         <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Subtitles_BurnInBehaviourModes}" />
                     </ComboBox.ToolTip>
-                </ComboBox> 
-                <CheckBox Content="Add Closed Captions when available"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
+                </ComboBox>
+                <CheckBox Content="{x:Static Properties:ResourcesUI.SubtitlesView_AddCC}"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
-                <CheckBox Content="Add 'Foreign Audio Scan'"  Grid.Column="3" Grid.Row="3" Margin="0,5,0,0" 
+                <CheckBox Content="{x:Static Properties:ResourcesUI.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="3" Grid.Row="3" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
             </Grid>
 
-            <TextBlock Text="Choose Languages:" Margin="5,15,0,0"/>
+            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="5,15,0,0"/>
 
             <Grid Margin="20,5,0,0">
                 <Grid.ColumnDefinitions>
@@ -338,7 +338,7 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <TextBlock Text="Available Languages:" Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
                             <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120" />
@@ -346,14 +346,14 @@
 
                         <DockPanel Grid.Column="1" Margin="10,0,10,0">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                                <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                             </StackPanel>
                         </DockPanel>
 
                         <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="Chosen Languages:"  Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
                             <ListBox Name="selectedLangauges" ItemsSource="{Binding SubtitleBehaviours.SelectedLangauges}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120"

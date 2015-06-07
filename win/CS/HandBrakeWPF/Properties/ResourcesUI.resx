@@ -297,4 +297,355 @@
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
     <value>Update Selected Preset</value>
   </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>Add All Remaining Selected Languages</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>Add All Remaining Tracks</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>Add New Track</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>Add Track</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>Allow passthru of:</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>'Auto Passthru' Behaviour:</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>Available Languages:</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>Choose Languages:</value>
+  </data>
+  <data name="Shared_ChosenLangages" xml:space="preserve">
+    <value>Chosen Languages:</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>Codec</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>Configure Default Behaviours</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>Gain</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>Mixdown</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>Move Left</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>Move Right</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>Otherwise use fallback encoder:</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>Reload Defaults</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>Samplerate</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>Track Name:</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Track Selection Behaviour:</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>Track Setting Default Behaviour:</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>When 'Auto Passthru' is selected as the audio codec.</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>Cancel Action</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>Proceed</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>When Done Action</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>Error Details:</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>Custom:</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>Deinterlace</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>Denoise:</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>Detelecine:</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>Preset:</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>Tune:</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>Copy to Clipboard</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorphic:</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>Cropping</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+    <value>Display Width:</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Keep Aspect Ratio</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Modulus:</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="PictureSettingsView_ParH" xml:space="preserve">
+    <value>PAR Height:</value>
+  </data>
+  <data name="PictureSettingsView_ParW" xml:space="preserve">
+    <value>PAR Width:</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="PictureSettingsView_Source" xml:space="preserve">
+    <value>Source:</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>Choose titles:</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>Add to Queue</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>Advanced:</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>Audio:</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>Clear Completed</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>Clear Queue</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>Clear Selected</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>Destination: </value>
+  </data>
+  <data name="QueueView_DoNothing" xml:space="preserve">
+    <value>Do nothing</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>Export Queue</value>
+  </data>
+  <data name="QueueView_Hibernate" xml:space="preserve">
+    <value>Hibernate</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Import Queue</value>
+  </data>
+  <data name="QueueView_LockSystem" xml:space="preserve">
+    <value>Lock System</value>
+  </data>
+  <data name="QueueView_Logoff" xml:space="preserve">
+    <value>Log off</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>Picture Settings:</value>
+  </data>
+  <data name="QueueView_QuitHandBrake" xml:space="preserve">
+    <value>Quit HandBrake</value>
+  </data>
+  <data name="QueueView_Shutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>Source: </value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>Subtitles:</value>
+  </data>
+  <data name="QueueView_Suspend" xml:space="preserve">
+    <value>Suspend</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>Video:</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>When Done::</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>Duration:</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>Live Preview</value>
+  </data>
+  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
+    <value>Use system default player</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>Add Closed Captions when available</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>Add 'Foreign Audio Scan'</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>Burn-In Behaviour:</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>Track Selection Behaviour:</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>Reload Defaults</value>
+  </data>
+  <data name="SubtitlesView_ImportSRT" xml:space="preserve">
+    <value>Import SRT</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>Add All Remaining Closed Captions</value>
+  </data>
+  <data name="VideoView_2Pass" xml:space="preserve">
+    <value>2-Pass Encoding</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>Avg Bitrate (kbps):</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>Video Codec:</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>Constant Framerate</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>Constant Quality:</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>Encoder Level</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>Encoder Preset:</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>Encoder Profile:</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>Encoder Tune:</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>Extra Options:</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>Fast Decode</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>Framerate (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>Optimise Video:</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>Peak Framerate</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="VideoView_SameAsSource" xml:space="preserve">
+    <value>Same as source</value>
+  </data>
+  <data name="VideoView_TurboFirstPass" xml:space="preserve">
+    <value>Turbo first pass</value>
+  </data>
+  <data name="VideoView_UseAdvancedTab" xml:space="preserve">
+    <value>Use Advanced Tab instead</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>Variable Framerate</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
 </root>

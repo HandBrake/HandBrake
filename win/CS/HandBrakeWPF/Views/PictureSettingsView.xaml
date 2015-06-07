@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-             xmlns:cal="http://www.caliburnproject.org">
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
@@ -15,12 +16,6 @@
     </UserControl.Resources>
 
     <Border Background="Transparent">
-        <Border.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Show Still Preview (Experimental)" cal:Message.Attach="[Event Click] = [Action PreviewImage]" Visibility="Visible" />
-            </ContextMenu>
-        </Border.ContextMenu  >
-
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
             <Grid.ColumnDefinitions>
@@ -36,25 +31,25 @@
 
             <!-- Size Panel-->
             <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.RowSpan="1" >
-                <Label Content="Size" FontWeight="Bold" />
+                <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Size}" FontWeight="Bold" />
 
                 <!-- Row 1-->
                 <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                    <Label Content="Source:" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Source}" />
                     <Label Content="{Binding SourceInfo}" Name="sourceResolution"/>
                 </StackPanel>
 
                 <!-- Row 2-->
                 <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                    <Label Content="Width:" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Width}" />
                     <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}"
                                              Minimum="0" Width="60"  />
-                    <Label Content="Height:" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Height}" />
                     <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                              Minimum="0" Width="60"  />
-                    <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}"
+                    <CheckBox Content="{x:Static Properties:ResourcesUI.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}"
                           Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" 
                           VerticalAlignment="Center" Margin="5,0,0,0" />
                 </StackPanel>
@@ -71,8 +66,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="Anamorphic:" Grid.Row="0" Grid.Column="0" />
-                    <Label Content="Modulus:" Grid.Row="1" Grid.Column="0" 
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Anamorphic}" Grid.Row="0" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Modulus}" Grid.Row="1" Grid.Column="0" 
                        Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
 
                     <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
@@ -94,9 +89,9 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="Display Width:" Grid.Row="0" Grid.Column="0" />
-                    <Label Content="PAR Width:" Grid.Row="1" Grid.Column="0" />
-                    <Label Content="PAR Height:" Grid.Row="2" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_DisplayWitdh}" Grid.Row="0" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_ParW}" Grid.Row="1" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_ParH}" Grid.Row="2" Grid.Column="0" />
 
                     <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="False" />
@@ -110,9 +105,9 @@
 
             <!-- Crop Panel -->
             <StackPanel Name="CropPanel" Margin="15,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
-                <Label Content="Cropping" FontWeight="Bold" />
-                <RadioButton Content="Automatic" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
-                <RadioButton Content="Custom" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0" />
+                <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Cropping}" FontWeight="Bold" />
+                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
+                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0" />
 
                 <Grid Margin="0,10,0,0">
                     <Grid.RowDefinitions>
@@ -131,10 +126,10 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="Top" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
-                    <Label Content="Bottom" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
-                    <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
-                    <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Top}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Bottom}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Left}" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
@@ -154,7 +149,7 @@
 
             <!-- Preview Panel -->
             <StackPanel Name="PreviewPanel" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
-                <Label Content="Output" FontWeight="Bold" />
+                <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Output}" FontWeight="Bold" />
 
                 <Grid Margin="5,0,0,0">
                     <Grid.RowDefinitions>

@@ -35,11 +35,11 @@
         </Grid.RowDefinitions>
 
         <!--  Header  -->
-        <TextBlock Text="Add to Queue" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:ResourcesUI.QueueSelectionView_Title}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
 
         <!-- Text -->
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,0,10,0">
-            <TextBlock Text="Choose titles: " />
+            <TextBlock Text="{x:Static Properties:ResourcesUI.QueueSelectionView_ChooseTitles}" />
         </StackPanel>
 
         <!-- Selection -->
@@ -116,13 +116,13 @@
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
-                    Content="Cancel"
+                    Content="{x:Static Properties:ResourcesUI.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Add]"
-                    Content="Add"
+                    Content="{x:Static Properties:ResourcesUI.Generic_Add}"
                     IsDefault="True"
                     Padding="8,2" />
         </Grid>
