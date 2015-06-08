@@ -198,12 +198,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         char *str = hb_value_get_string_xform(value);
 
         // here's where the strings are passed to libx265 for parsing
-        if (param_parse(param, key, str))
-        {
-            free(str);
-            hb_dict_free(&x265_opts);
-            goto fail;
-        }
+        // unknown options or bad values are non-fatal, see encx264.c
+        param_parse(param, key, str);
         free(str);
     }
     hb_dict_free(&x265_opts);
