@@ -188,11 +188,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     while ((entry = hb_dict_next(x265_opts, entry)) != NULL)
     {
         // here's where the strings are passed to libx265 for parsing
-        if (param_parse(param, entry->key, entry->value))
-        {
-            hb_dict_free(&x265_opts);
-            goto fail;
-        }
+        // unknown options or bad values are non-fatal, see encx264.c
+        param_parse(param, entry->key, entry->value);
     }
     hb_dict_free(&x265_opts);
 
