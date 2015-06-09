@@ -2834,9 +2834,10 @@ int global_verbosity_level; //Necessary for hb_deep_log
  *********************************************************************/
 void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va_list args)
 {
-    char        string[362]; /* 360 chars + \n + \0 */
+    char      * string;
     time_t      _now;
     struct tm * now;
+    char        preamble[362];
 
     if( !getenv( "HB_DEBUG" ) )
     {
@@ -2856,24 +2857,23 @@ void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va
     if ( prefix && *prefix )
     {
         // limit the prefix length
-        snprintf( string, 40, "[%02d:%02d:%02d] %s ",
-                 now->tm_hour, now->tm_min, now->tm_sec, prefix );
+        snprintf( preamble, 361, "[%02d:%02d:%02d] %s %s\n",
+                 now->tm_hour, now->tm_min, now->tm_sec, prefix, log );
     }
     else
     {
-        sprintf( string, "[%02d:%02d:%02d] ",
-                 now->tm_hour, now->tm_min, now->tm_sec );
+        snprintf( preamble, 361, "[%02d:%02d:%02d] %s\n",
+                  now->tm_hour, now->tm_min, now->tm_sec, log );
     }
-    int end = strlen( string );
 
-    /* Convert the message to a string */
-    vsnprintf( string + end, 361 - end, log, args );
-
-    /* Add the end of line */
-    strcat( string, "\n" );
+    string = hb_strdup_vaprintf(preamble, args);
 
 #ifdef SYS_MINGW
-    wchar_t     wstring[2*362]; /* 360 chars + \n + \0 */
+    wchar_t     *wstring; /* 360 chars + \n + \0 */
+    int          len;
+
+    len = strlen(string) + 1;
+    wstring = malloc(2 * len);
 
     // Convert internal utf8 to "console output code page".
     //
@@ -2881,14 +2881,27 @@ void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va
     // printf would automatically convert a wide character string to
     // the current "console output code page" when using the "%ls" format
     // specifier.  But it doesn't... so we must do it.
-    if (!MultiByteToWideChar(CP_UTF8, 0, string, -1, wstring, sizeof(wstring)))
+    if (!MultiByteToWideChar(CP_UTF8, 0, string, -1, wstring, len))
+    {
+        free(string);
+        free(wstring);
         return;
-    if (!WideCharToMultiByte(GetConsoleOutputCP(), 0, wstring, -1, string, sizeof(string), NULL, NULL))
+    }
+    free(string);
+    string = malloc(2 * len);
+    if (!WideCharToMultiByte(GetConsoleOutputCP(), 0, wstring, -1, string, len,
+                             NULL, NULL))
+    {
+        free(string);
+        free(wstring);
         return;
+    }
+    free(wstring);
 #endif
 
     /* Print it */
     fprintf( stderr, "%s", string );
+    free(string);
 }
 
 /**********************************************************************
@@ -4243,13 +4256,13 @@ void hb_metadata_rem_coverart( hb_metadata_t *metadata, int idx )
     }
 }
 
-char * hb_strdup_printf( const char * fmt, ... )
+char * hb_strdup_vaprintf( const char * fmt, va_list args )
 {
     int       len;
-    va_list   ap;
     int       size = 256;
     char    * str;
     char    * tmp;
+    va_list   copy;
 
     str = malloc( size );
     if ( str == NULL )
@@ -4257,10 +4270,12 @@ char * hb_strdup_printf( const char * fmt, ... )
 
     while (1)
     {
+        // vsnprintf modifies it's va_list.  Since we may need to do this
+        // more than once, use a copy of the va_list.
+        va_copy(copy, args);
+
         /* Try to print in the allocated space. */
-        va_start( ap, fmt );
-        len = vsnprintf( str, size, fmt, ap );
-        va_end( ap );
+        len = vsnprintf( str, size, fmt, copy );
 
         /* If that worked, return the string. */
         if ( len > -1 && len < size )
@@ -4282,6 +4297,20 @@ char * hb_strdup_printf( const char * fmt, ... )
         else
             str = tmp;
     }
+
+    return str;
+}
+
+char * hb_strdup_printf( const char * fmt, ... )
+{
+    char    * str;
+    va_list   args;
+
+    va_start( args, fmt );
+    str = hb_strdup_vaprintf( fmt, args );
+    va_end( args );
+
+    return str;
 }
 
 char * hb_strncat_dup( const char * s1, const char * s2, size_t n )
