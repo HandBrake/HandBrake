@@ -798,18 +798,19 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 return -1;
             }
 
-            hb_job_t   * job = NULL;
-            job = hb_dict_to_job(h, job_dict);
+            char * json_job;
+            json_job = hb_value_get_json(job_dict);
             hb_value_free(&job_dict);
-            if (job == NULL)
+            if (json_job == NULL)
             {
                 fprintf(stderr, "Error in setting up job! Aborting.\n");
                 die = 1;
                 return -1;
             }
 
-            hb_add( h, job );
-            hb_job_close( &job );
+
+            hb_add_json(h, json_job);
+            free(json_job);
             hb_start( h );
             break;
         }
