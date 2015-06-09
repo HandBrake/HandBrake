@@ -101,6 +101,8 @@ static void work_func( void * _work )
         // because the default values for the job come from the title.
         if (job->json != NULL)
         {
+            hb_deep_log(1, "json job:\n%s", job->json);
+
             // Perform title scan for json job
             hb_json_job_scan(job->h, job->json);
 
