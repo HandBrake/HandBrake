@@ -915,7 +915,7 @@ static int avformatInit( hb_mux_object_t * m )
     time_t now = time(NULL);
     struct tm * now_utc = gmtime(&now);
     char now_8601[24];
-    strftime(now_8601, sizeof(now_8601), "%FT%TZ", now_utc);
+    strftime(now_8601, sizeof(now_8601), "%Y-%m-%dT%H:%M:%SZ", now_utc);
     av_dict_set(&m->oc->metadata, "creation_time", now_8601, 0);
 
     ret = avformat_write_header(m->oc, &av_opts);
