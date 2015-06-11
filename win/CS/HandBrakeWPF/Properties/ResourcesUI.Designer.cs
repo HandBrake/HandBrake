@@ -1393,6 +1393,105 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose Disc to Scan.
+        /// </summary>
+        public static string SourceSelection_ChooseDisc {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseDisc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose File to Scan.
+        /// </summary>
+        public static string SourceSelection_ChooseFile {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose Folder to Scan.
+        /// </summary>
+        public static string SourceSelection_ChooseFolder {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optionally choose a specific title: .
+        /// </summary>
+        public static string SourceSelection_ChooseSpecificTitle {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseSpecificTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Then choose the video(s) you&apos;d like to encode: .
+        /// </summary>
+        public static string SourceSelection_ChooseVideo {
+            get {
+                return ResourceManager.GetString("SourceSelection_ChooseVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string SourceSelection_File {
+            get {
+                return ResourceManager.GetString("SourceSelection_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder (Batch Scan).
+        /// </summary>
+        public static string SourceSelection_FolderBatchScan {
+            get {
+                return ResourceManager.GetString("SourceSelection_FolderBatchScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open this DVD or Bluray Drive.
+        /// </summary>
+        public static string SourceSelection_OpenDVDBluray {
+            get {
+                return ResourceManager.GetString("SourceSelection_OpenDVDBluray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a folder with one or more files..
+        /// </summary>
+        public static string SourceSelection_OpenFolderWIth {
+            get {
+                return ResourceManager.GetString("SourceSelection_OpenFolderWIth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a single video file..
+        /// </summary>
+        public static string SourceSelection_SingleVideoFile {
+            get {
+                return ResourceManager.GetString("SourceSelection_SingleVideoFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source Selection.
+        /// </summary>
+        public static string SourceSelection_SourceSelection {
+            get {
+                return ResourceManager.GetString("SourceSelection_SourceSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duration:.
         /// </summary>
         public static string StaticPreviewView_Duration {

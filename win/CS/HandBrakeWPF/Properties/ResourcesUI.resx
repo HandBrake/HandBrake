@@ -648,4 +648,37 @@
   <data name="VideoView_Video" xml:space="preserve">
     <value>Video</value>
   </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>Source Selection</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>Optionally choose a specific title: </value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>Then choose the video(s) you'd like to encode: </value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>Choose Folder to Scan</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>Choose File to Scan</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Open this DVD or Bluray Drive</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>Open a single video file.</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>Choose Disc to Scan</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>Folder (Batch Scan)</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>Open a folder with one or more files.</value>
+  </data>
 </root>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-        >
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
 
     <Grid VerticalAlignment="Stretch">
         
@@ -28,19 +28,19 @@
 
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,8,0,0">
-                <TextBlock Text="Source Selection" FontSize="26" FontFamily="Segoe UI Light" />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SourceSelection}" FontSize="26" FontFamily="Segoe UI Light" />
             </StackPanel>
 
             <!-- Title Specific Scan -->
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="20,15,0,0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Optionally choose a specific title: " />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseSpecificTitle}" />
 
                     <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0"
                                 Minimum="0" Maximum="5000" Number="{Binding TitleSpecificScan, Mode=TwoWay}" />
                 </StackPanel>
 
-                <TextBlock Text="Then choose the video(s) you'd like to encode: " Margin="0,10,0,0" />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseVideo}" Margin="0,10,0,0" />
             </StackPanel>
 
             <!-- Source Type -->
@@ -53,26 +53,26 @@
                 </Grid.RowDefinitions>
 
                 <!-- Ctrl + R -->
-                <Button Grid.Row="0"  AutomationProperties.Name="Choose Folder to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+                <Button Grid.Row="0"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
                     Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
 
                     <StackPanel Orientation="Horizontal" MinWidth="100">
                         <Image Source="../Views/Images/folder32.png" Width="32" />
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Folder (Batch Scan)" VerticalAlignment="Center" Margin="5,0,0,0" />
-                            <TextBlock Text="Open a folder with one or more files." VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenFolderWIth}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </Button>
 
                 <!--Ctrl + F-->
-                <Button Grid.Row="1"  AutomationProperties.Name="Choose File to Scan" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+                <Button Grid.Row="1"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
                     Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" MinWidth="100">
                         <Image Source="../Views/Images/File32.png" Width="32" />
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="File" VerticalAlignment="Center" Margin="5,0,0,0" />
-                            <TextBlock Text="Open a single video file." VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SingleVideoFile}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </Button>
@@ -83,12 +83,12 @@
                             <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
                                 cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
                                 Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
-                                Tag="{Binding}" AutomationProperties.Name="Choose Disc to Scan">
+                                Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseDisc}">
                                 <StackPanel Orientation="Horizontal" MinWidth="100">
                                     <Image Source="../Views/Images/Disc.png" Width="32" />
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                                        <TextBlock Text="Open this DVD or Bluray Drive" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenDVDBluray}" VerticalAlignment="Center" Margin="5,0,0,0" />
                                     </StackPanel>
                                 </StackPanel>
                             </Button>
