@@ -411,7 +411,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
             this.UpdatePreviewFrame();
-            this.DisplayName = "Picture Preview";
+            this.DisplayName = Resources.StaticPreviewViewModel_Title;
             this.Title = Resources.Preview;
             this.ScannedSource = scannedSource;
         }
@@ -517,13 +517,13 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception)
             {
                 this.IsEncoding = false;
-                this.errorService.ShowMessageBox("Unable to delete previous preview file. You may need to restart the application.", 
+                this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview, 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
             {
-                this.errorService.ShowMessageBox("You must first scan a source and setup your encode before creating a preview.", 
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_ScanFirst, 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -604,7 +604,7 @@ namespace HandBrakeWPF.ViewModels
                             }
                             else
                             {
-                                this.errorService.ShowMessageBox("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\")", 
+                                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToFindVLC, 
                                                                  Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
                         }
@@ -618,7 +618,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else
                 {
-                    this.errorService.ShowMessageBox("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", 
+                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToPlayFile, 
                                  Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
@@ -635,7 +635,7 @@ namespace HandBrakeWPF.ViewModels
             // Make sure we are not already encoding and if we are then display an error.
             if (encodeService.IsEncoding)
             {
-                this.errorService.ShowMessageBox("Handbrake is already encoding a video! Only one file can be encoded at any one time.", 
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding, 
                                Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }

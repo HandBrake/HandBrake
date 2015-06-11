@@ -21,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Scan.Model;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -140,8 +141,8 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 throw new GeneralApplicationException(
-                    "Unable to save Chapter Makrers file! ",
-                    "Chapter marker names will NOT be saved in your encode.",
+                    Resources.ChaptersViewModel_UnableToExportChaptersWarning,
+                    Resources.ChaptersViewModel_UnableToExportChaptersMsg,
                     exc);
             }
         }

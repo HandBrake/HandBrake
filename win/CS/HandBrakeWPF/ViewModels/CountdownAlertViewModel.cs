@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Windows.Threading;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -73,7 +74,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.Format("The following action '{0}' will occur in {1} seconds.", action, CountdownTime - this.Ticks);
+                return string.Format(Resources.CountdownAlertViewModel_NoticeMessage, action, CountdownTime - this.Ticks);
             }
         }
 

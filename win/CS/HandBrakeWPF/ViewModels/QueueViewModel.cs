@@ -93,9 +93,9 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;
             this.errorService = errorService;
-            this.Title = "Queue";
-            this.JobsPending = "No encodes pending";
-            this.JobStatus = "There are no jobs currently encoding";
+            this.Title = Resources.QueueViewModel_Queue;
+            this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
+            this.JobStatus = Resources.QueueViewModel_NoJobsPending;
             this.SelectedItems = new BindingList<QueueTask>();
         }
 
@@ -208,7 +208,7 @@ namespace HandBrakeWPF.ViewModels
         public void Clear()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                "Are you sure you wish to clear the queue?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 this.queueProcessor.Clear();
@@ -238,7 +238,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Setup the window to the correct state.
             this.IsEncoding = this.queueProcessor.EncodeService.IsEncoding;
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
 
             base.OnLoad();
         }
@@ -250,11 +250,11 @@ namespace HandBrakeWPF.ViewModels
         {
             this.queueProcessor.Pause();
 
-            this.JobStatus = "Queue Paused";
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueuePending;
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsEncoding = false;
 
-            MessageBox.Show("The Queue has been paused. The currently running job will run to completion and no further jobs will start.", "Queue", 
+            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue, 
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -265,7 +265,7 @@ namespace HandBrakeWPF.ViewModels
         {
             MessageBoxResult result =
                   this.errorService.ShowMessageBox(
-                      "Are you sure you want to delete the selected jobs?",
+                      Resources.QueueViewModel_DelSelectedJobConfirmation,
                       Resources.Question,
                       MessageBoxButton.YesNo,
                       MessageBoxImage.Question);
@@ -300,7 +300,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
-                        "This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?", 
+                        Resources.QueueViewModel_JobCurrentlyRunningWarning, 
                         Resources.Warning, 
                         MessageBoxButton.YesNo, 
                         MessageBoxImage.Question);
@@ -327,7 +327,7 @@ namespace HandBrakeWPF.ViewModels
         {
             task.Status = QueueItemStatus.Waiting;
             this.queueProcessor.BackupQueue(null);
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
         }
 
         /// <summary>
@@ -338,12 +338,12 @@ namespace HandBrakeWPF.ViewModels
             if (this.queueProcessor.Count == 0)
             {
                 this.errorService.ShowMessageBox(
-                    "There are no pending jobs.", Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    Resources.QueueViewModel_NoPendingJobs, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            this.JobStatus = "Queue Started";
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueueStarted;
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsEncoding = true;
 
             this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
@@ -388,7 +388,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                "Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window.", 
+                Resources.QueueViewModel_EditConfrimation, 
                 "Modify Job?", 
                 MessageBoxButton.YesNo, 
                 MessageBoxImage.Question);
@@ -425,8 +425,8 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
 
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
-            this.JobStatus = "Queue Ready";
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueueReady;
 
             base.OnActivate();
         }
@@ -463,7 +463,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.JobStatus =
                     string.Format(
-                        "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}", 
+                        Resources.QueueViewModel_QueueStatusDisplay, 
                         e.Task, 
                         e.TaskCount, 
                         e.PercentComplete, 
@@ -485,11 +485,11 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueManager_QueueChanged(object sender, EventArgs e)
         {
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
 
             if (!queueProcessor.IsProcessing)
             {
-                this.JobStatus = "Queue Not Running";
+                this.JobStatus = Resources.QueueViewModel_QueueNotRunning;
             }
         }
 
@@ -504,8 +504,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void queueProcessor_QueueCompleted(object sender, EventArgs e)
         {
-            this.JobStatus = "Queue Completed";
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueueCompleted;
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsEncoding = false;
         }
 
@@ -522,7 +522,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!this.queueProcessor.IsProcessing)
             {
-                this.JobStatus = "Last Queued Job Finished";
+                this.JobStatus = Resources.QueueViewModel_LastJobFinished;
             }
         }
 
@@ -537,8 +537,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
         {
-            this.JobStatus = "Queue Started";
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueueStarted;
+            this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsEncoding = true;
         }
 

@@ -95,6 +95,51 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Custom Width or Height fields must be filled in for the &apos;Custom&apos; option..
+        /// </summary>
+        public static string AddPresetViewModel_CustomWidthHeightFieldsRequired {
+            get {
+                return ResourceManager.GetString("AddPresetViewModel_CustomWidthHeightFieldsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Preset must have a Name. Please fill out the Preset Name field..
+        /// </summary>
+        public static string AddPresetViewModel_PresetMustProvideName {
+            get {
+                return ResourceManager.GetString("AddPresetViewModel_PresetMustProvideName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Preset with this name already exists. Would you like to overwrite it?.
+        /// </summary>
+        public static string AddPresetViewModel_PresetWithSameNameOverwriteWarning {
+            get {
+                return ResourceManager.GetString("AddPresetViewModel_PresetWithSameNameOverwriteWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to add preset.
+        /// </summary>
+        public static string AddPresetViewModel_UnableToAddPreset {
+            get {
+                return ResourceManager.GetString("AddPresetViewModel_UnableToAddPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must first scan a source to use the &apos;Source Maximum&apos; Option..
+        /// </summary>
+        public static string AddPresetViewModel_YouMustFirstScanSource {
+            get {
+                return ResourceManager.GetString("AddPresetViewModel_YouMustFirstScanSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to x264 has a variety of algorithms to decide when to use B-frames and how many to use.
         ///
         ///Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.
@@ -358,11 +403,110 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio Defaults.
+        /// </summary>
+        public static string AudioViewModel_AudioDefaults {
+            get {
+                return ResourceManager.GetString("AudioViewModel_AudioDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Tracks.
+        /// </summary>
+        public static string AudioViewModel_AudioTracks {
+            get {
+                return ResourceManager.GetString("AudioViewModel_AudioTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure Defaults.
+        /// </summary>
+        public static string AudioViewModel_ConfigureDefaults {
+            get {
+                return ResourceManager.GetString("AudioViewModel_ConfigureDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Back To Tracks.
+        /// </summary>
+        public static string AudioViewModel_SwitchBackToTracks {
+            get {
+                return ResourceManager.GetString("AudioViewModel_SwitchBackToTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter marker names will NOT be saved in your encode..
+        /// </summary>
+        public static string ChaptersViewModel_UnableToExportChaptersMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to save Chapter Makrers file! .
+        /// </summary>
+        public static string ChaptersViewModel_UnableToExportChaptersWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following action &apos;{0}&apos; will occur in {1} seconds..
+        /// </summary>
+        public static string CountdownAlertViewModel_NoticeMessage {
+            get {
+                return ResourceManager.GetString("CountdownAlertViewModel_NoticeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If the problem presists, please try restarting HandBrake..
+        /// </summary>
+        public static string ErrorViewModel_IfTheProblemPersists {
+            get {
+                return ResourceManager.GetString("ErrorViewModel_IfTheProblemPersists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no further information available about this error..
+        /// </summary>
+        public static string ErrorViewModel_NoFurtherInformation {
+            get {
+                return ResourceManager.GetString("ErrorViewModel_NoFurtherInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An Unknown Error has occured..
+        /// </summary>
+        public static string ErrorViewModel_UnknownError {
+            get {
+                return ResourceManager.GetString("ErrorViewModel_UnknownError", resourceCulture);
             }
         }
         
@@ -840,6 +984,60 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version..
+        /// </summary>
+        public static string OptionsViewModel_64bitAvailable {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_64bitAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A New Update is Available!.
+        /// </summary>
+        public static string OptionsViewModel_NewUpdate {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_NewUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no new updates at this time..
+        /// </summary>
+        public static string OptionsViewModel_NoNewUpdates {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_NoNewUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Downloaded.
+        /// </summary>
+        public static string OptionsViewModel_UpdateDownloaded {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_UpdateDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Failed. You can try downloading the update from https://handbrake.fr.
+        /// </summary>
+        public static string OptionsViewModel_UpdateFailed {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_UpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Service Unavailable. You can try downloading the update from https://handbrake.fr.
+        /// </summary>
+        public static string OptionsViewModel_UpdateServiceUnavailable {
+            get {
+                return ResourceManager.GetString("OptionsViewModel_UpdateServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite?.
         /// </summary>
         public static string Overwrite {
@@ -854,6 +1052,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettings_OutputResolution {
             get {
                 return ResourceManager.GetString("PictureSettings_OutputResolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage: {0}x{1}, Display: {2}x{3}.
+        /// </summary>
+        public static string PictureSettingsViewModel_StorageDisplayLabel {
+            get {
+                return ResourceManager.GetString("PictureSettingsViewModel_StorageDisplayLabel", resourceCulture);
             }
         }
         
@@ -960,11 +1167,238 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add to Queue.
+        /// </summary>
+        public static string QueueSelectionViewModel_AddToQueue {
+            get {
+                return ResourceManager.GetString("QueueSelectionViewModel_AddToQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to clear the queue?.
+        /// </summary>
+        public static string QueueViewModel_ClearQueueConfrimation {
+            get {
+                return ResourceManager.GetString("QueueViewModel_ClearQueueConfrimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected jobs?.
+        /// </summary>
+        public static string QueueViewModel_DelSelectedJobConfirmation {
+            get {
+                return ResourceManager.GetString("QueueViewModel_DelSelectedJobConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window..
+        /// </summary>
+        public static string QueueViewModel_EditConfrimation {
+            get {
+                return ResourceManager.GetString("QueueViewModel_EditConfrimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?.
+        /// </summary>
+        public static string QueueViewModel_JobCurrentlyRunningWarning {
+            get {
+                return ResourceManager.GetString("QueueViewModel_JobCurrentlyRunningWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} jobs pending.
+        /// </summary>
+        public static string QueueViewModel_JobsPending {
+            get {
+                return ResourceManager.GetString("QueueViewModel_JobsPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Queued Job Finished.
+        /// </summary>
+        public static string QueueViewModel_LastJobFinished {
+            get {
+                return ResourceManager.GetString("QueueViewModel_LastJobFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No encodes pending.
+        /// </summary>
+        public static string QueueViewModel_NoEncodesPending {
+            get {
+                return ResourceManager.GetString("QueueViewModel_NoEncodesPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no jobs currently encoding.
+        /// </summary>
+        public static string QueueViewModel_NoJobsPending {
+            get {
+                return ResourceManager.GetString("QueueViewModel_NoJobsPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no pending jobs..
+        /// </summary>
+        public static string QueueViewModel_NoPendingJobs {
+            get {
+                return ResourceManager.GetString("QueueViewModel_NoPendingJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue.
+        /// </summary>
+        public static string QueueViewModel_Queue {
+            get {
+                return ResourceManager.GetString("QueueViewModel_Queue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Completed.
+        /// </summary>
+        public static string QueueViewModel_QueueCompleted {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueueCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Not Running.
+        /// </summary>
+        public static string QueueViewModel_QueueNotRunning {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueueNotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Queue has been paused. The currently running job will run to completion and no further jobs will start..
+        /// </summary>
+        public static string QueueViewModel_QueuePauseNotice {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueuePauseNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Paused.
+        /// </summary>
+        public static string QueueViewModel_QueuePending {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueuePending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Ready.
+        /// </summary>
+        public static string QueueViewModel_QueueReady {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueueReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Started.
+        /// </summary>
+        public static string QueueViewModel_QueueStarted {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueueStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\:mm\:ss}.
+        /// </summary>
+        public static string QueueViewModel_QueueStatusDisplay {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueueStatusDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
+        ///Are you sure you wish to exit HandBrake?.
+        /// </summary>
+        public static string ShellViewModel_CanClose {
+            get {
+                return ResourceManager.GetString("ShellViewModel_CanClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         public static string State_Ready {
             get {
                 return ResourceManager.GetString("State_Ready", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to delete previous preview file. You may need to restart the application..
+        /// </summary>
+        public static string StaticPreview_UnableToDeletePreview {
+            get {
+                return ResourceManager.GetString("StaticPreview_UnableToDeletePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Handbrake is already encoding a video! Only one file can be encoded at any one time..
+        /// </summary>
+        public static string StaticPreviewViewModel_AlreadyEncoding {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_AlreadyEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must first scan a source and setup your encode before creating a preview..
+        /// </summary>
+        public static string StaticPreviewViewModel_ScanFirst {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_ScanFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Picture Preview.
+        /// </summary>
+        public static string StaticPreviewViewModel_Title {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to detect VLC Player. 
+        ///Please make sure VLC is installed and the directory specified in HandBrake&apos;s options is correct. (See: &quot;Tools Menu &gt; Options &gt; Picture Tab&quot;).
+        /// </summary>
+        public static string StaticPreviewViewModel_UnableToFindVLC {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_UnableToFindVLC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details..
+        /// </summary>
+        public static string StaticPreviewViewModel_UnableToPlayFile {
+            get {
+                return ResourceManager.GetString("StaticPreviewViewModel_UnableToPlayFile", resourceCulture);
             }
         }
         
@@ -977,6 +1411,51 @@ namespace HandBrakeWPF.Properties {
         public static string Subtitles_BurnInBehaviourModes {
             get {
                 return ResourceManager.GetString("Subtitles_BurnInBehaviourModes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure Defaults.
+        /// </summary>
+        public static string SubtitlesViewModel_ConfigureDefaults {
+            get {
+                return ResourceManager.GetString("SubtitlesViewModel_ConfigureDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle Defaults.
+        /// </summary>
+        public static string SubtitlesViewModel_SubDefaults {
+            get {
+                return ResourceManager.GetString("SubtitlesViewModel_SubDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle Tracks.
+        /// </summary>
+        public static string SubtitlesViewModel_SubTracks {
+            get {
+                return ResourceManager.GetString("SubtitlesViewModel_SubTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch Back To Tracks.
+        /// </summary>
+        public static string SubtitlesViewModel_SwitchToTracks {
+            get {
+                return ResourceManager.GetString("SubtitlesViewModel_SwitchToTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown Error.
+        /// </summary>
+        public static string UnknownError {
+            get {
+                return ResourceManager.GetString("UnknownError", resourceCulture);
             }
         }
         

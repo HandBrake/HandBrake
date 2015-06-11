@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -199,7 +200,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowAudioDefaultsPanel ? "Audio Defaults" : "Audio Tracks";
+                return this.ShowAudioDefaultsPanel ? Resources.AudioViewModel_AudioDefaults : Resources.AudioViewModel_AudioTracks;
             }
         }
 
@@ -210,7 +211,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowAudioDefaultsPanel ? "Switch Back To Tracks" : "Configure Defaults";
+                return this.ShowAudioDefaultsPanel ? Resources.AudioViewModel_SwitchBackToTracks : Resources.AudioViewModel_ConfigureDefaults;
             }
         }
 

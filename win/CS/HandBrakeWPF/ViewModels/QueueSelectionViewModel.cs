@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Scan.Model;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -54,7 +55,7 @@ namespace HandBrakeWPF.ViewModels
         public QueueSelectionViewModel(IErrorService errorService)
         {
             this.errorService = errorService;
-            this.Title = "Add to Queue";
+            this.Title = Resources.QueueSelectionViewModel_AddToQueue;
             this.TitleList = new BindingList<SelectionTitle>();
             this.OrderedByTitle = true;
         }

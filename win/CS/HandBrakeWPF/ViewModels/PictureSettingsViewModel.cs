@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -932,7 +933,7 @@ namespace HandBrakeWPF.ViewModels
             double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
             this.DisplaySize = this.sourceResolution == null || this.sourceResolution.IsEmpty
                            ? string.Empty
-                           : string.Format("Storage: {0}x{1}, Display: {2}x{3}", result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
+                           : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
 
             // Step 4, Force an update on all the UI elements.
             this.NotifyOfPropertyChange(() => this.Width);

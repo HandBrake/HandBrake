@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -1528,17 +1529,17 @@ namespace HandBrakeWPF.ViewModels
             this.updateInfo = info;
             if (info.NewVersionAvailable)
             {
-                this.UpdateMessage = "A New Update is Available!";
+                this.UpdateMessage = Resources.OptionsViewModel_NewUpdate;
                 this.UpdateAvailable = true;
             }
             else if (Environment.Is64BitOperatingSystem && !System.Environment.Is64BitProcess)
             {
-                this.UpdateMessage = "Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.";
+                this.UpdateMessage = Resources.OptionsViewModel_64bitAvailable;
                 this.UpdateAvailable = true;
             }
             else
             {
-                this.UpdateMessage = "There are no new updates at this time.";
+                this.UpdateMessage = Resources.OptionsViewModel_NoNewUpdates;
                 this.UpdateAvailable = false;
             }
         }
@@ -1554,7 +1555,7 @@ namespace HandBrakeWPF.ViewModels
             if (info.TotalBytes == 0 || info.BytesRead == 0)
             {
                 this.UpdateAvailable = false;
-                this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Service Unavailable. You can try downloading the update from https://handbrake.fr";
+                this.UpdateMessage = info.WasSuccessful ? Resources.OptionsViewModel_UpdateDownloaded : Resources.OptionsViewModel_UpdateServiceUnavailable;
                 return;
             }
 
@@ -1575,7 +1576,7 @@ namespace HandBrakeWPF.ViewModels
         private void DownloadComplete(DownloadStatus info)
         {
             this.UpdateAvailable = false;
-            this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Failed. You can try downloading the update from https://handbrake.fr";
+            this.UpdateMessage = info.WasSuccessful ? Resources.OptionsViewModel_UpdateDownloaded : Resources.OptionsViewModel_UpdateFailed;
 
             Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
             Execute.OnUIThread(() => Application.Current.Shutdown());

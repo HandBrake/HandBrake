@@ -236,7 +236,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     errorService.ShowMessageBox(
-                        "An Encode is currently running. Exiting HandBrake will stop this encode.\nAre you sure you wish to exit HandBrake?",
+                        Resources.ShellViewModel_CanClose,
                         Resources.Warning,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);

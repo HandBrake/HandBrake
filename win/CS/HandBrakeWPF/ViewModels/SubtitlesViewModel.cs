@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -146,7 +147,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowDefaultsPanel ? "Subtitle Defaults" : "Subtitle Tracks";
+                return this.ShowDefaultsPanel ? Resources.SubtitlesViewModel_SubDefaults : Resources.SubtitlesViewModel_SubTracks;
             }
         }
 
@@ -157,7 +158,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowDefaultsPanel ? "Switch Back To Tracks" : "Configure Defaults";
+                return this.ShowDefaultsPanel ? Resources.SubtitlesViewModel_SwitchToTracks : Resources.SubtitlesViewModel_ConfigureDefaults;
             }
         }
 

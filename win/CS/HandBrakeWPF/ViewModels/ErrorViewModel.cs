@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Windows;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -45,9 +46,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public ErrorViewModel()
         {
-            this.Title = "Error";
-            this.ErrorMessage = "An Unknown Error has occured.";
-            this.Details = "There is no further information available about this error.";
+            this.Title = Resources.Error;
+            this.ErrorMessage = Resources.ErrorViewModel_UnknownError;
+            this.Details = Resources.ErrorViewModel_NoFurtherInformation;
         }
 
         #endregion
@@ -61,7 +62,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(this.details) ? "There is no further information available about this error." : this.details;
+                return string.IsNullOrEmpty(this.details) ? Resources.ErrorViewModel_NoFurtherInformation : this.details;
             }
 
             set
@@ -95,7 +96,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(this.solution) ? "If the problem presists, please try restarting HandBrake." : this.solution;
+                return string.IsNullOrEmpty(this.solution) ? Resources.ErrorViewModel_IfTheProblemPersists : this.solution;
             }
 
             set
