@@ -149,6 +149,7 @@ static options_map_t d_logging_opts[] =
     {"0", "0", 0, "0"},
     {"1", "1", 1, "1"},
     {"2", "2", 2, "2"},
+    {"3", "3", 3, "3"},
 };
 combo_opts_t logging_opts =
 {
@@ -2863,6 +2864,14 @@ ghb_backend_init(gint debug)
     h_scan = hb_init( debug, 0 );
     h_queue = hb_init( debug, 0 );
     h_live = hb_init( debug, 0 );
+}
+
+void
+ghb_log_level_set(int level)
+{
+    hb_log_level_set(h_scan, level);
+    hb_log_level_set(h_queue, level);
+    hb_log_level_set(h_live, level);
 }
 
 void

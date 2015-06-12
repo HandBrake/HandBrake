@@ -2839,12 +2839,6 @@ void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va
     struct tm * now;
     char        preamble[362];
 
-    if( !getenv( "HB_DEBUG" ) )
-    {
-        /* We don't want to print it */
-        return;
-    }
-
     if( global_verbosity_level < level )
     {
         /* Hiding message */

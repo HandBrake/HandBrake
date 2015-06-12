@@ -7444,7 +7444,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <property name="width_request">55</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <signal name="changed" handler="pref_changed_cb" swapped="no"/>
+                                    <signal name="changed" handler="log_level_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>

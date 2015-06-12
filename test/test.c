@@ -257,6 +257,9 @@ int main( int argc, char ** argv )
     hb_global_init();
     hb_presets_builtin_update();
 
+    /* Init libhb */
+    h = hb_init(4, 0);  // Show all logging until debug level is parsed
+
     // Get utf8 command line if windows
     get_argv_utf8(&argc, &argv);
 
@@ -267,11 +270,11 @@ int main( int argc, char ** argv )
         return 1;
     }
 
+    hb_log_level_set(h, debug);
+
     /* Register our error handler */
     hb_register_error_handler(&hb_cli_error_handler);
 
-    /* Init libhb */
-    h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
 
     /* Show version */
@@ -281,6 +284,7 @@ int main( int argc, char ** argv )
     /* Check for update */
     if( update )
     {
+        hb_update_poll(h);
         if( ( build = hb_check_update( h, &version ) ) > -1 )
         {
             fprintf( stderr, "You are using an old version of "

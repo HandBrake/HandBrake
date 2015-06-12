@@ -31,7 +31,8 @@ extern "C" {
 void          hb_register( hb_work_object_t * );
 void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose, int update_check );
-hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib
+void          hb_update_poll(hb_handle_t *h);
+void          hb_log_level_set(hb_handle_t *h, int level);
 
 void          hb_hwd_set_enable( hb_handle_t *h, uint8_t enable );
 int           hb_hwd_enabled( hb_handle_t *h );

@@ -377,6 +377,44 @@ void hb_register_logger( void (*log_cb)(const char* message) )
     hb_thread_init("ioredirect", redirect_thread_func, NULL, HB_NORMAL_PRIORITY);
 }
 
+void hb_log_level_set(hb_handle_t *h, int level)
+{
+    global_verbosity_level = level;
+}
+
+void hb_update_poll(hb_handle_t *h)
+{
+    uint64_t      date;
+
+    hb_log( "hb_update_poll: checking for updates" );
+    date             = hb_get_date();
+    h->update_thread = hb_update_init( &h->build, h->version );
+
+    for( ;; )
+    {
+        if (h->update_thread == 0)
+        {
+            // Closed by thread_func
+            break;
+        }
+        if (hb_thread_has_exited(h->update_thread))
+        {
+            /* Immediate success or failure */
+            hb_thread_close( &h->update_thread );
+            break;
+        }
+        if (hb_get_date() > date + 1000)
+        {
+            /* Still nothing after one second. Connection problem,
+               let the thread die */
+            hb_log( "hb_update_poll: connection problem, not waiting for "
+                    "update_thread" );
+            break;
+        }
+        hb_snooze( 500 );
+    }
+}
+
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
@@ -386,15 +424,12 @@ void hb_register_logger( void (*log_cb)(const char* message) )
 hb_handle_t * hb_init( int verbose, int update_check )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
-    uint64_t      date;
 
     /* See hb_deep_log() and hb_log() in common.c */
-    global_verbosity_level = verbose;
-    if( verbose )
-        putenv( "HB_DEBUG=1" );
-    
+    hb_log_level_set(h, verbose);
+
     h->id = hb_instance_counter++;
-    
+
     /* Check for an update on the website if asked to */
     h->build = -1;
 
@@ -403,28 +438,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     if( update_check )
     {
-        hb_log( "hb_init: checking for updates" );
-        date             = hb_get_date();
-        h->update_thread = hb_update_init( &h->build, h->version );
-
-        for( ;; )
-        {
-            if( hb_thread_has_exited( h->update_thread ) )
-            {
-                /* Immediate success or failure */
-                hb_thread_close( &h->update_thread );
-                break;
-            }
-            if( hb_get_date() > date + 1000 )
-            {
-                /* Still nothing after one second. Connection problem,
-                   let the thread die */
-                hb_log( "hb_init: connection problem, not waiting for "
-                        "update_thread" );
-                break;
-            }
-            hb_snooze( 500 );
-        }
+        hb_update_poll(h);
     }
 
     h->title_set.list_title = hb_list_init();
@@ -442,80 +456,9 @@ hb_handle_t * hb_init( int verbose, int update_check )
     h->die         = 0;
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
-    
-    return h;
-}
-
-/**
- * libhb initialization routine.
- * This version is to use when calling the dylib, the macro hb_init isn't available from a dylib call!
- * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
- * @param update_check signals libhb to check for updated version from HandBrake website.
- * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
- */
-hb_handle_t * hb_init_dl( int verbose, int update_check )
-{
-    hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
-    uint64_t      date;
-
-    /* See hb_log() in common.c */
-    if( verbose > HB_DEBUG_NONE )
-    {
-        putenv( "HB_DEBUG=1" );
-    }
-
-    h->id = hb_instance_counter++;
-
-    /* Check for an update on the website if asked to */
-    h->build = -1;
-
-    /* Initialize opaque for PowerManagement purposes */
-    h->system_sleep_opaque = hb_system_sleep_opaque_init();
-
-    if( update_check )
-    {
-        hb_log( "hb_init: checking for updates" );
-        date             = hb_get_date();
-        h->update_thread = hb_update_init( &h->build, h->version );
-
-        for( ;; )
-        {
-            if( hb_thread_has_exited( h->update_thread ) )
-            {
-                /* Immediate success or failure */
-                hb_thread_close( &h->update_thread );
-                break;
-            }
-            if( hb_get_date() > date + 1000 )
-            {
-                /* Still nothing after one second. Connection problem,
-                   let the thread die */
-                hb_log( "hb_init: connection problem, not waiting for "
-                        "update_thread" );
-                break;
-            }
-            hb_snooze( 500 );
-        }
-    }
-
-    h->title_set.list_title = hb_list_init();
-    h->jobs       = hb_list_init();
-    h->current_job = NULL;
-
-    h->state_lock  = hb_lock_init();
-    h->state.state = HB_STATE_IDLE;
-
-    h->pause_lock = hb_lock_init();
-
-    /* Start library thread */
-    hb_log( "hb_init: starting libhb thread" );
-    h->die         = 0;
-    h->main_thread = hb_thread_init( "libhb", thread_func, h,
-                                     HB_NORMAL_PRIORITY );
 
     return h;
 }
-
 
 /**
  * Returns current version of libhb.

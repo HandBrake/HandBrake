@@ -4082,6 +4082,14 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+log_level_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    pref_changed_cb(widget, ud);
+    int level = ghb_dict_get_int(ud->prefs, "LoggingLevel");
+    ghb_log_level_set(level);
+}
+
+G_MODULE_EXPORT void
 use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("use_m4v_changed_cb");
