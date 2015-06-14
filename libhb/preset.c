@@ -1585,13 +1585,13 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
         if (dar_width > 0)
         {
             geo.geometry.par.num = dar_width;
-            geo.geometry.par.num = geo.geometry.width;
+            geo.geometry.par.den = geo.geometry.width;
         }
         else
         {
             geo.geometry.par.num =
                 hb_value_get_int(hb_dict_get(preset, "PicturePARWidth"));
-            geo.geometry.par.num =
+            geo.geometry.par.den =
                 hb_value_get_int(hb_dict_get(preset, "PicturePARHeight"));
         }
     }
