@@ -562,7 +562,8 @@ namespace HandBrake.ApplicationServices.Interop
                         FractionComplete = state.Working.Progress, 
                         CurrentFrameRate = state.Working.Rate, 
                         AverageFrameRate = state.Working.RateAvg, 
-                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds), 
+                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        PassId = state.Working.PassID,
                         Pass = state.Working.Pass,
                         PassCount = state.Working.PassCount
                     };

@@ -20,12 +20,23 @@ namespace HandBrake.ApplicationServices.Interop.Json.State
         public int Hours { get; set; }
 
         /// <summary>
-        /// Gets or sets the job.
+        /// Gets or sets the Pass ID.
+        /// </summary>
+        /// <remarks>
+        /// -1: Subtitle scan
+        ///  0: Encode
+        ///  1: Encode first pass
+        ///  2: Encode second pass
+        /// </remarks>
+        public int PassID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pass number (1-based).
         /// </summary>
         public int Pass { get; set; }
 
         /// <summary>
-        /// Gets or sets the job count.
+        /// Gets or sets the pass count.
         /// </summary>
         public int PassCount { get; set; }
 
