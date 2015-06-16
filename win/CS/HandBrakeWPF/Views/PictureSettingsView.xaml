@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-             xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
+              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
@@ -30,17 +29,17 @@
             </Grid.RowDefinitions>
 
             <!-- Size Panel-->
-            <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Grid.RowSpan="1" >
-                <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Size}" FontWeight="Bold" />
+            <StackPanel Name="SizePanel" Orientation="Vertical" VerticalAlignment="Top" Margin="5,0,0,0"  Grid.Column="0" Grid.Row="0">
+                <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Size}"  FontWeight="Bold" />
 
                 <!-- Row 1-->
-                <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Source}" />
                     <Label Content="{Binding SourceInfo}" Name="sourceResolution"/>
                 </StackPanel>
 
                 <!-- Row 2-->
-                <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Width}" />
                     <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}"
@@ -55,7 +54,7 @@
                 </StackPanel>
 
                 <!-- Row 3-->
-                <Grid Margin="5,15,5,0">
+                <Grid Margin="0,15,5,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -77,7 +76,7 @@
                 </Grid>
 
                 <!-- Custom Anamoprhic -->
-                <Grid Margin="5,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
+                <Grid Margin="0,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -148,10 +147,10 @@
             </StackPanel>
 
             <!-- Preview Panel -->
-            <StackPanel Name="PreviewPanel" Margin="0,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
+            <StackPanel Name="PreviewPanel" Margin="10,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
                 <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Output}" FontWeight="Bold" />
 
-                <Grid Margin="5,0,0,0">
+                <Grid Margin="10,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />

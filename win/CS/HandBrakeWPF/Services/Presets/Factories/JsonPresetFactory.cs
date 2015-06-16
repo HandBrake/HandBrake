@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.MaxWidth = importedPreset.PictureWidth.HasValue && importedPreset.PictureWidth.Value > 0 ? importedPreset.PictureWidth.Value : (int?)null;
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
-            preset.Task.HasCropping = importedPreset.PictureAutoCrop;
+            preset.Task.HasCropping = !importedPreset.PictureAutoCrop;
 
             preset.Task.Modulus = importedPreset.PictureModulus;
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
