@@ -147,10 +147,10 @@
             </StackPanel>
 
             <!-- Preview Panel -->
-            <StackPanel Name="PreviewPanel" Margin="10,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
+            <StackPanel Name="PreviewPanel" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"  Grid.Column="0">
                 <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Output}" FontWeight="Bold" />
 
-                <Grid Margin="10,0,0,0">
+                <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
