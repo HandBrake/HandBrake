@@ -121,17 +121,17 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 }
 
+extern char *video_option_tooltip;
+
 G_MODULE_EXPORT void
 x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("x264_entry_changed_cb ()");
 
-    static char *tt = NULL;
-
-    if (tt == NULL)
+    if (video_option_tooltip == NULL)
     {
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-        tt = gtk_widget_get_tooltip_text(eo);
+        video_option_tooltip = gtk_widget_get_tooltip_text(eo);
     }
 
     if (!ignore_options_update)
@@ -153,14 +153,20 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
             ghb_update_x264Option(ud, sopts);
             ghb_x264_parse_options(ud, sopts);
 
-            GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-            char * new_tt;
-            if (sopts)
-                new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""), tt, sopts);
-            else
-                new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
-            gtk_widget_set_tooltip_text(eo, new_tt);
-            g_free(new_tt);
+            if (ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
+            {
+                GtkWidget *eo;
+                eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
+                char * tt;
+                if (sopts)
+                    tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
+                                         video_option_tooltip, sopts);
+                else
+                    tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""),
+                                         video_option_tooltip);
+                gtk_widget_set_tooltip_text(eo, tt);
+                g_free(tt);
+            }
 
             g_free(sopts);
         }

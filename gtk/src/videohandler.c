@@ -76,16 +76,15 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 }
 
+char *video_option_tooltip = NULL;
+
 void
 ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 {
-    static char *tt = NULL;
-
-
-    if (tt == NULL)
+    if (video_option_tooltip == NULL)
     {
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-        tt = gtk_widget_get_tooltip_text(eo);
+        video_option_tooltip = gtk_widget_get_tooltip_text(eo);
     }
 
     ghb_widget_to_setting(ud->settings, widget);
@@ -177,14 +176,16 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
 
-        char * new_tt;
+        char * tt;
         if (new_opts)
-            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""), tt, new_opts);
+            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
+                                 video_option_tooltip, new_opts);
         else
-            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
-        gtk_widget_set_tooltip_text(eo, new_tt);
+            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""),
+                                 video_option_tooltip);
+        gtk_widget_set_tooltip_text(eo, tt);
 
-        g_free(new_tt);
+        g_free(tt);
         g_free(new_opts);
 
         g_free(tunes);
@@ -194,14 +195,15 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         const char *opts = ghb_dict_get_string(ud->settings, "x264Option");
 
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-        char * new_tt;
+        char * tt;
         if (opts)
-            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
-                                     tt, opts);
+            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
+                                 video_option_tooltip, opts);
         else
-            new_tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""), tt);
-        gtk_widget_set_tooltip_text(eo, new_tt);
-        g_free(new_tt);
+            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""),
+                                 video_option_tooltip);
+        gtk_widget_set_tooltip_text(eo, tt);
+        g_free(tt);
     }
 
     ghb_check_dependency(ud, widget, NULL);
