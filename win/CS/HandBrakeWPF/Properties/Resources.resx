@@ -573,7 +573,7 @@ The Activity log may have further information.</value>
     <value>Show Queue{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Start Encode</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
     <value>Start Queue</value>

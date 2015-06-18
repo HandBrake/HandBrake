@@ -871,7 +871,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start.
+        ///   Looks up a localized string similar to Start Encode.
         /// </summary>
         public static string Main_Start {
             get {
