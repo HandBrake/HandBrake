@@ -916,6 +916,474 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Log files older than 30 days.
+        /// </summary>
+        public static string Options_30DayLogClear {
+            get {
+                return ResourceManager.GetString("Options_30DayLogClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About HandBrake.
+        /// </summary>
+        public static string Options_About {
+            get {
+                return ResourceManager.GetString("Options_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced.
+        /// </summary>
+        public static string Options_Advanced {
+            get {
+                return ResourceManager.GetString("Options_Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced Options.
+        /// </summary>
+        public static string Options_AdvancedOptions {
+            get {
+                return ResourceManager.GetString("Options_AdvancedOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Advanced Encoder Options Tab.
+        /// </summary>
+        public static string Options_AdvancedTab {
+            get {
+                return ResourceManager.GetString("Options_AdvancedTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arguments:.
+        /// </summary>
+        public static string Options_Arguments {
+            get {
+                return ResourceManager.GetString("Options_Arguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic File Naming.
+        /// </summary>
+        public static string Options_AutomaticFileNaming {
+            get {
+                return ResourceManager.GetString("Options_AutomaticFileNaming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically name output files.
+        /// </summary>
+        public static string Options_AutoNameOutput {
+            get {
+                return ResourceManager.GetString("Options_AutoNameOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for Updates.
+        /// </summary>
+        public static string Options_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("Options_CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always clear completed queue items after an encode completes.
+        /// </summary>
+        public static string Options_ClearCompleted {
+            get {
+                return ResourceManager.GetString("Options_ClearCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Log History.
+        /// </summary>
+        public static string Options_ClearLogs {
+            get {
+                return ResourceManager.GetString("Options_ClearLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put a copy of individual encode logs in a specified location:.
+        /// </summary>
+        public static string Options_CopyLogToDir {
+            get {
+                return ResourceManager.GetString("Options_CopyLogToDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put a copy of individual encode logs in the same location as the encoded video.
+        /// </summary>
+        public static string Options_CopyLogToEncDir {
+            get {
+                return ResourceManager.GetString("Options_CopyLogToEncDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Version.
+        /// </summary>
+        public static string Options_CurVersion {
+            get {
+                return ResourceManager.GetString("Options_CurVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decoding.
+        /// </summary>
+        public static string Options_Decoding {
+            get {
+                return ResourceManager.GetString("Options_Decoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Path:.
+        /// </summary>
+        public static string Options_DefaultPath {
+            get {
+                return ResourceManager.GetString("Options_DefaultPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Update.
+        /// </summary>
+        public static string Options_DownloadUpdates {
+            get {
+                return ResourceManager.GetString("Options_DownloadUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DVD Reading.
+        /// </summary>
+        public static string Options_DVD {
+            get {
+                return ResourceManager.GetString("Options_DVD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable LibDVDNav. (libdvdread will be used instead).
+        /// </summary>
+        public static string Options_DvdRead {
+            get {
+                return ResourceManager.GetString("Options_DvdRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable DXVA Hardware Accelerated Decoding (Experimental)&quot;.
+        /// </summary>
+        public static string Options_DXVA {
+            get {
+                return ResourceManager.GetString("Options_DXVA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format:.
+        /// </summary>
+        public static string Options_Format {
+            get {
+                return ResourceManager.GetString("Options_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string Options_General {
+            get {
+                return ResourceManager.GetString("Options_General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging.
+        /// </summary>
+        public static string Options_Logging {
+            get {
+                return ResourceManager.GetString("Options_Logging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Verbosity Level:.
+        /// </summary>
+        public static string Options_LogLevel {
+            get {
+                return ResourceManager.GetString("Options_LogLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Path:.
+        /// </summary>
+        public static string Options_LogPath {
+            get {
+                return ResourceManager.GetString("Options_LogPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize to system tray (Requires Restart).
+        /// </summary>
+        public static string Options_MinimiseTray {
+            get {
+                return ResourceManager.GetString("Options_MinimiseTray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum length of title to scan (seconds):.
+        /// </summary>
+        public static string Options_MinTitleScanLength {
+            get {
+                return ResourceManager.GetString("Options_MinTitleScanLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MP4 File Extension:.
+        /// </summary>
+        public static string Options_MP4FileExtension {
+            get {
+                return ResourceManager.GetString("Options_MP4FileExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On Startup.
+        /// </summary>
+        public static string Options_OnStartup {
+            get {
+                return ResourceManager.GetString("Options_OnStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Files.
+        /// </summary>
+        public static string Options_Output {
+            get {
+                return ResourceManager.GetString("Options_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path: .
+        /// </summary>
+        public static string Options_Path {
+            get {
+                return ResourceManager.GetString("Options_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path to VLC Player.
+        /// </summary>
+        public static string Options_PathToVLC {
+            get {
+                return ResourceManager.GetString("Options_PathToVLC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prevent the system from sleeping while encoding.
+        /// </summary>
+        public static string Options_PreventSleep {
+            get {
+                return ResourceManager.GetString("Options_PreventSleep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of picture previews to scan:.
+        /// </summary>
+        public static string Options_PreviewScanCount {
+            get {
+                return ResourceManager.GetString("Options_PreviewScanCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Priority Level:.
+        /// </summary>
+        public static string Options_PriorityLevel {
+            get {
+                return ResourceManager.GetString("Options_PriorityLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable QuickSync Decoding.
+        /// </summary>
+        public static string Options_QsvDecode {
+            get {
+                return ResourceManager.GetString("Options_QsvDecode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove common punctuation.
+        /// </summary>
+        public static string Options_RemovePunctuation {
+            get {
+                return ResourceManager.GetString("Options_RemovePunctuation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace underscores with a space.
+        /// </summary>
+        public static string Options_ReplaceUnderscores {
+            get {
+                return ResourceManager.GetString("Options_ReplaceUnderscores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to &apos;Do nothing&apos; when the app is re-launched..
+        /// </summary>
+        public static string Options_ResetDoNothing {
+            get {
+                return ResourceManager.GetString("Options_ResetDoNothing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose Scaler:.
+        /// </summary>
+        public static string Options_Scaler {
+            get {
+                return ResourceManager.GetString("Options_Scaler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scaling.
+        /// </summary>
+        public static string Options_Scaling {
+            get {
+                return ResourceManager.GetString("Options_Scaling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send file to:.
+        /// </summary>
+        public static string Options_SendFileTo {
+            get {
+                return ResourceManager.GetString("Options_SendFileTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change case to Title Case.
+        /// </summary>
+        public static string Options_TitleCase {
+            get {
+                return ResourceManager.GetString("Options_TitleCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates.
+        /// </summary>
+        public static string Options_Updates {
+            get {
+                return ResourceManager.GetString("Options_Updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Interface.
+        /// </summary>
+        public static string Options_UserInterface {
+            get {
+                return ResourceManager.GetString("Options_UserInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        public static string Options_Version {
+            get {
+                return ResourceManager.GetString("Options_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video.
+        /// </summary>
+        public static string Options_Video {
+            get {
+                return ResourceManager.GetString("Options_Video", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This path is used for the video preview feature only..
+        /// </summary>
+        public static string Options_VideoPreviewPath {
+            get {
+                return ResourceManager.GetString("Options_VideoPreviewPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Log Directory.
+        /// </summary>
+        public static string Options_ViewLogDirectory {
+            get {
+                return ResourceManager.GetString("Options_ViewLogDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When Done.
+        /// </summary>
+        public static string Options_WhenDone {
+            get {
+                return ResourceManager.GetString("Options_WhenDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to x264 Settings.
+        /// </summary>
+        public static string Options_x264 {
+            get {
+                return ResourceManager.GetString("Options_x264", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constant quality fractional granularity:.
+        /// </summary>
+        public static string Options_x264Granularity {
+            get {
+                return ResourceManager.GetString("Options_x264Granularity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {

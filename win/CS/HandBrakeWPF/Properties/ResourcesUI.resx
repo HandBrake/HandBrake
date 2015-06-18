@@ -681,4 +681,160 @@
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
     <value>Open a folder with one or more files.</value>
   </data>
+  <data name="Options_30DayLogClear" xml:space="preserve">
+    <value>Clear Log files older than 30 days</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>About HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>Advanced Options</value>
+  </data>
+  <data name="Options_AdvancedTab" xml:space="preserve">
+    <value>Show Advanced Encoder Options Tab</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>Arguments:</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>Automatic File Naming</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>Automatically name output files</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>Always clear completed queue items after an encode completes</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>Clear Log History</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>Put a copy of individual encode logs in a specified location:</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>Put a copy of individual encode logs in the same location as the encoded video</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>Current Version</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>Decoding</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>Default Path:</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>Download Update</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>DVD Reading</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
+  </data>
+  <data name="Options_DXVA" xml:space="preserve">
+    <value>Enable DXVA Hardware Accelerated Decoding (Experimental)"</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>Logging</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>Log Verbosity Level:</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>Log Path:</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>Minimize to system tray (Requires Restart)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>Minimum length of title to scan (seconds):</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>MP4 File Extension:</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>On Startup</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>Output Files</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>Path: </value>
+  </data>
+  <data name="Options_PathToVLC" xml:space="preserve">
+    <value>Path to VLC Player</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>Prevent the system from sleeping while encoding</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>Number of picture previews to scan:</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>Priority Level:</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>Disable QuickSync Decoding</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>Remove common punctuation</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>Replace underscores with a space</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>Reset to 'Do nothing' when the app is re-launched.</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>Choose Scaler:</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>Scaling</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>Send file to:</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>Change case to Title Case</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>User Interface</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>This path is used for the video preview feature only.</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>View Log Directory</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>When Done</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>x264 Settings</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>Constant quality fractional granularity:</value>
+  </data>
 </root>

@@ -86,20 +86,20 @@
                 <StackPanel Name="General" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.General}}">
 
-                    <TextBlock Text="General" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_General}" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="On Startup" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_OnStartup}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                            <CheckBox Content="Check for Updates" IsChecked="{Binding CheckForUpdates}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_CheckForUpdates}" IsChecked="{Binding CheckForUpdates}" />
                             <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20">
-                        <TextBlock Text="When Done" FontSize="14" Margin="0,0,0,10" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_WhenDone}" FontSize="14" Margin="0,0,0,10" />
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
@@ -108,7 +108,7 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="Reset to 'Do nothing' when the app is re-launched." VerticalAlignment="Center" IsChecked="{Binding ResetWhenDoneAction}" />
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" IsChecked="{Binding ResetWhenDoneAction}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="Collapsed">
@@ -117,13 +117,13 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="Send file to:" VerticalAlignment="Center" IsChecked="{Binding SendFileAfterEncode}" />
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_SendFileTo}" VerticalAlignment="Center" IsChecked="{Binding SendFileAfterEncode}" />
                                 <TextBlock Margin="5,0,5,5" VerticalAlignment="Center" Text="{Binding SendFileTo}" />
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseSendFileTo]" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="Arguments:" />
+                                <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="{x:Static Properties:ResourcesUI.Options_Arguments}" />
                                 <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" />
                             </StackPanel>
 
@@ -132,16 +132,16 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20">
 
-                        <TextBlock Text="Path to VLC Player" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_PathToVLC}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Path:" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:ResourcesUI.Options_Path}" />
                                 <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" />
                             </StackPanel>
-                            <TextBlock Margin="30,0,0,0" Text="This path is used for the video preview feature only." />
+                            <TextBlock Margin="30,0,0,0" Text="{x:Static Properties:ResourcesUI.Options_VideoPreviewPath}" />
 
                         </StackPanel>
                     </StackPanel>
@@ -149,12 +149,12 @@
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20">
 
-                        <TextBlock Text="User Interface" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_UserInterface}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
-                            <CheckBox Content="Show Advanced Encoder Options Tab" IsChecked="{Binding ShowAdvancedTab}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AdvancedTab}" IsChecked="{Binding ShowAdvancedTab}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -162,14 +162,14 @@
                 <StackPanel Name="Output" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.OutputFiles}}">
 
-                    <TextBlock Text="Output Files" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Output}" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Automatic File Naming" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_AutomaticFileNaming}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                            <CheckBox Content="Automatically name output files" IsChecked="{Binding AutomaticallyNameFiles}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AutoNameOutput}" IsChecked="{Binding AutomaticallyNameFiles}" />
 
                             <Grid Margin="0,5,0,0">
                                 <Grid.RowDefinitions>
@@ -182,25 +182,25 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock VerticalAlignment="Center" Text="Default Path: " Grid.Column="0" Grid.Row="0" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:ResourcesUI.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" 
                                          ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" Style="{StaticResource LongToolTipHolder}"  />
                                 <Button Content="Browse" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" 
                                         cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" />
 
-                                <TextBlock VerticalAlignment="Center" Text="Format:"  Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:ResourcesUI.Options_Format}"  Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" />
                                 <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="380"  Grid.Column="1" Grid.Row="1"  Margin="0,5,0,0"
                                          ToolTip="{x:Static Properties:Resources.Options_AdditionalFormatOptions}"  Style="{StaticResource LongToolTipHolder}" />
                             </Grid>
 
                             <StackPanel Orientation="Vertical" Margin="0,15,0,0">
-                                <CheckBox Content="Change case to Title Case" IsChecked="{Binding ChangeToTitleCase}" />
-                                <CheckBox Content="Replace underscores with a space" IsChecked="{Binding RemoveUnderscores}"/>
-                                <CheckBox Content="Remove common punctuation" ToolTip="Dash (-), Period (.) and Comma (,) " IsChecked="{Binding RemovePunctuation}"  />
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_TitleCase}" IsChecked="{Binding ChangeToTitleCase}" />
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ReplaceUnderscores}" IsChecked="{Binding RemoveUnderscores}"/>
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_RemovePunctuation}" ToolTip="Dash (-), Period (.) and Comma (,) " IsChecked="{Binding RemovePunctuation}"  />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                                <TextBlock VerticalAlignment="Center" Text="MP4 File Extension:" />
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:ResourcesUI.Options_MP4FileExtension}" />
                                 <ComboBox Name="mp4FileExtension" Width="120" ItemsSource="{Binding Mp4ExtensionOptions}" SelectedIndex="{Binding SelectedMp4Extension}" HorizontalAlignment="Left" />
                             </StackPanel>
                         </StackPanel>
@@ -210,28 +210,28 @@
                 <StackPanel Name="Hardware" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Video}}">
 
-                    <TextBlock Text="Video" FontSize="20" FontFamily="Segoe UI Light" />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Video}" FontSize="20" FontFamily="Segoe UI Light" />
 
                     <StackPanel Orientation="Vertical" Margin="0,0,0,20">
 
-                        <TextBlock Text="Decoding" FontSize="14" Margin="0,10,0,10" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Decoding}" FontSize="14" Margin="0,10,0,10" />
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0"  >
-                            <CheckBox Content="Enable DXVA Hardware Accelerated Decoding (Experimental)" IsChecked="{Binding EnableDxvaDecoding}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_DXVA}" IsChecked="{Binding EnableDxvaDecoding}" />
                             <TextBlock Text="{x:Static Properties:Resources.Video_DxvaDecode}" Margin="17,2,0,0" />
 
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin="20,10,0,0">
-                            <CheckBox Content="Disable QuickSync Decoding" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding DisableQuickSyncDecoding}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_QsvDecode}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding DisableQuickSyncDecoding}" />
                             <TextBlock Text="{x:Static Properties:Resources.Video_QuickSyncNotAvailable}" Margin="17,2,0,0" TextWrapping="Wrap"
                                         Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         </StackPanel>
 
-                        <TextBlock Text="Scaling" FontSize="14" Margin="0,20,0,10" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Scaling}" FontSize="14" Margin="0,20,0,10" />
 
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                            <TextBlock Text="Choose Scaler: " Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
                             <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
                                        SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
                                        Width="120" VerticalAlignment="Center" />
@@ -251,25 +251,25 @@
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
 
-                    <TextBlock Text="Advanced" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Advanced}" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Advanced Options" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_AdvancedOptions}" FontSize="14" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                            <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_PreventSleep}" IsChecked="{Binding PreventSleep}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.Options_PreviewScanCount}" VerticalAlignment="Center" Width="250" />
                                 <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Minimum length of title to scan (seconds):" VerticalAlignment="Center" Width="250" />
-                                <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.Options_MinTitleScanLength}" VerticalAlignment="Center" Width="250" />
+                                <TextBox x:Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
                                 <!-- Find a control for this-->
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Priority Level:" Width="250" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.Options_PriorityLevel}" Width="250" VerticalAlignment="Center" />
                                 <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
                             </StackPanel>
 
@@ -277,46 +277,46 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
-                        <TextBlock Text="x264 Settings" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1"  Margin="20,0,0,0">
-                            <TextBlock Text="Constant quality fractional granularity:" VerticalAlignment="Center" Width="250" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_x264}" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Options_x264Granularity}" VerticalAlignment="Center" Width="250" />
                             <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranulairty}" Width="120"/>
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="DVD Reading" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_DVD}" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
-                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" IsChecked="{Binding DisableLibdvdNav}" />
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" />
                         </StackPanel>
 
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="Logging" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Logging}" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
-                            <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                <TextBlock Text="Log Verbosity Level:" Width="250" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.Options_LogLevel}" Width="250" VerticalAlignment="Center" />
                                 <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions}" SelectedItem="{Binding SelectedVerbosity}" Width="120" />
                             </StackPanel>
 
-                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
-                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " Margin="0,5,0,0" IsChecked="{Binding CopyLogToSepcficedLocation}" />
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
-                                <TextBlock Text="Log Path:" VerticalAlignment="Center" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_CopyLogToEncDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSepcficedLocation}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="{x:Static Properties:ResourcesUI.Options_LogPath}" VerticalAlignment="Center" />
                                 <TextBox Width="120" Text="{Binding LogDirectory}" />
                                 <Button Content="Browse" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseLogPath]" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
-                                <Button Content="View Log Directory" cal:Message.Attach="[Event Click] = [Action ViewLogDirectory]" Margin="0,0,5,0" />
-                                <Button Content="Clear Log History" cal:Message.Attach="[Event Click] = [Action ClearLogHistory]" />
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="{x:Static Properties:ResourcesUI.Options_ViewLogDirectory}" cal:Message.Attach="[Event Click] = [Action ViewLogDirectory]" Margin="0,0,5,0" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Options_ClearLogs}" cal:Message.Attach="[Event Click] = [Action ClearLogHistory]" />
                             </StackPanel>
 
-                            <CheckBox Content="Clear Log files older than 30 days " Margin="0,10,0,0" IsChecked="{Binding ClearOldOlgs}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_30DayLogClear}" Margin="0,10,0,0" IsChecked="{Binding ClearOldOlgs}" />
                         </StackPanel>
 
                     </StackPanel>
@@ -327,9 +327,9 @@
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Updates}}">
 
 
-                    <TextBlock Text="Updates" FontSize="20" FontFamily="Segoe UI Light" />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Updates}" FontSize="20" FontFamily="Segoe UI Light" />
 
-                    <TextBlock Text="Current Version" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_CurVersion}" FontSize="14" Margin="0,10,0,10"/>
 
                     <Grid Margin="20,10,0,20">
                         <Grid.ColumnDefinitions>
@@ -338,15 +338,15 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Version -->
-                        <TextBlock Grid.Column="0" Margin="0,0,5,0" Text="Version:" />
+                        <TextBlock Grid.Column="0" Margin="0,0,5,0" Text="{x:Static Properties:ResourcesUI.Options_Version}" />
                         <TextBlock Grid.Column="1" Margin="0,0,0,1" VerticalAlignment="Bottom" Text="{Binding Version}" />
                     </Grid>
 
-                    <TextBlock Text="Updates" FontSize="14" Margin="0,10,0,10"/>
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Updates}" FontSize="14" Margin="0,10,0,10"/>
 
                     <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
-                        <Button Content="Check for Updates" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
-                        <Button Content="Download Update" Width="120" cal:Message.Attach="[Event Click] = [Action DownloadUpdate]" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
+                        <Button Content="{x:Static Properties:ResourcesUI.Options_CheckForUpdates}" MaxWidth="130" Margin="0,0,5,0" cal:Message.Attach="[Event Click] = [Action PerformUpdateCheck]" />
+                        <Button Content="{x:Static Properties:ResourcesUI.Options_DownloadUpdates}" Width="120" cal:Message.Attach="[Event Click] = [Action DownloadUpdate]" Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
                     </StackPanel>
 
                     <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
@@ -362,7 +362,7 @@
                 <StackPanel Name="About" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.About}}">
 
-                    <TextBlock Text="About HandBrake" FontSize="20" FontFamily="Segoe UI Light"  />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.Options_About}" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <ContentControl x:Name="AboutViewModel" />
 
