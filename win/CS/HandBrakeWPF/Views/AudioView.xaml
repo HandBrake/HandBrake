@@ -24,6 +24,7 @@
         <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
         <Audio:AudioBehaviourConverter x:Key="audioBehaviourConverter" />
         <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
+        <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -145,7 +146,7 @@
                         <Image Grid.Column="0" Grid.Row="0"
                                Width="16"
                                Height="16"
-                               Margin="10,0,10,0"
+                               Margin="8,0,8,0"
                                Source="Images/Movies.png" />
 
                         <!--  Settings  -->
@@ -188,12 +189,18 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Bitrate}"
-                                       Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
+                                      SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}"
+                                      Visibility="{Binding IsRateTypeVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
+                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
+                                      SelectedItem="{Binding Quality}"
+                                      Visibility="{Binding IsQualityVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
                             <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
                                       SelectedItem="{Binding Bitrate}"
-                                      Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-
+                                      Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
                             <!--  Row 2  -->
                             <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}"
@@ -204,18 +211,18 @@
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
 
-
-                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="2"
+                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,0,0"
                                            Padding="3,0" Height="22" HorizontalAlignment="Left" >
                                 <ToggleButton.Style>
                                     <Style TargetType="{x:Type ToggleButton}">
                                         <Setter Property="Content" Value="Show"/>
+                                        <Setter Property="FontWeight" Value="Bold" />
                                         <Style.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
-                                                <Setter Property="Content" Value="Hide"/>
+                                                <Setter Property="Content" Value="˄"/>
                                             </Trigger>
                                             <Trigger Property="IsChecked" Value="False">
-                                                <Setter Property="Content" Value="Show"/>
+                                                <Setter Property="Content" Value="˅" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>

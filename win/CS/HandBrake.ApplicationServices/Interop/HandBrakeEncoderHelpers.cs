@@ -9,7 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Interop
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -45,7 +44,7 @@ namespace HandBrake.ApplicationServices.Interop
 
         /// <summary>
         /// List of HandBrake containers.
-        /// </summary>
+        /// </summary> 
         private static List<HBContainer> containers;
 
         /// <summary>
@@ -262,8 +261,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Returns true if the subtitle source type can be set to forced only.
         /// </summary>
-        /// <param name="source">The subtitle source type (SSA, VobSub, etc)</param>
-        /// <returns>True if the subtitle source type can be set to forced only.</returns>
+        /// <param name="source">
+        /// The subtitle source type (SSA, VobSub, etc)
+        /// </param>
+        /// <returns>
+        /// True if the subtitle source type can be set to forced only.
+        /// </returns>
         public static bool SubtitleCanSetForcedOnly(int source)
         {
             return HBFunctions.hb_subtitle_can_force(source) > 0;
@@ -272,8 +275,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Returns true if the subtitle source type can be burned in.
         /// </summary>
-        /// <param name="source">The subtitle source type (SSA, VobSub, etc)</param>
-        /// <returns>True if the subtitle source type can be burned in.</returns>
+        /// <param name="source">
+        /// The subtitle source type (SSA, VobSub, etc)
+        /// </param>
+        /// <returns>
+        /// True if the subtitle source type can be burned in.
+        /// </returns>
         public static bool SubtitleCanBurn(int source)
         {
             return HBFunctions.hb_subtitle_can_burn(source) > 0;
@@ -282,9 +289,15 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Returns true if the subtitle type can be passed through using the given muxer.
         /// </summary>
-        /// <param name="subtitleSourceType">The subtitle source type (SSA, VobSub, etc)</param>
-        /// <param name="muxer">The ID of the muxer.</param>
-        /// <returns>True if the subtitle type can be passed through with the given muxer.</returns>
+        /// <param name="subtitleSourceType">
+        /// The subtitle source type (SSA, VobSub, etc)
+        /// </param>
+        /// <param name="muxer">
+        /// The ID of the muxer.
+        /// </param>
+        /// <returns>
+        /// True if the subtitle type can be passed through with the given muxer.
+        /// </returns>
         public static bool SubtitleCanPassthrough(int subtitleSourceType, int muxer)
         {
             return HBFunctions.hb_subtitle_can_pass(subtitleSourceType, muxer) > 0;
@@ -293,8 +306,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Gets the subtitle source type's name.
         /// </summary>
-        /// <param name="source">The subtitle source type (SSA, VobSub, etc).</param>
-        /// <returns>The name of the subtitle source.</returns>
+        /// <param name="source">
+        /// The subtitle source type (SSA, VobSub, etc).
+        /// </param>
+        /// <returns>
+        /// The name of the subtitle source.
+        /// </returns>
         public static string GetSubtitleSourceName(int source)
         {
             switch ((hb_subtitle_s_subsource)source)
@@ -492,9 +509,9 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new VideoQualityLimits
                 {
-                    Low = low,
-                    High = high,
-                    Granularity = granularity,
+                    Low = low, 
+                    High = high, 
+                    Granularity = granularity, 
                     Ascending = direction == 0
                 };
         }
@@ -551,7 +568,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// Limits on the audio quality for the given encoder.
         /// </returns>
-        internal static RangeLimits GetAudioQualityLimits(int encoderId)
+        public static RangeLimits GetAudioQualityLimits(int encoderId)
         {
             float low = 0, high = 0, granularity = 0;
             int direction = 0;
@@ -559,9 +576,9 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new RangeLimits
             {
-                Low = low,
-                High = high,
-                Granularity = granularity,
+                Low = low, 
+                High = high, 
+                Granularity = granularity, 
                 Ascending = direction == 0
             };
         }
@@ -575,7 +592,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// Limits on the audio compression for the given encoder.
         /// </returns>
-        internal static RangeLimits GetAudioCompressionLimits(int encoderId)
+        public static RangeLimits GetAudioCompressionLimits(int encoderId)
         {
             float low = 0, high = 0, granularity = 0;
             int direction = 0;
@@ -583,11 +600,39 @@ namespace HandBrake.ApplicationServices.Interop
 
             return new RangeLimits
             {
-                Low = low,
-                High = high,
-                Granularity = granularity,
+                Low = low, 
+                High = high, 
+                Granularity = granularity, 
                 Ascending = direction == 0
             };
+        }
+
+        /// <summary>
+        /// The get default quality.
+        /// </summary>
+        /// <param name="encoder">
+        /// The encoder.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
+        public static double GetDefaultQuality(HBAudioEncoder encoder)
+        {
+           return HBFunctions.hb_audio_quality_get_default((uint)encoder.Id);
+        }
+
+        /// <summary>
+        /// The get default audio compression.
+        /// </summary>
+        /// <param name="encoder">
+        /// The encoder.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
+        public static double GetDefaultAudioCompression(HBAudioEncoder encoder)
+        {
+            return HBFunctions.hb_audio_compression_get_default((uint)encoder.Id);
         }
     }
 }

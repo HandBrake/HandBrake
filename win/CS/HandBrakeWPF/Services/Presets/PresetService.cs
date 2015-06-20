@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        private static readonly int CurrentPresetVersion = 3;
+        private static readonly int CurrentPresetVersion = 4;
 
         /// <summary>
         /// User Preset Default Catgory Name

@@ -150,7 +150,7 @@
     <Compile Include="Interop\Model\BitrateLimits.cs" />
     <Compile Include="Interop\Model\Cropping.cs" />
     <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
-    <Compile Include="Interop\Model\Encoding\AudioEncoder.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\Container.cs" />
     <Compile Include="Interop\Model\Encoding\Decomb.cs" />
     <Compile Include="Interop\Model\Encoding\Deinterlace.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
     <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
     <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />

@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
 
@@ -341,6 +342,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(EnumHelper<Mixdown>.GetShortName(item.MixDown));
                 Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + item.MixDown);
 
+                HBRate sampleRate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(s => s.Name == item.SampleRate.ToString(CultureInfo.InvariantCulture));
+
                 HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack
                     {
                         Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
@@ -349,55 +352,27 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                         Gain = item.Gain,
                         Mixdown = mixdown.Id,
                         NormalizeMixLevel = false,
-                        Samplerate = GetSampleRateRaw(item.SampleRate),
+                        Samplerate = sampleRate != null ? sampleRate.Rate : 0,
                         Name = item.TrackName,
                     };
 
                 if (!item.IsPassthru)
                 {
-                    // TODO Impiment Quality and Compression. We only support bitrate right now.
-                    // if (item.EncodeRateType == AudioEncodeRateType.Quality)
-                    // {
-                    //    audioTrack.Quality = item.Quality;
-                    // }
+                     if (item.EncoderRateType == AudioEncoderRateType.Quality)
+                     {
+                        audioTrack.Quality = item.Quality;
+                     }
 
-                    // if (item.EncodeRateType == AudioEncodeRateType.Compression)
-                    // {
-                    //    audioTrack.CompressionLevel = item.Compression;
-                    // }
-
-                    // if (item.EncodeRateType == AudioEncodeRateType.Bitrate)
-                    // {
-                    audioTrack.Bitrate = item.Bitrate;
-                    // }
+                     if (item.EncoderRateType == AudioEncoderRateType.Bitrate)
+                     {
+                        audioTrack.Bitrate = item.Bitrate;
+                     }
                 }
 
                 audio.AudioList.Add(audioTrack);
             }
 
             return audio;
-        }
-
-        /// <summary>
-        /// The get sample rate raw.
-        /// </summary>
-        /// <param name="rate">
-        /// The rate.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private static int GetSampleRateRaw(double rate)
-        {
-            if (rate == 22.05)
-                return 22050;
-            else if (rate == 24)
-                return 24000;
-            else if (rate == 44.1)
-                return 32000;
-            else if (rate == 48)
-                return 48000;
-            else return 48000;
         }
 
         /// <summary>

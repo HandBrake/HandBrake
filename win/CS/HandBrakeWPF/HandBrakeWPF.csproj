@@ -140,6 +140,7 @@
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
     <Compile Include="Converters\Audio\AudioTrackDefaultBehaviourConverter.cs" />
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />

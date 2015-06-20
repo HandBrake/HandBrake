@@ -402,7 +402,6 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_image_close(IntPtr image);
 
-
         /* JSON API */
 
         // char     * hb_get_title_set_json(hb_handle_t * h);
