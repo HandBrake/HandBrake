@@ -21,7 +21,6 @@
         <Conveters:EnumComboConverter x:Key="enumComboConverter" />
         <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
-        <Audio:AudioBitrateConverter x:Key="audioBitrateConverter" />
         <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
         <Audio:AudioBehaviourConverter x:Key="audioBehaviourConverter" />
         <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
@@ -191,7 +190,7 @@
 
                             <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Bitrate}"
                                        Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding TrackReference, Converter={StaticResource audioBitrateConverter}}"
+                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
                                       SelectedItem="{Binding Bitrate}"
                                       Visibility="{Binding CannotSetBitrate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 

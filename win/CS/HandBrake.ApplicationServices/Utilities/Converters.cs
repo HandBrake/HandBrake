@@ -10,10 +10,9 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
-    using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
 
     /// <summary>
     /// A class to convert various things to native C# objects
@@ -26,69 +25,18 @@ namespace HandBrake.ApplicationServices.Utilities
          * 
          **/
 
-        /// <summary>
-        /// Convert HandBrakes time remaining into a TimeSpan
-        /// </summary>
-        /// <param name="time">
-        /// The time remaining for the encode.
-        /// </param>
-        /// <returns>
-        /// A TimepSpan object
-        /// </returns>
-        public static TimeSpan EncodeToTimespan(string time)
-        {
-            TimeSpan converted = new TimeSpan(0, 0, 0, 0);
-
-            Match m = Regex.Match(time.Trim(), @"^([0-9]{2}:[0-9]{2}:[0-9]{2})");
-            if (m.Success)
-            {
-                TimeSpan.TryParse(m.Groups[0].Value, out converted);
-            }
-
-            return converted;
-        }
-
         #region Audio
 
         /// <summary>
         /// Get the GUI equiv to a CLI mixdown
         /// </summary>
-        /// <param name="mixdown">The Audio Mixdown</param>
-        /// <returns>The GUI representation of the mixdown</returns>
-        public static string GetMixDown(string mixdown)
-        {
-            switch (mixdown.Trim())
-            {
-                case "mono":
-                    return "Mono";
-                case "left_only":
-                    return "Mono (Left Only)";
-                case "right_only":
-                    return "Mono (Right Only)";
-                case "stereo":
-                    return "Stereo";
-                case "dpl1":
-                    return "Dolby Surround";
-                case "dpl2":
-                    return "Dolby Pro Logic II";
-                case "5point1":
-                    return "5.1 Channels";
-                case "6point1":
-                    return "6.1 Channels";
-                case "7point1":
-                    return "7.1 Channels";
-                case "5_2_lfe":
-                    return "7.1 (5F/2R/LFE)";
-                default:
-                    return "Automatic";
-            }
-        }
-
-        /// <summary>
-        /// Get the GUI equiv to a CLI mixdown
-        /// </summary>
-        /// <param name="mixdown">The Audio Mixdown</param>
-        /// <returns>The GUI representation of the mixdown</returns>
+        /// <param name="mixdown">
+        /// The Audio Mixdown
+        /// </param>
+        /// <returns>
+        /// The GUI representation of the mixdown
+        /// </returns>
+        [Obsolete("Use EnumHelper instead")]
         public static Mixdown GetAudioMixDown(string mixdown)
         {
             switch (mixdown.Trim())
@@ -118,47 +66,15 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Return the CLI Mixdown name
-        /// </summary>
-        /// <param name="selectedAudio">GUI mixdown name</param>
-        /// <returns>CLI mixdown name</returns>
-        public static string GetCliMixDown(Mixdown selectedAudio)
-        {
-            switch (selectedAudio)
-            {
-                case Mixdown.Auto:
-                case Mixdown.None:
-                    return "none";
-                case Mixdown.Mono:
-                    return "mono";
-                case Mixdown.LeftOnly:
-                    return "left_only";
-                case Mixdown.RightOnly:
-                    return "right_only";
-                case Mixdown.Stereo:
-                    return "stereo";
-                case Mixdown.DolbySurround:
-                    return "dpl1";
-                case Mixdown.DolbyProLogicII:
-                    return "dpl2";
-                case Mixdown.FivePoint1Channels:
-                    return "5point1";
-                case Mixdown.SixPoint1Channels:
-                    return "6point1";
-                case Mixdown.SevenPoint1Channels:
-                    return "7point1";
-                case Mixdown.Five_2_LFE:
-                    return "5_2_lfe";
-                default:
-                    return "auto";
-            }
-        }
-
-        /// <summary>
         /// Get the GUI equiv to a GUI audio encoder string
         /// </summary>
-        /// <param name="audioEnc">The Audio Encoder</param>
-        /// <returns>The GUI representation of that audio encoder</returns>
+        /// <param name="audioEnc">
+        /// The Audio Encoder
+        /// </param>
+        /// <returns>
+        /// The GUI representation of that audio encoder
+        /// </returns>
+        [Obsolete("Use EnumHelper instead")]
         public static AudioEncoder GetAudioEncoder(string audioEnc)
         {
             switch (audioEnc)

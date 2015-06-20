@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
@@ -72,7 +73,13 @@ namespace HandBrakeWPF.ViewModels
         public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.Task = new EncodeTask();
-            this.SampleRates = new ObservableCollection<string> { "Auto", "48", "44.1", "32", "24", "22.05", "16", "12", "11.025", "8" };
+
+            this.SampleRates = new ObservableCollection<string> { "Auto" };
+            foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
+            {
+                this.SampleRates.Add(item.Name);
+            }
+
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
             this.AudioMixdowns = EnumHelper<Mixdown>.GetEnumList();
             this.SourceTracks = new List<Audio>();
@@ -148,7 +155,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SampleRates.
         /// </summary>
-        public IEnumerable<string> SampleRates { get; set; }
+        public IList<string> SampleRates { get; set; }
 
         /// <summary>
         /// Gets or sets SourceTracks.

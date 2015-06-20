@@ -298,7 +298,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);  
-                    track.MixDown = Converters.GetAudioMixDown(Converters.GetMixDown(audioTrack.AudioMixdown)); // TODO refactor
+                    track.MixDown = EnumHelper<Mixdown>.GetValue(audioTrack.AudioMixdown); 
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);

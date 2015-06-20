@@ -3,74 +3,42 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   An Audio Track for the Audio Panel
+//   Model of a HandBrake Audio Track and it's associated behaviours.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
+    using System.Linq;
 
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using Newtonsoft.Json;
 
     /// <summary>
-    /// An Audio Track for the Audio Panel
+    /// Model of a HandBrake Audio Track and it's associated behaviours.
     /// </summary>
     public class AudioTrack : PropertyChangedBase
     {
-        #region Constants and Fields
-
-        /// <summary>
-        ///   The bitrate.
-        /// </summary>
         private int bitrate;
-
-        /// <summary>
-        ///   The DRC Value
-        /// </summary>
         private double drc;
-
-        /// <summary>
-        ///   The encoder.
-        /// </summary>
         private AudioEncoder encoder;
-
-        /// <summary>
-        ///   The gain value
-        /// </summary>
         private int gain;
-
-        /// <summary>
-        ///   The mix down.
-        /// </summary>
         private Mixdown mixDown;
-
-        /// <summary>
-        ///   The sample rate.
-        /// </summary>
         private double sampleRate;
-
-        /// <summary>
-        ///   The Scanned Audio Track
-        /// </summary>
         [NonSerialized]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
-
-        /// <summary>
-        /// The is default.
-        /// </summary>
         private bool isDefault;
-
-        #endregion
-
-        #region Constructors and Destructors
+        private IEnumerable<int> bitrates;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "AudioTrack" /> class.
@@ -85,6 +53,9 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
             this.DRC = 0;
             this.ScannedTrack = new Audio();
             this.TrackName = string.Empty;
+
+            // Setup Backing Properties
+            this.SetupBitrateLimits();
         }
 
         /// <summary>
@@ -110,11 +81,131 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
                 this.scannedTrack = track.ScannedTrack ?? new Audio();
             }
             this.TrackName = track.TrackName;
+
+            // Setup Backing Properties
+            this.SetupBitrateLimits();
+        }
+
+        #region Track Properties
+
+        /// <summary>
+        ///   Gets or sets Audio Bitrate
+        /// </summary>
+        public int Bitrate
+        {
+            get
+            {
+                return this.bitrate;
+            }
+
+            set
+            {
+                this.bitrate = value;
+                this.NotifyOfPropertyChange(() => this.Bitrate);
+            }
+        }
+        
+
+        /// <summary>
+        ///   Gets or sets Dynamic Range Compression
+        /// </summary>
+        public double DRC
+        {
+            get
+            {
+                return this.drc;
+            }
+
+            set
+            {
+                if (!Equals(value, this.drc))
+                {
+                    this.drc = value;
+                    this.NotifyOfPropertyChange(() => this.DRC);
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the Gain for the audio track
+        /// </summary>
+        public int Gain
+        {
+            get
+            {
+                return this.gain;
+            }
+
+            set
+            {
+                if (!Equals(value, this.gain))
+                {
+                    this.gain = value;
+                    this.NotifyOfPropertyChange(() => this.Gain);
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets Audio Mixdown
+        /// </summary>
+        public Mixdown MixDown
+        {
+            get
+            {
+                return this.mixDown;
+            }
+
+            set
+            {
+                this.mixDown = value;
+                this.NotifyOfPropertyChange(() => this.MixDown);
+                this.SetupBitrateLimits();
+                this.NotifyOfPropertyChange(() => this.TrackReference);
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets Audio Encoder
+        /// </summary>
+        public AudioEncoder Encoder
+        {
+            get
+            {
+                return this.encoder;
+            }
+
+            set
+            {
+                this.encoder = value;
+                this.NotifyOfPropertyChange(() => this.Encoder);
+                this.NotifyOfPropertyChange(() => this.IsPassthru);
+                this.NotifyOfPropertyChange(() => this.CannotSetBitrate);
+                this.SetupBitrateLimits();
+                this.NotifyOfPropertyChange(() => this.TrackReference);
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets Audio SampleRate
+        /// </summary>
+        public double SampleRate
+        {
+            get
+            {
+                return this.sampleRate;
+            }
+
+            set
+            {
+                this.sampleRate = value;
+                this.NotifyOfPropertyChange(() => this.SampleRate);
+                this.SetupBitrateLimits();
+                this.NotifyOfPropertyChange(() => this.TrackReference);
+            }
         }
 
         #endregion
-
-        #region Public Properties
 
         /// <summary>
         ///   Gets AudioEncoderDisplayValue.
@@ -153,47 +244,11 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 
                 return this.Bitrate.ToString();
             }
-        }
-
-        /// <summary>
-        ///   Gets or sets Audio Bitrate
-        /// </summary>
-        public int Bitrate
-        {
-            get
-            {
-                return this.bitrate;
-            }
-
-            set
-            {
-                this.bitrate = value;
-                this.NotifyOfPropertyChange(() => this.Bitrate);
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets Dynamic Range Compression
-        /// </summary>
-        public double DRC
-        {
-            get
-            {
-                return this.drc;
-            }
-
-            set
-            {
-                if (!object.Equals(value, this.drc))
-                {
-                    this.drc = value;
-                    this.NotifyOfPropertyChange(() => this.DRC);
-                }
-            }
-        }
+        }     
 
         /// <summary>
         /// Gets or sets a value indicating whether is default.
+        /// TODO - Can this be removed? May have been added as a quick fix for a styling quirk.
         /// </summary>
         public bool IsDefault
         {
@@ -204,82 +259,6 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
             set
             {
                 this.isDefault = value;
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets Audio Encoder
-        /// </summary>
-        public AudioEncoder Encoder
-        {
-            get
-            {
-                return this.encoder;
-            }
-
-            set
-            {
-                this.encoder = value;
-                this.NotifyOfPropertyChange(() => this.Encoder);
-                this.NotifyOfPropertyChange(() => this.IsPassthru);
-                this.NotifyOfPropertyChange(() => this.CannotSetBitrate);
-                this.NotifyOfPropertyChange(() => this.TrackReference);
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets the Gain for the audio track
-        /// </summary>
-        public int Gain
-        {
-            get
-            {
-                return this.gain;
-            }
-
-            set
-            {
-                if (!object.Equals(value, this.gain))
-                {
-                    this.gain = value;
-                    this.NotifyOfPropertyChange(() => this.Gain);
-                }
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets Audio Mixdown
-        /// </summary>
-        public Mixdown MixDown
-        {
-            get
-            {
-                return this.mixDown;
-            }
-
-            set
-            {
-                this.mixDown = value;
-                this.NotifyOfPropertyChange(() => this.MixDown);
-                this.NotifyOfPropertyChange(() => this.TrackReference);
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets Audio SampleRate
-        /// </summary>
-        public double SampleRate
-        {
-            get
-            {
-                return this.sampleRate;
-            }
-
-            set
-            {
-                this.sampleRate = value;
-                this.NotifyOfPropertyChange(() => this.SampleRate);
-                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -361,6 +340,17 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         }
 
         /// <summary>
+        /// Gets the bitrates.
+        /// </summary>
+        public IEnumerable<int> Bitrates
+        {
+            get
+            {
+                return this.bitrates;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether can set bitrate.
         /// </summary>
         public bool CannotSetBitrate
@@ -396,6 +386,40 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         /// </summary>
         public string TrackName { get; set; }
 
-        #endregion
+        /// <summary>
+        /// The calculate bitrate limits.
+        /// </summary>
+        private void SetupBitrateLimits()
+        {
+            // Base set of bitrates available.
+            List<int> audioBitrates = HandBrakeEncoderHelpers.AudioBitrates;
+
+            // Defaults
+            int max = 256;
+            int low = 32;
+
+            // Based on the users settings, find the high and low bitrates.
+            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+            HBRate rate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(t => t.Name == this.SampleRate.ToString(CultureInfo.InvariantCulture));
+            HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(EnumHelper<Mixdown>.GetShortName(this.MixDown));
+
+            BitrateLimits limits = HandBrakeEncoderHelpers.GetBitrateLimits(hbaenc, rate != null ? rate.Rate : 48000, mixdown);
+            if (limits != null)
+            {
+                max = limits.High;
+                low = limits.Low;
+            }
+
+            // Return the subset of available bitrates.
+            List<int> subsetBitrates = audioBitrates.Where(b => b <= max && b >= low).ToList();
+            this.bitrates = subsetBitrates;
+            this.NotifyOfPropertyChange(() => this.Bitrates);
+
+            // If the subset does not contain the current bitrate, request the default.
+            if (!subsetBitrates.Contains(this.Bitrate))
+            {
+                this.Bitrate = HandBrakeEncoderHelpers.GetDefaultBitrate(hbaenc, rate != null ? rate.Rate : 48000, mixdown);
+            }
+        }
     }
 }

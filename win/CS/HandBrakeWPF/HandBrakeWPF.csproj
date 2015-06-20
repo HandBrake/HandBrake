@@ -218,7 +218,6 @@
     <Compile Include="Controls\StatusPanel.xaml.cs">
       <DependentUpon>StatusPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\Audio\AudioBitrateConverter.cs" />
     <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
     <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />

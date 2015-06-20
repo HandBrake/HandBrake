@@ -338,8 +338,8 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
                 HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(ApplicationServices.Utilities.Converters.GetCliAudioEncoder(item.Encoder));
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
-                HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(ApplicationServices.Utilities.Converters.GetCliMixDown(item.MixDown));
-                Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + ApplicationServices.Utilities.Converters.GetCliMixDown(item.MixDown));
+                HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(EnumHelper<Mixdown>.GetShortName(item.MixDown));
+                Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + item.MixDown);
 
                 HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack
                     {
