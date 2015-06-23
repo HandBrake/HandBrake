@@ -1039,6 +1039,14 @@ skip_preview:
                 aspect_to_string(&title->dar),
                 title->geometry.par.num, title->geometry.par.den);
 
+        if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
+        {
+            hb_log("scan: supported video decoders:%s%s%s",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_SW)    ? "" : " avcodec",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)   ? "" : " qsv",
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_DXVA2) ? "" : " dxva2");
+        }
+
         if( interlaced_preview_count >= ( npreviews / 2 ) )
         {
             hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",

@@ -301,6 +301,13 @@ void hb_display_job_info(hb_job_t *job)
     }
     else
 #endif
+#ifdef USE_HWD
+    if (hb_hwd_enabled(job->h))
+    {
+        hb_log("   + decoder: %s (dxva2)", title->video_codec_name);
+    }
+    else
+#endif
     {
         hb_log("   + decoder: %s", title->video_codec_name);
     }
@@ -909,6 +916,23 @@ static void do_job(hb_job_t *job)
     }
 #endif
 
+#ifdef USE_HWD
+    /*
+     * Check support for and enable DXVA2-accelerated when applicable; we need:
+     * - a compatible input bitstream (HB_DECODE_SUPPORT_DXVA2)
+     * - DXVA2-accelerated decoding enabled (job->use_hwd)
+     * - an AVFormatContext (title->opaque_priv) for now
+     */
+    if (title->video_decode_support & HB_DECODE_SUPPORT_DXVA2)
+    {
+        hb_hwd_set_enable(job->h, job->use_hwd && title->opaque_priv != NULL);
+    }
+    else
+#endif
+    {
+        hb_hwd_set_enable(job->h, 0);
+    }
+
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if( job->list_filter && hb_list_count( job->list_filter ) )
@@ -919,9 +943,6 @@ static void do_job(hb_job_t *job)
         init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.geometry.width = title->geometry.width;
         init.geometry.height = title->geometry.height;
-
-        /* DXVA2 */
-        init.use_dxva = hb_use_dxva(title);
 
         init.geometry.par = job->par;
         memcpy(init.crop, title->crop, sizeof(int[4]));

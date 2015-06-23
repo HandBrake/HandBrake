@@ -962,8 +962,9 @@ struct hb_title_s
 
     // additional supported video decoders (e.g. HW-accelerated implementations)
     int           video_decode_support;
-#define HB_DECODE_SUPPORT_SW  0x01 // software (libavcodec or mpeg2dec)
-#define HB_DECODE_SUPPORT_QSV 0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
+#define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
+#define HB_DECODE_SUPPORT_DXVA2 0x04 // Microsoft DXVA2
 
     hb_metadata_t * metadata;
 
@@ -979,7 +980,6 @@ struct hb_title_s
 
     // whether OpenCL scaling is supported for this source
     int             opencl_support;
-    int             hwd_support; // TODO: merge to video_decode_support
 };
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_state_s.cs when changing this struct
@@ -1153,8 +1153,6 @@ extern hb_work_object_t hb_reader;
 #define HB_FILTER_DROP    3
 #define HB_FILTER_DONE    4
 
-int hb_use_dxva(hb_title_t *title);
-
 typedef struct hb_filter_init_s
 {
     hb_job_t    * job;
@@ -1163,7 +1161,6 @@ typedef struct hb_filter_init_s
     int           crop[4];
     hb_rational_t vrate;
     int           cfr;
-    int           use_dxva;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s

@@ -1669,8 +1669,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 #ifdef USE_HWD
         // QSV decoding is faster, so prefer it to DXVA2
-        if (pv->job != NULL && !pv->qsv.decode && pv->job->use_hwd &&
-            hb_use_dxva(pv->title))
+        if (pv->job != NULL && !pv->qsv.decode && hb_hwd_enabled(pv->job->h))
         {
             pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
             if( pv->dxva2 && pv->dxva2->do_job == HB_WORK_OK )
@@ -1684,6 +1683,10 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                 pv->opencl_scale = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
                 memset( pv->opencl_scale, 0, sizeof( hb_oclscale_t ) );
                 pv->threads = 1;
+            }
+            else
+            {
+                hb_log("decavcodecvInit: hb_va_create_dxva2 failed, using software decoder");
             }
         }
 #endif
@@ -2123,6 +2126,17 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         default:
             break;
     }
+#ifdef USE_HWD
+    hb_va_dxva2_t *dxva2 = hb_va_create_dxva2(NULL, pv->context->codec_id);
+    if (dxva2 != NULL)
+    {
+        if (hb_check_hwd_fmt(pv->context->pix_fmt))
+        {
+            info->video_decode_support |= HB_DECODE_SUPPORT_DXVA2;
+        }
+        hb_va_close(dxva2);
+    }
+#endif
 
     return 1;
 }

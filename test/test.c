@@ -542,11 +542,6 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              title->crop[1], title->crop[2], title->crop[3] );
 
     fprintf(stderr, "  + support opencl: %s\n", title->opencl_support ? "yes" : "no");
-#ifdef USE_HWD
-    fprintf(stderr, "  + support hwd: %s\n", title->hwd_support ? "yes" : "no");
-#else
-    fprintf(stderr, "  + support hwd: not built-in\n");
-#endif
 
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )

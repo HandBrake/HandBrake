@@ -842,6 +842,8 @@ hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
     d->path = strdup( path );
     if (d->path != NULL )
     {
+        // XXX: DXVA2 integration code requires an AVFormatContext
+        // use lavf instead of our MPEG demuxer when it's enabled
         if (!hb_hwd_enabled(d->h) && hb_stream_get_type( d ) != 0 )
         {
             if( !scan )
@@ -1104,20 +1106,6 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     {
         hb_log( "transport stream missing PCRs - using video DTS instead" );
     }
-#ifdef USE_HWD
-    hb_va_dxva2_t * dxva2 = NULL;
-    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
-    if ( dxva2 )
-    {
-        title->hwd_support = 1;
-        hb_va_close(dxva2);
-        dxva2 = NULL;
-    }
-    else
-        title->hwd_support = 0;
-#else
-    title->hwd_support = 0;
-#endif
 
     // Height, width, rate and aspect ratio information is filled in
     // when the previews are built
@@ -5594,24 +5582,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         chapter->seconds = title->seconds;
         hb_list_add( title->list_chapter, chapter );
     }
-#ifdef USE_HWD
-    hb_va_dxva2_t * dxva2 = NULL;
-    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
-    if (dxva2)
-    {
-        title->hwd_support = 1;
-        hb_va_close(dxva2);
-        dxva2 = NULL;
-    }
-    else
-        title->hwd_support = 0;
-   if ( hb_check_hwd_fmt(pix_fmt) == 0)
-       title->hwd_support = 0;
-#else
-    // Eliminate compiler warning "pix_fmt set but not used"
-    (void)pix_fmt;
-    title->hwd_support = 0;
-#endif
 
     return title;
 }

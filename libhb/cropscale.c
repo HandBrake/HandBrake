@@ -71,7 +71,7 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->height_out = init->geometry.height - (init->crop[0] + init->crop[1]);
 
     /* OpenCL/DXVA2 */
-    pv->use_dxva       = init->use_dxva;
+    pv->use_dxva       = hb_hwd_enabled(init->job->h);
     pv->use_decomb     = init->job->use_decomb;
     pv->use_detelecine = init->job->use_detelecine;
 
