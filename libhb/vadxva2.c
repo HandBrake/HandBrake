@@ -636,38 +636,38 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
     dxva->hd3d9_dll = LoadLibrary( TEXT( "D3D9.DLL" ) );
     if( !dxva->hd3d9_dll )
     {
-        hb_log( "dxva2:cannot load d3d9.dll" );
+        hb_deep_log(2, "dxva2:cannot load d3d9.dll");
         goto error;
     }
     dxva->hdxva2_dll = LoadLibrary( TEXT( "DXVA2.DLL" ) );
     if( !dxva->hdxva2_dll )
     {
-        hb_log( "dxva2:cannot load DXVA2.dll" );
+        hb_deep_log(2, "dxva2:cannot load DXVA2.dll");
         goto error;
     }
 
     if( hb_d3d_create_device( dxva ) == HB_WORK_ERROR )
     {
-        hb_log( "dxva2:Failed to create Direct3D device" );
+        hb_deep_log(2, "dxva2:Failed to create Direct3D device");
         goto error;
     }
 
     if( hb_d3d_create_device_manager( dxva ) == HB_WORK_ERROR )
     {
-        hb_log( "dxva2:D3dCreateDeviceManager failed" );
+        hb_deep_log(2, "dxva2:D3dCreateDeviceManager failed");
         goto error;
     }
 
 
     if( hb_dx_create_video_service( dxva ) == HB_WORK_ERROR )
     {
-        hb_log( "dxva2:DxCreateVideoService failed" );
+        hb_deep_log(2, "dxva2:DxCreateVideoService failed");
         goto error;
     }
 
     if( hb_dx_find_video_service_conversion( dxva, &dxva->input, &dxva->render ) == HB_WORK_ERROR )
     {
-        hb_log( "dxva2:DxFindVideoServiceConversion failed" );
+        hb_deep_log(2, "dxva2:DxFindVideoServiceConversion failed");
         goto error;
     }
 
@@ -688,6 +688,7 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
             return dxva;
         }
     }
+    hb_deep_log(2, "dxva2:compatible AVHWAccel not found");
 
 error:
     hb_va_close( dxva );
