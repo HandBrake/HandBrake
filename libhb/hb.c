@@ -1635,6 +1635,9 @@ void hb_global_close()
     
     hb_presets_free();
 
+    /* OpenCL library (dynamically loaded) */
+    hb_ocl_close();
+
     /* Find and remove temp folder */
     memset( dirname, 0, 1024 );
     hb_get_temporary_directory( dirname );
