@@ -671,10 +671,23 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
         goto error;
     }
 
-    dxva->do_job = HB_WORK_OK;
-    dxva->description = "DXVA2";
-
-    return dxva;
+    /*
+     * We may get a valid DXVA2 decoder later on, but we won't be able to
+     * use it if libavcodec is built without support for the appropriate
+     * AVHWaccel, so we need to check for it before declaring victory.
+     */
+    AVHWAccel *hwaccel = NULL;
+    for (hwaccel = av_hwaccel_next(NULL);
+         hwaccel != NULL;
+         hwaccel = av_hwaccel_next(hwaccel))
+    {
+        if (hwaccel->id == codec_id && hwaccel->pix_fmt == AV_PIX_FMT_DXVA2_VLD)
+        {
+            dxva->do_job = HB_WORK_OK;
+            dxva->description = "DXVA2";
+            return dxva;
+        }
+    }
 
 error:
     hb_va_close( dxva );
