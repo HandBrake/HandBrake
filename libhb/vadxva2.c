@@ -124,19 +124,33 @@ void hb_va_close( hb_va_dxva2_t *dxva2 )
  */
 static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const  hb_title_t* fmt )
 {
+    int surface_alignment;
     dxva2->width = fmt->geometry.width;
     dxva2->height = fmt->geometry.height;
-    dxva2->surface_width = (fmt->geometry.width  + 15) & ~15;
-    dxva2->surface_height = (fmt->geometry.height + 15) & ~15;
+
     switch( codec_id )
     {
         case AV_CODEC_ID_H264:
             dxva2->surface_count = 16 + 1;
+            surface_alignment = 16;
+            break;
+        case AV_CODEC_ID_HEVC:
+            dxva2->surface_count = 16 + 1;
+            surface_alignment = 128;
+            break;
+        case AV_CODEC_ID_MPEG2VIDEO:
+            dxva2->surface_count = 2 + 1;
+            surface_alignment = 32;
             break;
         default:
             dxva2->surface_count = 2 + 1;
+            surface_alignment = 16;
             break;
     }
+    
+    dxva2->surface_width = HBALIGN(fmt->geometry.width, surface_alignment);
+    dxva2->surface_height = HBALIGN(fmt->geometry.height, surface_alignment);    
+    
     LPDIRECT3DSURFACE9 surface_list[VA_DXVA2_MAX_SURFACE_COUNT];
     if( FAILED( IDirectXVideoDecoderService_CreateSurface( dxva2->vs,
                                                            dxva2->surface_width,

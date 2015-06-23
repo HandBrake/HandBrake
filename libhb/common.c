@@ -4539,7 +4539,8 @@ int hb_use_dxva( hb_title_t * title )
               || title->video_codec_param == AV_CODEC_ID_H264
               || title->video_codec_param == AV_CODEC_ID_VC1
               || title->video_codec_param == AV_CODEC_ID_WMV3
-              || title->video_codec_param == AV_CODEC_ID_MPEG4 )
+              || title->video_codec_param == AV_CODEC_ID_MPEG4 
+              || title->video_codec_param == AV_CODEC_ID_HEVC )
              && title->opaque_priv );
 }
 

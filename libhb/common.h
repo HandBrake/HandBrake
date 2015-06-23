@@ -70,6 +70,8 @@
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
 
+#define HBALIGN(x, a) (((x)+(a)-1)&~((a)-1))
+
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_hwd_s hb_hwd_t;
 typedef struct hb_list_s hb_list_t;
