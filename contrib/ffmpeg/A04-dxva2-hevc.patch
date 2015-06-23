@@ -1,0 +1,1145 @@
+From a99d16e600f9070a3bcb99151d7fc3508d2fca59 Mon Sep 17 00:00:00 2001
+From: Diego Biurrun <diego@biurrun.de>
+Date: Fri, 15 Aug 2014 20:51:01 +0200
+Subject: [PATCH 1/9] dxva2: Pass variable of correct type to
+ IDirectXVideoDecoder_GetBuffer()
+
+This avoids related incompatible pointer type warnings.
+
+(cherry picked from commit 4600a85eaa6182e5a27464f6b9cae5a9ddbf3098)
+---
+ libavcodec/dxva2_h264.c  | 7 +++++--
+ libavcodec/dxva2_mpeg2.c | 5 ++++-
+ libavcodec/dxva2_vc1.c   | 4 +++-
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/libavcodec/dxva2_h264.c b/libavcodec/dxva2_h264.c
+index fa205c4..4132cd7 100644
+--- a/libavcodec/dxva2_h264.c
++++ b/libavcodec/dxva2_h264.c
+@@ -297,6 +297,7 @@ static int commit_bitstream_and_slice_buffer(AVCodecContext *avctx,
+     const H264Picture *current_picture = h->cur_pic_ptr;
+     struct dxva2_picture_context *ctx_pic = current_picture->hwaccel_picture_private;
+     DXVA_Slice_H264_Short *slice = NULL;
++    void     *dxva_data_ptr;
+     uint8_t  *dxva_data, *current, *end;
+     unsigned dxva_size;
+     void     *slice_data;
+@@ -306,9 +307,11 @@ static int commit_bitstream_and_slice_buffer(AVCodecContext *avctx,
+ 
+     /* Create an annex B bitstream buffer with only slice NAL and finalize slice */
+     if (FAILED(IDirectXVideoDecoder_GetBuffer(ctx->decoder,
+-                                               DXVA2_BitStreamDateBufferType,
+-                                               &dxva_data, &dxva_size)))
++                                              DXVA2_BitStreamDateBufferType,
++                                              &dxva_data_ptr, &dxva_size)))
+         return -1;
++
++    dxva_data = dxva_data_ptr;
+     current = dxva_data;
+     end = dxva_data + dxva_size;
+ 
+diff --git a/libavcodec/dxva2_mpeg2.c b/libavcodec/dxva2_mpeg2.c
+index f6ef5e5..65624e3 100644
+--- a/libavcodec/dxva2_mpeg2.c
++++ b/libavcodec/dxva2_mpeg2.c
+@@ -156,14 +156,17 @@ static int commit_bitstream_and_slice_buffer(AVCodecContext *avctx,
+         s->current_picture_ptr->hwaccel_picture_private;
+     const int is_field = s->picture_structure != PICT_FRAME;
+     const unsigned mb_count = s->mb_width * (s->mb_height >> is_field);
++    void     *dxva_data_ptr;
+     uint8_t  *dxva_data, *current, *end;
+     unsigned dxva_size;
+     unsigned i;
+ 
+     if (FAILED(IDirectXVideoDecoder_GetBuffer(ctx->decoder,
+                                               DXVA2_BitStreamDateBufferType,
+-                                              &dxva_data, &dxva_size)))
++                                              &dxva_data_ptr, &dxva_size)))
+         return -1;
++
++    dxva_data = dxva_data_ptr;
+     current = dxva_data;
+     end = dxva_data + dxva_size;
+ 
+diff --git a/libavcodec/dxva2_vc1.c b/libavcodec/dxva2_vc1.c
+index 4f4dd17..1524b51 100644
+--- a/libavcodec/dxva2_vc1.c
++++ b/libavcodec/dxva2_vc1.c
+@@ -173,15 +173,17 @@ static int commit_bitstream_and_slice_buffer(AVCodecContext *avctx,
+     const unsigned padding = 128 - ((start_code_size + slice_size) & 127);
+     const unsigned data_size = start_code_size + slice_size + padding;
+ 
++    void     *dxva_data_ptr;
+     uint8_t  *dxva_data;
+     unsigned dxva_size;
+     int result;
+ 
+     if (FAILED(IDirectXVideoDecoder_GetBuffer(ctx->decoder,
+                                               DXVA2_BitStreamDateBufferType,
+-                                              &dxva_data, &dxva_size)))
++                                              &dxva_data_ptr, &dxva_size)))
+         return -1;
+ 
++    dxva_data = dxva_data_ptr;
+     result = data_size <= dxva_size ? 0 : -1;
+     if (!result) {
+         if (start_code_size > 0)
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 13d8656eb3352c30a7e6983caa0f721b2df317df Mon Sep 17 00:00:00 2001
+From: Diego Biurrun <diego@biurrun.de>
+Date: Fri, 15 Aug 2014 21:01:15 +0200
+Subject: [PATCH 2/9] dxva2: Clean up definition of _WIN32_WINNT
+
+Only set a value if _WIN32_WINNT is undefined or smaller than 0x0600. This is
+cleaner than unconditional definition and avoids a number of redefinition
+warnings. Also only define a value in one of the two dxva2 headers.
+
+(cherry picked from commit b8962d64cc71af241601bcab5c3fcdc5735ef4ae)
+---
+ libavcodec/dxva2.h          | 4 ++++
+ libavcodec/dxva2_internal.h | 1 -
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/dxva2.h b/libavcodec/dxva2.h
+index 78939be..d9017c6 100644
+--- a/libavcodec/dxva2.h
++++ b/libavcodec/dxva2.h
+@@ -29,7 +29,11 @@
+  * Public libavcodec DXVA2 header.
+  */
+ 
++#if !defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0600
++#undef _WIN32_WINNT
+ #define _WIN32_WINNT 0x0600
++#endif
++
+ #include <stdint.h>
+ #include <d3d9.h>
+ #include <dxva2api.h>
+diff --git a/libavcodec/dxva2_internal.h b/libavcodec/dxva2_internal.h
+index f35a076..b775e6c 100644
+--- a/libavcodec/dxva2_internal.h
++++ b/libavcodec/dxva2_internal.h
+@@ -23,7 +23,6 @@
+ #ifndef AVCODEC_DXVA_INTERNAL_H
+ #define AVCODEC_DXVA_INTERNAL_H
+ 
+-#define _WIN32_WINNT 0x0600
+ #define COBJMACROS
+ 
+ #include "config.h"
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 56af8c0a6c9d1b05b11ba2be6fbacac4956abbef Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:45 +0100
+Subject: [PATCH 3/9] hevc: pass the full HEVCNAL struct to decode_nal_unit
+
+This enables decode_nal_unit to access additional fields added in
+subsequent commits.
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit b0593a4bca138f1f026d8c21e8c3daa96800afe2)
+---
+ libavcodec/hevc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 21d437c..6cd9054 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -2490,13 +2490,13 @@ fail:
+     return ret;
+ }
+ 
+-static int decode_nal_unit(HEVCContext *s, const uint8_t *nal, int length)
++static int decode_nal_unit(HEVCContext *s, const HEVCNAL *nal)
+ {
+     HEVCLocalContext *lc = &s->HEVClc;
+     GetBitContext *gb    = &lc->gb;
+     int ctb_addr_ts, ret;
+ 
+-    ret = init_get_bits8(gb, nal, length);
++    ret = init_get_bits8(gb, nal->data, nal->size);
+     if (ret < 0)
+         return ret;
+ 
+@@ -2802,7 +2802,7 @@ static int decode_nal_units(HEVCContext *s, const uint8_t *buf, int length)
+ 
+     /* parse the NAL units */
+     for (i = 0; i < s->nb_nals; i++) {
+-        int ret = decode_nal_unit(s, s->nals[i].data, s->nals[i].size);
++        int ret = decode_nal_unit(s, &s->nals[i]);
+         if (ret < 0) {
+             av_log(s->avctx, AV_LOG_WARNING,
+                    "Error parsing NAL unit #%d.\n", i);
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 60a65b94510cdda380ebbcf43812e6302697f2f7 Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:46 +0100
+Subject: [PATCH 4/9] hevc: store the escaped/raw bitstream in HEVCNAL
+
+Hardware Accelerators require access to the escaped bitstream.
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit 36779a84051eae6744cc936d91b1d428143665ba)
+---
+ libavcodec/hevc.c | 8 ++++++--
+ libavcodec/hevc.h | 3 +++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 6cd9054..8371b6b 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -2682,8 +2682,10 @@ static int extract_rbsp(const uint8_t *src, int length,
+ #endif /* HAVE_FAST_UNALIGNED */
+ 
+     if (i >= length - 1) { // no escaped 0
+-        nal->data = src;
+-        nal->size = length;
++        nal->data     =
++        nal->raw_data = src;
++        nal->size     =
++        nal->raw_size = length;
+         return length;
+     }
+ 
+@@ -2722,6 +2724,8 @@ nsc:
+ 
+     nal->data = dst;
+     nal->size = di;
++    nal->raw_data = src;
++    nal->raw_size = si;
+     return si;
+ }
+ 
+diff --git a/libavcodec/hevc.h b/libavcodec/hevc.h
+index 93c5125..94c688e 100644
+--- a/libavcodec/hevc.h
++++ b/libavcodec/hevc.h
+@@ -696,6 +696,9 @@ typedef struct HEVCNAL {
+ 
+     int size;
+     const uint8_t *data;
++
++    int raw_size;
++    const uint8_t *raw_data;
+ } HEVCNAL;
+ 
+ struct HEVCContext;
+-- 
+2.3.2 (Apple Git-55)
+
+
+From bfa5b2620e89fc67782e712555d332c0813a9225 Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:47 +0100
+Subject: [PATCH 5/9] hevc: store the short term rps flag and size in the
+ context
+
+For future use by hardware accelerators.
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit 4b95e95dbae58c9b60891284bf8b5bbd83e5293a)
+---
+ libavcodec/hevc.c | 8 +++++---
+ libavcodec/hevc.h | 2 ++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 8371b6b..18de9e5 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -552,7 +552,7 @@ static int hls_slice_header(HEVCContext *s)
+             sh->colour_plane_id = get_bits(gb, 2);
+ 
+         if (!IS_IDR(s)) {
+-            int short_term_ref_pic_set_sps_flag, poc;
++            int poc;
+ 
+             sh->pic_order_cnt_lsb = get_bits(gb, s->sps->log2_max_poc_lsb);
+             poc = ff_hevc_compute_poc(s, sh->pic_order_cnt_lsb);
+@@ -565,12 +565,14 @@ static int hls_slice_header(HEVCContext *s)
+             }
+             s->poc = poc;
+ 
+-            short_term_ref_pic_set_sps_flag = get_bits1(gb);
+-            if (!short_term_ref_pic_set_sps_flag) {
++            sh->short_term_ref_pic_set_sps_flag = get_bits1(gb);
++            if (!sh->short_term_ref_pic_set_sps_flag) {
++                int pos = get_bits_left(gb);
+                 ret = ff_hevc_decode_short_term_rps(s, &sh->slice_rps, s->sps, 1);
+                 if (ret < 0)
+                     return ret;
+ 
++                sh->short_term_ref_pic_set_size = pos - get_bits_left(gb);
+                 sh->short_term_rps = &sh->slice_rps;
+             } else {
+                 int numbits, rps_idx;
+diff --git a/libavcodec/hevc.h b/libavcodec/hevc.h
+index 94c688e..dced2b4 100644
+--- a/libavcodec/hevc.h
++++ b/libavcodec/hevc.h
+@@ -543,6 +543,8 @@ typedef struct SliceHeader {
+     uint8_t colour_plane_id;
+ 
+     ///< RPS coded in the slice header itself is stored here
++    int short_term_ref_pic_set_sps_flag;
++    int short_term_ref_pic_set_size;
+     ShortTermRPS slice_rps;
+     const ShortTermRPS *short_term_rps;
+     LongTermRPS long_term_rps;
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 3d85f38f870bce16c26bd8ebd80de1d22b940ce6 Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:48 +0100
+Subject: [PATCH 6/9] hevc: add hwaccel hooks
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit e72e8c5a1df61447ac7af750531e96e8b62d02ba)
+---
+ libavcodec/hevc.c      | 38 ++++++++++++++++++++++++++++++++++++--
+ libavcodec/hevc.h      |  3 +++
+ libavcodec/hevc_refs.c | 17 +++++++++++++++++
+ 3 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 18de9e5..2d1acdb5 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -385,6 +385,8 @@ static int decode_lt_rps(HEVCContext *s, LongTermRPS *rps, GetBitContext *gb)
+ 
+ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+ {
++    #define HWACCEL_MAX (0)
++    enum AVPixelFormat pix_fmts[HWACCEL_MAX + 2], *fmt = pix_fmts;
+     int ret;
+     unsigned int num = 0, den = 0;
+ 
+@@ -397,9 +399,16 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+     s->avctx->coded_height        = sps->height;
+     s->avctx->width               = sps->output_width;
+     s->avctx->height              = sps->output_height;
+-    s->avctx->pix_fmt             = sps->pix_fmt;
+     s->avctx->has_b_frames        = sps->temporal_layer[sps->max_sub_layers - 1].num_reorder_pics;
+ 
++    *fmt++ = sps->pix_fmt;
++    *fmt = AV_PIX_FMT_NONE;
++
++    ret = ff_get_format(s->avctx, pix_fmts);
++    if (ret < 0)
++        goto fail;
++    s->avctx->pix_fmt = ret;
++
+     ff_set_sar(s->avctx, sps->vui.sar);
+ 
+     if (sps->vui.video_signal_type_present_flag)
+@@ -422,7 +431,7 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+     ff_hevc_dsp_init (&s->hevcdsp, sps->bit_depth);
+     ff_videodsp_init (&s->vdsp,    sps->bit_depth);
+ 
+-    if (sps->sao_enabled) {
++    if (sps->sao_enabled && !s->avctx->hwaccel) {
+         av_frame_unref(s->tmp_frame);
+         ret = ff_get_buffer(s->avctx, s->tmp_frame, AV_GET_BUFFER_FLAG_REF);
+         if (ret < 0)
+@@ -2596,6 +2605,17 @@ static int decode_nal_unit(HEVCContext *s, const HEVCNAL *nal)
+             }
+         }
+ 
++        if (s->sh.first_slice_in_pic_flag && s->avctx->hwaccel) {
++            ret = s->avctx->hwaccel->start_frame(s->avctx, NULL, 0);
++            if (ret < 0)
++                goto fail;
++        }
++
++        if (s->avctx->hwaccel) {
++            ret = s->avctx->hwaccel->decode_slice(s->avctx, nal->raw_data, nal->raw_size);
++            if (ret < 0)
++                goto fail;
++        } else {
+         ctb_addr_ts = hls_slice_data(s);
+         if (ctb_addr_ts >= (s->sps->ctb_width * s->sps->ctb_height)) {
+             s->is_decoded = 1;
+@@ -2609,6 +2629,7 @@ static int decode_nal_unit(HEVCContext *s, const HEVCNAL *nal)
+             ret = ctb_addr_ts;
+             goto fail;
+         }
++        }
+         break;
+     case NAL_EOS_NUT:
+     case NAL_EOB_NUT:
+@@ -2916,6 +2937,11 @@ static int hevc_decode_frame(AVCodecContext *avctx, void *data, int *got_output,
+     if (ret < 0)
+         return ret;
+ 
++    if (avctx->hwaccel) {
++        if (s->ref && avctx->hwaccel->end_frame(avctx) < 0)
++            av_log(avctx, AV_LOG_ERROR,
++                   "hardware accelerator failed to decode picture\n");
++    } else {
+     /* verify the SEI checksum */
+     if (avctx->err_recognition & AV_EF_CRCCHECK && s->is_decoded &&
+         s->is_md5) {
+@@ -2925,6 +2951,7 @@ static int hevc_decode_frame(AVCodecContext *avctx, void *data, int *got_output,
+             return ret;
+         }
+     }
++    }
+     s->is_md5 = 0;
+ 
+     if (s->is_decoded) {
+@@ -2966,6 +2993,13 @@ static int hevc_ref_frame(HEVCContext *s, HEVCFrame *dst, HEVCFrame *src)
+     dst->flags      = src->flags;
+     dst->sequence   = src->sequence;
+ 
++    if (src->hwaccel_picture_private) {
++        dst->hwaccel_priv_buf = av_buffer_ref(src->hwaccel_priv_buf);
++        if (!dst->hwaccel_priv_buf)
++            goto fail;
++        dst->hwaccel_picture_private = dst->hwaccel_priv_buf->data;
++    }
++
+     return 0;
+ fail:
+     ff_hevc_unref_frame(s, dst, ~0);
+diff --git a/libavcodec/hevc.h b/libavcodec/hevc.h
+index dced2b4..40e945e 100644
+--- a/libavcodec/hevc.h
++++ b/libavcodec/hevc.h
+@@ -680,6 +680,9 @@ typedef struct HEVCFrame {
+     AVBufferRef *rpl_tab_buf;
+     AVBufferRef *rpl_buf;
+ 
++    AVBufferRef *hwaccel_priv_buf;
++    void *hwaccel_picture_private;
++
+     /**
+      * A sequence counter, so that old frames are output first
+      * after a POC reset
+diff --git a/libavcodec/hevc_refs.c b/libavcodec/hevc_refs.c
+index 658ead7..0b8e4ef 100644
+--- a/libavcodec/hevc_refs.c
++++ b/libavcodec/hevc_refs.c
+@@ -21,6 +21,7 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  */
+ 
++#include "libavutil/avassert.h"
+ #include "libavutil/pixdesc.h"
+ 
+ #include "internal.h"
+@@ -46,6 +47,9 @@ void ff_hevc_unref_frame(HEVCContext *s, HEVCFrame *frame, int flags)
+         frame->refPicList = NULL;
+ 
+         frame->collocated_ref = NULL;
++
++        av_buffer_unref(&frame->hwaccel_priv_buf);
++        frame->hwaccel_picture_private = NULL;
+     }
+ }
+ 
+@@ -105,6 +109,17 @@ static HEVCFrame *alloc_frame(HEVCContext *s)
+         for (j = 0; j < frame->ctb_count; j++)
+             frame->rpl_tab[j] = (RefPicListTab *)frame->rpl_buf->data;
+ 
++        if (s->avctx->hwaccel) {
++            const AVHWAccel *hwaccel = s->avctx->hwaccel;
++            av_assert0(!frame->hwaccel_picture_private);
++            if (hwaccel->frame_priv_data_size) {
++                frame->hwaccel_priv_buf = av_buffer_allocz(hwaccel->frame_priv_data_size);
++                if (!frame->hwaccel_priv_buf)
++                    goto fail;
++                frame->hwaccel_picture_private = frame->hwaccel_priv_buf->data;
++            }
++        }
++
+         return frame;
+ 
+ fail:
+@@ -340,6 +355,7 @@ static HEVCFrame *generate_missing_ref(HEVCContext *s, int poc)
+     if (!frame)
+         return NULL;
+ 
++    if (!s->avctx->hwaccel) {
+     if (!s->sps->pixel_shift) {
+         for (i = 0; frame->frame->buf[i]; i++)
+             memset(frame->frame->buf[i]->data, 1 << (s->sps->bit_depth - 1),
+@@ -352,6 +368,7 @@ static HEVCFrame *generate_missing_ref(HEVCContext *s, int poc)
+                             1 << (s->sps->bit_depth - 1));
+                 }
+     }
++    }
+ 
+     frame->poc      = poc;
+     frame->sequence = s->seq_decode;
+-- 
+2.3.2 (Apple Git-55)
+
+
+From f307d5762ae47dac503fe759f0774d25be9d7684 Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:49 +0100
+Subject: [PATCH 7/9] hevc: reindent after previous commit
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit b82722df9b2911bd41e0928db4804067b39e6528)
+---
+ libavcodec/hevc.c      | 40 ++++++++++++++++++++--------------------
+ libavcodec/hevc_refs.c | 24 ++++++++++++------------
+ 2 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 2d1acdb5..81f0dc8 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -2616,19 +2616,19 @@ static int decode_nal_unit(HEVCContext *s, const HEVCNAL *nal)
+             if (ret < 0)
+                 goto fail;
+         } else {
+-        ctb_addr_ts = hls_slice_data(s);
+-        if (ctb_addr_ts >= (s->sps->ctb_width * s->sps->ctb_height)) {
+-            s->is_decoded = 1;
+-            if ((s->pps->transquant_bypass_enable_flag ||
+-                 (s->sps->pcm.loop_filter_disable_flag && s->sps->pcm_enabled_flag)) &&
+-                s->sps->sao_enabled)
+-                restore_tqb_pixels(s);
+-        }
++            ctb_addr_ts = hls_slice_data(s);
++            if (ctb_addr_ts >= (s->sps->ctb_width * s->sps->ctb_height)) {
++                s->is_decoded = 1;
++                if ((s->pps->transquant_bypass_enable_flag ||
++                     (s->sps->pcm.loop_filter_disable_flag && s->sps->pcm_enabled_flag)) &&
++                    s->sps->sao_enabled)
++                    restore_tqb_pixels(s);
++            }
+ 
+-        if (ctb_addr_ts < 0) {
+-            ret = ctb_addr_ts;
+-            goto fail;
+-        }
++            if (ctb_addr_ts < 0) {
++                ret = ctb_addr_ts;
++                goto fail;
++            }
+         }
+         break;
+     case NAL_EOS_NUT:
+@@ -2942,16 +2942,16 @@ static int hevc_decode_frame(AVCodecContext *avctx, void *data, int *got_output,
+             av_log(avctx, AV_LOG_ERROR,
+                    "hardware accelerator failed to decode picture\n");
+     } else {
+-    /* verify the SEI checksum */
+-    if (avctx->err_recognition & AV_EF_CRCCHECK && s->is_decoded &&
+-        s->is_md5) {
+-        ret = verify_md5(s, s->ref->frame);
+-        if (ret < 0 && avctx->err_recognition & AV_EF_EXPLODE) {
+-            ff_hevc_unref_frame(s, s->ref, ~0);
+-            return ret;
++        /* verify the SEI checksum */
++        if (avctx->err_recognition & AV_EF_CRCCHECK && s->is_decoded &&
++            s->is_md5) {
++            ret = verify_md5(s, s->ref->frame);
++            if (ret < 0 && avctx->err_recognition & AV_EF_EXPLODE) {
++                ff_hevc_unref_frame(s, s->ref, ~0);
++                return ret;
++            }
+         }
+     }
+-    }
+     s->is_md5 = 0;
+ 
+     if (s->is_decoded) {
+diff --git a/libavcodec/hevc_refs.c b/libavcodec/hevc_refs.c
+index 0b8e4ef..7508b0e 100644
+--- a/libavcodec/hevc_refs.c
++++ b/libavcodec/hevc_refs.c
+@@ -356,18 +356,18 @@ static HEVCFrame *generate_missing_ref(HEVCContext *s, int poc)
+         return NULL;
+ 
+     if (!s->avctx->hwaccel) {
+-    if (!s->sps->pixel_shift) {
+-        for (i = 0; frame->frame->buf[i]; i++)
+-            memset(frame->frame->buf[i]->data, 1 << (s->sps->bit_depth - 1),
+-                   frame->frame->buf[i]->size);
+-    } else {
+-        for (i = 0; frame->frame->data[i]; i++)
+-            for (y = 0; y < (s->sps->height >> s->sps->vshift[i]); y++)
+-                for (x = 0; x < (s->sps->width >> s->sps->hshift[i]); x++) {
+-                    AV_WN16(frame->frame->data[i] + y * frame->frame->linesize[i] + 2 * x,
+-                            1 << (s->sps->bit_depth - 1));
+-                }
+-    }
++        if (!s->sps->pixel_shift) {
++            for (i = 0; frame->frame->buf[i]; i++)
++                memset(frame->frame->buf[i]->data, 1 << (s->sps->bit_depth - 1),
++                       frame->frame->buf[i]->size);
++        } else {
++            for (i = 0; frame->frame->data[i]; i++)
++                for (y = 0; y < (s->sps->height >> s->sps->vshift[i]); y++)
++                    for (x = 0; x < (s->sps->width >> s->sps->hshift[i]); x++) {
++                        AV_WN16(frame->frame->data[i] + y * frame->frame->linesize[i] + 2 * x,
++                                1 << (s->sps->bit_depth - 1));
++                    }
++        }
+     }
+ 
+     frame->poc      = poc;
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 8de29b6b92e02b47cafe105f1b69d5648394e2a0 Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Sun, 25 Jan 2015 12:58:50 +0100
+Subject: [PATCH 8/9] Add DXVA2 HEVC HWAccel
+
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+(cherry picked from commit 7e850fa67e32ebe98581c2e4ca4a4655dee7f116)
+---
+ configure               |   5 +
+ libavcodec/Makefile     |   1 +
+ libavcodec/allcodecs.c  |   1 +
+ libavcodec/dxva2_hevc.c | 375 ++++++++++++++++++++++++++++++++++++++++++++++++
+ libavcodec/hevc.c       |   8 +-
+ 5 files changed, 389 insertions(+), 1 deletion(-)
+ create mode 100644 libavcodec/dxva2_hevc.c
+
+diff --git a/configure b/configure
+index 33a7a85..4ea20c4 100755
+--- a/configure
++++ b/configure
+@@ -1495,6 +1495,7 @@ TOOLCHAIN_FEATURES="
+ "
+ 
+ TYPES_LIST="
++    DXVA_PicParams_HEVC
+     socklen_t
+     struct_addrinfo
+     struct_group_source_req
+@@ -1938,6 +1939,8 @@ h264_vda_old_hwaccel_deps="vda"
+ h264_vda_old_hwaccel_select="h264_decoder"
+ h264_vdpau_hwaccel_deps="vdpau"
+ h264_vdpau_hwaccel_select="h264_decoder"
++hevc_dxva2_hwaccel_deps="dxva2 DXVA_PicParams_HEVC"
++hevc_dxva2_hwaccel_select="hevc_decoder"
+ mpeg1_vdpau_hwaccel_deps="vdpau"
+ mpeg1_vdpau_hwaccel_select="mpeg1video_decoder"
+ mpeg2_dxva2_hwaccel_deps="dxva2"
+@@ -4100,6 +4103,8 @@ check_lib2 "windows.h psapi.h" GetProcessMemoryInfo -lpsapi
+ 
+ check_struct "sys/time.h sys/resource.h" "struct rusage" ru_maxrss
+ 
++check_type "windows.h dxva.h" "DXVA_PicParams_HEVC"
++
+ if ! disabled w32threads && ! enabled pthreads; then
+     check_func_headers "windows.h process.h" _beginthreadex &&
+         enable w32threads || disable w32threads
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index 752340f..7ea2018 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -547,6 +547,7 @@ OBJS-$(CONFIG_H264_DXVA2_HWACCEL)         += dxva2_h264.o
+ OBJS-$(CONFIG_H264_VAAPI_HWACCEL)         += vaapi_h264.o
+ OBJS-$(CONFIG_H264_VDA_HWACCEL)           += vda_h264.o
+ OBJS-$(CONFIG_H264_VDPAU_HWACCEL)         += vdpau_h264.o
++OBJS-$(CONFIG_HEVC_DXVA2_HWACCEL)         += dxva2_hevc.o
+ OBJS-$(CONFIG_MPEG1_VDPAU_HWACCEL)        += vdpau_mpeg12.o
+ OBJS-$(CONFIG_MPEG2_DXVA2_HWACCEL)        += dxva2_mpeg2.o
+ OBJS-$(CONFIG_MPEG2_VAAPI_HWACCEL)        += vaapi_mpeg2.o
+diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
+index 6a71b2c..b7899ce 100644
+--- a/libavcodec/allcodecs.c
++++ b/libavcodec/allcodecs.c
+@@ -81,6 +81,7 @@ void avcodec_register_all(void)
+     REGISTER_HWACCEL(H264_VDA,          h264_vda);
+     REGISTER_HWACCEL(H264_VDA_OLD,      h264_vda_old);
+     REGISTER_HWACCEL(H264_VDPAU,        h264_vdpau);
++    REGISTER_HWACCEL(HEVC_DXVA2,        hevc_dxva2);
+     REGISTER_HWACCEL(MPEG1_VDPAU,       mpeg1_vdpau);
+     REGISTER_HWACCEL(MPEG2_DXVA2,       mpeg2_dxva2);
+     REGISTER_HWACCEL(MPEG2_VAAPI,       mpeg2_vaapi);
+diff --git a/libavcodec/dxva2_hevc.c b/libavcodec/dxva2_hevc.c
+new file mode 100644
+index 0000000..2de9ef2
+--- /dev/null
++++ b/libavcodec/dxva2_hevc.c
+@@ -0,0 +1,375 @@
++/*
++ * DXVA2 HEVC HW acceleration.
++ *
++ * copyright (c) 2014 - 2015 Hendrik Leppkes
++ *
++ * This file is part of Libav.
++ *
++ * Libav is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * Libav is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with Libav; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include "libavutil/avassert.h"
++
++#include "dxva2_internal.h"
++#include "hevc.h"
++
++#define MAX_SLICES 256
++
++struct hevc_dxva2_picture_context {
++    DXVA_PicParams_HEVC   pp;
++    DXVA_Qmatrix_HEVC     qm;
++    unsigned              slice_count;
++    DXVA_Slice_HEVC_Short slice_short[MAX_SLICES];
++    const uint8_t         *bitstream;
++    unsigned              bitstream_size;
++};
++
++static void fill_picture_entry(DXVA_PicEntry_HEVC *pic,
++                               unsigned index, unsigned flag)
++{
++    av_assert0((index & 0x7f) == index && (flag & 0x01) == flag);
++    pic->bPicEntry = index | (flag << 7);
++}
++
++static int get_refpic_index(const DXVA_PicParams_HEVC *pp, int surface_index)
++{
++    int i;
++    for (i = 0; i < FF_ARRAY_ELEMS(pp->RefPicList); i++) {
++        if ((pp->RefPicList[i].bPicEntry & 0x7f) == surface_index)
++          return i;
++    }
++    return 0xff;
++}
++
++static void fill_picture_parameters(struct dxva_context *ctx, const HEVCContext *h,
++                                    DXVA_PicParams_HEVC *pp)
++{
++    const HEVCFrame *current_picture = h->ref;
++    int i, j, k;
++
++    memset(pp, 0, sizeof(*pp));
++
++    pp->PicWidthInMinCbsY  = h->sps->min_cb_width;
++    pp->PicHeightInMinCbsY = h->sps->min_cb_height;
++
++    pp->wFormatAndSequenceInfoFlags = (h->sps->chroma_format_idc          <<  0) |
++                                      (h->sps->separate_colour_plane_flag <<  2) |
++                                      ((h->sps->bit_depth - 8)            <<  3) |
++                                      ((h->sps->bit_depth - 8)            <<  6) |
++                                      ((h->sps->log2_max_poc_lsb - 4)     <<  9) |
++                                      (0                                  << 13) |
++                                      (0                                  << 14) |
++                                      (0                                  << 15);
++
++    fill_picture_entry(&pp->CurrPic, ff_dxva2_get_surface_index(ctx, current_picture->frame), 0);
++
++    pp->sps_max_dec_pic_buffering_minus1         = h->sps->temporal_layer[h->sps->max_sub_layers - 1].max_dec_pic_buffering - 1;
++    pp->log2_min_luma_coding_block_size_minus3   = h->sps->log2_min_cb_size - 3;
++    pp->log2_diff_max_min_luma_coding_block_size = h->sps->log2_diff_max_min_coding_block_size;
++    pp->log2_min_transform_block_size_minus2     = h->sps->log2_min_tb_size - 2;
++    pp->log2_diff_max_min_transform_block_size   = h->sps->log2_max_trafo_size  - h->sps->log2_min_tb_size;
++    pp->max_transform_hierarchy_depth_inter      = h->sps->max_transform_hierarchy_depth_inter;
++    pp->max_transform_hierarchy_depth_intra      = h->sps->max_transform_hierarchy_depth_intra;
++    pp->num_short_term_ref_pic_sets              = h->sps->nb_st_rps;
++    pp->num_long_term_ref_pics_sps               = h->sps->num_long_term_ref_pics_sps;
++
++    pp->num_ref_idx_l0_default_active_minus1     = h->pps->num_ref_idx_l0_default_active - 1;
++    pp->num_ref_idx_l1_default_active_minus1     = h->pps->num_ref_idx_l1_default_active - 1;
++    pp->init_qp_minus26                          = h->pps->pic_init_qp_minus26;
++
++    if (h->sh.short_term_ref_pic_set_sps_flag == 0 && h->sh.short_term_rps) {
++        pp->ucNumDeltaPocsOfRefRpsIdx            = h->sh.short_term_rps->num_delta_pocs;
++        pp->wNumBitsForShortTermRPSInSlice       = h->sh.short_term_ref_pic_set_size;
++    }
++
++    pp->dwCodingParamToolFlags = (h->sps->scaling_list_enable_flag               <<  0) |
++                                 (h->sps->amp_enabled_flag                       <<  1) |
++                                 (h->sps->sao_enabled                            <<  2) |
++                                 (h->sps->pcm_enabled_flag                       <<  3) |
++                                 ((h->sps->pcm_enabled_flag ? (h->sps->pcm.bit_depth - 1) : 0)            <<  4) |
++                                 ((h->sps->pcm_enabled_flag ? (h->sps->pcm.bit_depth_chroma - 1) : 0)     <<  8) |
++                                 ((h->sps->pcm_enabled_flag ? (h->sps->pcm.log2_min_pcm_cb_size - 3) : 0) << 12) |
++                                 ((h->sps->pcm_enabled_flag ? (h->sps->pcm.log2_max_pcm_cb_size - h->sps->pcm.log2_min_pcm_cb_size) : 0) << 14) |
++                                 (h->sps->pcm.loop_filter_disable_flag           << 16) |
++                                 (h->sps->long_term_ref_pics_present_flag        << 17) |
++                                 (h->sps->sps_temporal_mvp_enabled_flag          << 18) |
++                                 (h->sps->sps_strong_intra_smoothing_enable_flag << 19) |
++                                 (h->pps->dependent_slice_segments_enabled_flag  << 20) |
++                                 (h->pps->output_flag_present_flag               << 21) |
++                                 (h->pps->num_extra_slice_header_bits            << 22) |
++                                 (h->pps->sign_data_hiding_flag                  << 25) |
++                                 (h->pps->cabac_init_present_flag                << 26) |
++                                 (0                                              << 27);
++
++    pp->dwCodingSettingPicturePropertyFlags = (h->pps->constrained_intra_pred_flag                <<  0) |
++                                              (h->pps->transform_skip_enabled_flag                <<  1) |
++                                              (h->pps->cu_qp_delta_enabled_flag                   <<  2) |
++                                              (h->pps->pic_slice_level_chroma_qp_offsets_present_flag <<  3) |
++                                              (h->pps->weighted_pred_flag                         <<  4) |
++                                              (h->pps->weighted_bipred_flag                       <<  5) |
++                                              (h->pps->transquant_bypass_enable_flag              <<  6) |
++                                              (h->pps->tiles_enabled_flag                         <<  7) |
++                                              (h->pps->entropy_coding_sync_enabled_flag           <<  8) |
++                                              (h->pps->uniform_spacing_flag                       <<  9) |
++                                              ((h->pps->tiles_enabled_flag ? h->pps->loop_filter_across_tiles_enabled_flag : 0) << 10) |
++                                              (h->pps->seq_loop_filter_across_slices_enabled_flag << 11) |
++                                              (h->pps->deblocking_filter_override_enabled_flag    << 12) |
++                                              (h->pps->disable_dbf                                << 13) |
++                                              (h->pps->lists_modification_present_flag            << 14) |
++                                              (h->pps->slice_header_extension_present_flag        << 15) |
++                                              (IS_IRAP(h)                                         << 16) |
++                                              (IS_IDR(h)                                          << 17) |
++                                              /* IntraPicFlag */
++                                              (IS_IRAP(h)                                         << 18) |
++                                              (0                                                  << 19);
++    pp->pps_cb_qp_offset            = h->pps->cb_qp_offset;
++    pp->pps_cr_qp_offset            = h->pps->cr_qp_offset;
++    if (h->pps->tiles_enabled_flag) {
++        pp->num_tile_columns_minus1 = h->pps->num_tile_columns - 1;
++        pp->num_tile_rows_minus1    = h->pps->num_tile_rows - 1;
++
++        if (!h->pps->uniform_spacing_flag) {
++            for (i = 0; i < h->pps->num_tile_columns; i++)
++                pp->column_width_minus1[i] = h->pps->column_width[i] - 1;
++
++            for (i = 0; i < h->pps->num_tile_rows; i++)
++                pp->row_height_minus1[i] = h->pps->row_height[i] - 1;
++        }
++    }
++
++    pp->diff_cu_qp_delta_depth           = h->pps->diff_cu_qp_delta_depth;
++    pp->pps_beta_offset_div2             = h->pps->beta_offset / 2;
++    pp->pps_tc_offset_div2               = h->pps->tc_offset / 2;
++    pp->log2_parallel_merge_level_minus2 = h->pps->log2_parallel_merge_level - 2;
++    pp->CurrPicOrderCntVal               = h->poc;
++
++    // empty the lists
++    memset(&pp->RefPicList, 0xff, sizeof(pp->RefPicList));
++    memset(&pp->RefPicSetStCurrBefore, 0xff, sizeof(pp->RefPicSetStCurrBefore));
++    memset(&pp->RefPicSetStCurrAfter, 0xff, sizeof(pp->RefPicSetStCurrAfter));
++    memset(&pp->RefPicSetLtCurr, 0xff, sizeof(pp->RefPicSetLtCurr));
++
++    // fill RefPicList from the DPB
++    for (i = 0, j = 0; i < FF_ARRAY_ELEMS(h->DPB); i++) {
++        const HEVCFrame *frame = &h->DPB[i];
++        if (frame != current_picture && (frame->flags & (HEVC_FRAME_FLAG_LONG_REF | HEVC_FRAME_FLAG_SHORT_REF))) {
++            fill_picture_entry(&pp->RefPicList[j], ff_dxva2_get_surface_index(ctx, frame->frame), !!(frame->flags & HEVC_FRAME_FLAG_LONG_REF));
++            pp->PicOrderCntValList[j] = frame->poc;
++            j++;
++        }
++    }
++
++    #define DO_REF_LIST(ref_idx, ref_list) { \
++        const RefPicList *rpl = &h->rps[ref_idx]; \
++        av_assert0(rpl->nb_refs <= FF_ARRAY_ELEMS(pp->ref_list)); \
++        for (j = 0, k = 0; j < rpl->nb_refs; j++) { \
++            if (rpl->ref[j]) { \
++                pp->ref_list[k] = get_refpic_index(pp, ff_dxva2_get_surface_index(ctx, rpl->ref[j]->frame)); \
++                k++; \
++            } \
++        } \
++    }
++
++    // Fill short term and long term lists
++    DO_REF_LIST(ST_CURR_BEF, RefPicSetStCurrBefore);
++    DO_REF_LIST(ST_CURR_AFT, RefPicSetStCurrAfter);
++    DO_REF_LIST(LT_CURR, RefPicSetLtCurr);
++
++    pp->StatusReportFeedbackNumber = 1 + ctx->report_id++;
++}
++
++static void fill_scaling_lists(struct dxva_context *ctx, const HEVCContext *h, DXVA_Qmatrix_HEVC *qm)
++{
++    unsigned i, j;
++    memset(qm, 0, sizeof(*qm));
++    for (i = 0; i < 6; i++) {
++        for (j = 0; j < 16; j++)
++            qm->ucScalingLists0[i][j] = h->pps->scaling_list.sl[0][i][j];
++
++        for (j = 0; j < 64; j++) {
++            qm->ucScalingLists1[i][j] = h->pps->scaling_list.sl[1][i][j];
++            qm->ucScalingLists2[i][j] = h->pps->scaling_list.sl[2][i][j];
++
++            if (i < 2)
++                qm->ucScalingLists3[i][j] = h->pps->scaling_list.sl[3][i][j];
++        }
++
++        qm->ucScalingListDCCoefSizeID2[i] = h->pps->scaling_list.sl_dc[0][i];
++        if (i < 2)
++            qm->ucScalingListDCCoefSizeID3[i] = h->pps->scaling_list.sl_dc[1][i];
++    }
++}
++
++static void fill_slice_short(DXVA_Slice_HEVC_Short *slice,
++                             unsigned position, unsigned size)
++{
++    memset(slice, 0, sizeof(*slice));
++    slice->BSNALunitDataLocation = position;
++    slice->SliceBytesInBuffer    = size;
++    slice->wBadSliceChopping     = 0;
++}
++
++static int commit_bitstream_and_slice_buffer(AVCodecContext *avctx,
++                                             DXVA2_DecodeBufferDesc *bs,
++                                             DXVA2_DecodeBufferDesc *sc)
++{
++    const HEVCContext *h = avctx->priv_data;
++    struct dxva_context *ctx = avctx->hwaccel_context;
++    const HEVCFrame *current_picture = h->ref;
++    struct hevc_dxva2_picture_context *ctx_pic = current_picture->hwaccel_picture_private;
++    DXVA_Slice_HEVC_Short *slice = NULL;
++    void     *dxva_data_ptr;
++    uint8_t  *dxva_data, *current, *end;
++    unsigned dxva_size;
++    void     *slice_data;
++    unsigned slice_size;
++    unsigned padding;
++    unsigned i;
++
++    /* Create an annex B bitstream buffer with only slice NAL and finalize slice */
++    if (FAILED(IDirectXVideoDecoder_GetBuffer(ctx->decoder,
++                                              DXVA2_BitStreamDateBufferType,
++                                              &dxva_data_ptr, &dxva_size)))
++        return -1;
++
++    dxva_data = dxva_data_ptr;
++    current = dxva_data;
++    end = dxva_data + dxva_size;
++
++    for (i = 0; i < ctx_pic->slice_count; i++) {
++        static const uint8_t start_code[] = { 0, 0, 1 };
++        static const unsigned start_code_size = sizeof(start_code);
++        unsigned position, size;
++
++        slice = &ctx_pic->slice_short[i];
++
++        position = slice->BSNALunitDataLocation;
++        size     = slice->SliceBytesInBuffer;
++        if (start_code_size + size > end - current) {
++            av_log(avctx, AV_LOG_ERROR, "Failed to build bitstream");
++            break;
++        }
++
++        slice->BSNALunitDataLocation = current - dxva_data;
++        slice->SliceBytesInBuffer    = start_code_size + size;
++
++        memcpy(current, start_code, start_code_size);
++        current += start_code_size;
++
++        memcpy(current, &ctx_pic->bitstream[position], size);
++        current += size;
++    }
++    padding = FFMIN(128 - ((current - dxva_data) & 127), end - current);
++    if (slice && padding > 0) {
++        memset(current, 0, padding);
++        current += padding;
++
++        slice->SliceBytesInBuffer += padding;
++    }
++    if (FAILED(IDirectXVideoDecoder_ReleaseBuffer(ctx->decoder,
++                                                  DXVA2_BitStreamDateBufferType)))
++        return -1;
++    if (i < ctx_pic->slice_count)
++        return -1;
++
++    memset(bs, 0, sizeof(*bs));
++    bs->CompressedBufferType = DXVA2_BitStreamDateBufferType;
++    bs->DataSize             = current - dxva_data;
++    bs->NumMBsInBuffer       = 0;
++
++    slice_data = ctx_pic->slice_short;
++    slice_size = ctx_pic->slice_count * sizeof(*ctx_pic->slice_short);
++
++    av_assert0((bs->DataSize & 127) == 0);
++    return ff_dxva2_commit_buffer(avctx, ctx, sc,
++                                  DXVA2_SliceControlBufferType,
++                                  slice_data, slice_size, 0);
++}
++
++
++static int dxva2_hevc_start_frame(AVCodecContext *avctx,
++                                  av_unused const uint8_t *buffer,
++                                  av_unused uint32_t size)
++{
++    const HEVCContext *h = avctx->priv_data;
++    struct dxva_context *ctx = avctx->hwaccel_context;
++    struct hevc_dxva2_picture_context *ctx_pic = h->ref->hwaccel_picture_private;
++
++    if (!ctx->decoder || !ctx->cfg || ctx->surface_count <= 0)
++        return -1;
++    av_assert0(ctx_pic);
++
++    /* Fill up DXVA_PicParams_HEVC */
++    fill_picture_parameters(ctx, h, &ctx_pic->pp);
++
++    /* Fill up DXVA_Qmatrix_HEVC */
++    fill_scaling_lists(ctx, h, &ctx_pic->qm);
++
++    ctx_pic->slice_count    = 0;
++    ctx_pic->bitstream_size = 0;
++    ctx_pic->bitstream      = NULL;
++    return 0;
++}
++
++static int dxva2_hevc_decode_slice(AVCodecContext *avctx,
++                                   const uint8_t *buffer,
++                                   uint32_t size)
++{
++    const HEVCContext *h = avctx->priv_data;
++    const HEVCFrame *current_picture = h->ref;
++    struct hevc_dxva2_picture_context *ctx_pic = current_picture->hwaccel_picture_private;
++    unsigned position;
++
++    if (ctx_pic->slice_count >= MAX_SLICES)
++        return -1;
++
++    if (!ctx_pic->bitstream)
++        ctx_pic->bitstream = buffer;
++    ctx_pic->bitstream_size += size;
++
++    position = buffer - ctx_pic->bitstream;
++    fill_slice_short(&ctx_pic->slice_short[ctx_pic->slice_count], position, size);
++    ctx_pic->slice_count++;
++
++    return 0;
++}
++
++static int dxva2_hevc_end_frame(AVCodecContext *avctx)
++{
++    HEVCContext *h = avctx->priv_data;
++    struct hevc_dxva2_picture_context *ctx_pic = h->ref->hwaccel_picture_private;
++    int scale = ctx_pic->pp.dwCodingParamToolFlags & 1;
++    int ret;
++
++    if (ctx_pic->slice_count <= 0 || ctx_pic->bitstream_size <= 0)
++        return -1;
++
++    ret = ff_dxva2_common_end_frame(avctx, h->ref->frame,
++                                    &ctx_pic->pp, sizeof(ctx_pic->pp),
++                                    scale ? &ctx_pic->qm : NULL, scale ? sizeof(ctx_pic->qm) : 0,
++                                    commit_bitstream_and_slice_buffer);
++    return ret;
++}
++
++AVHWAccel ff_hevc_dxva2_hwaccel = {
++    .name           = "hevc_dxva2",
++    .type           = AVMEDIA_TYPE_VIDEO,
++    .id             = AV_CODEC_ID_HEVC,
++    .pix_fmt        = AV_PIX_FMT_DXVA2_VLD,
++    .start_frame    = dxva2_hevc_start_frame,
++    .decode_slice   = dxva2_hevc_decode_slice,
++    .end_frame      = dxva2_hevc_end_frame,
++    .frame_priv_data_size = sizeof(struct hevc_dxva2_picture_context),
++};
+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
+index 81f0dc8..d43f7f5 100644
+--- a/libavcodec/hevc.c
++++ b/libavcodec/hevc.c
+@@ -385,7 +385,7 @@ static int decode_lt_rps(HEVCContext *s, LongTermRPS *rps, GetBitContext *gb)
+ 
+ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+ {
+-    #define HWACCEL_MAX (0)
++    #define HWACCEL_MAX (CONFIG_HEVC_DXVA2_HWACCEL)
+     enum AVPixelFormat pix_fmts[HWACCEL_MAX + 2], *fmt = pix_fmts;
+     int ret;
+     unsigned int num = 0, den = 0;
+@@ -401,6 +401,12 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps)
+     s->avctx->height              = sps->output_height;
+     s->avctx->has_b_frames        = sps->temporal_layer[sps->max_sub_layers - 1].num_reorder_pics;
+ 
++    if (sps->pix_fmt == AV_PIX_FMT_YUV420P || sps->pix_fmt == AV_PIX_FMT_YUVJ420P) {
++#if CONFIG_HEVC_DXVA2_HWACCEL
++        *fmt++ = AV_PIX_FMT_DXVA2_VLD;
++#endif
++    }
++
+     *fmt++ = sps->pix_fmt;
+     *fmt = AV_PIX_FMT_NONE;
+ 
+-- 
+2.3.2 (Apple Git-55)
+
+
+From 3e8a77eee13d7446d9f7770176ad90b4f2ac2efd Mon Sep 17 00:00:00 2001
+From: Hendrik Leppkes <h.leppkes@gmail.com>
+Date: Tue, 3 Feb 2015 22:39:45 +0100
+Subject: [PATCH 9/9] dxva2_hevc: properly fill the scaling list structure
+
+The scaling list can be specified in either the SPS or PPS.
+Additionally, compensate for the diagonal scan permutation applied
+in the decoder.
+
+Signed-off-by: Luca Barbato <lu_zero@gentoo.org>
+(cherry picked from commit 8029af586fd5a5f2a0803001f9eff386e5545fe2)
+---
+ libavcodec/dxva2_hevc.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/libavcodec/dxva2_hevc.c b/libavcodec/dxva2_hevc.c
+index 2de9ef2..257bee7 100644
+--- a/libavcodec/dxva2_hevc.c
++++ b/libavcodec/dxva2_hevc.c
+@@ -192,23 +192,29 @@ static void fill_picture_parameters(struct dxva_context *ctx, const HEVCContext
+ 
+ static void fill_scaling_lists(struct dxva_context *ctx, const HEVCContext *h, DXVA_Qmatrix_HEVC *qm)
+ {
+-    unsigned i, j;
++    unsigned i, j, pos;
++    const ScalingList *sl = h->pps->scaling_list_data_present_flag ?
++                            &h->pps->scaling_list : &h->sps->scaling_list;
++
+     memset(qm, 0, sizeof(*qm));
+     for (i = 0; i < 6; i++) {
+-        for (j = 0; j < 16; j++)
+-            qm->ucScalingLists0[i][j] = h->pps->scaling_list.sl[0][i][j];
++        for (j = 0; j < 16; j++) {
++            pos = 4 * ff_hevc_diag_scan4x4_y[j] + ff_hevc_diag_scan4x4_x[j];
++            qm->ucScalingLists0[i][j] = sl->sl[0][i][pos];
++        }
+ 
+         for (j = 0; j < 64; j++) {
+-            qm->ucScalingLists1[i][j] = h->pps->scaling_list.sl[1][i][j];
+-            qm->ucScalingLists2[i][j] = h->pps->scaling_list.sl[2][i][j];
++            pos = 8 * ff_hevc_diag_scan8x8_y[j] + ff_hevc_diag_scan8x8_x[j];
++            qm->ucScalingLists1[i][j] = sl->sl[1][i][pos];
++            qm->ucScalingLists2[i][j] = sl->sl[2][i][pos];
+ 
+             if (i < 2)
+-                qm->ucScalingLists3[i][j] = h->pps->scaling_list.sl[3][i][j];
++                qm->ucScalingLists3[i][j] = sl->sl[3][i][pos];
+         }
+ 
+-        qm->ucScalingListDCCoefSizeID2[i] = h->pps->scaling_list.sl_dc[0][i];
++        qm->ucScalingListDCCoefSizeID2[i] = sl->sl_dc[0][i];
+         if (i < 2)
+-            qm->ucScalingListDCCoefSizeID3[i] = h->pps->scaling_list.sl_dc[1][i];
++            qm->ucScalingListDCCoefSizeID3[i] = sl->sl_dc[1][i];
+     }
+ }
+ 
+-- 
+2.3.2 (Apple Git-55)
+
