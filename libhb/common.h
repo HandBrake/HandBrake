@@ -59,6 +59,8 @@
 #define MAX( a, b ) ( (a) > (b) ? (a) : (b) )
 #endif
 
+#define HB_ALIGN(x, a) (((x)+(a)-1)&~((a)-1))
+
 #ifndef HB_DEBUG_ASSERT
 #define HB_DEBUG_ASSERT(x, y) { if ((x)) { hb_error("ASSERT: %s", y); exit(1); } }
 #endif
@@ -69,8 +71,6 @@
 #define MULTIPLE_MOD_DOWN(a, b) (((b) * (int)((a) / (b))))
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
-
-#define HBALIGN(x, a) (((x)+(a)-1)&~((a)-1))
 
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_hwd_s hb_hwd_t;

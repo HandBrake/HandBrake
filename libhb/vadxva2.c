@@ -148,8 +148,8 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
             break;
     }
     
-    dxva2->surface_width = HBALIGN(fmt->geometry.width, surface_alignment);
-    dxva2->surface_height = HBALIGN(fmt->geometry.height, surface_alignment);    
+    dxva2->surface_width  = HB_ALIGN(fmt->geometry.width,  surface_alignment);
+    dxva2->surface_height = HB_ALIGN(fmt->geometry.height, surface_alignment);
     
     LPDIRECT3DSURFACE9 surface_list[VA_DXVA2_MAX_SURFACE_COUNT];
     if( FAILED( IDirectXVideoDecoderService_CreateSurface( dxva2->vs,
