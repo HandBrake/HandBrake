@@ -2598,6 +2598,19 @@ hb_value_t* hb_presets_read_file(const char *filename)
     return preset;
 }
 
+char * hb_presets_read_file_json(const char *filename)
+{
+    char *result;
+    hb_value_t *preset = hb_value_read_json(filename);
+    if (preset == NULL)
+        preset = hb_plist_parse_file(filename);
+    if (preset == NULL)
+        return NULL;
+
+    result = hb_value_get_json(preset);
+    return result;
+}
+
 int hb_presets_add_file(const char *filename)
 {
     hb_value_t *preset = hb_value_read_json(filename);
