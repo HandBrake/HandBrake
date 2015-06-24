@@ -94,7 +94,11 @@ char       * hb_presets_import_json(const char *json);
 int          hb_presets_add_json(const char *json);
 
 // Read a preset file.  Does not add to internal preset list.
-hb_value_t*  hb_presets_read_file(const char *filename);
+hb_value_t * hb_presets_read_file(const char *filename);
+
+// Read a preset file.  Does not add to internal preset list.
+// Returns a json string.
+char       * hb_presets_read_file_json(const char *filename);
 
 // Register new presets with libhb from a preset dict
 int          hb_presets_add(hb_value_t *preset);
