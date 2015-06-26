@@ -192,8 +192,6 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     preset = JsonPresetFactory.ImportPreset(hbPreset);
                     preset.Category = UserPresetCatgoryName;
-                    preset.AudioTrackBehaviours = new AudioBehaviours();
-                    preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
 
                     // Handle the PictureDecombDeinterlace key
                     if (preset.UseDeinterlace)
@@ -273,6 +271,8 @@ namespace HandBrakeWPF.Services.Presets
                     preset.PictureSettingsMode = update.PictureSettingsMode;
                     preset.Category = update.Category;
                     preset.Description = update.Description;
+                    preset.AudioTrackBehaviours = update.AudioTrackBehaviours;
+                    preset.SubtitleTrackBehaviours = update.SubtitleTrackBehaviours;
 
                     // Update the presets file
                     this.UpdatePresetFiles();

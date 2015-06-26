@@ -242,9 +242,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
             preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
                                                                      ? AudioBehaviourModes.AllMatching
-                                                                     : importedPreset.AudioTrackSelectionBehavior == "first"
-                                                                           ? AudioBehaviourModes.FirstMatch
-                                                                           : AudioBehaviourModes.None;
+                                                                     : AudioBehaviourModes.FirstMatch;
+            preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.None;
 
             if (importedPreset.AudioCopyMask != null)
             {
