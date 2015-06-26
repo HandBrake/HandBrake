@@ -46,7 +46,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Name = importedPreset.PresetName;
             preset.Description = importedPreset.PresetDescription;
             preset.UsePictureFilters = importedPreset.UsesPictureFilters;
-            preset.UseDeinterlace = importedPreset.PictureDecombDeinterlace;
+            preset.UseDeinterlace = !importedPreset.PictureDecombDeinterlace;
             preset.Task = new EncodeTask();
 
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.

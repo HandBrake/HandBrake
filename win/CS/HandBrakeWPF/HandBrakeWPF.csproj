@@ -171,8 +171,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
+    <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
     <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
-    <Compile Include="Services\Presets\Factories\PlistPresetFactory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />
     <Compile Include="Model\ScanMode.cs" />
@@ -191,8 +191,6 @@
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\DriveUtilities.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
-    <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
-    <Compile Include="Utilities\PList.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />

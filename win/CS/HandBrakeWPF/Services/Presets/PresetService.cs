@@ -21,9 +21,14 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Model.Picture;
+    using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
@@ -159,6 +164,95 @@ namespace HandBrakeWPF.Services.Presets
 
             this.Update(preset);
             return true;
+        }
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        public void Import(string filename)
+        {
+            // TODO needs a tidy up but will do for now.
+            if (!string.IsNullOrEmpty(filename))
+            {
+                PresetTransportContainer container = HandBrakePresetService.GetPresetFromFile(filename);
+
+                if (container == null || container.PresetList == null || container.PresetList.Count == 0)
+                {
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
+                    return;
+                }
+
+                HBPreset hbPreset = container.PresetList.FirstOrDefault();
+
+                Preset preset = null;
+                try
+                {
+                    preset = JsonPresetFactory.ImportPreset(hbPreset);
+                    preset.Category = UserPresetCatgoryName;
+                    preset.AudioTrackBehaviours = new AudioBehaviours();
+                    preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
+
+                    // Handle the PictureDecombDeinterlace key
+                    if (preset.UseDeinterlace)
+                    {
+                        preset.Task.Decomb = Decomb.Off;
+                        preset.Task.CustomDecomb = string.Empty;
+                    }
+
+                    // Depending on the selected preset options, we may need to change some settings around.
+                    // If the user chose not to use fitlers, remove them.
+                    if (!preset.UsePictureFilters)
+                    {
+                        preset.Task.Detelecine = Detelecine.Off;
+                        preset.Task.Denoise = Denoise.Off;
+                        preset.Task.Deinterlace = Deinterlace.Off;
+                        preset.Task.Decomb = Decomb.Off;
+                        preset.Task.Deblock = 0;
+                        preset.Task.Grayscale = false;
+                    }
+
+                    // IF we are using Source Max, Set the Max Width / Height values.
+                    if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                    {
+                        preset.Task.MaxWidth = preset.Task.Height;
+                        preset.Task.MaxHeight = preset.Task.Width;
+                    }
+                }
+                catch (Exception exc)
+                {
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
+                }
+
+                if (preset == null)
+                {
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
+                    return;
+                }
+
+                // TODO Better version checking.
+                
+                if (this.CheckIfPresetExists(preset.Name))
+                {
+                    if (!CanUpdatePreset(preset.Name))
+                    {
+                        MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Update(preset);
+                    }
+                }
+                else
+                {
+                    Add(preset);
+                }
+            }
         }
 
         /// <summary>

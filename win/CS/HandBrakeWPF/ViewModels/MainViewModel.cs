@@ -30,6 +30,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Json.Presets;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
@@ -1813,74 +1814,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetImport()
         {
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Preset Files|*.json;*.plist", CheckFileExists = true };
             dialog.ShowDialog();
-            string filename = dialog.FileName;
-
-            if (!string.IsNullOrEmpty(filename))
-            {
-                PList plist = new PList(filename);
-
-                object build;
-                plist.TryGetValue("PresetBuildNumber", out build);
-
-                string buildNumber = build as string;
-                if (buildNumber == null)
-                {
-                    MessageBox.Show(
-                        Resources.Preset_UnableToImport_Message,
-                        Resources.Preset_UnableToImport_Header,
-                        MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    return;
-                }
-
-                if (buildNumber != HandBrakeUtils.Build.ToString(CultureInfo.InvariantCulture))
-                {
-                    MessageBoxResult result = MessageBox.Show(
-                        Resources.Preset_OldVersion_Message,
-                        Resources.Preset_OldVersion_Header,
-                        MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                    if (result == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-
-                Preset preset = null;
-                try
-                {
-                    preset = PlistPresetFactory.CreatePreset(plist);
-                }
-                catch (Exception exc)
-                {
-                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
-                }
-
-                if (preset != null)
-                {
-                    if (this.presetService.CheckIfPresetExists(preset.Name))
-                    {
-                        if (!presetService.CanUpdatePreset(preset.Name))
-                        {
-                            MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-
-                        MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            presetService.Update(preset);
-                        }
-                    }
-                    else
-                    {
-                        presetService.Add(preset);
-                    }
-                }
-
-                this.NotifyOfPropertyChange(() => this.Presets);
-            }
+            this.presetService.Import(dialog.FileName);
+            this.NotifyOfPropertyChange(() => this.Presets);
         }
 
         /// <summary>

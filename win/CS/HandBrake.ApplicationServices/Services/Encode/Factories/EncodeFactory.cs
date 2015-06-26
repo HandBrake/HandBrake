@@ -263,7 +263,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
         {
             Video video = new Video();
 
-            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == ApplicationServices.Utilities.Converters.GetVideoEncoder(job.VideoEncoder));
+            HBVideoEncoder videoEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(e => e.ShortName == EnumHelper<VideoEncoder>.GetShortName(job.VideoEncoder));
             Validate.NotNull(videoEncoder, "Video encoder " + job.VideoEncoder + " not recognized.");
             if (videoEncoder != null)
             {
@@ -336,7 +336,7 @@ namespace HandBrake.ApplicationServices.Services.Encode.Factories
             audio.AudioList = new List<Interop.Json.Encode.AudioTrack>();
             foreach (AudioTrack item in job.AudioTracks)
             {
-                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(ApplicationServices.Utilities.Converters.GetCliAudioEncoder(item.Encoder));
+                HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(item.Encoder));
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(EnumHelper<Mixdown>.GetShortName(item.MixDown));

@@ -96,25 +96,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
         }
 
         /// <summary>
-        /// The get null bool value.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The System.String.
-        /// </returns>
-        private static string getNullBoolValue(bool? value)
-        {
-            if (!value.HasValue)
-            {
-                return "1";
-            }
-
-            return value.Value ? "1" : "0";
-        }
-
-        /// <summary>
         /// Add the encode settings to the preset
         /// </summary>
         /// <param name="xmlWriter">

@@ -114,6 +114,7 @@
     <Compile Include="Interop\Json\Presets\AudioList.cs" />
     <Compile Include="Interop\Json\Presets\HBPreset.cs" />
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
+    <Compile Include="Interop\Json\Presets\PresetTransportContainer.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioTrack.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\Execute.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />

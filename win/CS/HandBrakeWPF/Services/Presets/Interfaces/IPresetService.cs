@@ -46,6 +46,14 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         bool Add(Preset preset);
 
         /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        void Import(string filename);
+
+        /// <summary>
         /// Update a preset
         /// </summary>
         /// <param name="update">
