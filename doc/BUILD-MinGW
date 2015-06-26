@@ -48,7 +48,7 @@ possible:
      At the time of writing,
      "mingw-w64-bin_x86_64-linux_20131228.tar.bz2" is used.
 
-     Note2: You must set the -cross flag with configure to cross compile
+     Note2: You must set the --cross flag with configure to cross compile
      with windows.  See the Example below.  Note that the cross compiler
      name varies between distributions.
 
