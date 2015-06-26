@@ -22,12 +22,20 @@ The following are the recommended specifications for building on @value{OS-mingw
 @item Intel 64-bit hardware
 @item @value{OS-mingw} on Fedora 20+, Ubuntu 14+ or Debian 7+ using gcc 4.7+
 @item Official MinGW-w64 builds are recommended over those provided by distributions.
-@item yasm 1.3.x 
+@item yasm 1.2 or newer 
 @end itemize
 
-@include building/prerequisites.bundled.texi
 
 @quotation Note
+We use MinGW-w64 from http://sourceforge.net/projects/mingw-w64/files/?source=navbar
+
+Please see "Toolchains targetting Win64" -> "Automated Builds" and choose the latest version.
+
+At the time of writing, "mingw-w64-bin_x86_64-linux_20131228.tar.bz2" is used.
+
+@end quotation
+
+@quotation Note2
 You must set the --cross flag with configure to cross compile with windows.
 See the Example below. Note that the cross compiler name varies between distributions.
 
@@ -35,7 +43,7 @@ The following is an example:
 @end quotation
 
 @example
-../configure --cross=x86_64-w64-mingw32
+../configure --cross=x86_64-w64-mingw32 --launch
 @end example
 
 @include building/prerequisites.common.texi
