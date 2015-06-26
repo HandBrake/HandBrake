@@ -1,5 +1,5 @@
-Guide to Building HandBrake svn6163 (2014041401) on MinGW
-*********************************************************
+Guide to Building HandBrake svn7316 (2015062601) on MinGW-W64
+*************************************************************
 
 1 Introduction
 2 Prerequisites
@@ -22,41 +22,39 @@ Appendix A Project Repository Details
 1 Introduction
 **************
 
-This guide documents the recommended process to build HandBrake on MinGW
-hosts from the official source-code repository.  Building from any other
-source is not supported.
+This guide documents the recommended process to build HandBrake on
+MinGW-W64 hosts from the official source-code repository.  Building from
+any other source is not supported.
 
 2 Prerequisites
 ***************
 
-The following are the recommended specifications for building on MinGW;
-but is not necessarily the only configuration that is possible:
+The following are the recommended specifications for building on
+MinGW-W64; but is not necessarily the only configuration that is
+possible:
 
-   * Intel 32-bit or 64-bit hardware
-   * MinGW on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.6+
-   * yasm 1.2.x (for i386 or x86_64 architectures)
+   * Intel 64-bit hardware
+   * MinGW-W64 on Fedora 20+, Ubuntu 14+ or Debian 7+ using gcc 4.7+
+   * Official MinGW-w64 builds are recommended over those provided by
+     distributions.
+   * yasm 1.2 or newer
 
-     Note: It is recommended to use the platform distribution's standard
-     compiler for maximum C++ compatibility.  If you build with a custom
-     compiler it will likely introduce non-standard runtime requirements
-     and have new/delete, exception and RTTI incompatibilities.  There
-     are of course many valid reasons to build with unbundled compilers,
-     but be aware it is generally unsupported and left as an exercise to
-     the reader.
+     Note: We use MinGW-w64 from
+     http://sourceforge.net/projects/mingw-w64/files/?source=navbar
 
-     Note: You must set the -cross flag with configure to cross compile
+     Please see "Toolchains targetting Win64" -> "Automated Builds" and
+     choose the latest version.
+
+     At the time of writing,
+     "mingw-w64-bin_x86_64-linux_20131228.tar.bz2" is used.
+
+     Note2: You must set the -cross flag with configure to cross compile
      with windows.  See the Example below.  Note that the cross compiler
      name varies between distributions.
 
-     As of this writing, MinGW has available to it several versions of
-     gcc; only one of which may be found and used in the path as 'gcc'
-     and 'g++'.  Configure will thus find what is probably the older
-     version of gcc in a typical MinGW environment.  If you desire to
-     build with the newer gcc, it is found in the path as 'gcc-4' and
-     'g++-4' respectively and you must indicate to configure the desired
-     versions.  The following syntax should do the trick:
+     The following is an example:
 
-     ../configure --cross=i686-w64-mingw32 --gcc=gcc-4
+     ../configure --cross=x86_64-w64-mingw32 --launch
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
@@ -99,7 +97,7 @@ following steps:
 4 Overview
 **********
 
-MinGW builds are performed from a terminal.  There is no support for
+MinGW-W64 builds are performed from a terminal.  There is no support for
 building from any IDEs.
 
 5 Building via Terminal
@@ -119,7 +117,7 @@ exactly the same branch.
 
 If you have write-access to the repository, then you may add the
 appropriate login/password information as needed.  It is recommended to
-use Subversion 1.6.0 or higher.  Lower versions should also work.
+use Subversion 1.6.0 or higher.  Lower versions may also work.
 
 5.2 Configure
 =============
@@ -290,11 +288,10 @@ scoped targets:
 5.4.3 Contrib Modules
 ---------------------
 
-Contrib modules such as 'a52dec', 'bzip2', 'faac', 'faad2', 'ffmpeg',
-'fontconfig', 'freetype', 'fribidi', 'lame', 'libass', 'libbluray',
-'libdca', 'libdvdnav', 'libdvdread', 'libiconv', 'libmkv', 'libogg',
-'libsamplerate', 'libtheora', 'libvorbis', 'libxml2', 'mp4v2',
-'mpeg2dec', 'x264', 'yasm' and 'zlib' have the following scoped targets:
+Contrib modules such as 'bzip2', 'ffmpeg', 'fontconfig', 'freetype',
+'fribidi', 'lame', 'libass', 'libbluray', 'libdvdnav', 'libdvdread',
+'libiconv', 'libogg', 'libsamplerate', 'libtheora', 'libvorbis',
+'libxml2', 'x264', 'yasm' and 'zlib' have the following scoped targets:
 
 'make MODULE.fetch'
      Download source tarball from the Internet and save to
@@ -436,6 +433,6 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    6163
-     date:   2014-04-13 09:22:16 -0700
+     rev:    7316
+     date:   2015-06-26 20:20:39 +0100
      type:   developer
