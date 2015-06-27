@@ -153,7 +153,24 @@ float hb_qsv_atof    (const char *str, int *err);
 int hb_qsv_param_default_preset(hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info, const char *preset);
 int hb_qsv_param_default       (hb_qsv_param_t *param, mfxVideoParam *videoParam, hb_qsv_info_t *info);
 int hb_qsv_param_parse         (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *key, const char *value);
+int hb_qsv_profile_parse       (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *profile_key);
+int hb_qsv_level_parse         (hb_qsv_param_t *param,                            hb_qsv_info_t *info, const char *level_key);
 
+typedef struct
+{
+    const char *name;
+    const char *key;
+    const int value;
+}
+hb_triplet_t;
+
+hb_triplet_t* hb_triplet4value(hb_triplet_t *triplets, const int  value);
+hb_triplet_t* hb_triplet4name (hb_triplet_t *triplets, const char *name);
+hb_triplet_t* hb_triplet4key  (hb_triplet_t *triplets, const char *key);
+
+const char* hb_qsv_codec_name    (uint32_t codec_id);
+const char* hb_qsv_profile_name  (uint32_t codec_id, uint16_t profile_id);
+const char* hb_qsv_level_name    (uint32_t codec_id, uint16_t level_id);
 const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 

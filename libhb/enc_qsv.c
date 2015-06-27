@@ -152,43 +152,6 @@ static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
     return pv->frame_duration[i];
 }
 
-static const char* qsv_h264_profile_xlat(int profile)
-{
-    switch (profile)
-    {
-        case MFX_PROFILE_AVC_CONSTRAINED_BASELINE:
-            return "Constrained Baseline";
-        case MFX_PROFILE_AVC_BASELINE:
-            return "Baseline";
-        case MFX_PROFILE_AVC_EXTENDED:
-            return "Extended";
-        case MFX_PROFILE_AVC_MAIN:
-            return "Main";
-        case MFX_PROFILE_AVC_CONSTRAINED_HIGH:
-            return "Constrained High";
-        case MFX_PROFILE_AVC_PROGRESSIVE_HIGH:
-            return "Progressive High";
-        case MFX_PROFILE_AVC_HIGH:
-            return "High";
-        case MFX_PROFILE_UNKNOWN:
-        default:
-            return NULL;
-    }
-}
-
-static const char* qsv_h264_level_xlat(int level)
-{
-    int i;
-    for (i = 0; hb_h264_level_names[i] != NULL; i++)
-    {
-        if (hb_h264_level_values[i] == level)
-        {
-            return hb_h264_level_names[i];
-        }
-    }
-    return NULL;
-}
-
 static void qsv_handle_breftype(hb_work_private_t *pv)
 {
     /*
@@ -588,7 +551,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             hb_value_t *value = hb_dict_iter_value(iter);
             char *str = hb_value_get_string_xform(value);
 
-            switch (hb_qsv_param_parse(&pv->param,  pv->qsv_info, key, str))
+            switch (hb_qsv_param_parse(&pv->param, pv->qsv_info, key, str))
             {
                 case HB_QSV_PARAM_OK:
                     break;
@@ -667,63 +630,29 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.Width         = job->qsv.enc_info.align_width;
     pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
 
-    // set H.264 profile and level
-    if (job->encoder_profile != NULL && *job->encoder_profile &&
-        strcasecmp(job->encoder_profile, "auto"))
+    // parse user-specified codec profile and level
+    if (hb_qsv_profile_parse(&pv->param, pv->qsv_info, job->encoder_profile))
     {
-        if (!strcasecmp(job->encoder_profile, "baseline"))
-        {
-            pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_BASELINE;
-        }
-        else if (!strcasecmp(job->encoder_profile, "main"))
-        {
-            pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_MAIN;
-        }
-        else if (!strcasecmp(job->encoder_profile, "high"))
-        {
-            pv->param.videoParam->mfx.CodecProfile = MFX_PROFILE_AVC_HIGH;
-        }
-        else
-        {
-            hb_error("encqsvInit: bad profile %s", job->encoder_profile);
-            return -1;
-        }
+        hb_error("encqsvInit: bad profile %s", job->encoder_profile);
+        return -1;
     }
-    if (job->encoder_level != NULL && *job->encoder_level &&
-        strcasecmp(job->encoder_level, "auto"))
+    if (hb_qsv_level_parse(&pv->param, pv->qsv_info, job->encoder_level))
     {
-        int err;
-        int i = hb_qsv_atoindex(hb_h264_level_names, job->encoder_level, &err);
-        if (err || i >= (sizeof(hb_h264_level_values) /
-                         sizeof(hb_h264_level_values[0])))
-        {
-            hb_error("encqsvInit: bad level %s", job->encoder_level);
-            return -1;
-        }
-        else if (pv->qsv_info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
-        {
-            pv->param.videoParam->mfx.CodecLevel = HB_QSV_CLIP3(MFX_LEVEL_AVC_1,
-                                                                MFX_LEVEL_AVC_52,
-                                                                hb_h264_level_values[i]);
-        }
-        else
-        {
-            // Media SDK API < 1.6, MFX_LEVEL_AVC_52 unsupported
-            pv->param.videoParam->mfx.CodecLevel = HB_QSV_CLIP3(MFX_LEVEL_AVC_1,
-                                                                MFX_LEVEL_AVC_51,
-                                                                hb_h264_level_values[i]);
-        }
+        hb_error("encqsvInit: bad level %s", job->encoder_level);
+        return -1;
     }
 
     // interlaced encoding is not always possible
-    if (pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
+    if (pv->param.videoParam->mfx.CodecId             == MFX_CODEC_AVC &&
+        pv->param.videoParam->mfx.FrameInfo.PicStruct != MFX_PICSTRUCT_PROGRESSIVE)
     {
         if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_AVC_CONSTRAINED_BASELINE ||
             pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_AVC_BASELINE             ||
             pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_AVC_PROGRESSIVE_HIGH)
         {
             hb_error("encqsvInit: profile %s doesn't support interlaced encoding",
-                     qsv_h264_profile_xlat(pv->param.videoParam->mfx.CodecProfile));
+                     hb_qsv_profile_name(MFX_CODEC_AVC,
+                                         pv->param.videoParam->mfx.CodecProfile));
             return -1;
         }
         if ((pv->param.videoParam->mfx.CodecLevel >= MFX_LEVEL_AVC_1b &&
@@ -731,7 +660,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
             (pv->param.videoParam->mfx.CodecLevel >= MFX_LEVEL_AVC_42))
         {
             hb_error("encqsvInit: level %s doesn't support interlaced encoding",
-                     qsv_h264_level_xlat(pv->param.videoParam->mfx.CodecLevel));
+                     hb_qsv_level_name(MFX_CODEC_AVC,
+                                       pv->param.videoParam->mfx.CodecLevel));
             return -1;
         }
     }
@@ -1053,6 +983,10 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // log code path and main output settings
     hb_log("encqsvInit: using %s path",
            pv->is_sys_mem ? "encode-only" : "full QSV");
+    hb_log("encqsvInit: %s %s profile @ level %s",
+           hb_qsv_codec_name  (videoParam.mfx.CodecId),
+           hb_qsv_profile_name(videoParam.mfx.CodecId, videoParam.mfx.CodecProfile),
+           hb_qsv_level_name  (videoParam.mfx.CodecId, videoParam.mfx.CodecLevel));
     hb_log("encqsvInit: TargetUsage %"PRIu16" AsyncDepth %"PRIu16"",
            videoParam.mfx.TargetUsage, videoParam.AsyncDepth);
     hb_log("encqsvInit: GopRefDist %"PRIu16" GopPicSize %"PRIu16" NumRefFrame %"PRIu16"",
@@ -1205,9 +1139,6 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
                 break;
         }
     }
-    hb_log("encqsvInit: H.264 profile %s @ level %s",
-           qsv_h264_profile_xlat(videoParam.mfx.CodecProfile),
-           qsv_h264_level_xlat  (videoParam.mfx.CodecLevel));
 
     // AsyncDepth has now been set and/or modified by Media SDK
     pv->max_async_depth = videoParam.AsyncDepth;
