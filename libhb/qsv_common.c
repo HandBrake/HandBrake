@@ -244,18 +244,21 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
     else
     {
         /* Implementation-specific features that can't be queried */
-        if (qsv_implementation_is_hardware(info->implementation))
+        if (info->codec_id == MFX_CODEC_AVC || info->codec_id == MFX_CODEC_HEVC)
         {
-            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+            if (qsv_implementation_is_hardware(info->implementation))
             {
-                info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+                if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
+                {
+                    info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+                }
             }
-        }
-        else
-        {
-            if (HB_CHECK_MFX_VERSION(version, 1, 6))
+            else
             {
-                info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+                if (HB_CHECK_MFX_VERSION(version, 1, 6))
+                {
+                    info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
+                }
             }
         }
 
