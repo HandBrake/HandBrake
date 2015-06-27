@@ -71,6 +71,10 @@ int            hb_qsv_info_init();
 void           hb_qsv_info_print();
 hb_qsv_info_t* hb_qsv_info_get(int encoder);
 
+/* Automatically load and unload any required MFX plug-ins */
+hb_list_t* hb_qsv_load_plugins  (hb_qsv_info_t *info, mfxSession session, mfxVersion version);
+void       hb_qsv_unload_plugins(hb_list_t     **_l,  mfxSession session, mfxVersion version);
+
 /* Intel Quick Sync Video DECODE utilities */
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id);
 int hb_qsv_decode_is_enabled(hb_job_t *job);

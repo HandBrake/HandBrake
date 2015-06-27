@@ -249,26 +249,10 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
     /* Reset capabilities before querying */
     info->capabilities = 0;
 
-    /* Load optional codec plug-ins */
-    if (HB_CHECK_MFX_VERSION(version, 1, 8))
+    /* Load required MFX plug-ins */
+    if ((mfxPluginList = hb_qsv_load_plugins(info, session, version)) == NULL)
     {
-        if ((mfxPluginList = hb_list_init()) == NULL)
-        {
-            hb_log("query_capabilities: hb_list_init() failed");
-            return 0;
-        }
-
-        if (!qsv_implementation_is_hardware(info->implementation))
-        {
-            if (info->codec_id == MFX_CODEC_HEVC)
-            {
-                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) < MFX_ERR_NONE)
-                {
-                    return 0; // mandatory plugin, this encoder is unavailable
-                }
-                hb_list_add(mfxPluginList, &MFX_PLUGINID_HEVCE_SW);
-            }
-        }
+        return 0; // the required plugin(s) couldn't be loaded
     }
 
     /*
@@ -578,21 +562,8 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
         }
     }
 
-    /* Unload optional codec plug-ins */
-    if (HB_CHECK_MFX_VERSION(version, 1, 8))
-    {
-        mfxPluginUID *pluginUID;
-
-        for (int i = 0; i < hb_list_count(mfxPluginList); i++)
-        {
-            if ((pluginUID = hb_list_item(mfxPluginList, i)) != NULL)
-            {
-                MFXVideoUSER_UnLoad(session, pluginUID);
-            }
-        }
-
-        hb_list_close(&mfxPluginList);
-    }
+    /* Unload MFX plug-ins */
+    hb_qsv_unload_plugins(&mfxPluginList, session, version);
 
     return 0;
 }
@@ -812,6 +783,55 @@ hb_qsv_info_t* hb_qsv_info_get(int encoder)
         default:
             return NULL;
     }
+}
+
+hb_list_t* hb_qsv_load_plugins(hb_qsv_info_t *info, mfxSession session, mfxVersion version)
+{
+    hb_list_t *mfxPluginList = hb_list_init();
+    if (mfxPluginList == NULL)
+    {
+        hb_log("hb_qsv_load_plugins: hb_list_init() failed");
+        goto fail;
+    }
+
+    if (HB_CHECK_MFX_VERSION(version, 1, 8))
+    {
+        if (info->codec_id == MFX_CODEC_HEVC)
+        {
+            if (HB_CHECK_MFX_VERSION(version, 1, 15))
+            {
+                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) < MFX_ERR_NONE)
+                {
+                    goto fail;
+                }
+                hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_SW);
+            }
+        }
+    }
+
+    return mfxPluginList;
+
+fail:
+    hb_list_close(&mfxPluginList);
+    return NULL;
+}
+
+void hb_qsv_unload_plugins(hb_list_t **_l, mfxSession session, mfxVersion version)
+{
+    mfxPluginUID *pluginUID;
+    hb_list_t *mfxPluginList = *_l;
+
+    if (mfxPluginList != NULL && HB_CHECK_MFX_VERSION(version, 1, 8))
+    {
+        for (int i = 0; i < hb_list_count(mfxPluginList); i++)
+        {
+            if ((pluginUID = hb_list_item(mfxPluginList, i)) != NULL)
+            {
+                MFXVideoUSER_UnLoad(session, pluginUID);
+            }
+        }
+    }
+    hb_list_close(_l);
 }
 
 const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)

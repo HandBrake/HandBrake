@@ -102,6 +102,8 @@ struct hb_work_private_s
 
     hb_list_t *delayed_processing;
     hb_list_t *encoded_frames;
+
+    hb_list_t *loaded_plugins;
 };
 
 // used in delayed_chapters list
@@ -277,7 +279,9 @@ int qsv_enc_init(hb_work_private_t *pv)
 {
     av_qsv_context *qsv = pv->job->qsv.ctx;
     hb_job_t       *job = pv->job;
+    mfxVersion version;
     mfxStatus sts;
+    mfxIMPL impl;
     int i;
 
     if (pv->init_done)
@@ -440,19 +444,6 @@ int qsv_enc_init(hb_work_private_t *pv)
         AV_QSV_CHECK_POINTER(qsv_encode->p_syncp[i]->p_sync, MFX_ERR_MEMORY_ALLOC);
     }
 
-    // initialize the encoder
-    sts = MFXVideoENCODE_Init(qsv->mfx_session, pv->param.videoParam);
-    if (sts < MFX_ERR_NONE) // ignore warnings
-    {
-        hb_error("qsv_enc_init: MFXVideoENCODE_Init failed (%d)", sts);
-        *job->done_error = HB_ERROR_INIT;
-        *job->die = 1;
-        return -1;
-    }
-    qsv_encode->is_init_done = 1;
-
-    mfxIMPL impl;
-    mfxVersion version;
     // log actual implementation details now that we know them
     if ((MFXQueryIMPL   (qsv->mfx_session, &impl)    == MFX_ERR_NONE) &&
         (MFXQueryVersion(qsv->mfx_session, &version) == MFX_ERR_NONE))
@@ -464,6 +455,30 @@ int qsv_enc_init(hb_work_private_t *pv)
     {
         hb_log("qsv_enc_init: MFXQueryIMPL/MFXQueryVersion failure");
     }
+
+    // if not re-using encqsvInit's MFX session, load required plug-ins here
+    if (pv->loaded_plugins == NULL)
+    {
+        pv->loaded_plugins = hb_qsv_load_plugins(pv->qsv_info, qsv->mfx_session, version);
+        if (pv->loaded_plugins == NULL)
+        {
+            hb_error("qsv_enc_init: hb_qsv_load_plugins failed");
+            *job->done_error = HB_ERROR_INIT;
+            *job->die = 1;
+            return -1;
+        }
+    }
+
+    // initialize the encoder
+    sts = MFXVideoENCODE_Init(qsv->mfx_session, pv->param.videoParam);
+    if (sts < MFX_ERR_NONE) // ignore warnings
+    {
+        hb_error("qsv_enc_init: MFXVideoENCODE_Init failed (%d)", sts);
+        *job->done_error = HB_ERROR_INIT;
+        *job->die = 1;
+        return -1;
+    }
+    qsv_encode->is_init_done = 1;
 
     pv->init_done = 1;
     return 0;
@@ -874,6 +889,25 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encqsvInit: MFXInit failed (%d)", err);
         return -1;
     }
+
+    /* Query the API version for hb_qsv_load_plugins */
+    err = MFXQueryVersion(session, &version);
+    if (err != MFX_ERR_NONE)
+    {
+        hb_error("encqsvInit: MFXQueryVersion failed (%d)", err);
+        MFXClose(session);
+        return -1;
+    }
+
+    /* Load required MFX plug-ins */
+    pv->loaded_plugins = hb_qsv_load_plugins(pv->qsv_info, session, version);
+    if (pv->loaded_plugins == NULL)
+    {
+        hb_error("encqsvInit: hb_qsv_load_plugins failed");
+        MFXClose(session);
+        return -1;
+    }
+
     err = MFXVideoENCODE_Init(session, pv->param.videoParam);
 // workaround for the early 15.33.x driver, should be removed later
 #define HB_DRIVER_FIX_33
@@ -890,6 +924,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     if (err < MFX_ERR_NONE) // ignore warnings
     {
         hb_error("encqsvInit: MFXVideoENCODE_Init failed (%d)", err);
+        hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
         return -1;
     }
@@ -938,6 +973,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     else
     {
         hb_error("encqsvInit: MFXVideoENCODE_GetVideoParam failed (%d)", err);
+        hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
         return -1;
     }
@@ -959,6 +995,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
+        hb_qsv_unload_plugins(&pv->loaded_plugins, session, version);
         MFXClose(session);
     }
 
@@ -1158,6 +1195,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
 void encqsvClose(hb_work_object_t *w)
 {
     hb_work_private_t *pv = w->private_data;
+    mfxVersion version;
     int i;
 
     if (pv != NULL && pv->job != NULL && pv->job->qsv.ctx != NULL &&
@@ -1211,6 +1249,12 @@ void encqsvClose(hb_work_object_t *w)
 
         if (qsv_ctx != NULL)
         {
+            /* Unload MFX plug-ins */
+            if (MFXQueryVersion(qsv_ctx->mfx_session, &version) == MFX_ERR_NONE)
+            {
+                hb_qsv_unload_plugins(&pv->loaded_plugins, qsv_ctx->mfx_session, version);
+            }
+
             /* QSV context cleanup and MFXClose */
             av_qsv_context_clean(qsv_ctx);
 
