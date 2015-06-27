@@ -915,7 +915,14 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()); // "You can provide additional arguments using the standard x264 format"; 
+                if (this.SelectedVideoEncoder == VideoEncoder.X264)
+                {
+                    return string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()); // "You can provide additional arguments using the standard x264 format"; 
+                }
+                else
+                {
+                    return "Pass additional parameters to the encoder.";
+                }
             }
         }
 
@@ -1343,6 +1350,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 tunes.Add(this.X264Tune.ToString().ToLower().Replace(" ", string.Empty)); // TODO tidy this sillyness up.
             }
+
             if (this.FastDecode)
             {
                 tunes.Add("fastdecode");
