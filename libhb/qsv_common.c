@@ -167,6 +167,39 @@ static void init_video_param(mfxVideoParam *videoParam)
     videoParam->IOPattern                   = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
 }
 
+static void init_ext_video_signal_info(mfxExtVideoSignalInfo *extVideoSignalInfo)
+{
+    if (extVideoSignalInfo == NULL)
+    {
+        return;
+    }
+
+    memset(extVideoSignalInfo, 0, sizeof(mfxExtVideoSignalInfo));
+    extVideoSignalInfo->Header.BufferId          = MFX_EXTBUFF_VIDEO_SIGNAL_INFO;
+    extVideoSignalInfo->Header.BufferSz          = sizeof(mfxExtVideoSignalInfo);
+    extVideoSignalInfo->VideoFormat              = 5; // undefined
+    extVideoSignalInfo->VideoFullRange           = 0; // TV range
+    extVideoSignalInfo->ColourDescriptionPresent = 0; // don't write to bitstream
+    extVideoSignalInfo->ColourPrimaries          = 2; // undefined
+    extVideoSignalInfo->TransferCharacteristics  = 2; // undefined
+    extVideoSignalInfo->MatrixCoefficients       = 2; // undefined
+}
+
+static void init_ext_coding_option(mfxExtCodingOption *extCodingOption)
+{
+    if (extCodingOption == NULL)
+    {
+        return;
+    }
+
+    memset(extCodingOption, 0, sizeof(mfxExtCodingOption));
+    extCodingOption->Header.BufferId = MFX_EXTBUFF_CODING_OPTION;
+    extCodingOption->Header.BufferSz = sizeof(mfxExtCodingOption);
+    extCodingOption->AUDelimiter     = MFX_CODINGOPTION_OFF;
+    extCodingOption->PicTimingSEI    = MFX_CODINGOPTION_OFF;
+    extCodingOption->CAVLC           = MFX_CODINGOPTION_OFF;
+}
+
 static void init_ext_coding_option2(mfxExtCodingOption2 *extCodingOption2)
 {
     if (extCodingOption2 == NULL)
@@ -209,7 +242,9 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
     hb_list_t    *mfxPluginList;
     mfxExtBuffer *videoExtParam[1];
     mfxVideoParam videoParam, inputParam;
-    mfxExtCodingOption2 extCodingOption2;
+    mfxExtCodingOption    extCodingOption;
+    mfxExtCodingOption2   extCodingOption2;
+    mfxExtVideoSignalInfo extVideoSignalInfo;
 
     /* Reset capabilities before querying */
     info->capabilities = 0;
@@ -361,7 +396,71 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
         }
 
         /*
-         * Check mfxExtCodingOption2 fields.
+         * Determine whether mfxExtVideoSignalInfo is supported.
+         */
+        if (HB_CHECK_MFX_VERSION(version, 1, 3))
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_video_signal_info(&extVideoSignalInfo);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extVideoSignalInfo;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+                /* Encoder can be configured via mfxExtVideoSignalInfo */
+                info->capabilities |= HB_QSV_CAP_VUI_VSINFO;
+            }
+            else if (info->codec_id == MFX_CODEC_AVC)
+            {
+                /*
+                 * This should not fail for AVC encoders, so we want to know
+                 * about it - however, it may fail for other encoders (ignore)
+                 */
+                fprintf(stderr,
+                        "hb_qsv_info_init: mfxExtVideoSignalInfo check"
+                        " failed (0x%"PRIX32", 0x%"PRIX32", %d)\n",
+                        info->codec_id, info->implementation, status);
+            }
+        }
+
+        /*
+         * Determine whether mfxExtCodingOption is supported.
+         */
+        if (HB_CHECK_MFX_VERSION(version, 1, 0))
+        {
+            init_video_param(&videoParam);
+            videoParam.mfx.CodecId = info->codec_id;
+
+            init_ext_coding_option(&extCodingOption);
+            videoParam.ExtParam    = videoExtParam;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption;
+            videoParam.NumExtParam = 1;
+
+            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            if (status >= MFX_ERR_NONE)
+            {
+                /* Encoder can be configured via mfxExtCodingOption */
+                info->capabilities |= HB_QSV_CAP_OPTION1;
+            }
+            else if (info->codec_id == MFX_CODEC_AVC)
+            {
+                /*
+                 * This should not fail for AVC encoders, so we want to know
+                 * about it - however, it may fail for other encoders (ignore)
+                 */
+                fprintf(stderr,
+                        "hb_qsv_info_init: mfxExtCodingOption check"
+                        " failed (0x%"PRIX32", 0x%"PRIX32", %d)\n",
+                        info->codec_id, info->implementation, status);
+            }
+        }
+
+        /*
+         * Determine whether mfxExtCodingOption2 and its fields are supported.
          *
          * Mode 2 suffers from false negatives with some drivers, whereas mode 1
          * suffers from false positives instead. The latter is probably easier
@@ -393,6 +492,9 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 fprintf(stderr, "LookAheadDS:   %4"PRIu16"\n", extCodingOption2.LookAheadDS);
                 fprintf(stderr, "-------------------\n");
 #endif
+
+                /* Encoder can be configured via mfxExtCodingOption2 */
+                info->capabilities |= HB_QSV_CAP_OPTION2;
 
                 /*
                  * Sanitize API 1.6 fields:
@@ -598,25 +700,39 @@ static void log_capabilities(int log_level, uint64_t caps, const char *prefix)
     {
         strcat(buffer, " icq");
     }
-    if (caps & HB_QSV_CAP_OPTION2_MBBRC)
+    if (caps & HB_QSV_CAP_VUI_VSINFO)
     {
-            strcat(buffer, " mbbrc");
+        strcat(buffer, " vsinfo");
     }
-    if (caps & HB_QSV_CAP_OPTION2_EXTBRC)
+    if (caps & HB_QSV_CAP_OPTION1)
     {
-        strcat(buffer, " extbrc");
+        strcat(buffer, " opt1");
     }
-    if (caps & HB_QSV_CAP_OPTION2_TRELLIS)
+    if (caps & HB_QSV_CAP_OPTION2)
     {
-        strcat(buffer, " trellis");
-    }
-    if (caps & HB_QSV_CAP_OPTION2_IB_ADAPT)
-    {
-        strcat(buffer, " ib_adapt");
-    }
-    if (caps & HB_QSV_CAP_OPTION2_NMPSLICE)
-    {
-        strcat(buffer, " nmpslice");
+        {
+            strcat(buffer, " opt2");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_MBBRC)
+        {
+            strcat(buffer, "+mbbrc");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_EXTBRC)
+        {
+            strcat(buffer, "+extbrc");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_TRELLIS)
+        {
+            strcat(buffer, "+trellis");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_IB_ADAPT)
+        {
+            strcat(buffer, "+ib_adapt");
+        }
+        if (caps & HB_QSV_CAP_OPTION2_NMPSLICE)
+        {
+            strcat(buffer, "+nmpslice");
+        }
     }
 
     hb_deep_log(log_level, "%s%s", prefix,
@@ -1022,13 +1138,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "cavlc") || !strcasecmp(key, "cabac"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_OPTION1)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atobool(value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atobool(value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1041,13 +1164,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "videoformat"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atoindex(hb_h264_vidformat_names, value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atoindex(hb_h264_vidformat_names, value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1056,13 +1186,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "fullrange"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atoindex(hb_h264_fullrange_names, value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atoindex(hb_h264_fullrange_names, value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1071,13 +1208,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "colorprim"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atoindex(hb_h264_colorprim_names, value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atoindex(hb_h264_colorprim_names, value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1087,13 +1231,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "transfer"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atoindex(hb_h264_transfer_names, value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atoindex(hb_h264_transfer_names, value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1103,13 +1254,20 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     }
     else if (!strcasecmp(key, "colormatrix"))
     {
-        switch (info->codec_id)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
         {
-            case MFX_CODEC_AVC:
-                ivalue = hb_qsv_atoindex(hb_h264_colmatrix_names, value, &error);
-                break;
-            default:
-                return HB_QSV_PARAM_UNSUPPORTED;
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    ivalue = hb_qsv_atoindex(hb_h264_colmatrix_names, value, &error);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
         }
         if (!error)
         {
@@ -1622,9 +1780,15 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         // attach supported mfxExtBuffer structures to the mfxVideoParam
         param->videoParam->NumExtParam                                = 0;
         param->videoParam->ExtParam                                   = param->ExtParamArray;
-        param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption;
-        param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->videoSignalInfo;
-        if (info->capabilities & HB_QSV_CAP_MSDK_API_1_6)
+        if (info->capabilities & HB_QSV_CAP_VUI_VSINFO)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->videoSignalInfo;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION1)
+        {
+            param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2)
         {
             param->videoParam->ExtParam[param->videoParam->NumExtParam++] = (mfxExtBuffer*)&param->codingOption2;
         }

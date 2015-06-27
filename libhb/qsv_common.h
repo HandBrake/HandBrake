@@ -42,18 +42,23 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_MSDK_API_1_6      (1LL <<  0)
     // H.264, H.265: B-frames can be used as references
 #define HB_QSV_CAP_B_REF_PYRAMID     (1LL <<  1)
+    // mfxExtVideoSignalInfo
+#define HB_QSV_CAP_VUI_VSINFO        (1LL <<  3)
     // optional rate control methods
 #define HB_QSV_CAP_RATECONTROL_LA    (1LL << 10)
 #define HB_QSV_CAP_RATECONTROL_LAi   (1LL << 11)
 #define HB_QSV_CAP_RATECONTROL_ICQ   (1LL << 12)
-    // mfxExtCodingOption2 fields
-#define HB_QSV_CAP_OPTION2_MBBRC     (1LL << 20)
-#define HB_QSV_CAP_OPTION2_EXTBRC    (1LL << 21)
-#define HB_QSV_CAP_OPTION2_TRELLIS   (1LL << 22)
-#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 23)
-#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 24)
-#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 25)
-#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 26)
+    // mfxExtCodingOption
+#define HB_QSV_CAP_OPTION1           (1LL << 20)
+    // mfxExtCodingOption2
+#define HB_QSV_CAP_OPTION2           (1LL << 30)
+#define HB_QSV_CAP_OPTION2_MBBRC     (1LL << 31)
+#define HB_QSV_CAP_OPTION2_EXTBRC    (1LL << 32)
+#define HB_QSV_CAP_OPTION2_TRELLIS   (1LL << 33)
+#define HB_QSV_CAP_OPTION2_BREFTYPE  (1LL << 34)
+#define HB_QSV_CAP_OPTION2_IB_ADAPT  (1LL << 35)
+#define HB_QSV_CAP_OPTION2_LA_DOWNS  (1LL << 36)
+#define HB_QSV_CAP_OPTION2_NMPSLICE  (1LL << 37)
 
     // TODO: add maximum encode resolution, etc.
 } hb_qsv_info_t;
