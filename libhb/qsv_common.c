@@ -274,14 +274,24 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             init_video_param(&inputParam);
             inputParam.mfx.CodecId = info->codec_id;
 
-            memset(&videoParam, 0, sizeof(mfxVideoParam));
-            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
-
-            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
-                videoParam.mfx.CodecId == info->codec_id)
+            /*
+             * MFXVideoENCODE_Query might tell you that an HEVC encoder is
+             * available on Haswell hardware, but it'll fail to initialize.
+             * Check encoder availability with MFXVideoENCODE_Init instead.
+             */
+            if ((status = MFXVideoENCODE_Init(session, &inputParam)) >= MFX_ERR_NONE)
             {
-                info->available = 1;
+                /*
+                 * When initializing encode-only on a hardware implementation,
+                 * MFX_WRN_PARTIAL_ACCELERATION could mean the graphics driver's
+                 * fallback software implementation is used; we don't want that.
+                 */
+                if (status != MFX_WRN_PARTIAL_ACCELERATION)
+                {
+                    info->available = 1;
+                }
             }
+            MFXVideoENCODE_Close(session);
         }
     }
     if (!info->available)
