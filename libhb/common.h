@@ -1259,18 +1259,6 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
                              const char *x264_encopts, const char *h264_profile,
                              const char *h264_level, int width, int height);
 
-#define HB_API_OLD_PRESET_GETTERS
-#ifdef  HB_API_OLD_PRESET_GETTERS
-// x264 preset/tune, qsv preset & h264 profile/level helpers
-const char * const * hb_x264_presets();
-const char * const * hb_x264_tunes();
-#ifdef USE_QSV
-const char * const * hb_qsv_presets();
-#endif
-const char * const * hb_h264_profiles();
-const char * const * hb_h264_levels();
-#endif
-
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );
 

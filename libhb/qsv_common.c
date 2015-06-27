@@ -1225,13 +1225,6 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     return error ? HB_QSV_PARAM_BAD_VALUE : HB_QSV_PARAM_OK;
 }
 
-#ifdef HB_API_OLD_PRESET_GETTERS
-const char* const* hb_qsv_presets()
-{
-    return hb_qsv_preset_get_names();
-}
-#endif
-
 const char* const* hb_qsv_preset_get_names()
 {
     if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)

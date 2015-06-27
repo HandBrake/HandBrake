@@ -1703,26 +1703,6 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     return unparsed_opts;
 }
 
-const char * const * hb_x264_presets()
-{
-    return x264_preset_names;
-}
-
-const char * const * hb_x264_tunes()
-{
-    return x264_tune_names;
-}
-
-const char * const * hb_h264_profiles()
-{
-    return hb_h264_profile_names;
-}
-
-const char * const * hb_h264_levels()
-{
-    return hb_h264_level_names;
-}
-
 const char * hb_x264_encopt_name(const char *name)
 {
     int i;
