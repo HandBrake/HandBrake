@@ -798,7 +798,16 @@ hb_list_t* hb_qsv_load_plugins(hb_qsv_info_t *info, mfxSession session, mfxVersi
     {
         if (info->codec_id == MFX_CODEC_HEVC)
         {
-            if (HB_CHECK_MFX_VERSION(version, 1, 15))
+            if (HB_CHECK_MFX_VERSION(version, 1, 15) &&
+                qsv_implementation_is_hardware(info->implementation))
+            {
+                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_HW, 0) < MFX_ERR_NONE)
+                {
+                    goto fail;
+                }
+                hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_HW);
+            }
+            else if (HB_CHECK_MFX_VERSION(version, 1, 15))
             {
                 if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) < MFX_ERR_NONE)
                 {
