@@ -1168,8 +1168,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
             ivalue = hb_qsv_atoi(value, &error);
             if (!error)
             {
-                // LookAheadDepth 10 will cause a hang with some driver versions
-                param->codingOption2.LookAheadDepth = HB_QSV_CLIP3(11, 100,
+                param->codingOption2.LookAheadDepth = HB_QSV_CLIP3(10, 100,
                                                                    ivalue);
             }
         }

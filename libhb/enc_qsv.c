@@ -908,7 +908,12 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         // encode-only is a bit less sensitive to memory issues
         pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist, 16);
         pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
-                                                       pv->param.rc.lookahead ? 60 : 0);
+                                                       pv->param.rc.lookahead ? 100 : 0);
+    }
+    if (pv->param.rc.lookahead)
+    {
+        // LookAheadDepth 10 will cause a hang with some driver versions
+        pv->param.codingOption2.LookAheadDepth = FFMAX(pv->param.codingOption2.LookAheadDepth, 11);
     }
 
     /*
