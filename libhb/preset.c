@@ -1162,7 +1162,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         else if (filter_str != hb_filter_off)
         {
             filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEINTERLACE));
             hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
             hb_value_array_append(filter_list, filter_dict);
             free(filter_str);
@@ -1190,7 +1190,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
                             hb_dict_get(preset, "PictureDenoiseTune"));
             else
                 denoise_tune = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDeinterlaceCustom"));
+                            hb_dict_get(preset, "PictureDenoiseCustom"));
 
             filter_str = hb_generate_filter_settings(
                                 filter_id, denoise_preset, denoise_tune);
