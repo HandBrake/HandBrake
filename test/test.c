@@ -2546,7 +2546,7 @@ static int ParseOptions( int argc, char ** argv )
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_HQDN3D, deinterlace))
+        else if (!hb_validate_filter_settings(HB_FILTER_DEINTERLACE, deinterlace))
         {
             deinterlace_custom = 1;
         }
@@ -2615,13 +2615,13 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --nlmeans and --no-nlmeans\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_HQDN3D, nlmeans, nlmeans_tune))
+        if (!hb_validate_filter_preset(HB_FILTER_NLMEANS, nlmeans, nlmeans_tune))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_HQDN3D, nlmeans))
+        else if (!hb_validate_filter_settings(HB_FILTER_NLMEANS, nlmeans))
         {
             nlmeans_custom = 1;
         }
