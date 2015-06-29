@@ -15,7 +15,7 @@
 #include "dvdread/ifo_print.h"
 #include "dvdread/nav_read.h"
 
-static hb_dvd_t    * hb_dvdread_init( char * path );
+static hb_dvd_t    * hb_dvdread_init( hb_handle_t * h, char * path );
 static void          hb_dvdread_close( hb_dvd_t ** _d );
 static char        * hb_dvdread_name( char * path );
 static int           hb_dvdread_title_count( hb_dvd_t * d );
@@ -106,7 +106,7 @@ static char * hb_dvdread_name( char * path )
  ***********************************************************************
  *
  **********************************************************************/
-hb_dvd_t * hb_dvdread_init( char * path )
+hb_dvd_t * hb_dvdread_init( hb_handle_t * h, char * path )
 {
     hb_dvd_t * e;
     hb_dvdread_t * d;
@@ -115,6 +115,7 @@ hb_dvd_t * hb_dvdread_init( char * path )
 
     e = calloc( sizeof( hb_dvd_t ), 1 );
     d = &(e->dvdread);
+    d->h = h;
 
     /*
      * Convert UTF-8 path to current code page on Windows
@@ -890,6 +891,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                 if ( d->cell_cur > d->cell_end )
                 {
                     hb_buffer_close( &b );
+                    hb_set_work_error(d->h, HB_ERROR_READ);
                     return NULL;
                 }
                 d->in_cell = 0;
@@ -988,8 +990,9 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
             /* Wasn't a valid VOBU, try next block */
             if( ++error > 1024 )
             {
-                hb_log( "dvd: couldn't find a VOBU after 1024 blocks" );
+                hb_error( "dvd: couldn't find a VOBU after 1024 blocks" );
                 hb_buffer_close( &b );
+                hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
             }
 
@@ -1269,9 +1272,9 @@ char * hb_dvd_name( char * path )
     return dvd_methods->name(path);
 }
 
-hb_dvd_t * hb_dvd_init( char * path )
+hb_dvd_t * hb_dvd_init( hb_handle_t * h, char * path )
 {
-    return dvd_methods->init(path);
+    return dvd_methods->init(h, path);
 }
 
 int hb_dvd_title_count( hb_dvd_t * d )

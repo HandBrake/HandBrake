@@ -108,11 +108,12 @@ typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
 typedef enum
 {
-     HB_ERROR_NONE    = 0,
-     HB_ERROR_CANCELED   ,
-     HB_ERROR_WRONG_INPUT,
-     HB_ERROR_INIT       ,
-     HB_ERROR_UNKNOWN
+     HB_ERROR_NONE         = 0,
+     HB_ERROR_CANCELED     = 1,
+     HB_ERROR_WRONG_INPUT  = 2,
+     HB_ERROR_INIT         = 3,
+     HB_ERROR_UNKNOWN      = 4,
+     HB_ERROR_READ         = 5
 } hb_error_code;
 
 #include "ports.h"

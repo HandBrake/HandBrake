@@ -126,7 +126,7 @@ static void ScanFunc( void * _data )
                                           data->title_set->list_title );
         }
     }
-    else if( ( data->dvd = hb_dvd_init( data->path ) ) )
+    else if( ( data->dvd = hb_dvd_init( data->h, data->path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );

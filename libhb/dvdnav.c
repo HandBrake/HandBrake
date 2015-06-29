@@ -19,7 +19,7 @@
 #define DVD_READ_CACHE 1
 
 static char        * hb_dvdnav_name( char * path );
-static hb_dvd_t    * hb_dvdnav_init( char * path );
+static hb_dvd_t    * hb_dvdnav_init( hb_handle_t * h, char * path );
 static int           hb_dvdnav_title_count( hb_dvd_t * d );
 static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t, uint64_t min_duration );
 static int           hb_dvdnav_start( hb_dvd_t * d, hb_title_t *title, int chapter );
@@ -148,7 +148,7 @@ fail:
  ***********************************************************************
  *
  **********************************************************************/
-static hb_dvd_t * hb_dvdnav_init( char * path )
+static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, char * path )
 {
     hb_dvd_t * e;
     hb_dvdnav_t * d;
@@ -157,6 +157,7 @@ static hb_dvd_t * hb_dvdnav_init( char * path )
 
     e = calloc( sizeof( hb_dvd_t ), 1 );
     d = &(e->dvdnav);
+    d->h = h;
 
     /*
      * Convert UTF-8 path to current code page on Windows
@@ -1627,6 +1628,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                 hb_error( "dvd: dvdnav_sector_search failed - %s",
                         dvdnav_err_to_string(d->dvdnav) );
                 hb_buffer_close( &b );
+                hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
             }
             error_count++;
@@ -1634,6 +1636,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             {
                 hb_error("dvdnav: Error, too many consecutive read errors");
                 hb_buffer_close( &b );
+                hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
             }
             continue;
@@ -1726,6 +1729,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                 {
                     // Transition to another title signals that we are done.
                     hb_buffer_close( &b );
+                    hb_deep_log(2, "dvdnav: vts change, found next title");
                     return NULL;
                 }
             }
@@ -1749,6 +1753,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                 {
                     // Transition to another title signals that we are done.
                     hb_buffer_close( &b );
+                    hb_deep_log(2, "dvdnav: cell change, found next title");
                     return NULL;
                 }
                 c = FindChapterIndex(d->list_chapter, pgcn, pgn);
@@ -1759,6 +1764,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                         // Some titles end with a 'link' back to the beginning so
                         // a transition to an earlier chapter means we're done.
                         hb_buffer_close( &b );
+                        hb_deep_log(2, "dvdnav: cell change, previous chapter");
                         return NULL;
                     }
                     chapter = d->chapter = c;
@@ -1766,6 +1772,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
                 else if ( cell_event->cellN <= d->cell )
                 {
                     hb_buffer_close( &b );
+                    hb_deep_log(2, "dvdnav: cell change, previous cell");
                     return NULL;
                 }
                 d->cell = cell_event->cellN;
@@ -1808,6 +1815,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             */
             d->stopped = 1;
             hb_buffer_close( &b );
+            hb_deep_log(2, "dvdnav: stop");
             return NULL;
 
         default:

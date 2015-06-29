@@ -1125,6 +1125,12 @@ static const uint8_t *next_packet( hb_stream_t *stream )
         if ( fread(stream->ts.packet, 1, stream->packetsize, stream->file_handle) !=
              stream->packetsize )
         {
+            int err;
+            if ((err = ferror(stream->file_handle)) != 0)
+            {
+                hb_error("next_packet: error (%d)", err);
+                hb_set_work_error(stream->h, HB_ERROR_READ);
+            }
             return NULL;
         }
         if (buf[0] == 0x47)
@@ -2408,6 +2414,12 @@ static off_t align_to_next_packet(hb_stream_t *stream)
         }
         else
         {
+            int err;
+            if ((err = ferror(stream->file_handle)) != 0)
+            {
+                hb_error("align_to_next_packet: error (%d)", err);
+                hb_set_work_error(stream->h, HB_ERROR_READ);
+            }
             return 0;
         }
     }
@@ -3352,9 +3364,18 @@ static int hb_ps_read_packet( hb_stream_t * stream, hb_buffer_t *b )
         pos -= 4;
         fseeko( stream->file_handle, -4, SEEK_CUR );
     }
+
 done:
     // Parse packet for information we might need
     funlockfile( stream->file_handle );
+
+    int err;
+    if ((err = ferror(stream->file_handle)) != 0)
+    {
+        hb_error("hb_ps_read_packet: error (%d)", err);
+        hb_set_work_error(stream->h, HB_ERROR_READ);
+    }
+
     int len = pos - b->size;
     b->size = pos;
 #undef cp
@@ -5657,8 +5678,17 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         // use M$ 'packed b-frames' and occasionally have negative
         // sizes for the null frames these require.
         if ( err != AVERROR(ENOMEM) || stream->ffmpeg_pkt->size >= 0 )
-            // eof
+        {
+            // error or eof
+            if (err != AVERROR_EOF)
+            {
+                char errstr[80];
+                av_strerror(err, errstr, 80);
+                hb_error("av_read_frame error (%d): %s", err, errstr);
+                hb_set_work_error(stream->h, HB_ERROR_READ);
+            }
             return NULL;
+        }
     }
     if ( stream->ffmpeg_pkt->stream_index == stream->ffmpeg_video_id )
     {

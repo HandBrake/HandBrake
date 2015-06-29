@@ -719,13 +719,14 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
             if (error_count > 10)
             {
                 hb_error("bd: Error, too many consecutive read errors");
-                return 0;
+                hb_set_work_error(d->h, HB_ERROR_READ);
+                return NULL;
             }
             continue;
         }
         else if ( result == 0 )
         {
-            return 0;
+            return NULL;
         }
 
         error_count = 0;
@@ -827,7 +828,8 @@ static int have_ts_sync(const uint8_t *buf, int psize)
 
 static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
 {
-    uint8_t buf[MAX_HOLE];
+    int      result;
+    uint8_t  buf[MAX_HOLE];
     uint64_t pos = 0;
     uint64_t start = bd_tell(bd);
     uint64_t orig;
@@ -841,7 +843,8 @@ static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
 
     while (1)
     {
-        if (bd_read(bd, buf+off, sizeof(buf)-off) == sizeof(buf)-off)
+        result = bd_read(bd, buf + off, sizeof(buf) - off);
+        if (result == sizeof(buf) - off)
         {
             const uint8_t *bp = buf;
             int i;
@@ -862,6 +865,10 @@ static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
             memcpy(buf, buf + sizeof(buf) - off, off);
             start += sizeof(buf) - off;
         }
+        else if (result < 0)
+        {
+            return -1;
+        }
         else
         {
             return 0;
@@ -874,9 +881,14 @@ static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
     bd_seek(bd, off);
     while (off > bd_tell(bd))
     {
-        if (bd_read(bd, buf, 192) != 192)
+        result = bd_read(bd, buf, 192);
+        if (result < 0)
         {
-            break;
+            return -1;
+        }
+        else if (result != 192)
+        {
+            return 0;
         }
     }
     return start - orig + pos;
@@ -905,12 +917,16 @@ static int next_packet( BLURAY *bd, uint8_t *pkt )
         // lost sync - back up to where we started then try to re-establish.
         uint64_t pos = bd_tell(bd);
         uint64_t pos2 = align_to_next_packet(bd, pkt);
-        if ( pos2 == 0 )
+        if (pos2 < 0)
         {
-            hb_log( "next_packet: eof while re-establishing sync @ %"PRIu64"", pos );
+            return -1;
+        }
+        else if (pos2 == 0)
+        {
+            hb_log("next_packet: eof while re-establishing sync @ %"PRIu64"", pos );
             return 0;
         }
-        hb_log( "next_packet: sync lost @ %"PRIu64", regained after %"PRIu64" bytes",
+        hb_log("next_packet: sync lost @ %"PRIu64", regained after %"PRIu64" bytes",
                  pos, pos2 );
     }
 }

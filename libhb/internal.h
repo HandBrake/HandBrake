@@ -48,6 +48,7 @@ void         hb_title_close( hb_title_t ** );
  **********************************************************************/
 int  hb_get_pid( hb_handle_t * );
 void hb_set_state( hb_handle_t *, hb_state_t * );
+void hb_set_work_error( hb_handle_t * h, hb_error_code err );
 void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
 
 /***********************************************************************
@@ -327,7 +328,7 @@ typedef struct hb_bd_s hb_bd_t;
 typedef union  hb_dvd_s hb_dvd_t;
 typedef struct hb_stream_s hb_stream_t;
 
-hb_dvd_t *   hb_dvd_init( char * path );
+hb_dvd_t *   hb_dvd_init( hb_handle_t * h, char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
 hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title, uint64_t min_duration );
 int          hb_dvd_start( hb_dvd_t *, hb_title_t *title, int chapter );

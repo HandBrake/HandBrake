@@ -81,7 +81,7 @@ static int hb_reader_open( hb_work_private_t * r )
     }
     else if ( r->title->type == HB_DVD_TYPE )
     {
-        if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
+        if ( !( r->dvd = hb_dvd_init( r->h, r->title->path ) ) )
             return 1;
     }
     else if ( r->title->type == HB_STREAM_TYPE ||

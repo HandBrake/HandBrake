@@ -42,6 +42,7 @@ struct hb_dvdread_s
     int            in_sync;
     uint16_t       cur_vob_id;
     uint8_t        cur_cell_id;
+    hb_handle_t  * h;
 };
 
 struct hb_dvdnav_s
@@ -57,6 +58,7 @@ struct hb_dvdnav_s
     int            cell;
     hb_list_t    * list_chapter;
     int            stopped;
+    hb_handle_t  * h;
 };
 
 typedef struct hb_dvdnav_s hb_dvdnav_t;
@@ -71,7 +73,7 @@ union hb_dvd_s
 
 struct hb_dvd_func_s
 {
-    hb_dvd_t *    (* init)        ( char * );
+    hb_dvd_t *    (* init)        ( hb_handle_t *, char * );
     void          (* close)       ( hb_dvd_t ** );
     char        * (* name)        ( char * );
     int           (* title_count) ( hb_dvd_t * );

@@ -1819,6 +1819,11 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     hb_unlock( h->pause_lock );
 }
 
+void hb_set_work_error( hb_handle_t * h, hb_error_code err )
+{
+    h->work_error = err;
+}
+
 void hb_system_sleep_allow(hb_handle_t *h)
 {
     hb_system_sleep_private_enable(h->system_sleep_opaque);
