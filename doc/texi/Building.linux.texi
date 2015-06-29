@@ -70,8 +70,8 @@ To install these packages:
 sudo apt-get install subversion cmake yasm build-essential autoconf libtool \
 zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
-libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev intltool \
-libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
+libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev libjansson-dev \
+intltool libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
 libwebkitgtk-3.0-dev libnotify-dev libgstreamer1.0-dev \
 libgstreamer-plugins-base1.0-dev libappindicator-dev
 @end example
@@ -125,8 +125,8 @@ To install these packages:
 sudo yum install patch intltool libtool cmake gcc-c++ yasm zlib-devel \
 bzip2-devel libogg-devel libtheora-devel libvorbis-devel libsamplerate-devel \
 libxml2-devel fribidi-devel freetype-devel fontconfig-devel libass-devel \
-lame-devel x264-devel dbus-glib-devel libgudev1-devel webkitgtk3-devel \
-libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
+lame-devel x264-devel jansson-devel dbus-glib-devel libgudev1-devel \
+webkitgtk3-devel libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
 @end example
 
 @c %**-------------------------------------------------------------------------
