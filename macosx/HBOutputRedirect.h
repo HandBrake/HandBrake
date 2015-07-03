@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBOutputRedirectListening <NSObject>
 
@@ -35,3 +36,5 @@
 - (void)removeListener:(id <HBOutputRedirectListening>)aListener;
 
 @end
+
+NS_ASSUME_NONNULL_END

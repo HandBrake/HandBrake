@@ -12,20 +12,36 @@
     FILE *f;
 }
 
-- (instancetype)initWithFileURL:(NSURL *)url;
+- (nullable instancetype)initWithFileURL:(NSURL *)url;
 {
     self = [super init];
     if (self)
     {
-
-        [[NSFileManager defaultManager] createDirectoryAtPath:url.URLByDeletingLastPathComponent.path
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:NULL];
+        NSError *error;
+        BOOL result;
+        result = [[NSFileManager defaultManager] createDirectoryAtPath:url.URLByDeletingLastPathComponent.path
+                                           withIntermediateDirectories:YES
+                                                            attributes:nil
+                                                                 error:&error];
+        if (!result)
+        {
+            [HBUtilities writeToActivityLog:"Error: coudln't open activity log file, %@", error];
+            return nil;
+        }
 
         _url = [url copy];
+
         f = fopen(url.path.fileSystemRepresentation, "w");
+        if (!f)
+        {
+            return nil;
+        }
+
         f = freopen(NULL, "a", f);
+        if (!f)
+        {
+            return nil;
+        }
 
         [self writeHeaderForReason:@"Session"];
     }

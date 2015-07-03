@@ -10,7 +10,7 @@
 
 @implementation HBJobOutputFileWriter
 
-- (instancetype)initWithJob:(HBJob *)job
+- (nullable instancetype)initWithJob:(HBJob *)job
 {
     NSURL *outputURL= job.destURL;
 

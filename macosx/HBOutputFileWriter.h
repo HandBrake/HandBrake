@@ -7,13 +7,15 @@
 #import <Foundation/Foundation.h>
 #import "HBOutputRedirect.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * This class is used to listen to HBOutputRedirect
  * and write the output to a file.
  */
 @interface HBOutputFileWriter : NSObject <HBOutputRedirectListening>
 
-- (instancetype)initWithFileURL:(NSURL *)url;
+- (nullable instancetype)initWithFileURL:(NSURL *)url;
 
 - (void)write:(NSString *)text;
 - (void)clear;
@@ -21,3 +23,5 @@
 @property (nonatomic, readonly) NSURL *url;
 
 @end
+
+NS_ASSUME_NONNULL_END

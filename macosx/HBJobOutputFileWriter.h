@@ -6,6 +6,8 @@
 
 #import "HBOutputFileWriter.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class HBJob;
 
 /**
@@ -14,6 +16,8 @@
  */
 @interface HBJobOutputFileWriter : HBOutputFileWriter
 
-- (instancetype)initWithJob:(HBJob *)job NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithJob:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END
