@@ -274,24 +274,34 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             init_video_param(&inputParam);
             inputParam.mfx.CodecId = info->codec_id;
 
-            /*
-             * MFXVideoENCODE_Query might tell you that an HEVC encoder is
-             * available on Haswell hardware, but it'll fail to initialize.
-             * Check encoder availability with MFXVideoENCODE_Init instead.
-             */
-            if ((status = MFXVideoENCODE_Init(session, &inputParam)) >= MFX_ERR_NONE)
+            memset(&videoParam, 0, sizeof(mfxVideoParam));
+            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+
+            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+                videoParam.mfx.CodecId == info->codec_id)
             {
                 /*
-                 * When initializing encode-only on a hardware implementation,
-                 * MFX_WRN_PARTIAL_ACCELERATION could mean the graphics driver's
-                 * fallback software implementation is used; we don't want that.
+                 * MFXVideoENCODE_Query might tell you that an HEVC encoder is
+                 * available on Haswell hardware, but it'll fail to initialize.
+                 * So check encoder availability with MFXVideoENCODE_Init too.
                  */
-                if (status != MFX_WRN_PARTIAL_ACCELERATION)
+                if ((status = MFXVideoENCODE_Init(session, &videoParam)) >= MFX_ERR_NONE)
                 {
                     info->available = 1;
                 }
+                else if (info->codec_id == MFX_CODEC_AVC)
+                {
+                    /*
+                     * This should not fail for AVC encoders, so we want to know
+                     * about it - however, it may fail for other encoders (ignore)
+                     */
+                    fprintf(stderr,
+                            "hb_qsv_info_init: MFXVideoENCODE_Init failed"
+                            " (0x%"PRIX32", 0x%"PRIX32", %d)\n",
+                            info->codec_id, info->implementation, status);
+                }
+                MFXVideoENCODE_Close(session);
             }
-            MFXVideoENCODE_Close(session);
         }
     }
     if (!info->available)
