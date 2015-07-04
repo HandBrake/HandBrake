@@ -673,14 +673,21 @@
 - (void)sendToExternalApp:(NSURL *)fileURL
 {
     // This end of encode action is called as each encode rolls off of the queue
-    if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"sendToMetaX"] == YES)
     {
-        NSString *sendToApp = [[NSUserDefaults standardUserDefaults] objectForKey:@"SendCompletedEncodeToApp"];
-        if (![sendToApp isEqualToString:@"None"])
+        NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+        NSString *sendToApp = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"SendCompletedEncodeToApp"]];
+
+        if (sendToApp)
         {
-            [HBUtilities writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
-            NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", fileURL.path, @"\")"]];
-            [myScript executeAndReturnError: nil];
+            if (![workspace openFile:fileURL.path withApplication:sendToApp])
+            {
+                [HBUtilities writeToActivityLog:"Failed to send file to: %s", sendToApp];
+            }
+        }
+        else
+        {
+            [HBUtilities writeToActivityLog:"Send file to: app not found"];
         }
     }
 }
