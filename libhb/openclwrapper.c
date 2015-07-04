@@ -668,6 +668,7 @@ int hb_release_opencl_env( GPUEnv *gpu_info )
     }
 
     isInited = 0;
+    useBuffers = 0;
     gpu_info->isUserCreated = 0;
 
     return 1;
