@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7519.1" systemVersion="14D87h" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7519.1"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -184,7 +183,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                                     <menuItem title="None" state="on" id="ej8-4k-1vd"/>
                                     <menuItem title="Foreign Audio Subtitles Track" id="QRd-XH-6TH"/>
                                     <menuItem title="First Selected Track" id="mnl-P8-dtK"/>
-                                    <menuItem title="Foreign Audio, the First Selected Track" id="d79-2j-fhc"/>
+                                    <menuItem title="Foreign Audio, then First Selected Track" id="d79-2j-fhc"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
