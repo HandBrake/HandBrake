@@ -858,6 +858,12 @@ static void do_job(hb_job_t *job)
                                    &vpp_settings[2], &vpp_settings[3],
                                    &vpp_settings[4], &vpp_settings[5]);
                         }
+                        // VPP crop/scale takes precedence over OpenCL scale too
+                        if (job->use_opencl)
+                        {
+                            hb_release_opencl_run_env();
+                            job->use_opencl = 0;
+                        }
                         hb_list_rem(job->list_filter, filter);
                         hb_filter_close(&filter);
                         break;
