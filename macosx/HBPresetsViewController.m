@@ -169,11 +169,11 @@
         // Save the current selection path and apply it again after the deletion
         NSIndexPath *currentSelection = [self.treeController selectionIndexPath];
         /* Alert user before deleting preset */
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Warning!"
-                                         defaultButton:@"OK"
-                                       alternateButton:@"Cancel"
+        NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", nil)
+                                         defaultButton:NSLocalizedString(@"Delete Preset", nil)
+                                       alternateButton:NSLocalizedString(@"Cancel", nil)
                                            otherButton:nil
-                             informativeTextWithFormat:@"Are you sure that you want to delete the selected preset?"];
+                             informativeTextWithFormat:NSLocalizedString(@"You can't undo this action.", nil)];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         NSInteger status = [alert runModal];

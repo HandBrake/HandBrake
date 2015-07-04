@@ -1096,8 +1096,8 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
-        [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"")];
+        [alert setMessageText:NSLocalizedString(@"Invalid destination.", @"")];
+        [alert setInformativeText:NSLocalizedString(@"The current destination folder is not a valid.", @"")];
         [alert runModal];
         return;
     }
@@ -1106,7 +1106,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.job.destURL.path])
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), self.job.destURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
