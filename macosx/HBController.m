@@ -756,8 +756,12 @@
 {
     // Open a panel to let the user choose and update the text field
     NSSavePanel *panel = [NSSavePanel savePanel];
-    panel.directoryURL = self.job.destURL.URLByDeletingLastPathComponent;
-    panel.nameFieldStringValue = self.job.destURL.lastPathComponent;
+
+    if (self.job.destURL)
+    {
+        panel.directoryURL = self.job.destURL.URLByDeletingLastPathComponent;
+        panel.nameFieldStringValue = self.job.destURL.lastPathComponent;
+    }
 
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
      {
