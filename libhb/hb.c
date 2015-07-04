@@ -1744,6 +1744,9 @@ void hb_global_close()
     char dirname[1024];
     DIR * dir;
     struct dirent * entry;
+
+    /* OpenCL library (dynamically loaded) */
+    hb_ocl_close();
     
     /* Find and remove temp folder */
     memset( dirname, 0, 1024 );
