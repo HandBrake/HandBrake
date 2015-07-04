@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -80,6 +80,17 @@
                                 <connections>
                                     <action selector="browseSources:" target="-1" id="9Ko-Me-Xae"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="Open Recent" id="fNa-z2-K1i">
+                                <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="ukX-HN-SXk">
+                                    <items>
+                                        <menuItem title="Clear Menu" id="wPw-Uj-Gxi">
+                                            <connections>
+                                                <action selector="clearRecentDocuments:" target="-1" id="94m-U1-U9q"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="2507">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>

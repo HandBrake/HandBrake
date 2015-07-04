@@ -280,10 +280,10 @@
     {
         if (action == @selector(browseSources:))
         {
-            [toolbarItem setImage: [NSImage imageNamed: @"source"]];
-            [toolbarItem setLabel: @"Source"];
-            [toolbarItem setPaletteLabel: @"Source"];
-            [toolbarItem setToolTip: @"Choose Video Source"];
+            [toolbarItem setImage:[NSImage imageNamed:@"source"]];
+            [toolbarItem setLabel:NSLocalizedString(@"Open Source", nil)];
+            [toolbarItem setPaletteLabel:NSLocalizedString(@"Open Source", nil)];
+            [toolbarItem setToolTip:NSLocalizedString(@"Open source and scan the selected title", nil)];
             return YES;
         }
     }
@@ -610,6 +610,9 @@
                      self.browsedSourceDisplayName = url.lastPathComponent;
                  }
              }
+
+             // Add the url to the Open Recent menu.
+             [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:url];
 
              NSInteger titleIdx = 0;
              if (self.scanSpecificTitle)

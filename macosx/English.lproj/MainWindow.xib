@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -605,7 +604,7 @@ IA
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
-                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Source" paletteLabel="Source" toolTip="Open source and scan the selected title" tag="-1" image="source" id="8r8-nZ-dYs">
+                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Open Source" paletteLabel="Open Source" toolTip="Open source and scan the selected title" tag="-1" image="source" id="8r8-nZ-dYs">
                         <connections>
                             <action selector="browseSources:" target="-2" id="zi1-Tk-0YL"/>
                         </connections>
