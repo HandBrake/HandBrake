@@ -22,6 +22,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -193,13 +194,6 @@ namespace HandBrakeWPF.Services.Presets
                     preset = JsonPresetFactory.ImportPreset(hbPreset);
                     preset.Category = UserPresetCatgoryName;
 
-                    // Handle the PictureDecombDeinterlace key
-                    if (preset.UseDeinterlace)
-                    {
-                        preset.Task.Decomb = Decomb.Off;
-                        preset.Task.CustomDecomb = string.Empty;
-                    }
-
                     // Depending on the selected preset options, we may need to change some settings around.
                     // If the user chose not to use fitlers, remove them.
                     if (!preset.UsePictureFilters)
@@ -251,6 +245,24 @@ namespace HandBrakeWPF.Services.Presets
                     Add(preset);
                 }
             }
+        }
+
+        /// <summary>
+        /// The export.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        public void Export(string filename, Preset preset, HBConfiguration configuration)
+        {
+            PresetTransportContainer container = JsonPresetFactory.ExportPreset(preset, configuration);
+            HandBrakePresetService.ExportPreset(filename, container);
         }
 
         /// <summary>

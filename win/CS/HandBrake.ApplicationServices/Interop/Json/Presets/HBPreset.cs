@@ -19,7 +19,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the audio copy mask.
         /// </summary>
-        public List<object> AudioCopyMask { get; set; }
+        public List<string> AudioCopyMask { get; set; }
 
         /// <summary>
         /// Gets or sets the audio encoder fallback.

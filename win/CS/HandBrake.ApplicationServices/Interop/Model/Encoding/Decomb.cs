@@ -9,15 +9,26 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The decomb.
     /// </summary>
     public enum Decomb
     {
+        [ShortName("off")]
         Off = 0,
+
+        [ShortName("default")]
         Default = 2,
+
+        [ShortName("fast")]
         Fast = 3,
+
+        [ShortName("bob")]
         Bob = 4,
+
+        [ShortName("custom")]
         Custom = 1
     }
 }

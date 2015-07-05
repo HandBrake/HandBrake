@@ -9,13 +9,18 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The detelecine.
     /// </summary>
     public enum Detelecine
     {
+        [ShortName("off")]
         Off = 0,
+        [ShortName("default")]
         Default = 2,
+        [ShortName("custom")]
         Custom = 1
     }
 }

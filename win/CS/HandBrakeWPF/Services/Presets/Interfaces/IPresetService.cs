@@ -11,6 +11,8 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
 {
     using System.Collections.ObjectModel;
 
+    using HandBrake.ApplicationServices.Model;
+
     using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
@@ -52,6 +54,21 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The filename.
         /// </param>
         void Import(string filename);
+
+
+        /// <summary>
+        /// The export.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        void Export(string filename, Preset preset, HBConfiguration configuration);
 
         /// <summary>
         /// Update a preset

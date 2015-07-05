@@ -11,15 +11,19 @@ namespace HandBrake.ApplicationServices.Model
 {
     using System.ComponentModel.DataAnnotations;
 
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     ///  The different scaling modes available in HandBrake
     /// </summary>
     public enum VideoScaler
     {
         [Display(Name = "Lanczos (default)")]
+        [ShortName("swscale")]
         Lanczos = 0,
 
         [Display(Name = "Bicubic (OpenCL)")]
+        [ShortName("opencl")]
         BicubicCl,
     }
 }

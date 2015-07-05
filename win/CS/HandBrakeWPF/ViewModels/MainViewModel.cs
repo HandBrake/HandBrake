@@ -1827,10 +1827,10 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog savefiledialog = new SaveFileDialog
                                                      {
-                                                         Filter = "plist|*.plist",
+                                                         Filter = "json|*.json",
                                                          CheckPathExists = true,
                                                          AddExtension = true,
-                                                         DefaultExt = ".plist",
+                                                         DefaultExt = ".json",
                                                          OverwritePrompt = true,
                                                          FilterIndex = 0
                                                      };
@@ -1841,10 +1841,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (!string.IsNullOrEmpty(filename))
                 {
-                    PlistFactory.Export(
-                        savefiledialog.FileName,
-                        this.selectedPreset,
-                        HandBrakeUtils.Build.ToString(CultureInfo.InvariantCulture));
+                    this.presetService.Export(savefiledialog.FileName, this.selectedPreset, HBConfigurationFactory.Create());
                 }
             }
             else

@@ -171,7 +171,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
-    <Compile Include="Services\Presets\Factories\PlistFactory.cs" />
     <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />

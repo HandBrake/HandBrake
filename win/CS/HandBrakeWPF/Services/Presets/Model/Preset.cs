@@ -77,11 +77,6 @@ namespace HandBrakeWPF.Services.Presets.Model
         public PresetPictureSettingsMode PictureSettingsMode { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether use deinterlace.
-        /// </summary>
-        public bool UseDeinterlace { get; set; }
-
-        /// <summary>
         /// Gets or sets task.
         /// </summary>
         public EncodeTask Task { get; set; }

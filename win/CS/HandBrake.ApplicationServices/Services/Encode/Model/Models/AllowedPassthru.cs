@@ -9,7 +9,7 @@
 
 namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Allowed Passthru Options
@@ -121,6 +121,51 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
         /// Gets or sets AudioEncoderFallback.
         /// </summary>
         public AudioEncoder AudioEncoderFallback { get; set; }
+
+        /// <summary>
+        /// Gets the allowed passthru options.
+        /// </summary>
+        public IEnumerable<AudioEncoder> AllowedPassthruOptions
+        {
+            get
+            {
+                List<AudioEncoder> audioEncoders = new List<AudioEncoder>();
+                if (AudioAllowAACPass)
+                {
+                    audioEncoders.Add(AudioEncoder.AacPassthru);
+                }
+                if (AudioAllowAC3Pass)
+                {
+                    audioEncoders.Add(AudioEncoder.Ac3Passthrough);
+                }
+                if (AudioAllowDTSHDPass)
+                {
+                    audioEncoders.Add(AudioEncoder.DtsHDPassthrough);
+                }
+                if (AudioAllowDTSPass)
+                {
+                    audioEncoders.Add(AudioEncoder.DtsPassthrough);
+                }
+                if (AudioAllowMP3Pass)
+                {
+                    audioEncoders.Add(AudioEncoder.Mp3Passthru);
+                }
+                if (AudioAllowTrueHDPass)
+                {
+                    audioEncoders.Add(AudioEncoder.TrueHDPassthrough);
+                }
+                if (AudioAllowFlacPass)
+                {
+                    audioEncoders.Add(AudioEncoder.FlacPassthru);
+                }
+                if (AudioAllowEAC3Pass)
+                {
+                    audioEncoders.Add(AudioEncoder.EAc3Passthrough);
+                }
+
+                return audioEncoders;
+            }
+        } 
 
         #endregion
     }

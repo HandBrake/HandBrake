@@ -9,13 +9,15 @@
 
 namespace HandBrakeWPF.Services.Presets.Factories
 {
-    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
@@ -46,7 +48,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Name = importedPreset.PresetName;
             preset.Description = importedPreset.PresetDescription;
             preset.UsePictureFilters = importedPreset.UsesPictureFilters;
-            preset.UseDeinterlace = !importedPreset.PictureDecombDeinterlace;
             preset.Task = new EncodeTask();
 
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
@@ -105,6 +106,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
             }
 
             preset.Task.CustomDecomb = importedPreset.PictureDecombCustom;
+
+            if (!importedPreset.PictureDecombDeinterlace)
+            {
+                preset.Task.Decomb = Decomb.Off;
+            }
 
             switch (importedPreset.PictureDeinterlace)
             {
@@ -367,15 +373,157 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// <param name="export">
         /// The export.
         /// </param>
+        /// <param name="config">
+        /// HandBrakes configuration options.
+        /// </param>
         /// <returns>
         /// The <see cref="Preset"/>.
         /// </returns>
-        public HandBrake.ApplicationServices.Interop.Json.Presets.HBPreset ExportPreset(Preset export)
+        public static PresetTransportContainer ExportPreset(Preset export, HBConfiguration config)
         {
-            HandBrake.ApplicationServices.Interop.Json.Presets.HBPreset preset = new HandBrake.ApplicationServices.Interop.Json.Presets.HBPreset();
+            PresetTransportContainer container = new PresetTransportContainer();
+            container.VersionMajor = "0";
+            container.VersionMinor = "10";
+            container.VersionMicro = "2";
+            container.PresetList = new List<HBPreset> { CreateHbPreset(export, config) };
+
+            return container;
+        }
+
+        /// <summary>
+        /// The create hb preset.
+        /// </summary>
+        /// <param name="export">
+        /// The export.
+        /// </param>
+        /// <param name="config">HandBrakes current configuration</param>
+        /// <returns>
+        /// The <see cref="HBPreset"/>.
+        /// </returns>
+        private static HBPreset CreateHbPreset(Preset export, HBConfiguration config)
+        {
+            HBPreset preset = new HBPreset();
+
+            // Preset
+            preset.PresetDescription = export.Description;
+            preset.PresetName = export.Name;
+            preset.Type = 1; // User Preset
+            preset.UsesPictureFilters = export.UsePictureFilters;
+            preset.UsesPictureSettings = (int)export.PictureSettingsMode;
+            preset.Default = false; // TODO Can other GUI's handle this?
+
+            // Audio
+            preset.AudioCopyMask = export.Task.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
+            preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.Task.AllowedPassthruOptions.AudioEncoderFallback);
+            preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLangauges);
+            preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
+            preset.AudioSecondaryEncoderMode = false; // TODO -> Check what this is.
+            preset.AudioList = new List<AudioList>();
+            foreach (var item in export.Task.AudioTracks)
+            {
+                AudioList track = new AudioList
+                                      {
+                                          AudioBitrate = item.Bitrate,
+                                          AudioCompressionLevel = 0, // TODO
+                                          AudioDitherMethod = null,  // TODO
+                                          AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
+                                          AudioMixdown = EnumHelper<Mixdown>.GetShortName(item.MixDown),
+                                          AudioNormalizeMixLevel = false, // TODO
+                                          AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(),  // TODO check formatting.
+                                          AudioTrackDRCSlider = item.DRC,
+                                          AudioTrackGainSlider = item.Gain,
+                                          AudioTrackQuality = item.Quality ?? 0,
+                                          AudioTrackQualityEnable = item.Quality.HasValue && item.IsQualityVisible
+                                      };
+               
+                preset.AudioList.Add(track);
+            }
+            
+
+            // Subtitles
+            preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
+            preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
+            preset.SubtitleBurnBDSub = false; // TODO not supported yet.
+            preset.SubtitleBurnDVDSub = false; // TODO not supported yet.
+            preset.SubtitleBurnBehavior = EnumHelper<SubtitleBurnInBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBurnInBehaviour);
+            preset.SubtitleLanguageList = LanguageUtilities.GetLanguageCodes(export.SubtitleTrackBehaviours.SelectedLangauges);
+            preset.SubtitleTrackSelectionBehavior = EnumHelper<SubtitleBehaviourModes>.GetShortName(export.SubtitleTrackBehaviours.SelectedBehaviour);
+
+            // Chapters
+            preset.ChapterMarkers = export.Task.IncludeChapterMarkers;
+
+            // Output Settings
+            preset.FileFormat = EnumHelper<OutputFormat>.GetShortName(export.Task.OutputFormat);
+            preset.Mp4HttpOptimize = export.Task.OptimizeMP4;
+            preset.Mp4iPodCompatible = export.Task.IPod5GSupport;
+
+            // Picture Settings
+            preset.PictureForceHeight = 0; // TODO
+            preset.PictureForceWidth = 0; // TODO
+            preset.PictureHeight = preset.UsesPictureSettings >= 1 ? export.Task.MaxHeight : 0; // TODO; // TODO
+            preset.PictureItuPAR = false; // TODO Not supported Yet
+            preset.PictureKeepRatio = export.Task.KeepDisplayAspect;
+            preset.PictureLeftCrop = export.Task.Cropping.Left;
+            preset.PictureLooseCrop = false; // TODO Not Supported Yet
+            preset.PictureModulus = export.Task.Modulus ?? 16;
+            preset.PicturePAR = EnumHelper<Anamorphic>.GetShortName(export.Task.Anamorphic);
+            preset.PicturePARHeight = export.Task.PixelAspectY;
+            preset.PicturePARWidth = export.Task.PixelAspectX; 
+            preset.PictureRightCrop = export.Task.Cropping.Right;
+            preset.PictureRotate = 0; // TODO Not supported yet.
+            preset.PictureTopCrop = export.Task.Cropping.Top;
+            preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0; // TODO
+            preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
+            preset.PictureAutoCrop = export.Task.HasCropping;
+            preset.PictureBottomCrop = export.Task.Cropping.Bottom;
+
+            // Filters
+            preset.PictureDeblock = export.Task.Deblock;
+            preset.PictureDecomb = EnumHelper<Decomb>.GetShortName(export.Task.Decomb);
+            preset.PictureDecombCustom = export.Task.CustomDecomb;
+            preset.PictureDecombDeinterlace = export.Task.Decomb != Decomb.Off;
+            preset.PictureDeinterlace = EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace);
+            preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
+            preset.PictureDenoiseCustom = export.Task.CustomDenoise;
+            preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
+            preset.PictureDenoisePreset = EnumHelper<DenoisePreset>.GetShortName(export.Task.DenoisePreset);
+            preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune); 
+            preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
+            preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
+
+            // Video
+            preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);
+            preset.VideoFramerate = export.Task.Framerate.ToString();
+            preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
+            preset.VideoGrayScale = export.Task.Grayscale;
+            preset.VideoHWDecode = false;
+            preset.VideoLevel = export.Task.VideoLevel.ShortName;
+            preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
+            preset.VideoPreset = export.Task.VideoPreset.ShortName;
+            preset.VideoProfile = export.Task.VideoProfile.ShortName;
+            preset.VideoQSVAsyncDepth = 4; // Defaulted to 4 for now.
+            preset.VideoQSVDecode = !config.DisableQuickSyncDecoding;
+            preset.VideoQualitySlider = export.Task.Quality.HasValue ? export.Task.Quality.Value : 0;
+            preset.VideoQualityType = (int)export.Task.VideoEncodeRateType;
+            preset.VideoScaler = EnumHelper<VideoScaler>.GetShortName(config.ScalingMode);
+            preset.VideoTune = export.Task.VideoTunes.Aggregate(string.Empty, (current, item) => !string.IsNullOrEmpty(current) ? string.Format("{0}, {1}", current, item.ShortName) : item.ShortName);
+            preset.VideoAvgBitrate = export.Task.VideoBitrate ?? 0;
+            preset.VideoColorMatrixCode = 0; // TODO not supported.
+            preset.VideoTurboTwoPass = export.Task.TurboFirstPass;
+            preset.VideoTwoPass = export.Task.TwoPass;
+
+            // Advanced
+            preset.x264Option = export.Task.AdvancedEncoderOptions;
+            preset.x264UseAdvancedOptions = export.Task.ShowAdvancedTab;
+
+            // Unknown
+            preset.ChildrenArray = new List<object>(); // TODO
+            preset.Folder = false; // TODO
+            preset.FolderOpen = false; // TODO
 
             return preset;
         }
+
 
         /// <summary>
         /// Get the OutputFormat Enum for a given string
@@ -385,8 +533,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// </param>
         /// <returns>
         /// An OutputFormat Enum
-        /// </returns>
-        public static OutputFormat GetFileFormat(string format)
+        /// </returns> 
+        private static OutputFormat GetFileFormat(string format)
         {
             switch (format.ToLower())
             {

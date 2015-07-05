@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Runtime.InteropServices;
 
     using HandBrake.ApplicationServices.Interop.HbLib;
@@ -64,6 +65,24 @@ namespace HandBrake.ApplicationServices.Interop
             PresetTransportContainer preset = JsonConvert.DeserializeObject<PresetTransportContainer>(presetJson);
 
             return preset;
+        }
+
+        /// <summary>
+        /// The export preset.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        public static void ExportPreset(string filename, PresetTransportContainer container)
+        {
+            string preset = JsonConvert.SerializeObject(container, Formatting.Indented);
+            using (StreamWriter writer = new StreamWriter(filename))
+            {
+                writer.Write(preset);
+            }
         }
     }
 }

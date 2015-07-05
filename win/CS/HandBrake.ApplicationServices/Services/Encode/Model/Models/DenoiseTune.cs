@@ -11,24 +11,31 @@ namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
     using System.ComponentModel.DataAnnotations;
 
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The denoise tune.
     /// </summary>
     public enum DenoiseTune
     {
         [Display(Name = "None")]
+        [ShortName("none")]
         None = 0,
 
         [Display(Name = "Film")]
+        [ShortName("film")]
         Film,
 
         [Display(Name = "Grain")]
+        [ShortName("grain")]
         Grain,
 
         [Display(Name = "High Motion")]
+        [ShortName("highmotion")]
         HighMotion,
 
         [Display(Name = "Animation")]
+        [ShortName("animation")]
         Animation,
     }
 }

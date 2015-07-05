@@ -9,16 +9,29 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The deinterlace.
     /// </summary>
     public enum Deinterlace
     {
+        [ShortName("off")]
         Off = 0,
+
+        [ShortName("fast")]
         Fast = 2,
+
+        [ShortName("slow")]
         Slow = 3,
+
+        [ShortName("slower")]
         Slower = 4,
+
+        [ShortName("bob")]
         Bob = 5,
+
+        [ShortName("custom")]
         Custom = 1
     }
 }

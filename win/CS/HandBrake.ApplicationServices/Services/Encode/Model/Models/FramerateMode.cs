@@ -9,13 +9,20 @@
 
 namespace HandBrake.ApplicationServices.Services.Encode.Model.Models
 {
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The Mode of Video Encoding. CFR, VFR, PFR
     /// </summary>
     public enum FramerateMode
     {
+        [ShortName("cfr")]
         CFR = 0,
+
+        [ShortName("pfr")]
         PFR,
+
+        [ShortName("vfr")]
         VFR
     }
 }

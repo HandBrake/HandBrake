@@ -9,13 +9,20 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
+    using HandBrake.ApplicationServices.Attributes;
+
     /// <summary>
     /// The denoise.
     /// </summary>
     public enum Denoise
     {
+        [ShortName("off")]
         Off = 0,
+
+        [ShortName("hqdn3d")]
         hqdn3d = 1,
+
+        [ShortName("nlmeans")]
         NLMeans = 2,
     }
 }
