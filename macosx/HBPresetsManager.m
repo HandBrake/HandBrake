@@ -214,7 +214,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
         else if ([obj isLeaf] && firstUserPreset == nil)
         {
             firstUserPreset = obj;
-            *stop = YES;
         }
 
         if ([obj isDefault])
@@ -222,10 +221,13 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
             self.defaultPreset = obj;
             defaultAlreadySetted = YES;
         }
+
+        [obj setIsDefault:NO];
     }];
 
     if (defaultAlreadySetted)
     {
+        self.defaultPreset.isDefault = YES;
         return;
     }
     else if (normalPreset)
