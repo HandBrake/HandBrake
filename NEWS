@@ -1,5 +1,17 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes between 0.10.1 and 0.10.2
+
+  - Assorted bug fixes and performance improvements.
+
+
+ 
+Changes between 0.10.0 and 0.10.1
+
+  - Assorted bug fixes for all three GUI's and the core library.
+  
+ 
+ 
 Changes between 0.9.9 and 0.10
 
   Core
