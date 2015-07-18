@@ -198,6 +198,8 @@
     </Compile>
     <Compile Include="ViewModels\Interfaces\IOverlayPanel.cs" />
     <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
+    <Compile Include="ViewModels\MiniViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="Views\CountdownAlertView.xaml.cs">
       <DependentUpon>CountdownAlertView.xaml</DependentUpon>
@@ -248,6 +250,9 @@
     </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MiniView.xaml.cs">
+      <DependentUpon>MiniView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -423,6 +428,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\QueueSelectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MiniView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

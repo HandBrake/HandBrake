@@ -88,6 +88,7 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<ITitleSpecificViewModel>().ImplementedBy<TitleSpecificViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IQueueSelectionViewModel>().ImplementedBy<QueueSelectionViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<ICountdownAlertViewModel>().ImplementedBy<CountdownAlertViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IMiniViewModel>().ImplementedBy<MiniViewModel>().LifeStyle.Is(LifestyleType.Singleton));
                  
             // Experimental Services and Windows.
             this.windsorContainer.Register(Component.For<IStaticPreviewViewModel>().ImplementedBy<StaticPreviewViewModel>().LifeStyle.Is(LifestyleType.Singleton));

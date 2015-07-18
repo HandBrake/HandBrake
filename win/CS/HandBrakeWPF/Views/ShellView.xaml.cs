@@ -50,7 +50,7 @@ namespace HandBrakeWPF.Views
             if (minimiseToTray)
             {
                 this.notifyIcon = new NotifyIcon();
-                this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick) });
+                this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick), new MenuItem("Mini Status Display", ShowMiniStatusDisplay) });
 
                 StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));
                 if (streamResourceInfo != null)
@@ -78,6 +78,27 @@ namespace HandBrakeWPF.Views
             {
                 this.TaskbarItemInfo = Win7.WindowsTaskbar;
             }
+        }
+
+        /// <summary>
+        /// The show mini status display.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ShowMiniStatusDisplay(object sender, EventArgs e)
+        {
+            IMiniViewModel titleSpecificView = IoC.Get<IMiniViewModel>();
+            IWindowManager windowManager = IoC.Get<IWindowManager>();
+            Execute.OnUIThread(
+                () =>
+                {
+                    titleSpecificView.Activate();
+                    windowManager.ShowWindow(titleSpecificView);
+                });
         }
 
         /// <summary>

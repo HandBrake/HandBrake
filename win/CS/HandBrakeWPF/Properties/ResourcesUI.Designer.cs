@@ -196,7 +196,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Otherwise use fallback encoder:.
+        ///   Looks up a localized string similar to Otherwise use fallback encodeServicer:.
         /// </summary>
         public static string AudioView_OtherwiseFallbackEncoder {
             get {
@@ -997,7 +997,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Always clear completed queue items after an encode completes.
+        ///   Looks up a localized string similar to Always clear completed queue items after an encodeService completes.
         /// </summary>
         public static string Options_ClearCompleted {
             get {
@@ -1015,7 +1015,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Put a copy of individual encode logs in a specified location:.
+        ///   Looks up a localized string similar to Put a copy of individual encodeService logs in a specified location:.
         /// </summary>
         public static string Options_CopyLogToDir {
             get {
@@ -1024,7 +1024,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Put a copy of individual encode logs in the same location as the encoded video.
+        ///   Looks up a localized string similar to Put a copy of individual encodeService logs in the same location as the encodeServiced video.
         /// </summary>
         public static string Options_CopyLogToEncDir {
             get {
@@ -1897,7 +1897,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Then choose the video(s) you&apos;d like to encode: .
+        ///   Looks up a localized string similar to Then choose the video(s) you&apos;d like to encodeService: .
         /// </summary>
         public static string SourceSelection_ChooseVideo {
             get {
