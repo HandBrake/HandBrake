@@ -352,7 +352,7 @@
     <value>Move Right</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Otherwise use fallback encodeServicer:</value>
+    <value>Otherwise use fallback encoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
     <value>Reload Defaults</value>
@@ -655,7 +655,7 @@
     <value>Optionally choose a specific title: </value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Then choose the video(s) you'd like to encodeService: </value>
+    <value>Then choose the video(s) you'd like to encode: </value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
     <value>Choose Folder to Scan</value>
@@ -709,16 +709,16 @@
     <value>Check for Updates</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Always clear completed queue items after an encodeService completes</value>
+    <value>Always clear completed queue items after an encode completes</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
     <value>Clear Log History</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Put a copy of individual encodeService logs in a specified location:</value>
+    <value>Put a copy of individual encode logs in a specified location:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Put a copy of individual encodeService logs in the same location as the encodeServiced video</value>
+    <value>Put a copy of individual encode logs in the same location as the encoded video</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
     <value>Current Version</value>

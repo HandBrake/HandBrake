@@ -84,9 +84,9 @@ namespace HandBrakeWPF.Properties {
         ///
         ///None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
         ///
-        ///Custom: You can optionally set a Maximum width and Height. When doing this an encodeService will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
+        ///Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
         ///
-        ///Source Maximum:  Always encodeService  [rest of string was truncated]&quot;;.
+        ///Source Maximum:  Always encode at the sources [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AddPreset_PictureSizeMode {
             get {
@@ -166,7 +166,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptive quantization controls how the encodeServicer distributes bits across the frame.
+        ///   Looks up a localized string similar to Adaptive quantization controls how the encoder distributes bits across the frame.
         ///Higher values take more bits away from edges and complex areas to improve areas with finer detail..
         /// </summary>
         public static string Advanced_AdaptiveQuantizationStrengthToolTip {
@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Sane values are ~2-5.  
-        ///This specifies the maximum number of sequential B-frames that the encodeServicer can use. 
+        ///This specifies the maximum number of sequential B-frames that the encoder can use. 
         /// Large numbers generally won&apos;t help significantly unless Adaptive B-frames is set to Optimal.  
         ///Cel-animated source material and B-pyramid also significantly increase the usefulness of larger values. 
         ///Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)..
@@ -199,7 +199,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to After the encodeServicer has done its work, it has a bunch of data that needs to be compressed losslessly, similar to ZIP or RAR. H.264 provides two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses significantly better (10-30%), especially at lower bitrates. If you&apos;re looking to minimize CPU requirements for video playback, disable this option. Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled..
+        ///   Looks up a localized string similar to After the encoder has done its work, it has a bunch of data that needs to be compressed losslessly, similar to ZIP or RAR. H.264 provides two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses significantly better (10-30%), especially at lower bitrates. If you&apos;re looking to minimize CPU requirements for video playback, disable this option. Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled..
         /// </summary>
         public static string Advanced_CabacToolTip {
             get {
@@ -232,7 +232,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The options passed to the x264 encodeServicer. 
+        ///   Looks up a localized string similar to The options passed to the x264 encoder. 
         ///The above controls are only a subset of useful x264 parameters. 
         ///This box allows you to add or modify additional or current parameters as desired. .
         /// </summary>
@@ -243,14 +243,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controls the motion estimation method. Motion estimation is how the encodeServicer estimates how each block of pixels in a frame has moved.  
+        ///   Looks up a localized string similar to Controls the motion estimation method. Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.  
         ///A better motion search method improves compression at the cost of speed.
         ///
         ///Diamond: performs an extremely fast and simple search using a diamond pattern.
         ///
         ///Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
         ///
-        ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex mot [rest of string was truncated]&quot;;.
+        ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_MotionEstimationMethodToolTip {
             get {
@@ -281,9 +282,9 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no options pane available for this encodeServicer.
+        ///   Looks up a localized string similar to There is no options pane available for this encoder.
         ///
-        ///Please use the &apos;Extra Options&apos; box on the &apos;Video&apos; tab to input any additional encodeServicer parameters you may need..
+        ///Please use the &apos;Extra Options&apos; box on the &apos;Video&apos; tab to input any additional encoder parameters you may need..
         /// </summary>
         public static string Advanced_NoOptionsPaneAvailable {
             get {
@@ -339,7 +340,7 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Sane values are ~1-6.
         ///
-        ///The more you add, the better the compression, but the slower the encodeService.
+        ///The more you add, the better the compression, but the slower the encode.
         ///
         ///Cel animation tends to benefit from more reference frames a lot more than film content.
         ///
@@ -356,10 +357,10 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
         ///
-        ///Mode decision is the method used to choose how to encodeService each block of the frame: a very important decision.
+        ///Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
         ///
         ///SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.
-        ///6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps ret [rest of string was truncated]&quot;;.
+        ///6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain det [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_SubpixelMotionEstimationToolTip {
             get {
@@ -438,7 +439,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chapter marker names will NOT be saved in your encodeService..
+        ///   Looks up a localized string similar to Chapter marker names will NOT be saved in your encode..
         /// </summary>
         public static string ChaptersViewModel_UnableToExportChaptersMsg {
             get {
@@ -537,7 +538,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose a destination for where you would like the encodeServiced file to be saved..
+        ///   Looks up a localized string similar to Please choose a destination for where you would like the encoded file to be saved..
         /// </summary>
         public static string Main_ChooseDestination {
             get {
@@ -582,7 +583,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot encodeService to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file..
+        ///   Looks up a localized string similar to You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file..
         /// </summary>
         public static string Main_MatchingFileOverwriteWarning {
             get {
@@ -636,7 +637,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preparing to encodeService ....
+        ///   Looks up a localized string similar to Preparing to encode ....
         /// </summary>
         public static string Main_PreparingToEncode {
             get {
@@ -801,7 +802,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake will not be able to encodeService the seleteced source as it did not find a valid source with titles to encodeService. 
+        ///   Looks up a localized string similar to HandBrake will not be able to encode the seleteced source as it did not find a valid source with titles to encode. 
         ///This could be due to one of the following reasons:
         ///- The source file is not a valid video file or is in a format that HandBrake does not support.
         ///- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
@@ -815,7 +816,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encodeService. Click the &apos;Source&apos; button on the toolbar to continue..
+        ///   Looks up a localized string similar to You must first scan a source and setup your job before starting an encode. Click the &apos;Source&apos; button on the toolbar to continue..
         /// </summary>
         public static string Main_ScanSource {
             get {
@@ -1202,7 +1203,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This encodeService is currently in progress. If you delete it, the encodeService will be stopped. Are you sure you wish to proceed?.
+        ///   Looks up a localized string similar to This encode is currently in progress. If you delete it, the encode will be stopped. Are you sure you wish to proceed?.
         /// </summary>
         public static string QueueViewModel_JobCurrentlyRunningWarning {
             get {
@@ -1229,7 +1230,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No encodeServices pending.
+        ///   Looks up a localized string similar to No encodes pending.
         /// </summary>
         public static string QueueViewModel_NoEncodesPending {
             get {
@@ -1328,7 +1329,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encodeService.
+        ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>
         public static string ShellViewModel_CanClose {
@@ -1356,7 +1357,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handbrake is already encoding a video! Only one file can be encodeServiced at any one time..
+        ///   Looks up a localized string similar to Handbrake is already encoding a video! Only one file can be encoded at any one time..
         /// </summary>
         public static string StaticPreviewViewModel_AlreadyEncoding {
             get {
@@ -1365,7 +1366,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must first scan a source and setup your encodeService before creating a preview..
+        ///   Looks up a localized string similar to You must first scan a source and setup your encode before creating a preview..
         /// </summary>
         public static string StaticPreviewViewModel_ScanFirst {
             get {
@@ -1393,7 +1394,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find the preview file. Either the file was deleted or the encodeService failed. Check the activity log for details..
+        ///   Looks up a localized string similar to Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details..
         /// </summary>
         public static string StaticPreviewViewModel_UnableToPlayFile {
             get {
@@ -1477,7 +1478,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The full list of encodeServicer parameters: 
+        ///   Looks up a localized string similar to The full list of encoder parameters: 
         ///{0}.
         /// </summary>
         public static string Video_EncoderExtraArgs {
@@ -1487,7 +1488,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additional advanced arguments that can be passed to the video encodeServicer..
+        ///   Looks up a localized string similar to Additional advanced arguments that can be passed to the video encoder..
         /// </summary>
         public static string Video_EncoderExtraArgsTooltip {
             get {
@@ -1590,14 +1591,14 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the desired quality factor. The encodeServicer targets a certain quality. 
-        ///The scale used by each video encodeServicer is different.
+        ///   Looks up a localized string similar to Set the desired quality factor. The encoder targets a certain quality. 
+        ///The scale used by each video encoder is different.
         ///
         ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
         ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
         ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
         ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for sta [rest of string was truncated]&quot;;.
+        ///Suggested values are: 18 to 20 for standard definiti [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Video_QualitySlider {
             get {
@@ -1608,7 +1609,7 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to QuickSync hardware not detected or enabled! 
         ///
-        ///In order to use the QuickSync encodeServicer, you must:
+        ///In order to use the QuickSync encoder, you must:
         ///
         ///- Have a Intel CPU with HD Graphics and QuickSync support. 4th Generation Haswell or newer parts are recommended for best quality.
         ///- Have the HD Graphics enabled.
