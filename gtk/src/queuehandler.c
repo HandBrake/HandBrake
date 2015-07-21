@@ -1608,6 +1608,12 @@ queue_drag_motion_cb(
     GtkTreeSelection *select;
     GtkWidget *widget;
 
+    int height;
+
+    height = gtk_widget_get_allocated_height(GTK_WIDGET(tv));
+    if (y <= 6 || y >= height - 6)
+        return FALSE;
+
     widget = gtk_drag_get_source_widget(ctx);
     if (widget == NULL || widget != GTK_WIDGET(tv))
         return TRUE;
