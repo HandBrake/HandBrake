@@ -31,6 +31,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private readonly IErrorService errorService;
 
+        private readonly IUserSettingService userSettingService;
+
         /// <summary>
         /// The ordered by duration.
         /// </summary>
@@ -52,9 +54,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public QueueSelectionViewModel(IErrorService errorService)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public QueueSelectionViewModel(IErrorService errorService, IUserSettingService userSettingService)
         {
             this.errorService = errorService;
+            this.userSettingService = userSettingService;
             this.Title = Resources.QueueSelectionViewModel_AddToQueue;
             this.TitleList = new BindingList<SelectionTitle>();
             this.OrderedByTitle = true;
@@ -111,7 +117,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
+                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
             }
         }
 

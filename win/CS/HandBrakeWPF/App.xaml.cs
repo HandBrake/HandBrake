@@ -118,20 +118,6 @@ namespace HandBrakeWPF
             {
                 this.ShowError(e.Exception.InnerException);
             }
-            else if (e.Exception.InnerException != null && e.Exception.InnerException.GetType() == typeof(Castle.MicroKernel.ComponentActivator.ComponentActivatorException))
-            {
-                // Handle Component Activation Exceptions. Can happen when one of the services throws an execption when being constructed.
-                Exception innerException = e.Exception.InnerException.InnerException;
-                if (innerException != null && innerException.InnerException != null &&
-                    innerException.InnerException.GetType() == typeof(GeneralApplicationException))
-                {
-                    this.ShowError(innerException.InnerException);
-                }
-                else
-                {
-                    this.ShowError(innerException);
-                }
-            }
             else
             {
                 this.ShowError(e.Exception);

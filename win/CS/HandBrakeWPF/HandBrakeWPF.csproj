@@ -76,12 +76,6 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\libraries\caliburn\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\libraries\caliburn\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop">
       <HintPath>..\libraries\WPFDragDrop\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
@@ -277,7 +271,7 @@
     <Compile Include="Model\AdvancedChoice.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
-    <Compile Include="Startup\CastleBootstrapper.cs" />
+    <Compile Include="Startup\AppBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />

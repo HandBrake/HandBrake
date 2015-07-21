@@ -46,6 +46,8 @@ namespace HandBrakeWPF.ViewModels
 
         private bool isMainPanelEnabled;
 
+        private IMainViewModel mainViewModel;
+
         #endregion
 
         /// <summary>
@@ -54,12 +56,21 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public ShellViewModel(IErrorService errorService)
+        /// <param name="mainViewModel">
+        /// The main View Model.
+        /// </param>
+        /// <param name="optionsViewModel">
+        /// The options View Model.
+        /// </param>
+        public ShellViewModel(IErrorService errorService, IMainViewModel mainViewModel, IOptionsViewModel optionsViewModel)
         {
             this.errorService = errorService;
             this.showMainWindow = true;
             this.showOptions = false;
             this.IsMainPanelEnabled = true;
+            this.MainViewModel = mainViewModel;
+            this.OptionsViewModel = optionsViewModel;
+            //this.OverlayPanelViewModel = overlayPanel;
         }
 
         /// <summary>

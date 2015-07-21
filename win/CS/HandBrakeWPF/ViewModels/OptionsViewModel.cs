@@ -44,11 +44,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUserSettingService userSettingService;
 
         /// <summary>
-        /// The Shell View Model
-        /// </summary>
-        private readonly IShellViewModel shellViewModel;
-
-        /// <summary>
         /// Backing field for the update service.
         /// </summary>
         private readonly IUpdateService updateService;
@@ -309,12 +304,15 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        public OptionsViewModel(IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService)
+        /// <param name="aboutViewModel">
+        /// The about View Model.
+        /// </param>
+        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
-            this.shellViewModel = shellViewModel;
             this.updateService = updateService;
+            this.AboutViewModel = aboutViewModel;
             this.OnLoad();
 
             this.SelectedTab = OptionsTab.General;
@@ -1213,7 +1211,9 @@ namespace HandBrakeWPF.ViewModels
         public void Close()
         {
             this.Save();
-            this.shellViewModel.DisplayWindow(ShellWindow.MainWindow);
+
+            IShellViewModel shellViewModel = IoC.Get<IShellViewModel>();
+            shellViewModel.DisplayWindow(ShellWindow.MainWindow);
         }
 
         /// <summary>

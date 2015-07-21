@@ -233,7 +233,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount) - 1;
+                return this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount) - 1;
             }
         }
 
@@ -340,7 +340,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 List<int> startPoints = new List<int>();
                 for (int i = 1;
-                     i <= this.UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+                     i <= this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
                      i++)
                 {
                     startPoints.Add(i);
@@ -583,7 +583,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        if (!File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
                         {
                             // Attempt to find VLC if it doesn't exist in the default set location.
                             string vlcPath;
@@ -600,7 +600,7 @@ namespace HandBrakeWPF.ViewModels
 
                             if (File.Exists(vlcPath))
                             {
-                                UserSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
+                                userSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
                             }
                             else
                             {
@@ -609,9 +609,9 @@ namespace HandBrakeWPF.ViewModels
                             }
                         }
 
-                        if (File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
+                        if (File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
                         {
-                            ProcessStartInfo vlc = new ProcessStartInfo(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
+                            ProcessStartInfo vlc = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
                             Process.Start(vlc);
                         }
                     }

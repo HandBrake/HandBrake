@@ -63,15 +63,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets WindowManager.
-        /// </summary>
-        public IWindowManager WindowManager { get; set; }
-
-        /// <summary>
-        /// Gets or sets UserSettingService.
-        /// </summary>
-        public IUserSettingService UserSettingService { get; set; }
 
         #endregion
 

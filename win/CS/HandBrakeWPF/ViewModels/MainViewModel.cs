@@ -80,14 +80,11 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
 
         /// <summary>
-        /// The Shell View Model
-        /// </summary>
-        private readonly IShellViewModel shellViewModel;
-
-        /// <summary>
         /// Backing field for the update serivce.
         /// </summary>
         private readonly IUpdateService updateService;
+
+        private readonly IWindowManager windowManager;
 
         /// <summary>
         /// Backing field for the user setting service.
@@ -228,9 +225,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        /// <param name="shellViewModel">
-        /// The shell View Model.
-        /// </param>
         /// <param name="updateService">
         /// The update Service.
         /// </param>
@@ -242,18 +236,33 @@ namespace HandBrakeWPF.ViewModels
         /// The when Done Service.
         /// *** Leave in Constructor. *** 
         /// </param>
+        /// <param name="windowManager">
+        /// The window Manager.
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, INotificationService notificationService,
-            IPrePostActionService whenDoneService)
+            IErrorService errorService,  IUpdateService updateService, INotificationService notificationService,
+            IPrePostActionService whenDoneService, IWindowManager windowManager)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
-            this.shellViewModel = shellViewModel;
+            // this.shellViewModel = shellViewModel; IShellViewModel shellViewModel,
             this.updateService = updateService;
+            this.windowManager = windowManager;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
+
+            // TODO tidy up. The new Simple Container IOC isn't doing property injection for some reason, so temp IoC.get the properties set by it.
+            this.PictureSettingsViewModel = IoC.Get<IPictureSettingsViewModel>();
+            this.VideoViewModel = IoC.Get<IVideoViewModel>();
+            this.FiltersViewModel = IoC.Get<IFiltersViewModel>();
+            this.AudioViewModel = IoC.Get<IAudioViewModel>();
+            this.SubtitleViewModel = IoC.Get<ISubtitlesViewModel>();
+            this.ChaptersViewModel = IoC.Get<IChaptersViewModel>();
+            this.AdvancedViewModel = IoC.Get<IAdvancedViewModel>();
+            IoC.BuildUp(this.AdvancedViewModel);
+            this.StaticPreviewViewModel = IoC.Get<IStaticPreviewViewModel>();
 
             // Setup Properties
             this.WindowTitle = Resources.HandBrake_Title;
@@ -753,7 +762,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedPointToPoint = PointToPointMode.Chapters;
                     this.SelectedAngle = 1;
 
-                    if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                     {
                         if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                         {
@@ -807,7 +816,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
                     if (this.SelectedPointToPoint == PointToPointMode.Chapters && this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null &&
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
@@ -1244,7 +1253,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenOptionsWindow()
         {
-            this.shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
+            IShellViewModel shellViewModel = IoC.Get<IShellViewModel>();
+            shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
         }
 
         /// <summary>
@@ -1264,7 +1274,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 ILogViewModel logvm = IoC.Get<ILogViewModel>();
                 logvm.SelectedTab = this.IsEncoding ? 0 : 1;
-                this.WindowManager.ShowWindow(logvm);
+                this.windowManager.ShowWindow(logvm);
             }
         }
 
@@ -1281,7 +1291,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.WindowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+                this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
             }
         }
 
@@ -1294,7 +1304,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.StaticPreviewViewModel.IsOpen = true;
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource);
-                this.WindowManager.ShowWindow(this.StaticPreviewViewModel);
+                this.windowManager.ShowWindow(this.StaticPreviewViewModel);
             }
         }
 
@@ -1447,7 +1457,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.WindowManager.ShowWindow(viewModel);
+                this.windowManager.ShowWindow(viewModel);
             }
         }
 
@@ -1504,7 +1514,7 @@ namespace HandBrakeWPF.ViewModels
                     this.IsEncoding = true;
                 }
 
-                this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 return;
             }
 
@@ -1539,7 +1549,7 @@ namespace HandBrakeWPF.ViewModels
             // Create the Queue Task and Start Processing
             if (this.AddToQueue())
             {
-                this.queueProcessor.Start(UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 this.IsEncoding = true;
             }
         }
@@ -1722,7 +1732,7 @@ namespace HandBrakeWPF.ViewModels
         {
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
-            this.WindowManager.ShowWindow(presetViewModel);
+            this.windowManager.ShowWindow(presetViewModel);
         }
 
         /// <summary>
@@ -1958,7 +1968,7 @@ namespace HandBrakeWPF.ViewModels
             // Make sure the output extension is set correctly based on the users preferences and selection.
             if (newExtension == ".mp4" || newExtension == ".m4v")
             {
-                switch (this.UserSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
                     case 0: // Auto
                         newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";

@@ -7,7 +7,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Styles/Styles.xaml"/>
                 <ResourceDictionary>
-                    <local:CastleBootstrapper x:Key="bootstrapper" />
+                    <local:AppBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
