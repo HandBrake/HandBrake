@@ -726,17 +726,45 @@
     if (targetedRows.count)
     {
         [self.jobs beginTransaction];
+
         // if this is a currently encoding job, we need to be sure to alert the user,
         // to let them decide to cancel it first, then if they do, we can come back and
         // remove it
         NSIndexSet *workingIndexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
             return item.state == HBJobStateWorking;
         }];
-        NSArray *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
-            return item.state == HBJobStateWorking;
-        }];
 
-        [targetedRows removeIndexes:workingIndexes];
+        if ([targetedRows containsIndexes:workingIndexes])
+        {
+            [targetedRows removeIndexes:workingIndexes];
+            NSArray *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
+                return item.state == HBJobStateWorking;
+            }];
+
+            if ([workingJobs containsObject:self.currentJob])
+            {
+                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", nil)];
+
+                // Which window to attach the sheet to?
+                NSWindow *targetWindow = nil;
+                if ([sender respondsToSelector: @selector(window)])
+                {
+                    targetWindow = [sender window];
+                }
+
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:alertTitle];
+                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
+                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
+                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
+                [alert setAlertStyle:NSCriticalAlertStyle];
+
+                [alert beginSheetModalForWindow:targetWindow
+                                  modalDelegate:self
+                                 didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
+                                    contextInfo:NULL];
+            }
+        }
 
         // remove the non working items immediately
         [self removeQueueItemsAtIndexes:targetedRows];
@@ -747,30 +775,6 @@
         [self.outlineView endUpdates];
 
         [self.jobs commit];
-
-        if ([workingJobs containsObject:self.currentJob])
-        {
-            NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", nil)];
-
-            // Which window to attach the sheet to?
-            NSWindow *targetWindow = nil;
-            if ([sender respondsToSelector: @selector(window)])
-            {
-                targetWindow = [sender window];
-            }
-
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:alertTitle];
-            [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
-            [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
-            [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
-            [alert setAlertStyle:NSCriticalAlertStyle];
-
-            [alert beginSheetModalForWindow:targetWindow
-                              modalDelegate:self
-                             didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
-                                contextInfo:NULL];
-        }
     }
 }
 
