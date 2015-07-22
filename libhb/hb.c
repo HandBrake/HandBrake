@@ -1003,12 +1003,18 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             if (maxWidth && (width > maxWidth))
             {
                 width  = maxWidth;
-                height = MULTIPLE_MOD(width / dar, mod);
+                if (keep_display_aspect)
+                {
+                    height = MULTIPLE_MOD(width / dar, mod);
+                }
             }
             if (maxHeight && (height > maxHeight))
             {
                 height  = maxHeight;
-                width = MULTIPLE_MOD(height * dar, mod);
+                if (keep_display_aspect)
+                {
+                    width = MULTIPLE_MOD(height * dar, mod);
+                }
             }
             dst_par_num = dst_par_den = 1;
         } break;
@@ -1099,7 +1105,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 // But otherwise, PAR and DAR will change the least
                 // if we stay as close as possible to the requested
                 // storage aspect.
-                if (!keep_display_aspect)
+                if (!keep_display_aspect &&
+                    (maxHeight == 0 || height < maxHeight))
                 {
                     height = width / storage_aspect + 0.5;
                     height = MULTIPLE_MOD(height, mod);
@@ -1109,7 +1116,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             {
                 height = maxHeight;
                 // Ditto, see comment above
-                if (!keep_display_aspect)
+                if (!keep_display_aspect &&
+                    (maxWidth == 0 || width < maxWidth))
                 {
                     width = height * storage_aspect + 0.5;
                     width  = MULTIPLE_MOD(width, mod);
