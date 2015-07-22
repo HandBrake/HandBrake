@@ -239,9 +239,35 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
+        /// <param name="pictureSettingsViewModel">
+        /// The picture Settings View Model.
+        /// </param>
+        /// <param name="videoViewModel">
+        /// The video View Model.
+        /// </param>
+        /// <param name="filtersViewModel">
+        /// The filters View Model.
+        /// </param>
+        /// <param name="audioViewModel">
+        /// The audio View Model.
+        /// </param>
+        /// <param name="subtitlesViewModel">
+        /// The subtitles View Model.
+        /// </param>
+        /// <param name="advancedViewModel">
+        /// The advanced View Model.
+        /// </param>
+        /// <param name="chaptersViewModel">
+        /// The chapters View Model.
+        /// </param>
+        /// <param name="staticPreviewViewModel">
+        /// The static Preview View Model.
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService,  IUpdateService updateService, INotificationService notificationService,
-            IPrePostActionService whenDoneService, IWindowManager windowManager)
+            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
+            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
+            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -253,16 +279,14 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
-            // TODO tidy up. The new Simple Container IOC isn't doing property injection for some reason, so temp IoC.get the properties set by it.
-            this.PictureSettingsViewModel = IoC.Get<IPictureSettingsViewModel>();
-            this.VideoViewModel = IoC.Get<IVideoViewModel>();
-            this.FiltersViewModel = IoC.Get<IFiltersViewModel>();
-            this.AudioViewModel = IoC.Get<IAudioViewModel>();
-            this.SubtitleViewModel = IoC.Get<ISubtitlesViewModel>();
-            this.ChaptersViewModel = IoC.Get<IChaptersViewModel>();
-            this.AdvancedViewModel = IoC.Get<IAdvancedViewModel>();
-            IoC.BuildUp(this.AdvancedViewModel);
-            this.StaticPreviewViewModel = IoC.Get<IStaticPreviewViewModel>();
+            this.PictureSettingsViewModel = pictureSettingsViewModel;
+            this.VideoViewModel = videoViewModel;
+            this.FiltersViewModel = filtersViewModel;
+            this.AudioViewModel = audioViewModel;
+            this.SubtitleViewModel = subtitlesViewModel;
+            this.ChaptersViewModel = chaptersViewModel;
+            this.AdvancedViewModel = advancedViewModel;
+            this.StaticPreviewViewModel = staticPreviewViewModel;
 
             // Setup Properties
             this.WindowTitle = Resources.HandBrake_Title;

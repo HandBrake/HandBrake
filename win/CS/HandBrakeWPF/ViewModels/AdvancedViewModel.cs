@@ -30,6 +30,17 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvancedViewModel"/> class.
+        /// </summary>
+        /// <param name="x264ViewModel">
+        /// The x 264 view model.
+        /// </param>
+        public AdvancedViewModel(IX264ViewModel x264ViewModel)
+        {
+            this.X264ViewModel = x264ViewModel;
+        }
+
         #region Properties
 
         /// <summary>
