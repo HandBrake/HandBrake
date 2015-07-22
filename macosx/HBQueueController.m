@@ -113,14 +113,12 @@
         if (self.core.state == HBStateIdle)
         {
             menuItem.title = NSLocalizedString(@"Start Encoding", nil);
-            menuItem.keyEquivalent = @"s";
 
             return (self.pendingItemsCount > 0);
         }
         else if (self.core.state != HBStateIdle)
         {
             menuItem.title = NSLocalizedString(@"Stop Encoding", nil);
-            menuItem.keyEquivalent = @".";
 
             return YES;
         }
@@ -1015,7 +1013,7 @@
                              didEndSelector:@selector(didDimissEditCurrentJob:returnCode:contextInfo:)
                                 contextInfo:(__bridge void *)(job)];
         }
-        else
+        else if (job.state != HBJobStateWorking)
         {
             // since we are not a currently encoding item, we can just be edit it
             HBJob *item = [[self.jobs[row] representedObject] copy];

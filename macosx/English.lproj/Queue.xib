@@ -167,12 +167,6 @@
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>
-                <menuItem title="Edit" id="2650">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="editSelectedQueueItem:" target="-2" id="2654"/>
-                    </connections>
-                </menuItem>
                 <menuItem title="Show in Finder" id="2655">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
@@ -180,7 +174,13 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="Au5-j1-AAd"/>
-                <menuItem title="Reset job" id="zy6-ab-ush">
+                <menuItem title="Edit" id="2650">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="editSelectedQueueItem:" target="-2" id="2654"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Reset" id="zy6-ab-ush">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="resetJobState:" target="-1" id="fxd-BP-VY6"/>
@@ -207,7 +207,7 @@
                     </connections>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="192" y="450.5"/>
+            <point key="canvasLocation" x="233" y="753.5"/>
         </menu>
         <userDefaultsController representsSharedInstance="YES" id="z2J-h1-IDv"/>
     </objects>
