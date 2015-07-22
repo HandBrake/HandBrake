@@ -143,6 +143,7 @@
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A93FD4751A62ABE800A6AC43 /* HBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = A93FD4741A62ABE800A6AC43 /* HBAudio.m */; };
+		A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */; };
 		A9523937199A6AAE00588AEF /* HBFilters.m in Sources */ = {isa = PBXBuildFile; fileRef = A9523936199A6AAE00588AEF /* HBFilters.m */; };
 		A9537BF01A48A85C00141102 /* HBJob+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BEF1A48A85C00141102 /* HBJob+UIAdditions.m */; };
 		A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9537BF21A48A99500141102 /* HBVideo+UIAdditions.m */; };
@@ -421,6 +422,8 @@
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
 		A93FD4731A62ABE800A6AC43 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
 		A93FD4741A62ABE800A6AC43 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
+		A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HBAdditions.h"; sourceTree = "<group>"; };
+		A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HBAdditions.m"; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
 		A9523936199A6AAE00588AEF /* HBFilters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFilters.m; sourceTree = "<group>"; };
 		A9537BEE1A48A85C00141102 /* HBJob+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+UIAdditions.h"; sourceTree = "<group>"; };
@@ -751,6 +754,8 @@
 				A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */,
 				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
 				A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */,
+				A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */,
+				A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */,
 				A9B34D711976844500871B7D /* UI Views */,
 				273F20BD14ADC09F0021BE6D /* main.mm */,
 			);
@@ -1396,6 +1401,7 @@
 				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,
 				A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */,
 				A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */,
+				A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */,
 				A9DEC8741A23C87500C79B48 /* HBCore.m in Sources */,
 				A9F4728D1976BAA70009EC65 /* HBSubtitlesDefaults.m in Sources */,
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,

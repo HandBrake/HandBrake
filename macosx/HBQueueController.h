@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSUInteger count;
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;
-@property (nonatomic, readonly) NSUInteger workingItemsCount;
 
 - (void)addJob:(HBJob *)item;
 - (void)addJobsFromArray:(NSArray *)items;

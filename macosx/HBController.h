@@ -100,7 +100,7 @@
 - (IBAction)addToQueue:(id)sender;
 - (IBAction)addAllTitlesToQueue:(id)sender;
 
-- (void)rescanJobToMainWindow:(HBJob *)queueItem;
+- (void)openJob:(HBJob *)job;
 - (void)setQueueState:(NSString *)info;
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden;
 

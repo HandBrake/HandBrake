@@ -26,7 +26,7 @@
 // By default, NSTableView only drags an image of the first column. Change this to
 // drag an image of the queue's icon and desc columns.
 
-@protocol HBQueueOutlineViewDelegate
+@protocol HBQueueOutlineViewDelegate <NSOutlineViewDelegate>
 
 @optional
 - (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView;

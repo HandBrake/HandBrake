@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
         <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -211,22 +211,22 @@
                 <popUpButton verticalHuggingPriority="750" id="491">
                     <rect key="frame" x="124" y="271" width="195" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="Do Nothing" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="494" id="492">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="492">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="493">
                             <items>
-                                <menuItem title="Do Nothing" state="on" id="494"/>
-                                <menuItem title="Alert Window" id="495"/>
-                                <menuItem title="Growl Notification" id="499"/>
-                                <menuItem title="Alert Window And Growl" id="496"/>
-                                <menuItem title="Put Computer To Sleep" id="497"/>
-                                <menuItem title="Shut Down Computer" id="498"/>
+                                <menuItem title="Do Nothing" id="494"/>
+                                <menuItem title="Alert" tag="1" id="495"/>
+                                <menuItem title="Notification" tag="2" id="499"/>
+                                <menuItem title="Alert And Notification" tag="3" id="496"/>
+                                <menuItem title="Put Computer To Sleep" tag="4" id="497"/>
+                                <menuItem title="Shut Down Computer" tag="5" id="498"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="61" name="selectedValue" keyPath="values.AlertWhenDone" id="501"/>
+                        <binding destination="61" name="selectedTag" keyPath="values.HBAlertWhenDone" id="xxK-qX-yth"/>
                     </connections>
                 </popUpButton>
                 <tokenField verticalHuggingPriority="750" id="6aa-GX-TuM">

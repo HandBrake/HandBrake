@@ -298,7 +298,7 @@
             [toolbarItem setLabel: @"Stop"];
             [toolbarItem setPaletteLabel: @"Stop"];
             [toolbarItem setToolTip: @"Stop Encoding"];
-            return (queueState != HBStateScanning);
+            return YES;
         }
         if (action == @selector(pause:))
         {
@@ -1054,10 +1054,10 @@
 /**
  * Rescans the chosen queue item back into the main window
  */
-- (void)rescanJobToMainWindow:(HBJob *)queueItem
+- (void)openJob:(HBJob *)job
 {
     // Set the browsedSourceDisplayName for showNewScan
-    self.jobFromQueue = queueItem;
+    self.jobFromQueue = job;
     self.browsedSourceDisplayName = self.jobFromQueue.fileURL.lastPathComponent;
 
     [self performScan:self.jobFromQueue.fileURL scanTitleNum:self.jobFromQueue.titleIdx];
