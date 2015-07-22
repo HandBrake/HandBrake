@@ -567,7 +567,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
     switch (self.anamorphicMode) {
         case HB_ANAMORPHIC_NONE:
-            preset[@"PicturePAR"] = @"none";
+            preset[@"PicturePAR"] = @"off";
             break;
         case HB_ANAMORPHIC_LOOSE:
             preset[@"PicturePAR"] = @"loose";
@@ -652,7 +652,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         // Assume max picture settings initially.
         self.keepDisplayAspect = [preset[@"PictureKeepRatio"] boolValue];
 
-        if ([preset[@"PicturePAR"] isEqualToString:@"none"])
+        if ([preset[@"PicturePAR"] isEqualToString:@"off"])
         {
             self.anamorphicMode = HB_ANAMORPHIC_NONE;
         }
