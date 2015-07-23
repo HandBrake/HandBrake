@@ -718,6 +718,8 @@ G_MODULE_EXPORT void plot_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
+// Important: any widgets named in CSS must have their widget names set
+// below before setting CSS properties on them.
 const gchar *MyCSS =
 "                                   \n\
 GtkRadioButton .button {            \n\
@@ -790,7 +792,19 @@ GtkEntry {                          \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
-";
+"
+#if GTK_CHECK_VERSION(3, 16, 0)
+"                                   \n\
+                                    \n\
+#activity_view                      \n\
+{                                   \n\
+    font-family: monospace;         \n\
+    font-size: 7pt;                 \n\
+    font-weight: lighter;           \n\
+}                                   \n\
+"
+#endif
+;
 
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
 
@@ -914,6 +928,7 @@ main(int argc, char *argv[])
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_fullscreen"), "preview_fullscreen");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
     widget = GHB_WIDGET(ud->builder, "preview_hud");
     gtk_widget_set_name(widget, "preview_hud");
     widget = GHB_WIDGET(ud->builder, "preview_window");
@@ -1189,11 +1204,13 @@ main(int argc, char *argv[])
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
     gtk_file_chooser_set_filter(chooser, filter);
 
+#if !GTK_CHECK_VERSION(3, 16, 0)
     PangoFontDescription *font_desc;
     font_desc = pango_font_description_from_string("monospace 10");
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
     gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
     pango_font_description_free(font_desc);
+#endif
 
     // Grrrr!  Gtk developers !!!hard coded!!! the width of the
     // radio buttons in GtkStackSwitcher to 100!!!
