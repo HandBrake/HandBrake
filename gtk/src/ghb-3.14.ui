@@ -3744,7 +3744,7 @@ preset but before all other parameters.</property>
 
 Set this if your device is struggling to play the output (dropped frames).</property>
                                     <property name="halign">start</property>
-                                    <property name="margin_left">2</property>
+                                    <property name="margin-start">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                   </object>
@@ -3769,7 +3769,7 @@ This is useful for broadcast of live streams.
 Since HandBrake is not suitable for live stream broadcast purposes,
 this setting is of little value here.</property>
                                     <property name="halign">start</property>
-                                    <property name="margin_left">2</property>
+                                    <property name="margin-start">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                   </object>
@@ -3932,8 +3932,8 @@ Colon separated list of encoder options.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
                         <property name="margin_top">12</property>
                         <property name="margin_bottom">12</property>
                         <property name="hexpand">True</property>
@@ -4134,7 +4134,7 @@ All other secondary audio output tracks will be encoded with first encoder only.
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
-                                <property name="margin_left">6</property>
+                                <property name="margin-start">6</property>
                                 <property name="spacing">2</property>
                                 <child>
                                   <object class="GtkGrid" id="grid4">
@@ -4637,8 +4637,8 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
                         <property name="margin_top">12</property>
                         <property name="margin_bottom">12</property>
                         <property name="hexpand">True</property>
@@ -5434,7 +5434,7 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="margin_left">12</property>
+                                            <property name="margin-start">12</property>
                                             <child>
                                               <object class="GtkGrid" id="table5">
                                                 <property name="visible">True</property>
@@ -5645,7 +5645,7 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
                                                 <property name="row_spacing">2</property>
-                                                <property name="margin_left">6</property>
+                                                <property name="margin-start">6</property>
                                                 <child>
                                                   <placeholder/>
                                                 </child>
@@ -6053,8 +6053,8 @@ where you are having trouble keeping fine noise.</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="scrolledwindow6">
                                     <property name="height_request">40</property>
-                                    <property name="margin_left">12</property>
-                                    <property name="margin_right">12</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">12</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="shadow_type">etched-in</property>
@@ -6813,8 +6813,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
           <object class="GtkGrid" id="title_add_multiple_grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
-            <property name="margin_right">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <property name="margin_top">12</property>
             <property name="column_spacing">6</property>
             <child>
