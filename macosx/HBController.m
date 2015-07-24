@@ -112,7 +112,7 @@
 
     NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
                                           stringForKey:@"HBDrawerSize"]);
-    if (drawerSize.width)
+    if (drawerSize.width > 0)
     {
         [fPresetDrawer setContentSize: drawerSize];
     }
