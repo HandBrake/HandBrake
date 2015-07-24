@@ -1021,15 +1021,16 @@
         {
             // since we are not a currently encoding item, we can just be edit it
             HBJob *item = [[self.jobs[row] representedObject] copy];
-            [self.controller openJob:item];
+            if ([self.controller openJob:item])
+            {
+                // Now that source is loaded and settings applied, delete the queue item from the queue
+                [self.outlineView beginUpdates];
+                [self removeQueueItemAtIndex:row];
+                [self.outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:row] inParent:nil withAnimation:NSTableViewAnimationEffectFade];
+                [self.outlineView endUpdates];
 
-            // Now that source is loaded and settings applied, delete the queue item from the queue
-            [self.outlineView beginUpdates];
-            [self removeQueueItemAtIndex:row];
-            [self.outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:row] inParent:nil withAnimation:NSTableViewAnimationEffectFade];
-            [self.outlineView endUpdates];
-
-            [self getQueueStats];
+                [self getQueueStats];
+            }
         }
     }
 
@@ -1050,10 +1051,14 @@
             [self cancelCurrentJobAndContinue];
         }
 
-        [self.jobs beginTransaction];
-        [self.controller openJob:job];
-        [self removeQueueItemAtIndex:index];
-        [self.jobs commit];
+        if ([self.controller openJob:job])
+        {
+            [self.jobs beginTransaction];
+            [self.controller openJob:job];
+            [self removeQueueItemAtIndex:index];
+            [self.jobs commit];
+            [self getQueueStats];
+        }
     }
 }
 

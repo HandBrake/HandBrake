@@ -180,7 +180,7 @@
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
 {
-    [self.mainController openFile:[NSURL fileURLWithPath:filenames.firstObject]];
+    [self.mainController openURL:[NSURL fileURLWithPath:filenames.firstObject]];
     [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
 }
 
