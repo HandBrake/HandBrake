@@ -89,7 +89,9 @@
 - (instancetype)initWithQueue:(HBQueueController *)queueController presetsManager:(HBPresetsManager *)manager;
 
 - (void)launchAction;
-- (void)openFile:(NSURL *)fileURL;
+
+- (BOOL)openURL:(NSURL *)fileURL;
+- (BOOL)openJob:(HBJob *)job;
 
 - (IBAction)browseSources:(id)sender;
 
@@ -100,7 +102,6 @@
 - (IBAction)addToQueue:(id)sender;
 - (IBAction)addAllTitlesToQueue:(id)sender;
 
-- (void)openJob:(HBJob *)job;
 - (void)setQueueState:(NSString *)info;
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden;
 
