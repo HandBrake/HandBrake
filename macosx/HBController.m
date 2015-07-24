@@ -204,7 +204,7 @@
     if ([pboard.types containsObject:NSFilenamesPboardType])
     {
         NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        [self openFile:[NSURL fileURLWithPath:paths.firstObject]];
+        [self openURL:[NSURL fileURLWithPath:paths.firstObject]];
     }
 
     return YES;
@@ -430,13 +430,34 @@
     
 }
 
-- (void)openFile:(NSURL *)fileURL
+- (BOOL)openURL:(NSURL *)fileURL
 {
     if (self.core.state != HBStateScanning)
     {
         self.browsedSourceDisplayName = fileURL.lastPathComponent;
         [self performScan:fileURL scanTitleNum:0];
+
+        return YES;
     }
+    return NO;
+}
+
+/**
+ * Rescans the a job back into the main window
+ */
+- (BOOL)openJob:(HBJob *)job
+{
+    if (self.core.state != HBStateScanning)
+    {
+        self.jobFromQueue = job;
+
+        // Set the browsedSourceDisplayName for showNewScan
+        self.browsedSourceDisplayName = self.jobFromQueue.fileURL.lastPathComponent;
+
+        [self performScan:self.jobFromQueue.fileURL scanTitleNum:self.jobFromQueue.titleIdx];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)removeJobObservers
@@ -1049,18 +1070,6 @@
     {
         [self doAddToQueue];
     }
-}
-
-/**
- * Rescans the chosen queue item back into the main window
- */
-- (void)openJob:(HBJob *)job
-{
-    // Set the browsedSourceDisplayName for showNewScan
-    self.jobFromQueue = job;
-    self.browsedSourceDisplayName = self.jobFromQueue.fileURL.lastPathComponent;
-
-    [self performScan:self.jobFromQueue.fileURL scanTitleNum:self.jobFromQueue.titleIdx];
 }
 
 - (void)doRip
