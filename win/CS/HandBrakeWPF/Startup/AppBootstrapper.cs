@@ -94,14 +94,17 @@ namespace HandBrakeWPF.Startup
         }
 
         /// <summary>
-        /// Select Assemblies
+        /// The on startup.
         /// </summary>
-        /// <returns>
-        /// A List of Assembly objects
-        /// </returns>
-        protected override IEnumerable<Assembly> SelectAssemblies()
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            return AppDomain.CurrentDomain.GetAssemblies();
+            DisplayRootViewFor<IShellViewModel>();
         }
 
         /// <summary>
@@ -121,11 +124,10 @@ namespace HandBrakeWPF.Startup
             var instance = container.GetInstance(service, key);
             if (instance != null)
             {
-               // this.BuildUp(instance);
                 return instance;
             }
 
-            throw new InvalidOperationException("Could not locate any instances for: " + key);
+            throw new InvalidOperationException("Could not locate any instances.");
         }
 
         /// <summary>
@@ -139,16 +141,7 @@ namespace HandBrakeWPF.Startup
         /// </returns>
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            IEnumerable<object> instances = this.container.GetAllInstances(service);
-            if (instances != null)
-            {
-                foreach (var item in instances)
-                {
-                //   this.BuildUp(item);
-                }
-            }
-
-            return instances;
+            return container.GetAllInstances(service);
         }
 
         /// <summary>
@@ -159,10 +152,6 @@ namespace HandBrakeWPF.Startup
         /// </param>
         protected override void BuildUp(object instance)
         {
-            //instance.GetType().GetProperties()
-            //   .Where(property => property.CanWrite && property.PropertyType.IsPublic)
-            //   .ForEach(property => property.SetValue(instance, this.container.GetInstance(property.PropertyType, property.Name), null));
-
             this.container.BuildUp(instance);
         }
     }
