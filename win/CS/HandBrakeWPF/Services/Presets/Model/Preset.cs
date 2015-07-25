@@ -21,7 +21,12 @@ namespace HandBrakeWPF.Services.Presets.Model
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
-    public class Preset : PropertyChangedBase
+    /// <remarks>
+    /// Using App Services PropertyChangedBase because Caliburn Micro has [DataContract] on their base class which causes json.net not to serialise properties without [DataContract]
+    /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/89
+    /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/96
+    /// </remarks>
+    public class Preset : HandBrake.ApplicationServices.Utilities.PropertyChangedBase  // Delibery not 
     {
         #region Constants and Fields
 

@@ -34,9 +34,17 @@ namespace HandBrakeWPF.Startup
     /// <summary>
     /// The Castle Bootstrapper
     /// </summary>
-    public class AppBootstrapper : Bootstrapper<IShellViewModel>
+    public class AppBootstrapper : BootstrapperBase
     {
         private SimpleContainer container;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppBootstrapper"/> class.
+        /// </summary>
+        public AppBootstrapper()
+        {
+            this.Initialize();
+        }
 
         /// <summary>
         /// Configure Castle Windsor
