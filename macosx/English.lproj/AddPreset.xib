@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
             <connections>
                 <outlet property="desc" destination="8kl-Sh-Gh7" id="Go1-hY-VFV"/>
                 <outlet property="name" destination="aKg-n4-OUS" id="FXa-ee-AN8"/>
-                <outlet property="picFilters" destination="zJI-d5-0k8" id="caQ-ST-efg"/>
                 <outlet property="picHeight" destination="Mga-dS-8BF" id="blD-Jx-MtN"/>
                 <outlet property="picSettingsPopUp" destination="z6B-ig-ouq" id="Nxq-Lm-dmh"/>
                 <outlet property="picWidth" destination="gOg-oO-8ar" id="oOu-qH-C4Q"/>
@@ -22,19 +21,20 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Create A New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="dbZ-Wo-9nG" userLabel="AddPresetPanel">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
-            <rect key="contentRect" x="421" y="536" width="406" height="255"/>
+            <rect key="contentRect" x="421" y="536" width="406" height="231"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
-            <value key="minSize" type="size" width="406" height="255"/>
+            <value key="minSize" type="size" width="406" height="231"/>
             <view key="contentView" id="AcO-9f-fnb">
-                <rect key="frame" x="0.0" y="6" width="406" height="255"/>
+                <rect key="frame" x="0.0" y="0.0" width="406" height="231"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <popUpButton verticalHuggingPriority="750" id="z6B-ig-ouq">
-                        <rect key="frame" x="114" y="174" width="232" height="22"/>
+                        <rect key="frame" x="114" y="151" width="232" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').
 'Custom': choose the maximum width and height allowed by the preset (has no effect if the preset specifies Strict anamorphic).
 'Source maximum': use the source dimensions.</string>
+                        <animations/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Mi7-V1-sSf">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -46,8 +46,9 @@
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" id="Wy7-cF-tGv">
-                        <rect key="frame" x="18" y="218" width="95" height="14"/>
+                        <rect key="frame" x="18" y="194" width="95" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset Name:" id="jhj-Et-ncF">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -55,8 +56,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="Wpk-WC-aVk">
-                        <rect key="frame" x="18" y="179" width="95" height="14"/>
+                        <rect key="frame" x="18" y="156" width="95" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Picture Size:" id="75B-xq-Qbe">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -64,8 +66,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="zDq-QP-LAu">
-                        <rect key="frame" x="18" y="100" width="95" height="14"/>
+                        <rect key="frame" x="18" y="97" width="95" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Description:" id="hc8-1h-Jye">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -73,9 +76,10 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="8kl-Sh-Gh7">
-                        <rect key="frame" x="116" y="61" width="270" height="53"/>
+                        <rect key="frame" x="116" y="58" width="270" height="53"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <string key="toolTip">Enter a description for the preset. The description will be shown when hovering the mouse over the preset name in the preset drawer.</string>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HKY-Cq-VyU">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +90,7 @@
                         </connections>
                     </textField>
                     <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="H9n-64-GXz">
-                        <rect key="frame" x="116" y="148" width="155" height="25"/>
+                        <rect key="frame" x="116" y="125" width="155" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView">
                             <rect key="frame" x="0.0" y="0.0" width="155" height="25"/>
@@ -96,6 +100,7 @@
                                     <rect key="frame" x="1" y="6" width="52" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <string key="toolTip">Select the maximum width allowed by the preset (has no effect if the preset specifies Strict anamorphic). 0 means no limit is placed on the width.</string>
+                                    <animations/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="ExG-3m-WxY">
                                         <font key="font" metaFont="miniSystem"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -106,6 +111,7 @@
                                 <textField verticalHuggingPriority="750" id="mQk-Ua-wzc">
                                     <rect key="frame" x="53" y="6" width="29" height="15"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <animations/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="x" id="Nfk-ix-xIv">
                                         <font key="font" metaFont="smallSystem"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -116,6 +122,7 @@
                                     <rect key="frame" x="82" y="6" width="52" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <string key="toolTip">Select the maximum height allowed by the preset (has no effect if the preset specifies Strict anamorphic).  0 means no limit is placed on the height.</string>
+                                    <animations/>
                                     <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="tBe-1m-0r9">
                                         <font key="font" metaFont="miniSystem"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -124,13 +131,16 @@
                                     <accessibility description="PictureHeight"/>
                                 </textField>
                             </subviews>
+                            <animations/>
                         </view>
+                        <animations/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
                     <textField toolTip="Enter a name for the preset (will be displayed in the preset drawer)." verticalHuggingPriority="750" id="aKg-n4-OUS">
-                        <rect key="frame" x="116" y="216" width="270" height="19"/>
+                        <rect key="frame" x="116" y="192" width="270" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -140,17 +150,10 @@
                             <accessibilityConnection property="title" destination="Wy7-cF-tGv" id="qbt-Xs-S0o"/>
                         </connections>
                     </textField>
-                    <button toolTip="If enabled, the preset will store the currently selected picture filters." id="zJI-d5-0k8">
-                        <rect key="frame" x="115" y="129" width="186" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Use Picture Filters" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="a3h-LA-LEO">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                    </button>
                     <button verticalHuggingPriority="750" id="fLU-xs-0du">
                         <rect key="frame" x="337" y="14" width="54" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Deg-rS-mRc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -165,6 +168,7 @@ DQ
                     <button verticalHuggingPriority="750" id="Y03-Ts-ZA4">
                         <rect key="frame" x="267" y="14" width="72" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="5Xb-gz-QEa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -177,11 +181,12 @@ Gw
                         </connections>
                     </button>
                 </subviews>
+                <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="99" y="233.5"/>
+            <point key="canvasLocation" x="514" y="410.5"/>
         </window>
     </objects>
 </document>

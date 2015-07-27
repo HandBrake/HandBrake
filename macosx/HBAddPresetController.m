@@ -21,8 +21,6 @@
 @property (unsafe_unretained) IBOutlet NSTextField *picHeight;
 @property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
-@property (unsafe_unretained) IBOutlet NSButton *picFilters;
-
 @property (nonatomic, strong) HBPreset *preset;
 @property NSSize size;
 
@@ -69,11 +67,8 @@
      * Default to Custom for all other anamorphic modes
      */
     [self.picSettingsPopUp selectItemWithTag: (1 + ([self.preset.content[@"PicturePAR"] integerValue] == HB_ANAMORPHIC_STRICT))];
-    /* Save the current filters in the preset by default */
-    [self.picFilters setState:NSOnState];
 
     /* Initialize custom height and width settings to current values */
-
     [self.picWidth setStringValue: [NSString stringWithFormat:@"%d", (int)self.size.width]];
     [self.picHeight setStringValue: [NSString stringWithFormat:@"%d",(int)self.size.height]];
     [self addPresetPicDropdownChanged:nil];
@@ -117,8 +112,8 @@
         //Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
         dict[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
 
-        // Get whether or not to use the current Picture Filter settings for the preset
-        dict[@"UsesPictureFilters"] = @((BOOL) self.picFilters.state);
+        // Always use Picture Filter settings for the preset
+        dict[@"UsesPictureFilters"] = @YES;
 
         self.preset.content = [dict copy];
 
