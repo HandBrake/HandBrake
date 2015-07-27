@@ -96,12 +96,6 @@
                                     AllowEmpty="True" />
             </StackPanel>
 
-            <CheckBox Grid.Row="4"
-                      Grid.Column="0" Grid.ColumnSpan="2"
-                      Margin="0,10,0,0"
-                      Content="{x:Static Properties:ResourcesUI.AddPresetView_SaveVideoFilters}"
-                      IsChecked="{Binding Preset.UsePictureFilters}" />
-
             <!--  Description  -->
             <TextBlock Grid.Row="5"
                        Grid.Column="0" Margin="0,10,0,0"

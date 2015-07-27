@@ -72,7 +72,7 @@ namespace HandBrakeWPF.ViewModels
             this.presetService = presetService;
             this.errorService = errorService;
             this.Title = "Add Preset";
-            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName, UsePictureFilters = true };
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName};
             this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
         }
 
@@ -198,7 +198,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            this.Preset.UsePictureFilters = this.Preset.UsePictureFilters;
             this.Preset.PictureSettingsMode = this.SelectedPictureSettingMode;
 
             // Setting W, H, MW and MH

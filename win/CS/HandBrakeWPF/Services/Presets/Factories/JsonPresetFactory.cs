@@ -47,7 +47,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             Preset preset = new Preset();
             preset.Name = importedPreset.PresetName;
             preset.Description = importedPreset.PresetDescription;
-            preset.UsePictureFilters = importedPreset.UsesPictureFilters;
             preset.Task = new EncodeTask();
 
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
@@ -408,7 +407,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PresetDescription = export.Description;
             preset.PresetName = export.Name;
             preset.Type = 1; // User Preset
-            preset.UsesPictureFilters = export.UsePictureFilters;
             preset.UsesPictureSettings = (int)export.PictureSettingsMode;
             preset.Default = false; // TODO Can other GUI's handle this?
 

@@ -115,15 +115,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Video Filter Settings.
-        /// </summary>
-        public static string AddPresetView_SaveVideoFilters {
-            get {
-                return ResourceManager.GetString("AddPresetView_SaveVideoFilters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Allow passthru of:.
         /// </summary>
         public static string AudioView_AllowPassThruOf {

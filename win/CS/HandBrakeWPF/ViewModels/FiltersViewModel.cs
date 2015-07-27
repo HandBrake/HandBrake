@@ -494,7 +494,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = task;
 
-            if (preset != null && preset.UsePictureFilters)
+            if (preset != null)
             {
                 // Properties
                 this.SelectedDenoise = preset.Task.Denoise;

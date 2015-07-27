@@ -194,18 +194,6 @@ namespace HandBrakeWPF.Services.Presets
                     preset = JsonPresetFactory.ImportPreset(hbPreset);
                     preset.Category = UserPresetCatgoryName;
 
-                    // Depending on the selected preset options, we may need to change some settings around.
-                    // If the user chose not to use fitlers, remove them.
-                    if (!preset.UsePictureFilters)
-                    {
-                        preset.Task.Detelecine = Detelecine.Off;
-                        preset.Task.Denoise = Denoise.Off;
-                        preset.Task.Deinterlace = Deinterlace.Off;
-                        preset.Task.Decomb = Decomb.Off;
-                        preset.Task.Deblock = 0;
-                        preset.Task.Grayscale = false;
-                    }
-
                     // IF we are using Source Max, Set the Max Width / Height values.
                     if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
                     {
@@ -279,7 +267,6 @@ namespace HandBrakeWPF.Services.Presets
                 if (preset.Name == update.Name)
                 {
                     preset.Task = update.Task;
-                    preset.UsePictureFilters = update.UsePictureFilters;
                     preset.PictureSettingsMode = update.PictureSettingsMode;
                     preset.Category = update.Category;
                     preset.Description = update.Description;
@@ -400,7 +387,6 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
                     preset.Version = VersionHelper.GetVersion();
-                    preset.UsePictureFilters = true;
                     preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
                     preset.Category = item.PresetName;
 

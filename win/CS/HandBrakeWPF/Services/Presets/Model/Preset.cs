@@ -87,11 +87,6 @@ namespace HandBrakeWPF.Services.Presets.Model
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Picture Filters are used with this preset.
-        /// </summary>
-        public bool UsePictureFilters { get; set; }
-
-        /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build
         /// </summary>
         public string Version { get; set; }

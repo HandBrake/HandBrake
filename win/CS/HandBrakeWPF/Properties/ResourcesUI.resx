@@ -234,9 +234,6 @@
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>Save Picture Size:</value>
   </data>
-  <data name="AddPresetView_SaveVideoFilters" xml:space="preserve">
-    <value>Save Video Filter Settings</value>
-  </data>
   <data name="Generic_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
