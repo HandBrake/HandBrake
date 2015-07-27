@@ -274,6 +274,33 @@ static NSDictionary *denoiseTypesDict = nil;
     return [self.deinterlace isEqualToString:@"custom"] ? YES : NO;
 }
 
+- (BOOL)denoiseEnabled
+{
+    return ![self.denoise isEqualToString:@"off"];
+}
+
+- (BOOL)customDenoiseSelected
+{
+    return [self.denoisePreset isEqualToString:@"custom"] && [self denoiseEnabled];
+}
+
+- (BOOL)denoiseTunesAvailable
+{
+    return [self.denoise isEqualToString:@"nlmeans"] && ![self.denoisePreset isEqualToString:@"custom"];
+}
+
+- (NSString *)deblockSummary
+{
+    if (self.deblock == 0)
+    {
+        return NSLocalizedString(@"Off", nil);
+    }
+    else
+    {
+        return [NSString stringWithFormat: @"%.0ld", (long)self.deblock];
+    }
+}
+
 - (NSString *)summary
 {
     NSMutableString *summary = [NSMutableString string];

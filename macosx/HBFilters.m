@@ -221,7 +221,19 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         retval = [NSSet setWithObjects:@"detelecine", @"decomb", @"deinterlace", @"useDecomb", nil];
     }
-
+    if ([key isEqualToString:@"denoiseTunesAvailable"] ||
+        [key isEqualToString:@"customDenoiseSelected"])
+    {
+        retval = [NSSet setWithObjects:@"denoise", @"denoisePreset", nil];
+    }
+    if ([key isEqualToString:@"denoiseEnabled"])
+    {
+        retval = [NSSet setWithObject:@"denoise"];
+    }
+    if ([key isEqualToString:@"deblockSummary"])
+    {
+        retval = [NSSet setWithObject:@"deblock"];
+    }
     return retval;
 }
 

@@ -13,7 +13,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 @interface HBPictureController ()
 {
     /* Picture Sizing */
-    IBOutlet NSTabView       * fSizeFilterView;
     IBOutlet NSBox           * fPictureSizeBox;
     IBOutlet NSBox           * fPictureCropBox;
 
@@ -21,20 +20,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     IBOutlet NSStepper       * fWidthStepper;
     IBOutlet NSStepper       * fHeightStepper;
 
-    /* Video Filters */
-    IBOutlet NSBox           * fDetelecineBox;
-    IBOutlet NSBox           * fDecombDeinterlaceBox;
-    IBOutlet NSBox           * fDecombBox;
-    IBOutlet NSBox           * fDeinterlaceBox;
-
-    IBOutlet NSTextField     * fDeblockField;
-
-    IBOutlet NSTextField    *fDenoisePreset;
-    IBOutlet NSPopUpButton  *fDenoisePresetPopUp;
-    IBOutlet NSTextField    *fDenoiseTuneLabel;
-    IBOutlet NSPopUpButton  *fDenoiseTunePopUp;
-    IBOutlet NSTextField    *fDenoiseCustomLabel;
-    IBOutlet NSTextField    *fDenoiseCustomField;
 }
 
 @end
@@ -55,14 +40,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
         // go away.
         [self window];
 
-        // Add the observers for the filters values
-        NSArray *observerdKeyPaths = @[@"self.filters.useDecomb", @"self.filters.deblock",
-                                       @"self.filters.denoise", @"self.filters.denoisePreset"];
-        for (NSString *keyPath in observerdKeyPaths)
-        {
-            [self addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
-        }
-
         [self addObserver:self forKeyPath:@"self.picture.anamorphicMode" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
         [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureControllerContext];
     }
@@ -70,11 +47,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
-    NSArray *observerdKeyPaths = @[@"self.filters.useDecomb", @"self.filters.deblock",
-                                   @"self.filters.denoise", @"self.filters.denoisePreset"];
-    @try {
+    NSArray *observerdKeyPaths = @[@"self.picture.anamorphicMode", @"self.picture.modulus"];
+    @try
+    {
         for (NSString *keyPath in observerdKeyPaths)
         {
             [self removeObserver:self forKeyPath:keyPath];
@@ -86,12 +63,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 - (void)windowDidLoad
 {
     [[self window] setExcludedFromWindowsMenu:YES];
-
-    // Set the panel appearance explicity to aqua.
-    // can be removed when Apple will fix UI appearance on Yosemite.
-    if (NSClassFromString(@"NSVisualEffectView")) {
-        [self.window setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameAqua"]];
-    }
 
     /* Populate the Anamorphic NSPopUp button here */
     [fAnamorphicPopUp removeAllItems];
@@ -120,86 +91,10 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
             [fWidthStepper setIncrement:self.picture.modulus];
             [fHeightStepper setIncrement:self.picture.modulus];
         }
-        else if ([keyPath isEqualToString:@"self.filters.useDecomb"])
-        {
-            if (self.filters.useDecomb)
-            {
-                [fDecombBox setHidden:NO];
-                [fDeinterlaceBox setHidden:YES];
-            }
-            else
-            {
-                [fDecombBox setHidden:YES];
-                [fDeinterlaceBox setHidden:NO];
-            }
-        }
-        else if ([keyPath isEqualToString:@"self.filters.deblock"])
-        {
-            // The minimum deblock value is 5,
-            // set it to 0 if the value is
-            // less than 4.
-            if (self.filters.deblock == 4)
-            {
-                [fDeblockField setStringValue: @"Off"];
-                self.filters.deblock = 0;
-            }
-            else if (self.filters.deblock > 4)
-            {
-                [fDeblockField setStringValue:[NSString stringWithFormat: @"%.0ld", (long)self.filters.deblock]];
-            }
-        }
-        else if ([keyPath isEqualToString:@"self.filters.denoise"] || [keyPath isEqualToString:@"self.filters.denoisePreset"])
-        {
-            [self validateDenoiseUI];
-        }
     }
     else
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-/**
- *  Validates the denoise UI items,
- *  disables/enables the right ones.
- */
-- (void)validateDenoiseUI
-{
-    if ([self.filters.denoise isEqualToString:@"off"])
-    {
-        NSArray *uiElements = @[fDenoisePreset, fDenoisePresetPopUp,
-                                fDenoiseTuneLabel, fDenoiseTunePopUp,
-                                fDenoiseCustomLabel, fDenoiseCustomField];
-        for (NSView *view in uiElements)
-            [view setHidden:YES];
-    }
-    else
-    {
-        NSArray *uiElements = @[fDenoisePreset, fDenoisePresetPopUp];
-        for (NSView *view in uiElements)
-            [view setHidden:NO];
-
-        if ([self.filters.denoisePreset isEqualToString:@"custom"])
-        {
-            [fDenoiseTuneLabel setHidden:YES];
-            [fDenoiseTunePopUp setHidden:YES];
-            [fDenoiseCustomLabel setHidden:NO];
-            [fDenoiseCustomField setHidden:NO];
-        }
-        else if ([self.filters.denoise isEqualToString:@"hqdn3d"])
-        {
-            [fDenoiseTuneLabel setHidden:YES];
-            [fDenoiseTunePopUp setHidden:YES];
-            [fDenoiseCustomLabel setHidden:YES];
-            [fDenoiseCustomField setHidden:YES];
-        }
-        else
-        {
-            [fDenoiseTuneLabel setHidden:NO];
-            [fDenoiseTunePopUp setHidden:NO];
-            [fDenoiseCustomLabel setHidden:YES];
-            [fDenoiseCustomField setHidden:YES];
-        }
     }
 }
 
@@ -219,29 +114,14 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
  * Size or Filters tab is clicked. Size gives a horizontally oriented
  * inspector and Filters is a vertically aligned inspector.
  */
-- (void) resizeInspectorForTab: (id) sender
+- (void)resizeInspectorForTab:(id)sender
 {
-    NSRect frame = [[self window] frame];
-    NSSize screenSize = [[[self window] screen] frame].size;
-    NSPoint screenOrigin = [[[self window] screen] frame].origin;
+    NSRect frame = self.window.frame;
+    NSSize screenSize = self.window.screen.frame.size;
+    NSPoint screenOrigin = self.window.screen.frame.origin;
 
-    /* We base our inspector size/layout on which tab is active for fSizeFilterView */
-    /* we are 1 which is Filters*/
-    if ([fSizeFilterView indexOfTabViewItem: [fSizeFilterView selectedTabViewItem]] == 1)
-    {
-        frame.size.width = 484;
-        /* we glean the height from the size of the boxes plus the extra window space
-         * needed for non boxed display
-         */
-        frame.size.height = 100.0 + [fDetelecineBox frame].size.height + [fDecombDeinterlaceBox frame].size.height;
-        /* Hide the size readout at the bottom as the vertical inspector is not wide enough */
-    }
-    else // we are Tab index 0 which is size
-    {
-        frame.size.width = 30.0 + [fPictureSizeBox frame].size.width + [fPictureCropBox frame].size.width;
-        frame.size.height = [fPictureSizeBox frame].size.height + 90;
-        /* hide the size summary field at the bottom */
-    }
+    frame.size.width = 30.0 + fPictureSizeBox.frame.size.width + fPictureCropBox.frame.size.width;
+
     /* get delta's for the change in window size */
     CGFloat deltaX = frame.size.width - [[self window] frame].size.width;
     CGFloat deltaY = frame.size.height - [[self window] frame].size.height;
@@ -265,7 +145,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     [[self window] setFrame:frame display:YES animate:YES];
 }
 
-- (void) adjustSizingDisplay: (id) sender
+- (void)adjustSizingDisplay:(id)sender
 {
     NSSize pictureSizingBoxSize = [fPictureSizeBox frame].size;
 
@@ -328,11 +208,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
     [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
-}
-
-- (IBAction)showPreviewWindow:(id)sender
-{
-    [self.previewWindow showWindow:sender];
 }
 
 @end

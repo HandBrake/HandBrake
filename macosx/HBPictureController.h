@@ -6,14 +6,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBFilters;
 @class HBPicture;
 
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic, readwrite, strong) HBFilters *filters;
 @property (nonatomic, readwrite, strong) HBPicture *picture;
-
-@property (nonatomic, readwrite, weak) NSWindowController *previewWindow;
 
 @end

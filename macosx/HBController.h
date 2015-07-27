@@ -8,13 +8,13 @@
 
 @class HBQueueController;
 
+@class HBPictureViewController;
 @class HBVideoController;
 @class HBAudioController;
 @class HBSubtitlesController;
 @class HBAdvancedController;
 @class HBChapterTitlesController;
 
-@class HBPictureController;
 @class HBPreviewController;
 
 @class HBPreferencesController;
@@ -26,6 +26,10 @@
 @interface HBController : NSWindowController <NSDrawerDelegate>
 {
     IBOutlet NSTabView *fMainTabView;
+
+    // Picture controller
+    HBPictureViewController * fPictureViewController;
+    IBOutlet NSTabViewItem  * fPictureTab;
 
     // Video view controller
     HBVideoController       * fVideoController;
@@ -47,8 +51,6 @@
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSTabViewItem       * fAdvancedTab;
 
-    // Picture Settings
-    HBPictureController           * fPictureController;
     // Picture Preview
     HBPreviewController           * fPreviewController;
     HBPreferencesController       * fPreferencesController;
@@ -95,7 +97,6 @@
 
 - (IBAction)browseSources:(id)sender;
 
-- (IBAction)showPicturePanel:(id)sender;
 - (IBAction)showPreviewWindow:(id)sender;
 
 // Queue

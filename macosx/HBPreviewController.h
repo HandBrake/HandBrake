@@ -7,10 +7,11 @@
 #import <Cocoa/Cocoa.h>
 
 @class HBPreviewGenerator;
+@class HBPicture;
 
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, strong) HBPreviewGenerator *generator;
-@property (nonatomic, readwrite, weak) NSWindowController *pictureSettingsWindow;
+@property (nonatomic, strong) HBPicture *picture;
 
 @end

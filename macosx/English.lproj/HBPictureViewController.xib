@@ -1,0 +1,1174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
+            <connections>
+                <outlet property="heightStepper" destination="2s0-5k-fjU" id="syT-uf-phX"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+                <outlet property="widthStepper" destination="FwZ-6T-zJe" id="1hV-r1-wxI"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="875" height="335"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="FPy-5b-0Oe">
+                    <rect key="frame" x="562" y="307" width="90" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Width:" id="QXA-8X-hD2">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="ocB-vz-iqd">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="LWv-Y9-b0S">
+                    <rect key="frame" x="658" y="306" width="61" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XYg-xi-ExT">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="jW5-N6-2cB"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="FPy-5b-0Oe" id="YdZ-5d-tpt"/>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="S0y-AY-6DT" id="2b6-KZ-95M">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IKb-wD-kbq"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="j71-Y5-RpA"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="IKb-wD-kbq" id="S0y-AY-6DT">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <outlet property="nextKeyView" destination="JC3-5O-BXA" id="oN1-b9-dyt"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
+                    <rect key="frame" x="658" y="252" width="50" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="gn4-8h-sfh" id="hpW-bc-SQg"/>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="c3e-8E-4E8" id="7DE-do-W8T">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="BXi-rt-OOn"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="BXi-rt-OOn" id="c3e-8E-4E8">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="taN-LH-eRG"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="JC3-5O-BXA">
+                    <rect key="frame" x="658" y="279" width="50" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="ygx-uC-eb0"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="vOY-Ix-eha" id="Gac-U9-X6e"/>
+                        <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IP2-ew-IdV"/>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="lWR-hz-s9a" id="RaY-1A-6vL">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="IP2-ew-IdV" id="lWR-hz-s9a">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="GT0-y1-Tr0"/>
+                        <outlet property="nextKeyView" destination="rFi-0b-3BX" id="IBQ-5n-k0g"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="vOY-Ix-eha">
+                    <rect key="frame" x="562" y="280" width="90" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Width:" id="gVj-RG-PcL">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="Ejc-ft-dS0">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="gn4-8h-sfh">
+                    <rect key="frame" x="562" y="253" width="90" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Height:" id="TxS-H4-WXY">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="Nah-49-1US">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
+                    <rect key="frame" x="162" y="304" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="JqM-hb-2O2" id="zEB-S1-VbO">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxWidth" id="rzD-bT-FPn"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.width" previousBinding="rzD-bT-FPn" id="0U8-Dc-QvL"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.widthEditable" id="JqM-hb-2O2"/>
+                        <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="uHh-Lp-0GY"/>
+                    </connections>
+                </stepper>
+                <popUpButton verticalHuggingPriority="750" id="ns0-ar-I7c">
+                    <rect key="frame" x="92" y="202" width="54" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" title="2" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="OWb-6v-ggg" id="H0L-sP-ky8">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="und-OA-MLn">
+                            <items>
+                                <menuItem title="16" id="uTT-yC-MFJ"/>
+                                <menuItem title="8" id="Lbl-i2-YJg"/>
+                                <menuItem title="4" id="MgF-Gw-0fD"/>
+                                <menuItem title="2" state="on" id="OWb-6v-ggg"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="tHY-g2-oWj" id="SpR-VQ-gX1"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="haa-fs-kQM">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.picture.modulus" id="lCQ-i3-hQ0"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="9hH-As-JSa">
+                    <rect key="frame" x="95" y="306" width="62" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="6jd-2b-RPM"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="9oG-zm-Y0W" id="lTZ-u6-eUU"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="L1O-OF-Smb" id="Ypo-AX-fuO">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.width" id="Ws8-no-nOU">
+                            <dictionary key="options">
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="editable" keyPath="self.picture.widthEditable" id="L1O-OF-Smb"/>
+                        <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
+                    <rect key="frame" x="162" y="278" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Rhl-EQ-AWd" id="hqb-mF-nWe">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.height" previousBinding="yUT-oM-ZsK" id="kln-nB-kei"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.heightEditable" id="Rhl-EQ-AWd"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="yUT-oM-ZsK"/>
+                    </connections>
+                </stepper>
+                <textField verticalHuggingPriority="750" id="JBo-0E-AsU">
+                    <rect key="frame" x="18" y="233" width="73" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
+                    <rect key="frame" x="18" y="282" width="73" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Height:" id="hN1-S9-zl8">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="w1f-3S-up0">
+                    <rect key="frame" x="92" y="228" width="83" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="1O3-th-4M5" id="vx1-8S-fyc">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="qSV-uB-Iup">
+                            <items>
+                                <menuItem title="Off" state="on" id="1O3-th-4M5"/>
+                                <menuItem title="Strict" id="JyN-AK-Hae"/>
+                                <menuItem title="Loose" id="Uiw-Nb-u5X"/>
+                                <menuItem title="Custom" id="f12-Dh-fDw"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="JBo-0E-AsU" id="b1p-96-aIC"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="RrW-07-vat">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedIndex" keyPath="self.picture.anamorphicMode" id="RJ9-6L-8mC"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="tHY-g2-oWj">
+                    <rect key="frame" x="38" y="207" width="53" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="9oG-zm-Y0W">
+                    <rect key="frame" x="32" y="307" width="59" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Width:" id="L7V-2e-qf9">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
+                    <rect key="frame" x="95" y="280" width="62" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Ts7-R5-Oye"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="uqQ-uA-3xF" id="Cho-Kz-bXA"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="GH2-sh-F1c" id="ImG-wf-FaF">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.height" id="SEV-F4-Swk">
+                            <dictionary key="options">
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="editable" keyPath="self.picture.heightEditable" id="GH2-sh-F1c"/>
+                        <outlet property="nextKeyView" destination="2s0-5k-fjU" id="D8H-ff-R52"/>
+                    </connections>
+                </textField>
+                <button id="6G0-MW-iVa">
+                    <rect key="frame" x="92" y="256" width="145" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="hcF-CZ-p0E">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="6Hg-VH-mTD" id="itG-f4-cLz">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.keepDisplayAspect" id="xNv-0O-F7Q"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspectEditable" id="6Hg-VH-mTD"/>
+                    </connections>
+                </button>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
+                    <rect key="frame" x="444" y="256" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="mtZ-Ty-n6s" id="HQZ-ek-iiD">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="mtZ-Ty-n6s">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="W6e-6e-e0G" id="rui-ft-8qd"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="W6e-6e-e0G"/>
+                    </connections>
+                </stepper>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
+                    <rect key="frame" x="507" y="229" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="qtl-2n-uKP" id="WyG-bu-8aC">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="qtl-2n-uKP">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="HGA-OB-h94" id="Or7-sC-RVD"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="HGA-OB-h94"/>
+                    </connections>
+                </stepper>
+                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
+                    <rect key="frame" x="324" y="284" width="90" height="43"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    <size key="cellSize" width="90" height="20"/>
+                    <size key="intercellSpacing" width="2" height="3"/>
+                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="S7K-vF-t1n" customClass="HBHUDButtonCell">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <cells>
+                        <column>
+                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="b3y-yE-sYc">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                            <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zmf-MM-j1I">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                        </column>
+                    </cells>
+                    <connections>
+                        <accessibilityConnection property="title" destination="Bmd-c8-9hp" id="1MC-Bp-IrM"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="aaX-en-7S9">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedIndex" keyPath="self.picture.autocrop" id="0hd-Rk-0R0">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </matrix>
+                <textField verticalHuggingPriority="750" id="41c-48-2XJ">
+                    <rect key="frame" x="406" y="258" width="36" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Crop top"/>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Pyj-gb-8gd" id="lb7-GI-AEb">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Pyj-gb-8gd">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" id="x0H-9t-WiF">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">0</string>
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="1Z0-JT-vst">
+                    <rect key="frame" x="406" y="204" width="36" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Crop bottom"/>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="wVJ-Yz-azk" id="Gzx-Ql-84O">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="wVJ-Yz-azk">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" id="ob5-QF-mOC">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">0</string>
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
+                    <rect key="frame" x="385" y="229" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="erl-nf-Xs5" id="UPJ-QD-Izo">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="erl-nf-Xs5">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="tYZ-2h-zIg" id="IBB-vL-VJ7"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="tYZ-2h-zIg"/>
+                    </connections>
+                </stepper>
+                <textField verticalHuggingPriority="750" id="LTu-ic-Ty9">
+                    <rect key="frame" x="347" y="231" width="36" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Crop left"/>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="7NV-4H-eCu" id="oXG-X9-P7q">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="7NV-4H-eCu">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" id="2fq-yE-LSA">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">0</string>
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
+                    <rect key="frame" x="444" y="202" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="ZKT-as-B7p" id="UHe-hi-SJo">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="ZKT-as-B7p">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="I1t-eF-byM" id="fjV-Mm-Iuz"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="I1t-eF-byM"/>
+                    </connections>
+                </stepper>
+                <textField verticalHuggingPriority="750" id="Bmd-c8-9hp">
+                    <rect key="frame" x="263" y="307" width="59" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="haC-cO-jDm">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="wsq-TS-cC6">
+                    <rect key="frame" x="469" y="231" width="36" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Crop right"/>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="o5T-kF-JlS" id="XqO-Pq-WZZ">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="o5T-kF-JlS">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" id="krD-da-wuz">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">0</string>
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="BpX-Ee-wct">
+                    <rect key="frame" x="66" y="163" width="789" height="5"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <textField verticalHuggingPriority="750" id="1a5-Yb-uwn">
+                    <rect key="frame" x="25" y="130" width="64" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="Mwp-XS-2tc">
+                    <rect key="frame" x="40" y="104" width="49" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="Pld-vq-ajk">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="DER-tS-cLx">
+                    <rect key="frame" x="92" y="125" width="114" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="tlc-kS-W8X"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="1a5-Yb-uwn" id="9sT-x7-00K"/>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="JKy-Uz-aTl">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.detelecine" previousBinding="GNQ-0G-9m1" id="nrd-Qr-ocH">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDetelecineTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.detelecineSettings" id="GNQ-0G-9m1"/>
+                        <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="ipJ-z3-XnJ">
+                    <rect key="frame" x="95" y="101" width="108" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Vb4-om-eIT">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Custom deleteline settings."/>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDetelecineSelected" id="tIw-ln-ir8">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.detelecineCustomString" id="jgA-bj-Qfl"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="N8y-at-fwU">
+                    <rect key="frame" x="656" y="130" width="64" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="ns7-Ww-hmX">
+                    <rect key="frame" x="656" y="105" width="64" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color:" id="uDH-ts-vs5">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="peM-dW-Ef8">
+                    <rect key="frame" x="719" y="130" width="31" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Off" id="CIX-Cq-deK">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="value" keyPath="self.filters.deblockSummary" id="tG7-P3-mWx">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">Off</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <slider verticalHuggingPriority="750" id="VHj-6u-NVp">
+                    <rect key="frame" x="751" y="127" width="104" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
+                    <connections>
+                        <accessibilityConnection property="title" destination="N8y-at-fwU" id="s2N-Mt-w93"/>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="viW-JK-JLj">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.deblock" id="n8X-FW-Dvy"/>
+                    </connections>
+                </slider>
+                <textField verticalHuggingPriority="750" id="9hM-c1-7hB">
+                    <rect key="frame" x="457" y="130" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton toolTip="Denoise filtering reduces or removes the appearance of noise and grain." verticalHuggingPriority="750" id="ins-7X-kbN">
+                    <rect key="frame" x="521" y="125" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="a2c-wR-CQ6">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="IHH-Se-l6d"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="9hM-c1-7hB" id="Y24-nk-rpo"/>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="MHi-Qm-SZA">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoise" previousBinding="kTQ-KD-pXs" id="GTi-Qd-jWl">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDenoiseTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTypes" id="kTQ-KD-pXs"/>
+                        <outlet property="nextKeyView" destination="cTy-PO-BSd" id="rNc-zg-awd"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="k1h-3F-Xh0">
+                    <rect key="frame" x="457" y="104" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseEnabled" id="y4E-17-yN9">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="cTy-PO-BSd">
+                    <rect key="frame" x="521" y="99" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="akB-JW-MPe"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="k1h-3F-Xh0" id="uZo-JE-P2O"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseEnabled" id="XQe-ei-Bp1">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoisePreset" previousBinding="eY4-v3-EBE" id="gmQ-cq-nqe">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoisePresets" id="eY4-v3-EBE"/>
+                        <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="MZj-WA-YC4"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" id="1XQ-md-5cQ">
+                    <rect key="frame" x="520" y="73" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="QNk-3W-T3X">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="pIO-dE-81w"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.denoiseTune" previousBinding="DIk-Cg-Tqu" id="aXQ-14-pzv">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDenoiseTuneTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.denoiseTunes" id="DIk-Cg-Tqu"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseTunesAvailable" id="nHU-MP-sKz">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="O3I-G6-dfv">
+                    <rect key="frame" x="457" y="78" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDenoiseSelected" id="BFC-VQ-bJj">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="ZR9-YG-pfn">
+                    <rect key="frame" x="524" y="75" width="107" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="EhQ-sa-Xvv">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Custom denoise settings."/>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDenoiseSelected" id="zff-ce-4Wm">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.denoiseCustomString" id="MUd-3J-rBA"/>
+                    </connections>
+                </textField>
+                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="V5h-RE-c1g">
+                    <rect key="frame" x="310" y="104" width="83" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    <size key="cellSize" width="83" height="20"/>
+                    <size key="intercellSpacing" width="4" height="2"/>
+                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="0e7-lW-GxD" customClass="HBHUDButtonCell">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <cells>
+                        <column>
+                            <buttonCell type="radio" title="Deinterlace" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="OVg-jG-Uzq">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                            <buttonCell type="radio" title="Decomb" imagePosition="left" alignment="left" controlSize="small" inset="2" id="CCd-Kk-NlW">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                        </column>
+                    </cells>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="KA3-LF-11B">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.useDecomb" id="dze-Gw-CZJ"/>
+                    </connections>
+                </matrix>
+                <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="Mmn-Ae-9Yn" userLabel="Decomb Box">
+                    <rect key="frame" x="233" y="43" width="207" height="62"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <view key="contentView" id="QFn-fS-gOg">
+                        <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" id="7iW-iI-CHT">
+                                <rect key="frame" x="11" y="38" width="61" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Decomb:" id="bkd-Rb-wwr">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" id="EoC-qG-nlq">
+                                <rect key="frame" x="11" y="12" width="61" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="VaB-Av-TDu">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="kgj-zy-TW7">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" id="kP2-Gv-DZV">
+                                <rect key="frame" x="75" y="33" width="114" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5f8-gV-wzv">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <menu key="menu" title="OtherViews" id="hOC-Xe-RPE"/>
+                                </popUpButtonCell>
+                                <connections>
+                                    <accessibilityConnection property="title" destination="7iW-iI-CHT" id="PnI-bH-5TP"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.filters" id="1ZK-xB-Tcj">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="-2" name="selectedValue" keyPath="self.filters.decomb" previousBinding="3Cu-Eh-e6g" id="ShC-Oj-9Cr">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">HBDecombTransformer</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="-2" name="contentValues" keyPath="self.filters.decombSettings" id="3Cu-Eh-e6g"/>
+                                </connections>
+                            </popUpButton>
+                            <textField verticalHuggingPriority="750" id="dNc-Lj-0eP">
+                                <rect key="frame" x="78" y="9" width="108" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="cDZ-Od-pI6">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <accessibility description="Custom decomb settings."/>
+                                <connections>
+                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="Ftt-V0-qz8">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="UZ0-eg-oV8" name="value" keyPath="values.self.filters.decombCustomString" id="lJH-aM-3yE"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <animations/>
+                    </view>
+                    <animations/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.useDecomb" id="Qt8-ik-TyT">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </box>
+                <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="N21-it-wjY" userLabel="Deinterlace Box">
+                    <rect key="frame" x="233" y="43" width="207" height="62"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <view key="contentView" id="zQw-9m-PM3">
+                        <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" id="xKf-yr-nCk">
+                                <rect key="frame" x="4" y="38" width="68" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" id="C83-aJ-v3x">
+                                <rect key="frame" x="23" y="12" width="49" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="kHC-eH-FKE">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
+                                <rect key="frame" x="75" y="33" width="114" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <menu key="menu" title="OtherViews" id="PyP-FP-gGx"/>
+                                </popUpButtonCell>
+                                <connections>
+                                    <accessibilityConnection property="title" destination="xKf-yr-nCk" id="9ol-TG-r46"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.filters" id="M9v-44-EJq">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlace" previousBinding="41E-Fv-hq1" id="RN0-ZY-YXU">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">HBDeinterlaceTransformer</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceSettings" id="41E-Fv-hq1"/>
+                                </connections>
+                            </popUpButton>
+                            <textField verticalHuggingPriority="750" id="r64-vI-ymx">
+                                <rect key="frame" x="78" y="9" width="108" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OKz-qW-7ai">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <accessibility description="Custom deinterlace settings"/>
+                                <connections>
+                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="h6M-Dy-tBR">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="ej3-7F-ZV8"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <animations/>
+                    </view>
+                    <animations/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.useDecomb" id="ja4-Mj-2gB"/>
+                    </connections>
+                </box>
+                <textField verticalHuggingPriority="750" id="A6i-ft-02b">
+                    <rect key="frame" x="484" y="78" width="34" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.denoiseTunesAvailable" id="nym-Kx-saO">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <button id="Psx-nN-XiT">
+                    <rect key="frame" x="723" y="103" width="103" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="5OR-jI-ZCD">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.grayscale" id="iuG-9X-7Dc"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="hM5-HQ-Scu">
+                    <rect key="frame" x="18" y="158" width="42" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters" id="wQL-qX-JeA">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="294.5" y="492.5"/>
+        </customView>
+        <userDefaultsController representsSharedInstance="YES" id="UZ0-eg-oV8"/>
+    </objects>
+</document>

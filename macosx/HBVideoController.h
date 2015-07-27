@@ -7,7 +7,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class HBAdvancedController;
-@class HBJob;
+@class HBVideo;
 
 /**
  *  HBVideoController
@@ -16,6 +16,6 @@
 
 - (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController;
 
-@property (nonatomic, readwrite, weak) HBJob *job;
+@property (nonatomic, readwrite, weak) HBVideo *video;
 
 @end

@@ -6,6 +6,8 @@
 
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
+#import "HBPictureController.h"
+
 #import <QTKit/QTKit.h>
 
 @implementation QTMovieView (HBQTMovieViewExtensions)
@@ -21,7 +23,7 @@
 
 - (BOOL) isPlaying
 {
-    if ([self rate])
+    if ([self rate] > 0)
         return YES;
     else
         return NO;
@@ -92,6 +94,8 @@ typedef enum ViewMode : NSUInteger {
     /* Popup of choices for length of preview in seconds */
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp;
 }
+
+@property (nonatomic, readwrite) HBPictureController *pictureSettingsWindow;
 
 @property (nonatomic, strong) CALayer *backLayer;
 @property (nonatomic, strong) CALayer *pictureLayer;
@@ -278,6 +282,7 @@ typedef enum ViewMode : NSUInteger {
         [self stopMovieTimer];
     }
 
+    [self.pictureSettingsWindow close];
     [self.generator purgeImageCache];
 }
 
@@ -799,6 +804,12 @@ typedef enum ViewMode : NSUInteger {
 
 - (IBAction) showPictureSettings: (id) sender
 {
+    if (self.pictureSettingsWindow == nil)
+    {
+        self.pictureSettingsWindow = [[HBPictureController alloc] init];
+    }
+
+    self.pictureSettingsWindow.picture = self.picture;
     [self.pictureSettingsWindow showWindow:self];
 }
 
@@ -835,6 +846,17 @@ typedef enum ViewMode : NSUInteger {
 
 		if (!movie)
         {
+            NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"HandBrake can't open the preview.", nil)
+                                             defaultButton:NSLocalizedString(@"Open in external player", nil)
+                                           alternateButton:NSLocalizedString(@"Cancel", nil)
+                                               otherButton:nil
+                                 informativeTextWithFormat:NSLocalizedString(@"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?", nil)];
+            [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+                if (returnCode == NSModalResponseOK)
+                {
+                    [[NSWorkspace sharedWorkspace] openURL:fileURL];
+                }
+            }];
             [self switchViewToMode:ViewModePicturePreview];
 		}
         else

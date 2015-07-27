@@ -13,13 +13,13 @@
 #import "HBPreset.h"
 #import "HBUtilities.h"
 
+#import "HBPictureViewController.h"
 #import "HBVideoController.h"
 #import "HBAudioController.h"
 #import "HBSubtitlesController.h"
 #import "HBAdvancedController.h"
 #import "HBChapterTitlesController.h"
 
-#import "HBPictureController.h"
 #import "HBPreviewController.h"
 #import "HBPreviewGenerator.h"
 
@@ -75,9 +75,6 @@
 
         // Inits the controllers
         fPreviewController = [[HBPreviewController alloc] init];
-        fPictureController = [[HBPictureController alloc] init];
-        fPictureController.previewWindow = fPreviewController;
-        fPreviewController.pictureSettingsWindow = fPictureController;
 
         fQueueController = queueController;
         fQueueController.controller = self;
@@ -168,6 +165,10 @@
     // setup the video view controller
     fVideoController = [[HBVideoController alloc] initWithAdvancedController:fAdvancedOptions];
     [fVideoTab setView:[fVideoController view]];
+
+    // setup the picture view controller
+    fPictureViewController = [[HBPictureViewController alloc] init];
+    [fPictureTab setView:[fPictureViewController view]];
 
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                               forKeyPath:@"values.HBShowAdvancedTab"
@@ -501,10 +502,9 @@
     _job = job;
 
     // Set the jobs info to the view controllers
-    fPictureController.picture = job.picture;
-    fPictureController.filters = job.filters;
-
-    fVideoController.job = job;
+    fPictureViewController.picture = job.picture;
+    fPictureViewController.filters = job.filters;
+    fVideoController.video = job.video;
     fAudioController.audio = job.audio;
     fSubtitlesViewController.subtitles = job.subtitles;
     fChapterTitlesController.job = job;
@@ -517,6 +517,7 @@
     {
         fPreviewController.generator = nil;
     }
+    fPreviewController.picture = job.picture;
 
     [self enableUI:(job != nil)];
 
@@ -1267,14 +1268,6 @@
     }
 
     [fPresetDrawer toggle:self];
-}
-
-/**
- * Shows Picture Settings Window.
- */
-- (IBAction)showPicturePanel:(id)sender
-{
-	[fPictureController showWindow:sender];
 }
 
 - (IBAction)showPreviewWindow:(id)sender

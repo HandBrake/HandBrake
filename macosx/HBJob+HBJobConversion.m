@@ -473,10 +473,7 @@
         }
     }
 
-    // Deblock  (uses pp7 default)
-    // NOTE: even though there is a valid deblock setting of 0 for the filter, for
-    // the macgui's purposes a value of 0 actually means to not even use the filter
-    // current hb_filter_deblock.settings valid ranges are from 5 - 15
+    // Deblock (uses pp7 default)
     if (self.filters.deblock)
     {
         filter = hb_filter_init(HB_FILTER_DEBLOCK);

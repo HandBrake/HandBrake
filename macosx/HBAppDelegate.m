@@ -193,8 +193,9 @@
         // Delegate the validation to the queue controller
         return [self.queueController validateMenuItem:menuItem];
     }
-    else if (action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:) ||
-             action == @selector(showPreviewWindow:) || action == @selector(browseSources:))
+    else if (action == @selector(showAddPresetPanel:) ||
+             action == @selector(showPreviewWindow:) ||
+             action == @selector(browseSources:))
     {
         // Delegate the validation to the main controller
         return [self.mainController validateMenuItem:menuItem];
@@ -372,11 +373,6 @@
 - (IBAction)showOutputPanel:(id)sender
 {
     [self.outputPanel showWindow:sender];
-}
-
-- (IBAction)showPicturePanel:(id)sender
-{
-    [self.mainController showPicturePanel:self];
 }
 
 - (IBAction)showPreviewWindow:(id)sender

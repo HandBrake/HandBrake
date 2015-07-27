@@ -24,6 +24,12 @@
 - (BOOL)customDecombSelected;
 - (BOOL)customDeinterlaceSelected;
 
+- (BOOL)denoiseEnabled;
+- (BOOL)customDenoiseSelected;
+- (BOOL)denoiseTunesAvailable;
+
+- (NSString *)deblockSummary;
+
 @property (nonatomic, readonly) NSArray *detelecineSettings;
 @property (nonatomic, readonly) NSArray *deinterlaceSettings;
 @property (nonatomic, readonly) NSArray *decombSettings;
