@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
@@ -39,7 +40,7 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="920" height="568"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="minSize" type="size" width="946" height="568"/>
+            <value key="minSize" type="size" width="920" height="568"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="920" height="568"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -285,7 +286,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
-                        <rect key="frame" x="70" y="540" width="310" height="14.000000042013745"/>
+                        <rect key="frame" x="70" y="540" width="310" height="14.000000042040575"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <animations/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
@@ -485,7 +486,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="391" y="542.00000004097819" width="510" height="12"/>
+                        <rect key="frame" x="391" y="542.00000004203991" width="510" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <animations/>
                     </progressIndicator>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14F6a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -28,6 +28,7 @@
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="200"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="185"/>
@@ -42,6 +43,7 @@
                 <popUpButton verticalHuggingPriority="750" id="374">
                     <rect key="frame" x="223" y="338" width="205" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Open Source" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="379" id="375">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -59,6 +61,7 @@
                 <popUpButton verticalHuggingPriority="750" id="414">
                     <rect key="frame" x="324" y="315" width="104" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Weekly" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="604800" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="417" id="415">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -78,6 +81,7 @@
                 <popUpButton verticalHuggingPriority="750" id="289">
                     <rect key="frame" x="255" y="184" width="96" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Auto" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="292" id="309">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -96,6 +100,7 @@
                 <textField verticalHuggingPriority="750" id="276">
                     <rect key="frame" x="18" y="189" width="103" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Output files:" id="308">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -105,6 +110,7 @@
                 <textField verticalHuggingPriority="750" id="383">
                     <rect key="frame" x="124" y="343" width="96" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source selection:" id="384">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -114,6 +120,7 @@
                 <textField verticalHuggingPriority="750" id="486">
                     <rect key="frame" x="124" y="189" width="128" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Default MP4 Extension:" id="487">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -123,6 +130,7 @@
                 <textField verticalHuggingPriority="750" id="275">
                     <rect key="frame" x="18" y="343" width="103" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="At launch:" id="307">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -132,6 +140,7 @@
                 <button id="244">
                     <rect key="frame" x="124" y="231" width="86" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Send file to:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="306">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -143,6 +152,7 @@
                 <button id="243">
                     <rect key="frame" x="124" y="318" width="197" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Automatically check for updates:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="305">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -154,6 +164,7 @@
                 <textField verticalHuggingPriority="750" id="242">
                     <rect key="frame" x="18" y="276" width="103" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="When Done:" id="304">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -163,6 +174,7 @@
                 <button id="239">
                     <rect key="frame" x="124" y="164" width="313" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Automatically name output files" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="302">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -174,6 +186,7 @@
                 <textField verticalHuggingPriority="750" id="448">
                     <rect key="frame" x="209" y="233" width="125" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="None" id="449">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -189,6 +202,7 @@
                 <button verticalHuggingPriority="750" id="450">
                     <rect key="frame" x="342" y="225" width="104" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Browse ..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="451">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -200,6 +214,7 @@
                 <button id="457">
                     <rect key="frame" x="124" y="249" width="313" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Play System Alert Sound" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="458">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -211,6 +226,7 @@
                 <popUpButton verticalHuggingPriority="750" id="491">
                     <rect key="frame" x="124" y="271" width="195" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="492">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -232,6 +248,7 @@
                 <tokenField verticalHuggingPriority="750" id="6aa-GX-TuM">
                     <rect key="frame" x="194" y="140" width="287" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <tokenFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" id="dHt-ry-PKg">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -251,6 +268,7 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="fF9-Q1-vYr">
                     <rect key="frame" x="125" y="142" width="63" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="3dN-MN-DcP">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -263,6 +281,7 @@
                 <button id="DLn-Xh-Zkh">
                     <rect key="frame" x="142" y="57" width="234" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Replace underscores with a space" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="pUi-lK-cHw">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -275,6 +294,7 @@
                 <button id="GNx-QT-RSv">
                     <rect key="frame" x="142" y="37" width="234" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Remove common punctuation" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="wo5-iR-2mb">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -287,6 +307,7 @@
                 <button id="zXr-lf-3A4">
                     <rect key="frame" x="142" y="17" width="234" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Change case to Title Case" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ggR-Zs-P8G">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -299,6 +320,7 @@
                 <tokenField verticalHuggingPriority="750" id="Tk3-Ig-fFI">
                     <rect key="frame" x="191" y="104" width="272" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <tokenFieldCell key="cell" controlSize="small" selectable="YES" allowsUndo="NO" alignment="left" allowsEditingTextAttributes="YES" id="cjy-yP-lqT">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -312,6 +334,7 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="LKY-ui-YVw">
                     <rect key="frame" x="192" y="82" width="204" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag to the above format field to add" id="dQ6-Dh-9sD">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -319,6 +342,7 @@
                     </textFieldCell>
                 </textField>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-82" y="-471"/>
         </customView>
         <customView id="235" userLabel="Audio">
@@ -328,6 +352,7 @@
                 <comboBox verticalHuggingPriority="750" id="253">
                     <rect key="frame" x="203" y="95" width="247" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="English" drawsBackground="YES" numberOfVisibleItems="10" id="316">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -341,6 +366,7 @@
                 <textField verticalHuggingPriority="750" id="252">
                     <rect key="frame" x="18" y="99" width="179" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Native Language:" id="315">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -350,6 +376,7 @@
                 <comboBox verticalHuggingPriority="750" id="508">
                     <rect key="frame" x="203" y="64" width="247" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="10" id="511">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -363,6 +390,7 @@
                 <textField verticalHuggingPriority="750" id="509">
                     <rect key="frame" x="18" y="68" width="179" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Alternate Language:" id="510">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -372,6 +400,7 @@
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mbd-FQ-sxW">
                     <rect key="frame" x="201" y="18" width="248" height="42"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings apply only to built-in presets. Use the audio defaults panel for custom presets." id="fIj-Tz-ghb">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -379,15 +408,17 @@
                     </textFieldCell>
                 </textField>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-82" y="-791"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="5" width="500" height="262"/>
+            <rect key="frame" x="0.0" y="0.0" width="500" height="262"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <popUpButton verticalHuggingPriority="750" id="363">
                     <rect key="frame" x="218" y="55" width="66" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="369" id="364">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -406,6 +437,7 @@
                 <popUpButton verticalHuggingPriority="750" id="387">
                     <rect key="frame" x="337" y="221" width="76" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -429,6 +461,7 @@
                 <button id="398">
                     <rect key="frame" x="125" y="92" width="339" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -440,6 +473,7 @@
                 <button id="347">
                     <rect key="frame" x="125" y="37" width="340" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Put individual encode logs in same location as movie" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="348">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -451,6 +485,7 @@
                 <textField verticalHuggingPriority="750" id="442">
                     <rect key="frame" x="18" y="94" width="104" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="DVD-Video:" id="443">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -460,6 +495,7 @@
                 <textField verticalHuggingPriority="750" id="IV7-SY-HLR">
                     <rect key="frame" x="18" y="167" width="104" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Scan:" id="c0L-TU-WML">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -469,6 +505,7 @@
                 <textField verticalHuggingPriority="750" id="jPa-4p-Y29">
                     <rect key="frame" x="18" y="226" width="104" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x264:" id="cqp-xU-GOe">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -478,6 +515,7 @@
                 <textField verticalHuggingPriority="750" id="350">
                     <rect key="frame" x="18" y="60" width="104" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Log:" id="351">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -487,6 +525,7 @@
                 <textField verticalHuggingPriority="750" id="371">
                     <rect key="frame" x="120" y="60" width="95" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Verbosity Level:" id="372">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -496,6 +535,7 @@
                 <textField verticalHuggingPriority="750" id="359">
                     <rect key="frame" x="92" y="143" width="230" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Number of picture previews to scan:" id="360">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -505,6 +545,7 @@
                 <textField verticalHuggingPriority="750" id="463">
                     <rect key="frame" x="118" y="167" width="179" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Minimum length of title to scan:" id="464">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -514,6 +555,7 @@
                 <textField verticalHuggingPriority="750" id="UXr-op-aKN">
                     <rect key="frame" x="356" y="167" width="77" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="seconds" id="klQ-DW-Kc6">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -523,6 +565,7 @@
                 <textField verticalHuggingPriority="750" id="395">
                     <rect key="frame" x="118" y="226" width="216" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Constant Quality fractional granularity:" id="396">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -532,6 +575,7 @@
                 <textField verticalHuggingPriority="750" id="480">
                     <rect key="frame" x="303" y="165" width="48" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="481">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -544,6 +588,7 @@
                 <button id="ybi-46-yhY">
                     <rect key="frame" x="125" y="201" width="286" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Show Advanced Encoder Options Tab" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Du1-9x-nHn">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -555,6 +600,7 @@
                 <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="I0V-hM-Fq0">
                     <rect key="frame" x="20" y="122" width="460" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
@@ -562,6 +608,7 @@
                 <popUpButton verticalHuggingPriority="750" id="352">
                     <rect key="frame" x="325" y="138" width="73" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="353">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -604,6 +651,7 @@
                 <button id="Ndp-Xh-ohY">
                     <rect key="frame" x="125" y="17" width="340" height="18"/>
                     <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
                     <buttonCell key="cell" type="check" title="Clear logs older than 30 days" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="lgn-RF-k0d">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -613,6 +661,7 @@
                     </connections>
                 </button>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-82" y="-85"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>

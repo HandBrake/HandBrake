@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -22,12 +23,13 @@
             <value key="minSize" type="size" width="427" height="304"/>
             <value key="maxSize" type="size" width="427" height="1000"/>
             <view key="contentView" id="ZP2-Cp-K5w">
-                <rect key="frame" x="0.0" y="5" width="427" height="409"/>
+                <rect key="frame" x="0.0" y="0.0" width="427" height="409"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="fPg-3n-1TN">
                         <rect key="frame" x="-2" y="373" width="157" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track Selection Behavior:" id="GbM-vm-RC2">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -37,6 +39,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Jsz-Er-bsF">
                         <rect key="frame" x="-2" y="349" width="157" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -46,6 +49,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Hqz-Lw-gAu">
                         <rect key="frame" x="-2" y="171" width="157" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -55,6 +59,7 @@
                     <popUpButton verticalHuggingPriority="750" id="oiD-QI-wly">
                         <rect key="frame" x="158" y="368" width="252" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mvw-Hg-JFM" id="21e-KY-8TR">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -74,6 +79,7 @@
                     <button toolTip="Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)." id="uF5-6E-EIe">
                         <rect key="frame" x="158" y="168" width="251" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="Add Closed Captions when available" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -85,6 +91,7 @@
                     <button toolTip="This search pass finds short sequences of foreign audio and provides subtitles for them." id="OOC-GZ-OFA">
                         <rect key="frame" x="158" y="150" width="251" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="Add &quot;Foreign Audio Search&quot;" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -103,6 +110,7 @@
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" id="Of7-71-Ci6">
                                     <rect key="frame" x="0.0" y="0.0" width="236" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -146,19 +154,24 @@
                                     </connections>
                                 </tableView>
                             </subviews>
+                            <animations/>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                        <animations/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
                             <rect key="frame" x="1" y="118" width="244" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="QAt-5X-NBT">
                         <rect key="frame" x="161" y="198" width="71" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" inset="3" id="PiQ-bA-7P1">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -175,6 +188,7 @@
 
 Burned-In subtitles are part of the video and can not be disabled during playback.
 Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+                        <animations/>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ej8-4k-1vd" id="vJS-B5-ELJ">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -195,6 +209,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="qAf-lQ-GN4">
                         <rect key="frame" x="-2" y="122" width="157" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Burn-In Behavior:" id="640-NB-Uby">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -207,6 +222,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                         <string key="toolTip">Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your player software or device does not support DVD Subtitles.
 
 Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="DVD Subtitles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="69Q-xB-Vyq">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -221,6 +237,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                         <string key="toolTip">Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your player software or device does not support Blu-ray Subtitles.
 
 Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="Blu-ray Subtitles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="bfV-9D-6dh">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -232,6 +249,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="MlS-tB-pEv">
                         <rect key="frame" x="159" y="46" width="250" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one of the above subtitle burn options will be applied, starting with the top." id="N4s-K9-RwM">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -241,6 +259,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     <button verticalHuggingPriority="750" id="sC2-52-liU">
                         <rect key="frame" x="363" y="14" width="54" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -253,6 +272,7 @@ DQ
                         </connections>
                     </button>
                 </subviews>
+                <animations/>
             </view>
             <point key="canvasLocation" x="302.5" y="103.5"/>
         </window>

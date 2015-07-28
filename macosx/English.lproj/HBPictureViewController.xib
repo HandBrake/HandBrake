@@ -2,8 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -946,7 +946,7 @@
                 <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="Mmn-Ae-9Yn" userLabel="Decomb Box">
                     <rect key="frame" x="233" y="43" width="207" height="62"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView" id="QFn-fS-gOg">
+                    <view key="contentView">
                         <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -1037,7 +1037,7 @@
                 <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="N21-it-wjY" userLabel="Deinterlace Box">
                     <rect key="frame" x="233" y="43" width="207" height="62"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView" id="zQw-9m-PM3">
+                    <view key="contentView">
                         <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>

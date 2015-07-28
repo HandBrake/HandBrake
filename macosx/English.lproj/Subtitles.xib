@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
@@ -25,8 +26,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="IiW-3a-Drv" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="27"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
                                 <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -141,23 +143,29 @@
                                 </connections>
                             </tableView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
+                    <animations/>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
                         <rect key="frame" x="-100" y="-100" width="685" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="GfM-TU-Tmr">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <tableHeaderView key="headerView" id="IiW-3a-Drv">
                         <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </tableHeaderView>
                 </scrollView>
                 <popUpButton verticalHuggingPriority="750" id="2Tb-KC-Ugi">
                     <rect key="frame" x="17" y="291" width="88" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -194,6 +202,7 @@
                 <button verticalHuggingPriority="750" id="QsM-28-Pya">
                     <rect key="frame" x="110" y="288" width="140" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Configure Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -210,6 +219,7 @@
                 <button verticalHuggingPriority="750" id="Vxx-gk-9kY">
                     <rect key="frame" x="248" y="288" width="116" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -224,6 +234,7 @@
                     </connections>
                 </button>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="373" y="444"/>
         </customView>
         <menu id="KgC-dn-Hq2">

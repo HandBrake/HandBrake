@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E17e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="5100" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
@@ -31,6 +31,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="fPg-3n-1TN">
                         <rect key="frame" x="10" y="406" width="145" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track Selection Behavior:" id="GbM-vm-RC2">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -40,6 +41,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Jsz-Er-bsF">
                         <rect key="frame" x="10" y="382" width="145" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Languages:" id="mAT-Jp-SG1">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -49,6 +51,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Hqz-Lw-gAu">
                         <rect key="frame" x="430" y="261" width="115" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NJl-q3-zXL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -58,6 +61,7 @@
                     <popUpButton verticalHuggingPriority="750" id="oiD-QI-wly">
                         <rect key="frame" x="158" y="401" width="252" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mvw-Hg-JFM" id="21e-KY-8TR">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -79,6 +83,7 @@
                         <rect key="frame" x="548" y="259" width="255" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Only the primary audio track will be encoded with the full encoder list. All other secondary audio output tracks will be encoded with first encoder only.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="Use only first encoder for secondary audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -98,6 +103,7 @@
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" id="Of7-71-Ci6">
                                     <rect key="frame" x="0.0" y="0.0" width="236" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -141,14 +147,18 @@
                                     </connections>
                                 </tableView>
                             </subviews>
+                            <animations/>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                        <animations/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
                             <rect key="frame" x="1" y="118" width="244" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                         <accessibility description="Audio Track Languages"/>
                         <connections>
@@ -158,6 +168,7 @@
                     <button verticalHuggingPriority="750" id="QAt-5X-NBT">
                         <rect key="frame" x="161" y="231" width="71" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="smallSquare" title="Show All" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" inset="3" id="PiQ-bA-7P1">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -171,6 +182,7 @@
                     <button verticalHuggingPriority="750" id="sC2-52-liU">
                         <rect key="frame" x="744" y="14" width="54" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -187,6 +199,7 @@ DQ
                         <rect key="frame" x="548" y="404" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="sdZ-Rx-JoG">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -201,6 +214,7 @@ DQ
                         <rect key="frame" x="548" y="386" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="cUX-iP-UAs">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -215,6 +229,7 @@ DQ
                         <rect key="frame" x="548" y="368" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="VnE-3R-bUf">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -229,6 +244,7 @@ DQ
                         <rect key="frame" x="548" y="350" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="8mC-Wx-myL">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -243,6 +259,7 @@ DQ
                         <rect key="frame" x="548" y="332" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="LX6-kc-5vq">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -256,6 +273,7 @@ DQ
                     <textField verticalHuggingPriority="750" id="l4i-pd-Cbk">
                         <rect key="frame" x="430" y="406" width="115" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru:" id="s6s-EH-5CB">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -265,6 +283,7 @@ DQ
                     <popUpButton toolTip="Set the audio codec to encode with when a suitable track can not be found for audio passthru." verticalHuggingPriority="750" id="LdN-Cx-ZJY">
                         <rect key="frame" x="548" y="285" width="152" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <popUpButtonCell key="cell" type="push" title="Item" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UJy-A2-Bb1" id="OqD-Tf-29c">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -288,6 +307,7 @@ DQ
                     <textField verticalHuggingPriority="750" id="Tth-IR-7cU">
                         <rect key="frame" x="430" y="290" width="115" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Passthru Fallback:" id="AQe-Sg-Qgh">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -304,6 +324,7 @@ DQ
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="X9E-z1-8Hv" id="r4m-GO-aN3">
                                     <rect key="frame" x="0.0" y="0.0" width="771" height="27"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -427,7 +448,7 @@ DQ
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" tickMarkPosition="above" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nEH-R2-7WW"/>
+                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nEH-R2-7WW"/>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
                                                 <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.gain" id="8lj-8n-vWu">
@@ -466,7 +487,7 @@ DQ
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="say-2a-x5G"/>
+                                            <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="say-2a-x5G"/>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
                                                 <binding destination="I6S-EX-Dvu" name="value" keyPath="arrangedObjects.drc" id="3lI-ks-4a5"/>
@@ -501,19 +522,24 @@ DQ
                                     </connections>
                                 </tableView>
                             </subviews>
+                            <animations/>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="MQZ-cv-4yN">
+                        <animations/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="MQZ-cv-4yN">
                             <rect key="frame" x="-100" y="-100" width="685" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="F0o-6a-EMC">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="F0o-6a-EMC">
                             <rect key="frame" x="-100" y="-100" width="15" height="206"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                         <tableHeaderView key="headerView" id="X9E-z1-8Hv">
                             <rect key="frame" x="0.0" y="0.0" width="771" height="17"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </tableHeaderView>
                         <accessibility description="Audio Track Presets"/>
                         <connections>
@@ -523,6 +549,7 @@ DQ
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RtZ-Cz-5mG">
                         <rect key="frame" x="18" y="198" width="252" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio encoder settings for the selected tracks:" id="007-WM-RmC">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -532,6 +559,7 @@ DQ
                     <segmentedControl verticalHuggingPriority="750" id="N4q-sT-WgW">
                         <rect key="frame" x="18" y="19" width="54" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="otA-K4-TxM">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
@@ -552,6 +580,7 @@ DQ
                         <rect key="frame" x="650" y="404" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="TrueHD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="z9d-P3-6UP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -566,6 +595,7 @@ DQ
                         <rect key="frame" x="650" y="386" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="FLAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="naS-No-CdV">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -580,6 +610,7 @@ DQ
                         <rect key="frame" x="650" y="368" width="77" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Enable this if your playback device supports EAC3. This permits EAC3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="EAC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -591,6 +622,7 @@ DQ
                         </connections>
                     </button>
                 </subviews>
+                <animations/>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>

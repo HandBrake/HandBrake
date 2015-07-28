@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6724" systemVersion="14C94b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6724"/>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
@@ -62,10 +63,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="GLD-lI-qeh" id="LlC-ua-mth">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="27"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
                                 <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
                                     <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="gRu-la-4i7">
@@ -200,7 +202,7 @@
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
-                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" tickMarkPosition="above" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="3XQ-vq-IRV"/>
+                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="3XQ-vq-IRV"/>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.PassThruDisabled" id="AY4-98-DiI"/>
@@ -239,7 +241,7 @@
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
-                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="jVw-iZ-yhL"/>
+                                        <sliderCell key="dataCell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="jVw-iZ-yhL"/>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
                                             <binding destination="rzb-Si-Kpf" name="enabled" keyPath="arrangedObjects.DRCEnabled" id="uRE-B4-yzg"/>
@@ -278,24 +280,30 @@
                                 </connections>
                             </tableView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="1Fp-Pd-fdH">
+                    <animations/>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="1Fp-Pd-fdH">
                         <rect key="frame" x="-100" y="-100" width="685" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="5LV-7H-phB">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="5LV-7H-phB">
                         <rect key="frame" x="-100" y="-100" width="15" height="206"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <tableHeaderView key="headerView" id="GLD-lI-qeh">
                         <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </tableHeaderView>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="vFP-nq-IQg">
                     <rect key="frame" x="110" y="288" width="140" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Configure Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aYF-d5-Ya6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -312,6 +320,7 @@
                 <button verticalHuggingPriority="750" id="wcL-rL-aYS">
                     <rect key="frame" x="248" y="288" width="116" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="q2P-Tg-cBJ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -328,6 +337,7 @@
                 <popUpButton verticalHuggingPriority="750" id="jrP-M5-2Rq">
                     <rect key="frame" x="17" y="291" width="88" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="AoT-G9-aA4">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -357,6 +367,7 @@
                     </connections>
                 </popUpButton>
             </subviews>
+            <animations/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="ee3-5O-TtC"/>
         <menu id="hyy-qd-qpe">

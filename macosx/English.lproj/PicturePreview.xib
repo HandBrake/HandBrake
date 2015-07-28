@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
-        <plugIn identifier="com.apple.QTKitIBPlugin" version="7702"/>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.QTKitIBPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreviewController">
@@ -39,6 +40,7 @@
                     <qtMovieView preservesAspectRatio="YES" id="207">
                         <rect key="frame" x="0.0" y="0.0" width="490" height="360"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <color key="fillColor" red="0.80000000999999998" green="0.80000000999999998" blue="0.80000000999999998" alpha="1" colorSpace="calibratedRGB"/>
                     </qtMovieView>
                     <customView id="2me-4k-EDi" userLabel="Picture Controls" customClass="HBHUDView">
@@ -48,6 +50,7 @@
                             <button toolTip="Encode And Play Back A Live Preview At Your Current Settings" verticalHuggingPriority="750" id="215">
                                 <rect key="frame" x="17" y="11" width="80" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="push" title="Live Preview" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="216">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -59,6 +62,7 @@
                             <button toolTip="Show Picture Settings Inspector" verticalHuggingPriority="750" id="271">
                                 <rect key="frame" x="378" y="11" width="61" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="push" title="Settings" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="272">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -70,6 +74,7 @@
                             <button toolTip="Scale Preview To Screen" verticalHuggingPriority="750" id="275">
                                 <rect key="frame" x="276" y="11" width="96" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="push" title="Scale To Screen" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="276">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -81,6 +86,7 @@
                             <textField verticalHuggingPriority="750" id="234">
                                 <rect key="frame" x="105" y="14" width="48" height="11"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="235">
                                     <font key="font" metaFont="miniSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -90,6 +96,7 @@
                             <textField verticalHuggingPriority="750" id="q81-Om-Azd">
                                 <rect key="frame" x="211" y="14" width="21" height="11"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="sec" id="APs-l9-qFj">
                                     <font key="font" metaFont="miniSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,6 +106,7 @@
                             <popUpButton toolTip="Select The Length Of Live Preview to Encode" verticalHuggingPriority="750" id="226">
                                 <rect key="frame" x="158" y="12" width="49" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="231" id="227">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -115,6 +123,7 @@
                             <slider verticalHuggingPriority="750" id="209">
                                 <rect key="frame" x="18" y="39" width="420" height="16"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="9" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="210">
                                     <font key="font" metaFont="miniSystem"/>
                                 </sliderCell>
@@ -125,6 +134,7 @@
                             <textField verticalHuggingPriority="750" id="38">
                                 <rect key="frame" x="15" y="55" width="430" height="20"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="165">
                                     <font key="font" metaFont="smallSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -134,6 +144,7 @@
                             <textField verticalHuggingPriority="750" id="280">
                                 <rect key="frame" x="15" y="77" width="426" height="12"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" id="281">
                                     <font key="font" metaFont="miniSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -141,6 +152,7 @@
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <animations/>
                     </customView>
                     <customView hidden="YES" id="COi-Ia-2yt" userLabel="Playback Controls" customClass="HBHUDView">
                         <rect key="frame" x="15" y="32" width="460" height="100"/>
@@ -149,6 +161,7 @@
                             <slider verticalHuggingPriority="750" id="341">
                                 <rect key="frame" x="18" y="17" width="337" height="21"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <sliderCell key="cell" continuous="YES" alignment="left" maxValue="100" tickMarkPosition="above" sliderType="linear" id="346"/>
                                 <connections>
                                     <action selector="previewScrubberChanged:" target="-2" id="384"/>
@@ -157,6 +170,7 @@
                             <button toolTip="Toggle Play/Pause" id="361">
                                 <rect key="frame" x="207" y="44" width="36" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="play-p" imagePosition="only" alignment="center" alternateImage="pause-p" imageScaling="proportionallyDown" id="362">
                                     <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -168,6 +182,7 @@
                             <button toolTip="Go To Beginning" id="375">
                                 <rect key="frame" x="165" y="49" width="32" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="prev-p" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" id="376">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -179,6 +194,7 @@
                             <button toolTip="Go To End" id="378">
                                 <rect key="frame" x="253" y="49" width="32" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="next-p" imagePosition="only" alignment="center" controlSize="mini" imageScaling="proportionallyDown" id="379">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -190,6 +206,7 @@
                             <button toolTip="Show Still Previews" verticalHuggingPriority="750" id="365">
                                 <rect key="frame" x="350" y="54" width="81" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="push" title="Still Previews" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="366">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -201,6 +218,7 @@
                             <textField verticalHuggingPriority="750" id="372">
                                 <rect key="frame" x="349" y="20" width="94" height="14"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="373">
                                     <font key="font" metaFont="smallSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -208,6 +226,7 @@
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <animations/>
                     </customView>
                     <customView hidden="YES" id="F8A-dU-Y1l" userLabel="Encoding Controls" customClass="HBHUDView">
                         <rect key="frame" x="15" y="240" width="460" height="100"/>
@@ -216,6 +235,7 @@
                             <textField verticalHuggingPriority="750" id="223">
                                 <rect key="frame" x="17" y="60" width="425" height="14"/>
                                 <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Preparing Preview" id="224">
                                     <font key="font" metaFont="smallSystemBold"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -225,10 +245,12 @@
                             <progressIndicator verticalHuggingPriority="750" maxValue="1" bezeled="NO" indeterminate="YES" controlSize="small" style="bar" id="213">
                                 <rect key="frame" x="20" y="27" width="346" height="12"/>
                                 <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
                             </progressIndicator>
                             <button toolTip="Cancel Live Preview Encode" verticalHuggingPriority="750" id="261">
                                 <rect key="frame" x="383" y="25" width="58" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <animations/>
                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="262">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="miniSystem"/>
@@ -238,8 +260,10 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <animations/>
                     </customView>
                 </subviews>
+                <animations/>
             </view>
         </window>
     </objects>
