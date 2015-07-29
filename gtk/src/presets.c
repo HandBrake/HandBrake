@@ -1524,7 +1524,9 @@ ghb_presets_load(signal_user_data_t *ud)
     {
         if (presets_add_config_file("presets") < 0)
         {
-            g_warning("Failed to read preset file");
+            ghb_log("Failed to read preset file, initailizing new presets...");
+            hb_presets_builtin_update();
+            store_presets();
         }
     }
 }
