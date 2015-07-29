@@ -1041,7 +1041,7 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
     GtkTreeView       *treeview;
     GtkTreeStore      *store;
     GtkTreePath       *parent_path;
-    GtkTreeIter        iter, *piter;
+    GtkTreeIter        iter, parent_iter, *piter;
     gint               count, ii;
 
     if (path == NULL)
@@ -1064,9 +1064,9 @@ ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
     parent_path = ghb_tree_path_new_from_index(path);
     if (parent_path != NULL)
     {
-        GtkTreeIter tmp_iter;
-        gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &tmp_iter, parent_path);
-        piter = &tmp_iter;
+        gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &parent_iter,
+                                parent_path);
+        piter = &parent_iter;
         gtk_tree_path_free(parent_path);
     }
     else
@@ -1206,7 +1206,7 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
     GtkTreeView       *treeview;
     GtkTreeStore      *store;
     GtkTreePath       *folder_treepath;
-    GtkTreeIter        iter, *piter;
+    GtkTreeIter        iter, parent_iter, *piter;
     const gchar       *name;
     const gchar       *description;
     gint               type;
@@ -1230,10 +1230,9 @@ presets_list_append(signal_user_data_t *ud, const hb_preset_index_t *path)
     folder_treepath = ghb_tree_path_new_from_index(folder_path);
     if (folder_treepath != NULL)
     {
-        GtkTreeIter tmp_iter;
-        gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &tmp_iter,
+        gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &parent_iter,
                                 folder_treepath);
-        piter = &tmp_iter;
+        piter = &parent_iter;
         gtk_tree_path_free(folder_treepath);
     }
     else
