@@ -77,9 +77,6 @@ static GstBusSyncReply create_window(GstBus *bus, GstMessage *msg,
                 gpointer data);
 #endif
 
-G_MODULE_EXPORT gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event,
-                signal_user_data_t *ud);
-
 void
 ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 {
@@ -152,6 +149,27 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
         *height = *height * den / num;
 }
 
+static GdkWindow*
+preview_window(GtkWidget *widget)
+{
+    return gtk_layout_get_bin_window(GTK_LAYOUT(widget));
+}
+
+void
+preview_set_size(signal_user_data_t *ud, int width, int height)
+{
+    GtkWidget *widget;
+
+    widget = GHB_WIDGET (ud->builder, "preview_image");
+    gtk_widget_set_size_request(widget, width, height);
+    gtk_layout_set_size(GTK_LAYOUT(widget), width, height);
+    widget = GHB_WIDGET (ud->builder, "preview_hud_box");
+    gtk_widget_set_size_request(widget, width, height);
+
+    ud->preview->width = width;
+    ud->preview->height = height;
+}
+
 void
 ghb_preview_init(signal_user_data_t *ud)
 {
@@ -160,20 +178,18 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview = g_malloc0(sizeof(preview_t));
     ud->preview->view = GHB_WIDGET(ud->builder, "preview_image");
     gtk_widget_realize(ud->preview->view);
-    g_signal_connect(G_OBJECT(ud->preview->view), "draw",
-                    G_CALLBACK(preview_expose_cb), ud);
 
     ud->preview->pause = TRUE;
     ud->preview->encode_frame = -1;
     ud->preview->live_id = -1;
-    widget = GHB_WIDGET (ud->builder, "preview_button_image");
+    widget = GHB_WIDGET(ud->builder, "preview_button_image");
     gtk_widget_get_size_request(widget, &ud->preview->button_width, &ud->preview->button_height);
 
 #if defined(_ENABLE_GST)
     GstBus *bus;
     GstElement *xover;
 
-    if (!gdk_window_ensure_native(gtk_widget_get_window(ud->preview->view)))
+    if (!gdk_window_ensure_native(preview_window(ud->preview->view)))
     {
         g_message("Couldn't create native window for GstXOverlay. Disabling live preview.");
         GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
@@ -182,11 +198,19 @@ ghb_preview_init(signal_user_data_t *ud)
         gtk_widget_hide (widget);
         return;
     }
+    widget = GHB_WIDGET(ud->builder, "preview_hud");
+    gtk_widget_realize(widget);
+    // Use a native window for the HUD.  Client side windows don't get
+    // updated properly as video changes benieth them.
+    if (!gdk_window_ensure_native(gtk_widget_get_window(widget)))
+    {
+        g_message("Couldn't create native window for HUD.");
+    }
 
 #if !defined(_WIN32)
-    ud->preview->xid = GDK_WINDOW_XID(gtk_widget_get_window(ud->preview->view));
+    ud->preview->xid = GDK_WINDOW_XID(preview_window(ud->preview->view));
 #else
-    ud->preview->xid = GDK_WINDOW_HWND(gtk_widget_get_window(ud->preview->view));
+    ud->preview->xid = GDK_WINDOW_HWND(preview_window(ud->preview->view));
 #endif
     ud->preview->play = gst_element_factory_make("playbin", "play");
     xover = gst_element_factory_make("gconfvideosink", "xover");
@@ -331,9 +355,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
 
         if (width != ud->preview->width || height != ud->preview->height)
         {
-            gtk_widget_set_size_request(ud->preview->view, width, height);
-            ud->preview->width = width;
-            ud->preview->height = height;
+            preview_set_size(ud, width, height);
         }
     }
 }
@@ -909,14 +931,10 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 #endif
 }
 
-static void _draw_pixbuf(GdkWindow *window, GdkPixbuf *pixbuf)
+static void _draw_pixbuf(cairo_t *cr, GdkPixbuf *pixbuf)
 {
-    cairo_t *cr;
-
-    cr = gdk_cairo_create(window);
     gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
     cairo_paint(cr);
-    cairo_destroy(cr);
 }
 
 void
@@ -965,11 +983,9 @@ ghb_set_preview_image(signal_user_data_t *ud)
     if (preview_width != ud->preview->width ||
         preview_height != ud->preview->height)
     {
-        gtk_widget_set_size_request(widget, preview_width, preview_height);
-        ud->preview->width = preview_width;
-        ud->preview->height = preview_height;
+        preview_set_size(ud, preview_width, preview_height);
     }
-    _draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
+    gtk_widget_queue_draw(widget);
 
     gchar *text = g_strdup_printf("%d x %d", width, height);
     widget = GHB_WIDGET (ud->builder, "preview_dims");
@@ -997,6 +1013,75 @@ ghb_set_preview_image(signal_user_data_t *ud)
             gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
             g_object_unref(scaled_preview);
         }
+    }
+}
+
+static cairo_region_t*
+curved_rect_mask(GtkWidget *widget)
+{
+    GdkWindow *window;
+    cairo_region_t *shape;
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    double w, h;
+    int radius;
+
+    if (!gtk_widget_get_realized(widget))
+        return NULL;
+
+    window = gtk_widget_get_window(widget);
+    w = gdk_window_get_width(window);
+    h = gdk_window_get_height(window);
+    if (w <= 50 || h <= 50)
+        return NULL;
+    radius = h / 4;
+    surface = gdk_window_create_similar_surface(window,
+                                                CAIRO_CONTENT_COLOR_ALPHA,
+                                                w, h);
+    cr = cairo_create (surface);
+
+    if (radius > w / 2)
+        radius = w / 2;
+    if (radius > h / 2)
+        radius = h / 2;
+
+    // fill shape with black
+    cairo_save(cr);
+    cairo_rectangle (cr, 0, 0, w, h);
+    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+    cairo_fill (cr);
+    cairo_restore (cr);
+
+    cairo_move_to  (cr, 0, radius);
+    cairo_curve_to (cr, 0 , 0, 0 , 0, radius, 0);
+    cairo_line_to (cr, w - radius, 0);
+    cairo_curve_to (cr, w, 0, w, 0, w, radius);
+    cairo_line_to (cr, w , h - radius);
+    cairo_curve_to (cr, w, h, w, h, w - radius, h);
+    cairo_line_to (cr, 0 + radius, h);
+    cairo_curve_to (cr, 0, h, 0, h, 0, h - radius);
+
+    cairo_close_path(cr);
+
+    cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo_fill(cr);
+
+    cairo_destroy(cr);
+    shape = gdk_cairo_region_create_from_surface(surface);
+    cairo_surface_destroy(surface);
+
+    return shape;
+}
+
+static void
+hud_update_shape(GtkWidget *widget)
+{
+    cairo_region_t *shape;
+    shape = curved_rect_mask(widget);
+    if (shape != NULL)
+    {
+        gtk_widget_shape_combine_region(widget, shape);
+        cairo_region_destroy(shape);
     }
 }
 
@@ -1052,33 +1137,10 @@ delayed_expose_cb(signal_user_data_t *ud)
 #endif
 #endif
 
-#if 0 // GTK_CHECK_VERSION(3, 0, 0)
-//
-// Only needed if the problems with GtkOverlay are ever resolved
-//
 G_MODULE_EXPORT gboolean
-position_overlay_cb(
-    GtkWidget *overlay,
+preview_draw_cb(
     GtkWidget *widget,
-    GdkRectangle *rect,
-    signal_user_data_t *ud)
-{
-    GtkRequisition min_size, size;
-    gtk_widget_get_preferred_size(widget, &min_size, &size);
-
-    rect->width = MAX(min_size.width, size.width);
-    rect->height = MAX(min_size.height, size.height);
-    rect->x = MAX(0, ud->preview->width / 2 - rect->width / 2);
-    rect->y = MAX(0, ud->preview->height - rect->height - 50);
-
-    return TRUE;
-}
-#endif
-
-G_MODULE_EXPORT gboolean
-preview_expose_cb(
-    GtkWidget *widget,
-    GdkEventExpose *event,
+    cairo_t *cr,
     signal_user_data_t *ud)
 {
 #if defined(_ENABLE_GST)
@@ -1101,9 +1163,8 @@ preview_expose_cb(
             // cleaned up here. But a delayed gst_x_overlay_expose()
             // takes care of it.
             g_idle_add((GSourceFunc)delayed_expose_cb, ud);
-            return FALSE;
         }
-        return TRUE;
+        return FALSE;
     }
 #else
     if (ud->preview->live_enabled && ud->preview->state == PREVIEW_STATE_LIVE)
@@ -1124,19 +1185,17 @@ preview_expose_cb(
             // cleaned up here. But a delayed gst_x_overlay_expose()
             // takes care of it.
             g_idle_add((GSourceFunc)delayed_expose_cb, ud);
-            return FALSE;
         }
-        return TRUE;
+        return FALSE;
     }
 #endif
 #endif
 
     if (ud->preview->pix != NULL)
     {
-        _draw_pixbuf(gtk_widget_get_window(ud->preview->view), ud->preview->pix);
-        //_draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
+        _draw_pixbuf(cr, ud->preview->pix);
     }
-    return TRUE;
+    return FALSE;
 }
 
 G_MODULE_EXPORT void
@@ -1293,13 +1352,14 @@ hud_timeout(signal_user_data_t *ud)
     return FALSE;
 }
 
+static gboolean in_hud = FALSE;
+
 G_MODULE_EXPORT gboolean
 hud_enter_cb(
     GtkWidget *widget,
     GdkEventCrossing *event,
     signal_user_data_t *ud)
 {
-    g_debug("hud_enter_cb()");
     if (hud_timeout_id != 0)
     {
         GMainContext *mc;
@@ -1311,8 +1371,22 @@ hud_enter_cb(
             g_source_destroy(source);
     }
     widget = GHB_WIDGET(ud->builder, "preview_hud");
-    gtk_widget_show(widget);
+    if (!gtk_widget_get_visible(widget))
+    {
+        gtk_widget_show(widget);
+    }
     hud_timeout_id = 0;
+    in_hud = TRUE;
+    return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+hud_leave_cb(
+    GtkWidget *widget,
+    GdkEventCrossing *event,
+    signal_user_data_t *ud)
+{
+    in_hud = FALSE;
     return FALSE;
 }
 
@@ -1322,7 +1396,6 @@ preview_leave_cb(
     GdkEventCrossing *event,
     signal_user_data_t *ud)
 {
-    g_debug("hud_leave_cb()");
     if (hud_timeout_id != 0)
     {
         GMainContext *mc;
@@ -1343,7 +1416,6 @@ preview_motion_cb(
     GdkEventMotion *event,
     signal_user_data_t *ud)
 {
-    //g_debug("hud_motion_cb %d", hud_timeout_id);
     if (hud_timeout_id != 0)
     {
         GMainContext *mc;
@@ -1359,78 +1431,20 @@ preview_motion_cb(
     {
         gtk_widget_show(widget);
     }
-    hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
+    if (!in_hud)
+    {
+        hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
+    }
     return FALSE;
 }
 
-cairo_region_t*
-ghb_curved_rect_mask(gint width, gint height, gint radius)
-{
-    cairo_region_t *shape;
-    cairo_surface_t *surface;
-    cairo_t *cr;
-    double w, h;
-
-    if (!width || !height)
-        return NULL;
-
-    surface = cairo_image_surface_create(CAIRO_FORMAT_A8, width, height);
-    cr = cairo_create (surface);
-
-    w = width;
-    h = height;
-    if (radius > width / 2)
-        radius = width / 2;
-    if (radius > height / 2)
-        radius = height / 2;
-
-    // fill shape with black
-    cairo_save(cr);
-    cairo_rectangle (cr, 0, 0, width, height);
-    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-    cairo_fill (cr);
-    cairo_restore (cr);
-
-    cairo_move_to  (cr, 0, radius);
-    cairo_curve_to (cr, 0 , 0, 0 , 0, radius, 0);
-    cairo_line_to (cr, w - radius, 0);
-    cairo_curve_to (cr, w, 0, w, 0, w, radius);
-    cairo_line_to (cr, w , h - radius);
-    cairo_curve_to (cr, w, h, w, h, w - radius, h);
-    cairo_line_to (cr, 0 + radius, h);
-    cairo_curve_to (cr, 0, h, 0, h, 0, h - radius);
-
-    cairo_close_path(cr);
-
-    cairo_set_source_rgb(cr, 1, 1, 1);
-    cairo_fill(cr);
-
-    cairo_destroy(cr);
-    shape = gdk_cairo_region_create_from_surface(surface);
-    cairo_surface_destroy(surface);
-
-    return shape;
-}
-
 G_MODULE_EXPORT void
-preview_hud_size_alloc_cb(
+hud_size_alloc_cb(
     GtkWidget *widget,
     GtkAllocation *allocation,
     signal_user_data_t *ud)
 {
-    cairo_region_t *shape;
-
-    //g_message("preview_hud_size_alloc_cb()");
-    if (gtk_widget_get_visible(widget) && allocation->height > 50)
-    {
-        shape = ghb_curved_rect_mask(allocation->width,
-                                    allocation->height, allocation->height/4);
-        if (shape != NULL)
-        {
-            gtk_widget_shape_combine_region(widget, shape);
-            cairo_region_destroy(shape);
-        }
-    }
+    hud_update_shape(widget);
 }
 
 G_MODULE_EXPORT gboolean
@@ -1441,7 +1455,6 @@ preview_configure_cb(
 {
     gint x, y;
 
-    //g_message("preview_configure_cb()");
     if (gtk_widget_get_visible(widget))
     {
         gtk_window_get_position(GTK_WINDOW(widget), &x, &y);

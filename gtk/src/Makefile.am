@@ -73,8 +73,6 @@ ghb_SOURCES = \
 	renderer_button.c \
 	ghbcellrenderertext.c \
 	ghbcellrenderertext.h \
-	ghbcompositor.c \
-	ghbcompositor.h \
 	ghb-dvd.c \
 	ghb-dvd.h \
 	marshalers.c \
