@@ -910,6 +910,7 @@ libx264 authors:
                   <object class="GtkToolbar" id="toolbar1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="show-arrow">False</property>
                     <property name="icon_size">5</property>
                     <child>
                       <object class="GtkToolButton" id="sourcetoolbutton">
