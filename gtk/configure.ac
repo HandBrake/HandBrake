@@ -119,19 +119,13 @@ PKG_PROG_PKG_CONFIG
 GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
 
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
-GST0_MODULES="gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-audio-0.10 gstreamer-pbutils-0.10"
 
 if test "x$gst_disable" = "xno" ; then
     PKG_CHECK_MODULES(GStreamer1, [$GST1_MODULES], use_gst1=yes, use_gst1=no)
     if test "x$use_gst1" = "xyes" ; then
         GHB_PACKAGES="$GHB_PACKAGES $GST1_MODULES"
     else
-        PKG_CHECK_MODULES(GStreamer0, [$GST0_MODULES], use_gst0=yes, use_gst0=no)
-        if test "x$use_gst0" = "xyes" ; then
-            GHB_PACKAGES="$GHB_PACKAGES $GST0_MODULES"
-        else
-            gst_disable="yes"
-        fi
+        gst_disable="yes"
     fi
 fi
 
