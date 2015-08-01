@@ -20,7 +20,7 @@ namespace HandBrakeWPF.Model.Picture
         None = 0,
         [Display(Name = "Custom")]
         Custom = 1,
-        [Display(Name = "Source Max Size")]
+        [Display(Name = "Always use Source Resolution")]
         SourceMaximum = 2,
     }
 }
