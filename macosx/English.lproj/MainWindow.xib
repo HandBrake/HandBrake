@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A234d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
@@ -62,11 +62,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <animations/>
                     </progressIndicator>
-                    <tabView controlSize="small" initialItem="eij-Sn-QmJ" id="1474">
+                    <tabView controlSize="small" initialItem="1477" id="1474">
                         <rect key="frame" x="13" y="27" width="894" height="357"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <animations/>
                         <tabViewItems>
+                            <tabViewItem label="Video" identifier="1" id="1477">
+                                <view key="view" id="1478">
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
+                                </view>
+                            </tabViewItem>
                             <tabViewItem label="Picture" identifier="" id="eij-Sn-QmJ" userLabel="PictureTab">
                                 <view key="view" id="nvx-9b-6fF">
                                     <rect key="frame" x="10" y="25" width="874" height="319"/>
@@ -74,37 +81,30 @@
                                     <animations/>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Video" identifier="1" id="1477">
-                                <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="25" width="900" height="319"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <animations/>
-                                </view>
-                            </tabViewItem>
                             <tabViewItem label="Audio" identifier="2" id="1475">
                                 <view key="view" id="1476">
-                                    <rect key="frame" x="10" y="25" width="900" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Subtitles" identifier="3" id="5194">
                                 <view key="view" id="5195">
-                                    <rect key="frame" x="10" y="25" width="900" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Advanced" identifier="5" id="2015">
                                 <view key="view" id="2016">
-                                    <rect key="frame" x="10" y="25" width="900" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Chapters" identifier="4" id="1989">
                                 <view key="view" id="1990">
-                                    <rect key="frame" x="10" y="25" width="900" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
                                 </view>
@@ -286,7 +286,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
-                        <rect key="frame" x="70" y="540" width="310" height="14.000000042040575"/>
+                        <rect key="frame" x="70" y="540" width="310" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <animations/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
@@ -486,7 +486,7 @@
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="391" y="542.00000004203991" width="510" height="12"/>
+                        <rect key="frame" x="391" y="542" width="510" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <animations/>
                     </progressIndicator>
