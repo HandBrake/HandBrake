@@ -33,6 +33,11 @@
     NSString *bsdName;
 }
 
+- (instancetype)init
+{
+    @throw nil;
+}
+
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath
 {
     return [[self alloc] initWithPath:aPath];

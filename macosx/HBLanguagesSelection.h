@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) NSString *language;
 @property (nonatomic, readonly) NSString *iso639_2;
 
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithLanguage:(NSString *)value iso639_2code:(NSString *)code NS_DESIGNATED_INITIALIZER;
 
 @end;

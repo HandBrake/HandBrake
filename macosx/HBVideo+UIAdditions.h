@@ -41,6 +41,7 @@
 @end
 
 @interface HBPresetsTransformer : NSValueTransformer
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithEncoder:(int)encoder NS_DESIGNATED_INITIALIZER;
 @end
 

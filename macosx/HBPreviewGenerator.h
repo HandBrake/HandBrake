@@ -24,8 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBPreviewGenerator : NSObject
 
-@property (nonatomic, weak, nullable) id <HBPreviewGeneratorDelegate> delegate;
+@property (nonatomic, assign, nullable) id <HBPreviewGeneratorDelegate> delegate;
 
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
 /* Still image generator */

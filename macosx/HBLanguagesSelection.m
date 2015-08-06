@@ -9,6 +9,11 @@
 
 @implementation HBLang
 
+- (instancetype)init
+{
+    @throw nil;
+}
+
 - (instancetype)initWithLanguage:(NSString *)value iso639_2code:(NSString *)code
 {
     self = [super init];

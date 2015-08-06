@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The HBCore used for encoding.
 @property (nonatomic, readonly) HBCore *core;
 
-@property (nonatomic, weak, nullable) HBController *controller;
+@property (nonatomic, assign, nullable) HBController *controller;
 @property (nonatomic, weak, nullable) HBAppDelegate *delegate;
 
 @property (nonatomic, readonly) NSUInteger count;

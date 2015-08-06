@@ -248,6 +248,11 @@
     int _encoder;
 }
 
+- (instancetype)init
+{
+    @throw nil;
+}
+
 - (instancetype)initWithEncoder:(int)encoder
 {
     self = [super init];
@@ -306,6 +311,11 @@
     BOOL _reverse;
     double _min;
     double _max;
+}
+
+- (instancetype)init
+{
+    return [self initWithReversedDirection:NO min:0 max:50];
 }
 
 - (instancetype)initWithReversedDirection:(BOOL)reverse min:(double)min max:(double)max

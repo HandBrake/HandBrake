@@ -20,7 +20,7 @@
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager;
 
-@property (nonatomic, readwrite, weak) id<HBPresetsViewControllerDelegate> delegate;
+@property (nonatomic, readwrite, assign) id<HBPresetsViewControllerDelegate> delegate;
 
 - (IBAction)exportPreset:(id)sender;
 - (IBAction)importPreset:(id)sender;

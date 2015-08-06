@@ -25,6 +25,11 @@
 
 @implementation HBPreviewGenerator
 
+- (instancetype)init
+{
+    @throw nil;
+}
+
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job
 {
     self = [super init];

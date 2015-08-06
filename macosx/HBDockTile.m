@@ -22,6 +22,11 @@ NSString *dockTilePercentFormat = @"%2.1f%%";
 
 @implementation HBDockTile
 
+- (instancetype)init
+{
+    @throw nil;
+}
+
 - (instancetype)initWithDockTile:(NSDockTile *)dockTile image:(NSImage *)image
 {
     self = [super init];
