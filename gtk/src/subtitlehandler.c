@@ -1273,20 +1273,28 @@ subtitle_update_pref_lang(signal_user_data_t *ud, const iso639_lang_t *lang)
 
     ghb_dict_set_string(ud->settings, "PreferredLanguage", code);
 
+    // If there is no preferred language, disable options that require
+    // a preferred language to be set.
+    gboolean sensitive = !(lang == NULL || !strncmp(code, "und", 4));
     button = GTK_BUTTON(GHB_WIDGET(ud->builder,
                                   "SubtitleAddForeignAudioSubtitle"));
-    str = g_strdup_printf(_("Add %s subtitle track if default audio is not %s"),
-                          name, name);
+    if (sensitive)
+    {
+        str = g_strdup_printf(
+            _("Add %s subtitle track if default audio is not %s"), name, name);
+    }
+    else
+    {
+        str = g_strdup_printf(
+            _("Add subtitle track if default audio is not your preferred language"));
+    }
     gtk_button_set_label(button, str);
     g_free(str);
 
-    // If there is no preferred language, hide options that require
-    // a preferred language to be set.
-    gboolean visible = !(lang == NULL || !strncmp(code, "und", 4));
-    gtk_widget_set_visible(GTK_WIDGET(button), visible);
+    gtk_widget_set_sensitive(GTK_WIDGET(button), sensitive);
     button = GTK_BUTTON(GHB_WIDGET(ud->builder,
                                   "SubtitleAddForeignAudioSearch"));
-    gtk_widget_set_visible(GTK_WIDGET(button), visible);
+    gtk_widget_set_sensitive(GTK_WIDGET(button), sensitive);
 }
 
 void

@@ -4849,7 +4849,9 @@ for determining subtitle selection settings when there is foreign audio.</proper
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Add "Foreign Audio Search" when the default audio track is your preferred language.
-This search pass finds short sequences of foreign audio and provides subtitles for them.</property>
+This search pass finds short sequences of foreign audio and provides subtitles for them.
+
+This option requires a language to be set in the Selected Languages list.</property>
                             <property name="halign">start</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -4866,7 +4868,9 @@ This search pass finds short sequences of foreign audio and provides subtitles f
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip_text" translatable="yes">When the default audio track is not your preferred language, add a subtitle track.</property>
+                            <property name="tooltip_text" translatable="yes">When the default audio track is not your preferred language, add a subtitle track.
+
+This option requires a language to be set in the Selected Languages list.</property>
                             <property name="halign">start</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
