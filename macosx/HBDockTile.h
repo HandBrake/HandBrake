@@ -10,6 +10,7 @@
 
 @interface HBDockTile : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithDockTile:(NSDockTile *)dockTile image:(NSImage *)image NS_DESIGNATED_INITIALIZER;
 
 /**

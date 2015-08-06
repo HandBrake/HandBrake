@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBDVDDetector : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
+
 + (HBDVDDetector *)detectorForPath: (NSString *)aPath;
 - (HBDVDDetector *)initWithPath: (NSString *)aPath NS_DESIGNATED_INITIALIZER;
 
