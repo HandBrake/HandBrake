@@ -84,20 +84,6 @@
     return sizeInfo;
 }
 
-- (NSString *)sourceInfo
-{
-    NSString *sizeInfo = @"";
-
-    sizeInfo = [NSString stringWithFormat:@"%d x %d",  self.sourceWidth, self.sourceHeight];
-
-    if (self.sourceWidth != self.sourceDisplayWidth)
-    {
-        sizeInfo = [NSString stringWithFormat:@"%d x %d, Anamorphic: %d x %d", self.sourceWidth, self.sourceHeight, self.sourceDisplayWidth, self.sourceHeight];
-    }
-
-    return sizeInfo;
-}
-
 - (NSString *)summary
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
