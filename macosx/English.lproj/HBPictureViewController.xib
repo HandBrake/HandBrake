@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A243d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
@@ -19,25 +19,8 @@
             <rect key="frame" x="0.0" y="0.0" width="875" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" id="FPy-5b-0Oe">
-                    <rect key="frame" x="562" y="307" width="90" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Width:" id="QXA-8X-hD2">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="ocB-vz-iqd">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
                 <textField verticalHuggingPriority="750" id="LWv-Y9-b0S">
-                    <rect key="frame" x="658" y="306" width="61" height="19"/>
+                    <rect key="frame" x="375" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XYg-xi-ExT">
@@ -47,12 +30,6 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <accessibilityConnection property="title" destination="FPy-5b-0Oe" id="YdZ-5d-tpt"/>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="S0y-AY-6DT" id="2b6-KZ-95M">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IKb-wD-kbq"/>
                         <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="j71-Y5-RpA"/>
                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="IKb-wD-kbq" id="S0y-AY-6DT">
@@ -63,34 +40,28 @@
                         <outlet property="nextKeyView" destination="JC3-5O-BXA" id="oN1-b9-dyt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
-                    <rect key="frame" x="658" y="252" width="50" height="19"/>
+                <textField verticalHuggingPriority="750" id="nQe-Vq-Og2">
+                    <rect key="frame" x="457" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
-                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0ho-7Y-adD">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="gd7-JE-NQS"/>
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <accessibilityConnection property="title" destination="gn4-8h-sfh" id="hpW-bc-SQg"/>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="c3e-8E-4E8" id="7DE-do-W8T">
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" id="8ix-ds-9fO">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="BXi-rt-OOn"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="BXi-rt-OOn" id="c3e-8E-4E8">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.parWidth" id="taN-LH-eRG"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.height" id="zm8-6D-NYY"/>
+                        <outlet property="nextKeyView" destination="JC3-5O-BXA" id="Ly3-4t-fIs"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="JC3-5O-BXA">
-                    <rect key="frame" x="658" y="279" width="50" height="19"/>
+                    <rect key="frame" x="375" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
@@ -102,11 +73,6 @@
                     <connections>
                         <accessibilityConnection property="title" destination="vOY-Ix-eha" id="Gac-U9-X6e"/>
                         <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IP2-ew-IdV"/>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" previousBinding="lWR-hz-s9a" id="RaY-1A-6vL">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="IP2-ew-IdV" id="lWR-hz-s9a">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -117,41 +83,17 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="vOY-Ix-eha">
-                    <rect key="frame" x="562" y="280" width="90" height="16"/>
+                    <rect key="frame" x="340" y="258" width="29" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Width:" id="gVj-RG-PcL">
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="Ejc-ft-dS0">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" id="gn4-8h-sfh">
-                    <rect key="frame" x="562" y="253" width="90" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR Height:" id="TxS-H4-WXY">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.picture.customAnamorphicEnabled" id="Nah-49-1US">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
-                    <rect key="frame" x="162" y="304" width="15" height="22"/>
+                    <rect key="frame" x="154" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
@@ -174,7 +116,7 @@
                     </connections>
                 </stepper>
                 <popUpButton verticalHuggingPriority="750" id="ns0-ar-I7c">
-                    <rect key="frame" x="92" y="202" width="54" height="22"/>
+                    <rect key="frame" x="93" y="206" width="54" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" title="2" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="OWb-6v-ggg" id="H0L-sP-ky8">
@@ -200,7 +142,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="9hH-As-JSa">
-                    <rect key="frame" x="95" y="306" width="62" height="19"/>
+                    <rect key="frame" x="96" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
@@ -225,30 +167,8 @@
                         <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
                     </connections>
                 </textField>
-                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
-                    <rect key="frame" x="162" y="278" width="15" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
-                        <font key="font" metaFont="smallSystem"/>
-                    </stepperCell>
-                    <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Rhl-EQ-AWd" id="hqb-mF-nWe">
-                            <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.height" previousBinding="yUT-oM-ZsK" id="kln-nB-kei"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture.heightEditable" id="Rhl-EQ-AWd"/>
-                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="yUT-oM-ZsK"/>
-                    </connections>
-                </stepper>
                 <textField verticalHuggingPriority="750" id="JBo-0E-AsU">
-                    <rect key="frame" x="18" y="233" width="73" height="14"/>
+                    <rect key="frame" x="18" y="237" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
@@ -258,17 +178,37 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
-                    <rect key="frame" x="18" y="282" width="73" height="14"/>
+                    <rect key="frame" x="174" y="286" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Height:" id="hN1-S9-zl8">
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="IVk-ye-fOe">
+                    <rect key="frame" x="438" y="286" width="10" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="uuL-JR-73C">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="sKT-h2-mAF">
+                    <rect key="frame" x="438" y="260" width="10" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="cNr-IZ-H9j">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="w1f-3S-up0">
-                    <rect key="frame" x="92" y="228" width="83" height="22"/>
+                    <rect key="frame" x="93" y="232" width="83" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="1O3-th-4M5" id="vx1-8S-fyc">
@@ -294,7 +234,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="tHY-g2-oWj">
-                    <rect key="frame" x="38" y="207" width="53" height="14"/>
+                    <rect key="frame" x="18" y="211" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
@@ -304,17 +244,37 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9oG-zm-Y0W">
-                    <rect key="frame" x="32" y="307" width="59" height="14"/>
+                    <rect key="frame" x="18" y="285" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Width:" id="L7V-2e-qf9">
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="hei-Cd-vcN">
+                    <rect key="frame" x="298" y="286" width="71" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" id="7ds-FA-XrD">
+                    <rect key="frame" x="18" y="309" width="74" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source:" id="nrd-lP-SHD">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
-                    <rect key="frame" x="95" y="280" width="62" height="19"/>
+                    <rect key="frame" x="188" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
@@ -340,7 +300,7 @@
                     </connections>
                 </textField>
                 <button id="6G0-MW-iVa">
-                    <rect key="frame" x="92" y="256" width="145" height="18"/>
+                    <rect key="frame" x="93" y="258" width="145" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="hcF-CZ-p0E">
@@ -362,7 +322,7 @@
                     </connections>
                 </button>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                    <rect key="frame" x="444" y="256" width="15" height="22"/>
+                    <rect key="frame" x="733" y="254" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
@@ -388,7 +348,7 @@
                     </connections>
                 </stepper>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                    <rect key="frame" x="507" y="229" width="15" height="22"/>
+                    <rect key="frame" x="796" y="227" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
@@ -414,7 +374,7 @@
                     </connections>
                 </stepper>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
-                    <rect key="frame" x="324" y="284" width="90" height="43"/>
+                    <rect key="frame" x="613" y="282" width="90" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -451,7 +411,7 @@
                     </connections>
                 </matrix>
                 <textField verticalHuggingPriority="750" id="41c-48-2XJ">
-                    <rect key="frame" x="406" y="258" width="36" height="19"/>
+                    <rect key="frame" x="695" y="256" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
@@ -484,7 +444,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="1Z0-JT-vst">
-                    <rect key="frame" x="406" y="204" width="36" height="19"/>
+                    <rect key="frame" x="695" y="202" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
@@ -517,7 +477,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                    <rect key="frame" x="385" y="229" width="15" height="22"/>
+                    <rect key="frame" x="674" y="227" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
@@ -543,7 +503,7 @@
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" id="LTu-ic-Ty9">
-                    <rect key="frame" x="347" y="231" width="36" height="19"/>
+                    <rect key="frame" x="636" y="229" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
@@ -576,7 +536,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                    <rect key="frame" x="444" y="202" width="15" height="22"/>
+                    <rect key="frame" x="733" y="200" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
@@ -602,7 +562,7 @@
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" id="Bmd-c8-9hp">
-                    <rect key="frame" x="263" y="307" width="59" height="17"/>
+                    <rect key="frame" x="552" y="309" width="59" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="haC-cO-jDm">
@@ -612,7 +572,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" id="wsq-TS-cC6">
-                    <rect key="frame" x="469" y="231" width="36" height="19"/>
+                    <rect key="frame" x="758" y="229" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
@@ -1165,9 +1125,64 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
+                    <rect key="frame" x="457" y="256" width="54" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="BXi-rt-OOn"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="BXi-rt-OOn" id="c3e-8E-4E8">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="Bwn-Hk-CGG"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ieR-o9-ztI">
+                    <rect key="frame" x="96" y="309" width="417" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="source size" id="mzN-4A-GZq">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="value" keyPath="self.picture.sourceInfo" id="7LZ-ep-EC2"/>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
+                    <rect key="frame" x="246" y="281" width="15" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                        <font key="font" metaFont="smallSystem"/>
+                    </stepperCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Rhl-EQ-AWd" id="hqb-mF-nWe">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.picture.height" previousBinding="yUT-oM-ZsK" id="kln-nB-kei"/>
+                        <binding destination="-2" name="enabled" keyPath="self.picture.heightEditable" id="Rhl-EQ-AWd"/>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="yUT-oM-ZsK"/>
+                    </connections>
+                </stepper>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="294.5" y="492.5"/>
+            <point key="canvasLocation" x="332.5" y="195.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="UZ0-eg-oV8"/>
     </objects>

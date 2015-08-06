@@ -345,6 +345,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     return self.sourceWidth / 2 - 2;
 }
 
+- (int)sourceDisplayWidth
+{
+    return (int) (self.sourceWidth * self.sourceParNum / (double)self.sourceParDen);
+}
+
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retval = nil;

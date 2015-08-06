@@ -48,6 +48,7 @@ extern NSString * const HBPictureChangedNotification;
  */
 @property (nonatomic, readonly) int sourceWidth;
 @property (nonatomic, readonly) int sourceHeight;
+@property (nonatomic, readonly) int sourceDisplayWidth;
 
 @end
 

@@ -37,7 +37,7 @@
             return nil;
         }
 
-        f = freopen(NULL, "a", f);
+        f = freopen(url.path.fileSystemRepresentation, "a", f);
         if (!f)
         {
             return nil;
