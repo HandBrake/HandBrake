@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBQueueController">
+            <connections>
+                <outlet property="countTextField" destination="2511" id="7vs-Ty-tNx"/>
+                <outlet property="outlineView" destination="2597" id="dPQ-wg-8cy"/>
+                <outlet property="progressTextField" destination="2646" id="E60-Gv-b2q"/>
+                <outlet property="window" destination="2576" id="2645"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Queue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="QueueWindow" animationBehavior="default" id="2576" userLabel="Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="893" y="128" width="574" height="423"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <value key="minSize" type="size" width="525" height="340"/>
+            <view key="contentView" id="2577">
+                <rect key="frame" x="0.0" y="0.0" width="574" height="423"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2596">
+                        <rect key="frame" x="20" y="20" width="534" height="338"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="B5m-TR-ErO">
+                            <rect key="frame" x="1" y="1" width="532" height="336"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="2624" id="2597" customClass="HBQueueOutlineView">
+                                    <rect key="frame" x="0.0" y="0.0" width="532" height="336"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="icon" width="38" minWidth="38" maxWidth="38" id="2624">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <imageCell key="dataCell" refusesFirstResponder="YES" alignment="left" animates="YES" imageAlignment="topRight" imageScaling="proportionallyDown" id="2625"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="desc" editable="NO" width="465" minWidth="40" maxWidth="5000" id="2599">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" selectable="YES" editable="YES" alignment="left" id="2609">
+                                                <font key="font" metaFont="cellTitle"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="action" editable="NO" width="20" minWidth="8" maxWidth="20" id="2604">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="square" bezelStyle="shadowlessSquare" image="Delete" imagePosition="above" alignment="center" inset="2" id="2605">
+                                                <behavior key="behavior" lightByContents="YES"/>
+                                                <font key="font" metaFont="cellTitle"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="-2" id="2602"/>
+                                        <outlet property="delegate" destination="-2" id="2603"/>
+                                        <outlet property="menu" destination="2649" id="ZZa-hT-PUa"/>
+                                    </connections>
+                                </outlineView>
+                            </subviews>
+                            <animations/>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <animations/>
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2644">
+                            <rect key="frame" x="-100" y="-100" width="282" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
+                        </scroller>
+                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2643">
+                            <rect key="frame" x="517" y="1" width="16" height="336"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
+                        </scroller>
+                    </scrollView>
+                    <textField verticalHuggingPriority="750" id="2511">
+                        <rect key="frame" x="17" y="399" width="540" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <animations/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Pending Jobs" id="2637">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" id="2646">
+                        <rect key="frame" x="17" y="366" width="540" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <animations/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="There are no jobs currently encoding" id="2647">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+                <animations/>
+            </view>
+            <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="609C5CFE-D854-4567-9CC2-70E109CBA332" explicitItemIdentifier="HBQueueStartCancelToolbarIdentifier" label="Start" paletteLabel="Start/Cancel" toolTip="Start Encoding" tag="-1" image="encode" id="SX6-mq-Hck">
+                        <connections>
+                            <action selector="toggleStartCancel:" target="-2" id="ABS-fA-RwJ"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="7DB01500-5492-42BC-BDEE-55E9EF3765A1" explicitItemIdentifier="HBQueuePauseResumeToolbarIdentifier" label="Pause" paletteLabel="Pause/Resume" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="s7o-pK-heI">
+                        <connections>
+                            <action selector="togglePauseResume:" target="-2" id="bmr-hx-loD"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="rHN-a0-oZQ"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="QuV-M8-cet"/>
+                    <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" id="a3c-kV-98E">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="100" height="25"/>
+                        <size key="maxSize" width="210" height="25"/>
+                        <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
+                            <rect key="frame" x="0.0" y="14" width="200" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <animations/>
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pch-jl-VXA">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="1Ee-Xt-VES">
+                                    <items>
+                                        <menuItem title="Do Nothing" id="sm5-26-sAg"/>
+                                        <menuItem title="Alert" tag="1" id="fAD-ky-zo6"/>
+                                        <menuItem title="Notification" tag="2" id="jDL-sB-8e3"/>
+                                        <menuItem title="Alert and Notification" tag="3" id="aat-1N-Odn"/>
+                                        <menuItem title="Put Computer to Sleep" tag="4" id="GUQ-xb-HVS"/>
+                                        <menuItem title="Shut Down Computer" tag="5" id="QmP-SQ-XKK"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                            <connections>
+                                <binding destination="z2J-h1-IDv" name="selectedTag" keyPath="values.HBAlertWhenDone" id="trt-6H-UtD"/>
+                            </connections>
+                        </popUpButton>
+                    </toolbarItem>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="SX6-mq-Hck"/>
+                    <toolbarItem reference="s7o-pK-heI"/>
+                    <toolbarItem reference="QuV-M8-cet"/>
+                    <toolbarItem reference="a3c-kV-98E"/>
+                </defaultToolbarItems>
+            </toolbar>
+            <connections>
+                <outlet property="delegate" destination="-2" id="2579"/>
+            </connections>
+            <point key="canvasLocation" x="322" y="355.5"/>
+        </window>
+        <menu id="2649" userLabel="ContextMenu">
+            <items>
+                <menuItem title="Show in Finder" id="2655">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="revealSelectedQueueItems:" target="-2" id="qtj-uq-KvZ"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Au5-j1-AAd"/>
+                <menuItem title="Edit" id="2650">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="editSelectedQueueItem:" target="-2" id="2654"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Reset" id="zy6-ab-ush">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="resetJobState:" target="-1" id="fxd-BP-VY6"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="1ZZ-71-d6P"/>
+                <menuItem title="Clear All" id="2652">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="clearAll:" target="-2" id="Q3d-9G-k0i"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Clear completed items" id="XdJ-Sl-pwu">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="clearCompleted:" target="-2" id="LMt-sj-JIh"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="Vww-Gx-tlr"/>
+                <menuItem title="Delete" id="Wfz-Kj-Vtx">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeSelectedQueueItem:" target="-2" id="i8t-gS-Bi3"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="233" y="753.5"/>
+        </menu>
+        <userDefaultsController representsSharedInstance="YES" id="z2J-h1-IDv"/>
+    </objects>
+    <resources>
+        <image name="Delete" width="16" height="16"/>
+        <image name="encode" width="24" height="24"/>
+        <image name="pauseencode" width="24" height="24"/>
+    </resources>
+</document>

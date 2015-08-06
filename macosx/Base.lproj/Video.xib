@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
+            <connections>
+                <outlet property="fDisplayX264PresetsUnparseTextField" destination="wk1-2U-z4i" id="aIk-h1-bOP"/>
+                <outlet property="fDividerLine" destination="g5v-MD-kdo" id="jZS-ae-kGM"/>
+                <outlet property="fEncoderOptionsLabel" destination="mkM-81-g3d" id="eWq-95-kTO"/>
+                <outlet property="fFramerateVfrPfrCell" destination="DD4-13-4gw" id="Cwu-GV-AKd"/>
+                <outlet property="fPresetView" destination="2dX-Hf-Hxl" id="OEP-rM-gGp"/>
+                <outlet property="fPresetsBox" destination="A4U-3F-pYq" id="m5l-h9-Ak8"/>
+                <outlet property="fPresetsSlider" destination="Biw-5K-pPD" id="so9-VX-eit"/>
+                <outlet property="fSimplePresetView" destination="aRi-vN-oR0" id="e0P-NK-oHv"/>
+                <outlet property="fVidQualitySlider" destination="GPu-Ht-bKg" id="faR-df-PGL"/>
+                <outlet property="fX264UseAdvancedOptionsCheck" destination="Zs7-1Y-50A" id="WWx-OC-tor"/>
+                <outlet property="view" destination="wAC-5p-nXb" id="i3V-vv-tDn"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <view id="wAC-5p-nXb">
+            <rect key="frame" x="0.0" y="0.0" width="920" height="315"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" id="gfa-Hb-cDP">
+                    <rect key="frame" x="279" y="289" width="69" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Quality:" id="F3s-qR-qeE">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pD7-5v-U6l"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="A3o-Zx-OfM">
+                    <rect key="frame" x="507" y="241" width="78" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="eQl-KB-XJu">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="TQJ-nd-2BX">
+                            <real key="minimum" value="0.0"/>
+                        </numberFormatter>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="6tI-Qz-3bJ" id="kcJ-ei-joL"/>
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="mjs-X8-KV8" id="VTs-xH-tZg">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.video.avgBitrate" id="c27-4i-SiJ">
+                            <dictionary key="options">
+                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                <string key="NSNotApplicablePlaceholder">0</string>
+                                <string key="NSNullPlaceholder">0</string>
+                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="mjs-X8-KV8">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="Pai-3Q-Gs3">
+                    <rect key="frame" x="530" y="288" width="50" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="bvD-W7-O0N">
+                        <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="efn-Vj-Jp7"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EsL-F5-tAO"/>
+                        <binding destination="-2" name="value" keyPath="self.video.quality" id="tMZ-Xb-TuF"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="9tc-EO-QMd">
+                    <rect key="frame" x="110" y="258" width="149" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Output framerate. 'Same as source' variable framerate is recommended. Peak framerate is 'same as source' VFR with a peak rate. VFR is incompatible with some players.</string>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="Jj0-Qw-HF8">
+                            <items>
+                                <menuItem id="Xzy-hl-maq"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="bAn-iZ-ieF" id="Tje-aM-83p"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="yN5-l3-JRJ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.frameRate" previousBinding="Heu-SS-Uwq" id="XC7-GV-Uae">
+                            <dictionary key="options">
+                                <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                <string key="NSValueTransformerName">HBFrameRateTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="content" keyPath="self.video.frameRates" id="Heu-SS-Uwq"/>
+                    </connections>
+                </popUpButton>
+                <button id="bnV-aE-FVh">
+                    <rect key="frame" x="379" y="222" width="124" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Perform 2-pass encoding. 'Bitrate' rate control is a prerequisite. During the 1st pass, statistics about the video are collected. Then in the second pass, those statistics are used to make bitrate allocation decisions.</string>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="7aV-7j-MzB" id="c4g-dz-q05">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="7aV-7j-MzB">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.video.twoPass" id="mOJ-b3-YKx"/>
+                    </connections>
+                </button>
+                <button toolTip="During the 1st pass of a 2-pass encode, use settings that speed things along." id="olm-zg-k9Y">
+                    <rect key="frame" x="504" y="222" width="107" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="iZE-er-OQN" id="Fbv-qd-JTg">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="iZE-er-OQN">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.video.turboTwoPass" id="4A4-hg-qhy"/>
+                        <binding destination="-2" name="hidden2" keyPath="self.video.turboTwoPassSupported" previousBinding="jpH-IH-e0p" id="BFH-ET-uPq">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.video.twoPass" previousBinding="Fbv-qd-JTg" id="jpH-IH-e0p">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+                <popUpButton verticalHuggingPriority="750" id="xwK-Yu-a1e">
+                    <rect key="frame" x="110" y="284" width="149" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="6Cs-jo-8Q6">
+                            <items>
+                                <menuItem id="cZC-bI-lgS"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="rOd-nt-22T" id="d3c-sR-Kgt"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Dhc-7W-mCB">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.encoder" previousBinding="PbS-nr-Hjk" id="h1y-Vg-Gyg">
+                            <dictionary key="options">
+                                <bool key="NSAllowsEditingMultipleValuesSelection" value="NO"/>
+                                <string key="NSValueTransformerName">HBVideoEncoderTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="content" keyPath="self.video.encoders" id="PbS-nr-Hjk"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="bAn-iZ-ieF">
+                    <rect key="frame" x="6" y="263" width="101" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="FB8-Bt-u3y"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="rOd-nt-22T">
+                    <rect key="frame" x="6" y="289" width="101" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Codec:" id="Mrb-6Q-0YM">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="2Sr-Kw-dnE"/>
+                    </connections>
+                </textField>
+                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="lsD-0N-H8k">
+                    <rect key="frame" x="354" y="234" width="145" height="70"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    <size key="cellSize" width="145" height="18"/>
+                    <size key="intercellSpacing" width="2" height="26"/>
+                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="ISq-P4-S73">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <cells>
+                        <column>
+                            <buttonCell type="radio" title="Constant Quality" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="au3-pU-KX6">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                                <string key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</string>
+                            </buttonCell>
+                            <buttonCell type="radio" title="Average Bitrate (kbps):" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6tI-Qz-3bJ">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                                <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
+                            </buttonCell>
+                        </column>
+                    </cells>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Bhn-TM-mbV">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedTag" keyPath="self.video.qualityType" id="Bpj-MC-Zf7"/>
+                    </connections>
+                </matrix>
+                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="Xe2-d5-nEH">
+                    <rect key="frame" x="113" y="215" width="143" height="38"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    <size key="cellSize" width="143" height="18"/>
+                    <size key="intercellSpacing" width="4" height="2"/>
+                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="M9p-y9-GDo">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <cells>
+                        <column>
+                            <buttonCell type="radio" title="Variable Framerate" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="DD4-13-4gw">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                            <buttonCell type="radio" title="Constant Framerate" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ZRE-Ig-mhJ">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                        </column>
+                    </cells>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="RUB-wC-Q0A">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedIndex" keyPath="self.video.frameRateMode" id="tJr-26-Y2P"/>
+                    </connections>
+                </matrix>
+                <box autoresizesSubviews="NO" title="x264 Presets" borderType="none" titlePosition="noTitle" id="A4U-3F-pYq">
+                    <rect key="frame" x="0.0" y="16" width="923" height="181"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <view key="contentView">
+                        <rect key="frame" x="0.0" y="0.0" width="923" height="181"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                    </view>
+                    <animations/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+                <slider verticalHuggingPriority="750" id="GPu-Ht-bKg">
+                    <rect key="frame" x="382" y="265" width="518" height="17"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</string>
+                    <animations/>
+                    <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
+                        <font key="font" metaFont="miniSystem"/>
+                    </sliderCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="au3-pU-KX6" id="tqT-R9-Pvn"/>
+                        <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="wCA-ag-GHJ" id="ywk-WQ-GNY">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.video.quality" previousBinding="nAO-gB-Jbd" id="C3d-pR-fJ2">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBQualityTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="maxValue" keyPath="self.video.qualityMaxValue" id="FrR-GV-xnx"/>
+                        <binding destination="-2" name="minValue" keyPath="self.video.qualityMinValue" previousBinding="FrR-GV-xnx" id="nAO-gB-Jbd"/>
+                        <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="wCA-ag-GHJ"/>
+                    </connections>
+                </slider>
+                <textField verticalHuggingPriority="750" id="1au-ZO-l1i">
+                    <rect key="frame" x="505" y="288" width="28" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="S90-zY-jeW"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="8" y="263.5"/>
+        </view>
+        <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
+            <rect key="frame" x="0.0" y="0.0" width="920" height="199"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <slider verticalHuggingPriority="750" id="Biw-5K-pPD">
+                    <rect key="frame" x="120" y="159" width="123" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Adjust encoder settings to trade off compression efficiency against encoding speed.
+
+This estabilishes your default encoder settings. Tunes, profiles, levels and advances option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</string>
+                    <animations/>
+                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="suZ-F3-AGy"/>
+                    <connections>
+                        <accessibilityConnection property="title" destination="0sa-ep-yfr" id="1L4-1l-EVG"/>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="exe-6L-bUd"/>
+                    </connections>
+                </slider>
+                <textField verticalHuggingPriority="750" id="0sa-ep-yfr">
+                    <rect key="frame" x="35" y="160" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="iab-iA-j04">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="jwX-Os-rhB"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="gzq-SL-YVY">
+                    <rect key="frame" x="35" y="137" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="zSD-4Y-1cI">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="wpX-b9-mYI"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="dY9-5D-mXX">
+                    <rect key="frame" x="35" y="110" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="hib-wi-BDx">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="nkv-vu-agJ"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="BY1-IG-JvI">
+                    <rect key="frame" x="35" y="84" width="79" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="QyZ-rl-uGw">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="0LN-xF-Kg6"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="A7d-wM-Xmp">
+                    <rect key="frame" x="117" y="131" width="129" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Tune settings to optimize for common scenarios.
+
+This can improve efficiency for particular source characteristics or set characteristics of the output file. Changes will be applied after the preset but before all other parameters.</string>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dy8-w4-ycN">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="c4N-uO-iVC"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="gzq-SL-YVY" id="W8X-Zk-cQD"/>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="jwX-If-Tz7"/>
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="ziN-5r-CNJ" id="gu5-Qw-6oi">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">none</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="content" keyPath="self.video.tunes" id="ziN-5r-CNJ"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" id="CPP-lh-FbN">
+                    <rect key="frame" x="117" y="105" width="129" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Sets and ensures compliance with the specified profile.
+Overrides all other settings.</string>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="oOm-hC-AoS">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="7CG-ga-88H"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="dY9-5D-mXX" id="gPk-3N-uSS"/>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="daB-50-blQ"/>
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.profile" previousBinding="Njf-bs-Nub" id="ioS-p7-9Ri">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">auto</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="content" keyPath="self.video.profiles" id="Njf-bs-Nub"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton toolTip="Sets and ensures compliance with the specified level. Overrides all other settings." verticalHuggingPriority="750" id="P7c-Zk-G99">
+                    <rect key="frame" x="117" y="79" width="129" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="PhX-Wa-Vhs">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="pPu-oR-2R8"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="BY1-IG-JvI" id="1gh-Gw-TgJ"/>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="gyc-y2-3XD"/>
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.level" previousBinding="MXA-St-eVu" id="v8q-ly-ZVP">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">auto</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="content" keyPath="self.video.levels" id="MXA-St-eVu"/>
+                    </connections>
+                </popUpButton>
+                <button id="z7F-H2-Vfr">
+                    <rect key="frame" x="261" y="134" width="108" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Reduce decoder CPU usage.
+Set this if your device is struggling to play the output (dropped frames).</string>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5De-nU-l3h">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="JTS-dn-Hyg"/>
+                        <binding destination="-2" name="value" keyPath="self.video.fastDecode" id="3I9-0k-Ixu"/>
+                        <binding destination="-2" name="hidden" keyPath="self.video.fastDecodeSupported" previousBinding="JTS-dn-Hyg" id="IVa-dm-KVJ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="ijg-ux-uvb">
+                    <rect key="frame" x="261" y="111" width="110" height="13"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ZSm-03-g0B">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="g1c-DV-iaX"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="oJk-ur-wgc">
+                    <rect key="frame" x="377" y="82" width="523" height="42"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="IID-yp-or8">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="wBW-sS-Bk8"/>
+                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="OfI-jr-h9v"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="gvn-wG-crj">
+                    <rect key="frame" x="250" y="165" width="129" height="13"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="rHx-Kg-tc2">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Dpc-uO-tKp"/>
+                        <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
+                    </connections>
+                </textField>
+                <button toolTip="Use Advanced Options tab for x264 settings. Use at your own risk!" id="Zs7-1Y-50A">
+                    <rect key="frame" x="117" y="183" width="209" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Use Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="sa6-r3-eVr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="GDV-uX-eAs">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.video.advancedOptions" id="sQg-ab-NdN"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="wk1-2U-z4i">
+                    <rect key="frame" x="18" y="20" width="883" height="45"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="ewb-Ig-EKG"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="mkM-81-g3d">
+                    <rect key="frame" x="-2" y="185" width="116" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="XIe-8Z-tIF">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Qg2-rj-XNj"/>
+                    </connections>
+                </textField>
+                <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="g5v-MD-kdo">
+                    <rect key="frame" x="120" y="189" width="780" height="5"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="8" y="586.5"/>
+        </customView>
+        <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
+            <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="mL3-yC-hUj">
+                    <rect key="frame" x="120" y="2" width="545" height="32"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="z0u-VS-m0l">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="HNx-Oj-zHh"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="26w-dz-St2">
+                    <rect key="frame" x="6" y="20" width="108" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="7bP-tR-sAX">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="8" y="779"/>
+        </customView>
+    </objects>
+</document>
