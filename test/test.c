@@ -2627,7 +2627,7 @@ static int ParseOptions( int argc, char ** argv )
         }
         else
         {
-            fprintf(stderr, "Invalid hqdn3d option %s\n", nlmeans);
+            fprintf(stderr, "Invalid nlmeans option %s\n", nlmeans);
             return -1;
         }
     }
@@ -3493,7 +3493,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string(nlmeans));
             if (nlmeans_tune != NULL)
             {
-                hb_dict_set(preset, "PictureDenoisePreset",
+                hb_dict_set(preset, "PictureDenoiseTune",
                             hb_value_string(nlmeans_tune));
             }
         }
