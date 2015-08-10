@@ -815,7 +815,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_value_array_t *audio_list = NULL;
     hb_value_array_t *subtitle_list = NULL;
     hb_value_array_t *filter_list = NULL;
-    hb_value_t *mux = NULL, *vcodec = NULL, *acodec_copy_mask, *acodec_fallback;
+    hb_value_t *mux = NULL, *vcodec = NULL;
+    hb_value_t *acodec_copy_mask = NULL, *acodec_fallback = NULL;
     char *destfile = NULL;
     char *range_type = NULL;
     char *video_preset = NULL, *video_tune = NULL;
@@ -1112,7 +1113,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             for (ii = 0; ii < count; ii++)
             {
                 hb_value_t *value = hb_value_array_get(acodec_copy_mask, ii);
-                if (hb_value_type(acodec_copy_mask) == HB_VALUE_TYPE_STRING)
+                if (hb_value_type(value) == HB_VALUE_TYPE_STRING)
                 {
                     const char *s = hb_value_get_string(value);
                     job->acodec_copy_mask |= hb_audio_encoder_get_from_name(s);
