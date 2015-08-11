@@ -566,12 +566,26 @@ check_name_template(signal_user_data_t *ud, const char *str)
 static void
 set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 {
-    const gchar *extension;
+    const gchar *extension, *dest_file;
     gchar *filename;
 
     extension = get_extension(ud, settings);
 
     g_debug("set_destination_settings");
+    dest_file = ghb_dict_get_string(ud->settings, "dest_file");
+    if (dest_file == NULL)
+    {
+        // Initialize destination filename if it has no value yet.
+        // If auto-naming is disabled, this will be the default filename.
+        GString *str = g_string_new("");
+        const gchar *vol_name;
+        vol_name = ghb_dict_get_string(settings, "volume_label");
+        g_string_append_printf(str, "%s", vol_name);
+        g_string_append_printf(str, ".%s", extension);
+        filename = g_string_free(str, FALSE);
+        ghb_dict_set_string(settings, "dest_file", filename);
+        g_free(filename);
+    }
     if (ghb_dict_get_bool(ud->prefs, "auto_name"))
     {
         GString *str = g_string_new("");
