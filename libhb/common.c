@@ -2232,7 +2232,8 @@ void hb_autopassthru_print_settings(hb_job_t *job)
     {
         if ((audio_encoder->codec &  HB_ACODEC_PASS_FLAG) &&
             (audio_encoder->codec != HB_ACODEC_AUTO_PASS) &&
-            (audio_encoder->codec & job->acodec_copy_mask))
+            (audio_encoder->codec & (job->acodec_copy_mask &
+                                     HB_ACODEC_PASS_MASK)))
         {
             if (mask != NULL)
             {
