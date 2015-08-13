@@ -206,6 +206,8 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
                 continue;
             }
             ii++;
+            if (result == PRESET_DO_SKIP)
+                return PRESET_DO_NEXT;
             if (result != PRESET_DO_NEXT)
                 return result;
         }
