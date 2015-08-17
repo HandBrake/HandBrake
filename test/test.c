@@ -2204,7 +2204,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    nlmeans = strdup("light");
+                    nlmeans = strdup("medium");
                 }
                 break;
             case FILTER_NLMEANS_TUNE:
