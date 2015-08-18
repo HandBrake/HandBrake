@@ -1545,7 +1545,6 @@ This allows a player to initiate playback before downloading the entire file.</p
                 <property name="shadow_type">none</property>
                 <property name="margin-end">6</property>
                 <property name="margin-bottom">6</property>
-                <signal name="size-allocate" handler="presets_frame_size_allocate_cb" swapped="no"/>
                 <child>
                   <object class="GtkScrolledWindow" id="presets_scroll">
                     <property name="visible">True</property>
