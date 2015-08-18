@@ -1082,6 +1082,8 @@ ghb_select_preset2(
             if (gtk_tree_model_get_iter_first(store, &iter))
                 gtk_tree_selection_select_iter (selection, &iter);
         }
+        // Make the selection visible in scroll window if it is not.
+        gtk_tree_view_scroll_to_cell(treeview, path, NULL, FALSE, 0, 0);
         gtk_tree_path_free(path);
     }
 }
@@ -4249,26 +4251,6 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     selection = gtk_tree_view_get_selection (treeview);
     gtk_tree_selection_unselect_all (selection);
     ghb_settings_set_boolean(ud->settings, "preset_modified", TRUE);
-}
-
-G_MODULE_EXPORT void
-presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
-{
-    GtkTreeView *treeview;
-    GtkTreeSelection *selection;
-    GtkTreeModel *store;
-    GtkTreeIter iter;
-
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
-    selection = gtk_tree_view_get_selection(treeview);
-    if (gtk_tree_selection_get_selected(selection, &store, &iter))
-    {
-        GtkTreePath *path;
-        path = gtk_tree_model_get_path (store, &iter);
-        // Make the parent visible in scroll window if it is not.
-        gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0, 0);
-        gtk_tree_path_free(path);
-    }
 }
 
 G_MODULE_EXPORT void
