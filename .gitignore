@@ -1,0 +1,4 @@
+# Ignore output created by Visual Studio
+win/CS/*/bin
+win/CS/*/obj
+win/CS/*.suo
