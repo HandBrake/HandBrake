@@ -138,6 +138,7 @@
     <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />

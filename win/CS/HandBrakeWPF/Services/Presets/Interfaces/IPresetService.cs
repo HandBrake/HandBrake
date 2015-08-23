@@ -55,7 +55,6 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// </param>
         void Import(string filename);
 
-
         /// <summary>
         /// The export.
         /// </summary>

@@ -54,7 +54,6 @@ namespace HandBrakeWPF.Converters.Audio
                 return rateTypes;
             }
 
-
             if (targetType == typeof(AudioEncoderRateType) || value.GetType() == typeof(AudioEncoderRateType))
             {
                 return EnumHelper<AudioEncoderRateType>.GetDisplay((AudioEncoderRateType)value);

@@ -133,7 +133,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<OutputFormat>.GetDisplay((OutputFormat)value);
             }
-
  
             return null;
         }

@@ -298,9 +298,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        /// <param name="shellViewModel">
-        /// The shell View Model.
-        /// </param>
         /// <param name="updateService">
         /// The update Service.
         /// </param>
@@ -554,7 +551,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("WhenDoneOptions");
             }
         }
-
 
         #endregion
 

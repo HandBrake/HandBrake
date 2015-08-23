@@ -36,16 +36,16 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         /// </summary>
         public TimeSpan EstimatedTimeLeft { get; set; }
 
-		/// <summary>
-		/// Gets or sets the pass ID.
-		/// </summary>
-		/// <remarks>
-		/// -1: Subtitle scan
-		///  0: Encode
-		///  1: Encode first pass
-		///  2: Encode second pass
-		/// </remarks>
-		public int PassId { get; set; }
+        /// <summary>
+        /// Gets or sets the pass ID.
+        /// </summary>
+        /// <remarks>
+        /// -1: Subtitle scan
+        ///  0: Encode
+        ///  1: Encode first pass
+        ///  2: Encode second pass
+        /// </remarks>
+        public int PassId { get; set; }
 
         /// <summary>
         /// Gets or sets the current encoding pass. (1-based)

@@ -316,7 +316,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
-
             /* Subtitle Settings */ 
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
 
@@ -437,7 +436,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 preset.AudioList.Add(track);
             }
             
-
             // Subtitles
             preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
             preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
@@ -521,7 +519,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             return preset;
         }
-
 
         /// <summary>
         /// Get the OutputFormat Enum for a given string

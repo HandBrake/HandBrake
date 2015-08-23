@@ -70,7 +70,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsMainPanelEnabled = true;
             this.MainViewModel = mainViewModel;
             this.OptionsViewModel = optionsViewModel;
-            //this.OverlayPanelViewModel = overlayPanel;
         }
 
         /// <summary>
