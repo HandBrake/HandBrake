@@ -89,7 +89,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="_Options" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
+                    <MenuItem Header="_Preferences" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Pref_Small.png" />
                         </MenuItem.Icon>

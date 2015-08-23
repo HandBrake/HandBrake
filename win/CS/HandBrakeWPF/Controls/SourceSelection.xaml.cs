@@ -10,6 +10,9 @@
 namespace HandBrakeWPF.Controls
 {
     using System.Windows.Controls;
+    using System.Windows.Navigation;
+
+    using HandBrakeWPF.ViewModels;
 
     /// <summary>
     /// Interaction logic for SourceSelection.xaml
@@ -22,6 +25,18 @@ namespace HandBrakeWPF.Controls
         public SourceSelection()
         {
             this.InitializeComponent();
+        }
+
+        private void AboutHandBrake_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MainViewModel vm = this.DataContext as MainViewModel;
+            vm.OpenAboutApplication();
+        }
+
+        private void OpenOptions_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MainViewModel vm = this.DataContext as MainViewModel;
+            vm.OpenOptionsWindow();
         }
     }
 }

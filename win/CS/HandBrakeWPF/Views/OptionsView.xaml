@@ -59,12 +59,10 @@
 
         <!-- Row 1 -->
         <StackPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <TextBlock Text="Options" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
+            <TextBlock Text="Preferences" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
 
         </StackPanel>
         
-   
-
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
             <StackPanel Orientation="Vertical" Margin="11,5,-1,0">
 
