@@ -264,8 +264,8 @@ namespace HandBrakeWPF.ViewModels
         /// The static Preview View Model.
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService,  IUpdateService updateService, INotificationService notificationService,
-            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
+            IErrorService errorService, IUpdateService updateService, INotificationService notificationService,
+            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel)
         {
@@ -569,7 +569,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<PointToPointMode>
                     {
-                        PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames 
+                        PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames
                     };
             }
         }
@@ -1228,7 +1228,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Queue Recovery
             QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
-    
+
             this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Log Cleaning
@@ -1467,13 +1467,13 @@ namespace HandBrakeWPF.ViewModels
             IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
 
             viewModel.Setup(this.ScannedSource, this.SourceName, (tasks) =>
+            {
+                foreach (SelectionTitle title in tasks)
                 {
-                    foreach (SelectionTitle title in tasks)
-                    {
-                        this.SelectedTitle = title.Title;
-                        this.AddToQueue();
-                    }
-                });
+                    this.SelectedTitle = title.Title;
+                    this.AddToQueue();
+                }
+            });
 
             if (window != null)
             {
@@ -1491,11 +1491,14 @@ namespace HandBrakeWPF.ViewModels
         public void FolderScan()
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.Main_PleaseSelectFolder, UseDescriptionForTitle = true };
-            dialog.ShowDialog();
+            bool? dialogResult = dialog.ShowDialog();
 
-            ShowSourceSelection = false;
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                ShowSourceSelection = false;
 
-            this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
+                this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
+            }
         }
 
         /// <summary>
@@ -1504,11 +1507,14 @@ namespace HandBrakeWPF.ViewModels
         public void FileScan()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
-            dialog.ShowDialog();
+            bool? dialogResult = dialog.ShowDialog();
 
-            ShowSourceSelection = false;
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                ShowSourceSelection = false;
 
-            this.StartScan(dialog.FileName, this.TitleSpecificScan);
+                this.StartScan(dialog.FileName, this.TitleSpecificScan);
+            }
         }
 
         /// <summary>
@@ -1674,13 +1680,13 @@ namespace HandBrakeWPF.ViewModels
         public void BrowseDestination()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
-                    CheckPathExists = true,
-                    AddExtension = true,
-                    DefaultExt = ".mp4",
-                    OverwritePrompt = true,
-                };
+            {
+                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
+                CheckPathExists = true,
+                AddExtension = true,
+                DefaultExt = ".mp4",
+                OverwritePrompt = true,
+            };
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
 
@@ -1849,9 +1855,12 @@ namespace HandBrakeWPF.ViewModels
         public void PresetImport()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Preset Files|*.json;*.plist", CheckFileExists = true };
-            dialog.ShowDialog();
-            this.presetService.Import(dialog.FileName);
-            this.NotifyOfPropertyChange(() => this.Presets);
+            bool? dialogResult = dialog.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                this.presetService.Import(dialog.FileName);
+                this.NotifyOfPropertyChange(() => this.Presets);
+            }
         }
 
         /// <summary>
@@ -1860,14 +1869,14 @@ namespace HandBrakeWPF.ViewModels
         public void PresetExport()
         {
             SaveFileDialog savefiledialog = new SaveFileDialog
-                                                     {
-                                                         Filter = "json|*.json",
-                                                         CheckPathExists = true,
-                                                         AddExtension = true,
-                                                         DefaultExt = ".json",
-                                                         OverwritePrompt = true,
-                                                         FilterIndex = 0
-                                                     };
+            {
+                Filter = "json|*.json",
+                CheckPathExists = true,
+                AddExtension = true,
+                DefaultExt = ".json",
+                OverwritePrompt = true,
+                FilterIndex = 0
+            };
             if (this.selectedPreset != null)
             {
                 savefiledialog.ShowDialog();
@@ -1944,41 +1953,41 @@ namespace HandBrakeWPF.ViewModels
         {
             /* TODO Fix this. */
             Execute.OnUIThread(() =>
-                {
-                    // Copy all the Scan data into the UI
-                    scannedSource.CopyTo(this.ScannedSource);
-                    this.NotifyOfPropertyChange(() => this.ScannedSource);
-                    this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
+            {
+                // Copy all the Scan data into the UI
+                scannedSource.CopyTo(this.ScannedSource);
+                this.NotifyOfPropertyChange(() => this.ScannedSource);
+                this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
 
-                    // Select the Users Title
-                    this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault();
-                    this.CurrentTask = new EncodeTask(queueEditTask);
-                    this.NotifyOfPropertyChange(() => this.CurrentTask);
-                    this.HasSource = true;
+                // Select the Users Title
+                this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault();
+                this.CurrentTask = new EncodeTask(queueEditTask);
+                this.NotifyOfPropertyChange(() => this.CurrentTask);
+                this.HasSource = true;
 
-                    // Update the Main Window
-                    this.NotifyOfPropertyChange(() => this.Destination);
-                    this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
-                    this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
-                    this.NotifyOfPropertyChange(() => this.SelectedAngle);
-                    this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
-                    this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
-                    this.NotifyOfPropertyChange(() => IsMkv);
+                // Update the Main Window
+                this.NotifyOfPropertyChange(() => this.Destination);
+                this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
+                this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
+                this.NotifyOfPropertyChange(() => this.SelectedAngle);
+                this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
+                this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
+                this.NotifyOfPropertyChange(() => IsMkv);
 
-                    // Update the Tab Controls
-                    this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
-                    this.VideoViewModel.UpdateTask(this.CurrentTask);
-                    this.FiltersViewModel.UpdateTask(this.CurrentTask);
-                    this.AudioViewModel.UpdateTask(this.CurrentTask);
-                    this.SubtitleViewModel.UpdateTask(this.CurrentTask);
-                    this.ChaptersViewModel.UpdateTask(this.CurrentTask);
-                    this.AdvancedViewModel.UpdateTask(this.CurrentTask);
+                // Update the Tab Controls
+                this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
+                this.VideoViewModel.UpdateTask(this.CurrentTask);
+                this.FiltersViewModel.UpdateTask(this.CurrentTask);
+                this.AudioViewModel.UpdateTask(this.CurrentTask);
+                this.SubtitleViewModel.UpdateTask(this.CurrentTask);
+                this.ChaptersViewModel.UpdateTask(this.CurrentTask);
+                this.AdvancedViewModel.UpdateTask(this.CurrentTask);
 
-                    // Cleanup
-                    this.ShowStatusWindow = false;
-                    this.SourceLabel = this.SourceName;
-                    this.StatusLabel = Resources.Main_ScanCompleted;
-                });
+                // Cleanup
+                this.ShowStatusWindow = false;
+                this.SourceLabel = this.SourceName;
+                this.StatusLabel = Resources.Main_ScanCompleted;
+            });
         }
 
         /// <summary>
@@ -2146,36 +2155,36 @@ namespace HandBrakeWPF.ViewModels
             }
 
             Execute.OnUIThread(() =>
+            {
+                if (e.Successful)
                 {
-                    if (e.Successful)
-                    {
-                        this.NotifyOfPropertyChange(() => this.ScannedSource);
-                        this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
-                        this.HasSource = true;
-                        this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
-                    }
-                    else
-                    {
-                        this.OpenAlertWindow(Resources.Main_ScanNoTitlesFound, Resources.Main_ScanNoTitlesFoundMessage);
-                    }
+                    this.NotifyOfPropertyChange(() => this.ScannedSource);
+                    this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
+                    this.HasSource = true;
+                    this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
+                }
+                else
+                {
+                    this.OpenAlertWindow(Resources.Main_ScanNoTitlesFound, Resources.Main_ScanNoTitlesFoundMessage);
+                }
 
-                    this.ShowStatusWindow = false;
-                    if (e.Successful)
-                    {
-                        this.SourceLabel = this.SourceName;
-                        this.StatusLabel = Resources.Main_ScanCompleted;
-                    }
-                    else if (e.Cancelled)
-                    {
-                        this.SourceLabel = Resources.Main_ScanCancelled;
-                        this.StatusLabel = Resources.Main_ScanCancelled;
-                    }
-                    else
-                    {
-                        this.SourceLabel = Resources.Main_ScanFailled_CheckLog;
-                        this.StatusLabel = Resources.Main_ScanFailled_CheckLog;
-                    }
-                });
+                this.ShowStatusWindow = false;
+                if (e.Successful)
+                {
+                    this.SourceLabel = this.SourceName;
+                    this.StatusLabel = Resources.Main_ScanCompleted;
+                }
+                else if (e.Cancelled)
+                {
+                    this.SourceLabel = Resources.Main_ScanCancelled;
+                    this.StatusLabel = Resources.Main_ScanCancelled;
+                }
+                else
+                {
+                    this.SourceLabel = Resources.Main_ScanFailled_CheckLog;
+                    this.StatusLabel = Resources.Main_ScanFailled_CheckLog;
+                }
+            });
         }
 
         /// <summary>

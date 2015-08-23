@@ -38,7 +38,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The source chapters backing field
         /// </summary>
-        private List<Chapter> sourceChaptersList; 
+        private List<Chapter> sourceChaptersList;
 
         #region Constructors and Destructors
 
@@ -99,13 +99,13 @@ namespace HandBrakeWPF.ViewModels
         public void Export()
         {
             var saveFileDialog = new OpenFileDialog
-                {
-                    Filter = "Csv File|*.csv",
-                    DefaultExt = "csv",
-                    CheckPathExists = true
-                };
-            saveFileDialog.ShowDialog();
-            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+            {
+                Filter = "Csv File|*.csv",
+                DefaultExt = "csv",
+                CheckPathExists = true
+            };
+            bool? dialogResult = saveFileDialog.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value && !string.IsNullOrEmpty(saveFileDialog.FileName))
             {
                 this.ExportChaptersToCSV(saveFileDialog.FileName);
             }
@@ -153,10 +153,10 @@ namespace HandBrakeWPF.ViewModels
         public void Import()
         {
             var dialog = new OpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
-            dialog.ShowDialog();
+            bool? dialogResult = dialog.ShowDialog();
             string filename = dialog.FileName;
 
-            if (string.IsNullOrEmpty(filename))
+            if (!dialogResult.HasValue || !dialogResult.Value || string.IsNullOrEmpty(filename))
             {
                 return;
             }
