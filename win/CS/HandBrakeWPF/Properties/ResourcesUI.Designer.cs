@@ -520,24 +520,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        public static string Generic_Export {
-            get {
-                return ResourceManager.GetString("Generic_Export", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import.
-        /// </summary>
-        public static string Generic_Import {
-            get {
-                return ResourceManager.GetString("Generic_Import", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Move Left.
         /// </summary>
         public static string Generic_MoveLeft {
@@ -1533,6 +1515,24 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_Width {
             get {
                 return ResourceManager.GetString("PictureSettingsView_Width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export to file.
+        /// </summary>
+        public static string Preset_Export {
+            get {
+                return ResourceManager.GetString("Preset_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import from file.
+        /// </summary>
+        public static string Preset_Import {
+            get {
+                return ResourceManager.GetString("Preset_Import", resourceCulture);
             }
         }
         

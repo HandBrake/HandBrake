@@ -267,11 +267,11 @@
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
     <value>Reset Chapter Names</value>
   </data>
-  <data name="Generic_Export" xml:space="preserve">
-    <value>Export</value>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>Export to file</value>
   </data>
-  <data name="Generic_Import" xml:space="preserve">
-    <value>Import</value>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>Import from file</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
     <value>Copy to clipboard</value>

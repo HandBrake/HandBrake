@@ -113,8 +113,8 @@
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="_Import" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                    <MenuItem Header="_Export" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                    <MenuItem Header="_Import from file" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                    <MenuItem Header="_Export to file" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                     <Separator />
                     <MenuItem Header="_Set Current as Default" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                     <MenuItem Header="_Reset Built-In Presets" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
@@ -548,6 +548,20 @@
                             </Style>
                         </ListBox.Resources>
                         
+                        <ListBox.ContextMenu>
+                            <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                <Separator />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                            </ContextMenu>
+
+                        </ListBox.ContextMenu>
+                        
                         <i:Interaction.Triggers>
                             <commands:InputBindingTrigger>
                                 <commands:InputBindingTrigger.InputBinding>
@@ -632,8 +646,8 @@
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </MenuItem>
