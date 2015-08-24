@@ -240,7 +240,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                       1 << 16 ); // saturation
 
         if (sws_init_context(ctx, NULL, NULL) < 0) {
-            fprintf(stderr, "Cannot initialize resampling context\n");
+            hb_error("Cannot initialize resampling context");
             sws_freeContext(ctx);
             ctx = NULL;
         } 

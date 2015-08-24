@@ -202,6 +202,12 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
             pv->pix_fmt   = in->f.fmt;
         }
         
+        if (pv->context == NULL)
+        {
+            hb_buffer_close(&out);
+            return NULL;
+        }
+
         // Scale pic_crop into pic_render according to the
         // context set up above
         sws_scale(pv->context,
