@@ -38,7 +38,7 @@ if [ ${ERR} -ne 0 ]; then
     exit ${ERR}
 fi
 
-# creat tag
+# create tag
 git tag -a "${TAG}" -m "Release ${TAG}" HEAD
 ERR=$?
 if [ ${ERR} -ne 0 ]; then

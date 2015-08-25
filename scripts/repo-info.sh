@@ -43,7 +43,7 @@ if [[ ${TAG} ]]; then
 else
     TAG=$(${GIT_EXE} describe $(${GIT_EXE} rev-list --tags --max-count=1))
     if [[ ${TAG} ]]; then
-        REV=$(${GIT_EXE} rev-list $(${GIT_EXE} merge-base 0.10.2 HEAD).. --count)
+        REV=$(${GIT_EXE} rev-list $(${GIT_EXE} merge-base ${TAG} HEAD).. --count)
     else
         REV=$(${GIT_EXE} rev-list HEAD --count)
     fi
@@ -57,7 +57,7 @@ fi
 DATE=$(${GIT_EXE} log -1 --format="format:%ai")
 
 # Output
-# Only write tag and rev if they exist. A fresh clone currently has no tags.
+# Only write tag and rev if they exist.
 echo "URL=${URL}"
 echo "HASH=${HASH}"
 if [[ ${TAG} ]]; then echo "TAG=${TAG}"; fi

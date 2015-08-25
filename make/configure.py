@@ -797,7 +797,7 @@ class Project( Action ):
             url_arch = ''
 
         if repo.tag != '':
-            m = re.match( '([0-9]+)\.([0-9]+)\.([0-9]+)', repo.tag )
+            m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)$', repo.tag )
             if not m:
                 cfg.errln( 'Invalid repo tag format %s\n', repo.tag )
                 sys.exit( 1 )
