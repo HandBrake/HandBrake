@@ -39,7 +39,8 @@ int           hb_hwd_enabled( hb_handle_t *h );
 hb_hwd_t    * hb_hwd_get_context();
 
 /* hb_get_version() */
-char        * hb_get_version( hb_handle_t * );
+const char  * hb_get_full_description();
+const char  * hb_get_version( hb_handle_t * );
 int           hb_get_build( hb_handle_t * );
 
 /* hb_check_update()

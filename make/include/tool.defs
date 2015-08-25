@@ -11,3 +11,4 @@ WGET.exe  = wget
 MV.exe    = mv
 ZIP.exe   = zip
 LN.exe    = ln
+GIT.exe   = git

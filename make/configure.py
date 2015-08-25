@@ -159,12 +159,12 @@ class Configure( object ):
             if os.access( name, os.X_OK ):
                 return name
             return None
-        
+
         if not os.environ.has_key( 'PATH' ) or os.environ[ 'PATH' ] == '':
             path = os.defpath
         else:
             path = os.environ['PATH']
-        
+
         for dir in path.split( os.pathsep ):
             f = os.path.join( dir, name )
             if os.access( f, os.X_OK ):
@@ -317,7 +317,7 @@ class ShellProbe( Action ):
 ##
 ## returns true if feature successfully compiles
 ##
-##   
+##
 class CCProbe( Action ):
     def __init__( self, pretext, command, test_file ):
         super( CCProbe, self ).__init__( 'probe', pretext )
@@ -358,7 +358,7 @@ class CCProbe( Action ):
 ##
 ## returns true if feature successfully compiles
 ##
-##   
+##
 class LDProbe( Action ):
     def __init__( self, pretext, command, lib, test_file ):
         super( LDProbe, self ).__init__( 'probe', pretext )
@@ -444,7 +444,7 @@ class HostTupleProbe( ShellProbe, list ):
 
         if self.match( '*-*-cygwin*' ):
             self.systemf = self[2][0].upper() + self[2][1:]
-            
+
     ## glob-match against spec
     def match( self, *specs ):
         for spec in specs:
@@ -519,7 +519,7 @@ class IfHost( object ):
 
     def __nonzero__( self ):
         return self.value != None
-        
+
     def __str__( self ):
         return self.value
 
@@ -551,7 +551,7 @@ class ArchAction( Action ):
     def _action( self ):
         self.fail = False
 
-        ## some match on system should be made here; otherwise we signal a warning. 
+        ## some match on system should be made here; otherwise we signal a warning.
         if host.match( '*-*-cygwin*' ):
             pass
         elif host.match( '*-*-darwin11.*' ):
@@ -673,74 +673,67 @@ class SelectMode( dict ):
 ## Builds are classed into one of the following types:
 ##
 ##  release
-##      must be built from official svn with '/tags/' in the url
+##      must be built from official git at version tag
 ##  developer
-##      must be built from official svn but is not a release
-##  unofficial
-##      all other builds
+##      must be built from official git but is not a release
 ##
 class RepoProbe( ShellProbe ):
     def __init__( self ):
-        svn = 'svn'
-
-        ## Possible the repo was created using an incompatible version than what is
-        ## available in PATH when probe runs. Workaround by checking for file
-        ## .svn/HANDBRAKE_REPO_PROBE which points to a preferred svn executable.
+        # Find script that creates repo info
         try:
-            hrp = os.path.join( cfg.src_dir, '.svn', 'HANDBRAKE_REPO_PROBE' )
-            if os.path.isfile( hrp ) and os.path.getsize( hrp ) > 0:
-                file = cfg.open( hrp, 'r' )
-                line = file.readline().strip()
-                file.close()
-                if line:
-                    svn = line
+            repo_info = os.path.join( cfg.src_dir, 'scripts', 'repo-info.sh' )
+            if not os.path.isfile( repo_info ):
+                cfg.errln( 'Missing required script %s\n', repo_info )
+                sys.exit( 1 )
         except:
-            pass
+            sys.exit( 1 )
 
-        super( RepoProbe, self ).__init__( 'svn info', '%s info %s' % (svn,cfg.src_dir) )
+        super( RepoProbe, self ).__init__( 'repo info', '%s %s' %
+                                            (repo_info, cfg.src_dir) )
 
-        self.url       = 'svn://nowhere.com/project/unknown'
-        self.root      = 'svn://nowhere.com/project'
+        self.url       = 'git://nowhere.com/project/unknown'
+        self.tag       = ''
         self.branch    = 'unknown'
-        self.uuid      = '00000000-0000-0000-0000-000000000000';
+        self.remote    = 'unknown'
         self.rev       = 0
+        self.hash      = 'deadbeaf'
+        self.shorthash = 'deadbea'
         self.date      = '0000-00-00 00:00:00 -0000'
         self.official  = 0
-        self.type      = 'unofficial'
+        self.type      = 'developer'
 
     def _parseSession( self ):
         for line in self.session:
             ## grok fields
-            m = re.match( '([^:]+):\\s+(.+)', line )
+            m = re.match( '([^\=]+)\=(.*)', line )
             if not m:
                 continue
 
             (name,value) = m.groups()
-            if name == 'URL':
+            if name == 'URL' and value != '':
                 self.url = value
-            elif name == 'Repository Root':
-                self.root = value
-            elif name == 'Repository UUID':
-                self.uuid = value
-            elif name == 'Revision':
+            elif name == 'TAG':
+                self.tag = value
+            elif name == 'BRANCH':
+                self.branch = value
+            elif name == 'REMOTE':
+                self.remote = value
+            elif name == 'REV':
                 self.rev = int( value )
-            elif name == 'Last Changed Date':
-                # strip chars in parens
-                if value.find( ' (' ):
-                    self.date = value[0:value.find(' (')]
-                else:
-                    self.date = value
+            elif name == 'DATE':
+                self.date = value
+            elif name == 'HASH':
+                self.hash = value
+                self.shorthash = value[:7]
 
-        ## grok branch
-        i = self.url.rfind( '/' )
-        if i != -1 and i < len(self.url)-1:
-            self.branch = self.url[i+1:]
+        # type-classification via repository URL
+        official_url = 'https://github.com/HandBrake/HandBrake.git' # HTTPS
+        if self.url == 'git@github.com:HandBrake/HandBrake.git':    # SSH
+            self.url = official_url
 
-        # type-classification via repository UUID
-        if self.uuid == 'b64f7644-9d1e-0410-96f1-a4d463321fa5':
+        if self.url == official_url:
             self.official = 1
-            m = re.match( '([^:]+)://([^/]+)/(.+)', self.url )
-            if m and re.match( '.*tags/.*', m.group( 3 )):
+            if self.branch == '' and self.rev == 0:
                 self.type = 'release'
             else:
                 self.type = 'developer'
@@ -748,12 +741,12 @@ class RepoProbe( ShellProbe ):
         self.msg_end = self.url
 
     def _failSession( self ):
-        # Look for svn info in version file.
+        # Look for repo info in version file.
         #
         # Version file would be created manually by source packager.
         # e.g.
-        # $ svn info HandBrake > HandBrake/version.txt
-        # $ tar -czf handbrake-source.tgz --exclude .svn HandBrake
+        # $ HandBrake/scripts/repo-info.sh HandBrake > HandBrake/version.txt
+        # $ tar -czf handbrake-source.tgz --exclude .git HandBrake
         cfg.infof( 'probe: version.txt...' )
         try:
             hvp = os.path.join( cfg.src_dir, 'version.txt' )
@@ -793,7 +786,7 @@ class Project( Action ):
         self.name_upper = self.name.upper()
 
         self.vmajor = 0
-        self.vminor = 10
+        self.vminor = 0
         self.vpoint = 0
 
     def _action( self ):
@@ -803,24 +796,33 @@ class Project( Action ):
         else:
             url_arch = ''
 
+        if repo.tag != '':
+            m = re.match( '([0-9]+)\.([0-9]+)\.([0-9]+)', repo.tag )
+            if not m:
+                cfg.errln( 'Invalid repo tag format %s\n', repo.tag )
+                sys.exit( 1 )
+            (vmajor, vminor, vpoint) = m.groups()
+            self.vmajor = int(vmajor)
+            self.vminor = int(vminor)
+            self.vpoint = int(vpoint)
+
         if repo.type == 'release':
             self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
             url_ctype = ''
             url_ntype = 'stable'
             self.build = time.strftime('%Y%m%d') + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
-        elif repo.type == 'developer':
-            self.version = '%dsvn' % (repo.rev)
+        else:
+            if repo.branch != '':
+                self.version = '%d.%d.%d-%d-%s-%s' % (self.vmajor, self.vminor,
+                    self.vpoint, repo.rev, repo.shorthash, repo.branch)
+            else:
+                self.version = '%d.%d.%d-%d-%s' % (self.vmajor, self.vminor,
+                    self.vpoint, repo.rev, repo.shorthash)
             url_ctype = '_unstable'
             url_ntype = 'unstable'
             self.build = time.strftime('%Y%m%d') + '01'
-            self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
-        else:
-            self.version = 'rev%d' % (repo.rev)
-            url_ctype = '_unofficial'
-            url_ntype = 'unofficial'
-            self.build = time.strftime('%Y%m%d') + '99'
-            self.title = '%s rev%d (%s)' % (self.name,repo.rev,self.build)
+            self.title = '%s %s (%s)' % (self.name,self.version,self.build)
 
         self.url_appcast = 'https://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
         self.url_appnote = 'https://handbrake.fr/appcast/%s.html' % (url_ntype)
@@ -1206,7 +1208,7 @@ def createCLI():
 
     h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
-    
+
     h = IfHost( 'enable use of x265 encoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-x265', default=True, action='store_true', help=h )
     grp.add_option( '--disable-x265', dest="enable_x265", action='store_false' )
@@ -1667,13 +1669,15 @@ int main ()
     doc.add( 'HB.build', project.build )
 
     doc.add( 'HB.repo.url',       repo.url )
-    doc.add( 'HB.repo.root',      repo.root )
-    doc.add( 'HB.repo.branch',    repo.branch )
-    doc.add( 'HB.repo.uuid',      repo.uuid )
+    doc.add( 'HB.repo.tag',       repo.tag )
     doc.add( 'HB.repo.rev',       repo.rev )
-    doc.add( 'HB.repo.date',      repo.date )
-    doc.add( 'HB.repo.official',  repo.official )
+    doc.add( 'HB.repo.hash',      repo.hash )
+    doc.add( 'HB.repo.shorthash', repo.shorthash )
+    doc.add( 'HB.repo.branch',    repo.branch )
+    doc.add( 'HB.repo.remote',    repo.remote )
     doc.add( 'HB.repo.type',      repo.type )
+    doc.add( 'HB.repo.official',  repo.official )
+    doc.add( 'HB.repo.date',      repo.date )
 
     doc.addBlank()
     doc.add( 'HOST.spec',    host.spec )
@@ -1714,7 +1718,7 @@ int main ()
     doc.add( 'BUILD/',  cfg.build_final + os.sep )
     doc.add( 'PREFIX',  cfg.prefix_final )
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
-    
+
     doc.addBlank()
     doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ))
     doc.add( 'FEATURE.local_autotools', int( options.enable_local_autotools ))
@@ -1867,7 +1871,7 @@ except AbortError, x:
     try:
         cfg.record_log()
     except:
-        pass        
-    sys.exit( 1 )    
+        pass
+    sys.exit( 1 )
 
 sys.exit( 0 )

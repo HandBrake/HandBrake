@@ -20,10 +20,10 @@ dnl
 @set HB-version-hex     __HB_version_hex
 @set HB-build           __HB_build
 @set HB-repo-url        __HB_repo_url
-@set HB-repo-root       __HB_repo_root
 @set HB-repo-branch     __HB_repo_branch
-@set HB-repo-uuid       __HB_repo_uuid
+@set HB-repo-tag        __HB_repo_tag
 @set HB-repo-rev        __HB_repo_rev
+@set HB-repo-hash       __HB_repo_hash
 @set HB-repo-date       __HB_repo_date
 @set HB-repo-official   __HB_repo_official
 @set HB-repo-type       __HB_repo_type

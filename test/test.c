@@ -1731,12 +1731,16 @@ static int ParseOptions( int argc, char ** argv )
     #define PRESET_EXPORT_FILE   304
     #define PRESET_IMPORT        305
     #define PRESET_IMPORT_GUI    306
+    #define VERSION              307
+    #define DESCRIBE             308
 
     for( ;; )
     {
         static struct option long_options[] =
           {
             { "help",        no_argument,       NULL,    'h' },
+            { "version",     no_argument,       NULL,    VERSION },
+            { "describe",    no_argument,       NULL,    DESCRIBE },
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
@@ -1906,6 +1910,12 @@ static int ParseOptions( int argc, char ** argv )
             case 'h':
                 ShowHelp();
                 exit( 0 );
+            case VERSION:
+                printf("HandBrake %s\n", hb_get_version(NULL));
+                exit(0);
+            case DESCRIBE:
+                printf("%s\n", hb_get_full_description());
+                exit(0);
             case 'u':
                 update = 1;
                 break;
