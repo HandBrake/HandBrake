@@ -48,12 +48,6 @@
 
 @end
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
-@interface NSWindow(HBExtensions)
-@property (readonly) CGFloat backingScaleFactor;
-@end
-#endif
-
 #define BORDER_SIZE 2.0
 // make min width and height of preview window large enough for hud
 #define MIN_WIDTH 480.0
