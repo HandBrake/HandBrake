@@ -11,25 +11,16 @@ namespace HandBrakeWPF.Model.Audio
 {
     using System.ComponentModel;
     using System.Linq;
-    using System.Windows.Media.Animation;
 
-    using Caliburn.Micro;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Audio Behaviours
     /// </summary>
     public class AudioBehaviours : PropertyChangedBase
     {
-        /// <summary>
-        /// The selected behaviour.
-        /// </summary>
         private AudioBehaviourModes selectedBehaviour;
-
-        /// <summary>
-        /// The selected langauges.
-        /// </summary>
         private BindingList<string> selectedLangauges;
-
         private AudioTrackDefaultsMode trackDefaultBehaviour;
 
         /// <summary>
@@ -126,8 +117,8 @@ namespace HandBrakeWPF.Model.Audio
         {
             AudioBehaviours cloned = new AudioBehaviours
                        {
-                           SelectedBehaviour = this.selectedBehaviour,
-                           SelectedLangauges = new BindingList<string>(),
+                           SelectedBehaviour = this.selectedBehaviour, 
+                           SelectedLangauges = new BindingList<string>(), 
                            SelectedTrackDefaultBehaviour = this.SelectedTrackDefaultBehaviour
                        };
 

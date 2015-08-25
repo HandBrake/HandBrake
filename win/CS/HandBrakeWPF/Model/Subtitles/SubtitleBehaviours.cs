@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Model.Subtitles
     using System.ComponentModel;
     using System.Linq;
 
-    using Caliburn.Micro;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     ///  A class to track the behaviours of audio track selection
@@ -158,11 +158,11 @@ namespace HandBrakeWPF.Model.Subtitles
         {
             SubtitleBehaviours cloned = new SubtitleBehaviours
             {
-                SelectedBehaviour = this.selectedBehaviour,
-                SelectedBurnInBehaviour = this.selectedBurnInBehaviour,
-                SelectedLangauges = new BindingList<string>(),
-                AddClosedCaptions = this.addClosedCaptions,
-                AddForeignAudioScanTrack = this.addForeignAudioScanTrack,
+                SelectedBehaviour = this.selectedBehaviour, 
+                SelectedBurnInBehaviour = this.selectedBurnInBehaviour, 
+                SelectedLangauges = new BindingList<string>(), 
+                AddClosedCaptions = this.addClosedCaptions, 
+                AddForeignAudioScanTrack = this.addForeignAudioScanTrack, 
             };
 
             foreach (var item in this.SelectedLangauges)
