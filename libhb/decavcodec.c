@@ -81,58 +81,58 @@ typedef struct {
 
 struct hb_work_private_s
 {
-    hb_job_t        *job;
-    hb_title_t      *title;
-    AVCodecContext  *context;
-    AVCodecParserContext *parser;
-    AVFrame         *frame;
-    hb_buffer_t     *palette;
-    int             threads;
-    int             video_codec_opened;
-    hb_list_t       *list;
-    double          duration;   // frame duration (for video)
-    double          field_duration;   // field duration (for video)
-    int             frame_duration_set; // Indicates valid timing was found in stream
-    double          pts_next;   // next pts we expect to generate
-    int64_t         chap_time;  // time of next chap mark (if new_chap != 0)
-    int             new_chap;   // output chapter mark pending
-    uint32_t        nframes;
-    uint32_t        ndrops;
-    uint32_t        decode_errors;
-    int64_t         prev_pts;
-    int             brokenTS; // video stream may contain packed b-frames
-    hb_buffer_t*    delayq[HEAP_SIZE];
-    int             queue_primed;
-    pts_heap_t      pts_heap;
-    void*           buffer;
-    struct SwsContext *sws_context; // if we have to rescale or convert color space
-    int             sws_width;
-    int             sws_height;
-    int             sws_pix_fmt;
-    int cadence[12];
-    int wait_for_keyframe;
+    hb_job_t             * job;
+    hb_title_t           * title;
+    AVCodecContext       * context;
+    AVCodecParserContext * parser;
+    AVFrame              * frame;
+    hb_buffer_t          * palette;
+    int                    threads;
+    int                    video_codec_opened;
+    hb_buffer_list_t       list;
+    double                 duration;   // frame duration (for video)
+    double                 field_duration;   // field duration (for video)
+    int                    frame_duration_set; // Indicates valid timing was found in stream
+    double                 pts_next;   // next pts we expect to generate
+    int64_t                chap_time;  // time of next chap mark (if new_chap != 0)
+    int                    new_chap;   // output chapter mark pending
+    uint32_t               nframes;
+    uint32_t               ndrops;
+    uint32_t               decode_errors;
+    int64_t                prev_pts;
+    int                    brokenTS; // video stream may contain packed b-frames
+    hb_buffer_t*           delayq[HEAP_SIZE];
+    int                    queue_primed;
+    pts_heap_t             pts_heap;
+    void*                  buffer;
+    struct SwsContext    * sws_context; // if we have to rescale or convert color space
+    int                    sws_width;
+    int                    sws_height;
+    int                    sws_pix_fmt;
+    int                    cadence[12];
+    int                    wait_for_keyframe;
 #ifdef USE_HWD
-    hb_va_dxva2_t   *dxva2;
-    uint8_t         *dst_frame;
-    hb_oclscale_t   *opencl_scale;
+    hb_va_dxva2_t        * dxva2;
+    uint8_t              * dst_frame;
+    hb_oclscale_t        * opencl_scale;
 #endif
-    hb_audio_resample_t *resample;
+    hb_audio_resample_t  * resample;
 
 #ifdef USE_QSV
     // QSV-specific settings
     struct
     {
-        int decode;
-        av_qsv_config config;
-        const char *codec_name;
+        int                decode;
+        av_qsv_config      config;
+        const char       * codec_name;
 #define USE_QSV_PTS_WORKAROUND // work around out-of-order output timestamps
 #ifdef  USE_QSV_PTS_WORKAROUND
-        hb_list_t *pts_list;
+        hb_list_t        * pts_list;
 #endif
     } qsv;
 #endif
 
-    hb_list_t          * list_subtitle;
+    hb_list_t            * list_subtitle;
 };
 
 #ifdef USE_QSV_PTS_WORKAROUND
@@ -188,7 +188,6 @@ static int64_t hb_av_pop_next_pts(hb_list_t *list)
 #endif
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
-static hb_buffer_t *link_buf_list( hb_work_private_t *pv );
 
 
 static int64_t heap_pop( pts_heap_t *heap )
@@ -267,7 +266,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = job->title;
     else
         pv->title = w->title;
-    pv->list = hb_list_init();
+    hb_buffer_list_clear(&pv->list);
 
     codec       = avcodec_find_decoder(w->codec_param);
     pv->context = avcodec_alloc_context3(codec);
@@ -431,8 +430,7 @@ static void closePrivData( hb_work_private_t ** ppv )
     if ( pv )
     {
         flushDelayQueue( pv );
-        hb_buffer_t *buf = link_buf_list( pv );
-        hb_buffer_close( &buf );
+        hb_buffer_list_close(&pv->list);
 
         if ( pv->job && pv->context && pv->context->codec )
         {
@@ -470,10 +468,6 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             av_freep( &pv->context->extradata );
             av_freep( &pv->context );
-        }
-        if ( pv->list )
-        {
-            hb_list_empty( &pv->list );
         }
         hb_audio_resample_free(pv->resample);
 
@@ -576,7 +570,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             decodeAudio( w->audio, pv, pout, pout_len, cur );
         }
     }
-    *buf_out = link_buf_list( pv );
+    *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;
 }
 
@@ -1032,10 +1026,10 @@ static void flushDelayQueue( hb_work_private_t *pv )
     int slot = pv->queue_primed ? pv->nframes & (HEAP_SIZE-1) : 0;
 
     // flush all the video packets left on our timestamp-reordering delay q
-    while ( ( buf = pv->delayq[slot] ) != NULL )
+    while ((buf = pv->delayq[slot]) != NULL)
     {
-        buf->s.start = heap_pop( &pv->pts_heap );
-        hb_list_add( pv->list, buf );
+        buf->s.start = heap_pop(&pv->pts_heap);
+        hb_buffer_list_append(&pv->list, buf);
         pv->delayq[slot] = NULL;
         slot = ( slot + 1 ) & (HEAP_SIZE-1);
     }
@@ -1446,7 +1440,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
             checkCadence( pv->cadence, flags, buf->s.start );
-            hb_list_add( pv->list, buf );
+            hb_buffer_list_append(&pv->list, buf);
             ++pv->nframes;
             return got_picture;
         }
@@ -1490,7 +1484,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
             checkCadence( pv->cadence, buf->s.flags, buf->s.start );
-            hb_list_add( pv->list, buf );
+            hb_buffer_list_append(&pv->list, buf);
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
@@ -1568,30 +1562,6 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
     }
 }
 
-/*
- * Removes all packets from 'pv->list', links them together into
- * a linked-list, and returns the first packet in the list.
- */
-static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
-{
-    hb_buffer_t *head = hb_list_item( pv->list, 0 );
-
-    if ( head )
-    {
-        hb_list_rem( pv->list, head );
-
-        hb_buffer_t *last = head, *buf;
-
-        while ( ( buf = hb_list_item( pv->list, 0 ) ) != NULL )
-        {
-            hb_list_rem( pv->list, buf );
-            last->next = buf;
-            last = buf;
-        }
-    }
-    return head;
-}
-
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1604,7 +1574,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = job->title;
     else
         pv->title = w->title;
-    pv->list = hb_list_init();
+    hb_buffer_list_clear(&pv->list);
 
 #ifdef USE_QSV
     if (hb_qsv_decode_is_enabled(job))
@@ -1819,8 +1789,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             decodeVideo(w, in->data, 0, 0, pts, dts, 0);
         }
-        hb_list_add( pv->list, in );
-        *buf_out = link_buf_list( pv );
+        hb_buffer_list_append(&pv->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_WORK_DONE;
     }
 
@@ -1919,7 +1889,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
-    *buf_out = link_buf_list( pv );
+    *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;
 }
 
@@ -2157,8 +2127,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
     if (pv->context != NULL && pv->context->codec != NULL)
     {
         flushDelayQueue( pv );
-        hb_buffer_t *buf = link_buf_list( pv );
-        hb_buffer_close( &buf );
+        hb_buffer_list_close(&pv->list);
         if ( pv->title->opaque_priv == NULL )
         {
             pv->video_codec_opened = 0;
@@ -2293,7 +2262,7 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                 out->s.duration = duration;
                 out->s.stop     = duration + pv->pts_next;
                 pv->pts_next    = duration + pv->pts_next;
-                hb_list_add(pv->list, out);
+                hb_buffer_list_append(&pv->list, out);
             }
         }
     }

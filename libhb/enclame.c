@@ -185,7 +185,10 @@ int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_audio_t * audio = w->audio;
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * buf;
+    hb_buffer_list_t list;
 
+    *buf_in = NULL;
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input - send it downstream & say we're done */
@@ -202,35 +205,24 @@ int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             hb_buffer_close( &buf );
         }
-
-        // Add the flushed data
-        *buf_out = buf;
-
+        hb_buffer_list_append(&list, buf);
         // Add the eof
-        if ( buf )
-        {
-            buf->next = in;
-        }
-        else
-        {
-            *buf_out = in;
-        }
+        hb_buffer_list_append(&list, in);
 
-        *buf_in = NULL;
+        *buf_out = hb_buffer_list_clear(&list);
         return HB_WORK_DONE;
     }
 
-    hb_list_add( pv->list, *buf_in );
-    *buf_in = NULL;
+    hb_list_add(pv->list, in);
 
-    *buf_out = buf = Encode( w );
-
-    while( buf )
+    buf = Encode( w );
+    while (buf)
     {
-        buf->next = Encode( w );
-        buf       = buf->next;
+        hb_buffer_list_append(&list, buf);
+        buf = Encode( w );
     }
 
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }
 

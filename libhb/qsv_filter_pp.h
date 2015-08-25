@@ -31,8 +31,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "msdk/mfxplugin.h"
 
-extern hb_buffer_t *link_buf_list( hb_filter_private_t *pv );
-
 struct qsv_filter_task_s;
 
 typedef struct{

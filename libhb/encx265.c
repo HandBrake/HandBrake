@@ -538,36 +538,20 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
         uint32_t nnal;
         x265_nal *nal;
         x265_picture pic_out;
-        hb_buffer_t *last_buf = NULL;
+        hb_buffer_list_t list;
+
+        hb_buffer_list_clear(&list);
 
         // flush delayed frames
         while (x265_encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
         {
             hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
-            if (buf != NULL)
-            {
-                if (last_buf == NULL)
-                {
-                    *buf_out = buf;
-                }
-                else
-                {
-                    last_buf->next = buf;
-                }
-                last_buf = buf;
-            }
+            hb_buffer_list_append(&list, buf);
         }
-
         // add the EOF to the end of the chain
-        if (last_buf == NULL)
-        {
-            *buf_out = in;
-        }
-        else
-        {
-            last_buf->next = in;
-        }
+        hb_buffer_list_append(&list, in);
 
+        *buf_out = hb_buffer_list_clear(&list);
         *buf_in = NULL;
         return HB_WORK_DONE;
     }

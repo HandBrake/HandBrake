@@ -2567,6 +2567,188 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 }
 
 /**********************************************************************
+ * hb_buffer_list implementation
+ *********************************************************************/
+void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf)
+{
+    int count = 1;
+    hb_buffer_t *end = buf;
+
+    if (buf == NULL)
+    {
+        return;
+    }
+
+    // Input buffer may be a list of buffers, find the end.
+    while (end != NULL && end->next != NULL)
+    {
+        end = end->next;
+        count++;
+    }
+    if (list->tail == NULL)
+    {
+        list->head = buf;
+        list->tail = end;
+    }
+    else
+    {
+        list->tail->next = buf;
+        list->tail = end;
+    }
+    list->count += count;
+}
+
+void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf)
+{
+    int count = 1;
+    hb_buffer_t *end = buf;
+
+    if (buf == NULL)
+    {
+        return;
+    }
+
+    // Input buffer may be a list of buffers, find the end.
+    while (end != NULL && end->next != NULL)
+    {
+        end = end->next;
+        count++;
+    }
+    if (list->tail == NULL)
+    {
+        list->head = buf;
+        list->tail = end;
+    }
+    else
+    {
+        end->next = list->head;
+        list->head = buf;
+    }
+    list->count += count;
+}
+
+hb_buffer_t* hb_buffer_list_rem_head(hb_buffer_list_t *list)
+{
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    hb_buffer_t *head = list->head;
+    if (list->head != NULL)
+    {
+        if (list->head == list->tail)
+        {
+            list->tail = NULL;
+        }
+        list->head = list->head->next;
+        list->count--;
+    }
+    if (head != NULL)
+    {
+        head->next = NULL;
+    }
+    return head;
+}
+
+hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
+{
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    hb_buffer_t *tail = list->tail;
+
+    if (list->head == list->tail)
+    {
+        list->head = list->tail = NULL;
+        list->count = 0;
+    }
+    else if (list->tail != NULL)
+    {
+        hb_buffer_t *end = list->head;
+        while (end != NULL && end->next != list->tail)
+        {
+            end = end->next;
+        }
+        end->next = NULL;
+        list->tail = end;
+        list->count--;
+    }
+    if (tail != NULL)
+    {
+        tail->next = NULL;
+    }
+    return tail;
+}
+
+hb_buffer_t* hb_buffer_list_head(hb_buffer_list_t *list)
+{
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    return list->head;
+}
+
+hb_buffer_t* hb_buffer_list_tail(hb_buffer_list_t *list)
+{
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    return list->tail;
+}
+
+hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf)
+{
+    int count = 0;
+
+    if (list == NULL)
+    {
+        return NULL;
+    }
+
+    hb_buffer_t *head = list->head;
+    hb_buffer_t *end = buf;
+    if (end != NULL)
+    {
+        count++;
+        while (end->next != NULL)
+        {
+            end = end->next;
+            count++;
+        }
+    }
+    list->head = buf;
+    list->tail = end;
+    list->count = count;
+    return head;
+}
+
+hb_buffer_t* hb_buffer_list_clear(hb_buffer_list_t *list)
+{
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    hb_buffer_t *head = list->head;
+    list->head = list->tail = NULL;
+    list->count = 0;
+    return head;
+}
+
+void hb_buffer_list_close(hb_buffer_list_t *list)
+{
+    hb_buffer_t *buf = hb_buffer_list_clear(list);
+    hb_buffer_close(&buf);
+}
+
+int hb_buffer_list_count(hb_buffer_list_t *list)
+{
+    return list->count;
+}
+
+/**********************************************************************
  * hb_list implementation
  **********************************************************************
  * Basic and slow, but enough for what we need

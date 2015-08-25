@@ -67,44 +67,44 @@ hb_work_object_t hb_encqsv =
 
 struct hb_work_private_s
 {
-    hb_job_t *job;
-    uint32_t  frames_in;
-    uint32_t  frames_out;
-    int64_t   last_start;
+    hb_job_t          * job;
+    uint32_t            frames_in;
+    uint32_t            frames_out;
+    int64_t             last_start;
 
-    hb_qsv_param_t param;
-    av_qsv_space enc_space;
-    hb_qsv_info_t *qsv_info;
+    hb_qsv_param_t      param;
+    av_qsv_space        enc_space;
+    hb_qsv_info_t     * qsv_info;
 
-    hb_list_t *delayed_chapters;
-    int64_t next_chapter_pts;
+    hb_list_t         * delayed_chapters;
+    int64_t             next_chapter_pts;
 
 #define BFRM_DELAY_MAX 16
-    uint32_t      *init_delay;
-    int            bfrm_delay;
-    int64_t        init_pts[BFRM_DELAY_MAX + 1];
-    hb_list_t     *list_dts;
+    int               * init_delay;
+    int                 bfrm_delay;
+    int64_t             init_pts[BFRM_DELAY_MAX + 1];
+    hb_list_t         * list_dts;
 
-    int64_t frame_duration[FRAME_INFO_SIZE];
+    int64_t             frame_duration[FRAME_INFO_SIZE];
 
-    int async_depth;
-    int max_async_depth;
+    int                 async_depth;
+    int                 max_async_depth;
 
     // if encode-only, system memory used
-    int is_sys_mem;
-    mfxSession mfx_session;
-    struct SwsContext *sws_context_to_nv12;
+    int                 is_sys_mem;
+    mfxSession          mfx_session;
+    struct SwsContext * sws_context_to_nv12;
 
     // whether to expect input from VPP or from QSV decode
-    int is_vpp_present;
+    int                 is_vpp_present;
 
     // whether the encoder is initialized
-    int init_done;
+    int                 init_done;
 
-    hb_list_t *delayed_processing;
-    hb_list_t *encoded_frames;
+    hb_list_t         * delayed_processing;
+    hb_buffer_list_t    encoded_frames;
 
-    hb_list_t *loaded_plugins;
+    hb_list_t         * loaded_plugins;
 };
 
 // used in delayed_chapters list
@@ -680,8 +680,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->is_sys_mem         = hb_qsv_decode_is_enabled(job) == 0;
     pv->qsv_info           = hb_qsv_info_get(job->vcodec);
     pv->delayed_processing = hb_list_init();
-    pv->encoded_frames     = hb_list_init();
     pv->last_start         = INT64_MIN;
+    hb_buffer_list_clear(&pv->encoded_frames);
 
     pv->next_chapter_pts = AV_NOPTS_VALUE;
     pv->delayed_chapters = hb_list_init();
@@ -984,7 +984,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
     else
     {
-        hb_error("encqsvInit: invalid rate control (%d, %d)",
+        hb_error("encqsvInit: invalid rate control (%f, %d)",
                  job->vquality, job->vbitrate);
         return -1;
     }
@@ -1514,16 +1514,7 @@ void encqsvClose(hb_work_object_t *w)
             }
             hb_list_close(&pv->delayed_chapters);
         }
-        if (pv->encoded_frames != NULL)
-        {
-            hb_buffer_t *item;
-            while ((item = hb_list_item(pv->encoded_frames, 0)) != NULL)
-            {
-                hb_list_rem(pv->encoded_frames, item);
-                hb_buffer_close(&item);
-            }
-            hb_list_close(&pv->encoded_frames);
-        }
+        hb_buffer_list_close(&pv->encoded_frames);
     }
 
     free(pv);
@@ -1677,7 +1668,7 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
     }
 
     /* This can come in handy */
-    hb_deep_log(2, "compute_init_delay: %"PRId64" (%d frames)", pv->init_delay[0], pv->bfrm_delay);
+    hb_deep_log(2, "compute_init_delay: %d (%d frames)", pv->init_delay[0], pv->bfrm_delay);
 
     /* The delay only needs to be set once. */
     pv->init_delay = NULL;
@@ -1781,7 +1772,7 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
         restore_chapter(pv, buf);
     }
 
-    hb_list_add(pv->encoded_frames, buf);
+    hb_buffer_list_append(&pv->encoded_frames, buf);
     pv->frames_out++;
     return;
 
@@ -1923,28 +1914,6 @@ static int qsv_enc_work(hb_work_private_t *pv,
     return 0;
 }
 
-static hb_buffer_t* link_buffer_list(hb_list_t *list)
-{
-    hb_buffer_t *buf, *prev = NULL, *out = NULL;
-
-    while ((buf = hb_list_item(list, 0)) != NULL)
-    {
-        hb_list_rem(list, buf);
-
-        if (prev == NULL)
-        {
-            prev = out = buf;
-        }
-        else
-        {
-            prev->next = buf;
-            prev       = buf;
-        }
-    }
-
-    return out;
-}
-
 int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
@@ -1968,8 +1937,8 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         qsv_enc_work(pv, NULL, NULL);
-        hb_list_add(pv->encoded_frames, in);
-        *buf_out = link_buffer_list(pv->encoded_frames);
+        hb_buffer_list_append(&pv->encoded_frames, in);
+        *buf_out = hb_buffer_list_clear(&pv->encoded_frames);
         *buf_in = NULL; // don't let 'work_loop' close this buffer
         return HB_WORK_DONE;
     }
@@ -2091,7 +2060,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         goto fail;
     }
 
-    *buf_out = link_buffer_list(pv->encoded_frames);
+    *buf_out = hb_buffer_list_clear(&pv->encoded_frames);
     return HB_WORK_OK;
 
 fail:

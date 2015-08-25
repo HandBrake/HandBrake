@@ -390,7 +390,9 @@ static hb_buffer_t * deint_fast(hb_filter_private_t * pv, hb_buffer_t * in)
 
     int ii;
     hb_buffer_t *dst, *src;
+    hb_buffer_list_t list;
 
+    hb_buffer_list_clear(&list);
     if (in != NULL)
     {
         dst = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
@@ -409,42 +411,20 @@ static hb_buffer_t * deint_fast(hb_filter_private_t * pv, hb_buffer_t * in)
         taskset_cycle( &pv->deint_taskset );
     }
 
-    hb_buffer_t *first = NULL, *last = NULL;
     for (ii = 0; ii < pv->deint_nsegs; ii++)
     {
         src = pv->deint_arguments[ii].src;
         dst = pv->deint_arguments[ii].dst;
         pv->deint_arguments[ii].src = NULL;
         pv->deint_arguments[ii].dst = NULL;
-        if (first == NULL)
-        {
-            first = dst;
-        }
-        if (last != NULL)
-        {
-            last->next = dst;
-        }
-        last = dst;
+        hb_buffer_list_append(&list, dst);
 
         dst->s = src->s;
         hb_buffer_close(&src);
     }
-    if (in == NULL)
-    {
-        // Flushing final buffers.  Append EOS marker buffer.
-        dst = hb_buffer_eof_init();
-        if (first == NULL)
-        {
-            first = dst;
-        }
-        else
-        {
-            last->next = dst;
-        }
-    }
     pv->deint_nsegs = 0;
 
-    return first;
+    return hb_buffer_list_clear(&list);
 }
 
 static int hb_deinterlace_init( hb_filter_object_t * filter,
@@ -580,30 +560,31 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
-    hb_buffer_t * last = NULL, * out = NULL;
+    hb_buffer_list_t list;
 
+    *buf_in = NULL;
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        *buf_out = in;
-        *buf_in = NULL;
         if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
         {
             // Flush final frames
-            *buf_out = deint_fast(pv, NULL);
+            hb_buffer_list_append(&list, deint_fast(pv, NULL));
         }
+        hb_buffer_list_append(&list, in);
+
+        *buf_out = hb_buffer_list_clear(&list);
         return HB_FILTER_DONE;
     }
 
-    /* Use libavcodec deinterlace if yadif_mode < 0 */
+    /* Use fast deinterlace if yadif_mode < 0 */
     if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
     {
-        *buf_in = NULL;
         *buf_out = deint_fast(pv, in);
         return HB_FILTER_OK;
     }
 
     /* Store current frame in yadif cache */
-    *buf_in = NULL;
     yadif_store_ref(pv, in);
 
     // yadif requires 3 buffers, prev, cur, and next.  For the first
@@ -647,7 +628,8 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
 
         if (o_buf[idx] == NULL)
         {
-            o_buf[idx] = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+            o_buf[idx] = hb_frame_buffer_init(in->f.fmt,
+                                              in->f.width, in->f.height);
         }
         yadif_filter(pv, o_buf[idx], parity, tff);
 
@@ -655,22 +637,13 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         // else, add only final frame
         if (( pv->yadif_mode & MODE_YADIF_BOB ) || frame == num_frames - 1)
         {
-            if ( out == NULL )
-            {
-                last = out = o_buf[idx];
-            }
-            else
-            {
-                last->next = o_buf[idx];
-                last = last->next;
-            }
-            last->next = NULL;
+            /* Copy buffered settings to output buffer settings */
+            o_buf[idx]->s = pv->yadif_ref[1]->s;
+            o_buf[idx]->next = NULL;
+            hb_buffer_list_append(&list, o_buf[idx]);
 
             // Indicate that buffer was consumed
             o_buf[idx] = NULL;
-
-            /* Copy buffered settings to output buffer settings */
-            last->s = pv->yadif_ref[1]->s;
             idx ^= 1;
         }
     }
@@ -681,13 +654,14 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
      * timestamps. */
     if (pv->yadif_mode & MODE_YADIF_BOB)
     {
-        out->s.stop -= (out->s.stop - out->s.start) / 2LL;
-        last->s.start = out->s.stop;
-        last->s.new_chap = 0;
+        hb_buffer_t *first = hb_buffer_list_head(&list);
+        hb_buffer_t *second = hb_buffer_list_tail(&list);
+        first->s.stop -= (first->s.stop - first->s.start) / 2LL;
+        second->s.start = first->s.stop;
+        second->s.new_chap = 0;
     }
 
-    *buf_out = out;
-
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_FILTER_OK;
 }
 

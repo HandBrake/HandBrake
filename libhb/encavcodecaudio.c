@@ -426,26 +426,19 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
 
 static hb_buffer_t * Flush( hb_work_object_t * w )
 {
-    hb_buffer_t *first, *buf, *last;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf;
 
-    first = last = buf = Encode( w );
-    while( buf )
+    hb_buffer_list_clear(&list);
+    buf = Encode( w );
+    while (buf != NULL)
     {
-        last = buf;
-        buf->next = Encode( w );
-        buf = buf->next;
+        hb_buffer_list_append(&list, buf);
+        buf = Encode( w );
     }
 
-    if( last )
-    {
-        last->next = hb_buffer_eof_init();
-    }
-    else
-    {
-        first = hb_buffer_eof_init();
-    }
-
-    return first;
+    hb_buffer_list_append(&list, hb_buffer_eof_init());
+    return hb_buffer_list_clear(&list);
 }
 
 /***********************************************************************
@@ -458,6 +451,7 @@ static int encavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in, * buf;
+    hb_buffer_list_t list;
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
@@ -475,14 +469,15 @@ static int encavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_list_add( pv->list, in );
     *buf_in = NULL;
 
-    *buf_out = buf = Encode( w );
-
-    while ( buf )
+    hb_buffer_list_clear(&list);
+    buf = Encode( w );
+    while (buf != NULL)
     {
-        buf->next = Encode( w );
-        buf = buf->next;
+        hb_buffer_list_append(&list, buf);
+        buf = Encode( w );
     }
 
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }
 

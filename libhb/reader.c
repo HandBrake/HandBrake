@@ -366,15 +366,15 @@ static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
  **********************************************************************/
 void ReadLoop( void * _w )
 {
-    hb_work_object_t * w = _w;
+    hb_work_object_t   * w = _w;
     hb_work_private_t  * r = w->private_data;
-    hb_fifo_t   ** fifos;
-    hb_buffer_t  * buf = NULL;
-    hb_list_t    * list;
-    int            n;
-    int            chapter = -1;
-    int            chapter_end = r->job->chapter_end;
-    uint8_t        done = 0;
+    hb_fifo_t         ** fifos;
+    hb_buffer_t        * buf = NULL;
+    hb_buffer_list_t     list;
+    int                  n;
+    int                  chapter = -1;
+    int                  chapter_end = r->job->chapter_end;
+    uint8_t              done = 0;
 
     if (r->bd)
     {
@@ -489,7 +489,7 @@ void ReadLoop( void * _w )
         hb_stream_seek_chapter( r->stream, start );
     }
 
-    list  = hb_list_init();
+    hb_buffer_list_clear(&list);
 
     while(!*r->die && !r->job->done && !done)
     {
@@ -537,11 +537,10 @@ void ReadLoop( void * _w )
             }
         }
 
-        (hb_demux[r->title->demuxer])( buf, list, &r->demux );
+        (hb_demux[r->title->demuxer])(buf, &list, &r->demux);
 
-        while( ( buf = hb_list_item( list, 0 ) ) )
+        while ((buf = hb_buffer_list_rem_head(&list)) != NULL)
         {
-            hb_list_rem( list, buf );
             fifos = GetFifoForId( r, buf->s.id );
 
             if (fifos && r->stream && r->start_found == 2 )
@@ -752,7 +751,7 @@ void ReadLoop( void * _w )
         }
     }
 
-    hb_list_empty( &list );
+    hb_buffer_list_close(&list);
 
     hb_log( "reader: done. %d scr changes", r->demux.scr_changes );
 }

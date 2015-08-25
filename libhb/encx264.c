@@ -53,8 +53,6 @@ struct hb_work_private_s
     x264_picture_t   pic_in;
     uint8_t        * grey_data;
 
-    uint32_t       frames_in;
-    uint32_t       frames_out;
     int64_t        last_stop;   // Debugging - stop time of previous input frame
 
     hb_list_t *delayed_chapters;
@@ -669,8 +667,11 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         x264_picture_t pic_out;
         int i_nal;
         x264_nal_t *nal;
-        hb_buffer_t *last_buf = NULL;
+        hb_buffer_list_t list;
 
+        hb_buffer_list_clear(&list);
+
+        // flush delayed frames
         while ( x264_encoder_delayed_frames( pv->x264 ) )
         {
             x264_encoder_encode( pv->x264, &nal, &i_nal, NULL, &pic_out );
@@ -680,29 +681,17 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 break;
 
             hb_buffer_t *buf = nal_encode( w, &pic_out, i_nal, nal );
-            if ( buf )
-            {
-                ++pv->frames_out;
-                if ( last_buf == NULL )
-                    *buf_out = buf;
-                else
-                    last_buf->next = buf;
-                last_buf = buf;
-            }
+            hb_buffer_list_append(&list, buf);
         }
-        // Flushed everything - add the eof to the end of the chain.
-        if ( last_buf == NULL )
-            *buf_out = in;
-        else
-            last_buf->next = in;
+        // add the EOF to the end of the chain
+        hb_buffer_list_append(&list, in);
 
+        *buf_out = hb_buffer_list_clear(&list);
         *buf_in = NULL;
         return HB_WORK_DONE;
     }
 
     // Not EOF - encode the packet & wrap it in a NAL
-    ++pv->frames_in;
-    ++pv->frames_out;
     *buf_out = x264_encode( w, in );
     return HB_WORK_OK;
 }

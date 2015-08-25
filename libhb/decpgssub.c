@@ -18,15 +18,13 @@ struct hb_work_private_s
     // packet until we have processed several packets.  So we cache
     // all the packets we see until libav returns a subtitle with
     // the information we need.
-    hb_buffer_t * list_pass_buffer;
-    hb_buffer_t * last_pass_buffer;
+    hb_buffer_list_t list_pass;
     // It is possible for multiple subtitles to be enncapsulated in
     // one packet.  This won't happen for PGS subs, but may for other
     // types of subtitles.  Since I plan to generalize this code to handle
     // other than PGS, we will need to keep a list of all subtitles seen
     // while parsing an input packet.
-    hb_buffer_t * list_buffer;
-    hb_buffer_t * last_buffer;
+    hb_buffer_list_t list;
     // XXX: we may occasionally see subtitles with broken timestamps
     //      while this should really get fixed elsewhere,
     //      dropping subtitles should be avoided as much as possible
@@ -50,6 +48,8 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
+    hb_buffer_list_clear(&pv->list);
+    hb_buffer_list_clear(&pv->list_pass);
     pv->discard_subtitle = 1;
     pv->seen_forced_sub  = 0;
     pv->last_pts         = 0;
@@ -168,18 +168,10 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
-        if ( pv->list_buffer == NULL )
-        {
-            pv->list_buffer = pv->last_buffer = in;
-        }
-        else
-        {
-            pv->last_buffer->next = in;
-        }
         *buf_in = NULL;
-        *buf_out = pv->list_buffer;
-        pv->list_buffer = NULL;
+        hb_buffer_list_append(&pv->list, in);
 
+        *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_WORK_DONE;
     }
 
@@ -189,15 +181,8 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         // Append to buffer list.  It will be sent to fifo after we determine
         // if this is a packet we need.
-        if ( pv->list_pass_buffer == NULL )
-        {
-            pv->list_pass_buffer = pv->last_pass_buffer = in;
-        }
-        else
-        {
-            pv->last_pass_buffer->next = in;
-            pv->last_pass_buffer = in;
-        }
+        hb_buffer_list_append(&pv->list_pass, in);
+
         // We are keeping the buffer, so prevent the filter loop from
         // deleting it.
         *buf_in = NULL;
@@ -286,7 +271,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     //
                     // If passthru, create an empty subtitle.
                     // Also, flag an empty subtitle for subtitle RENDER.
-                    make_empty_pgs(pv->list_pass_buffer);
+                    make_empty_pgs(hb_buffer_list_head(&pv->list_pass));
                     clear_subtitle = 1;
                 }
                 // is the subtitle forced?
@@ -340,15 +325,17 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if ( w->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass( PGSSUB, pv->job->mux ) )
             {
-                /* PGS subtitles are spread across multiple packets (1 per segment).
-                 * In the MKV container, all segments are found in the same packet
-                 * (this is expected by some devices, such as the WD TV Live).
-                 * So if there are multiple packets, merge them. */
-                if (pv->list_pass_buffer->next == NULL)
+                /* PGS subtitles are spread across multiple packets,
+                 * 1 per segment.
+                 *
+                 * In the MKV container, all segments are found in the same
+                 * packet (this is expected by some devices, such as the
+                 * WD TV Live).  So if there are multiple packets,
+                 * merge them. */
+                if (hb_buffer_list_count(&pv->list_pass) == 1)
                 {
                     // packets already merged (e.g. MKV sources)
-                    out = pv->list_pass_buffer;
-                    pv->list_pass_buffer = NULL;
+                    out = hb_buffer_list_clear(&pv->list_pass);
                 }
                 else
                 {
@@ -356,7 +343,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     uint8_t * data;
                     hb_buffer_t * b;
 
-                    b = pv->list_pass_buffer;
+                    b = hb_buffer_list_head(&pv->list_pass);
                     while (b != NULL)
                     {
                         size += b->size;
@@ -365,14 +352,14 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                     out = hb_buffer_init( size );
                     data = out->data;
-                    b = pv->list_pass_buffer;
+                    b = hb_buffer_list_head(&pv->list_pass);
                     while (b != NULL)
                     {
-                        memcpy( data, b->data, b->size );
+                        memcpy(data, b->data, b->size);
                         data += b->size;
                         b = b->next;
                     }
-                    hb_buffer_close( &pv->list_pass_buffer );
+                    hb_buffer_list_close(&pv->list_pass);
 
                     out->s        = in->s;
                     out->sequence = in->sequence;
@@ -468,15 +455,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             alpha += out->plane[3].stride;
                         }
                     }
-                    if ( pv->list_buffer == NULL )
-                    {
-                        pv->list_buffer = pv->last_buffer = out;
-                    }
-                    else
-                    {
-                        pv->last_buffer->next = out;
-                        pv->last_buffer = out;
-                    }
+                    hb_buffer_list_append(&pv->list, out);
                     out = NULL;
                 }
                 else
@@ -493,32 +472,19 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out->f.height = 0;
                 }
             }
-            if ( pv->list_buffer == NULL )
-            {
-                pv->list_buffer = pv->last_buffer = out;
-            }
-            else
-            {
-                pv->last_buffer->next = out;
-            }
-            while (pv->last_buffer && pv->last_buffer->next)
-            {
-                pv->last_buffer = pv->last_buffer->next;
-            }
+            hb_buffer_list_append(&pv->list, out);
         }
-        else if ( has_subtitle )
+        else if (has_subtitle)
         {
-            hb_buffer_close( &pv->list_pass_buffer );
-            pv->list_pass_buffer = NULL;
+            hb_buffer_list_close(&pv->list_pass);
         }
-        if ( has_subtitle )
+        if (has_subtitle)
         {
             avsubtitle_free(&subtitle);
         }
     } while (avp.size > 0);
 
-    *buf_out = pv->list_buffer;
-    pv->list_buffer = NULL;
+    *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;
 }
 

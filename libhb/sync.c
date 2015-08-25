@@ -60,10 +60,9 @@ typedef struct
 
 typedef struct
 {
-    int             link;
-    int             merge;
-    hb_buffer_t   * list_current;
-    hb_buffer_t   * last;
+    int              link;
+    int              merge;
+    hb_buffer_list_t list_current;
 } subtitle_sanitizer_t;
 
 typedef struct
@@ -218,17 +217,17 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     return ret;
 }
 
-static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
+static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int ii )
 {
     hb_subtitle_t * subtitle;
 
-    subtitle = hb_list_item( job->list_subtitle, i );
+    subtitle = hb_list_item( job->list_subtitle, ii );
     if (subtitle->format == TEXTSUB &&
         subtitle->config.dest == PASSTHRUSUB &&
         (job->mux & HB_MUX_MASK_MP4))
     {
         // Merge overlapping subtitles since mpv tx3g does not support them
-        sync->subtitle_sanitizer[i].merge = 1;
+        sync->subtitle_sanitizer[ii].merge = 1;
     }
     // PGS subtitles don't need to be linked because there are explicit
     // "clear" subtitle packets that indicate the end time of the
@@ -237,13 +236,14 @@ static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
         subtitle->source != PGSSUB)
     {
         // Fill in stop time when it is missing
-        sync->subtitle_sanitizer[i].link = 1;
+        sync->subtitle_sanitizer[ii].link = 1;
     }
+    hb_buffer_list_clear(&sync->subtitle_sanitizer[ii].list_current);
 }
 
 static void CloseSubtitle(hb_sync_video_t * sync, int ii)
 {
-    hb_buffer_close(&sync->subtitle_sanitizer[ii].list_current);
+    hb_buffer_list_close(&sync->subtitle_sanitizer[ii].list_current);
 }
 
 /***********************************************************************
@@ -345,82 +345,70 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
 
 static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
 {
-    hb_buffer_t *a, *b, *buf, *out = NULL, *last = NULL;
+    hb_buffer_t *a, *b, *buf;
+    hb_buffer_list_t list;
+
+    hb_buffer_list_clear(&list);
 
     do
     {
-        a = sanitizer->list_current;
-        b = a != NULL ? a->next : NULL;
+        a = hb_buffer_list_head(&sanitizer->list_current);
+        if (a == NULL)
+        {
+            break;
+        }
+        b = a->next;
 
         buf = NULL;
-        if (a != NULL && b == NULL && end)
+        if (b == NULL && end)
         {
-            sanitizer->list_current = a->next;
-            if (sanitizer->list_current == NULL)
-                sanitizer->last = NULL;
-            a->next = NULL;
-            buf = a;
+            buf = hb_buffer_list_rem_head(&sanitizer->list_current);
         }
-        else if (a != NULL && a->s.stop != AV_NOPTS_VALUE)
+        else if (a->s.stop != AV_NOPTS_VALUE)
         {
             if (!sanitizer->merge)
             {
-                sanitizer->list_current = a->next;
-                if (sanitizer->list_current == NULL)
-                    sanitizer->last = NULL;
-                a->next = NULL;
-                buf = a;
+                buf = hb_buffer_list_rem_head(&sanitizer->list_current);
             }
             else if (b != NULL && a->s.stop > b->s.start)
             {
                 // Overlap
                 if (ABS(a->s.start - b->s.start) <= 18000)
                 {
+                    if (b->s.stop == AV_NOPTS_VALUE && !end)
+                    {
+                        // To evaluate overlaps, we need the stop times
+                        // for a and b
+                        break;
+                    }
+                    a = hb_buffer_list_rem_head(&sanitizer->list_current);
+
                     // subtitles start within 1/5 second of eachother, merge
-                    if (a->s.stop > b->s.stop)
+                    if (a->s.stop > b->s.stop && b->s.stop != AV_NOPTS_VALUE)
                     {
                         // a continues after b, reorder the list and swap
-                        hb_buffer_t *tmp = a;
-                        a->next = b->next;
-                        b->next = a;
-                        if (sanitizer->last == b)
-                        {
-                            sanitizer->last = a;
-                        }
-                        a = b;
-                        b = tmp;
-                        sanitizer->list_current = a;
+                        b = a;
+                        a = hb_buffer_list_rem_head(&sanitizer->list_current);
+                        hb_buffer_list_prepend(&sanitizer->list_current, b);
                     }
 
-                    a->next = NULL;
                     b->s.start = a->s.stop;
 
                     buf = merge_ssa(a, b);
                     hb_buffer_close(&a);
                     a = buf;
-                    buf = NULL;
-                    sanitizer->list_current = a;
 
                     if (b->s.stop != AV_NOPTS_VALUE &&
                         ABS(b->s.stop - b->s.start) <= 18000)
                     {
                         // b and a completely overlap, remove b
-                        a->next = b->next;
-                        b->next = NULL;
-                        if (sanitizer->last == b)
-                        {
-                            sanitizer->last = a;
-                        }
+                        b = hb_buffer_list_rem_head(&sanitizer->list_current);
                         hb_buffer_close(&b);
-                    }
-                    else
-                    {
-                        a->next = b;
                     }
                 }
                 else
                 {
-                    // a starts before b, output copy of a and
+                    // a starts before b, output copy of a and update a start
                     buf = hb_buffer_dup(a);
                     buf->s.stop = b->s.start;
                     a->s.start = b->s.start;
@@ -428,11 +416,8 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
             }
             else if (b != NULL && a->s.stop <= b->s.start)
             {
-                sanitizer->list_current = a->next;
-                if (sanitizer->list_current == NULL)
-                    sanitizer->last = NULL;
-                a->next = NULL;
-                buf = a;
+                // a starts and ends before b
+                buf = hb_buffer_list_rem_head(&sanitizer->list_current);
             }
         }
 
@@ -442,19 +427,11 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                 buf->s.duration = buf->s.stop - buf->s.start;
             else
                 buf->s.duration = AV_NOPTS_VALUE;
-            if (last == NULL)
-            {
-                out = last = buf;
-            }
-            else
-            {
-                last->next = buf;
-                last = buf;
-            }
+            hb_buffer_list_append(&list, buf);
         }
-    } while (buf != NULL);
+    } while (hb_buffer_list_count(&list) >= 2 || end);
 
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static hb_buffer_t * sanitizeSubtitle(
@@ -496,9 +473,10 @@ static hb_buffer_t * sanitizeSubtitle(
     if (sub->s.renderOffset != AV_NOPTS_VALUE)
         sub->s.renderOffset -= pv->common->video_pts_slip;
 
-    if (sanitizer->last != NULL && sanitizer->last->s.stop == AV_NOPTS_VALUE)
+    hb_buffer_t *last = hb_buffer_list_tail(&sanitizer->list_current);
+    if (last != NULL && last->s.stop == AV_NOPTS_VALUE)
     {
-        sanitizer->last->s.stop = sub->s.start;
+        last->s.stop = sub->s.start;
     }
 
     if (sub->s.start == sub->s.stop)
@@ -507,18 +485,7 @@ static hb_buffer_t * sanitizeSubtitle(
         // of subtitles is not encoded in the stream
         hb_buffer_close(&sub);
     }
-    if (sub != NULL)
-    {
-        if (sanitizer->last == NULL)
-        {
-            sanitizer->list_current = sanitizer->last = sub;
-        }
-        else
-        {
-            sanitizer->last->next = sub;
-            sanitizer->last = sub;
-        }
-    }
+    hb_buffer_list_append(&sanitizer->list_current, sub);
 
     return mergeSubtitles(sanitizer, 0);
 }

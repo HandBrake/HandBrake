@@ -4468,8 +4468,10 @@ static int stream_kind_to_buf_type(int kind)
 
 static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
 {
-    hb_buffer_t *buf = NULL, *first = NULL;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf = NULL;
 
+    hb_buffer_list_clear(&list);
     hb_ts_stream_t * ts_stream = &stream->ts.list[curstream];
     hb_buffer_t * b = ts_stream->buf;
     if (!ts_stream->pes_info_valid)
@@ -4534,16 +4536,8 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // we want the whole TS stream including all substreams.
         // DTS-HD is an example of this.
 
-        if (first == NULL)
-        {
-            first = buf = hb_buffer_init(es_size);
-        }
-        else
-        {
-            hb_buffer_t *tmp = hb_buffer_init(es_size);
-            buf->next = tmp;
-            buf = tmp;
-        }
+        buf = hb_buffer_init(es_size);
+        hb_buffer_list_append(&list, buf);
 
         buf->s.id = get_id(pes_stream);
         buf->s.type = stream_kind_to_buf_type(pes_stream->stream_kind);
@@ -4579,7 +4573,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
     }
     b->size = 0;
     ts_stream->packet_offset = 0;
-    return first;
+    return hb_buffer_list_clear(&list);
 }
 
 static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx,
@@ -4604,18 +4598,17 @@ static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx,
 
 static hb_buffer_t * flush_ts_streams( hb_stream_t *stream )
 {
-    hb_buffer_t *out, **last;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf;
     int ii;
 
-    last = &out;
+    hb_buffer_list_clear(&list);
     for (ii = 0; ii < stream->ts.count; ii++)
     {
-        *last = generate_output_data(stream, ii);
-        // generate_output_data can generate 0 or multiple output buffers
-        while (*last != NULL)
-            last = &(*last)->next;
+        buf = generate_output_data(stream, ii);
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 /***********************************************************************
@@ -4632,10 +4625,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
      */
     int video_index = ts_index_of_video(stream);
     int curstream;
-    hb_buffer_t *out = NULL;
-    hb_buffer_t **last;
+    hb_buffer_t *buf = NULL;
+    hb_buffer_list_t list;
 
-    last = &out;
+    hb_buffer_list_clear(&list);
 
     if (chapter > 0)
     {
@@ -4686,10 +4679,8 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     if (discontinuity)
     {
         // If there is a discontinuity, flush all data
-        *last = flush_ts_streams(stream);
-        // flush_ts_streams can generate 0 or multiple output buffers
-        while (*last != NULL)
-            last = &(*last)->next;
+        buf = flush_ts_streams(stream);
+        hb_buffer_list_append(&list, buf);
     }
     if (adapt_len > 0)
     {
@@ -4710,10 +4701,8 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // When we get a new pcr, we flush all data that was
             // referenced to the last pcr.  This makes it easier
             // for reader to resolve pcr discontinuities.
-            *last = flush_ts_streams(stream);
-            // flush_ts_streams can generate 0 or multiple output buffers
-            while (*last != NULL)
-                last = &(*last)->next;
+            buf = flush_ts_streams(stream);
+            hb_buffer_list_append(&list, buf);
 
             int64_t pcr;
             pcr = ((uint64_t)pkt[ 6] << (33 -  8) ) |
@@ -4734,7 +4723,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     // the video stream DTS for the PCR.
     if (!stream->ts.found_pcr && (stream->ts_flags & TS_HAS_PCR))
     {
-        return out;
+        return hb_buffer_list_clear(&list);
     }
 
     // Get continuity
@@ -4771,7 +4760,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 // a PCR when one is needed). The only thing that can
                 // change in the dup is the PCR which we grabbed above
                 // so ignore the rest.
-                return out;
+                return hb_buffer_list_clear(&list);
             }
         }
         if ( !start && (ts_stream->continuity != -1) &&
@@ -4782,7 +4771,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                     (int)continuity,
                     (ts_stream->continuity + 1) & 0xf );
             ts_stream->continuity = continuity;
-            return out;
+            return hb_buffer_list_clear(&list);
         }
         ts_stream->continuity = continuity;
 
@@ -4811,7 +4800,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         // I ran across a poorly mastered BD that does not properly pad
         // the adaptation field and causes parsing errors below if we
         // do not exit early here.
-        return out;
+        return hb_buffer_list_clear(&list);
     }
 
     /* If we get here the packet is valid - process its data */
@@ -4825,10 +4814,8 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // we have to ship the old packet before updating the pcr
             // since the packet we've been accumulating is referenced
             // to the old pcr.
-            *last = generate_output_data(stream, curstream);
-            // generate_output_data can generate 0 or multiple output buffers
-            while (*last != NULL)
-                last = &(*last)->next;
+            buf = generate_output_data(stream, curstream);
+            hb_buffer_list_append(&list, buf);
             ts_stream->pes_info_valid = 0;
             ts_stream->packet_len = 0;
         }
@@ -4839,7 +4826,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         {
             ts_err( stream, curstream, "missing start code" );
             ts_stream->skipbad = 1;
-            return out;
+            return hb_buffer_list_clear(&list);
         }
 
         // If we were skipping a bad packet, start fresh on this new PES packet
@@ -4857,7 +4844,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 // a DTS or PTS.
                 if (stream->ts.last_timestamp < 0 && (pes[7] >> 6) == 0)
                 {
-                    return out;
+                    return hb_buffer_list_clear(&list);
                 }
                 if ((pes[7] >> 6) != 0)
                 {
@@ -4903,12 +4890,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         ts_stream->pes_info.packet_len > 0 &&
         ts_stream->packet_len >= ts_stream->pes_info.packet_len + 6)
     {
-        // generate_output_data can generate 0 or multiple output buffers
-        *last = generate_output_data(stream, curstream);
-        while (*last != NULL)
-            last = &(*last)->next;
+        buf = generate_output_data(stream, curstream);
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )

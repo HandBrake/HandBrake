@@ -2545,8 +2545,9 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
-    hb_buffer_t * last = NULL, * out = NULL;
+    hb_buffer_list_t list;
 
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         *buf_out = in;
@@ -2625,22 +2626,15 @@ static int hb_decomb_work( hb_filter_object_t * filter,
             pv->is_combed == 0 ||
             frame == num_frames - 1)
         {
-            if ( out == NULL )
-            {
-                last = out = o_buf[idx];
-            }
-            else
-            {
-                last->next = o_buf[idx];
-                last = last->next;
-            }
-            last->next = NULL;
+            /* Copy buffered settings to output buffer settings */
+            o_buf[idx]->s = pv->ref[1]->s;
+
+            o_buf[idx]->next = NULL;
+            hb_buffer_list_append(&list, o_buf[idx]);
 
             // Indicate that buffer was consumed
             o_buf[idx] = NULL;
 
-            /* Copy buffered settings to output buffer settings */
-            last->s = pv->ref[1]->s;
             idx ^= 1;
 
             if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
@@ -2650,7 +2644,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
                     ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
                     pv->is_combed)
                 {
-                    apply_mask(pv, last);
+                    apply_mask(pv, hb_buffer_list_tail(&list));
                 }
             }
         }
@@ -2662,13 +2656,14 @@ static int hb_decomb_work( hb_filter_object_t * filter,
        the duration of the saved timestamps. */
     if ((pv->mode & MODE_BOB) && pv->is_combed)
     {
-        out->s.stop -= (out->s.stop - out->s.start) / 2LL;
-        last->s.start = out->s.stop;
-        last->s.new_chap = 0;
+        hb_buffer_t *first  = hb_buffer_list_head(&list);
+        hb_buffer_t *second = hb_buffer_list_tail(&list);
+        first->s.stop -= (first->s.stop - first->s.start) / 2LL;
+        second->s.start = first->s.stop;
+        second->s.new_chap = 0;
     }
 
-    *buf_out = out;
-
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_FILTER_OK;
 }
 

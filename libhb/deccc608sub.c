@@ -141,8 +141,7 @@ static int general_608_init (struct s_write *wb)
     wb->new_channel = 1;
     wb->in_xds_mode = 0;
 
-    wb->hb_buffer = NULL;
-    wb->hb_last_buffer = NULL;
+    hb_buffer_list_clear(&wb->list);
     wb->last_pts = 0;
     return 0;
 }
@@ -162,10 +161,7 @@ static void general_608_close (struct s_write *wb)
     if( wb->subline ) {
         free(wb->subline);
     }
-
-    if( wb->hb_buffer ) {
-        hb_buffer_close( &wb->hb_buffer );
-    }
+    hb_buffer_list_close(&wb->list);
 }
 
 
@@ -959,15 +955,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         sprintf((char*)buffer->data, "%d,,Default,,0,0,0,,", ++wb->line);
         len = strlen((char*)buffer->data);
         memcpy(buffer->data + len, wb->enc_buffer, wb->enc_buffer_used);
-        if (wb->hb_last_buffer)
-        {
-            wb->hb_last_buffer->next = buffer;
-        }
-        else
-        {
-            wb->hb_buffer = buffer;
-        }
-        wb->hb_last_buffer = buffer;
+        hb_buffer_list_append(&wb->list, buffer);
         wrote_something=1;
         wb->clear_sub_needed = 1;
     }
@@ -978,15 +966,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
         buffer->s.start = ms_start;
         buffer->s.stop = ms_start;
         buffer->data[0] = 0;
-        if (wb->hb_last_buffer != NULL)
-        {
-            wb->hb_last_buffer->next = buffer;
-        }
-        else
-        {
-            wb->hb_buffer = buffer;
-        }
-        wb->hb_last_buffer = buffer;
+        hb_buffer_list_append(&wb->list, buffer);
         wb->clear_sub_needed = 0;
     }
     if (debug_608)
@@ -1832,16 +1812,9 @@ static int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /*
          * Grab any pending buffer and output them with the EOF on the end
          */
-        if (pv->cc608->hb_last_buffer) {
-            pv->cc608->hb_last_buffer->next = in;
-            *buf_out = pv->cc608->hb_buffer;
-            *buf_in = NULL;
-            pv->cc608->hb_buffer = NULL;
-            pv->cc608->hb_last_buffer = NULL;
-        } else {
-            *buf_out = in;
-            *buf_in = NULL;
-        }
+        *buf_in = NULL;
+        hb_buffer_list_append(&pv->cc608->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->cc608->list);
         return HB_WORK_DONE;
     }
 
@@ -1851,11 +1824,7 @@ static int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /*
      * If there is one waiting then pass it on
      */
-    *buf_out = pv->cc608->hb_buffer;
-
-    pv->cc608->hb_buffer = NULL;
-    pv->cc608->hb_last_buffer = NULL;
-
+    *buf_out = hb_buffer_list_clear(&pv->cc608->list);
     return HB_WORK_OK;
 }
 

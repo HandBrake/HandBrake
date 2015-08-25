@@ -241,9 +241,10 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
     hb_buffer_realloc(in, ++in->size);
     in->data[in->size - 1] = '\0';
 
-    hb_buffer_t *out_list = NULL;
-    hb_buffer_t **nextPtr = &out_list;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf;
 
+    hb_buffer_list_clear(&list);
     const char *EOL = "\r\n";
     char *curLine, *curLine_parserData;
     for ( curLine = strtok_r( (char *) in->data, EOL, &curLine_parserData );
@@ -255,14 +256,9 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
             continue;
 
         // Decode an individual SSA line
-        hb_buffer_t *out;
-        out = ssa_decode_line_to_mkv_ssa(w, (uint8_t *)curLine, strlen(curLine), in->sequence);
-        if ( out == NULL )
-            continue;
-
-        // Append 'out' to 'out_list'
-        *nextPtr = out;
-        nextPtr = &out->next;
+        buf = ssa_decode_line_to_mkv_ssa(w, (uint8_t *)curLine,
+                                         strlen(curLine), in->sequence);
+        hb_buffer_list_append(&list, buf);
     }
 
     // For point-to-point encoding, when the start time of the stream
@@ -279,21 +275,19 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
     //       such that first output packet's display time aligns with the
     //       input packet's display time. This should give the correct time
     //       when point-to-point encoding is in effect.
-    if (out_list && out_list->s.start > in->s.start)
+    buf = hb_buffer_list_head(&list);
+    if (buf && buf->s.start > in->s.start)
     {
-        int64_t slip = out_list->s.start - in->s.start;
-        hb_buffer_t *out;
-
-        out = out_list;
-        while (out)
+        int64_t slip = buf->s.start - in->s.start;
+        while (buf != NULL)
         {
-            out->s.start -= slip;
-            out->s.stop -= slip;
-            out = out->next;
+            buf->s.start -= slip;
+            buf->s.stop -= slip;
+            buf = buf->next;
         }
     }
 
-    return out_list;
+    return hb_buffer_list_clear(&list);
 }
 
 /*

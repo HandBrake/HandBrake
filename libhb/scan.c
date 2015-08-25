@@ -516,21 +516,23 @@ static int is_close_to( int val, int target, int thresh )
  **********************************************************************/
 static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 {
-    int             i, npreviews = 0, abort = 0;
-    hb_buffer_t   * buf, * buf_es;
-    hb_list_t     * list_es;
-    int progressive_count = 0;
-    int pulldown_count = 0;
-    int doubled_frame_count = 0;
-    int interlaced_preview_count = 0;
-    int frame_wait = 0;
-    int cc_wait = 10;
-    int frames;
-    hb_stream_t  * stream = NULL;
-    info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
+    int                i, npreviews = 0, abort = 0;
+    hb_buffer_t      * buf, * buf_es;
+    hb_buffer_list_t   list_es;
+    int                progressive_count = 0;
+    int                pulldown_count = 0;
+    int                doubled_frame_count = 0;
+    int                interlaced_preview_count = 0;
+    int                frame_wait = 0;
+    int                cc_wait = 10;
+    int                frames;
+    hb_stream_t      * stream = NULL;
+    info_list_t      * info_list;
+
+    info_list = calloc(data->preview_count+1, sizeof(*info_list));
     crop_record_t *crops = crop_record_init( data->preview_count );
 
-    list_es  = hb_list_init();
+    hb_buffer_list_clear(&list_es);
 
     if( data->batch )
     {
@@ -712,11 +714,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             total_read += buf->size;
             packets++;
 
-            (hb_demux[title->demuxer])(buf, list_es, 0 );
+            (hb_demux[title->demuxer])(buf, &list_es, 0 );
 
-            while( ( buf_es = hb_list_item( list_es, 0 ) ) )
+            while ((buf_es = hb_buffer_list_rem_head(&list_es)) != NULL)
             {
-                hb_list_rem( list_es, buf_es );
                 if( buf_es->s.id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
@@ -802,11 +803,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             progressive_count++;
         }
 
-        while( ( buf_es = hb_list_item( list_es, 0 ) ) )
-        {
-            hb_list_rem( list_es, buf_es );
-            hb_buffer_close( &buf_es );
-        }
+        hb_buffer_list_close(&list_es);
 
         /* Check preview for interlacing artifacts */
         if( hb_detect_comb( vid_buf, 10, 30, 9, 10, 30, 9 ) )
@@ -1061,12 +1058,8 @@ skip_preview:
     crop_record_free( crops );
     free( info_list );
 
-    while( ( buf_es = hb_list_item( list_es, 0 ) ) )
-    {
-        hb_list_rem( list_es, buf_es );
-        hb_buffer_close( &buf_es );
-    }
-    hb_list_close( &list_es );
+    hb_buffer_list_close(&list_es);
+
     if (data->bd)
       hb_bd_stop( data->bd );
     if (data->dvd)

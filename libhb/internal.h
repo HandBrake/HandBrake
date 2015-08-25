@@ -292,11 +292,11 @@ typedef struct {
     int     new_chap;
 } hb_psdemux_t;
 
-typedef void (*hb_muxer_t)(hb_buffer_t *, hb_list_t *, hb_psdemux_t*);
+typedef void (*hb_muxer_t)(hb_buffer_t *, hb_buffer_list_t *, hb_psdemux_t*);
 
-void hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-void hb_demux_ts( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-void hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+void hb_demux_ps(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
+void hb_demux_ts(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
+void hb_demux_null(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
 
 extern const hb_muxer_t hb_demux[];
 

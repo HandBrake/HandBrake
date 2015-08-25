@@ -75,6 +75,7 @@
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_hwd_s hb_hwd_t;
 typedef struct hb_list_s hb_list_t;
+typedef struct hb_buffer_list_s hb_buffer_list_t;
 typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_dither_s hb_dither_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
@@ -129,6 +130,24 @@ typedef enum
 #ifdef USE_QSV
 #include "libavcodec/qsv.h"
 #endif
+
+struct hb_buffer_list_s
+{
+    hb_buffer_t *head;
+    hb_buffer_t *tail;
+    int count;
+};
+
+void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf);
+void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf);
+hb_buffer_t* hb_buffer_list_head(hb_buffer_list_t *list);
+hb_buffer_t* hb_buffer_list_rem_head(hb_buffer_list_t *list);
+hb_buffer_t* hb_buffer_list_tail(hb_buffer_list_t *list);
+hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list);
+hb_buffer_t* hb_buffer_list_clear(hb_buffer_list_t *list);
+hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf);
+void hb_buffer_list_close(hb_buffer_list_t *list);
+int hb_buffer_list_count(hb_buffer_list_t *list);
 
 hb_list_t * hb_list_init();
 int         hb_list_count( const hb_list_t * );

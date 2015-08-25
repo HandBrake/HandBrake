@@ -1070,26 +1070,20 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
     pv->next_frame -= pv->thread_count;
 
     // Collect results from taskset
-    hb_buffer_t *last = NULL, *out = NULL;
+    hb_buffer_list_t list;
+    hb_buffer_list_clear(&list);
     for (int t = 0; t < pv->thread_count; t++)
     {
-        if (out == NULL)
-        {
-            out = last = pv->thread_data[t]->out;
-        }
-        else
-        {
-            last->next = pv->thread_data[t]->out;
-            last = pv->thread_data[t]->out;
-        }
+        hb_buffer_list_append(&list, pv->thread_data[t]->out);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
 {
-    hb_buffer_t *out = NULL, *last = NULL;
+    hb_buffer_list_t list;
 
+    hb_buffer_list_clear(&list);
     for (int f = 0; f < pv->next_frame; f++)
     {
         Frame *frame = &pv->frame[f];
@@ -1140,17 +1134,9 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
                           pv->diff_max[c]);
         }
         buf->s = frame->s;
-        if (out == NULL)
-        {
-            out = last = buf;
-        }
-        else
-        {
-            last->next = buf;
-            last = buf;
-        }
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static int nlmeans_work(hb_filter_object_t *filter,
@@ -1162,21 +1148,17 @@ static int nlmeans_work(hb_filter_object_t *filter,
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        hb_buffer_t *last;
-        // Flush buffered frames
-        last = *buf_out = nlmeans_filter_flush(pv);
+        hb_buffer_list_t list;
+        hb_buffer_t *buf;
 
-        // And terminate the buffer list with a null buffer
-        if (last != NULL)
-        {
-            while (last->next != NULL)
-                last = last->next;
-            last->next = in;
-        }
-        else
-        {
-            *buf_out = in;
-        }
+        // Flush buffered frames
+        buf = nlmeans_filter_flush(pv);
+        hb_buffer_list_set(&list, buf);
+
+        // And terminate the buffer list with a EOF buffer
+        hb_buffer_list_append(&list, in);
+        *buf_out = hb_buffer_list_clear(&list);
+
         *buf_in  = NULL;
         return HB_FILTER_DONE;
     }
