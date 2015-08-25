@@ -3640,12 +3640,16 @@ static int ParseOptions( int argc, char ** argv )
     #define QSV_IMPLEMENTATION   297
     #define FILTER_NLMEANS       298
     #define FILTER_NLMEANS_TUNE  299
+    #define VERSION              300
+    #define DESCRIBE             301
 
     for( ;; )
     {
         static struct option long_options[] =
           {
             { "help",        no_argument,       NULL,    'h' },
+            { "version",     no_argument,       NULL,    VERSION },
+            { "describe",    no_argument,       NULL,    DESCRIBE },
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
@@ -3787,6 +3791,12 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'h':
                 ShowHelp();
+                exit( 0 );
+            case VERSION:
+                printf("HandBrake %s\n", hb_get_version(NULL));
+                exit( 0 );
+            case DESCRIBE:
+                printf("%s\n", hb_get_full_description());
                 exit( 0 );
             case 'u':
                 update = 1;

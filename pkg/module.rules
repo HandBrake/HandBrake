@@ -17,8 +17,9 @@ $(PKG.src.tar.bz2): | $(STAGE.out.src/)
 	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) $(PKG.basename)
 
 $(STAGE.out.src/):
-	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
-	svn info $(HB.repo.url)@$(HB.repo.rev) > $@/$(PKG.basename)/version.txt
+	$(MKDIR.exe) -p $@
+	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $@
+	$(SRC/)scripts/repo-info.sh $(SRC/) $(GIT.exe) > $@/$(PKG.basename)/version.txt
 
 $(PKG.src-contrib.tar.bz2):
 	$(TAR.exe) cjf $@ -C $(CONTRIB.download/) \

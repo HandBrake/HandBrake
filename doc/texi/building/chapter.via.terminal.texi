@@ -62,7 +62,7 @@ Clean-room procedures dictate that when certain factors change, old builds shoul
 
 @itemize
 @item configure with different options
-@item subversion working dir is updated and you want configure to re-evaluate working dir metadata.
+@item git working dir is updated and you want configure to re-evaluate working dir metadata.
 @item build corruption is suspected
 @end itemize
 

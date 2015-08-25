@@ -29,7 +29,8 @@ hb_handle_t * hb_init( int verbose, int update_check );
 hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib
 
 /* hb_get_version() */
-char        * hb_get_version( hb_handle_t * );
+const char  * hb_get_full_description();
+const char  * hb_get_version( hb_handle_t * );
 int           hb_get_build( hb_handle_t * );
 
 /* hb_check_update()

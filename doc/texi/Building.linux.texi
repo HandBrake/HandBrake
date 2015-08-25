@@ -33,7 +33,7 @@ The @b{GTK UI} introduces some significant extra build requirements. GTK version
 
 Ubuntu 14.04 packages:
 @itemize @bullet
-@item subversion (cli/gui)
+@item git (cli/gui)
 @item cmake (cli/gui)
 @item yasm (cli/gui)
 @item build-essential (cli/gui)
@@ -66,7 +66,7 @@ Ubuntu 14.04 packages:
 
 To install these packages:
 @example
-sudo apt-get install subversion cmake yasm build-essential autoconf libtool \
+sudo apt-get install git cmake yasm build-essential autoconf libtool \
 zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
 libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev intltool \
