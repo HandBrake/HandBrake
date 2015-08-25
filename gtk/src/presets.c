@@ -1558,7 +1558,7 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
             if (type != PRESETS_CUSTOM)
             {
                 // Don't put new custom presets in a builtin folder
-                path->depth = 1;
+                path->depth = 0;
             }
         }
         else
