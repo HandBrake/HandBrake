@@ -233,8 +233,8 @@ static void enable_quality_widgets(
     int                 mix)
 {
     GtkWidget *widget;
-    gboolean quality_sensitive;
-    gboolean bitrate_sensitive;
+    gboolean quality_sensitive = TRUE;
+    gboolean bitrate_sensitive = TRUE;
 
     widget = GHB_WIDGET(ud->builder, "AudioBitrate");
     gtk_widget_set_visible(widget, !quality_enable);
