@@ -386,8 +386,8 @@
     <None Include="app.config" />
     <None Include="Installer\Installer.nsi" />
     <None Include="Installer\Installer64.nsi" />
-    <None Include="Installer\MakeNightly.nsi.tmpl" />
-    <None Include="Installer\MakeNightly64.nsi.tmpl" />
+    <None Include="Installer\MakeNightly.nsi" />
+    <None Include="Installer\MakeNightly64.nsi" />
     <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <AppDesigner Include="Properties\" />
