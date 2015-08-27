@@ -37,11 +37,11 @@ fi
 
 # Retrieve info
 URL=$(${GIT_EXE} config remote.origin.url)
-TAG=$(${GIT_EXE} describe --abbrev=0)
+TAG=$(${GIT_EXE} describe --tags --abbrev=0)
 if [[ ${TAG} ]]; then
     REV=$(${GIT_EXE} rev-list ${TAG}.. --count)
 else
-    TAG=$(${GIT_EXE} describe $(${GIT_EXE} rev-list --tags --max-count=1))
+    TAG=$(${GIT_EXE} describe --tags $(${GIT_EXE} rev-list --tags --max-count=1))
     if [[ ${TAG} ]]; then
         REV=$(${GIT_EXE} rev-list $(${GIT_EXE} merge-base ${TAG} HEAD).. --count)
     else
