@@ -16,6 +16,7 @@ import re
 import subprocess
 import sys
 import time
+from datetime import datetime, timedelta
 
 from optparse import OptionGroup
 from optparse import OptionGroup
@@ -693,12 +694,13 @@ class RepoProbe( ShellProbe ):
 
         self.url       = 'git://nowhere.com/project/unknown'
         self.tag       = ''
+        self.tag_hash  = 'deadbeaf'
         self.branch    = 'unknown'
         self.remote    = 'unknown'
         self.rev       = 0
         self.hash      = 'deadbeaf'
         self.shorthash = 'deadbea'
-        self.date      = '0000-00-00 00:00:00 -0000'
+        self.date      = datetime(1, 1, 1)
         self.official  = 0
         self.type      = 'developer'
 
@@ -714,6 +716,8 @@ class RepoProbe( ShellProbe ):
                 self.url = value
             elif name == 'TAG':
                 self.tag = value
+            elif name == 'TAG_HASH':
+                self.tag_hash = value
             elif name == 'BRANCH':
                 self.branch = value
             elif name == 'REMOTE':
@@ -721,7 +725,20 @@ class RepoProbe( ShellProbe ):
             elif name == 'REV':
                 self.rev = int( value )
             elif name == 'DATE':
-                self.date = value
+                self.date = datetime.strptime(value[0:19], "%Y-%m-%d %H:%M:%S")
+
+                # strptime can't handle UTC offset
+                m = re.match( '^([-+]?[0-9]{2})([0-9]{2})$', value[20:])
+                (hh, mn) = m.groups()
+                utc_off_hour   = int(hh)
+                utc_off_minute = int(mn)
+                if utc_off_hour >= 0:
+                    utc_off = utc_off_hour * 60 + utc_off_minute
+                else:
+                    utc_off = utc_off_hour * 60 - utc_off_minute
+                delta = timedelta(minutes=utc_off)
+                self.date = self.date - delta
+
             elif name == 'HASH':
                 self.hash = value
                 self.shorthash = value[:7]
@@ -733,7 +750,7 @@ class RepoProbe( ShellProbe ):
 
         if self.url == official_url:
             self.official = 1
-            if self.branch == '' and self.rev == 0:
+            if not options.snapshot and self.hash == self.tag_hash:
                 self.type = 'release'
             else:
                 self.type = 'developer'
@@ -788,6 +805,9 @@ class Project( Action ):
         self.vmajor = 0
         self.vminor = 0
         self.vpoint = 0
+        self.spoint = 0
+        self.suffix = ''
+        self.special = ''
 
     def _action( self ):
         ## add architecture to URL only for Mac
@@ -796,32 +816,51 @@ class Project( Action ):
         else:
             url_arch = ''
 
+        suffix = ''
         if repo.tag != '':
-            m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)$', repo.tag )
+            m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.*)?$', repo.tag )
             if not m:
                 cfg.errln( 'Invalid repo tag format %s\n', repo.tag )
                 sys.exit( 1 )
-            (vmajor, vminor, vpoint) = m.groups()
+            (vmajor, vminor, vpoint, suffix) = m.groups()
             self.vmajor = int(vmajor)
             self.vminor = int(vminor)
             self.vpoint = int(vpoint)
+            self.suffix = suffix
 
-        if repo.type == 'release':
-            self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
-            url_ctype = ''
-            url_ntype = 'stable'
-            self.build = time.strftime('%Y%m%d') + '00'
-            self.title = '%s %s (%s)' % (self.name,self.version,self.build)
-        else:
+        if repo.type != 'release' or options.snapshot:
+            self.version = repo.date.strftime("%Y%m%d%H%M%S")
+            self.version += '-%s' % (repo.shorthash)
             if repo.branch != '':
-                self.version = '%d.%d.%d-%d-%s-%s' % (self.vmajor, self.vminor,
-                    self.vpoint, repo.rev, repo.shorthash, repo.branch)
-            else:
-                self.version = '%d.%d.%d-%d-%s' % (self.vmajor, self.vminor,
-                    self.vpoint, repo.rev, repo.shorthash)
+                self.version += '-%s' % (repo.branch)
+
+            self.debversion = repo.date.strftime("%Y%m%d%H%M%S")
+            self.debversion += '-%s' % (repo.shorthash)
+            if repo.branch != '':
+                self.debversion += '-%s' % (repo.branch)
+
             url_ctype = '_unstable'
             url_ntype = 'unstable'
             self.build = time.strftime('%Y%m%d') + '01'
+            self.title = '%s %s (%s)' % (self.name,self.version,self.build)
+        else:
+            m = re.match('^([a-zA-Z]+)\.([0-9]+)$', suffix)
+            if not m:
+                # Regular release
+                self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
+                self.debversion = '%d.%d.%d' % (self.vmajor, self.vminor, self.vpoint)
+                url_ctype = ''
+                url_ntype = 'stable'
+            else:
+                (special, spoint,) = m.groups()
+                self.special = special
+                self.spoint = int(spoint)
+                self.version = '%d.%d.%d-%s.%d' % (self.vmajor,self.vminor,self.vpoint, self.special, self.spoint)
+                self.debversion = '%d.%d.%d~%s.%d' % (self.vmajor, self.vminor, self.vpoint, self.special, self.spoint)
+                url_ctype = '_unstable'
+                url_ntype = 'unstable'
+
+            self.build = time.strftime('%Y%m%d') + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
 
         self.url_appcast = 'https://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
@@ -1278,6 +1317,13 @@ def createCLI():
     for select in SelectTool.selects:
         select.cli_add_option( grp )
     cli.add_option_group( grp )
+
+    ## add build options
+    grp = OptionGroup( cli, 'Build Options' )
+    grp.add_option( '--snapshot', default=False, action='store_true',
+                    help='Force a snapshot build' )
+    cli.add_option_group( grp )
+
     return cli
 
 ###############################################################################
@@ -1649,7 +1695,9 @@ int main()
     doc.add( 'HB.version.major',  project.vmajor )
     doc.add( 'HB.version.minor',  project.vminor )
     doc.add( 'HB.version.point',  project.vpoint )
+    doc.add( 'HB.version.suffix', project.suffix )
     doc.add( 'HB.version',        project.version )
+    doc.add( 'HB.debversion',     project.debversion )
     doc.add( 'HB.version.hex',    '%04x%02x%02x%08x' % (project.vmajor,project.vminor,project.vpoint,repo.rev) )
 
     doc.add( 'HB.build', project.build )
@@ -1663,7 +1711,7 @@ int main()
     doc.add( 'HB.repo.remote',    repo.remote )
     doc.add( 'HB.repo.type',      repo.type )
     doc.add( 'HB.repo.official',  repo.official )
-    doc.add( 'HB.repo.date',      repo.date )
+    doc.add( 'HB.repo.date',      repo.date.strftime("%Y-%m-%d %H:%M:%S") )
 
     doc.addBlank()
     doc.add( 'HOST.spec',    host.spec )

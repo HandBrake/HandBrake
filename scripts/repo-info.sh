@@ -2,66 +2,78 @@
 #
 # Retrieves git repository info for directory ${1} using command ${2}
 
-# Args
-REPO_DIR='.'
-if [[ ${1} ]]; then
-    REPO_DIR=${1}
-fi
-GIT_EXE='git'
-if [[ ${2} ]]; then
-    GIT_EXE=${2}
-fi
+function repo_info()
+{
+    local repo_dir git_exe commit upstream err
 
-# Switch to working directory
-if ! cd ${REPO_DIR} 2>/dev/null; then
-    echo "Invalid directory ${REPO_DIR}." 1>&2
-    exit 1
-fi
-
-# Check whether we have git
-if ! hash ${GIT_EXE} 2>/dev/null; then
-    echo "Command '${GIT_EXE}' not found." 1>&2
-    exit 1
-fi
-
-# Check if there is a valid git repo here
-HASH=$(${GIT_EXE} rev-parse HEAD)
-ERR=$?
-if [[ ${ERR} -ne 0 ]]; then
-    echo "Not a valid repository." 1>&2
-    exit ${ERR}
-elif [[ -z ${HASH} ]]; then
-    echo "Not a valid repository." 1>&2
-    exit 1
-fi
-
-# Retrieve info
-URL=$(${GIT_EXE} config remote.origin.url)
-TAG=$(${GIT_EXE} describe --abbrev=0)
-if [[ ${TAG} ]]; then
-    REV=$(${GIT_EXE} rev-list ${TAG}.. --count)
-else
-    TAG=$(${GIT_EXE} describe $(${GIT_EXE} rev-list --tags --max-count=1))
-    if [[ ${TAG} ]]; then
-        REV=$(${GIT_EXE} rev-list $(${GIT_EXE} merge-base ${TAG} HEAD).. --count)
-    else
-        REV=$(${GIT_EXE} rev-list HEAD --count)
+    # Process args
+    repo_dir='.'
+    if [[ ${1} ]]; then
+        repo_dir=${1}
     fi
-fi
-BRANCH=$(${GIT_EXE} symbolic-ref -q --short HEAD)
-REMOTE="${URL}"
-UPSTREAM=$(${GIT_EXE} config branch.${BRANCH}.remote)
-if [[ ${UPSTREAM} ]]; then
-    REMOTE="${UPSTREAM}"
-fi
-DATE=$(${GIT_EXE} log -1 --format="format:%ai")
+    git_exe='git'
+    if [[ ${2} ]]; then
+        git_exe=${2}
+    fi
 
-# Output
-# Only write tag and rev if they exist.
-echo "URL=${URL}"
-echo "HASH=${HASH}"
-if [[ ${TAG} ]]; then echo "TAG=${TAG}"; fi
-if [[ ${REV} ]]; then echo "REV=${REV}"; fi
-echo "BRANCH=${BRANCH}"
-echo "REMOTE=${REMOTE}"
-echo "DATE=${DATE}"
+    # Switch to working directory
+    if ! cd ${repo_dir} 2>/dev/null; then
+        echo "Invalid directory ${repo_dir}." 1>&2
+        return 1
+    fi
+
+    # Check whether we have git
+    if ! hash ${git_exe} 2>/dev/null; then
+        echo "Command '${git_exe}' not found." 1>&2
+        return 1
+    fi
+
+    # Check if there is a valid git repo here
+    HASH=$(${git_exe} rev-parse HEAD)
+    SHORTHASH=$(${git_exe} rev-parse --short HEAD)
+    err=$?
+    if [[ ${err} -ne 0 ]]; then
+        echo "Not a valid repository." 1>&2
+        return ${err}
+    elif [[ -z ${HASH} ]]; then
+        echo "Not a valid repository." 1>&2
+        return 1
+    fi
+
+    # Retrieve info
+    URL=$(${git_exe} config remote.origin.url)
+
+    # check if an annotated tag is reachable from HEAD
+    TAG=$(${git_exe} describe --tags --abbrev=0 --exact-match --match \[0-9\]\*.\[0-9\]\*.\[0-9\]\* HEAD 2> /dev/null)
+    if [[ ${TAG} ]]; then
+        # if TAG is a release tag and HASH == TAG_HASH, this is release code
+        TAG_HASH=$(${git_exe} rev-list ${TAG} --max-count=1)
+        REV=$(${git_exe} rev-list $(${git_exe} merge-base ${TAG} HEAD).. --count)
+    else
+        REV=$(${git_exe} rev-list HEAD --count)
+    fi
+
+    BRANCH=$(${git_exe} symbolic-ref -q --short HEAD)
+    REMOTE="${URL}"
+    upstream=$(${git_exe} config branch.${BRANCH}.remote)
+    if [[ ${upstream} ]]; then
+        REMOTE="${upstream}"
+    fi
+    DATE=$(${git_exe} log -1 --format="format:%ci")
+
+    # Output
+    # Only write tag and rev if they exist.
+    echo "URL=${URL}"
+    echo "HASH=${HASH}"
+    echo "SHORTHASH=${SHORTHASH}"
+    if [[ ${TAG} ]]; then echo "TAG=${TAG}"; fi
+    if [[ ${TAG_HASH} ]]; then echo "TAG_HASH=${TAG_HASH}"; fi
+    if [[ ${REV} ]]; then echo "REV=${REV}"; fi
+    echo "BRANCH=${BRANCH}"
+    echo "REMOTE=${REMOTE}"
+    echo "DATE=${DATE}"
+
+    return 0
+}
+
+repo_info "$@"

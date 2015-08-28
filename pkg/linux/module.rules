@@ -65,7 +65,7 @@ $(PKG.gui.tmp.deb): GNUmakefile
 	fakeroot $(MAKE) -C $(SRC/) -f debian/rules clean
 	$(MAKE) BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure -C $(SRC/) -f debian/rules build
 	echo $(PKG.out/)
-	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure PKGDESTDIR=$(PWD)/$(PKG.out/) -C $(SRC/) -f debian/rules binary
+	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.debversion)" BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure PKGDESTDIR=$(PWD)/$(PKG.out/) -C $(SRC/) -f debian/rules binary
 
 $(PKG.gui.deb): | $(dir $(PKG.gui.deb))
 $(PKG.gui.deb): $(PKG.gui.tmp.deb)
@@ -79,8 +79,8 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
-	(cd $(STAGE.out.src/)vivid && dput handbrake-snapshots $(HB.name.lower)_$(HB.version)ppa1~vivid1_source.changes )
-	(cd $(STAGE.out.src/)trusty && dput handbrake-snapshots $(HB.name.lower)_$(HB.version)ppa1~trusty1_source.changes )
+	(cd $(STAGE.out.src/)vivid && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)ppa1~vivid1_source.changes )
+	(cd $(STAGE.out.src/)trusty && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)ppa1~trusty1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
@@ -92,7 +92,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)vivid/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/control.vivid $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/rules.vivid $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.version)ppa1~vivid1) vivid; urgency=low" > $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
+	echo "$(HB.name.lower) ($(HB.debversion)-1ppa1~vivid1) vivid; urgency=low" > $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)vivid/$(PKG.deb.basename)/debian/changelog
@@ -106,7 +106,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)trusty/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/control.trusty $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/rules.trusty $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.version)ppa1~trusty1) trusty; urgency=low" > $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
+	echo "$(HB.name.lower) ($(HB.debversion)-1ppa1~trusty1) trusty; urgency=low" > $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
