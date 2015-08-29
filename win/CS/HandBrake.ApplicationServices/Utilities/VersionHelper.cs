@@ -12,6 +12,9 @@ namespace HandBrake.ApplicationServices.Utilities
     using System;
     using System.Reflection;
 
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Interfaces;
+
     /// <summary>
     /// Version Utility
     /// </summary>
@@ -26,7 +29,10 @@ namespace HandBrake.ApplicationServices.Utilities
         public static string GetVersion()
         {
             Version version = Assembly.GetEntryAssembly().GetName().Version;
-            return IsNightly() ? string.Format("svn{0} (Nightly Build)", version.Revision) : string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+
+            IHandBrakeInstance instance = HandBrakeInstanceManager.GetScanInstance(1);
+       
+            return IsNightly() ? string.Format("Nightly {0} ({1})", instance.Version, instance.Build) : string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
         }
 
         /// <summary>
