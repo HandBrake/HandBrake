@@ -1055,7 +1055,7 @@ static void ShowHelp()
 "                           with the -r flag but won't change the source\n"
 "                           timing if it's below that rate.\n"
 "                           If none of these flags are given, the default\n"
-"                           is --cfr when -r is given and --vfr otherwise\n"
+"                           is --pfr when -r is given and --vfr otherwise\n"
 "\n"
 "### Audio Options---------------------------------------------------------\n\n"
 "       --audio-lang-list   Specifiy a comma separated list of audio\n"
@@ -1274,7 +1274,8 @@ if (hb_qsv_available())
 "   -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
 "                           Note: this filter drops duplicate frames to\n"
 "                           restore the pre-telecine framerate, unless you\n"
-"                           specify a constant framerate (--rate 29.97)\n"
+"                           specify a constant framerate\n"
+"                           (--rate 29.97 --cfr)\n"
 "         <L:R:T:B:SB:MP:FD> (default 1:1:4:4:0:0:-1)\n"
 "       --no-detelecine     Disable preset detelecine filter\n"
 "   -8, --hqdn3d            Denoise video with hqdn3d filter\n"
@@ -2324,9 +2325,9 @@ static int ParseOptions( int argc, char ** argv )
             case 'r':
             {
                 vrate = strdup(optarg);
-                if (!cfr)
+                if ( cfr != 2 )
                 {
-                    cfr = 1;
+                    cfr = 2;
                 }
                 break;
             }
