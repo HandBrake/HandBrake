@@ -339,6 +339,7 @@ void hb_common_global_init();
 int              hb_video_framerate_get_from_name(const char *name);
 const char*      hb_video_framerate_get_name(int framerate);
 const char*      hb_video_framerate_sanitize_name(const char *name);
+void             hb_video_framerate_get_limits(int *low, int *high, int *clock);
 const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last);
 
 int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);

@@ -1018,45 +1018,56 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
 
 static int get_video_framerate(hb_value_t *rate_value)
 {
-    int rate = 0;
-    if (hb_value_type(rate_value) != HB_VALUE_TYPE_STRING)
+    // Predefined by name
+    if (hb_value_type(rate_value) == HB_VALUE_TYPE_STRING)
     {
-        double d;
-        d = hb_value_get_double(rate_value);
-        if (d != 0 && d <= 600)
+        int rate = 0;
+        const char *rate_name = hb_value_get_string(rate_value);
+        if (!strcasecmp(rate_name, "source") ||
+            !strcasecmp(rate_name, "auto") ||
+            !strcasecmp(rate_name, "same as source"))
         {
-            // Assume the value is an actual framerate and compute
-            // 27Mhz based denominator
-            rate = (int)(27000000 / d);
+            return rate;
         }
         else
         {
-            // Assume the value is a 27Mhz based denominator
-            rate = (int)d;
-        }
-    }
-    else
-    {
-        const char *rate_name = hb_value_get_string(rate_value);
-        if (strcasecmp(rate_name, "source") &&
-            strcasecmp(rate_name, "auto") &&
-            strcasecmp(rate_name, "same as source"))
-        {
             rate = hb_video_framerate_get_from_name(rate_name);
-            if (rate < 0)
+            if (rate != -1)
             {
-                // No matching rate found. Error out.
-                rate = -1;
+                return rate;
             }
         }
     }
-    return rate;
+
+    // Arbitrary
+    int clock_min, clock_max, clock,
+        frame_min, frame_max;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+    frame_min = clock / clock_max;
+    frame_max = clock / clock_min;
+    double rate_d = hb_value_get_double(rate_value);
+    if (rate_d >= frame_min && rate_d <= frame_max)
+    {
+        // Value is a framerate, return clockrate
+        return (int)(clock / rate_d);
+    }
+    else if (rate_d >= clock_min && rate_d <= clock_max)
+    {
+        // Value is already a clockrate
+        return (int)(rate_d);
+    }
+
+    // Value out of bounds
+    return -1;
 }
 
 int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
     hb_value_t *filters_dict, *filter_list, *filter_dict;
     char *filter_str;
+
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
 
     // Create new filters
     filters_dict = hb_dict_init();
@@ -1282,7 +1293,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     if (vrate_den == 0)
         filter_str = hb_strdup_printf("%d", fr_mode);
     else
-        filter_str = hb_strdup_printf("%d:%d:%d", fr_mode, 27000000, vrate_den);
+        filter_str = hb_strdup_printf("%d:%d:%d", fr_mode, clock, vrate_den);
 
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));

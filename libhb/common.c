@@ -96,6 +96,9 @@ hb_rate_internal_t hb_video_rates[]  =
     { { "60",                   450000, }, NULL, 1, },
 };
 int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_video_rates[0]);
+const int hb_video_rate_clock = 27000000;           // 27MHz clock
+int hb_video_rate_min = hb_video_rate_clock / 1000; // Min clock rate from *max* frame rate
+int hb_video_rate_max = hb_video_rate_clock / 1;    // Max clock rate from *min* frame rate
 
 hb_rate_t *hb_audio_rates_first_item = NULL;
 hb_rate_t *hb_audio_rates_last_item  = NULL;
@@ -668,6 +671,13 @@ fail:
 const char* hb_video_framerate_sanitize_name(const char *name)
 {
     return hb_video_framerate_get_name(hb_video_framerate_get_from_name(name));
+}
+
+void hb_video_framerate_get_limits(int *low, int *high, int *clock)
+{
+    *low   = hb_video_rate_min;
+    *high  = hb_video_rate_max;
+    *clock = hb_video_rate_clock;
 }
 
 const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last)

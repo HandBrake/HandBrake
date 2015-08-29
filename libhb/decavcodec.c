@@ -2019,6 +2019,9 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
 
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+
     memset( info, 0, sizeof(*info) );
 
     if (pv->context == NULL)
@@ -2035,8 +2038,8 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->geometry.par.den = pv->context->sample_aspect_ratio.den;
 
     compute_frame_duration( pv );
-    info->rate.num = 27000000;
-    info->rate.den = pv->duration * 300.;
+    info->rate.num = clock;
+    info->rate.den = pv->duration * (clock / 90000.);
 
     info->profile = pv->context->profile;
     info->level = pv->context->level;

@@ -123,6 +123,9 @@ static int avformatInit( hb_mux_object_t * m )
     int max_tracks;
     int ii, ret;
 
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+
     const char *muxer_name = NULL;
 
     uint8_t         default_track_flag = 1;
@@ -362,13 +365,13 @@ static int avformatInit( hb_mux_object_t * m )
         vrate = job->vrate;
     }
 
-    // If the vrate is 27000000, there's a good chance this is
-    // a standard rate that we have in our hb_video_rates table.
+    // If the vrate is the internal clock rate, there's a good chance
+    // this is a standard rate that we have in our hb_video_rates table.
     // Because of rounding errors and approximations made while
     // measuring framerate, the actual value may not be exact.  So
     // we look for rates that are "close" and make an adjustment
     // to fps.den.
-    if (vrate.num == 27000000)
+    if (vrate.num == clock)
     {
         const hb_rate_t *video_framerate = NULL;
         while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)

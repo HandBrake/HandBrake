@@ -64,8 +64,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
-
     pv->job = job;
+
+    int clock_min, clock_max, clock;
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
 
     switch ( w->codec_param )
     {
@@ -111,13 +113,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         fps.num = job->vrate.num;
     }
 
-    // If the fps.num is 27000000, there's a good chance this is
-    // a standard rate that we have in our hb_video_rates table.
+    // If the fps.num is the internal clock rate, there's a good chance
+    // this is a standard rate that we have in our hb_video_rates table.
     // Because of rounding errors and approximations made while 
     // measuring framerate, the actual value may not be exact.  So
     // we look for rates that are "close" and make an adjustment
     // to fps.den.
-    if (fps.num == 27000000)
+    if (fps.num == clock)
     {
         const hb_rate_t *video_framerate = NULL;
         while ((video_framerate = hb_video_framerate_get_next(video_framerate)) != NULL)
