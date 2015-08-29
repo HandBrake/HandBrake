@@ -2,3 +2,6 @@
 win/CS/*/bin
 win/CS/*/obj
 win/CS/*.suo
+
+# Ignore Xcode user data
+xcuserdata
