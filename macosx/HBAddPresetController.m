@@ -62,11 +62,8 @@
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum (post source scan)", @"")];
     [[self.picSettingsPopUp lastItem] setTag: 2];
 
-    /*
-     * Default to Source Maximum for anamorphic Strict
-     * Default to Custom for all other anamorphic modes
-     */
-    [self.picSettingsPopUp selectItemWithTag: (1 + ([self.preset.content[@"PicturePAR"] integerValue] == HB_ANAMORPHIC_STRICT))];
+    //Default to Source Maximum
+    [self.picSettingsPopUp selectItemWithTag:2];
 
     /* Initialize custom height and width settings to current values */
     [self.picWidth setStringValue: [NSString stringWithFormat:@"%d", (int)self.size.width]];
