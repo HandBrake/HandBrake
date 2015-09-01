@@ -3544,11 +3544,12 @@ static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int *on
         return -1;
     }
 
-    int burn = !*one_burned && subburn == track + 1 &&
+    int out_track = hb_value_array_len(list);
+    int burn = !*one_burned && subburn == out_track + 1 &&
                hb_subtitle_can_burn(subtitle->source);
     *one_burned |= burn;
-    int def  = subdefault == track + 1;
-    int force = test_sub_list(subforce, track + 1);
+    int def  = subdefault == out_track + 1;
+    int force = test_sub_list(subforce, out_track + 1);
 
     if (!burn &&
         !hb_subtitle_can_pass(subtitle->source, mux))
