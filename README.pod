@@ -5,9 +5,14 @@
 
 <p>
  <h3> GitHub  </h3>
- 
- This is the main development repository for the HandBrake Project. <br />
- Our SVN is now read-only. <br /><br />
+ The main development repository for the HandBrake Project can be found on GitHub at <br />
+ <a href="https://github.com/HandBrake/HandBrake">Official HandBrake Source Repository</a> <br />
+ Our SVN is now read-only.
+ <br /><br />
+
+ <h3> HandBrake </h3>
+ HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs.
+ <br /><br />
 
  <h3> Community </h3>
  <b>IRC:</b> <a href="irc://irc.freenode.net/#handbrake">#Handbrake </a> and <a href="irc://irc.freenode.net/#handbrake-dev">#Handbrake-dev</a> on Freenode.<br />
