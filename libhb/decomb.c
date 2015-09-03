@@ -2655,9 +2655,6 @@ static int hb_decomb_work( hb_filter_object_t * filter,
             }
         }
     }
-    // Copy subs only to first output buffer
-    hb_buffer_move_subs( out, pv->ref[1] );
-
     hb_buffer_close(&o_buf[0]);
     hb_buffer_close(&o_buf[1]);
 

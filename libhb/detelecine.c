@@ -1023,8 +1023,6 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     pullup_release_frame( frame );
 
     out->s = in->s;
-    hb_buffer_move_subs( out, in );
-
     *buf_out = out;
 
 output_frame:

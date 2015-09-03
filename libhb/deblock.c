@@ -439,7 +439,6 @@ static int hb_deblock_work( hb_filter_object_t * filter,
                 0 );
 
         out->s = in->s;
-        hb_buffer_move_subs( out, in );
 
         *buf_out = out;
     }

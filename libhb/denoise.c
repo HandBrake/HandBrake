@@ -364,8 +364,6 @@ static int hb_denoise_work( hb_filter_object_t * filter,
     }
 
     out->s = in->s;
-    hb_buffer_move_subs( out, in );
-
     *buf_out = out;
 
     return HB_FILTER_OK;

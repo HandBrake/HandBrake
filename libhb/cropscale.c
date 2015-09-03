@@ -217,7 +217,6 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
     }
 
     out->s = in->s;
-    hb_buffer_move_subs( out, in );
     return out;
 }
 

@@ -160,16 +160,6 @@ struct hb_buffer_s
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;
 
-    // PICTURESUB subtitle packets:
-
-    // Video packets (after processing by the hb_sync_video work-object):
-    //   A (copy of a) PICTURESUB subtitle packet that needs to be burned into 
-    //   this video packet by the vobsub renderer filter
-    //
-    //   Subtitles that are simply passed thru are NOT attached to the 
-    //   associated video packets.
-    hb_buffer_t * sub;
-
     // Packets in a list:
     //   the next packet in the list
     hb_buffer_t * next;
@@ -189,7 +179,6 @@ void          hb_buffer_close( hb_buffer_t ** );
 hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src );
 int           hb_buffer_copy( hb_buffer_t * dst, const hb_buffer_t * src );
 void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
-void          hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src );
 hb_image_t  * hb_image_init(int pix_fmt, int width, int height);
 hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
 
@@ -208,8 +197,6 @@ void          hb_fifo_push( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_push_wait( hb_fifo_t *, hb_buffer_t * );
 int           hb_fifo_full_wait( hb_fifo_t * f );
 void          hb_fifo_push_head( hb_fifo_t *, hb_buffer_t * );
-void          hb_fifo_push_list_element( hb_fifo_t *fifo, hb_buffer_t *buffer_list );
-hb_buffer_t * hb_fifo_get_list_element( hb_fifo_t *fifo );
 void          hb_fifo_close( hb_fifo_t ** );
 void          hb_fifo_flush( hb_fifo_t * f );
 

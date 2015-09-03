@@ -419,9 +419,8 @@ static int hb_rotate_work( hb_filter_object_t * filter,
 
     // Rotate!
     rotate_filter( pv, out, in );
+
     out->s = in->s;
-    hb_buffer_move_subs( out, in );
-    
     *buf_out = out;
     
     return HB_FILTER_OK;

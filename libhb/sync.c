@@ -904,7 +904,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = cur;
     int64_t duration = next_start - cur->s.start;
     sync->cur = cur = next;
-    cur->sub = NULL;
     cur->s.start -= pv->common->video_pts_slip;
     if (cur->s.renderOffset != AV_NOPTS_VALUE)
         cur->s.renderOffset -= pv->common->video_pts_slip;

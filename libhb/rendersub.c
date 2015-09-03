@@ -775,11 +775,7 @@ static void ApplyPGSSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
         sub = hb_list_item( pv->sub_list, 0 );
         if ( sub->s.start <= buf->s.start )
         {
-            while ( sub )
-            {
-                ApplySub( pv, buf, sub );
-                sub = sub->sub;
-            }
+            ApplySub( pv, buf, sub );
         }
     }
 }

@@ -427,7 +427,6 @@ static hb_buffer_t * deint_fast(hb_filter_private_t * pv, hb_buffer_t * in)
         last = dst;
 
         dst->s = src->s;
-        hb_buffer_move_subs(dst, src);
         hb_buffer_close(&src);
     }
     if (in == NULL)
@@ -675,10 +674,6 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
             idx ^= 1;
         }
     }
-
-    // Copy subs only to first output buffer
-    hb_buffer_move_subs( out, pv->yadif_ref[1] );
-
     hb_buffer_close(&o_buf[0]);
     hb_buffer_close(&o_buf[1]);
 

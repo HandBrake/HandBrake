@@ -686,9 +686,6 @@ void hb_buffer_close( hb_buffer_t ** _b )
         hb_list_rem(buffers.alloc_list, b);
         hb_unlock(buffers.lock);
 #endif
-        // Close any attached subtitle buffers
-        hb_buffer_close( &b->sub );
-
         if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
         {
             hb_fifo_push_head( buffer_pool, b );
@@ -721,18 +718,6 @@ void hb_buffer_close( hb_buffer_t ** _b )
     }
 
     *_b = NULL;
-}
-
-void hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src )
-{
-    // Note that dst takes ownership of the subtitles
-    dst->sub       = src->sub;
-    src->sub       = NULL;
-
-#ifdef USE_QSV
-	memcpy(&dst->qsv_details, &src->qsv_details, sizeof(src->qsv_details));
-#endif
-
 }
 
 hb_image_t * hb_image_init(int pix_fmt, int width, int height)
@@ -1173,29 +1158,6 @@ void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
     f->size += ( size + 1 );
 
     hb_unlock( f->lock );
-}
-
-// Pushes a list of packets onto the specified FIFO as a single element.
-void hb_fifo_push_list_element( hb_fifo_t *fifo, hb_buffer_t *buffer_list )
-{
-    hb_buffer_t *container = hb_buffer_init( 0 );
-    // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
-    //      to carry the list inside a single "container" buffer
-    container->sub = buffer_list;
-    
-    hb_fifo_push( fifo, container );
-}
-
-// Removes a list of packets from the specified FIFO that were stored as a single element.
-hb_buffer_t *hb_fifo_get_list_element( hb_fifo_t *fifo )
-{
-    hb_buffer_t *container = hb_fifo_get( fifo );
-    // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
-    //      to carry the list inside a single "container" buffer
-    hb_buffer_t *buffer_list = container->sub;
-    hb_buffer_close( &container );
-    
-    return buffer_list;
 }
 
 void hb_fifo_close( hb_fifo_t ** _f )
