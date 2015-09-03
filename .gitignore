@@ -1,4 +1,6 @@
 # Ignore output created by Visual Studio
+build/
+download/
 win/CS/*/bin
 win/CS/*/obj
 win/CS/*.suo
