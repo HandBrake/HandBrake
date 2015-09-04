@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A278b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBOutputPanelController">
@@ -14,13 +14,13 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Activity Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="OutputPanelFrame" animationBehavior="default" id="5" userLabel="OutputPanel" customClass="NSPanel">
+        <window title="Activity" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="OutputPanelFrame" animationBehavior="default" id="5" userLabel="OutputPanel" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="74" y="449" width="378" height="439"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <value key="minSize" type="size" width="214.50200000000001" height="107"/>
-            <view key="contentView" id="6">
+            <view key="contentView" wantsLayer="YES" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
@@ -31,7 +31,7 @@
                             <rect key="frame" x="1" y="1" width="378" height="439"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" id="20">
+                                <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="bar" incrementalSearchingEnabled="YES" verticallyResizable="YES" id="20">
                                     <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <animations/>
@@ -51,12 +51,12 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
                         <animations/>
-                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="40">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="40">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>
-                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="39">
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="39">
                             <rect key="frame" x="363" y="1" width="16" height="439"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
@@ -68,7 +68,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="17"/>
             </connections>
-            <point key="canvasLocation" x="389" y="440.5"/>
+            <point key="canvasLocation" x="177" y="441.5"/>
         </window>
         <menu title="Menu" id="11" userLabel="ContextMenu">
             <items>

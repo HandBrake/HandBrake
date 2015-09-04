@@ -57,13 +57,6 @@
 
         // We initialize the outputTextStorage object for the activity window
         outputTextStorage = [[NSTextStorage alloc] init];
-
-        // Use the inline search bar if available.
-        if ([textView respondsToSelector:@selector(setUsesFindBar:)])
-        {
-            [textView setUsesFindBar:YES];
-        }
-
         [[textView layoutManager] replaceTextStorage:outputTextStorage];
         [[textView enclosingScrollView] setLineScroll:10];
         [[textView enclosingScrollView] setPageScroll:20];
