@@ -411,14 +411,16 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, w, h);
                     memset(out->data, 0, out->size);
 
-                    out->s.frametype    = HB_FRAME_SUBTITLE;
-                    out->s.id           = in->s.id;
-                    out->sequence       = in->sequence;
-                    out->s.start        = pts;
-                    out->s.stop         = AV_NOPTS_VALUE;
-                    out->s.renderOffset = AV_NOPTS_VALUE;
-                    out->f.x            = x0;
-                    out->f.y            = y0;
+                    out->s.frametype     = HB_FRAME_SUBTITLE;
+                    out->s.id            = in->s.id;
+                    out->sequence        = in->sequence;
+                    out->s.start         = pts;
+                    out->s.stop          = AV_NOPTS_VALUE;
+                    out->s.renderOffset  = AV_NOPTS_VALUE;
+                    out->f.x             = x0;
+                    out->f.y             = y0;
+                    out->f.window_width  = pv->context->width;
+                    out->f.window_height = pv->context->height;
                     for (ii = 0; ii < subtitle.num_rects; ii++)
                     {
                         AVSubtitleRect *rect = subtitle.rects[ii];

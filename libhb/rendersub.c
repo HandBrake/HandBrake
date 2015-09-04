@@ -11,24 +11,29 @@
 #include "hbffmpeg.h"
 #include <ass/ass.h>
 
+#define ABS(a) ((a) > 0 ? (a) : (-(a)))
+
 struct hb_filter_private_s
 {
     // Common
-    int               crop[4];
-    int               type;
+    int                 crop[4];
+    int                 type;
+    struct SwsContext * sws;
+    int                 sws_width;
+    int                 sws_height;
 
     // VOBSUB
-    hb_list_t       * sub_list; // List of active subs
+    hb_list_t         * sub_list; // List of active subs
 
     // SSA
-    ASS_Library     * ssa;
-    ASS_Renderer    * renderer;
-    ASS_Track       * ssaTrack;
-    uint8_t           script_initialized;
+    ASS_Library       * ssa;
+    ASS_Renderer      * renderer;
+    ASS_Track         * ssaTrack;
+    uint8_t             script_initialized;
 
     // SRT
-    int               line;
-    hb_buffer_t     * current_sub;
+    int                 line;
+    hb_buffer_t       * current_sub;
 };
 
 // VOBSUB
@@ -182,84 +187,144 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
 // as the original title diminsions
 static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t * sub )
 {
-    int top, left, margin_top, margin_percent;
+    blend( buf, sub, sub->f.x, sub->f.y );
+}
 
-    if ( !pv->ssa )
+static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
+                                   hb_buffer_t *sub, hb_buffer_t *buf)
+{
+    hb_buffer_t * scaled;
+    double xfactor = 1., yfactor = 1.;
+
+    // Do we need to rescale subtitles?
+    if (sub->f.window_width > 0 && sub->f.window_height > 0)
     {
-        /*
-         * Percent of height of picture that form a margin that subtitles
-         * should not be displayed within.
-         */
-        margin_percent = 2;
 
-        /*
-         * If necessary, move the subtitle so it is not in a cropped zone.
-         * When it won't fit, we center it so we lose as much on both ends.
-         * Otherwise we try to leave a 20px or 2% margin around it.
-         */
-        margin_top = ( ( buf->f.height - pv->crop[0] - pv->crop[1] ) *
-                       margin_percent ) / 100;
-
-        if( margin_top > 20 )
+        // TODO: Factor aspect ratio
+        // For now, assume subtitle and video PAR is the same.
+        xfactor     = (double)buf->f.width  / sub->f.window_width;
+        yfactor     = (double)buf->f.height / sub->f.window_height;
+        // The video may have been cropped.  This will make xfactor != yfactor
+        // even though video and subtitles are the same PAR.  So use the
+        // larger of as the scale factor.
+        if (xfactor > yfactor)
         {
-            /*
-             * A maximum margin of 20px regardless of height of the picture.
-             */
-            margin_top = 20;
-        }
-
-        if( sub->f.height > buf->f.height - pv->crop[0] - pv->crop[1] -
-            ( margin_top * 2 ) )
-        {
-            /*
-             * The subtitle won't fit in the cropped zone, so center
-             * it vertically so we fit in as much as we can.
-             */
-            top = pv->crop[0] + ( buf->f.height - pv->crop[0] -
-                                          pv->crop[1] - sub->f.height ) / 2;
-        }
-        else if( sub->f.y < pv->crop[0] + margin_top )
-        {
-            /*
-             * The subtitle fits in the cropped zone, but is currently positioned
-             * within our top margin, so move it outside of our margin.
-             */
-            top = pv->crop[0] + margin_top;
-        }
-        else if( sub->f.y > buf->f.height - pv->crop[1] - margin_top - sub->f.height )
-        {
-            /*
-             * The subtitle fits in the cropped zone, and is not within the top
-             * margin but is within the bottom margin, so move it to be above
-             * the margin.
-             */
-            top = buf->f.height - pv->crop[1] - margin_top - sub->f.height;
+            yfactor = xfactor;
         }
         else
         {
-            /*
-             * The subtitle is fine where it is.
-             */
-            top = sub->f.y;
+            xfactor = yfactor;
         }
+    }
+    if (ABS(xfactor - 1) > 0.01 || ABS(yfactor - 1) > 0.01)
+    {
+        AVPicture pic_in, pic_out;
+        int width, height;
 
-        if( sub->f.width > buf->f.width - pv->crop[2] - pv->crop[3] - 40 )
-            left = pv->crop[2] + ( buf->f.width - pv->crop[2] -
-                    pv->crop[3] - sub->f.width ) / 2;
-        else if( sub->f.x < pv->crop[2] + 20 )
-            left = pv->crop[2] + 20;
-        else if( sub->f.x > buf->f.width - pv->crop[3] - 20 - sub->f.width )
-            left = buf->f.width - pv->crop[3] - 20 - sub->f.width;
-        else
-            left = sub->f.x;
+        width       = sub->f.width  * xfactor;
+        height      = sub->f.height * yfactor;
+        scaled      = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, width, height);
+        scaled->f.x = sub->f.x * xfactor;
+        scaled->f.y = sub->f.y * yfactor;
+
+        hb_avpicture_fill(&pic_in,  sub);
+        hb_avpicture_fill(&pic_out, scaled);
+
+        if (pv->sws        == NULL   ||
+            pv->sws_width  != width  ||
+            pv->sws_height != height)
+        {
+            if (pv->sws!= NULL)
+                sws_freeContext(pv->sws);
+            pv->sws = hb_sws_get_context(
+                                sub->f.width, sub->f.height, sub->f.fmt,
+                                scaled->f.width, scaled->f.height, sub->f.fmt,
+                                SWS_LANCZOS|SWS_ACCURATE_RND);
+            pv->sws_width   = width;
+            pv->sws_height  = height;
+        }
+        sws_scale(pv->sws,
+                  (const uint8_t* const *)pic_in.data, pic_in.linesize,
+                  0, sub->f.height, pic_out.data, pic_out.linesize);
     }
     else
     {
-        top = sub->f.y;
-        left = sub->f.x;
+        scaled = hb_buffer_dup(sub);
     }
 
-    blend( buf, sub, left, top );
+    int top, left, margin_top, margin_percent;
+
+    /*
+     * Percent of height of picture that form a margin that subtitles
+     * should not be displayed within.
+     */
+    margin_percent = 2;
+
+    /*
+     * If necessary, move the subtitle so it is not in a cropped zone.
+     * When it won't fit, we center it so we lose as much on both ends.
+     * Otherwise we try to leave a 20px or 2% margin around it.
+     */
+    margin_top = ( ( buf->f.height - pv->crop[0] - pv->crop[1] ) *
+                   margin_percent ) / 100;
+
+    if( margin_top > 20 )
+    {
+        /*
+         * A maximum margin of 20px regardless of height of the picture.
+         */
+        margin_top = 20;
+    }
+
+    if( scaled->f.height > buf->f.height - pv->crop[0] - pv->crop[1] -
+        ( margin_top * 2 ) )
+    {
+        /*
+         * The subtitle won't fit in the cropped zone, so center
+         * it vertically so we fit in as much as we can.
+         */
+        top = pv->crop[0] + ( buf->f.height - pv->crop[0] -
+                                      pv->crop[1] - scaled->f.height ) / 2;
+    }
+    else if( scaled->f.y < pv->crop[0] + margin_top )
+    {
+        /*
+         * The subtitle fits in the cropped zone, but is currently positioned
+         * within our top margin, so move it outside of our margin.
+         */
+        top = pv->crop[0] + margin_top;
+    }
+    else if( scaled->f.y > buf->f.height - pv->crop[1] - margin_top - scaled->f.height )
+    {
+        /*
+         * The subtitle fits in the cropped zone, and is not within the top
+         * margin but is within the bottom margin, so move it to be above
+         * the margin.
+         */
+        top = buf->f.height - pv->crop[1] - margin_top - scaled->f.height;
+    }
+    else
+    {
+        /*
+         * The subtitle is fine where it is.
+         */
+        top = scaled->f.y;
+    }
+
+    if( scaled->f.width > buf->f.width - pv->crop[2] - pv->crop[3] - 40 )
+        left = pv->crop[2] + ( buf->f.width - pv->crop[2] -
+                pv->crop[3] - scaled->f.width ) / 2;
+    else if( scaled->f.x < pv->crop[2] + 20 )
+        left = pv->crop[2] + 20;
+    else if( scaled->f.x > buf->f.width - pv->crop[3] - 20 - scaled->f.width )
+        left = buf->f.width - pv->crop[3] - 20 - scaled->f.width;
+    else
+        left = scaled->f.x;
+
+    scaled->f.x = left;
+    scaled->f.y = top;
+
+    return scaled;
 }
 
 // Assumes that the input buffer has the same dimensions
@@ -290,7 +355,9 @@ static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
             // after it.  Render the subtitle into the frame.
             while ( sub )
             {
-                ApplySub( pv, buf, sub );
+                hb_buffer_t *scaled = ScaleSubtitle(pv, sub, buf);
+                ApplySub( pv, buf, scaled );
+                hb_buffer_close(&scaled);
                 sub = sub->next;
             }
             ii++;
@@ -775,7 +842,9 @@ static void ApplyPGSSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
         sub = hb_list_item( pv->sub_list, 0 );
         if ( sub->s.start <= buf->s.start )
         {
-            ApplySub( pv, buf, sub );
+            hb_buffer_t *scaled = ScaleSubtitle(pv, sub, buf);
+            ApplySub( pv, buf, scaled );
+            hb_buffer_close(&scaled);
         }
     }
 }
@@ -950,6 +1019,11 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
 static void hb_rendersub_close( hb_filter_object_t * filter )
 {
     hb_filter_private_t * pv = filter->private_data;
+
+    if (pv->sws != NULL)
+    {
+        sws_freeContext(pv->sws);
+    }
     switch( pv->type )
     {
         case VOBSUB:

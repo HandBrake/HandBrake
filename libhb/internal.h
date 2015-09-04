@@ -107,6 +107,8 @@ struct hb_image_format_s
     int           width;
     int           height;
     int           fmt;
+    int           window_width;
+    int           window_height;
 };
 
 struct hb_buffer_s

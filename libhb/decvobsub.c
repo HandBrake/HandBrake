@@ -541,10 +541,11 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     buf->s.frametype = HB_FRAME_SUBTITLE;
     buf->s.start  = pv->pts_start;
     buf->s.stop   = pv->pts_stop;
-    buf->s.type   = SUBTITLE_BUF;
 
     buf->f.x = pv->x + crop[2];
     buf->f.y = pv->y + crop[0];
+    buf->f.window_width  = w->subtitle->width;
+    buf->f.window_height = w->subtitle->height;
 
     lum_in    = raw + crop[0] * pv->width + crop[2];
     alpha_in  = lum_in + pv->width * pv->height;
