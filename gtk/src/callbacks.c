@@ -2258,25 +2258,37 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
-    double vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
-    if (vquality < 1.0)
+    gint vcodec;
+    double vquality;
+
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
+    vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
+    if (vcodec == HB_VCODEC_X264 && vquality < 1.0)
     {
+        // Set Profile to auto for lossless x264
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
     }
 
-    gint vcodec;
     gdouble step;
-    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
-    if (vcodec == HB_VCODEC_X264)
+    float min, max, min_step;
+    int direction;
+
+    hb_video_quality_get_limits(vcodec, &min, &max, &min_step, &direction);
+    step = ghb_settings_combo_double(ud->prefs, "VideoQualityGranularity");
+    if (step < min_step)
     {
-        step = ghb_settings_combo_double(ud->prefs, "VideoQualityGranularity");
-    }
-    else
-    {
-        step = 1;
+        step = min_step;
     }
     gdouble val = gtk_range_get_value(GTK_RANGE(widget));
     val = ((int)((val + step / 2) / step)) * step;
+    if (val < min)
+    {
+        val = min;
+    }
+    if (val > max)
+    {
+        val = max;
+    }
     gtk_range_set_value(GTK_RANGE(widget), val);
     if (check_name_template(ud, "{quality}"))
         set_destination(ud);
