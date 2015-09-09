@@ -1,5 +1,6 @@
 # Ignore output created by Visual Studio
 build/
+build.*/
 download/
 win/CS/*/bin
 win/CS/*/obj
@@ -7,3 +8,17 @@ win/CS/*.suo
 
 # Ignore Xcode user data
 xcuserdata
+
+# Ignore autoconf spam
+Makefile.in
+aclocal.m4
+autom4te.cache
+compile
+config.guess
+config.h.in
+config.sub
+configure
+depcomp
+install-sh
+ltmain.sh
+missing
