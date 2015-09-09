@@ -1,15 +1,17 @@
-# Ignore output created by Visual Studio
-build/
-build.*/
-download/
+# Visual Studio
 win/CS/*/bin
 win/CS/*/obj
 win/CS/*.suo
 
-# Ignore Xcode user data
+# Xcode user data
 xcuserdata
 
-# Ignore autoconf spam
+# Build system
+build/
+build.*/
+download/
+
+# autoconf spam
 Makefile.in
 aclocal.m4
 autom4te.cache
@@ -17,7 +19,6 @@ compile
 config.guess
 config.h.in
 config.sub
-configure
 depcomp
 install-sh
 ltmain.sh
