@@ -65,6 +65,13 @@ enum
     HB_GID_MUX_MP4,
 };
 
+#define HB_VIDEO_CLOCK    27000000 // 27MHz clock
+#define HB_VIDEO_FPS_MIN  1
+#define HB_VIDEO_FPS_MAX  1000
+int hb_video_rate_clock = HB_VIDEO_CLOCK;
+int hb_video_rate_min   = HB_VIDEO_CLOCK / HB_VIDEO_FPS_MAX; // Min clock rate from *max* frame rate
+int hb_video_rate_max   = HB_VIDEO_CLOCK / HB_VIDEO_FPS_MIN; // Max clock rate from *min* frame rate
+
 typedef struct
 {
     hb_rate_t  item;
@@ -96,9 +103,6 @@ hb_rate_internal_t hb_video_rates[]  =
     { { "60",                   450000, }, NULL, 1, },
 };
 int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_video_rates[0]);
-const int hb_video_rate_clock = 27000000;           // 27MHz clock
-int hb_video_rate_min = hb_video_rate_clock / 1000; // Min clock rate from *max* frame rate
-int hb_video_rate_max = hb_video_rate_clock / 1;    // Max clock rate from *min* frame rate
 
 hb_rate_t *hb_audio_rates_first_item = NULL;
 hb_rate_t *hb_audio_rates_last_item  = NULL;
