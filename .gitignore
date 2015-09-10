@@ -11,15 +11,16 @@ build/
 build.*/
 download/
 
-# autoconf spam
-Makefile.in
-aclocal.m4
-autom4te.cache
-compile
-config.guess
-config.h.in
-config.sub
-depcomp
-install-sh
-ltmain.sh
-missing
+# Gtk autoconf spam
+gtk/Makefile.in*
+gtk/*/Makefile.in*
+gtk/aclocal.m4
+gtk/autom4te.cache
+gtk/compile
+gtk/config.*
+gtk/configure
+gtk/depcomp
+gtk/install-sh
+gtk/ltmain.sh
+gtk/missing
+
