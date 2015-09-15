@@ -186,8 +186,7 @@ namespace HandBrakeWPF.ViewModels
             foreach (ChapterMarker item in this.Task.ChapterNames)
             {
                 string chapterName;
-                chapterMap.TryGetValue(item.ChapterNumber, out chapterName);
-                item.ChapterName = chapterName;
+                item.ChapterName = chapterMap.TryGetValue(item.ChapterNumber, out chapterName) ? chapterName : string.Empty;
             }
         }
 
