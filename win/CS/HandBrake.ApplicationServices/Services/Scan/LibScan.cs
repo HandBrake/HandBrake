@@ -272,7 +272,21 @@ namespace HandBrake.ApplicationServices.Services.Scan
             BitmapImage bitmapImage = null;
             try
             {
-                PreviewSettings settings = new PreviewSettings(job);
+                PreviewSettings settings = new PreviewSettings
+                                               {
+                                                   Cropping = new Cropping(job.Cropping),
+                                                   MaxWidth = job.MaxWidth ?? 0,
+                                                   MaxHeight = job.MaxHeight ?? 0,
+                                                   KeepDisplayAspect = job.KeepDisplayAspect,
+                                                   TitleNumber = job.Title,
+                                                   Anamorphic = job.Anamorphic,
+                                                   Modulus = job.Modulus,
+                                                   Width = job.Width ?? 0,
+                                                   Height = job.Height ?? 0,
+                                                   PixelAspectX = job.PixelAspectX,
+                                                   PixelAspectY = job.PixelAspectY
+                                               };
+
                 bitmapImage = this.instance.GetPreview(settings, preview);
             }
             catch (AccessViolationException e)
