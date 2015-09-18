@@ -27,19 +27,8 @@ namespace HandBrake.ApplicationServices.Interop.Factories
         /// </summary>
         public enum KeepSetting
         {
-            /// <summary>
-            /// The h b_ kee p_ width.
-            /// </summary>
             HB_KEEP_WIDTH = 0x01, 
-
-            /// <summary>
-            /// The h b_ kee p_ height.
-            /// </summary>
             HB_KEEP_HEIGHT = 0x02, 
-
-            /// <summary>
-            /// The h b_ kee p_ displa y_ aspect.
-            /// </summary>
             HB_KEEP_DISPLAY_ASPECT = 0x04
         }
 

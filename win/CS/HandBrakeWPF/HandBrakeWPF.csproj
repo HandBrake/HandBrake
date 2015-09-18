@@ -126,7 +126,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppArguments.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
@@ -237,10 +236,8 @@
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
     <Compile Include="Model\DownloadStatus.cs" />
-    <Compile Include="Services\Interfaces\INotificationService.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\Interfaces\IPrePostActionService.cs" />
-    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\PrePostActionService.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />

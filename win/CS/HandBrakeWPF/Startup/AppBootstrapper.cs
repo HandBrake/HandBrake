@@ -60,7 +60,6 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IUpdateService, UpdateService>();
             this.container.Singleton<IScan, LibScan>();
             this.container.Singleton<IEncode, LibEncode>();
-            this.container.Singleton<INotificationService, NotificationService>();
             this.container.Singleton<IPrePostActionService, PrePostActionService>();
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();

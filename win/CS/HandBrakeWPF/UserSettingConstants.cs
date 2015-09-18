@@ -72,11 +72,6 @@ namespace HandBrakeWPF
         public const string MinTitleLength = "MinTitleLength";
 
         /// <summary>
-        /// Skip Version
-        /// </summary>
-        public const string Skipversion = "skipversion";
-
-        /// <summary>
         /// Update Status
         /// </summary>
         public const string UpdateStatus = "updateStatus";
@@ -90,16 +85,6 @@ namespace HandBrakeWPF
         /// Vlc Path
         /// </summary>
         public const string VLCPath = "VLC_Path";
-
-        /// <summary>
-        /// Growl Encodes
-        /// </summary>
-        public const string GrowlEncode = "GrowlEncode";
-
-        /// <summary>
-        /// Growl Queues
-        /// </summary>
-        public const string GrowlQueue = "GrowlQueue";
 
         /// <summary>
         /// The Instance Id

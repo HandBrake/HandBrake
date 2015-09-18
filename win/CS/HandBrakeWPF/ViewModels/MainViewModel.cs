@@ -228,10 +228,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        /// <param name="notificationService">
-        /// The notification Service.
-        /// *** Leave in Constructor. *** 
-        /// </param>
         /// <param name="whenDoneService">
         /// The when Done Service.
         /// *** Leave in Constructor. *** 
@@ -264,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
         /// The static Preview View Model.
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService, IUpdateService updateService, INotificationService notificationService,
+            IErrorService errorService, IUpdateService updateService,
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel)
@@ -273,7 +269,6 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
-            // this.shellViewModel = shellViewModel; IShellViewModel shellViewModel,
             this.updateService = updateService;
             this.windowManager = windowManager;
             this.userSettingService = userSettingService;

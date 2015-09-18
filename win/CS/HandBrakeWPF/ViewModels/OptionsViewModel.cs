@@ -114,16 +114,6 @@ namespace HandBrakeWPF.ViewModels
         private bool disableLibdvdNav;
 
         /// <summary>
-        /// The growl after encode.
-        /// </summary>
-        private bool growlAfterEncode;
-
-        /// <summary>
-        /// The growl after queue.
-        /// </summary>
-        private bool growlAfterQueue;
-
-        /// <summary>
         /// The log directory.
         /// </summary>
         private string logDirectory;
@@ -430,40 +420,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.arguments = value;
                 this.NotifyOfPropertyChange("Arguments");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether GrowlAfterEncode.
-        /// </summary>
-        public bool GrowlAfterEncode
-        {
-            get
-            {
-                return this.growlAfterEncode;
-            }
-
-            set
-            {
-                this.growlAfterEncode = value;
-                this.NotifyOfPropertyChange("GrowlAfterEncode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether GrowlAfterQueue.
-        /// </summary>
-        public bool GrowlAfterQueue
-        {
-            get
-            {
-                return this.growlAfterQueue;
-            }
-
-            set
-            {
-                this.growlAfterQueue = value;
-                this.NotifyOfPropertyChange("GrowlAfterQueue");
             }
         }
 
@@ -1349,8 +1305,6 @@ namespace HandBrakeWPF.ViewModels
                 this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
             }
 
-            this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
-            this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
             this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)) ?? string.Empty;
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
@@ -1478,8 +1432,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, this.CheckForUpdates);
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, this.WhenDone);
-            this.userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
-            this.userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, this.SendFileToPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);

@@ -109,11 +109,6 @@
                                 <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" IsChecked="{Binding ResetWhenDoneAction}" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="Collapsed">
-                                <CheckBox Content="Growl after Queue Completes" IsChecked="{Binding GrowlAfterEncode}" Margin="0,0,5,0"/>
-                                <CheckBox Content="Growl after Encode Completes" IsChecked="{Binding GrowlAfterQueue}" />
-                            </StackPanel>
-
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <CheckBox Content="{x:Static Properties:ResourcesUI.Options_SendFileTo}" VerticalAlignment="Center" IsChecked="{Binding SendFileAfterEncode}" />
                                 <TextBlock Margin="5,0,5,5" VerticalAlignment="Center" Text="{Binding SendFileTo}" />

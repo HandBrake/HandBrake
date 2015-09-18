@@ -103,7 +103,6 @@ namespace HandBrakeWPF.Services
                         }
 
                         var currentBuild = HandBrakeUtils.Build;
-                        var skipBuild = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion);
 
                         // Initialize variables
                         WebRequest request = WebRequest.Create(url);
@@ -118,15 +117,6 @@ namespace HandBrakeWPF.Services
 
                         int latest = int.Parse(build);
                         int current = currentBuild;
-                        int skip = skipBuild;
-
-                        // If the user wanted to skip this version, don't report the update
-                        if (latest == skip)
-                        {
-                            var info = new UpdateCheckInformation { NewVersionAvailable = false };
-                            callback(info);
-                            return;
-                        }
 
                         var info2 = new UpdateCheckInformation
                             {
