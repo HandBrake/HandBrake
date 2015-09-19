@@ -351,6 +351,7 @@
                                   MinWidth="100"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding ScannedSource.Titles}"
+                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
                                   SelectedItem="{Binding Path=SelectedTitle}"
                                   />
                         <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
@@ -364,7 +365,7 @@
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="8,0,0,0"
-                                  ItemsSource="{Binding RangeMode}"
+                                  ItemsSource="{Binding RangeMode}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
                                   SelectedItem="{Binding SelectedPointToPoint}"
                                   />
                         <ComboBox Name="StartPoint"
@@ -423,7 +424,7 @@
                     <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_File}" />
                     <TextBox Name="Destination"
                              Grid.Column="1"
-                             Margin="8,0,0,0"
+                             Margin="8,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Destination}"
                              Text="{Binding Destination,
                                             UpdateSourceTrigger=PropertyChanged}"
                              >
@@ -454,6 +455,7 @@
                     <ComboBox Name="Container"
                               MinWidth="100"
                               Margin="8,0,0,0"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
                               SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}"
                               />
@@ -462,6 +464,7 @@
                               VerticalAlignment="Center"
                               Content="{x:Static Properties:ResourcesUI.MainView_WebOptimized}"
                               IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"
@@ -470,6 +473,7 @@
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
                               Content="{x:Static Properties:ResourcesUI.MainView_iPod5G}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
                               IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},

@@ -48,6 +48,7 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Detelecine}" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
                 <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Detelecine}"
                           HorizontalAlignment="Left"/>
                 <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
@@ -55,8 +56,10 @@
                 <TextBlock Text="{Binding DeinterlaceControlText}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" VerticalAlignment="Top"/>
                 <StackPanel Grid.Row="1" Grid.Column="1" >
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton GroupName="Interlace" Content="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" IsChecked="{Binding IsDeinterlaceMode}" />
-                        <RadioButton GroupName="Interlace" Content="{x:Static Properties:ResourcesUI.FiltersView_Decomb}" Margin="10,0,0,0" IsChecked="{Binding IsDeinterlaceMode, Converter={StaticResource inverseBooleanConverter}}" />
+                        <RadioButton GroupName="Interlace" Content="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" IsChecked="{Binding IsDeinterlaceMode}" 
+                                     ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DecombDeinterlace}" />
+                        <RadioButton GroupName="Interlace" Content="{x:Static Properties:ResourcesUI.FiltersView_Decomb}" Margin="10,0,0,0" IsChecked="{Binding IsDeinterlaceMode, Converter={StaticResource inverseBooleanConverter}}"
+                                     ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DecombDeinterlace}"/>
                     </StackPanel>
 
                     <ComboBox Width="120" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
@@ -77,7 +80,7 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Denoise}" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
-                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" />
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Denoise}" />
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" 
                             Visibility="{Binding ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
@@ -107,10 +110,11 @@
 
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deblock}" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
                 <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"
-                        HorizontalAlignment="Left" />
+                        HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" />
                 <TextBlock Text="{Binding DeblockText}" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10"/>
 
-                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"/>
+                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
             </Grid>
 
         </StackPanel>

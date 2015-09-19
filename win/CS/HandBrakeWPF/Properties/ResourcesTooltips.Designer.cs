@@ -61,6 +61,154 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The deblocking filter removes a common type of compression artifact.
+        ///If your source exhibits &apos;blockiness&apos;, this filter may help clean it up..
+        /// </summary>
+        public static string FilterView_Deblock {
+            get {
+                return ResourceManager.GetString("FilterView_Deblock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose decomb or deinterlace filter options.
+        ///
+        ///The decomb filter selectively deinterlaces frames that appear to be interlaced.
+        ///This will preserve quality in frames that are not interlaced.
+        ///
+        ///The classic deinterlace filter is applied to all frames.
+        ///Frames that are not interlaced will suffer some quality degradation..
+        /// </summary>
+        public static string FilterView_DecombDeinterlace {
+            get {
+                return ResourceManager.GetString("FilterView_DecombDeinterlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise filtering reduces or removes the appearance of noise and grain.
+        ///Film grain and other types of high frequency noise are difficult to compress.
+        ///Using this filter on such sources can result in smaller file sizes..
+        /// </summary>
+        public static string FilterView_Denoise {
+            get {
+                return ResourceManager.GetString("FilterView_Denoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This filter removes &apos;combing&apos; artifacts that are the result of telecining.
+        ///
+        ///Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps..
+        /// </summary>
+        public static string FilterView_Detelecine {
+            get {
+                return ResourceManager.GetString("FilterView_Detelecine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If enabled, filter colour components out of video..
+        /// </summary>
+        public static string FilterView_Grayscale {
+            get {
+                return ResourceManager.GetString("FilterView_Grayscale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the location and filename where your encoded file will be saved..
+        /// </summary>
+        public static string MainView_Destination {
+            get {
+                return ResourceManager.GetString("MainView_Destination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add iPod Atom needed by some older iPods..
+        /// </summary>
+        public static string MainView_IpodAtom {
+            get {
+                return ResourceManager.GetString("MainView_IpodAtom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format to mux encoded tracks to..
+        /// </summary>
+        public static string MainView_Mux {
+            get {
+                return ResourceManager.GetString("MainView_Mux", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimise the layout of the MP4 file for progressive download.
+        ///This allows a player to initiate playback before downloading the entire file..
+        /// </summary>
+        public static string MainView_Optimise {
+            get {
+                return ResourceManager.GetString("MainView_Optimise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a start and end point of the source title to encode. This can be in chapters, seconds or frames..
+        /// </summary>
+        public static string MainView_Range {
+            get {
+                return ResourceManager.GetString("MainView_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the title to encode.
+        ///By default, HandBrake will try and select the main title, or the longest if one isn&apos;t found..
+        /// </summary>
+        public static string MainView_Title {
+            get {
+                return ResourceManager.GetString("MainView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None   - Force pixel aspect ratio to 1:1.
+        ///Loose  - Align dimensions to chosen &apos;Alignment&apos; value
+        ///               and pick pixel aspect ratio that preserves the
+        ///               original display aspect ratio
+        ///Strict - Keep original source dimensions and pixel aspect ratio.
+        /// </summary>
+        public static string PictureSettingsView_Anamorphic {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Anamorphic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align storage dimensions to multiples of this value.
+        ///
+        ///This setting is only necessary for compatibility with some devices.
+        ///You should use 2 unless you experience compatibility issues..
+        /// </summary>
+        public static string PictureSettingsView_Modulus {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Modulus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pixel aspect defines the shape of the pixels.
+        ///A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+        ///Players will scale the image in order to achieve the specified aspect..
+        /// </summary>
+        public static string PictureSettingsView_PAR {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_PAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete the job from the queue..
         /// </summary>
         public static string QueueView_DeleteJob {

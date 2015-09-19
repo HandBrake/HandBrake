@@ -69,9 +69,10 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Modulus}" Grid.Row="1" Grid.Column="0" 
                        Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
 
-                    <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                    <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}" />
                     <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" 
-                          Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}"
+                          Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Modulus}"
                           Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 </Grid>
 
@@ -95,9 +96,11 @@
                     <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="False" />
                     <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
-                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
+                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
                     <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
-                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
+                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
                 </Grid>
 
             </StackPanel>
