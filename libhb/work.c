@@ -624,11 +624,14 @@ static void do_job(hb_job_t *job)
      * the library if we aren't going to use it. But we only call hb_ocl_close
      * in hb_global_close, since un/reloading the library each run is wasteful.
      */
-    if (job->use_opencl && (hb_ocl_init() || hb_init_opencl_run_env(0, NULL, "-I.")))
+    if (job->use_opencl)
     {
-        hb_log("work: failed to initialize OpenCL environment, using fallback");
-        hb_release_opencl_run_env();
-        job->use_opencl = 0;
+        if (hb_ocl_init() || hb_init_opencl_run_env(0, NULL, "-I."))
+        {
+            hb_log("work: failed to initialize OpenCL environment, using fallback");
+            hb_release_opencl_run_env();
+            job->use_opencl = 0;
+        }
     }
     else
     {
