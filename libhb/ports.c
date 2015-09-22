@@ -269,6 +269,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Haswell";
         case HB_CPU_PLATFORM_INTEL_BDW:
             return "Intel microarchitecture Broadwell";
+        case HB_CPU_PLATFORM_INTEL_SKL:
+            return "Intel microarchitecture Skylake";
         case HB_CPU_PLATFORM_INTEL_CHT:
             return "Intel microarchitecture Airmont";
 
@@ -353,6 +355,10 @@ static void init_cpu_info()
                         break;
                     case 0x4C:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_CHT;
+                        break;
+                    case 0x4E:
+                    case 0x5E:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SKL;
                         break;
                     default:
                         break;

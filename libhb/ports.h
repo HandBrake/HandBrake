@@ -39,6 +39,7 @@ enum hb_cpu_platform
     HB_CPU_PLATFORM_INTEL_HSW,
     HB_CPU_PLATFORM_INTEL_BDW,
     HB_CPU_PLATFORM_INTEL_CHT,
+    HB_CPU_PLATFORM_INTEL_SKL,
 };
 int         hb_get_cpu_count();
 int         hb_get_cpu_platform();
