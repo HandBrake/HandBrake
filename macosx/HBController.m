@@ -53,7 +53,6 @@
 
 /// The current selected preset.
 @property (nonatomic, strong) HBPreset *currentPreset;
-@property (nonatomic) BOOL customPreset;
 
 ///  The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
@@ -80,6 +79,7 @@
         fQueueController.controller = self;
 
         presetManager = manager;
+        _currentPreset = manager.defaultPreset;
     }
 
     return self;
@@ -867,10 +867,6 @@
     if (self.job)
     {
         self.currentPreset = [self createPresetFromCurrentSettings];
-    }
-    else
-    {
-        self.currentPreset = fPresetsView.selectedPreset;
     }
 
     HBTitle *title = self.core.titles[fSrcTitlePopUp.indexOfSelectedItem];
