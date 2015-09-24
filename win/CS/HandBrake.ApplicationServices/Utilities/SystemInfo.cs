@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SystemInfo.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -71,7 +71,7 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 try
                 {
-                    return HBFunctions.hb_qsv_available() == 1;
+                    return HBFunctions.hb_qsv_available() != 0;
                 }
                 catch (Exception)
                 {
