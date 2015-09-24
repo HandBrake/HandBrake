@@ -79,8 +79,8 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
-	(cd $(STAGE.out.src/)vivid && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)ppa1~vivid1_source.changes )
-	(cd $(STAGE.out.src/)trusty && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)ppa1~trusty1_source.changes )
+	(cd $(STAGE.out.src/)vivid && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-1ppa1~vivid1_source.changes )
+	(cd $(STAGE.out.src/)trusty && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-1ppa1~trusty1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
