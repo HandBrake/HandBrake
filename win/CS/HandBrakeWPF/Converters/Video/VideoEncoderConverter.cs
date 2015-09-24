@@ -57,10 +57,16 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.VP8);
                 }
 
-                if (!SystemInfo.IsQsvAvailable)
+                if (!SystemInfo.IsQsvAvailableH264)
                 {
                     encoders.Remove(VideoEncoder.QuickSync);
                 }
+
+                if (!SystemInfo.IsQsvAvailableH265)
+                {
+                    encoders.Remove(VideoEncoder.QuickSyncH265);
+                }
+
 
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
             }

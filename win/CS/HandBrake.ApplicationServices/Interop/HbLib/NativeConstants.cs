@@ -45,6 +45,10 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public const uint HB_ACODEC_ANY = (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG);
         public const uint HB_ACODEC_TRUEHD_PASS = (HB_ACODEC_PASS_FLAG | HB_ACODEC_FFTRUEHD);
 
+        // VideoEncoders
+        public const uint HB_VCODEC_QSV_H264 = 0x0000100;
+        public const uint HB_VCODEC_QSV_H265 = 0x0000200;
+        public const uint HB_VCODEC_QSV_MASK = 0x0000F00;
 
         // Encode state
         public const int HB_STATE_IDLE = 1;

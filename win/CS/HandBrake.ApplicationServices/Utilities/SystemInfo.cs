@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SystemInfo.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -72,6 +72,44 @@ namespace HandBrake.ApplicationServices.Utilities
                 try
                 {
                     return HBFunctions.hb_qsv_available() != 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is qsv available.
+        /// </summary>
+        public static bool IsQsvAvailableH264
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_qsv_available() == NativeConstants.HB_VCODEC_QSV_H264;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is qsv available.
+        /// </summary>
+        public static bool IsQsvAvailableH265
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_qsv_available() == NativeConstants.HB_VCODEC_QSV_H265;
                 }
                 catch (Exception)
                 {
