@@ -1,0 +1,15 @@
+diff --git a/libavformat/matroskaenc.c b/libavformat/matroskaenc.c
+index b39d1b2..d65b6eb 100644
+--- a/libavformat/matroskaenc.c
++++ b/libavformat/matroskaenc.c
+@@ -988,7 +988,9 @@ static int mkv_write_tag(AVFormatContext *s, AVDictionary *m, unsigned int eleme
+ 
+     while ((t = av_dict_get(m, "", t, AV_DICT_IGNORE_SUFFIX)))
+         if (av_strcasecmp(t->key, "title") &&
+-            av_strcasecmp(t->key, "encoding_tool"))
++            av_strcasecmp(t->key, "encoding_tool") &&
++            (elementid != MATROSKA_ID_TAGTARGETS_TRACKUID ||
++             av_strcasecmp(t->key, "language")))
+             mkv_write_simpletag(s->pb, t);
+ 
+     end_ebml_master(s->pb, tag);
