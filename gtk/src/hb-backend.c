@@ -2906,7 +2906,7 @@ void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
     g_debug("ghb_backend_queue_scan()");
-    hb_scan( h_queue, path, titlenum, 10, 0, 0 );
+    hb_scan( h_queue, path, titlenum, -1, 0, 0 );
     hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 

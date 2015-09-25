@@ -610,13 +610,28 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
             title = hb_list_item(h->title_set.list_title, ii);
             if (title->index == title_index)
             {
-                // Title has already been scanned.
-                hb_lock( h->state_lock );
-                h->state.state = HB_STATE_SCANDONE;
-                hb_unlock( h->state_lock );
-                return;
+                // In some cases, we don't care what the preview count is.
+                // E.g. when rescanning at the start of a job. In these
+                // cases, the caller can set preview_count to -1 to tell
+                // us to use the same count as the previous scan, if known.
+                if (preview_count < 0)
+                {
+                    preview_count = title->preview_count;
+                }
+                if (preview_count == title->preview_count)
+                {
+                    // Title has already been scanned.
+                    hb_lock( h->state_lock );
+                    h->state.state = HB_STATE_SCANDONE;
+                    hb_unlock( h->state_lock );
+                    return;
+                }
             }
         }
+    }
+    if (preview_count < 0)
+    {
+        preview_count = 10;
     }
 
     h->scan_die = 0;

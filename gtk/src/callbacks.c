@@ -2005,6 +2005,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     if (title != NULL)
     {
+        gint preview_count;
+        preview_count = title->preview_count;
+        if (preview_count < 1)
+        {
+            preview_count = 1;
+        }
+        widget = GHB_WIDGET(ud->builder, "preview_frame");
+        gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
+
         ghb_set_preview_image(ud);
         ghb_preview_set_visible(ud);
     }
@@ -4096,15 +4105,10 @@ G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
-// FIXME?
+
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
-
-    gint preview_count;
-    preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-    widget = GHB_WIDGET(ud->builder, "preview_frame");
-    gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 }
 
 G_MODULE_EXPORT void

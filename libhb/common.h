@@ -962,6 +962,7 @@ struct hb_title_s
     /* Exact duration (in 1/90000s) */
     uint64_t      duration;
 
+    int           preview_count;
     int           has_resolution_change;
     hb_geometry_t geometry;
     hb_rational_t dar;             // aspect ratio for the title's video

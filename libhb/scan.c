@@ -240,6 +240,7 @@ static void ScanFunc( void * _data )
             hb_title_close( &title );
             continue;
         }
+        title->preview_count = npreviews;
 
         /* Make sure we found audio rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )

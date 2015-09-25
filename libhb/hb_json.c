@@ -751,7 +751,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.
     hb_hwd_set_enable(h, use_hwd);
-    hb_scan(h, path, title_index, 10, 0, 0);
+    hb_scan(h, path, title_index, -1, 0, 0);
 
     // Wait for scan to complete
     hb_state_t state;
