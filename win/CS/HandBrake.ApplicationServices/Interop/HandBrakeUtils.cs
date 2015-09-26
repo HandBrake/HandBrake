@@ -316,7 +316,7 @@ namespace HandBrake.ApplicationServices.Interop
         {
             if (MessageLogged != null)
             {
-                MessageLogged(null, new MessageLoggedEventArgs { Message = message });
+                MessageLogged(null, new MessageLoggedEventArgs(message));
             }
 
             Debug.WriteLine(message);
@@ -332,7 +332,7 @@ namespace HandBrake.ApplicationServices.Interop
         {
             if (ErrorLogged != null)
             {
-                ErrorLogged(null, new MessageLoggedEventArgs { Message = message });
+                ErrorLogged(null, new MessageLoggedEventArgs(message));
             }
 
             Debug.WriteLine("ERROR: " + message);

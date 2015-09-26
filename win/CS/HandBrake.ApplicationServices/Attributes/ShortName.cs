@@ -30,6 +30,6 @@ namespace HandBrake.ApplicationServices.Attributes
         /// <summary>
         /// Gets or sets the short name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; private set; }
     }
 }

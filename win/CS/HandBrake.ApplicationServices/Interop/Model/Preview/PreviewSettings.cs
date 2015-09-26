@@ -9,7 +9,7 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Preview
 {
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using Encoding;
 
     /// <summary>
     /// The preview settings.

@@ -17,8 +17,19 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     public class MessageLoggedEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets or sets Message.
+        /// Initializes a new instance of the <see cref="MessageLoggedEventArgs"/> class.
         /// </summary>
-        public string Message { get; set; }
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        public MessageLoggedEventArgs(string message)
+        {
+            this.Message = message;
+        }
+
+        /// <summary>
+        /// Gets the Message.
+        /// </summary>
+        public string Message { get; private set; }
     }
 }

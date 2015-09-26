@@ -11,7 +11,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
     using System.Runtime.InteropServices;
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct iso639_lang_t
+    internal struct iso639_lang_t
     {
         public IntPtr eng_name;
 

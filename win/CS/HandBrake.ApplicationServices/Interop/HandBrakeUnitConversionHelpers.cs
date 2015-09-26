@@ -73,7 +73,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
+        internal static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
         {
             return new HBVideoEncoder
             {
@@ -93,7 +93,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
+        internal static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
         {
             var result = new HBAudioEncoder
                              {
@@ -120,7 +120,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted rate object.
         /// </returns>
-        public static HBRate NativeToRate(hb_rate_s rate)
+        internal static HBRate NativeToRate(hb_rate_s rate)
         {
             return new HBRate
                 {
@@ -138,7 +138,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
+        internal static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
         {
             return new HBMixdown
                 {
@@ -157,7 +157,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted structure.
         /// </returns>
-        public static HBContainer NativeToContainer(hb_container_s container)
+        internal static HBContainer NativeToContainer(hb_container_s container)
         {
             return new HBContainer
                 {
@@ -177,7 +177,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted structure.
         /// </returns>
-        public static Language NativeToLanguage(iso639_lang_t language)
+        internal static Language NativeToLanguage(iso639_lang_t language)
         {
             string englishName = InteropUtilities.ToStringFromUtf8Ptr(language.eng_name);
             string nativeName = InteropUtilities.ToStringFromUtf8Ptr(language.native_name);

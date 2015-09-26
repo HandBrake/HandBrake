@@ -36,6 +36,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
     using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using Validate = HandBrakeWPF.Helpers.Validate;
 
     /// <summary>
     /// This factory takes the internal EncodeJob object and turns it into a set of JSON models

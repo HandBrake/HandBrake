@@ -10,7 +10,7 @@
 
 namespace HandBrake.ApplicationServices.Interop.HbLib
 {
-    public enum hb_anamorphic_mode_t
+    internal enum hb_anamorphic_mode_t
     {
         HB_ANAMORPHIC_NONE,
         HB_ANAMORPHIC_STRICT,

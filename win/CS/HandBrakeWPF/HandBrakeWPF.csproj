@@ -155,6 +155,7 @@
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\Validate.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />

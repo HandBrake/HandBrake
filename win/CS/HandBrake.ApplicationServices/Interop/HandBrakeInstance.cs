@@ -268,7 +268,6 @@ namespace HandBrake.ApplicationServices.Interop
         public BitmapImage GetPreview(PreviewSettings settings, int previewNumber)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
-            Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
             // Create the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
@@ -510,14 +509,7 @@ namespace HandBrake.ApplicationServices.Interop
             {
                 if (this.ScanProgress != null)
                 {
-                    this.ScanProgress(this, new ScanProgressEventArgs
-                    {
-                        Progress = state.Scanning.Progress, 
-                        CurrentPreview = state.Scanning.Preview, 
-                        Previews = state.Scanning.PreviewCount, 
-                        CurrentTitle = state.Scanning.Title, 
-                        Titles = state.Scanning.TitleCount
-                    });
+                    this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
             else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
@@ -557,16 +549,8 @@ namespace HandBrake.ApplicationServices.Interop
             {
                 if (this.EncodeProgress != null)
                 {
-                    var progressEventArgs = new EncodeProgressEventArgs
-                    {
-                        FractionComplete = state.Working.Progress, 
-                        CurrentFrameRate = state.Working.Rate, 
-                        AverageFrameRate = state.Working.RateAvg, 
-                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
-                        PassId = state.Working.PassID,
-                        Pass = state.Working.Pass,
-                        PassCount = state.Working.PassCount
-                    };
+                    var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        state.Working.PassID, state.Working.Pass, state.Working.PassCount);
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
@@ -577,10 +561,9 @@ namespace HandBrake.ApplicationServices.Interop
 
                 if (this.EncodeCompleted != null)
                 {
-                    this.EncodeCompleted(this, new EncodeCompletedEventArgs
-                    {
-                        Error = state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE
-                    });
+                    this.EncodeCompleted(
+                        this,
+                        new EncodeCompletedEventArgs(state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE));
                 }
             }
         }
