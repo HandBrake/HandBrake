@@ -63,7 +63,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         #endregion
 
         #region Public Methods

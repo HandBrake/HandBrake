@@ -509,7 +509,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         #endregion
 
         #region Output Files

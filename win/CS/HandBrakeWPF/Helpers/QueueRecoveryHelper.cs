@@ -105,6 +105,9 @@ namespace HandBrakeWPF.Helpers
         /// <param name="errorService">
         /// The error Service.
         /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
