@@ -80,7 +80,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />
@@ -191,7 +190,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utilities\CharCodesUtilities.cs" />
-    <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

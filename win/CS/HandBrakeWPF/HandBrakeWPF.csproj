@@ -153,6 +153,7 @@
     <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
+    <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\Execute.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
+    <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
     <Compile Include="Utilities\PropertyChangedBase.cs" />

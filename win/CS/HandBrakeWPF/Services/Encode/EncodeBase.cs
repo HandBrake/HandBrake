@@ -14,15 +14,16 @@ namespace HandBrakeWPF.Services.Encode
     using System.IO;
     using System.Text;
 
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+
+    using HandBrakeWPF.Utilities;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeCompletedStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeCompletedStatus;
     using EncodeProgessStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeProgessStatus;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// A Base Class for the Encode Services.

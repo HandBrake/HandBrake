@@ -16,11 +16,11 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Exceptions;
-
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// Interaction logic for App.xaml

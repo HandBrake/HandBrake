@@ -16,10 +16,9 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Exceptions;
-
     using HandBrakeWPF.Services.Interfaces;
 
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>

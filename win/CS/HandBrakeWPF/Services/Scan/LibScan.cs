@@ -31,6 +31,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;

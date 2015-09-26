@@ -16,14 +16,12 @@ namespace HandBrakeWPF.Services.Queue
     using System.Linq;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
-
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;

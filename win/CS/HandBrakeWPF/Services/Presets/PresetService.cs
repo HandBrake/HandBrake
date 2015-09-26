@@ -18,7 +18,6 @@ namespace HandBrakeWPF.Services.Presets
     using System.Windows;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Model;
@@ -31,8 +30,11 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
+
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// The preset service manages HandBrake's presets
