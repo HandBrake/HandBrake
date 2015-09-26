@@ -14,23 +14,38 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// </summary>
     public class HBMixdown
     {
-        #region Public Properties
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HBMixdown"/> class.
+        /// </summary>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="shortName">
+        /// The short name.
+        /// </param>
+        public HBMixdown(string displayName, int id, string shortName)
+        {
+            this.DisplayName = displayName;
+            this.Id = id;
+            this.ShortName = shortName;
+        }
 
         /// <summary>
-        /// Gets or sets the display name.
+        /// Gets the display name.
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get; private set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets the id.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the short name.
+        /// Gets the short name.
         /// </summary>
-        public string ShortName { get; set; }
-
-        #endregion
+        public string ShortName { get; private set; }
     }
 }

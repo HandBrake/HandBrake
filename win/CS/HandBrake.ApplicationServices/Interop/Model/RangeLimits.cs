@@ -15,23 +15,46 @@ namespace HandBrake.ApplicationServices.Interop.Model
     public class RangeLimits
     {
         /// <summary>
-        /// Gets or sets a value indicating whether ascending.
+        /// Initializes a new instance of the <see cref="RangeLimits"/> class.
         /// </summary>
-        public bool Ascending { get; set; }
+        /// <param name="ascending">
+        /// The ascending.
+        /// </param>
+        /// <param name="granularity">
+        /// The granularity.
+        /// </param>
+        /// <param name="high">
+        /// The high.
+        /// </param>
+        /// <param name="low">
+        /// The low.
+        /// </param>
+        public RangeLimits(bool @ascending, float granularity, float high, float low)
+        {
+            this.Ascending = @ascending;
+            this.Granularity = granularity;
+            this.High = high;
+            this.Low = low;
+        }
 
         /// <summary>
-        /// Gets or sets the granularity.
+        /// Gets a value indicating whether ascending.
         /// </summary>
-        public float Granularity { get; set; }
+        public bool Ascending { get; private set; }
 
         /// <summary>
-        /// Gets or sets the high.
+        /// Gets the granularity.
         /// </summary>
-        public float High { get; set; }
+        public float Granularity { get; private set; }
 
         /// <summary>
-        /// Gets or sets the low.
+        /// Gets the high.
         /// </summary>
-        public float Low { get; set; }
+        public float High { get; private set; }
+
+        /// <summary>
+        /// Gets the low.
+        /// </summary>
+        public float Low { get; private set; }
     }
 }

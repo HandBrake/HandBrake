@@ -15,13 +15,28 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     public class HBRate
     {
         /// <summary>
-        /// Gets or sets the name to use for this rate.
+        /// Initializes a new instance of the <see cref="HBRate"/> class.
         /// </summary>
-        public string Name { get; set; }
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="rate">
+        /// The rate.
+        /// </param>
+        public HBRate(string name, int rate)
+        {
+            this.Name = name;
+            this.Rate = rate;
+        }
 
         /// <summary>
-        /// Gets or sets the raw rate.
+        /// Gets the name to use for this rate.
         /// </summary>
-        public int Rate { get; set; }
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the raw rate.
+        /// </summary>
+        public int Rate { get; private set; }
     }
 }

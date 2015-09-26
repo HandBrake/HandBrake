@@ -486,7 +486,7 @@ namespace HandBrake.ApplicationServices.Interop
 
             HBFunctions.hb_audio_bitrate_get_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
 
-            return new BitrateLimits { Low = low, High = high };
+            return new BitrateLimits(low, high);
         }
 
         /// <summary>
@@ -507,13 +507,7 @@ namespace HandBrake.ApplicationServices.Interop
 
             HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
 
-            return new VideoQualityLimits
-                {
-                    Low = low, 
-                    High = high, 
-                    Granularity = granularity, 
-                    Ascending = direction == 0
-                };
+            return new VideoQualityLimits(low, high, granularity, direction == 0);
         }
 
         /// <summary>
@@ -574,13 +568,7 @@ namespace HandBrake.ApplicationServices.Interop
             int direction = 0;
             HBFunctions.hb_audio_quality_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
-            return new RangeLimits
-            {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
-                Ascending = direction == 0
-            };
+            return new RangeLimits(direction == 0, granularity, high, low);
         }
 
         /// <summary>
@@ -598,13 +586,7 @@ namespace HandBrake.ApplicationServices.Interop
             int direction = 0;
             HBFunctions.hb_audio_compression_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
-            return new RangeLimits
-            {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
-                Ascending = direction == 0
-            };
+            return new RangeLimits(direction == 0, granularity, high, low);
         }
 
         /// <summary>

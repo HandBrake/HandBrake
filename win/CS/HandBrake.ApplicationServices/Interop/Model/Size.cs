@@ -30,14 +30,14 @@ namespace HandBrake.ApplicationServices.Interop.Model
         }
 
         /// <summary>
-        /// Gets or sets the height.
+        /// Gets the height.
         /// </summary>
-        public int Height { get; set; }
+        public int Height { get; private set; }
 
         /// <summary>
-        /// Gets or sets the width.
+        /// Gets the width.
         /// </summary>
-        public int Width { get; set; }
+        public int Width { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether is empty.

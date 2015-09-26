@@ -15,23 +15,46 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     public class HBContainer
     {
         /// <summary>
-        /// Gets or sets the default extension.
+        /// Initializes a new instance of the <see cref="HBContainer"/> class.
         /// </summary>
-        public string DefaultExtension { get; set; }
+        /// <param name="defaultExtension">
+        /// The default extension.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="shortName">
+        /// The short name.
+        /// </param>
+        public HBContainer(string defaultExtension, string displayName, int id, string shortName)
+        {
+            this.DefaultExtension = defaultExtension;
+            this.DisplayName = displayName;
+            this.Id = id;
+            this.ShortName = shortName;
+        }
 
         /// <summary>
-        /// Gets or sets the display name.
+        /// Gets the default extension.
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DefaultExtension { get; private set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets the display name.
         /// </summary>
-        public int Id { get; set; }
+        public string DisplayName { get; private set; }
 
         /// <summary>
-        /// Gets or sets the short name.
+        /// Gets the id.
         /// </summary>
-        public string ShortName { get; set; }
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// Gets the short name.
+        /// </summary>
+        public string ShortName { get; private set; }
     }
 }

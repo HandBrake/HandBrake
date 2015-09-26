@@ -17,34 +17,73 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     public class HBAudioEncoder
     {
         /// <summary>
-        /// Gets or sets the compatible containers.
+        /// Initializes a new instance of the <see cref="HBAudioEncoder"/> class.
         /// </summary>
-        public int CompatibleContainers { get; set; }
+        /// <param name="compatibleContainers">
+        /// The compatible containers.
+        /// </param>
+        /// <param name="compressionLimits">
+        /// The compression limits.
+        /// </param>
+        /// <param name="defaultCompression">
+        /// The default compression.
+        /// </param>
+        /// <param name="defaultQuality">
+        /// The default quality.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="qualityLimits">
+        /// The quality limits.
+        /// </param>
+        /// <param name="shortName">
+        /// The short name.
+        /// </param>
+        public HBAudioEncoder(int compatibleContainers, RangeLimits compressionLimits, float defaultCompression, float defaultQuality, string displayName, int id, RangeLimits qualityLimits, string shortName)
+        {
+            this.CompatibleContainers = compatibleContainers;
+            this.CompressionLimits = compressionLimits;
+            this.DefaultCompression = defaultCompression;
+            this.DefaultQuality = defaultQuality;
+            this.DisplayName = displayName;
+            this.Id = id;
+            this.QualityLimits = qualityLimits;
+            this.ShortName = shortName;
+        }
 
         /// <summary>
-        /// Gets or sets the compression limits.
+        /// Gets the compatible containers.
         /// </summary>
-        public RangeLimits CompressionLimits { get; set; }
+        public int CompatibleContainers { get; private set; }
 
         /// <summary>
-        /// Gets or sets the default compression.
+        /// Gets the compression limits.
         /// </summary>
-        public float DefaultCompression { get; set; }
+        public RangeLimits CompressionLimits { get; private set; }
 
         /// <summary>
-        /// Gets or sets the default quality.
+        /// Gets the default compression.
         /// </summary>
-        public float DefaultQuality { get; set; }
+        public float DefaultCompression { get; private set; }
 
         /// <summary>
-        /// Gets or sets the display name.
+        /// Gets the default quality.
         /// </summary>
-        public string DisplayName { get; set; }
+        public float DefaultQuality { get; private set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets the display name.
         /// </summary>
-        public int Id { get; set; }
+        public string DisplayName { get; private set; }
+
+        /// <summary>
+        /// Gets the id.
+        /// </summary>
+        public int Id { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the encoder is passthrough.

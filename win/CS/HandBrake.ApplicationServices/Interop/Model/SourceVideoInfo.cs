@@ -30,13 +30,13 @@ namespace HandBrake.ApplicationServices.Interop.Model
         }
 
         /// <summary>
-        /// Gets or sets the resolution (width/height) of this Title
+        /// Gets the resolution (width/height) of this Title
         /// </summary>
-        public Size Resolution { get; set; }
+        public Size Resolution { get; private set; }
 
         /// <summary>
-        /// Gets or sets the pixel aspect ratio.
+        /// Gets the pixel aspect ratio.
         /// </summary>
-        public Size ParVal { get; set; }
+        public Size ParVal { get; private set; }
     }
 }
