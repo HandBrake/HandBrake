@@ -24,6 +24,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Utilities;
+
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioEncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;

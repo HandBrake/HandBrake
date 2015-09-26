@@ -144,6 +144,7 @@
     <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
     <Compile Include="Converters\Audio\AudioTrackDefaultBehaviourConverter.cs" />
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
+    <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
@@ -226,7 +227,12 @@
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\DriveUtilities.cs" />
+    <Compile Include="Utilities\EnumHelper.cs" />
+    <Compile Include="Utilities\Execute.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
+    <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
+    <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />

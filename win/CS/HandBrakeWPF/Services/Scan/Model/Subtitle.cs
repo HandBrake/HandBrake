@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD

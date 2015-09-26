@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Converters.Options
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// A Converter to get the Display Name of each options tab.

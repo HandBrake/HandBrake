@@ -24,6 +24,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Utilities;
 
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;

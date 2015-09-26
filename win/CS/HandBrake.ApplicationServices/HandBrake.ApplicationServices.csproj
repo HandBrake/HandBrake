@@ -80,7 +80,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
@@ -183,11 +182,6 @@
     <Compile Include="Services\Logging\Model\LogLevel.cs" />
     <Compile Include="Services\Logging\Model\LogMessage.cs" />
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
-    <Compile Include="Utilities\EnumHelper.cs" />
-    <Compile Include="Utilities\Execute.cs" />
-    <Compile Include="Utilities\ExtensionMethods.cs" />
-    <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
-    <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />

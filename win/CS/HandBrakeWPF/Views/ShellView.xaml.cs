@@ -26,6 +26,7 @@ namespace HandBrakeWPF.Views
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Application = System.Windows.Application;
+    using Execute = Caliburn.Micro.Execute;
 
     /// <summary>
     /// Interaction logic for ShellView.xaml

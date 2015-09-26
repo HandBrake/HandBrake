@@ -16,6 +16,8 @@ namespace HandBrakeWPF.Converters.Audio
 
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Utilities;
+
     using AudioEncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType;
 
     /// <summary>

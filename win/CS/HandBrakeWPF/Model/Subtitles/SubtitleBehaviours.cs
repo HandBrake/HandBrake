@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Model.Subtitles
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     ///  A class to track the behaviours of audio track selection

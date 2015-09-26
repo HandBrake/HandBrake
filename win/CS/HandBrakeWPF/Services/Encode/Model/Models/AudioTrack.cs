@@ -21,6 +21,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
 

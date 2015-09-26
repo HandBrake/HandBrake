@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Converters.Video
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// Video Scaling Converter

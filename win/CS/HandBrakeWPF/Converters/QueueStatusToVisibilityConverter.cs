@@ -16,6 +16,8 @@ namespace HandBrakeWPF.Converters
 
     using HandBrake.ApplicationServices.Model;
 
+    using HandBrakeWPF.Services.Queue.Model;
+
     /// <summary>
     /// Boolean to Visibility Converter
     /// </summary>

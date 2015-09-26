@@ -18,6 +18,9 @@ namespace HandBrakeWPF.Converters
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
+
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 

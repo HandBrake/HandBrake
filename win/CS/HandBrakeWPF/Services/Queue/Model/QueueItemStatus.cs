@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrakeWPF.Services.Queue.Model
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;

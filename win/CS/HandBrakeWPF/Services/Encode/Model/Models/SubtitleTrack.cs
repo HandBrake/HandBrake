@@ -11,9 +11,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System;
 
-    using HandBrake.ApplicationServices.Utilities;
-
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// Subtitle Information

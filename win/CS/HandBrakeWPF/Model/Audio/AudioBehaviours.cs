@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// Audio Behaviours

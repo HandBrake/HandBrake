@@ -16,7 +16,8 @@ namespace HandBrakeWPF.Services.Encode.Model
 
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Utilities;
+
+    using HandBrakeWPF.Utilities;
 
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
