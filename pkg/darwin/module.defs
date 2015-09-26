@@ -1,10 +1,10 @@
 PKG.platname = osx
 
-PKG.gui.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-$(PKG.platname)-$(BUILD.arch).dmg
-PKG.cli.dmg = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname)-$(BUILD.arch).dmg
+PKG.gui.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-$(PKG.platname).dmg
+PKG.cli.dmg = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname).dmg
 
-PKG.gui.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-$(PKG.platname)-$(BUILD.arch).tmp.dmg
-PKG.cli.tmp.dmg = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname)-$(BUILD.arch).tmp.dmg
+PKG.gui.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-$(PKG.platname).tmp.dmg
+PKG.cli.tmp.dmg = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname).tmp.dmg
 
 STAGE.out.gui/ = $(STAGE.out/)gui/
 STAGE.out.cli/ = $(STAGE.out/)cli/
