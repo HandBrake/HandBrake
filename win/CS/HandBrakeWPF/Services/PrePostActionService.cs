@@ -15,7 +15,6 @@ namespace HandBrakeWPF.Services
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.EventArgs;
@@ -23,6 +22,7 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
 
     /// <summary>

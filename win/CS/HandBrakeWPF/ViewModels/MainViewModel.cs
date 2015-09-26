@@ -21,16 +21,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
-    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Json.Presets;
+    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.EventArgs;
@@ -40,11 +32,18 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.EventArgs;
+    using HandBrakeWPF.Services.Encode.Interfaces;
+    using HandBrakeWPF.Services.Encode.Model;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Services.Scan.EventArgs;
+    using HandBrakeWPF.Services.Scan.Interfaces;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
@@ -55,7 +54,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Action = System.Action;
     using Execute = Caliburn.Micro.Execute;
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -259,10 +257,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="staticPreviewViewModel">
         /// The static Preview View Model.
         /// </param>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService, IUpdateService updateService,
-            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel,
-            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
+            IErrorService errorService, IUpdateService updateService, 
+            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
+            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
             IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel)
         {
             this.scanService = scanService;
@@ -307,6 +305,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #region View Model Properties
+
         /// <summary>
         /// Gets or sets PictureSettingsViewModel.
         /// </summary>
@@ -345,6 +344,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Gets or sets TestProperty.
         /// </summary>
@@ -709,7 +709,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.CurrentTask.Destination, value))
+                if (!Equals(this.CurrentTask.Destination, value))
                 {
                     this.CurrentTask.Destination = value;
                     this.NotifyOfPropertyChange(() => this.Destination);
@@ -754,7 +754,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.selectedTitle, value))
+                if (!Equals(this.selectedTitle, value))
                 {
                     this.selectedTitle = value;
 
@@ -957,7 +957,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!object.Equals(this.selectedOutputFormat, value))
+                if (!Equals(this.selectedOutputFormat, value))
                 {
                     this.selectedOutputFormat = value;
                     this.CurrentTask.OutputFormat = value;
@@ -994,7 +994,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.isPresetPanelShowing, value))
+                if (!Equals(this.isPresetPanelShowing, value))
                 {
                     this.isPresetPanelShowing = value;
                     this.NotifyOfPropertyChange(() => this.IsPresetPanelShowing);
@@ -1039,9 +1039,9 @@ namespace HandBrakeWPF.ViewModels
                                                         let driveInformation = item
                                                         select new SourceMenuItem
                                                         {
-                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
-                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                                                            Tag = item,
+                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel), 
+                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)), 
+                                                            Tag = item, 
                                                             IsDrive = true
                                                         })
                     {
@@ -1207,6 +1207,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Load and Shutdown Handling
+
         /// <summary>
         /// Initialise this view model.
         /// </summary>
@@ -1682,11 +1683,11 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
-                CheckPathExists = true,
-                AddExtension = true,
-                DefaultExt = ".mp4",
-                OverwritePrompt = true,
+                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv", 
+                CheckPathExists = true, 
+                AddExtension = true, 
+                DefaultExt = ".mp4", 
+                OverwritePrompt = true, 
             };
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
@@ -1806,9 +1807,9 @@ namespace HandBrakeWPF.ViewModels
                 if (this.selectedPreset.IsDefault)
                 {
                     this.errorService.ShowMessageBox(
-                      Resources.MainViewModel_CanNotDeleteDefaultPreset,
-                      Resources.Warning,
-                      MessageBoxButton.OK,
+                      Resources.MainViewModel_CanNotDeleteDefaultPreset, 
+                      Resources.Warning, 
+                      MessageBoxButton.OK, 
                       MessageBoxImage.Information);
 
                     return;
@@ -1816,9 +1817,9 @@ namespace HandBrakeWPF.ViewModels
 
                 MessageBoxResult result =
                 this.errorService.ShowMessageBox(
-                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?",
-                   Resources.Question,
-                   MessageBoxButton.YesNo,
+                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?", 
+                   Resources.Question, 
+                   MessageBoxButton.YesNo, 
                    MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.No)
@@ -1871,11 +1872,11 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog savefiledialog = new SaveFileDialog
             {
-                Filter = "json|*.json",
-                CheckPathExists = true,
-                AddExtension = true,
-                DefaultExt = ".json",
-                OverwritePrompt = true,
+                Filter = "json|*.json", 
+                CheckPathExists = true, 
+                AddExtension = true, 
+                DefaultExt = ".json", 
+                OverwritePrompt = true, 
                 FilterIndex = 0
             };
             if (this.selectedPreset != null)
@@ -2120,6 +2121,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Event Handlers
+
         /// <summary>
         /// Handle the Scan Status Changed Event.
         /// </summary>
@@ -2220,7 +2222,7 @@ namespace HandBrakeWPF.ViewModels
         {
             int percent;
             int.TryParse(
-                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture),
+                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture), 
                 out percent);
 
             Execute.OnUIThread(
@@ -2229,12 +2231,12 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
-                                e.PercentComplete,
-                                e.CurrentFrameRate,
-                                e.AverageFrameRate,
-                                e.EstimatedTimeLeft,
-                                e.ElapsedTime,
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon, 
+                                e.PercentComplete, 
+                                e.CurrentFrameRate, 
+                                e.AverageFrameRate, 
+                                e.EstimatedTimeLeft, 
+                                e.ElapsedTime, 
                                 this.queueProcessor.Count);
 
                         if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
@@ -2378,7 +2380,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void CurrentTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void CurrentTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
             {

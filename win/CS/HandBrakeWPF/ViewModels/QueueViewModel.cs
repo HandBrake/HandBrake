@@ -18,8 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
@@ -29,6 +27,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
+
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Preview View Model

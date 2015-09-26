@@ -12,8 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Windows;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
@@ -24,8 +22,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>

@@ -11,13 +11,13 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
 
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The mini view model.

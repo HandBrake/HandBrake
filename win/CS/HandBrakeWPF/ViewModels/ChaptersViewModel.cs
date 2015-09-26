@@ -17,18 +17,19 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using LumenWorks.Framework.IO.Csv;
 
     using Microsoft.Win32;
+
+    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Chapters View Model

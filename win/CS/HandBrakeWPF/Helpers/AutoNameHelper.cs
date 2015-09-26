@@ -15,13 +15,13 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Services.Interfaces;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// The Destination AutoName Helper

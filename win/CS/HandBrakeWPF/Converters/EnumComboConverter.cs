@@ -15,10 +15,10 @@ namespace HandBrakeWPF.Converters
     using System;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>

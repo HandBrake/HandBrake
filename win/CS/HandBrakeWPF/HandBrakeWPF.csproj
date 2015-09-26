@@ -171,6 +171,33 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\Encode\EncodeBase.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
+    <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
+    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
+    <Compile Include="Services\Encode\LibEncode.cs" />
+    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
+    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
+    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
+    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
     <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
@@ -185,6 +212,15 @@
     <Compile Include="Services\Queue\QueueProcessor.cs" />
     <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />
     <Compile Include="Services\Queue\Model\QueueTask.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
+    <Compile Include="Services\Scan\LibScan.cs" />
+    <Compile Include="Services\Scan\Model\Audio.cs" />
+    <Compile Include="Services\Scan\Model\Chapter.cs" />
+    <Compile Include="Services\Scan\Model\Source.cs" />
+    <Compile Include="Services\Scan\Model\Subtitle.cs" />
+    <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />

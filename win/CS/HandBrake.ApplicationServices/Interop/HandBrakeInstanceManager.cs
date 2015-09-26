@@ -49,7 +49,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        internal static IHandBrakeInstance GetScanInstance(int verbosity)
+        public static IHandBrakeInstance GetScanInstance(int verbosity)
         {
             if (scanInstance != null)
             {
@@ -73,7 +73,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        internal static IHandBrakeInstance GetEncodeInstance(int verbosity)
+        public static IHandBrakeInstance GetEncodeInstance(int verbosity)
         {
             if (encodeInstance != null)
             {

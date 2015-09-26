@@ -13,12 +13,13 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Windows;
 
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Scan.EventArgs;
-    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
-
+    using HandBrakeWPF.Services.Scan.EventArgs;
+    using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The Log View Model

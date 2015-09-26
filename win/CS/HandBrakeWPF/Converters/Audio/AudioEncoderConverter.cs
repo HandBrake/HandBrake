@@ -16,10 +16,11 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Windows;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+
+    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// Audio Encoder Converter

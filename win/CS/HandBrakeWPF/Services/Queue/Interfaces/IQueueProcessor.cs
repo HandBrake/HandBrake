@@ -12,9 +12,9 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
     using System;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-
     using HandBrakeWPF.Services.Queue.Model;
+
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The Queue Processor

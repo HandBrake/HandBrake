@@ -14,9 +14,13 @@ namespace HandBrakeWPF.Converters.Video
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
 
     /// <summary>
     /// The x 264 queue tooltip converter.

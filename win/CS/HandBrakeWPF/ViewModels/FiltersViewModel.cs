@@ -14,15 +14,17 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
+    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Filters View Model

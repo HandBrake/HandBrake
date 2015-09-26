@@ -17,10 +17,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models.Video;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -29,10 +25,18 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Clipboard = System.Windows.Clipboard;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
+    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
 
     /// <summary>
     /// The Video View Model

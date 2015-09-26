@@ -13,9 +13,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Scan.Model;
 
     /// <summary>
     /// The Add Preset View Model

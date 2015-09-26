@@ -14,11 +14,10 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>

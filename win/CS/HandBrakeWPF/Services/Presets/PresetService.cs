@@ -21,15 +21,12 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
 
-    using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Picture;
-    using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;

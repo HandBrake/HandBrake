@@ -139,7 +139,6 @@
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />
     <Compile Include="Interop\Json\Scan\Color.cs" />
@@ -157,7 +156,6 @@
     <Compile Include="Interop\Model\BitrateLimits.cs" />
     <Compile Include="Interop\Model\Cropping.cs" />
     <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\Container.cs" />
     <Compile Include="Interop\Model\Encoding\Decomb.cs" />
     <Compile Include="Interop\Model\Encoding\Deinterlace.cs" />
@@ -179,27 +177,12 @@
     <Compile Include="Interop\Model\Size.cs" />
     <Compile Include="Interop\Model\SourceVideoInfo.cs" />
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
-    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
     <Compile Include="Model\VideoScaler.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Logging\LogHelper.cs" />
     <Compile Include="Services\Logging\Model\LogLevel.cs" />
     <Compile Include="Services\Logging\Model\LogMessage.cs" />
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\Execute.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
@@ -208,30 +191,11 @@
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
     <Compile Include="Utilities\Win32.cs" />
-    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
-    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
-    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
-    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
-    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
-    <Compile Include="Services\Scan\Model\Audio.cs" />
-    <Compile Include="Services\Scan\Model\Chapter.cs" />
-    <Compile Include="Services\Scan\Model\Source.cs" />
-    <Compile Include="Services\Scan\Model\Subtitle.cs" />
-    <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\Encode\EncodeBase.cs" />
-    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
-    <Compile Include="Services\Encode\LibEncode.cs" />
-    <Compile Include="Services\Scan\LibScan.cs" />
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />

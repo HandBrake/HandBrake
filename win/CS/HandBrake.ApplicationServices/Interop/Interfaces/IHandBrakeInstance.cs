@@ -20,7 +20,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
     /// <summary>
     /// The Interface for HandBrakeInstance
     /// </summary>
-    internal interface IHandBrakeInstance
+    public interface IHandBrakeInstance
     {
         #region Events
 

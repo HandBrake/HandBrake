@@ -18,13 +18,13 @@ namespace HandBrakeWPF.Services.Queue
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Queue.Model;
 
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 

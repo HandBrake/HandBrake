@@ -14,17 +14,20 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using SubtitleType = HandBrakeWPF.Services.Encode.Model.Models.SubtitleType;
 
     /// <summary>
     /// The Subtitles View Model
