@@ -1,17 +1,63 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+
+Changes between 0.10.2 and 1.0
+
+  Core
+    - Updated Libraries:
+        LibAV 11.2
+        x265 1.7
+        x264 r144
+        libmfx v6.0
+        freetype 2.6
+        fribidi 0.19.7
+        libass 0.12.3
+    - New JSON based API for interacting with libhb.
+    - New JSON based preset system. Including support in HandBrakeCLI
+    - Performance Improvements
+        NLMeans now has SSE2 optimisations. (Approx 1~6% improvement)
+        FDK AAC Encoder compiler optimizations re-enabled which brings speed just behind libav aac.
+    - Pad Filter
+    - Additional Framerate selections.
+    - Intel QuickSync? H.265 (HEVC) Encoder. (Works on Intel Skylake or newer CPU's only)
+    - Misc Bug fixes and improvements.
+    
+  Windows
+    - The UI now interacts with LibHB directly rather than using HandBrakeCLI.exe. This has 2 benefits.
+        Encodes and now be paused and resumed.
+        Stopping an encode will finalise the file so that it's playable.
+    - Added support for Quality based audio encoding.
+    - Improved the "Configure Default" options for the Audio and Subtitle Tabs
+        Audio: Default settings for track behavior is now configurable.
+        Subtitle: Burn-in Behavior mode now selectable.
+    - Reduced Installer / Install Size. (HandBrakeCLI is no longer included in the package)
+    - Numerous Usability and User Interface Experience enhancements.
+    
+  Mac
+    - XQuartz is no longer required for Subtitle burn-in to operate.
+    - Misc Bug fixes and improvements.
+    
+  Linux
+    - Remove system tray icon due to UI performance issues on Ubuntu.
+    - Misc Bug fixes and improvements.
+
+  Command Line Interface
+    - Preset System. You can now import and export presets from the CLI to and from the other UI's
+
+
+
 Changes between 0.10.1 and 0.10.2
 
   - Assorted bug fixes and performance improvements.
 
 
- 
+
 Changes between 0.10.0 and 0.10.1
 
   - Assorted bug fixes for all three GUI's and the core library.
-  
- 
- 
+
+
+
 Changes between 0.9.9 and 0.10
 
   Core
