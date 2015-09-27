@@ -1,6 +1,6 @@
 PKG.platname = win
 
-PKG.cli.zip   = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname)-$(BUILD.arch).zip
+PKG.cli.zip   = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname)-$(BUILD.machine).zip
 PKG.libhb.zip = $(PKG.out/)$(HB.name)-$(HB.version)-$(BUILD.machine)-libhb.zip
 PKG.mingw.lib = $(SRC/)libraries
 
