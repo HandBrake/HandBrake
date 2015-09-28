@@ -1,3 +1,17 @@
 # List of source files containing translatable strings.
+[type: gettext/glade] src/ghb.ui
+[type: gettext/glade] src/ghb-3.12.ui
+[type: gettext/glade] src/ghb-3.14.ui
 src/main.c
-src/ghb.ui
+src/audiohandler.c
+src/callbacks.c
+src/ghbcellrenderertext.c
+src/ghb-dvd.c
+src/hb-backend.c
+src/main.c
+src/presets.c
+src/preview.c
+src/queuehandler.c
+src/subtitlehandler.c
+src/videohandler.c
+src/x264handler.c

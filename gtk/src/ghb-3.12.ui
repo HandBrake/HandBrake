@@ -4903,7 +4903,7 @@ This option requires a language to be set in the Selected Languages list.</prope
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Burn-In Behavior:</property>
+                                <property name="label" translatable="yes">Burn-In Behavior*:</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -4942,7 +4942,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Burn-In for deficient players:</property>
+                                <property name="label" translatable="yes">Burn-In for deficient players*:</property>
                                 <property name="justify">right</property>
                               </object>
                               <packing>
@@ -8412,7 +8412,7 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="source_cancel">
-                <property name="label" translatable="yes">Cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8428,7 +8428,7 @@ Setting this to 0 means there is no maximum height.</property>
             </child>
             <child>
               <object class="GtkButton" id="source_ok">
-                <property name="label" translatable="yes">OK</property>
+                <property name="label" translatable="yes">_Open</property>
                 <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
