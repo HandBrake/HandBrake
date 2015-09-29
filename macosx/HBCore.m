@@ -331,6 +331,11 @@ static void hb_error_handler(const char *errmsg)
     return img;
 }
 
+- (NSUInteger)imagesCountForTitle:(HBTitle *)title
+{
+    return title.hb_title->preview_count;
+}
+
 #pragma mark - Encodes
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;

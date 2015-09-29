@@ -137,6 +137,11 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
                             deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
 
 /**
+ *  Returns the counts of the available previews images.
+ */
+- (NSUInteger)imagesCountForTitle:(HBTitle *)title;
+
+/**
  *  Initiates an asynchronous encode operation and returns immediately.
  *
  *  @param job                 the job to encode

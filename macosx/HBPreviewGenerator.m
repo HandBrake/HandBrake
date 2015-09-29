@@ -42,7 +42,7 @@
         // Limit the cache to 60 1080p previews, the cost is in pixels
         _picturePreviews.totalCostLimit = 60 * 1920 * 1080;
 
-        _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];

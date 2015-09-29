@@ -231,6 +231,11 @@ typedef enum ViewMode : NSUInteger {
         [fPictureSlider setMaxValue: generator.imagesCount - 1.0];
         [fPictureSlider setNumberOfTickMarks: generator.imagesCount];
 
+        if (self.pictureIndex > generator.imagesCount)
+        {
+            self.pictureIndex = generator.imagesCount - 1;
+        }
+
         [self switchViewToMode:ViewModePicturePreview];
         [self displayPreview];
     }
