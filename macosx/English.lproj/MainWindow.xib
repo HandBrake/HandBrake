@@ -648,7 +648,7 @@ IA
                 </subviews>
                 <animations/>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
+            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
@@ -695,10 +695,10 @@ IA
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
-                    <toolbarItem reference="byg-kj-sEM"/>
-                    <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="HCx-ku-nF7"/>
+                    <toolbarItem reference="byg-kj-sEM"/>
+                    <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
@@ -708,7 +708,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="987" y="-80"/>
+            <point key="canvasLocation" x="691" y="-54"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
