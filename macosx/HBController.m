@@ -80,6 +80,8 @@
 
         presetManager = manager;
         _currentPreset = manager.defaultPreset;
+
+        _scanSpecificTitleIdx = 1;
     }
 
     return self;
