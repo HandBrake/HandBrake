@@ -678,30 +678,24 @@
         [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
 
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
-        [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
-        [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
-        [alert addButtonWithTitle:@"Cancel Scan"];
-        [alert addButtonWithTitle:@"Attempt Scan Anyway"];
+        [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", nil)];
+        [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function.", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Attempt Scan Anyway", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+
         [NSApp requestUserAttention:NSCriticalRequest];
         NSInteger status = [alert runModal];
 
         if (status == NSAlertFirstButtonReturn)
         {
-            /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
-            canScan = NO;
-        }
-        else if (status == NSAlertSecondButtonReturn)
-        {
-            /* User chose to cancel the scan */
-            [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
-            canScan = NO;
+            // User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails
+            [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
         }
         else
         {
-            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
+            // User chose to cancel the scan
+            [HBUtilities writeToActivityLog:"Cannot open physical dvd, scan cancelled"];
+            canScan = NO;
         }
     }
 
