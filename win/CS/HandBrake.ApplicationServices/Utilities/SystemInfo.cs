@@ -90,7 +90,7 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H264);
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H264) != 0;
                 }
                 catch (Exception)
                 {
@@ -109,7 +109,7 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 try
                 {
-                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265);
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265) != 0;
                 }
                 catch (Exception)
                 {
