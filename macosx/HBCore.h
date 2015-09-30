@@ -25,8 +25,15 @@ typedef NS_ENUM(NSUInteger, HBState) {
     HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
 };
 
+// These constants specify the result of a scan or encode.
+typedef NS_ENUM(NSUInteger, HBCoreResult) {
+    HBCoreResultDone,
+    HBCoreResultCancelled,
+    HBCoreResultFailed,
+};
+
 typedef void (^HBCoreProgressHandler)(HBState state, hb_state_t hb_state);
-typedef void (^HBCoreCompletionHandler)(BOOL success);
+typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 
 /**
  * HBCore is an Objective-C interface to the low-level HandBrake library.

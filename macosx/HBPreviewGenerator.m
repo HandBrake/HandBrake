@@ -207,9 +207,9 @@
              [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state]
                                       info:[formatter stateToString:hb_state title:@"preview"]];
          }
-       completionHandler:^(BOOL success) {
+       completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle
-           if (success)
+           if (result == HBCoreResultDone)
            {
                [self.delegate didCreateMovieAtURL:destURL];
            }

@@ -501,14 +501,23 @@ static void hb_error_handler(const char *errmsg)
 
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
+
+    HBCoreResult result = HBCoreResultDone;
     if (_hb_state->state == HB_STATE_WORKDONE)
     {
-        [self handleWorkCompletion];
+        result = [self workDone] ? HBCoreResultDone : HBCoreResultFailed;
     }
     else
     {
-        [self handleScanCompletion];
+        result = [self scanDone] ? HBCoreResultDone : HBCoreResultFailed;
     }
+
+    if (self.isCancelled)
+    {
+        result = HBCoreResultCancelled;
+    }
+
+    [self runCompletionBlockAndCleanUpWithResult:result];
 
     // Reset the cancelled state.
     self.cancelled = NO;
@@ -519,7 +528,7 @@ static void hb_error_handler(const char *errmsg)
  *
  *  @param result the result to pass to the completion block.
  */
-- (void)runCompletionBlockAndCleanUpWithResult:(BOOL)result
+- (void)runCompletionBlockAndCleanUpWithResult:(HBCoreResult)result
 {
     if (self.completionHandler)
     {
@@ -529,24 +538,6 @@ static void hb_error_handler(const char *errmsg)
         self.completionHandler = nil;
         completionHandler(result);
     }
-}
-
-/**
- * Processes scan completion.
- */
-- (void)handleScanCompletion
-{
-    BOOL result = [self scanDone];
-    [self runCompletionBlockAndCleanUpWithResult:result];
-}
-
-/**
- * Processes work completion.
- */
-- (void)handleWorkCompletion
-{
-    BOOL result = [self workDone];
-    [self runCompletionBlockAndCleanUpWithResult:result];
 }
 
 @end

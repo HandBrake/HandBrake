@@ -722,14 +722,14 @@
             fScanHorizontalLine.hidden = YES;
             fScanIndicator.doubleValue = [formatter stateToPercentComplete:hb_state];
         }
-    completionHandler:^(BOOL success)
+    completionHandler:^(HBCoreResult result)
         {
             fScanHorizontalLine.hidden = NO;
             fScanIndicator.hidden = YES;
             fScanIndicator.indeterminate = NO;
             fScanIndicator.doubleValue = 0.0;
 
-            if (success)
+            if (result == HBCoreResultDone)
             {
                 [self showNewScan];
             }
