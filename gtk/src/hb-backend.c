@@ -318,78 +318,103 @@ combo_opts_t trellis_opts =
     d_trellis_opts
 };
 
+typedef struct
+{
+    int      filter_id;
+    gboolean preset;
+} filter_opts_t;
+
+static filter_opts_t nlmeans_preset_opts =
+{
+    .filter_id = HB_FILTER_NLMEANS,
+    .preset    = TRUE
+};
+
+static filter_opts_t nlmeans_tune_opts =
+{
+    .filter_id = HB_FILTER_NLMEANS,
+    .preset    = FALSE
+};
+
+#if 0
+static filter_opts_t hqdn3d_preset_opts =
+{
+    .filter_id = HB_FILTER_HQDN3D,
+    .preset    = TRUE
+};
+#endif
+
+static filter_opts_t detel_opts =
+{
+    .filter_id = HB_FILTER_DETELECINE,
+    .preset    = TRUE
+};
+
+static filter_opts_t decomb_opts =
+{
+    .filter_id = HB_FILTER_DECOMB,
+    .preset    = TRUE
+};
+
+static filter_opts_t deint_opts =
+{
+    .filter_id = HB_FILTER_DEINTERLACE,
+    .preset    = TRUE
+};
+
 typedef void (*opts_set_f)(signal_user_data_t *ud, const gchar *name,
-                           combo_opts_t *opts, const void* data);
-typedef GhbValue* (*opt_get_f)(const gchar *name, const combo_opts_t *opts,
+                           void *opts, const void* data);
+typedef GhbValue* (*opt_get_f)(const gchar *name, const void *opts,
                                const GhbValue *gval, GhbType type);
 typedef struct
 {
     const gchar  * name;
-    combo_opts_t * opts;
+    void         * opts;
     opts_set_f     opts_set;
     opt_get_f      opt_get;
 } combo_name_map_t;
 
 static void small_opts_set(signal_user_data_t *ud, const gchar *name,
-                           combo_opts_t *opts, const void* data);
+                           void *opts, const void* data);
 static void audio_bitrate_opts_set(signal_user_data_t *ud, const gchar *name,
-                                   combo_opts_t *opts, const void* data);
+                                   void *opts, const void* data);
 static void audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
-                                      combo_opts_t *opts, const void* data);
+                                      void *opts, const void* data);
 static void video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
-                                     combo_opts_t *opts, const void* data);
+                                     void *opts, const void* data);
 static void mix_opts_set(signal_user_data_t *ud, const gchar *name,
-                         combo_opts_t *opts, const void* data);
+                         void *opts, const void* data);
 static void video_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
-                                   combo_opts_t *opts, const void* data);
+                                   void *opts, const void* data);
 static void audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
-                                   combo_opts_t *opts, const void* data);
+                                   void *opts, const void* data);
 static void acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
-                                     combo_opts_t *opts, const void* data);
+                                     void *opts, const void* data);
 static void language_opts_set(signal_user_data_t *ud, const gchar *name,
-                              combo_opts_t *opts, const void* data);
+                              void *opts, const void* data);
 static void srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
-                                 combo_opts_t *opts, const void* data);
+                                 void *opts, const void* data);
 static void title_opts_set(signal_user_data_t *ud, const gchar *name,
-                           combo_opts_t *opts, const void* data);
+                           void *opts, const void* data);
 static void audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
-                                 combo_opts_t *opts, const void* data);
+                                 void *opts, const void* data);
 static void subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
-                                    combo_opts_t *opts, const void* data);
+                                    void *opts, const void* data);
 static void video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
-                                combo_opts_t *opts, const void* data);
+                                void *opts, const void* data);
 static void video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
-                                   combo_opts_t *opts, const void* data);
+                                   void *opts, const void* data);
 static void video_level_opts_set(signal_user_data_t *ud, const gchar *name,
-                                 combo_opts_t *opts, const void* data);
+                                 void *opts, const void* data);
 static void container_opts_set(signal_user_data_t *ud, const gchar *name,
-                               combo_opts_t *opts, const void* data);
-static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
-                           combo_opts_t *opts, const void* data);
-static void decomb_opts_set(signal_user_data_t *ud, const gchar *name,
-                            combo_opts_t *opts, const void* data);
-static void detel_opts_set(signal_user_data_t *ud, const gchar *name,
-                           combo_opts_t *opts, const void* data);
-static void denoise_preset_opts_set(signal_user_data_t *ud, const gchar *name,
-                                    combo_opts_t *opts, const void* data);
-static void denoise_tune_opts_set(signal_user_data_t *ud, const gchar *name,
-                                    combo_opts_t *opts, const void* data);
+                               void *opts, const void* data);
+static void filter_opts_set(signal_user_data_t *ud, const gchar *name,
+                           void *opts, const void* data);
 
-static GhbValue * generic_opt_get(const char *name, const combo_opts_t *opts,
+static GhbValue * generic_opt_get(const char *name, const void *opts,
                                   const GhbValue *gval, GhbType type);
-static GhbValue * deint_opt_get(const char *name, const combo_opts_t *opts,
+static GhbValue * filter_opt_get(const char *name, const void *opts,
                                 const GhbValue *gval, GhbType type);
-static GhbValue * decomb_opt_get(const char *name, const combo_opts_t *opts,
-                                 const GhbValue *gval, GhbType type);
-static GhbValue * detel_opt_get(const char *name, const combo_opts_t *opts,
-                                const GhbValue *gval, GhbType type);
-static GhbValue *
-denoise_preset_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type);
-static GhbValue *
-denoise_tune_opt_get(const char *name, const combo_opts_t *opts,
-                     const GhbValue *gval, GhbType type);
-
 combo_name_map_t combo_name_map[] =
 {
     {
@@ -460,21 +485,21 @@ combo_name_map_t combo_name_map[] =
     },
     {
         "PictureDeinterlace",
-        NULL,
-        deint_opts_set,
-        deint_opt_get
+        &deint_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDecomb",
-        NULL,
-        decomb_opts_set,
-        decomb_opt_get
+        &decomb_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDetelecine",
-        NULL,
-        detel_opts_set,
-        detel_opt_get
+        &detel_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDenoiseFilter",
@@ -484,15 +509,15 @@ combo_name_map_t combo_name_map[] =
     },
     {
         "PictureDenoisePreset",
-        NULL,
-        denoise_preset_opts_set,
-        denoise_preset_opt_get
+        &nlmeans_preset_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDenoiseTune",
-        NULL,
-        denoise_tune_opts_set,
-        denoise_tune_opt_get
+        &nlmeans_tune_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "x264_direct",
@@ -1522,7 +1547,7 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
 
 static void
 audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
-                          combo_opts_t *opts, const void* data)
+                          void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1599,7 +1624,7 @@ ghb_settings_audio_samplerate(const GhbValue *settings, const char *name)
 
 static void
 video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
-                         combo_opts_t *opts, const void* data)
+                         void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1701,11 +1726,8 @@ ghb_settings_video_framerate(const GhbValue *settings, const char *name)
 }
 
 static void
-video_encoder_opts_set(
-    signal_user_data_t *ud,
-    const gchar *name,
-    combo_opts_t *opts,
-    const void* data)
+video_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
+                       void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1865,11 +1887,8 @@ ghb_audio_encoder_opts_set(GtkComboBox *combo)
 }
 
 static void
-audio_encoder_opts_set(
-    signal_user_data_t *ud,
-    const gchar *name,
-    combo_opts_t *opts,
-    const void* data)
+audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
+                       void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1903,7 +1922,7 @@ audio_encoder_opts_set(
 
 static void
 acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
-                         combo_opts_t *opts, const void* data)
+                         void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1980,7 +1999,7 @@ ghb_settings_mixdown(const GhbValue *settings, const char *name)
 
 static void
 mix_opts_set(signal_user_data_t *ud, const gchar *name,
-             combo_opts_t *opts, const void* data)
+             void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -1990,11 +2009,8 @@ mix_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 static void
-container_opts_set(
-    signal_user_data_t *ud,
-    const gchar *name,
-    combo_opts_t *opts,
-    const void* data)
+container_opts_set(signal_user_data_t *ud, const gchar *name,
+                   void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2045,7 +2061,7 @@ ghb_lookup_container_by_name(const gchar *name)
 
 static void
 srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
-                     combo_opts_t *opts, const void* data)
+                     void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2071,7 +2087,7 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
 
 static void
 language_opts_set(signal_user_data_t *ud, const gchar *name,
-                  combo_opts_t *opts, const void* data)
+                  void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2159,7 +2175,7 @@ ghb_create_title_label(const hb_title_t *title)
 
 static void
 title_opts_set(signal_user_data_t *ud, const gchar *name,
-               combo_opts_t *opts, const void* data)
+               void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2283,7 +2299,7 @@ ghb_lookup_queue_title(int title_id, int *index)
 
 static void
 video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
-                    combo_opts_t *opts, const void* data)
+                    void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2338,7 +2354,7 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
 
 static void
 video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
-                       combo_opts_t *opts, const void* data)
+                       void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2381,7 +2397,7 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
 
 static void
 video_level_opts_set(signal_user_data_t *ud, const gchar *name,
-                     combo_opts_t *opts, const void* data)
+                     void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
@@ -2445,7 +2461,7 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 
 void
 audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
-                     combo_opts_t *opts, const void* data)
+                     void *opts, const void* data)
 {
     (void)opts;   // Silence "unused variable" warning
     const hb_title_t *title = (const hb_title_t*)data;
@@ -2501,11 +2517,8 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 static void
-subtitle_track_opts_set(
-    signal_user_data_t *ud,
-    const gchar *name,
-    combo_opts_t *opts,
-    const void* data)
+subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
+                        void *opts, const void* data)
 {
     (void)opts;   // Silence "unused variable" warning
     const hb_title_t *title = (const hb_title_t*)data;
@@ -2649,9 +2662,10 @@ ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start)
 
 static void
 small_opts_set(signal_user_data_t *ud, const gchar *name,
-               combo_opts_t *opts, const void* data)
+               void *vopts, const void* data)
 {
     (void)data; // Silence "unused variable" warning
+    combo_opts_t *opts = (combo_opts_t*)vopts;
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
@@ -2678,8 +2692,8 @@ small_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 static void
-filter_opts_set(signal_user_data_t *ud, const gchar *name,
-                int filter_id, int preset)
+filter_opts_set2(signal_user_data_t *ud, const gchar *name,
+                 int filter_id, int preset)
 {
     GtkTreeIter iter;
     GtkListStore *store;
@@ -2717,48 +2731,13 @@ filter_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 static void
-deint_opts_set(signal_user_data_t *ud, const gchar *name,
-                        combo_opts_t *opts, const void* data)
+filter_opts_set(signal_user_data_t *ud, const gchar *name,
+                void *vopts, const void* data)
 {
-    (void)opts; // Silence "unused variable" warning
-    (void)data; // Silence "unused variable" warning
-    filter_opts_set(ud, name, HB_FILTER_DEINTERLACE, 1);
-}
+    filter_opts_t *opts = (filter_opts_t*)vopts;
 
-static void
-decomb_opts_set(signal_user_data_t *ud, const gchar *name,
-                        combo_opts_t *opts, const void* data)
-{
-    (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
-    filter_opts_set(ud, name, HB_FILTER_DECOMB, 1);
-}
-
-static void
-detel_opts_set(signal_user_data_t *ud, const gchar *name,
-                        combo_opts_t *opts, const void* data)
-{
-    (void)opts; // Silence "unused variable" warning
-    (void)data; // Silence "unused variable" warning
-    filter_opts_set(ud, name, HB_FILTER_DETELECINE, 1);
-}
-
-static void
-denoise_preset_opts_set(signal_user_data_t *ud, const gchar *name,
-                        combo_opts_t *opts, const void* data)
-{
-    (void)opts; // Silence "unused variable" warning
-    (void)data; // Silence "unused variable" warning
-    filter_opts_set(ud, name, HB_FILTER_NLMEANS, 1);
-}
-
-static void
-denoise_tune_opts_set(signal_user_data_t *ud, const gchar *name,
-                        combo_opts_t *opts, const void* data)
-{
-    (void)opts; // Silence "unused variable" warning
-    (void)data; // Silence "unused variable" warning
-    filter_opts_set(ud, name, HB_FILTER_NLMEANS, 0);
+    filter_opts_set2(ud, name, opts->filter_id, opts->preset);
 }
 
 combo_name_map_t*
@@ -2788,9 +2767,10 @@ find_combo_opts(const gchar *name)
 }
 
 static GhbValue *
-generic_opt_get(const char *name, const combo_opts_t *opts,
+generic_opt_get(const char *name, const void *vopts,
                 const GhbValue *gval, GhbType type)
 {
+    combo_opts_t *opts = (combo_opts_t*)vopts;
     GhbValue *result = NULL;
     switch (type)
     {
@@ -2818,7 +2798,7 @@ generic_opt_get(const char *name, const combo_opts_t *opts,
 }
 
 static GhbValue *
-filter_opt_get(const char *name, const GhbValue *gval, GhbType type,
+filter_opt_get2(const char *name, const GhbValue *gval, GhbType type,
                int filter_id, int preset)
 {
     GhbValue *result = NULL;
@@ -2853,43 +2833,11 @@ filter_opt_get(const char *name, const GhbValue *gval, GhbType type,
 }
 
 static GhbValue *
-deint_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type)
+filter_opt_get(const char *name, const void *vopts,
+               const GhbValue *gval, GhbType type)
 {
-    (void)opts; // Silence "unused variable" warning
-    return filter_opt_get(name, gval, type, HB_FILTER_DEINTERLACE, 1);
-}
-
-static GhbValue *
-decomb_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type)
-{
-    (void)opts; // Silence "unused variable" warning
-    return filter_opt_get(name, gval, type, HB_FILTER_DECOMB, 1);
-}
-
-static GhbValue *
-detel_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type)
-{
-    (void)opts; // Silence "unused variable" warning
-    return filter_opt_get(name, gval, type, HB_FILTER_DETELECINE, 1);
-}
-
-static GhbValue *
-denoise_preset_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type)
-{
-    (void)opts; // Silence "unused variable" warning
-    return filter_opt_get(name, gval, type, HB_FILTER_NLMEANS, 1);
-}
-
-static GhbValue *
-denoise_tune_opt_get(const char *name, const combo_opts_t *opts,
-                       const GhbValue *gval, GhbType type)
-{
-    (void)opts; // Silence "unused variable" warning
-    return filter_opt_get(name, gval, type, HB_FILTER_NLMEANS, 0);
+    filter_opts_t *opts = (filter_opts_t*)vopts;
+    return filter_opt_get2(name, gval, type, opts->filter_id, opts->preset);
 }
 
 static GhbValue *
@@ -3182,7 +3130,7 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo)
 
 static void
 audio_bitrate_opts_set(signal_user_data_t *ud, const gchar *name,
-                       combo_opts_t *opts, const void* data)
+                       void *opts, const void* data)
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
