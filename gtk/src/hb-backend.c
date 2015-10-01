@@ -387,40 +387,304 @@ combo_opts_t trellis_opts =
     d_trellis_opts
 };
 
+typedef void (*opts_set_f)(signal_user_data_t *ud, const gchar *name,
+                           combo_opts_t *opts, const void* data);
+typedef GhbValue* (*opt_get_f)(const gchar *name, const combo_opts_t *opts,
+                               const GhbValue *gval, GhbType type);
 typedef struct
 {
-    const gchar *name;
-    combo_opts_t *opts;
+    const gchar  * name;
+    combo_opts_t * opts;
+    opts_set_f     opts_set;
+    opt_get_f      opt_get;
 } combo_name_map_t;
+
+static void small_opts_set(signal_user_data_t *ud, const gchar *name,
+                           combo_opts_t *opts, const void* data);
+static void audio_bitrate_opts_set(signal_user_data_t *ud, const gchar *name,
+                                   combo_opts_t *opts, const void* data);
+static void audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
+                                      combo_opts_t *opts, const void* data);
+static void video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
+                                     combo_opts_t *opts, const void* data);
+static void mix_opts_set(signal_user_data_t *ud, const gchar *name,
+                         combo_opts_t *opts, const void* data);
+static void video_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
+                                   combo_opts_t *opts, const void* data);
+static void audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
+                                   combo_opts_t *opts, const void* data);
+static void acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
+                                     combo_opts_t *opts, const void* data);
+static void language_opts_set(signal_user_data_t *ud, const gchar *name,
+                              combo_opts_t *opts, const void* data);
+static void srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
+                                 combo_opts_t *opts, const void* data);
+static void title_opts_set(signal_user_data_t *ud, const gchar *name,
+                           combo_opts_t *opts, const void* data);
+static void audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
+                                 combo_opts_t *opts, const void* data);
+static void subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
+                                    combo_opts_t *opts, const void* data);
+static void video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
+                                combo_opts_t *opts, const void* data);
+static void video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
+                                   combo_opts_t *opts, const void* data);
+static void video_level_opts_set(signal_user_data_t *ud, const gchar *name,
+                                 combo_opts_t *opts, const void* data);
+static void container_opts_set(signal_user_data_t *ud, const gchar *name,
+                               combo_opts_t *opts, const void* data);
+static GhbValue * generic_opt_get(const char *name, const combo_opts_t *opts,
+                                  const GhbValue *gval, GhbType type);
 
 combo_name_map_t combo_name_map[] =
 {
-    {"SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts},
-    {"SubtitleBurnBehavior", &subtitle_burn_opts},
-    {"AudioTrackSelectionBehavior", &audio_track_sel_opts},
-    {"PtoPType", &point_to_point_opts},
-    {"WhenComplete", &when_complete_opts},
-    {"PicturePAR", &par_opts},
-    {"PictureModulus", &alignment_opts},
-    {"LoggingLevel", &logging_opts},
-    {"LogLongevity", &log_longevity_opts},
-    {"check_updates", &appcast_update_opts},
-    {"VideoQualityGranularity", &vqual_granularity_opts},
-    {"PictureDeinterlace", &deint_opts},
-    {"PictureDecomb", &decomb_opts},
-    {"PictureDetelecine", &detel_opts},
-    {"PictureDenoiseFilter", &denoise_opts},
-    {"PictureDenoisePreset", &denoise_preset_opts},
-    {"PictureDenoiseTune", &nlmeans_tune_opts},
-    {"x264_direct", &direct_opts},
-    {"x264_b_adapt", &badapt_opts},
-    {"x264_bpyramid", &bpyramid_opts},
-    {"x264_weighted_pframes", &weightp_opts},
-    {"x264_me", &me_opts},
-    {"x264_subme", &subme_opts},
-    {"x264_analyse", &analyse_opts},
-    {"x264_trellis", &trellis_opts},
-    {NULL, NULL}
+    {
+        "SubtitleTrackSelectionBehavior",
+        &subtitle_track_sel_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "SubtitleBurnBehavior",
+        &subtitle_burn_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "AudioTrackSelectionBehavior",
+        &audio_track_sel_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PtoPType",
+        &point_to_point_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "WhenComplete",
+        &when_complete_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PicturePAR",
+        &par_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureModulus",
+        &alignment_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "LoggingLevel",
+        &logging_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "LogLongevity",
+        &log_longevity_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "check_updates",
+        &appcast_update_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "VideoQualityGranularity",
+        &vqual_granularity_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDeinterlace",
+        &deint_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDecomb",
+        &decomb_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDetelecine",
+        &detel_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDenoiseFilter",
+        &denoise_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDenoisePreset",
+        &denoise_preset_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureDenoiseTune",
+        &nlmeans_tune_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_direct",
+        &direct_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_b_adapt",
+        &badapt_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_bpyramid",
+        &bpyramid_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_weighted_pframes",
+        &weightp_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_me",
+        &me_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_subme",
+        &subme_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_analyse",
+        &analyse_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "x264_trellis",
+        &trellis_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "AudioBitrate",
+        NULL,
+        audio_bitrate_opts_set,
+        NULL
+    },
+    {
+        "AudioSamplerate",
+        NULL,
+        audio_samplerate_opts_set,
+        NULL
+    },
+    {
+        "VideoFramerate",
+        NULL,
+        video_framerate_opts_set,
+        NULL
+    },
+    {
+        "AudioMixdown",
+        NULL,
+        mix_opts_set,
+        NULL
+    },
+    {
+        "VideoEncoder",
+        NULL,
+        video_encoder_opts_set,
+        NULL
+    },
+    {
+        "AudioEncoder",
+        NULL,
+        audio_encoder_opts_set,
+        NULL
+    },
+    {
+        "AudioEncoderFallback",
+        NULL,
+        acodec_fallback_opts_set,
+        NULL
+    },
+    {
+        "SrtLanguage",
+        NULL,
+        language_opts_set,
+        NULL
+    },
+    {
+        "SrtCodeset",
+        NULL,
+        srt_codeset_opts_set,
+        NULL
+    },
+    {
+        "title",
+        NULL,
+        title_opts_set,
+        NULL
+    },
+    {
+        "AudioTrack",
+        NULL,
+        audio_track_opts_set,
+        NULL
+    },
+    {
+        "SubtitleTrack",
+        NULL,
+        subtitle_track_opts_set,
+        NULL
+    },
+    {
+        "VideoTune",
+        NULL,
+        video_tune_opts_set,
+        NULL
+    },
+    {
+        "VideoProfile",
+        NULL,
+        video_profile_opts_set,
+        NULL
+    },
+    {
+        "VideoLevel",
+        NULL,
+        video_level_opts_set,
+        NULL
+    },
+    {
+        "FileFormat",
+        NULL,
+        container_opts_set,
+        NULL
+    },
+    {NULL, NULL, NULL, NULL}
 };
 
 const gchar *srt_codeset_table[] =
@@ -667,7 +931,43 @@ const iso639_lang_t ghb_language_table[] =
 };
 #define LANG_TABLE_SIZE (sizeof(ghb_language_table)/ sizeof(iso639_lang_t)-1)
 
-static void audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name);
+int
+ghb_lookup_lang(const GhbValue *glang)
+{
+    gint ii;
+    const gchar *str;
+
+    str = ghb_value_get_string(glang);
+    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+    {
+        if (ghb_language_table[ii].iso639_2 &&
+            strcmp(ghb_language_table[ii].iso639_2, str) == 0)
+        {
+            return ii;
+        }
+        if (ghb_language_table[ii].iso639_2b &&
+            strcmp(ghb_language_table[ii].iso639_2b, str) == 0)
+        {
+            return ii;
+        }
+        if (ghb_language_table[ii].iso639_1 &&
+            strcmp(ghb_language_table[ii].iso639_1, str) == 0)
+        {
+            return ii;
+        }
+        if (ghb_language_table[ii].native_name &&
+            strcmp(ghb_language_table[ii].native_name, str) == 0)
+        {
+            return ii;
+        }
+        if (ghb_language_table[ii].eng_name &&
+            strcmp(ghb_language_table[ii].eng_name, str) == 0)
+        {
+            return ii;
+        }
+    }
+    return -1;
+}
 
 static void
 del_tree(const gchar *name, gboolean del_top)
@@ -764,7 +1064,7 @@ ghb_vquality_range(
 }
 
 gint
-find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
+find_combo_entry(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
 
@@ -815,7 +1115,7 @@ find_combo_entry(combo_opts_t *opts, const GhbValue *gval)
 }
 
 static gint
-lookup_generic_int(combo_opts_t *opts, const GhbValue *gval)
+lookup_generic_int(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     gint result = -1;
@@ -832,7 +1132,7 @@ lookup_generic_int(combo_opts_t *opts, const GhbValue *gval)
 }
 
 static gdouble
-lookup_generic_double(combo_opts_t *opts, const GhbValue *gval)
+lookup_generic_double(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     gdouble result = -1;
@@ -846,7 +1146,7 @@ lookup_generic_double(combo_opts_t *opts, const GhbValue *gval)
 }
 
 static const gchar*
-lookup_generic_option(combo_opts_t *opts, const GhbValue *gval)
+lookup_generic_option(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
     const gchar *result = "";
@@ -881,67 +1181,6 @@ ghb_find_closest_audio_samplerate(gint irate)
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)
 {
     return &ghb_language_table[idx];
-}
-
-int
-ghb_lookup_audio_lang(const GhbValue *glang)
-{
-    gint ii;
-    const gchar *str;
-
-    str = ghb_value_get_string(glang);
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
-    {
-        if (ghb_language_table[ii].iso639_2 &&
-            strcmp(ghb_language_table[ii].iso639_2, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].iso639_2b &&
-            strcmp(ghb_language_table[ii].iso639_2b, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].iso639_1 &&
-            strcmp(ghb_language_table[ii].iso639_1, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].native_name &&
-            strcmp(ghb_language_table[ii].native_name, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].eng_name &&
-            strcmp(ghb_language_table[ii].eng_name, str) == 0)
-        {
-            return ii;
-        }
-    }
-    return -1;
-}
-
-static int
-lookup_audio_lang_int(const GhbValue *glang)
-{
-    gint ii = ghb_lookup_audio_lang(glang);
-    if (ii >= 0)
-        return ii;
-    return 0;
-}
-
-static const gchar*
-lookup_audio_lang_option(const GhbValue *glang)
-{
-    gint ii = ghb_lookup_audio_lang(glang);
-    if (ii >= 0)
-    {
-        if (ghb_language_table[ii].native_name[0] != 0)
-            return ghb_language_table[ii].native_name;
-        else
-            return ghb_language_table[ii].eng_name;
-    }
-    return "Any";
 }
 
 // Handle for libhb.  Gets set by ghb_backend_init()
@@ -1238,7 +1477,6 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
     GtkListStore *store;
     gchar *str;
 
-    g_debug("audio_samplerate_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
@@ -1271,10 +1509,13 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
 }
 
 static void
-audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name)
+audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
+                          combo_opts_t *opts, const void* data)
 {
-    g_debug("audio_samplerate_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     ghb_audio_samplerate_opts_set(combo);
 }
 
@@ -1345,13 +1586,15 @@ ghb_settings_audio_samplerate(const GhbValue *settings, const char *name)
 }
 
 static void
-video_framerate_opts_set(GtkBuilder *builder, const gchar *name)
+video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
+                         combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
 
-    g_debug("video_framerate_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     // Add an item for "Same As Source"
@@ -1447,15 +1690,18 @@ ghb_settings_video_framerate(const GhbValue *settings, const char *name)
 
 static void
 video_encoder_opts_set(
-    GtkBuilder *builder,
-    const gchar *name)
+    signal_user_data_t *ud,
+    const gchar *name,
+    combo_opts_t *opts,
+    const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
 
-    g_debug("video_encoder_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1526,7 +1772,6 @@ ghb_audio_encoder_opts_set_with_mask(
     GtkListStore *store;
     gchar *str;
 
-    g_debug("ghb_audio_encoder_opts_set_with_mask()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1597,7 +1842,6 @@ audio_encoder_opts_set_with_mask(
     int mask,
     int neg_mask)
 {
-    g_debug("audio_encoder_opts_set_with_mask()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
     ghb_audio_encoder_opts_set_with_mask(combo, mask, neg_mask);
 }
@@ -1610,14 +1854,18 @@ ghb_audio_encoder_opts_set(GtkComboBox *combo)
 
 static void
 audio_encoder_opts_set(
-    GtkBuilder *builder,
-    const gchar *name)
+    signal_user_data_t *ud,
+    const gchar *name,
+    combo_opts_t *opts,
+    const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1642,9 +1890,13 @@ audio_encoder_opts_set(
 }
 
 static void
-acodec_fallback_opts_set(GtkBuilder *builder, const gchar *name)
+acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
+                         combo_opts_t *opts, const void* data)
 {
-    audio_encoder_opts_set_with_mask(builder, name, ~0, HB_ACODEC_PASS_FLAG);
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+
+    audio_encoder_opts_set_with_mask(ud->builder, name, ~0, HB_ACODEC_PASS_FLAG);
 }
 
 void
@@ -1654,7 +1906,6 @@ ghb_mix_opts_set(GtkComboBox *combo)
     GtkListStore *store;
     gchar *str;
 
-    g_debug("mix_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1716,24 +1967,30 @@ ghb_settings_mixdown(const GhbValue *settings, const char *name)
 }
 
 static void
-mix_opts_set(GtkBuilder *builder, const gchar *name)
+mix_opts_set(signal_user_data_t *ud, const gchar *name,
+             combo_opts_t *opts, const void* data)
 {
-    g_debug("mix_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     ghb_mix_opts_set(combo);
 }
 
 static void
 container_opts_set(
-    GtkBuilder *builder,
-    const gchar *name)
+    signal_user_data_t *ud,
+    const gchar *name,
+    combo_opts_t *opts,
+    const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gchar *str;
 
-    g_debug("hb_container_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -1775,14 +2032,16 @@ ghb_lookup_container_by_name(const gchar *name)
 }
 
 static void
-srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
+srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
+                     combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
 
-    g_debug("srt_codeset_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     for (ii = 0; ii < SRT_TABLE_SIZE; ii++)
@@ -1799,14 +2058,16 @@ srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
 }
 
 static void
-language_opts_set(GtkBuilder *builder, const gchar *name)
+language_opts_set(signal_user_data_t *ud, const gchar *name,
+                  combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
 
-    g_debug("language_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
@@ -1827,24 +2088,6 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
                            4, ghb_language_table[ii].iso639_1,
                            -1);
     }
-}
-
-const iso639_lang_t*
-ghb_lookup_lang(const char *name)
-{
-    int ii;
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
-    {
-        if (!strncmp(name, ghb_language_table[ii].iso639_2, 4) ||
-            !strncmp(name, ghb_language_table[ii].iso639_1, 4) ||
-            !strncmp(name, ghb_language_table[ii].iso639_2b, 4) ||
-            !strncmp(name, ghb_language_table[ii].native_name, 4) ||
-            !strncmp(name, ghb_language_table[ii].eng_name, 4))
-        {
-            return &ghb_language_table[ii];
-        }
-    }
-    return NULL;
 }
 
 gchar*
@@ -1902,9 +2145,12 @@ ghb_create_title_label(const hb_title_t *title)
     return label;
 }
 
-void
-title_opts_set(GtkBuilder *builder, const gchar *name)
+static void
+title_opts_set(signal_user_data_t *ud, const gchar *name,
+               combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     hb_list_t  * list = NULL;
@@ -1913,8 +2159,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
     gint count = 0;
 
 
-    g_debug("title_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     if (h_scan != NULL)
@@ -2025,8 +2270,11 @@ ghb_lookup_queue_title(int title_id, int *index)
 }
 
 static void
-video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
+video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
+                    combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii, count = 0;
@@ -2047,7 +2295,6 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
     gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
-    g_debug("video_tune_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -2078,8 +2325,11 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name)
 }
 
 static void
-video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
+video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
+                       combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii, count = 0;
@@ -2100,7 +2350,6 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
     gtk_widget_set_visible(w, count > 0);
     if (count == 0) return;
 
-    g_debug("video_profile_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -2119,8 +2368,11 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name)
 }
 
 static void
-video_level_opts_set(signal_user_data_t *ud, const gchar *name)
+video_level_opts_set(signal_user_data_t *ud, const gchar *name,
+                     combo_opts_t *opts, const void* data)
 {
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii, count = 0;
@@ -2141,7 +2393,6 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name)
     gtk_widget_set_visible(w, count > 0);
     if (count <= 0) return;
 
-    g_debug("video_level_opts_set ()\n");
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
@@ -2181,8 +2432,11 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 }
 
 void
-audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *title)
+audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
+                     combo_opts_t *opts, const void* data)
 {
+    (void)opts;   // Silence "unused variable" warning
+    const hb_title_t *title = (const hb_title_t*)data;
     GtkTreeIter iter;
     GtkListStore *store;
     hb_audio_config_t * audio;
@@ -2190,8 +2444,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
     gint count = 0;
     gchar *opt;
 
-    g_debug("audio_track_opts_set ()\n");
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     if (title != NULL)
@@ -2235,18 +2488,21 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, const hb_title_t *t
     gtk_combo_box_set_active (combo, 0);
 }
 
-void
+static void
 subtitle_track_opts_set(
-    GtkBuilder *builder,
+    signal_user_data_t *ud,
     const gchar *name,
-    const hb_title_t *title)
+    combo_opts_t *opts,
+    const void* data)
 {
+    (void)opts;   // Silence "unused variable" warning
+    const hb_title_t *title = (const hb_title_t*)data;
     GtkTreeIter iter;
     GtkListStore *store;
     hb_subtitle_t * subtitle;
     gint ii, count = 0;
 
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2380,16 +2636,17 @@ ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start)
 }
 
 static void
-small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
+small_opts_set(signal_user_data_t *ud, const gchar *name,
+               combo_opts_t *opts, const void* data)
 {
+    (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii;
     gchar *str;
 
-    g_debug("small_opts_set ()\n");
     if (name == NULL || opts == NULL) return;
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     for (ii = 0; ii < opts->count; ii++)
@@ -2408,8 +2665,8 @@ small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
     }
 }
 
-combo_opts_t*
-find_combo_table(const gchar *name)
+combo_name_map_t*
+find_combo_map(const gchar *name)
 {
     gint ii;
 
@@ -2417,8 +2674,70 @@ find_combo_table(const gchar *name)
     {
         if (strcmp(name, combo_name_map[ii].name) == 0)
         {
-            return combo_name_map[ii].opts;
+            return &combo_name_map[ii];
         }
+    }
+    return NULL;
+}
+
+combo_opts_t*
+find_combo_opts(const gchar *name)
+{
+    combo_name_map_t *entry = find_combo_map(name);
+    if (entry != NULL)
+    {
+        return entry->opts;
+    }
+    return NULL;
+}
+
+static GhbValue *
+generic_opt_get(const char *name, const combo_opts_t *opts,
+                const GhbValue *gval, GhbType type)
+{
+    GhbValue *result = NULL;
+    switch (type)
+    {
+        case GHB_INT:
+        {
+            int val;
+            val = lookup_generic_int(opts, gval);
+            return ghb_int_value_new(val);
+        } break;
+        case GHB_DOUBLE:
+        {
+            double val;
+            val = lookup_generic_double(opts, gval);
+            return ghb_double_value_new(val);
+        } break;
+        case GHB_STRING:
+        {
+            const char *val;
+            val = lookup_generic_option(opts, gval);
+            return ghb_string_value_new(val);
+        } break;
+    }
+    return result;
+}
+
+static GhbValue *
+lookup_combo_value(const gchar *name, const GhbValue *gval, GhbType type)
+{
+    combo_name_map_t *entry = find_combo_map(name);
+    if (entry != NULL)
+    {
+        if (entry->opt_get != NULL)
+        {
+            return entry->opt_get(name, entry->opts, gval, type);
+        }
+        else
+        {
+            g_warning("Combobox entry %s missing opt_get()", name);
+        }
+    }
+    else
+    {
+        g_warning("Combobox entry %s not found", name);
     }
     return NULL;
 }
@@ -2428,14 +2747,10 @@ ghb_lookup_combo_int(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return 0;
-    else if (strcmp(name, "SrtLanguage") == 0)
-        return lookup_audio_lang_int(gval);
-    else
-    {
-        return lookup_generic_int(find_combo_table(name), gval);
-    }
-    g_warning("ghb_lookup_combo_int() couldn't find %s", name);
-    return 0;
+    GhbValue *gresult = lookup_combo_value(name, gval, GHB_INT);
+    int result = ghb_value_get_int(gresult);
+    ghb_value_free(&gresult);
+    return result;
 }
 
 gdouble
@@ -2443,29 +2758,26 @@ ghb_lookup_combo_double(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return 0;
-    else if (strcmp(name, "SrtLanguage") == 0)
-        return lookup_audio_lang_int(gval);
-    else
-    {
-        return lookup_generic_double(find_combo_table(name), gval);
-    }
-    g_warning("ghb_lookup_combo_double() couldn't find %s", name);
-    return 0;
+    GhbValue *gresult = lookup_combo_value(name, gval, GHB_DOUBLE);
+    double result = ghb_value_get_double(gresult);
+    ghb_value_free(&gresult);
+    return result;
 }
 
-const gchar*
+char*
 ghb_lookup_combo_option(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return NULL;
-    else if (strcmp(name, "SrtLanguage") == 0)
-        return lookup_audio_lang_option(gval);
-    else
+    GhbValue *gresult = lookup_combo_value(name, gval, GHB_DOUBLE);
+    const char *tmp = ghb_value_get_string(gresult);
+    char *result = NULL;
+    if (tmp != NULL)
     {
-        return lookup_generic_option(find_combo_table(name), gval);
+        result = g_strdup(tmp);
     }
-    g_warning("ghb_lookup_combo_int() couldn't find %s", name);
-    return NULL;
+    ghb_value_free(&gresult);
+    return result;
 }
 
 void ghb_init_lang_list_box(GtkListBox *list_box)
@@ -2495,7 +2807,7 @@ void
 ghb_update_ui_combo_box(
     signal_user_data_t *ud,
     const gchar *name,
-    const void *user_data,
+    const void* user_data,
     gboolean all)
 {
     GtkComboBox *combo = NULL;
@@ -2524,84 +2836,20 @@ ghb_update_ui_combo_box(
     }
     if (all)
     {
-        audio_bitrate_opts_set(ud->builder, "AudioBitrate");
-        audio_samplerate_opts_set(ud->builder, "AudioSamplerate");
-        video_framerate_opts_set(ud->builder, "VideoFramerate");
-        mix_opts_set(ud->builder, "AudioMixdown");
-        video_encoder_opts_set(ud->builder, "VideoEncoder");
-        audio_encoder_opts_set(ud->builder, "AudioEncoder");
-        acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
-        language_opts_set(ud->builder, "SrtLanguage");
-        srt_codeset_opts_set(ud->builder, "SrtCodeset");
-        title_opts_set(ud->builder, "title");
-        audio_track_opts_set(ud->builder, "AudioTrack", user_data);
-        subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
-        small_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
-        small_opts_set(ud->builder, "SubtitleTrackSelectionBehavior", &subtitle_track_sel_opts);
-        small_opts_set(ud->builder, "SubtitleBurnBehavior", &subtitle_burn_opts);
-        small_opts_set(ud->builder, "AudioTrackSelectionBehavior", &audio_track_sel_opts);
-        small_opts_set(ud->builder, "PtoPType", &point_to_point_opts);
-        small_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
-        small_opts_set(ud->builder, "PicturePAR", &par_opts);
-        small_opts_set(ud->builder, "PictureModulus", &alignment_opts);
-        small_opts_set(ud->builder, "LoggingLevel", &logging_opts);
-        small_opts_set(ud->builder, "LogLongevity", &log_longevity_opts);
-        small_opts_set(ud->builder, "check_updates", &appcast_update_opts);
-        small_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
-        small_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
-        small_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
-        small_opts_set(ud->builder, "PictureDenoiseFilter", &denoise_opts);
-        small_opts_set(ud->builder, "PictureDenoisePreset", &denoise_preset_opts);
-        small_opts_set(ud->builder, "PictureDenoiseTune", &nlmeans_tune_opts);
-        small_opts_set(ud->builder, "x264_direct", &direct_opts);
-        small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
-        small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
-        small_opts_set(ud->builder, "x264_weighted_pframes", &weightp_opts);
-        small_opts_set(ud->builder, "x264_me", &me_opts);
-        small_opts_set(ud->builder, "x264_subme", &subme_opts);
-        small_opts_set(ud->builder, "x264_analyse", &analyse_opts);
-        small_opts_set(ud->builder, "x264_trellis", &trellis_opts);
-        video_tune_opts_set(ud, "VideoTune");
-        video_profile_opts_set(ud, "VideoProfile");
-        video_level_opts_set(ud, "VideoLevel");
-        container_opts_set(ud->builder, "FileFormat");
+        int ii;
+        for (ii = 0; combo_name_map[ii].name != NULL; ii++)
+        {
+            combo_name_map_t *entry = &combo_name_map[ii];
+            entry->opts_set(ud, entry->name, entry->opts, user_data);
+        }
     }
     else
     {
-        if (strcmp(name, "AudioBitrate") == 0)
-            audio_bitrate_opts_set(ud->builder, "AudioBitrate");
-        else if (strcmp(name, "AudioSamplerate") == 0)
-            audio_samplerate_opts_set(ud->builder, "AudioSamplerate");
-        else if (strcmp(name, "VideoFramerate") == 0)
-            video_framerate_opts_set(ud->builder, "VideoFramerate");
-        else if (strcmp(name, "AudioMixdown") == 0)
-            mix_opts_set(ud->builder, "AudioMixdown");
-        else if (strcmp(name, "VideoEncoder") == 0)
-            video_encoder_opts_set(ud->builder, "VideoEncoder");
-        else if (strcmp(name, "AudioEncoder") == 0)
-            audio_encoder_opts_set(ud->builder, "AudioEncoder");
-        else if (strcmp(name, "AudioEncoderFallback") == 0)
-            acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
-        else if (strcmp(name, "SrtLanguage") == 0)
-            language_opts_set(ud->builder, "SrtLanguage");
-        else if (strcmp(name, "SrtCodeset") == 0)
-            srt_codeset_opts_set(ud->builder, "SrtCodeset");
-        else if (strcmp(name, "title") == 0)
-            title_opts_set(ud->builder, "title");
-        else if (strcmp(name, "SubtitleTrack") == 0)
-            subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
-        else if (strcmp(name, "AudioTrack") == 0)
-            audio_track_opts_set(ud->builder, "AudioTrack", user_data);
-        else if (strcmp(name, "VideoTune") == 0)
-            video_tune_opts_set(ud, "VideoTune");
-        else if (strcmp(name, "VideoProfile") == 0)
-            video_profile_opts_set(ud, "VideoProfile");
-        else if (strcmp(name, "VideoLevel") == 0)
-            video_level_opts_set(ud, "VideoLevel");
-        else if (strcmp(name, "FileFormat") == 0)
-            container_opts_set(ud->builder, "FileFormat");
-        else
-            small_opts_set(ud->builder, name, find_combo_table(name));
+        combo_name_map_t *entry = find_combo_map(name);
+        if (entry != NULL)
+        {
+            entry->opts_set(ud, entry->name, entry->opts, user_data);
+        }
     }
     if (handler_id > 0)
     {
@@ -2614,22 +2862,6 @@ init_ui_combo_boxes(GtkBuilder *builder)
 {
     gint ii;
 
-    init_combo_box(builder, "AudioBitrate");
-    init_combo_box(builder, "AudioSamplerate");
-    init_combo_box(builder, "VideoFramerate");
-    init_combo_box(builder, "AudioMixdown");
-    init_combo_box(builder, "SrtLanguage");
-    init_combo_box(builder, "SrtCodeset");
-    init_combo_box(builder, "title");
-    init_combo_box(builder, "AudioTrack");
-    init_combo_box(builder, "SubtitleTrack");
-    init_combo_box(builder, "VideoEncoder");
-    init_combo_box(builder, "AudioEncoder");
-    init_combo_box(builder, "AudioEncoderFallback");
-    init_combo_box(builder, "VideoTune");
-    init_combo_box(builder, "VideoProfile");
-    init_combo_box(builder, "VideoLevel");
-    init_combo_box(builder, "FileFormat");
     for (ii = 0; combo_name_map[ii].name != NULL; ii++)
     {
         init_combo_box(builder, combo_name_map[ii].name);
@@ -2756,7 +2988,6 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo)
     GtkListStore *store;
     gchar *str;
 
-    g_debug("audio_bitrate_opts_set ()\n");
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
 
@@ -2778,9 +3009,13 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo)
 }
 
 static void
-audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
+audio_bitrate_opts_set(signal_user_data_t *ud, const gchar *name,
+                       combo_opts_t *opts, const void* data)
 {
-    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     ghb_audio_bitrate_opts_set(combo);
 }
 

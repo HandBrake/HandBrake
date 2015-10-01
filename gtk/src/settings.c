@@ -43,7 +43,7 @@ ghb_settings_combo_double(const GhbValue *settings, const gchar *key)
     return ghb_lookup_combo_double(key, ghb_dict_get_value(settings, key));
 }
 
-const gchar*
+gchar*
 ghb_settings_combo_option(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_option(key, ghb_dict_get_value(settings, key));

@@ -128,7 +128,7 @@ gint ghb_get_default_acodec(void);
 void ghb_grey_combo_options(signal_user_data_t *ud);
 void ghb_update_ui_combo_box(
     signal_user_data_t *ud, const gchar *name,
-    const void *user_data, gboolean all);
+    const void* user_data, gboolean all);
 const gchar* ghb_get_source_audio_lang(const hb_title_t *title, gint track);
 gint ghb_find_audio_track(const hb_title_t *title, const gchar *lang, int start);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
@@ -152,7 +152,7 @@ gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
 gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
-const gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
+gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
 
@@ -166,7 +166,7 @@ void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
 void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
 
-int ghb_lookup_audio_lang(const GhbValue *glang);
+int ghb_lookup_lang(const GhbValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
 void ghb_update_display_aspect_label(signal_user_data_t *ud);
 gchar* ghb_create_title_label(const hb_title_t *title);

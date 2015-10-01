@@ -293,9 +293,8 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
     // Next line in the display (Filter settings)
     // Filters: - Deinterlace
     gint decomb, detel, deint, deblock, denoise;
-    const gchar *detel_cust, *deint_cust, *decomb_cust;
-    const gchar *deint_opt, *decomb_opt;
-    const gchar *denoise_opt, *denoise_preset, *denoise_tune, *denoise_cust;
+    gchar *deint_opt, *decomb_opt, *denoise_opt, *denoise_preset, *denoise_tune;
+    const gchar *detel_cust, *deint_cust, *decomb_cust, *denoise_cust;
     gboolean decomb_deint;
     gboolean grayscale;
     gboolean filters;
@@ -391,6 +390,11 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         }
         XPRINT("</small>\n");
     }
+    free(deint_opt);
+    free(decomb_opt);
+    free(denoise_opt);
+    free(denoise_preset);
+    free(denoise_tune);
 
     // Next line in the display (Video Encoder)
     // Video: Encoder, Framerate: fps, RF/Bitrate/QP
