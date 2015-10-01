@@ -196,47 +196,6 @@ combo_opts_t vqual_granularity_opts =
     d_vqual_granularity_opts
 };
 
-static options_map_t d_detel_opts[] =
-{
-    {N_("Off"),    "off",   0, ""},
-    {N_("Custom"), "custom", 1, ""},
-    {N_("Default"),"default",2, NULL},
-};
-combo_opts_t detel_opts =
-{
-    sizeof(d_detel_opts)/sizeof(options_map_t),
-    d_detel_opts
-};
-
-static options_map_t d_decomb_opts[] =
-{
-    {N_("Off"),    "off",   0, ""},
-    {N_("Custom"), "custom", 1, ""},
-    {N_("Default"),"default",2, NULL},
-    {N_("Fast"),   "fast",   3, "7:2:6:9:1:80"},
-    {N_("Bob"),    "bob",    4, "455"},
-};
-combo_opts_t decomb_opts =
-{
-    sizeof(d_decomb_opts)/sizeof(options_map_t),
-    d_decomb_opts
-};
-
-static options_map_t d_deint_opts[] =
-{
-    {N_("Off"),    "off",    0,  ""},
-    {N_("Custom"), "custom", 1,  ""},
-    {N_("Fast"),   "fast",   2,  "0:-1:-1:0:1"},
-    {N_("Slow"),   "slow",   3,  "1:-1:-1:0:1"},
-    {N_("Slower"), "slower", 4,  "3:-1:-1:0:1"},
-    {N_("Bob"),    "bob",    5, "15:-1:-1:0:1"},
-};
-combo_opts_t deint_opts =
-{
-    sizeof(d_deint_opts)/sizeof(options_map_t),
-    d_deint_opts
-};
-
 static options_map_t d_denoise_opts[] =
 {
     {N_("Off"),     "off",     0, ""},
@@ -247,34 +206,6 @@ combo_opts_t denoise_opts =
 {
     sizeof(d_denoise_opts)/sizeof(options_map_t),
     d_denoise_opts
-};
-
-static options_map_t d_denoise_preset_opts[] =
-{
-    {N_("Custom"),     "custom",     1, ""},
-    {N_("Ultralight"), "ultralight", 5, ""},
-    {N_("Light"),      "light",      2, ""},
-    {N_("Medium"),     "medium",     3, ""},
-    {N_("Strong"),     "strong",     4, ""},
-};
-combo_opts_t denoise_preset_opts =
-{
-    sizeof(d_denoise_preset_opts)/sizeof(options_map_t),
-    d_denoise_preset_opts
-};
-
-static options_map_t d_nlmeans_tune_opts[] =
-{
-    {N_("None"),        "none",       0, ""},
-    {N_("Film"),        "film",       1, ""},
-    {N_("Grain"),       "grain",      2, ""},
-    {N_("High Motion"), "highmotion", 3, ""},
-    {N_("Animation"),   "animation",  4, ""},
-};
-combo_opts_t nlmeans_tune_opts =
-{
-    sizeof(d_nlmeans_tune_opts)/sizeof(options_map_t),
-    d_nlmeans_tune_opts
 };
 
 static options_map_t d_direct_opts[] =
@@ -433,8 +364,31 @@ static void video_level_opts_set(signal_user_data_t *ud, const gchar *name,
                                  combo_opts_t *opts, const void* data);
 static void container_opts_set(signal_user_data_t *ud, const gchar *name,
                                combo_opts_t *opts, const void* data);
+static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
+                           combo_opts_t *opts, const void* data);
+static void decomb_opts_set(signal_user_data_t *ud, const gchar *name,
+                            combo_opts_t *opts, const void* data);
+static void detel_opts_set(signal_user_data_t *ud, const gchar *name,
+                           combo_opts_t *opts, const void* data);
+static void denoise_preset_opts_set(signal_user_data_t *ud, const gchar *name,
+                                    combo_opts_t *opts, const void* data);
+static void denoise_tune_opts_set(signal_user_data_t *ud, const gchar *name,
+                                    combo_opts_t *opts, const void* data);
+
 static GhbValue * generic_opt_get(const char *name, const combo_opts_t *opts,
                                   const GhbValue *gval, GhbType type);
+static GhbValue * deint_opt_get(const char *name, const combo_opts_t *opts,
+                                const GhbValue *gval, GhbType type);
+static GhbValue * decomb_opt_get(const char *name, const combo_opts_t *opts,
+                                 const GhbValue *gval, GhbType type);
+static GhbValue * detel_opt_get(const char *name, const combo_opts_t *opts,
+                                const GhbValue *gval, GhbType type);
+static GhbValue *
+denoise_preset_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type);
+static GhbValue *
+denoise_tune_opt_get(const char *name, const combo_opts_t *opts,
+                     const GhbValue *gval, GhbType type);
 
 combo_name_map_t combo_name_map[] =
 {
@@ -506,21 +460,21 @@ combo_name_map_t combo_name_map[] =
     },
     {
         "PictureDeinterlace",
-        &deint_opts,
-        small_opts_set,
-        generic_opt_get
+        NULL,
+        deint_opts_set,
+        deint_opt_get
     },
     {
         "PictureDecomb",
-        &decomb_opts,
-        small_opts_set,
-        generic_opt_get
+        NULL,
+        decomb_opts_set,
+        decomb_opt_get
     },
     {
         "PictureDetelecine",
-        &detel_opts,
-        small_opts_set,
-        generic_opt_get
+        NULL,
+        detel_opts_set,
+        detel_opt_get
     },
     {
         "PictureDenoiseFilter",
@@ -530,15 +484,15 @@ combo_name_map_t combo_name_map[] =
     },
     {
         "PictureDenoisePreset",
-        &denoise_preset_opts,
-        small_opts_set,
-        generic_opt_get
+        NULL,
+        denoise_preset_opts_set,
+        denoise_preset_opt_get
     },
     {
         "PictureDenoiseTune",
-        &nlmeans_tune_opts,
-        small_opts_set,
-        generic_opt_get
+        NULL,
+        denoise_tune_opts_set,
+        denoise_tune_opt_get
     },
     {
         "x264_direct",
@@ -1064,7 +1018,7 @@ ghb_vquality_range(
 }
 
 gint
-find_combo_entry(const combo_opts_t *opts, const GhbValue *gval)
+find_opt_entry(const combo_opts_t *opts, const GhbValue *gval)
 {
     gint ii;
 
@@ -1077,20 +1031,8 @@ find_combo_entry(const combo_opts_t *opts, const GhbValue *gval)
         str = ghb_value_get_string(gval);
         for (ii = 0; ii < opts->count; ii++)
         {
-            if (strcmp(opts->map[ii].shortOpt, str) == 0)
-            {
-                break;
-            }
-        }
-        return ii;
-    }
-    else if (ghb_value_type(gval) == GHB_DOUBLE)
-    {
-        gdouble val;
-        val = ghb_value_get_double(gval);
-        for (ii = 0; ii < opts->count; ii++)
-        {
-            if (opts->map[ii].ivalue == val)
+            if (strcmp(opts->map[ii].shortOpt, str) == 0 ||
+                strcmp(opts->map[ii].option, str) == 0)
             {
                 break;
             }
@@ -1098,6 +1040,7 @@ find_combo_entry(const combo_opts_t *opts, const GhbValue *gval)
         return ii;
     }
     else if (ghb_value_type(gval) == GHB_INT ||
+             ghb_value_type(gval) == GHB_DOUBLE ||
              ghb_value_type(gval) == GHB_BOOL)
     {
         gint64 val;
@@ -1114,6 +1057,44 @@ find_combo_entry(const combo_opts_t *opts, const GhbValue *gval)
     return opts->count;
 }
 
+const hb_filter_param_t*
+find_param_entry(const hb_filter_param_t *param, const GhbValue *gval)
+{
+    gint ii;
+
+    if (param == NULL)
+        return NULL;
+
+    if (ghb_value_type(gval) == GHB_STRING)
+    {
+        const gchar *str;
+        str = ghb_value_get_string(gval);
+        for (ii = 0; param[ii].name != NULL; ii++)
+        {
+            if (strcmp(param[ii].short_name, str) == 0 ||
+                strcmp(param[ii].name, str) == 0)
+            {
+                return &param[ii];
+            }
+        }
+    }
+    else if (ghb_value_type(gval) == GHB_INT ||
+             ghb_value_type(gval) == GHB_DOUBLE ||
+             ghb_value_type(gval) == GHB_BOOL)
+    {
+        gint64 val;
+        val = ghb_value_get_int(gval);
+        for (ii = 0; param[ii].name != NULL; ii++)
+        {
+            if ((gint64)param[ii].index == val)
+            {
+                return &param[ii];
+            }
+        }
+    }
+    return NULL;
+}
+
 static gint
 lookup_generic_int(const combo_opts_t *opts, const GhbValue *gval)
 {
@@ -1123,7 +1104,7 @@ lookup_generic_int(const combo_opts_t *opts, const GhbValue *gval)
     if (opts == NULL)
         return 0;
 
-    ii = find_combo_entry(opts, gval);
+    ii = find_opt_entry(opts, gval);
     if (ii < opts->count)
     {
         result = opts->map[ii].ivalue;
@@ -1137,7 +1118,7 @@ lookup_generic_double(const combo_opts_t *opts, const GhbValue *gval)
     gint ii;
     gdouble result = -1;
 
-    ii = find_combo_entry(opts, gval);
+    ii = find_opt_entry(opts, gval);
     if (ii < opts->count)
     {
         result = opts->map[ii].ivalue;
@@ -1151,10 +1132,41 @@ lookup_generic_option(const combo_opts_t *opts, const GhbValue *gval)
     gint ii;
     const gchar *result = "";
 
-    ii = find_combo_entry(opts, gval);
+    ii = find_opt_entry(opts, gval);
     if (ii < opts->count)
     {
         result = opts->map[ii].option;
+    }
+    return result;
+}
+
+static gint
+lookup_param_int(const hb_filter_param_t *param, const GhbValue *gval)
+{
+    gint result = -1;
+
+    if (param == NULL)
+        return result;
+
+    const hb_filter_param_t *entry;
+    entry = find_param_entry(param, gval);
+    if (entry != NULL)
+    {
+        result = entry->index;
+    }
+    return result;
+}
+
+static const gchar*
+lookup_param_option(const hb_filter_param_t *param, const GhbValue *gval)
+{
+    const gchar *result = "";
+
+    const hb_filter_param_t *entry;
+    entry = find_param_entry(param, gval);
+    if (entry != NULL)
+    {
+        result = entry->name;
     }
     return result;
 }
@@ -2665,6 +2677,90 @@ small_opts_set(signal_user_data_t *ud, const gchar *name,
     }
 }
 
+static void
+filter_opts_set(signal_user_data_t *ud, const gchar *name,
+                int filter_id, int preset)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gint ii;
+    gchar *str;
+
+    if (name == NULL) return;
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
+    gtk_list_store_clear(store);
+    hb_filter_param_t * param;
+    if (preset)
+    {
+        param = hb_filter_param_get_presets(filter_id);
+    }
+    else
+    {
+        param = hb_filter_param_get_tunes(filter_id);
+    }
+    for (ii = 0; param != NULL && param[ii].name != NULL; ii++)
+    {
+        gtk_list_store_append(store, &iter);
+        str = g_strdup_printf("<small>%s</small>",
+                              gettext(param[ii].name));
+        gtk_list_store_set(store, &iter,
+                           0, str,
+                           1, TRUE,
+                           2, param[ii].short_name,
+                           3, (double)param[ii].index,
+                           4, param[ii].settings != NULL ?
+                                param[ii].settings : "",
+                           -1);
+        g_free(str);
+    }
+}
+
+static void
+deint_opts_set(signal_user_data_t *ud, const gchar *name,
+                        combo_opts_t *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    filter_opts_set(ud, name, HB_FILTER_DEINTERLACE, 1);
+}
+
+static void
+decomb_opts_set(signal_user_data_t *ud, const gchar *name,
+                        combo_opts_t *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    filter_opts_set(ud, name, HB_FILTER_DECOMB, 1);
+}
+
+static void
+detel_opts_set(signal_user_data_t *ud, const gchar *name,
+                        combo_opts_t *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    filter_opts_set(ud, name, HB_FILTER_DETELECINE, 1);
+}
+
+static void
+denoise_preset_opts_set(signal_user_data_t *ud, const gchar *name,
+                        combo_opts_t *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    filter_opts_set(ud, name, HB_FILTER_NLMEANS, 1);
+}
+
+static void
+denoise_tune_opts_set(signal_user_data_t *ud, const gchar *name,
+                        combo_opts_t *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    filter_opts_set(ud, name, HB_FILTER_NLMEANS, 0);
+}
+
 combo_name_map_t*
 find_combo_map(const gchar *name)
 {
@@ -2699,6 +2795,7 @@ generic_opt_get(const char *name, const combo_opts_t *opts,
     switch (type)
     {
         case GHB_INT:
+        case GHB_BOOL:
         {
             int val;
             val = lookup_generic_int(opts, gval);
@@ -2718,6 +2815,81 @@ generic_opt_get(const char *name, const combo_opts_t *opts,
         } break;
     }
     return result;
+}
+
+static GhbValue *
+filter_opt_get(const char *name, const GhbValue *gval, GhbType type,
+               int filter_id, int preset)
+{
+    GhbValue *result = NULL;
+    hb_filter_param_t * param;
+
+    if (preset)
+    {
+        param = hb_filter_param_get_presets(filter_id);
+    }
+    else
+    {
+        param = hb_filter_param_get_tunes(filter_id);
+    }
+    switch (type)
+    {
+        case GHB_DOUBLE:
+        case GHB_BOOL:
+        case GHB_INT:
+        {
+            int val;
+            val = lookup_param_int(param, gval);
+            return ghb_int_value_new(val);
+        } break;
+        case GHB_STRING:
+        {
+            const char *val;
+            val = lookup_param_option(param, gval);
+            return ghb_string_value_new(val);
+        } break;
+    }
+    return result;
+}
+
+static GhbValue *
+deint_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type)
+{
+    (void)opts; // Silence "unused variable" warning
+    return filter_opt_get(name, gval, type, HB_FILTER_DEINTERLACE, 1);
+}
+
+static GhbValue *
+decomb_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type)
+{
+    (void)opts; // Silence "unused variable" warning
+    return filter_opt_get(name, gval, type, HB_FILTER_DECOMB, 1);
+}
+
+static GhbValue *
+detel_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type)
+{
+    (void)opts; // Silence "unused variable" warning
+    return filter_opt_get(name, gval, type, HB_FILTER_DETELECINE, 1);
+}
+
+static GhbValue *
+denoise_preset_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type)
+{
+    (void)opts; // Silence "unused variable" warning
+    return filter_opt_get(name, gval, type, HB_FILTER_NLMEANS, 1);
+}
+
+static GhbValue *
+denoise_tune_opt_get(const char *name, const combo_opts_t *opts,
+                       const GhbValue *gval, GhbType type)
+{
+    (void)opts; // Silence "unused variable" warning
+    return filter_opt_get(name, gval, type, HB_FILTER_NLMEANS, 0);
 }
 
 static GhbValue *
@@ -2769,7 +2941,7 @@ ghb_lookup_combo_option(const gchar *name, const GhbValue *gval)
 {
     if (gval == NULL)
         return NULL;
-    GhbValue *gresult = lookup_combo_value(name, gval, GHB_DOUBLE);
+    GhbValue *gresult = lookup_combo_value(name, gval, GHB_STRING);
     const char *tmp = ghb_value_get_string(gresult);
     char *result = NULL;
     if (tmp != NULL)
