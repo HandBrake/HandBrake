@@ -186,6 +186,70 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatically crop black borders around edges of the video..
+        /// </summary>
+        public static string PictureSettingsView_AutoCrop {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_AutoCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop the video from the bottom..
+        /// </summary>
+        public static string PictureSettingsView_CropBottom {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_CropBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop the video from the left side..
+        /// </summary>
+        public static string PictureSettingsView_CropLeft {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_CropLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop the video from the right side..
+        /// </summary>
+        public static string PictureSettingsView_CropRight {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_CropRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop the video from the top..
+        /// </summary>
+        public static string PictureSettingsView_CropTop {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_CropTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the height that the video will be stored at.
+        ///The actual display dimensions will differ if the pixel aspect ratio is not 1:1..
+        /// </summary>
+        public static string PictureSettingsView_Height {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Height", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manually crop the video..
+        /// </summary>
+        public static string PictureSettingsView_ManualCrop {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_ManualCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Align storage dimensions to multiples of this value.
         ///
         ///This setting is only necessary for compatibility with some devices.
@@ -205,6 +269,16 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_PAR {
             get {
                 return ResourceManager.GetString("PictureSettingsView_PAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is the width that the video will be stored at.
+        ///The actual display dimensions will differ if the pixel aspect ratio is not 1:1..
+        /// </summary>
+        public static string PictureSettingsView_Width {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_Width", resourceCulture);
             }
         }
         
@@ -232,6 +306,188 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_SendJobBack {
             get {
                 return ResourceManager.GetString("QueueView_SendJobBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use advanced options Tab for x264 settings..
+        /// </summary>
+        public static string Video_AdvancedOptions {
+            get {
+                return ResourceManager.GetString("Video_AdvancedOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the average bitrate.
+        ///
+        ///The instantaneous bitrate can be much higher or lower at any point in time.
+        ///But the average over a long duration will be the value set here.  If you need
+        ///to limit instantaneous bitrate, look into x264&apos;s vbv-bufsize and vbv-maxrate settings..
+        /// </summary>
+        public static string Video_AvgBitrate {
+            get {
+                return ResourceManager.GetString("Video_AvgBitrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables constant framerate output..
+        /// </summary>
+        public static string Video_ConstantFramerate {
+            get {
+                return ResourceManager.GetString("Video_ConstantFramerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available video encoders..
+        /// </summary>
+        public static string Video_Encoders {
+            get {
+                return ResourceManager.GetString("Video_Encoders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tune settings to optimize for common scenarios.
+        ///
+        ///This can improve effeciency for particular source characteristics or set
+        ///characteristics of the output file.  Changes will be applied after the
+        ///preset but before all other parameters..
+        /// </summary>
+        public static string Video_EncoderTune {
+            get {
+                return ResourceManager.GetString("Video_EncoderTune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional encoder settings.
+        ///
+        ///Colon separated list of encoder options..
+        /// </summary>
+        public static string Video_ExtraOpts {
+            get {
+                return ResourceManager.GetString("Video_ExtraOpts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reduce decoder CPU usage.
+        ///
+        ///Set this if your device is struggling to play the output (dropped frames)..
+        /// </summary>
+        public static string Video_FastDecode {
+            get {
+                return ResourceManager.GetString("Video_FastDecode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output framerate.
+        ///
+        ///&apos;Same as source&apos; is recommended. If your source video has a variable framerate, &apos;Same as source&apos; will preserve it..
+        /// </summary>
+        public static string Video_Framerate {
+            get {
+                return ResourceManager.GetString("Video_Framerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets and ensures compliance with the specified level.
+        ///
+        ///Overrides all other settings..
+        /// </summary>
+        public static string Video_Level {
+            get {
+                return ResourceManager.GetString("Video_Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables variable framerate output with a peak rate determined by the framerate setting..
+        /// </summary>
+        public static string Video_PeakFramerate {
+            get {
+                return ResourceManager.GetString("Video_PeakFramerate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjusts encoder settings to trade off compression efficiency against encoding speed.
+        ///
+        ///This establishes your default encoder settings.
+        ///Tunes, profiles, levels and advanced option string will be applied to this.
+        ///You should generally set this option to the slowest you can bear since slower
+        ///settings will result in better quality or smaller files..
+        /// </summary>
+        public static string Video_Presets {
+            get {
+                return ResourceManager.GetString("Video_Presets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets and ensures compliance with the specified profile.
+        ///
+        ///Overrides all other settings..
+        /// </summary>
+        public static string Video_Profile {
+            get {
+                return ResourceManager.GetString("Video_Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the desired quality factor.
+        ///The encoder targets a certain quality.
+        ///The scale used by each video encoder is different.
+        ///
+        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality.
+        ///So small decreases in value will result in progressively larger increases
+        ///in the resulting file size.  A value of 0 means lossless and will result
+        ///in a file size that is larger than the original source, unless the source
+        ///was also lossless.
+        ///Suggested values are: 18 to 20 for standard definition sources an [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Video_Quality {
+            get {
+                return ResourceManager.GetString("Video_Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to During the 1st pass of a 2 pass encode, use settings that speed things along..
+        /// </summary>
+        public static string Video_TurboFirstPass {
+            get {
+                return ResourceManager.GetString("Video_TurboFirstPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perform 2 Pass Encoding.
+        ///
+        ///The &apos;Bitrate&apos; option is prerequisite. During the 1st pass, statistics about
+        ///the video are collected.  Then in the second pass, those statistics are used
+        ///to make bitrate allocation decisions..
+        /// </summary>
+        public static string Video_TwoPass {
+            get {
+                return ResourceManager.GetString("Video_TwoPass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables variable framerate output.
+        ///
+        ///VFR is not compatible with some players..
+        /// </summary>
+        public static string Video_VariableFramerate {
+            get {
+                return ResourceManager.GetString("Video_VariableFramerate", resourceCulture);
             }
         }
     }
