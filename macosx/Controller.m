@@ -1848,14 +1848,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying. */
             [prefs setInteger:1 forKey:@"suppresslibdvdcss"];
             
-            /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
+            /*compatible lib not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             NSInteger status;
             NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
-            [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
-            [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
+            [alert setMessageText:@"Copy-Protected sources are not supported."];
+            [alert setInformativeText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function."];
             [alert addButtonWithTitle:@"Cancel Scan"];
             [alert addButtonWithTitle:@"Attempt Scan Anyway"];
             [NSApp requestUserAttention:NSCriticalRequest];
@@ -1863,11 +1862,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [alert release];
 
             if (status == NSAlertFirstButtonReturn)
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
-            }
-            else if (status == NSAlertSecondButtonReturn)
             {
                 /* User chose to cancel the scan */
                 [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
