@@ -17,6 +17,8 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 @property (weak) IBOutlet NSStepper *widthStepper;
 @property (weak) IBOutlet NSStepper *heightStepper;
 
+@property (nonatomic, readwrite) NSColor *labelColor;
+
 @end
 
 @implementation HBPictureViewController
@@ -26,6 +28,7 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
     self = [super initWithNibName:@"HBPictureViewController" bundle:nil];
     if (self)
     {
+        _labelColor = [NSColor disabledControlTextColor];
         [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureViewControllerContext];
     }
     return self;
@@ -38,6 +41,21 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
         [self removeObserver:self forKeyPath:@"self.picture.modulus"];
     }
     @catch (NSException * __unused exception) {}
+}
+
+- (void)setPicture:(HBPicture *)picture
+{
+    _picture = picture;
+
+    if (_picture)
+    {
+        self.labelColor = [NSColor controlTextColor];
+    }
+    else
+    {
+        self.labelColor = [NSColor disabledControlTextColor];
+    }
+
 }
 
 #pragma mark - KVO

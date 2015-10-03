@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A262e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B22c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9052"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -242,6 +242,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fkJ-hW-R19"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="wsq-TS-cC6">
                     <rect key="frame" x="750" y="231" width="36" height="19"/>
@@ -285,7 +288,7 @@
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <textField verticalHuggingPriority="750" id="1a5-Yb-uwn">
-                    <rect key="frame" x="25" y="130" width="64" height="14"/>
+                    <rect key="frame" x="18" y="130" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
@@ -293,9 +296,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="M2A-q7-iOs"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Mwp-XS-2tc">
-                    <rect key="frame" x="40" y="104" width="49" height="14"/>
+                    <rect key="frame" x="18" y="104" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
@@ -309,6 +315,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lK9-eT-tUn"/>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="DER-tS-cLx">
@@ -364,6 +371,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="m7I-VM-1ct"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="ns7-Ww-hmX">
                     <rect key="frame" x="656" y="105" width="64" height="14"/>
@@ -374,6 +384,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pzU-oe-yEE"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="peM-dW-Ef8">
                     <rect key="frame" x="719" y="130" width="31" height="14"/>
@@ -416,6 +429,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="tH6-cB-0O3"/>
+                    </connections>
                 </textField>
                 <popUpButton toolTip="Denoise filtering reduces or removes the appearance of noise and grain." verticalHuggingPriority="750" id="ins-7X-kbN">
                     <rect key="frame" x="521" y="125" width="113" height="22"/>
@@ -457,6 +473,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="P6z-nu-QHk"/>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="cTy-PO-BSd">
@@ -522,6 +539,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="ZR9-YG-pfn">
@@ -591,6 +609,9 @@
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="-2" name="textColor" keyPath="self.labelColor" id="LZV-5c-GTF"/>
+                                </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" id="EoC-qG-nlq">
                                 <rect key="frame" x="11" y="12" width="61" height="14"/>
@@ -607,6 +628,7 @@
                                             <string key="NSValueTransformerName">NSNegateBoolean</string>
                                         </dictionary>
                                     </binding>
+                                    <binding destination="-2" name="textColor" keyPath="self.labelColor" id="6zF-wn-AFg"/>
                                 </connections>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" id="kP2-Gv-DZV">
@@ -682,6 +704,9 @@
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="-2" name="textColor" keyPath="self.labelColor" id="PYk-vE-y5t"/>
+                                </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" id="C83-aJ-v3x">
                                 <rect key="frame" x="23" y="12" width="49" height="14"/>
@@ -698,6 +723,7 @@
                                             <string key="NSValueTransformerName">NSNegateBoolean</string>
                                         </dictionary>
                                     </binding>
+                                    <binding destination="-2" name="textColor" keyPath="self.labelColor" id="OOp-ec-hRZ"/>
                                 </connections>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
@@ -768,6 +794,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="GTk-Mv-iiv"/>
                     </connections>
                 </textField>
                 <button id="Psx-nN-XiT">
@@ -861,7 +888,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="vOY-Ix-eha">
-                    <rect key="frame" x="340" y="258" width="29" height="14"/>
+                    <rect key="frame" x="291" y="258" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
@@ -869,12 +896,15 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="VwV-bW-PBZ"/>
+                    </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
                     <rect key="frame" x="154" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -954,6 +984,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="MVb-7T-IbY"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
                     <rect key="frame" x="174" y="286" width="10" height="14"/>
@@ -1020,6 +1053,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fh5-vf-5Tr"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9oG-zm-Y0W">
                     <rect key="frame" x="18" y="285" width="74" height="14"/>
@@ -1030,9 +1066,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Epa-CR-f64"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="hei-Cd-vcN">
-                    <rect key="frame" x="298" y="286" width="71" height="14"/>
+                    <rect key="frame" x="291" y="286" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
@@ -1040,6 +1079,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="7ds-FA-XrD">
                     <rect key="frame" x="18" y="309" width="74" height="14"/>
@@ -1050,6 +1092,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eOt-6I-k6x"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
                     <rect key="frame" x="188" y="283" width="56" height="19"/>
@@ -1136,7 +1181,7 @@
                     <rect key="frame" x="246" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
