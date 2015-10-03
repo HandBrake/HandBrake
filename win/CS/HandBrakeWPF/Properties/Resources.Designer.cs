@@ -1497,50 +1497,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderLevel {
-            get {
-                return ResourceManager.GetString("Video_EncoderLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adjusts settings to trade off compression efficiency against encoding speed.
-        ///
-        ///This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
-        ///
-        ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
-        /// </summary>
-        public static string Video_EncoderPreset {
-            get {
-                return ResourceManager.GetString("Video_EncoderPreset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Limit the profile of the output stream. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderProfile {
-            get {
-                return ResourceManager.GetString("Video_EncoderProfile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tune settings to optimise for common scenarios
-        ///
-        ///This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-        ///
-        ///Changes will be applied after the preset but before all other parameters..
-        /// </summary>
-        public static string Video_EncoderTune {
-            get {
-                return ResourceManager.GetString("Video_EncoderTune", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Higher Quality |.
         /// </summary>
         public static string Video_HigherQuality {
@@ -1587,22 +1543,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_PlaceboQuality {
             get {
                 return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Set the desired quality factor. The encoder targets a certain quality. 
-        ///The scale used by each video encoder is different.
-        ///
-        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
-        ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
-        ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
-        ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for standard definiti [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string Video_QualitySlider {
-            get {
-                return ResourceManager.GetString("Video_QualitySlider", resourceCulture);
             }
         }
         

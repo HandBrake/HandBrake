@@ -170,6 +170,28 @@ Loose  - Align dimensions to chosen 'Alignment' value
                original display aspect ratio
 Strict - Keep original source dimensions and pixel aspect ratio</value>
   </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Automatically crop black borders around edges of the video.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Crop the video from the bottom.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Crop the video from the left side.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Crop the video from the right side.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Crop the video from the top.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>This is the height that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Manually crop the video.</value>
+  </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>Align storage dimensions to multiples of this value.
 
@@ -181,6 +203,10 @@ You should use 2 unless you experience compatibility issues.</value>
 A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
 Players will scale the image in order to achieve the specified aspect.</value>
   </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>This is the width that the video will be stored at.
+The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+  </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
     <value>Delete the job from the queue.</value>
   </data>
@@ -189,5 +215,94 @@ Players will scale the image in order to achieve the specified aspect.</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
     <value>Send the job back to the main window for editing.</value>
+  </data>
+  <data name="Video_AdvancedOptions" xml:space="preserve">
+    <value>Use advanced options Tab for x264 settings.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Set the average bitrate.
+
+The instantaneous bitrate can be much higher or lower at any point in time.
+But the average over a long duration will be the value set here.  If you need
+to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Enables constant framerate output.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Available video encoders.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Tune settings to optimize for common scenarios.
+
+This can improve effeciency for particular source characteristics or set
+characteristics of the output file.  Changes will be applied after the
+preset but before all other parameters.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Additional encoder settings.
+
+Colon separated list of encoder options.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Reduce decoder CPU usage.
+
+Set this if your device is struggling to play the output (dropped frames).</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Output framerate.
+
+'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Sets and ensures compliance with the specified level.
+
+Overrides all other settings.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Enables variable framerate output with a peak rate determined by the framerate setting.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+
+This establishes your default encoder settings.
+Tunes, profiles, levels and advanced option string will be applied to this.
+You should generally set this option to the slowest you can bear since slower
+settings will result in better quality or smaller files.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Sets and ensures compliance with the specified profile.
+
+Overrides all other settings.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Set the desired quality factor.
+The encoder targets a certain quality.
+The scale used by each video encoder is different.
+
+x264's scale is logarithmic and lower values correspond to higher quality.
+So small decreases in value will result in progressively larger increases
+in the resulting file size.  A value of 0 means lossless and will result
+in a file size that is larger than the original source, unless the source
+was also lossless.
+Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
+
+FFMpeg's and Theora's scale is more linear.
+These encoders do not have a lossless mode.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>During the 1st pass of a 2 pass encode, use settings that speed things along.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Perform 2 Pass Encoding.
+
+The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
+the video are collected.  Then in the second pass, those statistics are used
+to make bitrate allocation decisions.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Enables variable framerate output.
+
+VFR is not compatible with some players.</value>
   </data>
 </root>

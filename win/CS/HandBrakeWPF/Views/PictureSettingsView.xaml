@@ -43,11 +43,11 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Width}" />
                     <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}"
-                                             Minimum="0" Width="60"  />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"  />
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Height}" />
                     <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}" 
-                                             Minimum="0" Width="60"  />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"  />
                     <CheckBox Content="{x:Static Properties:ResourcesUI.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}"
                           Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" 
                           VerticalAlignment="Center" Margin="5,0,0,0" />
@@ -108,8 +108,10 @@
             <!-- Crop Panel -->
             <StackPanel Name="CropPanel" Margin="15,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
                 <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Cropping}" FontWeight="Bold" />
-                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
-                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0" />
+                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Automatic}" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"
+                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_AutoCrop}"  />
+                <RadioButton Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Custom}" IsChecked="{Binding IsCustomCrop}" Margin="10,5,0,0"
+                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_ManualCrop}"  />
 
                 <Grid Margin="0,10,0,0">
                     <Grid.RowDefinitions>
@@ -134,16 +136,20 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Right}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
-                                    Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+                                    Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
-                                    Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+                                    Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
-                                    Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+                                    Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                      ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"  />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
-                                    Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+                                    Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}" />
 
                 </Grid>
 
