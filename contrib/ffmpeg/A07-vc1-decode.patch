@@ -1,0 +1,28 @@
+commit a97328afef0ccebfc8c3d9f9fdb8e93cbf1058ab
+Author:     Michael Niedermayer <michaelni@gmx.at>
+AuthorDate: Sun Sep 21 16:16:32 2014 +0100
+Commit:     Tim Walker <tdskywalker@gmail.com>
+CommitDate: Fri Sep 26 16:55:36 2014 +0200
+
+    vc1: Use logical instead of bitwise or for twomv
+    
+    CC: libav-stable@libav.org
+    Signed-off-by: Michael Niedermayer <michaelni@gmx.at>
+    Signed-off-by: Tim Walker <tdskywalker@gmail.com>
+
+diff --git a/libavcodec/vc1dec.c b/libavcodec/vc1dec.c
+index 35245ab..41beaeb 100644
+--- a/libavcodec/vc1dec.c
++++ b/libavcodec/vc1dec.c
+@@ -4570,9 +4570,9 @@ static int vc1_decode_b_mb_intfr(VC1Context *v)
+             if (mb_has_coeffs)
+                 cbp = 1 + get_vlc2(&v->s.gb, v->cbpcy_vlc->table, VC1_CBPCY_P_VLC_BITS, 2);
+             if (!direct) {
+-                if (bmvtype == (BMV_TYPE_INTERPOLATED & twomv)) {
++                if (bmvtype == BMV_TYPE_INTERPOLATED && twomv) {
+                     v->fourmvbp = get_vlc2(gb, v->fourmvbp_vlc->table, VC1_4MV_BLOCK_PATTERN_VLC_BITS, 1);
+-                } else if (bmvtype == (BMV_TYPE_INTERPOLATED | twomv)) {
++                } else if (bmvtype == BMV_TYPE_INTERPOLATED || twomv) {
+                     v->twomvbp = get_vlc2(gb, v->twomvbp_vlc->table, VC1_2MV_BLOCK_PATTERN_VLC_BITS, 1);
+                 }
+             }
