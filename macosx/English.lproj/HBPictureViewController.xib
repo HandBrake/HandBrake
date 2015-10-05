@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                    <rect key="frame" x="729" y="252" width="15" height="22"/>
+                    <rect key="frame" x="726" y="252" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
@@ -149,7 +149,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                    <rect key="frame" x="674" y="229" width="15" height="22"/>
+                    <rect key="frame" x="671" y="229" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
@@ -208,7 +208,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                    <rect key="frame" x="729" y="206" width="15" height="22"/>
+                    <rect key="frame" x="726" y="206" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
@@ -921,10 +921,10 @@ Players will scale the image in order to achieve the specified aspect.</string>
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
-                    <rect key="frame" x="154" y="281" width="15" height="22"/>
+                    <rect key="frame" x="151" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -1013,7 +1013,7 @@ You should use 2 unless you experience compatibility issues.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
-                    <rect key="frame" x="174" y="286" width="10" height="14"/>
+                    <rect key="frame" x="171" y="286" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
@@ -1124,7 +1124,7 @@ Strict - Keep original source dimensions and pixel aspect ratio</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
-                    <rect key="frame" x="188" y="283" width="56" height="19"/>
+                    <rect key="frame" x="185" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">This is the height that the video will be stored at. The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</string>
                     <animations/>
@@ -1211,10 +1211,10 @@ Players will scale the image in order to achieve the specified aspect.</string>
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
-                    <rect key="frame" x="246" y="281" width="15" height="22"/>
+                    <rect key="frame" x="240" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -1233,7 +1233,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                     </connections>
                 </stepper>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                    <rect key="frame" x="788" y="229" width="15" height="22"/>
+                    <rect key="frame" x="785" y="229" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
