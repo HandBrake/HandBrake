@@ -663,7 +663,7 @@
     [fSrcTitlePopUp removeAllItems];
 
     NSError *outError = NULL;
-    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppresslibdvdcss"];
+    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppressCopyProtectionAlert"];
 
     // Check if we can scan the source and if there is any warning.
     BOOL canScan = [self.core canScan:scanURL error:&outError];
@@ -672,10 +672,7 @@
     if (canScan && [outError code] == 101 && !suppressWarning)
     {
         // Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying.
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppresslibdvdcss"];
-
-        // Compatible libdvdcss not found
-        [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppressCopyProtectionAlert"];
 
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", nil)];
