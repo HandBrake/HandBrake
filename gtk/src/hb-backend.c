@@ -3894,87 +3894,176 @@ get_preview_geometry(signal_user_data_t *ud, const hb_title_t *title,
 }
 
 gboolean
-ghb_validate_filter_string(const gchar *str, gint max_fields)
-{
-    gint fields = 0;
-    gchar *end;
-
-    if (str == NULL || *str == 0) return TRUE;
-    while (*str)
-    {
-        g_strtod(str, &end);
-        if (str != end)
-        { // Found a numeric value
-            fields++;
-            // negative max_fields means infinate
-            if (max_fields >= 0 && fields > max_fields) return FALSE;
-            if (*end == 0)
-                return TRUE;
-            if (*end != ':')
-                return FALSE;
-            str = end + 1;
-        }
-        else
-            return FALSE;
-    }
-    return FALSE;
-}
-
-gboolean
 ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
 {
-    const gchar *str;
-    gint index;
     gchar *message;
 
-    gboolean decomb_deint = ghb_dict_get_bool(settings, "PictureDecombDeinterlace");
-    // deinte
-    index = ghb_settings_combo_int(settings, "PictureDeinterlace");
-    if (!decomb_deint && index == 1)
+    // Deinterlace
+    gboolean decomb_deint;
+    const char *deint_preset;
+    decomb_deint = ghb_dict_get_bool(settings, "PictureDecombDeinterlace");
+    deint_preset = ghb_dict_get_string(settings, "PictureDeinterlace");
+    if (!decomb_deint && strcasecmp(deint_preset, "off"))
     {
-        str = ghb_dict_get_string(settings, "PictureDeinterlaceCustom");
-        if (!ghb_validate_filter_string(str, -1))
+        const char *deint_custom = NULL;
+        int filter_id;
+
+        filter_id = HB_FILTER_DEINTERLACE;
+        if (!strcasecmp(deint_preset, "custom"))
         {
-            message = g_strdup_printf(
-                        _("Invalid Deinterlace Settings:\n\n%s\n"), str);
+            deint_custom = ghb_dict_get_string(settings,
+                                               "PictureDeinterlaceCustom");
+        }
+        if (hb_validate_filter_preset(filter_id, deint_preset, deint_custom))
+        {
+            if (deint_custom != NULL)
+            {
+                message = g_strdup_printf(
+                            _("Invalid Deinterlace Settings:\n\n"
+                              "Preset: %s\n"
+                              "Custom: %s\n"), deint_preset, deint_custom);
+            }
+            else
+            {
+                message = g_strdup_printf(
+                            _("Invalid Deinterlace Settings:\n\n"
+                              "Preset: %s\n"), deint_preset);
+            }
             ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
                                message, _("Cancel"), NULL);
             g_free(message);
             return FALSE;
         }
     }
-    // detel
-    index = ghb_settings_combo_int(settings, "PictureDetelecine");
-    if (index == 1)
+
+    // Decomb
+    deint_preset = ghb_dict_get_string(settings, "PictureDecomb");
+    if (decomb_deint && strcasecmp(deint_preset, "off"))
     {
-        str = ghb_dict_get_string(settings, "PictureDetelecineCustom");
-        if (!ghb_validate_filter_string(str, -1))
+        const char *deint_custom = NULL;
+        int filter_id;
+
+        filter_id = HB_FILTER_DECOMB;
+        if (!strcasecmp(deint_preset, "custom"))
         {
-            message = g_strdup_printf(
-                        _("Invalid Detelecine Settings:\n\n%s\n"), str);
+            deint_custom = ghb_dict_get_string(settings, "PictureDecombCustom");
+        }
+        if (hb_validate_filter_preset(filter_id, deint_preset, deint_custom))
+        {
+            if (deint_custom != NULL)
+            {
+                message = g_strdup_printf(
+                            _("Invalid Decomb Settings:\n\n"
+                              "Preset: %s\n"
+                              "Custom: %s\n"), deint_preset, deint_custom);
+            }
+            else
+            {
+                message = g_strdup_printf(
+                            _("Invalid Decomb Settings:\n\n"
+                              "Preset: %s\n"), deint_preset);
+            }
             ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
                                message, _("Cancel"), NULL);
             g_free(message);
             return FALSE;
         }
     }
-    // decomb
-    index = ghb_settings_combo_int(settings, "PictureDecomb");
-    if (decomb_deint && index == 1)
+
+    // Detelecine
+    const char *detel_preset;
+    detel_preset = ghb_dict_get_string(settings, "PictureDetelecine");
+    if (strcasecmp(detel_preset, "off"))
     {
-        str = ghb_dict_get_string(settings, "PictureDecombCustom");
-        if (!ghb_validate_filter_string(str, -1))
+        const char *detel_custom = NULL;
+        int filter_id;
+
+        filter_id = HB_FILTER_DETELECINE;
+        if (!strcasecmp(detel_preset, "custom"))
         {
-            message = g_strdup_printf(
-                        _("Invalid Decomb Settings:\n\n%s\n"), str);
+            detel_custom = ghb_dict_get_string(settings, "PictureDecombCustom");
+        }
+        if (hb_validate_filter_preset(filter_id, detel_preset, detel_custom))
+        {
+            if (detel_custom != NULL)
+            {
+                message = g_strdup_printf(
+                            _("Invalid Detelecine Settings:\n\n"
+                              "Preset: %s\n"
+                              "Custom: %s\n"), detel_preset, detel_custom);
+            }
+            else
+            {
+                message = g_strdup_printf(
+                            _("Invalid Detelecine Settings:\n\n"
+                              "Preset: %s\n"), detel_preset);
+            }
             ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
                                message, _("Cancel"), NULL);
             g_free(message);
             return FALSE;
         }
     }
-    // denoise
-    // TODO
+
+    // Denoise
+    const char *denoise_filter;
+    denoise_filter = ghb_dict_get_string(settings, "PictureDenoiseFilter");
+    if (strcasecmp(denoise_filter, "off"))
+    {
+        const char *denoise_preset, *denoise_tune, *denoise_custom = NULL;
+        int filter_id;
+
+        if (!strcasecmp(denoise_filter, "nlmeans"))
+        {
+            filter_id = HB_FILTER_NLMEANS;
+        }
+        else if (!strcasecmp(denoise_filter, "hqdn3d"))
+        {
+            filter_id = HB_FILTER_HQDN3D;
+        }
+        else
+        {
+            message = g_strdup_printf(
+                        _("Invalid Denoise Filter: %s\n"), denoise_filter);
+            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
+            g_free(message);
+            return FALSE;
+        }
+        denoise_preset = ghb_dict_get_string(settings, "PictureDenoisePreset");
+        denoise_tune   = ghb_dict_get_string(settings, "PictureDenoiseTune");
+        if (!strcasecmp(denoise_preset, "custom"))
+        {
+            denoise_custom = ghb_dict_get_string(settings,
+                                               "PictureDenoiseCustom");
+        }
+        if (hb_validate_filter_preset(filter_id, denoise_preset,
+                denoise_custom != NULL ? denoise_custom : denoise_tune))
+        {
+            if (denoise_custom != NULL)
+            {
+                message = g_strdup_printf(
+                            _("Invalid Denoise Settings:\n\n"
+                              "Filter: %s\n"
+                              "Preset: %s\n"
+                              "Custom: %s\n"), denoise_filter, denoise_preset,
+                                               denoise_custom);
+            }
+            else
+            {
+                message = g_strdup_printf(
+                            _("Invalid Denoise Settings:\n\n"
+                              "Filter: %s\n"
+                              "Preset: %s\n"
+                              "Tune:   %s\n"), denoise_filter, denoise_preset,
+                                               denoise_tune);
+            }
+            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
+                               message, _("Cancel"), NULL);
+            g_free(message);
+            return FALSE;
+        }
+    }
     return TRUE;
 }
 

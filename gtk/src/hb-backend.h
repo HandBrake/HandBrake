@@ -148,7 +148,6 @@ gboolean ghb_validate_audio(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_video(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_filters(GhbValue *settings, GtkWindow *parent);
-gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
 gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
