@@ -198,9 +198,9 @@ combo_opts_t vqual_granularity_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-    {N_("Off"),     "off",     0, ""},
-    {N_("NLMeans"), "nlmeans", 1, ""},
-    {N_("HQDN3D"),  "hqdn3d",  2, ""},
+    {N_("Off"),     "off",     HB_FILTER_INVALID, ""},
+    {N_("NLMeans"), "nlmeans", HB_FILTER_NLMEANS, ""},
+    {N_("HQDN3D"),  "hqdn3d",  HB_FILTER_HQDN3D,  ""},
 };
 combo_opts_t denoise_opts =
 {
@@ -3891,6 +3891,34 @@ get_preview_geometry(signal_user_data_t *ud, const hb_title_t *title,
         uiGeo->crop[3] = 0;
         uiGeo->modulus = 2;
     }
+}
+
+const char*
+ghb_lookup_filter_name(int filter_id, const char *short_name, int preset)
+{
+    hb_filter_param_t *map;
+    int ii;
+
+    if (short_name == NULL)
+    {
+        return NULL;
+    }
+    if (preset)
+    {
+        map = hb_filter_param_get_presets(filter_id);
+    }
+    else
+    {
+        map = hb_filter_param_get_tunes(filter_id);
+    }
+    for (ii = 0; map[ii].name != NULL; ii++)
+    {
+        if (!strcasecmp(map[ii].short_name, short_name))
+        {
+            return map[ii].name;
+        }
+    }
+    return NULL;
 }
 
 gboolean

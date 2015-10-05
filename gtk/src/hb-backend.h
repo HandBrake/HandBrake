@@ -152,6 +152,7 @@ void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
 gdouble ghb_lookup_combo_double(const gchar *name, const GhbValue *gval);
 gchar* ghb_lookup_combo_option(const gchar *name, const GhbValue *gval);
+const char* ghb_lookup_filter_name(int filter_id, const char *short_name, int preset);
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
 
