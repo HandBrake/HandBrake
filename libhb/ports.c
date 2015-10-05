@@ -1337,7 +1337,7 @@ void hb_system_sleep_private_disable(void *opaque)
         return;
     }
 
-    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep,
+    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
                                                    kIOPMAssertionLevelOn,
                                                    reasonForActivity,
                                                    assertionID);
