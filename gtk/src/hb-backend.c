@@ -3911,6 +3911,10 @@ ghb_lookup_filter_name(int filter_id, const char *short_name, int preset)
     {
         map = hb_filter_param_get_tunes(filter_id);
     }
+    if (map == NULL)
+    {
+        return NULL;
+    }
     for (ii = 0; map[ii].name != NULL; ii++)
     {
         if (!strcasecmp(map[ii].short_name, short_name))
@@ -4009,7 +4013,8 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         filter_id = HB_FILTER_DETELECINE;
         if (!strcasecmp(detel_preset, "custom"))
         {
-            detel_custom = ghb_dict_get_string(settings, "PictureDecombCustom");
+            detel_custom = ghb_dict_get_string(settings,
+                                               "PictureDetelecineCustom");
         }
         if (hb_validate_filter_preset(filter_id, detel_preset, detel_custom))
         {
@@ -4038,7 +4043,8 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
     denoise_filter = ghb_dict_get_string(settings, "PictureDenoiseFilter");
     if (strcasecmp(denoise_filter, "off"))
     {
-        const char *denoise_preset, *denoise_tune, *denoise_custom = NULL;
+        const char *denoise_preset;
+        const char *denoise_tune = NULL, *denoise_custom = NULL;
         int filter_id;
 
         if (!strcasecmp(denoise_filter, "nlmeans"))
@@ -4059,7 +4065,10 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
             return FALSE;
         }
         denoise_preset = ghb_dict_get_string(settings, "PictureDenoisePreset");
-        denoise_tune   = ghb_dict_get_string(settings, "PictureDenoiseTune");
+        if (filter_id == HB_FILTER_NLMEANS)
+        {
+            denoise_tune = ghb_dict_get_string(settings, "PictureDenoiseTune");
+        }
         if (!strcasecmp(denoise_preset, "custom"))
         {
             denoise_custom = ghb_dict_get_string(settings,

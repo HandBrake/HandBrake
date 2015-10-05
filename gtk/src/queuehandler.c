@@ -394,7 +394,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
                 XPRINT(" %s", denoise_preset);
                 const char *tune;
                 tune = ghb_dict_get_string(settings, "PictureDenoiseTune");
-                if (denoise == HB_FILTER_NLMEANS &&
+                if (denoise == HB_FILTER_NLMEANS && denoise_tune != NULL &&
                     tune != NULL && strcasecmp(tune, "none"))
                 {
                     XPRINT(",%s", denoise_tune);
