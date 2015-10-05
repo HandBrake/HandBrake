@@ -273,8 +273,6 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     ghb_dict_copy(settings, preset);
 
     // Fix up all the internal settings that are derived from preset values.
-    ghb_dict_set_bool(settings, "PictureDeinterlaceDecomb",
-        !ghb_dict_get_bool(settings, "PictureDecombDeinterlace"));
 
     int width, height;
     width = ghb_dict_get_int(settings, "PictureWidth");
@@ -495,6 +493,8 @@ static const char *widget_priority_list[] =
     "VideoEncoder",
     "VideoQualityGranularity",
     "AudioEncoder",
+    "PictureDeinterlaceFilter",
+    "PictureDeinterlacePreset",
     NULL
 };
 

@@ -57,7 +57,6 @@ static hb_filter_param_t detelecine_presets[] =
 
 static hb_filter_param_t decomb_presets[] =
 {
-    { 0, "Off",         "off",        hb_filter_off     },
     { 1, "Custom",      "custom",     NULL              },
     { 2, "Default",     "default",    ""                },
     { 3, "Fast",        "fast",       "7:2:6:9:1:80"    },
@@ -67,7 +66,6 @@ static hb_filter_param_t decomb_presets[] =
 
 static hb_filter_param_t deinterlace_presets[] =
 {
-    { 0, "Off",         "off",        hb_filter_off     },
     { 1, "Custom",      "custom",     NULL              },
     { 2, "Fast",        "fast",       "0:-1:-1:0:1"     },
     { 3, "Slow",        "slow",       "1:-1:-1:0:1"     },

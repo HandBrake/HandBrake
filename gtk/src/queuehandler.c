@@ -293,31 +293,21 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Next line in the display (Filter settings)
     // Filters: - Deinterlace
-    gint deblock, denoise;
-    gboolean decomb, deint, detel;
-    const gchar *decomb_opt, *deint_opt;
-    const gchar *decomb_preset, *deint_preset, *detel_preset;
-    const gchar *denoise_preset, *denoise_tune;
-    const gchar *detel_cust, *deint_cust, *decomb_cust, *denoise_cust;
-    gchar *denoise_opt;
-    gboolean decomb_deint;
-    gboolean grayscale;
-    gboolean filters;
+    gint deblock, denoise, deint;
+    const gchar *deint_preset, *detel_preset, *denoise_preset;
+    const gchar *denoise_tune;
+    const gchar *deint_cust, *detel_cust, *denoise_cust;
+    gchar *deint_opt, *denoise_opt;
+    gboolean grayscale, detel, filters;
 
-    decomb_deint = ghb_dict_get_bool(settings, "PictureDecombDeinterlace");
-    decomb_preset = ghb_dict_get_string(settings, "PictureDecomb");
-    decomb = decomb_preset != NULL && !!strcasecmp(decomb_preset, "off") &&
-             decomb_deint;
-    decomb_opt = ghb_lookup_filter_name(HB_FILTER_DECOMB,
-                    ghb_dict_get_string(settings, "PictureDecomb"), 1);
-    decomb_cust = ghb_dict_get_string(settings, "PictureDecombCustom");
-
-    deint_preset = ghb_dict_get_string(settings, "PictureDeinterlace");
-    deint = deint_preset != NULL && !!strcasecmp(deint_preset, "off") &&
-             !decomb_deint;
-    deint_opt = ghb_lookup_filter_name(HB_FILTER_DEINTERLACE,
-                    ghb_dict_get_string(settings, "PictureDeinterlace"), 1);
-    deint_cust = ghb_dict_get_string(settings, "PictureDeinterlaceCustom");
+    deint = ghb_settings_combo_int(settings, "PictureDeinterlaceFilter");
+    deint_opt = ghb_settings_combo_option(settings, "PictureDeinterlaceFilter");
+    if (deint != HB_FILTER_INVALID)
+    {
+        deint_preset = ghb_lookup_filter_name(deint,
+                ghb_dict_get_string(settings, "PictureDeinterlacePreset"), 1);
+        deint_cust = ghb_dict_get_string(settings, "PictureDeinterlaceCustom");
+    }
 
     detel_preset = ghb_dict_get_string(settings, "PictureDetelecine");
     detel = detel_preset != NULL && !!strcasecmp(detel_preset, "off");
@@ -333,14 +323,15 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
                     ghb_dict_get_string(settings, "PictureDenoisePreset"), 1);
         denoise_tune = ghb_lookup_filter_name(denoise,
                     ghb_dict_get_string(settings, "PictureDenoiseTune"), 0);
-
         denoise_cust = ghb_dict_get_string(settings, "PictureDenoiseCustom");
     }
 
     grayscale = ghb_dict_get_bool(settings, "VideoGrayScale");
 
-    filters = detel || decomb || deint || grayscale ||
-              denoise != HB_FILTER_INVALID || (deblock >= 5);
+    filters = detel || grayscale ||
+              deint   != HB_FILTER_INVALID ||
+              denoise != HB_FILTER_INVALID ||
+              (deblock >= 5);
     if (filters)
     {
         const char *prefix = " ";
@@ -354,35 +345,24 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
             }
             prefix = " - ";
         }
-        if (decomb)
+        if (deint != HB_FILTER_INVALID)
         {
-            XPRINT(_("%sDecomb"), prefix);
-            if (!strcasecmp(decomb_preset, "custom"))
-            {
-                XPRINT(": %s", decomb_cust);
-            }
-            else
-            {
-                XPRINT(": %s", decomb_opt);
-            }
-            prefix = " - ";
-        }
-        if (deint)
-        {
-            XPRINT(_("%sDeinterlace"), prefix);
-            if (!strcasecmp(deint_preset, "custom"))
+            XPRINT(_("%s%s:"), prefix, deint_opt);
+            const char *preset;
+            preset = ghb_dict_get_string(settings, "PictureDeinterlacePreset");
+            if (!strcasecmp(preset, "custom"))
             {
                 XPRINT(": %s", deint_cust);
             }
             else
             {
-                XPRINT(": %s", deint_opt);
+                XPRINT(" %s", deint_preset);
             }
             prefix = " - ";
         }
         if (denoise != HB_FILTER_INVALID)
         {
-            XPRINT(_("%sDenoise Filter %s:"), prefix, denoise_opt);
+            XPRINT(_("%sDenoise %s:"), prefix, denoise_opt);
             const char *preset;
             preset = ghb_dict_get_string(settings, "PictureDenoisePreset");
             if (preset && !strcasecmp(preset, "custom"))
@@ -414,6 +394,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
         }
         XPRINT("</small>\n");
     }
+    free(deint_opt);
     free(denoise_opt);
 
     // Next line in the display (Video Encoder)

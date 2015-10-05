@@ -3429,41 +3429,42 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoGrayScale", hb_value_bool(grayscale));
     }
-    if (deinterlace_disable)
+    if (decomb_disable || deinterlace_disable)
     {
-        hb_dict_set(preset, "PictureDeinterlace", hb_value_string("off"));
+        hb_dict_set(preset, "PictureDeinterlaceFilter", hb_value_string("off"));
     }
     if (deinterlace != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(0));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("deinterlace"));
         if (!deinterlace_custom)
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string(deinterlace));
         }
         else
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDeinterlaceCustom",
                         hb_value_string(deinterlace));
         }
     }
-    if (decomb_disable)
-    {
-        hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
-    }
     if (decomb != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(1));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("decomb"));
         if (!decomb_custom)
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string(decomb));
         }
         else
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string("custom"));
-            hb_dict_set(preset, "PictureDecombCustom", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureDeinterlaceCustom",
+                        hb_value_string(decomb));
         }
     }
     if (detelecine_disable)

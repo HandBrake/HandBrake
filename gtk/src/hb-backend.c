@@ -196,6 +196,18 @@ combo_opts_t vqual_granularity_opts =
     d_vqual_granularity_opts
 };
 
+static options_map_t d_deint_opts[] =
+{
+    {N_("Off"),         "off",         HB_FILTER_INVALID,     ""},
+    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB,      ""},
+    {N_("Deinterlace"), "deinterlace", HB_FILTER_DEINTERLACE, ""},
+};
+combo_opts_t deint_opts =
+{
+    sizeof(d_deint_opts)/sizeof(options_map_t),
+    d_deint_opts
+};
+
 static options_map_t d_denoise_opts[] =
 {
     {N_("Off"),     "off",     HB_FILTER_INVALID, ""},
@@ -324,6 +336,12 @@ typedef struct
     gboolean preset;
 } filter_opts_t;
 
+static filter_opts_t deint_preset_opts =
+{
+    .filter_id = HB_FILTER_DECOMB,
+    .preset    = TRUE
+};
+
 static filter_opts_t nlmeans_preset_opts =
 {
     .filter_id = HB_FILTER_NLMEANS,
@@ -347,18 +365,6 @@ static filter_opts_t hqdn3d_preset_opts =
 static filter_opts_t detel_opts =
 {
     .filter_id = HB_FILTER_DETELECINE,
-    .preset    = TRUE
-};
-
-static filter_opts_t decomb_opts =
-{
-    .filter_id = HB_FILTER_DECOMB,
-    .preset    = TRUE
-};
-
-static filter_opts_t deint_opts =
-{
-    .filter_id = HB_FILTER_DEINTERLACE,
     .preset    = TRUE
 };
 
@@ -410,11 +416,14 @@ static void container_opts_set(signal_user_data_t *ud, const gchar *name,
                                void *opts, const void* data);
 static void filter_opts_set(signal_user_data_t *ud, const gchar *name,
                            void *opts, const void* data);
+static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
+                           void *vopts, const void* data);
 
 static GhbValue * generic_opt_get(const char *name, const void *opts,
                                   const GhbValue *gval, GhbType type);
 static GhbValue * filter_opt_get(const char *name, const void *opts,
                                 const GhbValue *gval, GhbType type);
+
 combo_name_map_t combo_name_map[] =
 {
     {
@@ -484,15 +493,15 @@ combo_name_map_t combo_name_map[] =
         generic_opt_get
     },
     {
-        "PictureDeinterlace",
+        "PictureDeinterlaceFilter",
         &deint_opts,
-        filter_opts_set,
-        filter_opt_get
+        small_opts_set,
+        generic_opt_get
     },
     {
-        "PictureDecomb",
-        &decomb_opts,
-        filter_opts_set,
+        "PictureDeinterlacePreset",
+        &deint_preset_opts,
+        deint_opts_set,
         filter_opt_get
     },
     {
@@ -2740,6 +2749,18 @@ filter_opts_set(signal_user_data_t *ud, const gchar *name,
     filter_opts_set2(ud, name, opts->filter_id, opts->preset);
 }
 
+static void
+deint_opts_set(signal_user_data_t *ud, const gchar *name,
+               void *vopts, const void* data)
+{
+    (void)data;  // Silence "unused variable" warning
+
+    filter_opts_t *opts = (filter_opts_t*)vopts;
+    opts->filter_id = ghb_settings_combo_int(ud->settings,
+                                             "PictureDeinterlaceFilter");
+    filter_opts_set2(ud, name, opts->filter_id, opts->preset);
+}
+
 combo_name_map_t*
 find_combo_map(const gchar *name)
 {
@@ -2936,7 +2957,6 @@ ghb_update_ui_combo_box(
 
     if (name != NULL)
     {
-        g_debug("ghb_update_ui_combo_box() %s\n", name);
         // Clearing a combo box causes a rash of "changed" events, even when
         // the active item is -1 (inactive).  To control things, I'm disabling
         // the event till things are settled down.
@@ -3931,16 +3951,16 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
     gchar *message;
 
     // Deinterlace
-    gboolean decomb_deint;
-    const char *deint_preset;
-    decomb_deint = ghb_dict_get_bool(settings, "PictureDecombDeinterlace");
-    deint_preset = ghb_dict_get_string(settings, "PictureDeinterlace");
-    if (!decomb_deint && strcasecmp(deint_preset, "off"))
+    int filter_id;
+    filter_id = ghb_settings_combo_int(settings, "PictureDeinterlaceFilter");
+    if (filter_id != HB_FILTER_INVALID)
     {
-        const char *deint_custom = NULL;
-        int filter_id;
+        const char *deint_filter, *deint_preset, *deint_custom = NULL;
 
-        filter_id = HB_FILTER_DEINTERLACE;
+        deint_filter = ghb_dict_get_string(settings,
+                                           "PictureDeinterlaceFilter");
+        deint_preset = ghb_dict_get_string(settings,
+                                           "PictureDeinterlacePreset");
         if (!strcasecmp(deint_preset, "custom"))
         {
             deint_custom = ghb_dict_get_string(settings,
@@ -3952,48 +3972,17 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
             {
                 message = g_strdup_printf(
                             _("Invalid Deinterlace Settings:\n\n"
+                              "Filter: %s\n"
                               "Preset: %s\n"
-                              "Custom: %s\n"), deint_preset, deint_custom);
+                              "Custom: %s\n"), deint_filter, deint_preset,
+                                               deint_custom);
             }
             else
             {
                 message = g_strdup_printf(
                             _("Invalid Deinterlace Settings:\n\n"
-                              "Preset: %s\n"), deint_preset);
-            }
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
-            return FALSE;
-        }
-    }
-
-    // Decomb
-    deint_preset = ghb_dict_get_string(settings, "PictureDecomb");
-    if (decomb_deint && strcasecmp(deint_preset, "off"))
-    {
-        const char *deint_custom = NULL;
-        int filter_id;
-
-        filter_id = HB_FILTER_DECOMB;
-        if (!strcasecmp(deint_preset, "custom"))
-        {
-            deint_custom = ghb_dict_get_string(settings, "PictureDecombCustom");
-        }
-        if (hb_validate_filter_preset(filter_id, deint_preset, deint_custom))
-        {
-            if (deint_custom != NULL)
-            {
-                message = g_strdup_printf(
-                            _("Invalid Decomb Settings:\n\n"
-                              "Preset: %s\n"
-                              "Custom: %s\n"), deint_preset, deint_custom);
-            }
-            else
-            {
-                message = g_strdup_printf(
-                            _("Invalid Decomb Settings:\n\n"
-                              "Preset: %s\n"), deint_preset);
+                              "Filter: %s\n"
+                              "Preset: %s\n"), deint_filter, deint_preset);
             }
             ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
                                message, _("Cancel"), NULL);
@@ -4039,31 +4028,13 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
     }
 
     // Denoise
-    const char *denoise_filter;
-    denoise_filter = ghb_dict_get_string(settings, "PictureDenoiseFilter");
-    if (strcasecmp(denoise_filter, "off"))
+    filter_id = ghb_settings_combo_int(settings, "PictureDenoiseFilter");
+    if (filter_id != HB_FILTER_INVALID)
     {
-        const char *denoise_preset;
+        const char *denoise_filter, *denoise_preset;
         const char *denoise_tune = NULL, *denoise_custom = NULL;
-        int filter_id;
 
-        if (!strcasecmp(denoise_filter, "nlmeans"))
-        {
-            filter_id = HB_FILTER_NLMEANS;
-        }
-        else if (!strcasecmp(denoise_filter, "hqdn3d"))
-        {
-            filter_id = HB_FILTER_HQDN3D;
-        }
-        else
-        {
-            message = g_strdup_printf(
-                        _("Invalid Denoise Filter: %s\n"), denoise_filter);
-            ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
-                               message, _("Cancel"), NULL);
-            g_free(message);
-            return FALSE;
-        }
+        denoise_filter = ghb_dict_get_string(settings, "PictureDenoiseFilter");
         denoise_preset = ghb_dict_get_string(settings, "PictureDenoisePreset");
         if (filter_id == HB_FILTER_NLMEANS)
         {
@@ -4101,6 +4072,7 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
             return FALSE;
         }
     }
+
     return TRUE;
 }
 
@@ -4526,16 +4498,9 @@ ghb_get_preview_image(
     if( title == NULL ) return NULL;
 
     gboolean deinterlace;
-    if (ghb_dict_get_bool(ud->settings, "PictureDecombDeinterlace"))
-    {
-        deinterlace = ghb_settings_combo_int(ud->settings, "PictureDecomb")
-                      == 0 ? 0 : 1;
-    }
-    else
-    {
-        deinterlace = ghb_settings_combo_int(ud->settings, "PictureDeinterlace")
-                      == 0 ? 0 : 1;
-    }
+    deinterlace = ghb_settings_combo_int(ud->settings,
+                            "PictureDeinterlaceFilter") != HB_FILTER_INVALID;
+
     // Get the geometry settings for the preview.  This will disable
     // cropping if the setting to show the cropped region is enabled.
     get_preview_geometry(ud, title, &srcGeo, &uiGeo);
