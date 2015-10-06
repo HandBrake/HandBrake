@@ -77,6 +77,7 @@
 #include "ghbcellrenderertext.h"
 #include "x264handler.h"
 
+static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
@@ -3042,7 +3043,6 @@ void
 ghb_update_pending(signal_user_data_t *ud)
 {
     GtkLabel *label;
-    GtkToolButton *button;
     gint pending;
     gchar *str;
 
@@ -3052,17 +3052,7 @@ ghb_update_pending(signal_user_data_t *ud)
     gtk_label_set_text(label, str);
     g_free(str);
 
-    button = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
-    if (pending > 0)
-    {
-        str = g_strdup_printf(_("Queue (%d)"), pending);
-    }
-    else
-    {
-        str = g_strdup_printf(_("Queue"));
-    }
-    gtk_tool_button_set_label(button, str);
-    g_free(str);
+    update_queue_labels(ud);
 }
 
 GhbValue*
@@ -3843,20 +3833,36 @@ hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
 }
 
 static void
-update_queue_labels(signal_user_data_t *ud, gboolean active)
+update_queue_labels(signal_user_data_t *ud)
 {
     GtkToolButton *button;
+    gboolean       active;
+    gint           pending;
+    const gchar   *show_hide;
+    gchar         *str;
 
-    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    button  = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    active  = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button));
+    pending = queue_pending_count(ud->queue);
 
     if (!active)
     {
-        gtk_tool_button_set_label(button, "Show\nQueue");
+        show_hide = _("Show\nQueue");
     }
     else
     {
-        gtk_tool_button_set_label(button, "Hide\nQueue");
+        show_hide = _("Hide\nQueue");
     }
+    if (pending > 0)
+    {
+        str = g_strdup_printf("%s (%d)", show_hide, pending);
+    }
+    else
+    {
+        str = g_strdup_printf("%s", show_hide);
+    }
+    gtk_tool_button_set_label(button, str);
+    g_free(str);
 }
 
 G_MODULE_EXPORT void
@@ -3874,7 +3880,7 @@ show_queue_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     else
         tab = GHB_WIDGET(ud->builder, "settings_tab");
     gtk_stack_set_visible_child(stack, tab);
-    update_queue_labels(ud, active);
+    update_queue_labels(ud);
 
     menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder, "show_queue_menu"));
     gtk_check_menu_item_set_active(menuitem, active);
