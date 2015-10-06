@@ -8,52 +8,16 @@
 #import "HBPreviewGenerator.h"
 #import "HBPictureController.h"
 
+#import "HBPreviewView.h"
+
 #import <QTKit/QTKit.h>
+#import "QTKit+HBQTMovieExtensions.h"
 
-@implementation QTMovieView (HBQTMovieViewExtensions)
+#define ANIMATION_DUR 0.15
 
-- (void) mouseMoved: (NSEvent *) theEvent
-{
-    [super mouseMoved:theEvent];
-}
-
-@end
-
-@implementation QTMovie (HBQTMovieExtensions)
-
-- (BOOL) isPlaying
-{
-    if ([self rate] > 0)
-        return YES;
-    else
-        return NO;
-}
-
-- (NSString *) timecode
-{
-    QTTime time = [self currentTime];
-    double timeInSeconds = (double)time.timeValue / time.timeScale;
-	UInt16 seconds = (UInt16)fmod(timeInSeconds, 60.0);
-	UInt16 minutes = (UInt16)fmod(timeInSeconds / 60.0, 60.0);
-	UInt16 hours = (UInt16)(timeInSeconds / (60.0 * 60.0));
-	UInt16 milliseconds = (UInt16)(timeInSeconds - (int) timeInSeconds) * 1000;
-	return [NSString stringWithFormat:@"%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds];
-}
-
-- (void) setCurrentTimeDouble: (double) value
-{
-	long timeScale = [[self attributeForKey:QTMovieTimeScaleAttribute] longValue];
-	[self setCurrentTime:QTMakeTime((long long)value * timeScale, timeScale)];
-}
-
-@end
-
-#define BORDER_SIZE 2.0
 // make min width and height of preview window large enough for hud
 #define MIN_WIDTH 480.0
 #define MIN_HEIGHT 360.0
-
-#define ANIMATION_DUR 0.15
 
 typedef enum ViewMode : NSUInteger {
     ViewModePicturePreview,
@@ -91,13 +55,8 @@ typedef enum ViewMode : NSUInteger {
 
 @property (nonatomic, readwrite) HBPictureController *pictureSettingsWindow;
 
-@property (nonatomic, strong) CALayer *backLayer;
-@property (nonatomic, strong) CALayer *pictureLayer;
-
-@property (nonatomic) CGFloat backingScaleFactor;
-
 @property (nonatomic) ViewMode currentViewMode;
-@property (nonatomic) BOOL scaleToScreen;
+@property (nonatomic) NSPoint windowCenterPoint;
 
 @property (nonatomic, strong) NSTimer *hudTimer;
 
@@ -106,21 +65,7 @@ typedef enum ViewMode : NSUInteger {
 @property (nonatomic, strong) QTMovie *movie;
 @property (nonatomic, strong) NSTimer *movieTimer;
 
-/* Pictures HUD actions */
-- (IBAction) previewDurationPopUpChanged: (id) sender;
-- (IBAction) pictureSliderChanged: (id) sender;
-- (IBAction) showPictureSettings:(id)sender;
-- (IBAction) toggleScaleToScreen:(id)sender;
-
-- (IBAction) cancelCreateMoviePreview: (id) sender;
-- (IBAction) createMoviePreview: (id) sender;
-
-/* Movie HUD actions */
-- (IBAction) showPicturesPreview: (id) sender;
-- (IBAction) toggleMoviePreviewPlayPause: (id) sender;
-- (IBAction) moviePlaybackGoToBeginning: (id) sender;
-- (IBAction) moviePlaybackGoToEnd: (id) sender;
-- (IBAction) previewScrubberChanged: (id) sender;
+@property (weak) IBOutlet HBPreviewView *previewView;
 
 @end
 
@@ -134,83 +79,49 @@ typedef enum ViewMode : NSUInteger {
 
 - (void)windowDidLoad
 {
-    [[self window] setDelegate:self];
+    self.window.contentView.wantsLayer = YES;
 
-    if( ![[self window] setFrameUsingName:@"Preview"] )
-        [[self window] center];
+    self.windowCenterPoint = [self centerPoint];
 
-    [self setWindowFrameAutosaveName:@"Preview"];
-    [[self window] setExcludedFromWindowsMenu:YES];
+    self.window.excludedFromWindowsMenu = YES;
+    self.window.acceptsMouseMovedEvents = YES;
 
-    /* lets set the preview window to accept mouse moved events */
-    [[self window] setAcceptsMouseMovedEvents:YES];
-
-    /* we set the progress indicator to not use threaded animation
-     * as it causes a conflict with the qtmovieview's controllerbar
-     */
-    [fMovieCreationProgressIndicator setUsesThreadedAnimation:NO];
-
-	[fMovieView setHidden:YES];
-    [fMovieView setDelegate:self];
-    [fMovieView setControllerVisible:NO];
-
-    /* we set the preview length popup in seconds */
+    // we set the preview length popup in seconds
     [fPreviewMovieLengthPopUp removeAllItems];
     [fPreviewMovieLengthPopUp addItemsWithTitles:@[@"15", @"30", @"45", @"60", @"90",
                                                    @"120", @"150", @"180", @"210", @"240"]];
 
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"])
+    {
         [fPreviewMovieLengthPopUp selectItemWithTitle:[[NSUserDefaults standardUserDefaults]
                                                        objectForKey:@"PreviewLength"]];
-    if (![fPreviewMovieLengthPopUp selectedItem])
-        /* currently hard set default to 15 seconds */
+    }
+    if (!fPreviewMovieLengthPopUp.selectedItem)
+    {
+        // currently hard set default to 15 seconds
         [fPreviewMovieLengthPopUp selectItemAtIndex: 0];
+    }
 
-    /* Setup our layers for core animation */
-    [[[self window] contentView] setWantsLayer:YES];
-
-    self.backLayer = [CALayer layer];
-    [self.backLayer setBounds:CGRectMake(0.0, 0.0, MIN_WIDTH, MIN_HEIGHT)];
-    [self.backLayer setPosition:CGPointMake([[[self window] contentView] frame].size.width /2,
-                                            [[[self window] contentView] frame].size.height /2)];
-
-    [self.backLayer setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
-    CGColorRef white = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
-    [self.backLayer setBackgroundColor: white];
-    CFRelease(white);
-    [self.backLayer setShadowOpacity:0.5f];
-    [self.backLayer setShadowOffset:CGSizeMake(0, 0)];
-
-    self.pictureLayer = [CALayer layer];
-    [self.pictureLayer setBounds:CGRectMake(0.0, 0.0, MIN_WIDTH - (BORDER_SIZE * 2), MIN_HEIGHT - (BORDER_SIZE * 2))];
-    [self.pictureLayer setPosition:CGPointMake([[[self window] contentView] frame].size.width /2,
-                                               [[[self window] contentView] frame].size.height /2)];
-
-    [self.pictureLayer setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
-
-    // Disable fade on contents change
-    NSMutableDictionary *actions = [NSMutableDictionary
-                                    dictionaryWithDictionary:[self.pictureLayer actions]];
-
-    actions[@"contents"] = [NSNull null];
-    [self.pictureLayer setActions:actions];
-
-    [[[[self window] contentView] layer] insertSublayer:self.backLayer below: [fMovieView layer]];
-    [[[[self window] contentView] layer] insertSublayer:self.pictureLayer below: [fMovieView layer]];
-
-    /* relocate our hud origins */
-    NSPoint hudControlBoxOrigin = [fMoviePlaybackControlBox frame].origin;
-    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
+    // Relocate our hud origins.
+    NSPoint hudControlBoxOrigin = fMoviePlaybackControlBox.frame.origin;
+    fPictureControlBox.frameOrigin = hudControlBoxOrigin;
+    fEncodingControlBox.frameOrigin = hudControlBoxOrigin;
+    fMoviePlaybackControlBox.frameOrigin = hudControlBoxOrigin;
 
     [self hideHud];
 
-    /* set the current scale factor */
-    if( [[self window] respondsToSelector:@selector( backingScaleFactor )] )
-        self.backingScaleFactor = [[self window] backingScaleFactor];
-    else
-        self.backingScaleFactor = 1.0;
+    fMovieView.hidden = YES;
+    fMovieView.delegate = self;
+    [fMovieView setControllerVisible:NO];
+}
+
+- (void)dealloc
+{
+    [self removeMovieObservers];
+
+    [_hudTimer invalidate];
+    [_movieTimer invalidate];
+    [_generator cancel];
 }
 
 - (void)setGenerator:(HBPreviewGenerator *)generator
@@ -237,25 +148,25 @@ typedef enum ViewMode : NSUInteger {
         }
 
         [self switchViewToMode:ViewModePicturePreview];
-        [self displayPreview];
+        [self displayPreviewAtIndex:self.pictureIndex];
     }
     else
     {
-        [self.pictureLayer setContents:nil];
+        [self.previewView setImage:nil];
         self.window.title = NSLocalizedString(@"Preview", nil);
     }
 }
 
-- (void) reloadPreviews
+- (void)reloadPreviews
 {
     if (self.generator)
     {
         [self switchViewToMode:ViewModePicturePreview];
-        [self displayPreview];
+        [self displayPreviewAtIndex:self.pictureIndex];
     }
 }
 
-- (void) showWindow: (id) sender
+- (void)showWindow:(id)sender
 {
     [super showWindow:sender];
 
@@ -269,7 +180,7 @@ typedef enum ViewMode : NSUInteger {
     }
 }
 
-- (void) windowWillClose: (NSNotification *) aNotification
+- (void)windowWillClose:(NSNotification *)aNotification
 {
     if (self.currentViewMode == ViewModeEncoding)
     {
@@ -285,7 +196,7 @@ typedef enum ViewMode : NSUInteger {
     [self.generator purgeImageCache];
 }
 
-- (void) windowDidChangeBackingProperties: (NSNotification *) notification
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification
 {
     NSWindow *theWindow = (NSWindow *)[notification object];
 
@@ -297,55 +208,35 @@ typedef enum ViewMode : NSUInteger {
     {
         // Scale factor changed, update the preview window
         // to the new situation
-        self.backingScaleFactor = newBackingScaleFactor;
         if (self.generator)
+        {
             [self reloadPreviews];
+        }
     }
 }
 
+#pragma mark - Window sizing
+
 /**
- * Given the size of the preview image to be shown, returns the best possible
- * size for the view.
+ *  Calculates and returns the center point of the window
  */
-- (NSSize) optimalViewSizeForImageSize: (NSSize) imageSize
+- (NSPoint)centerPoint {
+    NSPoint center = NSMakePoint(floor(self.window.frame.origin.x + self.window.frame.size.width / 2),
+                                 floor(self.window.frame.origin.y + self.window.frame.size.height / 2));
+    return center;
+}
+
+- (void)windowDidMove:(NSNotification *)notification
 {
-    CGFloat minWidth = MIN_WIDTH;
-    CGFloat minHeight = MIN_HEIGHT;
-
-    NSSize screenSize = [[[self window] screen] visibleFrame].size;
-    CGFloat maxWidth = screenSize.width;
-    CGFloat maxHeight = screenSize.height;
-
-    NSSize resultSize = imageSize;
-    CGFloat resultPar = resultSize.width / resultSize.height;
-
-    //note, a mbp 15" at 1440 x 900 is a 1.6 ar
-    CGFloat screenAspect = screenSize.width / screenSize.height;
-
-    if ( resultSize.width > maxWidth || resultSize.height > maxHeight )
+    if (self.previewView.fitToView == NO)
     {
-    	// Source is larger than screen in one or more dimensions
-        if ( resultPar > screenAspect )
-        {
-            // Source aspect wider than screen aspect, snap to max width and vary height
-            resultSize.width = maxWidth;
-            resultSize.height = (maxWidth / resultPar);
-        }
-        else
-        {
-            // Source aspect narrower than screen aspect, snap to max height vary width
-            resultSize.height = maxHeight;
-            resultSize.width = (maxHeight * resultPar);
-        }
+        self.windowCenterPoint = [self centerPoint];
     }
+}
 
-    // If necessary, grow to minimum dimensions to ensure controls overlay is not obstructed
-    if ( resultSize.width < minWidth )
-        resultSize.width = minWidth;
-    if ( resultSize.height < minHeight )
-        resultSize.height = minHeight;
-
-    return resultSize;
+- (void)windowDidResize:(NSNotification *)notification
+{
+    [self updateSizeLabels];
 }
 
 /**
@@ -353,22 +244,20 @@ typedef enum ViewMode : NSUInteger {
  */
 - (void)resizeWindowForViewSize:(NSSize)viewSize animate:(BOOL)performAnimation
 {
-    NSSize currentSize = [[[self window] contentView] frame].size;
-    NSRect frame = [[self window] frame];
+    NSWindow *window = self.window;
+    NSSize currentSize = window.contentView.frame.size;
+    NSRect frame = window.frame;
 
     // Calculate border around content region of the frame
     int borderX = (int)(frame.size.width - currentSize.width);
     int borderY = (int)(frame.size.height - currentSize.height);
 
     // Make sure the frame is smaller than the screen
-    NSSize maxSize = [[[self window] screen] visibleFrame].size;
+    NSSize maxSize = window.screen.visibleFrame.size;
 
-    /* if we are not Scale To Screen, put an 10% of visible screen on the window */
-    if (self.scaleToScreen == NO)
-    {
-        maxSize.width = maxSize.width * 0.90;
-        maxSize.height = maxSize.height * 0.90;
-    }
+    // if we are not Scale To Screen, put an 10% of visible screen on the window
+    maxSize.width = maxSize.width * 0.90;
+    maxSize.height = maxSize.height * 0.90;
 
     // Set the new frame size
     // Add the border to the new frame size so that the content region
@@ -376,54 +265,74 @@ typedef enum ViewMode : NSUInteger {
     frame.size.width = viewSize.width + borderX;
     frame.size.height = viewSize.height + borderY;
 
-    /* compare frame to max size of screen */
-    if( frame.size.width > maxSize.width )
+    // compare frame to max size of screen
+    if (frame.size.width > maxSize.width)
     {
         frame.size.width = maxSize.width;
     }
-    if( frame.size.height > maxSize.height )
+    if (frame.size.height > maxSize.height)
     {
         frame.size.height = maxSize.height;
     }
 
-    /* Since upon launch we can open up the preview window if it was open
-     * the last time we quit (and at the size it was) we want to make
-     * sure that upon resize we do not have the window off the screen
-     * So check the origin against the screen origin and adjust if
-     * necessary.
-     */
-    NSSize screenSize = [[[self window] screen] visibleFrame].size;
-    NSPoint screenOrigin = [[[self window] screen] visibleFrame].origin;
+    // Since upon launch we can open up the preview window if it was open
+    // the last time we quit (and at the size it was) we want to make
+    // sure that upon resize we do not have the window off the screen
+    // So check the origin against the screen origin and adjust if
+    // necessary.
+    NSSize screenSize = window.screen.visibleFrame.size;
+    NSPoint screenOrigin = window.screen.visibleFrame.origin;
 
-    /* our origin is off the screen to the left*/
+    frame.origin.x = self.windowCenterPoint.x - floor(frame.size.width / 2);
+    frame.origin.y = self.windowCenterPoint.y - floor(frame.size.height / 2);
+
+    // our origin is off the screen to the left
     if (frame.origin.x < screenOrigin.x)
     {
-        /* so shift our origin to the right */
+        // so shift our origin to the right
         frame.origin.x = screenOrigin.x;
     }
     else if ((frame.origin.x + frame.size.width) > (screenOrigin.x + screenSize.width))
     {
-        /* the right side of the preview is off the screen, so shift to the left */
+        // the right side of the preview is off the screen, so shift to the left
         frame.origin.x = (screenOrigin.x + screenSize.width) - frame.size.width;
     }
 
-    if (self.scaleToScreen == YES)
-    {
-        /* our origin is off the screen to the top*/
-        if (frame.origin.y < screenOrigin.y)
-        {
-            /* so shift our origin to the bottom */
-            frame.origin.y = screenOrigin.y;
-        }
-        else if ((frame.origin.y + frame.size.height) > (screenOrigin.y + screenSize.height))
-        {
-            /* the top side of the preview is off the screen, so shift to the bottom */
-            frame.origin.y = (screenOrigin.y + screenSize.height) - frame.size.height;
-        }
-    }
-
-    [[self window] setFrame:frame display:YES animate:performAnimation];
+    [window setFrame:frame display:YES animate:performAnimation];
 }
+
+- (void)updateSizeLabels
+{
+    if (self.generator)
+    {
+        CGFloat scale = self.previewView.scale;
+
+        NSMutableString *scaleString = [NSMutableString string];
+        if (scale * 100.0 != 100)
+        {
+            [scaleString appendFormat:NSLocalizedString(@"(%.0f%% actual size)", nil), scale * 100.0];
+        }
+        else
+        {
+            [scaleString appendString:NSLocalizedString(@"(Actual size)", nil)];
+        }
+
+        if (self.previewView.fitToView == YES)
+        {
+            [scaleString appendString:NSLocalizedString(@" Scaled To Screen", nil)];
+        }
+
+        // Set the info fields in the hud controller
+        fInfoField.stringValue = self.generator.info;
+        fscaleInfoField.stringValue = scaleString;
+
+        // Set the info field in the window title bar
+        self.window.title = [NSString stringWithFormat:NSLocalizedString(@"Preview - %@ %@", nil),
+                             self.generator.info, scaleString];
+    }
+}
+
+#pragma mark - Hud mode
 
 /**
  * Enable/Disable an arbitrary number of UI elements.
@@ -469,7 +378,7 @@ typedef enum ViewMode : NSUInteger {
             }
             else if (self.currentViewMode == ViewModeMoviePreview)
             {
-                /* Stop playback and remove the observers */
+                // Stop playback and remove the observers
                 [fMovieView pause:self];
                 [self stopMovieTimer];
                 [self removeMovieObservers];
@@ -504,7 +413,7 @@ typedef enum ViewMode : NSUInteger {
             [self initPreviewScrubberForMovie];
             [self startMovieTimer];
 
-            /* Install movie notifications */
+            // Install movie notifications
             [self addMovieObservers];
         }
             break;
@@ -516,19 +425,10 @@ typedef enum ViewMode : NSUInteger {
     self.currentViewMode = mode;
 }
 
-- (void) dealloc
-{
-    [self removeMovieObservers];
-
-    [_hudTimer invalidate];
-    [_movieTimer invalidate];
-    [_generator cancel];
-}
-
 #pragma mark -
 #pragma mark Hud Control Overlay
 
-- (void) mouseMoved: (NSEvent *) theEvent
+- (void)mouseMoved:(NSEvent *)theEvent
 {
     [super mouseMoved:theEvent];
     NSPoint mouseLoc = [theEvent locationInWindow];
@@ -621,7 +521,7 @@ typedef enum ViewMode : NSUInteger {
     [fEncodingControlBox setHidden:YES];
 }
 
-- (void) startHudTimer
+- (void)startHudTimer
 {
 	if (self.hudTimer)
     {
@@ -634,17 +534,16 @@ typedef enum ViewMode : NSUInteger {
     }
 }
 
-- (void) stopHudTimer
+- (void)stopHudTimer
 {
     [self.hudTimer invalidate];
     self.hudTimer = nil;
 }
 
-- (void) hudTimerFired: (NSTimer *)theTimer
+- (void)hudTimerFired: (NSTimer *)theTimer
 {
-    /* Regardless which control box is active, after the timer
-     * period we want either one to fade to hidden.
-     */
+    // Regardless which control box is active, after the timer
+    // period we want either one to fade to hidden.
     [self hideHudWithAnimation:fPictureControlBox];
     [self hideHudWithAnimation:fMoviePlaybackControlBox];
 
@@ -658,146 +557,58 @@ typedef enum ViewMode : NSUInteger {
  * Adjusts the window to draw the current picture (fPicture) adjusting its size as
  * necessary to display as much of the picture as possible.
  */
-- (void) displayPreview
+- (void)displayPreviewAtIndex:(NSUInteger)idx
 {
     if (self.window.isVisible)
     {
-        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.pictureIndex shouldCache:YES];
-        [self.pictureLayer setContents:(__bridge id)(fPreviewImage)];
+        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:idx shouldCache:YES];
+        [self.previewView setImage:fPreviewImage];
         CFRelease(fPreviewImage);
     }
 
-    // Set the picture size display fields below the Preview Picture
-    NSSize imageScaledSize = [self.generator imageSize];
-
-    if (self.backingScaleFactor != 1.0)
+    if (self.previewView.fitToView == NO && !(self.window.styleMask & NSFullScreenWindowMask))
     {
-        // HiDPI mode usually display everything
-        // with douple pixel count, but we don't
-        // want to double the size of the video
-        imageScaledSize.height /= self.backingScaleFactor;
-        imageScaledSize.width /= self.backingScaleFactor;
-    }
+        // Get the optimal view size for the image
+        NSSize imageScaledSize = [self.generator imageSize];
 
-    // Get the optimal view size for the image
-    NSSize viewSize = [self optimalViewSizeForImageSize:imageScaledSize];
-    viewSize.width += BORDER_SIZE * 2;
-    viewSize.height += BORDER_SIZE * 2;
-
-    NSSize windowSize;
-    if (self.scaleToScreen == YES)
-    {
-        // Scale the window to the max possible size
-        windowSize = [[[self window] screen] visibleFrame].size;
-    }
-    else
-    {
         // Scale the window to the image size
-        windowSize = viewSize;
+        NSSize windowSize = [self.previewView optimalViewSizeForImageSize:imageScaledSize minSize:NSMakeSize(MIN_WIDTH, MIN_HEIGHT)];
+        [self resizeWindowForViewSize:windowSize animate:self.window.isVisible];
     }
 
-    [self resizeWindowForViewSize:windowSize animate:self.window.isVisible];
-    NSSize areaSize = [[[self window] contentView] frame].size;
-    areaSize.width -= BORDER_SIZE * 2;
-    areaSize.height -= BORDER_SIZE * 2;
-
-    if (self.scaleToScreen == YES)
-    {
-        // We are in Scale To Screen mode so, we have to get the ratio for height and width against the window
-        // size so we can scale from there.
-        CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
-        CGFloat areaAspectRatio = areaSize.width / areaSize.height;
-
-        if (pictureAspectRatio > areaAspectRatio)
-        {
-            viewSize.width = areaSize.width;
-            viewSize.height = viewSize.width / pictureAspectRatio;
-        }
-        else
-        {
-            viewSize.height = areaSize.height;
-            viewSize.width = viewSize.height * pictureAspectRatio;
-        }
-    }
-    else
-    {
-        // If the image is larger then the window, scale the image
-        viewSize = imageScaledSize;
-
-        if (imageScaledSize.width > areaSize.width || imageScaledSize.height > areaSize.height)
-        {
-            CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
-            CGFloat areaAspectRatio = areaSize.width / areaSize.height;
-
-            if (pictureAspectRatio > areaAspectRatio)
-            {
-                viewSize.width = areaSize.width;
-                viewSize.height = viewSize.width / pictureAspectRatio;
-            }
-            else
-            {
-                viewSize.height = areaSize.height;
-                viewSize.width = viewSize.height * pictureAspectRatio;
-            }
-        }
-    }
-
-    // Resize the CALayers
-    [self.backLayer setBounds:CGRectMake(0, 0, viewSize.width + (BORDER_SIZE * 2), viewSize.height + (BORDER_SIZE * 2))];
-    [self.pictureLayer setBounds:CGRectMake(0, 0, viewSize.width, viewSize.height)];
-
-    CGFloat scale = self.pictureLayer.frame.size.width / imageScaledSize.width;
-    NSString *scaleString;
-    if (scale * 100.0 != 100)
-    {
-        scaleString = [NSString stringWithFormat:@" (%.0f%% actual size)", scale * 100.0];
-    }
-    else
-    {
-        scaleString = @"(Actual size)";
-    }
-
-    if (_scaleToScreen == YES)
-    {
-        scaleString = [scaleString stringByAppendingString:@" Scaled To Screen"];
-    }
-
-    // Set the info fields in the hud controller
-    [fInfoField setStringValue:self.generator.info];
-    [fscaleInfoField setStringValue:scaleString];
-
-    // Set the info field in the window title bar
-    [self.window setTitle:[NSString stringWithFormat:@"Preview - %@ %@", self.generator.info, scaleString]];
+    [self updateSizeLabels];
 }
 
-- (IBAction) previewDurationPopUpChanged: (id) sender
+- (IBAction)previewDurationPopUpChanged:(id)sender
 {
     [[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
 }
 
-- (IBAction) pictureSliderChanged: (id) sender
+- (IBAction)pictureSliderChanged:(id)sender
 {
     if ((self.pictureIndex != [fPictureSlider intValue] || !sender) && self.generator) {
         self.pictureIndex = [fPictureSlider intValue];
-        [self displayPreview];
+        [self displayPreviewAtIndex:self.pictureIndex];
     }
 }
 
-- (IBAction) toggleScaleToScreen: (id) sender
+- (IBAction)toggleScaleToScreen:(id)sender
 {
-    if (self.scaleToScreen == YES)
+    if (self.previewView.fitToView == YES)
     {
-        self.scaleToScreen = NO;
-        /* make sure we are set to a still preview */
-        [self displayPreview];
-        [fScaleToScreenToggleButton setTitle:@"Scale To Screen"];
+        self.previewView.fitToView = NO;
+        fScaleToScreenToggleButton.title = NSLocalizedString(@"Scale To Screen", nil);
+
+        [self displayPreviewAtIndex:self.pictureIndex];
     }
     else
     {
-        self.scaleToScreen = YES;
-        /* make sure we are set to a still preview */
-        [self displayPreview];
-        [fScaleToScreenToggleButton setTitle:@"Actual Scale"];
+        self.previewView.fitToView = YES;
+        if (!(self.window.styleMask & NSFullScreenWindowMask))
+        {
+            [self.window setFrame:self.window.screen.visibleFrame display:YES animate:YES];
+        }
+        fScaleToScreenToggleButton.title = NSLocalizedString(@"Actual Scale", nil);
     }
 }
 
@@ -834,11 +645,11 @@ typedef enum ViewMode : NSUInteger {
     {
 		NSError *outError;
 		NSDictionary *movieAttributes = @{QTMovieURLAttribute: fileURL,
-                                          QTMovieAskUnresolvedDataRefsAttribute: @(NO),
-                                          @"QTMovieOpenForPlaybackAttribute": @(YES),
-                                          @"QTMovieOpenAsyncRequiredAttribute": @(NO),
-                                          @"QTMovieOpenAsyncOKAttribute": @(NO),
-                                          @"QTMovieIsSteppableAttribute": @(YES),
+                                          QTMovieAskUnresolvedDataRefsAttribute: @NO,
+                                          @"QTMovieOpenForPlaybackAttribute": @YES,
+                                          @"QTMovieOpenAsyncRequiredAttribute": @NO,
+                                          @"QTMovieOpenAsyncOKAttribute": @NO,
+                                          @"QTMovieIsSteppableAttribute": @YES,
                                           QTMovieApertureModeAttribute: QTMovieApertureModeClean};
 
         QTMovie *movie = [[QTMovie alloc] initWithAttributes:movieAttributes error:&outError];
@@ -860,29 +671,28 @@ typedef enum ViewMode : NSUInteger {
 		}
         else
         {
-            /* Scale the fMovieView to the picture player size */
-            [fMovieView setFrameSize:[self.pictureLayer frame].size];
-            [fMovieView setFrameOrigin:[self.pictureLayer frame].origin];
+            // Scale the fMovieView to the picture player size
+            [fMovieView setFrame:self.previewView.pictureFrame];
 
             [fMovieView setMovie:movie];
             [movie setDelegate:self];
 
             // get and enable subtitles
-            NSArray *subtitlesArray = [movie tracksOfMediaType: @"sbtl"];
-            if (subtitlesArray && [subtitlesArray count])
+            NSArray *subtitlesArray = [movie tracksOfMediaType:QTMediaTypeSubtitle];
+            if (subtitlesArray.count)
             {
                 // enable the first tx3g subtitle track
-                [subtitlesArray[0] setEnabled: YES];
+                [subtitlesArray[0] setEnabled:YES];
             }
             else
             {
                 // Perian subtitles
                 subtitlesArray = [movie tracksOfMediaType: QTMediaTypeVideo];
-                if (subtitlesArray && ([subtitlesArray count] >= 2))
+                if (subtitlesArray.count >= 2)
                 {
                     // track 0 should be video, other video tracks should
                     // be subtitles; force-enable the first subs track
-                    [subtitlesArray[1] setEnabled: YES];
+                    [subtitlesArray[1] setEnabled:YES];
                 }
             }
 
@@ -915,7 +725,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (IBAction) toggleMoviePreviewPlayPause: (id) sender
 {
-    /* make sure a movie is even loaded up */
+    // make sure a movie is even loaded up
     if (self.movie)
     {
         if ([self.movie isPlaying]) // we are playing
@@ -1005,7 +815,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) addMovieObservers
 {
-    /* Notification for any time the movie rate changes */
+    // Notification for any time the movie rate changes
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(movieRateDidChange:)
                                                  name:@"QTMovieRateDidChangeNotification"
@@ -1014,7 +824,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) removeMovieObservers
 {
-    /*Notification for any time the movie rate changes */
+    // Notification for any time the movie rate changes
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"QTMovieRateDidChangeNotification"
                                                   object:self.movie];
@@ -1022,7 +832,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (void) movieRateDidChange: (NSNotification *) notification
 {
-    if ([self.movie isPlaying])
+    if (self.movie.isPlaying)
         [fPlayPauseButton setState: NSOnState];
     else
         [fPlayPauseButton setState: NSOffState];
@@ -1092,16 +902,16 @@ typedef enum ViewMode : NSUInteger {
         [super keyDown:event];
 }
 
-- (void) scrollWheel: (NSEvent *) theEvent
+- (void)scrollWheel:(NSEvent *)theEvent
 {
     if (self.currentViewMode != ViewModeEncoding)
     {
-        if ([theEvent deltaY] < 0)
+        if (theEvent.deltaY < 0)
         {
             [fPictureSlider setIntegerValue:self.pictureIndex < [fPictureSlider maxValue] ? self.pictureIndex + 1 : self.pictureIndex];
             [self pictureSliderChanged:self];
         }
-        else if ([theEvent deltaY] > 0)
+        else if (theEvent.deltaY > 0)
         {
             [fPictureSlider setIntegerValue:self.pictureIndex > [fPictureSlider minValue] ? self.pictureIndex - 1 : self.pictureIndex];
             [self pictureSliderChanged:self];
