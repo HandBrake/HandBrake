@@ -3860,7 +3860,7 @@ update_queue_labels(signal_user_data_t *ud, gboolean active)
 }
 
 G_MODULE_EXPORT void
-show_queue_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_queue_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GtkWidget        *tab;
     GtkCheckMenuItem *menuitem;
