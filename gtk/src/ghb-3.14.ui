@@ -746,30 +746,30 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="show_preview_menu">
+                      <object class="GtkCheckMenuItem" id="show_queue_menu">
+                        <property name="label" translatable="yes">_Queue</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <signal name="toggled" handler="show_queue_menu_toggled_cb" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="show_preview_menu">
                         <property name="label" translatable="yes">_Preview</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="picture_settings_alt_clicked_cb" swapped="no"/>
+                        <signal name="toggled" handler="preview_menu_toggled_cb" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="show_activity_menu">
+                      <object class="GtkCheckMenuItem" id="show_activity_menu">
                         <property name="label" translatable="yes">_Activity Window</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="show_activity_menu_clicked_cb" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="show_queue_menu">
-                        <property name="label" translatable="yes">Show _Queue</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <signal name="activate" handler="show_queue_menu_clicked_cb" swapped="no"/>
+                        <signal name="toggled" handler="show_activity_menu_toggled_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -986,9 +986,10 @@ libx264 authors:
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Queue</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Queue</property>
+                        <property name="label" translatable="yes">Show
+Queue</property>
                         <property name="icon_name">hb-showqueue</property>
-                        <signal name="toggled" handler="show_queue_clicked_cb" swapped="no"/>
+                        <signal name="toggled" handler="show_queue_toggled_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1003,9 +1004,10 @@ libx264 authors:
                         <property name="tooltip_text" translatable="yes">Open Picture Settings and Preview window.
 Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Preview</property>
+                        <property name="label" translatable="yes">Show
+Preview</property>
                         <property name="icon_name">hb-picture</property>
-                        <signal name="toggled" handler="picture_settings_clicked_cb" swapped="no"/>
+                        <signal name="toggled" handler="preview_toggled_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1019,9 +1021,10 @@ Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Activity</property>
+                        <property name="label" translatable="yes">Show
+Activity</property>
                         <property name="icon_name">hb-activity</property>
-                        <signal name="toggled" handler="show_activity_clicked_cb" swapped="no"/>
+                        <signal name="toggled" handler="show_activity_toggled_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>

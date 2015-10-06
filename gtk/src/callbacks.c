@@ -3696,21 +3696,49 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-G_MODULE_EXPORT void
-show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_activity_labels(signal_user_data_t *ud, gboolean active)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, gtk_toggle_tool_button_get_active(
-                        GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+    GtkToolButton *button;
+
+    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+
+    if (!active)
+    {
+        gtk_tool_button_set_label(button, "Show\nActivity");
+    }
+    else
+    {
+        gtk_tool_button_set_label(button, "Hide\nActivity");
+    }
 }
 
 G_MODULE_EXPORT void
-show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_activity_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET (ud->builder, "show_activity");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *activity_window;
+    GtkCheckMenuItem *menuitem;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    activity_window = GHB_WIDGET(ud->builder, "activity_window");
+    gtk_widget_set_visible(activity_window, active);
+    update_activity_labels(ud, active);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder,
+                                              "show_activity_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_activity_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean             active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT gboolean
@@ -3814,25 +3842,53 @@ hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
     gtk_widget_hide (widget);
 }
 
-G_MODULE_EXPORT void
-show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_queue_labels(signal_user_data_t *ud, gboolean active)
 {
-    GtkWidget *widget;
-    GtkStack *stack;
+    GtkToolButton *button;
 
-    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
-    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget)))
-        widget = GHB_WIDGET(ud->builder, "queue_tab");
+    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+
+    if (!active)
+    {
+        gtk_tool_button_set_label(button, "Show\nQueue");
+    }
     else
-        widget = GHB_WIDGET(ud->builder, "settings_tab");
-    gtk_stack_set_visible_child(stack, widget);
+    {
+        gtk_tool_button_set_label(button, "Hide\nQueue");
+    }
 }
 
 G_MODULE_EXPORT void
-show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_queue_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *tab;
+    GtkCheckMenuItem *menuitem;
+    GtkStack         *stack;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
+    if (active)
+        tab = GHB_WIDGET(ud->builder, "queue_tab");
+    else
+        tab = GHB_WIDGET(ud->builder, "settings_tab");
+    gtk_stack_set_visible_child(stack, tab);
+    update_queue_labels(ud, active);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder, "show_queue_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_queue_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT void
