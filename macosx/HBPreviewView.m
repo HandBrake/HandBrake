@@ -93,7 +93,7 @@
 - (void)setImage:(CGImageRef)image
 {
     _image = image;
-    self.pictureLayer.contents = (__bridge id _Nullable)(image);
+    self.pictureLayer.contents = (__bridge id)(image);
 
     // Hide the layers if there is no image
     BOOL hidden = _image == nil ? YES : NO;
