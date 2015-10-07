@@ -111,7 +111,10 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
         if ([self checkIfOutOfDate:presetsDict])
         {
-            char *updatedJson = hb_presets_import_json(cleanedJson);
+            char *updatedJson;
+            int   result;
+
+            result = hb_presets_import_json(cleanedJson, &updatedJson);
             presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:updatedJson options:0 error:NULL];
             free(updatedJson);
         }

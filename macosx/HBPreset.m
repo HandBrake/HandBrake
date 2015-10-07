@@ -98,7 +98,10 @@
     // Run the json through the libhb import function
     // to avoid importing unknowns keys.
     if (presetsJson.length) {
-        char *importedJson = hb_presets_import_json(presetsJson.UTF8String);
+        char *importedJson;
+        int   result;
+
+        result = hb_presets_import_json(presetsJson.UTF8String, &importedJson);
 
         if (importedJson)
         {

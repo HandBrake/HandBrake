@@ -84,11 +84,11 @@ char       * hb_presets_clean_json(const char *json);
 // Import a preset.  Sanitizes and converts old key/value pairs
 // to new key/value pairs.  This is applied for you by hb_presets_add(),
 // hb_presets_add_json(), hb_presets_add_file(), and hb_presets_add_path()
-void         hb_presets_import(hb_value_t *preset);
+int          hb_presets_import(hb_value_t *preset);
 
 // Import a json preset.  Sanitizes and converts old key/value pairs
 // to new key/value pairs.
-char       * hb_presets_import_json(const char *json);
+int          hb_presets_import_json(const char *in, char **out);
 
 // Register new presets with libhb from json string
 int          hb_presets_add_json(const char *json);

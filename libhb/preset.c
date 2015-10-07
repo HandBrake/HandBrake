@@ -32,7 +32,7 @@ static hb_value_t *hb_presets = NULL;
 static hb_value_t *hb_presets_builtin = NULL;
 
 static void preset_clean(hb_value_t *preset, hb_value_t *template);
-static void preset_import(hb_value_t *preset, int major, int minor, int micro);
+static int  preset_import(hb_value_t *preset, int major, int minor, int micro);
 
 enum
 {
@@ -62,6 +62,7 @@ typedef struct
     int                  major;
     int                  minor;
     int                  micro;
+    int                  result;
 } preset_import_context_t;
 
 typedef struct
@@ -150,7 +151,7 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
 static int do_preset_import(hb_value_t *preset, preset_do_context_t *do_ctx)
 {
     preset_import_context_t *ctx = (preset_import_context_t*)do_ctx;
-    preset_import(preset, ctx->major, ctx->minor, ctx->micro);
+    ctx->result |= preset_import(preset, ctx->major, ctx->minor, ctx->micro);
     return PRESET_DO_NEXT;
 }
 
@@ -2204,21 +2205,26 @@ static void import_10_0_0(hb_value_t *preset)
     import_deint_10_0_0(preset);
 }
 
-static void preset_import(hb_value_t *preset, int major, int minor, int micro)
+static int preset_import(hb_value_t *preset, int major, int minor, int micro)
 {
+    int result = 0;
+
     if (!hb_value_get_bool(hb_dict_get(preset, "Folder")))
     {
         if (major == 0 && minor == 0 && micro == 0)
         {
             // Convert legacy presets (before versioning introduced)
             import_0_0_0(preset);
+            result = 1;
         }
         else if (major == 10 && minor == 0 && micro == 0)
         {
             import_10_0_0(preset);
+            result = 1;
         }
         preset_clean(preset, hb_preset_template);
     }
+    return result;
 }
 
 int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
@@ -2243,23 +2249,35 @@ int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
     return -1;
 }
 
-void hb_presets_import(hb_value_t *preset)
+int hb_presets_import(hb_value_t *preset)
 {
     preset_import_context_t ctx;
 
     ctx.do_ctx.path.depth = 1;
+    ctx.result = 0;
     hb_presets_version(preset, &ctx.major, &ctx.minor, &ctx.micro);
     presets_do(do_preset_import, preset, (preset_do_context_t*)&ctx);
+
+    return ctx.result;
 }
 
-char * hb_presets_import_json(const char *json)
+int hb_presets_import_json(const char *in, char **out)
 {
-    hb_value_t * dict = hb_value_json(json);
-    if (dict == NULL)
-        return NULL;
+    int result;
 
-    hb_presets_import(dict);
-    char * result = hb_value_get_json(dict);
+    if (out != NULL)
+    {
+        *out = NULL;
+    }
+    hb_value_t * dict = hb_value_json(in);
+    if (dict == NULL)
+        return 0;
+
+    result = hb_presets_import(dict);
+    if (out != NULL)
+    {
+        *out = hb_value_get_json(dict);
+    }
     hb_value_free(&dict);
     return result;
 }
