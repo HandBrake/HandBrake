@@ -4893,6 +4893,9 @@ This option requires a language to be set in the Selected Languages list.</prope
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="subtitle_def_widget_changed_cb" swapped="no"/>
                           </object>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="subtitle_burn_box">
@@ -8166,7 +8169,7 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
             <signal name="leave-notify-event" handler="preview_leave_cb" swapped="no"/>
             <signal name="motion-notify-event" handler="preview_motion_cb" swapped="no"/>
             <signal name="draw" handler="preview_draw_cb" swapped="no"/>
@@ -8176,7 +8179,7 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkEventBox" id="preview_hud">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="app_paintable">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
@@ -8385,6 +8388,10 @@ Setting this to 0 means there is no maximum height.</property>
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="x">0</property>
+                <property name="y">0</property>
+              </packing>
             </child>
           </object>
         </child>
