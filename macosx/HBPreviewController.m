@@ -79,7 +79,7 @@ typedef enum ViewMode : NSUInteger {
 
 - (void)windowDidLoad
 {
-    self.window.contentView.wantsLayer = YES;
+    [self.window.contentView setWantsLayer:YES];
 
     self.windowCenterPoint = [self centerPoint];
 
@@ -245,7 +245,7 @@ typedef enum ViewMode : NSUInteger {
 - (void)resizeWindowForViewSize:(NSSize)viewSize animate:(BOOL)performAnimation
 {
     NSWindow *window = self.window;
-    NSSize currentSize = window.contentView.frame.size;
+    NSSize currentSize = [window.contentView frame].size;
     NSRect frame = window.frame;
 
     // Calculate border around content region of the frame
