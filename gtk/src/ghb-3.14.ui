@@ -552,7 +552,7 @@ libx264 authors:
         <signal name="activate" handler="show_hide_toggle_cb" swapped="no"/>
       </object>
       <object class="GtkMenuItem" id="tray_queue_pause">
-        <property name="label" translatable="yes">_Pause Queue</property>
+        <property name="label" translatable="yes">_Pause Encoding</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
@@ -608,7 +608,7 @@ libx264 authors:
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="source_open">
-                        <property name="label" translatable="yes">_Source</property>
+                        <property name="label" translatable="yes">Open _Source</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -617,7 +617,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="source_title_open">
-                        <property name="label" translatable="yes">Single _Title</property>
+                        <property name="label" translatable="yes">Open Single _Title</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -626,7 +626,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="destination_menu_item">
-                        <property name="label" translatable="yes">_Destination</property>
+                        <property name="label" translatable="yes">Set _Destination</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -697,7 +697,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="queue_start_menu">
-                        <property name="label" translatable="yes">_Start</property>
+                        <property name="label" translatable="yes">_Start Encoding</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -706,7 +706,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="queue_pause_menu">
-                        <property name="label" translatable="yes">_Pause</property>
+                        <property name="label" translatable="yes">_Pause Encoding</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -919,9 +919,28 @@ libx264 authors:
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Source</property>
+                        <property name="label" translatable="yes">Open
+Source</property>
                         <property name="icon_name">hb-source</property>
                         <signal name="clicked" handler="source_button_clicked_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="queue_add">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Add to Queue</property>
+                        <property name="is_important">True</property>
+                        <property name="label" translatable="yes">Add To
+Queue</property>
+                        <property name="icon_name">hb-add-queue</property>
+                        <signal name="clicked" handler="queue_add_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -936,7 +955,8 @@ libx264 authors:
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Start Encoding</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Start</property>
+                        <property name="label" translatable="yes">Start
+Encoding</property>
                         <property name="icon_name">hb-start</property>
                         <signal name="clicked" handler="queue_start_clicked_cb" swapped="no"/>
                       </object>
@@ -953,7 +973,8 @@ libx264 authors:
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Pause Encoding</property>
                         <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Pause</property>
+                        <property name="label" translatable="yes">Pause
+Encoding</property>
                         <property name="icon_name">hb-pause</property>
                         <signal name="clicked" handler="queue_pause_clicked_cb" swapped="no"/>
                       </object>
@@ -963,20 +984,13 @@ libx264 authors:
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="queue_add">
+                      <object class="GtkSeparatorToolItem" id="main_tool_sep1">
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Add to Queue</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Enqueue</property>
-                        <property name="icon_name">hb-add-queue</property>
-                        <signal name="clicked" handler="queue_add_clicked_cb" swapped="no"/>
+                        <property name="draw">False</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
+                        <property name="expand">True</property>
+                        <property name="homogeneous">False</property>
                       </packing>
                     </child>
                     <child>
@@ -1001,8 +1015,7 @@ Queue</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Open Picture Settings and Preview window.
-Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
+                        <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Show
 Preview</property>

@@ -1244,7 +1244,7 @@ start_scan(
 
     widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop Scan"));
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop\nScan"));
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
 
     widget = GHB_WIDGET(ud->builder, "source_open");
@@ -3293,7 +3293,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Source"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Open\nSource"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
 
         widget = GHB_WIDGET(ud->builder, "source_open");
