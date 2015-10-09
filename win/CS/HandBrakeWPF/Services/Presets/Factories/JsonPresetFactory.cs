@@ -94,53 +94,78 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Filter Settings */
             preset.Task.Grayscale = importedPreset.VideoGrayScale;
             preset.Task.Deblock = importedPreset.PictureDeblock;
-            switch (importedPreset.PictureDecomb)
+
+            switch (importedPreset.PictureDeinterlaceFilter)
             {
-                case "custom":
-                    preset.Task.Decomb = Decomb.Custom;
-                    break;
-                case "default":
+                case "decomb":
                     preset.Task.Decomb = Decomb.Default;
-                    break;
-                case "bob":
-                    preset.Task.Decomb = Decomb.Bob;
-                    break;
-                case "fast":
-                    preset.Task.Decomb = Decomb.Fast;
-                    break;
-
-                default:
-                    preset.Task.Decomb = Decomb.Off;
-                    break;
-            }
-
-            preset.Task.CustomDecomb = importedPreset.PictureDecombCustom;
-
-            if (!importedPreset.PictureDecombDeinterlace)
-            {
-                preset.Task.Decomb = Decomb.Off;
-            }
-
-            switch (importedPreset.PictureDeinterlace)
-            {
-                case "custom":
-                    preset.Task.Deinterlace = Deinterlace.Custom;
-                    break;
-                case "bob":
-                    preset.Task.Deinterlace = Deinterlace.Bob;
-                    break;
-                case "gast":
-                    preset.Task.Deinterlace = Deinterlace.Fast;
-                    break;
-                case "slow":
-                    preset.Task.Deinterlace = Deinterlace.Slow;
-                    break;
-                case "slower":
-                    preset.Task.Deinterlace = Deinterlace.Slower;
-                    break;
-                default:
                     preset.Task.Deinterlace = Deinterlace.Off;
                     break;
+                case "deinterlace":
+                    preset.Task.Decomb = Decomb.Off;
+                    preset.Task.Deinterlace = Deinterlace.Fast;
+                    break;
+                default:
+                    preset.Task.Decomb = Decomb.Off;
+                    preset.Task.Deinterlace = Deinterlace.Off;
+                    break;
+            }
+
+            if (preset.Task.Decomb != Decomb.Off)
+            {
+                switch (importedPreset.PictureDeinterlaceFilter)
+                {
+                    case "custom":
+                        preset.Task.Decomb = Decomb.Custom;
+                        break;
+                    case "default":
+                        preset.Task.Decomb = Decomb.Default;
+                        break;
+                    case "bob":
+                        preset.Task.Decomb = Decomb.Bob;
+                        break;
+                    case "fast":
+                        preset.Task.Decomb = Decomb.Fast;
+                        break;
+                    default:
+                        preset.Task.Decomb = Decomb.Default;
+                        break;
+                }
+
+                if (preset.Task.Decomb == Decomb.Custom)
+                {
+                    preset.Task.CustomDecomb = importedPreset.PictureDeinterlaceCustom;
+                }
+            }
+
+            if (preset.Task.Deinterlace != Deinterlace.Off)
+            {
+                switch (importedPreset.PictureDeinterlaceFilter)
+                {
+                    case "custom":
+                        preset.Task.Deinterlace = Deinterlace.Custom;
+                        break;
+                    case "bob":
+                        preset.Task.Deinterlace = Deinterlace.Bob;
+                        break;
+                    case "fast":
+                        preset.Task.Deinterlace = Deinterlace.Fast;
+                        break;
+                    case "slow":
+                        preset.Task.Deinterlace = Deinterlace.Slow;
+                        break;
+                    case "slower":
+                        preset.Task.Deinterlace = Deinterlace.Slower;
+                        break;
+                    default:
+                        preset.Task.Deinterlace = Deinterlace.Fast;
+                        break;
+                }
+
+                if (preset.Task.Deinterlace == Deinterlace.Custom)
+                {
+                    preset.Task.CustomDecomb = importedPreset.PictureDeinterlaceCustom;
+                }
             }
 
             preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
@@ -485,10 +510,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Filters
             preset.PictureDeblock = export.Task.Deblock;
-            preset.PictureDecomb = EnumHelper<Decomb>.GetShortName(export.Task.Decomb);
-            preset.PictureDecombCustom = export.Task.CustomDecomb;
-            preset.PictureDecombDeinterlace = export.Task.Decomb != Decomb.Off;
-            preset.PictureDeinterlace = EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace);
+            preset.PictureDeinterlaceFilter = export.Task.Decomb != Decomb.Off ? "decomb" : export.Task.Deinterlace != Deinterlace.Off ? "deinterlace" : "off";  
+            preset.PictureDeinterlacePreset = export.Task.Decomb != Decomb.Off ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb) : export.Task.Deinterlace != Deinterlace.Off ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
+            preset.PictureDeinterlaceCustom = export.Task.Decomb != Decomb.Off ? export.Task.CustomDecomb : export.Task.Deinterlace != Deinterlace.Off ? export.Task.CustomDeinterlace : string.Empty;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
