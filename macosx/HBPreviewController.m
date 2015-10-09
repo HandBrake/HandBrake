@@ -81,7 +81,24 @@ typedef enum ViewMode : NSUInteger {
 {
     [self.window.contentView setWantsLayer:YES];
 
-    self.windowCenterPoint = [self centerPoint];
+    // Read the window center position
+    // We need the center and we can't use the
+    // standard NSWindow autosave because we change
+    // the window size at startup.
+    NSString *centerString = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBPreviewWindowCenter"];
+    if (centerString.length)
+    {
+        NSPoint center = NSPointFromString(centerString);
+        NSRect frame = self.window.frame;
+        [self.window setFrameOrigin:NSMakePoint(center.x - floor(frame.size.width / 2),
+                                                center.y - floor(frame.size.height / 2))];
+
+        self.windowCenterPoint = center;
+    }
+    else
+    {
+        self.windowCenterPoint = [self centerPoint];
+    }
 
     self.window.excludedFromWindowsMenu = YES;
     self.window.acceptsMouseMovedEvents = YES;
@@ -231,6 +248,7 @@ typedef enum ViewMode : NSUInteger {
     if (self.previewView.fitToView == NO)
     {
         self.windowCenterPoint = [self centerPoint];
+        [[NSUserDefaults standardUserDefaults] setObject:NSStringFromPoint(self.windowCenterPoint) forKey:@"HBPreviewWindowCenter"];
     }
 }
 
