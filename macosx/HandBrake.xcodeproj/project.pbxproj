@@ -757,23 +757,11 @@
 				A9B34D6F197683FE00871B7D /* Controllers */,
 				A98C29C51977C00000AF5DED /* Core */,
 				A952392E199A647F00588AEF /* Presets */,
+				A98F00771A972007001C2298 /* Output Redirect */,
 				A9AA44781970664A00D7DEFC /* HBUtilities.h */,
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
-				A9706CB21AC1436F00BAEAA8 /* HBApplication.h */,
-				A9706CB31AC1436F00BAEAA8 /* HBApplication.m */,
-				A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */,
-				A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */,
-				A98F00771A972007001C2298 /* Output Redirect */,
-				A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */,
-				A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */,
-				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
-				A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */,
-				A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */,
-				A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */,
-				A914BCB41BC441D100157917 /* QTKit+HBQTMovieExtensions.h */,
-				A914BCB51BC441D100157917 /* QTKit+HBQTMovieExtensions.m */,
+				A901C2431BC7D05000D77735 /* Others */,
 				A9B34D711976844500871B7D /* UI Views */,
-				273F20BD14ADC09F0021BE6D /* main.mm */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -946,6 +934,80 @@
 			name = "Products (external)";
 			sourceTree = "<group>";
 		};
+		A901C23F1BC7CFD100D77735 /* Main Window */ = {
+			isa = PBXGroup;
+			children = (
+				A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */,
+				A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */,
+				273F208E14ADBE670021BE6D /* HBController.h */,
+				273F208F14ADBE670021BE6D /* HBController.m */,
+				A9B34D701976841800871B7D /* View Controllers */,
+			);
+			name = "Main Window";
+			sourceTree = "<group>";
+		};
+		A901C2401BC7CFDC00D77735 /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				A9EA43661A2210C400785E95 /* HBQueueOutlineView.h */,
+				A9EA43671A2210C400785E95 /* HBQueueOutlineView.m */,
+				A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */,
+				A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */,
+				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
+				A9906B2B1A710920001D82D5 /* HBQueueController.m */,
+			);
+			name = Queue;
+			sourceTree = "<group>";
+		};
+		A901C2411BC7CFFD00D77735 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */,
+				A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */,
+				A9C9F88719A733FE00DC8923 /* HBHUDView.h */,
+				A9C9F88819A733FE00DC8923 /* HBHUDView.m */,
+				A914BCB11BC441C700157917 /* HBPreviewView.h */,
+				A914BCB21BC441C700157917 /* HBPreviewView.m */,
+				273F20A914ADBE670021BE6D /* HBPictureController.h */,
+				273F20AA14ADBE670021BE6D /* HBPictureController.m */,
+				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
+				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
+				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
+				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
+			);
+			name = Preview;
+			sourceTree = "<group>";
+		};
+		A901C2421BC7D01900D77735 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
+				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
+				A9160A331AE7A165009A7818 /* HBCodingUtilities.h */,
+				A9160A341AE7A165009A7818 /* HBCodingUtilities.m */,
+				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
+				A975C08C1AE8C5270061870D /* HBStateFormatter.h */,
+				A975C08D1AE8C5270061870D /* HBStateFormatter.m */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
+		A901C2431BC7D05000D77735 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				A9706CB21AC1436F00BAEAA8 /* HBApplication.h */,
+				A9706CB31AC1436F00BAEAA8 /* HBApplication.m */,
+				A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */,
+				A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */,
+				A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */,
+				A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */,
+				A914BCB41BC441D100157917 /* QTKit+HBQTMovieExtensions.h */,
+				A914BCB51BC441D100157917 /* QTKit+HBQTMovieExtensions.m */,
+				273F20BD14ADC09F0021BE6D /* main.mm */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
 		A91017B51A64441700039BFB /* Subtitles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1043,13 +1105,7 @@
 				A996B0F81A62C51C00B64179 /* Audio */,
 				A91017B51A64441700039BFB /* Subtitles */,
 				A9537BED1A48A7F900141102 /* UI Bindings Additions */,
-				273F209714ADBE670021BE6D /* HBDVDDetector.h */,
-				273F209814ADBE670021BE6D /* HBDVDDetector.m */,
-				A9160A331AE7A165009A7818 /* HBCodingUtilities.h */,
-				A9160A341AE7A165009A7818 /* HBCodingUtilities.m */,
-				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
-				A975C08C1AE8C5270061870D /* HBStateFormatter.h */,
-				A975C08D1AE8C5270061870D /* HBStateFormatter.m */,
+				A901C2421BC7D01900D77735 /* Others */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1087,21 +1143,11 @@
 			children = (
 				A92268761A6E555500A8D5C5 /* HBAppDelegate.h */,
 				A92268771A6E555500A8D5C5 /* HBAppDelegate.m */,
-				273F208E14ADBE670021BE6D /* HBController.h */,
-				273F208F14ADBE670021BE6D /* HBController.m */,
-				A9B34D701976841800871B7D /* Main Window View Controllers */,
-				A9AA447C1970726500D7DEFC /* HBQueueController.h */,
-				A9906B2B1A710920001D82D5 /* HBQueueController.m */,
-				A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */,
-				A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */,
+				A901C23F1BC7CFD100D77735 /* Main Window */,
+				A901C2401BC7CFDC00D77735 /* Queue */,
+				A901C2411BC7CFFD00D77735 /* Preview */,
 				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
 				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
-				273F20A914ADBE670021BE6D /* HBPictureController.h */,
-				273F20AA14ADBE670021BE6D /* HBPictureController.m */,
-				273F20A314ADBE670021BE6D /* HBPreviewController.h */,
-				273F20A414ADBE670021BE6D /* HBPreviewController.m */,
-				A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */,
-				A9D1E41618262364002F6424 /* HBPreviewGenerator.m */,
 				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
 				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
 				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
@@ -1110,7 +1156,7 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
-		A9B34D701976841800871B7D /* Main Window View Controllers */ = {
+		A9B34D701976841800871B7D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				A9CF25F51990D6820023F727 /* HBPresetsViewController.h */,
@@ -1129,8 +1175,10 @@
 				A9F472851976B7AA0009EC65 /* Subtitles Defaults */,
 				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
 				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
+				A98C29C21977B10600AF5DED /* HBLanguagesSelection.h */,
+				A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */,
 			);
-			name = "Main Window View Controllers";
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 		A9B34D711976844500871B7D /* UI Views */ = {
@@ -1138,20 +1186,12 @@
 			children = (
 				A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */,
 				A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */,
-				A9EA43661A2210C400785E95 /* HBQueueOutlineView.h */,
-				A9EA43671A2210C400785E95 /* HBQueueOutlineView.m */,
 				46AB433315F98A2B009C0961 /* DockTextField.h */,
 				46AB433415F98A2B009C0961 /* DockTextField.m */,
 				A9F7102419A475EC00F61301 /* HBDockTile.h */,
 				A9F7102519A475EC00F61301 /* HBDockTile.m */,
 				273F209914ADBE670021BE6D /* HBImageAndTextCell.h */,
 				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
-				A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */,
-				A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */,
-				A9C9F88719A733FE00DC8923 /* HBHUDView.h */,
-				A9C9F88819A733FE00DC8923 /* HBHUDView.m */,
-				A914BCB11BC441C700157917 /* HBPreviewView.h */,
-				A914BCB21BC441C700157917 /* HBPreviewView.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
