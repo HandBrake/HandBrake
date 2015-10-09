@@ -185,7 +185,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBVideoVersion"];
+    [coder encodeInt:1 forKey:@"HBJobVersion"];
 
     encodeInt(_state);
     encodeObject(_name);
@@ -215,7 +215,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
-    int version = [decoder decodeIntForKey:@"HBVideoVersion"];
+    int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
     if (version == 1 && (self = [super init]))
     {

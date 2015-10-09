@@ -429,22 +429,17 @@
         hb_add_filter(job, filter, filter_str);
     }
 
-    if (self.filters.useDecomb && ![self.filters.decomb isEqualToString:@"off"])
+    // Deinterlace
+    if (![self.filters.deinterlace isEqualToString:@"off"])
     {
-        // Decomb
         int filter_id = HB_FILTER_DECOMB;
+        if ([self.filters.deinterlace isEqualToString:@"deinterlace"])
+        {
+            filter_id = HB_FILTER_DEINTERLACE;
+        }
+
         const char *filter_str = hb_generate_filter_settings(filter_id,
-                                                             self.filters.decomb.UTF8String,
-                                                             self.filters.decombCustomString.UTF8String);
-        filter = hb_filter_init(filter_id);
-        hb_add_filter(job, filter, filter_str);
-    }
-    else if (!self.filters.useDecomb && ![self.filters.deinterlace isEqualToString:@"off"])
-    {
-        // Deinterlace
-        int filter_id = HB_FILTER_DEINTERLACE;
-        const char *filter_str = hb_generate_filter_settings(filter_id,
-                                                             self.filters.deinterlace.UTF8String,
+                                                             self.filters.deinterlacePreset.UTF8String,
                                                              self.filters.deinterlaceCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
         hb_add_filter(job, filter, filter_str);
