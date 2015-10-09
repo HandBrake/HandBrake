@@ -206,6 +206,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
 
+        /// <summary>
+        /// The Show Queue in-line option.
+        /// </summary>
+        public const string ShowQueueInline = "ShowQueueInline";
+        
         #endregion
     }
 }

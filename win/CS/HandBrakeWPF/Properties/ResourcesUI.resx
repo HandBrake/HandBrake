@@ -834,4 +834,7 @@
   <data name="Options_x264Granularity" xml:space="preserve">
     <value>Constant quality fractional granularity:</value>
   </data>
+  <data name="Options_ShowQueueInline" xml:space="preserve">
+    <value>Show Queue in place of the tab controls when toggled on.</value>
+  </data>
 </root>

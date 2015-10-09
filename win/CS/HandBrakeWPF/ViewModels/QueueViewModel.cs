@@ -39,39 +39,12 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The Error Service Backing field
-        /// </summary>
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The User Setting Service Backing Field.
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Queue Processor Backing field
-        /// </summary>
         private readonly IQueueProcessor queueProcessor;
-
-        /// <summary>
-        /// IsEncoding Backing field
-        /// </summary>
         private bool isEncoding;
-
-        /// <summary>
-        /// Job Status Backing field.
-        /// </summary>
         private string jobStatus;
-
-        /// <summary>
-        /// Jobs pending backing field
-        /// </summary>
         private string jobsPending;
-
-        /// <summary>
-        /// Backing field for the when done action description
-        /// </summary>
         private string whenDoneAction;
 
         #endregion
@@ -99,6 +72,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.JobStatus = Resources.QueueViewModel_NoJobsPending;
             this.SelectedItems = new BindingList<QueueTask>();
+            this.DisplayName = "Queue";
         }
 
         #endregion
@@ -186,7 +160,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the selected items.
         /// </summary>
-        public BindingList<QueueTask> SelectedItems { get; set; } 
+        public BindingList<QueueTask> SelectedItems { get; set; }
+
+        /// <summary>
+        /// Display the current job status information.
+        /// </summary>
+        public bool DisplayJobStatusInfo { get; set; } = false;
 
         #endregion
 
@@ -406,6 +385,16 @@ namespace HandBrakeWPF.ViewModels
             // Pass a copy of the job back to the Main Screen
             IMainViewModel mvm = IoC.Get<IMainViewModel>();
             mvm.EditQueueJob(new EncodeTask(task.Task));
+        }
+
+        /// <summary>
+        /// Activate this window in the correct mode
+        /// </summary>
+        /// <param name="isInline">Indicdates if this panel is displayed in-line with the main view.</param>
+        public void Activate(bool isInline)
+        {
+            this.DisplayJobStatusInfo = !isInline;
+            this.NotifyOfPropertyChange(() => this.DisplayJobStatusInfo);
         }
 
         #endregion

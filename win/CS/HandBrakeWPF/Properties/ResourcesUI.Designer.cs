@@ -1267,6 +1267,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Queue in place of the tab controls when toggled on..
+        /// </summary>
+        public static string Options_ShowQueueInline {
+            get {
+                return ResourceManager.GetString("Options_ShowQueueInline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change case to Title Case.
         /// </summary>
         public static string Options_TitleCase {

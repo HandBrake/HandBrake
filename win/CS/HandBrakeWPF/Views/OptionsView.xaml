@@ -148,6 +148,7 @@
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AdvancedTab}" IsChecked="{Binding ShowAdvancedTab}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

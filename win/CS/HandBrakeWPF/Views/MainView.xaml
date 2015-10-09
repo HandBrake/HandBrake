@@ -484,11 +484,12 @@
 
             <!--  Tab Control  -->
             <TabControl Name="tabControl"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Margin="10,10,5,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         MinHeight="350" MinWidth="720"
+                        Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
                         >
                 <TabItem Name="pictureTab" Header="{x:Static Properties:ResourcesUI.MainView_PictureTab}">
                     <ContentControl x:Name="PictureSettingsViewModel" />
@@ -512,6 +513,18 @@
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
+
+            <!-- Queue in-line display if enabled -->
+            <Grid  Grid.Row="3" Margin="10,10,5,5"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
+                <ContentControl x:Name="QueueViewModel"  Grid.Row="1" />
+            </Grid>
+
 
             <!--  Presets  -->
             <GroupBox Grid.RowSpan="4"
