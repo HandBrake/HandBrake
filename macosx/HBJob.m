@@ -50,7 +50,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _audio = [[HBAudio alloc] initWithTitle:title];
         _subtitles = [[HBSubtitles alloc] initWithTitle:title];
 
-        _chapterTitles = [title.chapters mutableCopy];
+        _chapterTitles = [title.chapters copy];
 
         _uuid = [[NSUUID UUID] UUIDString];
 
@@ -170,7 +170,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_subtitles = [_subtitles copy];
 
         copy->_chaptersEnabled = _chaptersEnabled;
-        copy->_chapterTitles = [[NSMutableArray alloc] initWithArray:_chapterTitles copyItems:YES];
+        copy->_chapterTitles = [[NSArray alloc] initWithArray:_chapterTitles copyItems:YES];
     }
 
     return copy;
@@ -244,7 +244,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObject(_subtitles, HBSubtitles);
 
         decodeBool(_chaptersEnabled);
-        decodeObject(_chapterTitles, NSMutableArray);
+        decodeObject(_chapterTitles, NSArray);
 
         return self;
     }

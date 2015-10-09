@@ -6,6 +6,7 @@
 
 #import "HBTitle.h"
 #import "HBTitlePrivate.h"
+#import "HBChapter.h"
 
 #include "lang.h"
 
@@ -253,18 +254,17 @@ extern NSString *keySubTrackSrtCharCode;
 
             if (chapter != NULL)
             {
+                NSString *title;
                 if (chapter->title != NULL)
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"%s",
-                                         chapter->title]];
+                    title = [NSString stringWithFormat:@"%s", chapter->title];
                 }
                 else
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"Chapter %d",
-                                         i + 1]];
+                    title = [NSString stringWithFormat:@"Chapter %d", i + 1];
                 }
+
+                [chapters addObject:[[HBChapter alloc] initWithTitle:title duration:chapter->duration]];
             }
         }
 

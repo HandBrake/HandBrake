@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
    
 #import "HBChapterTitlesController.h"
+#import "HBChapter.h"
 #import "HBJob.h"
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
@@ -13,7 +14,7 @@
 	IBOutlet NSTableColumn       * fChapterTableNameColumn;
 }
 
-@property (nonatomic, readwrite, strong) NSMutableArray *chapterTitles;
+@property (nonatomic, readwrite, strong) NSArray *chapterTitles;
 
 @end
 
@@ -46,10 +47,9 @@
         forTableColumn:(NSTableColumn *)aTableColumn
         row:(NSInteger)rowIndex
 {
-    if (aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
+    if ([aTableColumn.identifier isEqualToString:@"title"])
     {
-        (self.chapterTitles)[rowIndex] = [NSString
-                                                   stringWithString:anObject];
+        [(HBChapter *)self.chapterTitles[rowIndex] setTitle:anObject];
     }
 }
 
@@ -57,13 +57,17 @@
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
       row:(NSInteger)rowIndex
 {
-    if ([[aTableColumn identifier] intValue] == 1)
+    if ([aTableColumn.identifier isEqualToString:@"index"])
     {
         return [NSString stringWithFormat:@"%ld", rowIndex + 1];
     }
-    else
+    else if ([aTableColumn.identifier isEqualToString:@"duration"])
     {
-        return [NSString stringWithString:(self.chapterTitles)[rowIndex]];
+        return [(HBChapter *)self.chapterTitles[rowIndex] duration];
+    }
+    else if ([aTableColumn.identifier isEqualToString:@"title"])
+    {
+        return [(HBChapter *)self.chapterTitles[rowIndex] title];
     }
     return @"__DATA ERROR__";
 }

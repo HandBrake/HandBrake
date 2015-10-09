@@ -9,6 +9,8 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioTrack.h"
 
+#import "HBChapter.h"
+
 #import "HBTitlePrivate.h"
 
 @implementation HBJob (HBJobConversion)
@@ -84,12 +86,12 @@
         // Also, note that if for some reason we don't apply chapter names, the
         // chapters just come out 001, 002, etc. etc.
         int i = 0;
-        for (NSString *name in self.chapterTitles)
+        for (HBChapter *jobChapter in self.chapterTitles)
         {
             hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item(job->list_chapter, i);
             if (chapter != NULL)
             {
-                hb_chapter_set_title(chapter, name.UTF8String);
+                hb_chapter_set_title(chapter, jobChapter.title.UTF8String);
             }
             i++;
         }

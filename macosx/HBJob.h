@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) HBSubtitles *subtitles;
 
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
-@property (nonatomic, readonly) NSMutableArray *chapterTitles;
+@property (nonatomic, readonly) NSArray *chapterTitles;
 
 @end
 
