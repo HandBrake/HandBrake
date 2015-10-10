@@ -2230,16 +2230,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
-                        string pass = string.Empty;
-                        if (e.TaskCount > 1)
-                        {
-                            pass = $"for pass {e.Task} of {e.TaskCount}   ";
-                        }
-                        
                         this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon, 
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
+                                e.Task,
+                                e.TaskCount,
                                 e.PercentComplete,
-                                pass,
                                 e.CurrentFrameRate, 
                                 e.AverageFrameRate, 
                                 e.EstimatedTimeLeft, 
