@@ -358,7 +358,7 @@ In order to use the QuickSync encoder, you must:
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   Pending Jobs {5}</value>
+    <value>   Pending Jobs {6}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>New Default Preset Set: {0}</value>
@@ -551,7 +551,7 @@ The Activity log may have further information.</value>
     <value>Are you sure you want to delete the preset: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}</value>
+    <value>{0:00.00}%   {1}FPS: {2:000.0}   Avg FPS: {3:000.0}   Time Remaining: {4}   Elapsed: {5:hh\:mm\:ss}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>A Preset must have a Name. Please fill out the Preset Name field.</value>

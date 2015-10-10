@@ -574,7 +574,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {5}.
+        ///   Looks up a localized string similar to    Pending Jobs {6}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -934,7 +934,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}.
+        ///   Looks up a localized string similar to {0:00.00}%   {1}FPS: {2:000.0}   Avg FPS: {3:000.0}   Time Remaining: {4}   Elapsed: {5:hh\:mm\:ss}.
         /// </summary>
         public static string MainViewModel_EncodeStatusChanged_StatusLabel {
             get {
