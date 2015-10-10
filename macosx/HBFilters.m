@@ -365,16 +365,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
 
         // Deblock
-        if ([preset[@"PictureDeblock"] intValue] == 1)
-        {
-            // if its a one, then its the old on/off deblock, set on to 5
-            self.deblock = 5;
-        }
-        else
-        {
-            // use the settings intValue
-            self.deblock = [preset[@"PictureDeblock"] intValue];
-        }
+        self.deblock = [preset[@"PictureDeblock"] intValue];
 
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
     }
