@@ -141,6 +141,12 @@ typedef enum ViewMode : NSUInteger {
     [_generator cancel];
 }
 
+- (void)setPicture:(HBPicture *)picture
+{
+    _picture = picture;
+    self.pictureSettingsWindow.picture = _picture;
+}
+
 - (void)setGenerator:(HBPreviewGenerator *)generator
 {
     if (_generator)
@@ -169,7 +175,7 @@ typedef enum ViewMode : NSUInteger {
     }
     else
     {
-        [self.previewView setImage:nil];
+        self.previewView.image = nil;
         self.window.title = NSLocalizedString(@"Preview", nil);
     }
 }
