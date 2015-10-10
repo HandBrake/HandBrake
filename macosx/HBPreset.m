@@ -55,9 +55,13 @@
 {
     NSParameterAssert(dict);
 
+    NSString *name = dict[@"PresetName"] ? dict[@"PresetName"] : @"Unnamed preset";
+    BOOL builtIn = [dict[@"Type"] boolValue] ? NO : YES;
+    BOOL defaultPreset = [dict[@"Default"] boolValue];
+
     if ([dict[@"Folder"] boolValue])
     {
-        self = [self initWithFolderName:dict[@"PresetName"] builtIn:![dict[@"Type"] boolValue]];
+        self = [self initWithFolderName:name builtIn:builtIn];
 
         for (NSDictionary *childDict in [dict[@"ChildrenArray"] reverseObjectEnumerator])
         {
@@ -67,59 +71,79 @@
     }
     else
     {
-        self = [self initWithName:dict[@"PresetName"]
+        self = [self initWithName:name
                           content:dict
-                          builtIn:![dict[@"Type"] boolValue]];
-        self.isDefault = [dict[@"Default"] boolValue];
+                          builtIn:builtIn];
+        self.isDefault = defaultPreset;
     }
 
     return self;
 }
 
-- (nullable instancetype)initWithContentsOfURL:(NSURL *)url
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError **)outError
 {
-    NSArray *presetsArray;
-    NSString *presetsJson;
+    NSParameterAssert(url);
 
+    NSArray *presetsArray;
+    NSString *presetsString;
+
+    // Read a json file or the old plists format
     if ([url.pathExtension isEqualToString:@"json"])
     {
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        presetsJson = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        presetsString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
     else
     {
         NSArray *array = [[NSArray alloc] initWithContentsOfURL:url];
         if ([NSJSONSerialization isValidJSONObject:array])
         {
-            presetsJson = [NSJSONSerialization HB_StringWithJSONObject:array options:0 error:NULL];
+            presetsString = [NSJSONSerialization HB_StringWithJSONObject:array options:0 error:NULL];
         }
     }
 
     // Run the json through the libhb import function
     // to avoid importing unknowns keys.
-    if (presetsJson.length) {
+    if (presetsString.length)
+    {
         char *importedJson;
-        int   result;
-
-        result = hb_presets_import_json(presetsJson.UTF8String, &importedJson);
+        hb_presets_import_json(presetsString.UTF8String, &importedJson);
 
         if (importedJson)
         {
             id importedPresets = [NSJSONSerialization HB_JSONObjectWithUTF8String:importedJson options:0 error:NULL];
+            free(importedJson);
 
             if ([importedPresets isKindOfClass:[NSDictionary class]])
             {
-                presetsArray = importedPresets[@"PresetList"];
+                int hb_major, hb_minor, hb_micro;
+                int major;
+
+                hb_presets_current_version(&hb_major, &hb_minor, &hb_micro);
+                major = [importedPresets[@"VersionMajor"] intValue];
+
+                if (major <= hb_major)
+                {
+                    presetsArray = importedPresets[@"PresetList"];
+                }
+                else
+                {
+                    // Change in major indicates non-backward compatible preset changes.
+                    if (outError)
+                    {
+                        *outError = [self newerPresetErrorForUrl:url];
+                    }
+                    return nil;
+                }
             }
             else if ([importedPresets isKindOfClass:[NSArray class]])
             {
                 presetsArray = importedPresets;
             }
         }
-
-        free(importedJson);
     }
 
+    // Convert the array to a HBPreset tree.
     if (presetsArray.count)
     {
         self = [self initWithFolderName:@"Imported Presets" builtIn:NO];
@@ -134,8 +158,34 @@
         }
         return self;
     }
+    else if (outError)
+    {
+        *outError = [self invalidPresetErrorForUrl:url];
+    }
 
     return nil;
+}
+
+- (NSError *)invalidPresetErrorForUrl:(NSURL *)url
+{
+    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", nil),
+                             url.lastPathComponent];
+    NSString *reason = NSLocalizedString(@"The selected preset is invalid.", nil);
+
+    return [NSError errorWithDomain:@"HBPresetDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: description,
+                                                                        NSLocalizedRecoverySuggestionErrorKey: reason}];
+
+}
+
+- (NSError *)newerPresetErrorForUrl:(NSURL *)url
+{
+    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", nil),
+                             url.lastPathComponent];
+    NSString *reason = NSLocalizedString(@"The selected preset was created with a newer version of HandBrake.", nil);
+
+    return [NSError errorWithDomain:@"HBPresetDomain" code:2 userInfo:@{NSLocalizedDescriptionKey: description,
+                                                                        NSLocalizedRecoverySuggestionErrorKey: reason}];
+    
 }
 
 - (NSDictionary *)dictionary

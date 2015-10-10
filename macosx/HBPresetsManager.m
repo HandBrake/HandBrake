@@ -70,7 +70,8 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
  */
 - (void)loadOldPresetsFromURL:(NSURL *)url
 {
-    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url];
+    NSError *error;
+    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
 
     for (HBPreset *preset in oldPresets.children)
     {

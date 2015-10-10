@@ -135,7 +135,14 @@
 
          for (NSURL *url in panel.URLs)
          {
-             HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url];
+             NSError *error;
+             HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
+
+             if (import == nil)
+             {
+                 [self presentError:error];
+             }
+
              for (HBPreset *child in import.children)
              {
                  [self.presets addPreset:child];
