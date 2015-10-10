@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B22c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B30a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
@@ -672,17 +672,17 @@ IA
                             <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Show Queue" paletteLabel="Show Queue" tag="-1" image="showqueue" id="HCx-ku-nF7">
+                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7">
                         <connections>
                             <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview Window" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
+                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
                         <connections>
                             <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Window" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
+                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Log" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
                         <connections>
                             <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
                         </connections>
@@ -695,6 +695,7 @@ IA
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
+                    <toolbarItem reference="ZEH-cS-zXY"/>
                     <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="HCx-ku-nF7"/>
                     <toolbarItem reference="byg-kj-sEM"/>
@@ -708,7 +709,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="691" y="-54"/>
+            <point key="canvasLocation" x="879" y="65"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
