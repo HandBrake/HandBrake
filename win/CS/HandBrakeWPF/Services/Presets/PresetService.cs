@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -522,20 +523,25 @@ namespace HandBrakeWPF.Services.Presets
                     using (StreamReader reader = new StreamReader(this.builtInPresetFile))
                     {
                         // New Preset Format.
-                        try
-                        {
-                            var presetList = JsonConvert.DeserializeObject<List<Preset>>(reader.ReadToEnd());
+                        IList<PresetCategory> presetCategories = JsonConvert.DeserializeObject<IList<PresetCategory>>(reader.ReadToEnd());
 
-                            foreach (Preset preset in presetList)
+                        foreach (var item in presetCategories)
+                        {
+                            foreach (var hbpreset in item.ChildrenArray)
                             {
-                                preset.IsBuildIn = true;  // Older versions did not have this flag so explicitly make sure it is set.
+                                Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
+                                preset.Category = item.PresetName;
+                                preset.IsBuildIn = true;
+
+                                // IF we are using Source Max, Set the Max Width / Height values.
+                                if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                                {
+                                    preset.Task.MaxWidth = preset.Task.Height;
+                                    preset.Task.MaxHeight = preset.Task.Width;
+                                }
+
                                 this.presets.Add(preset);
                             }
-                        }
-                        catch (Exception exc)
-                        {
-                            // Do Nothing.
-                            Debug.WriteLine(exc);
                         }
                     }
                 }
@@ -581,12 +587,12 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     // New Preset Format.
                     bool createBackup = false;
-                    PresetContainer presetContainer = null;
+                    PresetTransportContainer presetContainer = null;
                     using (StreamReader reader = new StreamReader(this.userPresetFile))
                     {
                         try
                         {
-                            presetContainer = JsonConvert.DeserializeObject<PresetContainer>(reader.ReadToEnd());
+                            presetContainer = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
                         }
                         catch (Exception exc)
                         {
@@ -597,7 +603,7 @@ namespace HandBrakeWPF.Services.Presets
 
                     // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
                     // incase something goes wrong.
-                    if (createBackup || (presetContainer != null && presetContainer.Version < CurrentPresetVersion))
+                    if (createBackup || (presetContainer.VersionMajor != Constants.PresetVersionMajor || presetContainer.VersionMinor != Constants.PresetVersionMinor  || presetContainer.VersionMicro != Constants.PresetVersionMicro))
                     {
                         string fileName = RecoverFromCorruptedPresetFile(this.userPresetFile);
                         this.errorService.ShowMessageBox(
@@ -610,12 +616,21 @@ namespace HandBrakeWPF.Services.Presets
                     }
 
                     // Load the current presets.
-                    if (presetContainer != null && !string.IsNullOrEmpty(presetContainer.Presets))
+                    if (presetContainer.PresetList != null)
                     {
-                        JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
-                        List<Preset> list = JsonConvert.DeserializeObject<List<Preset>>(presetContainer.Presets, settings);
-                        foreach (Preset preset in list)
+                        foreach (var item in presetContainer.PresetList)
                         {
+                            Preset preset = JsonPresetFactory.ImportPreset(item);
+                            preset.Category = item.PresetName;
+                            preset.IsBuildIn = true;
+
+                            // If we are using Source Max, Set the Max Width / Height values.
+                            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                            {
+                                preset.Task.MaxWidth = preset.Task.Height;
+                                preset.Task.MaxHeight = preset.Task.Width;
+                            }
+
                             this.presets.Add(preset);
                         }
                     }
@@ -651,10 +666,23 @@ namespace HandBrakeWPF.Services.Presets
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
 
                 // Built-in Presets
+                Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
+                foreach (var item in this.presets.Where(p => p.IsBuildIn).ToList())
+                {
+                    HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
+                    if (presetCategories.ContainsKey(item.Category))
+                    {
+                        presetCategories[item.Category].ChildrenArray.Add(preset);
+                    }
+                    else
+                    {
+                        presetCategories[item.Category] = new PresetCategory { ChildrenArray = new List<HBPreset>(), Folder = true, PresetName = item.Category, Type = 0 };
+                    }                
+                }
 
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    string presetsJson = JsonConvert.SerializeObject(this.presets.Where(p => p.IsBuildIn).ToList(), Formatting.Indented, settings);
+                    string presetsJson = JsonConvert.SerializeObject(presetCategories, Formatting.Indented, settings);
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
                         writer.WriteLine(presetsJson);
@@ -667,12 +695,9 @@ namespace HandBrakeWPF.Services.Presets
                     List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
                     string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented, settings);
 
-                    PresetContainer container = new PresetContainer(CurrentPresetVersion, presetsJson);
-                    string containerJson = JsonConvert.SerializeObject(container, Formatting.Indented, settings);
-
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
-                        writer.WriteLine(containerJson);
+                        writer.WriteLine(presetsJson);
                     }
                 }
             }
