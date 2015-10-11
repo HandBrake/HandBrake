@@ -475,7 +475,6 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             {
                 long length;
                 char *p, *q;
-                int  line = 1;
                 uint64_t start_time = ( pv->current_entry.start +
                                         pv->subtitle->config.offset ) * 90;
                 uint64_t stop_time = ( pv->current_entry.stop +
@@ -494,7 +493,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                 for (q = p = pv->current_entry.text; *p != '\0'; p++)
                 {
-                    if (*p == '\n' || *p == '\r')
+                    if (*p == '\r')
                     {
                         if (*(p + 1) == '\n' || *(p + 1) == '\r' ||
                             *(p + 1) == '\0')
@@ -503,18 +502,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                             length--;
                             continue;
                         }
-                        else if (line == 1)
-                        {
-                            // replace '\r' with '\n'
-                            *q   = '\n';
-                            line = 2;
-                        }
-                        else
-                        {
-                            // all subtitles on two lines tops
-                            // replace line breaks with spaces
-                            *q = ' ';
-                        }
+                        // replace '\r' with '\n'
+                        *q   = '\n';
                         q++;
                     }
                     else
@@ -552,7 +541,6 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     {
         long length;
         char *p, *q;
-        int  line = 1;
         uint64_t start_time = ( pv->current_entry.start +
                                 pv->subtitle->config.offset ) * 90;
         uint64_t stop_time = ( pv->current_entry.stop +
@@ -569,7 +557,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
         for (q = p = pv->current_entry.text; *p != '\0'; p++)
         {
-            if (*p == '\n' || *p == '\r')
+            if (*p == '\r')
             {
                 if (*(p + 1) == '\n' || *(p + 1) == '\r' || *(p + 1) == '\0')
                 {
@@ -577,18 +565,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                     length--;
                     continue;
                 }
-                else if (line == 1)
-                {
-                    // replace '\r' with '\n'
-                    *q   = '\n';
-                    line = 2;
-                }
-                else
-                {
-                    // all subtitles on two lines tops
-                    // replace line breaks with spaces
-                    *q = ' ';
-                }
+                // replace '\r' with '\n'
+                *q   = '\n';
                 q++;
             }
             else
