@@ -693,7 +693,9 @@ namespace HandBrakeWPF.Services.Presets
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
-                    string presetsJson = JsonConvert.SerializeObject(userPresets, Formatting.Indented, settings);
+                    PresetTransportContainer container = JsonPresetFactory.ExportPresets(userPresets, HBConfigurationFactory.Create());
+
+                    string presetsJson = JsonConvert.SerializeObject(container, Formatting.Indented, settings);
 
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
