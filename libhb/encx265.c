@@ -105,8 +105,21 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     x265_nal *nal;
     uint32_t nnal;
 
-    // TODO: add support for other bit depths
-    pv->depth = 8;
+    switch (job->vcodec)
+    {
+        case HB_VCODEC_X265_8BIT:
+            pv->depth = 8;
+            break;
+        case HB_VCODEC_X265_10BIT:
+            pv->depth = 10;
+            break;
+        case HB_VCODEC_X265_12BIT:
+            pv->depth = 12;
+            break;
+        case HB_VCODEC_X265_16BIT:
+            pv->depth = 16;
+            break;
+    }
     pv->api = x265_api_get(pv->depth);
     if (pv->api == NULL)
     {
