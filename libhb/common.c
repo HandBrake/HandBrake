@@ -1325,10 +1325,13 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
             return hb_h264_profile_names;
 
         case HB_VCODEC_X265_8BIT:
+            return hb_h265_profile_names_8bit;
         case HB_VCODEC_X265_10BIT:
+            return hb_h265_profile_names_10bit;
         case HB_VCODEC_X265_12BIT:
+            return hb_h265_profile_names_12bit;
         case HB_VCODEC_X265_16BIT:
-            return hb_h265_profile_names;
+            return hb_h265_profile_names_16bit;
 
         default:
             return NULL;
