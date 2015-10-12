@@ -39,15 +39,15 @@ static const char * const hb_x265_encopt_synonyms[][2] =
 
 struct hb_work_private_s
 {
-    hb_job_t     *job;
-    x265_encoder *x265;
-    x265_param   *param;
+    hb_job_t       *job;
+    x265_encoder   *x265;
+    x265_param     *param;
 
-    int64_t  last_stop;
-    uint32_t frames_in;
+    int64_t         last_stop;
+    uint32_t        frames_in;
 
-    hb_list_t *delayed_chapters;
-    int64_t next_chapter_pts;
+    hb_list_t      *delayed_chapters;
+    int64_t         next_chapter_pts;
 
     struct
     {
@@ -55,7 +55,11 @@ struct hb_work_private_s
     }
     frame_info[FRAME_INFO_SIZE];
 
-    char csvfn[1024];
+    char            csvfn[1024];
+
+    // Multiple bit-depth
+    int             depth;
+    const x265_api *api;
 };
 
 // used in delayed_chapters list
@@ -65,9 +69,10 @@ struct chapter_s
     int64_t start;
 };
 
-static int param_parse(x265_param *param, const char *key, const char *value)
+static int param_parse(hb_work_private_t *pv, x265_param *param,
+                       const char *key, const char *value)
 {
-    int ret = x265_param_parse(param, key, value);
+    int ret = pv->api->param_parse(param, key, value);
     // let x265 sanity check the options for us
     switch (ret)
     {
@@ -100,10 +105,19 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     x265_nal *nal;
     uint32_t nnal;
 
-    x265_param *param = pv->param = x265_param_alloc();
+    // TODO: add support for other bit depths
+    pv->depth = 8;
+    pv->api = x265_api_get(pv->depth);
+    if (pv->api == NULL)
+    {
+        hb_error("encx265: x265_api_get failed, bit depth %d.", pv->depth);
+        goto fail;
+    }
 
-    if (x265_param_default_preset(param,
-                                  job->encoder_preset, job->encoder_tune) < 0)
+    x265_param *param = pv->param = pv->api->param_alloc();
+
+    if (pv->api->param_default_preset(param, job->encoder_preset,
+                                      job->encoder_tune) < 0)
     {
         hb_error("encx265: x265_param_default_preset failed. Preset (%s) Tune (%s)", job->encoder_preset, job->encoder_tune);
         goto fail;
@@ -177,9 +191,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             snprintf(colormatrix, sizeof(colormatrix), "%d", job->title->color_matrix);
             break;
     }
-    if (param_parse(param, "colorprim",   colorprim)   ||
-        param_parse(param, "transfer",    transfer)    ||
-        param_parse(param, "colormatrix", colormatrix))
+    if (param_parse(pv, param, "colorprim",   colorprim)   ||
+        param_parse(pv, param, "transfer",    transfer)    ||
+        param_parse(pv, param, "colormatrix", colormatrix))
     {
         goto fail;
     }
@@ -199,7 +213,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
         // here's where the strings are passed to libx265 for parsing
         // unknown options or bad values are non-fatal, see encx264.c
-        param_parse(param, key, str);
+        param_parse(pv, param, key, str);
         free(str);
     }
     hb_dict_free(&x265_opts);
@@ -227,7 +241,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      */
     char sar[22];
     snprintf(sar, sizeof(sar), "%d:%d", job->par.num, job->par.den);
-    if (param_parse(param, "sar", sar))
+    if (param_parse(pv, param, "sar", sar))
     {
         goto fail;
     }
@@ -248,13 +262,13 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             char pass[2];
             snprintf(pass, sizeof(pass), "%d", job->pass_id);
             hb_get_tempory_filename(job->h, stats_file, "x265.log");
-            if (param_parse(param, "stats", stats_file) ||
-                param_parse(param, "pass", pass))
+            if (param_parse(pv, param, "stats", stats_file) ||
+                param_parse(pv, param, "pass", pass))
             {
                 goto fail;
             }
             if (job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 0 &&
-                param_parse(param, "slow-firstpass", "1"))
+                param_parse(pv, param, "slow-firstpass", "1"))
             {
                 goto fail;
             }
@@ -279,7 +293,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     /* Apply profile and level settings last. */
     if (job->encoder_profile                                       != NULL &&
         strcasecmp(job->encoder_profile, hb_h265_profile_names[0]) != 0    &&
-        x265_param_apply_profile(param, job->encoder_profile)       < 0)
+        pv->api->param_apply_profile(param, job->encoder_profile)  < 0)
     {
         goto fail;
     }
@@ -289,9 +303,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
                                               param->bBPyramid > 0);
 
     /* Reset global variables before opening a new encoder */
-    x265_cleanup();
+    pv->api->cleanup();
 
-    pv->x265 = x265_encoder_open(param);
+    pv->x265 = pv->api->encoder_open(param);
     if (pv->x265 == NULL)
     {
         hb_error("encx265: x265_encoder_open failed.");
@@ -304,7 +318,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Write the header as is, and let the muxer reformat
      * the extradata and output bitstream properly for us.
      */
-    ret = x265_encoder_headers(pv->x265, &nal, &nnal);
+    ret = pv->api->encoder_headers(pv->x265, &nal, &nnal);
     if (ret < 0)
     {
         hb_error("encx265: x265_encoder_headers failed (%d)", ret);
@@ -341,8 +355,8 @@ void encx265Close(hb_work_object_t *w)
         hb_list_close(&pv->delayed_chapters);
     }
 
-    x265_param_free(pv->param);
-    x265_encoder_close(pv->x265);
+    pv->api->param_free(pv->param);
+    pv->api->encoder_close(pv->x265);
     free(pv);
     w->private_data = NULL;
 }
@@ -465,7 +479,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     x265_nal *nal;
     uint32_t nnal;
 
-    x265_picture_init(pv->param, &pic_in);
+    pv->api->picture_init(pv->param, &pic_in);
 
     pic_in.stride[0] = in->plane[0].stride;
     pic_in.stride[1] = in->plane[1].stride;
@@ -521,7 +535,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
     pv->last_stop = in->s.stop;
     save_frame_info(pv, in);
 
-    if (x265_encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out) > 0)
+    if (pv->api->encoder_encode(pv->x265, &nal, &nnal, &pic_in, &pic_out) > 0)
     {
         return nal_encode(w, &pic_out, nal, nnal);
     }
@@ -543,7 +557,8 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
         hb_buffer_list_clear(&list);
 
         // flush delayed frames
-        while (x265_encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
+        while (
+            pv->api->encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
         {
             hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
             hb_buffer_list_append(&list, buf);
