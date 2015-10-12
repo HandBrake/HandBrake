@@ -59,6 +59,7 @@ struct hb_work_private_s
 
     // Multiple bit-depth
     int             depth;
+    const char * const   *profile_names;
     const x265_api *api;
 };
 
@@ -109,15 +110,19 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     {
         case HB_VCODEC_X265_8BIT:
             pv->depth = 8;
+            pv->profile_names = hb_h265_profile_names_8bit;
             break;
         case HB_VCODEC_X265_10BIT:
             pv->depth = 10;
+            pv->profile_names = hb_h265_profile_names_10bit;
             break;
         case HB_VCODEC_X265_12BIT:
             pv->depth = 12;
+            pv->profile_names = hb_h265_profile_names_12bit;
             break;
         case HB_VCODEC_X265_16BIT:
             pv->depth = 16;
+            pv->profile_names = hb_h265_profile_names_16bit;
             break;
     }
     pv->api = x265_api_get(pv->depth);
@@ -304,9 +309,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Apply profile and level settings last. */
-    if (job->encoder_profile                                       != NULL &&
-        strcasecmp(job->encoder_profile, hb_h265_profile_names[0]) != 0    &&
-        pv->api->param_apply_profile(param, job->encoder_profile)  < 0)
+    if (job->encoder_profile                                      != NULL &&
+        strcasecmp(job->encoder_profile, pv->profile_names[0])    != 0    &&
+        pv->api->param_apply_profile(param, job->encoder_profile) < 0)
     {
         goto fail;
     }
