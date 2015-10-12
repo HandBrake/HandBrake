@@ -570,8 +570,8 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
         hb_buffer_list_clear(&list);
 
         // flush delayed frames
-        while (
-            pv->api->encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
+        while (pv->api->encoder_encode(pv->x265, &nal,
+                                       &nnal, NULL, &pic_out) > 0)
         {
             hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
             hb_buffer_list_append(&list, buf);
