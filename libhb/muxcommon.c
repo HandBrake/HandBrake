@@ -780,7 +780,7 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
                                       uint8_t *style_atoms, uint16_t *stylesize)
 {
     uint16_t utf8_count = 0;         // utf8 count from start of subtitle
-    int consumed, in_pos = 0, out_pos = 0, len, ii, lines;
+    int consumed, in_pos = 0, out_pos = 0, len, ii;
     style_context_t ctx;
     hb_subtitle_style_t style;
     char *text, *tmp;
@@ -803,7 +803,6 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
 
     while (input[in_pos] != '\0')
     {
-        lines = 1;
         text = hb_ssa_to_text((char*)input + in_pos, &consumed, &style);
         if (text == NULL)
             break;
@@ -817,18 +816,6 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
                 utf8_count++;
                 hb_deep_log( 3, "mux: Counted %d UTF-8 chrs within subtitle",
                                  utf8_count);
-            }
-            // By default tx3g only supports 2 lines of text
-            // To support more lines, we must enable the virtical placement
-            // flag in the tx3g atom and add tbox atoms to the sample
-            // data to set the vertical placement for each subtitle.
-            // Although tbox defines a rectangle, the QT spec says
-            // that only the vertical placement is honored (bummer).
-            if (text[ii] == '\n')
-            {
-                lines++;
-                if (lines > 2)
-                    text[ii] = ' ';
             }
             len++;
         }
