@@ -247,7 +247,7 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
     else
     {
         hb_error("Error: invalid preset format in presets_do()");
-        return PRESET_DO_NEXT;
+        return PRESET_DO_DELETE;
     }
     return PRESET_DO_DONE;
 }
