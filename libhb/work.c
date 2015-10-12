@@ -228,7 +228,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w = hb_get_work(h, WORK_ENCTHEORA);
             break;
 #ifdef USE_X265
-        case HB_VCODEC_X265:
+        case HB_VCODEC_X265_8BIT:
+        case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_X265_12BIT:
+        case HB_VCODEC_X265_16BIT:
             w = hb_get_work(h, WORK_ENCX265);
             break;
 #endif
@@ -415,7 +418,10 @@ void hb_display_job_info(hb_job_t *job)
             {
                 case HB_VCODEC_X264_8BIT:
                 case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265:
+                case HB_VCODEC_X265_8BIT:
+                case HB_VCODEC_X265_10BIT:
+                case HB_VCODEC_X265_12BIT:
+                case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                     hb_log("     + preset:  %s", job->encoder_preset);
@@ -429,7 +435,10 @@ void hb_display_job_info(hb_job_t *job)
             {
                 case HB_VCODEC_X264_8BIT:
                 case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265:
+                case HB_VCODEC_X265_8BIT:
+                case HB_VCODEC_X265_10BIT:
+                case HB_VCODEC_X265_12BIT:
+                case HB_VCODEC_X265_16BIT:
                     hb_log("     + tune:    %s", job->encoder_tune);
                 default:
                     break;
@@ -446,7 +455,10 @@ void hb_display_job_info(hb_job_t *job)
             {
                 case HB_VCODEC_X264_8BIT:
                 case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265:
+                case HB_VCODEC_X265_8BIT:
+                case HB_VCODEC_X265_10BIT:
+                case HB_VCODEC_X265_12BIT:
+                case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                     hb_log("     + profile: %s", job->encoder_profile);
@@ -477,7 +489,8 @@ void hb_display_job_info(hb_job_t *job)
         {
             hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass_id );
             if(job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 &&
-               ((job->vcodec & HB_VCODEC_X264_MASK) || job->vcodec == HB_VCODEC_X265))
+               ((job->vcodec & HB_VCODEC_X264_MASK) ||
+                (job->vcodec & HB_VCODEC_X265_MASK)))
             {
                 hb_log( "     + fast first pass" );
                 if (job->vcodec & HB_VCODEC_X264_MASK)

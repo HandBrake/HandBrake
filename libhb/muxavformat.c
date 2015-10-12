@@ -324,7 +324,10 @@ static int avformatInit( hb_mux_object_t * m )
             }
         } break;
 
-        case HB_VCODEC_X265:
+        case HB_VCODEC_X265_8BIT:
+        case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_X265_12BIT:
+        case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
             track->st->codec->codec_id = AV_CODEC_ID_HEVC;
 

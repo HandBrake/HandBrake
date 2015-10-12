@@ -51,14 +51,13 @@ struct hb_work_private_s
 
     struct
     {
-        int64_t duration;
+        int64_t     duration;
     }
     frame_info[FRAME_INFO_SIZE];
 
     char            csvfn[1024];
 
     // Multiple bit-depth
-    int             depth;
     const x265_api *api;
 };
 
@@ -95,22 +94,25 @@ static int param_parse(hb_work_private_t *pv, x265_param *param,
  **********************************************************************/
 int encx265Init(hb_work_object_t *w, hb_job_t *job)
 {
-    hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
-    pv->next_chapter_pts  = AV_NOPTS_VALUE;
-    pv->delayed_chapters  = hb_list_init();
-    pv->job               = job;
-    w->private_data       = pv;
-    int ret;
-    hb_rational_t vrate;
-    x265_nal *nal;
-    uint32_t nnal;
+    hb_work_private_t  *pv = calloc(1, sizeof(hb_work_private_t));
+    int                 ret, depth;
+    hb_rational_t       vrate;
+    x265_nal           *nal;
+    uint32_t            nnal;
+    const char * const *profile_names;
 
-    // TODO: add support for other bit depths
-    pv->depth = 8;
-    pv->api = x265_api_get(pv->depth);
+    pv->next_chapter_pts = AV_NOPTS_VALUE;
+    pv->delayed_chapters = hb_list_init();
+    pv->job              = job;
+    w->private_data      = pv;
+
+    depth                = hb_video_encoder_get_depth(job->vcodec);
+    profile_names        = hb_video_encoder_get_profiles(job->vcodec);
+    pv->api              = x265_api_get(depth);
+
     if (pv->api == NULL)
     {
-        hb_error("encx265: x265_api_get failed, bit depth %d.", pv->depth);
+        hb_error("encx265: x265_api_get failed, bit depth %d.", depth);
         goto fail;
     }
 
@@ -292,9 +294,9 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* Apply profile and level settings last. */
-    if (job->encoder_profile                                       != NULL &&
-        strcasecmp(job->encoder_profile, hb_h265_profile_names[0]) != 0    &&
-        pv->api->param_apply_profile(param, job->encoder_profile)  < 0)
+    if (job->encoder_profile                                      != NULL &&
+        strcasecmp(job->encoder_profile, profile_names[0])        != 0    &&
+        pv->api->param_apply_profile(param, job->encoder_profile) < 0)
     {
         goto fail;
     }
@@ -558,8 +560,8 @@ int encx265Work(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out
         hb_buffer_list_clear(&list);
 
         // flush delayed frames
-        while (
-            pv->api->encoder_encode(pv->x265, &nal, &nnal, NULL, &pic_out) > 0)
+        while (pv->api->encoder_encode(pv->x265, &nal,
+                                       &nnal, NULL, &pic_out) > 0)
         {
             hb_buffer_t *buf = nal_encode(w, &pic_out, nal, nnal);
             hb_buffer_list_append(&list, buf);
