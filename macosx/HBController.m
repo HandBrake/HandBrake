@@ -31,7 +31,69 @@
 #import "HBJob.h"
 #import "HBStateFormatter.h"
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate>
+{
+    IBOutlet NSTabView *fMainTabView;
+
+    // Picture controller
+    HBPictureViewController * fPictureViewController;
+    IBOutlet NSTabViewItem  * fPictureTab;
+
+    // Video view controller
+    HBVideoController       * fVideoController;
+    IBOutlet NSTabViewItem  * fVideoTab;
+
+    // Subtitles view controller
+    HBSubtitlesController   * fSubtitlesViewController;
+    IBOutlet NSTabViewItem  * fSubtitlesTab;
+
+    // Audio view controller
+    HBAudioController       * fAudioController;
+    IBOutlet NSTabViewItem  * fAudioTab;
+
+    // Chapters view controller
+    HBChapterTitlesController    * fChapterTitlesController;
+    IBOutlet NSTabViewItem       * fChaptersTitlesTab;
+
+    // Advanced options tab
+    HBAdvancedController         * fAdvancedOptions;
+    IBOutlet NSTabViewItem       * fAdvancedTab;
+
+    // Picture Preview
+    HBPreviewController           * fPreviewController;
+
+    // Queue panel
+    HBQueueController            * fQueueController;
+
+    // Source box
+    IBOutlet NSProgressIndicator * fScanIndicator;
+    IBOutlet NSBox               * fScanHorizontalLine;
+
+    IBOutlet NSTextField         * fSrcDVD2Field;
+    IBOutlet NSPopUpButton       * fSrcTitlePopUp;
+
+    // pts based start / stop
+    IBOutlet NSTextField         * fSrcTimeStartEncodingField;
+    IBOutlet NSTextField         * fSrcTimeEndEncodingField;
+    // frame based based start / stop
+    IBOutlet NSTextField         * fSrcFrameStartEncodingField;
+    IBOutlet NSTextField         * fSrcFrameEndEncodingField;
+
+    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
+    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
+
+    // Bottom
+    IBOutlet NSTextField         * fStatusField;
+    IBOutlet NSTextField         * fQueueStatus;
+    IBOutlet NSProgressIndicator * fRipIndicator;
+    BOOL                           fRipIndicatorShown;
+
+    // User Preset
+    HBPresetsManager             * presetManager;
+    HBPresetsViewController      * fPresetsView;
+    
+    IBOutlet NSDrawer            * fPresetDrawer;
+}
 
 @property (unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
