@@ -1155,9 +1155,6 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             /* Anamorphic 3: Power User Jamboree
                - Set everything based on specified values */
 
-            /* Use specified storage dimensions */
-            storage_aspect = (double)geo->geometry.width / geo->geometry.height;
-
             /* Time to get picture dimensions that divide cleanly.*/
             width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
             height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
@@ -1166,31 +1163,10 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             if (maxWidth && width > maxWidth)
             {
                 width = maxWidth;
-                // If we are keeping the display aspect, then we are going
-                // to be modifying the PAR anyway.  So it's preferred
-                // to let the width/height stray some from the original
-                // requested storage aspect.
-                //
-                // But otherwise, PAR and DAR will change the least
-                // if we stay as close as possible to the requested
-                // storage aspect.
-                if (!keep_display_aspect &&
-                    (maxHeight == 0 || height < maxHeight))
-                {
-                    height = width / storage_aspect + 0.5;
-                    height = MULTIPLE_MOD(height, mod);
-                }
             }
             if (maxHeight && height > maxHeight)
             {
                 height = maxHeight;
-                // Ditto, see comment above
-                if (!keep_display_aspect &&
-                    (maxWidth == 0 || width < maxWidth))
-                {
-                    width = height * storage_aspect + 0.5;
-                    width  = MULTIPLE_MOD(width, mod);
-                }
             }
             if (keep_display_aspect)
             {
@@ -1202,19 +1178,6 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                        src_par.num;
                 dst_par_den = (int64_t)width  * cropped_height *
                                        src_par.den;
-            }
-            else
-            {
-                /* If the dimensions were changed by the modulus
-                 * or by maxWidth/maxHeight, we also change the
-                 * output PAR so that the DAR is unchanged.
-                 *
-                 * PAR is the requested output display width / storage width
-                 * requested output display width is the original
-                 * requested width * original requested PAR
-                 */
-                dst_par_num = geo->geometry.width * dst_par_num;
-                dst_par_den = width * dst_par_den;
             }
         } break;
     }

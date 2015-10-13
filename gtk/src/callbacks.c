@@ -1873,7 +1873,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         if (!(keep_aspect || pic_par) || pic_par == 3)
         {
             ghb_dict_set_int(settings, "scale_height",
-                             title->geometry.width - title->crop[0] - title->crop[1]);
+                             title->geometry.height - title->crop[0] - title->crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -2501,7 +2501,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH);
+        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH|GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2516,7 +2516,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
     ghb_live_reset(ud);
@@ -2532,7 +2532,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2562,7 +2562,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
 }
@@ -2590,7 +2590,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
 
     update_aspect_info(ud);
@@ -2604,7 +2604,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     ghb_pref_save(ud->prefs, "preview_show_crop");
     update_preview = TRUE;
 }
