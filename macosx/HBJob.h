@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 
 @class HBPreset;
+@class HBMutablePreset;
 @class HBTitle;
 
 #import "HBRange.h"
@@ -37,12 +38,9 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 /**
  * HBJob
  */
-@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBUniqueObject>
+@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding, HBUniqueObject>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
-
-- (void)applyPreset:(HBPreset *)preset;
-- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict;
 
 /// Current state of the job.
 @property (nonatomic, readwrite) HBJobState state;

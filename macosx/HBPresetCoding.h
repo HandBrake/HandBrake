@@ -6,10 +6,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "HBPreset.h"
+#import "HBMutablePreset.h"
+
 @protocol HBPresetCoding <NSObject>
 
-- (void)applyPreset:(NSDictionary *)preset;
-- (void)writeToPreset:(NSMutableDictionary *)preset;
-
+- (void)applyPreset:(HBPreset *)preset;
+- (void)writeToPreset:(HBMutablePreset *)preset;
 
 @end

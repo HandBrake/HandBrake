@@ -69,7 +69,7 @@
     return nil;
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     // Track selection behavior
     if ([preset[@"AudioTrackSelectionBehavior"] isEqualToString:@"first"])
@@ -203,7 +203,7 @@
     }
 }
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     // Track selection behavior
     if (self.trackSelectionBehavior == HBAudioTrackSelectionBehaviorFirst)

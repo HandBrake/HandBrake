@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *
  *  An instance of HBPreset can be an actual preset or a folder.
  */
-@interface HBPreset : HBTreeNode <NSCopying>
+@interface HBPreset : HBTreeNode <NSCopying, NSMutableCopying>
 
 - (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
 
@@ -50,11 +50,6 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 - (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot;
 
 /**
- *  Removes unknown keys and normalizes values.
- */
-- (void)cleanUp;
-
-/**
  *  The name of the preset.
  */
 @property (nonatomic, copy) NSString *name;
@@ -75,14 +70,14 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 @property (nonatomic) BOOL isDefault;
 
 /**
- *  The actual content of the preset.
+ *  Returns the value associated with a given key.
+ *
+ *  @param key The key for which to return the corresponding value.
+ *
+ *  @return The value associated with key, or nil if no value is associated with key
  */
-@property (nonatomic, strong, nullable) NSDictionary *content;
-
-/**
- *  A dictionary representation of the preset.
- */
-@property (readonly, copy) NSDictionary *dictionary;
+- (nullable id)objectForKey:(NSString *)key;
+- (nullable id)objectForKeyedSubscript:(NSString *)key;
 
 @end
 

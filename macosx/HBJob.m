@@ -6,7 +6,6 @@
 
 #import "HBJob.h"
 #import "HBTitle.h"
-#import "HBPreset.h"
 
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
@@ -60,35 +59,37 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return self;
 }
 
+#pragma mark - HBPresetCoding
+
 - (void)applyPreset:(HBPreset *)preset
 {
     self.presetName = preset.name;
 
-    NSDictionary *content = preset.content;
-
-    self.container = hb_container_get_from_name([content[@"FileFormat"] UTF8String]);
+    self.container = hb_container_get_from_name([preset[@"FileFormat"] UTF8String]);
 
     // MP4 specifics options.
-    self.mp4HttpOptimize = [content[@"Mp4HttpOptimize"] boolValue];
-    self.mp4iPodCompatible = [content[@"Mp4iPodCompatible"] boolValue];
+    self.mp4HttpOptimize = [preset[@"Mp4HttpOptimize"] boolValue];
+    self.mp4iPodCompatible = [preset[@"Mp4iPodCompatible"] boolValue];
 
     // Chapter Markers
-    self.chaptersEnabled = [content[@"ChapterMarkers"] boolValue];
+    self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
 
     [@[self.audio, self.subtitles, self.filters, self.picture, self.video] makeObjectsPerformSelector:@selector(applyPreset:)
-                                                                                                           withObject:content];
+                                                                                                           withObject:preset];
 }
 
-- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
-    dict[@"FileFormat"] = @(hb_container_get_short_name(self.container));
-    dict[@"ChapterMarkers"] = @(self.chaptersEnabled);
+    preset.name = self.presetName;
+
+    preset[@"FileFormat"] = @(hb_container_get_short_name(self.container));
+    preset[@"ChapterMarkers"] = @(self.chaptersEnabled);
     // MP4 specifics options.
-    dict[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
-    dict[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
+    preset[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
+    preset[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
 
     [@[self.video, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(writeToPreset:)
-                                                                                                           withObject:dict];
+                                                                                                           withObject:preset];
 }
 
 - (void)setContainer:(int)container

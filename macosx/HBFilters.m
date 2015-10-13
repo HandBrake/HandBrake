@@ -323,7 +323,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 #pragma mark - Presets and queue
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     preset[@"PictureDeinterlaceFilter"] = self.deinterlace;
     preset[@"PictureDeinterlacePreset"] = self.deinterlacePreset;
@@ -341,7 +341,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     preset[@"VideoGrayScale"] = @(self.grayscale);
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     self.notificationsEnabled = NO;
 

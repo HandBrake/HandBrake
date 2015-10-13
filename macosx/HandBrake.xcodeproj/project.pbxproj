@@ -155,6 +155,7 @@
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A9597A2A1A49749D00007771 /* HBRange+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9597A291A49749D00007771 /* HBRange+UIAdditions.m */; };
 		A967E4BA1A16768200DF1DFC /* EncodeCanceled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */; };
+		A96CD1761BCC5F9100F372F1 /* HBMutablePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A96CD1751BCC5F9100F372F1 /* HBMutablePreset.m */; };
 		A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB31AC1436F00BAEAA8 /* HBApplication.m */; };
 		A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */; };
 		A9706CBA1AC1452800BAEAA8 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9706CB81AC1452800BAEAA8 /* ExceptionAlert.xib */; };
@@ -449,6 +450,8 @@
 		A95B8D931B09F16700F2F152 /* HandBrake Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HandBrake Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A95B8D961B09F16700F2F152 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeCanceled@2x.png"; sourceTree = "<group>"; };
+		A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBMutablePreset.h; sourceTree = "<group>"; };
+		A96CD1751BCC5F9100F372F1 /* HBMutablePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBMutablePreset.m; sourceTree = "<group>"; };
 		A9706CB21AC1436F00BAEAA8 /* HBApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBApplication.h; sourceTree = "<group>"; };
 		A9706CB31AC1436F00BAEAA8 /* HBApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBApplication.m; sourceTree = "<group>"; };
 		A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBExceptionAlertController.h; sourceTree = "<group>"; };
@@ -1037,6 +1040,8 @@
 				273F20A214ADBE670021BE6D /* HBPresetsManager.m */,
 				A9CF25F21990D64E0023F727 /* HBPreset.h */,
 				A9CF25F31990D64E0023F727 /* HBPreset.m */,
+				A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */,
+				A96CD1751BCC5F9100F372F1 /* HBMutablePreset.m */,
 				A9D488A31996270300E9B1BA /* HBTreeNode.h */,
 				A9D488A41996270300E9B1BA /* HBTreeNode.m */,
 			);
@@ -1450,6 +1455,7 @@
 				273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */,
 				273F20AE14ADBE670021BE6D /* HBAudioTrack.m in Sources */,
 				A9DEC87A1A23C89E00C79B48 /* HBPicture.m in Sources */,
+				A96CD1761BCC5F9100F372F1 /* HBMutablePreset.m in Sources */,
 				273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */,
 				A9537BF31A48A99500141102 /* HBVideo+UIAdditions.m in Sources */,
 				273F20B114ADBE670021BE6D /* HBDVDDetector.m in Sources */,

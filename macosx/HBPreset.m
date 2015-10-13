@@ -5,9 +5,20 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPreset.h"
+#import "HBMutablePreset.h"
+
 #include "preset.h"
 
 #import "NSJSONSerialization+HBAdditions.h"
+
+@interface HBPreset ()
+
+/**
+ *  The actual content of the preset.
+ */
+@property (nonatomic, strong, nullable) NSMutableDictionary *content;
+
+@end
 
 @implementation HBPreset
 
@@ -30,7 +41,7 @@
     {
         _name = [title copy];
         _isBuiltIn = builtIn;
-        _content = [content copy];
+        _content = [content mutableCopy];
         if ([content[@"PresetDescription"] isKindOfClass:[NSString class]])
         {
             _presetDescription = [content[@"PresetDescription"] copy];
@@ -188,6 +199,9 @@
     
 }
 
+/**
+ *  A dictionary representation of the preset.
+ */
 - (NSDictionary *)dictionary
 {
     NSMutableDictionary *output = [[NSMutableDictionary alloc] init];
@@ -248,14 +262,21 @@
     return success;
 }
 
+#pragma mark - NSCopying
+
 - (id)copyWithZone:(NSZone *)zone
 {
     HBPreset *node = [super copyWithZone:zone];
     node->_name = [self.name copy];
-    node->_content = [self.content copy];
+    node->_content = [self.content mutableCopy];
     node->_presetDescription = [self.presetDescription copy];
 
     return node;
+}
+
+- (id)mutableCopyWithZone:(NSZone *)zone
+{
+    return [[HBMutablePreset allocWithZone:zone] initWithDictionary:_content];
 }
 
 - (NSUInteger)hash
@@ -263,23 +284,7 @@
     return self.name.hash + self.isBuiltIn + self.isLeaf;
 }
 
-- (void)cleanUp
-{
-    // Run the libhb clean function
-    NSString *presetJson = [NSJSONSerialization HB_StringWithJSONObject:self.dictionary options:0 error:NULL];
-
-    if (presetJson.length)
-    {
-        char *cleanedJson = hb_presets_clean_json(presetJson.UTF8String);
-        NSDictionary *cleanedDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
-        free(cleanedJson);
-
-        if ([cleanedDict isKindOfClass:[NSDictionary class]])
-        {
-            self.content = cleanedDict;
-        }
-    }
-}
+#pragma mark - Properties
 
 - (void)setName:(NSString *)name
 {
@@ -291,6 +296,18 @@
 {
     _isDefault = isDefault;
     [self.delegate nodeDidChange:self];
+}
+
+#pragma mark - Keys
+
+- (id)objectForKey:(NSString *)key
+{
+    return [_content objectForKey:key];
+}
+
+- (nullable id)objectForKeyedSubscript:(NSString *)key
+{
+    return _content[key];
 }
 
 #pragma mark - KVC

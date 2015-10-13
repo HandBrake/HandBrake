@@ -566,7 +566,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 #pragma mark - Presets
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
 
@@ -599,7 +599,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     preset[@"PictureRightCrop"]  = @(self.cropRight);
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     self.validating = YES;
     self.notificationsEnabled = NO;

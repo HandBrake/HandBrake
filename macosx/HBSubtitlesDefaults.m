@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     if ([preset[@"SubtitleTrackSelectionBehavior"] isEqualToString:@"first"])
     {
@@ -61,7 +61,7 @@
     self.burnInBluraySubtitles = [preset[@"SubtitleBurnBDSub"] boolValue];
 }
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     if (self.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
     {

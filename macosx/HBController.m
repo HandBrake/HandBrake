@@ -11,6 +11,7 @@
 
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
+#import "HBMutablePreset.h"
 #import "HBUtilities.h"
 
 #import "HBPictureViewController.h"
@@ -1376,30 +1377,15 @@
 
 - (HBPreset *)createPresetFromCurrentSettings
 {
-    NSMutableDictionary *preset = [NSMutableDictionary dictionary];
-    NSDictionary *currentPreset = self.currentPreset.content;
-
-    preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
-    preset[@"PresetName"] = self.job.presetName;
-    preset[@"Folder"] = @NO;
+    HBMutablePreset *preset = [self.currentPreset mutableCopy];
 
 	// Set whether or not this is a user preset or factory 0 is factory, 1 is user
     preset[@"Type"] = @1;
     preset[@"Default"] = @NO;
 
-    // Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-    preset[@"UsesPictureSettings"] = currentPreset[@"UsesPictureSettings"];
-    // Get whether or not to use the current Picture Filter settings for the preset
-    preset[@"UsesPictureFilters"] = currentPreset[@"UsesPictureFilters"];
+    [self.job writeToPreset:preset];
 
-    preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
-    preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
-
-    preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
-
-    [self.job applyCurrentSettingsToPreset:preset];
-
-    return [[HBPreset alloc] initWithName:preset[@"PresetName"] content:preset builtIn:NO];
+    return [preset copy];
 }
 
 #pragma mark -

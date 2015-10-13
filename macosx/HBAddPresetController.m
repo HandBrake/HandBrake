@@ -8,8 +8,7 @@
 
 #import "HBAddPresetController.h"
 #import "HBPreset.h"
-
-#include "hb.h"
+#import "HBMutablePreset.h"
 
 @interface HBAddPresetController ()
 
@@ -53,7 +52,7 @@
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", @"")];
     [[self.picSettingsPopUp lastItem] setTag: 0];
 
-    if ([self.preset.content[@"PicturePAR"] integerValue] != HB_ANAMORPHIC_STRICT)
+    if (![self.preset[@"PicturePAR"] isEqualToString:@"strict"])
     {
         // not Strict, Custom is applicable
         [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", @"")];
@@ -94,27 +93,24 @@
     }
     else
     {
-        self.preset.name = self.name.stringValue;
-        self.preset.presetDescription = self.desc.stringValue;
+        HBMutablePreset *newPreset = [self.preset mutableCopy];
 
-        NSMutableDictionary *dict = [self.preset.content mutableCopy];
-
-        dict[@"PresetName"] = self.name.stringValue;
-        dict[@"PresetDescription"] = self.desc.stringValue;
+        newPreset.name = self.name.stringValue;
+        newPreset.presetDescription = self.desc.stringValue;
 
         // Get the picture size
-        dict[@"PictureWidth"] = @(self.picWidth.integerValue);
-        dict[@"PictureHeight"] = @(self.picHeight.integerValue);
+        newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
+        newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
 
         //Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-        dict[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
+        newPreset[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
 
         // Always use Picture Filter settings for the preset
-        dict[@"UsesPictureFilters"] = @YES;
+        newPreset[@"UsesPictureFilters"] = @YES;
 
-        self.preset.content = [dict copy];
+        [newPreset cleanUp];
 
-        [self.preset cleanUp];
+        self.preset = [newPreset copy];
 
         [[self window] orderOut:nil];
         [NSApp endSheet:[self window] returnCode:NSModalResponseContinue];

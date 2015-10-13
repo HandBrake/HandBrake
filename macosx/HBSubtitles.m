@@ -521,12 +521,12 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 #pragma mark - Presets
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     [self.defaults writeToPreset:preset];
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     [self.defaults applyPreset:preset];
     [self addTracksFromDefaults];

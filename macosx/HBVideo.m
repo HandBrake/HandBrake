@@ -503,7 +503,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return string;
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     self.notificationsEnabled = NO;
 
@@ -613,7 +613,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     self.notificationsEnabled = YES;
 }
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     preset[@"VideoEncoder"] = @(hb_video_encoder_get_short_name(self.encoder));
 
