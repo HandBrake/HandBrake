@@ -569,6 +569,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (void)writeToPreset:(HBMutablePreset *)preset
 {
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
+    preset[@"PictureModulus"]   = @(self.modulus);
 
     switch (self.anamorphicMode) {
         case HB_ANAMORPHIC_NONE:
@@ -588,7 +589,9 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
             break;
     }
 
-    preset[@"PictureModulus"]   = @(self.modulus);
+    // PAR
+    preset[@"PicturePARWidth"] = @(self.parWidth);
+    preset[@"PicturePARHeight"] = @(self.parHeight);
 
     // Set crop settings
     preset[@"PictureAutoCrop"] = @(self.autocrop);
@@ -610,6 +613,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
      */
     int maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
     int maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
+    int parWidth = self.parWidth;
+    int parHeight = self.parHeight;
     int jobMaxWidth = 0, jobMaxHeight = 0;
 
     /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
@@ -668,6 +673,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
         {
             self.anamorphicMode = HB_ANAMORPHIC_CUSTOM;
+            parWidth = [preset[@"PicturePARWidth"] intValue];
+            parHeight = [preset[@"PicturePARHeight"] intValue];
         }
         else
         {
@@ -726,7 +733,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     uiGeo.geometry.width = self.width;
     uiGeo.geometry.height =  self.height;
 
-    hb_rational_t par = {self.parWidth, self.parHeight};
+    hb_rational_t par = {parWidth, parHeight};
     uiGeo.geometry.par = par;
 
     uiGeo.maxWidth = jobMaxWidth;
