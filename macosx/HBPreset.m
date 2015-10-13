@@ -13,9 +13,7 @@
 
 @interface HBPreset ()
 
-/**
- *  The actual content of the preset.
- */
+///  The actual content of the preset.
 @property (nonatomic, strong, nullable) NSMutableDictionary *content;
 
 @end
@@ -30,6 +28,25 @@
         _name = @"New Preset";
         _presetDescription = @"";
         self.isLeaf = YES;
+    }
+    return self;
+}
+
+- (instancetype)initWithPreset:(HBPreset *)preset
+{
+    self = [super init];
+    if (self)
+    {
+        _name = preset.name;
+        _presetDescription = preset.presetDescription;
+        _content = [preset.content mutableCopy];
+        self.isLeaf = preset.isLeaf;
+
+        for (HBPreset *child in preset.children)
+        {
+            HBPreset *mutableChild = [[[self class] alloc] initWithPreset:child];
+            [self insertObject:mutableChild inChildrenAtIndex:0];
+        }
     }
     return self;
 }
@@ -262,6 +279,24 @@
     return success;
 }
 
+- (void)cleanUp
+{
+    // Run the libhb clean function
+    NSString *presetJson = [NSJSONSerialization HB_StringWithJSONObject:self.dictionary options:0 error:NULL];
+
+    if (presetJson.length)
+    {
+        char *cleanedJson = hb_presets_clean_json(presetJson.UTF8String);
+        NSDictionary *cleanedDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
+        free(cleanedJson);
+
+        if ([cleanedDict isKindOfClass:[NSDictionary class]])
+        {
+            self.content = [cleanedDict mutableCopy];
+        }
+    }
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone
@@ -276,7 +311,7 @@
 
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
-    return [[HBMutablePreset allocWithZone:zone] initWithDictionary:_content];
+    return [[HBMutablePreset allocWithZone:zone] initWithPreset:self];
 }
 
 - (NSUInteger)hash

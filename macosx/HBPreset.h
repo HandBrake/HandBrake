@@ -22,10 +22,10 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 @interface HBPreset : HBTreeNode <NSCopying, NSMutableCopying>
 
 - (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
-
 - (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithPreset:(HBPreset *)preset;
 
 /**
  *  Initializes a newly allocated preset object initialized with the data found at a given URL.
