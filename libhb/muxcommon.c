@@ -459,26 +459,19 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 static void muxFlush(hb_mux_t * mux)
 {
-    int ii;
+    int ii, done = 0;
 
-    while (1)
+    while (!done)
     {
+        done = 1;
         for (ii = 0; ii < mux->ntracks; ii++)
         {
             OutputTrackChunk(mux, ii, mux->m);
-        }
-
-        for (ii = 0; ii < mux->ntracks; ii++)
-        {
             if (mux->track[ii]->mf.out != mux->track[ii]->mf.in)
             {
                 // track buffer is not empty
-                break;
+                done = 0;
             }
-        }
-        if (ii >= mux->ntracks)
-        {
-            break;
         }
         mux->pts += mux->interleave;
     }
