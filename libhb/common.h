@@ -1185,6 +1185,7 @@ typedef struct hb_filter_init_s
     int           crop[4];
     hb_rational_t vrate;
     int           cfr;
+    int           grayscale;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
@@ -1252,6 +1253,7 @@ enum
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
     HB_FILTER_ROTATE,
+    HB_FILTER_GRAYSCALE,
 
     // for QSV - important to have as a last one
     HB_FILTER_QSV_POST,

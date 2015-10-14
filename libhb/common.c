@@ -3662,6 +3662,10 @@ hb_filter_object_t * hb_filter_init( int filter_id )
             filter = &hb_filter_rotate;
             break;
 
+        case HB_FILTER_GRAYSCALE:
+            filter = &hb_filter_grayscale;
+            break;
+
 #ifdef USE_QSV
         case HB_FILTER_QSV:
             filter = &hb_filter_qsv;

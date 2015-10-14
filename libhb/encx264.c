@@ -51,7 +51,6 @@ struct hb_work_private_s
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
-    uint8_t        * grey_data;
 
     int64_t        last_stop;   // Debugging - stop time of previous input frame
 
@@ -374,15 +373,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->pic_in.img.i_csp = X264_CSP_I420;
     pv->pic_in.img.i_plane = 3;
 
-    if( job->grayscale )
-    {
-        int uvsize = hb_image_stride(AV_PIX_FMT_YUV420P, job->width,  1) *
-                     hb_image_height(AV_PIX_FMT_YUV420P, job->height, 1);
-        pv->grey_data = malloc(uvsize);
-        memset(pv->grey_data, 0x80, uvsize);
-        pv->pic_in.img.plane[1] = pv->pic_in.img.plane[2] = pv->grey_data;
-    }
-
     return 0;
 }
 
@@ -401,7 +391,6 @@ void encx264Close( hb_work_object_t * w )
         hb_list_close(&pv->delayed_chapters);
     }
 
-    free( pv->grey_data );
     x264_encoder_close( pv->x264 );
     free( pv );
     w->private_data = NULL;
@@ -580,11 +569,8 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     pv->pic_in.img.i_stride[1] = in->plane[1].stride;
     pv->pic_in.img.i_stride[2] = in->plane[2].stride;
     pv->pic_in.img.plane[0] = in->plane[0].data;
-    if( !job->grayscale )
-    {
-        pv->pic_in.img.plane[1] = in->plane[1].data;
-        pv->pic_in.img.plane[2] = in->plane[2].data;
-    }
+    pv->pic_in.img.plane[1] = in->plane[1].data;
+    pv->pic_in.img.plane[2] = in->plane[2].data;
 
     if( in->s.new_chap && job->chapter_markers )
     {
