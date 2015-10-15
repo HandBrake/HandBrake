@@ -46,12 +46,6 @@ extern NSString *keySubTrackSrtCharCode;
 
 @implementation HBTitle
 
-- (instancetype)init
-{
-    NSAssert(false, @"[HBTitle init] should not be called");
-    return nil;
-}
-
 - (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured
 {
     self = [super init];

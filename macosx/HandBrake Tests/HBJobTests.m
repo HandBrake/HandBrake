@@ -88,4 +88,26 @@
     XCTAssertEqual(self.title.autoCropRight, self.job.picture.cropRight);
 }
 
+- (void)testCustomAnamorphic
+{
+    HBMutablePreset *preset = [self.preset mutableCopy];
+
+    preset[@"UsesPictureSettings"] = @1;
+
+    preset[@"PictureWidth"] = @720;
+    preset[@"PictureHeight"] = @576;
+
+    preset[@"PicturePAR"] = @"custom";
+    preset[@"PicturePARWidth"] = @64;
+    preset[@"PicturePARHeight"] = @45;
+
+    HBJob *job = [self.job copy];
+    [job applyPreset:preset];
+
+    XCTAssertEqual(job.picture.width, 720);
+    XCTAssertEqual(job.picture.height, 576);
+
+    XCTAssertEqual(job.picture.displayWidth, 1064);
+}
+
 @end
