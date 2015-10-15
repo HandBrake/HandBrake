@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B30a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9058" systemVersion="15B38b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9052"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9058"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBChapterTitlesController">
             <connections>
-                <outlet property="fChapterTable" destination="InF-gR-Lia" id="DSk-hZ-TGI"/>
-                <outlet property="fChapterTableNameColumn" destination="Z6H-lJ-ipr" id="TkJ-3q-ejW"/>
+                <outlet property="table" destination="InF-gR-Lia" id="z0x-sO-Ywf"/>
                 <outlet property="view" destination="qs9-Xl-pXA" id="km6-16-y27"/>
             </connections>
         </customObject>

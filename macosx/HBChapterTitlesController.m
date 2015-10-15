@@ -1,4 +1,4 @@
-/*  ChapterTitles.m $
+/*  HBChapterTitlesController.m $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.fr/>.
@@ -9,11 +9,8 @@
 #import "HBJob.h"
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
-{
-    IBOutlet NSTableView         * fChapterTable;
-	IBOutlet NSTableColumn       * fChapterTableNameColumn;
-}
 
+@property (weak) IBOutlet NSTableView *table;
 @property (nonatomic, readwrite, strong) NSArray *chapterTitles;
 
 @end
@@ -34,7 +31,7 @@
 {
     _job = job;
     self.chapterTitles = job.chapterTitles;
-    [fChapterTable reloadData];
+    [self.table reloadData];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -72,9 +69,12 @@
     return @"__DATA ERROR__";
 }
 
-/* Method to edit the next chapter when the user presses Return. We have to use
-a timer to avoid interfering with the chain of events that handles the edit. */
-- (void)controlTextDidEndEditing: (NSNotification *) notification
+/**
+ * Method to edit the next chapter when the user presses Return.
+ * We queue the actino on the runloop to avoid interfering
+ * with the chain of events that handles the edit.
+ */
+- (void)controlTextDidEndEditing:(NSNotification *)notification
 {
     NSTableView *chapterTable = [notification object];
     NSInteger column = [chapterTable editedColumn];
@@ -84,160 +84,138 @@ a timer to avoid interfering with the chain of events that handles the edit. */
     // Edit the cell in the next row, same column
     row++;
     textMovement = [[notification userInfo][@"NSTextMovement"] integerValue];
-    if( textMovement == NSReturnTextMovement && row < [chapterTable numberOfRows] )
+    if (textMovement == NSReturnTextMovement && row < chapterTable.numberOfRows)
     {
-        NSArray *info = @[chapterTable,
-            @(column), @(row)];
-        /* The delay is unimportant; editNextRow: won't be called until the responder
-        chain finishes because the event loop containing the timer is on this thread */
+        NSArray *info = @[chapterTable, @(column), @(row)];
+        // The delay is unimportant; editNextRow: won't be called until the responder
+        // chain finishes because the event loop containing the timer is on this thread
         [self performSelector:@selector(editNextRow:) withObject:info afterDelay:0.0];
     }
 }
 
-- (void)editNextRow: (id) objects
+- (void)editNextRow:(id)objects
 {
     NSTableView *chapterTable = objects[0];
     NSInteger column = [objects[1] integerValue];
     NSInteger row = [objects[2] integerValue];
 
-    if( row >= 0 && row < [chapterTable numberOfRows] )
+    if (row >= 0 && row < chapterTable.numberOfRows)
     {
         [chapterTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
         [chapterTable editColumn:column row:row withEvent:nil select:YES];
     }
 }
 
-#pragma mark -
-#pragma mark Chapter Files Import / Export
+#pragma mark - Chapter Files Import / Export
 
-- (IBAction) browseForChapterFile: (id) sender
+- (IBAction)browseForChapterFile:(id)sender
 {
-    /* We get the current file name and path from the destination field here */
+    // We get the current file name and path from the destination field here
     NSURL *sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
 
-	/* Open a panel to let the user choose the file */
+	// Open a panel to let the user choose the file
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-    [panel setDirectoryURL:sourceDirectory];
-    [panel setAllowedFileTypes:@[@"csv"]];
+    panel.allowedFileTypes = @[@"csv"];
+    panel.directoryURL = sourceDirectory;
 
-    [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
-        NSArray *chaptersArray = nil; /* temp array for chapters */
-        NSMutableArray *chaptersMutableArray = nil; /* temp array for chapters */
-        NSString *chapterName = nil; 	/* temp string from file */
-        NSInteger chapters, i;
-
-        if (result == NSOKButton)  /* if they click OK */
+    [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
+    {
+        if (result == NSFileHandlingPanelOKButton)
         {
-            chapterName = [[NSString alloc] initWithContentsOfURL:[panel URL] encoding:NSUTF8StringEncoding error:NULL];
-            chaptersArray = [chapterName componentsSeparatedByString:@"\n"];
-            chaptersMutableArray = [chaptersArray mutableCopy];
-            chapters = [self numberOfRowsInTableView:fChapterTable];
-            if ([chaptersMutableArray count] > 0)
+            NSString *csv = [[NSString alloc] initWithContentsOfURL:panel.URL encoding:NSUTF8StringEncoding error:NULL];
+            NSMutableArray *csvArray = [[csv componentsSeparatedByString:@"\n"] mutableCopy];
+            NSUInteger count = self.chapterTitles.count;
+
+            if (csvArray.count > 0)
             {
-                /* if last item is empty remove it */
-                if ([chaptersMutableArray[[chaptersArray count]-1] length] == 0)
+                // if last item is empty remove it
+                if ([csvArray.lastObject length] == 0)
                 {
-                    [chaptersMutableArray removeLastObject];
+                    [csvArray removeLastObject];
                 }
             }
-            /* if chapters in table is not equal to array count */
-            if ((unsigned int) chapters != [chaptersMutableArray count])
+            // if chapters in table is not equal to array count
+            if (count != csvArray.count)
             {
                 [panel close];
-                [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", @"Unable to load chapter file")
-                                 defaultButton:NSLocalizedString(@"OK", @"OK")
+                [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", nil)
+                                 defaultButton:NSLocalizedString(@"OK", nil)
                                alternateButton:NULL
                                    otherButton:NULL
-                     informativeTextWithFormat:NSLocalizedString(@"%d chapters expected, %d chapters found in %@", @"%d chapters expected, %d chapters found in %@"),
-                  chapters, [chaptersMutableArray count], [[panel URL] lastPathComponent]] runModal];
-                return;
+                     informativeTextWithFormat:NSLocalizedString(@"%d chapters expected, %d chapters found in %@", nil),
+                  count, csvArray.count, panel.URL.lastPathComponent] runModal];
             }
-            /* otherwise, go ahead and populate table with array */
-            for (i=0; i<chapters; i++)
+            else
             {
+                // otherwise, go ahead and populate table with array
+                NSUInteger idx = 0;
+                for (NSString *csvLine in csvArray)
+                {
+                    if (csvLine.length > 4)
+                    {
+                        // Get the Range.location of the first comma in the line and then put everything after that into chapterTitle
+                        NSRange firstCommaRange = [csvLine rangeOfString:@","];
+                        NSString *chapterTitle = [csvLine substringFromIndex:firstCommaRange.location + 1];
+                        // Since we store our chapterTitle commas as "\," for the cli, we now need to remove the escaping "\" from the title
+                        chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"\\," withString:@","];
 
-                if([chaptersMutableArray[i] length] > 5)
-                {
-                    /* avoid a segfault */
-                    /* Get the Range.location of the first comma in the line and then put everything after that into chapterTitle */
-                    NSRange firstCommaRange = [chaptersMutableArray[i] rangeOfString:@","];
-                    NSString *chapterTitle = [chaptersMutableArray[i] substringFromIndex:firstCommaRange.location + 1];
-                    /* Since we store our chapterTitle commas as "\," for the cli, we now need to remove the escaping "\" from the title */
-                    chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"\\," withString:@","];
-                    [self tableView:fChapterTable
-                     setObjectValue:chapterTitle
-                     forTableColumn:fChapterTableNameColumn
-                                row:i];
-                }
-                else
-                {
-                    [panel close];
-                    [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", @"Unable to load chapter file")
-                                     defaultButton:NSLocalizedString(@"OK", @"OK")
-                                   alternateButton:NULL
-                                       otherButton:NULL
-                         informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", @"%@ was not formatted as expected."), [[panel URL] lastPathComponent]] runModal];
-                    [fChapterTable reloadData];
-                    return;
+                        [self.chapterTitles[idx] setTitle:chapterTitle];
+                        idx++;
+                    }
+                    else
+                    {
+                        [panel close];
+                        [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", nil)
+                                         defaultButton:NSLocalizedString(@"OK", nil)
+                                       alternateButton:NULL
+                                           otherButton:NULL
+                             informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", nil), panel.URL.lastPathComponent] runModal];
+                        break;
+
+                    }
+                    [self.table reloadData];
                 }
             }
-            [fChapterTable reloadData];
         }
     }];
 }
 
-- (IBAction) browseForChapterFileSave: (id) sender
+- (IBAction)browseForChapterFileSave:(id)sender
 {
     NSURL *destinationDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
 
-    /* Open a panel to let the user save to a file */
     NSSavePanel *panel = [NSSavePanel savePanel];
-    [panel setAllowedFileTypes:@[@"csv"]];
-    [panel setDirectoryURL:destinationDirectory];
-    [panel setNameFieldStringValue:self.job.destURL.lastPathComponent.stringByDeletingPathExtension];
+    panel.allowedFileTypes = @[@"csv"];
+    panel.directoryURL = destinationDirectory;
+    panel.nameFieldStringValue = self.job.destURL.lastPathComponent.stringByDeletingPathExtension;
 
-    [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSInteger result) {
-        NSString *chapterName;      /* pointer for string for later file-writing */
-        NSString *chapterTitle;
-        NSError *saveError = nil;
-        NSInteger chapters, i;    /* ints for the number of chapters in the table and the loop */
-
-        if( result == NSOKButton )   /* if they clicked OK */
+    [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
+    {
+        if (result == NSFileHandlingPanelOKButton)
         {
-            chapters = [self numberOfRowsInTableView:fChapterTable];
-            chapterName = [NSString string];
-            for (i=0; i<chapters; i++)
+            NSError *saveError;
+            NSMutableString *csv = [NSMutableString string];
+
+            NSInteger idx = 0;
+            for (HBChapter *chapter in self.chapterTitles)
             {
-                /* put each chapter title from the table into the array */
-                if (i<9)
-                { /* if i is from 0 to 8 (chapters 1 to 9) add two leading zeros */
-                    chapterName = [chapterName stringByAppendingFormat:@"00%ld,",i+1];
-                }
-                else if (i<99)
-                { /* if i is from 9 to 98 (chapters 10 to 99) add one leading zero */
-                    chapterName = [chapterName stringByAppendingFormat:@"0%ld,",i+1];
-                }
-                else if (i<999)
-                { /* in case i is from 99 to 998 (chapters 100 to 999) no leading zeros */
-                    chapterName = [chapterName stringByAppendingFormat:@"%ld,",i+1];
-                }
+                // put each chapter title from the table into the array
+                [csv appendFormat:@"%03ld,",idx + 1];
+                idx++;
 
-                chapterTitle = [self tableView:fChapterTable objectValueForTableColumn:fChapterTableNameColumn row:i];
-                /* escape any commas in the chapter name with "\," */
-                chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"," withString:@"\\,"];
-                chapterName = [chapterName stringByAppendingString:chapterTitle];
-                if (i+1 != chapters)
-                { /* if not the last chapter */
-                    chapterName = [chapterName stringByAppendingString:@ "\n"];
-                }
-
-
+                // Escape any commas in the chapter name with "\,"
+                NSString *sanatizedTitle = [chapter.title stringByReplacingOccurrencesOfString:@"," withString:@"\\,"];
+                [csv appendString:sanatizedTitle];
+                [csv appendString:@"\n"];
             }
-            /* try to write it to where the user wanted */
-            if (![chapterName writeToURL:[panel URL]
-                              atomically:NO
-                                encoding:NSUTF8StringEncoding
-                                   error:&saveError])
+
+            [csv deleteCharactersInRange:NSMakeRange(csv.length - 1, 1)];
+
+            // try to write it to where the user wanted
+            if (![csv writeToURL:panel.URL
+                      atomically:YES
+                        encoding:NSUTF8StringEncoding
+                           error:&saveError])
             {
                 [panel close];
                 [[NSAlert alertWithError:saveError] runModal];
