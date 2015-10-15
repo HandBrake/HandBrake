@@ -101,7 +101,7 @@
 
     [panel beginWithCompletionHandler:^(NSInteger result)
      {
-         if (result == NSOKButton)
+         if (result == NSFileHandlingPanelOKButton)
          {
              NSURL *presetExportDirectory = [panel.URL URLByDeletingLastPathComponent];
              [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
@@ -133,19 +133,22 @@
      {
          [[NSUserDefaults standardUserDefaults] setURL:panel.directoryURL forKey:@"LastPresetImportDirectoryURL"];
 
-         for (NSURL *url in panel.URLs)
+         if (result == NSFileHandlingPanelOKButton)
          {
-             NSError *error;
-             HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
-
-             if (import == nil)
+             for (NSURL *url in panel.URLs)
              {
-                 [self presentError:error];
-             }
+                 NSError *error;
+                 HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
 
-             for (HBPreset *child in import.children)
-             {
-                 [self.presets addPreset:child];
+                 if (import == nil)
+                 {
+                     [self presentError:error];
+                 }
+
+                 for (HBPreset *child in import.children)
+                 {
+                     [self.presets addPreset:child];
+                 }
              }
          }
      }];
