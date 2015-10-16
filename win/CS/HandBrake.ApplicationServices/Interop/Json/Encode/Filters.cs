@@ -20,10 +20,5 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// Gets or sets the filter list.
         /// </summary>
         public List<Filter> FilterList { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether grayscale.
-        /// </summary>
-        public bool Grayscale { get; set; }
     }
 }
