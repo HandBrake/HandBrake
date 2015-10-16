@@ -1781,7 +1781,6 @@ int hb_global_init()
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
 #endif
-    hb_register(&hb_enclame);
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);
     hb_register(&hb_encx264);
