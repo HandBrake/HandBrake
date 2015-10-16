@@ -714,4 +714,13 @@ Please make sure VLC is installed and the directory specified in HandBrake's opt
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
     <value>Configure Defaults</value>
   </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Archived File:</value>
+  </data>
+  <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
+    <value>HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn't get loaded on next launch.</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Unable to load user presets.</value>
+  </data>
 </root>

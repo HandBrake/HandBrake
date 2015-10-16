@@ -58,6 +58,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Name = importedPreset.PresetName;
             preset.Description = importedPreset.PresetDescription;
             preset.Task = new EncodeTask();
+            preset.IsDefault = importedPreset.Default;
+            preset.IsBuildIn = importedPreset.Type == 0;
 
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
@@ -391,7 +393,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public int PictureForceWidth { get; set; }
             // public bool AudioSecondaryEncoderMode { get; set; }
             // public List<object> ChildrenArray { get; set; }
-            // public bool Default { get; set; }
             // public bool Folder { get; set; }
             // public bool FolderOpen { get; set; }
             // public int PictureDARWidth { get; set; }
@@ -419,7 +420,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             container.VersionMinor = Constants.PresetVersionMinor;
             container.VersionMicro = Constants.PresetVersionMicro;
 
-            container.PresetList = new List<HBPreset> { CreateHbPreset(export, config) };
+            container.PresetList = new List<object> { CreateHbPreset(export, config) };
 
             return container;
         }
@@ -439,7 +440,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             List<HBPreset> presets = exportList.Select(item => CreateHbPreset(item, config)).ToList();
 
-            container.PresetList = presets;
+            container.PresetList = new List<object>();
+            container.PresetList.AddRange(presets);
 
             return container;
         }
@@ -461,9 +463,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // Preset
             preset.PresetDescription = export.Description;
             preset.PresetName = export.Name;
-            preset.Type = 1; // User Preset
+            preset.Type = export.IsBuildIn ? 0 : 1;
             preset.UsesPictureSettings = (int)export.PictureSettingsMode;
-            preset.Default = false; // TODO Can other GUI's handle this?
+            preset.Default = export.IsDefault;
 
             // Audio
             preset.AudioCopyMask = export.Task.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();

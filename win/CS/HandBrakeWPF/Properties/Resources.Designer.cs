@@ -1122,6 +1122,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archived File:.
+        /// </summary>
+        public static string PresetService_ArchiveFile {
+            get {
+                return ResourceManager.GetString("PresetService_ArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn&apos;t get loaded on next launch..
+        /// </summary>
+        public static string PresetService_PresetsOutOfDate {
+            get {
+                return ResourceManager.GetString("PresetService_PresetsOutOfDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load user presets..
+        /// </summary>
+        public static string PresetService_UnableToLoad {
+            get {
+                return ResourceManager.GetString("PresetService_UnableToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {

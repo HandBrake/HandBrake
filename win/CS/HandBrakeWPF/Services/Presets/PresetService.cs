@@ -16,7 +16,6 @@ namespace HandBrakeWPF.Services.Presets
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
@@ -44,36 +43,9 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        private static readonly int CurrentPresetVersion = 5;
-
-        /// <summary>
-        /// User Preset Default Catgory Name
-        /// </summary>
         public static string UserPresetCatgoryName = "User Presets";
-
-        /// <summary>
-        /// The User Preset file
-        /// </summary>
-        private readonly string userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.json";
-
-        /// <summary>
-        /// The Legacy Preset file
-        /// </summary>
-        private readonly string legacyUserPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
-
-        /// <summary>
-        /// The Built In Presets File
-        /// </summary>
-        private readonly string builtInPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.json";
-
-        /// <summary>
-        /// A Collection of presets
-        /// </summary>
+        private readonly string presetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.json";
         private readonly ObservableCollection<Preset> presets = new ObservableCollection<Preset>();
-
-        /// <summary>
-        ///  The Error Service.
-        /// </summary>
         private readonly IErrorService errorService;
 
         #endregion
@@ -124,20 +96,13 @@ namespace HandBrakeWPF.Services.Presets
         public void Load()
         {
             // If the preset file doesn't exist. Create it.
-            if (!File.Exists(this.builtInPresetFile))
+            if (!File.Exists(this.presetFile))
             {
                 this.UpdateBuiltInPresets();
             }
 
             // Load the presets from file
             this.LoadPresets();
-
-            // Check they are up-to-date.
-            if (this.CheckIfPresetsAreOutOfDate())
-            {
-                this.UpdateBuiltInPresets();
-                this.LoadPresets(); // Reload again.
-            }
         }
 
         /// <summary>
@@ -159,7 +124,7 @@ namespace HandBrakeWPF.Services.Presets
                 this.LastPresetAdded = preset;
 
                 // Update the presets file
-                this.UpdatePresetFiles();
+                this.SavePresetFiles();
                 return true;
             }
 
@@ -186,52 +151,60 @@ namespace HandBrakeWPF.Services.Presets
                     return;
                 }
 
-                HBPreset hbPreset = container.PresetList.FirstOrDefault();
-
-                Preset preset = null;
-                try
+                // HBPreset Handling
+                IList<HBPreset> hbPresets = container.PresetList as IList<HBPreset>;
+                if (hbPresets != null)
                 {
-                    preset = JsonPresetFactory.ImportPreset(hbPreset);
-                    preset.Category = UserPresetCatgoryName;
-
-                    // IF we are using Source Max, Set the Max Width / Height values.
-                    if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                    foreach (var hbPreset in hbPresets)
                     {
-                        preset.Task.MaxWidth = preset.Task.Height;
-                        preset.Task.MaxHeight = preset.Task.Width;
+                        Preset preset = null;
+                        try
+                        {
+                            preset = JsonPresetFactory.ImportPreset(hbPreset);
+                            preset.Category = UserPresetCatgoryName;
+
+                            // IF we are using Source Max, Set the Max Width / Height values.
+                            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                            {
+                                preset.Task.MaxWidth = preset.Task.Height;
+                                preset.Task.MaxHeight = preset.Task.Width;
+                            }
+                        }
+                        catch (Exception exc)
+                        {
+                            this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
+                        }
+
+                        if (preset == null)
+                        {
+                            this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
+                            return;
+                        }
+
+                        // TODO Better version checking.
+
+                        if (this.CheckIfPresetExists(preset.Name))
+                        {
+                            if (!CanUpdatePreset(preset.Name))
+                            {
+                                MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+
+                            MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                Update(preset);
+                            }
+                        }
+                        else
+                        {
+                            Add(preset);
+                        }
                     }
                 }
-                catch (Exception exc)
-                {
-                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
-                }
 
-                if (preset == null)
-                {
-                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
-                    return;
-                }
-
-                // TODO Better version checking.
-                
-                if (this.CheckIfPresetExists(preset.Name))
-                {
-                    if (!CanUpdatePreset(preset.Name))
-                    {
-                        MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        Update(preset);
-                    }
-                }
-                else
-                {
-                    Add(preset);
-                }
+                // Category Handling.
             }
         }
 
@@ -249,6 +222,7 @@ namespace HandBrakeWPF.Services.Presets
         /// </param>
         public void Export(string filename, Preset preset, HBConfiguration configuration)
         {
+            // TODO Add support for multiple export
             PresetTransportContainer container = JsonPresetFactory.ExportPreset(preset, configuration);
             HandBrakePresetService.ExportPreset(filename, container);
         }
@@ -274,7 +248,7 @@ namespace HandBrakeWPF.Services.Presets
                     preset.SubtitleTrackBehaviours = update.SubtitleTrackBehaviours;
 
                     // Update the presets file
-                    this.UpdatePresetFiles();
+                    this.SavePresetFiles();
                     break;
                 }
             }
@@ -294,7 +268,7 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             this.presets.Remove(preset);
-            this.UpdatePresetFiles();
+            this.SavePresetFiles();
         }
 
         /// <summary>
@@ -317,7 +291,7 @@ namespace HandBrakeWPF.Services.Presets
                 this.presets.Remove(preset);
             }
 
-            this.UpdatePresetFiles();
+            this.SavePresetFiles();
         }
 
         /// <summary>
@@ -334,7 +308,7 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             name.IsDefault = true;
-            this.UpdatePresetFiles();
+            this.SavePresetFiles();
         }
 
         /// <summary>
@@ -381,14 +355,14 @@ namespace HandBrakeWPF.Services.Presets
 
             IList<PresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
 
-            foreach (var item in presetCategories)
+            foreach (var category in presetCategories)
             {
-                foreach (var hbpreset in item.ChildrenArray)
+                foreach (var hbpreset in category.ChildrenArray)
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
                     preset.Version = VersionHelper.GetVersion();
                     preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
-                    preset.Category = item.PresetName;
+                    preset.Category = category.PresetName;
 
                     if (preset.Name == "iPod")
                     {
@@ -413,31 +387,7 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             // Store the changes to disk
-            this.UpdatePresetFiles();
-        }
-
-        /// <summary>
-        /// Check if the built in Presets stored are not out of date.
-        /// Update them if they are.
-        /// </summary>
-        /// <returns>true if out of date</returns>
-        public bool CheckIfPresetsAreOutOfDate()
-        {
-            // Update built-in Presets if the built-in Presets belong to an older version.
-            if (this.presets.Count != 0)
-            {
-                List<Preset> preset = this.presets.Where(p => p.IsBuildIn).ToList();
-                if (preset.Count > 0)
-                {
-                    if (preset[0].Version != VersionHelper.GetVersion())
-                    {
-                        this.UpdateBuiltInPresets();
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            this.SavePresetFiles();
         }
 
         /// <summary>
@@ -515,23 +465,64 @@ namespace HandBrakeWPF.Services.Presets
             // First clear the Presets arraylists
             this.presets.Clear();
 
-            // Load in the Presets from Presets.xml
+            // Load the presets file.
             try
             {
-                if (File.Exists(this.builtInPresetFile))
+                // If we don't have a presets file. Create one for first load.
+                if (!File.Exists(this.presetFile))
                 {
-                    using (StreamReader reader = new StreamReader(this.builtInPresetFile))
-                    {
-                        // New Preset Format.
-                        IList<PresetCategory> presetCategories = JsonConvert.DeserializeObject<IList<PresetCategory>>(reader.ReadToEnd());
+                    this.UpdateBuiltInPresets();
+                    return;
+                }
 
-                        foreach (var item in presetCategories)
+                // Otherwise, we already have a file, so lets try load it.
+                using (StreamReader reader = new StreamReader(this.presetFile))
+                {
+                    // New Preset Format.
+                    PresetTransportContainer container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
+
+                    // Sanity Check. Did the container deserialise.
+                    if (container == null)
+                    {
+                        // Close and Dispose of early.
+                        reader.Close();
+                        reader.Dispose();
+                        RecoverFromCorruptedPresetFile(this.presetFile);
+                        this.UpdateBuiltInPresets();
+                        return;
+                    }
+
+                    // Version Check
+                    // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
+                    // incase something goes wrong.
+                    if (container.VersionMajor != Constants.PresetVersionMajor || container.VersionMinor != Constants.PresetVersionMinor || container.VersionMicro != Constants.PresetVersionMicro)
+                    {
+                        string fileName = RecoverFromCorruptedPresetFile(this.presetFile);
+                        this.UpdateBuiltInPresets();
+                        this.errorService.ShowMessageBox(
+                            Resources.PresetService_PresetsOutOfDate
+                            + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
+                            Resources.PresetService_UnableToLoad,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Exclamation);
+                        return;
+                    }
+
+
+                    // Process the presets.
+                    foreach (var item in container.PresetList)
+                    {
+                        object deserialisedItem = JsonConvert.DeserializeObject<PresetCategory>(item.ToString()); ;
+        
+                        // Handle Categorised Presets.
+                        PresetCategory category = deserialisedItem as PresetCategory;
+                        if (category != null && category.Folder)
                         {
-                            foreach (var hbpreset in item.ChildrenArray)
+                            foreach (HBPreset hbpreset in category.ChildrenArray)
                             {
                                 Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-                                preset.Category = item.PresetName;
-                                preset.IsBuildIn = true;
+                                preset.Category = category.PresetName;
+                                preset.IsBuildIn = hbpreset.Type == 0;
 
                                 // IF we are using Source Max, Set the Max Width / Height values.
                                 if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
@@ -543,88 +534,17 @@ namespace HandBrakeWPF.Services.Presets
                                 this.presets.Add(preset);
                             }
                         }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                RecoverFromCorruptedPresetFile(this.builtInPresetFile);
-                this.UpdateBuiltInPresets();
-            }
 
-            // Load in the users Presets from UserPresets.xml
-            try
-            {
-                // Handle Legacy Preset Format.
-                bool updatePresets = false;
-                if (File.Exists(this.legacyUserPresetFile))
-                {
-                    using (StreamReader reader = new StreamReader(this.legacyUserPresetFile))
-                    {
-                        try
+                        // Uncategorised Presets
+                        deserialisedItem = JsonConvert.DeserializeObject<HBPreset>(item.ToString());
+                        HBPreset hbPreset = deserialisedItem as HBPreset;
+                        if (hbPreset != null && !hbPreset.Folder)
                         {
-                            XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
-                            var oldPresets = (List<Preset>)Ser.Deserialize(reader);
-                            foreach (Preset oldPreset in oldPresets)
-                            {
-                                this.presets.Add(oldPreset);
-                            }
-                            updatePresets = true;
-                        }
-                        catch (Exception exc)
-                        {
-                            // Do Nothing
-                            Debug.WriteLine(exc);
-                        }
-                    }
+                            Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
+                            preset.Category = UserPresetCatgoryName;
+                            preset.IsBuildIn = hbPreset.Type == 1;
 
-                    // Archive the old file incase the user needs it.
-                    File.Move(this.legacyUserPresetFile, this.legacyUserPresetFile + ".archive." + GeneralUtilities.ProcessId);
-                }
-
-                // New JSON Format.
-                if (File.Exists(this.userPresetFile))
-                {
-                    // New Preset Format.
-                    bool createBackup = false;
-                    PresetTransportContainer presetContainer = null;
-                    using (StreamReader reader = new StreamReader(this.userPresetFile))
-                    {
-                        try
-                        {
-                            presetContainer = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
-                        }
-                        catch (Exception exc)
-                        {
-                            createBackup = true;
-                            Debug.WriteLine(exc);
-                        }
-                    }
-
-                    // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
-                    // incase something goes wrong.
-                    if (createBackup || (presetContainer.VersionMajor != Constants.PresetVersionMajor || presetContainer.VersionMinor != Constants.PresetVersionMinor  || presetContainer.VersionMicro != Constants.PresetVersionMicro))
-                    {
-                        string fileName = RecoverFromCorruptedPresetFile(this.userPresetFile);
-                        this.errorService.ShowMessageBox(
-                            "HandBrake is unable to load your user presets because they are from an older version of HandBrake. Your old presets file has been renamed so that it doesn't get loaded on next launch."
-                            + Environment.NewLine + Environment.NewLine + "Archived File: " + fileName, 
-                            "Unable to load user presets.", 
-                            MessageBoxButton.OK, 
-                            MessageBoxImage.Exclamation);
-                        return;
-                    }
-
-                    // Load the current presets.
-                    if (presetContainer.PresetList != null)
-                    {
-                        foreach (var item in presetContainer.PresetList)
-                        {
-                            Preset preset = JsonPresetFactory.ImportPreset(item);
-                            preset.Category = item.PresetName;
-                            preset.IsBuildIn = true;
-
-                            // If we are using Source Max, Set the Max Width / Height values.
+                            // IF we are using Source Max, Set the Max Width / Height values.
                             if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
                             {
                                 preset.Task.MaxWidth = preset.Task.Height;
@@ -635,68 +555,71 @@ namespace HandBrakeWPF.Services.Presets
                         }
                     }
                 }
-
-                // We did a preset convertion, so save the updates.
-                if (updatePresets)
-                {
-                    this.UpdatePresetFiles();
-                }
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                RecoverFromCorruptedPresetFile(this.userPresetFile);
-                throw new GeneralApplicationException("HandBrake has detected a problem with your presets.", "Your old presets file has been renamed so that it doesn't get loaded on next launch.", exc);
+                Debug.WriteLine(ex);
+                RecoverFromCorruptedPresetFile(this.presetFile);
+                this.UpdateBuiltInPresets();
             }
         }
 
         /// <summary>
         /// Update the preset files
         /// </summary>
-        private void UpdatePresetFiles()
+        private void SavePresetFiles()
         {
             try
             {
-                // Setup
-                string directory = Path.GetDirectoryName(this.userPresetFile);
+                // Verify Directories.
+                string directory = Path.GetDirectoryName(this.presetFile);
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
 
-                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
-
-                // Built-in Presets
+                // Orgamise the Presets list into Json Equivilent objects.
                 Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
-                foreach (var item in this.presets.Where(p => p.IsBuildIn).ToList())
+                List<HBPreset> uncategorisedPresets = new List<HBPreset>();      
+                foreach (Preset item in this.presets)
                 {
-                    HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
-                    if (presetCategories.ContainsKey(item.Category))
+                    if (string.IsNullOrEmpty(item.Category))
                     {
-                        presetCategories[item.Category].ChildrenArray.Add(preset);
+                        uncategorisedPresets.Add(JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create()));
                     }
                     else
                     {
-                        presetCategories[item.Category] = new PresetCategory { ChildrenArray = new List<HBPreset>(), Folder = true, PresetName = item.Category, Type = 0 };
-                    }                
-                }
-
-                using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
-                {
-                    string presetsJson = JsonConvert.SerializeObject(presetCategories, Formatting.Indented, settings);
-                    using (StreamWriter writer = new StreamWriter(strm))
-                    {
-                        writer.WriteLine(presetsJson);
+                        HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
+                        if (presetCategories.ContainsKey(item.Category))
+                        {
+                            presetCategories[item.Category].ChildrenArray.Add(preset);
+                        }
+                        else
+                        {
+                            presetCategories[item.Category] = new PresetCategory
+                                                              {
+                                                                  ChildrenArray = new List<HBPreset> { preset },
+                                                                  Folder = true,
+                                                                  PresetName = item.Category,
+                                                                  Type = item.IsBuildIn ? 0 : 1
+                                                              };
+                        }
                     }
                 }
 
-                // User Presets
-                using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
+                // Wrap the categories in a container. 
+                JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
+                PresetTransportContainer container = new PresetTransportContainer(
+                    Constants.PresetVersionMajor,
+                    Constants.PresetVersionMinor,
+                    Constants.PresetVersionMicro) { PresetList = new List<object>() };
+                container.PresetList.AddRange(presetCategories.Values);
+                container.PresetList.AddRange(uncategorisedPresets);
+
+                // Write the preset container out to file.
+                using (FileStream strm = new FileStream(this.presetFile, FileMode.Create, FileAccess.Write))
                 {
-                    List<Preset> userPresets = this.presets.Where(p => p.IsBuildIn == false).ToList();
-                    PresetTransportContainer container = JsonPresetFactory.ExportPresets(userPresets, HBConfigurationFactory.Create());
-
                     string presetsJson = JsonConvert.SerializeObject(container, Formatting.Indented, settings);
-
                     using (StreamWriter writer = new StreamWriter(strm))
                     {
                         writer.WriteLine(presetsJson);
@@ -705,6 +628,7 @@ namespace HandBrakeWPF.Services.Presets
             }
             catch (Exception exc)
             {
+                Debug.WriteLine(exc);
                 throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occured.", exc);
             }
         }

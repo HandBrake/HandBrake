@@ -69,9 +69,19 @@ namespace HandBrakeWPF
         /// </summary>
         public const string Bitrate = "{bitrate}";
 
+        /// <summary>
+        /// Preset Major Version
+        /// </summary>
+        public const string PresetVersionMajor = "11";
 
-        public const string PresetVersionMajor = "0";
-        public const string PresetVersionMinor = "10";
-        public const string PresetVersionMicro = "2";
+        /// <summary>
+        /// Preset Minor Version
+        /// </summary>
+        public const string PresetVersionMinor = "0";
+
+        /// <summary>
+        /// Preset Micro Version
+        /// </summary>
+        public const string PresetVersionMicro = "0";
     }
 }

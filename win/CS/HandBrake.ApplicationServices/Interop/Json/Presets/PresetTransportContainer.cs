@@ -18,10 +18,21 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
     /// </summary>
     public class PresetTransportContainer
     {
+        public PresetTransportContainer()
+        {
+        }
+
+        public PresetTransportContainer(string versionMajor, string versionMinor, string versionMicro)
+        {
+            this.VersionMajor = versionMajor;
+            this.VersionMicro = versionMicro;
+            this.VersionMinor = versionMinor;
+        }
+
         /// <summary>
         /// Gets or sets the children array.
         /// </summary>
-        public List<HBPreset> PresetList { get; set; }
+        public List<object> PresetList { get; set; }
 
         /// <summary>
         /// Gets or sets the version major.
