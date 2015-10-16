@@ -457,7 +457,27 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-void muxClose( hb_work_object_t * w )
+static void muxFlush(hb_mux_t * mux)
+{
+    int ii, done = 0;
+
+    while (!done)
+    {
+        done = 1;
+        for (ii = 0; ii < mux->ntracks; ii++)
+        {
+            OutputTrackChunk(mux, ii, mux->m);
+            if (mux->track[ii]->mf.out != mux->track[ii]->mf.in)
+            {
+                // track buffer is not empty
+                done = 0;
+            }
+        }
+        mux->pts += mux->interleave;
+    }
+}
+
+static void muxClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_mux_t    * mux = pv->mux;
@@ -468,6 +488,8 @@ void muxClose( hb_work_object_t * w )
     hb_lock( mux->mutex );
     if ( --mux->ref == 0 )
     {
+        muxFlush(mux);
+
         // Update state before closing muxer.  Closing the muxer
         // may initiate optimization which can take a while and
         // we want the muxing state to be visible while this is
