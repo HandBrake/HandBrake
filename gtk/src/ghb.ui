@@ -2869,7 +2869,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                         <property name="column-spacing">4</property>
                         <property name="row-spacing">32</property>
                         <property name="margin-top">16</property>
-                        <property name="margin-start">16</property>
+                        <property name="margin-left">16</property>
                         <property name="valign">start</property>
                         <property name="halign">fill</property>
                         <child>
