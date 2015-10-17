@@ -84,7 +84,7 @@
 - (BOOL)turboTwoPassSupported
 {
     return ((self.encoder & HB_VCODEC_X264_MASK) ||
-             self.encoder == HB_VCODEC_X265);
+            (self.encoder & HB_VCODEC_X265_MASK));
 }
 
 /**
