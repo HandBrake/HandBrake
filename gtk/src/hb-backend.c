@@ -999,7 +999,10 @@ ghb_vquality_default(signal_user_data_t *ud)
 
     switch (vcodec)
     {
-    case HB_VCODEC_X265:
+    case HB_VCODEC_X265_8BIT:
+    case HB_VCODEC_X265_10BIT:
+    case HB_VCODEC_X265_12BIT:
+    case HB_VCODEC_X265_16BIT:
     case HB_VCODEC_X264:
         return 20;
     case HB_VCODEC_THEORA:
