@@ -27,7 +27,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" indentationPerLevel="16" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY">
-                                <rect key="frame" x="0.0" y="0.0" width="222" height="288"/>
+                                <rect key="frame" x="0.0" y="0.0" width="222" height="16"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -133,7 +133,7 @@
                                     </connections>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="NEw-wC-h4v"/>
-                                <menuItem title="Update Built-in Presets" id="cm5-Kl-dB3">
+                                <menuItem title="Reset Built-in Presets" id="cm5-Kl-dB3">
                                     <connections>
                                         <action selector="updateBuiltInPresets:" target="-2" id="rND-6g-LMP"/>
                                     </connections>
