@@ -386,6 +386,7 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
 
+int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
@@ -519,9 +520,8 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x0000FFF
+#define HB_VCODEC_MASK         0x00FFFFF
 #define HB_VCODEC_INVALID      0x0000000
-#define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
 #define HB_VCODEC_X265         0x0000004
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
@@ -531,7 +531,11 @@ struct hb_job_s
 #define HB_VCODEC_QSV_H264     0x0000100
 #define HB_VCODEC_QSV_H265     0x0000200
 #define HB_VCODEC_QSV_MASK     0x0000F00
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264|HB_VCODEC_QSV_H264)
+#define HB_VCODEC_X264_8BIT    0x0010000
+#define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
+#define HB_VCODEC_X264_10BIT   0x0020000
+#define HB_VCODEC_X264_MASK    0x0030000
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264)
 #define HB_VCODEC_H265_MASK    (HB_VCODEC_X265|HB_VCODEC_QSV_H265)
 
     int             vcodec;
@@ -1296,9 +1300,10 @@ int hb_rgb2yuv(int rgb);
 const char * hb_subsource_name( int source );
 
 // unparse a set of x264 settings to an HB encopts string
-char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
-                             const char *x264_encopts, const char *h264_profile,
-                             const char *h264_level, int width, int height);
+char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
+                             const char *x264_tune, const char *x264_encopts,
+                             const char *h264_profile, const char *h264_level,
+                             int width, int height);
 
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );

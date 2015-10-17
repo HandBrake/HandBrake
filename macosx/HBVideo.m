@@ -576,7 +576,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     if (hb_video_encoder_get_presets(self.encoder) != NULL)
     {
-        if (self.encoder == HB_VCODEC_X264 && [preset[@"x264UseAdvancedOptions"] boolValue])
+        if ((self.encoder & HB_VCODEC_X264_MASK) && [preset[@"x264UseAdvancedOptions"] boolValue])
         {
             // preset does not use the x264 preset system, reset the widgets.
             self.preset = @"medium";

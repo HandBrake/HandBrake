@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "opencl.h"
 #include "hbffmpeg.h"
+#include "encx264.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -1772,6 +1773,7 @@ int hb_global_init()
     hb_register(&hb_encqsv);
 #endif
     
+    hb_x264_global_init();
     hb_common_global_init();
 
     /*

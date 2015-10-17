@@ -459,7 +459,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     // Next line in the display (Video Encoder Options)
     // Video Options: Preset - Tune - Profile - Level
-    if (video_encoder->codec == HB_VCODEC_X264 &&
+    if ((video_encoder->codec & HB_VCODEC_X264_MASK) &&
         !ghb_dict_get_bool(settings, "x264UseAdvancedOptions"))
     {
         const gchar *extra_opt = NULL;
@@ -489,7 +489,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
                     XPRINT("%s%s", prefix, tune_opt);
                     prefix = ",";
                 }
-                if (video_encoder->codec == HB_VCODEC_X264)
+                if (video_encoder->codec & HB_VCODEC_X264_MASK)
                 {
                     if (fastdecode)
                     {
@@ -522,7 +522,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
             XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), extra_opt);
         }
     }
-    else if (video_encoder->codec == HB_VCODEC_X264)
+    else if (video_encoder->codec & HB_VCODEC_X264_MASK)
     {
         // Next line in the display (Video Encoder Options)
         // Video Advanced Options: detailed settings

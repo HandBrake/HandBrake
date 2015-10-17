@@ -216,7 +216,8 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_VP8;
             break;
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
             w = hb_get_work(h, WORK_ENCX264);
             break;
         case HB_VCODEC_QSV_H264:
@@ -412,7 +413,8 @@ void hb_display_job_info(hb_job_t *job)
         {
             switch (job->vcodec)
             {
-                case HB_VCODEC_X264:
+                case HB_VCODEC_X264_8BIT:
+                case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_X265:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
@@ -425,7 +427,8 @@ void hb_display_job_info(hb_job_t *job)
         {
             switch (job->vcodec)
             {
-                case HB_VCODEC_X264:
+                case HB_VCODEC_X264_8BIT:
+                case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_X265:
                     hb_log("     + tune:    %s", job->encoder_tune);
                 default:
@@ -441,7 +444,8 @@ void hb_display_job_info(hb_job_t *job)
         {
             switch (job->vcodec)
             {
-                case HB_VCODEC_X264:
+                case HB_VCODEC_X264_8BIT:
+                case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_X265:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
@@ -454,7 +458,8 @@ void hb_display_job_info(hb_job_t *job)
         {
             switch (job->vcodec)
             {
-                case HB_VCODEC_X264:
+                case HB_VCODEC_X264_8BIT:
+                case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                     hb_log("     + level:   %s", job->encoder_level);
@@ -472,10 +477,10 @@ void hb_display_job_info(hb_job_t *job)
         {
             hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass_id );
             if(job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 &&
-               (job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_X265))
+               ((job->vcodec & HB_VCODEC_X264_MASK) || job->vcodec == HB_VCODEC_X265))
             {
                 hb_log( "     + fast first pass" );
-                if (job->vcodec == HB_VCODEC_X264)
+                if (job->vcodec & HB_VCODEC_X264_MASK)
                 {
                     hb_log( "     + options: ref=1:8x8dct=0:me=dia:trellis=0" );
                     hb_log( "                analyse=i4x4 (if originally enabled, else analyse=none)" );
@@ -484,7 +489,7 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->color_matrix_code && job->vcodec == HB_VCODEC_X264)
+        if (job->color_matrix_code && (job->vcodec == HB_VCODEC_X264_MASK))
         {
             // color matrix is set:
             // 1) at the stream    level (x264  only),
