@@ -507,7 +507,7 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x0000FFF
+#define HB_VCODEC_MASK         0x000FFFF
 #define HB_VCODEC_INVALID      0x0000000
 #define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
@@ -525,7 +525,7 @@ struct hb_job_s
 #define HB_VCODEC_X265_16BIT   0x0008000
 #define HB_VCODEC_X265_MASK    0x000F000
 #define HB_VCODEC_H264_MASK    (HB_VCODEC_X264|HB_VCODEC_QSV_H264)
-#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265|HB_VCODEC_QSV_H265)
+#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265)
 
     int             vcodec;
     double          vquality;
