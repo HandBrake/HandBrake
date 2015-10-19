@@ -682,7 +682,7 @@ FILE * hb_fopen(const char *path, const char *mode)
 #endif
 }
 
-HB_DIR* hb_opendir(char *path)
+HB_DIR* hb_opendir(const char *path)
 {
 #ifdef SYS_MINGW
     HB_DIR *dir;

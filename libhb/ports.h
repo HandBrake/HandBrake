@@ -73,7 +73,7 @@ typedef struct _stat64 hb_stat_t;
 typedef struct stat hb_stat_t;
 #endif
 
-HB_DIR* hb_opendir(char *path);
+HB_DIR* hb_opendir(const char *path);
 int hb_closedir(HB_DIR *dir);
 void hb_rewinddir(HB_DIR *dir);
 struct dirent * hb_readdir(HB_DIR *dir);
