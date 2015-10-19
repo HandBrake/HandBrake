@@ -1,5 +1,5 @@
 diff --git a/libavcodec/imgconvert.c b/libavcodec/imgconvert.c
-index 2d32602..aedc43d 100644
+index 53e7df8..655624c 100644
 --- a/libavcodec/imgconvert.c
 +++ b/libavcodec/imgconvert.c
 @@ -284,8 +284,11 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
@@ -40,7 +40,7 @@ index 2d32602..aedc43d 100644
              optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
                      (padleft >> x_shift);
 -            memcpy(optr, iptr, (width - padleft - padright) >> x_shift);
-+            memcpy(optr, iptr, ((width - padleft) >> x_shift) - stride_padright);
++            memcpy(optr, iptr, src_width >> x_shift);
              iptr += src->linesize[i];
              optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
 -                (dst->linesize[i] - (padright >> x_shift));
