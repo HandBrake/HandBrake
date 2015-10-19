@@ -824,16 +824,16 @@
 - (void)sendToExternalApp:(NSURL *)fileURL
 {
     // This end of encode action is called as each encode rolls off of the queue
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"SendCompletedEncodeToApp"] == YES)
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBSendToAppEnabled"] == YES)
     {
         NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-        NSString *sendToApp = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"SendCompletedEncodeToApp"]];
+        NSString *app = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"HBSendToApp"]];
 
-        if (sendToApp)
+        if (app)
         {
-            if (![workspace openFile:fileURL.path withApplication:sendToApp])
+            if (![workspace openFile:fileURL.path withApplication:app])
             {
-                [HBUtilities writeToActivityLog:"Failed to send file to: %s", sendToApp];
+                [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
             }
         }
         else

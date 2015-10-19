@@ -139,7 +139,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="61" name="value" keyPath="values.SendCompletedEncodeToApp" id="Uq2-2B-VTm"/>
+                        <binding destination="61" name="value" keyPath="values.HBSendToAppEnabled" id="Kff-6m-jt9"/>
                     </connections>
                 </button>
                 <button id="243">
@@ -189,7 +189,11 @@
                         </connections>
                     </textFieldCell>
                     <connections>
-                        <binding destination="61" name="value" keyPath="values.SendCompletedEncodeToApp" id="454"/>
+                        <binding destination="61" name="value" keyPath="values.HBSendToApp" id="f36-PN-c5F">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">None</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" id="450">

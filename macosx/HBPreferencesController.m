@@ -75,7 +75,6 @@
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",
         @"x264CqSliderFractional":          @"0.50",
-        @"SendCompletedEncodeToApp":        @"MetaX",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
         // Hash of the default folders, until there is a better way.
@@ -208,7 +207,7 @@
             NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
             /* we set the name of the app to send to in the display field */
             [fSendEncodeToAppField setStringValue:sendToAppName];
-            [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"SendCompletedEncodeToApp"];
+            [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"HBSendToApp"];
         }
     }];
 }
