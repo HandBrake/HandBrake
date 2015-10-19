@@ -68,4 +68,30 @@ NSString *dockTilePercentFormat = @"%2.1f%%";
     [_dockTile display];
 }
 
+- (void)updateDockIcon:(double)progress hours:(NSInteger)hours minutes:(NSInteger)minutes seconds:(NSInteger)seconds
+{
+    // ETA format is [XX]X:XX:XX when ETA is greater than one hour
+    // [X]X:XX when ETA is greater than 0 (minutes or seconds)
+    // When these conditions doesn't applied (eg. when ETA is undefined)
+    // we show just a tilde (~)
+
+    NSString *etaStr;
+    if (hours > 0)
+    {
+        etaStr = [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)hours, (long)minutes, (long)seconds];
+    }
+    else if (minutes > 0 || seconds > 0)
+    {
+        etaStr = [NSString stringWithFormat:@"%ld:%02ld", (long)minutes, (long)seconds];
+    }
+    else
+    {
+        etaStr = @"~";
+    }
+
+    [self updateDockIcon:progress withETA:etaStr];
+
+}
+
+
 @end

@@ -8,23 +8,6 @@
 
 #import "NSArray+HBAdditions.h"
 
-@implementation NSMutableArray (HBAdditions)
-
-- (void)removeObjectsUsingBlock:(BOOL (^)(id object))block
-{
-    NSMutableArray *objectsToRemove = [NSMutableArray array];
-    for (id object in self)
-    {
-        if (block(object))
-        {
-            [objectsToRemove addObject:object];
-        }
-    }
-    [self removeObjectsInArray:objectsToRemove];
-}
-
-@end
-
 @implementation NSArray (HBAdditions)
 
 - (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id object))block

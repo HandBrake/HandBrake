@@ -84,10 +84,10 @@ static NSDictionary            *shortHeightAttr;
         [ps setTabStops:@[]];    // clear all tabs
         [ps addTabStop: [[NSTextTab alloc] initWithType: NSLeftTabStopType location: 20.0]];
 
-        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:10.0],
+        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont smallSystemFontSize]],
                         NSParagraphStyleAttributeName: ps};
 
-        detailBoldAttr = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:10.0],
+        detailBoldAttr = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
                             NSParagraphStyleAttributeName: ps};
 
         titleAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSize]],
@@ -474,7 +474,9 @@ static NSDictionary            *shortHeightAttr;
             i++;
         }
     }
-    
+
+    [finalString deleteCharactersInRange:NSMakeRange(finalString.length - 1, 1)];
+
     return finalString;
 }
 

@@ -168,6 +168,8 @@
 		A990D9071A64562200139032 /* HBJob+HBJobConversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A990D9061A64562200139032 /* HBJob+HBJobConversion.m */; };
 		A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9935211196F38A70069C6B7 /* ChaptersTitles.xib */; };
 		A99422E01B1887B000DDB077 /* NSJSONSerialization+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A99422DF1B1887B000DDB077 /* NSJSONSerialization+HBAdditions.m */; };
+		A996557D1BD2D32500BA50FA /* EncodeFailed.png in Resources */ = {isa = PBXBuildFile; fileRef = A996557B1BD2D32500BA50FA /* EncodeFailed.png */; };
+		A996557E1BD2D32500BA50FA /* EncodeFailed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A996557C1BD2D32500BA50FA /* EncodeFailed@2x.png */; };
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A99F40D31B624EA500750170 /* HBPictureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A99F40D11B624EA500750170 /* HBPictureViewController.xib */; };
 		A9A24B2D1B09F6FD00AD1FAB /* HBPresetsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */; };
@@ -474,6 +476,8 @@
 		A9935212196F38A70069C6B7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = ChaptersTitles.xib; sourceTree = "<group>"; };
 		A99422DE1B1887B000DDB077 /* NSJSONSerialization+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSJSONSerialization+HBAdditions.h"; sourceTree = "<group>"; };
 		A99422DF1B1887B000DDB077 /* NSJSONSerialization+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSJSONSerialization+HBAdditions.m"; sourceTree = "<group>"; };
+		A996557B1BD2D32500BA50FA /* EncodeFailed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeFailed.png; sourceTree = "<group>"; };
+		A996557C1BD2D32500BA50FA /* EncodeFailed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "EncodeFailed@2x.png"; sourceTree = "<group>"; };
 		A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetCoding.h; sourceTree = "<group>"; };
 		A99F40CC1B624E7E00750170 /* HBPictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPictureViewController.h; sourceTree = "<group>"; };
 		A99F40CD1B624E7E00750170 /* HBPictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureViewController.m; sourceTree = "<group>"; };
@@ -831,6 +835,8 @@
 				273F212814ADCBF70021BE6D /* DeletePressed.png */,
 				273F212A14ADCBF80021BE6D /* EncodeCanceled.png */,
 				A967E4B91A16768200DF1DFC /* EncodeCanceled@2x.png */,
+				A996557B1BD2D32500BA50FA /* EncodeFailed.png */,
+				A996557C1BD2D32500BA50FA /* EncodeFailed@2x.png */,
 				A91C02501A165EA200DEA6F3 /* EncodeComplete.png */,
 				A91C02511A165EA200DEA6F3 /* EncodeComplete@2x.png */,
 				273F212C14ADCBF80021BE6D /* EncodeWorking0.png */,
@@ -1362,6 +1368,7 @@
 				A922687B1A6E569B00A8D5C5 /* MainWindow.xib in Resources */,
 				273F219114ADDDA10021BE6D /* Queue.xib in Resources */,
 				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
+				A996557D1BD2D32500BA50FA /* EncodeFailed.png in Resources */,
 				A9E1468016BC2AD800C307BC /* next-p.pdf in Resources */,
 				A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */,
 				A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */,
@@ -1388,6 +1395,7 @@
 				A99F40D31B624EA500750170 /* HBPictureViewController.xib in Resources */,
 				A9252C0A1A173D4800B8B7F8 /* RevealHighlight@2x.png in Resources */,
 				D2BCB11516F5152C0084604C /* picturesettings.png in Resources */,
+				A996557E1BD2D32500BA50FA /* EncodeFailed@2x.png in Resources */,
 				A93E0ED71972958C00FD67FB /* Video.xib in Resources */,
 				A9252C0B1A173D4800B8B7F8 /* RevealHighlightPressed@2x.png in Resources */,
 				D2BCB11616F5152C0084604C /* picturesettings@2x.png in Resources */,

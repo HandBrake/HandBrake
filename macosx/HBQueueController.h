@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate, GrowlApplicationBridgeDelegate>
 
+- (instancetype)initWithURL:(NSURL *)queueURL;
+
 /// The HBCore used for encoding.
 @property (nonatomic, readonly) HBCore *core;
 
