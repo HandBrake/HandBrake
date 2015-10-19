@@ -1,71 +1,104 @@
 diff --git a/libavcodec/imgconvert.c b/libavcodec/imgconvert.c
-index 53e7df8..655624c 100644
+index 53e7df8..d421c37 100644
 --- a/libavcodec/imgconvert.c
 +++ b/libavcodec/imgconvert.c
-@@ -284,8 +284,11 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+@@ -283,9 +283,13 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+     uint8_t *optr;
      int y_shift;
      int x_shift;
-     int yheight;
-+    int src_width;
-+    int stride_padright;
+-    int yheight;
++    int src_width, src_height;
++    int top, bottom, left, right;
++    int src_h, src_w;
      int i, y;
  
-+    src_width  = width  - (padleft + padright);
++    src_width  = width   - (padleft + padright);
++    src_height = height  - (padtop  + padbottom);
      if (pix_fmt < 0 || pix_fmt >= AV_PIX_FMT_NB ||
          !is_yuv_planar(desc)) return -1;
  
-@@ -293,6 +296,7 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+@@ -293,44 +297,56 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
          x_shift = i ? desc->log2_chroma_w : 0;
          y_shift = i ? desc->log2_chroma_h : 0;
  
-+        stride_padright = dst->linesize[i] - ((padleft + src_width) >> x_shift);
-         if (padtop || padleft) {
-             memset(dst->data[i], color[i],
-                 dst->linesize[i] * (padtop >> y_shift) + (padleft >> x_shift));
-@@ -300,10 +304,10 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
- 
-         if (padleft || padright) {
-             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+-        if (padtop || padleft) {
+-            memset(dst->data[i], color[i],
+-                dst->linesize[i] * (padtop >> y_shift) + (padleft >> x_shift));
+-        }
+-
+-        if (padleft || padright) {
+-            optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
 -                (dst->linesize[i] - (padright >> x_shift));
-+                (dst->linesize[i] - stride_padright);
-             yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
-             for (y = 0; y < yheight; y++) {
+-            yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
+-            for (y = 0; y < yheight; y++) {
 -                memset(optr, color[i], (padleft + padright) >> x_shift);
-+                memset(optr, color[i], (padleft >> x_shift) + stride_padright);
++        top    = padtop >> y_shift;
++        bottom = padbottom >> y_shift;
++        left   = padleft >> x_shift;
++        right  = padright >> x_shift;
++        src_h  = src_height >> y_shift;
++        src_w  = src_width  >> x_shift;
++
++        // Render pad top
++        if (top) {
++            optr = dst->data[i];
++            for (y = 0; y < top; y++) {
++                memset(optr, color[i], width >> x_shift);
++                // skip stride bytes
                  optr += dst->linesize[i];
              }
          }
-@@ -312,15 +316,15 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+ 
+-        if (src) { /* first line */
++        // Render pad left, src image, and pad right
++        if (src) {
              uint8_t *iptr = src->data[i];
-             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
-                     (padleft >> x_shift);
+-            optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+-                    (padleft >> x_shift);
 -            memcpy(optr, iptr, (width - padleft - padright) >> x_shift);
-+            memcpy(optr, iptr, src_width >> x_shift);
-             iptr += src->linesize[i];
-             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+-            iptr += src->linesize[i];
+-            optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
 -                (dst->linesize[i] - (padright >> x_shift));
-+                (dst->linesize[i] - stride_padright);
-             yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
-             for (y = 0; y < yheight; y++) {
+-            yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
+-            for (y = 0; y < yheight; y++) {
 -                memset(optr, color[i], (padleft + padright) >> x_shift);
 -                memcpy(optr + ((padleft + padright) >> x_shift), iptr,
 -                       (width - padleft - padright) >> x_shift);
-+                memset(optr, color[i], (padleft >> x_shift) + stride_padright);
-+                memcpy(optr + (padleft >> x_shift) + stride_padright, iptr,
-+                       src_width >> x_shift);
++            optr = dst->data[i] + dst->linesize[i] * top;
++            for (y = 0; y < src_h; y++) {
++                memset(optr, color[i], left);
++                memcpy(optr + left, iptr, src_w);
++                memset(optr + left + src_w, color[i], right);
++                // skip stride bytes
                  iptr += src->linesize[i];
                  optr += dst->linesize[i];
              }
-@@ -328,9 +332,9 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+         }
++        else if (left || right)
++        {
++            optr = dst->data[i] + dst->linesize[i] * top;
++            for (y = 0; y < src_h; y++) {
++                // padright, pad left next line
++                memset(optr, color[i], left);
++                memset(optr + left + src_w, color[i], right);
++                // skip stride bytes
++                optr += dst->linesize[i];
++            }
++        }
  
-         if (padbottom || padright) {
-             optr = dst->data[i] + dst->linesize[i] *
+-        if (padbottom || padright) {
+-            optr = dst->data[i] + dst->linesize[i] *
 -                ((height - padbottom) >> y_shift) - (padright >> x_shift);
 -            memset(optr, color[i],dst->linesize[i] *
 -                (padbottom >> y_shift) + (padright >> x_shift));
-+                ((height - padbottom) >> y_shift) - stride_padright;
-+            memset(optr, color[i], dst->linesize[i] *
-+                (padbottom >> y_shift) + stride_padright);
++        // Render pad bottom
++        if (bottom) {
++            optr = dst->data[i] + dst->linesize[i] * (top + src_h);
++            for (y = 0; y < bottom; y++) {
++                memset(optr, color[i], width >> x_shift);
++                // skip stride bytes
++                optr += dst->linesize[i];
++            }
          }
      }
      return 0;
