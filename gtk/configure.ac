@@ -9,7 +9,7 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC(gcc clang)
 AC_ISC_POSIX
-AC_PROG_CXX(gcc++ clang++)
+AC_PROG_CXX(g++ clang++)
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
