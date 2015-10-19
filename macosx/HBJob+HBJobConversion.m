@@ -218,8 +218,6 @@
             break;
     }
 
-    job->grayscale = self.filters.grayscale;
-
     // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
     BOOL one_burned = NO;
     for (NSDictionary *subtitleDict in self.subtitles.tracks)
@@ -484,6 +482,13 @@
                                  self.picture.cropTop, self.picture.cropBottom,
                                  self.picture.cropLeft, self.picture.cropRight].UTF8String);
     
+    // Add grayscale filter
+    if (self.filters.grayscale)
+    {
+        filter = hb_filter_init(HB_FILTER_GRAYSCALE);
+        hb_add_filter(job, filter, NULL);
+    }
+
     // Add framerate shaping filter
     filter = hb_filter_init(HB_FILTER_VFR);
     hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",

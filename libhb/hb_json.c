@@ -403,8 +403,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:{s:o, s:o, s:o, s:o}, s:[]},"
     // Metadata
     "s:{},"
-    // Filters {Grayscale, FilterList []}
-    "s:{s:o, s:[]}"
+    // Filters {FilterList []}
+    "s:{s:[]}"
     "}",
         "SequenceID",           hb_value_int(job->sequence_id),
         "Destination",
@@ -438,7 +438,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "SubtitleList",
         "Metadata",
         "Filters",
-            "Grayscale",        hb_value_bool(job->grayscale),
             "FilterList"
     );
     if (dict == NULL)
@@ -853,7 +852,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //           Comment, Genre, Description, LongDescription}
     "s?{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s},"
     // Filters {FilterList}
-    "s?{s?b, s?o}"
+    "s?{s?o}"
     "}",
         "SequenceID",               unpack_i(&job->sequence_id),
         "Destination",
@@ -913,7 +912,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Description",          unpack_s(&meta_desc),
             "LongDescription",      unpack_s(&meta_long_desc),
         "Filters",
-            "Grayscale",            unpack_b(&job->grayscale),
             "FilterList",           unpack_o(&filter_list)
     );
     if (result < 0)

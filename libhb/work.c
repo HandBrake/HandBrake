@@ -340,9 +340,6 @@ void hb_display_job_info(hb_job_t *job)
         }
     }
     
-    if ( job->grayscale )
-        hb_log( "     + grayscale mode" );
-
     hb_log( "   + Output geometry" );
     hb_log( "     + storage dimensions: %d x %d", job->width, job->height );
     hb_log( "     + pixel aspect ratio: %d : %d", job->par.num, job->par.den );
@@ -971,6 +968,7 @@ static void do_job(hb_job_t *job)
         memcpy(init.crop, title->crop, sizeof(int[4]));
         init.vrate = title->vrate;
         init.cfr = 0;
+        init.grayscale = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
@@ -990,6 +988,7 @@ static void do_job(hb_job_t *job)
         memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate = init.vrate;
         job->cfr = init.cfr;
+        job->grayscale = init.grayscale;
 
         // Perform filter post_init which informs filters of final
         // job configuration. e.g. rendersub filter needs to know the

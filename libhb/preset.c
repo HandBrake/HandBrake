@@ -1076,9 +1076,6 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     filter_list = hb_value_array_init();
     hb_dict_set(filters_dict, "FilterList", filter_list);
 
-    hb_dict_set(filters_dict, "Grayscale", hb_value_xform(
-                hb_dict_get(preset, "VideoGrayScale"), HB_VALUE_TYPE_BOOL));
-
     // Detelecine filter
     hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
     if (detel_val != NULL)
@@ -1245,6 +1242,14 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
     free(rotate);
+
+    // Grayscale filter
+    if (hb_value_get_bool(hb_dict_get(preset, "VideoGrayScale")))
+    {
+        filter_dict = hb_dict_init();
+        hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_GRAYSCALE));
+        hb_value_array_append(filter_list, filter_dict);
+    }
 
     hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
     int vrate_den = get_video_framerate(fr_value);
