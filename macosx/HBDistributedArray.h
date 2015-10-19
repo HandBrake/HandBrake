@@ -18,6 +18,11 @@ extern NSString *HBDistributedArrayChanged;
 
 @end
 
+typedef NS_ENUM(NSUInteger, HBDistributedArrayContent) {
+    HBDistributedArrayContentAcquired,
+    HBDistributedArrayContentReload,
+};
+
 /**
  *  HBDistributedArray
  *  a mutable array that share its content between processes.
@@ -33,9 +38,11 @@ extern NSString *HBDistributedArrayChanged;
 - (instancetype)initWithURL:(NSURL *)fileURL;
 
 /**
- *  Begin a transaction on the array
+ *  Begins a transaction on the array
+ *
+ *  @return whether the array content changes or not after beginning the transaction.
  */
-- (void)beginTransaction;
+- (HBDistributedArrayContent)beginTransaction;
 
 /**
  *  Commit the changes and notify

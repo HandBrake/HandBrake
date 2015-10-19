@@ -59,6 +59,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 @property (nonatomic, readwrite) NSTimeInterval modifiedTime;
 
 @property (nonatomic, readonly) sem_t *mutex;
+@property (nonatomic, readwrite) uint32_t mutexCount;
 
 @end
 
@@ -87,7 +88,8 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         // it can cause a deadlock if an instance
         // crashed while it has the lock on the semaphore.
         _mutex = sem_open(name, O_CREAT, 0777, 1);
-        if (_mutex == SEM_FAILED) {
+        if (_mutex == SEM_FAILED)
+        {
             NSLog(@"%s: %d\n", "Error in creating semaphore: ", errno);
         }
 
@@ -118,15 +120,25 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (void)lock
 {
-    sem_wait(self.mutex);
+    if (self.mutexCount == 0)
+    {
+        sem_wait(self.mutex);
+    }
+
+    self.mutexCount++;
 }
 
 - (void)unlock
 {
-    sem_post(self.mutex);
+    if (self.mutexCount == 1)
+    {
+        sem_post(self.mutex);
+    }
+
+    self.mutexCount--;
 }
 
-- (void)beginTransaction
+- (HBDistributedArrayContent)beginTransaction
 {
     [self lock];
     // We got the lock, need to check if
@@ -135,16 +147,22 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     // could have not received the notification yet
     NSDate *date = nil;
     [self.fileURL getResourceValue:&date forKey:NSURLAttributeModificationDateKey error:nil];
-    if (date.timeIntervalSinceReferenceDate > self.modifiedTime)
+    if (date.timeIntervalSinceReferenceDate > ceil(self.modifiedTime))
     {
         // File was modified while we waited on the lock
         // reload it
         [self reload];
+        NSLog(@"WTF");
+        return HBDistributedArrayContentReload;
     }
+
+    return HBDistributedArrayContentAcquired;
 }
 
 - (void)commit
 {
+    // Save changes to disk
+    // and unlock
     [self synchronize];
     [self unlock];
 }
