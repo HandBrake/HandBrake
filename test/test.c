@@ -1231,7 +1231,7 @@ static void ShowHelp()
 "       --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
 "       --loose-crop        Always crop to a multiple of the modulus\n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
-"       --pad <W:H:C>       Add boarders to 'pad' image to WxH (letterbox)\n"
+"       --pad <W:H:C>       Add borders to 'pad' image to WxH (letterbox)\n"
 "                           Optionally set color of padding to C\n"
 "                           Color may be HTML color name or RGB value\n"
 "   -Y, --maxHeight   <#>   Set maximum height\n"
