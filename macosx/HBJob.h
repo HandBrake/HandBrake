@@ -32,7 +32,8 @@ typedef NS_ENUM(NSUInteger, HBJobState){
     HBJobStateReady,
     HBJobStateWorking,
     HBJobStateCompleted,
-    HBJobStateCanceled
+    HBJobStateCanceled, 
+    HBJobStateFailed
 };
 
 /**
