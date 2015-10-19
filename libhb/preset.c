@@ -1607,6 +1607,38 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     free(filter_str);
     hb_value_array_append(filter_list, filter_dict);
 
+    int padded_width  = hb_value_get_int(hb_dict_get(preset, "PicturePaddedWidth"));
+    int padded_height = hb_value_get_int(hb_dict_get(preset, "PicturePaddedHeight"));
+    if (padded_width > resultGeo.width || padded_height > resultGeo.height)
+    {
+        int pad[4];
+
+        hb_get_padding(resultGeo.width, resultGeo.height,
+                       padded_width, padded_height, pad);
+
+        int pad_rgb = 0;
+        hb_value_t *pad_color_value = hb_dict_get(preset, "PicturePadColor");
+        if (hb_value_type(pad_color_value) == HB_VALUE_TYPE_STRING)
+        {
+            const char *s = hb_value_get_string(pad_color_value);
+            pad_rgb = hb_rgb_lookup_by_name(s);
+        }
+        else if (hb_value_type(pad_color_value) == HB_VALUE_TYPE_INT)
+        {
+            pad_rgb = hb_value_get_int(pad_color_value);
+        }
+
+        // Setup pad filter
+        filter_str = hb_strdup_printf("%d:%d:%d:%d:%d",
+                                      pad[0], pad[1], pad[2], pad[3], pad_rgb);
+
+        filter_dict = hb_dict_init();
+        hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_PAD));
+        hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+        free(filter_str);
+        hb_value_array_append(filter_list, filter_dict);
+    }
+
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
     {

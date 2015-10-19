@@ -22,6 +22,7 @@ extern "C" {
 #include "preset.h"
 #include "plist.h"
 #include "param.h"
+#include "colormap.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
@@ -86,6 +87,8 @@ hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_geometry_settings_t *geo,
                                       hb_geometry_t *result);
+void          hb_get_padding(int width, int height,
+                             int padded_width, int padded_height, int *pad);
 void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, 
                 const char * settings );
 

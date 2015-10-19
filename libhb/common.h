@@ -284,6 +284,7 @@ struct hb_geometry_settings_s
     int itu_par;                // use dvd dimensions to determine PAR
     int modulus;                // pixel alignment for loose anamorphic
     int crop[4];                // Pixels cropped from source before scaling
+    int pad[4];                 // Pixels added to source border after scaling
     int maxWidth;               // max destination storage width
     int maxHeight;              // max destination storage height
     hb_geometry_t geometry;
@@ -1183,6 +1184,7 @@ typedef struct hb_filter_init_s
     int           pix_fmt;
     hb_geometry_t geometry;
     int           crop[4];
+    int           pad[4];
     hb_rational_t vrate;
     int           cfr;
     int           grayscale;
@@ -1249,6 +1251,7 @@ enum
     HB_FILTER_NLMEANS,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
+    HB_FILTER_PAD,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters

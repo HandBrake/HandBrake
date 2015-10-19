@@ -1,0 +1,71 @@
+diff --git a/libavcodec/imgconvert.c b/libavcodec/imgconvert.c
+index 2d32602..aedc43d 100644
+--- a/libavcodec/imgconvert.c
++++ b/libavcodec/imgconvert.c
+@@ -284,8 +284,11 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+     int y_shift;
+     int x_shift;
+     int yheight;
++    int src_width;
++    int stride_padright;
+     int i, y;
+ 
++    src_width  = width  - (padleft + padright);
+     if (pix_fmt < 0 || pix_fmt >= AV_PIX_FMT_NB ||
+         !is_yuv_planar(desc)) return -1;
+ 
+@@ -293,6 +296,7 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+         x_shift = i ? desc->log2_chroma_w : 0;
+         y_shift = i ? desc->log2_chroma_h : 0;
+ 
++        stride_padright = dst->linesize[i] - ((padleft + src_width) >> x_shift);
+         if (padtop || padleft) {
+             memset(dst->data[i], color[i],
+                 dst->linesize[i] * (padtop >> y_shift) + (padleft >> x_shift));
+@@ -300,10 +304,10 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+ 
+         if (padleft || padright) {
+             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+-                (dst->linesize[i] - (padright >> x_shift));
++                (dst->linesize[i] - stride_padright);
+             yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
+             for (y = 0; y < yheight; y++) {
+-                memset(optr, color[i], (padleft + padright) >> x_shift);
++                memset(optr, color[i], (padleft >> x_shift) + stride_padright);
+                 optr += dst->linesize[i];
+             }
+         }
+@@ -312,15 +316,15 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+             uint8_t *iptr = src->data[i];
+             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+                     (padleft >> x_shift);
+-            memcpy(optr, iptr, (width - padleft - padright) >> x_shift);
++            memcpy(optr, iptr, ((width - padleft) >> x_shift) - stride_padright);
+             iptr += src->linesize[i];
+             optr = dst->data[i] + dst->linesize[i] * (padtop >> y_shift) +
+-                (dst->linesize[i] - (padright >> x_shift));
++                (dst->linesize[i] - stride_padright);
+             yheight = (height - 1 - (padtop + padbottom)) >> y_shift;
+             for (y = 0; y < yheight; y++) {
+-                memset(optr, color[i], (padleft + padright) >> x_shift);
+-                memcpy(optr + ((padleft + padright) >> x_shift), iptr,
+-                       (width - padleft - padright) >> x_shift);
++                memset(optr, color[i], (padleft >> x_shift) + stride_padright);
++                memcpy(optr + (padleft >> x_shift) + stride_padright, iptr,
++                       src_width >> x_shift);
+                 iptr += src->linesize[i];
+                 optr += dst->linesize[i];
+             }
+@@ -328,9 +332,9 @@ int av_picture_pad(AVPicture *dst, const AVPicture *src, int height, int width,
+ 
+         if (padbottom || padright) {
+             optr = dst->data[i] + dst->linesize[i] *
+-                ((height - padbottom) >> y_shift) - (padright >> x_shift);
+-            memset(optr, color[i],dst->linesize[i] *
+-                (padbottom >> y_shift) + (padright >> x_shift));
++                ((height - padbottom) >> y_shift) - stride_padright;
++            memset(optr, color[i], dst->linesize[i] *
++                (padbottom >> y_shift) + stride_padright);
+         }
+     }
+     return 0;
