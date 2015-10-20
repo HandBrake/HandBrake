@@ -3746,6 +3746,8 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
                 uiGeo.geometry.par.num =
                         ghb_dict_get_int(settings, "PictureDisplayWidth");
                 uiGeo.geometry.par.den = width;
+                hb_reduce(&uiGeo.geometry.par.num, &uiGeo.geometry.par.den,
+                           uiGeo.geometry.par.num,  uiGeo.geometry.par.den);
             }
         }
         else
