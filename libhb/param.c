@@ -363,6 +363,8 @@ static hb_filter_param_t*
 filter_param_get_tunes_internal(int filter_id, int *count)
 {
     int ii;
+
+    *count = 0;
     for (ii = 0; param_map[ii].filter_id != HB_FILTER_INVALID; ii++)
     {
         if (param_map[ii].filter_id == filter_id)
