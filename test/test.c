@@ -3783,7 +3783,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Codecs */
-        int acodec;
+        int acodec = HB_ACODEC_INVALID;
         ii = 0;
         if (acodecs != NULL)
         {
@@ -3820,7 +3820,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Sample Rate */
-        int arate;
+        int arate = 0;
         ii = 0;
         if (arates != NULL)
         {
@@ -3860,7 +3860,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Mixdown */
-        int mix;
+        int mix = HB_AMIXDOWN_NONE;
         ii = 0;
         if (mixdowns != NULL)
         {
@@ -3884,7 +3884,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Bitrate */
-        int abitrate;
+        int abitrate = 0;
         ii = 0;
         if (abitrates != NULL)
         {
@@ -3911,7 +3911,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Quality */
-        double aquality;
+        double aquality = 0.;
         ii = 0;
         if (aqualities != NULL)
         {
@@ -3970,7 +3970,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio DRC */
         ii = 0;
-        double drc;
+        double drc = 0.;
         if (dynamic_range_compression)
         {
             char **drcs = dynamic_range_compression;
@@ -3995,7 +3995,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio Gain */
         ii = 0;
-        double gain;
+        double gain = 1.;
         if (audio_gain)
         {
             for (; audio_gain[ii] != NULL && ii < track_count; ii++)
@@ -4018,7 +4018,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Dither */
-        int dither;
+        int dither = 0;
         ii = 0;
         if (audio_dither != NULL)
         {
