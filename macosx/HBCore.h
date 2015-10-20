@@ -85,6 +85,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 - (instancetype)initWithLogLevel:(int)level name:(NSString *)name;
 
 /**
+ *  Log level.
+ */
+@property (nonatomic, readwrite) int logLevel;
+
+/**
  * Current state of HBCore.
  */
 @property (nonatomic, readonly) HBState state;

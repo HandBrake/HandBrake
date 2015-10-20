@@ -97,6 +97,7 @@ static void hb_error_handler(const char *errmsg)
         _state = HBStateIdle;
         _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
         _hb_state = malloc(sizeof(struct hb_state_s));
+        _logLevel = level;
 
         _hb_handle = hb_init(level, 0);
         if (!_hb_handle)
@@ -132,10 +133,17 @@ static void hb_error_handler(const char *errmsg)
     free(_hb_state);
 }
 
+- (void)setLogLevel:(int)logLevel
+{
+    _logLevel = logLevel;
+    hb_log_level_set(_hb_handle, logLevel);
+}
+
 #pragma mark - Scan
 
 - (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
 {
+    NSAssert(url, @"[HBCore canScan:] called with nil url.");
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         if (error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
