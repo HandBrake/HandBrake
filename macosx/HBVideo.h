@@ -51,6 +51,8 @@ extern NSString * const HBVideoChangedNotification;
 @property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readonly) NSString *completeTune;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

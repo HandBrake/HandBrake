@@ -75,6 +75,8 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
 @property (nonatomic, readonly) NSArray *chapterTitles;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

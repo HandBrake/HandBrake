@@ -50,6 +50,8 @@ extern NSString * const HBPictureChangedNotification;
 @property (nonatomic, readonly) int sourceHeight;
 @property (nonatomic, readonly) int sourceDisplayWidth;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

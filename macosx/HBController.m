@@ -563,8 +563,14 @@
 {
     [self removeJobObservers];
 
+    // Clear the undo manager
+    [_job.undo removeAllActions];
+    _job.undo = nil;
+
     // Retain the new job
     _job = job;
+
+    job.undo = self.window.undoManager;
 
     // Set the jobs info to the view controllers
     fPictureViewController.picture = job.picture;
@@ -935,8 +941,9 @@
     }
     else
     {
-        self.job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
-        self.job.destURL = [self destURLForJob:self.job];
+        HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
+        job.destURL = [self destURLForJob:job];
+        self.job = job;
     }
 
     // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
@@ -998,9 +1005,17 @@
 {
     // Deselect the currently selected Preset if there is one
     [fPresetsView deselect];
-    // Change UI to show "Custom" settings are being used
-    self.job.presetName = NSLocalizedString(@"Custom", @"");
-    [self updateFileName];
+
+    // Update the preset and file name only if we are not
+    // undoing or redoing, because if so it's already stored
+    // in the undo manager.
+    NSUndoManager *undo = self.window.undoManager;
+    if (!(undo.isUndoing || undo.isRedoing))
+    {
+        // Change UI to show "Custom" settings are being used
+        self.job.presetName = NSLocalizedString(@"Custom", @"");
+        [self updateFileName];
+    }
 }
 
 #pragma mark - Queue progress

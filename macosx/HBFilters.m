@@ -52,6 +52,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDetelecine:(NSString *)detelecine
 {
+    if (![detelecine isEqualToString:_detelecine])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDetelecine:_detelecine];
+    }
     if (detelecine)
     {
         _detelecine = [detelecine copy];
@@ -66,6 +70,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 // Override setter to avoid nil values.
 - (void)setDetelecineCustomString:(NSString *)detelecineCustomString
 {
+    if (![detelecineCustomString isEqualToString:_detelecineCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDetelecineCustomString:_detelecineCustomString];
+    }
     if (detelecineCustomString)
     {
         _detelecineCustomString = [detelecineCustomString copy];
@@ -80,6 +88,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDeinterlace:(NSString *)deinterlace
 {
+    if (![deinterlace isEqualToString:_deinterlace])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeinterlace:_deinterlace];
+    }
     if (deinterlace)
     {
         _deinterlace = [deinterlace copy];
@@ -88,12 +100,20 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         _deinterlace = @"off";
     }
-    [self validateDeinterlacePreset];
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateDeinterlacePreset];
+    }
     [self postChangedNotification];
 }
 
 - (void)setDeinterlacePreset:(NSString *)deinterlacePreset
 {
+    if (![deinterlacePreset isEqualToString:_deinterlacePreset])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeinterlacePreset:_deinterlacePreset];
+    }
     if (deinterlacePreset)
     {
         _deinterlacePreset = [deinterlacePreset copy];
@@ -103,7 +123,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _deinterlacePreset = @"fast";
     }
 
-    [self validateDeinterlacePreset];
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateDeinterlacePreset];
+    }
     [self postChangedNotification];
 }
 
@@ -124,6 +147,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDeinterlaceCustomString:(NSString *)deinterlaceCustomString
 {
+    if (![deinterlaceCustomString isEqualToString:_deinterlaceCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeinterlaceCustomString:_deinterlaceCustomString];
+    }
     if (deinterlaceCustomString)
     {
         _deinterlaceCustomString = [deinterlaceCustomString copy];
@@ -138,6 +165,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDenoise:(NSString *)denoise
 {
+    if (![denoise isEqualToString:_denoise])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDenoise:_denoise];
+    }
     if (denoise)
     {
         _denoise = [denoise copy];
@@ -152,6 +183,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDenoisePreset:(NSString *)denoisePreset
 {
+    if (![denoisePreset isEqualToString:_denoisePreset])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDenoisePreset:_denoisePreset];
+    }
     if (denoisePreset)
     {
         _denoisePreset = [denoisePreset copy];
@@ -166,6 +201,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDenoiseTune:(NSString *)denoiseTune
 {
+    if (![denoiseTune isEqualToString:_denoiseTune])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDenoiseTune:_denoiseTune];
+    }
     if (denoiseTune)
     {
         _denoiseTune = [denoiseTune copy];
@@ -180,6 +219,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDenoiseCustomString:(NSString *)denoiseCustomString
 {
+    if (![denoiseCustomString isEqualToString:_denoiseCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDenoiseCustomString:_denoiseCustomString];
+    }
     if (denoiseCustomString)
     {
         _denoiseCustomString = [denoiseCustomString copy];
@@ -194,12 +237,20 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
 - (void)setDeblock:(int)deblock
 {
+    if (deblock != _deblock)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeblock:_deblock];
+    }
     _deblock = deblock;
     [self postChangedNotification];
 }
 
 - (void)setGrayscale:(BOOL)grayscale
 {
+    if (grayscale != _grayscale)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setGrayscale:_grayscale];
+    }
     _grayscale = grayscale;
     [self postChangedNotification];
 }

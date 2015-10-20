@@ -38,8 +38,22 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     [[NSNotificationCenter defaultCenter] postNotificationName:HBRangeChangedNotification object:self];
 }
 
+- (void)setType:(HBRangeType)type
+{
+    if (type != _type)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setType:_type];
+    }
+    _type = type;
+}
+
 - (void)setChapterStart:(int)chapterStart
 {
+    if (chapterStart != _chapterStart)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChapterStart:_chapterStart];
+    }
+
     if (chapterStart > self.chapterStop)
     {
         self.chapterStop = chapterStart;
@@ -52,6 +66,11 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
 - (void)setChapterStop:(int)chapterStop
 {
+    if (chapterStop != _chapterStop)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChapterStop:_chapterStop];
+    }
+
     if (chapterStop < self.chapterStart)
     {
         self.chapterStart = chapterStop;
@@ -60,6 +79,42 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     _chapterStop = chapterStop;
 
     [self postChangedNotification];
+}
+
+- (void)setFrameStart:(int)frameStart
+{
+    if (frameStart != _frameStart)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFrameStart:_frameStart];
+    }
+    _frameStart = frameStart;
+}
+
+- (void)setFrameStop:(int)frameStop
+{
+    if (frameStop != _frameStop)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFrameStop:_frameStop];
+    }
+    _frameStop = frameStop;
+}
+
+- (void)setSecondsStart:(int)secondsStart
+{
+    if (secondsStart != _secondsStart)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setSecondsStart:_secondsStart];
+    }
+    _secondsStart = secondsStart;
+}
+
+- (void)setSecondsStop:(int)secondsStop
+{
+    if (secondsStop != _secondsStop)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setSecondsStop:_secondsStop];
+    }
+    _secondsStop = secondsStop;
 }
 
 - (NSString *)duration

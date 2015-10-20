@@ -11,11 +11,11 @@
 
 - (instancetype)init
 {
-    self = [self initWithTitle:@"No Value" duration:0];
+    self = [self initWithTitle:@"No Value" index:0 duration:0];
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title duration:(uint64_t)duration
+- (instancetype)initWithTitle:(NSString *)title index:(NSUInteger)idx duration:(uint64_t)duration
 {
     NSParameterAssert(title);
 
@@ -28,9 +28,21 @@
 
         _duration = [NSString stringWithFormat:@"%02llu:%02llu:%02llu", hours, minutes, seconds];
         _title = [title copy];
+        _index = idx;
 
     }
     return self;
+}
+
+#pragma mark - Properties
+
+- (void)setTitle:(NSString *)title
+{
+    if (![title isEqualToString:_title])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTitle:_title];
+    }
+    _title = title;
 }
 
 #pragma mark - NSCopying
@@ -62,6 +74,7 @@
 
     encodeObject(_title);
     encodeObject(_duration);
+    encodeInteger(_index);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -72,6 +85,7 @@
     {
         decodeObject(_title, NSString);
         decodeObject(_duration, NSString);
+        decodeInteger(_index);
 
         return self;
     }

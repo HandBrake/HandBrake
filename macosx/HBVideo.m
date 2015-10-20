@@ -81,58 +81,97 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     {
         // if so, convert the old setting to the new scale as close as possible
         // based on percentages
-        self.quality = floor((maxValue - minValue + 1.) * (previousPercentOfSliderScale));
+        if (!(self.undo.isUndoing || self.undo.isRedoing))
+        {
+            self.quality = floor((maxValue - minValue + 1.) * (previousPercentOfSliderScale));
+        }
     }
 }
 
 - (void)setEncoder:(int)encoder
 {
+    if (encoder != _encoder)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setEncoder:_encoder];
+    }
     _encoder = encoder;
     [self updateQualityBounds];
-    [self validatePresetsSettings];
-    [self validateAdvancedOptions];
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validatePresetsSettings];
+        [self validateAdvancedOptions];
+    }
 
     [self postChangedNotification];
 }
 
 - (void)setQualityType:(int)qualityType
 {
+    if (qualityType != _qualityType)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setQualityType:_qualityType];
+    }
     _qualityType = qualityType;
     [self postChangedNotification];
 }
 
 - (void)setAvgBitrate:(int)avgBitrate
 {
+    if (avgBitrate != _avgBitrate)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAvgBitrate:_avgBitrate];
+    }
     _avgBitrate = avgBitrate;
     [self postChangedNotification];
 }
 
 - (void)setQuality:(double)quality
 {
+    if (quality != _quality)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setQuality:_quality];
+    }
     _quality = quality;
     [self postChangedNotification];
 }
 
 - (void)setFrameRate:(int)frameRate
 {
+    if (frameRate != _frameRate)
+    {
+        [(HBVideo *)[self.undo prepareWithInvocationTarget:self] setFrameRate:_frameRate];
+    }
     _frameRate = frameRate;
     [self postChangedNotification];
 }
 
 - (void)setFrameRateMode:(int)frameRateMode
 {
+    if (frameRateMode != _frameRateMode)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFrameRateMode:_frameRateMode];
+    }
     _frameRateMode = frameRateMode;
     [self postChangedNotification];
 }
 
 - (void)setTwoPass:(BOOL)twoPass
 {
+    if (twoPass != _twoPass)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTwoPass:_twoPass];
+    }
     _twoPass = twoPass;
     [self postChangedNotification];
 }
 
 - (void)setTurboTwoPass:(BOOL)turboTwoPass
 {
+    if (turboTwoPass != _turboTwoPass)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTurboTwoPass:_turboTwoPass];
+    }
     _turboTwoPass = turboTwoPass;
     [self postChangedNotification];
 }
@@ -162,12 +201,21 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setPreset:(NSString *)preset
 {
+    if (![preset isEqualToString:_preset])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setPreset:_preset];
+    }
     _preset = [preset copy];
     [self postChangedNotification];
 }
 
 - (void)setTune:(NSString *)tune
 {
+    if (![tune isEqualToString:_tune])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTune:_tune];
+    }
+
     if (![tune isEqualToString:@"none"])
     {
         _tune = [tune copy];
@@ -182,18 +230,30 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setProfile:(NSString *)profile
 {
+    if (![profile isEqualToString:_profile])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setProfile:_profile];
+    }
     _profile = [profile copy];
     [self postChangedNotification];
 }
 
 - (void)setLevel:(NSString *)level
 {
+    if (![level isEqualToString:_level])
+    {
+        [(HBVideo *)[self.undo prepareWithInvocationTarget:self] setLevel:_level];
+    }
     _level = [level copy];
     [self postChangedNotification];
 }
 
 - (void)setVideoOptionExtra:(NSString *)videoOptionExtra
 {
+    if (![videoOptionExtra isEqualToString:_videoOptionExtra])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setVideoOptionExtra:_videoOptionExtra];
+    }
     if (videoOptionExtra != nil)
     {
         _videoOptionExtra = [videoOptionExtra copy];
@@ -207,6 +267,10 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setFastDecode:(BOOL)fastDecode
 {
+    if (fastDecode != _fastDecode)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFastDecode:_fastDecode];
+    }
     _fastDecode = fastDecode;
     [self postChangedNotification];
 }

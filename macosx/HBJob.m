@@ -92,8 +92,39 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
                                                                                                            withObject:preset];
 }
 
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    [@[self.video, self.range, self.filters, self.picture, /*self.audio, self.subtitles*/] makeObjectsPerformSelector:@selector(setUndo:)
+                                                                                                       withObject:_undo];
+    [self.chapterTitles makeObjectsPerformSelector:@selector(setUndo:) withObject:_undo];
+}
+
+- (void)setPresetName:(NSString *)presetName
+{
+    if (![presetName isEqualToString:_presetName])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setPresetName:_presetName];
+    }
+    _presetName = [presetName copy];
+}
+
+- (void)setDestURL:(NSURL *)destURL
+{
+    if (![destURL isEqualTo:_destURL])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDestURL:_destURL];
+    }
+    _destURL = [destURL copy];
+}
+
 - (void)setContainer:(int)container
 {
+    if (container != _container)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setContainer:_container];
+    }
+
     _container = container;
 
     [self.audio containerChanged:container];
@@ -104,14 +135,45 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
 }
 
+- (void)setAngle:(int)angle
+{
+    if (angle != _angle)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAngle:_angle];
+    }
+    _angle = angle;
+}
+
 - (void)setTitle:(HBTitle *)title
 {
     _title = title;
     self.range.title = title;
 }
 
+- (void)setMp4HttpOptimize:(BOOL)mp4HttpOptimize
+{
+    if (mp4HttpOptimize != _mp4HttpOptimize)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setMp4HttpOptimize:_mp4HttpOptimize];
+    }
+    _mp4HttpOptimize = mp4HttpOptimize;
+}
+
+- (void)setMp4iPodCompatible:(BOOL)mp4iPodCompatible
+{
+    if (mp4iPodCompatible != _mp4iPodCompatible)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setMp4iPodCompatible:_mp4iPodCompatible];
+    }
+    _mp4iPodCompatible = mp4iPodCompatible;
+}
+
 - (void)setChaptersEnabled:(BOOL)chaptersEnabled
 {
+    if (chaptersEnabled != _chaptersEnabled)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setChaptersEnabled:_chaptersEnabled];
+    }
     _chaptersEnabled = chaptersEnabled;
     [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
 }

@@ -31,6 +31,8 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite) int deblock;
 @property (nonatomic, readwrite) BOOL grayscale;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

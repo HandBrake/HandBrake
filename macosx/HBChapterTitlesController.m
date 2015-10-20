@@ -31,54 +31,18 @@
 {
     _job = job;
     self.chapterTitles = job.chapterTitles;
-    [self.table reloadData];
-}
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
-{
-    return self.chapterTitles.count;
-}
-
-- (void)tableView:(NSTableView *)aTableView
-        setObjectValue:(id)anObject
-        forTableColumn:(NSTableColumn *)aTableColumn
-        row:(NSInteger)rowIndex
-{
-    if ([aTableColumn.identifier isEqualToString:@"title"])
-    {
-        [(HBChapter *)self.chapterTitles[rowIndex] setTitle:anObject];
-    }
-}
-
-- (id)tableView:(NSTableView *)aTableView
-      objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(NSInteger)rowIndex
-{
-    if ([aTableColumn.identifier isEqualToString:@"index"])
-    {
-        return [NSString stringWithFormat:@"%ld", rowIndex + 1];
-    }
-    else if ([aTableColumn.identifier isEqualToString:@"duration"])
-    {
-        return [(HBChapter *)self.chapterTitles[rowIndex] duration];
-    }
-    else if ([aTableColumn.identifier isEqualToString:@"title"])
-    {
-        return [(HBChapter *)self.chapterTitles[rowIndex] title];
-    }
-    return @"__DATA ERROR__";
 }
 
 /**
  * Method to edit the next chapter when the user presses Return.
- * We queue the actino on the runloop to avoid interfering
+ * We queue the action on the runloop to avoid interfering
  * with the chain of events that handles the edit.
  */
 - (void)controlTextDidEndEditing:(NSNotification *)notification
 {
-    NSTableView *chapterTable = [notification object];
-    NSInteger column = [chapterTable editedColumn];
-    NSInteger row = [chapterTable editedRow];
+    NSTableView *chapterTable = self.table;
+    NSInteger column = 2;
+    NSInteger row = [self.table rowForView:[notification object]];
     NSInteger textMovement;
 
     // Edit the cell in the next row, same column
@@ -173,7 +137,6 @@
                         break;
 
                     }
-                    [self.table reloadData];
                 }
             }
         }

@@ -258,7 +258,9 @@ extern NSString *keySubTrackSrtCharCode;
                     title = [NSString stringWithFormat:@"Chapter %d", i + 1];
                 }
 
-                [chapters addObject:[[HBChapter alloc] initWithTitle:title duration:chapter->duration]];
+                [chapters addObject:[[HBChapter alloc] initWithTitle:title
+                                                               index:i + 1
+                                                            duration:chapter->duration]];
             }
         }
 
