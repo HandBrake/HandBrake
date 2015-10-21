@@ -768,16 +768,14 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                 geo->geometry.par.num / geo->geometry.par.den;
     int height = geo->geometry.height;
 
-    // Set minimum dimensions to prevent failure to initialize
-    // sws context
-    if (width < 32)
-    {
-        width = 32;
-    }
-    if (height < 32)
-    {
-        height = 32;
-    }
+    // Set min/max dimensions to prevent failure to initialize
+    // sws context and absurd sizes.
+    //
+    // This means output image size may not match requested image size!
+    int ww = width, hh = height;
+    width  = MIN(MAX(width,                HB_MIN_WIDTH),  HB_MAX_WIDTH);
+    height = MIN(MAX(height * width  / ww, HB_MIN_HEIGHT), HB_MAX_HEIGHT);
+    width  = MIN(MAX(width  * height / hh, HB_MIN_WIDTH),  HB_MAX_WIDTH);
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
@@ -1053,12 +1051,24 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     int width, height;
     int maxWidth, maxHeight;
 
-    maxWidth = MULTIPLE_MOD_DOWN(geo->maxWidth, mod);
-    maxHeight = MULTIPLE_MOD_DOWN(geo->maxHeight, mod);
-    if (maxWidth && maxWidth < 32)
-        maxWidth = 32;
-    if (maxHeight && maxHeight < 32)
-        maxHeight = 32;
+    if (geo->maxWidth > 0)
+    {
+        maxWidth  = MIN(MAX(MULTIPLE_MOD_DOWN(geo->maxWidth, mod),
+                            HB_MIN_WIDTH), HB_MAX_WIDTH);
+    }
+    else
+    {
+        maxWidth  = HB_MAX_WIDTH;
+    }
+    if (geo->maxHeight > 0)
+    {
+        maxHeight = MIN(MAX(MULTIPLE_MOD_DOWN(geo->maxHeight, mod),
+                            HB_MIN_HEIGHT), HB_MAX_HEIGHT);
+    }
+    else
+    {
+        maxHeight = HB_MAX_HEIGHT;
+    }
 
     switch (geo->mode)
     {
@@ -1091,7 +1101,25 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 width = MULTIPLE_MOD_UP(geo->geometry.width, mod);
                 height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
             }
-            if (maxWidth && (width > maxWidth))
+
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+                if (keep_display_aspect)
+                {
+                    height = MULTIPLE_MOD(width / dar, mod);
+                }
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+                if (keep_display_aspect)
+                {
+                    width = MULTIPLE_MOD(height * dar, mod);
+                }
+            }
+            if (width > maxWidth)
             {
                 width  = maxWidth;
                 if (keep_display_aspect)
@@ -1099,7 +1127,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                     height = MULTIPLE_MOD(width / dar, mod);
                 }
             }
-            if (maxHeight && (height > maxHeight))
+            if (height > maxHeight)
             {
                 height  = maxHeight;
                 if (keep_display_aspect)
@@ -1154,13 +1182,23 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 width = MULTIPLE_MOD_UP(height * storage_aspect + 0.5, mod);
             }
 
-            if (maxWidth && (maxWidth < width))
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+                height = MULTIPLE_MOD(width / storage_aspect + 0.5, mod);
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+                width = MULTIPLE_MOD(height * storage_aspect + 0.5, mod);
+            }
+            if (width > maxWidth)
             {
                 width = maxWidth;
                 height = MULTIPLE_MOD(width / storage_aspect + 0.5, mod);
             }
-
-            if (maxHeight && (maxHeight < height))
+            if (height > maxHeight)
             {
                 height = maxHeight;
                 width = MULTIPLE_MOD(height * storage_aspect + 0.5, mod);
@@ -1181,12 +1219,20 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
             height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
 
-            /* Bind to max dimensions */
-            if (maxWidth && width > maxWidth)
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+            }
+            if (width > maxWidth)
             {
                 width = maxWidth;
             }
-            if (maxHeight && height > maxHeight)
+            if (height > maxHeight)
             {
                 height = maxHeight;
             }
@@ -1202,6 +1248,34 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                        src_par.den;
             }
         } break;
+    }
+    if (width < HB_MIN_WIDTH || height < HB_MIN_HEIGHT ||
+        width > maxWidth     || height > maxHeight)
+    {
+        // All limits set above also attempted to keep PAR and DAR.
+        // If we are still outside limits, enforce them and modify
+        // PAR to keep DAR
+        if (width < HB_MIN_WIDTH)
+        {
+            width  = HB_MIN_WIDTH;
+        }
+        if (height < HB_MIN_HEIGHT)
+        {
+            height  = HB_MIN_HEIGHT;
+        }
+        if (width > maxWidth)
+        {
+            width = maxWidth;
+        }
+        if (height > maxHeight)
+        {
+            height = maxHeight;
+        }
+        if (keep_display_aspect && geo->mode != HB_ANAMORPHIC_NONE)
+        {
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        }
     }
 
     /* Pass the results back to the caller */
