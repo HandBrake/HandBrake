@@ -4517,6 +4517,33 @@ ghb_get_preview_image(
     uiGeo.geometry.par.num = 1;
     uiGeo.geometry.par.den = 1;
 
+    GdkScreen *ss;
+    gint s_w, s_h;
+
+    ss = gdk_screen_get_default();
+    s_w = gdk_screen_get_width(ss);
+    s_h = gdk_screen_get_height(ss);
+
+    if (uiGeo.geometry.width > s_w * 2 ||
+        uiGeo.geometry.height > s_h * 2)
+    {
+        double factor = 1.;
+
+        // Image is of extreme size > twice the screen dimensions.
+        // In some extreme cases (very lopsided PAR), this can cause
+        // hb_get_preview2 to crash or hang.
+        if (uiGeo.geometry.width > s_w)
+        {
+            factor = (double)s_w / uiGeo.geometry.width;
+        }
+        if (uiGeo.geometry.height * factor > s_h)
+        {
+            factor = (double)s_h / uiGeo.geometry.height;
+        }
+        uiGeo.geometry.width  *= factor;
+        uiGeo.geometry.height *= factor;
+    }
+
     GdkPixbuf *preview;
     hb_image_t *image;
     image = hb_get_preview2(h_scan, title->index, index, &uiGeo, deinterlace);
@@ -4581,17 +4608,12 @@ ghb_get_preview_image(
     // If the preview is too large to fit the screen, reduce it's size.
     if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
     {
-        GdkScreen *ss;
-        gint s_w, s_h;
         gint factor = 80;
 
         if (ghb_dict_get_bool(ud->prefs, "preview_fullscreen"))
         {
             factor = 100;
         }
-        ss = gdk_screen_get_default();
-        s_w = gdk_screen_get_width(ss);
-        s_h = gdk_screen_get_height(ss);
 
         if (previewWidth > s_w * factor / 100 ||
             previewHeight > s_h * factor / 100)
