@@ -758,7 +758,8 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                             hb_geometry_settings_t *geo, int deinterlace)
 {
     char                 filename[1024];
-    hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
+    hb_buffer_t        * in_buf = NULL, * deint_buf = NULL;
+    hb_buffer_t        * preview_buf = NULL;
     uint32_t             swsflags;
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
     struct SwsContext  * context;
@@ -766,6 +767,17 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     int width = geo->geometry.width *
                 geo->geometry.par.num / geo->geometry.par.den;
     int height = geo->geometry.height;
+
+    // Set minimum dimensions to prevent failure to initialize
+    // sws context
+    if (width < 32)
+    {
+        width = 32;
+    }
+    if (height < 32)
+    {
+        height = 32;
+    }
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
@@ -816,6 +828,12 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                 title->geometry.height - (geo->crop[0] + geo->crop[1]),
                 AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags);
 
+    if (context == NULL)
+    {
+        // if by chance hb_sws_get_context fails, don't crash in sws_scale
+        goto fail;
+    }
+
     // Scale
     sws_scale(context,
               (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
@@ -835,6 +853,10 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     return image;
 
 fail:
+
+    hb_buffer_close( &in_buf );
+    hb_buffer_close( &deint_buf );
+    hb_buffer_close( &preview_buf );
 
     image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
     return image;
