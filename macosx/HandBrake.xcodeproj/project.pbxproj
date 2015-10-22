@@ -118,6 +118,7 @@
 		A9160A351AE7A165009A7818 /* HBCodingUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9160A341AE7A165009A7818 /* HBCodingUtilities.m */; };
 		A91726E7197291BC00D1AFEF /* HBChapterTitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */; };
 		A91806711A4807B000FC9BED /* HBRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A91806701A4807B000FC9BED /* HBRange.m */; };
+		A9181CB21BD76F8400E5C8B0 /* HBSubtitlesTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */; };
 		A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */; };
 		A91AFD0F1A949472009BECED /* HBJobOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */; };
 		A91C024D1A16516A00DEA6F3 /* JobSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C024C1A16516A00DEA6F3 /* JobSmall@2x.png */; };
@@ -400,6 +401,8 @@
 		A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBChapterTitlesController.m; sourceTree = "<group>"; };
 		A918066F1A4807B000FC9BED /* HBRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRange.h; sourceTree = "<group>"; };
 		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
+		A9181CB01BD76F8400E5C8B0 /* HBSubtitlesTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesTrack.h; sourceTree = "<group>"; };
+		A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesTrack.m; sourceTree = "<group>"; };
 		A91AFD0A1A948827009BECED /* HBOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputFileWriter.h; sourceTree = "<group>"; };
 		A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputFileWriter.m; sourceTree = "<group>"; };
 		A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBJobOutputFileWriter.h; sourceTree = "<group>"; };
@@ -1022,6 +1025,8 @@
 			children = (
 				A91017B21A64440A00039BFB /* HBSubtitles.h */,
 				A91017B31A64440A00039BFB /* HBSubtitles.m */,
+				A9181CB01BD76F8400E5C8B0 /* HBSubtitlesTrack.h */,
+				A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */,
 				A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */,
 				A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */,
 			);
@@ -1510,6 +1515,7 @@
 				A9DEC87F1A23DF6F00C79B48 /* HBJob.m in Sources */,
 				A9E2FD271A21BC4A000E8D3F /* HBAddPresetController.m in Sources */,
 				A975C08E1AE8C5270061870D /* HBStateFormatter.m in Sources */,
+				A9181CB21BD76F8400E5C8B0 /* HBSubtitlesTrack.m in Sources */,
 				A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */,
 				A9597A2A1A49749D00007771 /* HBRange+UIAdditions.m in Sources */,
 			);

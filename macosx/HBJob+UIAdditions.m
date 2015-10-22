@@ -9,8 +9,11 @@
 #import "HBAttributedStringAdditions.h"
 #import "HBTitle.h"
 #import "HBJob.h"
+
 #import "HBAudioTrack.h"
 #import "HBAudioDefaults.h"
+
+#import "HBSubtitlesTrack.h"
 
 #import "HBPicture+UIAdditions.h"
 #import "HBFilters+UIAdditions.h"
@@ -131,7 +134,7 @@ static NSDictionary            *shortHeightAttr;
         }
         NSString *passesString = @"";
         // check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan
-        if (self.subtitles.tracks.count && [self.subtitles.tracks[0][@"keySubTrackIndex"] intValue] == -1)
+        if (self.subtitles.tracks.firstObject.sourceTrackIdx == 1)
         {
             passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
         }
@@ -447,7 +450,7 @@ static NSDictionary            *shortHeightAttr;
         
         // Ninth Line Subtitle Details
         int i = 0;
-        for (NSDictionary *track in self.subtitles.tracks)
+        for (HBSubtitlesTrack *track in self.subtitles.tracks)
         {
             // Ignore the none track.
             if (i == self.subtitles.tracks.count - 1)
@@ -457,16 +460,16 @@ static NSDictionary            *shortHeightAttr;
             
             /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
             [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
-            [finalString appendString: track[@"keySubTrackName"] withAttributes:detailAttr];
-            if ([track[@"keySubTrackForced"] intValue] == 1)
+            [finalString appendString: self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"] withAttributes:detailAttr];
+            if (track.forcedOnly)
             {
                 [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
             }
-            if ([track[@"keySubTrackBurned"] intValue] == 1)
+            if (track.burnedIn)
             {
                 [finalString appendString: @" - Burned In" withAttributes:detailAttr];
             }
-            if ([track[@"keySubTrackDefault"] intValue] == 1)
+            if (track.def)
             {
                 [finalString appendString: @" - Default" withAttributes:detailAttr];
             }

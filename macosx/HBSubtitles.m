@@ -1,38 +1,34 @@
-//
-//  HBSubtitles.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 12/01/15.
-//
-//
+/*  HBSubtitles.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBSubtitles.h"
 #import "HBSubtitlesDefaults.h"
 
+#import "HBSubtitlesTrack.h"
+
 #import "HBTitle.h"
 #import "HBCodingUtilities.h"
 
-#include "lang.h"
 #include "common.h"
 
-NSString *keySubTrackSelectionIndex = @"keySubTrackSelectionIndex";
-NSString *keySubTrackName = @"keySubTrackName";
-NSString *keySubTrackIndex = @"keySubTrackIndex";
-NSString *keySubTrackLanguage = @"keySubTrackLanguage";
-NSString *keySubTrackLanguageIsoCode = @"keySubTrackLanguageIsoCode";
-NSString *keySubTrackType = @"keySubTrackType";
+extern NSString *keySubTrackName;
+extern NSString *keySubTrackLanguageIsoCode;
+extern NSString *keySubTrackType;
 
-NSString *keySubTrackForced = @"keySubTrackForced";
-NSString *keySubTrackBurned = @"keySubTrackBurned";
-NSString *keySubTrackDefault = @"keySubTrackDefault";
+extern NSString *keySubTrackSrtFileURL;
 
-NSString *keySubTrackSrtOffset = @"keySubTrackSrtOffset";
-NSString *keySubTrackSrtFilePath = @"keySubTrackSrtFilePath";
-NSString *keySubTrackSrtCharCode = @"keySubTrackSrtCharCode";
-NSString *keySubTrackSrtCharCodeIndex = @"keySubTrackSrtCharCodeIndex";
-NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
+#define NONE_TRACK_INDEX        0
+#define FOREIGN_TRACK_INDEX     1
 
-#define CHAR_CODE_DEFAULT_INDEX 11
+@interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
+
+/// Used to aovid circular dependecy validation.
+@property (nonatomic, readwrite) BOOL validating;
+
+@end
 
 @implementation HBSubtitles
 
@@ -43,72 +39,167 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     {
         _container = HB_MUX_MP4;
 
+        _sourceTracks = [title.subtitlesTracks mutableCopy];
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBSubtitlesDefaults alloc] init];
 
-        _masterTrackArray = [title.subtitlesTracks mutableCopy];
-
-        NSMutableArray *forcedSourceNamesArray = [NSMutableArray array];
-        for (NSDictionary *dict in _masterTrackArray)
+        NSMutableSet<NSString *> *forcedSourceNamesArray = [NSMutableSet set];
+        int foreignAudioType = VOBSUB;
+        for (NSDictionary *dict in _sourceTracks)
         {
             enum subsource source = [dict[keySubTrackType] intValue];
-            NSString *subSourceName = @(hb_subsource_name(source));
+            NSString *name = @(hb_subsource_name(source));
             // if the subtitle track can be forced, add its source name to the array
-            if (hb_subtitle_can_force(source) && [forcedSourceNamesArray containsObject:subSourceName] == NO)
+            if (hb_subtitle_can_force(source) && name.length)
             {
-                [forcedSourceNamesArray addObject:subSourceName];
+                [forcedSourceNamesArray addObject:name];
             }
         }
 
         // now set the name of the Foreign Audio Search track
+        NSMutableString *foreignAudioSearchTrackName = [@"Foreign Audio Search (Bitmap)" mutableCopy];
         if (forcedSourceNamesArray.count)
         {
-            [forcedSourceNamesArray sortUsingComparator:^(id obj1, id obj2)
-             {
-                 return [((NSString *)obj1) compare:((NSString *)obj2)];
-             }];
-
-            NSString *tempList = @"";
-            for (NSString *tempString in forcedSourceNamesArray)
+            [foreignAudioSearchTrackName appendFormat:@" ("];
+            for (NSString *name in forcedSourceNamesArray)
             {
-                if (tempList.length)
-                {
-                    tempList = [tempList stringByAppendingString:@", "];
-                }
-                tempList = [tempList stringByAppendingString:tempString];
+                [foreignAudioSearchTrackName appendFormat:@"%@, ", name];
             }
-            self.foreignAudioSearchTrackName = [NSString stringWithFormat:@"Foreign Audio Search (Bitmap) (%@)", tempList];
+            [foreignAudioSearchTrackName deleteCharactersInRange:NSMakeRange(foreignAudioSearchTrackName.length - 2, 2)];
+            [foreignAudioSearchTrackName appendFormat:@")"];
         }
-        else
-        {
-            self.foreignAudioSearchTrackName = @"Foreign Audio Search (Bitmap)";
-        }
+
+        // Add the none and foreign track to the source array
+        NSDictionary *none = @{  keySubTrackName: NSLocalizedString(@"None", nil)};
+        [_sourceTracks insertObject:none atIndex:0];
+
+        NSDictionary *foreign = @{ keySubTrackName: foreignAudioSearchTrackName,
+                                   keySubTrackType: @(foreignAudioType) };
+        [_sourceTracks insertObject:foreign atIndex:1];
+
     }
     return self;
 }
 
-- (void)addAllTracks
+#pragma mark - Data Source
+
+- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
 {
-    [self.tracks removeAllObjects];
+    return self.sourceTracks[idx];
+}
 
-    // Add the foreign audio search pass
-    [self addTrack:[self trackFromSourceTrackIndex:-1]];
+- (NSArray<NSString *> *)sourceTracksArray
+{
+    NSMutableArray *sourceNames = [NSMutableArray array];
 
-    // Add the remainings tracks
-    for (NSDictionary *track in self.masterTrackArray)
+    for (NSDictionary *track in self.sourceTracks)
     {
-        NSInteger sourceIndex = [track[keySubTrackIndex] integerValue];
-        [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+        [sourceNames addObject:track[keySubTrackName]];
     }
 
-    [self.tracks addObject:[self createSubtitleTrack]];
+    return sourceNames;
+}
+
+#pragma mark - Delegate
+
+- (void)track:(HBSubtitlesTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx;
+{
+    // If the source was changed to None, remove the track
+    if (track.sourceTrackIdx == NONE_TRACK_INDEX)
+    {
+        NSUInteger idx = [self.tracks indexOfObject:track];
+        [self removeObjectFromTracksAtIndex:idx];
+    }
+    // If the source was changed to Foreign Audio Track,
+    // insert it at top if it wasn't already there
+    else if (track.sourceTrackIdx == FOREIGN_TRACK_INDEX)
+    {
+        NSUInteger idx = [self.tracks indexOfObject:track];
+        if (idx != 0)
+        {
+            [self removeObjectFromTracksAtIndex:idx];
+            if (self.tracks[0].sourceTrackIdx != FOREIGN_TRACK_INDEX)
+            {
+                [self insertObject:track inTracksAtIndex:0];
+            }
+        }
+        [self addNoneTrack];
+    }
+    // Else add a new None track
+    else if (oldSourceIdx == NONE_TRACK_INDEX)
+    {
+        [self addNoneTrack];
+    }
+    [self validatePassthru];
+}
+
+- (BOOL)canSetBurnedInOption:(HBSubtitlesTrack *)track
+{
+    BOOL result = YES;
+    for (HBSubtitlesTrack *subTrack in self.tracks)
+    {
+        if (subTrack != track && subTrack.isEnabled
+            && subTrack.sourceTrackIdx > FOREIGN_TRACK_INDEX && !subTrack.canPassthru)
+        {
+            result = NO;
+        }
+    }
+    return result;
+}
+
+- (void)didSetBurnedInOption:(HBSubtitlesTrack *)track
+{
+    if (self.validating == NO && track.sourceTrackIdx != FOREIGN_TRACK_INDEX)
+    {
+        self.validating = YES;
+        NSUInteger idx = [self.tracks indexOfObject:track];
+        [self validateBurned:idx];
+        self.validating = NO;
+    }
+}
+
+- (void)didSetDefaultOption:(HBSubtitlesTrack *)track
+{
+    if (self.validating == NO && track.sourceTrackIdx != FOREIGN_TRACK_INDEX)
+    {
+        self.validating = YES;
+        NSUInteger idx = [self.tracks indexOfObject:track];
+        [self validateDefault:idx];
+        self.validating = NO;
+    }
+}
+
+- (void)addNoneTrack
+{
+    HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:NONE_TRACK_INDEX];
+    [self addTrack:track];
+}
+
+#pragma mark - Public methods
+
+- (void)addAllTracks
+{
+    while (self.countOfTracks)
+    {
+        [self removeObjectFromTracksAtIndex:0];
+    }
+
+    // Add the remainings tracks
+    for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++) {
+        [self addTrack:[self trackFromSourceTrackIndex:idx]];
+    }
+
+    [self addNoneTrack];
     [self validatePassthru];
 }
 
 - (void)removeAll
 {
-    [self.tracks removeAllObjects];
-    [self.tracks addObject:[self createSubtitleTrack]];
+    while (self.countOfTracks)
+    {
+        [self removeObjectFromTracksAtIndex:0];
+    }
+    [self addNoneTrack];
 }
 
 - (void)reloadDefaults
@@ -116,115 +207,62 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     [self addTracksFromDefaults];
 }
 
-// This gets called whenever the video container changes.
-- (void)containerChanged:(int)container
+- (void)addSrtTrackFromURL:(NSURL *)srtURL
 {
-    self.container = container;
+    // Create a new entry for the subtitle source array so it shows up in our subtitle source list
+    [self.sourceTracks addObject:@{keySubTrackName: srtURL.lastPathComponent,
+                                   keySubTrackType: @(SRTSUB),
+                                   keySubTrackSrtFileURL: srtURL}];
+    HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:self.sourceTracksArray.count - 1];
+    [self insertObject:track inTracksAtIndex:[self countOfTracks] - 1];
+}
 
-    [self validatePassthru];
+- (void)setContainer:(int)container
+{
+    _container = container;
+    for (HBSubtitlesTrack *track in self.tracks)
+    {
+        track.container = container;
+    }
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validatePassthru];
+    }
+}
+
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    for (HBSubtitlesTrack *track in self.tracks)
+    {
+        track.undo = undo;
+    }
 }
 
 /**
  *  Convenience method to add a track to subtitlesArray.
- *  It calculates the keySubTrackSelectionIndex.
  *
  *  @param track the track to add.
  */
-- (void)addTrack:(NSMutableDictionary *)newTrack
+- (void)addTrack:(HBSubtitlesTrack *)newTrack
 {
-    newTrack[keySubTrackSelectionIndex] = @([newTrack[keySubTrackIndex] integerValue] + 1 + (self.tracks.count == 0));
     [self insertObject:newTrack inTracksAtIndex:[self countOfTracks]];
-}
-
-/**
- *  Creates a new subtitle track.
- */
-- (NSMutableDictionary *)createSubtitleTrack
-{
-    NSMutableDictionary *newSubtitleTrack = [[NSMutableDictionary alloc] init];
-    newSubtitleTrack[keySubTrackIndex] = @(-2);
-    newSubtitleTrack[keySubTrackSelectionIndex] = @0;
-    newSubtitleTrack[keySubTrackName] = @"None";
-    newSubtitleTrack[keySubTrackForced] = @0;
-    newSubtitleTrack[keySubTrackBurned] = @0;
-    newSubtitleTrack[keySubTrackDefault] = @0;
-
-    return newSubtitleTrack;
 }
 
 /**
  *  Creates a new track dictionary from a source track.
  *
- *  @param index the index of the source track in the subtitlesSourceArray,
- *               -1 means a Foreign Audio Search pass.
- *
- *  @return a new mutable track dictionary.
+ *  @param index the index of the source track in the subtitlesSourceArray
  */
-- (NSMutableDictionary *)trackFromSourceTrackIndex:(NSInteger)index
+- (HBSubtitlesTrack *)trackFromSourceTrackIndex:(NSInteger)index
 {
-    NSMutableDictionary *track = [self createSubtitleTrack];
-
-    if (index == -1)
-    {
-        /*
-         * we are foreign lang search, which is inherently bitmap
-         *
-         * since it can be either VOBSUB or PGS and the latter can't be
-         * passed through to MP4, we need to know whether there are any
-         * PGS tracks in the source - otherwise we can just set the
-         * source track type to VOBSUB
-         */
-        int subtitleTrackType = VOBSUB;
-        if ([self.foreignAudioSearchTrackName rangeOfString:@(hb_subsource_name(PGSSUB))].location != NSNotFound)
-        {
-            subtitleTrackType = PGSSUB;
-        }
-        // Use -1 to indicate the foreign lang search
-        track[keySubTrackIndex] = @(-1);
-        track[keySubTrackName] = self.foreignAudioSearchTrackName;
-        track[keySubTrackType] = @(subtitleTrackType);
-        // foreign lang search is most useful when combined w/Forced Only - make it default
-        track[keySubTrackForced] = @1;
-    }
-    else
-    {
-        NSDictionary *sourceTrack = self.masterTrackArray[index];
-
-        track[keySubTrackIndex] = @(index);
-        track[keySubTrackName] = sourceTrack[keySubTrackName];
-
-        /* check to see if we are an srt, in which case set our file path and source track type kvp's*/
-        if ([self.masterTrackArray[index][keySubTrackType] intValue] == SRTSUB)
-        {
-            track[keySubTrackType] = @(SRTSUB);
-            track[keySubTrackSrtFilePath] = sourceTrack[keySubTrackSrtFilePath];
-
-            track[keySubTrackLanguageIndex] = @(self.languagesArrayDefIndex);
-            track[keySubTrackLanguageIsoCode] = self.languagesArray[self.languagesArrayDefIndex][1];
-
-            track[keySubTrackSrtCharCodeIndex] = @(CHAR_CODE_DEFAULT_INDEX);
-            track[keySubTrackSrtCharCode] = self.charCodeArray[CHAR_CODE_DEFAULT_INDEX];
-        }
-        else
-        {
-            track[keySubTrackType] = sourceTrack[keySubTrackType];
-        }
-    }
-
-    if (!hb_subtitle_can_burn([track[keySubTrackType] intValue]))
-    {
-        /* the source track cannot be burned in, so uncheck the widget */
-        track[keySubTrackBurned] = @0;
-    }
-
-    if (!hb_subtitle_can_force([track[keySubTrackType] intValue]))
-    {
-        /* the source track does not support forced flags, so uncheck the widget */
-        track[keySubTrackForced] = @0;
-    }
-    
+    HBSubtitlesTrack *track = [[HBSubtitlesTrack alloc] initWithTrackIdx:index container:self.container
+                                                              dataSource:self delegate:self];
+    track.undo = self.undo;
     return track;
 }
+
+#pragma mark - Defaults
 
 /**
  *  Remove all the subtitles tracks and
@@ -236,12 +274,15 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     // so we don't add the same track twice.
     NSMutableIndexSet *tracksAdded = [NSMutableIndexSet indexSet];
 
-    [self.tracks removeAllObjects];
+    while (self.countOfTracks)
+    {
+        [self removeObjectFromTracksAtIndex:0];
+    }
 
     // Add the foreign audio search pass
     if (self.defaults.addForeignAudioSearch)
     {
-        [self addTrack:[self trackFromSourceTrackIndex:-1]];
+        [self addTrack:[self trackFromSourceTrackIndex:FOREIGN_TRACK_INDEX]];
     }
 
     // Add the tracks for the selected languages
@@ -249,23 +290,24 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     {
         for (NSString *lang in self.defaults.trackSelectionLanguages)
         {
-            for (NSDictionary *track in self.masterTrackArray)
+            NSUInteger idx = 0;
+            for (NSDictionary *track in self.sourceTracks)
             {
-                if ([lang isEqualToString:@"und"] || [track[keySubTrackLanguageIsoCode] isEqualToString:lang])
+                if (idx > FOREIGN_TRACK_INDEX &&
+                    ([lang isEqualToString:@"und"] || [track[keySubTrackLanguageIsoCode] isEqualToString:lang]))
                 {
-                    NSInteger sourceIndex = [track[keySubTrackIndex] intValue];
-
-                    if (![tracksAdded containsIndex:sourceIndex])
+                    if (![tracksAdded containsIndex:idx])
                     {
-                        [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+                        [self addTrack:[self trackFromSourceTrackIndex:idx]];
                     }
-                    [tracksAdded addIndex:sourceIndex];
+                    [tracksAdded addIndex:idx];
 
                     if (self.defaults.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
                     {
                         break;
                     }
                 }
+                idx++;
             }
         }
     }
@@ -273,14 +315,14 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     // Add the closed captions track if there is one.
     if (self.defaults.addCC)
     {
-        for (NSDictionary *track in self.masterTrackArray)
+        NSUInteger idx = 0;
+        for (NSDictionary *track in self.sourceTracks)
         {
             if ([track[keySubTrackType] intValue] == CC608SUB)
             {
-                NSInteger sourceIndex = [track[keySubTrackIndex] intValue];
-                if (![tracksAdded containsIndex:sourceIndex])
+                if (![tracksAdded containsIndex:idx])
                 {
-                    [self addTrack:[self trackFromSourceTrackIndex:sourceIndex]];
+                    [self addTrack:[self trackFromSourceTrackIndex:idx]];
                 }
 
                 if (self.defaults.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
@@ -288,6 +330,7 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
                     break;
                 }
             }
+            idx++;
         }
     }
 
@@ -296,25 +339,26 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     {
         if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorFirst)
         {
-            if ([self.tracks.firstObject[keySubTrackIndex] integerValue] != -1)
+            if (self.tracks.firstObject.sourceTrackIdx != FOREIGN_TRACK_INDEX)
             {
-                self.tracks.firstObject[keySubTrackBurned] = @YES;
+                self.tracks.firstObject.burnedIn = YES;
             }
             else if (self.tracks.count > 1)
             {
-                self.tracks[1][keySubTrackBurned] = @YES;
+                self.tracks[0].burnedIn = NO;
+                self.tracks[1].burnedIn = YES;
             }
         }
         else if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudio)
         {
-            if ([self.tracks.firstObject[keySubTrackIndex] integerValue] == -1)
+            if (self.tracks.firstObject.sourceTrackIdx == FOREIGN_TRACK_INDEX)
             {
-                self.tracks.firstObject[keySubTrackBurned] = @YES;
+                self.tracks.firstObject.burnedIn = YES;
             }
         }
         else if (self.defaults.burnInBehavior == HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst)
         {
-            self.tracks.firstObject[keySubTrackBurned] = @YES;
+            self.tracks.firstObject.burnedIn = YES;
         }
     }
 
@@ -325,18 +369,18 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
         BOOL bitmapSubtitlesFound = NO;
 
         NSMutableArray *tracksToDelete = [[NSMutableArray alloc] init];
-        for (NSMutableDictionary *track in self.tracks)
+        for (HBSubtitlesTrack *track in self.tracks)
         {
-            if ([track[keySubTrackIndex] integerValue] != -1)
+            if (track.sourceTrackIdx != 1)
             {
-                if ((([track[keySubTrackType] intValue] == VOBSUB && self.defaults.burnInDVDSubtitles) ||
-                     ([track[keySubTrackType] intValue] == PGSSUB && self.defaults.burnInBluraySubtitles)) &&
+                if (((track.type == VOBSUB && self.defaults.burnInDVDSubtitles) ||
+                     (track.type == PGSSUB && self.defaults.burnInBluraySubtitles)) &&
                     !bitmapSubtitlesFound)
                 {
-                    track[keySubTrackBurned] = @YES;
+                    track.burnedIn = YES;
                     bitmapSubtitlesFound = YES;
                 }
-                else if ([track[keySubTrackType] intValue] == VOBSUB || [track[keySubTrackType] intValue] == PGSSUB)
+                else if (track.type == VOBSUB || track.type == PGSSUB)
                 {
                     [tracksToDelete addObject:track];
                 }
@@ -346,9 +390,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     }
 
     // Add an empty track
-    [self insertObject:[self createSubtitleTrack] inTracksAtIndex:[self countOfTracks]];
+    [self addNoneTrack];
     [self validatePassthru];
 }
+
+#pragma mark - Validation
 
 /**
  *  Checks whether any subtitles in the list cannot be passed through.
@@ -357,103 +403,70 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 - (void)validatePassthru
 {
     BOOL convertToBurnInUsed = NO;
-    NSMutableArray *tracksToDelete = [[NSMutableArray alloc] init];
+    NSMutableIndexSet *tracksToDelete = [[NSMutableIndexSet alloc] init];
 
     // convert any non-None incompatible tracks to burn-in or remove them
-    for (NSMutableDictionary *track in self.tracks)
+    NSUInteger idx = 0;
+    for (HBSubtitlesTrack *track in self.tracks)
     {
-        if (track[keySubTrackType] == nil)
-        {
-            continue;
-        }
-
-        int subtitleTrackType = [track[keySubTrackType] intValue];
-        if (!hb_subtitle_can_pass(subtitleTrackType, self.container))
+        if (track.isEnabled && track.sourceTrackIdx > FOREIGN_TRACK_INDEX && !track.canPassthru)
         {
             if (convertToBurnInUsed == NO)
             {
                 //we haven't set any track to burned-in yet, so we can
-                track[keySubTrackBurned] = @1;
+                track.burnedIn = YES;
                 convertToBurnInUsed = YES; //remove any additional tracks
             }
             else
             {
                 //we already have a burned-in track, we must remove others
-                [tracksToDelete addObject:track];
+                [tracksToDelete addIndex:idx];
             }
         }
+        idx++;
     }
+
     //if we converted a track to burned-in, unset it for tracks that support passthru
     if (convertToBurnInUsed == YES)
     {
-        for (NSMutableDictionary *track in self.tracks)
+        for (HBSubtitlesTrack *track in self.tracks)
         {
-            if (track[keySubTrackType] == nil)
+            if (track.isEnabled && track.sourceTrackIdx > FOREIGN_TRACK_INDEX && track.canPassthru)
             {
-                continue;
-            }
-
-            int subtitleTrackType = [track[keySubTrackType] intValue];
-            if (hb_subtitle_can_pass(subtitleTrackType, self.container))
-            {
-                track[keySubTrackBurned] = @0;
+                track.burnedIn = NO;
             }
         }
     }
 
-    [self willChangeValueForKey:@"tracks"];
-    if (tracksToDelete.count)
+    // Delete the tracks
+    NSUInteger currentIndex = [tracksToDelete lastIndex];
+    while (currentIndex != NSNotFound)
     {
-        [self.tracks removeObjectsInArray:tracksToDelete];
+        [self removeObjectFromTracksAtIndex:currentIndex];
+        currentIndex = [tracksToDelete indexLessThanIndex:currentIndex];
     }
-    [self didChangeValueForKey:@"tracks"];
-
 }
 
-#pragma mark - Languages
-
-@synthesize languagesArray = _languagesArray;
-
-- (NSArray *)languagesArray
+- (void)validateBurned:(NSUInteger)index
 {
-    if (!_languagesArray)
+    [self.tracks enumerateObjectsUsingBlock:^(HBSubtitlesTrack *track, NSUInteger idx, BOOL *stop)
     {
-        _languagesArray = [self populateLanguageArray];
-    }
-
-    return _languagesArray;
-}
-
-- (NSArray *)populateLanguageArray
-{
-    NSMutableArray *languages = [[NSMutableArray alloc] init];
-
-    for (const iso639_lang_t * lang = lang_get_next(NULL); lang != NULL; lang = lang_get_next(lang))
-    {
-        [languages addObject:@[@(lang->eng_name),
-                               @(lang->iso639_2)]];
-        if (!strcasecmp(lang->eng_name, "English"))
+        if (idx != index && track.sourceTrackIdx != FOREIGN_TRACK_INDEX)
         {
-            _languagesArrayDefIndex = [languages count] - 1;
+            track.burnedIn = NO;
         }
-    }
-    return [languages copy];
+    }];
 }
 
-@synthesize charCodeArray = _charCodeArray;
-
-- (NSArray *)charCodeArray
+- (void)validateDefault:(NSUInteger)index
 {
-    if (!_charCodeArray)
+    [self.tracks enumerateObjectsUsingBlock:^(HBSubtitlesTrack *obj, NSUInteger idx, BOOL *stop)
     {
-        // populate the charCodeArray.
-        _charCodeArray = @[@"ANSI_X3.4-1968", @"ANSI_X3.4-1986", @"ANSI_X3.4", @"ANSI_X3.110-1983", @"ANSI_X3.110", @"ASCII",
-                            @"ECMA-114", @"ECMA-118", @"ECMA-128", @"ECMA-CYRILLIC", @"IEC_P27-1", @"ISO-8859-1", @"ISO-8859-2",
-                            @"ISO-8859-3", @"ISO-8859-4", @"ISO-8859-5", @"ISO-8859-6", @"ISO-8859-7", @"ISO-8859-8", @"ISO-8859-9",
-                            @"ISO-8859-9E", @"ISO-8859-10", @"ISO-8859-11", @"ISO-8859-13", @"ISO-8859-14", @"ISO-8859-15", @"ISO-8859-16",
-                            @"UTF-7", @"UTF-8", @"UTF-16", @"UTF-16LE", @"UTF-16BE", @"UTF-32", @"UTF-32LE", @"UTF-32BE"];
-    }
-    return _charCodeArray;
+        if (idx != index && obj.sourceTrackIdx != FOREIGN_TRACK_INDEX)
+        {
+            obj.def = NO;
+        }
+    }];
 }
 
 #pragma mark - NSCopying
@@ -465,15 +478,13 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     if (copy)
     {
         copy->_container = _container;
-
-        copy->_masterTrackArray = [_masterTrackArray mutableCopy];
-        copy->_foreignAudioSearchTrackName = [_foreignAudioSearchTrackName copy];
+        copy->_sourceTracks = [_sourceTracks mutableCopy];
 
         copy->_tracks = [[NSMutableArray alloc] init];
         [_tracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             if (idx < _tracks.count)
             {
-                NSMutableDictionary *trackCopy = [obj copy];
+                id trackCopy = [obj copy];
                 [copy->_tracks addObject:trackCopy];
             }
         }];
@@ -493,14 +504,11 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBAudioVersion"];
+    [coder encodeInt:1 forKey:@"HBSubtitlesVersion"];
 
     encodeInt(_container);
-
-    encodeObject(_masterTrackArray);
-    encodeObject(_foreignAudioSearchTrackName);
+    encodeObject(_sourceTracks);
     encodeObject(_tracks);
-
     encodeObject(_defaults);
 }
 
@@ -509,10 +517,14 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
     self = [super init];
 
     decodeInt(_container);
-
-    decodeObject(_masterTrackArray, NSMutableArray);
-    decodeObject(_foreignAudioSearchTrackName, NSString);
+    decodeObject(_sourceTracks, NSMutableArray);
     decodeObject(_tracks, NSMutableArray);
+
+    for (HBSubtitlesTrack *track in _tracks)
+    {
+        track.dataSource = self;
+        track.delegate = self;
+    }
 
     decodeObject(_defaults, HBSubtitlesDefaults);
 
@@ -535,23 +547,26 @@ NSString *keySubTrackLanguageIndex = @"keySubTrackLanguageIndex";
 #pragma mark -
 #pragma mark KVC
 
-- (NSUInteger) countOfTracks
+- (NSUInteger)countOfTracks
 {
     return self.tracks.count;
 }
 
-- (id)objectInTracksAtIndex:(NSUInteger)index
+- (HBSubtitlesTrack *)objectInTracksAtIndex:(NSUInteger)index
 {
     return self.tracks[index];
 }
 
-- (void)insertObject:(id)track inTracksAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBSubtitlesTrack *)track inTracksAtIndex:(NSUInteger)index;
 {
+    [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksAtIndex:index];
     [self.tracks insertObject:track atIndex:index];
 }
 
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index
 {
+    HBSubtitlesTrack *track = self.tracks[index];
+    [[self.undo prepareWithInvocationTarget:self] insertObject:track inTracksAtIndex:index];
     [self.tracks removeObjectAtIndex:index];
 }
 

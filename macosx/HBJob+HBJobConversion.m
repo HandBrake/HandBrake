@@ -9,6 +9,8 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioTrack.h"
 
+#import "HBSubtitlesTrack.h"
+
 #import "HBChapter.h"
 
 #import "HBTitlePrivate.h"
@@ -220,93 +222,84 @@
 
     // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
     BOOL one_burned = NO;
-    for (NSDictionary *subtitleDict in self.subtitles.tracks)
+    for (HBSubtitlesTrack *subTrack in self.subtitles.tracks)
     {
-        int subtitle = [subtitleDict[keySubTrackIndex] intValue];
-        BOOL force = [subtitleDict[keySubTrackForced] boolValue];
-        BOOL burned = [subtitleDict[keySubTrackBurned] boolValue];
-        BOOL def = [subtitleDict[keySubTrackDefault] boolValue];
-
-        // Skip the "None" track.
-        if (subtitle == -2)
+        if (subTrack.isEnabled)
         {
-            continue;
-        }
+            // Shift the source index by 2 to componsate
+            // for the none and foreign audio search tracks.
+            int sourceIdx = ((int)subTrack.sourceTrackIdx) - 2;
 
-        // we need to check for the "Foreign Audio Search" which would be keySubTrackIndex of -1
-        if (subtitle == -1)
-        {
-            job->indepth_scan = 1;
-
-            if (burned != 1)
+            // we need to check for the "Foreign Audio Search" which would be have an index of -1
+            if (sourceIdx == -1)
             {
-                job->select_subtitle_config.dest = PASSTHRUSUB;
+                job->indepth_scan = 1;
+
+                if (subTrack.burnedIn)
+                {
+                    job->select_subtitle_config.dest = RENDERSUB;
+                }
+                else
+                {
+                    job->select_subtitle_config.dest = PASSTHRUSUB;
+                }
+
+                job->select_subtitle_config.force = subTrack.forcedOnly;
+                job->select_subtitle_config.default_track = subTrack.def;
             }
             else
             {
-                job->select_subtitle_config.dest = RENDERSUB;
-            }
-
-            job->select_subtitle_config.force = force;
-            job->select_subtitle_config.default_track = def;
-        }
-        else
-        {
-            // if we are getting the subtitles from an external srt file
-            if ([subtitleDict[keySubTrackType] intValue] == SRTSUB)
-            {
-                hb_subtitle_config_t sub_config;
-
-                sub_config.offset = [subtitleDict[keySubTrackSrtOffset] intValue];
-
-                // we need to strncpy file name and codeset
-                strncpy(sub_config.src_filename, [subtitleDict[keySubTrackSrtFilePath] UTF8String], 255);
-                sub_config.src_filename[255] = 0;
-                strncpy(sub_config.src_codeset, [subtitleDict[keySubTrackSrtCharCode] UTF8String], 39);
-                sub_config.src_codeset[39] = 0;
-
-                if (!burned && hb_subtitle_can_pass(SRTSUB, job->mux))
+                // if we are getting the subtitles from an external srt file
+                if (subTrack.type == SRTSUB)
                 {
-                    sub_config.dest = PASSTHRUSUB;
+                    hb_subtitle_config_t sub_config;
+
+                    sub_config.offset = subTrack.offset;
+
+                    // we need to strncpy file name and codeset
+                    strncpy(sub_config.src_filename, subTrack.fileURL.path.fileSystemRepresentation, 255);
+                    sub_config.src_filename[255] = 0;
+                    strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, 39);
+                    sub_config.src_codeset[39] = 0;
+
+                    if (!subTrack.burnedIn && hb_subtitle_can_pass(SRTSUB, job->mux))
+                    {
+                        sub_config.dest = PASSTHRUSUB;
+                    }
+                    else if (hb_subtitle_can_burn(SRTSUB))
+                    {
+                        one_burned = YES;
+                        sub_config.dest = RENDERSUB;
+                    }
+
+                    sub_config.force = 0;
+                    sub_config.default_track = subTrack.def;
+                    hb_srt_add( job, &sub_config, subTrack.isoLanguage.UTF8String);
                 }
-                else if (hb_subtitle_can_burn(SRTSUB))
+                else
                 {
-                    // Only allow one subtitle to be burned into the video
-                    if (one_burned)
-                        continue;
-                    one_burned = YES;
-                    sub_config.dest = RENDERSUB;
+                    // We are setting a source subtitle so access the source subtitle info
+                    hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item(title->list_subtitle, sourceIdx);
+
+                    if (subt != NULL)
+                    {
+                        hb_subtitle_config_t sub_config = subt->config;
+
+                        if (!subTrack.burnedIn && hb_subtitle_can_pass(subt->source, job->mux))
+                        {
+                            sub_config.dest = PASSTHRUSUB;
+                        }
+                        else if (hb_subtitle_can_burn(subt->source))
+                        {
+                            one_burned = YES;
+                            sub_config.dest = RENDERSUB;
+                        }
+
+                        sub_config.force = subTrack.forcedOnly;
+                        sub_config.default_track = subTrack.def;
+                        hb_subtitle_add(job, &sub_config, sourceIdx);
+                    }
                 }
-
-                sub_config.force = 0;
-                sub_config.default_track = def;
-                hb_srt_add( job, &sub_config, [subtitleDict[keySubTrackLanguageIsoCode] UTF8String]);
-                continue;
-            }
-
-            // We are setting a source subtitle so access the source subtitle info
-            hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item(title->list_subtitle, subtitle);
-
-            if (subt != NULL)
-            {
-                hb_subtitle_config_t sub_config = subt->config;
-
-                if (!burned && hb_subtitle_can_pass(subt->source, job->mux))
-                {
-                    sub_config.dest = PASSTHRUSUB;
-                }
-                else if (hb_subtitle_can_burn(subt->source))
-                {
-                    // Only allow one subtitle to be burned into the video
-                    if (one_burned)
-                        continue;
-                    one_burned = YES;
-                    sub_config.dest = RENDERSUB;
-                }
-
-                sub_config.force = force;
-                sub_config.default_track = def;
-                hb_subtitle_add(job, &sub_config, subtitle);
             }
         }
     }

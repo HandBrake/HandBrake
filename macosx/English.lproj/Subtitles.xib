@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
             <connections>
-                <outlet property="fTableView" destination="0yM-wE-D2x" id="0vq-y5-Ubi"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -18,150 +17,6 @@
             <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Syo-rH-vof">
-                    <rect key="frame" x="20" y="20" width="886" height="266"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <clipView key="contentView" id="ljc-nW-Cnc">
-                        <rect key="frame" x="1" y="17" width="884" height="248"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" headerView="IiW-3a-Drv" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <animations/>
-                                <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                <tableColumns>
-                                    <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
-                                        </tableHeaderCell>
-                                        <popUpButtonCell key="dataCell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="kzn-6s-3Ka">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <menu key="menu" title="OtherViews" id="Umu-1b-U1Z">
-                                                <items>
-                                                    <menuItem title="Pop Up" id="cSW-OC-qKA"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                    </tableColumn>
-                                    <tableColumn identifier="forced" width="76" minWidth="10" maxWidth="3.4028229999999999e+38" id="klV-Gy-igk">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Forced Only">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="JLr-Qi-X0X">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                    </tableColumn>
-                                    <tableColumn identifier="burned" width="64" minWidth="10" maxWidth="3.4028229999999999e+38" id="fIe-Fg-ufj">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Burned In">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="R9w-Bn-CCt">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                    </tableColumn>
-                                    <tableColumn identifier="default" width="51" minWidth="10" maxWidth="3.4028229999999999e+38" id="fvq-pE-sOC">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Default">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="ooy-Sh-Edm">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                    </tableColumn>
-                                    <tableColumn identifier="srt_lang" width="173" minWidth="10" maxWidth="3.4028229999999999e+38" id="9ka-9O-WDj">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Language">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <popUpButtonCell key="dataCell" type="bevel" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="vHW-fn-RSG" id="2Qz-Lh-O8g">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <menu key="menu" title="OtherViews" id="UOP-xa-WpP">
-                                                <items>
-                                                    <menuItem title="Pop Up" state="on" id="vHW-fn-RSG"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                    </tableColumn>
-                                    <tableColumn identifier="srt_charcode" width="113" minWidth="10" maxWidth="3.4028229999999999e+38" id="1Qg-We-ltR">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Char Code">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <popUpButtonCell key="dataCell" type="bevel" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="xt1-a1-JhF" id="AdJ-Mv-JI2">
-                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <menu key="menu" title="OtherViews" id="ABd-Ec-K2L">
-                                                <items>
-                                                    <menuItem title="Pop Up" state="on" id="xt1-a1-JhF"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                    </tableColumn>
-                                    <tableColumn identifier="srt_offset" width="64" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Offset">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                        </tableHeaderCell>
-                                        <textFieldCell key="dataCell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" alignment="center" title="Text" id="QRj-KI-a03">
-                                            <font key="font" metaFont="smallSystem"/>
-                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                    </tableColumn>
-                                </tableColumns>
-                                <connections>
-                                    <binding destination="-2" name="enabled" keyPath="self.subtitles" id="pmZ-qP-DnG">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSIsNotNil</string>
-                                        </dictionary>
-                                    </binding>
-                                    <outlet property="dataSource" destination="-2" id="DH5-v0-2ba"/>
-                                    <outlet property="delegate" destination="-2" id="Dfm-tw-89m"/>
-                                    <outlet property="menu" destination="KgC-dn-Hq2" id="Iff-7t-kdg"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
-                        <animations/>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </clipView>
-                    <animations/>
-                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
-                        <rect key="frame" x="-100" y="-100" width="685" height="15"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
-                    </scroller>
-                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
-                    </scroller>
-                    <tableHeaderView key="headerView" id="IiW-3a-Drv">
-                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
-                    </tableHeaderView>
-                </scrollView>
                 <popUpButton verticalHuggingPriority="750" id="2Tb-KC-Ugi">
                     <rect key="frame" x="17" y="291" width="88" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -233,10 +88,348 @@
                         </binding>
                     </connections>
                 </button>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Syo-rH-vof">
+                    <rect key="frame" x="20" y="20" width="886" height="266"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <clipView key="contentView" id="ljc-nW-Cnc">
+                        <rect key="frame" x="1" y="17" width="884" height="248"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" rowSizeStyle="automatic" headerView="IiW-3a-Drv" viewBased="YES" id="0yM-wE-D2x">
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="kzn-6s-3Ka">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="Umu-1b-U1Z">
+                                                <items>
+                                                    <menuItem title="Pop Up" id="cSW-OC-qKA"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="EZp-rc-7mo">
+                                                <rect key="frame" x="1" y="1" width="322" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <popUpButton verticalHuggingPriority="750" id="Tf3-cP-TGw">
+                                                        <rect key="frame" x="0.0" y="1" width="322" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="JWk-Ab-hdY">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <menu key="menu" id="0GR-vf-sZq">
+                                                                <items>
+                                                                    <menuItem title="Item 1" id="yDg-DK-z5D"/>
+                                                                    <menuItem title="Item 2" id="g4b-FM-qX4"/>
+                                                                    <menuItem title="Item 3" id="fAW-To-EeP"/>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="EZp-rc-7mo" name="selectedIndex" keyPath="objectValue.sourceTrackIdx" previousBinding="LeD-lR-MOf" id="zso-1b-OrL"/>
+                                                            <binding destination="EZp-rc-7mo" name="content" keyPath="objectValue.sourceTracksArray" id="LeD-lR-MOf"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="forced" width="76" minWidth="10" maxWidth="3.4028229999999999e+38" id="klV-Gy-igk">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Forced Only">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="JLr-Qi-X0X">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <prototypeCellViews>
+                                            <tableCellView id="zKg-by-KFV">
+                                                <rect key="frame" x="326" y="1" width="76" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button id="HC5-ql-Vcr">
+                                                        <rect key="frame" x="26" y="3" width="23" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPR-9q-XBK">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="zKg-by-KFV" name="value" keyPath="objectValue.forcedOnly" id="iFe-SC-lu3"/>
+                                                            <binding destination="zKg-by-KFV" name="enabled" keyPath="objectValue.isEnabled" id="wpB-JZ-Upd"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="burned" width="64" minWidth="10" maxWidth="3.4028229999999999e+38" id="fIe-Fg-ufj">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Burned In">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="R9w-Bn-CCt">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <prototypeCellViews>
+                                            <tableCellView id="gxH-yz-YRK">
+                                                <rect key="frame" x="405" y="1" width="64" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button id="zpm-9Z-Hsq">
+                                                        <rect key="frame" x="20" y="3" width="23" height="20"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s2E-1o-mGs">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="gxH-yz-YRK" name="value" keyPath="objectValue.burnedIn" id="reR-Z6-yBf">
+                                                                <dictionary key="options">
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="gxH-yz-YRK" name="enabled" keyPath="objectValue.canPassthru" id="xVE-oI-pP8"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="default" width="51" minWidth="10" maxWidth="3.4028229999999999e+38" id="fvq-pE-sOC">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Default">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" alignment="left" controlSize="small" continuous="YES" inset="2" id="ooy-Sh-Edm">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <prototypeCellViews>
+                                            <tableCellView id="mQ6-s6-Zm2">
+                                                <rect key="frame" x="472" y="1" width="51" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button id="mdO-Qu-3Pb">
+                                                        <rect key="frame" x="14" y="4" width="22" height="18"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="kwl-qH-Dgo">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="mQ6-s6-Zm2" name="enabled" keyPath="objectValue.canPassthru" id="VIq-6A-MlG"/>
+                                                            <binding destination="mQ6-s6-Zm2" name="value" keyPath="objectValue.def" id="6sg-s1-xTn"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="srt_lang" width="173" minWidth="10" maxWidth="3.4028229999999999e+38" id="9ka-9O-WDj">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Language">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="bevel" title="Pop Up" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="vHW-fn-RSG" id="2Qz-Lh-O8g">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="UOP-xa-WpP">
+                                                <items>
+                                                    <menuItem title="Pop Up" state="on" id="vHW-fn-RSG"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="4bh-my-GeM">
+                                                <rect key="frame" x="526" y="1" width="173" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <popUpButton verticalHuggingPriority="750" id="Inz-O5-B8g">
+                                                        <rect key="frame" x="0.0" y="0.0" width="173" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="zIn-sc-xak">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <menu key="menu" id="YpS-Pf-abd">
+                                                                <items>
+                                                                    <menuItem title="Item 1" id="Rj8-KI-k4L"/>
+                                                                    <menuItem title="Item 2" id="HQq-Mp-4sI"/>
+                                                                    <menuItem title="Item 3" id="yEC-jb-q8b"/>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isSrt" id="p69-lt-dgE"/>
+                                                            <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBIsoLanguageTrasformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="4bh-my-GeM" name="content" keyPath="objectValue.languages" id="OIo-fF-3vU"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="srt_charcode" width="113" minWidth="10" maxWidth="3.4028229999999999e+38" id="1Qg-We-ltR">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Char Code">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <popUpButtonCell key="dataCell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" continuous="YES" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="AdJ-Mv-JI2">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" title="OtherViews" id="ABd-Ec-K2L"/>
+                                        </popUpButtonCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="ZBK-cc-m0z">
+                                                <rect key="frame" x="702" y="1" width="113" height="25"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <popUpButton verticalHuggingPriority="750" id="QV0-kE-4yR">
+                                                        <rect key="frame" x="0.0" y="0.0" width="113" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jFr-2c-3Vv">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <menu key="menu" id="u4x-JX-Hma">
+                                                                <items>
+                                                                    <menuItem title="Item 1" id="dap-ee-kor"/>
+                                                                    <menuItem title="Item 2" id="gHY-6m-ASb"/>
+                                                                    <menuItem title="Item 3" id="ThR-Cn-Vfr"/>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
+                                                            <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
+                                                            <binding destination="ZBK-cc-m0z" name="enabled" keyPath="objectValue.isSrt" id="ZIt-gt-iqy"/>
+                                                        </connections>
+                                                    </popUpButton>
+                                                </subviews>
+                                                <animations/>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                    <tableColumn identifier="srt_offset" width="64" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Offset">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" alignment="center" title="Text" id="QRj-KI-a03">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="9tV-iL-oaF">
+                                                <rect key="frame" x="818" y="1" width="64" height="17"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="aJi-zQ-0cg">
+                                                        <rect key="frame" x="0.0" y="-3" width="64" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <animations/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="hhH-c3-gD0">
+                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Jui-oB-oVO"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isSrt" id="noe-Kh-7pa"/>
+                                                            <binding destination="9tV-iL-oaF" name="value" keyPath="objectValue.offset" id="NlM-1C-Udf">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSNullPlaceholder" value="0"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <animations/>
+                                                <connections>
+                                                    <outlet property="textField" destination="aJi-zQ-0cg" id="WSP-oS-jCs"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <connections>
+                                    <binding destination="ssY-jQ-Nev" name="content" keyPath="arrangedObjects" id="Oj3-29-oCf"/>
+                                    <binding destination="-2" name="enabled" keyPath="self.subtitles" id="pmZ-qP-DnG">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                    <outlet property="menu" destination="KgC-dn-Hq2" id="Iff-7t-kdg"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <animations/>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
+                        <rect key="frame" x="-100" y="-100" width="685" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </scroller>
+                    <tableHeaderView key="headerView" id="IiW-3a-Drv">
+                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </tableHeaderView>
+                </scrollView>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="373" y="444"/>
+            <point key="canvasLocation" x="532" y="403"/>
         </customView>
+        <arrayController objectClassName="HBSubtitlesTrack" id="ssY-jQ-Nev">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.subtitles.tracks" id="mlB-F3-p89"/>
+            </connections>
+        </arrayController>
         <menu id="KgC-dn-Hq2">
             <items>
                 <menuItem title="Add All" id="S2I-Jd-Lyg">

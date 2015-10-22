@@ -20,18 +20,8 @@ extern NSString *keyAudioInputChannelLayout;
 extern NSString *keyAudioTrackLanguageIsoCode;
 
 extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
 
 @interface HBTitle ()
 
@@ -224,9 +214,7 @@ extern NSString *keySubTrackSrtCharCode;
 
             /* create a dictionary of source subtitle information to store in our array */
             [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
-                                              keySubTrackIndex: @(i),
                                               keySubTrackType: @(subtitle->source),
-                                              keySubTrackLanguage: nativeLanguage,
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
 
