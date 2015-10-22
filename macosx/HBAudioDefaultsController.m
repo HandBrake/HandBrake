@@ -32,6 +32,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
+        _settings.undo = self.window.undoManager;
     }
     return self;
 }

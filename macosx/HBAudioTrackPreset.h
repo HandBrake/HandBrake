@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray *samplerates;
 @property (nonatomic, readonly) NSArray *bitrates;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

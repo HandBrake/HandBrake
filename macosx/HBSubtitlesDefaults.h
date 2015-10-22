@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackBurnInBehavior) {
 @interface HBSubtitlesDefaults : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBSubtitleTrackSelectionBehavior trackSelectionBehavior;
-@property (nonatomic, readwrite, strong) NSMutableArray *trackSelectionLanguages;
+@property (nonatomic, readwrite, strong) NSMutableArray<NSString *> *trackSelectionLanguages;
 
 @property (nonatomic, readwrite) BOOL addForeignAudioSearch;
 @property (nonatomic, readwrite) BOOL addForeignAudioSubtitle;
@@ -34,6 +34,8 @@ typedef NS_ENUM(NSUInteger, HBSubtitleTrackBurnInBehavior) {
 @property (nonatomic, readwrite) HBSubtitleTrackBurnInBehavior burnInBehavior;
 @property (nonatomic, readwrite) BOOL burnInDVDSubtitles;
 @property (nonatomic, readwrite) BOOL burnInBluraySubtitles;
+
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end
 

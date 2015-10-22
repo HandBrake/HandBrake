@@ -34,7 +34,109 @@
 - (void)addTrack
 {
     HBAudioTrackPreset *track = [[HBAudioTrackPreset alloc] initWithContainer:self.container];
+    track.undo = self.undo;
     [self insertObject:track inTracksArrayAtIndex:[self countOfTracksArray]];
+}
+
+#pragma mark - Properties
+
+- (void)setTrackSelectionBehavior:(HBAudioTrackSelectionBehavior)trackSelectionBehavior
+{
+    if (trackSelectionBehavior != _trackSelectionBehavior)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTrackSelectionBehavior:_trackSelectionBehavior];
+    }
+    _trackSelectionBehavior = trackSelectionBehavior;
+}
+
+- (void)setAllowAACPassthru:(BOOL)allowAACPassthru
+{
+    if (allowAACPassthru != _allowAACPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowAACPassthru:_allowAACPassthru];
+    }
+    _allowAACPassthru = allowAACPassthru;
+}
+
+- (void)setAllowAC3Passthru:(BOOL)allowAC3Passthru
+{
+    if (allowAC3Passthru != _allowAC3Passthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowAC3Passthru:_allowAC3Passthru];
+    }
+    _allowAC3Passthru = allowAC3Passthru;
+}
+
+- (void)setAllowEAC3Passthru:(BOOL)allowEAC3Passthru
+{
+    if (allowEAC3Passthru != _allowEAC3Passthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowEAC3Passthru:_allowEAC3Passthru];
+    }
+    _allowEAC3Passthru = allowEAC3Passthru;
+}
+
+- (void)setAllowDTSHDPassthru:(BOOL)allowDTSHDPassthru
+{
+    if (allowDTSHDPassthru != _allowDTSHDPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowDTSHDPassthru:_allowDTSHDPassthru];
+    }
+    _allowDTSHDPassthru = allowDTSHDPassthru;
+}
+
+- (void)setAllowDTSPassthru:(BOOL)allowDTSPassthru
+{
+    if (allowDTSPassthru != _allowDTSPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowDTSPassthru:_allowDTSPassthru];
+    }
+    _allowDTSPassthru = allowDTSPassthru;
+}
+
+- (void)setAllowMP3Passthru:(BOOL)allowMP3Passthru
+{
+    if (allowMP3Passthru != _allowMP3Passthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowMP3Passthru:_allowMP3Passthru];
+    }
+    _allowMP3Passthru = allowMP3Passthru;
+}
+
+- (void)setAllowTrueHDPassthru:(BOOL)allowTrueHDPassthru
+{
+    if (allowTrueHDPassthru != _allowTrueHDPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowTrueHDPassthru:_allowTrueHDPassthru];
+    }
+    _allowTrueHDPassthru = allowTrueHDPassthru;
+}
+
+- (void)setAllowFLACPassthru:(BOOL)allowFLACPassthru
+{
+    if (allowFLACPassthru != _allowFLACPassthru)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAllowFLACPassthru:_allowFLACPassthru];
+    }
+    _allowFLACPassthru = allowFLACPassthru;
+}
+
+- (void)setEncoderFallback:(int)encoderFallback
+{
+    if (encoderFallback != _encoderFallback)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setEncoderFallback:_encoderFallback];
+    }
+    _encoderFallback = encoderFallback;
+}
+
+- (void)setSecondaryEncoderMode:(BOOL)secondaryEncoderMode
+{
+    if (secondaryEncoderMode != _secondaryEncoderMode)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setSecondaryEncoderMode:_secondaryEncoderMode];
+    }
+    _secondaryEncoderMode = secondaryEncoderMode;
 }
 
 - (NSArray *)audioEncoderFallbacks
@@ -68,6 +170,8 @@
 
     return nil;
 }
+
+#pragma mark - HBPresetCoding
 
 - (void)applyPreset:(HBPreset *)preset
 {
@@ -307,6 +411,12 @@
     self.container = container;
 }
 
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    [self.tracksArray makeObjectsPerformSelector:@selector(setUndo:) withObject:undo];
+}
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -403,11 +513,14 @@
 
 - (void)insertObject:(HBAudioTrackPreset *)track inTracksArrayAtIndex:(NSUInteger)index;
 {
+    [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksArrayAtIndex:index];
     [self.tracksArray insertObject:track atIndex:index];
 }
 
 - (void)removeObjectFromTracksArrayAtIndex:(NSUInteger)index
 {
+    id obj = self.tracksArray[index];
+    [[self.undo prepareWithInvocationTarget:self] insertObject:obj inTracksArrayAtIndex:index];
     [self.tracksArray removeObjectAtIndex:index];
 }
 

@@ -29,6 +29,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
+        _settings.undo = self.window.undoManager;
     }
     return self;
 }

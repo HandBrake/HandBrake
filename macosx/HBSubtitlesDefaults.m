@@ -19,6 +19,73 @@
     return self;
 }
 
+#pragma mark - Properties
+
+- (void)setTrackSelectionBehavior:(HBSubtitleTrackSelectionBehavior)trackSelectionBehavior
+{
+    if (trackSelectionBehavior != _trackSelectionBehavior)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTrackSelectionBehavior:_trackSelectionBehavior];
+    }
+    _trackSelectionBehavior = trackSelectionBehavior;
+}
+
+- (void)setAddForeignAudioSearch:(BOOL)addForeignAudioSearch
+{
+    if (addForeignAudioSearch != _addForeignAudioSearch)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAddForeignAudioSearch:_addForeignAudioSearch];
+    }
+    _addForeignAudioSearch = addForeignAudioSearch;
+}
+
+- (void)setAddForeignAudioSubtitle:(BOOL)addForeignAudioSubtitle
+{
+    if (addForeignAudioSubtitle != _addForeignAudioSubtitle)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAddForeignAudioSubtitle:_addForeignAudioSubtitle];
+    }
+    _addForeignAudioSubtitle = addForeignAudioSubtitle;
+}
+
+- (void)setAddCC:(BOOL)addCC
+{
+    if (addCC != _addCC)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAddCC:_addCC];
+    }
+    _addCC = addCC;
+}
+
+- (void)setBurnInBehavior:(HBSubtitleTrackBurnInBehavior)burnInBehavior
+{
+    if (burnInBehavior != _burnInBehavior)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setBurnInBehavior:_burnInBehavior];
+    }
+    _burnInBehavior = burnInBehavior;
+}
+
+- (void)setBurnInDVDSubtitles:(BOOL)burnInDVDSubtitles
+{
+    if (burnInDVDSubtitles != _burnInDVDSubtitles)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setBurnInDVDSubtitles:_burnInDVDSubtitles];
+    }
+    _burnInDVDSubtitles = burnInDVDSubtitles;
+}
+
+- (void)setBurnInBluraySubtitles:(BOOL)burnInBluraySubtitles
+{
+    if (burnInBluraySubtitles != _burnInBluraySubtitles)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setBurnInBluraySubtitles:_burnInBluraySubtitles];
+    }
+    _burnInBluraySubtitles = burnInBluraySubtitles;
+}
+
+#pragma mark - HBPresetCoding
+
 - (void)applyPreset:(HBPreset *)preset
 {
     if ([preset[@"SubtitleTrackSelectionBehavior"] isEqualToString:@"first"])

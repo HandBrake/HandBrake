@@ -54,22 +54,55 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 - (void)setEncoder:(int)encoder
 {
+    if (encoder != _encoder)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setEncoder:_encoder];
+    }
     _encoder = encoder;
-    [self validateMixdown];
-    [self validateSamplerate];
-    [self validateBitrate];
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateMixdown];
+        [self validateSamplerate];
+        [self validateBitrate];
+    }
 }
 
 - (void)setMixdown:(int)mixdown
 {
+    if (mixdown != _mixdown)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setMixdown:_mixdown];
+    }
     _mixdown = mixdown;
-    [self validateBitrate];
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateBitrate];
+    }
 }
 
 - (void)setSampleRate:(int)sampleRate
 {
+    if (sampleRate != _sampleRate)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setSampleRate:_sampleRate];
+    }
     _sampleRate = sampleRate;
-    [self validateBitrate];
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateBitrate];
+    }
+}
+
+- (void)setBitRate:(int)bitRate
+{
+    if (bitRate != _bitRate)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setBitRate:_bitRate];
+    }
+    _bitRate = bitRate;
 }
 
 #pragma mark -
@@ -153,6 +186,15 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     return retval;
 }
 
+- (void)setGain:(double)gain
+{
+    if (gain != _gain)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setGain:_gain];
+    }
+    _gain = gain;
+}
+
 // Because we have indicated that the binding for the gain validates immediately we can implement the
 // key value binding method to ensure the gain stays in our accepted range.
 - (BOOL)validateGain:(id *)ioValue error:(NSError * __autoreleasing *)outError
@@ -172,6 +214,15 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
 
     return retval;
+}
+
+- (void)setDrc:(double)drc
+{
+    if (drc != _drc)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDrc:_drc];
+    }
+    _drc = drc;
 }
 
 #pragma mark - Options
