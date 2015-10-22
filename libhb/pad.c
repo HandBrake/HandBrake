@@ -118,18 +118,53 @@ static void pad_close( hb_filter_object_t * filter )
 
 static hb_buffer_t* pad( hb_filter_private_t * pv, hb_buffer_t * in )
 {
-    AVPicture     pic_in;
-    AVPicture     pic_out;
-    hb_buffer_t * out;
+    int           pp;
+    int           width  = in->f.width  + pv->pad[2] + pv->pad[3];
+    int           height = in->f.height + pv->pad[0] + pv->pad[1];
+    hb_buffer_t * out    = hb_frame_buffer_init(in->f.fmt, width, height);
 
-    out = hb_frame_buffer_init(in->f.fmt, pv->width_out, pv->height_out);
+    for (pp = 0; pp < 3; pp++)
+    {
+        int       pad[4], yy, x_div, y_div;
+        uint8_t * dst, *src;
 
-    hb_avpicture_fill(&pic_in,  in );
-    hb_avpicture_fill(&pic_out, out );
+        x_div = in->plane[0].width / in->plane[pp].width;
+        y_div = in->plane[0].height / in->plane[pp].height;
 
-    av_picture_pad(&pic_out, &pic_in, pv->height_out, pv->width_out, in->f.fmt,
-                   pv->pad[0], pv->pad[1], pv->pad[2], pv->pad[3],
-                   pv->color);
+        pad[0] = pv->pad[0] / y_div;
+        pad[1] = pv->pad[1] / y_div;
+        pad[2] = pv->pad[2] / x_div;
+        pad[3] = pv->pad[3] / x_div;
+
+        // Render top pad
+        dst = out->plane[pp].data;
+        for (yy = 0; yy < pad[0]; yy++)
+        {
+            memset(dst, pv->color[pp], out->plane[pp].width);
+            dst += out->plane[pp].stride;
+        }
+
+        // Render left pad, image, right pad
+        src = in->plane[pp].data;
+        dst = out->plane[pp].data + pad[0] * out->plane[pp].stride;
+        for (yy = 0; yy < in->plane[pp].height; yy++)
+        {
+            memset(dst, pv->color[pp], pad[2]);
+            memcpy(dst + pad[2], src, in->plane[pp].width);
+            memset(dst + pad[2] + in->plane[pp].width, pv->color[pp], pad[3]);
+            src += in->plane[pp].stride;
+            dst += out->plane[pp].stride;
+        }
+
+        // Render bottom pad
+        dst = out->plane[pp].data +
+              out->plane[pp].stride * (pad[0] + in->plane[pp].height);
+        for (yy = 0; yy < pad[1]; yy++)
+        {
+            memset(dst, pv->color[pp], out->plane[pp].width);
+            dst += out->plane[pp].stride;
+        }
+    }
 
     out->s = in->s;
     return out;
