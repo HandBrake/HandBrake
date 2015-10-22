@@ -172,22 +172,47 @@ int hb_avcodec_close(AVCodecContext *avctx)
 }
 
 
-int hb_avpicture_fill(AVPicture *pic, hb_buffer_t *buf)
+int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 {
     int ret, ii;
 
     for (ii = 0; ii < 4; ii++)
-        pic->linesize[ii] = buf->plane[ii].stride;
+        stride[ii] = buf->plane[ii].stride;
 
-    ret = av_image_fill_pointers(pic->data, buf->f.fmt,
+    ret = av_image_fill_pointers(data, buf->f.fmt,
                                  buf->plane[0].height_stride,
-                                 buf->data, pic->linesize);
+                                 buf->data, stride);
     if (ret != buf->size)
     {
-        hb_error("Internal error hb_avpicture_fill expected %d, got %d",
+        hb_error("Internal error hb_picture_fill expected %d, got %d",
                  buf->size, ret);
     }
     return ret;
+}
+
+int hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *buf,
+                    int top, int left)
+{
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(buf->f.fmt);
+    int x_shift, y_shift;
+
+    if (desc == NULL)
+        return -1;
+
+    x_shift = desc->log2_chroma_w;
+    y_shift = desc->log2_chroma_h;
+
+    data[0] = buf->plane[0].data + top * buf->plane[0].stride + left;
+    data[1] = buf->plane[1].data + (top >> y_shift) * buf->plane[1].stride +
+              (left >> x_shift);
+    data[2] = buf->plane[2].data + (top >> y_shift) * buf->plane[2].stride +
+              (left >> x_shift);
+
+    stride[0] = buf->plane[0].stride;
+    stride[1] = buf->plane[1].stride;
+    stride[2] = buf->plane[2].stride;
+
+    return 0;
 }
 
 static int handle_jpeg(enum AVPixelFormat *format)
@@ -761,7 +786,8 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     hb_buffer_t        * in_buf = NULL, * deint_buf = NULL;
     hb_buffer_t        * preview_buf = NULL;
     uint32_t             swsflags;
-    AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
+    uint8_t            * preview_data[4], * crop_data[4];
+    int                  preview_stride[4], crop_stride[4];
     struct SwsContext  * context;
 
     int width = geo->geometry.width *
@@ -781,7 +807,7 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
 
     preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
     // fill in AVPicture
-    hb_avpicture_fill( &pic_preview, preview_buf );
+    hb_picture_fill( preview_data, preview_stride, preview_buf );
 
 
     memset( filename, 0, 1024 );
@@ -800,23 +826,19 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
         goto fail;
     }
 
-    hb_avpicture_fill( &pic_in, in_buf );
-
     if (deinterlace)
     {
         // Deinterlace and crop
         deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
                               title->geometry.width, title->geometry.height );
         hb_deinterlace(deint_buf, in_buf);
-        hb_avpicture_fill( &pic_deint, deint_buf );
-
-        av_picture_crop(&pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
+        hb_picture_crop(crop_data, crop_stride, deint_buf,
                         geo->crop[0], geo->crop[2] );
     }
     else
     {
         // Crop
-        av_picture_crop(&pic_crop, &pic_in, AV_PIX_FMT_YUV420P,
+        hb_picture_crop(crop_data, crop_stride, in_buf,
                         geo->crop[0], geo->crop[2] );
     }
 
@@ -834,9 +856,9 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
 
     // Scale
     sws_scale(context,
-              (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
+              (const uint8_t * const *)crop_data, crop_stride,
               0, title->geometry.height - (geo->crop[0] + geo->crop[1]),
-              pic_preview.data, pic_preview.linesize);
+              preview_data, preview_stride);
 
     // Free context
     sws_freeContext( context );

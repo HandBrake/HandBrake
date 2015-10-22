@@ -218,8 +218,9 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
     }
     if (ABS(xfactor - 1) > 0.01 || ABS(yfactor - 1) > 0.01)
     {
-        AVPicture pic_in, pic_out;
-        int width, height;
+        uint8_t * in_data[4], * out_data[4];
+        int       in_stride[4], out_stride[4];
+        int       width, height;
 
         width       = sub->f.width  * xfactor;
         height      = sub->f.height * yfactor;
@@ -227,8 +228,8 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
         scaled->f.x = sub->f.x * xfactor;
         scaled->f.y = sub->f.y * yfactor;
 
-        hb_avpicture_fill(&pic_in,  sub);
-        hb_avpicture_fill(&pic_out, scaled);
+        hb_picture_fill(in_data,  in_stride,  sub);
+        hb_picture_fill(out_data, out_stride, scaled);
 
         if (pv->sws        == NULL   ||
             pv->sws_width  != width  ||
@@ -243,9 +244,8 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
             pv->sws_width   = width;
             pv->sws_height  = height;
         }
-        sws_scale(pv->sws,
-                  (const uint8_t* const *)pic_in.data, pic_in.linesize,
-                  0, sub->f.height, pic_out.data, pic_out.linesize);
+        sws_scale(pv->sws, (const uint8_t* const *)in_data, in_stride,
+                  0, sub->f.height, out_data, out_stride);
     }
     else
     {
