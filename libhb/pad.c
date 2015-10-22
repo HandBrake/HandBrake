@@ -52,11 +52,21 @@ static int pad_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     pv->job       = init->job;
     pv->width_in  = pv->width_out  = init->geometry.width;
     pv->height_in = pv->height_out = init->geometry.height;
+    pv->x = -1;
+    pv->y = -1;
 
     if (filter->settings)
     {
         sscanf(filter->settings, "%d:%d:%d:%d:%u",
                &pv->width_out, &pv->height_out, &pv->x, &pv->y, &pv->rgb);
+    }
+    if (pv->x < 0)
+    {
+        pv->x = ((pv->width_out - pv->width_in) / 2) & ~1;
+    }
+    if (pv->y < 0)
+    {
+        pv->y = ((pv->height_out - pv->height_in) / 2) & ~1;
     }
 
     // TODO: handle other input pix_fmt

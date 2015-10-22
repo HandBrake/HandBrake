@@ -284,7 +284,6 @@ struct hb_geometry_settings_s
     int itu_par;                // use dvd dimensions to determine PAR
     int modulus;                // pixel alignment for loose anamorphic
     int crop[4];                // Pixels cropped from source before scaling
-    int pad[4];                 // Pixels added to source border after scaling
     int maxWidth;               // max destination storage width
     int maxHeight;              // max destination storage height
     hb_geometry_t geometry;
