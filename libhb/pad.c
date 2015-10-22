@@ -18,7 +18,8 @@ struct hb_filter_private_s
     int                 height_in;
     int                 width_out;
     int                 height_out;
-    int                 pad[4];
+    int                 x;
+    int                 y;
     int                 rgb;
     int                 color[3];
 };
@@ -46,18 +47,16 @@ static int pad_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    int ii;
     int color;
 
-    pv->job = init->job;
-    pv->width_in   = init->geometry.width;
-    pv->height_in  = init->geometry.height;
+    pv->job       = init->job;
+    pv->width_in  = pv->width_out  = init->geometry.width;
+    pv->height_in = pv->height_out = init->geometry.height;
 
-    memcpy(pv->pad, init->pad, sizeof( int[4] ));
     if (filter->settings)
     {
         sscanf(filter->settings, "%d:%d:%d:%d:%u",
-               &pv->pad[0], &pv->pad[1], &pv->pad[2], &pv->pad[3], &pv->rgb);
+               &pv->width_out, &pv->height_out, &pv->x, &pv->y, &pv->rgb);
     }
 
     // TODO: handle other input pix_fmt
@@ -66,22 +65,21 @@ static int pad_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     pv->color[1] = (color      ) & 0xff;
     pv->color[2] = (color >>  8) & 0xff;
 
-    for (ii = 0; ii < 4; ii++)
+    if (pv->width_out & 1)
     {
-        if (pv->pad[ii] & 1)
-        {
-            hb_log("Pad must be even! Fixing...");
-            pv->pad[ii]++;
-        }
+        pv->width_out++;
+        hb_log("pad_init: Width must be even! Fixing...");
     }
-    pv->width_out  = init->geometry.width  + pv->pad[2] + pv->pad[3];
-    pv->height_out = init->geometry.height + pv->pad[0] + pv->pad[1];
+    if (pv->height_out & 1)
+    {
+        pv->height_out++;
+        hb_log("pad_init: Height must be even! Fixing...");
+    }
 
     // Set init values so the next stage in the pipline
     // knows what it will be getting
     init->geometry.width = pv->width_out;
     init->geometry.height = pv->height_out;
-    memcpy(init->pad, pv->pad, sizeof(int[4]));
 
     return 0;
 }
@@ -99,10 +97,16 @@ static int pad_info( hb_filter_object_t * filter, hb_filter_info_t * info )
     info->out.geometry.width = pv->width_out;
     info->out.geometry.height = pv->height_out;
 
+    int pad[4];
+    pad[0] = pv->y;
+    pad[1] = pv->height_out - pv->height_in - pv->y;
+    pad[2] = pv->x;
+    pad[3] = pv->width_out - pv->width_in - pv->x;
+
     sprintf( info->human_readable_desc,
         "source: %d * %d, color 0x%x, pad (%d/%d/%d/%d): %d * %d",
         pv->width_in, pv->height_in, pv->rgb,
-        pv->pad[0], pv->pad[1], pv->pad[2], pv->pad[3],
+        pad[0], pad[1], pad[2], pad[3],
         pv->width_out, pv->height_out );
 
     return 0;
@@ -116,55 +120,161 @@ static void pad_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
-static hb_buffer_t* pad( hb_filter_private_t * pv, hb_buffer_t * in )
+static void draw_rect(hb_buffer_t * buf, int pos_x, int pos_y,
+                      int width, int height, int *color)
 {
-    int           pp;
-    int           width  = in->f.width  + pv->pad[2] + pv->pad[3];
-    int           height = in->f.height + pv->pad[0] + pv->pad[1];
-    hb_buffer_t * out    = hb_frame_buffer_init(in->f.fmt, width, height);
+    // Sanitize bounds
+    if (pos_x >= buf->f.width || pos_y > buf->f.height)
+    {
+        return;
+    }
+    if (pos_x < 0)
+    {
+        width += pos_x;
+        pos_x = 0;
+    }
+    if (pos_y < 0)
+    {
+        height += pos_y;
+        pos_y = 0;
+    }
+    if (pos_x + width > buf->f.width)
+    {
+        width = buf->f.width - pos_x;
+    }
+    if (pos_y + height > buf->f.height)
+    {
+        height = buf->f.height - pos_y;
+    }
+    if (width <= 0 || height <= 0)
+    {
+        return;
+    }
 
+    int pp;
     for (pp = 0; pp < 3; pp++)
     {
-        int       pad[4], yy, x_div, y_div;
-        uint8_t * dst, *src;
+        int       yy, x_div, y_div, w, h, x, y;
+        uint8_t * dst;
 
-        x_div = in->plane[0].width / in->plane[pp].width;
-        y_div = in->plane[0].height / in->plane[pp].height;
+        x_div = buf->plane[0].width  / buf->plane[pp].width;
+        y_div = buf->plane[0].height / buf->plane[pp].height;
 
-        pad[0] = pv->pad[0] / y_div;
-        pad[1] = pv->pad[1] / y_div;
-        pad[2] = pv->pad[2] / x_div;
-        pad[3] = pv->pad[3] / x_div;
+        w = width  / x_div;
+        h = height / y_div;
+        x = pos_x  / x_div;
+        y = pos_y  / y_div;
 
-        // Render top pad
-        dst = out->plane[pp].data;
-        for (yy = 0; yy < pad[0]; yy++)
+        dst = buf->plane[pp].data + buf->plane[pp].stride * y + x;
+        for (yy = 0; yy < h; yy++)
         {
-            memset(dst, pv->color[pp], out->plane[pp].width);
-            dst += out->plane[pp].stride;
-        }
-
-        // Render left pad, image, right pad
-        src = in->plane[pp].data;
-        dst = out->plane[pp].data + pad[0] * out->plane[pp].stride;
-        for (yy = 0; yy < in->plane[pp].height; yy++)
-        {
-            memset(dst, pv->color[pp], pad[2]);
-            memcpy(dst + pad[2], src, in->plane[pp].width);
-            memset(dst + pad[2] + in->plane[pp].width, pv->color[pp], pad[3]);
-            src += in->plane[pp].stride;
-            dst += out->plane[pp].stride;
-        }
-
-        // Render bottom pad
-        dst = out->plane[pp].data +
-              out->plane[pp].stride * (pad[0] + in->plane[pp].height);
-        for (yy = 0; yy < pad[1]; yy++)
-        {
-            memset(dst, pv->color[pp], out->plane[pp].width);
-            dst += out->plane[pp].stride;
+            memset(dst, color[pp], w);
+            dst += buf->plane[pp].stride;
         }
     }
+}
+
+static void copy_rect(hb_buffer_t *dst, int dst_x, int dst_y,
+                      hb_buffer_t *src, int src_x, int src_y,
+                      int width, int height)
+{
+    // Sanitize bounds
+    if (dst_x >= dst->f.width || dst_y > dst->f.height)
+    {
+        return;
+    }
+    if (src_x >= src->f.width || src_y > src->f.height)
+    {
+        return;
+    }
+    if (dst_x < 0)
+    {
+        width += dst_x;
+        src_x -= dst_x;
+        dst_x  = 0;
+    }
+    if (dst_y < 0)
+    {
+        height += dst_y;
+        src_y  -= dst_y;
+        dst_y   = 0;
+    }
+    if (src_x < 0)
+    {
+        width += src_x;
+        src_x  = 0;
+    }
+    if (src_y < 0)
+    {
+        height += src_x;
+        src_y   = 0;
+    }
+    if (dst_x + width > dst->f.width)
+    {
+        width = dst->f.width - dst_x;
+    }
+    if (dst_y + height > dst->f.height)
+    {
+        height = dst->f.height - dst_y;
+    }
+    if (src_x + width > src->f.width)
+    {
+        width = src->f.width - src_x;
+    }
+    if (src_y + height > src->f.height)
+    {
+        height = src->f.height - src_y;
+    }
+    if (width <= 0 || height <= 0)
+    {
+        return;
+    }
+
+    int pp;
+    for (pp = 0; pp < 3; pp++)
+    {
+        int       yy, x_div, y_div, w, h, dx, dy, sx, sy;
+        uint8_t * dst_data, *src_data;
+
+        x_div = dst->plane[0].width  / dst->plane[pp].width;
+        y_div = dst->plane[0].height / dst->plane[pp].height;
+
+        w = width  / x_div;
+        h = height / y_div;
+        dx = dst_x  / x_div;
+        dy = dst_y  / y_div;
+        sx = src_x  / x_div;
+        sy = src_y  / y_div;
+
+        dst_data = dst->plane[pp].data + dst->plane[pp].stride * dy + dx;
+        src_data = src->plane[pp].data + dst->plane[pp].stride * sy + sx;
+        for (yy = 0; yy < h; yy++)
+        {
+            memcpy(dst_data, src_data, w);
+            dst_data += dst->plane[pp].stride;
+            src_data += src->plane[pp].stride;
+        }
+    }
+}
+
+static hb_buffer_t* pad( hb_filter_private_t * pv, hb_buffer_t * in )
+{
+    int           width  = pv->width_out;
+    int           height = pv->height_out;
+    int           bottom = height - in->f.height - pv->y;
+    int           right  = width  - in->f.width  - pv->x;
+    hb_buffer_t * out    = hb_frame_buffer_init(in->f.fmt, width, height);
+
+    // copy image
+    copy_rect(out, pv->x, pv->y, in, 0, 0, in->f.width, in->f.height);
+    // top bar
+    draw_rect(out, 0, 0, width, pv->y, pv->color);
+    // bottom bar
+    draw_rect(out, 0, pv->y + in->f.height, width, bottom, pv->color);
+    // left bar
+    draw_rect(out, 0, pv->y, pv->x, in->f.height, pv->color);
+    // right bar
+    draw_rect(out, pv->x + in->f.width, pv->y, right, in->f.height, pv->color);
 
     out->s = in->s;
     return out;

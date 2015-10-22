@@ -1184,7 +1184,6 @@ typedef struct hb_filter_init_s
     int           pix_fmt;
     hb_geometry_t geometry;
     int           crop[4];
-    int           pad[4];
     hb_rational_t vrate;
     int           cfr;
     int           grayscale;

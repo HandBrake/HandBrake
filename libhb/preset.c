@@ -1611,26 +1611,24 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     int padded_height = hb_value_get_int(hb_dict_get(preset, "PicturePaddedHeight"));
     if (padded_width > resultGeo.width || padded_height > resultGeo.height)
     {
-        int pad[4];
+        int rgb = 0;
+        int x   = ((padded_width  - resultGeo.width)  / 2) & ~1;
+        int y   = ((padded_height - resultGeo.height) / 2) & ~1;
 
-        hb_get_padding(resultGeo.width, resultGeo.height,
-                       padded_width, padded_height, pad);
-
-        int pad_rgb = 0;
         hb_value_t *pad_color_value = hb_dict_get(preset, "PicturePadColor");
         if (hb_value_type(pad_color_value) == HB_VALUE_TYPE_STRING)
         {
             const char *s = hb_value_get_string(pad_color_value);
-            pad_rgb = hb_rgb_lookup_by_name(s);
+            rgb = hb_rgb_lookup_by_name(s);
         }
         else if (hb_value_type(pad_color_value) == HB_VALUE_TYPE_INT)
         {
-            pad_rgb = hb_value_get_int(pad_color_value);
+            rgb = hb_value_get_int(pad_color_value);
         }
 
         // Setup pad filter
         filter_str = hb_strdup_printf("%d:%d:%d:%d:%d",
-                                      pad[0], pad[1], pad[2], pad[3], pad_rgb);
+                                      padded_width, padded_height, x, y, rgb);
 
         filter_dict = hb_dict_init();
         hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_PAD));

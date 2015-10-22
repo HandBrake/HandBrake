@@ -1243,34 +1243,6 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     }
 }
 
-void
-hb_get_padding(int width, int height,
-               int padded_width, int padded_height, int *pad)
-{
-    // padded width/height must be divisible by 2
-    if (padded_width & 1)
-    {
-        hb_log("Pad width must be even! Fixing...");
-        padded_width++;
-    }
-    if (padded_height & 1)
-    {
-        hb_log("Pad height must be even! Fixing...");
-        padded_height++;
-    }
-    memset(pad, 0, sizeof(int[4]));
-    if (padded_width > width)
-    {
-        pad[2] = ((padded_width - width) / 2) & ~1;
-        pad[3] = padded_width - width - pad[2];
-    }
-    if (padded_height > height)
-    {
-        pad[0] = ((padded_height - height) / 2) & ~1;
-        pad[1] = padded_height - height - pad[0];
-    }
-}
-
 /**
  * Add a filter to a jobs filter list
  *
