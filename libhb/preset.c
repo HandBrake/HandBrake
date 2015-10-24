@@ -16,8 +16,8 @@
 #define HB_PRESET_PLIST_FILE    "ghb/presets"
 #define HB_PRESET_JSON_FILE     "ghb/presets.json"
 #elif defined(SYS_MINGW)
-#define HB_PRESET_PLIST_FILE    "HandBrake\\user_presets.xml"
-#define HB_PRESET_JSON_FILE     "HandBrake\\user_presets.json"
+#define HB_PRESET_PLIST_FILE    "HandBrake\\presets.xml"
+#define HB_PRESET_JSON_FILE     "HandBrake\\presets.json"
 #elif defined(SYS_DARWIN)
 #define HB_PRESET_PLIST_FILE    "HandBrake/UserPresets.plist"
 #define HB_PRESET_JSON_FILE     "HandBrake/UserPresets.json"
