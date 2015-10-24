@@ -67,8 +67,7 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
 
-static int hb_qsv_filter_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info );
+static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter );
 
 static void hb_qsv_filter_close( hb_filter_object_t * filter );
 
@@ -371,15 +370,19 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static int hb_qsv_filter_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info )
+static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter )
 {
-
     hb_filter_private_t *pv = filter->private_data;
-    if (pv == NULL)
-        return -1;
+    hb_filter_info_t    * info;
 
-    sprintf(info->human_readable_desc,
+    if( !pv )
+        return NULL;
+
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
+
+    snprintf(info->human_readable_desc, 128,
             "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
             pv->width_in, pv->height_in,
             pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
@@ -389,11 +392,11 @@ static int hb_qsv_filter_info( hb_filter_object_t * filter,
 
     if (pv->deinterlace)
     {
-        sprintf(info->human_readable_desc + strlen(info->human_readable_desc),
-                ", deinterlace");
+        int len = strlen(info->human_readable_desc);
+        snprintf(info->human_readable_desc + len, 128 - len, ", deinterlace");
     }
 
-    return 0;
+    return info;
 }
 
 void qsv_filter_close( av_qsv_context* qsv, AV_QSV_STAGE_TYPE vpp_type ){

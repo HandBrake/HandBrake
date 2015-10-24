@@ -22,6 +22,7 @@ extern "C" {
 #include "preset.h"
 #include "plist.h"
 #include "param.h"
+#include "colormap.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,

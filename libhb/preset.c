@@ -1269,6 +1269,28 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         return -1;
     }
 
+    // Pad filter
+    char *pad = hb_value_get_string_xform(
+                        hb_dict_get(preset, "PicturePad"));
+    if (pad != NULL)
+    {
+        filter_str = hb_generate_filter_settings(HB_FILTER_PAD, pad, NULL);
+        if (filter_str == NULL)
+        {
+            hb_error("Invalid pad filter settings (%s)", pad);
+            return -1;
+        }
+        else if (filter_str != hb_filter_off)
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_PAD));
+            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
+            hb_value_array_append(filter_list, filter_dict);
+            free(filter_str);
+        }
+    }
+    free(pad);
+
     int fr_mode;
     hb_value_t *fr_mode_value = hb_dict_get(preset, "VideoFramerateMode");
     fr_mode = hb_value_type(fr_mode_value) == HB_VALUE_TYPE_STRING ? (

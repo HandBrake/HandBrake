@@ -39,8 +39,7 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
 
-static int hb_crop_scale_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info );
+static hb_filter_info_t * hb_crop_scale_info( hb_filter_object_t * filter );
 
 static void hb_crop_scale_close( hb_filter_object_t * filter );
 
@@ -98,17 +97,18 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static int hb_crop_scale_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info )
+static hb_filter_info_t * hb_crop_scale_info( hb_filter_object_t * filter )
 {
     hb_filter_private_t * pv = filter->private_data;
+    hb_filter_info_t    * info;
 
     if( !pv )
-        return 0;
+        return NULL;
 
-    // Set init values so the next stage in the pipline
-    // knows what it will be getting
-    memset( info, 0, sizeof( hb_filter_info_t ) );
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
+
     info->out.pix_fmt = pv->pix_fmt;
     info->out.geometry.width = pv->width_out;
     info->out.geometry.height = pv->height_out;
@@ -117,13 +117,13 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
     int cropped_width = pv->width_in - ( pv->crop[2] + pv->crop[3] );
     int cropped_height = pv->height_in - ( pv->crop[0] + pv->crop[1] );
 
-    sprintf( info->human_readable_desc, 
+    snprintf( info->human_readable_desc, 128,
         "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
         pv->width_in, pv->height_in,
         pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
         cropped_width, cropped_height, pv->width_out, pv->height_out );
 
-    return 0;
+    return info;
 }
 
 static void hb_crop_scale_close( hb_filter_object_t * filter )

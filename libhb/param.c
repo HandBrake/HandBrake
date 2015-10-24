@@ -10,6 +10,7 @@
 
 #include "param.h"
 #include "common.h"
+#include "colormap.h"
 #include <regex.h>
 
 const char hb_filter_off[] = "off";
@@ -102,6 +103,76 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_INVALID,     NULL,                NULL, 0        }
 };
+
+/* Pad presets and tunes
+ *
+ * There are currently no presets and tunes for pad
+ * The custom pad string is converted to an avformat filter graph string
+ */
+char *
+generate_pad_settings(const char * preset, const char * tune)
+{
+    int      width  = 0, height = 0, rgb = 0;
+    int      x = -1, y = -1, ii;
+    char  ** args;
+    char  *  result;
+
+    args = hb_str_vsplit(preset, ':');
+    for (ii = 0; ii < 5 && args[ii]; ii++)
+    {
+        if (args[ii][0] == 0 || !strcasecmp("auto", args[ii]))
+            continue;
+        switch (ii)
+        {
+            case 0:
+                width  = strtol(args[ii], &result, 0);
+                break;
+            case 1:
+                height = strtol(args[ii], &result, 0);
+                break;
+            case 2:
+                rgb  = strtol(args[ii], &result, 0);
+                if (result == args[ii])
+                {
+                    // Not a numeric value, lookup by name
+                    rgb = hb_rgb_lookup_by_name(args[2]);
+                }
+                break;
+            case 3:
+                x      = strtol(args[ii], &result, 0);
+                break;
+            case 4:
+                y      = strtol(args[ii], &result, 0);
+                break;
+            default:
+                break;
+        }
+    }
+    hb_str_vfree(args);
+
+    char x_str[20];
+    char y_str[20];
+    if (x < 0)
+    {
+        snprintf(x_str, 20, "(out_w-in_w)/2");
+    }
+    else
+    {
+        snprintf(x_str, 20, "%d", x);
+    }
+    if (y < 0)
+    {
+        snprintf(y_str, 20, "(out_h-in_h)/2");
+    }
+    else
+    {
+        snprintf(y_str, 20, "%d", y);
+    }
+    result = hb_strdup_printf(
+                    "pad='width=%d:height=%d:x=%s:y=%s:color=0x%06x'",
+                    width, height, x_str, y_str, rgb);
+    return result;
+}
 
 /* NL-means presets and tunes
  *
@@ -311,11 +382,15 @@ int hb_validate_filter_settings(int filter_id, const char *filter_param)
 
     // Regex matches "number" followed by one or more ":number", where number is int or float
     const char *hb_colon_separated_params_regex = "^(((([\\-])?[0-9]+([.,][0-9]+)?)|(([\\-])?[.,][0-9]+))((:((([\\-])?[0-9]+([,.][0-9]+)?)|(([\\-])?[,.][0-9]+)))+)?)$";
+    const char *hb_pad_regex = "^([0-9]*|auto)(:([0-9]*|auto)(:([a-zA-Z0-9]*|auto)(:([0-9]*|auto)(:([0-9]*|auto))?)?)?)?$";
 
     const char *regex_pattern = NULL;
 
     switch (filter_id)
     {
+        case HB_FILTER_PAD:
+            regex_pattern = hb_pad_regex;
+            break;
         case HB_FILTER_ROTATE:
         case HB_FILTER_DEBLOCK:
         case HB_FILTER_DETELECINE:
@@ -534,6 +609,12 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune)
 
     switch (filter_id)
     {
+        case HB_FILTER_PAD:
+            if (preset == NULL) return NULL;
+            if (!strcasecmp(preset, "off")) return (char*)hb_filter_off;
+            if (hb_validate_filter_settings(filter_id, preset)) return NULL;
+
+            return generate_pad_settings(preset, tune);
         case HB_FILTER_NLMEANS:
             filter_param = generate_nlmeans_settings(preset, tune);
             break;

@@ -11,6 +11,7 @@
 #include "opencl.h"
 #include "hbffmpeg.h"
 #include "encx264.h"
+#include "libavfilter/avfilter.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -128,6 +129,7 @@ void hb_avcodec_init()
 {
     av_lockmgr_register(ff_lockmgr_cb);
     av_register_all();
+    avfilter_register_all();
 #ifdef _WIN64
     // avresample's assembly optimizations can cause crashes under Win x86_64
     // (see http://bugzilla.libav.org/show_bug.cgi?id=496)

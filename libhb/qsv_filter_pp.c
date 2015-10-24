@@ -41,8 +41,7 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
 static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
-static int hb_qsv_filter_pre_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info );
+static hb_filter_info_t * hb_qsv_filter_pre_info( hb_filter_object_t * filter )
 static void hb_qsv_filter_pre_close( hb_filter_object_t * filter );
 
 static int hb_qsv_filter_post_init( hb_filter_object_t * filter,
@@ -50,8 +49,7 @@ static int hb_qsv_filter_post_init( hb_filter_object_t * filter,
 static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
-static int hb_qsv_filter_post_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info );
+static hb_filter_info_t * hb_qsv_filter_post_info(hb_filter_object_t * filter);
 static void hb_qsv_filter_post_close( hb_filter_object_t * filter );
 
 
@@ -242,15 +240,21 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
     return 0;
 }
 
-static int hb_qsv_filter_pre_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info ){
+static hb_filter_info_t * hb_qsv_filter_pre_info( hb_filter_object_t * filter )
+{
     hb_filter_private_t * pv = filter->private_data;
+    hb_filter_info_t    * info;
+
     if( !pv )
-        return 0;
+        return NULL;
 
-    sprintf(info->human_readable_desc, "copy data to system memory");
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
 
-    return 0;
+    snprintf(info->human_readable_desc, 128, "copy data to system memory");
+
+    return info;
 }
 static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init ){
@@ -535,15 +539,21 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
 }
 
 
-static int hb_qsv_filter_post_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info ){
+static hb_filter_info_t * hb_qsv_filter_post_info( hb_filter_object_t * filter )
+{
     hb_filter_private_t * pv = filter->private_data;
+    hb_filter_info_t    * info;
+
     if( !pv )
-        return 0;
+        return NULL;
 
-    sprintf(info->human_readable_desc, "copy data to opaque memory");
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
 
-    return 0;
+    snprintf(info->human_readable_desc, 128, "copy data to opaque memory");
+
+    return info;
 }
 static int hb_qsv_filter_post_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init ){

@@ -387,12 +387,23 @@ void hb_display_job_info(hb_job_t *job)
                 hb_log("     + %s (default settings)", filter->name);
             if( filter->info )
             {
-                hb_filter_info_t info;
-                filter->info( filter, &info );
-                if( info.human_readable_desc[0] )
+                hb_filter_info_t * info;
+
+                info = filter->info(filter);
+                if (info != NULL &&
+                    info->human_readable_desc != NULL &&
+                    info->human_readable_desc[0] != 0)
                 {
-                    hb_log("       + %s", info.human_readable_desc);
+                    char * line, * pos = NULL;
+                    char * tmp = strdup(info->human_readable_desc);
+                    for (line = strtok_r(tmp,  "\n", &pos); line != NULL;
+                         line = strtok_r(NULL, "\n", &pos))
+                    {
+                        hb_log("       + %s", line);
+                    }
+                    free(tmp);
                 }
+                hb_filter_info_close(&info);
             }
         }
     }
@@ -1146,6 +1157,7 @@ static int sanitize_qsv( hb_job_t * job )
                     // validated, CPU-based filters
                     case HB_FILTER_ROTATE:
                     case HB_FILTER_RENDER_SUB:
+                    case HB_FILTER_AVFILTER:
                         encode_only = 1;
                         break;
 
@@ -1244,6 +1256,7 @@ static int sanitize_qsv( hb_job_t * job )
                     // then, validated filters
                     case HB_FILTER_ROTATE: // TODO: use Media SDK for this
                     case HB_FILTER_RENDER_SUB:
+                    case HB_FILTER_AVFILTER:
                         num_cpu_filters++;
                         break;
 
@@ -1399,6 +1412,10 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
+        // Combine HB_FILTER_AVFILTERs that are sequential
+        hb_avfilter_combine(job->list_filter);
+
+        memset(&init, 0, sizeof(init));
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.geometry.width = title->geometry.width;
@@ -1615,7 +1632,6 @@ static void do_job(hb_job_t *job)
             for (i = 0; i < hb_list_count(job->list_filter); i++)
             {
                 hb_filter_object_t * filter = hb_list_item(job->list_filter, i);
-
                 filter->fifo_in = fifo_in;
                 filter->fifo_out = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
                 fifo_in = filter->fifo_out;
