@@ -17,8 +17,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
-
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -161,11 +159,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the selected items.
         /// </summary>
         public BindingList<QueueTask> SelectedItems { get; set; }
-
-        /// <summary>
-        /// Display the current job status information.
-        /// </summary>
-        public bool IsQueueEmbedded { get; set; } = false;
 
         #endregion
 
@@ -385,16 +378,6 @@ namespace HandBrakeWPF.ViewModels
             // Pass a copy of the job back to the Main Screen
             IMainViewModel mvm = IoC.Get<IMainViewModel>();
             mvm.EditQueueJob(new EncodeTask(task.Task));
-        }
-
-        /// <summary>
-        /// Activate this window in the correct mode
-        /// </summary>
-        /// <param name="isInline">Indicdates if this panel is displayed in-line with the main view.</param>
-        public void Activate(bool isInline)
-        {
-            this.IsQueueEmbedded = !isInline;
-            this.NotifyOfPropertyChange(() => this.IsQueueEmbedded);
         }
 
         #endregion

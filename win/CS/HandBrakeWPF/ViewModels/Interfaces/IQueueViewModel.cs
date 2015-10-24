@@ -14,12 +14,5 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IQueueViewModel
     {
-        /// <summary>
-        /// Activate this window. Either in-line or displayed as a window.
-        /// </summary>
-        /// <param name="isInline">
-        /// The is inline.
-        /// </param>
-        void Activate(bool isInline);
     }
 }

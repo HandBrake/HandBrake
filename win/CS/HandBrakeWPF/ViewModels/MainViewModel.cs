@@ -1220,14 +1220,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IsQueueShowingInLine = !this.IsQueueShowingInLine;
                 this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
-                this.QueueViewModel.Activate(true);
             }
             else
             {
                 this.IsQueueShowingInLine = false;
                 this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
 
-                this.QueueViewModel.Activate(false);
                 Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
                 if (window != null)
                 {
