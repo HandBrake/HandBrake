@@ -485,7 +485,7 @@
             <!--  Tab Control  -->
             <TabControl Name="tabControl"
                         Grid.Row="4"
-                        Margin="10,10,5,5"
+                        Margin="10,10,5,6"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         MinHeight="350" MinWidth="720"
@@ -522,9 +522,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
-                <ContentControl x:Name="QueueViewModel"  Grid.Row="1" />
+                <ContentControl x:Name="QueueViewModel" cal:View.Context="Embedded" Margin="5,0,0,0"  Grid.Row="1" /> 
             </Grid>
-
 
             <!--  Presets  -->
             <GroupBox Grid.RowSpan="4"

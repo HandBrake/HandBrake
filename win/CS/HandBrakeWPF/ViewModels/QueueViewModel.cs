@@ -165,7 +165,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Display the current job status information.
         /// </summary>
-        public bool DisplayJobStatusInfo { get; set; } = false;
+        public bool IsQueueEmbedded { get; set; } = false;
 
         #endregion
 
@@ -393,8 +393,8 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="isInline">Indicdates if this panel is displayed in-line with the main view.</param>
         public void Activate(bool isInline)
         {
-            this.DisplayJobStatusInfo = !isInline;
-            this.NotifyOfPropertyChange(() => this.DisplayJobStatusInfo);
+            this.IsQueueEmbedded = !isInline;
+            this.NotifyOfPropertyChange(() => this.IsQueueEmbedded);
         }
 
         #endregion

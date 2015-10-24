@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HandBrakeWPF.Views.QueueView"
+﻿<Window x:Class="HandBrakeWPF.Views.QueueView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
@@ -14,13 +14,16 @@
         xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-
+        Title="{Binding Title}"
+        Width="700"
+        Height="500"
         MinWidth="350"
         MinHeight="250"
+        WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
 
-    <UserControl.Resources>
+    <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
@@ -34,7 +37,7 @@
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         </Style>
 
-    </UserControl.Resources>
+    </Window.Resources>
 
     <Grid>
 
@@ -176,9 +179,9 @@
             </DockPanel>
         </ToolBar>
 
-        <StackPanel Grid.Row="1" Margin="10,20,10,0" Visibility="{Binding DisplayJobStatusInfo,  Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-            <TextBlock Text="{Binding JobsPending}" />
-            <TextBlock Text="{Binding JobStatus}" />
+        <StackPanel Grid.Row="1" Margin="10,20,10,0">
+            <TextBlock Text="{Binding JobsPending}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
         </StackPanel>
 
         <ListBox Grid.Row="2"
@@ -415,4 +418,4 @@
 
 
     </Grid>
-</UserControl>
+</Window>

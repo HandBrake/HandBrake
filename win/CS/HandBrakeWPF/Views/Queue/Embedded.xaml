@@ -1,0 +1,280 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.Queue.Embedded"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
+        xmlns:Subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+        xmlns:video="clr-namespace:HandBrakeWPF.Converters.Video"
+        xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
+        xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+
+        MinWidth="350"
+        MinHeight="250"
+        TextOptions.TextFormattingMode="Display"
+        mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
+        <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
+        <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
+        <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
+        <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
+        
+        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
+            <Setter Property="ToolTipService.ShowDuration" Value="10000" />
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <ListBox Grid.Row="2"
+                 Margin="10,5,0,1"
+                 dd:DragDrop.DropHandler="{Binding}"
+                 dd:DragDrop.IsDragSource="True"
+                 dd:DragDrop.IsDropTarget="True"
+                 ItemsSource="{Binding QueueTasks, Mode=OneWay}"
+                 helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
+                 SelectionMode="Extended">
+
+            <i:Interaction.Triggers>
+                <commands:InputBindingTrigger>
+                    <commands:InputBindingTrigger.InputBinding>
+                        <KeyBinding Key="Delete"/>
+                    </commands:InputBindingTrigger.InputBinding>
+                    <cal:ActionMessage MethodName="RemoveSelectedJobs" />
+                </commands:InputBindingTrigger>
+            </i:Interaction.Triggers>
+
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />                 
+                    <Separator />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0,0,0,1" />
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <Grid MaxWidth="650" Margin="0,5,0,5" Style="{StaticResource LongToolTipHolder}">
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="0,5,0,5" />
+                                    </Style>
+                                </Grid.Resources>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="95" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.Source}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task.PictureSettingsDesc}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
+
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />
+
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
+                                <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
+                                           Grid.Row="4" Grid.Column="1"/>
+
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:ResourcesUI.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
+                                <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
+                                           Grid.Row="5" Grid.Column="1" />
+
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="{x:Static Properties:ResourcesUI.QueueView_Advanced}" />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"  />
+                            </Grid>
+
+                        </Setter.Value>
+                    </Setter>
+          
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate x:Name="QueueItemTemplate">
+
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Marker  -->
+                        <Image Grid.Column="0"
+                               Width="16"
+                               Height="16"
+                               Margin="10,0,10,0">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
+                                            <Setter Property="Source" Value="..\Images\Movies.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
+                                            <Setter Property="Source" Value="..\Images\Working0.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
+                                            <Setter Property="Source" Value="..\Images\Complete.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
+                                            <Setter Property="Source" Value="..\Images\WarningSmall.png" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+
+                        <!--  Settings  -->
+                        <StackPanel Grid.Column="1"
+                                    Margin="0,5,0,5"
+                                    HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="Title: " />
+                                <TextBlock Text="{Binding Task.Title}" />
+
+                                <TextBlock Margin="10,0,0,0"
+                                           FontWeight="Bold"
+                                           Text="{Binding Task.PointToPointMode}" />
+                                <TextBlock Text=": " />
+                                <TextBlock Text="{Binding Task.StartPoint}" />
+                                <TextBlock Margin="5,0,5,0" Text="to" />
+                                <TextBlock Text="{Binding Task.EndPoint}" />
+                            </StackPanel>
+
+                            <!--  TODO Support Drive Label Name  -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" />
+                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" />
+                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--  Delete  -->
+                        <Grid Grid.Column="2"
+                              Margin="10,0,10,0"
+                              VerticalAlignment="Center">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}"
+                                    Grid.Row="0" Grid.Column="0" Margin="0,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20"  
+                                               Height="20" VerticalAlignment="Center"
+                                               Source="../Images/Refresh.ico"
+                                               ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="RetryJob">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="1" Margin="10,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20" 
+                                               Height="20" VerticalAlignment="Center"
+                                               Source="../Images/Options24.png"
+                                               ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="EditJob">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="2" Margin="10,5,0,0">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="20" 
+                                               Height="20" VerticalAlignment="Center" 
+                                               Source="../Images/delete.png"
+                                               ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="RemoveJob">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+
+
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+    </Grid>
+</UserControl>

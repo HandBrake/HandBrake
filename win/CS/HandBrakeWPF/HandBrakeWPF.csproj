@@ -297,6 +297,9 @@
     <Compile Include="Views\MiniView.xaml.cs">
       <DependentUpon>MiniView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Queue\Embedded.xaml.cs">
+      <DependentUpon>Embedded.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -475,6 +478,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MiniView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Queue\Embedded.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

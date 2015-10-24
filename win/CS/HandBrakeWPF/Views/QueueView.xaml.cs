@@ -10,19 +10,20 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows;
-    using System.Windows.Controls;
+
+    using HandBrakeWPF.Views;
 
     /// <summary>
     /// Interaction logic for VideoView
     /// </summary>
-    public partial class QueueView : UserControl
+    public partial class QueueView : Window
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueView"/> class.
         /// </summary>
         public QueueView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

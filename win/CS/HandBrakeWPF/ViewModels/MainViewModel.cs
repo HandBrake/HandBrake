@@ -1228,16 +1228,14 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
 
                 this.QueueViewModel.Activate(false);
-                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.Content.GetType() == typeof(QueueView));
-
+                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
                 if (window != null)
                 {
                     window.Activate();
                 }
                 else
                 {
-                    // TODO to control the size of this window, we will probably have to create a new window for hosting the queue.
-                    this.windowManager.ShowWindow(this.QueueViewModel);
+                    this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
                 }
             }
         }
