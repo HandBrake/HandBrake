@@ -99,6 +99,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Deblock = task.Deblock;
             this.Decomb = task.Decomb;
             this.Deinterlace = task.Deinterlace;
+            this.DeinterlaceFilter = task.DeinterlaceFilter;
             this.Denoise = task.Denoise;
             this.DenoisePreset = task.DenoisePreset;
             this.DenoiseTune = task.DenoiseTune;
@@ -276,6 +277,11 @@ namespace HandBrakeWPF.Services.Encode.Model
         #endregion
 
         #region Filters
+
+        /// <summary>
+        /// Gets or sets Deinterlace Filter Mode
+        /// </summary>
+        public DeinterlaceFilter DeinterlaceFilter { get; set; }
 
         /// <summary>
         /// Gets or sets Deinterlace.

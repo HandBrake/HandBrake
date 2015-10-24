@@ -394,7 +394,7 @@
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace</value>
+    <value>Deinterlace:</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>Denoise:</value>

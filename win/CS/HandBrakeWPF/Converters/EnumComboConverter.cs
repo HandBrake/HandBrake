@@ -91,6 +91,10 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<OutputFormat>.GetEnumDisplayValues(typeof(OutputFormat));
             }
+            if (value is IEnumerable<DeinterlaceFilter>)
+            {
+                return EnumHelper<DeinterlaceFilter>.GetEnumDisplayValues(typeof(DeinterlaceFilter));
+            }
 
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
@@ -136,7 +140,12 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<OutputFormat>.GetDisplay((OutputFormat)value);
             }
- 
+
+            if (targetType == typeof(DeinterlaceFilter) || value.GetType() == typeof(DeinterlaceFilter))
+            {
+                return EnumHelper<DeinterlaceFilter>.GetDisplay((DeinterlaceFilter)value);
+            }
+
             return null;
         }
 
@@ -199,6 +208,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(OutputFormat) || value.GetType() == typeof(OutputFormat))
             {
                 return EnumHelper<OutputFormat>.GetValue(value.ToString());
+            }
+
+            if (targetType == typeof(DeinterlaceFilter) || value.GetType() == typeof(DeinterlaceFilter))
+            {
+                return EnumHelper<DeinterlaceFilter>.GetValue(value.ToString());
             }
 
             return null;

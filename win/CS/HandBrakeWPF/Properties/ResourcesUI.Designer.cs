@@ -412,7 +412,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deinterlace.
+        ///   Looks up a localized string similar to Deinterlace:.
         /// </summary>
         public static string FiltersView_Deinterlace {
             get {

@@ -406,7 +406,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Decomb
-            if (job.Decomb != Decomb.Off)
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
                 string options;
                 if (job.Decomb == Decomb.Fast)
@@ -427,7 +427,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Deinterlace
-            if (job.Deinterlace != Deinterlace.Off)
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
             {
                 string options;
                 if (job.Deinterlace == Deinterlace.Fast)
