@@ -45,7 +45,7 @@ static void hb_error_handler(const char *errmsg)
 @property (nonatomic, readonly) dispatch_queue_t updateTimerQueue;
 
 /// Current scanned titles.
-@property (nonatomic, readwrite, strong) NSArray *titles;
+@property (nonatomic, readwrite, strong) NSArray<HBTitle *> *titles;
 
 /// Progress handler.
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
