@@ -305,4 +305,7 @@ to make bitrate allocation decisions.</value>
 
 VFR is not compatible with some players.</value>
   </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>When HandBrake has finished the current queue or encode it will perform this action.</value>
+  </data>
 </root>

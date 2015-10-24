@@ -173,6 +173,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When HandBrake has finished the current queue or encode it will perform this action..
+        /// </summary>
+        public static string MainView_WhenDone {
+            get {
+                return ResourceManager.GetString("MainView_WhenDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None   - Force pixel aspect ratio to 1:1.
         ///Loose  - Align dimensions to chosen &apos;Alignment&apos; value
         ///               and pick pixel aspect ratio that preserves the

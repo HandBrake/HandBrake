@@ -7,6 +7,7 @@
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
              AllowDrop="True"
         FontSize="11"
         cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -531,7 +532,7 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Header="Presets"
-                      Margin="0,0,0,5"
+                      Margin="0,0,5,5"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
                 <Grid>
@@ -707,13 +708,68 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" MinHeight="32" >
 
-            <ProgressBar Value="{Binding ProgressPercentage}" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
-                         Width="100" Height="18" VerticalAlignment="Center"/>
-            <Label VerticalAlignment="Center"
-                   Content="{Binding Path=ProgramStatusLabel}" />
+        <StatusBar Name="statusBar1" Height="32" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
 
+            <StatusBarItem>
+                <ProgressBar Value="{Binding ProgressPercentage}" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}}"
+                         Width="100" Height="18" VerticalAlignment="Center" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Path=ProgramStatusLabel}" TextTrimming="CharacterEllipsis" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_WhenDone}">
+                <Menu Background="Transparent">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_WhenDone}" />
+                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding QueueViewModel.WhenDoneAction}" />
+                                <Path Height="5"
+                                      Margin="2,2,2,0"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Fill="{DynamicResource GlyphBrush}" />
+                            </StackPanel>
+                        </MenuItem.Header>
+
+                        <MenuItem x:Name="doNothing"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="shutdown"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="suspend"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="hibernate"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="lock"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="logoff"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="quit"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"
+                                  IsCheckable="True"
+                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                    </MenuItem>
+                </Menu>
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </UserControl>

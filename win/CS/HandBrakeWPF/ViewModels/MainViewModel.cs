@@ -1569,6 +1569,15 @@ namespace HandBrakeWPF.ViewModels
             this.AlertWindowHeader = string.Empty;
         }
 
+        /// <summary>
+        /// Pass on the "When Done" Action to the queue view model. 
+        /// </summary>
+        /// <param name="action"></param>
+        public void WhenDone(string action)
+        {
+            this.QueueViewModel?.WhenDone(action);
+        }
+
         #endregion
 
         #region Main Window Public Methods

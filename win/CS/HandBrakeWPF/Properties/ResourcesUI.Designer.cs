@@ -1771,7 +1771,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Done::.
+        ///   Looks up a localized string similar to When Done:.
         /// </summary>
         public static string QueueView_WhenDone {
             get {

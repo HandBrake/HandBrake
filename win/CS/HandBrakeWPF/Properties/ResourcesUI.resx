@@ -553,7 +553,7 @@
     <value>Video:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>When Done::</value>
+    <value>When Done:</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>Duration:</value>

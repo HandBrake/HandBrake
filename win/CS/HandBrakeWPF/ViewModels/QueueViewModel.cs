@@ -71,6 +71,8 @@ namespace HandBrakeWPF.ViewModels
             this.JobStatus = Resources.QueueViewModel_NoJobsPending;
             this.SelectedItems = new BindingList<QueueTask>();
             this.DisplayName = "Queue";
+
+            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
         }
 
         #endregion
@@ -390,8 +392,6 @@ namespace HandBrakeWPF.ViewModels
         protected override void OnActivate()
         {
             this.Load();
-
-            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
 
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
