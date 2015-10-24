@@ -33,6 +33,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
         _settings.undo = self.window.undoManager;
+        _languagesList.undo = self.window.undoManager;
     }
     return self;
 }
@@ -84,16 +85,16 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 - (IBAction)done:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
-
-    [self.settings.trackSelectionLanguages removeAllObjects];
-    [self.settings.trackSelectionLanguages addObjectsFromArray:self.languagesList.selectedLanguages];
+    [self.window orderOut:nil];
+    if (self.window.undoManager.canUndo)
+    {
+        self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
+    }
+    [NSApp endSheet:self.window returnCode:self.window.undoManager.canUndo];
 }
 
 - (void)dealloc
 {
-
     @try {
         [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
     } @catch (NSException * __unused exception) {}

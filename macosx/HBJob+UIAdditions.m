@@ -183,8 +183,8 @@ static NSDictionary            *shortHeightAttr;
             if (audioTrack.enabled)
             {
                 audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
-                NSNumber *drc = audioTrack.drc;
-                NSNumber *gain = audioTrack.gain;
+                NSNumber *drc = @(audioTrack.drc);
+                NSNumber *gain = @(audioTrack.gain);
                 NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
                                           audioTrack.track[keyAudioTrackName],
                                           audioTrack.codec[keyAudioCodecName],

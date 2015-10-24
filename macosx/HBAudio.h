@@ -20,7 +20,7 @@ extern NSString *HBAudioChangedNotification;
 - (instancetype)initWithTitle:(HBTitle *)title;
 
 @property (nonatomic, readonly) NSMutableArray *tracks;
-@property (nonatomic, readonly) HBAudioDefaults *defaults;
+@property (nonatomic, readwrite) HBAudioDefaults *defaults;
 
 - (void)addAllTracks;
 - (void)removeAll;
@@ -30,7 +30,8 @@ extern NSString *HBAudioChangedNotification;
 - (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
 - (void)switchingTrackFromNone:(nullable HBAudioTrack *)noLongerNoneTrack;
 
-- (void)containerChanged:(int)container;
+@property (nonatomic, readwrite) int container;
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end
 

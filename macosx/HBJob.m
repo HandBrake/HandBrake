@@ -95,7 +95,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 - (void)setUndo:(NSUndoManager *)undo
 {
     _undo = undo;
-    [@[self.video, self.range, self.filters, self.picture, /*self.audio,*/ self.subtitles] makeObjectsPerformSelector:@selector(setUndo:)
+    [@[self.video, self.range, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(setUndo:)
                                                                                                        withObject:_undo];
     [self.chapterTitles makeObjectsPerformSelector:@selector(setUndo:) withObject:_undo];
 }
@@ -127,7 +127,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     _container = container;
 
-    [self.audio containerChanged:container];
+    [self.audio setContainer:container];
     [self.subtitles setContainer:container];
     [self.video containerChanged];
 

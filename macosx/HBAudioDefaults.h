@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class HBAudioTrackPreset;
+
 typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
     HBAudioTrackSelectionBehaviorNone,
     HBAudioTrackSelectionBehaviorFirst,
@@ -22,9 +24,8 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @interface HBAudioDefaults : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
 
 @property (nonatomic, readwrite) HBAudioTrackSelectionBehavior trackSelectionBehavior;
-@property (nonatomic, readwrite, strong) NSMutableArray *trackSelectionLanguages;
-
-@property (nonatomic, readwrite, strong) NSMutableArray *tracksArray;
+@property (nonatomic, readwrite, strong) NSMutableArray<NSString *> *trackSelectionLanguages;
+@property (nonatomic, readwrite, strong) NSMutableArray<HBAudioTrackPreset *> *tracksArray;
 
 /**
  *  Adds a new track preset.

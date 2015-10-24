@@ -22,8 +22,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 @property (nonatomic, readonly, strong) NSDictionary *noneTrack;
 @property (nonatomic, readonly, strong) NSArray *masterTrackArray;  // the master list of audio tracks from the title
 
-@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
-
 @end
 
 @implementation HBAudio
@@ -92,8 +90,9 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         [newAudio setDataSource:self];
         [newAudio setDelegate:self];
         [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
-        [newAudio setVideoContainerTag:@(self.container)];
+        [newAudio setContainer:self.container];
         [newAudio setTrackFromIndex: (int)trackIndex];
+        [newAudio setUndo:self.undo];
 
         const char *name = hb_audio_encoder_get_name(preset.encoder);
         NSString *audioEncoder = nil;
@@ -148,8 +147,8 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
             {
                 [newAudio setBitRateFromName: [NSString stringWithFormat:@"%d", preset.bitRate]];
             }
-            [newAudio setDrc: @(preset.drc)];
-            [newAudio setGain: @(preset.gain)];
+            [newAudio setDrc:preset.drc];
+            [newAudio setGain:preset.gain];
         }
         else
         {
@@ -272,11 +271,10 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     HBAudioTrack *newAudio = [[HBAudioTrack alloc] init];
     [newAudio setDataSource:self];
     [newAudio setDelegate:self];
-    [self insertObject: newAudio inTracksAtIndex: [self countOfTracks]];
-    [newAudio setVideoContainerTag:@(self.container)];
+    [self insertObject:newAudio inTracksAtIndex:[self countOfTracks]];
+    [newAudio setContainer:self.container];
     [newAudio setTrack: self.noneTrack];
-    [newAudio setDrc: @0.0f];
-    [newAudio setGain: @0.0f];
+    [newAudio setUndo:self.undo];
 }
 
 #pragma mark -
@@ -322,19 +320,41 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 }
 
 // This gets called whenever the video container changes.
-- (void)containerChanged:(int)container
+- (void)setContainer:(int)container
 {
-    self.container = container;
+    _container = container;
 
-    // Update each of the instances because this value influences possible settings.
-    for (HBAudioTrack *audioObject in self.tracks)
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        [audioObject setVideoContainerTag:@(container)];
-    }
+        // Update each of the instances because this value influences possible settings.
+        for (HBAudioTrack *audioObject in self.tracks)
+        {
+            audioObject.container = container;
+        }
 
-    // Update the Auto Passthru Fallback Codec Popup
-    // lets get the tag of the currently selected item first so we might reset it later
-    [self.defaults validateEncoderFallbackForVideoContainer:container];
+        // Update the Auto Passthru Fallback Codec Popup
+        // lets get the tag of the currently selected item first so we might reset it later
+        [self.defaults validateEncoderFallbackForVideoContainer:container];
+    }
+}
+
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    for (HBAudioTrack *track in self.tracks)
+    {
+        track.undo = undo;
+    }
+    self.defaults.undo = undo;
+}
+
+- (void)setDefaults:(HBAudioDefaults *)defaults
+{
+    if (defaults != _defaults)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDefaults:_defaults];
+    }
+    _defaults = defaults;
 }
 
 - (void)mixdownChanged
@@ -441,11 +461,14 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)insertObject:(HBAudioTrack *)track inTracksAtIndex:(NSUInteger)index;
 {
+    [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksAtIndex:index];
     [self.tracks insertObject:track atIndex:index];
 }
 
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index
 {
+    HBAudioTrack *track = self.tracks[index];
+    [[self.undo prepareWithInvocationTarget:self] insertObject:track inTracksAtIndex:index];
     [self.tracks removeObjectAtIndex:index];
 }
 

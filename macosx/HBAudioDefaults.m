@@ -49,6 +49,15 @@
     _trackSelectionBehavior = trackSelectionBehavior;
 }
 
+- (void)setTrackSelectionLanguages:(NSMutableArray<NSString *> *)trackSelectionLanguages
+{
+    if (trackSelectionLanguages != _trackSelectionLanguages)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTrackSelectionLanguages:_trackSelectionLanguages];
+    }
+    _trackSelectionLanguages = trackSelectionLanguages;
+}
+
 - (void)setAllowAACPassthru:(BOOL)allowAACPassthru
 {
     if (allowAACPassthru != _allowAACPassthru)
@@ -276,7 +285,10 @@
         self.encoderFallback = hb_audio_encoder_get_from_name([preset[@"AudioEncoderFallback"] UTF8String]);
     }
 
-    [self.tracksArray removeAllObjects];
+    while ([self countOfTracksArray])
+    {
+        [self removeObjectFromTracksArrayAtIndex:0];
+    }
 
     for (NSDictionary *track in preset[@"AudioList"])
     {
@@ -303,7 +315,7 @@
 
         newTrack.drc = [track[@"AudioTrackDRCSlider"] doubleValue];
         newTrack.gain = [track[@"AudioTrackGainSlider"] doubleValue];
-        [self.tracksArray addObject:newTrack];
+        [self insertObject:newTrack inTracksArrayAtIndex:[self countOfTracksArray]];
     }
 }
 

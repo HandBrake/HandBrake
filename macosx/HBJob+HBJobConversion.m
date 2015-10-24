@@ -226,7 +226,7 @@
     {
         if (subTrack.isEnabled)
         {
-            // Shift the source index by 2 to componsate
+            // Subtract 2 to the source indexes to compensate
             // for the none and foreign audio search tracks.
             int sourceIdx = ((int)subTrack.sourceTrackIdx) - 2;
 
@@ -380,7 +380,7 @@
             // output is not passthru so apply gain
             if (!([[audioTrack codec][keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
             {
-                audio->out.gain = [audioTrack.gain doubleValue];
+                audio->out.gain = audioTrack.gain;
             }
             else
             {
@@ -392,7 +392,7 @@
                                        [audioTrack.track[keyAudioInputCodecParam] intValue],
                                        [audioTrack.codec[keyAudioCodec] intValue]))
             {
-                audio->out.dynamic_range_compression = [audioTrack.drc doubleValue];
+                audio->out.dynamic_range_compression = audioTrack.drc;
             }
             else
             {
