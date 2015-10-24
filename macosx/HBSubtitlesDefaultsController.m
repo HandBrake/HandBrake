@@ -66,11 +66,12 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (IBAction)done:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
-
-    [self.settings.trackSelectionLanguages removeAllObjects];
-    [self.settings.trackSelectionLanguages addObjectsFromArray:self.languagesList.selectedLanguages];
+    [self.window orderOut:nil];
+    if (self.window.undoManager.canUndo)
+    {
+        self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
+    }
+    [NSApp endSheet:self.window returnCode:self.window.undoManager.canUndo];
 }
 
 - (void)dealloc

@@ -237,6 +237,7 @@ extern NSString *keySubTrackSrtFileURL;
     {
         track.undo = undo;
     }
+    self.defaults.undo = undo;
 }
 
 /**

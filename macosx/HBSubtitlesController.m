@@ -59,17 +59,27 @@
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:self.subtitles.defaults];
+    HBSubtitlesDefaults *defaults = [self.subtitles.defaults copy];
+    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
 
-	[NSApp beginSheet:self.defaultsController.window
+    [NSApp beginSheet:self.defaultsController.window
        modalForWindow:self.view.window
         modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd)
-          contextInfo:NULL];
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
 }
 
-- (void)sheetDidEnd
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
+    HBSubtitlesDefaults *defaults = (HBSubtitlesDefaults *)CFBridgingRelease(contextInfo);
+
+    // If things changed, do this ugly
+    // operation to group the changes for the undo manager.
+    if (returnCode)
+    {
+        defaults.undo = self.subtitles.defaults.undo;
+        self.subtitles.defaults = defaults;
+    }
     self.defaultsController = nil;
 }
 
