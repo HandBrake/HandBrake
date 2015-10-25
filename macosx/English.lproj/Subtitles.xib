@@ -89,14 +89,14 @@
                     </connections>
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Syo-rH-vof">
-                    <rect key="frame" x="20" y="20" width="886" height="266"/>
+                    <rect key="frame" x="20" y="20" width="886" height="264"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="ljc-nW-Cnc">
-                        <rect key="frame" x="1" y="17" width="884" height="248"/>
+                        <rect key="frame" x="1" y="0.0" width="884" height="263"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" rowSizeStyle="automatic" headerView="IiW-3a-Drv" viewBased="YES" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="246"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -423,7 +423,7 @@
                 </scrollView>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="532" y="403"/>
+            <point key="canvasLocation" x="521" y="-253"/>
         </customView>
         <arrayController objectClassName="HBSubtitlesTrack" id="ssY-jQ-Nev">
             <connections>

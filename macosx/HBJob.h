@@ -17,6 +17,7 @@
 
 #import "HBAudio.h"
 #import "HBSubtitles.h"
+#import "HBChapter.h"
 
 #import "HBDistributedArray.h"
 
@@ -73,7 +74,7 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) HBSubtitles *subtitles;
 
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
-@property (nonatomic, readonly) NSArray *chapterTitles;
+@property (nonatomic, readonly) NSArray<HBChapter *> *chapterTitles;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 

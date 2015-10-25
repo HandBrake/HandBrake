@@ -70,14 +70,14 @@
                     </connections>
                 </button>
                 <scrollView horizontalLineScroll="18" horizontalPageScroll="0.0" verticalLineScroll="18" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="lqY-aE-MZi">
-                    <rect key="frame" x="20" y="20" width="886" height="266"/>
+                    <rect key="frame" x="20" y="20" width="886" height="264"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="3Pi-zz-fFg">
-                        <rect key="frame" x="1" y="0.0" width="884" height="265"/>
+                        <rect key="frame" x="1" y="0.0" width="884" height="263"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" headerView="0rK-Rs-NTb" viewBased="YES" id="InF-gR-Lia">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="248"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="246"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -235,7 +235,7 @@
                         <animations/>
                     </scroller>
                     <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="yp0-pp-Yw7">
-                        <rect key="frame" x="869" y="17" width="16" height="248"/>
+                        <rect key="frame" x="869" y="17" width="16" height="246"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
                     </scroller>
