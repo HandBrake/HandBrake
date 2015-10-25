@@ -563,8 +563,12 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
-#pragma mark -
-#pragma mark Bindings Support
+#pragma mark - Bindings Support
+
+- (NSArray *)masterTrackArray
+{
+    return self.dataSource.masterTrackArray;
+}
 
 - (BOOL)enabled
 {
@@ -633,6 +637,14 @@ static NSMutableArray *masterBitRateArray = nil;
         }
     }
     return retval;
+}
+
+- (void)setNilValueForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"drc"] || [key isEqualToString:@"gain"])
+    {
+        [self setValue:@0 forKey:key];
+    }
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
