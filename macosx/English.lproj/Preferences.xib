@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9058" systemVersion="15B38b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9058"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -40,46 +40,6 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="376"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <popUpButton verticalHuggingPriority="750" id="374">
-                    <rect key="frame" x="124" y="338" width="156" height="22"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="375">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="376">
-                            <items>
-                                <menuItem title="Do Nothing" id="378"/>
-                                <menuItem title="Open Source" id="379"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="275" id="2gt-u6-G1z"/>
-                        <binding destination="61" name="selectedValue" keyPath="values.LaunchSourceBehavior" id="386"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" id="414">
-                    <rect key="frame" x="324" y="315" width="104" height="22"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <popUpButtonCell key="cell" type="push" title="Weekly" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="604800" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="417" id="415">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="416">
-                            <items>
-                                <menuItem title="Daily" tag="86400" id="419"/>
-                                <menuItem title="Weekly" state="on" tag="604800" id="417"/>
-                                <menuItem title="Monthly" tag="2629800" id="420"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="243" id="8on-qM-5ra"/>
-                        <binding destination="410" name="enabled" keyPath="automaticallyChecksForUpdates" id="433"/>
-                        <binding destination="410" name="selectedTag" keyPath="updateCheckInterval" id="434"/>
-                    </connections>
-                </popUpButton>
                 <popUpButton verticalHuggingPriority="750" id="289">
                     <rect key="frame" x="255" y="184" width="96" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
@@ -140,18 +100,6 @@
                     </buttonCell>
                     <connections>
                         <binding destination="61" name="value" keyPath="values.HBSendToAppEnabled" id="Kff-6m-jt9"/>
-                    </connections>
-                </button>
-                <button id="243">
-                    <rect key="frame" x="124" y="318" width="197" height="18"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <buttonCell key="cell" type="check" title="Automatically check for updates:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="305">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="410" name="value" keyPath="automaticallyChecksForUpdates" id="429"/>
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="242">
@@ -339,6 +287,40 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button id="ibT-yk-a1x">
+                    <rect key="frame" x="123" y="341" width="197" height="18"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Show Open Source panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="Zqz-Kn-xOS">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="61" name="value" keyPath="values.HBShowOpenPanelAtLaunch" id="hsG-Dx-Mf3"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="6Qw-bc-4P9">
+                    <rect key="frame" x="23" y="313" width="98" height="14"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Check for update:" id="Gyg-hU-a3l">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button id="243">
+                    <rect key="frame" x="123" y="311" width="226" height="18"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Automatically check weekly" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="305">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="410" name="value" keyPath="automaticallyChecksForUpdates" id="429"/>
+                    </connections>
+                </button>
             </subviews>
             <animations/>
             <point key="canvasLocation" x="42" y="-503"/>

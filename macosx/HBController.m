@@ -487,13 +487,11 @@
 {
     if (self.core.state != HBStateScanning && !self.job)
     {
-        // We show whichever open source window specified in LaunchSourceBehavior preference key
-        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowOpenPanelAtLaunch"])
         {
             [self browseSources:nil];
         }
     }
-    
 }
 
 - (BOOL)openURL:(NSURL *)fileURL
