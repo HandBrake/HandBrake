@@ -113,6 +113,7 @@
 		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
 		A90A0CAF1988D57200DA65CE /* HBAudioTrackPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */; };
 		A91017B41A64440A00039BFB /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A91017B31A64440A00039BFB /* HBSubtitles.m */; };
+		A91404611BDBB7DE00BE29A7 /* HBJobUndoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A91404601BDBB7DE00BE29A7 /* HBJobUndoTests.m */; };
 		A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB21BC441C700157917 /* HBPreviewView.m */; };
 		A914BCB61BC441D100157917 /* QTKit+HBQTMovieExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB51BC441D100157917 /* QTKit+HBQTMovieExtensions.m */; };
 		A9160A351AE7A165009A7818 /* HBCodingUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9160A341AE7A165009A7818 /* HBCodingUtilities.m */; };
@@ -391,6 +392,7 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
 		A91017B31A64440A00039BFB /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
+		A91404601BDBB7DE00BE29A7 /* HBJobUndoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobUndoTests.m; sourceTree = "<group>"; };
 		A914BCB11BC441C700157917 /* HBPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewView.h; sourceTree = "<group>"; };
 		A914BCB21BC441C700157917 /* HBPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewView.m; sourceTree = "<group>"; };
 		A914BCB41BC441D100157917 /* QTKit+HBQTMovieExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QTKit+HBQTMovieExtensions.h"; sourceTree = "<group>"; };
@@ -1081,6 +1083,7 @@
 			children = (
 				A98FD5911B19C63800FCC7A5 /* HBMockTitle.h */,
 				A98FD5921B19C63800FCC7A5 /* HBMockTitle.m */,
+				A91404601BDBB7DE00BE29A7 /* HBJobUndoTests.m */,
 				A9A24B2E1B09F87400AD1FAB /* HBJobTests.m */,
 				A9A24B2C1B09F6FD00AD1FAB /* HBPresetsTests.m */,
 				A95B8D951B09F16700F2F152 /* Supporting Files */,
@@ -1526,6 +1529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A98FD5931B19C63800FCC7A5 /* HBMockTitle.m in Sources */,
+				A91404611BDBB7DE00BE29A7 /* HBJobUndoTests.m in Sources */,
 				A9A24B2D1B09F6FD00AD1FAB /* HBPresetsTests.m in Sources */,
 				A9A24B2F1B09F87400AD1FAB /* HBJobTests.m in Sources */,
 			);

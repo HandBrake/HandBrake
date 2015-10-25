@@ -7,6 +7,7 @@
 //
 
 #import "HBMockTitle.h"
+#import "HBChapter.h"
 
 extern NSString *keyAudioTrackIndex;
 extern NSString *keyAudioTrackName;
@@ -162,9 +163,18 @@ extern NSString *keySubTrackType;
     return nil;
 }
 
-- (NSArray *)chapters
+- (NSArray<HBChapter *> *)chapters
 {
-    return @[@"Chapter 1", @"Chapter 2"];
+    NSMutableArray *chapters = [NSMutableArray array];
+
+    for (int i = 0; i < 10; i++)
+    {
+        NSString *title = [NSString stringWithFormat:@"Chapter %d", i + 1];
+        [chapters addObject:[[HBChapter alloc] initWithTitle:title
+                                                        index:i + 1
+                                                    duration:100]];
+    }
+    return [chapters copy];
 }
 
 
