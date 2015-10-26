@@ -959,6 +959,7 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
+        memset(&init, 0, sizeof(init));
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.geometry.width = title->geometry.width;

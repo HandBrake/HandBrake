@@ -104,14 +104,17 @@ static char ** srtoffset                 = NULL;
 static char ** srtlang                   = NULL;
 static int     srtdefault                = -1;
 static int     srtburn                   = -1;
-static int      width       = 0;
-static int      height      = 0;
-static int      crop[4]     = { -1,-1,-1,-1 };
-static int      loose_crop  = -1;
-static char *   vrate       = NULL;
-static float    vquality    = -1.0;
-static int      vbitrate    = 0;
-static int      mux         = 0;
+static int      width                    = 0;
+static int      height                   = 0;
+static int      crop[4]                  = { -1,-1,-1,-1 };
+static int      loose_crop               = -1;
+static int      padded_width             = 0;
+static int      padded_height            = 0;
+static int      pad_color                = -1;
+static char *   vrate                    = NULL;
+static float    vquality                 = -1.0;
+static int      vbitrate                 = 0;
+static int      mux                      = 0;
 static int      anamorphic_mode     = -1;
 static int      modulus             = 0;
 static int      par_height          = -1;
@@ -1228,6 +1231,9 @@ static void ShowHelp()
 "       --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
 "       --loose-crop        Always crop to a multiple of the modulus\n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
+"       --pad <W:H:C>       Add borders to 'pad' image to WxH (letterbox)\n"
+"                           Optionally set color of padding to C\n"
+"                           Color may be HTML color name or RGB value\n"
 "   -Y, --maxHeight   <#>   Set maximum height\n"
 "   -X, --maxWidth    <#>   Set maximum width\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
@@ -1743,6 +1749,7 @@ static int ParseOptions( int argc, char ** argv )
     #define PRESET_IMPORT_GUI    306
     #define VERSION              307
     #define DESCRIBE             308
+    #define PAD                  309
 
     for( ;; )
     {
@@ -1843,6 +1850,7 @@ static int ParseOptions( int argc, char ** argv )
             { "crop",        required_argument, NULL,    'n' },
             { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
             { "no-loose-crop", no_argument,     &loose_crop, 0 },
+            { "pad",         required_argument, NULL,    PAD },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -2337,6 +2345,31 @@ static int ParseOptions( int argc, char ** argv )
                 else
                     loose_crop = 1;
                 break;
+            case PAD:
+            {
+                char ** pads;
+                char *  end;
+                pads = str_split(optarg, ':');
+                if (pads[0] != NULL)
+                {
+                    padded_width = strtol(pads[0], &end, 0);
+                    if (pads[1] != NULL)
+                    {
+                        padded_height = strtol(pads[1], &end, 0);
+                        if (pads[2] != NULL)
+                        {
+                            pad_color = strtol(pads[2], &end, 0);
+                            if (end == pads[2])
+                            {
+                                // Not a numeric value, lookup by name
+                                pad_color = hb_rgb_lookup_by_name(pads[2]);
+                            }
+                        }
+                    }
+                }
+                str_vfree(pads);
+                break;
+            }
             case 'r':
             {
                 vrate = strdup(optarg);
@@ -3424,6 +3457,18 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (modulus > 0)
     {
         hb_dict_set(preset, "PictureModulus", hb_value_int(modulus));
+    }
+    if (padded_width > 0)
+    {
+        hb_dict_set(preset, "PicturePaddedWidth", hb_value_int(padded_width));
+    }
+    if (padded_height > 0)
+    {
+        hb_dict_set(preset, "PicturePaddedHeight", hb_value_int(padded_height));
+    }
+    if (pad_color >= 0)
+    {
+        hb_dict_set(preset, "PicturePadColor", hb_value_int(pad_color));
     }
     if (grayscale != -1)
     {

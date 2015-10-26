@@ -1253,6 +1253,7 @@ enum
     HB_FILTER_NLMEANS,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
+    HB_FILTER_PAD,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
