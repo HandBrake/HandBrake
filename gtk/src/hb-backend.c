@@ -3746,6 +3746,8 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
                 uiGeo.geometry.par.num =
                         ghb_dict_get_int(settings, "PictureDisplayWidth");
                 uiGeo.geometry.par.den = width;
+                hb_reduce(&uiGeo.geometry.par.num, &uiGeo.geometry.par.den,
+                           uiGeo.geometry.par.num,  uiGeo.geometry.par.den);
             }
         }
         else
@@ -3881,9 +3883,10 @@ get_preview_geometry(signal_user_data_t *ud, const hb_title_t *title,
     srcGeo->par    = title->geometry.par;
 
     uiGeo->mode = ghb_settings_combo_int(ud->settings, "PicturePAR");
-    uiGeo->keep = ghb_dict_get_bool(ud->settings, "PictureKeepRatio") ||
-                                        uiGeo->mode == HB_ANAMORPHIC_STRICT  ||
-                                        uiGeo->mode == HB_ANAMORPHIC_LOOSE;
+    uiGeo->keep = (ghb_dict_get_bool(ud->settings, "PictureKeepRatio") ||
+                                 uiGeo->mode == HB_ANAMORPHIC_STRICT  ||
+                                 uiGeo->mode == HB_ANAMORPHIC_LOOSE) ?
+                                 HB_KEEP_DISPLAY_ASPECT : 0;
     uiGeo->itu_par = 0;
     uiGeo->modulus = ghb_settings_combo_int(ud->settings, "PictureModulus");
     uiGeo->crop[0] = ghb_dict_get_int(ud->settings, "PictureTopCrop");
@@ -4557,9 +4560,11 @@ ghb_get_preview_image(
         src_line += image->plane[0].stride;
         dst += stride;
     }
-    gint w = ghb_dict_get_int(ud->settings, "scale_width");
-    gint h = ghb_dict_get_int(ud->settings, "scale_height");
-    ghb_par_scale(ud, &w, &h, resultGeo.par.num, resultGeo.par.den);
+
+    *out_width = ghb_dict_get_int(ud->settings, "scale_width");
+    *out_height = ghb_dict_get_int(ud->settings, "scale_height");
+    ghb_par_scale(ud, out_width, out_height,
+                  resultGeo.par.num, resultGeo.par.den);
 
     gint c0, c1, c2, c3;
     c0 = ghb_dict_get_int(ud->settings, "PictureTopCrop");
@@ -4567,11 +4572,17 @@ ghb_get_preview_image(
     c2 = ghb_dict_get_int(ud->settings, "PictureLeftCrop");
     c3 = ghb_dict_get_int(ud->settings, "PictureRightCrop");
 
-    gdouble xscale = (gdouble)w / (gdouble)(title->geometry.width - c2 - c3);
-    gdouble yscale = (gdouble)h / (gdouble)(title->geometry.height - c0 - c1);
-
-    *out_width = w;
-    *out_height = h;
+    gdouble xscale, yscale;
+    if (ghb_dict_get_bool(ud->prefs, "preview_show_crop"))
+    {
+        xscale = (gdouble)image->width / title->geometry.width;
+        yscale = (gdouble)image->height / title->geometry.height;
+    }
+    else
+    {
+        xscale = (gdouble)image->width / (title->geometry.width - c2 - c3);
+        yscale = (gdouble)image->height / (title->geometry.height - c0 - c1);
+    }
 
     int previewWidth = image->width;
     int previewHeight = image->height;
@@ -4579,14 +4590,16 @@ ghb_get_preview_image(
     // If the preview is too large to fit the screen, reduce it's size.
     if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
     {
-        GdkScreen *ss;
-        gint s_w, s_h;
         gint factor = 80;
 
         if (ghb_dict_get_bool(ud->prefs, "preview_fullscreen"))
         {
             factor = 100;
         }
+
+        GdkScreen *ss;
+        gint s_w, s_h;
+
         ss = gdk_screen_get_default();
         s_w = gdk_screen_get_width(ss);
         s_h = gdk_screen_get_height(ss);
@@ -4610,28 +4623,28 @@ ghb_get_preview_image(
             }
             xscale *= (gdouble)previewWidth / orig_w;
             yscale *= (gdouble)previewHeight / orig_h;
-            w *= (gdouble)previewWidth / orig_w;
-            h *= (gdouble)previewHeight / orig_h;
             scaled_preview = gdk_pixbuf_scale_simple(preview,
                             previewWidth, previewHeight, GDK_INTERP_HYPER);
             g_object_unref(preview);
             preview = scaled_preview;
         }
     }
+
     if (ghb_dict_get_bool(ud->prefs, "preview_show_crop"))
     {
         c0 *= yscale;
         c1 *= yscale;
         c2 *= xscale;
         c3 *= xscale;
+
         // Top
-        hash_pixbuf(preview, c2, 0, w, c0, 32, 0);
+        hash_pixbuf(preview, 0, 0, previewWidth, c0, 32, 0);
         // Bottom
-        hash_pixbuf(preview, c2, previewHeight-c1, w, c1, 32, 0);
+        hash_pixbuf(preview, 0, previewHeight-c1, previewWidth, c1, 32, 0);
         // Left
-        hash_pixbuf(preview, 0, c0, c2, h, 32, 1);
+        hash_pixbuf(preview, 0, 0, c2, previewHeight, 32, 1);
         // Right
-        hash_pixbuf(preview, previewWidth-c3, c0, c3, h, 32, 1);
+        hash_pixbuf(preview, previewWidth-c3, 0, c3, previewHeight, 32, 1);
     }
     hb_image_close(&image);
     return preview;

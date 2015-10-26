@@ -72,6 +72,11 @@
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
 
+#define HB_MIN_WIDTH    32
+#define HB_MIN_HEIGHT   32
+#define HB_MAX_WIDTH    20480
+#define HB_MAX_HEIGHT   20480
+
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_hwd_s hb_hwd_t;
 typedef struct hb_list_s hb_list_t;
