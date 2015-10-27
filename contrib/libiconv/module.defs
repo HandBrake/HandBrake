@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
 LIBICONV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libiconv-1.13.tar.bz2
+LIBICONV.FETCH.md5 = 9c8b41b77f508edf72e26b406e873a2f
 
 # this contrib will not build under MinGW with -std=gnu99
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

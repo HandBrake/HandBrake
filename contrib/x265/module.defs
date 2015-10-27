@@ -3,6 +3,7 @@ $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
 X265.FETCH.url = http://download.handbrake.fr/contrib/x265_1.9.tar.gz
+X265.FETCH.md5 = f34a1c4c660ff07511365cb0983cf164
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"

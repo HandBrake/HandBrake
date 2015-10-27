@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,FDKAAC,fdkaac))
 $(eval $(call import.CONTRIB.defs,FDKAAC))
 
 FDKAAC.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fdk-aac-0.1.4.tar.gz
+FDKAAC.FETCH.md5 = e274a7d7f6cd92c71ec5c78e4dc9f8b7
 
 # fdk-aac configure script fails to add compiler optimizations if the
 # CFLAGS env variable is set during configure.  Since we set it, we

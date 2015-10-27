@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,LIBOGG,libogg))
 $(eval $(call import.CONTRIB.defs,LIBOGG))
 
 LIBOGG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libogg-1.3.0.tar.gz
+LIBOGG.FETCH.md5 = 0a7eb40b86ac050db3a789ab65fe21c2
 LIBOGG.EXTRACT.tarbase = libogg-1.3.0
 
 LIBOGG.CONFIGURE.extra = --disable-sdl

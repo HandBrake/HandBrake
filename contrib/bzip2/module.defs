@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,BZIP2,bzip2))
 $(eval $(call import.CONTRIB.defs,BZIP2))
 
 BZIP2.FETCH.url = http://download.handbrake.fr/handbrake/contrib/bzip2-1.0.6.tar.gz
+BZIP2.FETCH.md5 = 6ec09fe81e3380184ed11e21ea06c215
 BZIP2.EXTRACT.tarbase = bzip2
 BZIP2.CONFIGURE = $(TOUCH.exe) $@
 

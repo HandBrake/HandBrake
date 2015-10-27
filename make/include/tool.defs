@@ -1,13 +1,12 @@
 AR.exe    = ar
 CP.exe    = cp
-CURL.exe  = curl
+FETCH.exe = $(SRC/)make/python_launcher $(SRC/)make/fetch.py
 M4.exe    = m4
 MKDIR.exe = mkdir
 PATCH.exe = patch
 RM.exe    = rm
 TAR.exe   = tar
 TOUCH.exe = touch
-WGET.exe  = wget
 MV.exe    = mv
 ZIP.exe   = zip
 LN.exe    = ln

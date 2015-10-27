@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,ZLIB,zlib))
 $(eval $(call import.CONTRIB.defs,ZLIB))
 
 ZLIB.FETCH.url = http://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
+ZLIB.FETCH.md5 = af3358a811ad3469a2e54db49f77d52a
 ZLIB.EXTRACT.tarbase = zlib
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
 

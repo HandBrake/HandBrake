@@ -3,10 +3,8 @@ The following general tools are used on various platforms and it is recommended 
 @itemize @bullet
 @item git - 2.4.3
 @item python - Python 2.7.1
-@item curl - curl 7.21.4 (or wget)
 @item m4 - GNU M4 1.4.6
 @item make - GNU Make 3.81
 @item patch - Patch 2.5.8
 @item tar - GNU tar 1.26
-@item wget - GNU Wget 1.13.4 (or curl)
 @end itemize

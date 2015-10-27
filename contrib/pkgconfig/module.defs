@@ -2,5 +2,6 @@ $(eval $(call import.MODULE.defs,PKGCONFIG,pkgconfig))
 $(eval $(call import.CONTRIB.defs,PKGCONFIG))
 
 PKGCONFIG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/pkg-config-0.28.tar.bz2
+PKGCONFIG.FETCH.md5 = 60c2d5353d501c5619d535c6d4d80f1c
 
 PKGCONFIG.CONFIGURE.extra = --with-internal-glib --disable-host-tool

@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread,PKGCONFIG))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
 LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.0-6-gcb1ae87.tar.gz
+LIBDVDREAD.FETCH.md5 = 607a5dd41b0dd2f35433d6deac79b99e
 LIBDVDREAD.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

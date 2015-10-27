@@ -6,6 +6,7 @@ $(eval $(call import.MODULE.defs,FRIBIDI,fribidi))
 $(eval $(call import.CONTRIB.defs,FRIBIDI))
 
 FRIBIDI.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.bz2
+FRIBIDI.FETCH.md5 = 6c7e7cfdd39c908f7ac619351c1c5c23
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FRIBIDI.CONFIGURE.extra = --with-glib=no

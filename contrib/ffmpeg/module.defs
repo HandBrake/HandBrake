@@ -7,6 +7,7 @@ $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libav-v11.3-0-g00abc00.tar.gz
+FFMPEG.FETCH.md5 = 23648740623345f122cfd0e015063c7e
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.env   =

@@ -3,5 +3,6 @@ $(eval $(call import.MODULE.defs,FREETYPE,freetype,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FREETYPE))
 
 FREETYPE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/freetype-2.6.tar.bz2
+FREETYPE.FETCH.md5 = 5682890cb0267f6671dd3de6eabd3e69
 
 FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no

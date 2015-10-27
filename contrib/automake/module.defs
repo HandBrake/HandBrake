@@ -2,3 +2,4 @@ $(eval $(call import.MODULE.defs,AUTOMAKE,automake,AUTOCONF))
 $(eval $(call import.CONTRIB.defs,AUTOMAKE))
 
 AUTOMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/automake-1.13.1.tar.bz2
+AUTOMAKE.FETCH.md5 = c66595aafe79e4e5455b4b3491fe6b05

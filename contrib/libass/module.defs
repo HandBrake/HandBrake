@@ -3,6 +3,7 @@ $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
 LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.12.3.tar.gz
+LIBASS.FETCH.md5 = 648ee785f966c69d4b5d50948e509d93
 
 # Disable as many external dependencies as I can get away with
 # and tell configure where to find our version of freetype

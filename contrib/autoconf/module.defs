@@ -2,3 +2,4 @@ $(eval $(call import.MODULE.defs,AUTOCONF,autoconf,M4))
 $(eval $(call import.CONTRIB.defs,AUTOCONF))
 
 AUTOCONF.FETCH.url = http://download.handbrake.fr/handbrake/contrib/autoconf-2.69.tar.bz2
+AUTOCONF.FETCH.md5 = 58e0cca25061e1b3e2bc30a5be13815b

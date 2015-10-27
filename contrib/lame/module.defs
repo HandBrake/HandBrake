@@ -2,4 +2,5 @@ $(eval $(call import.MODULE.defs,LAME,lame))
 $(eval $(call import.CONTRIB.defs,LAME))
 
 LAME.FETCH.url = http://download.handbrake.fr/handbrake/contrib/lame-3.98.tar.gz
+LAME.FETCH.md5 = 7036b52e792538fd665595d56b9e49a0
 LAME.EXTRACT.tarbase = lame
