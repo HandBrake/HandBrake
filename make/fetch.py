@@ -243,10 +243,11 @@ class File(object):
 def load_config(option, opt, value, parser):
     with open(value, 'r') as file:
         data = json.load(file)
-        parser.values.disable     = data[0]
-        parser.values.disable_md5 = data[1]
-        parser.values.accept_url  = data[2]
-        parser.values.deny_url    = data[3]
+        parser.values.verbose     = data[0]
+        parser.values.disable     = data[1]
+        parser.values.disable_md5 = data[2]
+        parser.values.accept_url  = data[3]
+        parser.values.deny_url    = data[4]
 
 ###############################################################################
 

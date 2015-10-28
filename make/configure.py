@@ -1181,6 +1181,7 @@ def encodeFetchConfig():
     fname = 'fetch.cfg'
     ftmp = fname + '.tmp'
     data = [
+        options.verbose_fetch,
         options.disable_fetch,
         options.disable_fetch_md5,
         options.accept_fetch_url,
@@ -1253,6 +1254,7 @@ def createCLI():
 
     ## add fetch options
     grp = OptionGroup( cli, 'Fetch Options' )
+    grp.add_option( '--verbose-fetch', default=False, action='store_true', help='increase fetch verbosity' )
     grp.add_option( '--disable-fetch', default=False, action='store_true', help='disable automatic downloads of 3rd-party distributions' )
     grp.add_option( '--disable-fetch-md5', default=False, action='store_true', help='disable MD5 data error detection' )
     grp.add_option( '--accept-fetch-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern' )
