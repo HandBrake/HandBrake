@@ -3,3 +3,10 @@ $(eval $(call import.CONTRIB.defs,AUTOMAKE))
 
 AUTOMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/automake-1.13.1.tar.bz2
 AUTOMAKE.FETCH.md5 = c66595aafe79e4e5455b4b3491fe6b05
+
+# TODO: Upstream no longer provides bzip2 archives, automake 1.15 is latest
+#AUTOMAKE.FETCH.url = http://ftp.gnu.org/gnu/automake/automake-1.13.1.tar.gz
+#AUTOMAKE.FETCH.md5 = 78a0ef8216b0556b44508e7b5b0c0847
+#
+#AUTOMAKE.FETCH.url = http://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
+#AUTOMAKE.FETCH.md5 = 716946a105ca228ab545fc37a70df3a3

@@ -4,6 +4,17 @@ $(eval $(call import.CONTRIB.defs,LIBVPX))
 LIBVPX.FETCH.url = http://download.handbrake.fr/contrib/libvpx-v1.3.0.tar.bz2
 LIBVPX.FETCH.md5 = 14783a148872f2d08629ff7c694eb31f
 
+# TODO: Upstream migrated from Google Code to self-hosted with GitHub mirror and no longer provides bzip2 archives, libvpx 1.4.0 is latest
+#LIBVPX.FETCH.url = https://github.com/webmproject/libvpx/archive/v1.3.0.tar.gz
+#LIBVPX.FETCH.md5 = 733a1bedec212a9f1ce723d17679bf2f
+#LIBVPX.FETCH.distfile  = libvpx-v1.3.0.tar.gz
+#LIBVPX.EXTRACT.tarbase = libvpx-v1.3.0
+#
+#LIBVPX.FETCH.url = https://github.com/webmproject/libvpx/archive/v1.4.0.tar.gz
+#LIBVPX.FETCH.md5 = 9e82cdcb2d2146f812b71c8a7a2686a3
+#LIBVPX.FETCH.distfile  = libvpx-v1.4.0.tar.gz
+#LIBVPX.EXTRACT.tarbase = libvpx-v1.4.0
+
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \

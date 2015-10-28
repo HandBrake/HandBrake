@@ -1,9 +1,19 @@
 $(eval $(call import.MODULE.defs,ZLIB,zlib))
 $(eval $(call import.CONTRIB.defs,ZLIB))
 
-ZLIB.FETCH.url = http://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
-ZLIB.FETCH.md5 = af3358a811ad3469a2e54db49f77d52a
+ZLIB.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
+ZLIB.FETCH.md5 =  af3358a811ad3469a2e54db49f77d52a
 ZLIB.EXTRACT.tarbase = zlib
+
+# TODO: Upstream hash does not match mirror, zlib 1.2.8 is latest
+#ZLIB.FETCH.url += http://sourceforge.net/projects/libpng/files/zlib/1.2.3/zlib-1.2.3.tar.gz
+#ZLIB.FETCH.md5 =  debc62758716a169df9f62e6ab2bc634
+#ZLIB.EXTRACT.tarbase = zlib
+#
+#ZLIB.FETCH.url += http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz
+#ZLIB.FETCH.md5 =  44d667c142d7cda120332623eab69f40
+#ZLIB.EXTRACT.tarbase = zlib
+
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

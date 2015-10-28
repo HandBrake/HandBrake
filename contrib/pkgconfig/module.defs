@@ -4,4 +4,11 @@ $(eval $(call import.CONTRIB.defs,PKGCONFIG))
 PKGCONFIG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/pkg-config-0.28.tar.bz2
 PKGCONFIG.FETCH.md5 = 60c2d5353d501c5619d535c6d4d80f1c
 
+# TODO: Upstream no longer provides bzip2 archives, pkg-config 0.29 is latest
+#PKGCONFIG.FETCH.url = http://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
+#PKGCONFIG.FETCH.md5 = aa3c86e67551adc3ac865160e34a2a0d
+#
+#PKGCONFIG.FETCH.url = http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.tar.gz
+#PKGCONFIG.FETCH.md5 = 77f27dce7ef88d0634d0d6f90e03a77f
+
 PKGCONFIG.CONFIGURE.extra = --with-internal-glib --disable-host-tool

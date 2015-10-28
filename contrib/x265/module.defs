@@ -3,6 +3,7 @@ $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
 X265.FETCH.url = http://download.handbrake.fr/contrib/x265_1.9.tar.gz
+X265.FETCH.url += https://download.videolan.org/pub/videolan/x265/x265_1.9.tar.gz
 X265.FETCH.md5 = f34a1c4c660ff07511365cb0983cf164
 
 X265.CONFIGURE.exe         = cmake
@@ -36,5 +37,3 @@ X265.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(X265.EXTRACT.dir/)source/)"
 ## optional static libs need to be marked
 X265.OSL.libs  = x265
 X265.OSL.files = $(foreach i,$(X265.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
-
-

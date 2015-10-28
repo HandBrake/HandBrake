@@ -5,6 +5,10 @@ LIBVORBIS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libvorbis-a
 LIBVORBIS.FETCH.md5 = 586d2ac0fa13f32cba78be5db4a16330
 LIBVORBIS.EXTRACT.tarbase = aotuv-b6.03_20110424
 
+# TODO: Upstream variant aotuv no longer exists, libvorbis 1.3.5 is latest, tarbase not necessary with new upstream
+#LIBVORBIS.FETCH.url = http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
+#LIBVORBIS.FETCH.md5 = 7220e089f3be3412a2317d6fde9e3944
+
 LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
 
 LIBVORBIS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;

@@ -1,8 +1,9 @@
 $(eval $(call import.MODULE.defs,CMAKE,cmake))
 $(eval $(call import.CONTRIB.defs,CMAKE))
 
-CMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/cmake-3.3.2.tar.gz
-CMAKE.FETCH.md5 = 5febbd11bcaac854a27eebaf4a124be2
+CMAKE.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/cmake-3.3.2.tar.gz
+CMAKE.FETCH.url += https://cmake.org/files/v3.3/cmake-3.3.2.tar.gz
+CMAKE.FETCH.md5 =  5febbd11bcaac854a27eebaf4a124be2
 
 CMAKE.CONFIGURE.deps =
 CMAKE.CONFIGURE.shared =
