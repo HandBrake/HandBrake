@@ -1,4 +1,4 @@
-__deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX
+__deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX LAME
 ifeq (1,$(FEATURE.qsv))
 __deps__ += PTHREADW32 LIBMFX
 endif
