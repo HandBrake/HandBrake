@@ -53,6 +53,8 @@ class Fetch(object):
             self.verbosef('  deny_url:       %s\n' % None)
 
     def run(self):
+        if not self.urls:
+            self.errln('no URLs specified')
         files = []
         for url in self.urls:
             files.append(self._process_url(url))
@@ -60,10 +62,15 @@ class Fetch(object):
         for file in files:
             file.dump(index)
             index += 1
+        canon = files[0].filename
         for file in files:
-            if file.run():
+            if file.filename != canon:
+                self.errln('URL basename is not consistent')
+        scan = os.access(canon, os.F_OK)
+        for file in files:
+            if file.run(scan):
                 return
-        self.errln('download failed.')
+        self.errln('%s failed.' % ('scan' if scan else 'download'))
 
     def errln(self, format, *args):
         s = (format % args)
@@ -91,6 +98,8 @@ class Fetch(object):
         props = {}
         index = 0
         while True:
+            ## optional per-URL properties
+            ## [key=value][...]URL
             m = re.match('(\[(\w+)=([^]]+)\])?(.*)', url[index:])
             if not m.group(1):
                 break
@@ -103,7 +112,7 @@ class Fetch(object):
 class File(object):
     def __init__(self, url, **kwargs):
         self.url = url
-        self.md5 = kwargs.get('md5', fetch.options.md5)
+        self.props = kwargs # not currently used
         self.filename = os.path.join(fetch.options.output_dir,os.path.basename(urlparse(self.url).path))
         self.active = True
         self.active_descr = 'default'
@@ -112,15 +121,14 @@ class File(object):
 
     def dump(self, index):
         fetch.verbosef('URL[%d]: %s\n' % (index,self.url))
-        fetch.verbosef('  MD5: %s\n' % self.md5)
         fetch.verbosef('  filename: %s\n' % self.filename)
         fetch.verbosef('  active: %s (%s)\n' % ('yes' if self.active else 'no',self.active_descr))
 
-    def run(self):
+    def run(self, scan):
         if not self.active:
             return False
         try:
-            if self._download():
+            if (self._scan() if scan else self._download()):
                 return True
         except Exception, x:
             if fetch.options.verbose:
@@ -185,15 +193,15 @@ class File(object):
             os.unlink(ftmp)
             return False
 
-        if not fetch.options.disable_md5 and self.md5 and self.md5 == hasher.hexdigest():
+        if not fetch.options.disable_md5 and fetch.options.md5 and fetch.options.md5 == hasher.hexdigest():
             s = ' (verified)'
         else:
             s = ''
 
         fetch.infof("downloaded '%s' - %d bytes - %s%s\n" % (self.filename,data_total,hasher.hexdigest(),s))
-        if not fetch.options.disable_md5 and self.md5 and self.md5 != hasher.hexdigest():
+        if not fetch.options.disable_md5 and fetch.options.md5 and fetch.options.md5 != hasher.hexdigest():
             os.unlink(ftmp)
-            raise RuntimeError("expected MD5 hash '%s', got '%s'" % (self.md5, hasher.hexdigest()))
+            raise RuntimeError("expected MD5 hash '%s', got '%s'" % (fetch.options.md5, hasher.hexdigest()))
 
         if os.access(self.filename, os.F_OK) and not os.access(self.filename, os.W_OK):
             os.unlink(ftmp)
@@ -203,7 +211,31 @@ class File(object):
             os.rename(ftmp,self.filename)
         except:
             os.unlink(ftmp)
+        return True
 
+    def _scan(self):
+        fetch.infof('scanning %s\n' % self.filename)
+        hasher = hashlib.md5()
+        try:
+            o = open(self.filename, 'r')
+            data_total = 0
+            while True:
+                data = o.read(65536)
+                if not data:
+                    break
+                hasher.update(data)
+                data_total += len(data)
+        finally:
+            o.close()
+
+        if not fetch.options.disable_md5 and fetch.options.md5 and fetch.options.md5 == hasher.hexdigest():
+            s = ' (verified)'
+        else:
+            s = ''
+
+        fetch.infof("scanned '%s' - %d bytes - %s%s\n" % (self.filename,data_total,hasher.hexdigest(),s))
+        if not fetch.options.disable_md5 and fetch.options.md5 and fetch.options.md5 != hasher.hexdigest():
+            raise RuntimeError("expected MD5 hash '%s', got '%s'" % (fetch.options.md5, hasher.hexdigest()))
         return True
 
 ###############################################################################

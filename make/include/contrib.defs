@@ -34,6 +34,15 @@ define import.CONTRIB.defs
     endef
 
     ##
+    ## target: verify
+    ##
+    $(1).VERIFY.target = $$($(1).build/).stamp.verify
+    define $(1).VERIFY
+        $$(FETCH.exe) --config $(BUILD/)fetch.cfg --output-dir $$(dir $$($(1).FETCH.tar)) $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) $$($(1).FETCH.url)
+        $$(TOUCH.exe) $$@
+    endef
+
+    ##
     ## target: extract
     ##
     $(1).EXTRACT.tarbase = $$(strip $$(foreach x,tar.bz2 tar.gz,$$(patsubst %.$$(x),%,$$(filter %.$$(x),$$(notdir $$($(1).FETCH.url))))))
@@ -213,7 +222,22 @@ define import.CONTRIB.rules
 $($(1).name).fetch: $$($(1).FETCH.target)
 
 $$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
-	$$($(1).FETCH)
+	@$$($(1).FETCH)
+
+##
+## target: verify
+##
+$($(1).name).verify: $$($(1).VERIFY.target)
+
+$$($(1).VERIFY.target): | $$(dir $$($(1).VERIFY.target))
+$$($(1).VERIFY.target): $$($(1).FETCH.target)
+	@$$($(1).VERIFY)
+
+$($(1).name).verify.touch:
+	$$(TOUCH.exe) $$($(1).VERIFY.target)
+
+$($(1).name).verify.untouch:
+	$$(RM.exe) -f $$($(1).VERIFY.target)
 
 ##
 ## target: extract
@@ -222,7 +246,7 @@ $$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
 $($(1).name).extract: $$($(1).EXTRACT.target)
 
 $$($(1).EXTRACT.target): | $$(dir $$($(1).EXTRACT.target))
-$$($(1).EXTRACT.target): $$($(1).FETCH.target)
+$$($(1).EXTRACT.target): $$($(1).VERIFY.target)
 	$$($(1).EXTRACT)
 
 $($(1).name).extract.touch:
@@ -320,6 +344,7 @@ $($(1).name): $($(1).name).build
 ## participate with global convenience targets
 ##
 contrib.fetch: $($(1).name).fetch
+contrib.verify: $($(1).name).verify
 contrib.extract: $($(1).name).extract
 contrib.patch: $($(1).name).patch
 contrib.configure: $($(1).name).configure
