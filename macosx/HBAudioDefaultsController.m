@@ -8,7 +8,7 @@
 #import "HBAudioDefaults.h"
 #import "HBLanguagesSelection.h"
 
-static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
+static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 @interface HBAudioDefaultsController ()
 
@@ -40,7 +40,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBAudioDefaultsContex];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBAudioDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {
@@ -50,7 +50,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBAudioDefaultsContex)
+    if (context == HBAudioDefaultsContext)
     {
         if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
         {
@@ -96,7 +96,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 - (void)dealloc
 {
     @try {
-        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
+        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly" context:HBAudioDefaultsContext];
     } @catch (NSException * __unused exception) {}
 
 }

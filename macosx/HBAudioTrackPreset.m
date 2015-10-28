@@ -227,9 +227,9 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 #pragma mark - Options
 
-- (NSArray *)encoders
+- (NSArray<NSString *> *)encoders
 {
-    NSMutableArray *encoders = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *encoders = [[NSMutableArray alloc] init];
     for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
          audio_encoder != NULL;
          audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
@@ -239,9 +239,9 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     return encoders;
 }
 
-- (NSArray *)mixdowns
+- (NSArray<NSString *> *)mixdowns
 {
-    NSMutableArray *mixdowns = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *mixdowns = [[NSMutableArray alloc] init];
     for (const hb_mixdown_t *mixdown = hb_mixdown_get_next(NULL);
          mixdown != NULL;
          mixdown  = hb_mixdown_get_next(mixdown))
@@ -254,9 +254,9 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     return mixdowns;
 }
 
-- (NSArray *)samplerates
+- (NSArray<NSString *> *)sampleRates
 {
-    NSMutableArray *samplerates = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *sampleRates = [[NSMutableArray alloc] init];
     for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
          audio_samplerate != NULL;
          audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
@@ -264,30 +264,30 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
         int rate = audio_samplerate->rate;
         if (rate == hb_audio_samplerate_get_best(self.encoder, rate, NULL))
         {
-            [samplerates addObject:@(audio_samplerate->name)];
+            [sampleRates addObject:@(audio_samplerate->name)];
         }
     }
-    return samplerates;
+    return sampleRates;
 }
 
-- (NSArray *)bitrates
+- (NSArray<NSString *> *)bitRates
 {
     int minBitRate = 0;
     int maxBitRate = 0;
 
     hb_audio_bitrate_get_limits(self.encoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
 
-    NSMutableArray *bitrates = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *bitRates = [[NSMutableArray alloc] init];
     for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
          audio_bitrate != NULL;
          audio_bitrate  = hb_audio_bitrate_get_next(audio_bitrate))
     {
         if (audio_bitrate->rate >= minBitRate && audio_bitrate->rate <= maxBitRate)
         {
-            [bitrates addObject:@(audio_bitrate->name)];
+            [bitRates addObject:@(audio_bitrate->name)];
         }
     }
-    return bitrates;
+    return bitRates;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
@@ -304,6 +304,14 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
 
     return retval;
+}
+
+- (void)setNilValueForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"drc"] || [key isEqualToString:@"gain"])
+    {
+        [self setValue:@0 forKey:key];
+    }
 }
 
 #pragma mark - NSCopying
@@ -371,7 +379,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 #pragma mark - Value Trasformers
 
-@implementation HBEncoderTrasformer
+@implementation HBEncoderTransformer
 
 + (Class)transformedValueClass
 {
@@ -403,7 +411,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 @end
 
-@implementation HBMixdownTrasformer
+@implementation HBMixdownTransformer
 
 + (Class)transformedValueClass
 {
@@ -435,7 +443,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 @end
 
-@implementation HBSampleRateTrasformer
+@implementation HBSampleRateTransformer
 
 + (Class)transformedValueClass
 {
@@ -472,7 +480,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
 
 @end
 
-@implementation HBIntegerTrasformer
+@implementation HBIntegerTransformer
 
 + (Class)transformedValueClass
 {

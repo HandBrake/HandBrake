@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, HBAudioTrackSelectionBehavior) {
 @property(nonatomic, readwrite) int encoderFallback;
 @property(nonatomic, readwrite) BOOL secondaryEncoderMode;
 
-@property(nonatomic, readonly) NSArray *audioEncoderFallbacks;
+@property(nonatomic, readonly) NSArray<NSString *> *audioEncoderFallbacks;
 
 - (void)validateEncoderFallbackForVideoContainer:(int)container;
 

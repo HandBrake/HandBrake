@@ -148,9 +148,9 @@
     _secondaryEncoderMode = secondaryEncoderMode;
 }
 
-- (NSArray *)audioEncoderFallbacks
+- (NSArray<NSString *> *)audioEncoderFallbacks
 {
-    NSMutableArray *fallbacks = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *fallbacks = [[NSMutableArray alloc] init];
     for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
          audio_encoder != NULL;
          audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
@@ -452,6 +452,7 @@
         copy->_allowFLACPassthru = _allowFLACPassthru;
 
         copy->_encoderFallback = _encoderFallback;
+        copy->_container = _container;
         copy->_secondaryEncoderMode = _secondaryEncoderMode;
     }
     
@@ -467,7 +468,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBAudioDefaultsVersion"];
+    [coder encodeInt:2 forKey:@"HBAudioDefaultsVersion"];
 
     encodeInteger(_trackSelectionBehavior);
     encodeObject(_trackSelectionLanguages);
@@ -484,6 +485,7 @@
     encodeBool(_allowFLACPassthru);
 
     encodeInt(_encoderFallback);
+    encodeInt(_container);
     encodeBool(_secondaryEncoderMode);
 }
 
@@ -506,6 +508,7 @@
     decodeBool(_allowFLACPassthru);
 
     decodeInt(_encoderFallback);
+    decodeInt(_container);
     decodeBool(_secondaryEncoderMode);
 
     return self;

@@ -32,10 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Arrays of possible options for the track properties.
  */
-@property (nonatomic, readonly) NSArray *encoders;
-@property (nonatomic, readonly) NSArray *mixdowns;
-@property (nonatomic, readonly) NSArray *samplerates;
-@property (nonatomic, readonly) NSArray *bitrates;
+@property (nonatomic, readonly) NSArray<NSString *> *encoders;
+@property (nonatomic, readonly) NSArray<NSString *> *mixdowns;
+@property (nonatomic, readonly) NSArray<NSString *> *sampleRates;
+@property (nonatomic, readonly) NSArray<NSString *> *bitRates;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
@@ -47,14 +47,14 @@ NS_ASSUME_NONNULL_END
  *  A series of value trasformers to bridge the libhb enums
  *  to the textual rapresentations used in the interface.
  */
-@interface HBEncoderTrasformer : NSValueTransformer
+@interface HBEncoderTransformer : NSValueTransformer
 @end
 
-@interface HBMixdownTrasformer : NSValueTransformer
+@interface HBMixdownTransformer : NSValueTransformer
 @end
 
-@interface HBSampleRateTrasformer : NSValueTransformer
+@interface HBSampleRateTransformer : NSValueTransformer
 @end
 
-@interface HBIntegerTrasformer : NSValueTransformer
+@interface HBIntegerTransformer : NSValueTransformer
 @end
