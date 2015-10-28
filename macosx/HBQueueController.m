@@ -44,7 +44,7 @@
 
 @property (nonatomic, readonly) NSMutableDictionary *descriptions;
 
-@property (nonatomic, readonly) HBDistributedArray *jobs;
+@property (nonatomic, readonly) HBDistributedArray<HBJob *> *jobs;
 @property (nonatomic)   HBJob *currentJob;
 @property (nonatomic)   HBJobOutputFileWriter *currentLog;
 
@@ -53,7 +53,7 @@
 @property (nonatomic, readwrite) NSUInteger pendingItemsCount;
 @property (nonatomic, readwrite) NSUInteger completedItemsCount;
 
-@property (nonatomic) NSArray *dragNodesArray;
+@property (nonatomic) NSArray<HBJob *> *dragNodesArray;
 
 @end
 
@@ -213,10 +213,13 @@
     [self addJobsFromArray:@[item]];
 }
 
-- (void)addJobsFromArray:(NSArray *)items;
+- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
 {
     NSParameterAssert(items);
-    [self addQueueItems:items];
+    if (items.count)
+    {
+        [self addQueueItems:items];
+    }
 }
 
 - (BOOL)jobExistAtURL:(NSURL *)url
@@ -937,7 +940,7 @@
         if ([targetedRows containsIndexes:workingIndexes])
         {
             [targetedRows removeIndexes:workingIndexes];
-            NSArray *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
+            NSArray<HBJob *> *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
                 return item.state == HBJobStateWorking;
             }];
 

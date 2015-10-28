@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, HBDistributedArrayContent) {
  *
  *  It is safe to keep a reference to an array object.
  */
-@interface HBDistributedArray : NSMutableArray
+@interface HBDistributedArray<ObjectType> : NSMutableArray
 
 - (instancetype)initWithURL:(NSURL *)fileURL;
 

@@ -38,7 +38,7 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 {
     @try
     {
-        [self removeObserver:self forKeyPath:@"self.picture.modulus"];
+        [self removeObserver:self forKeyPath:@"self.picture.modulus" context:HBPictureViewControllerContext];
     }
     @catch (NSException * __unused exception) {}
 }
@@ -64,7 +64,7 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 {
     if (context == HBPictureViewControllerContext)
     {
-        // Set the increment here, it's not possible with bidings.
+        // Set the increment here, it's not possible with bindings.
         if ([keyPath isEqualToString:@"self.picture.modulus"])
         {
             [self.widthStepper setIncrement:self.picture.modulus];

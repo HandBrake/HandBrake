@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;
 
 - (void)addJob:(HBJob *)item;
-- (void)addJobsFromArray:(NSArray *)items;
+- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
 
 - (BOOL)jobExistAtURL:(NSURL *)url;
 

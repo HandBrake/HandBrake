@@ -54,7 +54,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     {
         for (NSString *keyPath in observerdKeyPaths)
         {
-            [self removeObserver:self forKeyPath:keyPath];
+            [self removeObserver:self forKeyPath:keyPath context:HBPictureControllerContext];
         }
 
     } @catch (NSException * __unused exception) {}

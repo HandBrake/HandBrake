@@ -52,9 +52,9 @@
 NSString *HBDistributedArrayChanged = @"HBDistributedArrayChanged";
 NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
-@interface HBDistributedArray ()
+@interface HBDistributedArray<ObjectType> ()
 
-@property (nonatomic, readonly) NSMutableArray *array;
+@property (nonatomic, readonly) NSMutableArray<ObjectType> *array;
 @property (nonatomic, readonly) NSURL *fileURL;
 @property (nonatomic, readwrite) NSTimeInterval modifiedTime;
 

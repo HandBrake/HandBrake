@@ -8,7 +8,7 @@
 #import "HBSubtitlesDefaults.h"
 #import "HBLanguagesSelection.h"
 
-static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
+static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 
 @interface HBSubtitlesDefaultsController ()
 
@@ -36,7 +36,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContex];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {
@@ -46,7 +46,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBSubtitlesDefaultsContex)
+    if (context == HBSubtitlesDefaultsContext)
     {
         if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
         {
@@ -77,7 +77,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 - (void)dealloc
 {
     @try {
-        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
+        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly" context:HBSubtitlesDefaultsContext];
     } @catch (NSException * __unused exception) {}
 }
 
