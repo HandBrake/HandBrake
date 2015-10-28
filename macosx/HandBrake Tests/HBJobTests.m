@@ -66,7 +66,7 @@
 
 - (void)testAudio
 {
-    XCTAssertEqual(self.job.audio.tracks.count, 2);
+    XCTAssertGreaterThan(self.job.audio.tracks.count, 1);
 }
 
 - (void)testPictureSize
