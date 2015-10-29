@@ -32,4 +32,3 @@ struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
                    int flags);
-int hb_avpicture_fill(AVPicture *pic, hb_buffer_t *buf);

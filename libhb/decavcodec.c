@@ -920,8 +920,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             h != context->height)
         {
             // have to convert to our internal color space and/or rescale
-            AVPicture dstpic;
-            hb_avpicture_fill(&dstpic, buf);
+            uint8_t * data[4];
+            int       stride[4];
+            hb_picture_fill(data, stride, buf);
 
             if (pv->sws_context == NULL            ||
                 pv->sws_width   != context->width  ||
@@ -941,8 +942,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             }
             sws_scale(pv->sws_context,
                       (const uint8_t* const *)pv->frame->data,
-                      pv->frame->linesize,
-                      0, context->height, dstpic.data, dstpic.linesize);
+                      pv->frame->linesize, 0, context->height, data, stride);
         }
         else
         {

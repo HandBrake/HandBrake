@@ -158,19 +158,16 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
 /* OpenCL */
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 {
-    AVPicture           pic_in;
-    AVPicture           pic_out;
-    AVPicture           pic_crop;
     hb_buffer_t * out;
-    out = hb_video_buffer_init( pv->width_out, pv->height_out );
+    uint8_t     * crop_data[4], * out_data[4];
+    int           crop_stride[4], out_stride[4];
 
-    hb_avpicture_fill( &pic_in, in );
-    hb_avpicture_fill( &pic_out, out );
+    out = hb_video_buffer_init( pv->width_out, pv->height_out );
+    hb_picture_fill(out_data, out_stride, out);
 
     // Crop; this alters the pointer to the data to point to the
     // correct place for cropped frame
-    av_picture_crop( &pic_crop, &pic_in, in->f.fmt,
-                     pv->crop[0], pv->crop[2] );
+    hb_picture_crop(crop_data, crop_stride, in, pv->crop[0], pv->crop[2]);
 
     // Use bicubic OpenCL scaling when selected and when downsampling < 4:1;
     if ((pv->job->use_opencl && pv->job->title->opencl_support) &&
@@ -193,10 +190,11 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
                 sws_freeContext(pv->context);
             }
             
-            pv->context = hb_sws_get_context(in->f.width  - (pv->crop[2] + pv->crop[3]),
-                                             in->f.height - (pv->crop[0] + pv->crop[1]),
-                                             in->f.fmt, out->f.width, out->f.height,
-                                             out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND);
+            pv->context = hb_sws_get_context(
+                                in->f.width  - (pv->crop[2] + pv->crop[3]),
+                                in->f.height - (pv->crop[0] + pv->crop[1]),
+                                in->f.fmt, out->f.width, out->f.height,
+                                out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND);
             pv->width_in  = in->f.width;
             pv->height_in = in->f.height;
             pv->pix_fmt   = in->f.fmt;
@@ -208,12 +206,11 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
             return NULL;
         }
 
-        // Scale pic_crop into pic_render according to the
-        // context set up above
+        // Scale crop into out according to the context set up above
         sws_scale(pv->context,
-                  (const uint8_t* const*)pic_crop.data, pic_crop.linesize,
+                  (const uint8_t* const*)crop_data, crop_stride,
                   0, in->f.height - (pv->crop[0] + pv->crop[1]),
-                  pic_out.data, pic_out.linesize);
+                  out_data, out_stride);
     }
 
     out->s = in->s;

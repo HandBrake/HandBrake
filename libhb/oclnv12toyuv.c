@@ -228,10 +228,12 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
     HB_OCL_CHECK(hb_ocl->clEnqueueNDRangeKernel, kenv->command_queue,
                  kenv->kernel, 2, NULL, gdim, NULL, 0, NULL, NULL );
 
-    if( (crop[0] || crop[1] || crop[2] || crop[3]) && (decomb == 0) && (detelecine == 0) )
+    if ((crop[0] || crop[1] || crop[2] || crop[3]) &&
+        (decomb == 0) && (detelecine == 0))
     {
-        AVPicture pic_in;
-        AVPicture pic_crop;
+        uint8_t * crop_data[4];
+        int       crop_stride[4];
+
         hb_ocl->clEnqueueReadBuffer(kenv->command_queue,  dxva2->cl_mem_yuv,
                                     CL_TRUE, 0, in_bytes, dxva2->nv12toyuv_tmp_out,
                                     0, NULL, NULL);
@@ -239,23 +241,29 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
 
         int wmp = in->plane[0].stride;
         int hmp = in->plane[0].height;
-        copy_plane( in->plane[0].data, dxva2->nv12toyuv_tmp_out, wmp, w, hmp );
+        copy_plane(in->plane[0].data, dxva2->nv12toyuv_tmp_out, wmp, w, hmp);
         wmp = in->plane[1].stride;
         hmp = in->plane[1].height;
-        copy_plane( in->plane[1].data, dxva2->nv12toyuv_tmp_out + w * h, wmp, w>>1, hmp );
+        copy_plane(in->plane[1].data, dxva2->nv12toyuv_tmp_out + w * h,
+                   wmp, w >> 1, hmp);
         wmp = in->plane[2].stride;
         hmp = in->plane[2].height;
-        copy_plane( in->plane[2].data, dxva2->nv12toyuv_tmp_out + w * h +( ( w * h )>>2 ), wmp, w>>1, hmp );
+        copy_plane(in->plane[2].data, dxva2->nv12toyuv_tmp_out + w * h +
+                                      ((w * h) >> 2), wmp, w>>1, hmp);
 
-        hb_avpicture_fill( &pic_in, in );
-        av_picture_crop( &pic_crop, &pic_in, in->f.fmt, crop[0], crop[2] );
+        hb_picture_crop(crop_data, crop_stride, in, crop[0], crop[2]);
         int i, ww = w - ( crop[2] + crop[3] ), hh = h - ( crop[0] + crop[1] );
         for( i = 0; i< hh >> 1; i++ )
         {
-            memcpy( dxva2->nv12toyuv_tmp_in + ( ( i << 1 ) + 0 ) * ww, pic_crop.data[0]+ ( ( i << 1 ) + 0 ) * pic_crop.linesize[0], ww );
-            memcpy( dxva2->nv12toyuv_tmp_in + ( ( i << 1 ) + 1 ) * ww, pic_crop.data[0]+ ( ( i << 1 ) + 1 ) * pic_crop.linesize[0], ww );
-            memcpy( dxva2->nv12toyuv_tmp_in + ( ww * hh ) + i * ( ww >> 1 ), pic_crop.data[1] + i * pic_crop.linesize[1], ww >> 1 );
-            memcpy( dxva2->nv12toyuv_tmp_in + ( ww * hh ) + ( ( ww * hh )>>2 ) + i * ( ww >> 1 ), pic_crop.data[2] + i * pic_crop.linesize[2], ww >> 1 );
+            memcpy( dxva2->nv12toyuv_tmp_in + ((i << 1) + 0) * ww,
+                    crop_data[0]+ ((i << 1) + 0) * crop_stride[0], ww );
+            memcpy( dxva2->nv12toyuv_tmp_in + ((i << 1) + 1) * ww,
+                    crop_data[0]+ ((i << 1) + 1) * crop_stride[0], ww );
+            memcpy( dxva2->nv12toyuv_tmp_in + (ww * hh) + i * (ww >> 1),
+                    crop_data[1] + i * crop_stride[1], ww >> 1 );
+            memcpy( dxva2->nv12toyuv_tmp_in + (ww * hh) + ((ww * hh) >> 2) +
+                    i * (ww >> 1),
+                    crop_data[2] + i * crop_stride[2], ww >> 1 );
         }
 
         if( kenv->isAMD )
