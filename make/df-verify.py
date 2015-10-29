@@ -62,7 +62,7 @@ class Tool(hb_distfile.Tool):
 
     def _run(self, error):
         if self.options.disable:
-            self.infof('%s disabled; stop.\n' % self.name)
+            self.infof('%s disabled; nothing to do.\n' % self.name)
             sys.exit(0)
         if len(self.args) != 1:
             self.parser.print_usage()

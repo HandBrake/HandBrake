@@ -64,17 +64,19 @@ class Tool(hb_distfile.Tool):
         self.parser.add_option('--md5', default=None, action='store', metavar='HASH', help='verify MD5 HASH against data')
         self.parser.add_option('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
         self.parser.add_option('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
+        self.parser.add_option('--exhaust-url', default=None, action='store_true', help='try all active distfiles')
         self.parser.add_option('--output', default=None, action='store', metavar='FILE', help='write to FILE')
         self._parse()
 
     def _load_config2(self, parser, data):
-        parser.values.disable    = data['disable-fetch']
-        parser.values.accept_url = data['accept-url']
-        parser.values.deny_url   = data['deny-url']
+        parser.values.disable     = data['disable-fetch']
+        parser.values.accept_url  = data['accept-url']
+        parser.values.deny_url    = data['deny-url']
+        parser.values.exhaust_url = data['exhaust-url']
 
     def _run(self, error):
         if self.options.disable:
-            self.infof('%s disabled; stop.\n' % self.name)
+            self.infof('%s disabled; nothing to do.\n' % self.name)
             sys.exit(0)
         if len(self.args) < 1:
             self.parser.print_usage()
@@ -93,7 +95,8 @@ class Tool(hb_distfile.Tool):
             url = urls.pop(0)
             try:
                 url.download(error)
-                break
+                if not self.options.exhaust_url:
+                    break
             except Exception, x:
                 ## propagate exception if no remaining urls
                 if not urls:
