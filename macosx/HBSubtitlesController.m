@@ -73,11 +73,8 @@
 {
     HBSubtitlesDefaults *defaults = (HBSubtitlesDefaults *)CFBridgingRelease(contextInfo);
 
-    // If things changed, do this ugly
-    // operation to group the changes for the undo manager.
-    if (returnCode)
+    if (returnCode == NSModalResponseOK)
     {
-        defaults.undo = self.subtitles.defaults.undo;
         self.subtitles.defaults = defaults;
     }
     self.defaultsController = nil;

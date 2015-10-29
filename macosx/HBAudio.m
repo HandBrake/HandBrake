@@ -355,6 +355,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setDefaults:_defaults];
     }
     _defaults = defaults;
+    _defaults.undo = self.undo;
 }
 
 - (void)mixdownChanged

@@ -240,6 +240,16 @@ extern NSString *keySubTrackSrtFileURL;
     self.defaults.undo = undo;
 }
 
+- (void)setDefaults:(HBSubtitlesDefaults *)defaults
+{
+    if (defaults != _defaults)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDefaults:_defaults];
+    }
+    _defaults = defaults;
+    _defaults.undo = self.undo;
+}
+
 /**
  *  Convenience method to add a track to subtitlesArray.
  *

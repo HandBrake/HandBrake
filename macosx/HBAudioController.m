@@ -57,11 +57,8 @@
 {
     HBAudioDefaults *defaults = (HBAudioDefaults *)CFBridgingRelease(contextInfo);
 
-    // If things changed, do this ugly
-    // operation to group the changes for the undo manager.
-    if (returnCode)
+    if (returnCode == NSModalResponseOK)
     {
-        defaults.undo = self.audio.defaults.undo;
         self.audio.defaults = defaults;
     }
     self.defaultsController = nil;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15C27e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
@@ -156,10 +156,10 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="sC2-52-liU">
-                        <rect key="frame" x="744" y="14" width="54" height="28"/>
+                        <rect key="frame" x="718" y="14" width="80" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <animations/>
-                        <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
+                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -167,7 +167,7 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="done:" target="-2" id="Rdg-PN-7l6"/>
+                            <action selector="ok:" target="-2" id="pNO-TU-osz"/>
                             <outlet property="nextKeyView" destination="oiD-QI-wly" id="1gO-sY-HNE"/>
                         </connections>
                     </button>
@@ -488,7 +488,6 @@ DQ
                                                                 <menu key="menu" id="xhO-vr-WJF"/>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="5No-Mm-bpD" name="content" keyPath="objectValue.sampleRates" id="adb-9q-L5r"/>
                                                                 <binding destination="5No-Mm-bpD" name="enabled" keyPath="objectValue.mixdownEnabled" id="E9O-S2-Uq8"/>
                                                                 <binding destination="5No-Mm-bpD" name="selectedValue" keyPath="objectValue.sampleRate" previousBinding="adb-9q-L5r" id="DxT-bF-prJ">
                                                                     <dictionary key="options">
@@ -496,6 +495,7 @@ DQ
                                                                         <string key="NSValueTransformerName">HBSampleRateTransformer</string>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="5No-Mm-bpD" name="content" keyPath="objectValue.sampleRates" id="adb-9q-L5r"/>
                                                             </connections>
                                                         </popUpButton>
                                                     </subviews>
@@ -530,13 +530,13 @@ DQ
                                                                 <menu key="menu" id="pWk-70-S7v"/>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="Bxd-gI-dFS" name="content" keyPath="objectValue.bitRates" id="aT6-o7-lFG"/>
-                                                                <binding destination="Bxd-gI-dFS" name="enabled" keyPath="objectValue.bitrateEnabled" id="paa-Sa-JU9"/>
                                                                 <binding destination="Bxd-gI-dFS" name="selectedValue" keyPath="objectValue.bitRate" previousBinding="aT6-o7-lFG" id="CSr-pu-s9O">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">HBIntegerTransformer</string>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="Bxd-gI-dFS" name="content" keyPath="objectValue.bitRates" id="aT6-o7-lFG"/>
+                                                                <binding destination="Bxd-gI-dFS" name="enabled" keyPath="objectValue.bitrateEnabled" id="paa-Sa-JU9"/>
                                                             </connections>
                                                         </popUpButton>
                                                     </subviews>
@@ -677,13 +677,28 @@ DQ
                             <binding destination="-2" name="value" keyPath="self.settings.secondaryEncoderMode" id="Umc-CV-pJy"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" id="kJY-av-BYf">
+                        <rect key="frame" x="640" y="14" width="80" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jn4-1L-J1g">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="Vkr-zh-YAJ"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <animations/>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
             </connections>
-            <point key="canvasLocation" x="-205.5" y="81"/>
+            <point key="canvasLocation" x="187.5" y="96"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>

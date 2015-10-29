@@ -64,14 +64,17 @@ static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
     self.tableController.showSelectedOnly = !self.tableController.showSelectedOnly;
 }
 
-- (IBAction)done:(id)sender
+- (IBAction)ok:(id)sender
+{
+    self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseOK];
+}
+
+- (IBAction)cancel:(id)sender
 {
     [self.window orderOut:nil];
-    if (self.window.undoManager.canUndo)
-    {
-        self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
-    }
-    [NSApp endSheet:self.window returnCode:self.window.undoManager.canUndo];
+    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (void)dealloc
