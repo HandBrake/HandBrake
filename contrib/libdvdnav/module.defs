@@ -1,12 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,PKGCONFIG LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.1-0-gaa3659d.tar.gz
-LIBDVDNAV.FETCH.md5 = 1fb10188c7a33f480011d3ddf32553c7
+LIBDVDNAV.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.1.tar.bz2
+LIBDVDNAV.FETCH.url += http://download.videolan.org/pub/videolan/libdvdnav/5.0.1/libdvdnav-5.0.1.tar.bz2
+LIBDVDNAV.FETCH.md5 =  81e30fb57eaf9f61aa6513a7bd85bd74
 
-# TODO: Upstream archive differs, libdvdnav 5.0.3 is latest
-#LIBDVDNAV.FETCH.url = http://download.videolan.org/pub/videolan/libdvdnav/5.0.1/libdvdnav-5.0.1.tar.bz2
-#LIBDVDNAV.FETCH.md5 = 81e30fb57eaf9f61aa6513a7bd85bd74
+# TODO: libdvdnav 5.0.3 is latest
 #LIBDVDNAV.FETCH.url = http://download.videolan.org/pub/videolan/libdvdnav/5.0.3/libdvdnav-5.0.3.tar.bz2
 #LIBDVDNAV.FETCH.md5 = e9ea4de3bd8f204e61301d407d09f033
 

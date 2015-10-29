@@ -1,12 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
-LIBICONV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libiconv-1.13.tar.bz2
-LIBICONV.FETCH.md5 = 9c8b41b77f508edf72e26b406e873a2f
+LIBICONV.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libiconv-1.13.tar.gz
+LIBICONV.FETCH.url += http://ftp.gnu.org/gnu/libiconv/libiconv-1.13.tar.gz
+LIBICONV.FETCH.md5 =  048032a3032ebd182150bdee30a5d533
 
-# TODO: Upstream no longer provides bzip2 archives, libiconv 1.14 is latest
-#LIBICONV.FETCH.url = http://ftp.gnu.org/gnu/libiconv/libiconv-1.13.tar.gz
-#LIBICONV.FETCH.md5 = 048032a3032ebd182150bdee30a5d533
+# TODO: libiconv 1.14 is latest
 #LIBICONV.FETCH.url = http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
 #LIBICONV.FETCH.md5 = e34509b1623cec449dfeb73d7ce9c6c6
 
