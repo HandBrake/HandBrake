@@ -14,7 +14,9 @@ import json
 import optparse
 import os
 import platform
+import random
 import re
+import string
 import subprocess
 import sys
 import time
@@ -128,7 +130,7 @@ class Configure( object ):
         dir = os.path.dirname( args[0] )
         if len(args) > 1 and args[1].find('w') != -1:
             self.mkdirs( dir )
-        m = re.match( '^(.*)\.tmp$', args[0] )
+        m = re.match( '^(.*)\.tmp\..{8}$', args[0] )
         if m:
             self.infof( 'write: %s\n', m.group(1) )
         else:
@@ -209,6 +211,10 @@ class Configure( object ):
         ## special case if src == build: add build subdir
         if os.path.abspath( self.src_dir ) == os.path.abspath( self.build_dir ):
             self.build_dir = os.path.join( self.build_dir, 'build' )
+
+    ## generate a temporary filename - not worried about race conditions
+    def mktmpname( self, filename ):
+        return filename + '.tmp.' + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
 
 ###############################################################################
 ##
@@ -1153,7 +1159,7 @@ class ConfigDocument:
         else:
             raise ValueError, 'unknown file type: ' + type
 
-        ftmp  = fname + '.tmp'
+        ftmp = cfg.mktmpname(fname)
         try:
             try:
                 file = cfg.open( ftmp, 'w' )
@@ -1177,16 +1183,16 @@ class ConfigDocument:
 
 ###############################################################################
 
-def encodeFetchConfig():
-    fname = 'fetch.cfg'
-    ftmp = fname + '.tmp'
-    data = [
-        options.verbose_fetch,
-        options.disable_fetch,
-        options.disable_fetch_md5,
-        options.accept_fetch_url,
-        options.deny_fetch_url,
-    ]
+def encodeDistfileConfig():
+    fname = 'distfile.cfg'
+    ftmp = cfg.mktmpname(fname)
+    data = {
+        'disable-fetch':  options.disable_df_fetch,
+        'disable-verify': options.disable_df_verify,
+        'verbosity':      options.df_verbosity,
+        'accept-url':     options.df_accept_url,
+        'deny-url':       options.df_deny_url,
+    }
     try:
         try:
             file = cfg.open( ftmp, 'w' )
@@ -1252,13 +1258,13 @@ def createCLI():
     cli.add_option( '--force', default=False, action='store_true', help='overwrite existing build config' )
     cli.add_option( '--verbose', default=False, action='store_true', help='increase verbosity' )
 
-    ## add fetch options
-    grp = OptionGroup( cli, 'Fetch Options' )
-    grp.add_option( '--verbose-fetch', default=False, action='store_true', help='increase fetch verbosity' )
-    grp.add_option( '--disable-fetch', default=False, action='store_true', help='disable automatic downloads of 3rd-party distributions' )
-    grp.add_option( '--disable-fetch-md5', default=False, action='store_true', help='disable MD5 data error detection' )
-    grp.add_option( '--accept-fetch-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern' )
-    grp.add_option( '--deny-fetch-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern' )
+    ## add distfile options
+    grp = OptionGroup( cli, 'Distfile Options' )
+    grp.add_option( '--disable-df-fetch', default=False, action='store_true', help='disable distfile downloads' )
+    grp.add_option( '--disable-df-verify', default=False, action='store_true', help='disable distfile data verification' )
+    grp.add_option( '--df-verbose', default=1, action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
+    grp.add_option( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
+    grp.add_option( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
     cli.add_option_group( grp )
 
     ## add install options
@@ -1929,7 +1935,7 @@ int main ()
     ## perform
     doc.write( 'make' )
     doc.write( 'm4' )
-    encodeFetchConfig()
+    encodeDistfileConfig()
 
     if options.launch:
         Launcher( targets )

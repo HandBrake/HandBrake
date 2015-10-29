@@ -26,11 +26,12 @@ define import.CONTRIB.defs
     ##
     ## target: fetch
     ##
-    $(1).FETCH.tar    = $$(CONTRIB.download/)$$(notdir $$(firstword $$($(1).FETCH.url)))
-    $(1).FETCH.url    = FETCH_IS_UNDEFINED
-    $(1).FETCH.target = $$($(1).FETCH.tar)
+    $(1).FETCH.url      = FETCH_URL_IS_UNDEFINED
+    $(1).FETCH.basename = $$(notdir $$(firstword $$($(1).FETCH.url)))
+    $(1).FETCH.distfile = $$(CONTRIB.download/)$$($(1).FETCH.basename)
+    $(1).FETCH.target   = $$($(1).FETCH.distfile)
     define $(1).FETCH
-        $$(FETCH.exe) --config $(BUILD/)fetch.cfg --output-dir $$(dir $$@) $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) $$($(1).FETCH.url)
+        $$(DF.FETCH.exe) --config $(BUILD/)distfile.cfg $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) --output $$@ $$($(1).FETCH.url)
     endef
 
     ##
@@ -38,19 +39,19 @@ define import.CONTRIB.defs
     ##
     $(1).VERIFY.target = $$($(1).build/).stamp.verify
     define $(1).VERIFY
-        $$(FETCH.exe) --config $(BUILD/)fetch.cfg --output-dir $$(dir $$($(1).FETCH.tar)) $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) $$($(1).FETCH.url)
+        $$(DF.VERIFY.exe) --config $(BUILD/)distfile.cfg $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) $$($(1).FETCH.distfile)
         $$(TOUCH.exe) $$@
     endef
 
     ##
     ## target: extract
     ##
-    $(1).EXTRACT.tarbase = $$(strip $$(foreach x,tar.bz2 tar.gz,$$(patsubst %.$$(x),%,$$(filter %.$$(x),$$(notdir $$($(1).FETCH.url))))))
+    $(1).EXTRACT.tarbase = $$(strip $$(foreach x,tar.bz2 tar.gz,$$(patsubst %.$$(x),%,$$(filter %.$$(x),$$($(1).FETCH.basename)))))
     $(1).EXTRACT.dir/    = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
     $(1).EXTRACT.target  = $$($(1).build/).stamp.extract
     define $(1).EXTRACT
         $$(RM.exe) -fr $$($(1).EXTRACT.dir/)
-        $$(TAR.exe) xfC $$($(1).FETCH.tar) $$($(1).build/)
+        $$(TAR.exe) xfC $$($(1).FETCH.distfile) $$($(1).build/)
         $$(TOUCH.exe) $$@
     endef
 
@@ -345,6 +346,8 @@ $($(1).name): $($(1).name).build
 ##
 contrib.fetch: $($(1).name).fetch
 contrib.verify: $($(1).name).verify
+contrib.verify.touch: $($(1).name).verify.touch
+contrib.verify.untouch: $($(1).name).verify.untouch
 contrib.extract: $($(1).name).extract
 contrib.patch: $($(1).name).patch
 contrib.configure: $($(1).name).configure
