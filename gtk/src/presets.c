@@ -1624,8 +1624,37 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
             replace = TRUE;
         }
     }
+    char * new_name = strdup(name);
+    if (!replace)
+    {
+        // We are creating a new preset.  Make sure there is not
+        // another preset in this folder that has the same name
+        int       ii, count, index = 1;
+        GhbValue *children;
+
+        children = hb_presets_get_folder_children(path);
+        count   = ghb_array_len(children);
+        do
+        {
+            for (ii = 0; ii < count; ii++)
+            {
+                GhbValue   *preset;
+                const char *s;
+
+                preset = ghb_array_get(children, ii);
+                s      = ghb_dict_get_string(preset, "PresetName");
+                if (s != NULL && !strcmp(s, new_name))
+                {
+                    free(new_name);
+                    new_name = g_strdup_printf("%s (%d)", name, index++);
+                    break;
+                }
+            }
+        } while (ii < count);
+    }
     dict = ghb_settings_to_preset(ud->settings);
-    ghb_dict_set_string(dict, "PresetName", name);
+    ghb_dict_set_string(dict, "PresetName", new_name);
+    free(new_name);
     if (replace)
     {
         // Already exists, update its description
