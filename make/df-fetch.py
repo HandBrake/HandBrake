@@ -72,7 +72,6 @@ class Tool(hb_distfile.Tool):
         parser.values.disable     = data['disable-fetch']
         parser.values.accept_url  = data['accept-url']
         parser.values.deny_url    = data['deny-url']
-        parser.values.exhaust_url = data['exhaust-url']
 
     def _run(self, error):
         if self.options.disable:

@@ -1192,7 +1192,6 @@ def encodeDistfileConfig():
         'verbosity':      options.df_verbosity,
         'accept-url':     options.df_accept_url,
         'deny-url':       options.df_deny_url,
-        'exhaust-url':    options.df_exhaust_url,
     }
     try:
         try:
@@ -1266,7 +1265,6 @@ def createCLI():
     grp.add_option( '--df-verbose', default=1, action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
     grp.add_option( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
     grp.add_option( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
-    grp.add_option( '--df-exhaust-url', default=False, action='store_true', help='try all active distfiles' )
     cli.add_option_group( grp )
 
     ## add install options

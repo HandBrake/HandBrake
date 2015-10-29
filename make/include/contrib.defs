@@ -33,6 +33,9 @@ define import.CONTRIB.defs
     define $(1).FETCH
         $$(DF.FETCH.exe) --config $(BUILD/)distfile.cfg $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) --output $$@ $$($(1).FETCH.url)
     endef
+    define $(1).FETCH.test
+        $$(DF.FETCH.exe) --config $(BUILD/)distfile.cfg $$(if $$($(1).FETCH.md5),--md5 $$($(1).FETCH.md5)) --exhaust-url $$($(1).FETCH.url)
+    endef
 
     ##
     ## target: verify
@@ -225,6 +228,9 @@ $($(1).name).fetch: $$($(1).FETCH.target)
 $$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
 	@$$($(1).FETCH)
 
+$($(1).name).fetch.test:
+	@$$($(1).FETCH.test)
+
 ##
 ## target: verify
 ##
@@ -345,6 +351,7 @@ $($(1).name): $($(1).name).build
 ## participate with global convenience targets
 ##
 contrib.fetch: $($(1).name).fetch
+contrib.fetch.test: $($(1).name).fetch.test
 contrib.verify: $($(1).name).verify
 contrib.verify.touch: $($(1).name).verify.touch
 contrib.verify.untouch: $($(1).name).verify.untouch
