@@ -196,6 +196,7 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Category Handling.
+                // TODO maybe for a future release.
             }
         }
 
