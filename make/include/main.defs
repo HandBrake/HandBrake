@@ -22,7 +22,9 @@ ifeq (1,$(FEATURE.local_autotools))
     MODULES += contrib/automake
     MODULES += contrib/libtool
     MODULES += contrib/m4
+ifneq (1,$(FEATURE.local_pkgconfig))
     MODULES += contrib/pkgconfig
+endif
     AUTOTOOL_MODULES = AUTOCONF AUTOMAKE LIBTOOL M4 PKGCONFIG
     HB_TOOLS_PATH = $(call fn.ABSOLUTE,$(CONTRIB.build/)bin)
 else
