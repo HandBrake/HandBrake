@@ -62,11 +62,10 @@ class Tool(hb_distfile.Tool):
 
     def _run(self, error):
         if self.options.disable:
-            self.infof('%s disabled; nothing to do.\n' % self.name)
+            self.infof('%s failure; administratively disabled.\n' % self.name)
             sys.exit(0)
         if len(self.args) != 1:
-            self.parser.print_usage()
-            sys.exit(1)
+            raise error('no file specified')
         filename = self.args[0]
         if self.options.md5:
             error.op = 'verify'
@@ -78,7 +77,7 @@ class Tool(hb_distfile.Tool):
             self.infof('MD5 (%s) = %s (%d bytes)\n', filename, r.md5, r.size)
 
     def run(self):
-        error = hb_distfile.ToolError('run')
+        error = hb_distfile.ToolError(self.name)
         try:
             self._run(error)
         except Exception, x:

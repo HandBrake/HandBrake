@@ -60,7 +60,7 @@ class Tool(hb_distfile.Tool):
         self.parser.prog = self.name
         self.parser.usage = '%prog [OPTIONS] URL...'
         self.parser.description = 'Fetch and verify distfile data integrity.'
-        self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit without error')
+        self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit with error')
         self.parser.add_option('--md5', default=None, action='store', metavar='HASH', help='verify MD5 HASH against data')
         self.parser.add_option('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
         self.parser.add_option('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
@@ -75,11 +75,7 @@ class Tool(hb_distfile.Tool):
 
     def _run(self, error):
         if self.options.disable:
-            self.infof('%s disabled; nothing to do.\n' % self.name)
-            sys.exit(0)
-        if len(self.args) < 1:
-            self.parser.print_usage()
-            sys.exit(1)
+            raise error('administratively disabled')
         ## create URL objects and keep active
         urls = []
         i = 0
@@ -90,6 +86,8 @@ class Tool(hb_distfile.Tool):
             i += 1
         ## try each URL until first success
         error.op = 'download'
+        if not urls:
+            raise error('nothing to download')
         while urls:
             url = urls.pop(0)
             try:
@@ -103,7 +101,7 @@ class Tool(hb_distfile.Tool):
                 self.errln('%s failure; %s' % (error.op,x))
 
     def run(self):
-        error = hb_distfile.ToolError('run')
+        error = hb_distfile.ToolError(self.name)
         try:
             self._run(error)
         except Exception, x:
@@ -130,7 +128,7 @@ class URL(object):
         index = 0
         for spec in tool.options.accept_url:
             if re.search(spec, self.url):
-                self.rule = 'via accept rule %d: %s' % (index,spec)
+                self.rule = 'via accept rule[%d]: %s' % (index,spec)
                 return
             index += 1
         self.active = False
@@ -141,7 +139,7 @@ class URL(object):
         for spec in tool.options.deny_url:
             if re.search(spec, self.url):
                 self.active = False
-                self.rule = 'via deny rule %d: %s' % (index,spec)
+                self.rule = 'via deny rule[%d]: %s' % (index,spec)
                 return
             index += 1
 
