@@ -73,11 +73,6 @@ namespace HandBrakeWPF.Services.Presets
         }
 
         /// <summary>
-        /// Gets or sets LastPresetAdded.
-        /// </summary>
-        public Preset LastPresetAdded { get; set; }
-
-        /// <summary>
         /// Gets the DefaultPreset.
         /// </summary>
         public Preset DefaultPreset
@@ -118,10 +113,9 @@ namespace HandBrakeWPF.Services.Presets
         /// </returns>
         public bool Add(Preset preset)
         {
-            if (this.CheckIfPresetExists(preset.Name) == false)
+            if (!this.CheckIfPresetExists(preset.Name))
             {
                 this.presets.Add(preset);
-                this.LastPresetAdded = preset;
 
                 // Update the presets file
                 this.SavePresetFiles();
@@ -140,12 +134,11 @@ namespace HandBrakeWPF.Services.Presets
         /// </param>
         public void Import(string filename)
         {
-            // TODO needs a tidy up but will do for now.
             if (!string.IsNullOrEmpty(filename))
             {
                 PresetTransportContainer container = HandBrakePresetService.GetPresetFromFile(filename);
 
-                if (container == null || container.PresetList == null || container.PresetList.Count == 0)
+                if (container?.PresetList == null || container.PresetList.Count == 0)
                 {
                     this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
                     return;
@@ -181,11 +174,9 @@ namespace HandBrakeWPF.Services.Presets
                             return;
                         }
 
-                        // TODO Better version checking.
-
-                        if (this.CheckIfPresetExists(preset.Name))
+                                                if (this.CheckIfPresetExists(preset.Name))
                         {
-                            if (!CanUpdatePreset(preset.Name))
+                            if (!this.CanUpdatePreset(preset.Name))
                             {
                                 MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
@@ -194,12 +185,12 @@ namespace HandBrakeWPF.Services.Presets
                             MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
                             if (result == MessageBoxResult.Yes)
                             {
-                                Update(preset);
+                                this.Update(preset);
                             }
                         }
                         else
                         {
-                            Add(preset);
+                            this.Add(preset);
                         }
                     }
                 }
@@ -360,8 +351,7 @@ namespace HandBrakeWPF.Services.Presets
                 foreach (var hbpreset in category.ChildrenArray)
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-                    preset.Version = VersionHelper.GetVersion();
-                    preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
+                    preset.IsBuildIn = true; 
                     preset.Category = category.PresetName;
 
                     if (preset.Name == "iPod")
@@ -432,7 +422,7 @@ namespace HandBrakeWPF.Services.Presets
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string RecoverFromCorruptedPresetFile(string file)
+        private string RecoverFromCorruptedPresetFile(string file)
         {
             try
             {
@@ -448,6 +438,32 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 return disabledFile;
+            }
+            catch (IOException)
+            {
+                // Give up
+            }
+
+            return "Sorry, the archiving failed.";
+        }
+
+        /// <summary>
+        /// Archive the presets file without deleting it.
+        /// </summary>
+        /// <param name="file">The filename to archive</param>
+        /// <returns>The archived filename</returns>
+        private string ArchivePresetFile(string file)
+        {
+            try
+            {
+                // Recover from Error.
+                string archiveFile = string.Format("{0}.{1}", file, GeneralUtilities.ProcessId);
+                if (File.Exists(file))
+                {
+                    File.Copy(file, archiveFile);
+                }
+
+                return archiveFile;
             }
             catch (IOException)
             {
@@ -476,18 +492,34 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Otherwise, we already have a file, so lets try load it.
+                bool versionCheckChange = false;
                 using (StreamReader reader = new StreamReader(this.presetFile))
                 {
                     // New Preset Format.
-                    PresetTransportContainer container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
+                    PresetTransportContainer container = null;
+                    try
+                    {
+                        container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
 
                     // Sanity Check. Did the container deserialise.
-                    if (container == null)
+                    if (container?.PresetList == null)
                     {
                         // Close and Dispose of early.
                         reader.Close();
                         reader.Dispose();
-                        RecoverFromCorruptedPresetFile(this.presetFile);
+
+                        string filename = this.RecoverFromCorruptedPresetFile(this.presetFile);
+                        this.errorService.ShowMessageBox(
+                           Resources.PresetService_UnableToLoadPresets + filename,
+                           Resources.PresetService_UnableToLoad,
+                           MessageBoxButton.OK,
+                           MessageBoxImage.Exclamation);
+                     
                         this.UpdateBuiltInPresets();
                         return;
                     }
@@ -497,17 +529,15 @@ namespace HandBrakeWPF.Services.Presets
                     // incase something goes wrong.
                     if (container.VersionMajor != Constants.PresetVersionMajor || container.VersionMinor != Constants.PresetVersionMinor || container.VersionMicro != Constants.PresetVersionMicro)
                     {
-                        string fileName = RecoverFromCorruptedPresetFile(this.presetFile);
-                        this.UpdateBuiltInPresets();
+                        string fileName = this.ArchivePresetFile(this.presetFile);
                         this.errorService.ShowMessageBox(
                             Resources.PresetService_PresetsOutOfDate
                             + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
                             Resources.PresetService_UnableToLoad,
                             MessageBoxButton.OK,
                             MessageBoxImage.Exclamation);
-                        return;
+                        versionCheckChange = true;
                     }
-
 
                     // Process the presets.
                     foreach (var item in container.PresetList)
@@ -555,11 +585,17 @@ namespace HandBrakeWPF.Services.Presets
                         }
                     }
                 }
+
+                // Resave the presets if we failed the version check to update the container
+                if (versionCheckChange)
+                {
+                    this.SavePresetFiles();
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                RecoverFromCorruptedPresetFile(this.presetFile);
+                this.RecoverFromCorruptedPresetFile(this.presetFile);
                 this.UpdateBuiltInPresets();
             }
         }
@@ -573,7 +609,7 @@ namespace HandBrakeWPF.Services.Presets
             {
                 // Verify Directories.
                 string directory = Path.GetDirectoryName(this.presetFile);
-                if (!Directory.Exists(directory))
+                if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }

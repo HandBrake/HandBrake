@@ -60,7 +60,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task = new EncodeTask();
             preset.IsDefault = importedPreset.Default;
             preset.IsBuildIn = importedPreset.Type == 0;
-
+           
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
             /* Output Settings */
