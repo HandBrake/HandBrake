@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Encode
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Text;
 
@@ -188,18 +189,19 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        public void ProcessLogs(string destination, HBConfiguration configuration)
+        public void ProcessLogs(string destination, bool isPreview, HBConfiguration configuration)
         {
             try
             {
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string tempLogFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.ProcessId));
+
+                string tempLogFile = Path.Combine(logDir, isPreview ? $"preview_encode_log{GeneralUtilities.ProcessId}.txt" : string.Format("last_encode_log{0}.txt", GeneralUtilities.ProcessId));
 
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
                 string encodeLogFile = destinationFile + " " +
-                                       DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + ".txt";
+                                       DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))
@@ -232,12 +234,11 @@ namespace HandBrakeWPF.Services.Encode
         /// <summary>
         /// Setup the logging.
         /// </summary>
-        protected void SetupLogging()
+        protected void SetupLogging(bool isPreviewEncode)
         {
             this.ShutdownFileWriter();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.ProcessId));
-            string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", GeneralUtilities.ProcessId));
+            string logFile = Path.Combine(logDir, isPreviewEncode ? $"preview_last_encode_log{GeneralUtilities.ProcessId}.txt" : $"last_encode_log{GeneralUtilities.ProcessId}.txt");
 
             try
             {
@@ -249,11 +250,6 @@ namespace HandBrakeWPF.Services.Encode
                 if (File.Exists(logFile))
                 {
                     File.Delete(logFile);
-                }
-
-                if (File.Exists(logFile2))
-                {
-                    File.Delete(logFile2);
                 }
 
                 lock (FileWriterLock)

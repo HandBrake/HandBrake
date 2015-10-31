@@ -104,16 +104,5 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         /// Kill the process
         /// </summary>
         void Stop();
-
-        /// <summary>
-        /// Copy the log file to the desired destinations
-        /// </summary>
-        /// <param name="destination">
-        /// The destination.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        void ProcessLogs(string destination, HBConfiguration configuration);
     }
 }
