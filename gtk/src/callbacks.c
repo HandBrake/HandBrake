@@ -1838,7 +1838,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         gint num_chapters = hb_list_count(title->list_chapter);
 
         ghb_dict_set_int(settings, "angle", 1);
-        ghb_dict_set_int(settings, "PtoPType", 0);
+        ghb_dict_set_string(settings, "PtoPType", "chapter");
         ghb_dict_set_int(settings, "start_point", 1);
         ghb_dict_set_int(settings, "end_point", num_chapters);
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
