@@ -1,0 +1,119 @@
+diff -ur libav-v11.3-0-g00abc00-orig/libavcodec/avcodec.h libav-v11.3-0-g00abc00/libavcodec/avcodec.h
+--- libav-v11.3-0-g00abc00-orig/libavcodec/avcodec.h	2015-03-08 18:51:11.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavcodec/avcodec.h	2015-11-05 08:29:24.381723633 -0800
+@@ -917,6 +917,14 @@
+      * Stereoscopic 3D information in form of the AVStereo3D struct.
+      */
+     AV_PKT_DATA_STEREO3D,
++
++    /**
++     * This side data contains an integer value representing the stream index
++     * of a "fallback" track.  A fallback track indicates an alternate
++     * track to use when the current track can not be decoded for some reason.
++     * e.g. no decoder available for codec.
++     */
++    AV_PKT_DATA_FALLBACK_TRACK,
+ };
+ 
+ typedef struct AVPacketSideData {
+Only in libav-v11.3-0-g00abc00/libavcodec: avcodec.h.orig
+diff -ur libav-v11.3-0-g00abc00-orig/libavformat/avformat.h libav-v11.3-0-g00abc00/libavformat/avformat.h
+--- libav-v11.3-0-g00abc00-orig/libavformat/avformat.h	2015-03-08 18:51:11.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavformat/avformat.h	2015-11-05 08:28:54.944222066 -0800
+@@ -1361,6 +1361,16 @@
+ AVStream *avformat_new_stream(AVFormatContext *s, const AVCodec *c);
+ 
+ /**
++ * Allocate new information from stream.
++ *
++ * @param stream stream
++ * @param type desired side information type
++ * @param size side information size
++ * @return pointer to fresh allocated data or NULL otherwise
++ */
++uint8_t *av_stream_new_side_data(AVStream *stream,
++                                 enum AVPacketSideDataType type, int size);
++/**
+  * Get side information from stream.
+  *
+  * @param stream stream
+Only in libav-v11.3-0-g00abc00/libavformat: avformat.h.orig
+Only in libav-v11.3-0-g00abc00/libavformat: internal.h.orig
+Only in libav-v11.3-0-g00abc00/libavformat: mov.c.orig
+diff -ur libav-v11.3-0-g00abc00-orig/libavformat/movenc.c libav-v11.3-0-g00abc00/libavformat/movenc.c
+--- libav-v11.3-0-g00abc00-orig/libavformat/movenc.c	2015-03-08 18:51:11.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavformat/movenc.c	2015-11-05 08:28:54.949222151 -0800
+@@ -2211,10 +2211,21 @@
+             mov->tracks[i].tref_id  = mov->tracks[mov->chapter_track].track_id;
+         }
+     for (i = 0; i < mov->nb_streams; i++) {
+-        if (mov->tracks[i].tag == MKTAG('r','t','p',' ')) {
+-            mov->tracks[i].tref_tag = MKTAG('h','i','n','t');
+-            mov->tracks[i].tref_id =
+-                mov->tracks[mov->tracks[i].src_track].track_id;
++        MOVTrack *track = &mov->tracks[i];
++        if (track->tag == MKTAG('r','t','p',' ')) {
++            track->tref_tag = MKTAG('h','i','n','t');
++            track->tref_id = mov->tracks[track->src_track].track_id;
++        } else if (track->enc->codec_type == AVMEDIA_TYPE_AUDIO) {
++            int * fallback, size;
++            fallback = (int*)av_stream_get_side_data(track->st,
++                                                     AV_PKT_DATA_FALLBACK_TRACK,
++                                                     &size);
++            if (fallback != NULL && size == sizeof(int)) {
++                if (*fallback >= 0 && *fallback < mov->nb_streams) {
++                    track->tref_tag = MKTAG('f','a','l','l');
++                    track->tref_id = mov->tracks[*fallback].track_id;
++                }
++            }
+         }
+     }
+ 
+Only in libav-v11.3-0-g00abc00/libavformat: movenc.c.orig
+Only in libav-v11.3-0-g00abc00/libavformat: replaygain.c.orig
+diff -ur libav-v11.3-0-g00abc00-orig/libavformat/utils.c libav-v11.3-0-g00abc00/libavformat/utils.c
+--- libav-v11.3-0-g00abc00-orig/libavformat/utils.c	2015-03-08 18:51:11.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavformat/utils.c	2015-11-05 08:32:19.646709922 -0800
+@@ -3126,3 +3126,41 @@
+     }
+     return NULL;
+ }
++
++uint8_t *av_stream_new_side_data(AVStream *st, enum AVPacketSideDataType type,
++                                 int size)
++{
++    AVPacketSideData *sd, *tmp;
++    int i;
++    uint8_t *data = av_malloc(size);
++
++    if (!data)
++        return NULL;
++
++    for (i = 0; i < st->nb_side_data; i++) {
++        sd = &st->side_data[i];
++
++        if (sd->type == type) {
++            av_freep(&sd->data);
++            sd->data = data;
++            sd->size = size;
++            return sd->data;
++        }
++    }
++
++    tmp = av_realloc_array(st->side_data, st->nb_side_data + 1, sizeof(*tmp));
++    if (!tmp) {
++        av_freep(&data);
++        return NULL;
++    }
++
++    st->side_data = tmp;
++    st->nb_side_data++;
++
++    sd = &st->side_data[st->nb_side_data - 1];
++    sd->type = type;
++    sd->data = data;
++    sd->size = size;
++    return data;
++}
++
+Only in libav-v11.3-0-g00abc00/libavformat: utils.c.orig
