@@ -1119,7 +1119,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     }
     hb_fifo_push( audio->priv.scan_cache, b );
 
-    hb_work_object_t *w = hb_codec_decoder(scan->h, audio->config.in.codec);
+    hb_work_object_t *w = hb_audio_decoder(scan->h, audio->config.in.codec);
 
     if ( w == NULL || w->bsinfo == NULL )
     {

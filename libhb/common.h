@@ -58,6 +58,9 @@
 #ifndef MAX
 #define MAX( a, b ) ( (a) > (b) ? (a) : (b) )
 #endif
+#ifndef ABS
+#define ABS(a) ((a) > 0 ? (a) : (-(a)))
+#endif
 
 #define HB_ALIGN(x, a) (((x)+(a)-1)&~((a)-1))
 
@@ -365,6 +368,8 @@ const char*      hb_video_framerate_get_name(int framerate);
 const char*      hb_video_framerate_sanitize_name(const char *name);
 void             hb_video_framerate_get_limits(int *low, int *high, int *clock);
 const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last);
+int              hb_video_framerate_get_close(hb_rational_t *framerate,
+                                              double thresh);
 
 int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
 int              hb_audio_samplerate_get_from_name(const char *name);
@@ -531,6 +536,10 @@ struct hb_job_s
     double          vquality;
     int             vbitrate;
     hb_rational_t   vrate;
+    // Some parameters that depend on vrate (like keyint) can't change
+    // between encoding passes. So orig_vrate is used to store the
+    // 1st pass rate.
+    hb_rational_t   orig_vrate;
     int             cfr;
     PRIVATE int     pass_id;
     int             twopass;        // Enable 2-pass encode. Boolean
@@ -1139,12 +1148,12 @@ struct hb_work_object_s
     hb_thread_t       * thread;
     int                 yield;
     volatile int      * done;
+    volatile int      * die;
     int                 status;
     int                 codec_param;
     hb_title_t        * title;
 
     hb_work_object_t  * next;
-    int                 thread_sleep_interval;
 
     hb_handle_t       * h;
 #endif

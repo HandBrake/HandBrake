@@ -1023,7 +1023,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set the keyframe interval
     if (pv->param.gop.gop_pic_size < 0)
     {
-        int rate = (int)((double)job->vrate.num / (double)job->vrate.den + 0.5);
+        int rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
         if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
         {
             // ensure B-pyramid is enabled for CQP on Haswell

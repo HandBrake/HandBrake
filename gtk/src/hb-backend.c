@@ -3375,7 +3375,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
         status->hours = p.hours;
         status->minutes = p.minutes;
         status->seconds = p.seconds;
-        status->unique_id = p.sequence_id & 0xFFFFFF;
+        status->unique_id = p.sequence_id;
     }
     else
     {
@@ -3395,7 +3395,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
         status->hours = p.hours;
         status->minutes = p.minutes;
         status->seconds = p.seconds;
-        status->unique_id = p.sequence_id & 0xFFFFFF;
+        status->unique_id = p.sequence_id;
     }
     else
     {
@@ -4316,18 +4316,19 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
     return TRUE;
 }
 
-void
-ghb_add_job(hb_handle_t *h, GhbValue *js, gint unique_id)
+int
+ghb_add_job(hb_handle_t *h, GhbValue *js)
 {
     GhbValue *job;
     char     *json_job;
+    int       sequence_id;
 
     job      = ghb_dict_get(js, "Job");
-    ghb_dict_set_int(job, "SequenceID", unique_id);
     json_job = hb_value_get_json(job);
-
-    hb_add_json(h, json_job);
+    sequence_id = hb_add_json(h, json_job);
     free(json_job);
+
+    return sequence_id;
 }
 
 void
@@ -4342,7 +4343,7 @@ ghb_remove_job(gint unique_id)
     ii = hb_count(h_queue) - 1;
     while ((job = hb_job(h_queue, ii--)) != NULL)
     {
-        if ((job->sequence_id & 0xFFFFFF) == unique_id)
+        if (job->sequence_id == unique_id)
             hb_rem(h_queue, job);
     }
 }

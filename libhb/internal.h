@@ -274,10 +274,13 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
+void hb_work_loop( void * );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( hb_handle_t *, int );
-hb_work_object_t * hb_codec_decoder( hb_handle_t *, int );
-hb_work_object_t * hb_codec_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_decoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int );
+hb_work_object_t * hb_video_encoder( hb_handle_t *, int );
 
 /***********************************************************************
  * sync.c

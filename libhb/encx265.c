@@ -139,7 +139,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     hb_reduce(&vrate.num, &vrate.den, job->vrate.num, job->vrate.den);
     param->fpsNum      = vrate.num;
     param->fpsDenom    = vrate.den;
-    param->keyframeMin = (double)vrate.num / vrate.den + 0.5;
+    param->keyframeMin = (double)job->orig_vrate.num / job->orig_vrate.den +
+                                 0.5;
     param->keyframeMax = param->keyframeMin * 10;
 
     /*

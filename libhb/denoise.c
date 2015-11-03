@@ -24,9 +24,6 @@
 #define HQDN3D_SPATIAL_CHROMA_DEFAULT  3.0f
 #define HQDN3D_TEMPORAL_LUMA_DEFAULT   6.0f
 
-#define ABS(A) ( (A) > 0 ? (A) : -(A) )
-#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
-
 struct hb_filter_private_s
 {
     short            hqdn3d_coef[6][512*16];

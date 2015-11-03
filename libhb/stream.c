@@ -3930,7 +3930,7 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
 static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
 {
     hb_work_info_t info;
-    hb_work_object_t *w = hb_codec_decoder( stream->h, pes->codec );
+    hb_work_object_t *w = hb_audio_decoder( stream->h, pes->codec );
 
     w->codec_param = pes->codec_param;
     int ret = w->bsinfo( w, pes->probe_buf, &info );

@@ -92,7 +92,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                                   job->encoder_preset, job->encoder_tune) < 0)
     {
         free( pv );
-        pv = NULL;
+        w->private_data = NULL;
         return 1;
     }
 
@@ -120,17 +120,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* Some HandBrake-specific defaults; users can override them
      * using the encoder_options string. */
-    if( job->pass_id == HB_PASS_ENCODE_2ND && job->cfr != 1 )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        param.i_fps_num = interjob->vrate.num;
-        param.i_fps_den = interjob->vrate.den;
-    }
-    else
-    {
-        param.i_fps_num = job->vrate.num;
-        param.i_fps_den = job->vrate.den;
-    }
+    param.i_fps_num = job->vrate.num;
+    param.i_fps_den = job->vrate.den;
     if ( job->cfr == 1 )
     {
         param.i_timebase_num   = 0;
@@ -146,9 +137,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Set min:max keyframe intervals to 1:10 of fps;
      * adjust +0.5 for when fps has remainder to bump
      * { 23.976, 29.976, 59.94 } to { 24, 30, 60 }. */
-    param.i_keyint_min = (double)job->vrate.num / job->vrate.den + 0.5;
+    param.i_keyint_min = (double)job->orig_vrate.num / job->orig_vrate.den +
+                                 0.5;
     param.i_keyint_max = 10 * param.i_keyint_min;
-
     param.i_log_level  = X264_LOG_INFO;
 
     /* set up the VUI color model & gamma to match what the COLR atom
@@ -301,7 +292,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         if (hb_apply_h264_profile(&param, job->encoder_profile, 1))
         {
             free(pv);
-            pv = NULL;
+            w->private_data = NULL;
             return 1;
         }
     }
@@ -311,7 +302,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                                 job->encoder_profile, 1) < 0)
         {
             free(pv);
-            pv = NULL;
+            w->private_data = NULL;
             return 1;
         }
     }
@@ -354,7 +345,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     {
         hb_error("encx264: x264_encoder_open failed.");
         free( pv );
-        pv = NULL;
+        w->private_data = NULL;
         return 1;
     }
 
@@ -380,6 +371,11 @@ void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
+    if (pv == NULL)
+    {
+        // Not initialized
+        return;
+    }
     if (pv->delayed_chapters != NULL)
     {
         struct chapter_s *item;

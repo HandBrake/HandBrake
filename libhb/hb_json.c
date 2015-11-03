@@ -1374,9 +1374,7 @@ int hb_add_json( hb_handle_t * h, const char * json_job )
     hb_job_t job;
 
     job.json = json_job;
-    hb_add(h, &job);
-
-    return 0;
+    return hb_add(h, &job);
 }
 
 

@@ -355,16 +355,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codec->height                  = job->height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
-    hb_rational_t vrate;
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        vrate = interjob->vrate;
-    }
-    else
-    {
-        vrate = job->vrate;
-    }
+    hb_rational_t vrate = job->vrate;
 
     // If the vrate is the internal clock rate, there's a good chance
     // this is a standard rate that we have in our hb_video_rates table.

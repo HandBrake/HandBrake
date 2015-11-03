@@ -694,6 +694,26 @@ const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last)
     return ((hb_rate_internal_t*)last)->next;
 }
 
+int hb_video_framerate_get_close(hb_rational_t *framerate, double thresh)
+{
+    double            fps_in;
+    const hb_rate_t * rate = NULL;
+    int               result = -1;
+    double            closest = thresh;
+
+    fps_in = (double)framerate->num / framerate->den;
+    while ((rate = hb_video_framerate_get_next(rate)) != NULL)
+    {
+        double fps = (double)hb_video_rate_clock / rate->rate;
+        if (ABS(fps - fps_in) < closest)
+        {
+            result = rate->rate;
+            closest = ABS(fps - fps_in);
+        }
+    }
+    return result;
+}
+
 int hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift)
 {
     int best_samplerate;

@@ -102,17 +102,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set things in context that we will allow the user to 
     // override with advanced settings.
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        fps.den = interjob->vrate.den;
-        fps.num = interjob->vrate.num;
-    }
-    else
-    {
-        fps.den = job->vrate.den;
-        fps.num = job->vrate.num;
-    }
+    fps.den = job->vrate.den;
+    fps.num = job->vrate.num;
 
     // If the fps.num is the internal clock rate, there's a good chance
     // this is a standard rate that we have in our hb_video_rates table.
@@ -163,7 +154,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->time_base.den = fps.num;
     context->time_base.num = fps.den;
-    context->gop_size  = 10 * ((double)job->vrate.num / job->vrate.den + 0.5);
+    context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
+                                  0.5) * 10;
 
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * lavc_opts = NULL;
@@ -234,6 +226,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
+    if (job->vcodec == HB_VCODEC_FFMPEG_MPEG4)
+    {
+        // MPEG-4 Part 2 stores the PAR num/den as unsigned 8-bit fields,
+        // and libavcodec's encoder fails to initialize if we don't
+        // reduce it to fit 8-bits.
+        hb_limit_rational(&context->sample_aspect_ratio.num,
+                          &context->sample_aspect_ratio.den,
+                           context->sample_aspect_ratio.num,
+                           context->sample_aspect_ratio.den, 255);
+    }
 
     hb_log( "encavcodec: encoding with stored aspect %d/%d",
             job->par.num, job->par.den );

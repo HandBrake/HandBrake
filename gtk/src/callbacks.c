@@ -2946,7 +2946,6 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 static void
 submit_job(signal_user_data_t *ud, GhbValue *settings)
 {
-    static gint unique_id = 1;
     gchar *type, *modified;
     const char *name;
     GhbValue *js;
@@ -2960,10 +2959,10 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
     modified = preset_modified ? "Modified " : "";
     ghb_log("%s%sPreset: %s", modified, type, name);
 
-    ghb_dict_set_int(settings, "job_unique_id", unique_id);
     ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
     start_new_log(ud, settings);
-    ghb_add_job(ghb_queue_handle(), settings, unique_id);
+    int unique_id = ghb_add_job(ghb_queue_handle(), settings);
+    ghb_dict_set_int(settings, "job_unique_id", unique_id);
     ghb_start_queue();
 
     // Start queue activity spinner
@@ -2983,8 +2982,6 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
         }
         g_free(path);
     }
-
-    unique_id++;
 }
 
 static void

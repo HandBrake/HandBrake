@@ -43,7 +43,6 @@ typedef struct
 typedef struct
 {
     hb_lock_t       * mutex;
-    int               ref;
     int               done;
     hb_mux_object_t * m;
     double            pts;        // end time of next muxing chunk
@@ -60,9 +59,10 @@ typedef struct
 
 struct hb_work_private_s
 {
-    hb_job_t * job;
-    int        track;
-    hb_mux_t * mux;
+    hb_job_t  * job;
+    int         track;
+    hb_mux_t  * mux;
+    hb_list_t * list_work;
 };
 
 
@@ -444,6 +444,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if ( i >= mux->ntracks )
             {
                 mux->done = 1;
+                *w->done = 1;
                 hb_unlock( mux->mutex );
                 hb_bitvec_free(&more);
                 return HB_WORK_DONE;
@@ -477,147 +478,133 @@ static void muxFlush(hb_mux_t * mux)
     }
 }
 
-static void muxClose( hb_work_object_t * w )
+static void muxClose( hb_work_object_t * muxer )
 {
-    hb_work_private_t * pv = w->private_data;
-    hb_mux_t    * mux = pv->mux;
-    hb_job_t    * job = pv->job;
-    hb_track_t  * track;
-    int           i;
+    hb_work_private_t * pv = muxer->private_data;
+    if (pv == NULL)
+    {
+        // Not initialized
+        return;
+    }
+
+    hb_mux_t          * mux = pv->mux;
+    hb_job_t          * job = pv->job;
+    hb_track_t        * track;
+    hb_work_object_t  * w;
+    int                 i;
 
     hb_lock( mux->mutex );
-    if ( --mux->ref == 0 )
+    muxFlush(mux);
+
+    // Update state before closing muxer.  Closing the muxer
+    // may initiate optimization which can take a while and
+    // we want the muxing state to be visible while this is
+    // happening.
+    if( job->pass_id == HB_PASS_ENCODE ||
+        job->pass_id == HB_PASS_ENCODE_2ND )
     {
-        muxFlush(mux);
-
-        // Update state before closing muxer.  Closing the muxer
-        // may initiate optimization which can take a while and
-        // we want the muxing state to be visible while this is
-        // happening.
-        if( job->pass_id == HB_PASS_ENCODE ||
-            job->pass_id == HB_PASS_ENCODE_2ND )
-        {
-            /* Update the UI */
-            hb_state_t state;
-            state.state = HB_STATE_MUXING;
-            state.param.muxing.progress = 0;
-            hb_set_state( job->h, &state );
-        }
-
-        if( mux->m )
-        {
-            mux->m->end( mux->m );
-            free( mux->m );
-        }
-
-        // we're all done muxing -- print final stats and cleanup.
-        if( job->pass_id == HB_PASS_ENCODE ||
-            job->pass_id == HB_PASS_ENCODE_2ND )
-        {
-            hb_stat_t sb;
-            uint64_t bytes_total, frames_total;
-
-            if (!hb_stat(job->file, &sb))
-            {
-                hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
-
-                bytes_total  = 0;
-                frames_total = 0;
-                for( i = 0; i < mux->ntracks; ++i )
-                {
-                    track = mux->track[i];
-                    hb_log( "mux: track %d, %"PRId64" frames, %"PRId64" bytes, %.2f kbps, fifo %d",
-                            i, track->frames, track->bytes,
-                            90000.0 * track->bytes / mux->pts / 125,
-                            track->mf.flen );
-                    if( !i && job->vquality < 0 )
-                    {
-                        /* Video */
-                        hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",
-                                (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
-                    }
-                    bytes_total  += track->bytes;
-                    frames_total += track->frames;
-                }
-
-                if( bytes_total && frames_total )
-                {
-                    hb_deep_log( 2, "mux: overhead, %.2f bytes per frame",
-                            (float) ( sb.st_size - bytes_total ) /
-                            frames_total );
-                }
-            }
-        }
-
-        for( i = 0; i < mux->ntracks; ++i )
-        {
-            hb_buffer_t * b;
-            track = mux->track[i];
-            while ( (b = mf_pull( mux, i )) != NULL )
-            {
-                hb_buffer_close( &b );
-            }
-            if( track->mux_data )
-            {
-                free( track->mux_data );
-                free( track->mf.fifo );
-            }
-            free( track );
-        }
-        free(mux->track);
-        hb_unlock( mux->mutex );
-        hb_lock_close( &mux->mutex );
-        hb_bitvec_free(&mux->eof);
-        hb_bitvec_free(&mux->rdy);
-        hb_bitvec_free(&mux->allEof);
-        hb_bitvec_free(&mux->allRdy);
-        free( mux );
+        /* Update the UI */
+        hb_state_t state;
+        state.state = HB_STATE_MUXING;
+        state.param.muxing.progress = 0;
+        hb_set_state( job->h, &state );
     }
-    else
+
+    if( mux->m )
     {
-        hb_unlock( mux->mutex );
+        mux->m->end( mux->m );
+        free( mux->m );
     }
+
+    // we're all done muxing -- print final stats and cleanup.
+    if( job->pass_id == HB_PASS_ENCODE ||
+        job->pass_id == HB_PASS_ENCODE_2ND )
+    {
+        hb_stat_t sb;
+        uint64_t bytes_total, frames_total;
+
+        if (!hb_stat(job->file, &sb))
+        {
+            hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
+
+            bytes_total  = 0;
+            frames_total = 0;
+            for( i = 0; i < mux->ntracks; ++i )
+            {
+                track = mux->track[i];
+                hb_log( "mux: track %d, %"PRId64" frames, %"PRId64" bytes, %.2f kbps, fifo %d",
+                        i, track->frames, track->bytes,
+                        90000.0 * track->bytes / mux->pts / 125,
+                        track->mf.flen );
+                if( !i && job->vquality < 0 )
+                {
+                    /* Video */
+                    hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",
+                            (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
+                }
+                bytes_total  += track->bytes;
+                frames_total += track->frames;
+            }
+
+            if( bytes_total && frames_total )
+            {
+                hb_deep_log( 2, "mux: overhead, %.2f bytes per frame",
+                        (float) ( sb.st_size - bytes_total ) /
+                        frames_total );
+            }
+        }
+    }
+
+    for (i = 0; i < mux->ntracks; ++i)
+    {
+        hb_buffer_t * b;
+        track = mux->track[i];
+        while ( (b = mf_pull( mux, i )) != NULL )
+        {
+            hb_buffer_close( &b );
+        }
+        if( track->mux_data )
+        {
+            free( track->mux_data );
+            free( track->mf.fifo );
+        }
+        free( track );
+    }
+    free(mux->track);
+    hb_unlock( mux->mutex );
+    hb_lock_close( &mux->mutex );
+    hb_bitvec_free(&mux->eof);
+    hb_bitvec_free(&mux->rdy);
+    hb_bitvec_free(&mux->allEof);
+    hb_bitvec_free(&mux->allRdy);
+    free( mux );
+
+    // Close mux work threads
+    while ((w = hb_list_item(pv->list_work, 0)))
+    {
+        hb_list_rem(pv->list_work, w);
+        if (w->thread != NULL)
+        {
+            hb_thread_close( &w->thread );
+        }
+        free(w->private_data);
+        free(w);
+    }
+    hb_list_close(&pv->list_work);
     free( pv );
-    w->private_data = NULL;
+    muxer->private_data = NULL;
 }
 
-static void mux_loop( void * _w )
+static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
 {
-    hb_work_object_t  * w = _w;
-    hb_work_private_t * pv = w->private_data;
-    hb_job_t          * job = pv->job;
-    hb_buffer_t       * buf_in;
+    muxer->private_data = calloc( sizeof( hb_work_private_t ), 1 );
+    hb_work_private_t * pv = muxer->private_data;
 
-    while ( !*job->die && w->status != HB_WORK_DONE )
-    {
-        buf_in = hb_fifo_get_wait( w->fifo_in );
-        if ( pv->mux->done )
-            break;
-        if ( buf_in == NULL )
-            continue;
-        if ( *job->die )
-        {
-            if( buf_in )
-            {
-                hb_buffer_close( &buf_in );
-            }
-            break;
-        }
+    hb_mux_t         * mux = calloc( sizeof( hb_mux_t ), 1 );
+    int                i;
+    hb_work_object_t * w;
 
-        w->status = w->work( w, &buf_in, NULL );
-        if( buf_in )
-        {
-            hb_buffer_close( &buf_in );
-        }
-    }
-}
-
-hb_work_object_t * hb_muxer_init( hb_job_t * job )
-{
-    int           i;
-    hb_mux_t    * mux = calloc( sizeof( hb_mux_t ), 1 );
-    hb_work_object_t  * w;
-    hb_work_object_t  * muxer;
+    pv->list_work = hb_list_init();
 
     // The bit vectors must be allocated before hb_thread_init for the
     // audio and subtitle muxer jobs below.
@@ -649,7 +636,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
             hb_error( "No muxer selected, exiting" );
             *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
-            return NULL;
+            return -1;
         }
         /* Create file, write headers */
         if( mux->m )
@@ -659,60 +646,50 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     }
 
     /* Initialize the work objects that will receive fifo data */
-
-    muxer = hb_get_work( job->h, WORK_MUX );
-    muxer->private_data = calloc( sizeof( hb_work_private_t ), 1 );
-    muxer->private_data->job = job;
-    muxer->private_data->mux = mux;
-    mux->ref++;
-    muxer->private_data->track = mux->ntracks;
+    pv->job = job;
+    pv->mux = mux;
+    pv->track = mux->ntracks;
     muxer->fifo_in = job->fifo_mpeg4;
     add_mux_track( mux, job->mux_data, 1 );
-    muxer->done = &muxer->private_data->mux->done;
 
-    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
+    for (i = 0; i < hb_list_count(job->list_audio); i++)
     {
         hb_audio_t  *audio = hb_list_item( job->list_audio, i );
 
-        w = hb_get_work( job->h, WORK_MUX );
-        w->private_data = calloc( sizeof( hb_work_private_t ), 1 );
+        w = hb_get_work(job->h, WORK_MUX);
+        w->private_data = calloc(sizeof(hb_work_private_t), 1);
         w->private_data->job = job;
         w->private_data->mux = mux;
-        mux->ref++;
         w->private_data->track = mux->ntracks;
         w->fifo_in = audio->priv.fifo_out;
-        add_mux_track( mux, audio->priv.mux_data, 1 );
-        w->done = &job->done;
-        hb_list_add( job->list_work, w );
-        w->thread = hb_thread_init( w->name, mux_loop, w, HB_NORMAL_PRIORITY );
+        add_mux_track(mux, audio->priv.mux_data, 1);
+        hb_list_add(pv->list_work, w);
     }
 
-    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+    for (i = 0; i < hb_list_count(job->list_subtitle); i++)
     {
         hb_subtitle_t  *subtitle = hb_list_item( job->list_subtitle, i );
 
         if (subtitle->config.dest != PASSTHRUSUB)
             continue;
 
-        w = hb_get_work( job->h, WORK_MUX );
-        w->private_data = calloc( sizeof( hb_work_private_t ), 1 );
+        w = hb_get_work(job->h, WORK_MUX);
+        w->private_data = calloc(sizeof(hb_work_private_t), 1);
         w->private_data->job = job;
         w->private_data->mux = mux;
-        mux->ref++;
         w->private_data->track = mux->ntracks;
         w->fifo_in = subtitle->fifo_out;
-        add_mux_track( mux, subtitle->mux_data, 0 );
-        w->done = &job->done;
-        hb_list_add( job->list_work, w );
-        w->thread = hb_thread_init( w->name, mux_loop, w, HB_NORMAL_PRIORITY );
+        add_mux_track(mux, subtitle->mux_data, 0);
+        hb_list_add(pv->list_work, w);
     }
-    return muxer;
-}
 
-// muxInit does nothing because the muxer has a special initializer
-// that takes care of initializing all muxer work objects
-static int muxInit( hb_work_object_t * w, hb_job_t * job )
-{
+    /* Launch processing threads */
+    for (i = 0; i < hb_list_count(pv->list_work); i++)
+    {
+        w = hb_list_item(pv->list_work, i);
+        w->done = muxer->done;
+        w->thread = hb_thread_init(w->name, hb_work_loop, w, HB_LOW_PRIORITY);
+    }
     return 0;
 }
 

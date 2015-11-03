@@ -46,6 +46,7 @@ struct hb_handle_s
 
     /* The thread which processes the jobs. Others threads are launched
        from this one (see work.c) */
+    int            sequence_id;
     hb_list_t    * jobs;
     hb_job_t     * current_job;
     volatile int   work_die;
@@ -1524,11 +1525,14 @@ hb_job_t* hb_job_copy(hb_job_t * job)
     return job_copy;
 }
 
-void hb_add( hb_handle_t * h, hb_job_t * job )
+int hb_add( hb_handle_t * h, hb_job_t * job )
 {
     hb_job_t *job_copy = hb_job_copy(job);
     job_copy->h = h;
+    job_copy->sequence_id = ++h->sequence_id;
     hb_list_add(h->jobs, job_copy);
+
+    return job_copy->sequence_id;
 }
 
 void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
@@ -1968,7 +1972,7 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     {
         // Set which job is being worked on
         if (h->current_job)
-            h->state.param.working.sequence_id = h->current_job->sequence_id & 0xFFFFFF;
+            h->state.param.working.sequence_id = h->current_job->sequence_id;
         else
             h->state.param.working.sequence_id = 0;
     }

@@ -91,7 +91,7 @@ void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_log_level_set(int level);
 void ghb_backend_close(void);
-void ghb_add_job(hb_handle_t *h, GhbValue *js, gint unique_id);
+int  ghb_add_job(hb_handle_t *h, GhbValue *js);
 void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);
 void ghb_stop_queue(void);
