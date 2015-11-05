@@ -5590,11 +5590,11 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     return title;
 }
 
-static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
+static int64_t av_to_hb_pts( int64_t pts, double conv_factor, int64_t offset )
 {
     if ( pts == AV_NOPTS_VALUE )
         return AV_NOPTS_VALUE;
-    return (int64_t)( (double)pts * conv_factor );
+    return (int64_t)( (double)pts * conv_factor ) - offset;
 }
 
 static int ffmpeg_is_keyframe( hb_stream_t *stream )
@@ -5730,8 +5730,8 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     double tsconv = (double)90000. * s->time_base.num / s->time_base.den;
     int64_t offset = 90000L * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
 
-    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv) - offset;
-    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv) - offset;
+    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv, offset);
+    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv, offset);
     if ( buf->s.renderOffset >= 0 && buf->s.start == AV_NOPTS_VALUE )
     {
         buf->s.start = buf->s.renderOffset;
@@ -5789,12 +5789,12 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->convergence_duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
         buf->s.stop = buf->s.start + buf_duration;
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
         buf->s.stop = buf->s.start + buf_duration;
     }
 
