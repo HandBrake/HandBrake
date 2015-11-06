@@ -529,6 +529,11 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    memset(in->data + in->size, 0, in->alloc - in->size);
+
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
@@ -1781,6 +1786,11 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_in = NULL;
     *buf_out = NULL;
+
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    memset(in->data + in->size, 0, in->alloc - in->size);
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if (in->s.flags & HB_BUF_FLAG_EOF)
