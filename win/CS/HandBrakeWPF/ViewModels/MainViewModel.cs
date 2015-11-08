@@ -2247,7 +2247,13 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.ProgramStatusLabel = Resources.Main_QueueFinished;
+                    string errorDesc = string.Empty;
+                    if (this.queueProcessor.ErrorCount > 0)
+                    {
+                        errorDesc += string.Format(Resources.Main_QueueFinishedErrors, this.queueProcessor.ErrorCount);
+                    }
+
+                    this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
                     this.IsEncoding = false;
 
                     if (this.windowsSeven.IsWindowsSeven)

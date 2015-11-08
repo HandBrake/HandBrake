@@ -141,6 +141,17 @@ namespace HandBrakeWPF.Services.Queue
         }
 
         /// <summary>
+        /// The number of errors detected.
+        /// </summary>
+        public int ErrorCount
+        {
+            get
+            {
+                return this.queue.Count(item => item.Status == QueueItemStatus.Error);
+            }
+        }
+
+        /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
         public IEncode EncodeService { get; private set; }

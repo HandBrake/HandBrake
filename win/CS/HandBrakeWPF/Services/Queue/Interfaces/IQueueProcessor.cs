@@ -54,6 +54,11 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         int Count { get; }
 
         /// <summary>
+        /// The number of errors detected in the queue.
+        /// </summary>
+        int ErrorCount { get; }
+
+        /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
         IEncode EncodeService { get; }

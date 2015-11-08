@@ -730,6 +730,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  with {0} errors detected..
+        /// </summary>
+        public static string Main_QueueFinishedErrors {
+            get {
+                return ResourceManager.GetString("Main_QueueFinishedErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Queue{0}.
         /// </summary>
         public static string Main_QueueLabel {
