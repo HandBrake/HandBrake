@@ -67,13 +67,14 @@ static hb_filter_param_t decomb_presets[] =
 
 static hb_filter_param_t deinterlace_presets[] =
 {
-    { 1, "Custom",      "custom",     NULL              },
-    { 2, "Fast",        "fast",       "0:-1:-1:0:1"     },
-    { 3, "Slow",        "slow",       "1:-1:-1:0:1"     },
-    { 4, "Slower",      "slower",     "3:-1:-1:0:1"     },
-    { 5, "Bob",         "bob",        "15:-1:-1:0:1"    },
-    { 0,  NULL,         NULL,         NULL              },
-    { 2, "Default",     "default",    "0:-1:-1:0:1"     }
+    { 1, "Custom",             "custom",       NULL              },
+    { 3, "Default",            "default",      "3:-1"            },
+    { 2, "Skip Spatial Check", "skip-spatial", "1:-1"            },
+    { 5, "Bob",                "bob",          "7:-1"            },
+    { 0,  NULL,                NULL,           NULL              },
+    { 2, "Fast",               "fast",         "1:-1:"           },
+    { 3, "Slow",               "slow",         "3:-1:"           },
+    { 4, "Slower",             "slower",       "3:-1:"           }
 };
 
 typedef struct
@@ -104,7 +105,58 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_INVALID,     NULL,                NULL, 0        }
 };
 
-/* Settings:
+#define MODE_YADIF_ENABLE       1
+#define MODE_YADIF_SPATIAL      2
+#define MODE_YADIF_BOB          4
+
+/* Deinterlace Settings
+ *  mode:parity
+ *
+ *  mode   - yadif deinterlace mode
+ *  parity - field parity
+ *
+ *  Modes:
+ *      1 = Enabled
+ *      2 = Spatial
+ *      4 = Bob
+ *
+ *  Parity:
+ *      0  = Top Field First
+ *      1  = Bottom Field First
+ *      -1 = Automatic detection of field parity
+ */
+char *
+generate_deinterlace_settings(const char * settings)
+{
+    char       ** args;
+    char       * result;
+    int          ii, mode = 3, parity = -1;
+
+    args = hb_str_vsplit(settings, ':');
+    for (ii = 0; ii < 2 && args[ii]; ii++)
+    {
+        switch (ii)
+        {
+            case 0:
+                mode   = strtol(args[ii], &result, 0);
+                break;
+            case 1:
+                parity = strtol(args[ii], &result, 0);
+                break;
+        }
+    }
+    if (!(mode & MODE_YADIF_ENABLE))
+    {
+        return (char*)hb_filter_off;
+    }
+    int bob        = !!(mode & MODE_YADIF_BOB);
+    int no_spatial = !(mode & MODE_YADIF_SPATIAL);
+    mode = bob | (no_spatial << 1);
+
+    return hb_strdup_printf("yadif='mode=%d:parity=%d'", mode, parity);
+}
+
+/* Rotate Settings:
  *  degrees:mirror
  *
  *  degrees - Rotation angle, may be one of 90, 180, or 270
@@ -700,12 +752,22 @@ hb_generate_filter_settings_by_index(int filter_id, int preset,
                 filter_param = hb_strdup_printf("%d", preset);
             break;
         case HB_FILTER_DECOMB:
-        case HB_FILTER_DEINTERLACE:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
             filter_param = generate_generic_settings_by_index(filter_id,
                                                               preset, custom);
             break;
+        case HB_FILTER_DEINTERLACE:
+        {
+            char * s;
+            s = generate_generic_settings_by_index(filter_id, preset, custom);
+            if (s == NULL || hb_validate_filter_settings(filter_id, s))
+            {
+                free(s);
+                return NULL;
+            }
+            return generate_deinterlace_settings(s);
+        } break;
         default:
             fprintf(stderr,
                     "hb_generate_filter_settings: Unrecognized filter (%d).\n",
@@ -754,11 +816,21 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune)
                 filter_param = strdup(preset);
             break;
         case HB_FILTER_DECOMB:
-        case HB_FILTER_DEINTERLACE:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
             filter_param = generate_generic_settings(filter_id, preset, tune);
             break;
+        case HB_FILTER_DEINTERLACE:
+        {
+            char * s;
+            s = generate_generic_settings(filter_id, preset, tune);
+            if (s == NULL || hb_validate_filter_settings(filter_id, s))
+            {
+                free(s);
+                return NULL;
+            }
+            return generate_deinterlace_settings(s);
+        } break;
         default:
             fprintf(stderr,
                     "hb_generate_filter_settings: Unrecognized filter (%d).\n",

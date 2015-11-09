@@ -1969,6 +1969,79 @@ void hb_presets_clean(hb_value_t *preset)
     presets_clean(preset, hb_preset_template);
 }
 
+static void import_deint_11_0_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlaceFilter");
+    if (val == NULL)
+    {
+        return;
+    }
+    const char * deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (strcasecmp(deint, "deinterlace"))
+    {
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlacePreset");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (!strcasecmp(deint, "fast") || !strcasecmp(deint, "slow"))
+    {
+        // fast and slow -> skip-spatial
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("skip-spatial"));
+        return;
+    }
+    else if (!strcasecmp(deint, "bob") || !strcasecmp(deint, "default"))
+    {
+        return;
+    }
+    else if (strcasecmp(deint, "custom"))
+    {
+        // not custom -> default
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlaceCustom");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    // Translate custom values
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    int bob, spatial, yadif, mode = 3, parity = -1;
+    sscanf(deint, "%d:%d", &mode, &parity);
+    yadif   = !!(mode & 1);
+    spatial = !!(mode & 2);
+    bob     = !!(mode & 8);
+    mode = yadif + (yadif && spatial) * 2 + bob * 4;
+    char * custom = hb_strdup_printf("%d:%d", mode, parity);
+    hb_dict_set(preset, "PictureDeinterlaceCustom", hb_value_string(custom));
+    free(custom);
+}
+
 static void import_deint_10_0_0(hb_value_t *preset)
 {
     hb_value_t *val = hb_dict_get(preset, "PictureDecombDeinterlace");
@@ -2002,6 +2075,7 @@ static void import_deint_10_0_0(hb_value_t *preset)
                         hb_value_string("default"));
         }
     }
+    import_deint_11_0_0(preset);
 }
 
 static const char* import_indexed_filter(int filter_id, int index)
@@ -2277,6 +2351,11 @@ static void import_10_0_0(hb_value_t *preset)
     import_deint_10_0_0(preset);
 }
 
+static void import_11_0_0(hb_value_t *preset)
+{
+    import_deint_11_0_0(preset);
+}
+
 static int preset_import(hb_value_t *preset, int major, int minor, int micro)
 {
     int result = 0;
@@ -2292,6 +2371,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (major == 10 && minor == 0 && micro == 0)
         {
             import_10_0_0(preset);
+            result = 1;
+        }
+        else if (major == 11 && minor == 0 && micro == 0)
+        {
+            import_11_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);
@@ -2321,6 +2405,28 @@ int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
     return -1;
 }
 
+void hb_presets_update_version(hb_value_t *preset)
+{
+    if (hb_value_type(preset) == HB_VALUE_TYPE_DICT)
+    {
+        // Is this a single preset or a packaged collection of presets?
+        hb_value_t *val = hb_dict_get(preset, "PresetName");
+        if (val == NULL)
+        {
+            val = hb_dict_get(preset, "VersionMajor");
+            if (val != NULL)
+            {
+                hb_dict_set(preset, "VersionMajor",
+                            hb_value_int(hb_preset_version_major));
+                hb_dict_set(preset, "VersionMinor",
+                            hb_value_int(hb_preset_version_minor));
+                hb_dict_set(preset, "VersionMicro",
+                            hb_value_int(hb_preset_version_micro));
+            }
+        }
+    }
+}
+
 int hb_presets_import(hb_value_t *preset)
 {
     preset_import_context_t ctx;
@@ -2329,6 +2435,10 @@ int hb_presets_import(hb_value_t *preset)
     ctx.result = 0;
     hb_presets_version(preset, &ctx.major, &ctx.minor, &ctx.micro);
     presets_do(do_preset_import, preset, (preset_do_context_t*)&ctx);
+    if (ctx.result)
+    {
+        hb_presets_update_version(preset);
+    }
 
     return ctx.result;
 }
