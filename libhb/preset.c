@@ -2100,6 +2100,43 @@ static void import_pic_0_0_0(hb_value_t *preset)
         }
         hb_dict_set(preset, "PicturePAR", hb_value_string(s));
     }
+    else if (hb_value_type(val) == HB_VALUE_TYPE_STRING)
+    {
+        const char *v = hb_value_get_string(val);
+        const char *s;
+        char *end;
+        int pic_par = strtol(v, &end, 0);
+        if (end != NULL)
+        {
+            switch (pic_par)
+            {
+                default:
+                case 2:
+                    s = "loose";
+                    break;
+                case 0:
+                    s = "off";
+                    break;
+                case 1:
+                    s = "strict";
+                    break;
+                case 3:
+                    s = "custom";
+                    break;
+            }
+            hb_dict_set(preset, "PicturePAR", hb_value_string(s));
+        }
+        else
+        {
+            if (strcasecmp(v, "off") &&
+                strcasecmp(v, "strict") &&
+                strcasecmp(v, "loose") &&
+                strcasecmp(v, "custom"))
+            {
+                hb_dict_set(preset, "PicturePAR", hb_value_string("loose"));
+            }
+        }
+    }
 }
 
 static void import_audio_0_0_0(hb_value_t *preset)
