@@ -88,6 +88,7 @@ namespace HandBrakeWPF.ViewModels
         private bool disableQuickSyncDecoding;
         private bool isClScaling;
         private bool showQueueInline;
+        private bool pauseOnLowDiskspace;
 
         #endregion
 
@@ -585,6 +586,23 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("PreventSleep");
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether HandBrake should pause on low disk space.
+        /// </summary>
+        public bool PauseOnLowDiskspace
+        {
+            get
+            {
+                return this.pauseOnLowDiskspace;
+            }
+
+            set
+            {
+                this.pauseOnLowDiskspace = value;
+                this.NotifyOfPropertyChange(() => this.PauseOnLowDiskspace);
+            }
+        }  
 
         /// <summary>
         /// Gets or sets PriorityLevelOptions.
@@ -1222,7 +1240,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPriority = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
-
+            this.PauseOnLowDiskspace = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
+            
             // Log Verbosity Level
             this.logVerbosityOptions.Clear();
             this.logVerbosityOptions.Add(0);
@@ -1312,6 +1331,7 @@ namespace HandBrakeWPF.ViewModels
             /* System and Logging */
             userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
+            userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
             userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);

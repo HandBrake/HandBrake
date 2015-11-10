@@ -396,8 +396,9 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
-            this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
+            this.queueProcessor.EncodeService.EncodeCompleted += this.EncodeService_EncodeCompleted;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
+            this.queueProcessor.LowDiskspaceDetected += this.QueueProcessor_LowDiskspaceDetected;
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.JobStatus = Resources.QueueViewModel_QueueReady;
@@ -416,8 +417,10 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted -= this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeService_EncodeStatusChanged;
-            this.queueProcessor.EncodeService.EncodeCompleted -= EncodeService_EncodeCompleted;
+            this.queueProcessor.EncodeService.EncodeCompleted -= this.EncodeService_EncodeCompleted;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
+            this.queueProcessor.LowDiskspaceDetected -= this.QueueProcessor_LowDiskspaceDetected;
+
 
             base.OnDeactivate(close);
         }
@@ -446,6 +449,29 @@ namespace HandBrakeWPF.ViewModels
                         e.EstimatedTimeLeft, 
                         e.ElapsedTime);
             });
+        }
+
+        /// <summary>
+        /// Detect Low Disk Space before starting new queue tasks.
+        /// </summary>
+        /// <param name="sender">Event invoker. </param>
+        /// <param name="e">Event Args.</param>
+        private void QueueProcessor_LowDiskspaceDetected(object sender, EventArgs e)
+        {
+            Execute.OnUIThreadAsync(
+                () =>
+                {
+                    this.queueProcessor.Pause();
+                    this.JobStatus = Resources.QueueViewModel_QueuePending;
+                    this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+                    this.IsEncoding = false;
+
+                    this.errorService.ShowMessageBox(
+                        Resources.MainViewModel_LowDiskSpaceWarning,
+                        Resources.MainViewModel_LowDiskSpace,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                });
         }
 
         /// <summary>

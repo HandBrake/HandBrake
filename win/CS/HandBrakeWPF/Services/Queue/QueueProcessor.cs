@@ -14,8 +14,12 @@ namespace HandBrakeWPF.Services.Queue
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Windows;
     using System.Xml.Serialization;
 
+    using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
@@ -53,6 +57,9 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         private bool clearCompleted;
 
+        private readonly IUserSettingService userSettingService;
+        private readonly IErrorService errorService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -63,11 +70,19 @@ namespace HandBrakeWPF.Services.Queue
         /// <param name="encodeService">
         /// The encode Service.
         /// </param>
+        /// <param name="userSettingService">
+        /// The user settings service.
+        /// </param>
+        /// <param name="errorService">
+        /// The Error Service.
+        /// </param>
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IEncode encodeService)
+        public QueueProcessor(IEncode encodeService, IUserSettingService userSettingService, IErrorService errorService)
         {
+            this.userSettingService = userSettingService;
+            this.errorService = errorService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -124,6 +139,8 @@ namespace HandBrakeWPF.Services.Queue
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         public event EventHandler QueuePaused;
+
+        public event EventHandler LowDiskspaceDetected;
 
         #endregion
 
@@ -587,6 +604,11 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = false;
         }
 
+        protected virtual void OnLowDiskspaceDetected()
+        {
+            this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
+        }
+        
         /// <summary>
         /// Run through all the jobs on the queue.
         /// </summary>
@@ -595,6 +617,22 @@ namespace HandBrakeWPF.Services.Queue
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace))
+                {
+                    string drive = Path.GetPathRoot(job.Task.Destination);
+                    if (drive != null)
+                    {
+                        DriveInfo c = new DriveInfo(drive);
+                        if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
+                        {
+                            job.Status = QueueItemStatus.Waiting;
+                            this.InvokeQueueChanged(EventArgs.Empty);
+                            this.OnLowDiskspaceDetected();
+                            return; // Don't start the next job.
+                        }
+                    }
+                }
+
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.EncodeService.Start(job.Task, job.Configuration);
             }
@@ -609,5 +647,6 @@ namespace HandBrakeWPF.Services.Queue
         }
 
         #endregion
+
     }
 }

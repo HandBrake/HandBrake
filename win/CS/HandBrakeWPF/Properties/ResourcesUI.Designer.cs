@@ -1177,6 +1177,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pause queue if disk space is low before starting a job..
+        /// </summary>
+        public static string Options_PauseQueueOnLowDiskSpace {
+            get {
+                return ResourceManager.GetString("Options_PauseQueueOnLowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prevent the system from sleeping while encoding.
         /// </summary>
         public static string Options_PreventSleep {

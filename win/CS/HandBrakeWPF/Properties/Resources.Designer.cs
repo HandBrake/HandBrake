@@ -952,6 +952,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low Disk Space.
+        /// </summary>
+        public static string MainViewModel_LowDiskSpace {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. .
+        /// </summary>
+        public static string MainViewModel_LowDiskSpaceWarning {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpaceWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete the preset: .
         /// </summary>
         public static string MainViewModel_PresetRemove_AreYouSure {

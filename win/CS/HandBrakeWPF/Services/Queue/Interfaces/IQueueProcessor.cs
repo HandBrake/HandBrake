@@ -44,6 +44,13 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         event EventHandler QueuePaused;
 
+
+        /// <summary>
+        /// Low Diskspace has been detected.
+        /// Checked before each job starts.
+        /// </summary>
+        event EventHandler LowDiskspaceDetected;
+
         #endregion
 
         #region Properties

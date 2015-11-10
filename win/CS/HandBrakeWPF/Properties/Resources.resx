@@ -733,4 +733,10 @@ Your old presets file was archived to:</value>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value> with {0} errors detected.</value>
   </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Low Disk Space</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. </value>
+  </data>
 </root>

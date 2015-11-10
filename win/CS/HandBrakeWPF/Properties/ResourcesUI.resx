@@ -837,4 +837,7 @@
   <data name="Options_ShowQueueInline" xml:space="preserve">
     <value>Show Queue in place of the tab controls when toggled on.</value>
   </data>
+  <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
+    <value>Pause queue if disk space is low before starting a job.</value>
+  </data>
 </root>
