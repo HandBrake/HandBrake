@@ -36,6 +36,12 @@ typedef struct
     int valid;      // Stream timing is not valid until next scr.
 } stream_timing_t;
 
+typedef struct
+{
+    int              id;
+    hb_buffer_list_t list;
+} buffer_splice_list_t;
+
 struct hb_work_private_s
 {
     hb_handle_t  * h;
@@ -63,6 +69,9 @@ struct hb_work_private_s
     uint64_t       st_first;
     uint64_t       duration;
     hb_fifo_t    * fifos[100];
+
+    buffer_splice_list_t * splice_list;
+    int                    splice_list_size;
 };
 
 /***********************************************************************
@@ -70,6 +79,7 @@ struct hb_work_private_s
  **********************************************************************/
 static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id );
 static void UpdateState( hb_work_private_t  * r, int64_t start);
+static hb_buffer_list_t * get_splice_list(hb_work_private_t * r, int id);
 
 /***********************************************************************
  * reader_init
@@ -250,6 +260,28 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    // Count number of splice lists needed for merging buffers
+    // that have been split
+    int count = 1; // 1 for video
+    count += hb_list_count( job->list_subtitle );
+    count += hb_list_count( job->list_audio );
+    r->splice_list_size = count;
+    r->splice_list = calloc(count, sizeof(buffer_splice_list_t));
+
+    // Initialize stream id's of splice lists
+    int ii, jj = 0;
+    r->splice_list[jj++].id = r->title->video_id;
+    for (ii = 0; ii < hb_list_count(job->list_subtitle); ii++)
+    {
+        hb_subtitle_t * subtitle = hb_list_item(job->list_subtitle, ii);
+        r->splice_list[jj++].id = subtitle->id;
+    }
+    for (ii = 0; ii < hb_list_count(job->list_audio); ii++)
+    {
+        hb_audio_t * audio = hb_list_item(job->list_audio, ii);
+        r->splice_list[jj++].id = audio->id;
+    }
+
     // The stream needs to be open before starting the reader thead
     // to prevent a race with decoders that may share information
     // with the reader. Specifically avcodec needs this.
@@ -290,8 +322,41 @@ static void reader_close( hb_work_object_t * w )
     free( r );
 }
 
-static void push_buf( const hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
+    // Handle buffers that were split across a PCR discontinuity.
+    // Rejoin them into a single buffer.
+    hb_buffer_list_t * list = get_splice_list(r, buf->s.id);
+    if (list != NULL)
+    {
+        hb_buffer_list_append(list, buf);
+        if (buf->s.split)
+        {
+            return;
+        }
+
+        int count = hb_buffer_list_count(list);
+        if (count > 1)
+        {
+            int size = hb_buffer_list_size(list);
+            hb_buffer_t * b = hb_buffer_init(size);
+            buf = hb_buffer_list_head(list);
+            b->s = buf->s;
+
+            int pos = 0;
+            while ((buf = hb_buffer_list_rem_head(list)) != NULL)
+            {
+                memcpy(b->data + pos, buf->data, buf->size);
+                pos += buf->size;
+                hb_buffer_close(&buf);
+            }
+            buf = b;
+        }
+        else
+        {
+            buf = hb_buffer_list_clear(list);
+        }
+    }
     while ( !*r->die && !r->job->done )
     {
         if ( hb_fifo_full_wait( fifo ) )
@@ -853,3 +918,16 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
     return NULL;
 }
 
+static hb_buffer_list_t * get_splice_list(hb_work_private_t * r, int id)
+{
+    int ii;
+
+    for (ii = 0; ii < r->splice_list_size; ii++)
+    {
+        if (r->splice_list[ii].id == id)
+        {
+            return &r->splice_list[ii].list;
+        }
+    }
+    return NULL;
+}

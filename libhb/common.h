@@ -144,6 +144,7 @@ struct hb_buffer_list_s
     hb_buffer_t *head;
     hb_buffer_t *tail;
     int count;
+    int size;
 };
 
 void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf);
@@ -156,6 +157,7 @@ hb_buffer_t* hb_buffer_list_clear(hb_buffer_list_t *list);
 hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf);
 void hb_buffer_list_close(hb_buffer_list_t *list);
 int hb_buffer_list_count(hb_buffer_list_t *list);
+int hb_buffer_list_size(hb_buffer_list_t *list);
 
 hb_list_t * hb_list_init();
 int         hb_list_count( const hb_list_t * );

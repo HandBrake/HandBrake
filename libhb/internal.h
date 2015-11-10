@@ -71,6 +71,7 @@ struct hb_buffer_settings_s
     int64_t       stop;         // stop time of frame
     int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
     int64_t       pcr;
+    int           split;
     uint8_t       discontinuity;
     int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 

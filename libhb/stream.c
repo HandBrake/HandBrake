@@ -4537,6 +4537,10 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // DTS-HD is an example of this.
 
         buf = hb_buffer_init(es_size);
+        if (ts_stream->packet_len < ts_stream->pes_info.packet_len + 6)
+        {
+            buf->s.split = 1;
+        }
         hb_buffer_list_append(&list, buf);
 
         buf->s.id = get_id(pes_stream);

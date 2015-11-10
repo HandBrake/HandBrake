@@ -2592,6 +2592,7 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf)
 {
     int count = 1;
+    int size = 0;
     hb_buffer_t *end = buf;
 
     if (buf == NULL)
@@ -2600,8 +2601,10 @@ void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf)
     }
 
     // Input buffer may be a list of buffers, find the end.
+    size += buf->size;
     while (end != NULL && end->next != NULL)
     {
+        size += end->size;
         end = end->next;
         count++;
     }
@@ -2616,11 +2619,13 @@ void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf)
         list->tail = end;
     }
     list->count += count;
+    list->size += size;
 }
 
 void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf)
 {
     int count = 1;
+    int size = 0;
     hb_buffer_t *end = buf;
 
     if (buf == NULL)
@@ -2629,8 +2634,10 @@ void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf)
     }
 
     // Input buffer may be a list of buffers, find the end.
+    size += buf->size;
     while (end != NULL && end->next != NULL)
     {
+        size += end->size;
         end = end->next;
         count++;
     }
@@ -2645,6 +2652,7 @@ void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf)
         list->head = buf;
     }
     list->count += count;
+    list->size += size;
 }
 
 hb_buffer_t* hb_buffer_list_rem_head(hb_buffer_list_t *list)
@@ -2662,6 +2670,7 @@ hb_buffer_t* hb_buffer_list_rem_head(hb_buffer_list_t *list)
         }
         list->head = list->head->next;
         list->count--;
+        list->size -= head->size;
     }
     if (head != NULL)
     {
@@ -2682,6 +2691,7 @@ hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
     {
         list->head = list->tail = NULL;
         list->count = 0;
+        list->size = 0;
     }
     else if (list->tail != NULL)
     {
@@ -2693,6 +2703,7 @@ hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
         end->next = NULL;
         list->tail = end;
         list->count--;
+        list->size -= tail->size;
     }
     if (tail != NULL)
     {
@@ -2722,6 +2733,7 @@ hb_buffer_t* hb_buffer_list_tail(hb_buffer_list_t *list)
 hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf)
 {
     int count = 0;
+    int size = 0;
 
     if (list == NULL)
     {
@@ -2733,15 +2745,18 @@ hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf)
     if (end != NULL)
     {
         count++;
+        size += end->size;
         while (end->next != NULL)
         {
             end = end->next;
             count++;
+            size += end->size;
         }
     }
     list->head = buf;
     list->tail = end;
     list->count = count;
+    list->size = size;
     return head;
 }
 
@@ -2754,6 +2769,7 @@ hb_buffer_t* hb_buffer_list_clear(hb_buffer_list_t *list)
     hb_buffer_t *head = list->head;
     list->head = list->tail = NULL;
     list->count = 0;
+    list->size = 0;
     return head;
 }
 
@@ -2766,6 +2782,11 @@ void hb_buffer_list_close(hb_buffer_list_t *list)
 int hb_buffer_list_count(hb_buffer_list_t *list)
 {
     return list->count;
+}
+
+int hb_buffer_list_size(hb_buffer_list_t *list)
+{
+    return list->size;
 }
 
 /**********************************************************************
