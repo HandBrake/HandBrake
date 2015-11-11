@@ -121,7 +121,10 @@ static int avformatInit( hb_mux_object_t * m )
     hb_mux_data_t * track;
     int meta_mux;
     int max_tracks;
-    int ii, jj, ret;
+    int ii, ret;
+#ifdef AV_PKT_DATA_FALLBACK_TRACK
+    int jj;
+#endif
 
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
@@ -593,6 +596,7 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
 
+#ifdef AV_PKT_DATA_FALLBACK_TRACK
     // Check for audio track associations
     for (ii = 0; ii < hb_list_count(job->list_audio); ii++)
     {
@@ -642,6 +646,7 @@ static int avformatInit( hb_mux_object_t * m )
             } break;
         }
     }
+#endif
 
     char * subidx_fmt =
         "size: %dx%d\n"
