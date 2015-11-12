@@ -110,7 +110,7 @@
     }
 
     if (self.video.twoPass && ((self.video.encoder & HB_VCODEC_X264_MASK) ||
-                               self.video.encoder == HB_VCODEC_X265))
+                               (self.video.encoder & HB_VCODEC_X265_MASK)))
     {
         job->fastfirstpass = self.video.turboTwoPass;
     }
