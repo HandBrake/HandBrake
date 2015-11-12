@@ -216,7 +216,8 @@ static int avformatInit( hb_mux_object_t * m )
     int priv_size = 0;
     switch (job->vcodec)
     {
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
             track->st->codec->codec_id = AV_CODEC_ID_H264;
 

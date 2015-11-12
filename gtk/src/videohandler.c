@@ -70,7 +70,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 
     // Advanced options are only for x264
-    if (encoder != HB_VCODEC_X264)
+    if (!(encoder & HB_VCODEC_X264_MASK))
     {
         ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
     }
@@ -101,7 +101,7 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
     }
 
     if (!ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions") &&
-        encoder == HB_VCODEC_X264)
+        (encoder & HB_VCODEC_X264_MASK))
     {
         GString *str = g_string_new("");
         const char *preset;
@@ -167,7 +167,7 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         {
             level = "";
         }
-        new_opts = hb_x264_param_unparse(
+        new_opts = hb_x264_param_unparse(hb_video_encoder_get_depth(encoder),
                         preset, tunes, opts, profile, level, w, h);
         if (new_opts)
             ghb_update_x264Option(ud, new_opts);

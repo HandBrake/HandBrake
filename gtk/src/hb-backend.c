@@ -1000,7 +1000,8 @@ ghb_vquality_default(signal_user_data_t *ud)
     switch (vcodec)
     {
     case HB_VCODEC_X265:
-    case HB_VCODEC_X264:
+    case HB_VCODEC_X264_8BIT:
+    case HB_VCODEC_X264_10BIT:
         return 20;
     case HB_VCODEC_THEORA:
         return 45;
@@ -3017,7 +3018,8 @@ ghb_build_advanced_opts_string(GhbValue *settings)
     vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
     switch (vcodec)
     {
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
             return ghb_dict_get_string(settings, "x264Option");
 
         default:

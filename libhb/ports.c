@@ -42,6 +42,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <dlfcn.h>
 #endif
 
 #ifdef SYS_CYGWIN
@@ -1353,3 +1354,34 @@ void hb_system_sleep_private_disable(void *opaque)
     }
 #endif
 }
+
+void * hb_dlopen(const char *name)
+{
+#ifdef SYS_MINGW
+    HMODULE h = LoadLibraryA(name);
+#else
+    void *h = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
+#endif
+
+    return h;
+}
+
+void * hb_dlsym(void *h, const char *name)
+{
+#ifdef SYS_MINGW
+    FARPROC p = GetProcAddress(h, name);
+#else
+    void *p = dlsym(h, name);
+#endif
+    return p;
+}
+
+int hb_dlclose(void *h)
+{
+#ifdef SYS_MINGW
+    return FreeLibrary(h);
+#else
+    return dlclose(h);
+#endif
+}
+

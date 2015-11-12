@@ -175,6 +175,21 @@ void  hb_system_sleep_opaque_close(void **opaque);
 void  hb_system_sleep_private_enable(void *opaque);
 void  hb_system_sleep_private_disable(void *opaque);
 
+/************************************************************************
+* Loadable Libraries
+***********************************************************************/
+void * hb_dlopen(const char *name);
+void * hb_dlsym(void *h, const char *name);
+int    hb_dlclose(void *h);
+
+#if defined( SYS_MINGW )
+#define HB_SO_EXT  ".dll"
+#elif defined( SYS_DARWIN )
+#define HB_SO_EXT  ".dylib"
+#else
+#define HB_SO_EXT  ".so"
+#endif
+
 #endif /* __LIBHB__ */
 
 #endif

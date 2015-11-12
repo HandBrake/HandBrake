@@ -1008,7 +1008,7 @@ void ghb_show_container_options(signal_user_data_t *ud)
 
     gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
-                               (enc == HB_VCODEC_X264));
+                               (enc == HB_VCODEC_X264_8BIT));
 }
 
 static void
@@ -2285,7 +2285,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
-    if (vcodec == HB_VCODEC_X264 && vquality < 1.0)
+    if ((vcodec & HB_VCODEC_X264_MASK) && vquality < 1.0)
     {
         // Set Profile to auto for lossless x264
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
@@ -5130,7 +5130,8 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
             return g_strdup_printf("%s: %d", vqname, (int)val);
         } break;
 
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
         {
             if (val == 0.0)
             {

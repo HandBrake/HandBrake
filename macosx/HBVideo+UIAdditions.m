@@ -83,7 +83,8 @@
 
 - (BOOL)turboTwoPassSupported
 {
-    return (self.encoder == HB_VCODEC_X264 || self.encoder == HB_VCODEC_X265);
+    return ((self.encoder & HB_VCODEC_X264_MASK) ||
+             self.encoder == HB_VCODEC_X265);
 }
 
 /**
@@ -92,7 +93,7 @@
  */
 - (NSString *)unparseOptions
 {
-    if (self.encoder != HB_VCODEC_X264)
+    if (!(self.encoder & HB_VCODEC_X264_MASK))
     {
         return @"";
     }
@@ -132,12 +133,12 @@
     }
 
     // now, unparse
-    char *fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(x264_preset,
-                                                                 x264_tune,
-                                                                 advanced_opts,
-                                                                 h264_profile,
-                                                                 h264_level,
-                                                                 self.job.picture.width, self.job.picture.height);
+    char *fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(
+                                    hb_video_encoder_get_depth(self.encoder),
+                                    x264_preset, x264_tune, advanced_opts,
+                                    h264_profile, h264_level,
+                                    self.job.picture.width,
+                                    self.job.picture.height);
     // update the text field
     if (fX264PresetsUnparsedUTF8String != NULL)
     {

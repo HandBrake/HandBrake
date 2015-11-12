@@ -1325,7 +1325,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "ColorMatrixCode", hb_value_dup(color_value));
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
 
-    if (vcodec == HB_VCODEC_X264 &&
+    if ((vcodec & HB_VCODEC_X264_MASK) &&
         hb_value_get_bool(hb_dict_get(preset, "x264UseAdvancedOptions")))
     {
         hb_dict_set(video_dict, "Options",

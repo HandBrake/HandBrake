@@ -48,20 +48,26 @@ hb_work_object_t hb_encx264 =
 
 struct hb_work_private_s
 {
-    hb_job_t       * job;
-    x264_t         * x264;
-    x264_picture_t   pic_in;
+    hb_job_t         * job;
+    x264_t           * x264;
+    x264_picture_t     pic_in;
 
-    int64_t        last_stop;   // Debugging - stop time of previous input frame
+    int64_t            last_stop;   // Debugging - stop time of previous input frame
 
-    hb_list_t *delayed_chapters;
-    int64_t next_chapter_pts;
+    hb_list_t        * delayed_chapters;
+    int64_t            next_chapter_pts;
     struct {
-        int64_t duration;
+        int64_t        duration;
     } frame_info[FRAME_INFO_SIZE];
 
-    char             filename[1024];
+    char               filename[1024];
+
+    // Multiple bit-depth
+    const x264_api_t * api;
 };
+
+#define HB_X264_API_COUNT   2
+static x264_api_t x264_apis[HB_X264_API_COUNT];
 
 // used in delayed_chapters list
 struct chapter_s
@@ -70,6 +76,224 @@ struct chapter_s
     int64_t start;
 };
 
+const char *libx264_10bit_names[] = {
+    "libx26410b", "libx264_main10", NULL
+};
+
+const char *libx264_8bit_names[] = {
+    "libx264", "libx2648b", "libx264_main", NULL
+};
+
+static void * x264_lib_open(const char *names[])
+{
+    if (names == NULL)
+        return NULL;
+
+    void *h;
+    int   ii = 0;
+    while (names[ii] != NULL)
+    {
+        char *name = hb_strdup_printf("%s%s", names[ii], HB_SO_EXT);
+        h = hb_dlopen(name);
+        free(name);
+        if (h != NULL)
+        {
+            return h;
+        }
+        ii++;
+    }
+    return NULL;
+}
+
+#if defined(SYS_LINUX)
+static void * x264_lib_open_ubuntu_10bit_search(const char *prefix)
+{
+    void          * h;
+    const char    * name = "libx264.so";
+
+    HB_DIR        * dir;
+    struct dirent * entry;
+
+    dir = hb_opendir(prefix);
+    if (dir == NULL)
+    {
+        return NULL;
+    }
+
+    while ((entry = hb_readdir(dir)) != NULL)
+    {
+        if (!strncmp(entry->d_name, name, strlen(name)))
+        {
+            char *path = hb_strdup_printf("%s/%s", prefix, entry->d_name);
+            h = hb_dlopen(path);
+            free(path);
+            if (h != NULL)
+            {
+                hb_closedir(dir);
+                return h;
+            }
+        }
+    }
+    hb_closedir(dir);
+
+    return NULL;
+}
+
+static void * x264_lib_open_ubuntu_10bit(void)
+{
+    void *h = NULL;
+
+#if ARCH_X86_64
+    h = x264_lib_open_ubuntu_10bit_search("/usr/lib/x86_64-linux-gnu/x264-10bit");
+#elif ARCH_X86_32
+    h = x264_lib_open_ubuntu_10bit_search("/usr/lib/i386-linux-gnu/x264-10bit");
+#endif
+    if (h == NULL)
+    {
+        h = x264_lib_open_ubuntu_10bit_search("/usr/lib/x264-10bit");
+    }
+    return h;
+}
+#endif
+
+void hb_x264_global_init(void)
+{
+    x264_apis[0].bit_depth                 = x264_bit_depth;
+    x264_apis[0].param_default             = x264_param_default;
+    x264_apis[0].param_default_preset      = x264_param_default_preset;
+    x264_apis[0].param_apply_profile       = x264_param_apply_profile;
+    x264_apis[0].param_apply_fastfirstpass = x264_param_apply_fastfirstpass;
+    x264_apis[0].param_parse               = x264_param_parse;
+    x264_apis[0].encoder_open              = x264_encoder_open;
+    x264_apis[0].encoder_headers           = x264_encoder_headers;
+    x264_apis[0].encoder_encode            = x264_encoder_encode;
+    x264_apis[0].encoder_delayed_frames    = x264_encoder_delayed_frames;
+    x264_apis[0].encoder_close             = x264_encoder_close;
+    x264_apis[0].picture_init              = x264_picture_init;
+
+    // Invalidate other apis
+    x264_apis[1].bit_depth = -1;
+
+    // Attempt to dlopen a library for handling the bit-depth that we do
+    // not already have.
+    void *h;
+    if (x264_bit_depth == 8)
+    {
+        h = x264_lib_open(libx264_10bit_names);
+#if defined(SYS_LINUX)
+        if (h == NULL)
+        {
+            h = x264_lib_open_ubuntu_10bit();
+        }
+#endif
+    }
+    else
+    {
+        h = x264_lib_open(libx264_8bit_names);
+    }
+    if (h == NULL)
+    {
+        return;
+    }
+
+    int ii;
+    int *pbit_depth                   = (int*)hb_dlsym(h, "x264_bit_depth");
+    x264_apis[1].param_default        = hb_dlsym(h, "x264_param_default");
+    x264_apis[1].param_default_preset = hb_dlsym(h, "x264_param_default_preset");
+    x264_apis[1].param_apply_profile  = hb_dlsym(h, "x264_param_apply_profile");
+    x264_apis[1].param_apply_fastfirstpass =
+                                hb_dlsym(h, "x264_param_apply_fastfirstpass");
+    x264_apis[1].param_parse          = hb_dlsym(h, "x264_param_parse");
+    // x264 appends the build number to the end of x264_encoder_open
+    for (ii = 140; ii < 200; ii++)
+    {
+        char *name = hb_strdup_printf("x264_encoder_open_%d", ii);
+        x264_apis[1].encoder_open = hb_dlsym(h, name);
+        free(name);
+        if (x264_apis[1].encoder_open != NULL)
+        {
+            break;
+        }
+    }
+    x264_apis[1].encoder_headers      = hb_dlsym(h, "x264_encoder_headers");
+    x264_apis[1].encoder_encode       = hb_dlsym(h, "x264_encoder_encode");
+    x264_apis[1].encoder_delayed_frames =
+                                hb_dlsym(h, "x264_encoder_delayed_frames");
+    x264_apis[1].encoder_close        = hb_dlsym(h, "x264_encoder_close");
+    x264_apis[1].picture_init         = hb_dlsym(h, "x264_picture_init");
+
+    if (pbit_depth                             != NULL &&
+        x264_apis[1].param_default             != NULL &&
+        x264_apis[1].param_default_preset      != NULL &&
+        x264_apis[1].param_apply_profile       != NULL &&
+        x264_apis[1].param_apply_fastfirstpass != NULL &&
+        x264_apis[1].param_parse               != NULL &&
+        x264_apis[1].encoder_open              != NULL &&
+        x264_apis[1].encoder_headers           != NULL &&
+        x264_apis[1].encoder_encode            != NULL &&
+        x264_apis[1].encoder_delayed_frames    != NULL &&
+        x264_apis[1].encoder_close             != NULL &&
+        x264_apis[1].picture_init              != NULL)
+    {
+        x264_apis[1].bit_depth = *pbit_depth;
+    }
+}
+
+const x264_api_t * hb_x264_api_get(int bit_depth)
+{
+    int ii;
+
+    for (ii = 0; ii < HB_X264_API_COUNT; ii++)
+    {
+        if (-1        != x264_apis[ii].bit_depth &&
+            bit_depth == x264_apis[ii].bit_depth)
+        {
+            return &x264_apis[ii];
+        }
+    }
+    return NULL;
+}
+
+#if 0
+/*
+ * Check whether a valid h264_level is compatible with the given framerate,
+ * resolution and interlaced compression/flags combination.
+ *
+ * width, height, fps_num and fps_den should be greater than zero.
+ *
+ * interlacing parameters can be set to zero when the information is
+ * unavailable, as apply_h264_level() will disable interlacing if necessary.
+ *
+ * Returns 0 if the level is valid and compatible, 1 otherwise.
+ */
+static int check_h264_level(const char *h264_level, int width, int height,
+                            int fps_num, int fps_den, int interlaced,
+                            int fake_interlaced);
+#endif
+
+/*
+ * Applies the restrictions of the requested H.264 level to an x264_param_t.
+ *
+ * Returns -1 if an invalid level (or no level) is specified. GUIs should be
+ * capable of always providing a valid level.
+ *
+ * Does not modify resolution/framerate but warns when they exceed level limits.
+ *
+ * Based on a x264_param_apply_level() draft and other x264 code.
+ */
+static int apply_h264_level(const x264_api_t *api, x264_param_t *param,
+                            const char *h264_level, const char *x264_profile,
+                            int verbose);
+
+/*
+ * Applies the restrictions of the requested H.264 profile to an x264_param_t.
+ *
+ * x264_param_apply_profile wrapper designed to always succeed when a valid
+ * H.264 profile is specified (unlike x264's function).
+ */
+static int apply_h264_profile(const x264_api_t *api, x264_param_t *param,
+                              const char *h264_profile, int verbose);
+
 /***********************************************************************
  * hb_work_encx264_init
  ***********************************************************************
@@ -77,18 +301,25 @@ struct chapter_s
  **********************************************************************/
 int encx264Init( hb_work_object_t * w, hb_job_t * job )
 {
-    x264_param_t       param;
-    x264_nal_t       * nal;
-    int                nal_count;
-
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    x264_param_t        param;
+    x264_nal_t        * nal;
+    int                 nal_count, bit_depth;
+
     w->private_data = pv;
+
+    bit_depth = hb_video_encoder_get_depth(job->vcodec);
+    pv->api   = hb_x264_api_get(bit_depth);
+    if (pv->api == NULL)
+    {
+        hb_error("encx264: hb_x264_api_get failed, bit-depth %d", bit_depth);
+    }
 
     pv->job = job;
     pv->next_chapter_pts = AV_NOPTS_VALUE;
     pv->delayed_chapters = hb_list_init();
 
-    if (x264_param_default_preset(&param,
+    if (pv->api->param_default_preset(&param,
                                   job->encoder_preset, job->encoder_tune) < 0)
     {
         free( pv );
@@ -198,7 +429,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         char *str = hb_value_get_string_xform(value);
 
         /* Here's where the strings are passed to libx264 for parsing. */
-        ret = x264_param_parse(&param, key, str);
+        ret = pv->api->param_parse(&param, key, str);
 
         /* Let x264 sanity check the options for us */
         if (ret == X264_PARAM_BAD_NAME)
@@ -289,7 +520,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Apply profile and level settings last, if present. */
     if (job->encoder_profile != NULL && *job->encoder_profile)
     {
-        if (hb_apply_h264_profile(&param, job->encoder_profile, 1))
+        if (apply_h264_profile(pv->api, &param, job->encoder_profile, 1))
         {
             free(pv);
             w->private_data = NULL;
@@ -298,8 +529,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     if (job->encoder_level != NULL && *job->encoder_level)
     {
-        if (hb_apply_h264_level(&param, job->encoder_level,
-                                job->encoder_profile, 1) < 0)
+        if (apply_h264_level(pv->api, &param, job->encoder_level,
+                             job->encoder_profile, 1) < 0)
         {
             free(pv);
             w->private_data = NULL;
@@ -310,7 +541,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Turbo first pass */
     if( job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 1 )
     {
-        x264_param_apply_fastfirstpass( &param );
+        pv->api->param_apply_fastfirstpass( &param );
     }
 
     /* B-pyramid is enabled by default. */
@@ -326,7 +557,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     
     /* Log the unparsed x264 options string. */
-    char *x264_opts_unparsed = hb_x264_param_unparse(job->encoder_preset,
+    char *x264_opts_unparsed = hb_x264_param_unparse(pv->api->bit_depth,
+                                                     job->encoder_preset,
                                                      job->encoder_tune,
                                                      job->encoder_options,
                                                      job->encoder_profile,
@@ -340,7 +572,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     free( x264_opts_unparsed );
 
     hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass_id );
-    pv->x264 = x264_encoder_open( &param );
+    pv->x264 = pv->api->encoder_open( &param );
     if ( pv->x264 == NULL )
     {
         hb_error("encx264: x264_encoder_open failed.");
@@ -349,7 +581,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
-    x264_encoder_headers( pv->x264, &nal, &nal_count );
+    pv->api->encoder_headers( pv->x264, &nal, &nal_count );
 
     /* Sequence Parameter Set */
     memcpy(w->config->h264.sps, nal[0].p_payload + 4, nal[0].i_payload - 4);
@@ -359,9 +591,13 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     memcpy(w->config->h264.pps, nal[1].p_payload + 4, nal[1].i_payload - 4);
     w->config->h264.pps_length = nal[1].i_payload - 4;
 
-    x264_picture_init( &pv->pic_in );
+    pv->api->picture_init( &pv->pic_in );
 
     pv->pic_in.img.i_csp = X264_CSP_I420;
+    if (pv->api->bit_depth > 8)
+    {
+        pv->pic_in.img.i_csp |= X264_CSP_HIGH_DEPTH;
+    }
     pv->pic_in.img.i_plane = 3;
 
     return 0;
@@ -387,7 +623,7 @@ void encx264Close( hb_work_object_t * w )
         hb_list_close(&pv->delayed_chapters);
     }
 
-    x264_encoder_close( pv->x264 );
+    pv->api->encoder_close( pv->x264 );
     free( pv );
     w->private_data = NULL;
 
@@ -555,18 +791,58 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     return buf;
 }
 
+static hb_buffer_t * expand_buf(int bit_depth, hb_buffer_t *in)
+{
+    hb_buffer_t *buf;
+    int          pp;
+    int          shift = bit_depth - 8;
+
+    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P16BE,
+                               in->f.width, in->f.height);
+    for (pp = 0; pp < 3; pp++)
+    {
+        int       xx, yy;
+        uint8_t  *src =  in->plane[pp].data;
+        uint16_t *dst = (uint16_t*)buf->plane[pp].data;
+        for (yy = 0; yy < in->plane[pp].height; yy++)
+        {
+            for (xx = 0; xx < in->plane[pp].width; xx++)
+            {
+                dst[xx] = (uint16_t)src[xx] << shift;
+            }
+            src +=  in->plane[pp].stride;
+            dst += buf->plane[pp].stride / 2;
+        }
+    }
+    return buf;
+}
+
 static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
 {
     hb_work_private_t *pv = w->private_data;
-    hb_job_t *job = pv->job;
+    hb_job_t          *job = pv->job;
+    hb_buffer_t       *tmp = NULL;
 
     /* Point x264 at our current buffers Y(UV) data.  */
-    pv->pic_in.img.i_stride[0] = in->plane[0].stride;
-    pv->pic_in.img.i_stride[1] = in->plane[1].stride;
-    pv->pic_in.img.i_stride[2] = in->plane[2].stride;
-    pv->pic_in.img.plane[0] = in->plane[0].data;
-    pv->pic_in.img.plane[1] = in->plane[1].data;
-    pv->pic_in.img.plane[2] = in->plane[2].data;
+    if (pv->pic_in.img.i_csp & X264_CSP_HIGH_DEPTH)
+    {
+        tmp = expand_buf(pv->api->bit_depth, in);
+        pv->pic_in.img.i_stride[0] = tmp->plane[0].stride;
+        pv->pic_in.img.i_stride[1] = tmp->plane[1].stride;
+        pv->pic_in.img.i_stride[2] = tmp->plane[2].stride;
+        pv->pic_in.img.plane[0] = tmp->plane[0].data;
+        pv->pic_in.img.plane[1] = tmp->plane[1].data;
+        pv->pic_in.img.plane[2] = tmp->plane[2].data;
+    }
+    else
+    {
+        pv->pic_in.img.i_stride[0] = in->plane[0].stride;
+        pv->pic_in.img.i_stride[1] = in->plane[1].stride;
+        pv->pic_in.img.i_stride[2] = in->plane[2].stride;
+        pv->pic_in.img.plane[0] = in->plane[0].data;
+        pv->pic_in.img.plane[1] = in->plane[1].data;
+        pv->pic_in.img.plane[2] = in->plane[2].data;
+    }
 
     if( in->s.new_chap && job->chapter_markers )
     {
@@ -626,11 +902,12 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     int i_nal;
     x264_nal_t *nal;
 
-    x264_encoder_encode( pv->x264, &nal, &i_nal, &pv->pic_in, &pic_out );
+    pv->api->encoder_encode( pv->x264, &nal, &i_nal, &pv->pic_in, &pic_out );
     if ( i_nal > 0 )
     {
         return nal_encode( w, &pic_out, i_nal, nal );
     }
+    hb_buffer_close(&tmp);
     return NULL;
 }
 
@@ -654,9 +931,9 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_buffer_list_clear(&list);
 
         // flush delayed frames
-        while ( x264_encoder_delayed_frames( pv->x264 ) )
+        while ( pv->api->encoder_delayed_frames( pv->x264 ) )
         {
-            x264_encoder_encode( pv->x264, &nal, &i_nal, NULL, &pic_out );
+            pv->api->encoder_encode( pv->x264, &nal, &i_nal, NULL, &pic_out );
             if ( i_nal == 0 )
                 continue;
             if ( i_nal < 0 )
@@ -678,11 +955,20 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
-                          int verbose)
+static int apply_h264_profile(const x264_api_t *api, x264_param_t *param,
+                              const char *h264_profile, int verbose)
 {
+    const char * const * profile_names;
+    if (api->bit_depth == 10)
+    {
+        profile_names = hb_h264_profile_names_10bit;
+    }
+    else
+    {
+        profile_names = hb_h264_profile_names_8bit;
+    }
     if (h264_profile != NULL &&
-        strcasecmp(h264_profile, hb_h264_profile_names[0]) != 0)
+        strcasecmp(h264_profile, profile_names[0]) != 0)
     {
         /*
          * baseline profile doesn't support interlacing
@@ -693,7 +979,7 @@ int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
         {
             if (verbose)
             {
-                hb_log("hb_apply_h264_profile [warning]: baseline profile doesn't support interlacing, disabling");
+                hb_log("apply_h264_profile [warning]: baseline profile doesn't support interlacing, disabling");
             }
             param->b_interlaced = param->b_fake_interlaced = 0;
         }
@@ -706,20 +992,13 @@ int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
         {
             if (verbose)
             {
-                hb_log("hb_apply_h264_profile [warning]: lossless requires high444 profile, disabling");
+                hb_log("apply_h264_profile [warning]: lossless requires high444 profile, disabling");
             }
             param->rc.f_rf_constant = 1.0;
         }
-        if (!strcasecmp(h264_profile, "high10") ||
-            !strcasecmp(h264_profile, "high422"))
-        {
-            // arbitrary profile names may be specified via the CLI
-            // map unsupported high10 and high422 profiles to high
-            return x264_param_apply_profile(param, "high");
-        }
-        return x264_param_apply_profile(param, h264_profile);
+        return api->param_apply_profile(param, h264_profile);
     }
-    else if (!strcasecmp(h264_profile, hb_h264_profile_names[0]))
+    else if (!strcasecmp(h264_profile, profile_names[0]))
     {
         // "auto", do nothing
         return 0;
@@ -727,14 +1006,15 @@ int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
     else
     {
         // error (profile not a string), abort
-        hb_error("hb_apply_h264_profile: no profile specified");
+        hb_error("apply_h264_profile: no profile specified");
         return -1;
     }
 }
 
-int hb_check_h264_level(const char *h264_level, int width, int height,
-                        int fps_num, int fps_den, int interlaced,
-                        int fake_interlaced)
+#if 0
+static int check_h264_level(const char *h264_level,
+                            int width, int height, int fps_num,
+                            int fps_den, int interlaced, int fake_interlaced)
 {
     x264_param_t param;
     x264_param_default(&param);
@@ -744,11 +1024,13 @@ int hb_check_h264_level(const char *h264_level, int width, int height,
     param.i_fps_den         = fps_den;
     param.b_interlaced      = !!interlaced;
     param.b_fake_interlaced = !!fake_interlaced;
-    return (hb_apply_h264_level(&param, h264_level, NULL, 0) != 0);
+    return (apply_h264_level(&param, h264_level, NULL, 0) != 0);
 }
+#endif
 
-int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
-                        const char *h264_profile, int verbose)
+int apply_h264_level(const x264_api_t *api, x264_param_t *param,
+                     const char *h264_level, const char *h264_profile,
+                     int verbose)
 {
     float f_framerate;
     const x264_level_t *x264_level = NULL;
@@ -779,7 +1061,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
         if (x264_level == NULL)
         {
             // error (invalid or unsupported level), abort
-            hb_error("hb_apply_h264_level: invalid level %s", h264_level);
+            hb_error("apply_h264_level: invalid level %s", h264_level);
             return -1;
         }
     }
@@ -791,7 +1073,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     else
     {
         // error (level not a string), abort
-        hb_error("hb_apply_h264_level: no level specified");
+        hb_error("apply_h264_level: no level specified");
         return -1;
     }
 
@@ -804,6 +1086,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
         HB_ENCX264_PROFILE_MAIN,
         // High (no 4:2:2 or 10-bit support, so anything lossy is equivalent)
         HB_ENCX264_PROFILE_HIGH,
+        HB_ENCX264_PROFILE_HIGH10,
         // Lossless (4:2:0 8-bit for now)
         HB_ENCX264_PROFILE_HIGH444,
     } hb_encx264_profile;
@@ -847,7 +1130,14 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
         else if (param->analyse.b_transform_8x8 ||
                  param->i_cqm_preset != X264_CQM_FLAT)
         {
-            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH;
+            if (api->bit_depth == 10)
+            {
+                hb_encx264_profile = HB_ENCX264_PROFILE_HIGH10;
+            }
+            else
+            {
+                hb_encx264_profile = HB_ENCX264_PROFILE_HIGH;
+            }
         }
         else
         {
@@ -861,7 +1151,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     if (param->i_width <= 0 || param->i_height <= 0)
     {
         // error (invalid width or height), abort
-        hb_error("hb_apply_h264_level: invalid resolution (width: %d, height: %d)",
+        hb_error("apply_h264_level: invalid resolution (width: %d, height: %d)",
                  param->i_width, param->i_height);
         return -1;
     }
@@ -879,7 +1169,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     {
         if (verbose)
         {
-            hb_log("hb_apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
+            hb_log("apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
                    h264_level);
         }
         ret = 1;
@@ -937,7 +1227,9 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     if (hb_encx264_profile != HB_ENCX264_PROFILE_HIGH444)
     {
         // High profile allows for higher VBV bufsize/maxrate
-        int cbp_factor = hb_encx264_profile == HB_ENCX264_PROFILE_HIGH ? 5 : 4;
+        int cbp_factor;
+        cbp_factor = hb_encx264_profile == HB_ENCX264_PROFILE_HIGH10 ? 12 :
+                     hb_encx264_profile == HB_ENCX264_PROFILE_HIGH   ?  5 : 4;
         if (!param->rc.i_vbv_max_bitrate)
         {
             param->rc.i_vbv_max_bitrate = (x264_level->bitrate * cbp_factor) / 4;
@@ -979,7 +1271,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     {
         if (verbose)
         {
-            hb_log("hb_apply_h264_level [warning]: frame size (%dx%d, %d macroblocks) too high for level %s (max. %d macroblocks)",
+            hb_log("apply_h264_level [warning]: frame size (%dx%d, %d macroblocks) too high for level %s (max. %d macroblocks)",
                    i_mb_width * 16, i_mb_height * 16, i_mb_size, h264_level,
                    x264_level->frame_size);
         }
@@ -989,7 +1281,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     {
         if (verbose)
         {
-            hb_log("hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
+            hb_log("apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
                    f_framerate, h264_level, param->i_width, param->i_height,
                    (float)x264_level->mbps / i_mb_size);
         }
@@ -1004,7 +1296,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     {
         if (verbose)
         {
-            hb_log("hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
+            hb_log("apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
                    param->i_width, h264_level, max_mb_side * 16);
         }
         ret = 1;
@@ -1013,7 +1305,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     {
         if (verbose)
         {
-            hb_log("hb_apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
+            hb_log("apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
                    param->i_height, h264_level, max_mb_side * 16);
         }
         ret = 1;
@@ -1034,24 +1326,28 @@ static hb_value_t * value_pair(hb_value_t * v1, hb_value_t * v2)
     return array;
 }
 
-char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
-                             const char *x264_encopts, const char *h264_profile,
-                             const char *h264_level, int width, int height)
+// TODO: add bit_depth
+char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
+                             const char *x264_tune, const char *x264_encopts,
+                             const char *h264_profile, const char *h264_level,
+                             int width, int height)
 {
     int i;
     char *unparsed_opts;
     hb_dict_t *x264_opts;
     x264_param_t defaults, param;
+    const x264_api_t *api;
 
     /*
      * get the global x264 defaults (what we compare against)
      */
-    x264_param_default(&defaults);
+    api = hb_x264_api_get(bit_depth);
+    api->param_default(&defaults);
 
     /*
      * apply the defaults, preset and tune
      */
-    if (x264_param_default_preset(&param, x264_preset, x264_tune) < 0)
+    if (api->param_default_preset(&param, x264_preset, x264_tune) < 0)
     {
         /*
          * Note: GUIs should be able to always specifiy valid preset/tunes, so
@@ -1094,7 +1390,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
         char *str = hb_value_get_string_xform(value);
 
         // let's not pollute GUI logs with x264_param_parse return codes
-        x264_param_parse(&param, key, str);
+        api->param_parse(&param, key, str);
         free(str);
     }
 
@@ -1104,7 +1400,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     if (h264_profile != NULL && *h264_profile)
     {
         // be quiet so at to not pollute GUI logs
-        hb_apply_h264_profile(&param, h264_profile, 0);
+        apply_h264_profile(api, &param, h264_profile, 0);
     }
 
     /*
@@ -1112,11 +1408,11 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
      */
     if (h264_level != NULL && *h264_level)
     {
-        // set width/height to avoid issues in hb_apply_h264_level
+        // set width/height to avoid issues in apply_h264_level
         param.i_width  = width;
         param.i_height = height;
         // be quiet so at to not pollute GUI logs
-        hb_apply_h264_level(&param, h264_level, h264_profile, 0);
+        apply_h264_level(api, &param, h264_level, h264_profile, 0);
     }
 
     /*
