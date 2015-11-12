@@ -448,8 +448,11 @@ static void ts_err( hb_stream_t *stream, int curstream, char *log, ... )
     ts_warn_helper( stream, log, args );
     va_end( args );
 
-    stream->ts.list[curstream].skipbad = 1;
-    stream->ts.list[curstream].continuity = -1;
+    if (curstream >= 0)
+    {
+        stream->ts.list[curstream].skipbad = 1;
+        stream->ts.list[curstream].continuity = -1;
+    }
 }
 
 static int check_ps_sync(const uint8_t *buf)
@@ -4545,8 +4548,6 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
 
         buf->s.id = get_id(pes_stream);
         buf->s.type = stream_kind_to_buf_type(pes_stream->stream_kind);
-        buf->s.discontinuity = stream->ts.discontinuity;
-        stream->ts.discontinuity = 0;
         buf->s.new_chap = b->s.new_chap;
         b->s.new_chap = 0;
 
@@ -4554,6 +4555,8 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // only put timestamps on the first output buffer for this PES packet.
         if (ts_stream->packet_offset > 0)
         {
+            buf->s.discontinuity = stream->ts.discontinuity;
+            stream->ts.discontinuity = 0;
             buf->s.pcr = stream->ts.pcr;
             stream->ts.pcr = AV_NOPTS_VALUE;
             buf->s.start = ts_stream->pes_info.pts;
@@ -4640,6 +4643,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     }
     if (discontinuity)
     {
+        // If there is a discontinuity, flush all data
+        buf = flush_ts_streams(stream);
+        hb_buffer_list_append(&list, buf);
+
         stream->ts.discontinuity = 1;
     }
 
@@ -4649,15 +4656,17 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     int pid = ((pkt[1] & 0x1F) << 8) | pkt[2];
     if ( ( curstream = index_of_pid( stream, pid ) ) < 0 )
     {
-        return NULL;
+        // Not a stream we care about
+        return hb_buffer_list_clear(&list);
     }
+
 
     // Get error
     int errorbit = (pkt[1] & 0x80) != 0;
     if (errorbit)
     {
         ts_err( stream, curstream,  "packet error bit set");
-        return NULL;
+        return hb_buffer_list_clear(&list);
     }
 
     // Get adaption header info
@@ -4666,7 +4675,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     if (adaption == 0)
     {
         ts_err( stream, curstream,  "adaptation code 0");
-        return NULL;
+        return hb_buffer_list_clear(&list);
     }
     else if (adaption == 0x2)
         adapt_len = 184;
@@ -4676,16 +4685,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         if (adapt_len > 184)
         {
             ts_err( stream, curstream,  "invalid adapt len %d", adapt_len);
-            return NULL;
+            return hb_buffer_list_clear(&list);
         }
     }
 
-    if (discontinuity)
-    {
-        // If there is a discontinuity, flush all data
-        buf = flush_ts_streams(stream);
-        hb_buffer_list_append(&list, buf);
-    }
     if (adapt_len > 0)
     {
         if (pkt[5] & 0x40)
