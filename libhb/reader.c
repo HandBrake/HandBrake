@@ -68,7 +68,7 @@ struct hb_work_private_s
     int            chapter_end;
     uint64_t       st_first;
     uint64_t       duration;
-    hb_fifo_t    * fifos[100];
+    hb_fifo_t   ** fifos;
 
     buffer_splice_list_t * splice_list;
     int                    splice_list_size;
@@ -282,6 +282,10 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
         r->splice_list[jj++].id = audio->id;
     }
 
+    // count also happens to be the upper bound for the number of
+    // fifos that will be needed (+1 for null terminator)
+    r->fifos = calloc(count + 1, sizeof(hb_fifo_t*));
+
     // The stream needs to be open before starting the reader thead
     // to prevent a race with decoders that may share information
     // with the reader. Specifically avcodec needs this.
@@ -299,6 +303,10 @@ static void reader_close( hb_work_object_t * w )
 {
     hb_work_private_t * r = w->private_data;
 
+    if ( r == NULL )
+    {
+        return;
+    }
     if (r->bd)
     {
         hb_bd_stop( r->bd );
@@ -319,6 +327,7 @@ static void reader_close( hb_work_object_t * w )
         free( r->stream_timing );
     }
 
+    free( r->fifos );
     free( r );
 }
 
@@ -858,9 +867,7 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
     hb_title_t    * title = job->title;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle;
-    int             i, n, count;
-
-    memset(r->fifos, 0, sizeof(r->fifos));
+    int             i, n;
 
     if( id == title->video_id )
     {
@@ -878,13 +885,12 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
         else
         {
             r->fifos[0] = job->fifo_mpeg2;
+            r->fifos[1] = NULL;
             return r->fifos;
         }
     }
 
-    count = hb_list_count( job->list_subtitle );
-    count = count > 99 ? 99 : count;
-    for( i = n = 0; i < count; i++ )
+    for( i = n = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
         subtitle =  hb_list_item( job->list_subtitle, i );
         if (id == subtitle->id)
@@ -895,6 +901,7 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
     }
     if ( n != 0 )
     {
+        r->fifos[n] = NULL;
         return r->fifos;
     }
 
@@ -911,6 +918,7 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
 
         if( n != 0 )
         {
+            r->fifos[n] = NULL;
             return r->fifos;
         }
     }
