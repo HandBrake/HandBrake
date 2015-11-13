@@ -347,6 +347,7 @@ void encx265Close(hb_work_object_t *w)
 {
     hb_work_private_t *pv = w->private_data;
 
+    if (pv == NULL) return;
     if (pv->delayed_chapters != NULL)
     {
         struct chapter_s *item;
