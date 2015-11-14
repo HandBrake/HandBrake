@@ -501,7 +501,7 @@ static int hb_vfr_work( hb_filter_object_t * filter,
 
     // If there is a gap between the last stop and the current start
     // then frame(s) were dropped.
-    if ( in->s.start > pv->last_stop[0] )
+    if (hb_fifo_size(pv->delay_queue) > 0 && in->s.start > pv->last_stop[0])
     {
         /* We need to compensate for the time lost by dropping frame(s).
            Spread its duration out in quarters, because usually dropped frames

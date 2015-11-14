@@ -9,6 +9,9 @@
 
 #include "hb.h"
 #include "openclwrapper.h"
+#ifdef USE_QSV
+#include "libavcodec/qsv.h"
+#endif
 
 #ifndef SYS_DARWIN
 #include <malloc.h>
@@ -676,6 +679,29 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
     while( b )
     {
+#ifdef USE_QSV
+        // Reclaim QSV resources before dropping the buffer.
+        // when decoding without QSV, the QSV atom will be NULL.
+        if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
+        {
+            av_qsv_stage *stage = av_qsv_get_last_stage(b->qsv_details.qsv_atom);
+            if (stage != NULL)
+            {
+                av_qsv_wait_on_sync(b->qsv_details.ctx, stage);
+                if (stage->out.sync->in_use > 0)
+                {
+                    ff_qsv_atomic_dec(&stage->out.sync->in_use);
+                }
+                if (stage->out.p_surface->Data.Locked > 0)
+                {
+                    ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
+                }
+            }
+            av_qsv_flush_stages(b->qsv_details.ctx->pipes,
+                                &b->qsv_details.qsv_atom);
+        }
+#endif
+
         hb_buffer_t * next = b->next;
         hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
