@@ -930,7 +930,15 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     }
     if (!strcmp(pref_lang, "und"))
     {
-        foreign_audio_search = foreign_first_audio = 0;
+        if (first_audio_lang != NULL)
+        {
+            pref_lang = first_audio_lang;
+            foreign_first_audio = 0;
+        }
+        else
+        {
+            foreign_audio_search = foreign_first_audio = 0;
+        }
     }
 
     int track;
