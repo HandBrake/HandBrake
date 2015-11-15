@@ -358,8 +358,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Subtitle Settings */ 
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
-
-            // parsedPreset.SubtitleTrackBehaviours.SelectedBehaviour = preset.SubtitleTrackSelectionBehavior;
+            preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
             preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
             if (importedPreset.SubtitleLanguageList != null)
