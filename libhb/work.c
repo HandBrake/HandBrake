@@ -1531,6 +1531,7 @@ static void do_job(hb_job_t *job)
     for (i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
         subtitle = hb_list_item( job->list_subtitle, i );
+        w = hb_get_work( job->h, subtitle->codec );
         // Must set capacity of the raw-FIFO to be set >= the maximum
         // number of subtitle lines that could be decoded prior to a
         // video frame in order to prevent the following deadlock
@@ -1546,11 +1547,15 @@ static void do_job(hb_job_t *job)
         // Since that number is unbounded, the FIFO must be made
         // (effectively) unbounded in capacity.
         subtitle->fifo_raw  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
-        subtitle->fifo_in   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        if (w->id != WORK_DECSRTSUB)
+        {
+            // decsrtsub is a buffer source like reader.  It's input comes
+            // from a file.
+            subtitle->fifo_in   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        }
         subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
-        w = hb_get_work( job->h, subtitle->codec );
         w->fifo_in = subtitle->fifo_in;
         w->fifo_out = subtitle->fifo_raw;
         w->subtitle = subtitle;

@@ -600,7 +600,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 {
     int retval = 1;
     hb_work_private_t * pv;
-    hb_buffer_t *buffer;
     int i;
     hb_chapter_t * chapter;
 
@@ -610,10 +609,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         w->private_data = pv;
 
         pv->job = job;
-
-        buffer = hb_buffer_init( 0 );
-        hb_fifo_push( w->fifo_in, buffer);
-
         pv->current_state = k_state_potential_new_entry;
         pv->number_of_entries = 0;
         pv->last_entry_number = 0;
@@ -688,26 +683,18 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * in = *buf_in;
     hb_buffer_t * out = NULL;
 
     out = srt_read( pv );
-    if( out )
+    if (out != NULL)
     {
         hb_srt_to_ssa(out, ++pv->line);
-
-        /*
-         * Keep a buffer in our input fifo so that we get run.
-         */
-        hb_fifo_push( w->fifo_in, in);
-        *buf_in = NULL;
         *buf_out = out;
-    } else {
-        *buf_out = NULL;
         return HB_WORK_OK;
+    } else {
+        *buf_out = hb_buffer_eof_init();
+        return HB_WORK_DONE;
     }
-
-    return HB_WORK_OK;
 }
 
 static void decsrtClose( hb_work_object_t * w )
