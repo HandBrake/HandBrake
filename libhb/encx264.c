@@ -317,6 +317,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
     pv->next_chapter_pts = AV_NOPTS_VALUE;
+    pv->last_stop        = AV_NOPTS_VALUE;
     pv->delayed_chapters = hb_list_init();
 
     if (pv->api->param_default_preset(&param,
@@ -884,7 +885,7 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
      * frame stream with the current frame's start time equal to the
      * previous frame's stop time.
      */
-    if( pv->last_stop != in->s.start )
+    if (pv->last_stop != AV_NOPTS_VALUE && pv->last_stop != in->s.start)
     {
         hb_log("encx264 input continuity err: last stop %"PRId64"  start %"PRId64,
                 pv->last_stop, in->s.start);
