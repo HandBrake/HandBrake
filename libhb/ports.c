@@ -998,6 +998,10 @@ void hb_lock_close( hb_lock_t ** _l )
 {
     hb_lock_t * l = *_l;
 
+    if (l == NULL)
+    {
+        return;
+    }
 #if defined( SYS_BEOS )
     delete_sem( l->sem );
 #elif USE_PTHREAD
@@ -1077,6 +1081,10 @@ void hb_cond_close( hb_cond_t ** _c )
 {
     hb_cond_t * c = *_c;
 
+    if (c == NULL)
+    {
+        return;
+    }
 #if defined( SYS_BEOS )
 #elif USE_PTHREAD
     pthread_cond_destroy( &c->cond );
