@@ -2843,6 +2843,7 @@ void hb_buffer_list_close(hb_buffer_list_t *list)
 
 int hb_buffer_list_count(hb_buffer_list_t *list)
 {
+    if (list == NULL) return 0;
     return list->count;
 }
 
@@ -2894,6 +2895,7 @@ hb_list_t * hb_list_init()
  *********************************************************************/
 int hb_list_count( const hb_list_t * l )
 {
+    if (l == NULL) return 0;
     return l->items_count;
 }
 
@@ -3120,7 +3122,9 @@ void hb_list_close( hb_list_t ** _l )
     hb_list_t * l = *_l;
 
     if (l == NULL)
+    {
         return;
+    }
 
     free( l->items );
     free( l );
