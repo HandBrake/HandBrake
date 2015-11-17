@@ -1607,7 +1607,7 @@ const char* const* hb_qsv_profile_get_names(int encoder)
         case HB_VCODEC_QSV_H264:
             return hb_h264_profile_names_8bit;
         case HB_VCODEC_QSV_H265:
-            return hb_h265_profile_names;
+            return hb_h265_profile_names_8bit;
         default:
             return NULL;
     }
