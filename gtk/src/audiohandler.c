@@ -2398,7 +2398,7 @@ audio_def_lang_list_init(signal_user_data_t *ud)
     for (ii = 0; ii < count; )
     {
         GhbValue *lang_val = ghb_array_get(lang_list, ii);
-        int idx = ghb_lookup_audio_lang(lang_val);
+        int idx = ghb_lookup_lang(lang_val);
 
         GtkListBox *avail, *selected;
         GtkListBoxRow *row;

@@ -42,7 +42,7 @@
         // Limit the cache to 60 1080p previews, the cost is in pixels
         _picturePreviews.totalCostLimit = 60 * 1920 * 1080;
 
-        _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
@@ -76,8 +76,7 @@
     if (!theImage)
     {
         HBFilters *filters = self.job.filters;
-        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"] && !filters.useDecomb) ||
-                           (![filters.decomb isEqualToString:@"off"] && filters.useDecomb);
+        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"]);
 
         theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
@@ -207,9 +206,9 @@
              [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state]
                                       info:[formatter stateToString:hb_state title:@"preview"]];
          }
-       completionHandler:^(BOOL success) {
+       completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle
-           if (success)
+           if (result == HBCoreResultDone)
            {
                [self.delegate didCreateMovieAtURL:destURL];
            }

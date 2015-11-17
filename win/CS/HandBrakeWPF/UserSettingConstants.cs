@@ -132,6 +132,16 @@ namespace HandBrakeWPF
         public const string PreventSleep = "PreventSleep";
 
         /// <summary>
+        /// Pause Queue on Low Disk Space
+        /// </summary>
+        public const string PauseOnLowDiskspace = "PauseOnLowDiskspace";
+
+        /// <summary>
+        /// Low Disk Space Warning Level in Bytes.
+        /// </summary>
+        public const string PauseOnLowDiskspaceLevel = "LowDiskSpaceWarningLevelInBytes";
+
+        /// <summary>
         /// The remove punctuation.
         /// </summary>
         public const string RemovePunctuation = "RemovePunctuation";
@@ -206,6 +216,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
 
+        /// <summary>
+        /// The Show Queue in-line option.
+        /// </summary>
+        public const string ShowQueueInline = "ShowQueueInline";
+        
         #endregion
     }
 }

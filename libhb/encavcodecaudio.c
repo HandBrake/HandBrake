@@ -121,6 +121,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             }
             break;
 
+        case HB_ACODEC_LAME:
+            codec_name = "libmp3lame";
+            break;
+
         default:
             hb_error("encavcodecaInit: unsupported codec (0x%x)",
                      audio->config.out.codec);

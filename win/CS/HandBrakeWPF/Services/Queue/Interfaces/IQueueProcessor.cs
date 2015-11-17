@@ -44,6 +44,13 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         event EventHandler QueuePaused;
 
+
+        /// <summary>
+        /// Low Diskspace has been detected.
+        /// Checked before each job starts.
+        /// </summary>
+        event EventHandler LowDiskspaceDetected;
+
         #endregion
 
         #region Properties
@@ -52,6 +59,11 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Gets the number of jobs in the queue
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// The number of errors detected in the queue.
+        /// </summary>
+        int ErrorCount { get; }
 
         /// <summary>
         /// Gets the IEncodeService instance.

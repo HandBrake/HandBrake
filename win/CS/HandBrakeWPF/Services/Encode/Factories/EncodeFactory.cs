@@ -396,7 +396,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
             Filters filter = new Filters
                             {
                                 FilterList = new List<Filter>(),
-                                Grayscale = job.Grayscale
                             };
 
             // Detelecine
@@ -407,7 +406,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Decomb
-            if (job.Decomb != Decomb.Off)
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
                 string options;
                 if (job.Decomb == Decomb.Fast)
@@ -428,7 +427,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Deinterlace
-            if (job.Deinterlace != Deinterlace.Off)
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
             {
                 string options;
                 if (job.Deinterlace == Deinterlace.Fast)
@@ -503,6 +502,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
 
                 Filter filterItem = new Filter { ID = (int)id, Settings = settings };
+                filter.FilterList.Add(filterItem);
+            }
+
+            if (job.Grayscale)
+            {
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_GRAYSCALE, Settings = null };
                 filter.FilterList.Add(filterItem);
             }
 

@@ -18,14 +18,14 @@ struct hb_filter_private_s
     hb_fifo_t   * delay_queue;
     int           dropped_frames;
     int           extended_frames;
-    uint64_t      last_start[4];
-    uint64_t      last_stop[4];
-    uint64_t      lost_time[4];
-    uint64_t      total_lost_time;
-    uint64_t      total_gained_time;
+    int64_t       last_start[4];
+    int64_t       last_stop[4];
+    int64_t       lost_time[4];
+    int64_t       total_lost_time;
+    int64_t       total_gained_time;
     int           count_frames;      // frames output so far
     double        frame_rate;        // 90KHz ticks per frame (for CFR/PFR)
-    uint64_t      out_last_stop;     // where last frame ended (for CFR/PFR)
+    int64_t       out_last_stop;     // where last frame ended (for CFR/PFR)
     int           drops;             // frames dropped (for CFR/PFR)
     int           dups;              // frames duped (for CFR/PFR)
 
@@ -511,7 +511,7 @@ static int hb_vfr_work( hb_filter_object_t * filter,
            evenly by 4, and we can't lose the remainder, we have to go
            through an awkward process to preserve it in the 4th array index.
         */
-        uint64_t temp_duration = in->s.start - pv->last_stop[0];
+        int64_t temp_duration = in->s.start - pv->last_stop[0];
         pv->lost_time[0] += (temp_duration / 4);
         pv->lost_time[1] += (temp_duration / 4);
         pv->lost_time[2] += (temp_duration / 4);
@@ -539,8 +539,16 @@ static int hb_vfr_work( hb_filter_object_t * filter,
 
     /* In order to make sure we have continuous time stamps, store
        the current frame's duration as starting when the last one stopped. */
-    pv->last_start[0] = pv->last_stop[1];
-    pv->last_stop[0] = pv->last_start[0] + (in->s.stop - in->s.start);
+    if (hb_fifo_size(pv->delay_queue) == 0)
+    {
+        pv->last_start[0] = in->s.start;
+        pv->last_stop[0]  = in->s.stop;
+    }
+    else
+    {
+        pv->last_start[0] = pv->last_stop[1];
+        pv->last_stop[0] = pv->last_start[0] + (in->s.stop - in->s.start);
+    }
 
     hb_fifo_push( pv->delay_queue, in );
 

@@ -17,6 +17,7 @@
 #import "HBController.h"
 
 #define PRESET_FILE @"UserPresets.json"
+#define QUEUE_FILE @"Queue.hbqueue"
 
 @interface HBAppDelegate ()
 
@@ -51,10 +52,11 @@
         _outputPanel = [[HBOutputPanelController alloc] init];
 
         // we init the HBPresetsManager
-        NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:PRESET_FILE];
-        _presetsManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
+        NSURL *appSupportURL = [HBUtilities appSupportURL];
+        _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE]];
 
-        _queueController = [[HBQueueController alloc] init];
+        // Queue
+        _queueController = [[HBQueueController alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
         _queueController.delegate = self;
         _mainController = [[HBController alloc] initWithQueue:_queueController presetsManager:_presetsManager];
 

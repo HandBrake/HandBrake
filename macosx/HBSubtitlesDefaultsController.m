@@ -8,7 +8,7 @@
 #import "HBSubtitlesDefaults.h"
 #import "HBLanguagesSelection.h"
 
-static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
+static void *HBSubtitlesDefaultsContext = &HBSubtitlesDefaultsContext;
 
 @interface HBSubtitlesDefaultsController ()
 
@@ -29,13 +29,14 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
+        _settings.undo = self.window.undoManager;
     }
     return self;
 }
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContex];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBSubtitlesDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {
@@ -45,7 +46,7 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBSubtitlesDefaultsContex)
+    if (context == HBSubtitlesDefaultsContext)
     {
         if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
         {
@@ -63,19 +64,23 @@ static void *HBSubtitlesDefaultsContex = &HBSubtitlesDefaultsContex;
     self.tableController.showSelectedOnly = !self.tableController.showSelectedOnly;
 }
 
-- (IBAction)done:(id)sender
+- (IBAction)ok:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
+    self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseOK];
+}
 
-    [self.settings.trackSelectionLanguages removeAllObjects];
-    [self.settings.trackSelectionLanguages addObjectsFromArray:self.languagesList.selectedLanguages];
+- (IBAction)cancel:(id)sender
+{
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (void)dealloc
 {
     @try {
-        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
+        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly" context:HBSubtitlesDefaultsContext];
     } @catch (NSException * __unused exception) {}
 }
 

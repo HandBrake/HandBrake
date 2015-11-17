@@ -121,7 +121,7 @@ static int avformatInit( hb_mux_object_t * m )
     hb_mux_data_t * track;
     int meta_mux;
     int max_tracks;
-    int ii, ret;
+    int ii, jj, ret;
 
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
@@ -216,7 +216,8 @@ static int avformatInit( hb_mux_object_t * m )
     int priv_size = 0;
     switch (job->vcodec)
     {
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
             track->st->codec->codec_id = AV_CODEC_ID_H264;
 
@@ -323,7 +324,10 @@ static int avformatInit( hb_mux_object_t * m )
             }
         } break;
 
-        case HB_VCODEC_X265:
+        case HB_VCODEC_X265_8BIT:
+        case HB_VCODEC_X265_10BIT:
+        case HB_VCODEC_X265_12BIT:
+        case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
             track->st->codec->codec_id = AV_CODEC_ID_HEVC;
 
@@ -355,16 +359,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st->codec->height                  = job->height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
-    hb_rational_t vrate;
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        vrate = interjob->vrate;
-    }
-    else
-    {
-        vrate = job->vrate;
-    }
+    hb_rational_t vrate = job->vrate;
 
     // If the vrate is the internal clock rate, there's a good chance
     // this is a standard rate that we have in our hb_video_rates table.
@@ -595,6 +590,56 @@ static int avformatInit( hb_mux_object_t * m )
             // Some software (MPC, mediainfo) use hdlr description
             // for track title
             av_dict_set(&track->st->metadata, "handler", name, 0);
+        }
+    }
+
+    // Check for audio track associations
+    for (ii = 0; ii < hb_list_count(job->list_audio); ii++)
+    {
+        audio = hb_list_item(job->list_audio, ii);
+        switch (audio->config.out.codec & HB_ACODEC_MASK)
+        {
+            case HB_ACODEC_FFAAC:
+            case HB_ACODEC_CA_AAC:
+            case HB_ACODEC_CA_HAAC:
+            case HB_ACODEC_FDK_AAC:
+            case HB_ACODEC_FDK_HAAC:
+                break;
+
+            default:
+            {
+                // Mark associated fallback audio tracks for any non-aac track
+                for(jj = 0; jj < hb_list_count( job->list_audio ); jj++ )
+                {
+                    hb_audio_t    * fallback;
+                    int             codec;
+
+                    if (ii == jj) continue;
+
+                    fallback = hb_list_item( job->list_audio, jj );
+                    codec = fallback->config.out.codec & HB_ACODEC_MASK;
+                    if (fallback->config.in.track == audio->config.in.track &&
+                        (codec == HB_ACODEC_FFAAC ||
+                         codec == HB_ACODEC_CA_AAC ||
+                         codec == HB_ACODEC_CA_HAAC ||
+                         codec == HB_ACODEC_FDK_AAC ||
+                         codec == HB_ACODEC_FDK_HAAC))
+                    {
+                        hb_mux_data_t * fallback_track;
+                        int           * sd;
+
+                        track = audio->priv.mux_data;
+                        fallback_track = fallback->priv.mux_data;
+                        sd = (int*)av_stream_new_side_data(track->st,
+                                                     AV_PKT_DATA_FALLBACK_TRACK,
+                                                     sizeof(int));
+                        if (sd != NULL)
+                        {
+                            *sd = fallback_track->st->index;
+                        }
+                    }
+                }
+            } break;
         }
     }
 

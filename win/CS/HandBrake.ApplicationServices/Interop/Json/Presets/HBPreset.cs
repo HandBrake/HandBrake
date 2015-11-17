@@ -122,24 +122,14 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public int PictureDeblock { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture decomb.
-        /// </summary>
-        public string PictureDecomb { get; set; }
-
-        /// <summary>
-        /// Gets or sets the picture decomb custom.
-        /// </summary>
-        public string PictureDecombCustom { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether picture decomb deinterlace.
         /// </summary>
-        public bool PictureDecombDeinterlace { get; set; }
+        public string PictureDeinterlaceFilter { get; set; }
 
         /// <summary>
-        /// Gets or sets the picture deinterlace.
+        /// Gets or sets the picture deinterlace preset.
         /// </summary>
-        public string PictureDeinterlace { get; set; }
+        public string PictureDeinterlacePreset { get; set; }
 
         /// <summary>
         /// Gets or sets the picture deinterlace custom.

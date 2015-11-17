@@ -33,8 +33,6 @@
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
         
-
-
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         </Style>
@@ -181,13 +179,13 @@
             </DockPanel>
         </ToolBar>
 
-        <StackPanel Grid.Row="1" Margin="10,20,10,20">
-            <TextBlock Text="{Binding JobsPending}" />
-            <TextBlock Text="{Binding JobStatus}" />
+        <StackPanel Grid.Row="1" Margin="10,20,10,0">
+            <TextBlock Text="{Binding JobsPending}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
         </StackPanel>
 
         <ListBox Grid.Row="2"
-                 Margin="10,0,10,10"
+                 Margin="10,20,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"

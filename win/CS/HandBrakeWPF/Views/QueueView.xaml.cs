@@ -11,6 +11,8 @@ namespace HandBrakeWPF.Views
 {
     using System.Windows;
 
+    using HandBrakeWPF.Views;
+
     /// <summary>
     /// Interaction logic for VideoView
     /// </summary>
@@ -21,7 +23,7 @@ namespace HandBrakeWPF.Views
         /// </summary>
         public QueueView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

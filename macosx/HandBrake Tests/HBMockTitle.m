@@ -1,12 +1,11 @@
-//
-//  HBMockTitle.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 30/05/15.
-//
-//
+/*  HBMockTitle
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBMockTitle.h"
+#import "HBChapter.h"
 
 extern NSString *keyAudioTrackIndex;
 extern NSString *keyAudioTrackName;
@@ -18,18 +17,8 @@ extern NSString *keyAudioInputChannelLayout;
 extern NSString *keyAudioTrackLanguageIsoCode;
 
 extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
 
 @implementation HBMockTitle
 
@@ -128,54 +117,50 @@ extern NSString *keySubTrackSrtCharCode;
 {
     NSMutableArray *tracks = [NSMutableArray array];
     [tracks addObject: @{keyAudioTrackIndex: @1,
-                         keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", 1, "English"],
+                         keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", 0, "English"],
                          keyAudioInputBitrate: @104,
                          keyAudioInputSampleRate: @48000,
                          keyAudioInputCodec: @65536,
                          keyAudioInputCodecParam: @86018,
                          keyAudioInputChannelLayout: @3,
                          keyAudioTrackLanguageIsoCode: @"eng"}];
+
+    [tracks addObject: @{keyAudioTrackIndex: @2,
+                         keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", 1, "Italian"],
+                         keyAudioInputBitrate: @104,
+                         keyAudioInputSampleRate: @48000,
+                         keyAudioInputCodec: @65536,
+                         keyAudioInputCodecParam: @86018,
+                         keyAudioInputChannelLayout: @3,
+                         keyAudioTrackLanguageIsoCode: @"ita"}];
     return [tracks copy];
 }
 
 - (NSArray *)subtitlesTracks
 {
-    /*if (!_subtitlesTracks)
-    {
-        NSMutableArray *tracks = [NSMutableArray array];
-        hb_subtitle_t *subtitle;
-        hb_list_t *list = self.hb_title->list_subtitle;
-        int count = hb_list_count(list);
+    NSMutableArray *tracks = [NSMutableArray array];
+    NSString *nativeLanguage = @"English";
 
-        for (int i = 0; i < count; i++)
-        {
-            subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
+    // create a dictionary of source subtitle information to store in our array
+    [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", 0, nativeLanguage, @"Bitmap", @"VobSub"],
+                        keySubTrackType: @0,
+                        keySubTrackLanguageIsoCode: @"eng"}];
 
-            // Human-readable representation of subtitle->source
-            NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
-            NSString *subSourceName = @(hb_subsource_name(subtitle->source));
-
-            // Use the native language name if available
-            iso639_lang_t *language = lang_for_code2(subtitle->iso639_2);
-            NSString *nativeLanguage = strlen(language->native_name) ? @(language->native_name) : @(language->eng_name);
-
-            // create a dictionary of source subtitle information to store in our array
-            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
-                                keySubTrackIndex: @(i),
-                                keySubTrackType: @(subtitle->source),
-                                keySubTrackLanguage: nativeLanguage,
-                                keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
-        }
-
-        _subtitlesTracks = [tracks copy];
-    }*/
-
-    return nil;
+    return [tracks copy];
 }
 
-- (NSArray *)chapters
+- (NSArray<HBChapter *> *)chapters
 {
-    return @[@"Chapter 1", @"Chapter 2"];
+    NSMutableArray *chapters = [NSMutableArray array];
+
+    for (int i = 0; i < 10; i++)
+    {
+        NSString *title = [NSString stringWithFormat:@"Chapter %d", i + 1];
+        [chapters addObject:[[HBChapter alloc] initWithTitle:title
+                                                        index:i + 1
+                                                    duration:100]];
+    }
+    return [chapters copy];
 }
 
 

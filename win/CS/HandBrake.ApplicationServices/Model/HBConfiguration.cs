@@ -50,11 +50,6 @@ namespace HandBrake.ApplicationServices.Model
         public int MinScanDuration { get; set; }
 
         /// <summary>
-        /// Gets or sets the process priority.
-        /// </summary>
-        public string ProcessPriority { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether save log to copy directory.
         /// </summary>
         public bool SaveLogToCopyDirectory { get; set; }

@@ -7,6 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifndef HB_ENCX264_H
+#define HB_ENCX264_H
+
 #include "x264.h"
 #include "h264_common.h"
 
@@ -39,39 +42,24 @@ static const char * const hb_x264_encopt_synonyms[][2] =
     { NULL,             NULL,              },
 };
 
-/*
- * Check whether a valid h264_level is compatible with the given framerate,
- * resolution and interlaced compression/flags combination.
- *
- * width, height, fps_num and fps_den should be greater than zero.
- *
- * interlacing parameters can be set to zero when the information is
- * unavailable, as hb_apply_h264_level() will disable interlacing if necessary.
- *
- * Returns 0 if the level is valid and compatible, 1 otherwise.
- */
-int hb_check_h264_level(const char *h264_level, int width, int height,
-                        int fps_num, int fps_den, int interlaced,
-                        int fake_interlaced);
+typedef struct x264_api_s
+{
+    int     bit_depth;
+    void    (*param_default)(x264_param_t*);
+    int     (*param_default_preset)(x264_param_t*, const char*, const char*);
+    int     (*param_apply_profile)(x264_param_t*, const char*);
+    void    (*param_apply_fastfirstpass)(x264_param_t*);
+    int     (*param_parse)(x264_param_t*, const char*, const char*);
+    x264_t* (*encoder_open)(x264_param_t*);
+    int     (*encoder_headers)(x264_t*, x264_nal_t**, int*);
+    int     (*encoder_encode)(x264_t*, x264_nal_t**, int*,
+                              x264_picture_t*, x264_picture_t*);
+    int     (*encoder_delayed_frames)(x264_t*);
+    void    (*encoder_close)(x264_t*);
+    void    (*picture_init)(x264_picture_t*);
+} x264_api_t;
 
-/*
- * Applies the restrictions of the requested H.264 level to an x264_param_t.
- *
- * Returns -1 if an invalid level (or no level) is specified. GUIs should be
- * capable of always providing a valid level.
- *
- * Does not modify resolution/framerate but warns when they exceed level limits.
- *
- * Based on a x264_param_apply_level() draft and other x264 code.
- */
-int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
-                        const char *x264_profile, int verbose);
+void               hb_x264_global_init(void);
+const x264_api_t * hb_x264_api_get(int bit_depth);
 
-/*
- * Applies the restrictions of the requested H.264 profile to an x264_param_t.
- *
- * x264_param_apply_profile wrapper designed to always succeed when a valid
- * H.264 profile is specified (unlike x264's function).
- */
-int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
-                          int verbose);
+#endif // HB_ENCX264_H

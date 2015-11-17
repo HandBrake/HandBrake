@@ -1448,6 +1448,7 @@ static char** str_width_split( const char *str, int width )
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
         *ret = NULL;
         return ret;
     }
@@ -1472,7 +1473,8 @@ static char** str_width_split( const char *str, int width )
     }
     count++;
     ret = calloc( ( count + 1 ), sizeof(char*) );
-
+    if ( ret == NULL ) return ret;
+    
     pos = str;
     end = pos + width;
     for (ii = 0; ii < count - 1 && end < str + len; ii++)
@@ -1584,6 +1586,7 @@ static char *strndup_quote(char *str, char q, int len)
     int str_len = strlen( str );
     int src = 0, dst = 0;
     res = malloc( len > str_len ? str_len + 1 : len + 1 );
+    if ( res == NULL ) return res;
 
     while (str[src] != 0 && src < len)
     {
@@ -1625,6 +1628,7 @@ static char** str_split( char *str, char delem )
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
         *ret = NULL;
         return ret;
     }
@@ -1639,6 +1643,7 @@ static char** str_split( char *str, char delem )
     }
 
     ret = calloc( ( count + 1 ), sizeof(char*) );
+    if ( ret == NULL ) return ret;
 
     pos = str;
     for ( i = 0; i < count - 1; i++ )
@@ -1983,6 +1988,12 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         free( input );
                         input = malloc( strlen( "/dev/" ) + strlen( devName ) + 1 );
+                        if( input == NULL )
+                        {
+                            fprintf( stderr, "ERROR: malloc() failed while attempting to set device path.\n" );
+                            free( devName );
+                            return -1;
+                        }
                         sprintf( input, "/dev/%s", devName );
                     }
                     free( devName );
@@ -3418,41 +3429,42 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoGrayScale", hb_value_bool(grayscale));
     }
-    if (deinterlace_disable)
+    if (decomb_disable || deinterlace_disable)
     {
-        hb_dict_set(preset, "PictureDeinterlace", hb_value_string("off"));
+        hb_dict_set(preset, "PictureDeinterlaceFilter", hb_value_string("off"));
     }
     if (deinterlace != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(0));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("deinterlace"));
         if (!deinterlace_custom)
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string(deinterlace));
         }
         else
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDeinterlaceCustom",
                         hb_value_string(deinterlace));
         }
     }
-    if (decomb_disable)
-    {
-        hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
-    }
     if (decomb != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(1));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("decomb"));
         if (!decomb_custom)
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string(decomb));
         }
         else
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string("custom"));
-            hb_dict_set(preset, "PictureDecombCustom", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureDeinterlaceCustom",
+                        hb_value_string(decomb));
         }
     }
     if (detelecine_disable)
@@ -3771,7 +3783,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Codecs */
-        int acodec;
+        int acodec = HB_ACODEC_INVALID;
         ii = 0;
         if (acodecs != NULL)
         {
@@ -3808,7 +3820,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Sample Rate */
-        int arate;
+        int arate = 0;
         ii = 0;
         if (arates != NULL)
         {
@@ -3848,7 +3860,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Mixdown */
-        int mix;
+        int mix = HB_AMIXDOWN_NONE;
         ii = 0;
         if (mixdowns != NULL)
         {
@@ -3872,7 +3884,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Bitrate */
-        int abitrate;
+        int abitrate = 0;
         ii = 0;
         if (abitrates != NULL)
         {
@@ -3899,7 +3911,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Quality */
-        double aquality;
+        double aquality = 0.;
         ii = 0;
         if (aqualities != NULL)
         {
@@ -3958,7 +3970,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio DRC */
         ii = 0;
-        double drc;
+        double drc = 0.;
         if (dynamic_range_compression)
         {
             char **drcs = dynamic_range_compression;
@@ -3983,7 +3995,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio Gain */
         ii = 0;
-        double gain;
+        double gain = 1.;
         if (audio_gain)
         {
             for (; audio_gain[ii] != NULL && ii < track_count; ii++)
@@ -4006,7 +4018,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Dither */
-        int dither;
+        int dither = 0;
         ii = 0;
         if (audio_dither != NULL)
         {

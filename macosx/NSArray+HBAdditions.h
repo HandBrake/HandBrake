@@ -8,13 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSMutableArray (HBAdditions)
-
-- (void)removeObjectsUsingBlock:(BOOL (^)(id object))block;
-
-@end
-
-
 @interface NSArray (HBAdditions)
 
 - (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id object))block;

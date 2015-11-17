@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate, GrowlApplicationBridgeDelegate>
 
+- (instancetype)initWithURL:(NSURL *)queueURL;
+
 /// The HBCore used for encoding.
 @property (nonatomic, readonly) HBCore *core;
 
@@ -27,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger pendingItemsCount;
 
 - (void)addJob:(HBJob *)item;
-- (void)addJobsFromArray:(NSArray *)items;
+- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
 
 - (BOOL)jobExistAtURL:(NSURL *)url;
 

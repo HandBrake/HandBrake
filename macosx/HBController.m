@@ -11,6 +11,7 @@
 
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
+#import "HBMutablePreset.h"
 #import "HBUtilities.h"
 
 #import "HBPictureViewController.h"
@@ -31,7 +32,69 @@
 #import "HBJob.h"
 #import "HBStateFormatter.h"
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate>
+{
+    IBOutlet NSTabView *fMainTabView;
+
+    // Picture controller
+    HBPictureViewController * fPictureViewController;
+    IBOutlet NSTabViewItem  * fPictureTab;
+
+    // Video view controller
+    HBVideoController       * fVideoController;
+    IBOutlet NSTabViewItem  * fVideoTab;
+
+    // Subtitles view controller
+    HBSubtitlesController   * fSubtitlesViewController;
+    IBOutlet NSTabViewItem  * fSubtitlesTab;
+
+    // Audio view controller
+    HBAudioController       * fAudioController;
+    IBOutlet NSTabViewItem  * fAudioTab;
+
+    // Chapters view controller
+    HBChapterTitlesController    * fChapterTitlesController;
+    IBOutlet NSTabViewItem       * fChaptersTitlesTab;
+
+    // Advanced options tab
+    HBAdvancedController         * fAdvancedOptions;
+    IBOutlet NSTabViewItem       * fAdvancedTab;
+
+    // Picture Preview
+    HBPreviewController           * fPreviewController;
+
+    // Queue panel
+    HBQueueController            * fQueueController;
+
+    // Source box
+    IBOutlet NSProgressIndicator * fScanIndicator;
+    IBOutlet NSBox               * fScanHorizontalLine;
+
+    IBOutlet NSTextField         * fSrcDVD2Field;
+    IBOutlet NSPopUpButton       * fSrcTitlePopUp;
+
+    // pts based start / stop
+    IBOutlet NSTextField         * fSrcTimeStartEncodingField;
+    IBOutlet NSTextField         * fSrcTimeEndEncodingField;
+    // frame based based start / stop
+    IBOutlet NSTextField         * fSrcFrameStartEncodingField;
+    IBOutlet NSTextField         * fSrcFrameEndEncodingField;
+
+    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
+    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
+
+    // Bottom
+    IBOutlet NSTextField         * fStatusField;
+    IBOutlet NSTextField         * fQueueStatus;
+    IBOutlet NSProgressIndicator * fRipIndicator;
+    BOOL                           fRipIndicatorShown;
+
+    // User Preset
+    HBPresetsManager             * presetManager;
+    HBPresetsViewController      * fPresetsView;
+    
+    IBOutlet NSDrawer            * fPresetDrawer;
+}
 
 @property (unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
@@ -80,6 +143,8 @@
 
         presetManager = manager;
         _currentPreset = manager.defaultPreset;
+
+        _scanSpecificTitleIdx = 1;
     }
 
     return self;
@@ -422,13 +487,11 @@
 {
     if (self.core.state != HBStateScanning && !self.job)
     {
-        // We show whichever open source window specified in LaunchSourceBehavior preference key
-        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowOpenPanelAtLaunch"])
         {
             [self browseSources:nil];
         }
     }
-    
 }
 
 - (BOOL)openURL:(NSURL *)fileURL
@@ -498,8 +561,14 @@
 {
     [self removeJobObservers];
 
+    // Clear the undo manager
+    [_job.undo removeAllActions];
+    _job.undo = nil;
+
     // Retain the new job
     _job = job;
+
+    job.undo = self.window.undoManager;
 
     // Set the jobs info to the view controllers
     fPictureViewController.picture = job.picture;
@@ -661,7 +730,7 @@
     [fSrcTitlePopUp removeAllItems];
 
     NSError *outError = NULL;
-    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppresslibdvdcss"];
+    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppressCopyProtectionAlert"];
 
     // Check if we can scan the source and if there is any warning.
     BOOL canScan = [self.core canScan:scanURL error:&outError];
@@ -670,36 +739,27 @@
     if (canScan && [outError code] == 101 && !suppressWarning)
     {
         // Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying.
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppresslibdvdcss"];
-
-        // Compatible libdvdcss not found
-        [HBUtilities writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppressCopyProtectionAlert"];
 
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function."];
-        [alert setInformativeText:@"Videolan.org provides libdvdcss if you are not currently using another solution."];
-        [alert addButtonWithTitle:@"Get libdvdcss.pkg"];
-        [alert addButtonWithTitle:@"Cancel Scan"];
-        [alert addButtonWithTitle:@"Attempt Scan Anyway"];
+        [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", nil)];
+        [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function.", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Attempt Scan Anyway", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+
         [NSApp requestUserAttention:NSCriticalRequest];
         NSInteger status = [alert runModal];
 
         if (status == NSAlertFirstButtonReturn)
         {
-            /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-            [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
-            canScan = NO;
-        }
-        else if (status == NSAlertSecondButtonReturn)
-        {
-            /* User chose to cancel the scan */
-            [HBUtilities writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
-            canScan = NO;
+            // User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails
+            [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
         }
         else
         {
-            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            [HBUtilities writeToActivityLog:"User overrode copy-protection warning - trying to open physical dvd without decryption"];
+            // User chose to cancel the scan
+            [HBUtilities writeToActivityLog:"Cannot open physical dvd, scan cancelled"];
+            canScan = NO;
         }
     }
 
@@ -720,14 +780,14 @@
             fScanHorizontalLine.hidden = YES;
             fScanIndicator.doubleValue = [formatter stateToPercentComplete:hb_state];
         }
-    completionHandler:^(BOOL success)
+    completionHandler:^(HBCoreResult result)
         {
             fScanHorizontalLine.hidden = NO;
             fScanIndicator.hidden = YES;
             fScanIndicator.indeterminate = NO;
             fScanIndicator.doubleValue = 0.0;
 
-            if (success)
+            if (result == HBCoreResultDone)
             {
                 [self showNewScan];
             }
@@ -879,8 +939,9 @@
     }
     else
     {
-        self.job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
-        self.job.destURL = [self destURLForJob:self.job];
+        HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
+        job.destURL = [self destURLForJob:job];
+        self.job = job;
     }
 
     // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
@@ -942,9 +1003,17 @@
 {
     // Deselect the currently selected Preset if there is one
     [fPresetsView deselect];
-    // Change UI to show "Custom" settings are being used
-    self.job.presetName = NSLocalizedString(@"Custom", @"");
-    [self updateFileName];
+
+    // Update the preset and file name only if we are not
+    // undoing or redoing, because if so it's already stored
+    // in the undo manager.
+    NSUndoManager *undo = self.window.undoManager;
+    if (!(undo.isUndoing || undo.isRedoing))
+    {
+        // Change UI to show "Custom" settings are being used
+        self.job.presetName = NSLocalizedString(@"Custom", @"");
+        [self updateFileName];
+    }
 }
 
 #pragma mark - Queue progress
@@ -1321,30 +1390,15 @@
 
 - (HBPreset *)createPresetFromCurrentSettings
 {
-    NSMutableDictionary *preset = [NSMutableDictionary dictionary];
-    NSDictionary *currentPreset = self.currentPreset.content;
-
-    preset[@"PresetBuildNumber"] = [NSString stringWithFormat: @"%d", [[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] intValue]];
-    preset[@"PresetName"] = self.job.presetName;
-    preset[@"Folder"] = @NO;
+    HBMutablePreset *preset = [self.currentPreset mutableCopy];
 
 	// Set whether or not this is a user preset or factory 0 is factory, 1 is user
     preset[@"Type"] = @1;
     preset[@"Default"] = @NO;
 
-    // Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-    preset[@"UsesPictureSettings"] = currentPreset[@"UsesPictureSettings"];
-    // Get whether or not to use the current Picture Filter settings for the preset
-    preset[@"UsesPictureFilters"] = currentPreset[@"UsesPictureFilters"];
+    [self.job writeToPreset:preset];
 
-    preset[@"PictureWidth"]  = currentPreset[@"PictureWidth"];
-    preset[@"PictureHeight"] = currentPreset[@"PictureHeight"];
-
-    preset[@"PresetDescription"] = currentPreset[@"PresetDescription"];
-
-    [self.job applyCurrentSettingsToPreset:preset];
-
-    return [[HBPreset alloc] initWithName:preset[@"PresetName"] content:preset builtIn:NO];
+    return [preset copy];
 }
 
 #pragma mark -

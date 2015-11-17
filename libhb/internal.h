@@ -71,6 +71,7 @@ struct hb_buffer_settings_s
     int64_t       stop;         // stop time of frame
     int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
     int64_t       pcr;
+    int           split;
     uint8_t       discontinuity;
     int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
@@ -183,6 +184,9 @@ int           hb_buffer_copy( hb_buffer_t * dst, const hb_buffer_t * src );
 void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
 hb_image_t  * hb_image_init(int pix_fmt, int width, int height);
 hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
+int           hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *b);
+int           hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *b,
+                              int top, int left);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
@@ -271,10 +275,13 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
+void hb_work_loop( void * );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( hb_handle_t *, int );
-hb_work_object_t * hb_codec_decoder( hb_handle_t *, int );
-hb_work_object_t * hb_codec_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_decoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int );
+hb_work_object_t * hb_video_encoder( hb_handle_t *, int );
 
 /***********************************************************************
  * sync.c
@@ -452,6 +459,7 @@ extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
 extern hb_filter_object_t hb_filter_decomb;
 extern hb_filter_object_t hb_filter_rotate;
+extern hb_filter_object_t hb_filter_grayscale;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_render_sub;
 extern hb_filter_object_t hb_filter_vfr;

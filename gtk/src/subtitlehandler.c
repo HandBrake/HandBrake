@@ -1393,7 +1393,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             const iso639_lang_t *lang;
             GhbValue *entry = ghb_array_get(lang_list, 0);
-            lang = ghb_iso639_lookup_by_int(ghb_lookup_audio_lang(entry));
+            lang = ghb_iso639_lookup_by_int(ghb_lookup_lang(entry));
             subtitle_update_pref_lang(ud, lang);
         }
         else
@@ -1442,7 +1442,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     for (ii = 0; ii < count; )
     {
         GhbValue *lang_val = ghb_array_get(lang_list, ii);
-        int idx = ghb_lookup_audio_lang(lang_val);
+        int idx = ghb_lookup_lang(lang_val);
         if (ii == 0)
         {
             const iso639_lang_t *lang;

@@ -25,8 +25,15 @@ typedef NS_ENUM(NSUInteger, HBState) {
     HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
 };
 
+// These constants specify the result of a scan or encode.
+typedef NS_ENUM(NSUInteger, HBCoreResult) {
+    HBCoreResultDone,
+    HBCoreResultCancelled,
+    HBCoreResultFailed,
+};
+
 typedef void (^HBCoreProgressHandler)(HBState state, hb_state_t hb_state);
-typedef void (^HBCoreCompletionHandler)(BOOL success);
+typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 
 /**
  * HBCore is an Objective-C interface to the low-level HandBrake library.
@@ -78,6 +85,11 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 - (instancetype)initWithLogLevel:(int)level name:(NSString *)name;
 
 /**
+ *  Log level.
+ */
+@property (nonatomic, readwrite) int logLevel;
+
+/**
  * Current state of HBCore.
  */
 @property (nonatomic, readonly) HBState state;
@@ -118,7 +130,7 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
 /**
  *  An array of HBTitles found by the latest scan.
  */
-@property (nonatomic, readonly, nullable) NSArray *titles;
+@property (nonatomic, readonly, nullable) NSArray<HBTitle *> *titles;
 
 /**
  *  This function converts an image created by libhb (specified via index)
@@ -135,6 +147,11 @@ typedef void (^HBCoreCompletionHandler)(BOOL success);
                                forTitle:(HBTitle *)title
                            pictureFrame:(HBPicture *)frame
                             deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
+
+/**
+ *  Returns the counts of the available previews images.
+ */
+- (NSUInteger)imagesCountForTitle:(HBTitle *)title;
 
 /**
  *  Initiates an asynchronous encode operation and returns immediately.

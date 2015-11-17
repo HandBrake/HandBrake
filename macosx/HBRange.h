@@ -46,6 +46,8 @@ typedef NS_ENUM(NSUInteger, HBRangeType) {
 
 @property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 @end
 
 NS_ASSUME_NONNULL_END

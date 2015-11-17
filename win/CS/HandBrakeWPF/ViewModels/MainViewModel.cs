@@ -62,144 +62,36 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Private Variables and Services
 
-        /// <summary>
-        /// The Encode Service
-        /// </summary>
         private readonly IQueueProcessor queueProcessor;
-
-        /// <summary>
-        /// The preset service
-        /// </summary>
         private readonly IPresetService presetService;
-
-        /// <summary>
-        /// The Error Service Backing field.
-        /// </summary>
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// Backing field for the update serivce.
-        /// </summary>
         private readonly IUpdateService updateService;
-
         private readonly IWindowManager windowManager;
-
-        /// <summary>
-        /// Backing field for the user setting service.
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// The Source Scan Service.
-        /// </summary>
         private readonly IScan scanService;
-
-        /// <summary>
-        /// The Encode Service
-        /// </summary>
         private readonly IEncode encodeService;
-
-        /// <summary>
-        /// Windows 7 API Pack wrapper
-        /// </summary>
         private readonly Win7 windowsSeven = new Win7();
-
-        /// <summary>
-        /// HandBrakes Main Window Title
-        /// </summary>
         private string windowName;
-
-        /// <summary>
-        /// The Source Label
-        /// </summary>
         private string sourceLabel;
-
-        /// <summary>
-        /// The Selected Output Format Backing Field
-        /// </summary>
         private OutputFormat selectedOutputFormat;
-
-        /// <summary>
-        /// Is a MKV file backing field
-        /// </summary>
         private bool isMkv;
-
-        /// <summary>
-        /// The Toolbar Status Label
-        /// </summary>
         private string statusLabel;
-
-        /// <summary>
-        /// Program Status Label
-        /// </summary>
         private string programStatusLabel;
-
-        /// <summary>
-        /// Backing field for the scanned source.
-        /// </summary>
         private Source scannedSource;
-
-        /// <summary>
-        /// Backing field for the selected title.
-        /// </summary>
         private Title selectedTitle;
-
-        /// <summary>
-        /// Backing field for duration
-        /// </summary>
         private string duration;
-
-        /// <summary>
-        /// Is Encoding Backing Field
-        /// </summary>
         private bool isEncoding;
-
-        /// <summary>
-        /// An Indicated to show the status window
-        /// </summary>
         private bool showStatusWindow;
-
-        /// <summary>
-        /// Backing field for the selected preset.
-        /// </summary>
         private Preset selectedPreset;
-
-        /// <summary>
-        /// Queue Edit Task
-        /// </summary>
         private EncodeTask queueEditTask;
-
-        /// <summary>
-        /// The last percentage complete value.
-        /// </summary>
         private int lastEncodePercentage;
-
-        /// <summary>
-        /// The is preset panel showing.
-        /// </summary>
         private bool isPresetPanelShowing;
-
-        /// <summary>
-        /// The show source selection.
-        /// </summary>
         private bool showSourceSelection;
-
-        /// <summary>
-        /// The drives.
-        /// </summary>
         private BindingList<SourceMenuItem> drives;
-
-        /// <summary>
-        /// The can pause.
-        /// </summary>
         private bool canPause;
-
         private bool showAlertWindow;
-
         private string alertWindowHeader;
-
         private string alertWindowText;
-
         private bool hasSource;
 
         #endregion
@@ -257,11 +149,15 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="staticPreviewViewModel">
         /// The static Preview View Model.
         /// </param>
+        /// <param name="queueViewModel">
+        /// The queue View Model.
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
-            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel)
+            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
+            IQueueViewModel queueViewModel)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -269,6 +165,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.updateService = updateService;
             this.windowManager = windowManager;
+            this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
@@ -300,6 +197,29 @@ namespace HandBrakeWPF.ViewModels
 
             this.Presets = this.presetService.Presets;
             this.Drives = new BindingList<SourceMenuItem>();
+
+            // Set Process Priority
+            switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
+            {
+                case "Realtime":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                    break;
+                case "High":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    break;
+                case "Above Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                    break;
+                case "Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                    break;
+                case "Low":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                    break;
+                default:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
+            }
 
             HandBrakeInstanceManager.Init();
         }
@@ -340,6 +260,16 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets FiltersViewModel.
         /// </summary>
         public IFiltersViewModel FiltersViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the queue view model.
+        /// </summary>
+        public IQueueViewModel QueueViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the static preview view model.
+        /// </summary>
+        public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
         #endregion
 
@@ -1076,11 +1006,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the static preview view model.
-        /// </summary>
-        public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
-
-        /// <summary>
         /// Gets the cancel action.
         /// </summary>
         public Action CancelAction
@@ -1204,6 +1129,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Flag to indicate if the queue is showing on the main view. (I.e  inline queue display)
+        /// </summary>
+        public bool IsQueueShowingInLine { get; set; } = false;
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -1309,15 +1239,25 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
-
-            if (window != null)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline))
             {
-                window.Activate();
+                this.IsQueueShowingInLine = !this.IsQueueShowingInLine;
+                this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
             }
             else
             {
-                this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+                this.IsQueueShowingInLine = false;
+                this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
+
+                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
+                if (window != null)
+                {
+                    window.Activate();
+                }
+                else
+                {
+                    this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+                }
             }
         }
 
@@ -1652,6 +1592,15 @@ namespace HandBrakeWPF.ViewModels
             this.AlertWindowHeader = string.Empty;
         }
 
+        /// <summary>
+        /// Pass on the "When Done" Action to the queue view model. 
+        /// </summary>
+        /// <param name="action"></param>
+        public void WhenDone(string action)
+        {
+            this.QueueViewModel?.WhenDone(action);
+        }
+
         #endregion
 
         #region Main Window Public Methods
@@ -1718,6 +1667,21 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.Destination = saveFileDialog.FileName;
+
+                // Disk Space Check
+                string drive = Path.GetPathRoot(this.Destination);
+                if (drive != null)
+                {
+                    DriveInfo c = new DriveInfo(drive);
+                    if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
+                    {
+                        this.errorService.ShowMessageBox(
+                            Resources.MainViewModel_LowDiskSpaceWarning,
+                            Resources.MainViewModel_LowDiskSpace,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+                    }
+                }
 
                 // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
                 if (!string.IsNullOrEmpty(saveFileDialog.FileName))
@@ -2231,12 +2195,14 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon, 
-                                e.PercentComplete, 
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
+                                e.Task,
+                                e.TaskCount,
+                                e.PercentComplete,
                                 e.CurrentFrameRate, 
                                 e.AverageFrameRate, 
                                 e.EstimatedTimeLeft, 
-                                e.ElapsedTime, 
+                                e.ElapsedTime,
                                 this.queueProcessor.Count);
 
                         if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
@@ -2296,7 +2262,13 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.ProgramStatusLabel = Resources.Main_QueueFinished;
+                    string errorDesc = string.Empty;
+                    if (this.queueProcessor.ErrorCount > 0)
+                    {
+                        errorDesc += string.Format(Resources.Main_QueueFinishedErrors, this.queueProcessor.ErrorCount);
+                    }
+
+                    this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
                     this.IsEncoding = false;
 
                     if (this.windowsSeven.IsWindowsSeven)

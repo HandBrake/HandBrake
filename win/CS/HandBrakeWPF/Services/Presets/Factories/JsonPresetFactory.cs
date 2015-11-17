@@ -58,7 +58,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Name = importedPreset.PresetName;
             preset.Description = importedPreset.PresetDescription;
             preset.Task = new EncodeTask();
-
+            preset.IsDefault = importedPreset.Default;
+            preset.IsBuildIn = importedPreset.Type == 0;
+           
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
             /* Output Settings */
@@ -94,53 +96,81 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Filter Settings */
             preset.Task.Grayscale = importedPreset.VideoGrayScale;
             preset.Task.Deblock = importedPreset.PictureDeblock;
-            switch (importedPreset.PictureDecomb)
+
+            switch (importedPreset.PictureDeinterlaceFilter)
             {
-                case "custom":
-                    preset.Task.Decomb = Decomb.Custom;
-                    break;
-                case "default":
+                case "decomb":
                     preset.Task.Decomb = Decomb.Default;
-                    break;
-                case "bob":
-                    preset.Task.Decomb = Decomb.Bob;
-                    break;
-                case "fast":
-                    preset.Task.Decomb = Decomb.Fast;
-                    break;
-
-                default:
-                    preset.Task.Decomb = Decomb.Off;
-                    break;
-            }
-
-            preset.Task.CustomDecomb = importedPreset.PictureDecombCustom;
-
-            if (!importedPreset.PictureDecombDeinterlace)
-            {
-                preset.Task.Decomb = Decomb.Off;
-            }
-
-            switch (importedPreset.PictureDeinterlace)
-            {
-                case "custom":
-                    preset.Task.Deinterlace = Deinterlace.Custom;
-                    break;
-                case "bob":
-                    preset.Task.Deinterlace = Deinterlace.Bob;
-                    break;
-                case "gast":
                     preset.Task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Decomb;
                     break;
-                case "slow":
-                    preset.Task.Deinterlace = Deinterlace.Slow;
-                    break;
-                case "slower":
-                    preset.Task.Deinterlace = Deinterlace.Slower;
+                case "deinterlace":
+                    preset.Task.Decomb = Decomb.Default;
+                    preset.Task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Deinterlace;
                     break;
                 default:
-                    preset.Task.Deinterlace = Deinterlace.Off;
+                    preset.Task.Decomb = Decomb.Default;
+                    preset.Task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Off;
                     break;
+            }
+
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+            {
+                switch (importedPreset.PictureDeinterlaceFilter)
+                {
+                    case "custom":
+                        preset.Task.Decomb = Decomb.Custom;
+                        break;
+                    case "default":
+                        preset.Task.Decomb = Decomb.Default;
+                        break;
+                    case "bob":
+                        preset.Task.Decomb = Decomb.Bob;
+                        break;
+                    case "fast":
+                        preset.Task.Decomb = Decomb.Fast;
+                        break;
+                    default:
+                        preset.Task.Decomb = Decomb.Default;
+                        break;
+                }
+
+                if (preset.Task.Decomb == Decomb.Custom)
+                {
+                    preset.Task.CustomDecomb = importedPreset.PictureDeinterlaceCustom;
+                }
+            }
+
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
+            {
+                switch (importedPreset.PictureDeinterlaceFilter)
+                {
+                    case "custom":
+                        preset.Task.Deinterlace = Deinterlace.Custom;
+                        break;
+                    case "bob":
+                        preset.Task.Deinterlace = Deinterlace.Bob;
+                        break;
+                    case "fast":
+                        preset.Task.Deinterlace = Deinterlace.Fast;
+                        break;
+                    case "slow":
+                        preset.Task.Deinterlace = Deinterlace.Slow;
+                        break;
+                    case "slower":
+                        preset.Task.Deinterlace = Deinterlace.Slower;
+                        break;
+                    default:
+                        preset.Task.Deinterlace = Deinterlace.Fast;
+                        break;
+                }
+
+                if (preset.Task.Deinterlace == Deinterlace.Custom)
+                {
+                    preset.Task.CustomDecomb = importedPreset.PictureDeinterlaceCustom;
+                }
             }
 
             preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
@@ -328,8 +358,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Subtitle Settings */ 
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
-
-            // parsedPreset.SubtitleTrackBehaviours.SelectedBehaviour = preset.SubtitleTrackSelectionBehavior;
+            preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
             preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
             if (importedPreset.SubtitleLanguageList != null)
@@ -366,7 +395,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public int PictureForceWidth { get; set; }
             // public bool AudioSecondaryEncoderMode { get; set; }
             // public List<object> ChildrenArray { get; set; }
-            // public bool Default { get; set; }
             // public bool Folder { get; set; }
             // public bool FolderOpen { get; set; }
             // public int PictureDARWidth { get; set; }
@@ -390,10 +418,32 @@ namespace HandBrakeWPF.Services.Presets.Factories
         public static PresetTransportContainer ExportPreset(Preset export, HBConfiguration config)
         {
             PresetTransportContainer container = new PresetTransportContainer();
-            container.VersionMajor = "0";
-            container.VersionMinor = "10";
-            container.VersionMicro = "2";
-            container.PresetList = new List<HBPreset> { CreateHbPreset(export, config) };
+            container.VersionMajor = Constants.PresetVersionMajor;
+            container.VersionMinor = Constants.PresetVersionMinor;
+            container.VersionMicro = Constants.PresetVersionMicro;
+
+            container.PresetList = new List<object> { CreateHbPreset(export, config) };
+
+            return container;
+        }
+
+        /// <summary>
+        /// Export a list of Presets.
+        /// </summary>
+        /// <param name="exportList">A list of presets to export</param>
+        /// <param name="config">HB's configuration</param>
+        /// <returns>A list of JSON object presets.</returns>
+        public static PresetTransportContainer ExportPresets(IEnumerable<Preset> exportList, HBConfiguration config)
+        {
+            PresetTransportContainer container = new PresetTransportContainer();
+            container.VersionMajor = Constants.PresetVersionMajor;
+            container.VersionMinor = Constants.PresetVersionMinor;
+            container.VersionMicro = Constants.PresetVersionMicro;
+
+            List<HBPreset> presets = exportList.Select(item => CreateHbPreset(item, config)).ToList();
+
+            container.PresetList = new List<object>();
+            container.PresetList.AddRange(presets);
 
             return container;
         }
@@ -408,16 +458,16 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// <returns>
         /// The <see cref="HBPreset"/>.
         /// </returns>
-        private static HBPreset CreateHbPreset(Preset export, HBConfiguration config)
+        public static HBPreset CreateHbPreset(Preset export, HBConfiguration config)
         {
             HBPreset preset = new HBPreset();
 
             // Preset
             preset.PresetDescription = export.Description;
             preset.PresetName = export.Name;
-            preset.Type = 1; // User Preset
+            preset.Type = export.IsBuildIn ? 0 : 1;
             preset.UsesPictureSettings = (int)export.PictureSettingsMode;
-            preset.Default = false; // TODO Can other GUI's handle this?
+            preset.Default = export.IsDefault;
 
             // Audio
             preset.AudioCopyMask = export.Task.AllowedPassthruOptions.AllowedPassthruOptions.Select(EnumHelper<AudioEncoder>.GetShortName).ToList();
@@ -485,10 +535,15 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Filters
             preset.PictureDeblock = export.Task.Deblock;
-            preset.PictureDecomb = EnumHelper<Decomb>.GetShortName(export.Task.Decomb);
-            preset.PictureDecombCustom = export.Task.CustomDecomb;
-            preset.PictureDecombDeinterlace = export.Task.Decomb != Decomb.Off;
-            preset.PictureDeinterlace = EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace);
+            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
+                ? "decomb" 
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? "deinterlace" : "off";  
+            preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
+                ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb) 
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
+            preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
+                ? export.Task.CustomDecomb 
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? export.Task.CustomDeinterlace : string.Empty;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);

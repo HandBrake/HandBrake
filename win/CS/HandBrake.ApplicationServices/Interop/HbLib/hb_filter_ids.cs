@@ -24,6 +24,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         // Finally filters that don't care what order they are in,
         // except that they must be after the above filters
         HB_FILTER_ROTATE,
+        HB_FILTER_GRAYSCALE,
         HB_FILTER_QSV_POST, // for QSV - important to have as a last one 
         HB_FILTER_QSV,  // default MSDK VPP filter 
     }

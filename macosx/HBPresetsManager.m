@@ -70,7 +70,8 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
  */
 - (void)loadOldPresetsFromURL:(NSURL *)url
 {
-    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url];
+    NSError *error;
+    HBPreset *oldPresets = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
 
     for (HBPreset *preset in oldPresets.children)
     {
@@ -78,7 +79,20 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     }
 }
 
-- (BOOL)checkIfOutOfDate:(NSDictionary *)dict
+- (BOOL)isNewer:(NSDictionary *)dict
+{
+    int major, minor, micro;
+    hb_presets_current_version(&major, &minor, &micro);
+
+    if ([dict[@"VersionMajor"] intValue] > major)
+    {
+        return YES;
+    }
+
+    return NO;
+}
+
+- (BOOL)isOutOfDate:(NSDictionary *)dict
 {
     int major, minor, micro;
     hb_presets_current_version(&major, &minor, &micro);
@@ -92,41 +106,123 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     return NO;
 }
 
-- (BOOL)loadPresetsFromURL:(NSURL *)url
+- (NSURL *)backupURLfromURL:(NSURL *)url versionMajor:(int)major minor:(int)minor micro:(int)micro
+{
+    NSString *backupName = [NSString stringWithFormat:@"%@.%d.%d.%d.json",
+                            url.lastPathComponent.stringByDeletingPathExtension,
+                            major, minor, micro];
+
+    return [url.URLByDeletingLastPathComponent URLByAppendingPathComponent:backupName];
+}
+
+typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
+    HBPresetLoadingResultOK,
+    HBPresetLoadingResultOKUpgraded,
+    HBPresetLoadingResultFailedNewer,
+    HBPresetLoadingResultFailed
+};
+
+- (NSDictionary *)dictionaryWithPresetsAtURL:(NSURL *)url backup:(BOOL)backup result:(HBPresetLoadingResult *)result;
 {
     NSData *presetData = [[NSData alloc] initWithContentsOfURL:url];
 
-    // Try to load to load the old presets file
-    // if the new one is empty
-    if (presetData == nil)
-    {
-        [self loadOldPresetsFromURL:[url.URLByDeletingPathExtension URLByAppendingPathExtension:@"plist"]];
-        [self generateBuiltInPresets];
-    }
-    else
+    if (presetData)
     {
         const char *json = [[NSString alloc] initWithData:presetData encoding:NSUTF8StringEncoding].UTF8String;
-        char *cleanedJson = hb_presets_clean_json(json);
-        NSDictionary *presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
+        NSDictionary *presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:json options:0 error:NULL];
 
-        if ([self checkIfOutOfDate:presetsDict])
+        if ([presetsDict isKindOfClass:[NSDictionary class]])
         {
-            char *updatedJson = hb_presets_import_json(cleanedJson);
-            presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:updatedJson options:0 error:NULL];
-            free(updatedJson);
+            if ([self isNewer:presetsDict])
+            {
+                *result = HBPresetLoadingResultFailedNewer;
+                return nil;
+            }
+            else if ([self isOutOfDate:presetsDict])
+            {
+                // There is a new presets file format,
+                // make a backup of the old one for the previous versions.
+                if (backup)
+                {
+                    NSURL *backupURL = [self backupURLfromURL:self.fileURL
+                                                 versionMajor:[presetsDict[@"VersionMajor"] intValue]
+                                                        minor:[presetsDict[@"VersionMinor"] intValue]
+                                                        micro:[presetsDict[@"VersionMicro"] intValue]];
+                    [[NSFileManager defaultManager] copyItemAtURL:url toURL:backupURL error:NULL];
+                }
+
+                // Update the presets to the current format.
+                char *updatedJson;
+                hb_presets_import_json(json, &updatedJson);
+                presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:updatedJson options:0 error:NULL];
+                free(updatedJson);
+
+                *result = HBPresetLoadingResultOKUpgraded;
+            }
+            else
+            {
+                // Else, clean up the presets just to be sure
+                // it's in the right format.
+                char *cleanedJson = hb_presets_clean_json(json);
+                presetsDict = [NSJSONSerialization HB_JSONObjectWithUTF8String:cleanedJson options:0 error:NULL];
+                free(cleanedJson);
+
+                *result = HBPresetLoadingResultOK;
+            }
+
+            return presetsDict;
         }
+    }
 
-        free(cleanedJson);
+    *result = HBPresetLoadingResultFailed;
+    return nil;
+}
 
+- (void)loadPresetsFromURL:(NSURL *)url;
+{
+    HBPresetLoadingResult result;
+    NSDictionary *presetsDict;
+
+    // Load the presets
+    presetsDict = [self dictionaryWithPresetsAtURL:url backup:YES result:&result];
+
+    if (result == HBPresetLoadingResultFailedNewer)
+    {
+        // Try a backup
+        int major, minor, micro;
+        hb_presets_current_version(&major, &minor, &micro);
+
+        NSURL *backupURL = [self backupURLfromURL:url versionMajor:major minor:minor micro:micro];
+
+        HBPresetLoadingResult backupResult;
+        presetsDict = [self dictionaryWithPresetsAtURL:backupURL backup:NO result:&backupResult];
+
+        // Change the fileURL so we don't overwrite
+        // the latest version presets.
+        _fileURL = backupURL;
+    }
+
+    // Add the presets to the root
+    if (presetsDict)
+    {
         for (NSDictionary *child in presetsDict[@"PresetList"])
         {
             [self.root.children addObject:[[HBPreset alloc] initWithDictionary:child]];
         }
 
-        if ([self checkIfOutOfDate:presetsDict])
+        if (result == HBPresetLoadingResultOKUpgraded)
         {
             [self generateBuiltInPresets];
         }
+    }
+
+    // If there is no json presets file try to read the old plist
+    if (result == HBPresetLoadingResultFailed && presetsDict == nil)
+    {
+        // Try to load to load the old presets file
+        // if the new one is empty
+        [self loadOldPresetsFromURL:[url.URLByDeletingPathExtension URLByAppendingPathExtension:@"plist"]];
+        [self generateBuiltInPresets];
     }
 
     // If the preset list contains no leaf,
@@ -146,8 +242,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     }
 
     [self selectNewDefault];
-
-    return YES;
 }
 
 - (BOOL)savePresetsToURL:(NSURL *)url
@@ -264,9 +358,6 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 /**
  * Built-in preset folders at the root of the hierarchy
- *
- * Note: the built-in presets will *not* sort themselves alphabetically,
- * so they will appear in the order you create them.
  */
 - (void)generateBuiltInPresets
 {

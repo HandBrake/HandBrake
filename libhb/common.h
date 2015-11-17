@@ -58,6 +58,9 @@
 #ifndef MAX
 #define MAX( a, b ) ( (a) > (b) ? (a) : (b) )
 #endif
+#ifndef ABS
+#define ABS(a) ((a) > 0 ? (a) : (-(a)))
+#endif
 
 #define HB_ALIGN(x, a) (((x)+(a)-1)&~((a)-1))
 
@@ -71,6 +74,11 @@
 #define MULTIPLE_MOD_DOWN(a, b) (((b) * (int)((a) / (b))))
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
+
+#define HB_MIN_WIDTH    32
+#define HB_MIN_HEIGHT   32
+#define HB_MAX_WIDTH    20480
+#define HB_MAX_HEIGHT   20480
 
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_hwd_s hb_hwd_t;
@@ -136,6 +144,7 @@ struct hb_buffer_list_s
     hb_buffer_t *head;
     hb_buffer_t *tail;
     int count;
+    int size;
 };
 
 void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf);
@@ -148,6 +157,7 @@ hb_buffer_t* hb_buffer_list_clear(hb_buffer_list_t *list);
 hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf);
 void hb_buffer_list_close(hb_buffer_list_t *list);
 int hb_buffer_list_count(hb_buffer_list_t *list);
+int hb_buffer_list_size(hb_buffer_list_t *list);
 
 hb_list_t * hb_list_init();
 int         hb_list_count( const hb_list_t * );
@@ -360,6 +370,8 @@ const char*      hb_video_framerate_get_name(int framerate);
 const char*      hb_video_framerate_sanitize_name(const char *name);
 void             hb_video_framerate_get_limits(int *low, int *high, int *clock);
 const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last);
+int              hb_video_framerate_get_close(hb_rational_t *framerate,
+                                              double thresh);
 
 int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
 int              hb_audio_samplerate_get_from_name(const char *name);
@@ -374,6 +386,7 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last);
 void        hb_video_quality_get_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 const char* hb_video_quality_get_name(uint32_t codec);
 
+int                hb_video_encoder_get_depth   (int encoder);
 const char* const* hb_video_encoder_get_presets (int encoder);
 const char* const* hb_video_encoder_get_tunes   (int encoder);
 const char* const* hb_video_encoder_get_profiles(int encoder);
@@ -507,11 +520,9 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x0000FFF
+#define HB_VCODEC_MASK         0x00FFFFF
 #define HB_VCODEC_INVALID      0x0000000
-#define HB_VCODEC_X264         0x0000001
 #define HB_VCODEC_THEORA       0x0000002
-#define HB_VCODEC_X265         0x0000004
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
 #define HB_VCODEC_FFMPEG_MPEG2 0x0000020
 #define HB_VCODEC_FFMPEG_VP8   0x0000040
@@ -519,13 +530,27 @@ struct hb_job_s
 #define HB_VCODEC_QSV_H264     0x0000100
 #define HB_VCODEC_QSV_H265     0x0000200
 #define HB_VCODEC_QSV_MASK     0x0000F00
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264|HB_VCODEC_QSV_H264)
-#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265|HB_VCODEC_QSV_H265)
+#define HB_VCODEC_X264_8BIT    0x0010000
+#define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
+#define HB_VCODEC_X264_10BIT   0x0020000
+#define HB_VCODEC_X264_MASK    0x0030000
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264)
+#define HB_VCODEC_X265_8BIT    0x0001000
+#define HB_VCODEC_X265         HB_VCODEC_X265_8BIT
+#define HB_VCODEC_X265_10BIT   0x0002000
+#define HB_VCODEC_X265_12BIT   0x0004000
+#define HB_VCODEC_X265_16BIT   0x0008000
+#define HB_VCODEC_X265_MASK    0x000F000
+#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265)
 
     int             vcodec;
     double          vquality;
     int             vbitrate;
     hb_rational_t   vrate;
+    // Some parameters that depend on vrate (like keyint) can't change
+    // between encoding passes. So orig_vrate is used to store the
+    // 1st pass rate.
+    hb_rational_t   orig_vrate;
     int             cfr;
     PRIVATE int     pass_id;
     int             twopass;        // Enable 2-pass encode. Boolean
@@ -962,6 +987,7 @@ struct hb_title_s
     /* Exact duration (in 1/90000s) */
     uint64_t      duration;
 
+    int           preview_count;
     int           has_resolution_change;
     hb_geometry_t geometry;
     hb_rational_t dar;             // aspect ratio for the title's video
@@ -1133,12 +1159,12 @@ struct hb_work_object_s
     hb_thread_t       * thread;
     int                 yield;
     volatile int      * done;
+    volatile int      * die;
     int                 status;
     int                 codec_param;
     hb_title_t        * title;
 
     hb_work_object_t  * next;
-    int                 thread_sleep_interval;
 
     hb_handle_t       * h;
 #endif
@@ -1162,7 +1188,6 @@ extern hb_work_object_t hb_encx265;
 extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
 extern hb_work_object_t hb_declpcm;
-extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
 extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
@@ -1184,6 +1209,7 @@ typedef struct hb_filter_init_s
     int           crop[4];
     hb_rational_t vrate;
     int           cfr;
+    int           grayscale;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
@@ -1251,6 +1277,7 @@ enum
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
     HB_FILTER_ROTATE,
+    HB_FILTER_GRAYSCALE,
 
     // for QSV - important to have as a last one
     HB_FILTER_QSV_POST,
@@ -1278,9 +1305,10 @@ int hb_rgb2yuv(int rgb);
 const char * hb_subsource_name( int source );
 
 // unparse a set of x264 settings to an HB encopts string
-char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
-                             const char *x264_encopts, const char *h264_profile,
-                             const char *h264_level, int width, int height);
+char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
+                             const char *x264_tune, const char *x264_encopts,
+                             const char *h264_profile, const char *h264_level,
+                             int width, int height);
 
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );

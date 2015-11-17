@@ -36,6 +36,15 @@
     return lang;
 }
 
+- (void)setIsSelected:(BOOL)isSelected
+{
+    if (_isSelected != isSelected)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setIsSelected:_isSelected];
+    }
+    _isSelected = isSelected;
+}
+
 - (NSString *)description
 {
     return self.language;
@@ -47,17 +56,17 @@
 
 - (instancetype)init
 {
-    self = [self initWithLanguages:nil];
+    self = [self initWithLanguages:@[]];
     return self;
 }
 
-- (instancetype)initWithLanguages:(NSArray *)languages
+- (instancetype)initWithLanguages:(NSArray<NSString *> *)languages
 {
     self = [super init];
     if (self)
     {
-        NSMutableArray *internal = [[NSMutableArray alloc] init];
-        NSMutableArray *selected = [[NSMutableArray alloc] init];
+        NSMutableArray<HBLang *> *internal = [[NSMutableArray alloc] init];
+        NSMutableArray<HBLang *> *selected = [[NSMutableArray alloc] init];
 
         const iso639_lang_t *lang = lang_get_next(NULL);
         for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
@@ -114,6 +123,15 @@
     }
 
     return [selected copy];
+}
+
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    for (HBLang *lang in self.languagesArray)
+    {
+        lang.undo = undo;
+    }
 }
 
 

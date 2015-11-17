@@ -128,7 +128,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
         {
-            if (self.video.encoder == HB_VCODEC_X264)
+            if (self.video.encoder & HB_VCODEC_X264_MASK)
             {
                 fDisplayX264PresetsUnparseTextField.stringValue = [NSString stringWithFormat:@"x264 Unparse: %@", self.video.unparseOptions];
             }
@@ -214,7 +214,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         fPresetsBox.contentView = fPresetView;
         [self setupPresetsSlider];
 
-        if (self.video.encoder == HB_VCODEC_X264)
+        if (self.video.encoder & HB_VCODEC_X264_MASK)
         {
             self.advancedController.hidden = NO;
         }
@@ -250,7 +250,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)toggleAdvancedOptionsCheckBoxForEncoder:(int)encoder
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder == HB_VCODEC_X264))
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder & HB_VCODEC_X264_MASK))
     {
         fX264UseAdvancedOptionsCheck.hidden = NO;
         fDividerLine.hidden = YES;

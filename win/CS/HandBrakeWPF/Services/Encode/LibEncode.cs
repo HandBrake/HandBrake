@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Model;
 
+    using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Services.Encode.Factories;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -34,6 +35,7 @@ namespace HandBrakeWPF.Services.Encode
         private DateTime startTime;
         private EncodeTask currentTask;
         private HBConfiguration currentConfiguration;
+        private bool isPreviewInstance;
 
         #endregion
 
@@ -55,6 +57,12 @@ namespace HandBrakeWPF.Services.Encode
         {
             try
             {
+                // Sanity Checking and Setup
+                if (this.IsEncoding)
+                {
+                    throw new GeneralApplicationException("HandBrake is already encoding a file.", "Please stop the current encode. If the problem persists, please restart HandBrake.", null);
+                }
+
                 // Setup
                 this.startTime = DateTime.Now;
                 this.currentTask = task;
@@ -64,18 +72,14 @@ namespace HandBrakeWPF.Services.Encode
                 // Setup the HandBrake Instance
                 HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
                 HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
-                this.instance = HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
+                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
+                
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                 this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
-                // Sanity Checking and Setup
-                if (this.IsEncoding)
-                {
-                    throw new Exception("HandBrake is already encoding.");
-                }
-     
                 this.IsEncoding = true;
-                this.SetupLogging();
+                this.isPreviewInstance = task.IsPreviewEncode;
+                this.SetupLogging(task.IsPreviewEncode);
 
                 // Verify the Destination Path Exists, and if not, create it.
                 this.VerifyEncodeDestinationPath(task);
@@ -87,29 +91,6 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);
-
-                // Set the Process Priority
-                switch (configuration.ProcessPriority)
-                {
-                    case "Realtime":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                        break;
-                    case "High":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case "Above Normal":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case "Normal":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case "Low":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                }
             }
             catch (Exception exc)
             {
@@ -246,7 +227,7 @@ namespace HandBrakeWPF.Services.Encode
             HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
             
             // Handling Log Data 
-            this.ProcessLogs(this.currentTask.Destination, this.currentConfiguration);
+            this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
 
             // Cleanup
             this.ShutdownFileWriter();

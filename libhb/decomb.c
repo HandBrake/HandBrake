@@ -73,7 +73,6 @@ which will feed EEDI2 interpolations to yadif.
 
 #define PARITY_DEFAULT   -1
 
-#define ABS(a) ((a) > 0 ? (a) : (-(a)))
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
 #define MAX3(a,b,c) MAX(MAX(a,b),c)
 

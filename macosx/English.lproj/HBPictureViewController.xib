@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A262e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B22c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9052"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                    <rect key="frame" x="729" y="252" width="15" height="22"/>
+                    <rect key="frame" x="726" y="252" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
@@ -58,7 +58,7 @@
                     </buttonCell>
                     <cells>
                         <column>
-                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="b3y-yE-sYc">
+                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" toolTip="Automatically crop black borders around edges of the video." inset="2" id="b3y-yE-sYc">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
                             </buttonCell>
@@ -149,7 +149,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                    <rect key="frame" x="674" y="229" width="15" height="22"/>
+                    <rect key="frame" x="671" y="229" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
@@ -208,7 +208,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                    <rect key="frame" x="729" y="206" width="15" height="22"/>
+                    <rect key="frame" x="726" y="206" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
@@ -242,6 +242,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fkJ-hW-R19"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="wsq-TS-cC6">
                     <rect key="frame" x="750" y="231" width="36" height="19"/>
@@ -285,7 +288,7 @@
                     <font key="titleFont" metaFont="system"/>
                 </box>
                 <textField verticalHuggingPriority="750" id="1a5-Yb-uwn">
-                    <rect key="frame" x="25" y="130" width="64" height="14"/>
+                    <rect key="frame" x="18" y="130" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
@@ -293,9 +296,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="M2A-q7-iOs"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Mwp-XS-2tc">
-                    <rect key="frame" x="40" y="104" width="49" height="14"/>
+                    <rect key="frame" x="18" y="104" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
@@ -309,11 +315,14 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lK9-eT-tUn"/>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="DER-tS-cLx">
                     <rect key="frame" x="92" y="125" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">This filter removes 'combing' artifacts that are the result of telecining.
+Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</string>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -336,7 +345,7 @@
                         <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="ipJ-z3-XnJ">
+                <textField toolTip="Custom detelecine filter string format: JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity" verticalHuggingPriority="750" id="ipJ-z3-XnJ">
                     <rect key="frame" x="95" y="101" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
@@ -364,6 +373,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="m7I-VM-1ct"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="ns7-Ww-hmX">
                     <rect key="frame" x="656" y="105" width="64" height="14"/>
@@ -374,6 +386,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pzU-oe-yEE"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="peM-dW-Ef8">
                     <rect key="frame" x="719" y="130" width="31" height="14"/>
@@ -395,6 +410,8 @@
                 <slider verticalHuggingPriority="750" id="VHj-6u-NVp">
                     <rect key="frame" x="751" y="127" width="104" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">The deblocking filter removes a common type of compression artifact.
+If your source exhibits 'blockiness', this filter may help clean it up.</string>
                     <animations/>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
                     <connections>
@@ -416,10 +433,16 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="tH6-cB-0O3"/>
+                    </connections>
                 </textField>
-                <popUpButton toolTip="Denoise filtering reduces or removes the appearance of noise and grain." verticalHuggingPriority="750" id="ins-7X-kbN">
+                <popUpButton verticalHuggingPriority="750" id="ins-7X-kbN">
                     <rect key="frame" x="521" y="125" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Denoise filtering reduces or removes the appearance of noise and grain.
+Film grain and other types of high frequency noise are difficult to compress.
+Using this filter on such sources can result in smaller file sizes.</string>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="a2c-wR-CQ6">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -457,6 +480,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="P6z-nu-QHk"/>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" id="cTy-PO-BSd">
@@ -522,6 +546,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="ZR9-YG-pfn">
@@ -533,7 +558,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
-                    <accessibility description="Custom denoise settings."/>
+                    <accessibility description="Custom denoise filter string format: SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"/>
                     <connections>
                         <binding destination="-2" name="hidden" keyPath="self.filters.customDenoiseSelected" id="zff-ce-4Wm">
                             <dictionary key="options">
@@ -543,216 +568,6 @@
                         <binding destination="-2" name="value" keyPath="self.filters.denoiseCustomString" id="MUd-3J-rBA"/>
                     </connections>
                 </textField>
-                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="V5h-RE-c1g">
-                    <rect key="frame" x="310" y="104" width="83" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
-                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    <size key="cellSize" width="83" height="20"/>
-                    <size key="intercellSpacing" width="4" height="2"/>
-                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="0e7-lW-GxD" customClass="HBHUDButtonCell">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <cells>
-                        <column>
-                            <buttonCell type="radio" title="Deinterlace" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="OVg-jG-Uzq">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <buttonCell type="radio" title="Decomb" imagePosition="left" alignment="left" controlSize="small" inset="2" id="CCd-Kk-NlW">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                        </column>
-                    </cells>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="KA3-LF-11B">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedIndex" keyPath="self.filters.useDecomb" id="dze-Gw-CZJ"/>
-                    </connections>
-                </matrix>
-                <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="Mmn-Ae-9Yn" userLabel="Decomb Box">
-                    <rect key="frame" x="233" y="43" width="207" height="62"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView">
-                        <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField verticalHuggingPriority="750" id="7iW-iI-CHT">
-                                <rect key="frame" x="11" y="38" width="61" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Decomb:" id="bkd-Rb-wwr">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="EoC-qG-nlq">
-                                <rect key="frame" x="11" y="12" width="61" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="VaB-Av-TDu">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <connections>
-                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="kgj-zy-TW7">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </textField>
-                            <popUpButton verticalHuggingPriority="750" id="kP2-Gv-DZV">
-                                <rect key="frame" x="75" y="33" width="114" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5f8-gV-wzv">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" title="OtherViews" id="hOC-Xe-RPE"/>
-                                </popUpButtonCell>
-                                <connections>
-                                    <accessibilityConnection property="title" destination="7iW-iI-CHT" id="PnI-bH-5TP"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.filters" id="1ZK-xB-Tcj">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSIsNotNil</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="-2" name="selectedValue" keyPath="self.filters.decomb" previousBinding="3Cu-Eh-e6g" id="ShC-Oj-9Cr">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">HBDecombTransformer</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="-2" name="contentValues" keyPath="self.filters.decombSettings" id="3Cu-Eh-e6g"/>
-                                </connections>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="750" id="dNc-Lj-0eP">
-                                <rect key="frame" x="78" y="9" width="108" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="cDZ-Od-pI6">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <accessibility description="Custom decomb settings."/>
-                                <connections>
-                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDecombSelected" id="Ftt-V0-qz8">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="UZ0-eg-oV8" name="value" keyPath="values.self.filters.decombCustomString" id="lJH-aM-3yE"/>
-                                </connections>
-                            </textField>
-                        </subviews>
-                        <animations/>
-                    </view>
-                    <animations/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.useDecomb" id="Qt8-ik-TyT">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </box>
-                <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="N21-it-wjY" userLabel="Deinterlace Box">
-                    <rect key="frame" x="233" y="43" width="207" height="62"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <view key="contentView">
-                        <rect key="frame" x="0.0" y="0.0" width="207" height="62"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField verticalHuggingPriority="750" id="xKf-yr-nCk">
-                                <rect key="frame" x="4" y="38" width="68" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" id="C83-aJ-v3x">
-                                <rect key="frame" x="23" y="12" width="49" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <connections>
-                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="kHC-eH-FKE">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </textField>
-                            <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
-                                <rect key="frame" x="75" y="33" width="114" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" title="OtherViews" id="PyP-FP-gGx"/>
-                                </popUpButtonCell>
-                                <connections>
-                                    <accessibilityConnection property="title" destination="xKf-yr-nCk" id="9ol-TG-r46"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.filters" id="M9v-44-EJq">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSIsNotNil</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlace" previousBinding="41E-Fv-hq1" id="RN0-ZY-YXU">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">HBDeinterlaceTransformer</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceSettings" id="41E-Fv-hq1"/>
-                                </connections>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="750" id="r64-vI-ymx">
-                                <rect key="frame" x="78" y="9" width="108" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <animations/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OKz-qW-7ai">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <accessibility description="Custom deinterlace settings"/>
-                                <connections>
-                                    <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="h6M-Dy-tBR">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="ej3-7F-ZV8"/>
-                                </connections>
-                            </textField>
-                        </subviews>
-                        <animations/>
-                    </view>
-                    <animations/>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.useDecomb" id="ja4-Mj-2gB"/>
-                    </connections>
-                </box>
                 <textField verticalHuggingPriority="750" id="A6i-ft-02b">
                     <rect key="frame" x="484" y="78" width="34" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -768,9 +583,10 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="GTk-Mv-iiv"/>
                     </connections>
                 </textField>
-                <button id="Psx-nN-XiT">
+                <button toolTip="If enabled, filter colour components out of video." id="Psx-nN-XiT">
                     <rect key="frame" x="723" y="103" width="103" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
@@ -797,7 +613,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="LWv-Y9-b0S">
+                <textField toolTip="This is the display width. It is the result of scaling the storage dimensions by the pixel aspect." verticalHuggingPriority="750" id="LWv-Y9-b0S">
                     <rect key="frame" x="375" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
@@ -807,6 +623,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Display Width"/>
                     <connections>
                         <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IKb-wD-kbq"/>
                         <binding destination="-2" name="value" keyPath="self.picture.displayWidth" id="j71-Y5-RpA"/>
@@ -828,6 +645,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Display Height"/>
                     <connections>
                         <binding destination="-2" name="value" keyPath="self.picture.height" id="zm8-6D-NYY"/>
                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" id="8ix-ds-9fO">
@@ -841,6 +659,9 @@
                 <textField verticalHuggingPriority="750" id="JC3-5O-BXA">
                     <rect key="frame" x="375" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Pixel aspect defines the shape of the pixels.
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</string>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="ygx-uC-eb0"/>
@@ -848,6 +669,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Pixel Aspect Ration Numerator"/>
                     <connections>
                         <accessibilityConnection property="title" destination="vOY-Ix-eha" id="Gac-U9-X6e"/>
                         <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="IP2-ew-IdV"/>
@@ -861,7 +683,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="vOY-Ix-eha">
-                    <rect key="frame" x="340" y="258" width="29" height="14"/>
+                    <rect key="frame" x="291" y="258" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
@@ -869,9 +691,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="VwV-bW-PBZ"/>
+                    </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
-                    <rect key="frame" x="154" y="281" width="15" height="22"/>
+                    <rect key="frame" x="151" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
@@ -896,6 +721,8 @@
                 <popUpButton verticalHuggingPriority="750" id="ns0-ar-I7c">
                     <rect key="frame" x="93" y="206" width="54" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Align storage dimensions to multiples of this value. This setting is only necessary for compatibility with some devices.
+You should use 2 unless you experience compatibility issues.</string>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" title="2" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="OWb-6v-ggg" id="H0L-sP-ky8">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -922,6 +749,7 @@
                 <textField verticalHuggingPriority="750" id="9hH-As-JSa">
                     <rect key="frame" x="96" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">This is the width that the video will be stored at. The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</string>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="6jd-2b-RPM"/>
@@ -929,6 +757,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Storage Width"/>
                     <connections>
                         <accessibilityConnection property="title" destination="9oG-zm-Y0W" id="lTZ-u6-eUU"/>
                         <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="L1O-OF-Smb" id="Ypo-AX-fuO">
@@ -954,9 +783,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="MVb-7T-IbY"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
-                    <rect key="frame" x="174" y="286" width="10" height="14"/>
+                    <rect key="frame" x="171" y="286" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
@@ -988,6 +820,9 @@
                 <popUpButton verticalHuggingPriority="750" id="w1f-3S-up0">
                     <rect key="frame" x="93" y="232" width="83" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">None   - Force pixel aspect ratio to 1:1.
+Loose  - Align dimensions to chosen 'Alignment' value and pick pixel aspect ratio that preserves the original display aspect ratio
+Strict - Keep original source dimensions and pixel aspect ratio</string>
                     <animations/>
                     <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="1O3-th-4M5" id="vx1-8S-fyc">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1020,6 +855,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fh5-vf-5Tr"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="9oG-zm-Y0W">
                     <rect key="frame" x="18" y="285" width="74" height="14"/>
@@ -1030,9 +868,12 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Epa-CR-f64"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="hei-Cd-vcN">
-                    <rect key="frame" x="298" y="286" width="71" height="14"/>
+                    <rect key="frame" x="291" y="286" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
@@ -1040,6 +881,9 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="7ds-FA-XrD">
                     <rect key="frame" x="18" y="309" width="74" height="14"/>
@@ -1050,10 +894,14 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eOt-6I-k6x"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
-                    <rect key="frame" x="188" y="283" width="56" height="19"/>
+                    <rect key="frame" x="185" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">This is the height that the video will be stored at. The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</string>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Ts7-R5-Oye"/>
@@ -1061,6 +909,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Storage Height"/>
                     <connections>
                         <accessibilityConnection property="title" destination="uqQ-uA-3xF" id="Cho-Kz-bXA"/>
                         <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="GH2-sh-F1c" id="ImG-wf-FaF">
@@ -1077,7 +926,7 @@
                         <outlet property="nextKeyView" destination="2s0-5k-fjU" id="D8H-ff-R52"/>
                     </connections>
                 </textField>
-                <button id="6G0-MW-iVa">
+                <button toolTip="If enabled, the original display aspect of the source will be maintained." id="6G0-MW-iVa">
                     <rect key="frame" x="93" y="258" width="145" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
@@ -1102,6 +951,9 @@
                 <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
                     <rect key="frame" x="457" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Pixel aspect defines the shape of the pixels.
+A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
+Players will scale the image in order to achieve the specified aspect.</string>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
@@ -1109,6 +961,7 @@
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <accessibility description="Pixel Aspect Ratio Denominator"/>
                     <connections>
                         <binding destination="-2" name="editable" keyPath="self.picture.customAnamorphicEnabled" id="BXi-rt-OOn"/>
                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspect" previousBinding="BXi-rt-OOn" id="c3e-8E-4E8">
@@ -1133,7 +986,7 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
-                    <rect key="frame" x="246" y="281" width="15" height="22"/>
+                    <rect key="frame" x="240" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
@@ -1155,7 +1008,7 @@
                     </connections>
                 </stepper>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                    <rect key="frame" x="788" y="229" width="15" height="22"/>
+                    <rect key="frame" x="785" y="229" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
@@ -1180,6 +1033,128 @@
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="HGA-OB-h94"/>
                     </connections>
                 </stepper>
+                <textField verticalHuggingPriority="750" id="xKf-yr-nCk">
+                    <rect key="frame" x="240" y="130" width="68" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="PYk-vE-y5t"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="C83-aJ-v3x">
+                    <rect key="frame" x="259" y="79" width="49" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="kHC-eH-FKE">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="OOp-ec-hRZ"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
+                    <rect key="frame" x="311" y="125" width="114" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Choose decomb or deinterlace filter options.
+The decomb filter selectively deinterlaces frames that appear to be interlaced.
+This will preserve quality in frames that are not interlaced.
+The classic deinterlace filter is applied to all frames.
+Frames that are not interlaced will suffer some quality degradation.</string>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="PyP-FP-gGx"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="xKf-yr-nCk" id="9ol-TG-r46"/>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="M9v-44-EJq">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlace" previousBinding="1XG-JZ-nFn" id="jo4-ky-6QP">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDeinterlaceTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceTypes" id="1XG-JZ-nFn"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" id="r64-vI-ymx">
+                    <rect key="frame" x="314" y="76" width="108" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OKz-qW-7ai">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <accessibility description="Custom deinterlace filter string format: YadifMode:YadifParity:McdintMode:McdeintQp"/>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeinterlaceSelected" id="h6M-Dy-tBR">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="ej3-7F-ZV8"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" id="9Uz-PL-igg">
+                    <rect key="frame" x="248" y="104" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="zvZ-ZX-yKE">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="9z5-2i-puG">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="58H-r8-xBi"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" id="6nG-zk-FMo">
+                    <rect key="frame" x="312" y="99" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="at1-DR-WGs">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="qey-Yo-9sX"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="9Uz-PL-igg" id="EXp-0c-TdS"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="gBQ-b8-r6y">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deinterlacePreset" previousBinding="ZVC-PA-ji4" id="4RE-n6-Oyz">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDeinterlacePresetTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlacePresets" id="ZVC-PA-ji4"/>
+                        <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="LJa-RO-dzf"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <animations/>
             <point key="canvasLocation" x="403.5" y="86.5"/>

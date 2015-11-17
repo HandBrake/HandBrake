@@ -9,24 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *keySubTrackSelectionIndex;
-extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
-extern NSString *keySubTrackLanguageIsoCode;
-extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
-extern NSString *keySubTrackSrtCharCodeIndex;
-extern NSString *keySubTrackLanguageIndex;
-
 @class HBTitle;
+@class HBSubtitlesTrack;
 @class HBSubtitlesDefaults;
 
 @interface HBSubtitles : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
@@ -37,35 +21,26 @@ extern NSString *keySubTrackLanguageIndex;
 - (void)removeAll;
 - (void)reloadDefaults;
 
-- (void)validatePassthru;
-- (NSMutableDictionary *)createSubtitleTrack;
-- (NSMutableDictionary *)trackFromSourceTrackIndex:(NSInteger)index;
+- (void)addSrtTrackFromURL:(NSURL *)srtURL;
 
-@property (nonatomic, readonly) NSMutableArray *masterTrackArray;  // the master list of audio tracks from the title
-@property (nonatomic, readonly) NSMutableArray *tracks;
-
-@property (nonatomic, readwrite, strong) NSString *foreignAudioSearchTrackName;
-@property (nonatomic, readonly) NSArray *charCodeArray;
-
-@property (nonatomic, readonly) NSArray *languagesArray;
-@property (nonatomic, readonly) NSInteger languagesArrayDefIndex;
+@property (nonatomic, readonly) NSMutableArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSMutableArray<HBSubtitlesTrack *> *tracks;
 
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaults *defaults;
 
 /**
  *  For internal use
  */
-
-- (void)containerChanged:(int)container;
-@property (nonatomic, readwrite) int container; // initially is the default HB_MUX_MP4
+@property (nonatomic, readwrite) int container;
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end
 
 @interface HBSubtitles (KVC)
 
 @property (nonatomic, readonly) NSUInteger countOfTracks;
-- (id)objectInTracksAtIndex:(NSUInteger)index;
-- (void)insertObject:(id)audioObject inTracksAtIndex:(NSUInteger)index;
+- (HBSubtitlesTrack *)objectInTracksAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBSubtitlesTrack *)audioObject inTracksAtIndex:(NSUInteger)index;
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index;
 
 @end

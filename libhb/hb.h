@@ -92,7 +92,7 @@ void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
 hb_job_t    * hb_job( hb_handle_t *, int );
-void          hb_add( hb_handle_t *, hb_job_t * );
+int           hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
 
 hb_title_t  * hb_find_title_by_index( hb_handle_t *h, int title_index );
@@ -111,11 +111,11 @@ void          hb_system_sleep_prevent(hb_handle_t*);
 /* Persistent data between jobs. */
 typedef struct hb_interjob_s
 {
-    int last_job;          /* job->sequence_id & 0xFFFFFF */
-    int frame_count;       /* number of frames counted by sync */
-    int out_frame_count;   /* number of frames counted by render */
-    uint64_t total_time;   /* real length in 90kHz ticks (i.e. seconds / 90000) */
-    hb_rational_t vrate;   /* actual measured output vrate from 1st pass */
+    int     sequence_id;     /* job->sequence_id                   */
+    int     frame_count;     /* number of frames counted by sync   */
+    int     out_frame_count; /* number of frames counted by render */
+    int64_t total_time;      /* measured length in 90kHz ticks     */
+    hb_rational_t vrate;     /* measured output vrate              */
 
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 } hb_interjob_t;

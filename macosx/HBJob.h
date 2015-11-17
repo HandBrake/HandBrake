@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 
 @class HBPreset;
+@class HBMutablePreset;
 @class HBTitle;
 
 #import "HBRange.h"
@@ -16,6 +17,7 @@
 
 #import "HBAudio.h"
 #import "HBSubtitles.h"
+#import "HBChapter.h"
 
 #import "HBDistributedArray.h"
 
@@ -31,23 +33,21 @@ typedef NS_ENUM(NSUInteger, HBJobState){
     HBJobStateReady,
     HBJobStateWorking,
     HBJobStateCompleted,
-    HBJobStateCanceled
+    HBJobStateCanceled, 
+    HBJobStateFailed
 };
 
 /**
  * HBJob
  */
-@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBUniqueObject>
+@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding, HBUniqueObject>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
-
-- (void)applyPreset:(HBPreset *)preset;
-- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict;
 
 /// Current state of the job.
 @property (nonatomic, readwrite) HBJobState state;
 
-@property (nonatomic, readwrite, assign, nullable) HBTitle *title;
+@property (nonatomic, readwrite, weak, nullable) HBTitle *title;
 @property (nonatomic, readonly) int titleIdx;
 
 @property (nonatomic, readwrite, copy) NSString *presetName;
@@ -74,7 +74,9 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) HBSubtitles *subtitles;
 
 @property (nonatomic, readwrite) BOOL chaptersEnabled;
-@property (nonatomic, readonly) NSMutableArray *chapterTitles;
+@property (nonatomic, readonly) NSArray<HBChapter *> *chapterTitles;
+
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end
 

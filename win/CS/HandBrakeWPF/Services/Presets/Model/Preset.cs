@@ -85,11 +85,6 @@ namespace HandBrakeWPF.Services.Presets.Model
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets or sets The version number which associates this preset with a HB build
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets or sets the audio track behaviours.
         /// </summary>
         public AudioBehaviours AudioTrackBehaviours { get; set; }

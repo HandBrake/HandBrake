@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -40,44 +40,6 @@
             <rect key="frame" x="0.0" y="0.0" width="500" height="376"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <popUpButton verticalHuggingPriority="750" id="374">
-                    <rect key="frame" x="223" y="338" width="205" height="22"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <popUpButtonCell key="cell" type="push" title="Open Source" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="379" id="375">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="376">
-                            <items>
-                                <menuItem title="Do Nothing" id="378"/>
-                                <menuItem title="Open Source" state="on" id="379"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <binding destination="61" name="selectedValue" keyPath="values.LaunchSourceBehavior" id="386"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" id="414">
-                    <rect key="frame" x="324" y="315" width="104" height="22"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <popUpButtonCell key="cell" type="push" title="Weekly" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="604800" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="417" id="415">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="416">
-                            <items>
-                                <menuItem title="Daily" tag="86400" id="419"/>
-                                <menuItem title="Weekly" state="on" tag="604800" id="417"/>
-                                <menuItem title="Monthly" tag="2629800" id="420"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <binding destination="410" name="enabled" keyPath="automaticallyChecksForUpdates" id="433"/>
-                        <binding destination="410" name="selectedTag" keyPath="updateCheckInterval" id="434"/>
-                    </connections>
-                </popUpButton>
                 <popUpButton verticalHuggingPriority="750" id="289">
                     <rect key="frame" x="255" y="184" width="96" height="22"/>
                     <autoresizingMask key="autoresizingMask"/>
@@ -94,6 +56,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="486" id="3J0-Cd-s8X"/>
                         <binding destination="61" name="selectedValue" keyPath="values.DefaultMpegExtension" id="490"/>
                     </connections>
                 </popUpButton>
@@ -102,16 +65,6 @@
                     <autoresizingMask key="autoresizingMask"/>
                     <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Output files:" id="308">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" id="383">
-                    <rect key="frame" x="124" y="343" width="96" height="14"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source selection:" id="384">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -146,19 +99,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="61" name="value" keyPath="values.sendToMetaX" id="266"/>
-                    </connections>
-                </button>
-                <button id="243">
-                    <rect key="frame" x="124" y="318" width="197" height="18"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <animations/>
-                    <buttonCell key="cell" type="check" title="Automatically check for updates:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="305">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="410" name="value" keyPath="automaticallyChecksForUpdates" id="429"/>
+                        <binding destination="61" name="value" keyPath="values.HBSendToAppEnabled" id="Kff-6m-jt9"/>
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" id="242">
@@ -196,7 +137,11 @@
                         </connections>
                     </textFieldCell>
                     <connections>
-                        <binding destination="61" name="value" keyPath="values.SendCompletedEncodeToApp" id="454"/>
+                        <binding destination="61" name="value" keyPath="values.HBSendToApp" id="f36-PN-c5F">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">None</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" id="450">
@@ -242,6 +187,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="242" id="fOv-gS-Cui"/>
                         <binding destination="61" name="selectedTag" keyPath="values.HBAlertWhenDone" id="xxK-qX-yth"/>
                     </connections>
                 </popUpButton>
@@ -341,9 +287,43 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button id="ibT-yk-a1x">
+                    <rect key="frame" x="123" y="341" width="197" height="18"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Show Open Source panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="Zqz-Kn-xOS">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="61" name="value" keyPath="values.HBShowOpenPanelAtLaunch" id="hsG-Dx-Mf3"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" id="6Qw-bc-4P9">
+                    <rect key="frame" x="23" y="313" width="98" height="14"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Check for update:" id="Gyg-hU-a3l">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button id="243">
+                    <rect key="frame" x="123" y="311" width="226" height="18"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <animations/>
+                    <buttonCell key="cell" type="check" title="Automatically check weekly" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="305">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="410" name="value" keyPath="automaticallyChecksForUpdates" id="429"/>
+                    </connections>
+                </button>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="-82" y="-471"/>
+            <point key="canvasLocation" x="42" y="-503"/>
         </customView>
         <customView id="235" userLabel="Audio">
             <rect key="frame" x="0.0" y="0.0" width="500" height="136"/>
@@ -359,6 +339,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </comboBoxCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="252" id="hu3-YO-cRz"/>
                         <binding destination="-2" name="content" keyPath="self.languages.languagesArray" id="xPC-Fg-O3G"/>
                         <binding destination="61" name="value" keyPath="values.DefaultLanguage" previousBinding="xPC-Fg-O3G" id="I2t-Qy-TKa"/>
                     </connections>
@@ -383,6 +364,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </comboBoxCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="509" id="PE7-MG-1ib"/>
                         <binding destination="-2" name="content" keyPath="self.languages.languagesArray" id="l02-3Q-yhI"/>
                         <binding destination="61" name="value" keyPath="values.AlternateLanguage" previousBinding="l02-3Q-yhI" id="M5z-5g-aQN"/>
                     </connections>
@@ -431,6 +413,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="371" id="awk-S1-w3X"/>
                         <binding destination="61" name="selectedValue" keyPath="values.LoggingLevel" id="373"/>
                     </connections>
                 </popUpButton>
@@ -455,6 +438,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="395" id="NVF-jL-QpH"/>
                         <binding destination="61" name="selectedValue" keyPath="values.x264CqSliderFractional" id="397"/>
                     </connections>
                 </popUpButton>
@@ -582,6 +566,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="463" id="7YR-Pi-GBe"/>
                         <binding destination="61" name="value" keyPath="values.MinTitleScanSeconds" id="483"/>
                     </connections>
                 </textField>
@@ -645,6 +630,7 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <accessibilityConnection property="title" destination="359" id="83c-8K-HW6"/>
                         <binding destination="61" name="selectedValue" keyPath="values.PreviewsNumber" id="358"/>
                     </connections>
                 </popUpButton>
@@ -662,7 +648,7 @@
                 </button>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="-82" y="-85"/>
+            <point key="canvasLocation" x="53" y="-460"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>
     </objects>

@@ -6,28 +6,18 @@
 
 #import "HBHUDView.h"
 
-@interface NSView (HBHUDViewExtension)
-
-- (void)setBlendingMode:(int)mode;
-- (void)setMaterial:(int)material;
-- (void)setState:(int)state;
-
-@end
-
 @implementation HBHUDView
 
-+ (void)setupNewStyleHUD:(NSView *)view
++ (void)setupNewStyleHUD:(NSVisualEffectView *)view
 {
     [view setWantsLayer:YES];
     [view.layer setCornerRadius:4];
 
-    // Hardcode the values so we can
-    // compile it with the 10.9 sdk.
-    [view setBlendingMode:1];
-    [view setMaterial:2];
-    [view setState:1];
+    [view setBlendingMode:NSVisualEffectBlendingModeWithinWindow];
+    [view setMaterial:NSVisualEffectMaterialDark];
+    [view setState:NSVisualEffectStateActive];
 
-    [view setAppearance:[NSClassFromString(@"NSAppearance") appearanceNamed:@"NSAppearanceNameVibrantDark"]];
+    [view setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -57,7 +47,7 @@
         self = [[NSClassFromString(@"NSVisualEffectView") alloc] initWithFrame:frame];
         if (self)
         {
-            [HBHUDView setupNewStyleHUD:self];
+            [HBHUDView setupNewStyleHUD:(NSVisualEffectView *)self];
         }
     }
     else

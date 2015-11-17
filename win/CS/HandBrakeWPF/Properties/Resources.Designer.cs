@@ -574,7 +574,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {5}.
+        ///   Looks up a localized string similar to    Pending Jobs {7}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -726,6 +726,15 @@ namespace HandBrakeWPF.Properties {
         public static string Main_QueueFinished {
             get {
                 return ResourceManager.GetString("Main_QueueFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  with {0} errors detected..
+        /// </summary>
+        public static string Main_QueueFinishedErrors {
+            get {
+                return ResourceManager.GetString("Main_QueueFinishedErrors", resourceCulture);
             }
         }
         
@@ -934,11 +943,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}.
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\:mm\:ss}.
         /// </summary>
         public static string MainViewModel_EncodeStatusChanged_StatusLabel {
             get {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low Disk Space.
+        /// </summary>
+        public static string MainViewModel_LowDiskSpace {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. .
+        /// </summary>
+        public static string MainViewModel_LowDiskSpaceWarning {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpaceWarning", resourceCulture);
             }
         }
         
@@ -1118,6 +1145,46 @@ namespace HandBrakeWPF.Properties {
         public static string Presets_ResetHeader {
             get {
                 return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived File:.
+        /// </summary>
+        public static string PresetService_ArchiveFile {
+            get {
+                return ResourceManager.GetString("PresetService_ArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake has detected your presets file is from an older version.
+        ///It will try and load the file anyway.
+        ///If it fails, it will archive off the old file and create a new one..
+        /// </summary>
+        public static string PresetService_PresetsOutOfDate {
+            get {
+                return ResourceManager.GetString("PresetService_PresetsOutOfDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load presets..
+        /// </summary>
+        public static string PresetService_UnableToLoad {
+            get {
+                return ResourceManager.GetString("PresetService_UnableToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+        ///
+        ///Your old presets file was archived to:.
+        /// </summary>
+        public static string PresetService_UnableToLoadPresets {
+            get {
+                return ResourceManager.GetString("PresetService_UnableToLoadPresets", resourceCulture);
             }
         }
         
@@ -1497,50 +1564,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderLevel {
-            get {
-                return ResourceManager.GetString("Video_EncoderLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adjusts settings to trade off compression efficiency against encoding speed.
-        ///
-        ///This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
-        ///
-        ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
-        /// </summary>
-        public static string Video_EncoderPreset {
-            get {
-                return ResourceManager.GetString("Video_EncoderPreset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Limit the profile of the output stream. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderProfile {
-            get {
-                return ResourceManager.GetString("Video_EncoderProfile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tune settings to optimise for common scenarios
-        ///
-        ///This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-        ///
-        ///Changes will be applied after the preset but before all other parameters..
-        /// </summary>
-        public static string Video_EncoderTune {
-            get {
-                return ResourceManager.GetString("Video_EncoderTune", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Higher Quality |.
         /// </summary>
         public static string Video_HigherQuality {
@@ -1587,22 +1610,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_PlaceboQuality {
             get {
                 return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Set the desired quality factor. The encoder targets a certain quality. 
-        ///The scale used by each video encoder is different.
-        ///
-        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
-        ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
-        ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
-        ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for standard definiti [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string Video_QualitySlider {
-            get {
-                return ResourceManager.GetString("Video_QualitySlider", resourceCulture);
             }
         }
         

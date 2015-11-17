@@ -77,6 +77,7 @@
 #include "ghbcellrenderertext.h"
 #include "x264handler.h"
 
+static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
@@ -1007,7 +1008,7 @@ void ghb_show_container_options(signal_user_data_t *ud)
 
     gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
-                               (enc == HB_VCODEC_X264));
+                               (enc == HB_VCODEC_X264_8BIT));
 }
 
 static void
@@ -1243,7 +1244,7 @@ start_scan(
 
     widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop Scan"));
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop\nScan"));
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
 
     widget = GHB_WIDGET(ud->builder, "source_open");
@@ -1837,7 +1838,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         gint num_chapters = hb_list_count(title->list_chapter);
 
         ghb_dict_set_int(settings, "angle", 1);
-        ghb_dict_set_int(settings, "PtoPType", 0);
+        ghb_dict_set_string(settings, "PtoPType", "chapter");
         ghb_dict_set_int(settings, "start_point", 1);
         ghb_dict_set_int(settings, "end_point", num_chapters);
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
@@ -1872,7 +1873,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         if (!(keep_aspect || pic_par) || pic_par == 3)
         {
             ghb_dict_set_int(settings, "scale_height",
-                             title->geometry.width - title->crop[0] - title->crop[1]);
+                             title->geometry.height - title->crop[0] - title->crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -2005,6 +2006,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     if (title != NULL)
     {
+        gint preview_count;
+        preview_count = title->preview_count;
+        if (preview_count < 1)
+        {
+            preview_count = 1;
+        }
+        widget = GHB_WIDGET(ud->builder, "preview_frame");
+        gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
+
         ghb_set_preview_image(ud);
         ghb_preview_set_visible(ud);
     }
@@ -2104,6 +2114,18 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    ghb_update_ui_combo_box(ud, "PictureDeinterlacePreset", NULL, FALSE);
+    ghb_ui_update(ud, "PictureDeinterlacePreset",
+                  ghb_dict_get(ud->settings, "PictureDeinterlacePreset"));
 }
 
 G_MODULE_EXPORT void
@@ -2263,7 +2285,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
-    if (vcodec == HB_VCODEC_X264 && vquality < 1.0)
+    if ((vcodec & HB_VCODEC_X264_MASK) && vquality < 1.0)
     {
         // Set Profile to auto for lossless x264
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
@@ -2479,7 +2501,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH);
+        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH|GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2494,7 +2516,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
     ghb_live_reset(ud);
@@ -2510,7 +2532,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2540,7 +2562,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
 }
@@ -2568,7 +2590,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
 
     update_aspect_info(ud);
@@ -2582,7 +2604,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     ghb_pref_save(ud->prefs, "preview_show_crop");
     update_preview = TRUE;
 }
@@ -2924,7 +2946,6 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 static void
 submit_job(signal_user_data_t *ud, GhbValue *settings)
 {
-    static gint unique_id = 1;
     gchar *type, *modified;
     const char *name;
     GhbValue *js;
@@ -2938,10 +2959,10 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
     modified = preset_modified ? "Modified " : "";
     ghb_log("%s%sPreset: %s", modified, type, name);
 
-    ghb_dict_set_int(settings, "job_unique_id", unique_id);
     ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
     start_new_log(ud, settings);
-    ghb_add_job(ghb_queue_handle(), settings, unique_id);
+    int unique_id = ghb_add_job(ghb_queue_handle(), settings);
+    ghb_dict_set_int(settings, "job_unique_id", unique_id);
     ghb_start_queue();
 
     // Start queue activity spinner
@@ -2961,8 +2982,6 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
         }
         g_free(path);
     }
-
-    unique_id++;
 }
 
 static void
@@ -3033,7 +3052,6 @@ void
 ghb_update_pending(signal_user_data_t *ud)
 {
     GtkLabel *label;
-    GtkToolButton *button;
     gint pending;
     gchar *str;
 
@@ -3043,17 +3061,7 @@ ghb_update_pending(signal_user_data_t *ud)
     gtk_label_set_text(label, str);
     g_free(str);
 
-    button = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
-    if (pending > 0)
-    {
-        str = g_strdup_printf(_("Queue (%d)"), pending);
-    }
-    else
-    {
-        str = g_strdup_printf(_("Queue"));
-    }
-    gtk_tool_button_set_label(button, str);
-    g_free(str);
+    update_queue_labels(ud);
 }
 
 GhbValue*
@@ -3294,7 +3302,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Source"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Open\nSource"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
 
         widget = GHB_WIDGET(ud->builder, "source_open");
@@ -3687,21 +3695,49 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-G_MODULE_EXPORT void
-show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_activity_labels(signal_user_data_t *ud, gboolean active)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, gtk_toggle_tool_button_get_active(
-                        GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+    GtkToolButton *button;
+
+    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+
+    if (!active)
+    {
+        gtk_tool_button_set_label(button, "Show\nActivity");
+    }
+    else
+    {
+        gtk_tool_button_set_label(button, "Hide\nActivity");
+    }
 }
 
 G_MODULE_EXPORT void
-show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_activity_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET (ud->builder, "show_activity");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *activity_window;
+    GtkCheckMenuItem *menuitem;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    activity_window = GHB_WIDGET(ud->builder, "activity_window");
+    gtk_widget_set_visible(activity_window, active);
+    update_activity_labels(ud, active);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder,
+                                              "show_activity_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_activity_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean             active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT gboolean
@@ -3805,25 +3841,69 @@ hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
     gtk_widget_hide (widget);
 }
 
-G_MODULE_EXPORT void
-show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_queue_labels(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    GtkStack *stack;
+    GtkToolButton *button;
+    gboolean       active;
+    gint           pending;
+    const gchar   *show_hide;
+    gchar         *str;
 
-    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
-    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget)))
-        widget = GHB_WIDGET(ud->builder, "queue_tab");
+    button  = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    active  = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button));
+    pending = queue_pending_count(ud->queue);
+
+    if (!active)
+    {
+        show_hide = _("Show\nQueue");
+    }
     else
-        widget = GHB_WIDGET(ud->builder, "settings_tab");
-    gtk_stack_set_visible_child(stack, widget);
+    {
+        show_hide = _("Hide\nQueue");
+    }
+    if (pending > 0)
+    {
+        str = g_strdup_printf("%s (%d)", show_hide, pending);
+    }
+    else
+    {
+        str = g_strdup_printf("%s", show_hide);
+    }
+    gtk_tool_button_set_label(button, str);
+    g_free(str);
 }
 
 G_MODULE_EXPORT void
-show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_queue_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *tab;
+    GtkCheckMenuItem *menuitem;
+    GtkStack         *stack;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
+    if (active)
+        tab = GHB_WIDGET(ud->builder, "queue_tab");
+    else
+        tab = GHB_WIDGET(ud->builder, "settings_tab");
+    gtk_stack_set_visible_child(stack, tab);
+    update_queue_labels(ud);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder, "show_queue_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_queue_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT void
@@ -4096,15 +4176,10 @@ G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
-// FIXME?
+
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
-
-    gint preview_count;
-    preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-    widget = GHB_WIDGET(ud->builder, "preview_frame");
-    gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 }
 
 G_MODULE_EXPORT void
@@ -4999,69 +5074,6 @@ ghb_uninhibit_gsm()
 }
 
 G_MODULE_EXPORT gboolean
-tweak_setting_cb(
-    GtkWidget *widget,
-    GdkEventButton *event,
-    signal_user_data_t *ud)
-{
-    const gchar *name;
-    gchar *tweak_name;
-    gboolean ret = FALSE;
-    gboolean allow_tweaks;
-
-    g_debug("press %d %d", event->type, event->button);
-    allow_tweaks = ghb_dict_get_bool(ud->prefs, "allow_tweaks");
-    if (allow_tweaks && event->type == GDK_BUTTON_PRESS && event->button == 3)
-    { // Its a right mouse click
-        GtkWidget *dialog;
-        GtkEntry *entry;
-        GtkResponseType response;
-        const gchar *tweak = NULL;
-
-        name = ghb_get_setting_key(widget);
-        if (g_str_has_prefix(name, "tweak_"))
-        {
-            tweak_name = g_strdup(name);
-        }
-        else
-        {
-            tweak_name = g_strdup_printf("tweak_%s", name);
-        }
-
-        tweak = ghb_dict_get_string(ud->settings, tweak_name);
-        dialog = GHB_WIDGET(ud->builder, "tweak_dialog");
-        gtk_window_set_title(GTK_WINDOW(dialog), tweak_name);
-        entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "tweak_setting"));
-        if (tweak)
-        {
-            gtk_entry_set_text(entry, tweak);
-        }
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_hide(dialog);
-        if (response == GTK_RESPONSE_OK)
-        {
-            tweak = (gchar*)gtk_entry_get_text(entry);
-            if (ghb_validate_filter_string(tweak, -1))
-                ghb_dict_set_string(ud->settings, tweak_name, tweak);
-            else
-            {
-                GtkWindow *hb_window;
-                gchar *message;
-                hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-                message = g_strdup_printf(
-                            _("Invalid Settings:\n%s"),
-                            tweak);
-                ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
-                g_free(message);
-            }
-        }
-        g_free(tweak_name);
-        ret = TRUE;
-    }
-    return ret;
-}
-
-G_MODULE_EXPORT gboolean
 easter_egg_cb(
     GtkWidget *widget,
     GdkEventButton *event,
@@ -5118,7 +5130,8 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
             return g_strdup_printf("%s: %d", vqname, (int)val);
         } break;
 
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
+        case HB_VCODEC_X264_10BIT:
         {
             if (val == 0.0)
             {

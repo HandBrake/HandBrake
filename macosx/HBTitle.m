@@ -6,6 +6,7 @@
 
 #import "HBTitle.h"
 #import "HBTitlePrivate.h"
+#import "HBChapter.h"
 
 #include "lang.h"
 
@@ -19,18 +20,8 @@ extern NSString *keyAudioInputChannelLayout;
 extern NSString *keyAudioTrackLanguageIsoCode;
 
 extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
 
 @interface HBTitle ()
 
@@ -44,12 +35,6 @@ extern NSString *keySubTrackSrtCharCode;
 @end
 
 @implementation HBTitle
-
-/*- (instancetype)init
-{
-    NSAssert(false, @"[HBTitle init] should not be called");
-    return nil;
-}*/
 
 - (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured
 {
@@ -229,9 +214,7 @@ extern NSString *keySubTrackSrtCharCode;
 
             /* create a dictionary of source subtitle information to store in our array */
             [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
-                                              keySubTrackIndex: @(i),
                                               keySubTrackType: @(subtitle->source),
-                                              keySubTrackLanguage: nativeLanguage,
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
 
@@ -253,18 +236,19 @@ extern NSString *keySubTrackSrtCharCode;
 
             if (chapter != NULL)
             {
+                NSString *title;
                 if (chapter->title != NULL)
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"%s",
-                                         chapter->title]];
+                    title = [NSString stringWithFormat:@"%s", chapter->title];
                 }
                 else
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"Chapter %d",
-                                         i + 1]];
+                    title = [NSString stringWithFormat:@"Chapter %d", i + 1];
                 }
+
+                [chapters addObject:[[HBChapter alloc] initWithTitle:title
+                                                               index:i + 1
+                                                            duration:chapter->duration]];
             }
         }
 

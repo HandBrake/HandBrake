@@ -242,40 +242,6 @@ may have problems with Weighted P-frame prediction: the Apple TV is completely i
 
 Set this if your device is struggling to play the output. (i.e. dropped frames)</value>
   </data>
-  <data name="Video_EncoderLevel" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified H.264 Levels. This will override all other settings.</value>
-  </data>
-  <data name="Video_EncoderPreset" xml:space="preserve">
-    <value>Adjusts settings to trade off compression efficiency against encoding speed.
-
-This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
-
-You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</value>
-  </data>
-  <data name="Video_EncoderProfile" xml:space="preserve">
-    <value>Limit the profile of the output stream. This will override all other settings.</value>
-  </data>
-  <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Tune settings to optimise for common scenarios
-
-This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-
-Changes will be applied after the preset but before all other parameters.</value>
-  </data>
-  <data name="Video_QualitySlider" xml:space="preserve">
-    <value>Set the desired quality factor. The encoder targets a certain quality. 
-The scale used by each video encoder is different.
-
-x264's scale is logarithmic and lower values correspond to higher quality. 
-So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
-A value of 0 means lossless and will result in a file size that is larger than the original source, 
-unless the source was also lossless. 
-Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
-
-x265 is a new encoder, so there are no recommended values yet. You'll have to experiment.
-
-FFMpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
-  </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>Warning: RF 0 is Lossless!</value>
   </data>
@@ -392,7 +358,7 @@ In order to use the QuickSync encoder, you must:
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   Pending Jobs {5}</value>
+    <value>   Pending Jobs {7}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>New Default Preset Set: {0}</value>
@@ -585,7 +551,7 @@ The Activity log may have further information.</value>
     <value>Are you sure you want to delete the preset: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\:mm\:ss}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>A Preset must have a Name. Please fill out the Preset Name field.</value>
@@ -747,5 +713,30 @@ Please make sure VLC is installed and the directory specified in HandBrake's opt
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
     <value>Configure Defaults</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Archived File:</value>
+  </data>
+  <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
+    <value>HandBrake has detected your presets file is from an older version.
+It will try and load the file anyway.
+If it fails, it will archive off the old file and create a new one.</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Unable to load presets.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+
+Your old presets file was archived to:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> with {0} errors detected.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Low Disk Space</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. </value>
   </data>
 </root>

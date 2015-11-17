@@ -412,7 +412,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deinterlace.
+        ///   Looks up a localized string similar to Deinterlace:.
         /// </summary>
         public static string FiltersView_Deinterlace {
             get {
@@ -1177,6 +1177,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pause queue if disk space is low before starting a job..
+        /// </summary>
+        public static string Options_PauseQueueOnLowDiskSpace {
+            get {
+                return ResourceManager.GetString("Options_PauseQueueOnLowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prevent the system from sleeping while encoding.
         /// </summary>
         public static string Options_PreventSleep {
@@ -1263,6 +1272,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_SendFileTo {
             get {
                 return ResourceManager.GetString("Options_SendFileTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Queue in place of the tab controls when toggled on..
+        /// </summary>
+        public static string Options_ShowQueueInline {
+            get {
+                return ResourceManager.GetString("Options_ShowQueueInline", resourceCulture);
             }
         }
         
@@ -1762,7 +1780,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Done::.
+        ///   Looks up a localized string similar to When Done:.
         /// </summary>
         public static string QueueView_WhenDone {
             get {

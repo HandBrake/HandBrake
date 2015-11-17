@@ -94,6 +94,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setWidth:(int)width
 {
+    if (width != _width)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setWidth:_width];
+    }
     _width = width;
 
     if (!self.isValidating)
@@ -110,6 +114,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     if (nil != *ioValue)
     {
         int value = [*ioValue intValue];
+        int roundedValue = value - (value % self.modulus);
+
         if (value >= self.maxWidth)
         {
             *ioValue = @(self.maxWidth);
@@ -118,6 +124,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         {
             *ioValue = @32;
         }
+        else if (value != roundedValue)
+        {
+            *ioValue = @(roundedValue);
+        }
     }
 
     return retval;
@@ -125,6 +135,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setHeight:(int)height
 {
+    if (height != _height)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setHeight:_height];
+    }
     _height = height;
     if (!self.isValidating)
     {
@@ -140,6 +154,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     if (nil != *ioValue)
     {
         int value = [*ioValue intValue];
+        int roundedValue = value - (value % self.modulus);
+
         if (value >= self.maxHeight)
         {
             *ioValue = @(self.maxHeight);
@@ -148,6 +164,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         {
             *ioValue = @32;
         }
+        else if (value != roundedValue)
+        {
+            *ioValue = @(roundedValue);
+        }
     }
 
     return retval;
@@ -155,6 +175,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setDisplayWidth:(int)displayWidth
 {
+    if (displayWidth != _displayWidth)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDisplayWidth:_displayWidth];
+    }
     _displayWidth = displayWidth;
     if (!self.isValidating)
     {
@@ -165,6 +189,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setParWidth:(int)parWidth
 {
+    if (parWidth != _parWidth)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setParWidth:_parWidth];
+    }
     _parWidth = parWidth;
     if (!self.isValidating)
     {
@@ -174,6 +202,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setParHeight:(int)parHeight
 {
+    if (parHeight != _parHeight)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setParHeight:_parHeight];
+    }
     _parHeight = parHeight;
     if (!self.isValidating)
     {
@@ -183,6 +215,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setCropTop:(int)cropTop
 {
+    if (cropTop != _cropTop)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCropTop:_cropTop];
+    }
     _cropTop = cropTop;
     if (!self.isValidating)
     {
@@ -192,6 +228,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setCropBottom:(int)cropBottom
 {
+    if (cropBottom != _cropBottom)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCropBottom:_cropBottom];
+    }
     _cropBottom = cropBottom;
     if (!self.isValidating)
     {
@@ -201,6 +241,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setCropLeft:(int)cropLeft
 {
+    if (cropLeft != _cropLeft)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCropLeft:_cropLeft];
+    }
     _cropLeft = cropLeft;
     if (!self.isValidating)
     {
@@ -210,6 +254,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setCropRight:(int)cropRight
 {
+    if (cropRight != _cropRight)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCropRight:_cropRight];
+    }
     _cropRight = cropRight;
     if (!self.isValidating)
     {
@@ -275,22 +323,33 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setAutocrop:(BOOL)autocrop
 {
+    if (autocrop != _autocrop)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAutocrop:_autocrop];
+    }
     _autocrop = autocrop;
     if (autocrop && !self.isValidating)
     {
-        self.validating = YES;
-        // Reset the crop values to those determined right after scan
-        self.cropTop    = self.autoCropTop;
-        self.cropBottom = self.autoCropBottom;
-        self.cropLeft   = self.autoCropLeft;
-        self.cropRight  = self.autoCropRight;
-        self.validating = NO;
+        if (!(self.undo.isUndoing || self.undo.isRedoing))
+        {
+            self.validating = YES;
+            // Reset the crop values to those determined right after scan
+            self.cropTop    = self.autoCropTop;
+            self.cropBottom = self.autoCropBottom;
+            self.cropLeft   = self.autoCropLeft;
+            self.cropRight  = self.autoCropRight;
+            self.validating = NO;
+        }
         [self validateSettings];
     }
 }
 
 - (void)setAnamorphicMode:(int)anamorphicMode
 {
+    if (anamorphicMode != _anamorphicMode)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAnamorphicMode:_anamorphicMode];
+    }
     _anamorphicMode = anamorphicMode;
 
     if (self.anamorphicMode == HB_ANAMORPHIC_STRICT ||
@@ -307,6 +366,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setKeepDisplayAspect:(BOOL)keepDisplayAspect
 {
+    if (keepDisplayAspect != _keepDisplayAspect)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setKeepDisplayAspect:_keepDisplayAspect];
+    }
     _keepDisplayAspect = keepDisplayAspect;
     if (!self.isValidating)
     {
@@ -316,6 +379,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (void)setModulus:(int)modulus
 {
+    if (modulus != _modulus)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setModulus:_modulus];
+    }
     _modulus = modulus;
     if (!self.isValidating)
     {
@@ -398,49 +465,50 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (void)validateSettings
 {
     self.validating = YES;
-
-    self.keep |= self.keepDisplayAspect * HB_KEEP_DISPLAY_ASPECT;
-
-    hb_geometry_t srcGeo, resultGeo;
-    hb_geometry_settings_t uiGeo;
-
-    srcGeo.width = self.sourceWidth;
-    srcGeo.height = self.sourceHeight;
-    srcGeo.par.num = self.sourceParNum;
-    srcGeo.par.den = self.sourceParDen;
-
-    uiGeo.mode = self.anamorphicMode;
-    uiGeo.keep = self.keep;
-    uiGeo.itu_par = 0;
-    uiGeo.modulus = self.modulus;
-
-    int crop[4] = {self.cropTop, self.cropBottom, self.cropLeft, self.cropRight};
-    memcpy(uiGeo.crop, crop, sizeof(int[4]));
-    uiGeo.geometry.width = self.width;
-    uiGeo.geometry.height =  self.height;
-    // Modulus added to maxWidth/maxHeight to allow a small amount of
-    // upscaling to the next mod boundary.
-    uiGeo.maxWidth = self.sourceWidth - crop[2] - crop[3] + self.modulus - 1;
-    uiGeo.maxHeight = self.sourceHeight - crop[0] - crop[1] + self.modulus - 1;
-
-    hb_rational_t par = {self.parWidth, self.parHeight};
-    uiGeo.geometry.par = par;
-    if (self.anamorphicMode == HB_ANAMORPHIC_CUSTOM && self.darUpdated)
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        uiGeo.geometry.par.num = self.displayWidth;
-        uiGeo.geometry.par.den = uiGeo.geometry.width;
+        self.keep |= self.keepDisplayAspect * HB_KEEP_DISPLAY_ASPECT;
+
+        hb_geometry_t srcGeo, resultGeo;
+        hb_geometry_settings_t uiGeo;
+
+        srcGeo.width = self.sourceWidth;
+        srcGeo.height = self.sourceHeight;
+        srcGeo.par.num = self.sourceParNum;
+        srcGeo.par.den = self.sourceParDen;
+
+        uiGeo.mode = self.anamorphicMode;
+        uiGeo.keep = self.keep;
+        uiGeo.itu_par = 0;
+        uiGeo.modulus = self.modulus;
+
+        int crop[4] = {self.cropTop, self.cropBottom, self.cropLeft, self.cropRight};
+        memcpy(uiGeo.crop, crop, sizeof(int[4]));
+        uiGeo.geometry.width = self.width;
+        uiGeo.geometry.height =  self.height;
+        // Modulus added to maxWidth/maxHeight to allow a small amount of
+        // upscaling to the next mod boundary.
+        uiGeo.maxWidth = self.sourceWidth - crop[2] - crop[3] + self.modulus - 1;
+        uiGeo.maxHeight = self.sourceHeight - crop[0] - crop[1] + self.modulus - 1;
+
+        hb_rational_t par = {self.parWidth, self.parHeight};
+        uiGeo.geometry.par = par;
+        if (self.anamorphicMode == HB_ANAMORPHIC_CUSTOM && self.darUpdated)
+        {
+            uiGeo.geometry.par.num = self.displayWidth;
+            uiGeo.geometry.par.den = uiGeo.geometry.width;
+        }
+        hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
+
+        int display_width;
+        display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;
+
+        self.width = resultGeo.width;
+        self.height = resultGeo.height;
+        self.parWidth = resultGeo.par.num;
+        self.parHeight = resultGeo.par.den;
+        self.displayWidth = display_width;
     }
-    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-
-    int display_width;
-    display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;
-
-    self.width = resultGeo.width;
-    self.height = resultGeo.height;
-    self.parWidth = resultGeo.par.num;
-    self.parHeight = resultGeo.par.den;
-    self.displayWidth = display_width;
-
     self.validating = NO;
     self.keep = 0;
     self.darUpdated = NO;
@@ -566,9 +634,10 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 #pragma mark - Presets
 
-- (void)writeToPreset:(NSMutableDictionary *)preset
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
     preset[@"PictureKeepRatio"] = @(self.keepDisplayAspect);
+    preset[@"PictureModulus"]   = @(self.modulus);
 
     switch (self.anamorphicMode) {
         case HB_ANAMORPHIC_NONE:
@@ -588,7 +657,9 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
             break;
     }
 
-    preset[@"PictureModulus"]   = @(self.modulus);
+    // PAR
+    preset[@"PicturePARWidth"] = @(self.parWidth);
+    preset[@"PicturePARHeight"] = @(self.parHeight);
 
     // Set crop settings
     preset[@"PictureAutoCrop"] = @(self.autocrop);
@@ -599,7 +670,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     preset[@"PictureRightCrop"]  = @(self.cropRight);
 }
 
-- (void)applyPreset:(NSDictionary *)preset
+- (void)applyPreset:(HBPreset *)preset
 {
     self.validating = YES;
     self.notificationsEnabled = NO;
@@ -610,6 +681,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
      */
     int maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
     int maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
+    int parWidth = self.parWidth;
+    int parHeight = self.parHeight;
     int jobMaxWidth = 0, jobMaxHeight = 0;
 
     /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
@@ -668,6 +741,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
         {
             self.anamorphicMode = HB_ANAMORPHIC_CUSTOM;
+            parWidth = [preset[@"PicturePARWidth"] intValue];
+            parHeight = [preset[@"PicturePARHeight"] intValue];
         }
         else
         {
@@ -726,7 +801,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     uiGeo.geometry.width = self.width;
     uiGeo.geometry.height =  self.height;
 
-    hb_rational_t par = {self.parWidth, self.parHeight};
+    hb_rational_t par = {parWidth, parHeight};
     uiGeo.geometry.par = par;
 
     uiGeo.maxWidth = jobMaxWidth;

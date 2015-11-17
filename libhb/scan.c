@@ -240,6 +240,7 @@ static void ScanFunc( void * _data )
             hb_title_close( &title );
             continue;
         }
+        title->preview_count = npreviews;
 
         /* Make sure we found audio rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )
@@ -523,6 +524,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     int                pulldown_count = 0;
     int                doubled_frame_count = 0;
     int                interlaced_preview_count = 0;
+    int                vid_samples = 0;
     int                frame_wait = 0;
     int                cc_wait = 10;
     int                frames;
@@ -731,6 +733,36 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                     //    additional frames to find the CCs.
                     if (vid_buf != NULL && (frame_wait || cc_wait))
                     {
+                        hb_work_info_t vid_info;
+                        if (vid_decoder->info(vid_decoder, &vid_info))
+                        {
+                            if (is_close_to(vid_info.rate.den, 900900, 100) &&
+                                (vid_buf->s.flags & PIC_FLAG_REPEAT_FIRST_FIELD))
+                            {
+                                /* Potentially soft telecine material */
+                                pulldown_count++;
+                            }
+
+                            if (vid_buf->s.flags & PIC_FLAG_REPEAT_FRAME)
+                            {
+                                // AVCHD-Lite specifies that all streams are
+                                // 50 or 60 fps.  To produce 25 or 30 fps, camera
+                                // makers are repeating all frames.
+                                doubled_frame_count++;
+                            }
+
+                            if (is_close_to(vid_info.rate.den, 1126125, 100 ))
+                            {
+                                // Frame FPS is 23.976 (meaning it's
+                                // progressive), so start keeping track of
+                                // how many are reporting at that speed. When
+                                // enough show up that way, we want to make
+                                // that the overall title FPS.
+                                progressive_count++;
+                            }
+                            vid_samples++;
+                        }
+
                         if (frames > 0 && vid_buf->s.frametype == HB_FRAME_I)
                             frame_wait = 0;
                         if (frame_wait || cc_wait)
@@ -779,29 +811,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         }
 
         remember_info( info_list, &vid_info );
-
-        if( is_close_to( vid_info.rate.den, 900900, 100 ) &&
-            ( vid_buf->s.flags & PIC_FLAG_REPEAT_FIRST_FIELD ) )
-        {
-            /* Potentially soft telecine material */
-            pulldown_count++;
-        }
-
-        if( vid_buf->s.flags & PIC_FLAG_REPEAT_FRAME )
-        {
-            // AVCHD-Lite specifies that all streams are
-            // 50 or 60 fps.  To produce 25 or 30 fps, camera
-            // makers are repeating all frames.
-            doubled_frame_count++;
-        }
-
-        if( is_close_to( vid_info.rate.den, 1126125, 100 ) )
-        {
-            // Frame FPS is 23.976 (meaning it's progressive), so start keeping
-            // track of how many are reporting at that speed. When enough 
-            // show up that way, we want to make that the overall title FPS.
-            progressive_count++;
-        }
 
         hb_buffer_list_close(&list_es);
 
@@ -948,12 +957,12 @@ skip_preview:
             title->vrate = vid_info.rate;
             if( vid_info.rate.den == 900900 )
             {
-                if( npreviews >= 4 && pulldown_count >= npreviews / 4 )
+                if (vid_samples >= 4 && pulldown_count >= vid_samples / 4)
                 {
                     title->vrate.den = 1126125;
                     hb_deep_log( 2, "Pulldown detected, setting fps to 23.976" );
                 }
-                if( npreviews >= 2 && progressive_count >= npreviews / 2 )
+                if (vid_samples >= 2 && progressive_count >= vid_samples / 2)
                 {
                     // We've already deduced that the frame rate is 23.976,
                     // so set it back again.
@@ -961,7 +970,7 @@ skip_preview:
                     hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976" );
                 }
             }
-            if( npreviews >= 2 && doubled_frame_count >= 3 * npreviews / 4 )
+            if (vid_samples >= 2 && doubled_frame_count >= 3 * vid_samples / 4)
             {
                 // We've detected that a significant number of the frames
                 // have been doubled in duration by repeat flags.
@@ -1118,7 +1127,7 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     }
     hb_fifo_push( audio->priv.scan_cache, b );
 
-    hb_work_object_t *w = hb_codec_decoder(scan->h, audio->config.in.codec);
+    hb_work_object_t *w = hb_audio_decoder(scan->h, audio->config.in.codec);
 
     if ( w == NULL || w->bsinfo == NULL )
     {

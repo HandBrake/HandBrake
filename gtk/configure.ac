@@ -7,15 +7,15 @@ AM_INIT_AUTOMAKE([1.7.9 foreign dist-bzip2 dist-zip])
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
+AC_PROG_CC(gcc clang)
 AC_ISC_POSIX
-AC_PROG_CC
-AC_PROG_CXX
+AC_PROG_CXX(g++ clang++)
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
 if test x"$CC_FOR_BUILD" = x; then
 	if test x"$cross_compiling" = x"yes"; then
-		AC_CHECK_PROGS(CC_FOR_BUILD, gcc, cc)
+		AC_CHECK_PROGS(CC_FOR_BUILD, gcc clang, cc)
 	else
 		CC_FOR_BUILD="$CC"
 	fi

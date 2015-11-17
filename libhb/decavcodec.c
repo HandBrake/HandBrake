@@ -529,6 +529,14 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    if (in->data != NULL)
+    {
+        memset(in->data + in->size, 0, in->alloc - in->size);
+    }
+
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
@@ -920,8 +928,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             h != context->height)
         {
             // have to convert to our internal color space and/or rescale
-            AVPicture dstpic;
-            hb_avpicture_fill(&dstpic, buf);
+            uint8_t * data[4];
+            int       stride[4];
+            hb_picture_fill(data, stride, buf);
 
             if (pv->sws_context == NULL            ||
                 pv->sws_width   != context->width  ||
@@ -941,8 +950,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             }
             sws_scale(pv->sws_context,
                       (const uint8_t* const *)pv->frame->data,
-                      pv->frame->linesize,
-                      0, context->height, dstpic.data, dstpic.linesize);
+                      pv->frame->linesize, 0, context->height, data, stride);
         }
         else
         {
@@ -1781,6 +1789,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_in = NULL;
     *buf_out = NULL;
+
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    if (in->data != NULL)
+    {
+        memset(in->data + in->size, 0, in->alloc - in->size);
+    }
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if (in->s.flags & HB_BUF_FLAG_EOF)

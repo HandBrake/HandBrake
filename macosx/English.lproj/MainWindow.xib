@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A234d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9052" systemVersion="15B30a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9052"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -186,7 +186,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1553">
-                        <rect key="frame" x="784" y="511" width="65" height="14"/>
+                        <rect key="frame" x="780" y="511" width="65" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
@@ -203,10 +203,10 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" id="1554">
-                        <rect key="frame" x="849" y="511" width="53" height="14"/>
+                        <rect key="frame" x="842" y="511" width="60" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <animations/>
-                        <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="00:00:00" id="4915">
+                        <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -648,7 +648,7 @@ IA
                 </subviews>
                 <animations/>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
+            <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
@@ -672,17 +672,17 @@ IA
                             <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Show Queue" paletteLabel="Show Queue" tag="-1" image="showqueue" id="HCx-ku-nF7">
+                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7">
                         <connections>
                             <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview Window" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
+                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
                         <connections>
                             <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Window" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
+                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Log" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
                         <connections>
                             <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
                         </connections>
@@ -695,10 +695,11 @@ IA
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
-                    <toolbarItem reference="byg-kj-sEM"/>
-                    <toolbarItem reference="wTQ-KF-5KW"/>
+                    <toolbarItem reference="ZEH-cS-zXY"/>
                     <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="HCx-ku-nF7"/>
+                    <toolbarItem reference="byg-kj-sEM"/>
+                    <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
@@ -708,7 +709,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="987" y="-80"/>
+            <point key="canvasLocation" x="879" y="65"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
@@ -750,10 +751,11 @@ IA
                     </textFieldCell>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.scanSpecificTitle" id="3aE-hX-Q0r"/>
-                        <binding destination="-2" name="value" keyPath="self.scanSpecificTitleIdx" id="dJZ-JM-2BP">
+                        <binding destination="-2" name="value" keyPath="self.scanSpecificTitleIdx" id="EhO-SP-fUT">
                             <dictionary key="options">
                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                 <integer key="NSNullPlaceholder" value="0"/>
+                                <bool key="NSValidatesImmediately" value="YES"/>
                             </dictionary>
                         </binding>
                     </connections>

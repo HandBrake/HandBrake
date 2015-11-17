@@ -39,245 +39,56 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// Backing field for the user setting service.
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Backing field for the update service.
-        /// </summary>
         private readonly IUpdateService updateService;
-
-        /// <summary>
-        /// The arguments.
-        /// </summary>
         private string arguments;
-
-        /// <summary>
-        /// The auto name default path.
-        /// </summary>
         private string autoNameDefaultPath;
-
-        /// <summary>
-        /// The automatically name files.
-        /// </summary>
         private bool automaticallyNameFiles;
-
-        /// <summary>
-        /// The autoname format.
-        /// </summary>
         private string autonameFormat;
-
-        /// <summary>
-        /// The change to title case.
-        /// </summary>
         private bool changeToTitleCase;
-
-        /// <summary>
-        /// The check for updates.
-        /// </summary>
         private bool checkForUpdates;
-
-        /// <summary>
-        /// The check for updates frequencies.
-        /// </summary>
         private BindingList<string> checkForUpdatesFrequencies = new BindingList<string>();
-
-        /// <summary>
-        /// The check for updates frequency.
-        /// </summary>
         private int checkForUpdatesFrequency;
-
-        /// <summary>
-        /// The clear old olgs.
-        /// </summary>
         private bool clearOldOlgs;
-
-        /// <summary>
-        /// The constant quality granularity.
-        /// </summary>
         private BindingList<string> constantQualityGranularity = new BindingList<string>();
-
-        /// <summary>
-        /// The copy log to encode directory.
-        /// </summary>
         private bool copyLogToEncodeDirectory;
-
-        /// <summary>
-        /// The copy log to sepcficed location.
-        /// </summary>
         private bool copyLogToSepcficedLocation;
-
-        /// <summary>
-        /// The disable libdvd nav.
-        /// </summary>
         private bool disableLibdvdNav;
-
-        /// <summary>
-        /// The log directory.
-        /// </summary>
         private string logDirectory;
-
-        /// <summary>
-        /// The log verbosity options.
-        /// </summary>
         private BindingList<int> logVerbosityOptions = new BindingList<int>();
-
-        /// <summary>
-        /// The min length.
-        /// </summary>
         private long minLength;
-
-        /// <summary>
-        /// The minimise to tray.
-        /// </summary>
         private bool minimiseToTray;
-
-        /// <summary>
-        /// The mp 4 extension options.
-        /// </summary>
         private BindingList<string> mp4ExtensionOptions = new BindingList<string>();
-
-        /// <summary>
-        /// The prevent sleep.
-        /// </summary>
         private bool preventSleep;
-
-        /// <summary>
-        /// The preview pictures to scan.
-        /// </summary>
         private BindingList<int> previewPicturesToScan = new BindingList<int>();
-
-        /// <summary>
-        /// The priority level options.
-        /// </summary>
         private BindingList<string> priorityLevelOptions = new BindingList<string>();
-
-        /// <summary>
-        /// The remove underscores.
-        /// </summary>
         private bool removeUnderscores;
-
-        /// <summary>
-        /// The selected granulairty.
-        /// </summary>
         private string selectedGranulairty;
-
-        /// <summary>
-        /// The selected mp 4 extension.
-        /// </summary>
         private int selectedMp4Extension;
-
-        /// <summary>
-        /// The selected preview count.
-        /// </summary>
         private int selectedPreviewCount;
-
-        /// <summary>
-        /// The selected priority.
-        /// </summary>
         private string selectedPriority;
-
-        /// <summary>
-        /// The selected verbosity.
-        /// </summary>
         private int selectedVerbosity;
-
-        /// <summary>
-        /// The send file after encode.
-        /// </summary>
         private bool sendFileAfterEncode;
-
-        /// <summary>
-        /// The send file to.
-        /// </summary>
         private string sendFileTo;
-
-        /// <summary>
-        /// The send file to Path.
-        /// </summary>
         private string sendFileToPath;
-
-        /// <summary>
-        /// The vlc path.
-        /// </summary>
         private string vlcPath;
-
-        /// <summary>
-        /// The when done.
-        /// </summary>
         private string whenDone;
-
-        /// <summary>
-        /// The when done options.
-        /// </summary>
         private BindingList<string> whenDoneOptions = new BindingList<string>();
-
-        /// <summary>
-        /// Backing field for clear queue on encode completed.
-        /// </summary>
         private bool clearQueueOnEncodeCompleted;
-
-        /// <summary>
-        /// The options tab that is selected.
-        /// </summary>
         private OptionsTab selectedTab;
-
-        /// <summary>
-        /// Update Message
-        /// </summary>
         private string updateMessage;
-
-        /// <summary>
-        /// Update Available
-        /// </summary>
         private bool updateAvailable;
-
-        /// <summary>
-        /// Download progress backing field.
-        /// </summary>
         private int downloadProgressPercentage;
-
-        /// <summary>
-        /// Backing field for update info.
-        /// </summary>
         private UpdateCheckInformation updateInfo;
-
-        /// <summary>
-        /// The show advanced tab backing field.
-        /// </summary>
         private bool showAdvancedTab;
-
-        /// <summary>
-        /// The remove punctuation.
-        /// </summary>
         private bool removePunctuation;
-
-        /// <summary>
-        /// The reset when done action.
-        /// </summary>
         private bool resetWhenDoneAction;
-
-        /// <summary>
-        /// The selected scaling mode.
-        /// </summary>
         private VideoScaler selectedScalingMode;
-
-        /// <summary>
-        /// The enable dxva decoding.
-        /// </summary>
         private bool enableDxvaDecoding;
-
-        /// <summary>
-        /// The disable quick sync decoding.
-        /// </summary>
         private bool disableQuickSyncDecoding;
-
-        /// <summary>
-        /// The is cl scaling.
-        /// </summary>
         private bool isClScaling;
+        private bool showQueueInline;
+        private bool pauseOnLowDiskspace;
 
         #endregion
 
@@ -506,6 +317,26 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.whenDoneOptions = value;
                 this.NotifyOfPropertyChange("WhenDoneOptions");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show queue inline.
+        /// </summary>
+        public bool ShowQueueInline
+        {
+            get
+            {
+                return this.showQueueInline;
+            }
+            set
+            {
+                if (value == this.showQueueInline)
+                {
+                    return;
+                }
+                this.showQueueInline = value;
+                this.NotifyOfPropertyChange(() => this.ShowQueueInline);
             }
         }
 
@@ -757,6 +588,23 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether HandBrake should pause on low disk space.
+        /// </summary>
+        public bool PauseOnLowDiskspace
+        {
+            get
+            {
+                return this.pauseOnLowDiskspace;
+            }
+
+            set
+            {
+                this.pauseOnLowDiskspace = value;
+                this.NotifyOfPropertyChange(() => this.PauseOnLowDiskspace);
+            }
+        }  
+
+        /// <summary>
         /// Gets or sets PriorityLevelOptions.
         /// </summary>
         public BindingList<string> PriorityLevelOptions
@@ -803,7 +651,30 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPriority = value;
-                this.NotifyOfPropertyChange("SelectedPriority");
+                this.NotifyOfPropertyChange();
+
+                // Set the Process Priority
+                switch (value)
+                {
+                    case "Realtime":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                        break;
+                    case "High":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case "Above Normal":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case "Normal":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case "Low":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
             }
         }
         #endregion
@@ -1310,6 +1181,7 @@ namespace HandBrakeWPF.ViewModels
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo) ?? string.Empty;
             this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
             this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
+            this.ShowQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
 
             // #############################
             // Output Settings
@@ -1368,7 +1240,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPriority = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
-
+            this.PauseOnLowDiskspace = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
+            
             // Log Verbosity Level
             this.logVerbosityOptions.Clear();
             this.logVerbosityOptions.Add(0);
@@ -1436,6 +1309,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
@@ -1457,6 +1331,7 @@ namespace HandBrakeWPF.ViewModels
             /* System and Logging */
             userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
+            userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
             userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);

@@ -21,6 +21,7 @@ namespace HandBrake.ApplicationServices.Interop
     {
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance encodeInstance;
+        private static HandBrakeInstance previewInstance;
         private static HandBrakeInstance masterInstance;
 
         /// <summary>
@@ -86,6 +87,30 @@ namespace HandBrake.ApplicationServices.Interop
             encodeInstance = newInstance;
 
             return encodeInstance;
+        }
+
+        /// <summary>
+        /// The get encode instance.
+        /// </summary>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IHandBrakeInstance"/>.
+        /// </returns>
+        public static IHandBrakeInstance GetPreviewInstance(int verbosity)
+        {
+            if (previewInstance != null)
+            {
+                previewInstance.Dispose();
+                previewInstance = null;
+            }
+
+            HandBrakeInstance newInstance = new HandBrakeInstance();
+            newInstance.Initialize(verbosity);
+            previewInstance = newInstance;
+
+            return previewInstance;
         }
 
         /// <summary>

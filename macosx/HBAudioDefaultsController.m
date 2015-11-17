@@ -8,7 +8,7 @@
 #import "HBAudioDefaults.h"
 #import "HBLanguagesSelection.h"
 
-static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
+static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 @interface HBAudioDefaultsController ()
 
@@ -32,13 +32,15 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
     {
         _settings = settings;
         _languagesList = [[HBLanguagesSelection alloc] initWithLanguages:_settings.trackSelectionLanguages];
+        _settings.undo = self.window.undoManager;
+        _languagesList.undo = self.window.undoManager;
     }
     return self;
 }
 
 - (void)windowDidLoad
 {
-    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBAudioDefaultsContex];
+    [self addObserver:self forKeyPath:@"tableController.showSelectedOnly" options:0 context:HBAudioDefaultsContext];
 
     if (self.settings.trackSelectionLanguages.count)
     {
@@ -48,7 +50,7 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBAudioDefaultsContex)
+    if (context == HBAudioDefaultsContext)
     {
         if ([keyPath isEqualToString:@"tableController.showSelectedOnly"])
         {
@@ -81,20 +83,23 @@ static void *HBAudioDefaultsContex = &HBAudioDefaultsContex;
     }
 }
 
-- (IBAction)done:(id)sender
+- (IBAction)ok:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
+    self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseOK];
+}
 
-    [self.settings.trackSelectionLanguages removeAllObjects];
-    [self.settings.trackSelectionLanguages addObjectsFromArray:self.languagesList.selectedLanguages];
+- (IBAction)cancel:(id)sender
+{
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (void)dealloc
 {
-
     @try {
-        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly"];
+        [self removeObserver:self forKeyPath:@"tableController.showSelectedOnly" context:HBAudioDefaultsContext];
     } @catch (NSException * __unused exception) {}
 
 }

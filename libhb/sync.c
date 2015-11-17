@@ -17,8 +17,6 @@
 #endif
 #define INT64_MIN (-9223372036854775807LL-1)
 
-#define ABS(a)  ((a) < 0 ? -(a) : (a))
-
 typedef struct
 {
     /* Audio/Video sync thread synchronization */
@@ -26,8 +24,6 @@ typedef struct
     hb_cond_t * next_frame;
     int64_t volatile  * last_pts;
     int         pts_count;
-
-    int         ref;        /* Reference count to tell us when it's unused */
 
     /* PTS synchronization */
     int64_t     audio_pts_slip;
@@ -37,6 +33,9 @@ typedef struct
     /* point-to-point support */
     int         start_found;
     int         count_frames;
+
+    /* sync audio work objects */
+    hb_list_t * list_work;
 } hb_sync_common_t;
 
 typedef struct
@@ -117,7 +116,7 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
  ***********************************************************************
  * Initialize the work object
  **********************************************************************/
-hb_work_object_t * hb_sync_init( hb_job_t * job )
+int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
 {
     hb_title_t        * title = job->title;
     hb_chapter_t      * chapter;
@@ -125,13 +124,11 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     uint64_t            duration;
     hb_work_private_t * pv;
     hb_sync_video_t   * sync;
-    hb_work_object_t  * w;
-    hb_work_object_t  * ret = NULL;
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     sync = &pv->type.video;
     pv->common = calloc( 1, sizeof( hb_sync_common_t ) );
-    pv->common->ref++;
+    pv->common->list_work = hb_list_init();
     pv->common->mutex = hb_lock_init();
     pv->common->next_frame = hb_cond_init();
     pv->common->pts_count = 1;
@@ -144,7 +141,6 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
         pv->common->start_found = 1;
     }
 
-    ret = w = hb_get_work( job->h, WORK_SYNC_VIDEO );
     w->private_data = pv;
     w->fifo_in = job->fifo_raw;
     // Register condition with fifo to wake us up immediately if
@@ -214,7 +210,17 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     {
         InitSubtitle(job, sync, i);
     }
-    return ret;
+
+    /* Launch audio processing threads */
+    for (i = 0; i < hb_list_count(pv->common->list_work); i++)
+    {
+        hb_work_object_t * audio_work;
+        audio_work = hb_list_item(pv->common->list_work, i);
+        audio_work->done = w->done;
+        audio_work->thread = hb_thread_init(audio_work->name, hb_work_loop,
+                                            audio_work, HB_LOW_PRIORITY);
+    }
+    return 0;
 }
 
 static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int ii )
@@ -278,7 +284,6 @@ void syncVideoClose( hb_work_object_t * w )
         /* Preserve frame count for better accuracy in pass 2 */
         hb_interjob_t * interjob = hb_interjob_get( job->h );
         interjob->frame_count = pv->common->count_frames;
-        interjob->last_job = job->sequence_id;
     }
 
     if (sync->drops || sync->dups )
@@ -294,20 +299,24 @@ void syncVideoClose( hb_work_object_t * w )
     }
     free(sync->subtitle_sanitizer);
 
-    hb_lock( pv->common->mutex );
-    if ( --pv->common->ref == 0 )
+    // Close audio work threads
+    hb_work_object_t * audio_work;
+    while ((audio_work = hb_list_item(pv->common->list_work, 0)))
     {
-        hb_unlock( pv->common->mutex );
-        hb_cond_close( &pv->common->next_frame );
-        hb_lock_close( &pv->common->mutex );
-        free((void*)pv->common->last_pts);
-        free(pv->common);
+        hb_list_rem(pv->common->list_work, audio_work);
+        if (audio_work->thread != NULL)
+        {
+            hb_thread_close(&audio_work->thread);
+        }
+        audio_work->close(audio_work);
+        free(audio_work);
     }
-    else
-    {
-        hb_unlock( pv->common->mutex );
-    }
+    hb_list_close(&pv->common->list_work);
 
+    hb_cond_close( &pv->common->next_frame );
+    hb_lock_close( &pv->common->mutex );
+    free((void*)pv->common->last_pts);
+    free(pv->common);
     free( pv );
     w->private_data = NULL;
 }
@@ -900,13 +909,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-// sync*Init does nothing because sync has a special initializer
-// that takes care of initializing video and all audio tracks
-int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
-{
-    return 0;
-}
-
 hb_work_object_t hb_sync_video =
 {
     WORK_SYNC_VIDEO,
@@ -936,20 +938,6 @@ void syncAudioClose( hb_work_object_t * w )
     if ( sync->state )
     {
         src_delete( sync->state );
-    }
-
-    hb_lock( pv->common->mutex );
-    if ( --pv->common->ref == 0 )
-    {
-        hb_unlock( pv->common->mutex );
-        hb_cond_close( &pv->common->next_frame );
-        hb_lock_close( &pv->common->mutex );
-        free((void*)pv->common->last_pts);
-        free(pv->common);
-    }
-    else
-    {
-        hb_unlock( pv->common->mutex );
     }
 
     free( pv );
@@ -1138,10 +1126,11 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     sync->index = i;
     pv->job    = job;
     pv->common = common;
-    pv->common->ref++;
     pv->common->pts_count++;
 
     w = hb_get_work( job->h, WORK_SYNC_AUDIO );
+    hb_list_add(common->list_work, w);
+
     w->private_data = pv;
     w->audio = hb_list_item( job->list_audio, i );
     w->fifo_in = w->audio->priv.fifo_raw;
@@ -1356,8 +1345,6 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     }
 
     sync->gain_factor = pow(10, w->audio->config.out.gain / 20);
-
-    hb_list_add( job->list_work, w );
 }
 
 static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
