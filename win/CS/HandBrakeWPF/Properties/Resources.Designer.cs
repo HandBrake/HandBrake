@@ -448,11 +448,47 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to save Chapter Makrers file! .
+        ///   Looks up a localized string similar to Unable to save Chapter Markers file! .
         /// </summary>
         public static string ChaptersViewModel_UnableToExportChaptersWarning {
             get {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First column in chapters file must only contain a integer number value higher than zero (0).
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All lines in chapters file must have at least 2 columns of data.
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line {0} is invalid. Nothing will be imported..
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersMalformedLineMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersMalformedLineMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import chapter file.
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersWarning", resourceCulture);
             }
         }
         
