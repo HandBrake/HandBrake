@@ -751,4 +751,38 @@ Your old presets file was archived to:</value>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
     <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
   </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Chapter files of type '{0}' are not currently supported.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Unsupported chapter file type</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Invalid chapter information for source media</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Chapter count doesn't match between source and input file</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>The reported duration of the chapters on the source media 
+and the duration of chapters in the input file differ drastically.
+It is very likely that this chapter file was produced from a different source media.
+
+Are you sure you want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Chapter duration doesn't match between source and input file</value>
+  </data>
 </root>
