@@ -87,10 +87,8 @@
     <Reference Include="GongSolutions.Wpf.DragDrop">
       <HintPath>..\libraries\WPFDragDrop\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="LumenWorks.Framework.IO">
-      <HintPath>..\libraries\CsvReader\LumenWorks.Framework.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\json\Newtonsoft.Json.dll</HintPath>
@@ -234,6 +232,7 @@
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
+    <Compile Include="Utilities\Output\CsvHelper.cs" />
     <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
