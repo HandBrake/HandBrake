@@ -376,6 +376,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
 
         [DllImport("hb.dll", EntryPoint = "hb_x264_param_unparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_x264_param_unparse(
+            int bit_depth,
             [In] [MarshalAs(UnmanagedType.LPStr)] string x264_preset,
             [In] [MarshalAs(UnmanagedType.LPStr)] string x264_tune,
             [In] [MarshalAs(UnmanagedType.LPStr)] string x264_encopts,
