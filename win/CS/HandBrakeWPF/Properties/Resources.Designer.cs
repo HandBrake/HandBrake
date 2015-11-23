@@ -545,7 +545,8 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to The reported duration of the chapters on the source media 
-        ///and the duration of chapters in the input file differ drastically.
+        ///and the duration of chapters in the input file differ greatly.
+        ///
         ///It is very likely that this chapter file was produced from a different source media.
         ///
         ///Are you sure you want to import the chapter names?.

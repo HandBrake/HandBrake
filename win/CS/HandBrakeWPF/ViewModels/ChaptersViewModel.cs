@@ -28,8 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using Microsoft.VisualBasic.FileIO;
-
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
@@ -174,7 +172,8 @@ namespace HandBrakeWPF.ViewModels
             // Execute the importer based on the file extension
             switch (fileExtension)
             {
-                case ".csv":
+                case ".csv": // comma separated file
+                case ".tsv": // tab separated file
                     ChapterImporterCsv.Import(filename, ref importedChapters);
                     break;
                 case ".xml":
@@ -199,6 +198,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 if( !string.IsNullOrEmpty(validationErrorMessage))
                     throw new GeneralApplicationException(Resources.ChaptersViewModel_ValidationFailedWarning, validationErrorMessage);
+
+                // The user has cancelled the import, so exit
+                return;
             }
 
             // Now iterate over each chatper we have, and set it's name

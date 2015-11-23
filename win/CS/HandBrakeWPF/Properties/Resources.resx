@@ -777,7 +777,8 @@ Do you still want to import the chapter names?</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
     <value>The reported duration of the chapters on the source media 
-and the duration of chapters in the input file differ drastically.
+and the duration of chapters in the input file differ greatly.
+
 It is very likely that this chapter file was produced from a different source media.
 
 Are you sure you want to import the chapter names?</value>

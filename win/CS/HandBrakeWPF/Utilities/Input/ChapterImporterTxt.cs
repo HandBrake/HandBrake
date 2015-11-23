@@ -10,10 +10,22 @@ namespace HandBrakeWPF.Utilities.Input
 
     using HandBrakeWPF.Helpers;
 
+    /// <summary>
+    /// Imports chapter markers in the ChaptersDb.org TXT format
+    /// More info: http://www.chapterdb.org/docs
+    /// </summary>
     public class ChapterImporterTxt
     {
+        /// <summary>
+        /// The file filter value for the OpenFileDialog
+        /// </summary>
         public static string FileFilter => "Text files (*.txt)|*.txt";
 
+        /// <summary>
+        /// Imports all chapter information from the given <see cref="filename"/> into the <see cref="chapterMap"/> dictionary.
+        /// </summary>
+        /// <param name="filename">The full path and filename of the chapter marker file to import</param>
+        /// <param name="chapterMap">The dictionary that should be populated with parsed chapter markers</param>
         public static void Import(string filename, ref Dictionary<int, Tuple<string, TimeSpan>> chapterMap)
         {
             using (var file = new StreamReader(filename))
