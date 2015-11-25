@@ -584,7 +584,7 @@ The Activity log may have further information.</value>
     <value>Switch Back To Tracks</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Unable to save Chapter Makrers file! </value>
+    <value>Unable to save Chapter Markers file! </value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
     <value>Chapter marker names will NOT be saved in your encode.</value>
@@ -738,5 +738,17 @@ Your old presets file was archived to:</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
     <value>Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. </value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Line {0} is invalid. Nothing will be imported.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Unable to import chapter file</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>All lines in chapters file must have at least 2 columns of data</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
   </data>
 </root>

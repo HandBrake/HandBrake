@@ -279,13 +279,14 @@ namespace HandBrake.ApplicationServices.Interop
             }
 
             IntPtr ptr = HBFunctions.hb_x264_param_unparse(
+                8,
                 preset,
                 string.Join(",", tunes),
                 extraOptions,
                 profile,
                 level,
                 width,
-                height);
+                height); // TODO add bit-depth support.
 
             string x264Settings = Marshal.PtrToStringAnsi(ptr);
 

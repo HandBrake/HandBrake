@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Text;
+    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -20,11 +22,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using LumenWorks.Framework.IO.Csv;
-
-    using Microsoft.Win32;
+    using Microsoft.VisualBasic.FileIO;
 
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -94,49 +95,39 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Export a CSV file.
-        /// </summary>
-        public void Export()
-        {
-            var saveFileDialog = new OpenFileDialog
-            {
-                Filter = "Csv File|*.csv",
-                DefaultExt = "csv",
-                CheckPathExists = true
-            };
-            bool? dialogResult = saveFileDialog.ShowDialog();
-            if (dialogResult.HasValue && dialogResult.Value && !string.IsNullOrEmpty(saveFileDialog.FileName))
-            {
-                this.ExportChaptersToCSV(saveFileDialog.FileName);
-            }
-        }
-
-        /// <summary>
         /// Export the Chapter Markers to a CSV file
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
         /// <exception cref="GeneralApplicationException">
         /// Thrown when exporting fails.
         /// </exception>
-        public void ExportChaptersToCSV(string filename)
+        public void Export()
         {
+            string fileName = null;
+            using (var saveFileDialog = new SaveFileDialog()
+                                        {
+                                            Filter = "Csv File|*.csv",
+                                            DefaultExt = "csv",
+                                            CheckPathExists = true,
+                                            OverwritePrompt = true
+                                        })
+            {
+                var dialogResult = saveFileDialog.ShowDialog();
+                fileName = saveFileDialog.FileName;
+
+                // Exit early if the user cancelled or the filename is invalid
+                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
+                    return;
+            }
+
             try
             {
-                string csv = string.Empty;
-
-                foreach (ChapterMarker row in this.Task.ChapterNames)
+                using (var csv = new StreamWriter(fileName))
                 {
-                    csv += row.ChapterNumber.ToString();
-                    csv += ",";
-                    csv += row.ChapterName.Replace(",", "\\,");
-                    csv += Environment.NewLine;
+                    foreach (ChapterMarker row in this.Task.ChapterNames)
+                    {
+                        csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                    }
                 }
-                var file = new StreamWriter(filename);
-                file.Write(csv);
-                file.Close();
-                file.Dispose();
             }
             catch (Exception exc)
             {
@@ -152,41 +143,69 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            var dialog = new OpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
-            bool? dialogResult = dialog.ShowDialog();
-            string filename = dialog.FileName;
-
-            if (!dialogResult.HasValue || !dialogResult.Value || string.IsNullOrEmpty(filename))
+            string filename = null;
+            using (var dialog = new OpenFileDialog() { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true })
             {
-                return;
+                var dialogResult = dialog.ShowDialog();
+                filename = dialog.FileName;
+
+                // Exit if the user didn't press the OK button or the file name is invalid
+                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(filename))
+                    return;
             }
 
-            IDictionary<int, string> chapterMap = new Dictionary<int, string>();
-            try
+            var chapterMap = new Dictionary<int, string>();
+
+            using (TextFieldParser csv = new TextFieldParser(filename)
+                    { CommentTokens = new[] { "#" }, // Comment lines
+                        Delimiters = new[] { ",", "\t", ";", ":" }, // Support all of these common delimeter types
+                        HasFieldsEnclosedInQuotes = true, // Assume that our data will be properly escaped
+                        TextFieldType = FieldType.Delimited,
+                        TrimWhiteSpace = true // Remove excess whitespace from ends of imported values
+                    })
             {
-                using (CsvReader csv = new CsvReader(new StreamReader(filename), false))
+                while (!csv.EndOfData)
                 {
-                    while (csv.ReadNextRecord())
+                    try
                     {
-                        if (csv.FieldCount == 2)
-                        {
-                            int chapter;
-                            int.TryParse(csv[0], out chapter);
-                            chapterMap[chapter] = csv[1];
-                        }
+                        // Only read the first two columns, anything else will be ignored but will not raise an error
+                        var row = csv.ReadFields();
+                        if (row == null || row.Length < 2) // null condition happens if the file is somehow corrupt during reading
+                            throw new MalformedLineException(Resources.ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns, csv.LineNumber);
+
+                        int chapterNumber;
+                        if (!int.TryParse(row[0], out chapterNumber))
+                            throw new MalformedLineException(Resources.ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber, csv.LineNumber);
+
+                        // Store the chapter name at the correct index
+                        chapterMap[chapterNumber] = row[1]?.Trim();
+                    }
+                    catch (MalformedLineException mlex)
+                    {
+                        throw new GeneralApplicationException(
+                            Resources.ChaptersViewModel_UnableToImportChaptersWarning,
+                            string.Format(Resources.ChaptersViewModel_UnableToImportChaptersMalformedLineMsg, mlex.LineNumber),
+                            mlex);
                     }
                 }
             }
-            catch (Exception)
-            {
-                // Do Nothing
-            }
+
+            // Exit early if no chapter information was extracted
+            if (chapterMap.Count <= 0)
+                return;
 
             // Now iterate over each chatper we have, and set it's name
             foreach (ChapterMarker item in this.Task.ChapterNames)
             {
                 string chapterName;
-                item.ChapterName = chapterMap.TryGetValue(item.ChapterNumber, out chapterName) ? chapterName : string.Empty;
+
+                // If we don't have a chapter name for this chapter then 
+                // fallback to the value that is already set for the chapter
+                if (!chapterMap.TryGetValue(item.ChapterNumber, out chapterName))
+                    chapterName = item.ChapterName;
+
+                // Assign the chapter name unless the name is not set or only whitespace charaters
+                item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
             }
         }
 
