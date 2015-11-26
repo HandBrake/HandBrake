@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Text;
     using System.Linq;
+    using System.Windows;
     using System.Windows.Forms;
 
     using Caliburn.Micro;
@@ -31,16 +32,23 @@ namespace HandBrakeWPF.ViewModels
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using MessageBox = System.Windows.Forms.MessageBox;
 
     /// <summary>
     /// The Chapters View Model
     /// </summary>
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
+        #region Constants and Fields
+
+        private readonly IErrorService errorService;
+
         /// <summary>
         /// The source chapters backing field
         /// </summary>
         private List<Chapter> sourceChaptersList;
+
+        #endregion
 
         #region Constructors and Destructors
 
@@ -53,9 +61,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        /// <param name="errorService">
+        /// The Error Service 
+        /// </param>
+        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IErrorService errorService)
         {
             this.Task = new EncodeTask();
+            this.errorService = errorService;
         }
 
         #endregion
@@ -235,13 +247,12 @@ namespace HandBrakeWPF.ViewModels
             // If the number of chapters don't match, prompt for confirmation
             if (importedChapters.Count != this.Task.ChapterNames.Count)
             {
-                if (DialogResult.Yes !=
-                    MessageBox.Show(
+                if (MessageBoxResult.Yes !=
+                    this.errorService.ShowMessageBox(
                         string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Task.ChapterNames.Count, importedChapters.Count),
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button2))
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question))
                 {
                     return false;
                 }
@@ -255,13 +266,12 @@ namespace HandBrakeWPF.ViewModels
             var diffs = importedChapters.Zip(this.Task.ChapterNames, (import, source) => source.Duration - import.Value.Item2);
             if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
             {
-                if (DialogResult.Yes !=
-                    MessageBox.Show(
+                if (MessageBoxResult.Yes !=
+                    this.errorService.ShowMessageBox(
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button2))
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question))
                 {
                     return false;
                 }
