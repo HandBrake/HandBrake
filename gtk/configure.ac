@@ -162,30 +162,30 @@ HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdre
 case $host in
   *-*-mingw*)
     if test "x$use_libdl" = "xyes" ; then
-		HB_LIBS+=" -ldl"
+		HB_LIBS="$HB_LIBS -ldl"
 	fi
     if test "x$use_libpthread" = "xyes" ; then
-		HB_LIBS+=" -lpthread"
+		HB_LIBS="$HB_LIBS -lpthread"
     else
-        HB_LIBS+=" -lpthreadGC2"
+        HB_LIBS="$HB_LIBS -lpthreadGC2"
 	fi
-    HB_LIBS+=" -lregex -luuid"
+    HB_LIBS="$HB_LIBS -lregex -luuid"
     ;;
   *)
-    HB_LIBS+=" -ldl -lpthread"
+    HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
 esac
 
 if test "x$use_fdk_aac" = "xyes" ; then
-    HB_LIBS+=" -lfdk-aac"
+    HB_LIBS="$HB_LIBS -lfdk-aac"
 fi
 
 if test "x$use_x265" = "xyes" ; then
-    HB_LIBS+=" -lx265"
+    HB_LIBS="$HB_LIBS -lx265"
 fi
 
 if test "x$use_qsv" = "xyes" ; then
-    HB_LIBS+=" -lmfx"
+    HB_LIBS="$HB_LIBS -lmfx"
 fi
 
 AC_SUBST(HB_LIBS)
