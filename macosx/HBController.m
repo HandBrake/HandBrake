@@ -1371,9 +1371,14 @@
 
 - (IBAction)showAddPresetPanel:(id)sender
 {
-	// Show the add panel
+    BOOL defaultToCustom = ((self.job.picture.width + self.job.picture.cropRight + self.job.picture.cropLeft) < self.job.picture.sourceWidth) ||
+                           ((self.job.picture.height + self.job.picture.cropTop + self.job.picture.cropBottom) < self.job.picture.sourceHeight);
+
+    // Show the add panel
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
-                                                                                     videoSize:NSMakeSize(self.job.picture.width, self.job.picture.height)];
+                                                                                   customWidth:self.job.picture.width
+                                                                                  customHeight:self.job.picture.height
+                                                                               defaultToCustom:defaultToCustom];
 
     [NSApp beginSheet:addPresetController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(addPresetController)];
 }
