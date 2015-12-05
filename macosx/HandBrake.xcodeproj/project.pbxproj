@@ -706,7 +706,6 @@
 				273F200014ADAE950021BE6D /* Products */,
 				27D6C72314B1013400B785E4 /* Products (external) */,
 				273F20CD14ADC8E60021BE6D /* Resources */,
-				273F219214ADDE440021BE6D /* Resources (unused) */,
 				273F203414ADBAC30021BE6D /* Frameworks */,
 				273F20CE14ADC9210021BE6D /* Frameworks (bundled) */,
 				277A3FCF14AE848400A835E4 /* xcconfig */,
@@ -895,21 +894,6 @@
 				A9706CB81AC1452800BAEAA8 /* ExceptionAlert.xib */,
 			);
 			path = English.lproj;
-			sourceTree = "<group>";
-		};
-		273F219214ADDE440021BE6D /* Resources (unused) */ = {
-			isa = PBXGroup;
-			children = (
-				273F219314ADDE9A0021BE6D /* icons */,
-			);
-			name = "Resources (unused)";
-			sourceTree = "<group>";
-		};
-		273F219314ADDE9A0021BE6D /* icons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = icons;
 			sourceTree = "<group>";
 		};
 		277A3FCF14AE848400A835E4 /* xcconfig */ = {
