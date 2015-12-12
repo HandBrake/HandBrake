@@ -144,7 +144,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.VideoLevel = task.VideoLevel;
             this.VideoProfile = task.VideoProfile;
             this.VideoPreset = task.VideoPreset;
-            this.VideoTunes = task.VideoTunes;
+            this.VideoTunes = new List<VideoTune>(task.VideoTunes);
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
             this.ShowAdvancedTab = task.ShowAdvancedTab;

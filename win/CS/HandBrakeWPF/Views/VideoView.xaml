@@ -152,6 +152,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
 
@@ -188,8 +189,8 @@
 
                     <!-- Row 3 -->
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_ExtraOptions}" Grid.Row="4" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
-                    <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="200"
-                             Height="30" MaxLines="2" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5,10,0,0" VerticalAlignment="Center"
+                    <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="200" Width="365" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow"
+                             Height="30" MaxLines="3" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,10,0,0" VerticalAlignment="Center"
                              ToolTip="{Binding FullOptionsTooltip}" Style="{StaticResource LongToolTipHolder}" >
                         <TextBox.ContextMenu>
                             <ContextMenu>

@@ -1515,6 +1515,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured when trying to stop the scan. Please restart HandBrake..
+        /// </summary>
+        public static string ScanService_ScanStopFailed {
+            get {
+                return ResourceManager.GetString("ScanService_ScanStopFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>

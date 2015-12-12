@@ -786,4 +786,7 @@ Are you sure you want to import the chapter names?</value>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
     <value>Chapter duration doesn't match between source and input file</value>
   </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>An error occured when trying to stop the scan. Please restart HandBrake.</value>
+  </data>
 </root>

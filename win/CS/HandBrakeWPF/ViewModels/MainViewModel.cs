@@ -1464,7 +1464,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CancelScan()
         {
-            this.scanService.Stop();
+            this.scanService.Cancel();
         }
 
         /// <summary>
@@ -2130,7 +2130,7 @@ namespace HandBrakeWPF.ViewModels
                     this.HasSource = true;
                     this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle) ?? this.ScannedSource.Titles.FirstOrDefault();
                 }
-                else
+                else if (!e.Cancelled)
                 {
                     this.OpenAlertWindow(Resources.Main_ScanNoTitlesFound, Resources.Main_ScanNoTitlesFoundMessage);
                 }

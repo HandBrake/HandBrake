@@ -89,6 +89,11 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         void Scan(string sourcePath, int title, Action<bool, Source> postAction, HBConfiguration configuration);
 
         /// <summary>
+        /// Cancel the current scan.
+        /// </summary>
+        void Cancel();
+
+        /// <summary>
         /// Get a Preview image for the current job and preview number.
         /// </summary>
         /// <param name="task">
