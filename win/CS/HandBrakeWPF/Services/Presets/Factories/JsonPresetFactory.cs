@@ -530,7 +530,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureTopCrop = export.Task.Cropping.Top;
             preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0; // TODO
             preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
-            preset.PictureAutoCrop = export.Task.HasCropping;
+            preset.PictureAutoCrop = !export.Task.HasCropping;
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
 
             // Filters
