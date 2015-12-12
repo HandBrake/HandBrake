@@ -1340,6 +1340,12 @@
 	[fPreviewController showWindow:sender];
 }
 
+- (IBAction)showTabView:(id)sender
+{
+    NSInteger tag = [sender tag];
+    [fMainTabView selectTabViewItemAtIndex:tag];
+}
+
 #pragma mark - Presets View Controller Delegate
 
 - (void)selectionDidChange
