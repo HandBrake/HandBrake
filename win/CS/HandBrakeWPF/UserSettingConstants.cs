@@ -220,7 +220,12 @@ namespace HandBrakeWPF
         /// The Show Queue in-line option.
         /// </summary>
         public const string ShowQueueInline = "ShowQueueInline";
-        
+
+        /// <summary>
+        /// Setting to allow mid-version upgrades of presets.
+        /// </summary>
+        public const string ForcePresetReset = "ForcePresetReset";
+
         #endregion
     }
 }
