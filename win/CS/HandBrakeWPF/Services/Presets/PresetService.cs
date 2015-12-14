@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        public const int ForcePresetReset = 0;
+        public const int ForcePresetReset = 2;
         public static string UserPresetCatgoryName = "User Presets";
         private readonly string presetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.json";
         private readonly ObservableCollection<Preset> presets = new ObservableCollection<Preset>();
@@ -544,11 +544,13 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Force Upgrade of presets
-                if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.ForcePresetReset) > ForcePresetReset)
+                if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.ForcePresetReset) < ForcePresetReset)
                 {
+                    this.userSettingService.SetUserSetting(UserSettingConstants.ForcePresetReset, ForcePresetReset);
+
                     string fileName = this.ArchivePresetFile(this.presetFile);
                     this.errorService.ShowMessageBox(
-                        Resources.PresetService_PresetsOutOfDate
+                        Resources.Presets_PresetForceReset
                         + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
                         Resources.PresetService_UnableToLoad,
                         MessageBoxButton.OK,

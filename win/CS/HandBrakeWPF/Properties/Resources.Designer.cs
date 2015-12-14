@@ -1250,6 +1250,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
+        ///Your preset file will be archived and new one created. You will need to re-create your own presets..
+        /// </summary>
+        public static string Presets_PresetForceReset {
+            get {
+                return ResourceManager.GetString("Presets_PresetForceReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Built-in presets have been reset..
         /// </summary>
         public static string Presets_ResetComplete {

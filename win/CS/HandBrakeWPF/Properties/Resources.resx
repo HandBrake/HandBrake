@@ -789,4 +789,8 @@ Are you sure you want to import the chapter names?</value>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
     <value>An error occured when trying to stop the scan. Please restart HandBrake.</value>
   </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake is unable to upgrade your presets file to a new version format.
+Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
+  </data>
 </root>
