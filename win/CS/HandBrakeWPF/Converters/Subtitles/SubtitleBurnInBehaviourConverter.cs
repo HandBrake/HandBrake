@@ -15,8 +15,6 @@ namespace HandBrakeWPF.Converters.Subtitles
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Utilities;
-
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Utilities;
 
@@ -52,7 +50,7 @@ namespace HandBrakeWPF.Converters.Subtitles
                         EnumHelper<SubtitleBurnInBehaviourModes>.GetEnumDisplayValues(typeof(SubtitleBurnInBehaviourModes)).ToList());
             }
 
-            if (value != null && value.GetType() == typeof(SubtitleBehaviourModes))
+            if (value != null && value.GetType() == typeof(SubtitleBurnInBehaviourModes))
             {
                 return EnumHelper<SubtitleBurnInBehaviourModes>.GetDisplay((SubtitleBurnInBehaviourModes)value);
             }
