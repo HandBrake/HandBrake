@@ -119,6 +119,7 @@
     <Compile Include="Model\Subtitle\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitle\SubtitleBehaviours.cs" />
     <Compile Include="Model\VideoScaler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IServerService.cs" />
@@ -176,10 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
