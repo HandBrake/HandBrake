@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Picture;
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
 
@@ -288,7 +289,16 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
                                                                      ? AudioBehaviourModes.AllMatching
                                                                      : AudioBehaviourModes.FirstMatch;
-            preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.None;
+
+            // TODO - The other GUI's don't support All Tracks yet. So for now we can only load / Save first track.
+            if (importedPreset.AudioSecondaryEncoderMode)
+            {
+                preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.FirstTrack;
+            }
+            else
+            {
+                preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.None;
+            }
 
             if (importedPreset.AudioCopyMask != null)
             {
@@ -347,8 +357,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
 
-                    // track.IsQualityBased = audioTrack.AudioTrackQualityEnable;
-                    // track.Quality = audioTrack.AudioTrackQuality;
+                    track.EncoderRateType = audioTrack.AudioTrackQualityEnable ? AudioEncoderRateType.Quality : AudioEncoderRateType.Bitrate;
+                    track.Quality = audioTrack.AudioTrackQuality;
                     track.Gain = (int)audioTrack.AudioTrackGainSlider;
                     track.DRC = audioTrack.AudioTrackDRCSlider;
 
@@ -359,6 +369,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Subtitle Settings */ 
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
             preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
+            preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour = EnumHelper<SubtitleBurnInBehaviourModes>.GetValue(importedPreset.SubtitleBurnBehavior);
+
             preset.SubtitleTrackBehaviours.AddClosedCaptions = importedPreset.SubtitleAddCC;
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
             if (importedPreset.SubtitleLanguageList != null)
@@ -383,7 +395,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public bool VideoQSVDecode { get; set; }
             // public int VideoQSVAsyncDepth { get; set; }
             // public bool SubtitleAddForeignAudioSubtitle { get; set; }
-            // public string SubtitleBurnBehavior { get; set; }
             // public bool SubtitleBurnBDSub { get; set; }
             // public bool SubtitleBurnDVDSub { get; set; }
             // public bool PictureItuPAR { get; set; }
@@ -393,7 +404,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public int PictureRotate { get; set; }
             // public int PictureForceHeight { get; set; }
             // public int PictureForceWidth { get; set; }
-            // public bool AudioSecondaryEncoderMode { get; set; }
             // public List<object> ChildrenArray { get; set; }
             // public bool Folder { get; set; }
             // public bool FolderOpen { get; set; }
@@ -474,7 +484,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetShortName(export.Task.AllowedPassthruOptions.AudioEncoderFallback);
             preset.AudioLanguageList = LanguageUtilities.GetLanguageCodes(export.AudioTrackBehaviours.SelectedLangauges);
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
-            preset.AudioSecondaryEncoderMode = false; // TODO -> Check what this is.
+            preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // TODO -> We don't support AllTracks yet in other GUIs.
             preset.AudioList = new List<AudioList>();
             foreach (var item in export.Task.AudioTracks)
             {
@@ -578,7 +588,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.x264UseAdvancedOptions = export.Task.ShowAdvancedTab;
 
             // Unknown
-            preset.ChildrenArray = new List<object>(); // TODO
+            preset.ChildrenArray = new List<object>(); // We don't support nested presets.
             preset.Folder = false; // TODO
             preset.FolderOpen = false; // TODO
 
