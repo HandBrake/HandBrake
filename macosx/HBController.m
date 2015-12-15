@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import "HBController.h"
+#import "HBFocusRingView.h"
 
 #import "HBQueueController.h"
 #import "HBTitleSelectionController.h"
@@ -32,7 +33,7 @@
 #import "HBJob.h"
 #import "HBStateFormatter.h"
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate, NSDraggingDestination>
 {
     IBOutlet NSTabView *fMainTabView;
 
@@ -246,55 +247,53 @@
 #pragma mark -
 #pragma mark Drag & drop handling
 
-/** This method is used by OSX to know what kind of files can be drag & drop on the NSWindow
- * We only want filenames (and so folders too)
- */
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+- (nullable NSArray<NSURL *> *)fileURLsFromPasteboard:(NSPasteboard *)pasteboard
 {
-    NSPasteboard *pboard = [sender draggingPasteboard];
-
-    if ([[pboard types] containsObject:NSFilenamesPboardType])
-    {
-        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        return paths.count == 1 ? NSDragOperationGeneric : NSDragOperationNone;
-    }
-
-    return NSDragOperationNone;
+    NSDictionary *options = @{NSPasteboardURLReadingFileURLsOnlyKey: @YES};
+    return [pasteboard readObjectsForClasses:@[[NSURL class]] options:options];
 }
 
-// This method is doing the job after the drag & drop operation has been validated by [self draggingEntered] and OSX
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    NSArray<NSURL *> *fileURLs = [self fileURLsFromPasteboard:[sender draggingPasteboard]];
+    [self.window.contentView setShowFocusRing:YES];
+    return fileURLs.count ? NSDragOperationGeneric : NSDragOperationNone;
+}
+
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pboard = [sender draggingPasteboard];
+    NSArray<NSURL *> *fileURLs = [self fileURLsFromPasteboard:[sender draggingPasteboard]];
 
-    if ([pboard.types containsObject:NSFilenamesPboardType])
+    if (fileURLs.count)
     {
-        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        [self openURL:[NSURL fileURLWithPath:paths.firstObject]];
+        [self openURL:fileURLs.firstObject];
     }
 
+    [self.window.contentView setShowFocusRing:NO];
     return YES;
+}
+
+- (void)draggingExited:(nullable id <NSDraggingInfo>)sender
+{
+    [self.window.contentView setShowFocusRing:NO];
 }
 
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == NULL)
+    if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
     {
-        if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
         {
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
+            if (![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
             {
-                if (![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
-                {
-                    [fMainTabView insertTabViewItem:fAdvancedTab atIndex:3];
-                }
+                [fMainTabView insertTabViewItem:fAdvancedTab atIndex:5];
             }
-            else
-            {
-                [fMainTabView removeTabViewItem:fAdvancedTab];
-            }
+        }
+        else
+        {
+            [fMainTabView removeTabViewItem:fAdvancedTab];
         }
     }
     else
@@ -1340,6 +1339,12 @@
 	[fPreviewController showWindow:sender];
 }
 
+- (IBAction)showTabView:(id)sender
+{
+    NSInteger tag = [sender tag];
+    [fMainTabView selectTabViewItemAtIndex:tag];
+}
+
 #pragma mark - Presets View Controller Delegate
 
 - (void)selectionDidChange
@@ -1371,9 +1376,14 @@
 
 - (IBAction)showAddPresetPanel:(id)sender
 {
-	// Show the add panel
+    BOOL defaultToCustom = ((self.job.picture.width + self.job.picture.cropRight + self.job.picture.cropLeft) < self.job.picture.sourceWidth) ||
+                           ((self.job.picture.height + self.job.picture.cropTop + self.job.picture.cropBottom) < self.job.picture.sourceHeight);
+
+    // Show the add panel
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
-                                                                                     videoSize:NSMakeSize(self.job.picture.width, self.job.picture.height)];
+                                                                                   customWidth:self.job.picture.width
+                                                                                  customHeight:self.job.picture.height
+                                                                               defaultToCustom:defaultToCustom];
 
     [NSApp beginSheet:addPresetController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(addPresetController)];
 }

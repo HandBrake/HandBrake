@@ -331,7 +331,7 @@ static void reader_close( hb_work_object_t * w )
     free( r );
 }
 
-static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+static hb_buffer_t * splice_discontinuity( hb_work_private_t *r, hb_buffer_t *buf )
 {
     // Handle buffers that were split across a PCR discontinuity.
     // Rejoin them into a single buffer.
@@ -341,7 +341,7 @@ static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
         hb_buffer_list_append(list, buf);
         if (buf->s.split)
         {
-            return;
+            return NULL;
         }
 
         int count = hb_buffer_list_count(list);
@@ -366,6 +366,11 @@ static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
             buf = hb_buffer_list_clear(list);
         }
     }
+    return buf;
+}
+
+static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+{
     while ( !*r->die && !r->job->done )
     {
         if ( hb_fifo_full_wait( fifo ) )
@@ -770,7 +775,8 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
 #endif
         }
-        if( fifos )
+        buf = splice_discontinuity(r, buf);
+        if( fifos && buf != NULL )
         {
             if ( !r->start_found )
             {

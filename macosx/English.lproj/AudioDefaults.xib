@@ -369,7 +369,7 @@ DQ
                         <rect key="frame" x="20" y="69" width="773" height="143"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="jkU-Fi-GCv">
-                            <rect key="frame" x="1" y="23" width="771" height="119"/>
+                            <rect key="frame" x="1" y="17" width="771" height="119"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="IbE-bD-EWJ" viewBased="YES" id="ZsG-T1-vGv">
@@ -659,7 +659,7 @@ DQ
                             <animations/>
                         </scroller>
                         <tableHeaderView key="headerView" id="IbE-bD-EWJ">
-                            <rect key="frame" x="0.0" y="0.0" width="771" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="771" height="17"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </tableHeaderView>

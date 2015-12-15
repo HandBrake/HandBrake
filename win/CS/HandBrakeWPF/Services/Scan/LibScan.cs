@@ -26,6 +26,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.EventArgs;
@@ -89,6 +90,11 @@ namespace HandBrakeWPF.Services.Scan
         /// The post scan operation.
         /// </summary>
         private Action<bool, Source> postScanOperation;
+
+        /// <summary>
+        /// Global to handle cancelled scans.
+        /// </summary>
+        private bool isCancelled = false;
 
         #endregion
 
@@ -243,10 +249,21 @@ namespace HandBrakeWPF.Services.Scan
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                this.isCancelled = false;
+                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(false, exc, Resources.ScanService_ScanStopFailed, null));
                 // Do Nothing.
             }
+        }
+
+        /// <summary>
+        /// Cancel the current scan.
+        /// </summary>
+        public void Cancel()
+        {
+            this.isCancelled = true;
+            this.Stop();
         }
 
         /// <summary>
@@ -365,6 +382,8 @@ namespace HandBrakeWPF.Services.Scan
         private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
             this.ServiceLogMessage("Scan Finished ...");
+            bool cancelled = this.isCancelled;
+            this.isCancelled = false;
 
             // Write the log file out before we start processing incase we crash.
             try
@@ -391,7 +410,7 @@ namespace HandBrakeWPF.Services.Scan
 
             // Process into internal structures.
             Source sourceData = null;
-            if (this.instance != null && this.instance.Titles != null)
+            if (this.instance?.Titles != null)
             {
                 sourceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
             }
@@ -413,7 +432,7 @@ namespace HandBrakeWPF.Services.Scan
             }
             else
             {
-                if (this.ScanCompleted != null) this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty, sourceData));
+                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(cancelled, null, string.Empty, sourceData));
             }
         }
 

@@ -36,6 +36,18 @@ namespace HandBrakeWPF.Exceptions
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralApplicationException"/> class with no wrapped exception.
+        /// </summary>
+        /// <param name="error">
+        /// The error.
+        /// </param>
+        /// <param name="solution">
+        /// The solution.
+        /// </param>
+        public GeneralApplicationException(string error, string solution) : this(error, solution, null)
+        {}
+
+        /// <summary>
         /// Gets or sets FailureReason.
         /// </summary>
         public string Error { get; set; }

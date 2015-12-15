@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Utilities.Output
     {
         private const string QUOTE = "\"";
         private const string ESCAPED_QUOTE = "\"\"";
-        private static readonly char[] CHARACTERS_THAT_MUST_BE_QUOTED = { ',', '"', '\n' };
+        private static readonly char[] CHARACTERS_THAT_MUST_BE_QUOTED = { ',', '"', '\n', '\t' };
 
         /// <summary>
         /// Properly escapes a string value containing reserved characters with double quotes "..." before it is written to a CSV file.

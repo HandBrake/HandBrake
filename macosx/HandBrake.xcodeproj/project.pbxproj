@@ -186,6 +186,8 @@
 		A9CF25F11990D62C0023F727 /* Presets.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CF25EF1990D62C0023F727 /* Presets.xib */; };
 		A9CF25F41990D64E0023F727 /* HBPreset.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F31990D64E0023F727 /* HBPreset.m */; };
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
+		A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */; };
+		A9D0FA7A1C1C36820003F2A9 /* HBTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D0FA791C1C36820003F2A9 /* HBTabView.m */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9D488A51996270300E9B1BA /* HBTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D488A41996270300E9B1BA /* HBTreeNode.m */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
@@ -510,6 +512,10 @@
 		A9CF25F31990D64E0023F727 /* HBPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreset.m; sourceTree = "<group>"; };
 		A9CF25F51990D6820023F727 /* HBPresetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresetsViewController.h; sourceTree = "<group>"; };
 		A9CF25F61990D6820023F727 /* HBPresetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsViewController.m; sourceTree = "<group>"; };
+		A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFocusRingView.h; sourceTree = "<group>"; };
+		A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBFocusRingView.m; sourceTree = "<group>"; };
+		A9D0FA781C1C36820003F2A9 /* HBTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTabView.h; sourceTree = "<group>"; };
+		A9D0FA791C1C36820003F2A9 /* HBTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTabView.m; sourceTree = "<group>"; };
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9D488A31996270300E9B1BA /* HBTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTreeNode.h; sourceTree = "<group>"; };
 		A9D488A41996270300E9B1BA /* HBTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTreeNode.m; sourceTree = "<group>"; };
@@ -706,7 +712,6 @@
 				273F200014ADAE950021BE6D /* Products */,
 				27D6C72314B1013400B785E4 /* Products (external) */,
 				273F20CD14ADC8E60021BE6D /* Resources */,
-				273F219214ADDE440021BE6D /* Resources (unused) */,
 				273F203414ADBAC30021BE6D /* Frameworks */,
 				273F20CE14ADC9210021BE6D /* Frameworks (bundled) */,
 				277A3FCF14AE848400A835E4 /* xcconfig */,
@@ -895,21 +900,6 @@
 				A9706CB81AC1452800BAEAA8 /* ExceptionAlert.xib */,
 			);
 			path = English.lproj;
-			sourceTree = "<group>";
-		};
-		273F219214ADDE440021BE6D /* Resources (unused) */ = {
-			isa = PBXGroup;
-			children = (
-				273F219314ADDE9A0021BE6D /* icons */,
-			);
-			name = "Resources (unused)";
-			sourceTree = "<group>";
-		};
-		273F219314ADDE9A0021BE6D /* icons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = icons;
 			sourceTree = "<group>";
 		};
 		277A3FCF14AE848400A835E4 /* xcconfig */ = {
@@ -1211,6 +1201,10 @@
 				A9F7102519A475EC00F61301 /* HBDockTile.m */,
 				273F209914ADBE670021BE6D /* HBImageAndTextCell.h */,
 				273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */,
+				A9D0FA751C1C284D0003F2A9 /* HBFocusRingView.h */,
+				A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */,
+				A9D0FA781C1C36820003F2A9 /* HBTabView.h */,
+				A9D0FA791C1C36820003F2A9 /* HBTabView.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -1461,6 +1455,7 @@
 				A932E273198834130047D13E /* HBAudioDefaults.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
 				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
+				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
 				A91806711A4807B000FC9BED /* HBRange.m in Sources */,
 				A9DEC8771A23C88D00C79B48 /* HBVideo.m in Sources */,
 				A9523937199A6AAE00588AEF /* HBFilters.m in Sources */,
@@ -1482,6 +1477,7 @@
 				A93FD4751A62ABE800A6AC43 /* HBAudio.m in Sources */,
 				A971281F1A2C75180088C076 /* HBTitle.m in Sources */,
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
+				A9D0FA7A1C1C36820003F2A9 /* HBTabView.m in Sources */,
 				A9E66D701A67A2A8007B641D /* HBDistributedArray.m in Sources */,
 				A99422E01B1887B000DDB077 /* NSJSONSerialization+HBAdditions.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,

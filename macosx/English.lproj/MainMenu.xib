@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9058" systemVersion="15B38b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15C48a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9058"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -252,6 +252,62 @@
                                         </menuItem>
                                     </items>
                                 </menu>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="View" id="Hzp-jb-hme">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="View" id="ndG-Ig-Yol">
+                        <items>
+                            <menuItem title="Video" keyEquivalent="1" id="9ie-b7-RaS">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="MZT-Vf-Djg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Picture" tag="1" keyEquivalent="2" id="Jef-U4-eQT">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="tzG-5g-Iv2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Audio" tag="2" keyEquivalent="3" id="brQ-mu-8JM">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="efj-Q8-kdm"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Subtitles" tag="3" keyEquivalent="4" id="Csx-2S-iUe">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="yOQ-JB-fED"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Chapters" tag="4" keyEquivalent="5" id="lCU-PH-gal">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="TgH-ML-j69"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="uFS-Tj-SCh"/>
+                            <menuItem title="Show Toolbar" keyEquivalent="t" id="IsV-5A-bqx">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="toggleToolbarShown:" target="-1" id="ZSD-Mu-aVB"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Customize Toolbar…" id="KKV-n0-Fmr">
+                                <connections>
+                                    <action selector="runToolbarCustomizationPalette:" target="-1" id="DlG-Uy-ICt"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="zXS-dj-fV9"/>
+                            <menuItem title="Enter Full Screen" keyEquivalent="f" id="mGX-7Z-siB">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                <connections>
+                                    <action selector="toggleFullScreen:" target="-1" id="Rls-Rq-Aln"/>
+                                </connections>
                             </menuItem>
                         </items>
                     </menu>

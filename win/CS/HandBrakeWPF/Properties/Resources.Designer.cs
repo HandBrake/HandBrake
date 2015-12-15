@@ -493,6 +493,89 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chapter files of type &apos;{0}&apos; are not currently supported..
+        /// </summary>
+        public static string ChaptersViewModel_UnsupportedFileFormatMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported chapter file type.
+        /// </summary>
+        public static string ChaptersViewModel_UnsupportedFileFormatWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of chapters on the source media 
+        ///and the number of chapters in the input file do not match ({0} vs {1}).
+        ///
+        ///Do you still want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of chapters on the source media 
+        ///and the number of chapters in the input file do not match ({0} vs {1}).
+        ///
+        ///Do you still want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter count doesn&apos;t match between source and input file.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reported duration of the chapters on the source media 
+        ///and the duration of chapters in the input file differ greatly.
+        ///
+        ///It is very likely that this chapter file was produced from a different source media.
+        ///
+        ///Are you sure you want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter duration doesn&apos;t match between source and input file.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid chapter information for source media.
+        /// </summary>
+        public static string ChaptersViewModel_ValidationFailedWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidationFailedWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -1167,6 +1250,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
+        ///Your preset file will be archived and new one created. You will need to re-create your own presets..
+        /// </summary>
+        public static string Presets_PresetForceReset {
+            get {
+                return ResourceManager.GetString("Presets_PresetForceReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Built-in presets have been reset..
         /// </summary>
         public static string Presets_ResetComplete {
@@ -1428,6 +1521,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_QueueStatusDisplay {
             get {
                 return ResourceManager.GetString("QueueViewModel_QueueStatusDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured when trying to stop the scan. Please restart HandBrake..
+        /// </summary>
+        public static string ScanService_ScanStopFailed {
+            get {
+                return ResourceManager.GetString("ScanService_ScanStopFailed", resourceCulture);
             }
         }
         

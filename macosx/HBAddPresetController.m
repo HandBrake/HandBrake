@@ -1,14 +1,18 @@
-//
-//  HBAddPresetController.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 23/11/14.
-//
-//
+/*  HBAddPresetController.m
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBAddPresetController.h"
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
+
+typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
+    HBAddPresetControllerModeNone,
+    HBAddPresetControllerModeCustom,
+    HBAddPresetControllerModeSourceMaximum,
+};
 
 @interface HBAddPresetController ()
 
@@ -21,20 +25,26 @@
 @property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
 @property (nonatomic, strong) HBPreset *preset;
-@property NSSize size;
+@property (nonatomic) int width;
+@property (nonatomic) int height;
+
+@property (nonatomic) BOOL defaultToCustom;
+
 
 @end
 
 @implementation HBAddPresetController
 
-- (instancetype)initWithPreset:(HBPreset *)preset videoSize:(NSSize)size;
+- (instancetype)initWithPreset:(HBPreset *)preset customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom
 {
     self = [super initWithWindowNibName:@"AddPreset"];
     if (self)
     {
         NSParameterAssert(preset);
         _preset = preset;
-        _size = size;
+        _width = customWidth;
+        _height = customHeight;
+        _defaultToCustom = defaultToCustom;
     }
     return self;
 }
@@ -49,30 +59,39 @@
      *
      * Use [NSMenuItem tag] to store preset values for each option.
      */
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", @"")];
-    [[self.picSettingsPopUp lastItem] setTag: 0];
+
+    // Default to Source Maximum
+    HBAddPresetControllerMode mode = HBAddPresetControllerModeSourceMaximum;
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", nil)];
+    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeNone];
 
     if (![self.preset[@"PicturePAR"] isEqualToString:@"strict"])
     {
         // not Strict, Custom is applicable
-        [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", @"")];
-        [[self.picSettingsPopUp lastItem] setTag: 1];
+        [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", nil)];
+        [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
+
+        if (self.defaultToCustom)
+        {
+            mode = HBAddPresetControllerModeCustom;
+        }
     }
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum (post source scan)", @"")];
-    [[self.picSettingsPopUp lastItem] setTag: 2];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum (post source scan)", nil)];
+    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];
 
-    //Default to Source Maximum
-    [self.picSettingsPopUp selectItemWithTag:2];
 
-    /* Initialize custom height and width settings to current values */
-    [self.picWidth setStringValue: [NSString stringWithFormat:@"%d", (int)self.size.width]];
-    [self.picHeight setStringValue: [NSString stringWithFormat:@"%d",(int)self.size.height]];
+    [self.picSettingsPopUp selectItemWithTag:mode];
+
+    // Initialize custom height and width settings to current values
+    [self.picWidth setIntValue:self.width];
+    [self.picHeight setIntValue:self.height];
     [self addPresetPicDropdownChanged:nil];
 }
 
 - (IBAction)addPresetPicDropdownChanged:(id)sender
 {
-    if (self.picSettingsPopUp.selectedItem.tag == 1)
+    if (self.picSettingsPopUp.selectedItem.tag == HBAddPresetControllerModeCustom)
     {
         self.picWidthHeightBox.hidden = NO;
     }
@@ -112,15 +131,15 @@
 
         self.preset = [newPreset copy];
 
-        [[self window] orderOut:nil];
-        [NSApp endSheet:[self window] returnCode:NSModalResponseContinue];
+        [self.window orderOut:nil];
+        [NSApp endSheet:self.window returnCode:NSModalResponseContinue];
     }
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window] returnCode:NSModalResponseAbort];
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseAbort];
 }
 
 @end
