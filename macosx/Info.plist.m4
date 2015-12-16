@@ -58,5 +58,10 @@ All rights reserved.</string>
 	<string>HBApplication</string>
     <key>SUFeedURL</key>
     <string>__HB_url_appcast</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+    <true/>
+	</dict>
 </dict>
 </plist>
