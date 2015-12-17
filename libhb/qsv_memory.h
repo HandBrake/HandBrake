@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define QSV_MEMORY_H
 
 #include "libavcodec/qsv.h"
-#include "msdk/mfxplugin.h"
+#include "mfx/mfxplugin.h"
 
 typedef struct{
 

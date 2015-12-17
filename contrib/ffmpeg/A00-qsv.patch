@@ -22,7 +22,7 @@ index 5085333..7283fb1 100755
  
  # hardware accelerators
  dxva2_deps="dxva2api_h"
-+qsv_deps="msdk_mfxvideo_h"
++qsv_deps="mfx_mfxvideo_h"
  vaapi_deps="va_va_h"
  vda_deps="VideoDecodeAcceleration_VDADecoder_h pthreads"
  vda_extralibs="-framework CoreFoundation -framework VideoDecodeAcceleration -framework QuartzCore"
@@ -39,7 +39,7 @@ index 5085333..7283fb1 100755
  check_header io.h
  check_header mach/mach_time.h
  check_header malloc.h
-+check_header msdk/mfxvideo.h
++check_header mfx/mfxvideo.h
  check_header poll.h
  check_header sys/mman.h
  check_header sys/param.h
@@ -830,7 +830,7 @@ index 0000000..52378cf
 + *  Note: Compilation would require:
 + *   - Intel MediaSDK headers, Full SDK is avaialble from the original web site:
 + *                     http://software.intel.com/en-us/vcsource/tools/media-SDK
-+ *     Will be referenced as msdk/*.h (mfxdefs.h, mfxstructures.h, ... )
++ *     Will be referenced as mfx/*.h (mfxdefs.h, mfxstructures.h, ... )
 + *  and
 + *  - Final application has to link against Intel MediaSDK dispatcher, available
 + *     at MediaSDK as well
@@ -868,7 +868,7 @@ index 0000000..52378cf
 +
 +#include <stdint.h>
 +#include <string.h>
-+#include "msdk/mfxvideo.h"
++#include "mfx/mfxvideo.h"
 +#include "libavutil/mem.h"
 +#include "libavutil/time.h"
 +
