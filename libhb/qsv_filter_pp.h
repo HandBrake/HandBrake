@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_FILTER_PP_H
 #define QSV_FILTER_PP_H
 
-#include "msdk/mfxplugin.h"
+#include "mfx/mfxplugin.h"
 
 struct qsv_filter_task_s;
 

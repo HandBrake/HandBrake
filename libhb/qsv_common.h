@@ -10,8 +10,8 @@
 #ifndef HB_QSV_COMMON_H
 #define HB_QSV_COMMON_H
 
-#include "msdk/mfxvideo.h"
-#include "msdk/mfxplugin.h"
+#include "mfx/mfxvideo.h"
+#include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
