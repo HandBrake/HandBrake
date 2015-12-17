@@ -74,7 +74,7 @@ namespace HandBrakeWPF.Helpers
                 TextReader stdOutput = cliProcess.StandardError;
                 while ((line = stdOutput.ReadLine()) != null)
                 {
-                    Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \(([0-9]*)\)");
+                    Match m = Regex.Match(line, @"HandBrake ([a-zA-Z0-9.\-]*) \(([0-9]*)\)");
                     if (m.Success)
                     {
                         string build = m.Groups[2].Success ? m.Groups[2].Value : string.Empty;
