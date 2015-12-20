@@ -793,7 +793,7 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
         ghb_dict_set_string(dest, "File", name);
         ghb_dict_set_string(range, "Type", "preview");
-        ghb_dict_set_int(range, "Start", ud->preview->frame);
+        ghb_dict_set_int(range, "Start", ud->preview->frame + 1);
         ghb_dict_set_int(range, "End",
             ghb_dict_get_int(ud->prefs, "live_duration") * 90000);
         ghb_dict_set_int(range, "SeekPoints",
