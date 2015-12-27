@@ -109,7 +109,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                     <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_AverageBitrate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" 
                                  IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
-                    <TextBox Width="75" Text="{Binding Task.VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                    <TextBox Width="75" Text="{Binding VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" />
                 </StackPanel>
 

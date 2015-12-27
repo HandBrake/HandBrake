@@ -69,7 +69,6 @@ namespace HandBrakeWPF.ViewModels
         private bool fastDecode;
         private bool displayTuneControls;
         private bool displayLevelControl;
-
         #endregion
 
         #region Constructors and Destructors
@@ -367,6 +366,26 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// The Video Bitrate.
+        /// </summary>
+        public int? VideoBitrate
+        {
+            get
+            {
+                return this.Task.VideoBitrate;
+            }
+            set
+            {
+                if (value == this.Task.VideoBitrate)
+                {
+                    return;
+                }
+                this.Task.VideoBitrate = value;
+                this.NotifyOfPropertyChange(() => this.VideoBitrate);
+            }
+        }
+
+        /// <summary>
         /// Gets DisplayRF.
         /// </summary>
         public double DisplayRF
@@ -616,7 +635,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.fastDecode;
+                return this.Task.VideoTunes.Contains(VideoTune.FastDecode);
             }
             set
             {
@@ -625,9 +644,6 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
                 this.fastDecode = value;
-                this.NotifyOfPropertyChange(() => this.FastDecode);
-                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
-                ResetAdvancedTab();
 
                 // Update the encode task
                 if (value && !this.Task.VideoTunes.Contains(VideoTune.FastDecode))
@@ -637,7 +653,11 @@ namespace HandBrakeWPF.ViewModels
                 else
                 {
                     this.Task.VideoTunes.Remove(VideoTune.FastDecode);
-                }          
+                }
+
+                this.NotifyOfPropertyChange(() => this.FastDecode);
+                this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.ResetAdvancedTab();
             }
         }
 
@@ -654,8 +674,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.VideoPreset = value;
                 this.NotifyOfPropertyChange(() => this.VideoPreset);
-                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
-                ResetAdvancedTab();
+                this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.ResetAdvancedTab();
             }
         }
 
@@ -711,7 +731,9 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.videoTune;
+                VideoTune tune = this.Task.VideoTunes.FirstOrDefault(t => !Equals(t, VideoTune.FastDecode))
+                                 ?? VideoTune.None;
+                return tune;
             }
             set
             {
@@ -720,21 +742,23 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
                 this.videoTune = value;
-                this.NotifyOfPropertyChange(() => this.VideoTune);
-                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
-                ResetAdvancedTab();
 
                 // Update the encode task.
+                bool hasFastDecode = this.Task.VideoTunes.Contains(VideoTune.FastDecode);
                 this.Task.VideoTunes.Clear();
                 if (value != null && !Equals(value, VideoTune.None))
                 {
                     this.Task.VideoTunes.Add(value);
                 }
 
-                if (this.FastDecode)
+                if (hasFastDecode)
                 {
                     this.Task.VideoTunes.Add(VideoTune.FastDecode);
                 }
+
+                this.NotifyOfPropertyChange(() => this.VideoTune);
+                this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.ResetAdvancedTab();
             }
         }
 
@@ -751,8 +775,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.VideoProfile = value;
                 this.NotifyOfPropertyChange(() => this.VideoProfile);
-                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
-                ResetAdvancedTab();
+                this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.ResetAdvancedTab();
             }
         }
 
@@ -769,8 +793,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.VideoLevel = value;
                 this.NotifyOfPropertyChange(() => this.VideoLevel);
-                this.NotifyOfPropertyChange(() => FullOptionsTooltip);
-                ResetAdvancedTab();
+                this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.ResetAdvancedTab();
             }
         }
 
@@ -928,6 +952,8 @@ namespace HandBrakeWPF.ViewModels
             this.Task = task;
             this.SetRF(task.Quality);
 
+            this.ShowPeakFramerate = this.IsPeakFramerate;
+
             this.NotifyOfPropertyChange(() => this.IsConstantFramerate);
             this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
             this.NotifyOfPropertyChange(() => this.IsPeakFramerate);
@@ -939,17 +965,23 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.RF);
             this.NotifyOfPropertyChange(() => this.DisplayRF);
             this.NotifyOfPropertyChange(() => this.IsLossless);
-            this.NotifyOfPropertyChange(() => this.Task.VideoBitrate);
+            this.NotifyOfPropertyChange(() => this.VideoBitrate);
             this.NotifyOfPropertyChange(() => this.Task.Quality);
             this.NotifyOfPropertyChange(() => this.Task.TwoPass);
             this.NotifyOfPropertyChange(() => this.Task.TurboFirstPass);
-
             this.NotifyOfPropertyChange(() => this.VideoTune);
             this.NotifyOfPropertyChange(() => this.VideoProfile);
-            this.NotifyOfPropertyChange(() => this.VideoProfile);
+            this.NotifyOfPropertyChange(() => this.VideoPreset);
             this.NotifyOfPropertyChange(() => this.VideoLevel);
             this.NotifyOfPropertyChange(() => this.FastDecode);
             this.NotifyOfPropertyChange(() => this.ExtraArguments);
+
+            HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(this.SelectedVideoEncoder));
+            if (encoder != null && this.VideoPreset != null)
+            {
+                int index = encoder.Presets.IndexOf(this.VideoPreset.ShortName);
+                this.VideoPresetValue = index;
+            }          
         }
 
         /// <summary>

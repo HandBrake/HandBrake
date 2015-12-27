@@ -1160,6 +1160,10 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.ShowSourceSelection = true;
             }
+            else
+            {
+                this.HasSource = true; // Enable the GUI. Needed for in-line queue.
+            }
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
