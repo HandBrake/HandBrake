@@ -7,7 +7,6 @@
  <h3> GitHub  </h3>
  The main development repository for the HandBrake Project can be found on GitHub at <br />
  <a href="https://github.com/HandBrake/HandBrake">Official HandBrake Source Repository</a> <br />
- Our SVN is now read-only.
  <br /><br />
 
  <h3> HandBrake </h3>

@@ -5,8 +5,8 @@ Changes between 0.10.2 and 1.0
 
   Core
     - Updated Libraries:
-        LibAV 11.2
-        x265 1.7
+        LibAV 11.3
+        x265 1.8
         x264 r144
         libmfx v6.0
         freetype 2.6
@@ -23,14 +23,14 @@ Changes between 0.10.2 and 1.0
     - Misc Bug fixes and improvements.
     
   Windows
-    - The UI now interacts with LibHB directly rather than using HandBrakeCLI.exe. This has 2 benefits.
+    - The UI now interacts with LibHB directly rather than using HandBrakeCLI.exe. This has several benefits.
         Encodes and now be paused and resumed.
         Stopping an encode will finalise the file so that it's playable.
+		Reduced Installer / Install Size. (HandBrakeCLI is no longer included in the package)
     - Added support for Quality based audio encoding.
     - Improved the "Configure Default" options for the Audio and Subtitle Tabs
         Audio: Default settings for track behavior is now configurable.
         Subtitle: Burn-in Behavior mode now selectable.
-    - Reduced Installer / Install Size. (HandBrakeCLI is no longer included in the package)
     - Numerous Usability and User Interface Experience enhancements.
     
   Mac
