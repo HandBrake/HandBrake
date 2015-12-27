@@ -41,10 +41,10 @@ struct hb_work_private_s
 };
 
 #define SSA_2_HB_TIME(hr,min,sec,centi) \
-    ( 90L * ( hr    * 1000L * 60 * 60 +\
-              min   * 1000L * 60 +\
-              sec   * 1000L +\
-              centi * 10L ) )
+    ( 90LL * ( hr    * 1000LL * 60 * 60 +\
+              min   * 1000LL * 60 +\
+              sec   * 1000LL +\
+              centi * 10LL ) )
 
 #define SSA_VERBOSE_PACKETS 0
 

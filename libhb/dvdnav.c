@@ -1323,7 +1323,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
             longest_duration_fallback = title->duration;
             longest_fallback = title->index;
         }
-        if ( title->duration > 90000L * 60 * 30 )
+        if ( title->duration > 90000LL * 60 * 30 )
         {
             avg_duration += title->duration;
             avg_cnt++;
@@ -1419,7 +1419,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         longest = longest_title;
     }
     if ((float)longest_duration_fallback * 0.7 > longest_duration &&
-        longest_duration < 90000L * 60 * 30 )
+        longest_duration < 90000LL * 60 * 30 )
     {
         float factor = (float)avg_duration / longest_duration;
         if ( factor > 1 )

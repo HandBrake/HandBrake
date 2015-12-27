@@ -1912,7 +1912,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 static void compute_frame_duration( hb_work_private_t *pv )
 {
     double duration = 0.;
-    int64_t max_fps = 64L;
+    int64_t max_fps = 64LL;
 
     // context->time_base may be in fields, so set the max *fields* per second
     if ( pv->context->ticks_per_frame > 1 )
@@ -1942,14 +1942,14 @@ static void compute_frame_duration( hb_work_private_t *pv )
             // Because the time bases are so screwed up, we only take values
             // in the range 8fps - 64fps.
             AVRational *tb = NULL;
-            if ( st->avg_frame_rate.den * 64L > st->avg_frame_rate.num &&
-                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8L )
+            if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
+                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8LL )
             {
                 tb = &(st->avg_frame_rate);
                 duration =  (double)tb->den / (double)tb->num;
             }
-            else if ( st->time_base.num * 64L > st->time_base.den &&
-                      st->time_base.den > st->time_base.num * 8L )
+            else if ( st->time_base.num * 64LL > st->time_base.den &&
+                      st->time_base.den > st->time_base.num * 8LL )
             {
                 tb = &(st->time_base);
                 duration =  (double)tb->num / (double)tb->den;
@@ -1957,7 +1957,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         }
         if ( !duration &&
              pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8L )
+             pv->context->time_base.den > pv->context->time_base.num * 8LL )
         {
             duration =  (double)pv->context->time_base.num /
                         (double)pv->context->time_base.den;
@@ -1972,7 +1972,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
     else
     {
         if ( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8L )
+             pv->context->time_base.den > pv->context->time_base.num * 8LL )
         {
             duration =  (double)pv->context->time_base.num /
                             (double)pv->context->time_base.den;

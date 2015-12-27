@@ -606,7 +606,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             cur = sync->cur;
             cur->s.start = sync->next_start;
-            cur->s.stop = cur->s.start + 90000L *
+            cur->s.stop = cur->s.start + 90000LL *
                           job->vrate.den / job->vrate.num;
 
             /* Make sure last frame is reflected in frame count */

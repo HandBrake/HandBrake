@@ -647,7 +647,7 @@ void correct_framerate( hb_interjob_t * interjob, hb_job_t * job )
 
     // compute actual output vrate from first pass
     int64_t num, den;
-    num = interjob->out_frame_count * 90000L;
+    num = interjob->out_frame_count * 90000LL;
     den = interjob->total_time;
     hb_limit_rational64(&num, &den, num, den, INT_MAX);
 
