@@ -731,9 +731,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                VideoTune tune = this.Task.VideoTunes.FirstOrDefault(t => !Equals(t, VideoTune.FastDecode))
-                                 ?? VideoTune.None;
-                return tune;
+                return this.videoTune;
             }
             set
             {
@@ -975,6 +973,9 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.VideoLevel);
             this.NotifyOfPropertyChange(() => this.FastDecode);
             this.NotifyOfPropertyChange(() => this.ExtraArguments);
+
+            this.VideoTune = (task.VideoTunes != null && task.VideoTunes.Any() ? task.VideoTunes.FirstOrDefault(t => !Equals(t, VideoTune.FastDecode)) : this.VideoTunes.FirstOrDefault())
+                                        ?? VideoTune.None;
 
             HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(this.SelectedVideoEncoder));
             if (encoder != null && this.VideoPreset != null)
