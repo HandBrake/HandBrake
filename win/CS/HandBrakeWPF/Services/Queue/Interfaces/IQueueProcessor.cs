@@ -44,7 +44,6 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         event EventHandler QueuePaused;
 
-
         /// <summary>
         /// Low Diskspace has been detected.
         /// Checked before each job starts.
@@ -61,7 +60,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         int Count { get; }
 
         /// <summary>
-        /// The number of errors detected in the queue.
+        /// Gets the number of errors detected in the queue.
         /// </summary>
         int ErrorCount { get; }
 

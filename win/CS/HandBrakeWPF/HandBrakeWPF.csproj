@@ -144,6 +144,7 @@
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
+    <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\MP4Helper.cs" />
     <Compile Include="Helpers\TimeSpanHelper.cs" />
     <Compile Include="Helpers\Validate.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />

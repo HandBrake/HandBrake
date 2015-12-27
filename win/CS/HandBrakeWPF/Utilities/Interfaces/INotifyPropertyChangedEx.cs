@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities.Interfaces
     public interface INotifyPropertyChangedEx : INotifyPropertyChanged
     {
         /// <summary>
-        /// Enables/Disables property change notification.
+        /// Gets or sets a value indicating whether Enables/Disables property change notification.
         /// </summary>
         bool IsNotifying { get; set; }
 

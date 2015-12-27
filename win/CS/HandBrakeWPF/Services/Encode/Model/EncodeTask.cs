@@ -9,10 +9,8 @@
 
 namespace HandBrakeWPF.Services.Encode.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
 
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -20,7 +18,6 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrakeWPF.Utilities;
 
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
@@ -29,7 +26,6 @@ namespace HandBrakeWPF.Services.Encode.Model
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
     using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using SubtitleType = HandBrakeWPF.Services.Encode.Model.Models.SubtitleType;
     using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
     using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
     using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
@@ -464,53 +460,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public string ExtraAdvancedArguments { get; set; }
 
-        #endregion
-
-        #region Preview
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsPreviewEncode.
-        /// </summary>
-        public bool IsPreviewEncode { get; set; }
-
-        /// <summary>
-        /// Gets or sets PreviewEncodeDuration.
-        /// </summary>
-        public int? PreviewEncodeDuration { get; set; }
-
-        /// <summary>
-        /// Gets or sets PreviewEncodeStartAt.
-        /// </summary>
-        public int? PreviewEncodeStartAt { get; set; }
-
-        #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Gets a value indicating whether M4v extension is required.
-        /// </summary>
-        public bool RequiresM4v
-        {
-            get
-            {
-                if (this.OutputFormat == OutputFormat.Mp4)
-                {
-                    bool audio =
-                        this.AudioTracks.Any(
-                            item =>
-                            item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.Ac3
-                            || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
-
-                    bool subtitles = this.SubtitleTracks.Any(track => track.SubtitleType != SubtitleType.VobSub);
-
-                    return audio || subtitles;
-                }
-
-                return false;
-            }
-        }
-
         /// <summary>
         /// Gets or sets a value indicating whether advanced panel enabled.
         /// </summary>
@@ -530,34 +479,24 @@ namespace HandBrakeWPF.Services.Encode.Model
             }
         }
 
-        /// <summary>
-        /// Gets the picture settings desc.
-        /// </summary>
-        public string PictureSettingsDesc
-        {
-            get
-            {
-                string resolution = string.Empty; 
-                switch (this.Anamorphic)
-                {
-                    case Anamorphic.Strict:
-                        resolution = "Anamorphic: Strict";
-                        break;
-                    case Anamorphic.Loose:
-                        resolution = "Anamorphic: Loose, Width: " + this.Width;
-                        break;
-                    case Anamorphic.Custom:
-                        resolution = "Anamorphic: Custom, Resolution: " + this.Width + "x" + this.Height;
-                        break;
-                    case Anamorphic.None:
-                        resolution = "Resolution: " + this.Width + "x" + this.Height;
-                        break;
-                }
+        #endregion
 
-                return resolution + Environment.NewLine + "Crop Top: " + this.Cropping.Top + ", Botton: " + this.Cropping.Bottom + ", Left: "
-                       + this.Cropping.Left + ", Right: " + this.Cropping.Right;
-            }
-        }
+        #region Preview
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsPreviewEncode.
+        /// </summary>
+        public bool IsPreviewEncode { get; set; }
+
+        /// <summary>
+        /// Gets or sets PreviewEncodeDuration.
+        /// </summary>
+        public int? PreviewEncodeDuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets PreviewEncodeStartAt.
+        /// </summary>
+        public int? PreviewEncodeStartAt { get; set; }
 
         #endregion
     }

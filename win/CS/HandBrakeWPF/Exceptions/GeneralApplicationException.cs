@@ -44,8 +44,10 @@ namespace HandBrakeWPF.Exceptions
         /// <param name="solution">
         /// The solution.
         /// </param>
-        public GeneralApplicationException(string error, string solution) : this(error, solution, null)
-        {}
+        public GeneralApplicationException(string error, string solution)
+            : this(error, solution, null)
+        {
+        }
 
         /// <summary>
         /// Gets or sets FailureReason.

@@ -97,8 +97,7 @@ namespace HandBrake.ApplicationServices.Interop
                 encoder.name,
                 encoder.codec,
                 HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec),
-                encoder.short_name
-                );
+                encoder.short_name);
 
             return result;
         }

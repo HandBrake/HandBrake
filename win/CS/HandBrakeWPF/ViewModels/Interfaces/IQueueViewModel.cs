@@ -14,6 +14,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IQueueViewModel
     {
+        /// <summary>
+        /// The when done action after a queue completes.
+        /// </summary>
+        /// <param name="action">
+        /// The action.
+        /// </param>
         void WhenDone(string action);
     }
 }

@@ -14,8 +14,6 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
     using System;
 
-    using HandBrake.ApplicationServices.Model;
-
     using HandBrakeWPF.Services.Queue.Model;
 
     /// <summary>

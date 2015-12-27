@@ -366,7 +366,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The Video Bitrate.
+        /// Gets or sets the Video Bitrate.
         /// </summary>
         public int? VideoBitrate
         {

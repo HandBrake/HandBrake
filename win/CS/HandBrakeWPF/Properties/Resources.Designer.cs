@@ -1534,6 +1534,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any settings you changed may need to be reset the next time HandBrake launches..
+        /// </summary>
+        public static string SettingService_SaveErrorReset {
+            get {
+                return ResourceManager.GetString("SettingService_SaveErrorReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>
@@ -1670,6 +1679,51 @@ namespace HandBrakeWPF.Properties {
         public static string Updated {
             get {
                 return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A problem occured when trying to save your preferences..
+        /// </summary>
+        public static string UserSettings_AnErrorOccured {
+            get {
+                return ResourceManager.GetString("UserSettings_AnErrorOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load user settings file: {0}.
+        /// </summary>
+        public static string UserSettings_UnableToLoad {
+            get {
+                return ResourceManager.GetString("UserSettings_UnableToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one..
+        /// </summary>
+        public static string UserSettings_UnableToLoadSolution {
+            get {
+                return ResourceManager.GetString("UserSettings_UnableToLoadSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your user settings file was corrupted or inaccessible. Settings have been reset to defaults..
+        /// </summary>
+        public static string UserSettings_YourSettingsAreCorrupt {
+            get {
+                return ResourceManager.GetString("UserSettings_YourSettingsAreCorrupt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning, your settings have been reset!.
+        /// </summary>
+        public static string UserSettings_YourSettingsHaveBeenReset {
+            get {
+                return ResourceManager.GetString("UserSettings_YourSettingsHaveBeenReset", resourceCulture);
             }
         }
         

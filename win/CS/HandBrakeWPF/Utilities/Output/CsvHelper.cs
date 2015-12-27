@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CsvHelper.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Utilitiy functions for writing CSV files
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Utilities.Output
 {

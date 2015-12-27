@@ -1974,7 +1974,7 @@ namespace HandBrakeWPF.ViewModels
                 switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
                     case 0: // Auto
-                        newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";
+                        newExtension = MP4Helper.RequiresM4v(this.CurrentTask) ? ".m4v" : ".mp4";
                         break;
                     case 1: // MP4
                         newExtension = ".mp4";
