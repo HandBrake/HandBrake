@@ -2114,7 +2114,7 @@ static void import_pic_0_0_0(hb_value_t *preset)
         const char *s;
         char *end;
         int pic_par = strtol(v, &end, 0);
-        if (end != NULL)
+        if (end != v)
         {
             switch (pic_par)
             {
