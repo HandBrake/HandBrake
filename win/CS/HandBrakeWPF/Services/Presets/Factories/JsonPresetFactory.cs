@@ -611,8 +611,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 default:
                     return OutputFormat.Mp4;
                 case "m4v":
+                case "mp4":
+                case "av_mp4":
                     return OutputFormat.Mp4;
                 case "mkv":
+                case "av_mkv":
                     return OutputFormat.Mkv;
             }
         }
