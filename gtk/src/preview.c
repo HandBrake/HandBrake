@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * preview.c
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * preview.c is free software.
  *
@@ -10,7 +10,18 @@
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
+ * preview.c is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with main.c.  If not, write to:
+ *  The Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor
+ *  Boston, MA  02110-1301, USA.
  */
+
 #include <unistd.h>
 #include <glib.h>
 #include <glib/gstdio.h>

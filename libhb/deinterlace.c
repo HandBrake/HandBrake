@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2006 Michael Niedermayer <michaelni@gmx.at>
+ Copyright (C) 2006-2016 Michael Niedermayer <michaelni@gmx.at>
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

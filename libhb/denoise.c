@@ -1,6 +1,6 @@
 /*
- Copyright (c) 2003 Daniel Moreno <comac AT comac DOT darktech DOT org>
- Copyright (c) 2012 Loren Merritt
+ Copyright (c) 2003-2016 Daniel Moreno <comac AT comac DOT darktech DOT org>
+ Copyright (c) 2012-2016 Loren Merritt
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
