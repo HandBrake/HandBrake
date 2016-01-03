@@ -1,10 +1,10 @@
-diff -ur libav-v11.3-0-g00abc00-orig/libavcodec/avcodec.h libav-v11.3-0-g00abc00/libavcodec/avcodec.h
---- libav-v11.3-0-g00abc00-orig/libavcodec/avcodec.h	2015-03-08 18:51:11.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavcodec/avcodec.h	2015-11-05 08:29:24.381723633 -0800
-@@ -917,6 +917,14 @@
-      * Stereoscopic 3D information in form of the AVStereo3D struct.
+diff -ur libav-v10.1.orig/libavcodec/avcodec.h libav-v10.1/libavcodec/avcodec.h
+--- libav-v10.1.orig/libavcodec/avcodec.h	2014-05-10 10:03:46.000000000 -0600
++++ libav-v10.1/libavcodec/avcodec.h	2016-01-03 11:08:50.502675261 -0700
+@@ -923,8 +923,22 @@
+      * @endcode
       */
-     AV_PKT_DATA_STEREO3D,
+     AV_PKT_DATA_H263_MB_INFO,
 +
 +    /**
 +     * This side data contains an integer value representing the stream index
@@ -15,13 +15,62 @@ diff -ur libav-v11.3-0-g00abc00-orig/libavcodec/avcodec.h libav-v11.3-0-g00abc00
 +    AV_PKT_DATA_FALLBACK_TRACK,
  };
  
- typedef struct AVPacketSideData {
-Only in libav-v11.3-0-g00abc00/libavcodec: avcodec.h.orig
-diff -ur libav-v11.3-0-g00abc00-orig/libavformat/avformat.h libav-v11.3-0-g00abc00/libavformat/avformat.h
---- libav-v11.3-0-g00abc00-orig/libavformat/avformat.h	2015-03-08 18:51:11.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavformat/avformat.h	2015-11-05 08:28:54.944222066 -0800
-@@ -1361,6 +1361,16 @@
- AVStream *avformat_new_stream(AVFormatContext *s, const AVCodec *c);
++typedef struct AVPacketSideData {
++    uint8_t *data;
++    int      size;
++    enum AVPacketSideDataType type;
++} AVPacketSideData;
++
+ /**
+  * This structure stores compressed data. It is typically exported by demuxers
+  * and then passed as input to decoders, or received as output from encoders and
+@@ -981,11 +995,7 @@
+      * Additional packet data that can be provided by the container.
+      * Packet can contain several types of side information.
+      */
+-    struct {
+-        uint8_t *data;
+-        int      size;
+-        enum AVPacketSideDataType type;
+-    } *side_data;
++    AVPacketSideData *side_data;
+     int side_data_elems;
+ 
+     /**
+diff -ur libav-v10.1.orig/libavformat/avformat.h libav-v10.1/libavformat/avformat.h
+--- libav-v10.1.orig/libavformat/avformat.h	2014-05-10 10:03:46.000000000 -0600
++++ libav-v10.1/libavformat/avformat.h	2016-01-03 10:55:46.558170954 -0700
+@@ -755,6 +755,28 @@
+      */
+     AVPacket attached_pic;
+ 
++    /**
++     * An array of side data that applies to the whole stream (i.e. the
++     * container does not allow it to change between packets).
++     *
++     * There may be no overlap between the side data in this array and side data
++     * in the packets. I.e. a given side data is either exported by the muxer
++     * (demuxing) / set by the caller (muxing) in this array, then it never
++     * appears in the packets, or the side data is exported / sent through
++     * the packets (always in the first packet where the value becomes known or
++     * changes), then it does not appear in this array.
++     *
++     * - demuxing: Set by libavformat when the stream is created.
++     * - muxing: May be set by the caller before avformat_write_header().
++     *
++     * Freed by libavformat in avformat_free_context().
++     */
++    AVPacketSideData *side_data;
++    /**
++     * The number of elements in the AVStream.side_data array.
++     */
++    int            nb_side_data;
++
+     /*****************************************************************
+      * All fields below this line are not part of the public API. They
+      * may not be used outside of libavformat and can be changed and
+@@ -1307,6 +1329,29 @@
+ AVInputFormat *av_probe_input_format(AVProbeData *pd, int is_opened);
  
  /**
 + * Allocate new information from stream.
@@ -33,17 +82,27 @@ diff -ur libav-v11.3-0-g00abc00-orig/libavformat/avformat.h libav-v11.3-0-g00abc
 + */
 +uint8_t *av_stream_new_side_data(AVStream *stream,
 +                                 enum AVPacketSideDataType type, int size);
++
 +/**
-  * Get side information from stream.
++ * Get side information from stream.
++ *
++ * @param stream stream
++ * @param type desired side information type
++ * @param size pointer for side information size to store (optional)
++ * @return pointer to data if present or NULL otherwise
++ */
++uint8_t *av_stream_get_side_data(AVStream *stream,
++                                 enum AVPacketSideDataType type, int *size);
++
++
++/**
+  * Guess the file format.
   *
-  * @param stream stream
-Only in libav-v11.3-0-g00abc00/libavformat: avformat.h.orig
-Only in libav-v11.3-0-g00abc00/libavformat: internal.h.orig
-Only in libav-v11.3-0-g00abc00/libavformat: mov.c.orig
-diff -ur libav-v11.3-0-g00abc00-orig/libavformat/movenc.c libav-v11.3-0-g00abc00/libavformat/movenc.c
---- libav-v11.3-0-g00abc00-orig/libavformat/movenc.c	2015-03-08 18:51:11.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavformat/movenc.c	2015-11-05 08:28:54.949222151 -0800
-@@ -2211,10 +2211,21 @@
+  * @param pd        data to be probed
+diff -ur libav-v10.1.orig/libavformat/movenc.c libav-v10.1/libavformat/movenc.c
+--- libav-v10.1.orig/libavformat/movenc.c	2014-05-10 10:03:46.000000000 -0600
++++ libav-v10.1/libavformat/movenc.c	2016-01-03 11:25:26.833901308 -0700
+@@ -2106,10 +2106,21 @@
              mov->tracks[i].tref_id  = mov->tracks[mov->chapter_track].track_id;
          }
      for (i = 0; i < mov->nb_streams; i++) {
@@ -69,15 +128,88 @@ diff -ur libav-v11.3-0-g00abc00-orig/libavformat/movenc.c libav-v11.3-0-g00abc00
          }
      }
  
-Only in libav-v11.3-0-g00abc00/libavformat: movenc.c.orig
-Only in libav-v11.3-0-g00abc00/libavformat: replaygain.c.orig
-diff -ur libav-v11.3-0-g00abc00-orig/libavformat/utils.c libav-v11.3-0-g00abc00/libavformat/utils.c
---- libav-v11.3-0-g00abc00-orig/libavformat/utils.c	2015-03-08 18:51:11.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavformat/utils.c	2015-11-05 08:32:19.646709922 -0800
-@@ -3126,3 +3126,41 @@
-     }
-     return NULL;
+diff -ur libav-v10.1.orig/libavformat/utils.c libav-v10.1/libavformat/utils.c
+--- libav-v10.1.orig/libavformat/utils.c	2014-05-10 10:03:46.000000000 -0600
++++ libav-v10.1/libavformat/utils.c	2016-01-03 11:03:50.830126004 -0700
+@@ -2592,6 +2592,36 @@
+     return AVERROR(ENOSYS);
  }
+ 
++static void free_stream(AVStream **pst)
++{
++    AVStream *st = *pst;
++    int i;
++
++    if (!st)
++        return;
++
++    for (i = 0; i < st->nb_side_data; i++)
++        av_freep(&st->side_data[i].data);
++    av_freep(&st->side_data);
++
++    if (st->parser)
++        av_parser_close(st->parser);
++
++    if (st->attached_pic.data)
++        av_free_packet(&st->attached_pic);
++
++    av_dict_free(&st->metadata);
++    av_freep(&st->probe_data.buf);
++    av_free(st->index_entries);
++    av_free(st->codec->extradata);
++    av_free(st->codec->subtitle_header);
++    av_free(st->codec);
++    av_free(st->priv_data);
++    av_free(st->info);
++
++    av_freep(pst);
++}
++
+ void avformat_free_context(AVFormatContext *s)
+ {
+     int i;
+@@ -2603,21 +2633,7 @@
+ 
+     for (i = 0; i < s->nb_streams; i++) {
+         /* free all data in a stream component */
+-        st = s->streams[i];
+-        if (st->parser) {
+-            av_parser_close(st->parser);
+-        }
+-        if (st->attached_pic.data)
+-            av_free_packet(&st->attached_pic);
+-        av_dict_free(&st->metadata);
+-        av_freep(&st->probe_data.buf);
+-        av_free(st->index_entries);
+-        av_free(st->codec->extradata);
+-        av_free(st->codec->subtitle_header);
+-        av_free(st->codec);
+-        av_free(st->priv_data);
+-        av_free(st->info);
+-        av_free(st);
++        free_stream(&s->streams[i]);
+     }
+     for (i = s->nb_programs - 1; i >= 0; i--) {
+         av_dict_free(&s->programs[i]->metadata);
+@@ -3490,3 +3506,56 @@
+ 
+     return 0;
+ }
++
++uint8_t *av_stream_get_side_data(AVStream *st, enum AVPacketSideDataType type,
++                                 int *size)
++{
++    int i;
++
++    for (i = 0; i < st->nb_side_data; i++) {
++        if (st->side_data[i].type == type) {
++            if (size)
++                *size = st->side_data[i].size;
++            return st->side_data[i].data;
++        }
++    }
++    return NULL;
++}
 +
 +uint8_t *av_stream_new_side_data(AVStream *st, enum AVPacketSideDataType type,
 +                                 int size)
@@ -116,4 +248,3 @@ diff -ur libav-v11.3-0-g00abc00-orig/libavformat/utils.c libav-v11.3-0-g00abc00/
 +    return data;
 +}
 +
-Only in libav-v11.3-0-g00abc00/libavformat: utils.c.orig
