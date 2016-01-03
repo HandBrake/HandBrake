@@ -143,7 +143,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                return this.mixDown;
+                return this.IsPassthru ? Mixdown.Auto : this.mixDown;
             }
 
             set

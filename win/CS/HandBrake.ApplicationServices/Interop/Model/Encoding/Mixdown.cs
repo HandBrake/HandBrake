@@ -22,11 +22,11 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         DolbyProLogicII = 0,
 
         [Display(Name = "None")]
-        [ShortName("dpl2")]
+        [ShortName("none")]
         None,
 
         [Display(Name = "Automatic")]
-        [ShortName("dpl2")]
+        [ShortName("none")]
         Auto,
 
         [Display(Name = "Mono")]
