@@ -457,24 +457,22 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             // VFR / CFR
             int fm = job.FramerateMode == FramerateMode.CFR ? 1 : job.FramerateMode == FramerateMode.PFR ? 2 : 0;
+            int? num = null, den = null;
             if (job.Framerate != null)
             {
                 IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.Framerate.Value.ToString(CultureInfo.InvariantCulture));
                 int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
 
-                int? num = null;
-                int? den = null;
                 if (vrate > 0)
                 {
                     num = 27000000;
                     den = vrate;
                 }
-
-                string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
-
-                Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
-                filter.FilterList.Add(framerateShaper);
             }
+
+            string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
+            Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
+            filter.FilterList.Add(framerateShaper);
 
             // Deblock
             if (job.Deblock >= 5)
