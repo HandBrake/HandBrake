@@ -1295,7 +1295,7 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH265;
             this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264;
             this.DisplayTuneControls = SelectedVideoEncoder == VideoEncoder.X264 || SelectedVideoEncoder == VideoEncoder.X265;
-            this.DisplayLevelControl = SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.QuickSync;
+            this.DisplayLevelControl = SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265;
 
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);
