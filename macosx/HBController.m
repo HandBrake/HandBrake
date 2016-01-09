@@ -118,6 +118,9 @@
 /// The current selected preset.
 @property (nonatomic, strong) HBPreset *currentPreset;
 
+/// Whether the job has been edited after a preset was applied.
+@property (nonatomic) BOOL edited;
+
 ///  The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
 
@@ -462,7 +465,7 @@
     }
     if (action == @selector(selectPresetFromMenu:))
     {
-        if ([menuItem.representedObject isEqualTo:self.currentPreset])
+        if ([menuItem.representedObject isEqualTo:self.currentPreset] && self.edited == NO)
         {
             menuItem.state = NSOnState;
         }
@@ -1011,6 +1014,7 @@
     {
         // Change UI to show "Custom" settings are being used
         self.job.presetName = NSLocalizedString(@"Custom", @"");
+        self.edited = YES;
         [self updateFileName];
     }
 }
@@ -1354,11 +1358,38 @@
 
 #pragma mark -  Presets
 
+- (void)setCurrentPreset:(HBPreset *)currentPreset
+{
+    NSParameterAssert(currentPreset);
+
+    if (currentPreset != _currentPreset)
+    {
+        NSUndoManager *undo = self.window.undoManager;
+        [[undo prepareWithInvocationTarget:self] setCurrentPreset:_currentPreset];
+
+        _currentPreset = currentPreset;
+    }
+}
+
+- (void)setEdited:(BOOL)edited
+{
+    if (edited != _edited)
+    {
+        NSUndoManager *undo = self.window.undoManager;
+        [[undo prepareWithInvocationTarget:self] setEdited:_edited];
+
+        _edited = edited;
+    }
+}
+
 - (void)applyPreset:(HBPreset *)preset
 {
-    if (preset != nil && self.job)
+    NSParameterAssert(preset);
+
+    if (self.job)
     {
         self.currentPreset = preset;
+        self.edited = NO;
 
         // Remove the job observer so we don't update the file name
         // too many times while the preset is being applied
