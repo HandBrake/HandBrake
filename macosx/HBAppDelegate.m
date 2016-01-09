@@ -302,17 +302,17 @@
 
     __block NSUInteger i = 0;
     __block BOOL builtInEnded = NO;
-    [self.presetsManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
+    [self.presetsManager.root enumerateObjectsUsingBlock:^(HBPreset *obj, NSIndexPath *idx, BOOL *stop)
      {
          if (idx.length)
          {
              NSMenuItem *item = [[NSMenuItem alloc] init];
-             item.title = [obj name];
+             item.title = obj.name;
              item.tag = i++;
 
              // Set an action only to the actual presets,
              // not on the folders.
-             if ([obj isLeaf])
+             if (obj.isLeaf)
              {
                  item.action = @selector(selectPresetFromMenu:);
                  item.representedObject = obj;
@@ -320,12 +320,12 @@
              // Make the default preset font bold.
              if ([obj isEqualTo:self.presetsManager.defaultPreset])
              {
-                 NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:[obj name]
+                 NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:obj.name
                                                                                 attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
                  [item setAttributedTitle:newTitle];
              }
              // Add a separator line after the last builtIn preset
-             if ([obj isBuiltIn] == NO && builtInEnded == NO)
+             if (obj.isBuiltIn == NO && builtInEnded == NO)
              {
                  [self.presetsMenu addItem:[NSMenuItem separatorItem]];
                  builtInEnded = YES;

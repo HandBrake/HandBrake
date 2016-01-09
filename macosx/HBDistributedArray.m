@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBDistributedArray.h"
+#import "HBUtilities.h"
 
 #include <semaphore.h>
 
@@ -90,7 +91,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         _mutex = sem_open(name, O_CREAT, 0777, 1);
         if (_mutex == SEM_FAILED)
         {
-            NSLog(@"%s: %d\n", "Error in creating semaphore: ", errno);
+            [HBUtilities writeToActivityLog:"%s: %d\n", "Error in creating semaphore: ", errno];
         }
 
         [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:HBDistributedArraWrittenToDisk object:nil];
@@ -152,7 +153,6 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         // File was modified while we waited on the lock
         // reload it
         [self reload];
-        NSLog(@"WTF");
         return HBDistributedArrayContentReload;
     }
 
@@ -253,7 +253,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
     if (![NSKeyedArchiver archiveRootObject:temp toFile:self.fileURL.path])
     {
-        NSLog(@"failed to write the queue to disk");
+        [HBUtilities writeToActivityLog:"Failed to write the queue to disk"];
     }
 
     // Send a distributed notification.
