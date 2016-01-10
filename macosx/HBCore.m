@@ -156,30 +156,34 @@ static void hb_error_handler(const char *errmsg)
 
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:url.path];
 
-    if (detector.isVideoDVD)
+    if (detector.isVideoDVD || detector.isVideoBluRay)
     {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
+        [HBUtilities writeToActivityLog:"%s trying to open a physical disk at: %s", self.name.UTF8String, url.path.UTF8String];
+        void *lib = NULL;
 
-        [HBUtilities writeToActivityLog:"%s trying to open a physical dvd at: %s", self.name.UTF8String, url.path.UTF8String];
-
-        // Notify the user that we don't support removal of copy protection.
-        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss)
+        if (detector.isVideoDVD)
         {
-            // libdvdcss was found so all is well
-            [HBUtilities writeToActivityLog:"%s libdvdcss.2.dylib found for decrypting physical dvd", self.name.UTF8String];
-            dlclose(dvdcss);
+            lib = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+        }
+        else if (detector.isVideoBluRay)
+        {
+            lib = dlopen("libaacs.dylib", RTLD_LAZY);
+        }
+
+        if (lib)
+        {
+            dlclose(lib);
+            [HBUtilities writeToActivityLog:"%s library found for decrypting physical disk", self.name.UTF8String];
         }
         else
         {
-            // compatible libdvdcss not found
-            [HBUtilities writeToActivityLog:"%s, libdvdcss.2.dylib not found for decrypting physical dvd", self.name.UTF8String];
+            // Notify the user that we don't support removal of copy protection.
+            [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disk", self.name.UTF8String];
 
             if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain"
                                              code:101
-                                         userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
+                                         userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disk" }];
             }
         }
     }
@@ -205,7 +209,7 @@ static void hb_error_handler(const char *errmsg)
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
-    if (detector.isVideoDVD)
+    if (detector.isVideoDVD || detector.isVideoBluRay)
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
