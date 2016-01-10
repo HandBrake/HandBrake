@@ -255,6 +255,16 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
+- (void)setRotate:(int)rotate
+{
+    if (rotate != _rotate)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setRotate:_rotate];
+    }
+    _rotate = rotate;
+    [self postChangedNotification];
+}
+
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retval = nil;
@@ -316,6 +326,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
         copy->_deblock = _deblock;
         copy->_grayscale = _grayscale;
+        copy->_rotate = _rotate;
     }
 
     return copy;
@@ -346,6 +357,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     encodeInt(_deblock);
     encodeBool(_grayscale);
+    encodeInt(_rotate);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -366,6 +378,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     decodeInt(_deblock);
     decodeBool(_grayscale);
+    decodeInt(_rotate);
 
     _notificationsEnabled = YES;
 
@@ -390,6 +403,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     preset[@"PictureDeblock"] = @(self.deblock);
     preset[@"VideoGrayScale"] = @(self.grayscale);
+    preset[@"PictureRotate"] = @(self.grayscale);
 }
 
 - (void)applyPreset:(HBPreset *)preset
@@ -419,6 +433,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         self.deblock = [preset[@"PictureDeblock"] intValue];
 
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
+        self.rotate = [preset[@"PictureRotate"] intValue];
     }
 
     self.notificationsEnabled = YES;

@@ -29,6 +29,7 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite, copy) NSString *denoiseCustomString;
 
 @property (nonatomic, readwrite) int deblock;
+@property (nonatomic, readwrite) int rotate;
 @property (nonatomic, readwrite) BOOL grayscale;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;

@@ -482,6 +482,13 @@
         hb_add_filter(job, filter, NULL);
     }
 
+    // Add rotate filter
+    if (self.filters.rotate)
+    {
+        filter = hb_filter_init(HB_FILTER_ROTATE);
+        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d", self.filters.rotate].UTF8String);
+    }
+
     // Add framerate shaping filter
     filter = hb_filter_init(HB_FILTER_VFR);
     hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
