@@ -5,6 +5,10 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBUtilities.h"
+
+#import "HBTitle.h"
+#import "HBJob.h"
+
 #include "common.h"
 
 @implementation HBUtilities
@@ -45,6 +49,129 @@
         fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str);
     }
     va_end(args);
+}
+
++ (NSURL *)mediaURLFromURL:(NSURL *)URL
+{
+    NSURL *mediaURL = URL;
+
+    // We check to see if the chosen file at path is a package
+    if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:URL.path])
+    {
+        [HBUtilities writeToActivityLog:"trying to open a package at: %s", URL.path.UTF8String];
+        // We check to see if this is an .eyetv package
+        if ([URL.pathExtension isEqualToString:@"eyetv"])
+        {
+            [HBUtilities writeToActivityLog:"trying to open eyetv package"];
+            // We're looking at an EyeTV package - try to open its enclosed .mpg media file
+            NSString *mpgname;
+            NSUInteger n = [[URL.path stringByAppendingString: @"/"]
+                            completePathIntoString: &mpgname caseSensitive: YES
+                            matchesIntoArray: nil
+                            filterTypes: @[@"mpg"]];
+            if (n > 0)
+            {
+                // Found an mpeg inside the eyetv package, make it our scan path
+                [HBUtilities writeToActivityLog:"found mpeg in eyetv package"];
+                mediaURL = [NSURL fileURLWithPath:mpgname];
+            }
+            else
+            {
+                // We did not find an mpeg file in our package, so we do not call performScan
+                [HBUtilities writeToActivityLog:"no valid mpeg in eyetv package"];
+            }
+        }
+        // We check to see if this is a .dvdmedia package
+        else if ([URL.pathExtension isEqualToString:@"dvdmedia"])
+        {
+            // path IS a package - but dvdmedia packages can be treaded like normal directories
+            [HBUtilities writeToActivityLog:"trying to open dvdmedia package"];
+        }
+        else
+        {
+            // The package is not an eyetv package, try to open it anyway
+            [HBUtilities writeToActivityLog:"not a known to package"];
+        }
+    }
+    else
+    {
+        // path is not a package, so we call perform scan directly on our file
+        if ([URL.lastPathComponent isEqualToString:@"VIDEO_TS"])
+        {
+            [HBUtilities writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
+            // If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
+            mediaURL = URL.URLByDeletingLastPathComponent;
+        }
+        else
+        {
+            [HBUtilities writeToActivityLog:"trying to open a folder or file"];
+        }
+    }
+
+    return mediaURL;
+}
+
++ (NSString *)automaticNameForJob:(HBJob *)job
+{
+    HBTitle *title = job.title;
+
+    // Generate a new file name
+    NSString *fileName = [HBUtilities automaticNameForSource:title.name
+                                                       title:title.index
+                                                    chapters:NSMakeRange(job.range.chapterStart + 1, job.range.chapterStop + 1)
+                                                     quality:job.video.qualityType ? job.video.quality : 0
+                                                     bitrate:!job.video.qualityType ? job.video.avgBitrate : 0
+                                                  videoCodec:job.video.encoder];
+    return fileName;
+}
+
++ (NSString *)automaticExtForJob:(HBJob *)job
+{
+    NSString *extension = @(hb_container_get_default_extension(job.container));
+
+    if (job.container & HB_MUX_MASK_MP4)
+    {
+        BOOL anyCodecAC3 = [job.audio anyCodecMatches:HB_ACODEC_AC3] || [job.audio anyCodecMatches:HB_ACODEC_AC3_PASS];
+        // Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter
+        BOOL chapterMarkers = (job.chaptersEnabled) &&
+        (job.range.type != HBRangeTypeChapters || job.range.chapterStart < job.range.chapterStop);
+
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@".m4v"] ||
+            ((YES == anyCodecAC3 || YES == chapterMarkers) &&
+             [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@"Auto"]))
+        {
+            extension = @"m4v";
+        }
+    }
+
+    return extension;
+}
+
++ (NSURL *)destURLForJob:(HBJob *)job
+{
+    // Check to see if the last destination has been set,use if so, if not, use Desktop
+    NSURL *destURL = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
+    if (!destURL || ![[NSFileManager defaultManager] fileExistsAtPath:destURL.path])
+    {
+        destURL = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject]
+                             isDirectory:YES];
+    }
+
+    // Generate a new file name
+    NSString *fileName = job.title.name;
+
+    // If Auto Naming is on. We create an output filename of dvd name - title number
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    {
+        fileName = [self automaticNameForJob:job];
+    }
+
+    destURL = [destURL URLByAppendingPathComponent:fileName];
+    // use the correct extension based on the container
+    NSString *ext = [self automaticExtForJob:job];
+    destURL = [destURL URLByAppendingPathExtension:ext];
+    
+    return destURL;
 }
 
 + (NSString *)automaticNameForSource:(NSString *)sourceName

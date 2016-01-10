@@ -4,9 +4,11 @@
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class HBJob;
 
 @interface HBUtilities : NSObject
 
@@ -19,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Returns the url of the current <user>/Library/Application Support/HandBrake folder.
  */
 + (nullable NSURL *)appSupportURL;
+
 /**
  *  Writes a message to standard error.
  *  The message will show up in the output panel and in the activity log.
@@ -26,6 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param format a standard c format string with varargs.
  */
 + (void)writeToActivityLog:(const char *)format, ...;
+
++ (NSURL *)mediaURLFromURL:(NSURL *)URL;
+
++ (NSString *)automaticNameForJob:(HBJob *)job;
++ (NSString *)automaticExtForJob:(HBJob *)job;
++ (NSURL *)destURLForJob:(HBJob *)job;
 
 /**
  *  Generates a file name automatically based on the inputs,
@@ -48,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
                           videoCodec:(uint32_t)codec;
 
 @end
+
 
 NS_ASSUME_NONNULL_END
 
