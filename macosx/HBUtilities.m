@@ -51,6 +51,18 @@
     va_end(args);
 }
 
++ (NSString *)displayNameForURL:(NSURL *)URL
+{
+    NSString *displayName = URL.lastPathComponent;
+
+    if ([URL.lastPathComponent isEqualToString:@"VIDEO_TS"])
+    {
+        displayName = URL.URLByDeletingLastPathComponent.lastPathComponent;
+    }
+
+    return displayName;
+}
+
 + (NSURL *)mediaURLFromURL:(NSURL *)URL
 {
     NSURL *mediaURL = URL;

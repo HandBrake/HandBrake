@@ -103,12 +103,6 @@
 
 @property (nonatomic, readwrite, strong) HBTitleSelectionController *titlesSelectionController;
 
-/**
- * The name of the source, it might differ from the source
- * last path component if it's a package or a folder.
- */
-@property (nonatomic, copy) NSString *browsedSourceDisplayName;
-
 /// The current job.
 @property (nonatomic, strong, nullable) HBJob *job;
 
@@ -520,11 +514,14 @@
     self.job = nil;
     [fSrcTitlePopUp removeAllItems];
 
+    NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
+    NSString *displayName = [HBUtilities displayNameForURL:fileURL];
+
     NSError *outError = NULL;
     BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppressCopyProtectionAlert"];
 
     // Check if we can scan the source and if there is any warning.
-    BOOL canScan = [self.core canScan:fileURL error:&outError];
+    BOOL canScan = [self.core canScan:mediaURL error:&outError];
 
     // Notify the user that we don't support removal of copy proteciton.
     if (canScan && [outError code] == 101 && !suppressWarning)
@@ -552,7 +549,7 @@
 
         HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
 
-        [self.core scanURL:fileURL
+        [self.core scanURL:mediaURL
                 titleIndex:index
                   previews:hb_num_previews minDuration:min_title_duration_seconds
            progressHandler:^(HBState state, hb_state_t hb_state)
@@ -574,7 +571,7 @@
                  for (HBTitle *title in self.core.titles)
                  {
                      // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
-                     fSrcDVD2Field.stringValue = self.browsedSourceDisplayName;
+                     fSrcDVD2Field.stringValue = displayName;
 
                      [fSrcTitlePopUp addItemWithTitle:title.description];
 
@@ -605,13 +602,10 @@
 
 - (void)openURL:(NSURL *)fileURL titleIndex:(NSUInteger)index
 {
-    NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
-
-    self.browsedSourceDisplayName = fileURL.lastPathComponent;
-    [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
-
-    [self scanURL:mediaURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
+    [self scanURL:fileURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
+        [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
+
         HBJob *job = [self jobFromTitle:titles.firstObject];
         self.job = job;
     }];
@@ -634,9 +628,6 @@
 {
     if (self.core.state != HBStateScanning)
     {
-        // Set the browsedSourceDisplayName for showNewScan
-        self.browsedSourceDisplayName = job.fileURL.lastPathComponent;
-
         [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
         {
             job.title = titles.firstObject;
@@ -726,7 +717,7 @@
         if (title.isStream && self.core.titles.count > 1)
         {
             // Change the source to read out the parent folder also
-            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", self.browsedSourceDisplayName, title.name];
+            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", title.url.URLByDeletingLastPathComponent.lastPathComponent, title.name];
         }
     }
     else

@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)writeToActivityLog:(const char *)format, ...;
 
++ (NSString *)displayNameForURL:(NSURL *)URL;
 + (NSURL *)mediaURLFromURL:(NSURL *)URL;
 
 + (NSString *)automaticNameForJob:(HBJob *)job;
