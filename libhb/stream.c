@@ -5349,6 +5349,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
         subtitle->extradata_size = codec->extradata_size;
     }
 
+    if (st->disposition & AV_DISPOSITION_DEFAULT)
+    {
+        subtitle->config.default_track = 1;
+    }
+
     subtitle->track = id;
     hb_list_add(title->list_subtitle, subtitle);
 }

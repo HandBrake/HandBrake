@@ -771,6 +771,23 @@ typedef struct subtitle_behavior_s
     uint8_t *used;
 } subtitle_behavior_t;
 
+static int has_default_subtitle(hb_value_array_t *list)
+{
+    int ii, count, def;
+
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_value_t *sub = hb_value_array_get(list, ii);
+        def = hb_value_get_int(hb_dict_get(sub, "Default"));
+        if (def)
+        {
+            return def;
+        }
+    }
+    return 0;
+}
+
 static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
                                   int mux, const char *lang,
                                   subtitle_behavior_t *behavior)
@@ -795,7 +812,12 @@ static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
                 (subtitle->source == PGSSUB && behavior->burn_bd)  ||
                 !hb_subtitle_can_pass(subtitle->source, mux) ||
                 behavior->burn_first || behavior->burn_foreign);
-        make_default = !burn && behavior->make_default;
+        // If the subtitle is added for foreign audio, or the source
+        // subtitle was the default subtitle, mark this subtitle as
+        // default.
+        make_default = (!burn && behavior->make_default) ||
+                       (!has_default_subtitle(list) &&
+                        subtitle->config.default_track);
         behavior->burn_first &= !burn;
         behavior->one_burned |= burn;
         behavior->used[t] = 1;
