@@ -326,9 +326,9 @@
         if (action == @selector(browseSources:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: @"Cancel Scan"];
-            [toolbarItem setPaletteLabel: @"Cancel Scanning"];
-            [toolbarItem setToolTip: @"Cancel Scanning Source"];
+            [toolbarItem setLabel: NSLocalizedString(@"Cancel Scan", nil)];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Cancel Scanning", nil)];
+            [toolbarItem setToolTip: NSLocalizedString(@"Cancel Scanning Source", nil)];
             return YES;
         }
 
@@ -354,17 +354,17 @@
         if (action == @selector(rip:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: @"Stop"];
-            [toolbarItem setPaletteLabel: @"Stop"];
-            [toolbarItem setToolTip: @"Stop Encoding"];
+            [toolbarItem setLabel: NSLocalizedString(@"Stop", nil)];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Stop", nil)];
+            [toolbarItem setToolTip: NSLocalizedString(@"Stop Encoding", nil)];
             return YES;
         }
         if (action == @selector(pause:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
-            [toolbarItem setLabel: @"Pause"];
-            [toolbarItem setPaletteLabel: @"Pause Encoding"];
-            [toolbarItem setToolTip: @"Pause Encoding"];
+            [toolbarItem setLabel: NSLocalizedString(@"Pause", nil)];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Pause Encoding", nil)];
+            [toolbarItem setToolTip: NSLocalizedString(@"Pause Encoding", nil)];
             return YES;
         }
     }
@@ -373,9 +373,9 @@
         if (action == @selector(pause:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-            [toolbarItem setLabel: @"Resume"];
-            [toolbarItem setPaletteLabel: @"Resume Encoding"];
-            [toolbarItem setToolTip: @"Resume Encoding"];
+            [toolbarItem setLabel: NSLocalizedString(@"Resume", nil)];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Resume Encoding", nil)];
+            [toolbarItem setToolTip: NSLocalizedString(@"Resume Encoding", nil)];
             return YES;
         }
         if (action == @selector(rip:))
@@ -387,11 +387,11 @@
         {
             [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
             if (fQueueController.pendingItemsCount > 0)
-                [toolbarItem setLabel: @"Start Queue"];
+                [toolbarItem setLabel: NSLocalizedString(@"Start Queue", nil)];
             else
-                [toolbarItem setLabel: @"Start"];
-            [toolbarItem setPaletteLabel: @"Start Encoding"];
-            [toolbarItem setToolTip: @"Start Encoding"];
+                [toolbarItem setLabel: NSLocalizedString(@"Start", nil)];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Start Encoding", nil)];
+            [toolbarItem setToolTip: NSLocalizedString(@"Start Encoding", nil)];
         }
 
         if (action == @selector(rip:))

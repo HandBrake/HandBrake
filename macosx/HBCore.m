@@ -158,7 +158,7 @@ static void hb_error_handler(const char *errmsg)
 
     if (detector.isVideoDVD || detector.isVideoBluRay)
     {
-        [HBUtilities writeToActivityLog:"%s trying to open a physical disk at: %s", self.name.UTF8String, url.path.UTF8String];
+        [HBUtilities writeToActivityLog:"%s trying to open a physical disc at: %s", self.name.UTF8String, url.path.UTF8String];
         void *lib = NULL;
 
         if (detector.isVideoDVD)
@@ -173,17 +173,17 @@ static void hb_error_handler(const char *errmsg)
         if (lib)
         {
             dlclose(lib);
-            [HBUtilities writeToActivityLog:"%s library found for decrypting physical disk", self.name.UTF8String];
+            [HBUtilities writeToActivityLog:"%s library found for decrypting physical disc", self.name.UTF8String];
         }
         else
         {
             // Notify the user that we don't support removal of copy protection.
-            [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disk", self.name.UTF8String];
+            [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disc", self.name.UTF8String];
 
             if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain"
                                              code:101
-                                         userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disk" }];
+                                         userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disc" }];
             }
         }
     }
