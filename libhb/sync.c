@@ -438,7 +438,7 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer, int end)
                 buf->s.duration = AV_NOPTS_VALUE;
             hb_buffer_list_append(&list, buf);
         }
-    } while (hb_buffer_list_count(&list) >= 2 || end);
+    } while (hb_buffer_list_count(&sanitizer->list_current) >= 2 || end);
 
     return hb_buffer_list_clear(&list);
 }
