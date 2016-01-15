@@ -1880,7 +1880,8 @@ void hb_work_loop( void * _w )
 
     // Consume data in incoming fifo till job complete so that
     // residual data does not stall the pipeline
-    while (!*w->done && w->fifo_in != NULL)
+    while ((w->die == NULL || !*w->die) &&
+           !*w->done && w->fifo_in != NULL)
     {
         buf_in = hb_fifo_get_wait( w->fifo_in );
         if ( buf_in != NULL )
