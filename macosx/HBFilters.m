@@ -265,6 +265,16 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
+- (void)setFlip:(BOOL)flip
+{
+    if (flip != _flip)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFlip:_flip];
+    }
+    _flip = flip;
+    [self postChangedNotification];
+}
+
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retval = nil;
@@ -327,6 +337,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         copy->_deblock = _deblock;
         copy->_grayscale = _grayscale;
         copy->_rotate = _rotate;
+        copy->_flip = _flip;
     }
 
     return copy;
@@ -358,6 +369,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeInt(_deblock);
     encodeBool(_grayscale);
     encodeInt(_rotate);
+    encodeBool(_flip);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
@@ -379,6 +391,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeInt(_deblock);
     decodeBool(_grayscale);
     decodeInt(_rotate);
+    decodeBool(_flip);
 
     _notificationsEnabled = YES;
 
@@ -403,7 +416,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     preset[@"PictureDeblock"] = @(self.deblock);
     preset[@"VideoGrayScale"] = @(self.grayscale);
-    preset[@"PictureRotate"] = @(self.grayscale);
+    preset[@"PictureRotate"] = [NSString stringWithFormat:@"%d:%d", self.rotate, self.flip];
 }
 
 - (void)applyPreset:(HBPreset *)preset
@@ -429,11 +442,25 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
         self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
 
-        // Deblock
         self.deblock = [preset[@"PictureDeblock"] intValue];
-
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
-        self.rotate = [preset[@"PictureRotate"] intValue];
+
+        // Rotate
+        NSString *rotate = preset[@"PictureRotate"];
+        if ([rotate isKindOfClass:[NSString class]])
+        {
+            NSArray<NSString *> *components = [rotate componentsSeparatedByString:@":"];
+            if (components.count == 2)
+            {
+                self.rotate = [components[0] intValue];
+                self.flip = [components[1] boolValue];
+            }
+            else
+            {
+                self.rotate = 0;
+                self.flip = NO;
+            }
+        }
     }
 
     self.notificationsEnabled = YES;

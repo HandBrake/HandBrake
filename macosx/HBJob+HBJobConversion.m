@@ -483,10 +483,10 @@
     }
 
     // Add rotate filter
-    if (self.filters.rotate)
+    if (self.filters.rotate || self.filters.flip)
     {
         filter = hb_filter_init(HB_FILTER_ROTATE);
-        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d", self.filters.rotate].UTF8String);
+        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d:%d", self.filters.rotate, self.filters.flip].UTF8String);
     }
 
     // Add framerate shaping filter
