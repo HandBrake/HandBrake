@@ -4062,7 +4062,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 norm = atoi(nmls[ii]);
                 audio_dict = hb_value_array_get(audio_array, ii);
                 hb_dict_set(audio_dict, "NormalizeMixLevel",
-                            hb_value_int(norm));
+                            hb_value_bool(norm));
             }
             if (nmls[ii] != NULL)
             {
@@ -4075,7 +4075,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         if (ii == 1) for (; ii < track_count; ii++)
         {
             audio_dict = hb_value_array_get(audio_array, ii);
-            hb_dict_set(audio_dict, "NormalizeMixLevel", hb_value_int(norm));
+            hb_dict_set(audio_dict, "NormalizeMixLevel", hb_value_bool(norm));
         }
 
         /* Audio Track Names */
