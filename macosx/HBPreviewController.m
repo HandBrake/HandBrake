@@ -10,6 +10,8 @@
 
 #import "HBPreviewView.h"
 
+#import "HBController.h"
+
 #import <QTKit/QTKit.h>
 #import "QTKit+HBQTMovieExtensions.h"
 
@@ -139,6 +141,33 @@ typedef enum ViewMode : NSUInteger {
     [_hudTimer invalidate];
     [_movieTimer invalidate];
     [_generator cancel];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    SEL action = menuItem.action;
+
+    if (action == @selector(selectPresetFromMenu:))
+    {
+        return [self.documentController validateMenuItem:menuItem];
+    }
+
+    return YES;
+}
+
+- (IBAction)selectDefaultPreset:(id)sender
+{
+    [self.documentController selectDefaultPreset:sender];
+}
+
+- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    return self.documentController.window.undoManager;
+}
+
+- (IBAction)selectPresetFromMenu:(id)sender
+{
+    [self.documentController selectPresetFromMenu:sender];
 }
 
 - (void)setPicture:(HBPicture *)picture
@@ -641,6 +670,7 @@ typedef enum ViewMode : NSUInteger {
     if (self.pictureSettingsWindow == nil)
     {
         self.pictureSettingsWindow = [[HBPictureController alloc] init];
+        self.pictureSettingsWindow.previewController = self;
     }
 
     self.pictureSettingsWindow.picture = self.picture;

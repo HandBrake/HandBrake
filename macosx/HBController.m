@@ -132,6 +132,7 @@
 
         // Inits the controllers
         fPreviewController = [[HBPreviewController alloc] init];
+        fPreviewController.documentController = self;
 
         fQueueController = queueController;
         fQueueController.controller = self;
@@ -415,7 +416,7 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
-    SEL action = [menuItem action];
+    SEL action = menuItem.action;
 
     if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) ||
         action == @selector(addTitlesToQueue:) || action == @selector(showAddPresetPanel:))

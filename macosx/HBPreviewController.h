@@ -8,10 +8,13 @@
 
 @class HBPreviewGenerator;
 @class HBPicture;
+@class HBController;
 
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, strong) HBPreviewGenerator *generator;
 @property (nonatomic, strong) HBPicture *picture;
+
+@property (nonatomic, assign) HBController *documentController;
 
 @end

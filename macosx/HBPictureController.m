@@ -72,6 +72,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     [self adjustSizingDisplay:nil];
 }
 
+- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    return self.previewController.window.undoManager;
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
