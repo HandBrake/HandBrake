@@ -62,7 +62,7 @@
         "PicturePAR": "loose",
         "PicturePARWidth": 853,
         "PicturePARHeight": 720,
-        "PictureRotate": 0,
+        "PictureRotate": "0",
         "PictureWidth": 0,
         "PictureHeight": 0,
         "PictureForceHeight": 0,

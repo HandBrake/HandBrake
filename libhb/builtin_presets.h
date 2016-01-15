@@ -818,7 +818,7 @@ const char hb_builtin_presets_json[] =
 "            \"PicturePARHeight\": 720, \n"
 "            \"PicturePARWidth\": 853, \n"
 "            \"PictureRightCrop\": 0, \n"
-"            \"PictureRotate\": 0, \n"
+"            \"PictureRotate\": \"0\", \n"
 "            \"PictureTopCrop\": 0, \n"
 "            \"PictureWidth\": 0, \n"
 "            \"PresetDescription\": \"\", \n"
