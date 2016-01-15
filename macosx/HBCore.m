@@ -279,10 +279,62 @@ static void hb_error_handler(const char *errmsg)
 
 #pragma mark - Preview images
 
+- (CGImageRef)CGImageRotatedByAngle:(CGImageRef)imgRef angle:(CGFloat)angle flipped:(BOOL)flipped CF_RETURNS_RETAINED
+{
+    CGFloat angleInRadians = angle * (M_PI / 180);
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+
+    CGRect imgRect = CGRectMake(0, 0, width, height);
+    CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
+    CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                   (size_t)rotatedRect.size.width,
+                                                   (size_t)rotatedRect.size.height,
+                                                   8,
+                                                   0,
+                                                   colorSpace,
+                                                   kCGImageAlphaPremultipliedFirst);
+    CGContextSetAllowsAntialiasing(bmContext, FALSE);
+    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+    CGColorSpaceRelease(colorSpace);
+
+    // Rotate
+    CGContextTranslateCTM(bmContext,
+                          + (rotatedRect.size.width / 2),
+                          + (rotatedRect.size.height / 2));
+    CGContextRotateCTM(bmContext, -angleInRadians);
+    CGContextTranslateCTM(bmContext,
+                          - (rotatedRect.size.width / 2),
+                          - (rotatedRect.size.height / 2));
+
+    // Flip
+    if (flipped) {
+        CGAffineTransform flipHorizontal = CGAffineTransformMake(-1, 0, 0, 1, floor(rotatedRect.size.width), 0);
+        CGContextConcatCTM(bmContext, flipHorizontal);
+    }
+
+    CGContextDrawImage(bmContext,
+                       CGRectMake((rotatedRect.size.width - width)/2.0f,
+                                  (rotatedRect.size.height - height)/2.0f,
+                                  width,
+                                  height),
+                       imgRef);
+
+    CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+    CFRelease(bmContext);
+
+    return rotatedImage;
+}
+
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
                    deinterlace:(BOOL)deinterlace
+                        rotate:(int)angle
+                       flipped:(BOOL)flipped CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
 
@@ -339,8 +391,17 @@ static void hb_error_handler(const char *errmsg)
 
         hb_image_close(&image);
     }
-    
-    return img;
+
+    if (angle || flipped)
+    {
+        CGImageRef rotatedImg = [self CGImageRotatedByAngle:img angle:angle flipped:flipped];
+        CGImageRelease(img);
+        return rotatedImg;
+    }
+    else
+    {
+        return img;
+    }
 }
 
 - (NSUInteger)imagesCountForTitle:(HBTitle *)title

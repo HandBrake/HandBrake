@@ -81,7 +81,9 @@
         theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
                                                        pictureFrame:self.job.picture
-                                                        deinterlace:deinterlace];
+                                                        deinterlace:deinterlace
+                                                        rotate:self.job.filters.rotate
+                                                       flipped:self.job.filters.flip];
         if (cache && theImage)
         {
             // The cost is the number of pixels of the image

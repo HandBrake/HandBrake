@@ -144,9 +144,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  @return a CGImageRef of the wanted image, NULL if the index is out of bounds.
  */
 - (nullable CGImageRef)copyImageAtIndex:(NSUInteger)index
-                               forTitle:(HBTitle *)title
-                           pictureFrame:(HBPicture *)frame
-                            deinterlace:(BOOL)deinterlace CF_RETURNS_RETAINED;
+                      forTitle:(HBTitle *)title
+                  pictureFrame:(HBPicture *)frame
+                   deinterlace:(BOOL)deinterlace
+                        rotate:(int)angle
+                       flipped:(BOOL)flipped CF_RETURNS_RETAINED;
 
 /**
  *  Returns the counts of the available previews images.
