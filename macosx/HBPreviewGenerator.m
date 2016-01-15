@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong) HBCore *core;
 
+@property (nonatomic) BOOL reloadInQueue;
+
 @end
 
 @implementation HBPreviewGenerator
@@ -53,6 +55,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
     [self.core cancelEncode];
 }
 
@@ -117,9 +120,21 @@
 {
     // Purge the existing picture previews so they get recreated the next time
     // they are needed.
-
     [self purgeImageCache];
+
+    // Enquee the reload call on the main runloop
+    // to avoid reloading the same image multiple times.
+    if (self.reloadInQueue == NO)
+    {
+        [[NSRunLoop mainRunLoop] performSelector:@selector(postReloadNotification) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        self.reloadInQueue = YES;
+    }
+}
+
+- (void)postReloadNotification
+{
     [self.delegate reloadPreviews];
+    self.reloadInQueue = NO;
 }
 
 - (NSString *)info
