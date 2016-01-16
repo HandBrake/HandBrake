@@ -1,0 +1,26 @@
+# Visual Studio
+win/CS/*/bin
+win/CS/*/obj
+win/CS/*.suo
+
+# Xcode user data
+xcuserdata
+
+# Build system
+build/
+build.*/
+download/
+
+# Gtk autoconf spam
+gtk/Makefile.in*
+gtk/*/Makefile.in*
+gtk/aclocal.m4
+gtk/autom4te.cache
+gtk/compile
+gtk/config.*
+gtk/configure
+gtk/depcomp
+gtk/install-sh
+gtk/ltmain.sh
+gtk/missing
+
