@@ -582,8 +582,11 @@
 
             // Tell HB to output a new activity log file for this encode
             self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextJob];
-            [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
-            [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
+            if (self.currentLog)
+            {
+                [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
+                [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
+            }
 
             self.currentJob = nextJob;
             [self reloadQueueItemAtIndex:[self.jobs indexOfObject:nextJob]];

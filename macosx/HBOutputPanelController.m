@@ -52,8 +52,11 @@
         NSURL *outputLogFile = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"HandBrake-activitylog.txt"];
 
         _outputFile = [[HBOutputFileWriter alloc] initWithFileURL:outputLogFile];
-        [[HBOutputRedirect stderrRedirect] addListener:_outputFile];
-        [[HBOutputRedirect stdoutRedirect] addListener:_outputFile];
+        if (_outputFile)
+        {
+            [[HBOutputRedirect stderrRedirect] addListener:_outputFile];
+            [[HBOutputRedirect stdoutRedirect] addListener:_outputFile];
+        }
 
         // We initialize the outputTextStorage object for the activity window
         outputTextStorage = [[NSTextStorage alloc] init];
