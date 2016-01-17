@@ -151,11 +151,12 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // HBPreset Handling
-                IList<HBPreset> hbPresets = container.PresetList as IList<HBPreset>;
-                if (hbPresets != null)
+                if (container.PresetList != null)
                 {
-                    foreach (var hbPreset in hbPresets)
+                    foreach (var objectPreset in container.PresetList)
                     {
+                        HBPreset hbPreset = JsonConvert.DeserializeObject<HBPreset>(objectPreset.ToString());
+
                         Preset preset = null;
                         try
                         {
@@ -180,7 +181,7 @@ namespace HandBrakeWPF.Services.Presets
                             return;
                         }
 
-                                                if (this.CheckIfPresetExists(preset.Name))
+                        if (this.CheckIfPresetExists(preset.Name))
                         {
                             if (!this.CanUpdatePreset(preset.Name))
                             {

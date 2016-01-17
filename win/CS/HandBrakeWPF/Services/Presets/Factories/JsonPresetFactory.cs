@@ -75,13 +75,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.MaxHeight = importedPreset.PictureHeight.HasValue && importedPreset.PictureHeight.Value > 0 ? importedPreset.PictureHeight.Value : (int?)null;
             preset.Task.Cropping = new Cropping(importedPreset.PictureTopCrop, importedPreset.PictureBottomCrop, importedPreset.PictureLeftCrop, importedPreset.PictureRightCrop);
             preset.Task.HasCropping = !importedPreset.PictureAutoCrop;
-
             preset.Task.Modulus = importedPreset.PictureModulus;
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
+            
             switch (importedPreset.PicturePAR)
             {
                 case "custom":
                     preset.Task.Anamorphic = Anamorphic.Custom;
+                    preset.Task.DisplayWidth = importedPreset.PictureDARWidth;
                     break;
                 case "loose":
                     preset.Task.Anamorphic = Anamorphic.Loose;
@@ -407,7 +408,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public List<object> ChildrenArray { get; set; }
             // public bool Folder { get; set; }
             // public bool FolderOpen { get; set; }
-            // public int PictureDARWidth { get; set; }
             // public int Type { get; set; }
 
             return preset;
