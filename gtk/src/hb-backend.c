@@ -4227,8 +4227,6 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
         asettings = ghb_array_get(audio_list, ii);
         track = ghb_dict_get_int(asettings, "Track");
         codec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
-        if (codec == HB_ACODEC_AUTO_PASS)
-            continue;
 
         aconfig = hb_list_audio_config_item(title->list_audio, track);
         if (ghb_audio_is_passthru(codec) &&
@@ -4290,32 +4288,6 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             g_free(message);
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_dict_set_string(asettings, "Encoder", name);
-        }
-
-        const hb_mixdown_t *mix;
-        mix = ghb_settings_mixdown(asettings, "Mixdown");
-
-        const gchar *mix_unsup = NULL;
-        if (!hb_mixdown_is_supported(mix->amixdown, codec, aconfig->in.channel_layout))
-        {
-            mix_unsup = mix->name;
-        }
-        if (mix_unsup)
-        {
-            message = g_strdup_printf(
-                        _("The source audio does not support %s mixdown.\n\n"
-                        "You should choose a different mixdown.\n"
-                        "If you continue, one will be chosen for you."), mix_unsup);
-            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
-                                    message, _("Cancel"), _("Continue")))
-            {
-                g_free(message);
-                return FALSE;
-            }
-            g_free(message);
-            int amixdown = ghb_get_best_mix(aconfig, codec, mix->amixdown);
-            ghb_dict_set_string(asettings, "Mixdown",
-                                    hb_mixdown_get_short_name(amixdown));
         }
     }
     return TRUE;
