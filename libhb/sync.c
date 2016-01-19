@@ -630,6 +630,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->common->start_found = 1;
         // Unblock anybody waiting on this threads last PTS
         setSyncPTS(pv, INT64_MAX, 0);
+        if (job->indepth_scan)
+        {
+            // During subtitle scan, sync is the end of the pipeline.
+            // Terminate job when EOF reached.
+            *w->done = 1;
+        }
         return HB_WORK_DONE;
     }
 

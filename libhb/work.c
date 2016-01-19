@@ -1878,8 +1878,9 @@ void hb_work_loop( void * _w )
         hb_buffer_close( &buf_out );
     }
 
-    // Consume data in incoming fifo till job complete so that
-    // residual data does not stall the pipeline
+    // Consume data in incoming fifo till job completes so that
+    // residual data does not stall the pipeline. There can be
+    // residual data during point-to-point encoding.
     while ((w->die == NULL || !*w->die) &&
            !*w->done && w->fifo_in != NULL)
     {
