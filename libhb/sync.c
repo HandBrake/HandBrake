@@ -1515,7 +1515,7 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
     }
 
     // We only reach here if we are merging subtitles
-    while (hb_buffer_list_count(&sanitizer->list_current) > 1)
+    while (hb_buffer_list_count(&sanitizer->list_current) > 0)
     {
         a = hb_buffer_list_head(&sanitizer->list_current);
         if (a->s.flags & HB_BUF_FLAG_EOF)
@@ -1525,6 +1525,10 @@ static hb_buffer_t * mergeSubtitles(subtitle_sanitizer_t *sanitizer)
             break;
         }
         b = a->next;
+        if (b == NULL)
+        {
+            break;
+        }
         if (b->s.flags & HB_BUF_FLAG_EOF)
         {
             buf = hb_buffer_list_rem_head(&sanitizer->list_current);
