@@ -918,6 +918,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
         buf->qsv_details.qsv_atom = pv->frame->data[2];
+        buf->qsv_details.ctx      = pv->job->qsv.ctx;
         return buf;
     }
 #endif

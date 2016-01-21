@@ -169,13 +169,11 @@ hb_work_object_t* hb_audio_decoder(hb_handle_t *h, int codec)
     if (codec & HB_ACODEC_FF_MASK)
     {
         w = hb_get_work(h, WORK_DECAVCODEC);
-        w->yield = 1;   // decoders yield to keep sync fifos more even
     }
     switch (codec)
     {
         case HB_ACODEC_LPCM:
             w = hb_get_work(h, WORK_DECLPCM);
-            w->yield = 1;   // decoders yield to keep sync fifos more even
             break;
         default:
             break;
@@ -1570,7 +1568,6 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
-    w->yield = 1;   // decoders yield to keep sync fifos more even
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
     hb_list_add(job->list_work, w);
@@ -1867,10 +1864,6 @@ void hb_work_loop( void * _w )
                     break;
                 }
             }
-        }
-        if (w->yield)
-        {
-            hb_yield();
         }
     }
     if ( buf_out )

@@ -9,6 +9,9 @@
 
 #include "hbffmpeg.h"
 #include "extras/cl.h"
+#ifdef USE_QSV
+#include "libavcodec/qsv.h"
+#endif
 
 /***********************************************************************
  * Hardware Decode Context
@@ -145,11 +148,14 @@ struct hb_buffer_s
         int           size;
     } plane[4]; // 3 Color components + alpha
 
+#ifdef USE_QSV
     struct qsv
     {
-        void *qsv_atom;
-        void *filter_details;
+        void           * qsv_atom;
+        void           * filter_details;
+        av_qsv_context * ctx;
     } qsv_details;
+#endif
 
     /* OpenCL */
     struct cl_data
@@ -426,6 +432,7 @@ enum
     WORK_NONE = 0,
     WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
+    WORK_SYNC_SUBTITLE,
     WORK_DECCC608,
     WORK_DECVOBSUB,
     WORK_DECSRTSUB,

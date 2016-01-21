@@ -1966,6 +1966,9 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     {
         qsv_atom = in->qsv_details.qsv_atom;
         surface  = av_qsv_get_last_stage(qsv_atom)->out.p_surface;
+        // At this point, enc_qsv takes ownership of the QSV resources
+        // in the 'in' buffer.
+        in->qsv_details.qsv_atom = NULL;
 
         /*
          * QSV decoding fills the QSV context's dts_seq list, we need to
