@@ -1203,53 +1203,51 @@ extern hb_work_object_t hb_reader;
 
 typedef struct hb_filter_init_s
 {
-    hb_job_t    * job;
-    int           pix_fmt;
-    hb_geometry_t geometry;
-    int           crop[4];
-    hb_rational_t vrate;
-    int           cfr;
-    int           grayscale;
+    hb_job_t      * job;
+    int             pix_fmt;
+    hb_geometry_t   geometry;
+    int             crop[4];
+    hb_rational_t   vrate;
+    int             cfr;
+    int             grayscale;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
 {
-    char               human_readable_desc[128];
+    char             * human_readable_desc;
     hb_filter_init_t   out;
 } hb_filter_info_t;
 
 struct hb_filter_object_s
 {
-    int                     id;
-    int                     enforce_order;
-    char                  * name;
-    char                  * settings;
+    int                   id;
+    int                   enforce_order;
+    char                * name;
+    char                * settings;
 
 #ifdef __LIBHB__
-    int         (* init)      ( hb_filter_object_t *, hb_filter_init_t * );
-    int         (* post_init) ( hb_filter_object_t *, hb_job_t * );
+    int                (* init)     ( hb_filter_object_t *, hb_filter_init_t * );
+    int                (* post_init)( hb_filter_object_t *, hb_job_t * );
+    int                (* work)     ( hb_filter_object_t *,
+                                      hb_buffer_t **, hb_buffer_t ** );
+    void               (* close)    ( hb_filter_object_t * );
+    hb_filter_info_t * (* info)     ( hb_filter_object_t * );
 
-    int         (* work)      ( hb_filter_object_t *,
-                                hb_buffer_t **, hb_buffer_t ** );
+    hb_fifo_t           * fifo_in;
+    hb_fifo_t           * fifo_out;
 
-    void        (* close)     ( hb_filter_object_t * );
-    int         (* info)      ( hb_filter_object_t *, hb_filter_info_t * );
-
-    hb_fifo_t   * fifo_in;
-    hb_fifo_t   * fifo_out;
-
-    hb_subtitle_t     * subtitle;
+    hb_subtitle_t       * subtitle;
 
     hb_filter_private_t * private_data;
 
-    hb_thread_t       * thread;
-    volatile int      * done;
-    int                 status;
+    hb_thread_t         * thread;
+    volatile int        * done;
+    int                   status;
 
     // Filters can drop frames and thus chapter marks
     // These are used to bridge the chapter to the next buffer
-    int                 chapter_val;
-    int64_t             chapter_time;
+    int                   chapter_val;
+    int64_t               chapter_time;
 #endif
 };
 
@@ -1273,11 +1271,13 @@ enum
     HB_FILTER_NLMEANS,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
+    HB_FILTER_ROTATE,
+    HB_FILTER_GRAYSCALE,
+    HB_FILTER_PAD,
 
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
-    HB_FILTER_ROTATE,
-    HB_FILTER_GRAYSCALE,
+    HB_FILTER_AVFILTER,
 
     // for QSV - important to have as a last one
     HB_FILTER_QSV_POST,
@@ -1288,8 +1288,9 @@ enum
 
 hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
-hb_list_t *hb_filter_list_copy(const hb_list_t *src);
-void hb_filter_close( hb_filter_object_t ** );
+hb_list_t          * hb_filter_list_copy(const hb_list_t *src);
+void                 hb_filter_close( hb_filter_object_t ** );
+void                 hb_filter_info_close( hb_filter_info_t ** );
 
 typedef void hb_error_handler_t( const char *errmsg );
 
@@ -1298,6 +1299,13 @@ extern void hb_register_error_handler( hb_error_handler_t * handler );
 char * hb_strdup_vaprintf( const char * fmt, va_list args );
 char * hb_strdup_printf(const char *fmt, ...) HB_WPRINTF(1, 2);
 char * hb_strncat_dup( const char * s1, const char * s2, size_t n );
+
+// free array of strings
+void    hb_str_vfree( char ** strv );
+// count number of strings in array of strings
+int     hb_str_vlen(char ** strv);
+// split string into array of strings
+char ** hb_str_vsplit( const char * str, char delem );
 
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);

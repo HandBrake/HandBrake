@@ -54,6 +54,8 @@ static int     main_feature        = 0;
 static char *  native_language     = NULL;
 static int     native_dub          = 0;
 static int     twoPass             = 0;
+static int     pad_disable         = 0;
+static char *  pad                 = NULL;
 static int     deinterlace_disable = 0;
 static int     deinterlace_custom  = 0;
 static char *  deinterlace         = NULL;
@@ -104,14 +106,14 @@ static char ** srtoffset                 = NULL;
 static char ** srtlang                   = NULL;
 static int     srtdefault                = -1;
 static int     srtburn                   = -1;
-static int      width       = 0;
-static int      height      = 0;
-static int      crop[4]     = { -1,-1,-1,-1 };
-static int      loose_crop  = -1;
-static char *   vrate       = NULL;
-static float    vquality    = -1.0;
-static int      vbitrate    = 0;
-static int      mux         = 0;
+static int      width                    = 0;
+static int      height                   = 0;
+static int      crop[4]                  = { -1,-1,-1,-1 };
+static int      loose_crop               = -1;
+static char *   vrate                    = NULL;
+static float    vquality                 = -1.0;
+static int      vbitrate                 = 0;
+static int      mux                      = 0;
 static int      anamorphic_mode     = -1;
 static int      modulus             = 0;
 static int      par_height          = -1;
@@ -177,10 +179,6 @@ static int         HandleEvents( hb_handle_t * h, hb_dict_t *preset_dict );
 static hb_dict_t * PreparePreset( const char *preset_name );
 static hb_dict_t * PrepareJob( hb_handle_t *h, hb_title_t *title,
                                hb_dict_t *preset_dict );
-
-static int str_vlen(char **strv);
-static void str_vfree( char **strv );
-static char** str_split( char *str, char delem );
 
 static void print_string_list(FILE *out, const char* const *list, const char *prefix);
 
@@ -461,20 +459,20 @@ int main( int argc, char ** argv )
     hb_value_free(&preset_dict);
     hb_close(&h);
     hb_global_close();
-    str_vfree(audio_copy_list);
-    str_vfree(abitrates);
-    str_vfree(acompressions);
-    str_vfree(aqualities);
-    str_vfree(audio_dither);
-    str_vfree(acodecs);
-    str_vfree(arates);
-    str_vfree(atracks);
-    str_vfree(audio_lang_list);
-    str_vfree(audio_gain);
-    str_vfree(dynamic_range_compression);
-    str_vfree(mixdowns);
-    str_vfree(subtitle_lang_list);
-    str_vfree(subtracks);
+    hb_str_vfree(audio_copy_list);
+    hb_str_vfree(abitrates);
+    hb_str_vfree(acompressions);
+    hb_str_vfree(aqualities);
+    hb_str_vfree(audio_dither);
+    hb_str_vfree(acodecs);
+    hb_str_vfree(arates);
+    hb_str_vfree(atracks);
+    hb_str_vfree(audio_lang_list);
+    hb_str_vfree(audio_gain);
+    hb_str_vfree(dynamic_range_compression);
+    hb_str_vfree(mixdowns);
+    hb_str_vfree(subtitle_lang_list);
+    hb_str_vfree(subtracks);
     free(acodec_fallback);
     free(native_language);
     free(format);
@@ -1228,6 +1226,12 @@ static void ShowHelp()
 "       --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
 "       --loose-crop        Always crop to a multiple of the modulus\n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
+"       --pad <W:H:C:X,Y>   Add borders to pad image to WxH (e.g. letterbox)\n"
+"                           Optionally set color of pad to C (default black)\n"
+"                           Color may be HTML color name or RGB value\n"
+"                           Optionally set position of image in pad area\n"
+"                           Any value may be 'auto' in which case the\n"
+"                           default value for that field is used\n"
 "   -Y, --maxHeight   <#>   Set maximum height\n"
 "   -X, --maxWidth    <#>   Set maximum width\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
@@ -1546,129 +1550,11 @@ static void ShowPresets(hb_value_array_t *presets, int indent, int descriptions)
                         Indent(stderr, "    ", indent+1);
                         fprintf(stderr, "%s\n", split[ii]);
                     }
-                    str_vfree(split);
+                    hb_str_vfree(split);
                 }
             }
         }
     }
-}
-
-static char* strchr_quote(char *pos, char c, char q)
-{
-    if (pos == NULL)
-        return NULL;
-
-    while (*pos != 0 && *pos != c)
-    {
-        if (*pos == q)
-        {
-            pos = strchr_quote(pos+1, q, 0);
-            if (pos == NULL)
-                return NULL;
-            pos++;
-        }
-        else if (*pos == '\\' && *(pos+1) != 0)
-            pos += 2;
-        else
-            pos++;
-    }
-    if (*pos != c)
-        return NULL;
-    return pos;
-}
-
-static char *strndup_quote(char *str, char q, int len)
-{
-    if (str == NULL)
-        return NULL;
-
-    char * res;
-    int str_len = strlen( str );
-    int src = 0, dst = 0;
-    res = malloc( len > str_len ? str_len + 1 : len + 1 );
-    if ( res == NULL ) return res;
-
-    while (str[src] != 0 && src < len)
-    {
-        if (str[src] == q)
-            src++;
-        else if (str[src] == '\\' && str[src+1] != 0)
-        {
-            res[dst++] = str[src+1];
-            src += 2;
-        }
-        else
-            res[dst++] = str[src++];
-    }
-    res[dst] = '\0';
-    return res;
-}
-
-static int str_vlen(char **strv)
-{
-    int i;
-    if (strv == NULL)
-        return 0;
-    for (i = 0; strv[i]; i++);
-    return i;
-}
-
-static char** str_split( char *str, char delem )
-{
-    char *  pos;
-    char *  end;
-    char ** ret;
-    int     count, i;
-    char quote = '"';
-
-    if (delem == '"')
-    {
-        quote = '\'';
-    }
-    if ( str == NULL || str[0] == 0 )
-    {
-        ret = malloc( sizeof(char*) );
-        if ( ret == NULL ) return ret;
-        *ret = NULL;
-        return ret;
-    }
-
-    // Find number of elements in the string
-    count = 1;
-    pos = str;
-    while ( ( pos = strchr_quote( pos, delem, quote ) ) != NULL )
-    {
-        count++;
-        pos++;
-    }
-
-    ret = calloc( ( count + 1 ), sizeof(char*) );
-    if ( ret == NULL ) return ret;
-
-    pos = str;
-    for ( i = 0; i < count - 1; i++ )
-    {
-        end = strchr_quote( pos, delem, quote );
-        ret[i] = strndup_quote(pos, quote, end - pos);
-        pos = end + 1;
-    }
-    ret[i] = strndup_quote(pos, quote, strlen(pos));
-
-    return ret;
-}
-
-static void str_vfree( char **strv )
-{
-    int i;
-
-    if (strv == NULL)
-        return;
-
-    for ( i = 0; strv[i]; i++ )
-    {
-        free( strv[i] );
-    }
-    free( strv );
 }
 
 static double parse_hhmmss_strtok()
@@ -1743,6 +1629,7 @@ static int ParseOptions( int argc, char ** argv )
     #define PRESET_IMPORT_GUI    306
     #define VERSION              307
     #define DESCRIBE             308
+    #define PAD                  309
 
     for( ;; )
     {
@@ -1843,6 +1730,8 @@ static int ParseOptions( int argc, char ** argv )
             { "crop",        required_argument, NULL,    'n' },
             { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
             { "no-loose-crop", no_argument,     &loose_crop, 0 },
+            { "pad",         required_argument, NULL,            PAD },
+            { "no-pad",      no_argument,       &pad_disable,    1 },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -2056,53 +1945,53 @@ static int ParseOptions( int argc, char ** argv )
                 chapter_markers = 1;
                 break;
             case AUDIO_LANG_LIST:
-                audio_lang_list = str_split(optarg, ',');
+                audio_lang_list = hb_str_vsplit(optarg, ',');
                 break;
             case SUBTITLE_LANG_LIST:
-                subtitle_lang_list = str_split(optarg, ',');
+                subtitle_lang_list = hb_str_vsplit(optarg, ',');
                 break;
             case 'a':
                 if( optarg != NULL )
                 {
-                    atracks = str_split(optarg, ',');
+                    atracks = hb_str_vsplit(optarg, ',');
                 }
                 else
                 {
-                    atracks = str_split("1", ',');
+                    atracks = hb_str_vsplit("1", ',');
                 }
                 break;
             case '6':
                 if( optarg != NULL )
                 {
-                    mixdowns = str_split(optarg, ',');
+                    mixdowns = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case 'D':
                 if( optarg != NULL )
                 {
-                    dynamic_range_compression = str_split(optarg, ',');
+                    dynamic_range_compression = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case AUDIO_GAIN:
                 if( optarg != NULL )
                 {
-                    audio_gain = str_split(optarg, ',');
+                    audio_gain = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case AUDIO_DITHER:
                 if (optarg != NULL)
                 {
-                    audio_dither = str_split(optarg, ',');
+                    audio_dither = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case NORMALIZE_MIX:
-                normalize_mix_level = str_split(optarg, ',');
+                normalize_mix_level = hb_str_vsplit(optarg, ',');
                 break;
             case 's':
-                subtracks = str_split( optarg, ',' );
+                subtracks = hb_str_vsplit( optarg, ',' );
                 break;
             case 'F':
-                subforce = str_split( optarg, ',' );
+                subforce = hb_str_vsplit( optarg, ',' );
                 break;
             case SUB_BURNED:
                 if (optarg != NULL)
@@ -2121,7 +2010,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 if (subburn > 0)
                 {
-                    if (subtracks != NULL && str_vlen(subtracks) >= subburn &&
+                    if (subtracks != NULL && hb_str_vlen(subtracks) >= subburn &&
                         !strcasecmp("scan", subtracks[subburn-1]))
                     {
                         subburn_native = 1;
@@ -2155,16 +2044,16 @@ static int ParseOptions( int argc, char ** argv )
                 native_dub = 1;
                 break;
             case SRT_FILE:
-                srtfile = str_split( optarg, ',' );
+                srtfile = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_CODESET:
-                srtcodeset = str_split( optarg, ',' );
+                srtcodeset = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_OFFSET:
-                srtoffset = str_split( optarg, ',' );
+                srtoffset = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_LANG:
-                srtlang = str_split( optarg, ',' );
+                srtlang = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_DEFAULT:
                 if( optarg != NULL )
@@ -2309,7 +2198,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'E':
                 if( optarg != NULL )
                 {
-                    acodecs = str_split(optarg, ',');
+                    acodecs = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case 'w':
@@ -2337,6 +2226,15 @@ static int ParseOptions( int argc, char ** argv )
                 else
                     loose_crop = 1;
                 break;
+            case PAD:
+            {
+                free(pad);
+                if (optarg != NULL)
+                {
+                    pad = strdup(optarg);
+                }
+                break;
+            }
             case 'r':
             {
                 vrate = strdup(optarg);
@@ -2347,7 +2245,7 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             }
             case 'R':
-                arates = str_split( optarg, ',' );
+                arates = hb_str_vsplit( optarg, ',' );
                 break;
             case 'b':
                 vbitrate = atoi( optarg );
@@ -2356,13 +2254,13 @@ static int ParseOptions( int argc, char ** argv )
                 vquality = atof( optarg );
                 break;
             case 'B':
-                abitrates = str_split( optarg, ',' );
+                abitrates = hb_str_vsplit( optarg, ',' );
                 break;
             case 'Q':
-                aqualities = str_split( optarg, ',' );
+                aqualities = hb_str_vsplit( optarg, ',' );
                 break;
             case 'C':
-                acompressions = str_split( optarg, ',' );
+                acompressions = hb_str_vsplit( optarg, ',' );
                 break;
             case ENCODER_PRESET:
                 encoder_preset = strdup( optarg );
@@ -2419,7 +2317,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'A':
                 if( optarg != NULL )
                 {
-                    anames = str_split( optarg, ',' );
+                    anames = hb_str_vsplit( optarg, ',' );
                 }
                 break;
             case PREVIEWS:
@@ -2478,7 +2376,7 @@ static int ParseOptions( int argc, char ** argv )
             }
             case ALLOWED_AUDIO_COPY:
             {
-                audio_copy_list = str_split(optarg, ',');
+                audio_copy_list = hb_str_vsplit(optarg, ',');
                 break;
             }
             case AUDIO_FALLBACK:
@@ -2553,6 +2451,21 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid detelecine option %s\n", detelecine);
+            return -1;
+        }
+    }
+
+    if (pad != NULL)
+    {
+        if (pad_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --pad and --no-pad\n");
+            return -1;
+        }
+        else if (hb_validate_filter_settings(HB_FILTER_PAD, pad))
+        {
+            fprintf(stderr, "Invalid pad option %s\n", pad);
             return -1;
         }
     }
@@ -2665,7 +2578,7 @@ static int foreign_audio_scan(char **subtracks)
 {
     if (subtracks != NULL)
     {
-        int count = str_vlen(subtracks);
+        int count = hb_str_vlen(subtracks);
         int ii;
         for (ii = 0; ii < count; ii++)
         {
@@ -2683,7 +2596,7 @@ static int count_subtitles(char **subtracks)
     int subtitle_track_count = 0;
     if (subtracks != NULL)
     {
-        int count = str_vlen(subtracks);
+        int count = hb_str_vlen(subtracks);
         int ii;
         for (ii = 0; ii < count; ii++)
         {
@@ -2844,7 +2757,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (subtitle_lang_list != NULL)
     {
         hb_value_array_clear(subtitle_lang_array);
-        int count = str_vlen(subtitle_lang_list);
+        int count = hb_str_vlen(subtitle_lang_list);
         for (ii = 0; ii < count; ii++)
         {
             const iso639_lang_t *lang = lang_lookup(subtitle_lang_list[ii]);
@@ -2943,7 +2856,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (audio_lang_list != NULL)
     {
         hb_value_array_clear(audio_lang_array);
-        int count = str_vlen(audio_lang_list);
+        int count = hb_str_vlen(audio_lang_list);
         for (ii = 0; ii < count; ii++)
         {
             const iso639_lang_t *lang = lang_lookup(audio_lang_list[ii]);
@@ -2998,17 +2911,17 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             list = hb_value_array_init();
             hb_dict_set(preset, "AudioList", list);
         }
-        int count = MAX(str_vlen(mixdowns),
-                    MAX(str_vlen(dynamic_range_compression),
-                    MAX(str_vlen(audio_gain),
-                    MAX(str_vlen(audio_dither),
-                    MAX(str_vlen(normalize_mix_level),
-                    MAX(str_vlen(arates),
-                    MAX(str_vlen(abitrates),
-                    MAX(str_vlen(aqualities),
-                    MAX(str_vlen(acompressions),
-                    MAX(str_vlen(acodecs),
-                        str_vlen(anames)))))))))));
+        int count = MAX(hb_str_vlen(mixdowns),
+                    MAX(hb_str_vlen(dynamic_range_compression),
+                    MAX(hb_str_vlen(audio_gain),
+                    MAX(hb_str_vlen(audio_dither),
+                    MAX(hb_str_vlen(normalize_mix_level),
+                    MAX(hb_str_vlen(arates),
+                    MAX(hb_str_vlen(abitrates),
+                    MAX(hb_str_vlen(aqualities),
+                    MAX(hb_str_vlen(acompressions),
+                    MAX(hb_str_vlen(acodecs),
+                        hb_str_vlen(anames)))))))))));
 
         hb_dict_t *audio_dict;
         // Add audio dict entries to list if needed
@@ -3023,7 +2936,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update codecs
-        if (str_vlen(acodecs) > 0)
+        if (hb_str_vlen(acodecs) > 0)
         {
             for (ii = 0; acodecs[ii] != NULL; ii++)
             {
@@ -3041,7 +2954,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update qualities
-        if (str_vlen(aqualities) > 0)
+        if (hb_str_vlen(aqualities) > 0)
         {
             for (ii = 0; aqualities[ii] != NULL &&
                          aqualities[ii][0] != 0; ii++)
@@ -3055,7 +2968,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update bitrates
-        if (str_vlen(abitrates) > 0)
+        if (hb_str_vlen(abitrates) > 0)
         {
             for (ii = 0; abitrates[ii]    != NULL &&
                          abitrates[ii][0] != 0; ii++)
@@ -3085,7 +2998,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update samplerates
-        if (str_vlen(arates) > 0)
+        if (hb_str_vlen(arates) > 0)
         {
             for (ii = 0; arates[ii]    != NULL &&
                          arates[ii][0] != 0; ii++)
@@ -3105,7 +3018,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update mixdowns
-        if (str_vlen(mixdowns) > 0)
+        if (hb_str_vlen(mixdowns) > 0)
         {
             for (ii = 0; mixdowns[ii]    != NULL &&
                          mixdowns[ii][0] != 0; ii++)
@@ -3125,7 +3038,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update mixdowns normalization
-        if (str_vlen(normalize_mix_level) > 0)
+        if (hb_str_vlen(normalize_mix_level) > 0)
         {
             for (ii = 0; normalize_mix_level[ii]    != NULL &&
                          normalize_mix_level[ii][0] != 0; ii++)
@@ -3147,7 +3060,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update DRC
-        if (str_vlen(dynamic_range_compression) > 0)
+        if (hb_str_vlen(dynamic_range_compression) > 0)
         {
             for (ii = 0;dynamic_range_compression[ii]    != NULL &&
                         dynamic_range_compression[ii][0] != 0; ii++)
@@ -3170,7 +3083,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update Gain
-        if (str_vlen(audio_gain) > 0)
+        if (hb_str_vlen(audio_gain) > 0)
         {
             for (ii = 0; audio_gain[ii]    != NULL &&
                          audio_gain[ii][0] != 0; ii++)
@@ -3192,7 +3105,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update dither method
-        if (str_vlen(audio_dither) > 0)
+        if (hb_str_vlen(audio_dither) > 0)
         {
             for (ii = 0; audio_dither[ii]    != NULL &&
                          audio_dither[ii][0] != 0; ii++)
@@ -3212,7 +3125,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update compression
-        if (str_vlen(acompressions) > 0)
+        if (hb_str_vlen(acompressions) > 0)
         {
             for (ii = 0; acompressions[ii]    != NULL &&
                          acompressions[ii][0] != 0; ii++)
@@ -3234,7 +3147,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update track names
-        if (str_vlen(anames) > 0)
+        if (hb_str_vlen(anames) > 0)
         {
             for (ii = 0; anames[ii]    != NULL &&
                          anames[ii][0] != 0; ii++)
@@ -3544,6 +3457,14 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "PictureRotate", hb_value_string(rotate));
     }
+    if (pad_disable)
+    {
+        hb_dict_set(preset, "PicturePad", hb_value_string("off"));
+    }
+    if (pad != NULL)
+    {
+        hb_dict_set(preset, "PicturePad", hb_value_string(pad));
+    }
 
     return preset;
 }
@@ -3598,11 +3519,11 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
     *one_burned |= burn;
     int def  = srtdefault == track + 1;
 
-    if (srtcodeset && track < str_vlen(srtcodeset) && srtcodeset[track])
+    if (srtcodeset && track < hb_str_vlen(srtcodeset) && srtcodeset[track])
         codeset = srtcodeset[track];
-    if (srtoffset && track < str_vlen(srtoffset) && srtoffset[track])
+    if (srtoffset && track < hb_str_vlen(srtoffset) && srtoffset[track])
         offset = strtoll(srtoffset[track], NULL, 0);
-    if (srtlang && track < str_vlen(srtlang) && srtlang[track])
+    if (srtlang && track < hb_str_vlen(srtlang) && srtlang[track])
     {
         const iso639_lang_t *lang = lang_lookup(srtlang[track]);
         if (lang != NULL)

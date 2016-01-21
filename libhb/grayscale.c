@@ -37,13 +37,12 @@ static int hb_grayscale_work( hb_filter_object_t * filter,
 
 static void hb_grayscale_close( hb_filter_object_t * filter );
 
-static int hb_grayscale_info( hb_filter_object_t * filter,
-                              hb_filter_info_t * info );
+static hb_filter_info_t * hb_grayscale_info( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_grayscale =
 {
     .id            = HB_FILTER_GRAYSCALE,
-    .enforce_order = 0,
+    .enforce_order = 1,
     .name          = "Grayscale",
     .settings      = NULL,
     .init          = hb_grayscale_init,
@@ -207,11 +206,9 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static int hb_grayscale_info( hb_filter_object_t * filter,
-                              hb_filter_info_t   * info )
+static hb_filter_info_t * hb_grayscale_info( hb_filter_object_t * filter )
 {
-    info->human_readable_desc[0] = 0;
-    return 0;
+    return NULL;
 }
 
 static void hb_grayscale_close( hb_filter_object_t * filter )

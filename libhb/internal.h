@@ -460,16 +460,18 @@ enum
 };
 
 extern hb_filter_object_t hb_filter_detelecine;
+extern hb_filter_object_t hb_filter_decomb;
 extern hb_filter_object_t hb_filter_deinterlace;
+extern hb_filter_object_t hb_filter_vfr;
 extern hb_filter_object_t hb_filter_deblock;
 extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
-extern hb_filter_object_t hb_filter_decomb;
+extern hb_filter_object_t hb_filter_render_sub;
+extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_grayscale;
-extern hb_filter_object_t hb_filter_crop_scale;
-extern hb_filter_object_t hb_filter_render_sub;
-extern hb_filter_object_t hb_filter_vfr;
+extern hb_filter_object_t hb_filter_pad;
+extern hb_filter_object_t hb_filter_avfilter;
 
 #ifdef USE_QSV
 extern hb_filter_object_t hb_filter_qsv;
@@ -508,3 +510,5 @@ void hb_muxmp4_process_subtitle_style( uint8_t *input,
                                        uint8_t *style, uint16_t *stylesize );
 
 void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
+void hb_avfilter_combine( hb_list_t * list );
+

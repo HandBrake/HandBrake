@@ -59,13 +59,12 @@ static int hb_rotate_work( hb_filter_object_t * filter,
 
 static void hb_rotate_close( hb_filter_object_t * filter );
 
-static int hb_rotate_info( hb_filter_object_t * filter,
-                           hb_filter_info_t * info );
+static hb_filter_info_t * hb_rotate_info( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_rotate =
 {
     .id            = HB_FILTER_ROTATE,
-    .enforce_order = 0,
+    .enforce_order = 1,
     .name          = "Rotate (rotate & flip image axes)",
     .settings      = NULL,
     .init          = hb_rotate_init,
@@ -322,18 +321,21 @@ static int hb_rotate_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static int hb_rotate_info( hb_filter_object_t * filter,
-                           hb_filter_info_t * info )
+static hb_filter_info_t * hb_rotate_info( hb_filter_object_t * filter )
 {
     hb_filter_private_t * pv = filter->private_data;
-    if( !pv )
-        return 1;
+    hb_filter_info_t    * info;
 
-    memset( info, 0, sizeof( hb_filter_info_t ) );
+    if( !pv )
+        return NULL;
+
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
+
     info->out.geometry.width = pv->width;
     info->out.geometry.height = pv->height;
     info->out.geometry.par = pv->par;
-    int pos = 0;
 
     int mirror_x = !!(pv->mode & 2);
     int mirror_y = !!(pv->mode & 1);
@@ -348,18 +350,18 @@ static int hb_rotate_info( hb_filter_object_t * filter,
 
     if (degrees > 0)
     {
-        sprintf(&info->human_readable_desc[pos], "Rotate %d%s", degrees,
-                mirror_x ? " / mirror image" : "");
+        snprintf(info->human_readable_desc, 128, "Rotate %d%s", degrees,
+                 mirror_x ? " / mirror image" : "");
     }
     else if (mirror_x)
     {
-        sprintf(&info->human_readable_desc[pos], "Mirror image");
+        snprintf(info->human_readable_desc, 128, "Mirror image");
     }
     else
     {
-        sprintf(&info->human_readable_desc[pos], "No rotation or mirror!");
+        snprintf(info->human_readable_desc, 128, "No rotation or mirror!");
     }
-    return 0;
+    return info;
 }
 
 static void hb_rotate_close( hb_filter_object_t * filter )

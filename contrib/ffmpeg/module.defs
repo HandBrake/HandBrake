@@ -22,7 +22,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avplay \
     --disable-avprobe \
     --disable-avdevice \
-    --disable-avfilter \
     --disable-muxers \
     --disable-network \
     --disable-hwaccels \

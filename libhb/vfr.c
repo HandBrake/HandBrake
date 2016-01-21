@@ -46,7 +46,7 @@ static int hb_vfr_work( hb_filter_object_t * filter,
                         hb_buffer_t ** buf_out );
 
 static void hb_vfr_close( hb_filter_object_t * filter );
-static int hb_vfr_info( hb_filter_object_t * filter, hb_filter_info_t * info );
+static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_vfr =
 {
@@ -349,15 +349,18 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     return 0;
 }
 
-static int hb_vfr_info( hb_filter_object_t * filter,
-                        hb_filter_info_t * info )
+static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter )
 {
     hb_filter_private_t * pv = filter->private_data;
+    hb_filter_info_t    * info;
 
     if( !pv )
-        return 1;
+        return NULL;
 
-    memset( info, 0, sizeof( hb_filter_info_t ) );
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
+
     info->out.vrate      = pv->input_vrate;
     if (pv->cfr == 2)
     {
@@ -380,9 +383,9 @@ static int hb_vfr_info( hb_filter_object_t * filter,
     if ( pv->cfr == 0 )
     {
         /* Ensure we're using "Same as source" FPS */
-        sprintf( info->human_readable_desc,
-                "frame rate: same as source (around %.3f fps)",
-                (float)pv->vrate.num / pv->vrate.den );
+        snprintf( info->human_readable_desc, 128,
+                  "frame rate: same as source (around %.3f fps)",
+                  (float)pv->vrate.num / pv->vrate.den );
     }
     else if ( pv->cfr == 2 )
     {
@@ -390,21 +393,21 @@ static int hb_vfr_info( hb_filter_object_t * filter,
         // framerate, unless it's higher than the specified peak framerate.
         double source_fps = (double)pv->input_vrate.num / pv->input_vrate.den;
         double peak_fps = (double)pv->vrate.num / pv->vrate.den;
-        sprintf( info->human_readable_desc,
-                "frame rate: %.3f fps -> peak rate limited to %.3f fps",
-                source_fps , peak_fps );
+        snprintf( info->human_readable_desc, 128,
+                  "frame rate: %.3f fps -> peak rate limited to %.3f fps",
+                  source_fps , peak_fps );
     }
     else
     {
         // Constant framerate. Signal the framerate we are using.
         double source_fps = (double)pv->input_vrate.num / pv->input_vrate.den;
         double constant_fps = (double)pv->vrate.num / pv->vrate.den;
-        sprintf( info->human_readable_desc,
-                "frame rate: %.3f fps -> constant %.3f fps",
-                source_fps , constant_fps );
+        snprintf( info->human_readable_desc, 128,
+                  "frame rate: %.3f fps -> constant %.3f fps",
+                  source_fps , constant_fps );
     }
 
-    return 0;
+    return info;
 }
 
 static void hb_vfr_close( hb_filter_object_t * filter )

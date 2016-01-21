@@ -3765,6 +3765,14 @@ hb_filter_object_t * hb_filter_init( int filter_id )
             filter = &hb_filter_crop_scale;
             break;
 
+        case HB_FILTER_AVFILTER:
+            filter = &hb_filter_avfilter;
+            break;
+
+        case HB_FILTER_PAD:
+            filter = &hb_filter_pad;
+            break;
+
         case HB_FILTER_ROTATE:
             filter = &hb_filter_rotate;
             break;
@@ -3803,11 +3811,25 @@ void hb_filter_close( hb_filter_object_t ** _f )
 {
     hb_filter_object_t * f = *_f;
 
-    if( f->settings )
-        free( f->settings );
+    free(f->settings);
 
     free( f );
     *_f = NULL;
+}
+
+/**********************************************************************
+ * hb_filter_info_close
+ **********************************************************************
+ *
+ *********************************************************************/
+void hb_filter_info_close( hb_filter_info_t ** _fi )
+{
+    hb_filter_info_t * fi = *_fi;
+
+    free(fi->human_readable_desc);
+
+    free( fi );
+    *_fi = NULL;
 }
 
 /**********************************************************************
@@ -4843,3 +4865,122 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         hb_deep_log( level, "    %-50s%20s", line, ascii );
     }
 }
+
+int hb_str_vlen(char **strv)
+{
+    int i;
+    if (strv == NULL)
+        return 0;
+    for (i = 0; strv[i]; i++);
+    return i;
+}
+
+static const char* strchr_quote(const char *pos, char c, char q)
+{
+    if (pos == NULL)
+        return NULL;
+
+    while (*pos != 0 && *pos != c)
+    {
+        if (*pos == q)
+        {
+            pos = strchr_quote(pos+1, q, 0);
+            if (pos == NULL)
+                return NULL;
+            pos++;
+        }
+        else if (*pos == '\\' && *(pos+1) != 0)
+            pos += 2;
+        else
+            pos++;
+    }
+    if (*pos != c)
+        return NULL;
+    return pos;
+}
+
+static char *strndup_quote(const char *str, char q, int len)
+{
+    if (str == NULL)
+        return NULL;
+
+    char * res;
+    int str_len = strlen( str );
+    int src = 0, dst = 0;
+    res = malloc( len > str_len ? str_len + 1 : len + 1 );
+    if ( res == NULL ) return res;
+
+    while (str[src] != 0 && src < len)
+    {
+        if (str[src] == q)
+            src++;
+        else if (str[src] == '\\' && str[src+1] != 0)
+        {
+            res[dst++] = str[src+1];
+            src += 2;
+        }
+        else
+            res[dst++] = str[src++];
+    }
+    res[dst] = '\0';
+    return res;
+}
+
+char** hb_str_vsplit( const char *str, char delem )
+{
+    const char *  pos;
+    const char *  end;
+    char       ** ret;
+    int           count, i;
+    char          quote = '"';
+
+    if (delem == '"')
+    {
+        quote = '\'';
+    }
+    if ( str == NULL || str[0] == 0 )
+    {
+        ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
+        *ret = NULL;
+        return ret;
+    }
+
+    // Find number of elements in the string
+    count = 1;
+    pos = str;
+    while ( ( pos = strchr_quote( pos, delem, quote ) ) != NULL )
+    {
+        count++;
+        pos++;
+    }
+
+    ret = calloc( ( count + 1 ), sizeof(char*) );
+    if ( ret == NULL ) return ret;
+
+    pos = str;
+    for ( i = 0; i < count - 1; i++ )
+    {
+        end = strchr_quote( pos, delem, quote );
+        ret[i] = strndup_quote(pos, quote, end - pos);
+        pos = end + 1;
+    }
+    ret[i] = strndup_quote(pos, quote, strlen(pos));
+
+    return ret;
+}
+
+void hb_str_vfree( char **strv )
+{
+    int i;
+
+    if (strv == NULL)
+        return;
+
+    for ( i = 0; strv[i]; i++ )
+    {
+        free( strv[i] );
+    }
+    free( strv );
+}
+
