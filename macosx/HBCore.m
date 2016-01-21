@@ -311,7 +311,8 @@ static void hb_error_handler(const char *errmsg)
                           - (rotatedRect.size.height / 2));
 
     // Flip
-    if (flipped) {
+    if (flipped)
+    {
         CGAffineTransform flipHorizontal = CGAffineTransformMake(-1, 0, 0, 1, floor(rotatedRect.size.width), 0);
         CGContextConcatCTM(bmContext, flipHorizontal);
     }
