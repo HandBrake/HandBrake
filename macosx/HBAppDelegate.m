@@ -150,6 +150,7 @@
         [alert setInformativeText:NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil)];
         [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
         [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
+        [alert.buttons[1] setKeyEquivalent:@"\E"];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         NSInteger result = [alert runModal];
