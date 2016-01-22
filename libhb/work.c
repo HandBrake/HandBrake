@@ -11,6 +11,7 @@
 #include "libavformat/avformat.h"
 #include "openclwrapper.h"
 #include "opencl.h"
+#include "decomb.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -1309,6 +1310,31 @@ static int sanitize_qsv( hb_job_t * job )
     return 0;
 }
 
+static void sanitize_filter_list(hb_list_t *list)
+{
+    // Add selective deinterlacing mode if comb detection is enabled
+    if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
+    {
+        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_DEINTERLACE};
+        int ii, count = sizeof(selective) / sizeof(int);
+
+        for (ii = 0; ii < count; ii++)
+        {
+            hb_filter_object_t * filter = hb_filter_find(list, selective[ii]);
+            if (filter != NULL)
+            {
+                int mode = hb_dict_get_int(filter->settings, "mode");
+                mode |= MODE_DECOMB_SELECTIVE;
+                hb_dict_set(filter->settings, "mode", hb_value_int(mode));
+                break;
+            }
+        }
+    }
+
+    // Combine HB_FILTER_AVFILTERs that are sequential
+    hb_avfilter_combine(list);
+}
+
 /**
  * Job initialization rountine.
  *
@@ -1416,8 +1442,7 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
-        // Combine HB_FILTER_AVFILTERs that are sequential
-        hb_avfilter_combine(job->list_filter);
+        sanitize_filter_list(job->list_filter);
 
         memset(&init, 0, sizeof(init));
         init.job = job;

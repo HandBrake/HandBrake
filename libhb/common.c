@@ -3718,6 +3718,27 @@ hb_list_t *hb_filter_list_copy(const hb_list_t *src)
     return list;
 }
 
+hb_filter_object_t * hb_filter_find(const hb_list_t *list, int filter_id)
+{
+    hb_filter_object_t *filter = NULL;
+    int ii;
+
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    for (ii = 0; ii < hb_list_count(list); ii++)
+    {
+        filter = hb_list_item(list, ii);
+        if (filter->id == filter_id)
+        {
+            return filter;
+        }
+    }
+
+    return NULL;
+}
+
 /**
  * Gets a filter object with the given type
  * @param filter_id The type of filter to get.
@@ -3730,6 +3751,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
     {
         case HB_FILTER_DETELECINE:
             filter = &hb_filter_detelecine;
+            break;
+
+        case HB_FILTER_COMB_DETECT:
+            filter = &hb_filter_comb_detect;
             break;
 
         case HB_FILTER_DECOMB:

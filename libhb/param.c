@@ -75,18 +75,28 @@ static hb_filter_param_t detelecine_presets[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t comb_detect_presets[] =
+{
+    { 0, "Off",         "off",        "disable=1"       },
+    { 1, "Custom",      "custom",     NULL              },
+    { 2, "Default",     "default",
+      "mode=3:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
+      "filter-mode=2:block-thresh=40:block-width=16:block-height=16"
+                                                        },
+    { 3, "Fast",        "fast",
+      "mode=0:spatial-metric=2:motion-thresh=6:spatial-thresh=9:"
+      "filter-mode=1:block-thresh=80:block-width=16:block-height=16"
+                                                        },
+    { 0, NULL,          NULL,         NULL              }
+};
+
 static hb_filter_param_t decomb_presets[] =
 {
     { 1, "Custom",      "custom",     NULL              },
-    { 2, "Default",     "default",
-      "mode=391:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
-      "filter-mode=2:block-thresh=40"
-                                                        },
-    { 3, "Fast",        "fast",
-      "mode=7:motion-thresh=6:spatial-thresh=9:"
-      "filter-mode=1:block-thresh=80"
-                                                        },
-    { 4, "Bob",         "bob",        "mode=455"        },
+    { 2, "Default",     "default",    "mode=7"          },
+    { 4, "Bob",         "bob",        "mode=23"         },
+    { 3, "EEDI2",       "eedi2",      "mode=15"         },
+    { 4, "EEDI2 Bob",   "eedi2bob",   "mode=31"         },
     { 0, NULL,          NULL,         NULL              }
 };
 
@@ -120,6 +130,9 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
       sizeof(detelecine_presets) / sizeof(hb_filter_param_t)     },
+
+    { HB_FILTER_COMB_DETECT, comb_detect_presets, NULL,
+      sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
 
     { HB_FILTER_DECOMB,      decomb_presets,      NULL,
       sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
@@ -552,6 +565,7 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_NLMEANS:
             settings = generate_nlmeans_settings(preset, tune, custom);
             break;
+        case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
