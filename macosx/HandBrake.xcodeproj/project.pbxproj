@@ -201,6 +201,8 @@
 		A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467D16BC2AD800C307BC /* pause-p.pdf */; };
 		A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467E16BC2AD800C307BC /* play-p.pdf */; };
 		A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* prev-p.pdf */; };
+		A9E165521C523016003EF30E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
+		A9E165531C52302A003EF30E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
 		A9E2FD271A21BC4A000E8D3F /* HBAddPresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */; };
 		A9E2FD2B1A21BC6F000E8D3F /* AddPreset.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */; };
 		A9E66D701A67A2A8007B641D /* HBDistributedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */; };
@@ -535,6 +537,7 @@
 		A9E1467D16BC2AD800C307BC /* pause-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "pause-p.pdf"; sourceTree = "<group>"; };
 		A9E1467E16BC2AD800C307BC /* play-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-p.pdf"; sourceTree = "<group>"; };
 		A9E1467F16BC2AD800C307BC /* prev-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "prev-p.pdf"; sourceTree = "<group>"; };
+		A9E165511C523016003EF30E /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "external/contrib/lib/libavfilter.a"; sourceTree = "<group>"; };
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
 		A9E2FD2A1A21BC6F000E8D3F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AddPreset.xib; sourceTree = "<group>"; };
@@ -582,6 +585,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
 				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
@@ -619,6 +623,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9E165531C52302A003EF30E /* libavfilter.a in Frameworks */,
 				273F20C914ADC5150021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
@@ -691,6 +696,7 @@
 				27D6C73F14B102DA00B785E4 /* libx264.a */,
 				27D6C74014B102DA00B785E4 /* libxml2.a */,
 				A95512881A320A12001BFC6F /* libjansson.a */,
+				A9E165511C523016003EF30E /* libavfilter.a */,
 			);
 			name = "Static Libraries";
 			sourceTree = "<group>";
