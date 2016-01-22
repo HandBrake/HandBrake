@@ -41,7 +41,7 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
 static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
-static hb_filter_info_t * hb_qsv_filter_pre_info( hb_filter_object_t * filter )
+static hb_filter_info_t * hb_qsv_filter_pre_info( hb_filter_object_t * filter );
 static void hb_qsv_filter_pre_close( hb_filter_object_t * filter );
 
 static int hb_qsv_filter_post_init( hb_filter_object_t * filter,
