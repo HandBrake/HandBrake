@@ -335,9 +335,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (importedPreset.AudioLanguageList != null)
             {
-                foreach (var item in importedPreset.AudioLanguageList)
+                IList<string> names = LanguageUtilities.GetLanguageNames(importedPreset.AudioLanguageList);
+                foreach (var name in names)
                 {
-                    preset.AudioTrackBehaviours.SelectedLangauges.Add(item);
+                    preset.AudioTrackBehaviours.SelectedLangauges.Add(name);
                 }
             }
 
@@ -376,13 +377,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack = importedPreset.SubtitleAddForeignAudioSearch;
             if (importedPreset.SubtitleLanguageList != null)
             {
-                foreach (var item in importedPreset.SubtitleLanguageList)
+                IList<string> names = LanguageUtilities.GetLanguageNames(importedPreset.SubtitleLanguageList);
+                foreach (var name in names)
                 {
-                    preset.SubtitleTrackBehaviours.SelectedLangauges.Add(item);
+                    preset.SubtitleTrackBehaviours.SelectedLangauges.Add(name);
                 }
             }
 
-            /* Chapter Marker Settings */ 
+            /* Chapter Marker Settings */
             preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
 
             /* Advanced Settings */ 
