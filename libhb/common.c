@@ -3826,7 +3826,10 @@ void hb_filter_info_close( hb_filter_info_t ** _fi )
 {
     hb_filter_info_t * fi = *_fi;
 
-    free(fi->human_readable_desc);
+    if (fi != NULL)
+    {
+        free(fi->human_readable_desc);
+    }
 
     free( fi );
     *_fi = NULL;
