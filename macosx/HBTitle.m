@@ -167,16 +167,15 @@ extern NSString *keySubTrackType;
     if (!_audioTracks)
     {
         NSMutableArray *tracks = [NSMutableArray array];
-        hb_audio_config_t *audio;
         hb_list_t *list = self.hb_title->list_audio;
         int count = hb_list_count(list);
 
         // Initialize the audio list of available audio tracks from this title
         for (int i = 0; i < count; i++)
         {
-            audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
+            hb_audio_config_t *audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
             [tracks addObject: @{keyAudioTrackIndex: @(i + 1),
-                                           keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", i, audio->lang.description],
+                                           keyAudioTrackName: [NSString stringWithFormat: @"%d: %@", i, @(audio->lang.description)],
                                            keyAudioInputBitrate: @(audio->in.bitrate / 1000),
                                            keyAudioInputSampleRate: @(audio->in.samplerate),
                                            keyAudioInputCodec: @(audio->in.codec),
@@ -196,15 +195,14 @@ extern NSString *keySubTrackType;
     if (!_subtitlesTracks)
     {
         NSMutableArray *tracks = [NSMutableArray array];
-        hb_subtitle_t *subtitle;
         hb_list_t *list = self.hb_title->list_subtitle;
         int count = hb_list_count(list);
 
         for (int i = 0; i < count; i++)
         {
-            subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
+            hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
 
-            /* Human-readable representation of subtitle->source */
+            // Human-readable representation of subtitle->source
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
             NSString *subSourceName = @(hb_subsource_name(subtitle->source));
 
@@ -224,11 +222,11 @@ extern NSString *keySubTrackType;
     return _subtitlesTracks;
 }
 
-- (NSArray *)chapters
+- (NSArray<HBChapter *> *)chapters
 {
     if (!_chapters)
     {
-        NSMutableArray *chapters = [NSMutableArray array];
+        NSMutableArray<HBChapter *> *chapters = [NSMutableArray array];
 
         for (int i = 0; i < hb_list_count(self.hb_title->list_chapter); i++)
         {
