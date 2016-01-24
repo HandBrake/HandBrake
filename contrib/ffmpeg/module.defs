@@ -40,6 +40,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_vp8 \
     --enable-zlib \
     --enable-bzlib \
+    --enable-pic \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
