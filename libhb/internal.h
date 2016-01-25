@@ -102,6 +102,11 @@ struct hb_buffer_settings_s
 #define PIC_FLAG_REPEAT_FRAME       0x0200
 #define HB_BUF_FLAG_EOF             0x0400
     uint16_t      flags;
+
+#define HB_COMB_NONE  0
+#define HB_COMB_LIGHT 1
+#define HB_COMB_HEAVY 2
+    uint8_t       combed;
 };
 
 struct hb_image_format_s

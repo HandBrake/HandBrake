@@ -108,6 +108,7 @@ static filter_param_map_t param_map[] =
 #define MODE_YADIF_ENABLE       1
 #define MODE_YADIF_SPATIAL      2
 #define MODE_YADIF_BOB          4
+#define MODE_YADIF_AUTO         8
 
 /* Deinterlace Settings
  *  mode:parity
@@ -119,6 +120,7 @@ static filter_param_map_t param_map[] =
  *      1 = Enabled
  *      2 = Spatial
  *      4 = Bob
+ *      8 = Auto
  *
  *  Parity:
  *      0  = Top Field First
@@ -149,11 +151,13 @@ generate_deinterlace_settings(const char * settings)
     {
         return (char*)hb_filter_off;
     }
+    int automatic  = !!(mode & MODE_YADIF_AUTO);
     int bob        = !!(mode & MODE_YADIF_BOB);
     int no_spatial = !(mode & MODE_YADIF_SPATIAL);
     mode = bob | (no_spatial << 1);
 
-    return hb_strdup_printf("yadif='mode=%d:parity=%d'", mode, parity);
+    return hb_strdup_printf("yadif='mode=%d:auto=%d:parity=%d'",
+                            mode, automatic, parity);
 }
 
 /* Rotate Settings:

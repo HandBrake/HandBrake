@@ -335,11 +335,12 @@ static void fill_frame(hb_filter_private_t * pv,
     frame->linesize[1] = buf->plane[1].stride;
     frame->linesize[2] = buf->plane[2].stride;
 
-    frame->pts = buf->s.start;
+    frame->pts              = buf->s.start;
     frame->reordered_opaque = buf->s.start;
-    frame->width = buf->f.width;
-    frame->height = buf->f.height;
-    frame->format = buf->f.fmt;
+    frame->width            = buf->f.width;
+    frame->height           = buf->f.height;
+    frame->format           = buf->f.fmt;
+    frame->interlaced_frame = !!buf->s.combed;
 }
 
 static hb_buffer_t* avframe_to_buffer(hb_filter_private_t * pv, AVFrame *frame)
