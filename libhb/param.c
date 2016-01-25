@@ -104,6 +104,129 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_INVALID,     NULL,                NULL, 0        }
 };
 
+/* Settings:
+ *  degrees:mirror
+ *
+ *  degrees - Rotation angle, may be one of 90, 180, or 270
+ *  mirror  - Mirror image around x axis
+ *
+ * Examples:
+ * Mode 180:1 Mirror then rotate 180'
+ * Mode   0:1 Mirror
+ * Mode 180:0 Rotate 180'
+ * Mode  90:0 Rotate 90'
+ * Mode 270:0 Rotate 270'
+ *
+ * Legacy Mode Examples (also accepted):
+ * Mode 1: Flip vertically (y0 becomes yN and yN becomes y0) (aka 180:1)
+ * Mode 2: Flip horizontally (x0 becomes xN and xN becomes x0) (aka 0:1)
+ * Mode 3: Flip both horizontally and vertically (aka 180:0)
+ * Mode 4: Rotate 90' (aka 90:0)
+ * Mode 7: Flip horiz & vert plus Rotate 90' (aka 270:0)
+ */
+char *
+generate_rotate_settings(const char * preset, const char * tune)
+{
+    char       ** args;
+    const char *  trans = NULL;
+    char       *  result;
+    int           ii, angle = 180, flip = 0, hflip = 0, vflip = 0;
+
+    args = hb_str_vsplit(preset, ':');
+    for (ii = 0; ii < 2 && args[ii]; ii++)
+    {
+        switch (ii)
+        {
+            case 0:
+                angle  = strtol(args[ii], &result, 0);
+                break;
+            case 1:
+                flip = strtol(args[ii], &result, 0);
+                break;
+            default:
+                break;
+        }
+    }
+    hb_str_vfree(args);
+    if (angle < 8 && ii == 1)
+    {
+        // Legacy value
+        switch (angle)
+        {
+            case 1:
+                vflip = 1;
+                break;
+            case 2:
+                hflip = 1;
+                break;
+            case 3:
+                vflip = hflip = 1;
+                break;
+            case 4:
+                trans = "clock";
+                break;
+            case 5:
+                trans = "cclock_flip";
+                break;
+            case 6:
+                trans = "clock_flip";
+                break;
+            case 7:
+                trans = "cclock";
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        const char * clock;
+        const char * cclock;
+        if (flip)
+        {
+            clock  = "clock_flip";
+            cclock = "cclock_flip";
+        }
+        else
+        {
+            clock  = "clock";
+            cclock = "cclock";
+        }
+        switch (angle)
+        {
+            case 0:
+                hflip = flip;
+                break;
+            case 90:
+                trans = clock;
+                break;
+            case 180:
+                vflip = hflip = 1;
+                break;
+            case 270:
+                trans = cclock;
+                break;
+            default:
+                break;
+        }
+    }
+    if (trans != NULL)
+    {
+        return hb_strdup_printf("transpose='dir=%s'", trans);
+    }
+    else if (vflip || hflip)
+    {
+        return hb_strdup_printf("%s%s%s",
+                                vflip ? "vflip" : "",
+                                hflip ? ", "    : "",
+                                hflip ? "hflip" : "");
+    }
+    else
+    {
+        return (char*)hb_filter_off;
+    }
+}
+
 /* Pad presets and tunes
  *
  * There are currently no presets and tunes for pad
@@ -615,14 +738,14 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune)
             if (hb_validate_filter_settings(filter_id, preset)) return NULL;
 
             return generate_pad_settings(preset, tune);
+        case HB_FILTER_ROTATE:
+            if (preset == NULL) return NULL;
+            if (!strcasecmp(preset, "off")) return (char*)hb_filter_off;
+            if (hb_validate_filter_settings(filter_id, preset)) return NULL;
+
+            return generate_rotate_settings(preset, tune);
         case HB_FILTER_NLMEANS:
             filter_param = generate_nlmeans_settings(preset, tune);
-            break;
-        case HB_FILTER_ROTATE:
-            if (atoi(preset) == 0)
-                filter_param = (char*)hb_filter_off;
-            else
-                filter_param = strdup(preset);
             break;
         case HB_FILTER_DEBLOCK:
             if (atoi(preset) < 5)
