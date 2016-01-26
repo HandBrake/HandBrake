@@ -173,7 +173,7 @@ extern NSString *keySubTrackType;
         // Initialize the audio list of available audio tracks from this title
         for (int i = 0; i < count; i++)
         {
-            hb_audio_config_t *audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
+            hb_audio_config_t *audio = hb_list_audio_config_item(list, i);
             [tracks addObject: @{keyAudioTrackIndex: @(i + 1),
                                            keyAudioTrackName: [NSString stringWithFormat: @"%d: %@", i, @(audio->lang.description)],
                                            keyAudioInputBitrate: @(audio->in.bitrate / 1000),
@@ -200,7 +200,7 @@ extern NSString *keySubTrackType;
 
         for (int i = 0; i < count; i++)
         {
-            hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
+            hb_subtitle_t *subtitle = hb_list_item(self.hb_title->list_subtitle, i);
 
             // Human-readable representation of subtitle->source
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
