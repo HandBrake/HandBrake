@@ -1697,6 +1697,15 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         streamFlush(pv->stream);
         *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
+        // Ideally, we would only do this subtitle scan check in
+        // syncSubtitleWork, but someone might try to do a subtitle
+        // scan on a source that has no subtitles :-(
+        if (pv->common->job->indepth_scan)
+        {
+            // When doing subtitle indepth scan, the pipeline ends at sync.
+            // Terminate job when EOF reached.
+            *w->done = 1;
+        }
         return HB_WORK_DONE;
     }
 
