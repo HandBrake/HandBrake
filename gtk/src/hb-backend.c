@@ -716,245 +716,13 @@ const gchar *srt_codeset_table[] =
 };
 #define SRT_TABLE_SIZE (sizeof(srt_codeset_table)/ sizeof(char*)-1)
 
-#if 0
-typedef struct iso639_lang_t
-{
-    char * eng_name;        /* Description in English */
-    char * native_name;     /* Description in native language */
-    char * iso639_1;       /* ISO-639-1 (2 characters) code */
-    char * iso639_2;        /* ISO-639-2/t (3 character) code */
-    char * iso639_2b;       /* ISO-639-2/b code (if different from above) */
-} iso639_lang_t;
-#endif
-
-const iso639_lang_t ghb_language_table[] =
-{
-    { "Any", "", "zz", "und" },
-    { "Afar", "", "aa", "aar" },
-    { "Abkhazian", "", "ab", "abk" },
-    { "Afrikaans", "", "af", "afr" },
-    { "Akan", "", "ak", "aka" },
-    { "Albanian", "", "sq", "sqi", "alb" },
-    { "Amharic", "", "am", "amh" },
-    { "Arabic", "", "ar", "ara" },
-    { "Aragonese", "", "an", "arg" },
-    { "Armenian", "", "hy", "hye", "arm" },
-    { "Assamese", "", "as", "asm" },
-    { "Avaric", "", "av", "ava" },
-    { "Avestan", "", "ae", "ave" },
-    { "Aymara", "", "ay", "aym" },
-    { "Azerbaijani", "", "az", "aze" },
-    { "Bashkir", "", "ba", "bak" },
-    { "Bambara", "", "bm", "bam" },
-    { "Basque", "", "eu", "eus", "baq" },
-    { "Belarusian", "", "be", "bel" },
-    { "Bengali", "", "bn", "ben" },
-    { "Bihari", "", "bh", "bih" },
-    { "Bislama", "", "bi", "bis" },
-    { "Bosnian", "", "bs", "bos" },
-    { "Breton", "", "br", "bre" },
-    { "Bulgarian", "", "bg", "bul" },
-    { "Burmese", "", "my", "mya", "bur" },
-    { "Catalan", "", "ca", "cat" },
-    { "Chamorro", "", "ch", "cha" },
-    { "Chechen", "", "ce", "che" },
-    { "Chinese", "", "zh", "zho", "chi" },
-    { "Church Slavic", "", "cu", "chu" },
-    { "Chuvash", "", "cv", "chv" },
-    { "Cornish", "", "kw", "cor" },
-    { "Corsican", "", "co", "cos" },
-    { "Cree", "", "cr", "cre" },
-    { "Czech", "", "cs", "ces", "cze" },
-    { "Danish", "Dansk", "da", "dan" },
-    { "German", "Deutsch", "de", "deu", "ger" },
-    { "Divehi", "", "dv", "div" },
-    { "Dzongkha", "", "dz", "dzo" },
-    { "English", "English", "en", "eng" },
-    { "Spanish", "Espanol", "es", "spa" },
-    { "Esperanto", "", "eo", "epo" },
-    { "Estonian", "", "et", "est" },
-    { "Ewe", "", "ee", "ewe" },
-    { "Faroese", "", "fo", "fao" },
-    { "Fijian", "", "fj", "fij" },
-    { "French", "Francais", "fr", "fra", "fre" },
-    { "Western Frisian", "", "fy", "fry" },
-    { "Fulah", "", "ff", "ful" },
-    { "Georgian", "", "ka", "kat", "geo" },
-    { "Gaelic (Scots)", "", "gd", "gla" },
-    { "Irish", "", "ga", "gle" },
-    { "Galician", "", "gl", "glg" },
-    { "Manx", "", "gv", "glv" },
-    { "Greek, Modern", "", "el", "ell", "gre" },
-    { "Guarani", "", "gn", "grn" },
-    { "Gujarati", "", "gu", "guj" },
-    { "Haitian", "", "ht", "hat" },
-    { "Hausa", "", "ha", "hau" },
-    { "Hebrew", "", "he", "heb" },
-    { "Herero", "", "hz", "her" },
-    { "Hindi", "", "hi", "hin" },
-    { "Hiri Motu", "", "ho", "hmo" },
-    { "Croatian", "Hrvatski", "hr", "hrv", "scr" },
-    { "Igbo", "", "ig", "ibo" },
-    { "Ido", "", "io", "ido" },
-    { "Icelandic", "Islenska", "is", "isl", "ice" },
-    { "Sichuan Yi", "", "ii", "iii" },
-    { "Inuktitut", "", "iu", "iku" },
-    { "Interlingue", "", "ie", "ile" },
-    { "Interlingua", "", "ia", "ina" },
-    { "Indonesian", "", "id", "ind" },
-    { "Inupiaq", "", "ik", "ipk" },
-    { "Italian", "Italiano", "it", "ita" },
-    { "Javanese", "", "jv", "jav" },
-    { "Japanese", "", "ja", "jpn" },
-    { "Kalaallisut", "", "kl", "kal" },
-    { "Kannada", "", "kn", "kan" },
-    { "Kashmiri", "", "ks", "kas" },
-    { "Kanuri", "", "kr", "kau" },
-    { "Kazakh", "", "kk", "kaz" },
-    { "Central Khmer", "", "km", "khm" },
-    { "Kikuyu", "", "ki", "kik" },
-    { "Kinyarwanda", "", "rw", "kin" },
-    { "Kirghiz", "", "ky", "kir" },
-    { "Komi", "", "kv", "kom" },
-    { "Kongo", "", "kg", "kon" },
-    { "Korean", "", "ko", "kor" },
-    { "Kuanyama", "", "kj", "kua" },
-    { "Kurdish", "", "ku", "kur" },
-    { "Lao", "", "lo", "lao" },
-    { "Latin", "", "la", "lat" },
-    { "Latvian", "", "lv", "lav" },
-    { "Limburgan", "", "li", "lim" },
-    { "Lingala", "", "ln", "lin" },
-    { "Lithuanian", "", "lt", "lit" },
-    { "Luxembourgish", "", "lb", "ltz" },
-    { "Luba-Katanga", "", "lu", "lub" },
-    { "Ganda", "", "lg", "lug" },
-    { "Macedonian", "", "mk", "mkd", "mac" },
-    { "Hungarian", "Magyar", "hu", "hun" },
-    { "Marshallese", "", "mh", "mah" },
-    { "Malayalam", "", "ml", "mal" },
-    { "Maori", "", "mi", "mri", "mao" },
-    { "Marathi", "", "mr", "mar" },
-    { "Malay", "", "ms", "msa", "msa" },
-    { "Malagasy", "", "mg", "mlg" },
-    { "Maltese", "", "mt", "mlt" },
-    { "Moldavian", "", "mo", "mol" },
-    { "Mongolian", "", "mn", "mon" },
-    { "Nauru", "", "na", "nau" },
-    { "Navajo", "", "nv", "nav" },
-    { "Dutch", "Nederlands", "nl", "nld", "dut" },
-    { "Ndebele, South", "", "nr", "nbl" },
-    { "Ndebele, North", "", "nd", "nde" },
-    { "Ndonga", "", "ng", "ndo" },
-    { "Nepali", "", "ne", "nep" },
-    { "Norwegian", "Norsk", "no", "nor" },
-    { "Norwegian Nynorsk", "", "nn", "nno" },
-    { "Norwegian Bokmål", "", "nb", "nob" },
-    { "Chichewa; Nyanja", "", "ny", "nya" },
-    { "Occitan", "", "oc", "oci" },
-    { "Ojibwa", "", "oj", "oji" },
-    { "Oriya", "", "or", "ori" },
-    { "Oromo", "", "om", "orm" },
-    { "Ossetian", "", "os", "oss" },
-    { "Panjabi", "", "pa", "pan" },
-    { "Persian", "", "fa", "fas", "per" },
-    { "Pali", "", "pi", "pli" },
-    { "Polish", "", "pl", "pol" },
-    { "Portuguese", "Portugues", "pt", "por" },
-    { "Pushto", "", "ps", "pus" },
-    { "Quechua", "", "qu", "que" },
-    { "Romansh", "", "rm", "roh" },
-    { "Romanian", "", "ro", "ron", "rum" },
-    { "Rundi", "", "rn", "run" },
-    { "Russian", "", "ru", "rus" },
-    { "Sango", "", "sg", "sag" },
-    { "Sanskrit", "", "sa", "san" },
-    { "Serbian", "", "sr", "srp", "scc" },
-    { "Sinhala", "", "si", "sin" },
-    { "Slovak", "", "sk", "slk", "slo" },
-    { "Slovenian", "", "sl", "slv" },
-    { "Northern Sami", "", "se", "sme" },
-    { "Samoan", "", "sm", "smo" },
-    { "Shona", "", "sn", "sna" },
-    { "Sindhi", "", "sd", "snd" },
-    { "Somali", "", "so", "som" },
-    { "Sotho, Southern", "", "st", "sot" },
-    { "Sardinian", "", "sc", "srd" },
-    { "Swati", "", "ss", "ssw" },
-    { "Sundanese", "", "su", "sun" },
-    { "Finnish", "Suomi", "fi", "fin" },
-    { "Swahili", "", "sw", "swa" },
-    { "Swedish", "Svenska", "sv", "swe" },
-    { "Tahitian", "", "ty", "tah" },
-    { "Tamil", "", "ta", "tam" },
-    { "Tatar", "", "tt", "tat" },
-    { "Telugu", "", "te", "tel" },
-    { "Tajik", "", "tg", "tgk" },
-    { "Tagalog", "", "tl", "tgl" },
-    { "Thai", "", "th", "tha" },
-    { "Tibetan", "", "bo", "bod", "tib" },
-    { "Tigrinya", "", "ti", "tir" },
-    { "Tonga", "", "to", "ton" },
-    { "Tswana", "", "tn", "tsn" },
-    { "Tsonga", "", "ts", "tso" },
-    { "Turkmen", "", "tk", "tuk" },
-    { "Turkish", "", "tr", "tur" },
-    { "Twi", "", "tw", "twi" },
-    { "Uighur", "", "ug", "uig" },
-    { "Ukrainian", "", "uk", "ukr" },
-    { "Urdu", "", "ur", "urd" },
-    { "Uzbek", "", "uz", "uzb" },
-    { "Venda", "", "ve", "ven" },
-    { "Vietnamese", "", "vi", "vie" },
-    { "Volapük", "", "vo", "vol" },
-    { "Welsh", "", "cy", "cym", "wel" },
-    { "Walloon", "", "wa", "wln" },
-    { "Wolof", "", "wo", "wol" },
-    { "Xhosa", "", "xh", "xho" },
-    { "Yiddish", "", "yi", "yid" },
-    { "Yoruba", "", "yo", "yor" },
-    { "Zhuang", "", "za", "zha" },
-    { "Zulu", "", "zu", "zul" },
-    {NULL, NULL, NULL, NULL}
-};
-#define LANG_TABLE_SIZE (sizeof(ghb_language_table)/ sizeof(iso639_lang_t)-1)
-
 int
 ghb_lookup_lang(const GhbValue *glang)
 {
-    gint ii;
     const gchar *str;
 
     str = ghb_value_get_string(glang);
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
-    {
-        if (ghb_language_table[ii].iso639_2 &&
-            strcmp(ghb_language_table[ii].iso639_2, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].iso639_2b &&
-            strcmp(ghb_language_table[ii].iso639_2b, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].iso639_1 &&
-            strcmp(ghb_language_table[ii].iso639_1, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].native_name &&
-            strcmp(ghb_language_table[ii].native_name, str) == 0)
-        {
-            return ii;
-        }
-        if (ghb_language_table[ii].eng_name &&
-            strcmp(ghb_language_table[ii].eng_name, str) == 0)
-        {
-            return ii;
-        }
-    }
-    return -1;
+    return lang_lookup_index(str);
 }
 
 static void
@@ -1230,7 +998,7 @@ ghb_find_closest_audio_samplerate(gint irate)
 
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)
 {
-    return &ghb_language_table[idx];
+    return lang_for_index(idx);
 }
 
 // Handle for libhb.  Gets set by ghb_backend_init()
@@ -2111,22 +1879,24 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+    const iso639_lang_t *iso639;
+    for (iso639 = lang_get_next(NULL), ii = 0; iso639 != NULL;
+         iso639 = lang_get_next(iso639), ii++)
     {
         const gchar *lang;
 
-        if (ghb_language_table[ii].native_name[0] != 0)
-            lang = ghb_language_table[ii].native_name;
+        if (iso639->native_name[0] != 0)
+            lang = iso639->native_name;
         else
-            lang = ghb_language_table[ii].eng_name;
+            lang = iso639->eng_name;
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
                            0, lang,
                            1, TRUE,
-                           2, ghb_language_table[ii].iso639_2,
+                           2, iso639->iso639_2,
                            3, (gdouble)ii,
-                           4, ghb_language_table[ii].iso639_1,
+                           4, iso639->iso639_1,
                            -1);
     }
 }
@@ -2929,17 +2699,19 @@ void ghb_init_lang_list_box(GtkListBox *list_box)
 {
     int ii;
 
-    for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+    const iso639_lang_t *iso639;
+    for (iso639 = lang_get_next(NULL), ii = 0; iso639 != NULL;
+         iso639 = lang_get_next(iso639), ii++)
     {
         const char *lang;
-        if (ghb_language_table[ii].native_name != NULL &&
-            ghb_language_table[ii].native_name[0] != 0)
+        if (iso639->native_name != NULL &&
+            iso639->native_name[0] != 0)
         {
-            lang = ghb_language_table[ii].native_name;
+            lang = iso639->native_name;
         }
         else
         {
-            lang = ghb_language_table[ii].eng_name;
+            lang = iso639->eng_name;
         }
         GtkWidget *label = gtk_label_new(lang);
         g_object_set_data(G_OBJECT(label), "lang_idx", (gpointer)(intptr_t)ii);
