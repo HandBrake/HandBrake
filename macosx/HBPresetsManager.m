@@ -84,7 +84,9 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     int major, minor, micro;
     hb_presets_current_version(&major, &minor, &micro);
 
-    if ([dict[@"VersionMajor"] intValue] > major)
+    if ([dict[@"VersionMajor"] intValue] > major ||
+        ([dict[@"VersionMajor"] intValue] == major && [dict[@"VersionMinor"] intValue] > minor) ||
+        ([dict[@"VersionMajor"] intValue] == major && [dict[@"VersionMinor"] intValue] == minor && [dict[@"VersionMicro"] intValue] > micro))
     {
         return YES;
     }

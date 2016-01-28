@@ -46,9 +46,9 @@ extern NSString *keyAudioBitrate;
 
 @property (nonatomic, strong) NSDictionary *track;
 @property (nonatomic, strong, nullable) NSDictionary *codec;
-@property (nonatomic, strong) NSDictionary *mixdown;
-@property (nonatomic, strong) NSDictionary *sampleRate;
-@property (nonatomic, strong) NSDictionary *bitRate;
+@property (nonatomic, strong, nullable) NSDictionary *mixdown;
+@property (nonatomic, strong, nullable) NSDictionary *sampleRate;
+@property (nonatomic, strong, nullable) NSDictionary *bitRate;
 @property (nonatomic) double drc;
 @property (nonatomic) double gain;
 @property (nonatomic) int container;
@@ -63,7 +63,7 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, readonly) BOOL enabled;
 
 - (void) setTrackFromIndex: (int) aValue;
-- (BOOL) setCodecFromName: (NSString *) aValue;
+- (BOOL) setCodecFromName: (nullable NSString *) aValue;
 - (void) setMixdownFromName: (NSString *) aValue;
 - (void) setSampleRateFromName: (NSString *) aValue;
 - (void) setBitRateFromName: (NSString *) aValue;

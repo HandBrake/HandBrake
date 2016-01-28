@@ -845,7 +845,7 @@
 {
     [self updateFileExtension:nil];
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] && self.job)
     {
         // Generate a new file name
         NSString *fileName = [HBUtilities automaticNameForJob:self.job];
@@ -858,10 +858,13 @@
 
 - (void)updateFileExtension:(NSNotification *)notification
 {
-    NSString *extension = [HBUtilities automaticExtForJob:self.job];
-    if (![extension isEqualTo:self.job.destURL.pathExtension])
+    if (self.job)
     {
-        self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:extension];
+        NSString *extension = [HBUtilities automaticExtForJob:self.job];
+        if (![extension isEqualTo:self.job.destURL.pathExtension])
+        {
+            self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:extension];
+        }
     }
 }
 
