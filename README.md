@@ -5,6 +5,7 @@ The main development repository for the HandBrake Project can be found on GitHub
 HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs.
 ### Community
 **IRC:** [\#Handbrake](irc://irc.freenode.net/#handbrake) and [\#Handbrake-dev](irc://irc.freenode.net/#handbrake-dev) on Freenode.
+
 **Support:** [Community forums](https://forum.handbrake.fr/)
 
 ### Submitting a Patch
