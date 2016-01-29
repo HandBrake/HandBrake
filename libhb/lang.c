@@ -205,7 +205,7 @@ static const int lang_count = sizeof(languages) / sizeof(languages[0]);
 const int lang_lookup_index( const char * str )
 {
     int             ii = 0;
-    iso639_lang_t * lang;
+    const iso639_lang_t * lang;
 
     // We use "Any" as a synonym for undefined
     if (!strcasecmp("any", str))
@@ -213,7 +213,7 @@ const int lang_lookup_index( const char * str )
         return 0;
     }
 
-    for (ii = 0; lang->eng_name; ii++)
+    for (ii = 0; languages[ii].eng_name; ii++)
     {
         lang = &languages[ii];
         if ((lang->iso639_1    != NULL && !strcasecmp(lang->iso639_1,  str)) ||
@@ -234,7 +234,7 @@ const iso639_lang_t * lang_lookup( const char * str )
     return lang_for_index(lang_lookup_index(str));
 }
 
-iso639_lang_t * lang_for_index( int index )
+const iso639_lang_t * lang_for_index( int index )
 {
     if (index < 0 || index >= lang_count)
         return NULL;
