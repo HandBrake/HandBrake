@@ -240,6 +240,7 @@
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
     <Compile Include="Utilities\Output\CsvHelper.cs" />
     <Compile Include="Utilities\PropertyChangedBase.cs" />
+    <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />

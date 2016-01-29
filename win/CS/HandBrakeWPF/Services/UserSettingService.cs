@@ -15,8 +15,11 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
 
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
@@ -29,7 +32,7 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// The Settings File
         /// </summary>
-        private readonly string settingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\settings.xml";
+        private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "settings.xml");
 
         /// <summary>
         /// The XML Serializer 
@@ -145,6 +148,24 @@ namespace HandBrakeWPF.Services
                 // Load up the users current settings file.
                 if (File.Exists(this.settingsFile))
                 {
+                    using (StreamReader reader = new StreamReader(this.settingsFile))
+                    {
+                        Collections.SerializableDictionary<string, object> data = (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
+                        this.userSettings = data;
+                    }
+                }
+                else if (VersionHelper.IsNightly() && File.Exists(Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.xml")))
+                {
+                    // Port the release versions config to the nightly.
+                    string releasePresetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.xml");
+
+                    if (!Directory.Exists(DirectoryUtilities.GetUserStoragePath(true)))
+                    {
+                        Directory.CreateDirectory(DirectoryUtilities.GetUserStoragePath(true));
+                    }
+
+                    File.Copy(releasePresetFile, Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.xml"));
+
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         Collections.SerializableDictionary<string, object> data = (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(reader);

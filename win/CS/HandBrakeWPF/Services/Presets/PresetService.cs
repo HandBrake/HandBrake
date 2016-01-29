@@ -45,7 +45,7 @@ namespace HandBrakeWPF.Services.Presets
 
         public const int ForcePresetReset = 2;
         public static string UserPresetCatgoryName = "User Presets";
-        private readonly string presetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.json";
+        private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "presets.json");
         private readonly ObservableCollection<Preset> presets = new ObservableCollection<Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
@@ -495,8 +495,17 @@ namespace HandBrakeWPF.Services.Presets
                 // If we don't have a presets file. Create one for first load.
                 if (!File.Exists(this.presetFile))
                 {
-                    this.UpdateBuiltInPresets();
-                    return; // Update built-in presets stores the presets locally, so just return.
+                    // If this is a nightly, and we don't have a presets file, try port the main version if it exists.
+                    string releasePresetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "presets.json");
+                    if (VersionHelper.IsNightly() && File.Exists(releasePresetFile))
+                    {
+                        File.Copy(releasePresetFile, DirectoryUtilities.GetUserStoragePath(true));
+                    }
+                    else
+                    {
+                        this.UpdateBuiltInPresets();
+                        return; // Update built-in presets stores the presets locally, so just return.
+                    }
                 }
 
                 // Otherwise, we already have a file, so lets try load it.
