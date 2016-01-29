@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Utilities
             }
             else
             {
-                return Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HandBrake");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HandBrake");
             }
         }
     }
