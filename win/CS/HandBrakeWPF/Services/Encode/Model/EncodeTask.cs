@@ -101,6 +101,9 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.DenoiseTune = task.DenoiseTune;
             this.Destination = task.Destination;
             this.Detelecine = task.Detelecine;
+            this.FlipVideo = task.FlipVideo;
+            this.Rotation = task.Rotation;
+
             this.DisplayWidth = task.DisplayWidth;
             this.EndPoint = task.EndPoint;
             this.Framerate = task.Framerate;
@@ -339,6 +342,15 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public bool Grayscale { get; set; }
 
+        /// <summary>
+        /// Rotate the Video by x Degrees
+        /// </summary>
+        public int Rotation { get; set; }
+
+        /// <summary>
+        /// Flip the video.
+        /// </summary>
+        public bool FlipVideo { get; set; }
         #endregion
 
         #region Video

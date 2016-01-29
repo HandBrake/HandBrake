@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Linq;
+    using System.Windows.Forms.VisualStyles;
 
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
@@ -61,7 +62,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task = new EncodeTask();
             preset.IsDefault = importedPreset.Default;
             preset.IsBuildIn = importedPreset.Type == 0;
-           
+
             // Step 1, Create the EncodeTask Object that can be loaded into the UI.
 
             /* Output Settings */
@@ -77,7 +78,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.HasCropping = !importedPreset.PictureAutoCrop;
             preset.Task.Modulus = importedPreset.PictureModulus;
             preset.Task.KeepDisplayAspect = importedPreset.PictureKeepRatio;
-            
+
             switch (importedPreset.PicturePAR)
             {
                 case "custom":
@@ -247,6 +248,21 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
+            // Rotation and Flip
+            if (!string.IsNullOrEmpty(importedPreset.PictureRotate))
+            {
+                string[] rotation = importedPreset.PictureRotate.Split(':');
+                if (rotation.Length == 2)
+                {
+                    int rotate;
+                    if (int.TryParse(rotation[0], out rotate))
+                    {
+                        preset.Task.Rotation = int.Parse(rotation[0]);
+                        preset.Task.FlipVideo = rotation[1] == "1";
+                    }
+                }
+            }
+
             /* Video Settings */
             preset.Task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(importedPreset.VideoEncoder);
             preset.Task.VideoBitrate = importedPreset.VideoAvgBitrate;
@@ -284,7 +300,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     break;
             }
 
-            /* Audio Settings */ 
+            /* Audio Settings */
             preset.AudioTrackBehaviours = new AudioBehaviours();
             preset.Task.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(importedPreset.AudioEncoderFallback);
             preset.AudioTrackBehaviours.SelectedBehaviour = importedPreset.AudioTrackSelectionBehavior == "all"
@@ -353,8 +369,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
-                    track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);  
-                    track.MixDown = EnumHelper<Mixdown>.GetValue(audioTrack.AudioMixdown); 
+                    track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
+                    track.MixDown = EnumHelper<Mixdown>.GetValue(audioTrack.AudioMixdown);
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
@@ -368,7 +384,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
-            /* Subtitle Settings */ 
+            /* Subtitle Settings */
             preset.SubtitleTrackBehaviours = new SubtitleBehaviours();
             preset.SubtitleTrackBehaviours.SelectedBehaviour = EnumHelper<SubtitleBehaviourModes>.GetValue(importedPreset.SubtitleTrackSelectionBehavior);
             preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour = EnumHelper<SubtitleBurnInBehaviourModes>.GetValue(importedPreset.SubtitleBurnBehavior);
@@ -387,11 +403,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Chapter Marker Settings */
             preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
 
-            /* Advanced Settings */ 
+            /* Advanced Settings */
             preset.Task.ShowAdvancedTab = importedPreset.x264UseAdvancedOptions;
             preset.Task.AdvancedEncoderOptions = importedPreset.x264Option;
 
-            /* Not Supported Yet */ 
+            /* Not Supported Yet */
             // public int VideoColorMatrixCode { get; set; }
             // public bool VideoHWDecode { get; set; }
             // public string VideoScaler { get; set; }
@@ -404,7 +420,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             // public bool PictureLooseCrop { get; set; }
             // public int PicturePARWidth { get; set; }
             // public int PicturePARHeight { get; set; }
-            // public int PictureRotate { get; set; }
             // public int PictureForceHeight { get; set; }
             // public int PictureForceWidth { get; set; }
             // public List<object> ChildrenArray { get; set; }
@@ -491,23 +506,23 @@ namespace HandBrakeWPF.Services.Presets.Factories
             foreach (var item in export.Task.AudioTracks)
             {
                 AudioList track = new AudioList
-                                      {
-                                          AudioBitrate = item.Bitrate,
-                                          AudioCompressionLevel = 0, // TODO
-                                          AudioDitherMethod = null,  // TODO
-                                          AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
-                                          AudioMixdown = EnumHelper<Mixdown>.GetShortName(item.MixDown),
-                                          AudioNormalizeMixLevel = false, // TODO
-                                          AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(),  // TODO check formatting.
-                                          AudioTrackDRCSlider = item.DRC,
-                                          AudioTrackGainSlider = item.Gain,
-                                          AudioTrackQuality = item.Quality ?? 0,
-                                          AudioTrackQualityEnable = item.Quality.HasValue && item.IsQualityVisible
-                                      };
-               
+                {
+                    AudioBitrate = item.Bitrate,
+                    AudioCompressionLevel = 0, // TODO
+                    AudioDitherMethod = null,  // TODO
+                    AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
+                    AudioMixdown = EnumHelper<Mixdown>.GetShortName(item.MixDown),
+                    AudioNormalizeMixLevel = false, // TODO
+                    AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(),  // TODO check formatting.
+                    AudioTrackDRCSlider = item.DRC,
+                    AudioTrackGainSlider = item.Gain,
+                    AudioTrackQuality = item.Quality ?? 0,
+                    AudioTrackQualityEnable = item.Quality.HasValue && item.IsQualityVisible
+                };
+
                 preset.AudioList.Add(track);
             }
-            
+
             // Subtitles
             preset.SubtitleAddCC = export.SubtitleTrackBehaviours.AddClosedCaptions;
             preset.SubtitleAddForeignAudioSearch = export.SubtitleTrackBehaviours.AddForeignAudioScanTrack;
@@ -536,9 +551,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureModulus = export.Task.Modulus ?? 16;
             preset.PicturePAR = EnumHelper<Anamorphic>.GetShortName(export.Task.Anamorphic);
             preset.PicturePARHeight = export.Task.PixelAspectY;
-            preset.PicturePARWidth = export.Task.PixelAspectX; 
+            preset.PicturePARWidth = export.Task.PixelAspectX;
             preset.PictureRightCrop = export.Task.Cropping.Right;
-            preset.PictureRotate = 0; // TODO Not supported yet.
+            preset.PictureRotate = string.Format("{0}:{1}", export.Task.Rotation, export.Task.FlipVideo ? "1" : "0");
             preset.PictureTopCrop = export.Task.Cropping.Top;
             preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0; // TODO
             preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
@@ -547,20 +562,20 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Filters
             preset.PictureDeblock = export.Task.Deblock;
-            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
-                ? "decomb" 
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? "deinterlace" : "off";  
-            preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
-                ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb) 
+            preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
+                ? "decomb"
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? "deinterlace" : "off";
+            preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
+                ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb)
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
-            preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb 
-                ? export.Task.CustomDecomb 
+            preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
+                ? export.Task.CustomDecomb
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? export.Task.CustomDeinterlace : string.Empty;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
             preset.PictureDenoisePreset = EnumHelper<DenoisePreset>.GetShortName(export.Task.DenoisePreset);
-            preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune); 
+            preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
 

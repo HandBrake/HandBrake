@@ -204,7 +204,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the picture rotate.
         /// </summary>
-        public int PictureRotate { get; set; }
+        public string PictureRotate { get; set; }
 
         /// <summary>
         /// Gets or sets the picture width.

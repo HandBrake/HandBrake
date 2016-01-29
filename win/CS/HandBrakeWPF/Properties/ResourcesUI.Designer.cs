@@ -448,6 +448,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flip.
+        /// </summary>
+        public static string FiltersView_FlipVideo {
+            get {
+                return ResourceManager.GetString("FiltersView_FlipVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grayscale.
         /// </summary>
         public static string FiltersView_Grayscale {
@@ -462,6 +471,15 @@ namespace HandBrakeWPF.Properties {
         public static string FiltersView_Preset {
             get {
                 return ResourceManager.GetString("FiltersView_Preset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotate:.
+        /// </summary>
+        public static string FiltersView_Rotate {
+            get {
+                return ResourceManager.GetString("FiltersView_Rotate", resourceCulture);
             }
         }
         

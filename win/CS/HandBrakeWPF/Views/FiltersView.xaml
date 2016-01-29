@@ -37,6 +37,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -123,6 +124,14 @@
 
                 <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
+
+                <!-- Rotation -->
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Rotate}" Grid.Row="6" Grid.Column="0" Margin="0,0,0,0"/>
+                <ComboBox Width="120" ItemsSource="{Binding RotationOptions}" Grid.Row="6" Grid.Column="1"
+                              SelectedItem="{Binding SelectedRotation}"
+                              HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="6" Grid.Column="2" IsChecked="{Binding FlipVideo, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
         </StackPanel>

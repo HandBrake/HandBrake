@@ -10,11 +10,11 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -496,6 +496,42 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<int> RotationOptions => new BindingList<int> { 0, 90, 180, 270 };
+
+        /// <summary>
+        /// Selected Rotation.
+        /// </summary>
+        public int SelectedRotation
+        {
+            get
+            {
+                return this.CurrentTask.Rotation;
+            }
+
+            set
+            {
+                this.CurrentTask.Rotation = value;
+                this.NotifyOfPropertyChange(() => this.SelectedRotation);
+            }
+        }
+
+        /// <summary>
+        /// Flip the Video
+        /// </summary>
+        public bool FlipVideo
+        {
+            get
+            {
+                return this.CurrentTask.FlipVideo;
+            }
+
+            set
+            {
+                this.CurrentTask.FlipVideo = value;
+                this.NotifyOfPropertyChange(() => this.FlipVideo);
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -531,7 +567,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.SelectedDeinterlaceFilter = DeinterlaceFilter.Decomb;
                 }
-                else 
+                else
                 {
                     this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
                 }
@@ -547,6 +583,10 @@ namespace HandBrakeWPF.ViewModels
                 this.CustomDeinterlace = preset.Task.CustomDeinterlace;
                 this.CustomDetelecine = preset.Task.CustomDetelecine;
                 this.CustomDenoise = preset.Task.CustomDenoise;
+
+
+                this.SelectedRotation = preset.Task.Rotation;
+                this.FlipVideo = preset.Task.FlipVideo;
             }
             else
             {
@@ -557,6 +597,9 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedDetelecine = Detelecine.Off;
                 this.Grayscale = false;
                 this.DeblockValue = 0;
+
+                this.SelectedRotation = 0;
+                this.FlipVideo = false;
             }
         }
 
@@ -585,6 +628,9 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
             this.NotifyOfPropertyChange(() => this.IsDecombMode);
             this.NotifyOfPropertyChange(() => this.IsDeinterlaceDecomb);
+
+            this.NotifyOfPropertyChange(() => this.FlipVideo);
+            this.NotifyOfPropertyChange(() => this.SelectedRotation);
 
         }
 

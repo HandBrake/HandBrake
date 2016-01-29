@@ -65,17 +65,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
         internal static JsonEncodeObject Create(EncodeTask job, HBConfiguration configuration)
         {
             JsonEncodeObject encode = new JsonEncodeObject
-                {
-                    SequenceID = 0,
-                    Audio = CreateAudio(job),
-                    Destination = CreateDestination(job),
-                    Filters = CreateFilters(job),
-                    PAR = CreatePAR(job),
-                    Metadata = CreateMetadata(job),
-                    Source = CreateSource(job, configuration),
-                    Subtitle = CreateSubtitle(job),
-                    Video = CreateVideo(job, configuration)
-                };
+            {
+                SequenceID = 0,
+                Audio = CreateAudio(job),
+                Destination = CreateDestination(job),
+                Filters = CreateFilters(job),
+                PAR = CreatePAR(job),
+                Metadata = CreateMetadata(job),
+                Source = CreateSource(job, configuration),
+                Subtitle = CreateSubtitle(job),
+                Video = CreateVideo(job, configuration)
+            };
 
             return encode;
         }
@@ -145,10 +145,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 File = job.Destination,
                 Mp4Options = new Mp4Options
-                                 {
-                                     IpodAtom = job.IPod5GSupport,
-                                     Mp4Optimize = job.OptimizeMP4
-                                 },
+                {
+                    IpodAtom = job.IPod5GSupport,
+                    Mp4Optimize = job.OptimizeMP4
+                },
                 ChapterMarkers = job.IncludeChapterMarkers,
                 Mux = HBFunctions.hb_container_get_from_name(job.OutputFormat == OutputFormat.Mp4 ? "av_mp4" : "av_mkv"), // TODO tidy up.
                 ChapterList = new List<Chapter>()
@@ -192,17 +192,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
         private static Subtitle CreateSubtitle(EncodeTask job)
         {
             Subtitles subtitle = new Subtitles
-                {
-                    Search =
+            {
+                Search =
                         new SubtitleSearch
-                            {
-                                Enable = false,
-                                Default = false,
-                                Burn = false,
-                                Forced = false
-                            },
-                    SubtitleList = new List<HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack>()
-                };
+                        {
+                            Enable = false,
+                            Default = false,
+                            Burn = false,
+                            Forced = false
+                        },
+                SubtitleList = new List<HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack>()
+            };
 
             foreach (SubtitleTrack item in job.SubtitleTracks)
             {
@@ -352,28 +352,28 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 HBRate sampleRate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(s => s.Name == item.SampleRate.ToString(CultureInfo.InvariantCulture));
 
                 HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack
-                    {
-                        Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
-                        DRC = item.DRC,
-                        Encoder = encoder.Id,
-                        Gain = item.Gain,
-                        Mixdown = mixdown.Id,
-                        NormalizeMixLevel = false,
-                        Samplerate = sampleRate != null ? sampleRate.Rate : 0,
-                        Name = item.TrackName,
-                    };
+                {
+                    Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
+                    DRC = item.DRC,
+                    Encoder = encoder.Id,
+                    Gain = item.Gain,
+                    Mixdown = mixdown.Id,
+                    NormalizeMixLevel = false,
+                    Samplerate = sampleRate != null ? sampleRate.Rate : 0,
+                    Name = item.TrackName,
+                };
 
                 if (!item.IsPassthru)
                 {
-                     if (item.EncoderRateType == AudioEncoderRateType.Quality)
-                     {
+                    if (item.EncoderRateType == AudioEncoderRateType.Quality)
+                    {
                         audioTrack.Quality = item.Quality;
-                     }
+                    }
 
-                     if (item.EncoderRateType == AudioEncoderRateType.Bitrate)
-                     {
+                    if (item.EncoderRateType == AudioEncoderRateType.Bitrate)
+                    {
                         audioTrack.Bitrate = item.Bitrate;
-                     }
+                    }
                 }
 
                 audio.AudioList.Add(audioTrack);
@@ -394,35 +394,16 @@ namespace HandBrakeWPF.Services.Encode.Factories
         private static Filters CreateFilters(EncodeTask job)
         {
             Filters filter = new Filters
-                            {
-                                FilterList = new List<Filter>(),
-                            };
+            {
+                FilterList = new List<Filter>(),
+            };
+
+            // Note, order is important.
 
             // Detelecine
             if (job.Detelecine != Detelecine.Off)
             {
                 Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = job.CustomDetelecine };
-                filter.FilterList.Add(filterItem);
-            }
-
-            // Decomb
-            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
-            {
-                string options;
-                if (job.Decomb == Decomb.Fast)
-                {
-                    options = "7:2:6:9:1:80";
-                }
-                else if (job.Decomb == Decomb.Bob)
-                {
-                    options = "455";
-                }
-                else
-                {
-                    options = job.CustomDecomb;
-                }
-
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -455,29 +436,24 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 filter.FilterList.Add(filterItem);
             }
 
-            // VFR / CFR
-            int fm = job.FramerateMode == FramerateMode.CFR ? 1 : job.FramerateMode == FramerateMode.PFR ? 2 : 0;
-            int? num = null, den = null;
-            if (job.Framerate != null)
+            // Decomb
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
-                IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.Framerate.Value.ToString(CultureInfo.InvariantCulture));
-                int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
-
-                if (vrate > 0)
+                string options;
+                if (job.Decomb == Decomb.Fast)
                 {
-                    num = 27000000;
-                    den = vrate;
+                    options = "7:2:6:9:1:80";
                 }
-            }
+                else if (job.Decomb == Decomb.Bob)
+                {
+                    options = "455";
+                }
+                else
+                {
+                    options = job.CustomDecomb;
+                }
 
-            string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
-            Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
-            filter.FilterList.Add(framerateShaper);
-
-            // Deblock
-            if (job.Deblock >= 5)
-            {
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.Deblock.ToString() };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -503,9 +479,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 filter.FilterList.Add(filterItem);
             }
 
-            if (job.Grayscale)
+            // Deblock
+            if (job.Deblock >= 5)
             {
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_GRAYSCALE, Settings = null };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = job.Deblock.ToString() };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -525,8 +502,38 @@ namespace HandBrakeWPF.Services.Encode.Factories
             };
             filter.FilterList.Add(cropScale);
 
+            // Grayscale
+            if (job.Grayscale)
+            {
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_GRAYSCALE, Settings = null };
+                filter.FilterList.Add(filterItem);
+            }
+
             // Rotate
-            /* TODO  NOT SUPPORTED YET. */
+            if (job.Rotation != 0 || job.FlipVideo)
+            {
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = string.Format("{0}:{1}", job.Rotation, job.FlipVideo ? "1" : "0") };
+                filter.FilterList.Add(filterItem);
+            }
+
+            // Framerate shaping filter
+            int fm = job.FramerateMode == FramerateMode.CFR ? 1 : job.FramerateMode == FramerateMode.PFR ? 2 : 0;
+            int? num = null, den = null;
+            if (job.Framerate != null)
+            {
+                IntPtr frameratePrt = Marshal.StringToHGlobalAnsi(job.Framerate.Value.ToString(CultureInfo.InvariantCulture));
+                int vrate = HBFunctions.hb_video_framerate_get_from_name(frameratePrt);
+
+                if (vrate > 0)
+                {
+                    num = 27000000;
+                    den = vrate;
+                }
+            }
+
+            string framerateString = num.HasValue ? string.Format("{0}:{1}:{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
+            Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateString };
+            filter.FilterList.Add(framerateShaper);
 
             return filter;
         }

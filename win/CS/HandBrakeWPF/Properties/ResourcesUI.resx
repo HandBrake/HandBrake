@@ -840,4 +840,10 @@
   <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
     <value>Pause queue if disk space is low before starting a job.</value>
   </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotate:</value>
+  </data>
 </root>
