@@ -69,6 +69,11 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.QuickSyncH265);
                 }
 
+                if (!SystemInfo.IsAMDVCEAvailable)
+                {
+                    encoders.Remove(VideoEncoder.AMDVCE);
+                }
+
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 
