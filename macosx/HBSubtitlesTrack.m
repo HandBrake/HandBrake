@@ -316,6 +316,7 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     {
         copy->_sourceTrackIdx = _sourceTrackIdx;
         copy->_type = _type;
+        copy->_container = _container;
 
         copy->_forcedOnly = _forcedOnly;
         copy->_burnedIn = _burnedIn;
