@@ -1,5 +1,5 @@
-Guide to Building HandBrake svn7316 (2015062601) on MinGW-W64
-*************************************************************
+Guide to Building HandBrake 20160130110114-6a00e46-master (2016013001) on MinGW-W64
+***********************************************************************************
 
 1 Introduction
 2 Prerequisites
@@ -48,7 +48,7 @@ possible:
      At the time of writing,
      "mingw-w64-bin_x86_64-linux_20131228.tar.bz2" is used.
 
-     Note2: You must set the --cross flag with configure to cross compile
+     Note2: You must set the -cross flag with configure to cross compile
      with windows.  See the Example below.  Note that the cross compiler
      name varies between distributions.
 
@@ -59,7 +59,7 @@ possible:
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
 
-   * subversion - 1.6.16
+   * git - 2.4.3
    * python - Python 2.7.1
    * curl - curl 7.21.4 (or wget)
    * m4 - GNU M4 1.4.6
@@ -78,8 +78,8 @@ available beginning with *note overview:: which describes procedures
 suitable for repeating builds.  This chapter should be skipped by those
 seeking more than a minimalist build.
 
-     svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
-     cd hb-trunk
+     git clone https://github.com/HandBrake/HandBrake.git hb-master
+     cd hb-master
      ./configure --launch
 
 The special option '--launch' selects launch mode and performs the
@@ -108,16 +108,15 @@ building from any IDEs.
 
 Checkout HandBrake from the official source-code repository.
 
-     svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
-     cd hb-trunk
+     git clone https://github.com/HandBrake/HandBrake.git hb-master
+     cd hb-master
 
-Sources are checked out from the 'trunk' branch.  This document was
+Sources are checked out from the 'master' branch.  This document was
 generated from that very branch, and for example purposes, we will use
 exactly the same branch.
 
 If you have write-access to the repository, then you may add the
-appropriate login/password information as needed.  It is recommended to
-use Subversion 1.6.0 or higher.  Lower versions may also work.
+appropriate login/password information as needed.
 
 5.2 Configure
 =============
@@ -193,8 +192,8 @@ reliable and clean software builds.  The following is a short list of
 some of the reasons why someone may choose to scrap an existing build:
 
    * configure with different options
-   * subversion working dir is updated and you want configure to
-     re-evaluate working dir metadata.
+   * git working dir is updated and you want configure to re-evaluate
+     working dir metadata.
    * build corruption is suspected
 
 There are generally two methods for scrapping a build.  The 'build'
@@ -429,10 +428,10 @@ When troubleshooting build issues, the following files relative to the
 Appendix A Project Repository Details
 *************************************
 
-     url:    svn://svn.handbrake.fr/HandBrake/trunk
-     root:   svn://svn.handbrake.fr/HandBrake
-     branch: trunk
-     uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    7316
-     date:   2015-06-26 20:20:39 +0100
+     url:    https://github.com/HandBrake/HandBrake.git
+     branch: master
+     tag:
+     rev:    6989
+     hash:   6a00e46d7888cd49b6a8671784788129d8139835
+     date:   2016-01-30 11:01:14
      type:   developer
