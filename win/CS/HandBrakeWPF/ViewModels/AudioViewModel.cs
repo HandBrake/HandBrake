@@ -582,7 +582,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddFirstForSelectedLanguages()
         {
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(false))
             {
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
@@ -612,7 +612,7 @@ namespace HandBrakeWPF.ViewModels
         public void AddAllRemainingForSelectedLanguages()
         {
             // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(true))
             {
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
@@ -650,17 +650,22 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets a list of source tracks for the users selected languages.
         /// </summary>
+        /// <param name="includeAny">
+        /// The include Any.
+        /// </param>
         /// <returns>
         /// A list of source audio tracks.
         /// </returns>
-        private IEnumerable<Audio> GetSelectedLanguagesTracks()
+        private IEnumerable<Audio> GetSelectedLanguagesTracks(bool includeAny)
         {
             List<Audio> trackList = new List<Audio>();
 
-            List<string> isoCodes = this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any)
-                                            ? LanguageUtilities.GetIsoCodes()
-                                            : LanguageUtilities.GetLanguageCodes(
-                                                this.AudioBehaviours.SelectedLangauges.ToArray());
+            List<string> isoCodes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
+
+            if (includeAny)
+            {
+                isoCodes = LanguageUtilities.GetIsoCodes();
+            }
 
             foreach (string code in isoCodes)
             {
