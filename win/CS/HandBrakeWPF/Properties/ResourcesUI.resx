@@ -736,7 +736,7 @@
     <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
   <data name="Options_DXVA" xml:space="preserve">
-    <value>Enable DXVA Hardware Accelerated Decoding (Experimental)"</value>
+    <value>Enable DXVA Hardware Accelerated Decoding</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
     <value>Format:</value>
@@ -845,5 +845,8 @@
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
     <value>Rotate:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Open Source</value>
   </data>
 </root>

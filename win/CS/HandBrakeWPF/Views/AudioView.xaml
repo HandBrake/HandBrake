@@ -389,7 +389,7 @@
 
                 <TextBlock Margin="15,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
 
-                <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="10,0,5,0">
+                <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
                             <Binding Path="Task.AllowedPassthruOptions.AudioEncoderFallback" />
