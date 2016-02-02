@@ -817,6 +817,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Source.
+        /// </summary>
+        public static string MainView_SourceOpen {
+            get {
+                return ResourceManager.GetString("MainView_SourceOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Encode.
         /// </summary>
         public static string MainView_StartEncode {
@@ -1078,7 +1087,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable DXVA Hardware Accelerated Decoding (Experimental)&quot;.
+        ///   Looks up a localized string similar to Enable DXVA Hardware Accelerated Decoding.
         /// </summary>
         public static string Options_DXVA {
             get {

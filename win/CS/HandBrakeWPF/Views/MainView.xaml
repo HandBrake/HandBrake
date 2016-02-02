@@ -157,7 +157,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Source}"
+                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"
                                />
                     </StackPanel>
                 </Button>
