@@ -8,6 +8,12 @@
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
 
+#import "HBAudioDefaults.h"
+#import "HBSubtitlesDefaults.h"
+
+#import "HBAudioDefaultsController.h"
+#import "HBSubtitlesDefaultsController.h"
+
 typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     HBAddPresetControllerModeNone,
     HBAddPresetControllerModeCustom,
@@ -25,10 +31,14 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 @property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
 @property (nonatomic, strong) HBPreset *preset;
+@property (nonatomic, strong) HBMutablePreset *mutablePreset;
+
 @property (nonatomic) int width;
 @property (nonatomic) int height;
 
 @property (nonatomic) BOOL defaultToCustom;
+
+@property (nonatomic, readwrite, strong) NSWindowController *defaultsController;
 
 
 @end
@@ -41,7 +51,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     if (self)
     {
         NSParameterAssert(preset);
-        _preset = preset;
+        _mutablePreset = [preset mutableCopy];
         _width = customWidth;
         _height = customHeight;
         _defaultToCustom = defaultToCustom;
@@ -77,7 +87,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
             mode = HBAddPresetControllerModeCustom;
         }
     }
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum (post source scan)", nil)];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", nil)];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];
 
 
@@ -101,6 +111,45 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     }
 }
 
+- (IBAction)showAudioSettingsSheet:(id)sender
+{
+    HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
+    [defaults applyPreset:self.mutablePreset];
+
+    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
+
+    [NSApp beginSheet:self.defaultsController.window
+       modalForWindow:self.window
+        modalDelegate:self
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
+}
+
+- (IBAction)showSubtitlesSettingsSheet:(id)sender
+{
+    HBSubtitlesDefaults *defaults = [[HBSubtitlesDefaults alloc] init];
+    [defaults applyPreset:self.mutablePreset];
+
+    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
+
+    [NSApp beginSheet:self.defaultsController.window
+       modalForWindow:self.window
+        modalDelegate:self
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    id defaults = (id)CFBridgingRelease(contextInfo);
+
+    if (returnCode == NSModalResponseOK)
+    {
+        [defaults writeToPreset:self.mutablePreset];
+    }
+    self.defaultsController = nil;
+}
+
 - (IBAction)add:(id)sender
 {
     if (self.name.stringValue.length == 0)
@@ -112,7 +161,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     }
     else
     {
-        HBMutablePreset *newPreset = [self.preset mutableCopy];
+        HBMutablePreset *newPreset = self.mutablePreset;
 
         newPreset.name = self.name.stringValue;
         newPreset.presetDescription = self.desc.stringValue;
