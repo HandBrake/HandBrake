@@ -17,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
@@ -211,9 +210,9 @@ namespace HandBrakeWPF.ViewModels
                 if (value)
                 {
                     this.Task.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
-                    this.Task.TwoPass = false;
-                    this.Task.TurboFirstPass = false;
-                    this.Task.VideoBitrate = null;
+                    this.TwoPass = false;
+                    this.TurboFirstPass = false;
+                    this.VideoBitrate = null;
                     this.NotifyOfPropertyChange(() => this.Task);
                 }
                 else
@@ -913,7 +912,9 @@ namespace HandBrakeWPF.ViewModels
          
             this.TwoPass = preset.Task.TwoPass;
             this.TurboFirstPass = preset.Task.TurboFirstPass;
-            this.Task.VideoBitrate = preset.Task.VideoBitrate;
+
+            this.VideoBitrate = preset.Task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate ? preset.Task.VideoBitrate : null;
+         
 
             this.NotifyOfPropertyChange(() => this.Task);
 
