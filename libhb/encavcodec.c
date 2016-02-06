@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "hb_dict.h"
 #include "hbffmpeg.h"
+#include "h264_common.h"
 
 /*
  * The frame info struct remembers information about each frame across calls
@@ -70,35 +71,36 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
 
-    switch ( w->codec_param )
+    switch (job->vcodec)
     {
-        case AV_CODEC_ID_MPEG4:
-        {
-            hb_log("encavcodecInit: MPEG-4 ASP encoder");
-        } break;
-        case AV_CODEC_ID_MPEG2VIDEO:
-        {
-            hb_log("encavcodecInit: MPEG-2 encoder");
-        } break;
-        case AV_CODEC_ID_VP8:
-        {
-            hb_log("encavcodecInit: VP8 encoder");
-        } break;
+        case HB_VCODEC_FFMPEG_MPEG4:
+            hb_log("encavcodecInit: MPEG-4 part 2 (libavcodec)");
+            codec = avcodec_find_encoder_by_name("mpeg4");
+            break;
+        case HB_VCODEC_FFMPEG_MPEG2:
+            hb_log("encavcodecInit: MPEG-2 video (libavcodec)");
+            codec = avcodec_find_encoder_by_name("mpeg2video");
+            break;
+        case HB_VCODEC_FFMPEG_VP8:
+            hb_log("encavcodecInit: VP8 (libvpx)");
+            codec = avcodec_find_encoder_by_name("libvpx");
+            break;
+        case HB_VCODEC_VCE_H264:
+            hb_log("encavcodecInit: H.264 (AMD VCE)");
+            codec = avcodec_find_encoder_by_name("h264_vce");
+            break;
         default:
-        {
             hb_error("encavcodecInit: unsupported encoder!");
             return 1;
-        }
     }
 
-    codec = avcodec_find_encoder( w->codec_param  );
-    if( !codec )
+    if (codec == NULL)
     {
-        hb_log( "encavcodecInit: avcodec_find_encoder "
-                "failed" );
+        hb_log("encavcodecInit: avcodec_find_encoder failed");
         return 1;
     }
-    context = avcodec_alloc_context3( codec );
+
+    context = avcodec_alloc_context3(codec);
 
     // Set things in context that we will allow the user to 
     // override with advanced settings.
@@ -156,6 +158,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->time_base.num = fps.den;
     context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
                                   0.5) * 10;
+
+    if (job->vcodec == HB_VCODEC_VCE_H264)
+    {
+        // Set profile and level
+        context->profile = FF_PROFILE_UNKNOWN;
+        if (job->encoder_preset != NULL && *job->encoder_preset)
+        {
+            if ((!strcasecmp(job->encoder_preset, "balanced"))
+                || (!strcasecmp(job->encoder_preset, "speed"))
+                || (!strcasecmp(job->encoder_preset, "quality")))
+            {
+                av_opt_set(context, "preset", job->encoder_preset, AV_OPT_SEARCH_CHILDREN);
+            }
+        }
+    }
 
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * lavc_opts = NULL;
@@ -249,6 +266,32 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->flags |= CODEC_FLAG_GRAY;
     }
 
+    if (job->vcodec == HB_VCODEC_VCE_H264)
+    {
+        // Set profile and level
+        context->profile = FF_PROFILE_UNKNOWN;
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "baseline"))
+                context->profile = FF_PROFILE_H264_BASELINE;
+            else if (!strcasecmp(job->encoder_profile, "main"))
+                 context->profile = FF_PROFILE_H264_MAIN;
+            else if (!strcasecmp(job->encoder_profile, "high"))
+                context->profile = FF_PROFILE_H264_HIGH;
+        }
+        context->level = FF_LEVEL_UNKNOWN;
+        if (job->encoder_level != NULL && *job->encoder_level)
+        {
+            int i = 1;
+            while (hb_h264_level_names[i] != NULL)
+            {
+                if (!strcasecmp(job->encoder_level, hb_h264_level_names[i]))
+                    context->level = hb_h264_level_values[i];
+                ++i;
+            }
+        }
+    }
+
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
@@ -300,11 +343,51 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         job->areBframes = 1;
     }
+
     if( ( job->mux & HB_MUX_MASK_MP4 ) && job->pass_id != HB_PASS_ENCODE_1ST )
     {
-        w->config->mpeg4.length = context->extradata_size;
-        memcpy( w->config->mpeg4.bytes, context->extradata,
-                context->extradata_size );
+        if (w->codec_param == AV_CODEC_ID_H264)
+        {
+            // Scan extradata for the loacation on the SPS/PPS headers
+            unsigned char header[4] = { 0x00, 0x00, 0x00, 0x01 };
+            int headerCount = 0;
+            int headerPositions[80];
+            int ppsPos = -1;
+            int spsPos = -1;
+            int i;
+            unsigned char *data = context->extradata;
+            for (i = 0; i + 4 < context->extradata_size; ++i)
+            {
+                if (data[i + 0] == header[0] && data[i + 1] == header[1] && data[i + 2] == header[2] && data[i + 3] == header[3])
+                {
+                    if ((data[i + 4] & 0x1f) == 7)
+                        spsPos = headerCount;
+                    if ((data[i + 4] & 0x1f) == 8)
+                        ppsPos = headerCount;
+                    headerPositions[headerCount] = i;
+                    ++headerCount;
+                }
+            }
+            headerPositions[headerCount] = context->extradata_size;
+            if (spsPos >= 0)
+            {
+                // SPS found, copy into work object
+                w->config->h264.sps_length = headerPositions[spsPos + 1] - headerPositions[spsPos] - 4;
+                memcpy(w->config->h264.sps, &data[headerPositions[spsPos] + 4], w->config->h264.sps_length);
+            }
+            if (ppsPos >= 0)
+            {
+                // PPS found, copy into work object
+                w->config->h264.pps_length = headerPositions[ppsPos + 1] - headerPositions[ppsPos] - 4;
+                memcpy(w->config->h264.pps, &data[headerPositions[ppsPos] + 4], w->config->h264.pps_length);
+            }
+        }
+        else
+        {
+            w->config->mpeg4.length = context->extradata_size;
+            memcpy( w->config->mpeg4.bytes, context->extradata,
+                    context->extradata_size );
+        }
     }
 
     return 0;

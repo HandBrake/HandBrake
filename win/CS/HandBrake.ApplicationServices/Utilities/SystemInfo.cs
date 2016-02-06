@@ -120,6 +120,17 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
+        /// Gets a value indicating whether is amdvce available.
+        /// </summary>
+        public static bool IsAMDVCEAvailable
+        {
+            get
+            {
+                return true; // TODO this needs to hook into LibHB.
+            }
+        }
+
+        /// <summary>
         /// Gets the get gpu driver version.
         /// </summary>
         public static List<string> GetGPUInfo
