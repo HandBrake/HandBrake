@@ -556,6 +556,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Generic_Save {
+            get {
+                return ResourceManager.GetString("Generic_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy to clipboard.
         /// </summary>
         public static string LogView_CopyClipboard {
@@ -1564,6 +1573,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change the behaviour of the audio track selection for this preset.  
+        ///This will not affect your current settings in the Audio tab..
+        /// </summary>
+        public static string Preset_AudioDefaults_SubText {
+            get {
+                return ResourceManager.GetString("Preset_AudioDefaults_SubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Defaults.
+        /// </summary>
+        public static string Preset_AudioDefaults_Title {
+            get {
+                return ResourceManager.GetString("Preset_AudioDefaults_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to file.
         /// </summary>
         public static string Preset_Export {
@@ -1578,6 +1606,25 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_Import {
             get {
                 return ResourceManager.GetString("Preset_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the behaviour of the subtitle track selection for this preset.  
+        ///This will not affect your current settings in the Subtitle tab..
+        /// </summary>
+        public static string Preset_SubtitleDefaults_SubText {
+            get {
+                return ResourceManager.GetString("Preset_SubtitleDefaults_SubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle Defaults.
+        /// </summary>
+        public static string Preset_SubtitleDefaults_Title {
+            get {
+                return ResourceManager.GetString("Preset_SubtitleDefaults_Title", resourceCulture);
             }
         }
         

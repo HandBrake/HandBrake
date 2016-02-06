@@ -10,15 +10,32 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
     /// The Audio View Model Interface
     /// </summary>
-    public interface IAudioDefaultsViewModel : IOverlayPanel
+    public interface IAudioDefaultsViewModel : IOverlayPanel, IViewModelBase
     {
         /// <summary>
         /// Gets the audio behaviours.
         /// </summary>
         AudioBehaviours AudioBehaviours { get; }
+
+        /// <summary>
+        /// The setup languages.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        void SetupLanguages(Preset preset);
+
+        /// <summary>
+        /// The setup languages.
+        /// </summary>
+        /// <param name="behaviours">
+        /// The behaviours.
+        /// </param>
+        void SetupLanguages(AudioBehaviours behaviours);
     }
 }

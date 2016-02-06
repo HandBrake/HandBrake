@@ -243,16 +243,28 @@
     <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">
       <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Interfaces\IOverlayPanel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPopupWindowViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISubtitlesDefaultsViewModel.cs" />
     <Compile Include="ViewModels\MiniViewModel.cs" />
+    <Compile Include="ViewModels\PopupWindowViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
+    <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
+    <Compile Include="Views\AudioDefaultsView.xaml.cs">
+      <DependentUpon>AudioDefaultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopupWindowView.xaml.cs">
+      <DependentUpon>PopupWindowView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CountdownAlertView.xaml.cs">
       <DependentUpon>CountdownAlertView.xaml</DependentUpon>
     </Compile>
@@ -370,6 +382,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\SubtitlesDefaultsView.xaml.cs">
+      <DependentUpon>SubtitlesDefaultsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\X264View.xaml.cs">
       <DependentUpon>X264View.xaml</DependentUpon>
     </Compile>
@@ -456,6 +471,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AudioDefaultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PopupWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CountdownAlertView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -503,6 +526,10 @@
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubtitlesDefaultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\X264View.xaml">
       <SubType>Designer</SubType>

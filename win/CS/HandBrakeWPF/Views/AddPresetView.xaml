@@ -49,8 +49,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <!--  Name  -->
@@ -104,6 +104,14 @@
                 <controls:NumberBox Width="60" Number="{Binding CustomHeight, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="True" />
             </StackPanel>
+            
+            <TextBlock Text="Audio:" Grid.Row="5" />
+            <Button Content="Edit Defaults..." Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+                    cal:Message.Attach="[Event Click] = [Action EditAudioDefaults]" />
+            
+            <TextBlock Text="Subtitles:" Grid.Row="6" />
+            <Button Content="Edit Defaults..." Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+                    cal:Message.Attach="[Event Click] = [Action EditSubtitleDefaults]" />
 
         </Grid>
 
