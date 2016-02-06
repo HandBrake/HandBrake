@@ -849,4 +849,21 @@
   <data name="MainView_SourceOpen" xml:space="preserve">
     <value>Open Source</value>
   </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Preset_AudioDefaults_SubText" xml:space="preserve">
+    <value>Change the behaviour of the audio track selection for this preset.  
+This will not affect your current settings in the Audio tab.</value>
+  </data>
+  <data name="Preset_AudioDefaults_Title" xml:space="preserve">
+    <value>Audio Defaults</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_SubText" xml:space="preserve">
+    <value>Change the behaviour of the subtitle track selection for this preset.  
+This will not affect your current settings in the Subtitle tab.</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_Title" xml:space="preserve">
+    <value>Subtitle Defaults</value>
+  </data>
 </root>
