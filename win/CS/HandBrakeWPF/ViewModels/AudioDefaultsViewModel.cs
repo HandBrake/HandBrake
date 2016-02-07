@@ -295,7 +295,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.audioEncoderFallback;
+                return this.Task.AllowedPassthruOptions.AudioEncoderFallback;
             }
             set
             {
@@ -303,7 +303,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return;
                 }
-                this.audioEncoderFallback = value;
+                this.Task.AllowedPassthruOptions.AudioEncoderFallback = value;
                 this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
             }
         }
