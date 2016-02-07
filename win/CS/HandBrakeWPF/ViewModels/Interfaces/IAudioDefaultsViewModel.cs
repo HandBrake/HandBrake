@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
@@ -28,14 +29,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="preset">
         /// The preset.
         /// </param>
-        void SetupLanguages(Preset preset);
-
-        /// <summary>
-        /// The setup languages.
-        /// </summary>
-        /// <param name="behaviours">
-        /// The behaviours.
+        /// <param name="task">
+        /// The task.
         /// </param>
-        void SetupLanguages(AudioBehaviours behaviours);
+        void Setup(Preset preset, EncodeTask task);
     }
 }

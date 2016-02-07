@@ -33,7 +33,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
         {
             if (message.LogLevel <= currentLogLevel)
             {
-                Debug.WriteLine(message.Content);
+                //Debug.WriteLine(message.Content);
             }
 
             // TODO cache logging.         

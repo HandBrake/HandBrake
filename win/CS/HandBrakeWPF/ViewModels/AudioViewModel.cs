@@ -66,9 +66,9 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
-        {
-            this.AudioDefaultsViewModel = new AudioDefaultsViewModel();
+        {        
             this.Task = new EncodeTask();
+            this.AudioDefaultsViewModel = new AudioDefaultsViewModel(this.Task);
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
@@ -287,12 +287,10 @@ namespace HandBrakeWPF.ViewModels
             this.currentPreset = preset;
 
             // Audio Behaviours
-            this.AudioDefaultsViewModel.SetupLanguages(preset);
+            this.AudioDefaultsViewModel.Setup(preset, task);
 
             if (preset != null && preset.Task != null)
             {
-                this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
-
                 this.SetupTracks();
             }
 

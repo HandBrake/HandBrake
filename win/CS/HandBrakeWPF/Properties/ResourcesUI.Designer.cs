@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Otherwise use fallback encoder:.
+        ///   Looks up a localized string similar to Fallback encoder:.
         /// </summary>
         public static string AudioView_OtherwiseFallbackEncoder {
             get {

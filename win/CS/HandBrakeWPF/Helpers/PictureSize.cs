@@ -204,7 +204,6 @@ namespace HandBrakeWPF.Helpers
             int outputHeight = result.height;
             int outputParWidth = result.par.num;
             int outputParHeight = result.par.den;
-            Debug.WriteLine("hb_set_anamorphic_size2: {0}x{1}", outputWidth, outputHeight);
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
     }

@@ -159,15 +159,15 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void Setup(EncodeTask task, Title title, AudioBehaviours audioBehaviours, SubtitleBehaviours subtitleBehaviours)
         {
-            this.audioDefaultsViewModel = new AudioDefaultsViewModel();
-            this.audioDefaultsViewModel.SetupLanguages(audioBehaviours);
+            this.Preset.Task = new EncodeTask(task);
+            this.Preset.AudioTrackBehaviours = audioBehaviours.Clone();
+            this.Preset.SubtitleTrackBehaviours = subtitleBehaviours.Clone();
+
+            this.audioDefaultsViewModel = new AudioDefaultsViewModel(this.Preset.Task);
+            this.audioDefaultsViewModel.Setup(this.Preset, this.Preset.Task);
 
             this.subtitlesDefaultsViewModel = new SubtitlesDefaultsViewModel();
             this.subtitlesDefaultsViewModel.SetupLanguages(subtitleBehaviours);
-
-            this.Preset.Task = new EncodeTask(task);
-            this.Preset.AudioTrackBehaviours = audioBehaviours;
-            this.Preset.SubtitleTrackBehaviours = subtitleBehaviours.Clone();
 
             this.selectedTitle = title;
 

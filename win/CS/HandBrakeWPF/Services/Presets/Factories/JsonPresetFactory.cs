@@ -319,31 +319,35 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (importedPreset.AudioCopyMask != null)
             {
+                preset.Task.AllowedPassthruOptions.SetFalse();
                 foreach (var item in importedPreset.AudioCopyMask)
                 {
-                    AudioEncoder encoder = EnumHelper<AudioEncoder>.GetValue(item.ToString());
+                    AudioEncoder encoder = EnumHelper<AudioEncoder>.GetValue(item);
                     switch (encoder)
                     {
                         case AudioEncoder.AacPassthru:
                             preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
                             break;
                         case AudioEncoder.Ac3Passthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowAC3Pass = true;
                             break;
                         case AudioEncoder.EAc3Passthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowEAC3Pass = true;
                             break;
                         case AudioEncoder.DtsHDPassthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowDTSHDPass = true;
                             break;
                         case AudioEncoder.DtsPassthrough:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowDTSPass = true;
                             break;
                         case AudioEncoder.FlacPassthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowFlacPass = true;
                             break;
                         case AudioEncoder.Mp3Passthru:
-                            preset.Task.AllowedPassthruOptions.AudioAllowAACPass = true;
+                            preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass = true;
+                            break;
+                        case AudioEncoder.TrueHDPassthrough:
+                            preset.Task.AllowedPassthruOptions.AudioAllowTrueHDPass = true;
                             break;
                     }
                 }

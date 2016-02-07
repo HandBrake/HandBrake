@@ -115,41 +115,41 @@
                         Orientation="Horizontal">
                 <CheckBox Margin="0,0,5,0"
                           Content="MP3" VerticalAlignment="Center"    
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowMP3Pass}" />
+                          IsChecked="{Binding AudioAllowMP3Pass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="AAC" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAACPass}" />
+                          IsChecked="{Binding AudioAllowAACPass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="AC3" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAC3Pass}" />
+                          IsChecked="{Binding AudioAllowAC3Pass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="E-AC3" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowEAC3Pass}" />
+                          IsChecked="{Binding AudioAllowEAC3Pass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="DTS" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSPass}" />
+                          IsChecked="{Binding AudioAllowDTSPass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="DTSHD" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
+                          IsChecked="{Binding AudioAllowDTSHDPass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="TrueHD" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowTrueHDPass}" />
+                          IsChecked="{Binding AudioAllowTrueHDPass}" />
                 <CheckBox Margin="0,0,5,0"
                           Content="FLAC" VerticalAlignment="Center"
-                          IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowFlacPass}" />
+                          IsChecked="{Binding AudioAllowFlacPass}" />
 
                 <TextBlock Margin="15,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
 
                 <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}">
-                            <Binding Path="Task.AllowedPassthruOptions.AudioEncoderFallback" />
+                            <Binding Path="AudioEncoderFallback" />
                         </MultiBinding>
                     </ComboBox.SelectedItem>
                     <ComboBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}" ConverterParameter="True">
-                            <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
-                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
                         </MultiBinding>
                     </ComboBox.ItemsSource>
                 </ComboBox>

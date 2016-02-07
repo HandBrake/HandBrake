@@ -165,7 +165,22 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 return audioEncoders;
             }
-        } 
+        }
+
+        /// <summary>
+        /// Disable the passthru options.
+        /// </summary>
+        public void SetFalse()
+        {
+            this.AudioAllowAACPass = false;
+            this.AudioAllowAC3Pass = false;
+            this.AudioAllowDTSHDPass = false;
+            this.AudioAllowDTSPass = false;
+            this.AudioAllowMP3Pass = false;
+            this.AudioAllowEAC3Pass = false;
+            this.AudioAllowTrueHDPass = false;
+            this.AudioAllowFlacPass = false;
+        }
 
         #endregion
     }

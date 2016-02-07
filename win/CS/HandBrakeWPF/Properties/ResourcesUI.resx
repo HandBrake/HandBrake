@@ -349,7 +349,7 @@
     <value>Move Right</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Otherwise use fallback encoder:</value>
+    <value>Fallback encoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
     <value>Reload Defaults</value>
