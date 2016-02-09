@@ -237,6 +237,7 @@
 		D2BCB12716F5154E0084604C /* source@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB12016F5154C0084604C /* source@2x.png */; };
 		D2BCB12816F5154E0084604C /* stopencode.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB12116F5154D0084604C /* stopencode.png */; };
 		D2BCB12916F5154E0084604C /* stopencode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2BCB12216F5154D0084604C /* stopencode@2x.png */; };
+		D867E2EB1C6A016C009B9CB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D867E2EA1C6A016C009B9CB2 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -578,6 +579,7 @@
 		D2BCB12016F5154C0084604C /* source@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "source@2x.png"; sourceTree = "<group>"; };
 		D2BCB12116F5154D0084604C /* stopencode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stopencode.png; sourceTree = "<group>"; };
 		D2BCB12216F5154D0084604C /* stopencode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stopencode@2x.png"; sourceTree = "<group>"; };
+		D867E2EA1C6A016C009B9CB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -795,6 +797,7 @@
 				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				273F212014ADCBF70021BE6D /* icons */,
+				D867E2EA1C6A016C009B9CB2 /* Assets.xcassets */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1386,6 +1389,7 @@
 				D2BCB10A16F5152C0084604C /* activity@2x.png in Resources */,
 				D2BCB10B16F5152C0084604C /* addqueue.png in Resources */,
 				D2BCB10C16F5152C0084604C /* addqueue@2x.png in Resources */,
+				D867E2EB1C6A016C009B9CB2 /* Assets.xcassets in Resources */,
 				D2BCB10D16F5152C0084604C /* advanced.png in Resources */,
 				A9204DC51A16C5AB007CA74C /* Delete@2x.png in Resources */,
 				A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */,
