@@ -414,6 +414,11 @@ static int vobsub_work( hb_filter_object_t * filter,
     // subtitle list
     while( ( sub = hb_fifo_get( filter->subtitle->fifo_out ) ) )
     {
+        if (sub->s.flags & HB_BUF_FLAG_EOF)
+        {
+            hb_buffer_close(&sub);
+            break;
+        }
         hb_list_add( pv->sub_list, sub );
     }
 
@@ -641,6 +646,11 @@ static int ssa_work( hb_filter_object_t * filter,
     // subtitle list
     while( ( sub = hb_fifo_get( filter->subtitle->fifo_out ) ) )
     {
+        if (sub->s.flags & HB_BUF_FLAG_EOF)
+        {
+            hb_buffer_close(&sub);
+            break;
+        }
         // Parse MKV-SSA packet
         // SSA subtitles always have an explicit stop time, so we
         // do not need to do special processing for stop == AV_NOPTS_VALUE
@@ -739,6 +749,20 @@ static int textsub_work(hb_filter_object_t * filter,
     // subtitle list
     while ((sub = hb_fifo_get(filter->subtitle->fifo_out)))
     {
+        if (sub->s.flags & HB_BUF_FLAG_EOF)
+        {
+            hb_buffer_close(&sub);
+            if (pv->current_sub != NULL)
+            {
+                // Make us some duration for final sub
+                pv->current_sub->s.stop = pv->current_sub->s.start +
+                                          90000LL * 10;
+                process_sub(pv, pv->current_sub);
+                hb_buffer_close(&pv->current_sub);
+            }
+            break;
+        }
+
         // libass expects times in ms.  So to make the math easy,
         // convert to ms immediately.
         sub->s.start /= 90;
@@ -893,6 +917,11 @@ static int pgssub_work( hb_filter_object_t * filter,
     // subtitle list
     while ( ( sub = hb_fifo_get( filter->subtitle->fifo_out ) ) )
     {
+        if (sub->s.flags & HB_BUF_FLAG_EOF)
+        {
+            hb_buffer_close(&sub);
+            break;
+        }
         hb_list_add( pv->sub_list, sub );
     }
 
