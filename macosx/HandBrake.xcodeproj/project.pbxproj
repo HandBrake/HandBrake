@@ -719,7 +719,6 @@
 				27D6C72314B1013400B785E4 /* Products (external) */,
 				273F20CD14ADC8E60021BE6D /* Resources */,
 				273F203414ADBAC30021BE6D /* Frameworks */,
-				273F20CE14ADC9210021BE6D /* Frameworks (bundled) */,
 				277A3FCF14AE848400A835E4 /* xcconfig */,
 			);
 			sourceTree = "<group>";
@@ -760,6 +759,7 @@
 				273F202714ADB8BE0021BE6D /* libbz2.dylib */,
 				273F202914ADB8D60021BE6D /* libiconv.dylib */,
 				273F202514ADB8A40021BE6D /* libz.dylib */,
+				273F20CE14ADC9210021BE6D /* Bundled */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -799,13 +799,13 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		273F20CE14ADC9210021BE6D /* Frameworks (bundled) */ = {
+		273F20CE14ADC9210021BE6D /* Bundled */ = {
 			isa = PBXGroup;
 			children = (
 				273F20BF14ADC1250021BE6D /* Growl.framework */,
 				273F20C014ADC1250021BE6D /* Sparkle.framework */,
 			);
-			name = "Frameworks (bundled)";
+			name = Bundled;
 			sourceTree = "<group>";
 		};
 		273F212014ADCBF70021BE6D /* icons */ = {
