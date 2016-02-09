@@ -672,8 +672,8 @@
 			children = (
 				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
-				273F212014ADCBF70021BE6D /* icons */,
 				D867E2EC1C6A04F3009B9CB2 /* Assets.xcassets */,
+				273F212014ADCBF70021BE6D /* pdf icons */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -687,7 +687,7 @@
 			name = Bundled;
 			sourceTree = "<group>";
 		};
-		273F212014ADCBF70021BE6D /* icons */ = {
+		273F212014ADCBF70021BE6D /* pdf icons */ = {
 			isa = PBXGroup;
 			children = (
 				A9E1467C16BC2AD800C307BC /* next-p.pdf */,
@@ -695,6 +695,7 @@
 				A9E1467E16BC2AD800C307BC /* play-p.pdf */,
 				A9E1467F16BC2AD800C307BC /* prev-p.pdf */,
 			);
+			name = "pdf icons";
 			path = icons;
 			sourceTree = "<group>";
 		};
