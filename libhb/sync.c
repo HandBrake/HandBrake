@@ -736,9 +736,18 @@ static void streamFlush( sync_stream_t * stream )
             {
                 buf->s.start = stream->next_pts;
                 buf->s.stop  = stream->next_pts + buf->s.duration;
+                stream->next_pts += buf->s.duration;
             }
-
-            stream->next_pts += buf->s.duration;
+            else
+            {
+                // Last ditch effort to prevent timestamps from going backwards
+                // This can (and should only) affect subtitle streams.
+                if (buf->s.start < stream->next_pts)
+                {
+                    buf->s.start = stream->next_pts;
+                }
+                stream->next_pts = buf->s.start;
+            }
 
             if (buf->s.stop > 0)
             {
@@ -967,9 +976,19 @@ static void OutputBuffer( sync_common_t * common )
             {
                 buf->s.start = out_stream->next_pts;
                 buf->s.stop  = out_stream->next_pts + buf->s.duration;
+                out_stream->next_pts += buf->s.duration;
+            }
+            else
+            {
+                // Last ditch effort to prevent timestamps from going backwards
+                // This can (and should only) affect subtitle streams.
+                if (buf->s.start < out_stream->next_pts)
+                {
+                    buf->s.start = out_stream->next_pts;
+                }
+                out_stream->next_pts = buf->s.start;
             }
 
-            out_stream->next_pts += buf->s.duration;
 
             if (buf->s.stop > 0)
             {
