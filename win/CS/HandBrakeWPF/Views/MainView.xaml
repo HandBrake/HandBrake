@@ -464,7 +464,7 @@
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
                               Content="{x:Static Properties:ResourcesUI.MainView_WebOptimized}"
-                              IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
+                              IsChecked="{Binding Path=OptimizeMP4}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
@@ -475,7 +475,7 @@
                               VerticalAlignment="Center"
                               Content="{x:Static Properties:ResourcesUI.MainView_iPod5G}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
-                              IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
+                              IsChecked="{Binding Path=IPod5GSupport}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"
