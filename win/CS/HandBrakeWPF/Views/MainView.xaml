@@ -484,7 +484,7 @@
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
                               Content="Web Optimized"
-                              IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
+                              IsChecked="{Binding Path=OptimizeMP4}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"
@@ -493,7 +493,7 @@
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
                               Content="iPod 5G Support"
-                              IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
+                              IsChecked="{Binding Path=IPod5GSupport}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"

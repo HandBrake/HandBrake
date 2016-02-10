@@ -375,9 +375,11 @@ namespace HandBrakeWPF.ViewModels
                 if (this.SelectedPreset != null)
                 {
                     // Main Window Settings
-                    this.CurrentTask.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
-                    this.CurrentTask.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
+                    this.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
+                    this.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
+
+                    this.NotifyOfPropertyChange("Task.OptimizeMP4");
 
                     // Tab Settings
                     this.PictureSettingsViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
@@ -1028,6 +1030,39 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool OptimizeMP4
+        {
+            get
+            {
+                return this.CurrentTask.OptimizeMP4;
+            }
+            set
+            {
+                if (value == this.CurrentTask.OptimizeMP4)
+                {
+                    return;
+                }
+                this.CurrentTask.OptimizeMP4 = value;
+                this.NotifyOfPropertyChange(() => this.OptimizeMP4);
+            }
+        }
+
+        public bool IPod5GSupport
+        {
+            get
+            {
+                return this.CurrentTask.IPod5GSupport;
+            }
+            set
+            {
+                if (value == this.CurrentTask.IPod5GSupport)
+                {
+                    return;
+                }
+                this.CurrentTask.IPod5GSupport = value;
+                this.NotifyOfPropertyChange(() => this.IPod5GSupport);
+            }
+        }
         #endregion
 
         #region Load and Shutdown Handling
