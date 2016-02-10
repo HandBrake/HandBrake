@@ -59,6 +59,7 @@ typedef struct
     int             merge;
     hb_buffer_t   * list_current;
     hb_buffer_t   * last;
+    int64_t         last_start;
 } subtitle_sanitizer_t;
 
 typedef struct
@@ -229,6 +230,7 @@ static void InitSubtitle( hb_job_t * job, hb_sync_video_t * sync, int i )
         // Fill in stop time when it is missing
         sync->subtitle_sanitizer[i].link = 1;
     }
+    sync->subtitle_sanitizer[i].last_start = AV_NOPTS_VALUE;
 }
 
 static void CloseSubtitle(hb_sync_video_t * sync, int ii)
@@ -512,7 +514,20 @@ static hb_buffer_t * sanitizeSubtitle(
             sanitizer->last = sub;
         }
     }
-    return mergeSubtitles(sanitizer, 0);
+
+    hb_buffer_t * out;
+    sub = out = mergeSubtitles(sanitizer, 0);
+    while (sub)
+    {
+        if (sub->s.start < sanitizer->last_start)
+        {
+            sub->s.start = sanitizer->last_start;
+        }
+        sanitizer->last_start = sub->s.start;
+        sub = sub->next;
+    }
+
+    return out;
 }
 
 /***********************************************************************
