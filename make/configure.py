@@ -1253,7 +1253,7 @@ def createCLI():
     grp.add_option( '--disable-x265', dest="enable_x265", action='store_false' )
 
     h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
+    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=h )
     grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
 
     h = IfHost( 'enable use of libav aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
