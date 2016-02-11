@@ -144,6 +144,7 @@
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A932E26F198833920047D13E /* HBAudioDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E26E198833920047D13E /* HBAudioDefaultsController.m */; };
 		A932E273198834130047D13E /* HBAudioDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A932E272198834130047D13E /* HBAudioDefaults.m */; };
+		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A93FD4751A62ABE800A6AC43 /* HBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = A93FD4741A62ABE800A6AC43 /* HBAudio.m */; };
@@ -438,6 +439,7 @@
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
 		A932E271198834130047D13E /* HBAudioDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaults.h; sourceTree = "<group>"; };
 		A932E272198834130047D13E /* HBAudioDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaults.m; sourceTree = "<group>"; };
+		A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		A93E0ED01972957000FD67FB /* HBVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBVideoController.h; sourceTree = "<group>"; };
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
@@ -793,6 +795,7 @@
 			isa = PBXGroup;
 			children = (
 				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
+				A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				273F212014ADCBF70021BE6D /* icons */,
 			);
@@ -1381,6 +1384,7 @@
 				A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */,
 				A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */,
 				A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */,
+				A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */,
 				D2BCB10916F5152C0084604C /* activity.png in Resources */,
 				A91C025D1A166BE300DEA6F3 /* EncodeWorking3@2x.png in Resources */,
 				D2BCB10A16F5152C0084604C /* activity@2x.png in Resources */,
@@ -1888,6 +1892,7 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -1916,6 +1921,7 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",

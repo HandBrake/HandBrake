@@ -50,7 +50,7 @@ dnl
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>__HB_version __BUILD_arch</string>
+	<string>__HB_version</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -64,9 +64,13 @@ All rights reserved.</string>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>HBApplication</string>
-    <key>SUFeedURL</key>
-    <string>__HB_url_appcast</string>
-    <key>NSAppTransportSecurity</key>
+	<key>SUFeedURL</key>
+	<string>__HB_url_appcast</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
+	<key>SUAllowsAutomaticUpdates</key>
+	<false/>
+	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
