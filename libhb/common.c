@@ -541,8 +541,7 @@ void hb_common_global_init()
                     break;
                 }
             }
-            if ((hb_audio_encoders[i].item.codec & HB_ACODEC_MASK) == 0 &&
-                (hb_audio_encoders[i].gid == HB_GID_ACODEC_AAC_HE))
+            if (hb_audio_encoders[i].gid == HB_GID_ACODEC_AAC_HE)
             {
                 // try to find an AAC fallback if no HE-AAC encoder is available
                 for (j = 0; j < hb_audio_encoders_count; j++)
