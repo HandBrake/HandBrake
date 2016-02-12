@@ -1414,12 +1414,13 @@ fail:
 static void syncVideoClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv   = w->private_data;
-    hb_job_t          * job  = pv->common->job;
+    hb_job_t          * job;
 
     if (pv == NULL)
     {
         return;
     }
+    job = pv->common->job;
 
     hb_log("sync: got %d frames, %d expected",
            pv->stream->frame_count, pv->common->est_frame_count );
