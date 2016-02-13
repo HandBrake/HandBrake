@@ -31,8 +31,6 @@ namespace HandBrakeWPF.ViewModels
         private AudioBehaviours audioBehaviours;
         private EncodeTask task;
 
-        private AudioEncoder audioEncoderFallback;
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -299,7 +297,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (value == this.audioEncoderFallback)
+                if (value == this.Task.AllowedPassthruOptions.AudioEncoderFallback)
                 {
                     return;
                 }
@@ -423,6 +421,20 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AudioAllowTrueHDPass);
             this.NotifyOfPropertyChange(() => this.AudioAllowFlacPass);
             this.NotifyOfPropertyChange(() => this.AudioEncoderFallback);
+        }
+
+        /// <summary>
+        /// The refresh task.
+        /// </summary>
+        public void RefreshTask()
+        {
+            this.NotifyOfPropertyChange(() => this.Task);
+
+            if (this.Task.OutputFormat == OutputFormat.Mp4 && 
+                (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
+            {
+                    this.AudioEncoderFallback = AudioEncoder.ffaac;
+            }
         }
 
         #endregion

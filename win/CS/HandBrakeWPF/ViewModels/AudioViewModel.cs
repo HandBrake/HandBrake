@@ -28,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -248,6 +247,8 @@ namespace HandBrakeWPF.ViewModels
                     track.Encoder = AudioEncoder.ffaac;
                 }
             }
+
+            this.AudioDefaultsViewModel.RefreshTask();
         }
 
         /// <summary>

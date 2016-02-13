@@ -33,5 +33,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The task.
         /// </param>
         void Setup(Preset preset, EncodeTask task);
+
+        /// <summary>
+        /// The refresh task.
+        /// </summary>
+        void RefreshTask();
     }
 }

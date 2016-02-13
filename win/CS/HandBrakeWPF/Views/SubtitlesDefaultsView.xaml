@@ -38,8 +38,7 @@
 
 
         <!-- Row 0 -->
-        <StackPanel Grid.Row="0" Grid.Column="0"  Margin="10,0,0,0"
-              Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}">
+        <StackPanel Grid.Row="0" Grid.Column="0"  Margin="10,0,0,0">
 
             <Grid Margin="5,0,0,0" >
                 <Grid.RowDefinitions>

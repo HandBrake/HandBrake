@@ -31,8 +31,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Row 2 -->
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,0,0"
-              Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false, FallbackValue=Visible}">
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,0,0">
 
             <Grid Margin="0,0,0,0" >
                 <Grid.RowDefinitions>
@@ -148,8 +147,8 @@
                     </ComboBox.SelectedItem>
                     <ComboBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource audioEncoderConverter}" ConverterParameter="True">
-                            <Binding Path="AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
-                            <Binding Path="Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
                         </MultiBinding>
                     </ComboBox.ItemsSource>
                 </ComboBox>
