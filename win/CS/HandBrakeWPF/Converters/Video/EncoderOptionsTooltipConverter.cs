@@ -48,7 +48,7 @@ namespace HandBrakeWPF.Converters.Video
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             EncodeTask task = value as EncodeTask;
-            if (task != null && (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X265))
+            if (task != null && (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X264_10 || task.VideoEncoder == VideoEncoder.X265 || task.VideoEncoder == VideoEncoder.X265_10 || task.VideoEncoder == VideoEncoder.X265_12))
             {
                 if (task.ShowAdvancedTab)
                 {

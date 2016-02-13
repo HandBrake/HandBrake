@@ -78,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetEncoder(VideoEncoder encoder)
         {
             this.X264ViewModel.SetEncoder(encoder);
-            this.ShowX264Panel = encoder == VideoEncoder.X264;
+            this.ShowX264Panel = encoder == VideoEncoder.X264 || encoder == VideoEncoder.X264_10;
         }
 
         /// <summary>

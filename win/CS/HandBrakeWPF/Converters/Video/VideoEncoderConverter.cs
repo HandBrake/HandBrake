@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Converters.Video
     using System.Linq;
     using System.Windows.Data;
 
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
@@ -52,6 +53,21 @@ namespace HandBrakeWPF.Converters.Video
             {
                 List<VideoEncoder> encoders = EnumHelper<VideoEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
+
+                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X264_10)))
+                {
+                    encoders.Remove(VideoEncoder.X264_10);
+                }
+
+                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X265_10)))
+                {
+                    encoders.Remove(VideoEncoder.X265_10);
+                }
+
+                if (HandBrakeEncoderHelpers.VideoEncoders.All(a => a.ShortName != EnumHelper<VideoEncoder>.GetShortName(VideoEncoder.X265_12)))
+                {
+                    encoders.Remove(VideoEncoder.X265_12);
+                }
 
                 if (task != null && task.OutputFormat != OutputFormat.Mkv)
                 {

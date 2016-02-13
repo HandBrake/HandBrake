@@ -945,7 +945,7 @@ namespace HandBrakeWPF.ViewModels
             this.Task.PropertyChanged += this.Task_PropertyChanged;
             this.AdvancedOptionsString = preset.Task.AdvancedEncoderOptions;
 
-            if (task.ShowAdvancedTab && task.VideoEncoder == VideoEncoder.X264)
+            if (task.ShowAdvancedTab && task.VideoEncoder == VideoEncoder.X264 && task.VideoEncoder == VideoEncoder.X264_10)
             {
                 this.ShowX264AdvancedOptions = true;
                 this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
