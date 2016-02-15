@@ -74,6 +74,18 @@ hb_filter_object_t hb_filter_rotate =
     .info          = avfilter_info,
 };
 
+hb_filter_object_t hb_filter_deinterlace =
+{
+    .id            = HB_FILTER_DEINTERLACE,
+    .enforce_order = 1,
+    .name          = "avfilter",
+    .settings      = NULL,
+    .init          = avfilter_init,
+    .work          = avfilter_work,
+    .close         = avfilter_close,
+    .info          = avfilter_info,
+};
+
 static AVFilterContext * append_filter( hb_filter_private_t * pv,
                                         const char * name, const char * args)
 {
@@ -323,11 +335,12 @@ static void fill_frame(hb_filter_private_t * pv,
     frame->linesize[1] = buf->plane[1].stride;
     frame->linesize[2] = buf->plane[2].stride;
 
-    frame->pts = buf->s.start;
+    frame->pts              = buf->s.start;
     frame->reordered_opaque = buf->s.start;
-    frame->width = buf->f.width;
-    frame->height = buf->f.height;
-    frame->format = buf->f.fmt;
+    frame->width            = buf->f.width;
+    frame->height           = buf->f.height;
+    frame->format           = buf->f.fmt;
+    frame->interlaced_frame = !!buf->s.combed;
 }
 
 static hb_buffer_t* avframe_to_buffer(hb_filter_private_t * pv, AVFrame *frame)
@@ -429,6 +442,7 @@ void hb_avfilter_combine( hb_list_t * list )
         {
             case HB_FILTER_AVFILTER:
             case HB_FILTER_ROTATE:
+            case HB_FILTER_DEINTERLACE:
             case HB_FILTER_PAD:
                 if (avfilter != NULL)
                 {

@@ -200,7 +200,7 @@ static options_map_t d_deint_opts[] =
 {
     {N_("Off"),         "off",         HB_FILTER_INVALID,     ""},
     {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB,      ""},
-    {N_("Deinterlace"), "deinterlace", HB_FILTER_DEINTERLACE, ""},
+    {N_("Yadif"),       "deinterlace", HB_FILTER_DEINTERLACE, ""},
 };
 combo_opts_t deint_opts =
 {

@@ -1262,7 +1262,13 @@ static void ShowHelp()
 "\n"
 "### Filters---------------------------------------------------------------\n\n"
 "   -d, --deinterlace       Unconditionally deinterlaces all frames\n"
-"         <fast/slow/slower/bob");
+"         <");
+hb_filter_param_t * param = hb_filter_param_get_presets(HB_FILTER_DEINTERLACE);
+// Skip "custom"
+for (i = 1; param != NULL && param[i].name != NULL; i++)
+{
+    fprintf(out, "%s%s", i > 1 ? "/" : "", param[i].short_name);
+}
 #ifdef USE_QSV
 if (hb_qsv_available())
 {
@@ -1271,7 +1277,7 @@ if (hb_qsv_available())
 #endif
      fprintf( out, "> or omitted (default settings)\n"
      "           or\n"
-"         <YM:FD>           (default 0:-1)\n"
+"         <YM:FP>           Yadif Mode:Field Parity (default 3:-1)\n"
 "       --no-deinterlace    Disable preset deinterlace filter\n"
 "   -5, --decomb            Selectively deinterlaces when it detects combing\n"
 "         <fast/bob> or omitted (default settings)\n"

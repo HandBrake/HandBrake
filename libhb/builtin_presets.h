@@ -858,6 +858,6 @@ const char hb_builtin_presets_json[] =
 "        }, \n"
 "        \"VersionMajor\": 11, \n"
 "        \"VersionMicro\": 0, \n"
-"        \"VersionMinor\": 0\n"
+"        \"VersionMinor\": 1\n"
 "    }\n"
 "}\n";
