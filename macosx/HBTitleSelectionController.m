@@ -39,17 +39,19 @@
 
 @property (nonatomic, readwrite) NSArray<HBTitleSelection *> *titles;
 @property (nonatomic, readonly, assign) id<HBTitleSelectionDelegate> delegate;
+@property (nonatomic, readonly) NSString *message;
 
 @end
 
 @implementation HBTitleSelectionController
 
-- (instancetype)initWithTitles:(NSArray *)titles delegate:(id<HBTitleSelectionDelegate>)delegate
+- (instancetype)initWithTitles:(NSArray<HBTitle *> *)titles presetName:(NSString *)presetName delegate:(id<HBTitleSelectionDelegate>)delegate;
 {
     self = [super initWithWindowNibName:@"HBTitleSelection"];
     if (self)
     {
         _delegate = delegate;
+        _message = [NSString stringWithFormat:NSLocalizedString(@"Select the titles to add to the queue using the %@ preset:" , nil), presetName];
 
         NSMutableArray<HBTitleSelection *> *array = [[NSMutableArray alloc] init];
         for (HBTitle *title in titles)

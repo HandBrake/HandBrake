@@ -1099,7 +1099,9 @@
 
 - (IBAction)addTitlesToQueue:(id)sender
 {
-    self.titlesSelectionController = [[HBTitleSelectionController alloc] initWithTitles:self.core.titles delegate:self];
+    self.titlesSelectionController = [[HBTitleSelectionController alloc] initWithTitles:self.core.titles
+                                                                             presetName:self.job.presetName
+                                                                               delegate:self];
 
     [NSApp beginSheet:self.titlesSelectionController.window
        modalForWindow:self.window
