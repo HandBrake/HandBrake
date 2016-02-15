@@ -193,7 +193,7 @@ static NSDictionary *denoiseTypesDict = nil;
     if (!deinterlaceTypesDict)
     {
         deinterlaceTypesDict = @{NSLocalizedString(@"Off", nil):      @"off",
-                                 NSLocalizedString(@"Deinterlace", nil):  @"deinterlace",
+                                 NSLocalizedString(@"Yadif", nil):  @"deinterlace",
                                  NSLocalizedString(@"Decomb", nil):   @"decomb"};;
     }
     return deinterlaceTypesDict;
@@ -201,7 +201,7 @@ static NSDictionary *denoiseTypesDict = nil;
 
 - (NSArray *)deinterlaceTypes
 {
-    return @[@"Off", @"Deinterlace", @"Decomb"];
+    return @[@"Off", @"Yadif", @"Decomb"];
 }
 
 + (NSDictionary *)decombPresetsDict
