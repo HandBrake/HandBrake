@@ -263,8 +263,8 @@
 
     NSDictionary *dict = @{ @"PresetList": presetList,
                             @"VersionMajor": @(major),
-                            @"VersionMicro": @(minor),
-                            @"VersionMinor": @(micro) };
+                            @"VersionMinor": @(minor),
+                            @"VersionMicro": @(micro) };
 
     if (format == HBPresetFormatPlist)
     {
