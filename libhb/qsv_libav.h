@@ -26,8 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifndef AVCODEC_QSV_H
-#define AVCODEC_QSV_H
+#ifndef HB_QSV_LIBAV_H
+#define HB_QSV_LIBAV_H
 
 /**
  * @file
@@ -491,4 +491,4 @@ void *av_qsv_list_item(av_qsv_list *, int);
 
 /* @} */
 
-#endif                          //AVCODEC_QSV_H
+#endif // HB_QSV_LIBAV_H

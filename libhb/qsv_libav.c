@@ -26,10 +26,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#include "qsv.h"
+#ifdef USE_QSV
 
-#include "avcodec.h"
-#include "internal.h"
+#include "hbffmpeg.h"
+#include "qsv_libav.h"
 
 int av_qsv_get_free_encode_task(av_qsv_list * tasks)
 {
@@ -62,16 +62,12 @@ int av_qsv_get_free_sync(av_qsv_space * space, av_qsv_context * qsv)
                 return i;
             }
         }
-#if HAVE_THREADS
         if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
-#endif
             av_log(NULL, AV_LOG_FATAL, "not enough to have %d sync point(s) allocated\n",
                    space->sync_num);
             break;
-#if HAVE_THREADS
         }
         av_qsv_sleep(5);
-#endif
     }
     return ret;
 }
@@ -101,16 +97,12 @@ int av_qsv_get_free_surface(av_qsv_space * space, av_qsv_context * qsv,
                 return i;
             }
         }
-#if HAVE_THREADS
         if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
-#endif
             av_log(NULL, AV_LOG_FATAL,
                    "not enough to have %d surface(s) allocated\n", up);
             break;
-#if HAVE_THREADS
         }
         av_qsv_sleep(5);
-#endif
     }
     return ret;
 }
@@ -193,9 +185,7 @@ void av_qsv_stage_clean(av_qsv_stage ** stage)
 void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
 {
     int is_active = 0;
-#if HAVE_THREADS
     int mut_ret = 0;
-#endif
 
     is_active = ff_qsv_atomic_inc(&qsv->is_context_active);
     if (is_active == 1) {
@@ -204,7 +194,6 @@ void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
 
         qsv->dts_seq = av_qsv_list_init(is_threaded);
 
-#if HAVE_THREADS
         if (is_threaded) {
             qsv->qts_seq_mutex = av_mallocz(sizeof(pthread_mutex_t));
             if (qsv->qts_seq_mutex){
@@ -214,7 +203,6 @@ void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
             }
 
         } else
-#endif
             qsv->qts_seq_mutex = 0;
     }
 }
@@ -223,9 +211,7 @@ int av_qsv_context_clean(av_qsv_context * qsv)
 {
     int is_active = 0;
     mfxStatus sts = MFX_ERR_NONE;
-#if HAVE_THREADS
     int mut_ret = 0;
-#endif
 
     is_active = ff_qsv_atomic_dec(&qsv->is_context_active);
 
@@ -239,16 +225,12 @@ int av_qsv_context_clean(av_qsv_context * qsv)
 
             av_qsv_list_close(&qsv->dts_seq);
         }
-#if HAVE_THREADS
         if (qsv->qts_seq_mutex) {
             mut_ret = pthread_mutex_destroy(qsv->qts_seq_mutex);
             if(mut_ret)
                 av_log(NULL, AV_LOG_ERROR, "pthread_mutex_destroy issue[%d] at %s\n", mut_ret,__FUNCTION__);
-#endif
             qsv->qts_seq_mutex = 0;
-#if HAVE_THREADS
         }
-#endif
 
         if (qsv->pipes)
             av_qsv_pipe_list_clean(&qsv->pipes);
@@ -360,18 +342,14 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
     av_qsv_dts *cur_dts = 0;
     av_qsv_dts *new_dts = 0;
     int i = 0;
-#if HAVE_THREADS
     int mut_ret = 0;
-#endif
 
 
-#if HAVE_THREADS
     if (iter == 0 && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_lock(qsv->qts_seq_mutex);
         if(mut_ret)
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
     }
-#endif
 
     if (end == 0)
         end = av_qsv_list_count(qsv->dts_seq);
@@ -395,51 +373,41 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
             } else if (cur_dts->dts == dts)
                 break;
         }
-#if HAVE_THREADS
     if (iter == 0 && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_unlock(qsv->qts_seq_mutex);
         if(mut_ret)
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",mut_ret, __FUNCTION__);
     }
-#endif
 }
 
 void av_qsv_dts_pop(av_qsv_context * qsv)
 {
     av_qsv_dts *item = 0;
-#if HAVE_THREADS
     int mut_ret = 0;
-#endif
 
-#if HAVE_THREADS
     if (qsv && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_lock(qsv->qts_seq_mutex);
         if(mut_ret)
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
     }
-#endif
 
     if (av_qsv_list_count(qsv->dts_seq)) {
         item = av_qsv_list_item(qsv->dts_seq, 0);
         av_qsv_list_rem(qsv->dts_seq, item);
         av_free(item);
     }
-#if HAVE_THREADS
     if (qsv && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_unlock(qsv->qts_seq_mutex);
         if(mut_ret)
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
         }
-#endif
 }
 
 
 av_qsv_list *av_qsv_list_init(int is_threaded)
 {
     av_qsv_list *l;
-#if HAVE_THREADS
     int mut_ret;
-#endif
 
     l = av_mallocz(sizeof(av_qsv_list));
     if (!l)
@@ -449,7 +417,6 @@ av_qsv_list *av_qsv_list_init(int is_threaded)
         return 0;
     l->items_alloc = AV_QSV_JOB_SIZE_DEFAULT;
 
-#if HAVE_THREADS
     if (is_threaded) {
         l->mutex = av_mallocz(sizeof(pthread_mutex_t));
         if (l->mutex){
@@ -464,7 +431,6 @@ av_qsv_list *av_qsv_list_init(int is_threaded)
                 av_log(NULL, AV_LOG_ERROR, "pthread_mutex_init issue[%d] at %s\n",mut_ret, __FUNCTION__);
         }
     } else
-#endif
         l->mutex = 0;
     return l;
 }
@@ -566,15 +532,12 @@ void av_qsv_list_insert(av_qsv_list * l, int pos, void *p)
 void av_qsv_list_close(av_qsv_list ** _l)
 {
     av_qsv_list *l = *_l;
-#if HAVE_THREADS
     int mut_ret;
-#endif
 
     av_qsv_list_lock(l);
 
     av_free(l->items);
 
-#if HAVE_THREADS
     if (l->mutex){
         mut_ret = pthread_mutex_unlock(l->mutex);
         if( mut_ret )
@@ -582,31 +545,26 @@ void av_qsv_list_close(av_qsv_list ** _l)
         mut_ret = pthread_mutex_destroy(&l->mutex);
         mut_ret = pthread_mutexattr_destroy(&l->mta);
     }
-#endif
     av_freep(_l);
 }
 
 int av_qsv_list_lock(av_qsv_list *l){
     int ret = 0;
-#if HAVE_THREADS
     if (l->mutex){
         ret = pthread_mutex_lock(l->mutex);
         if( ret )
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",ret, __FUNCTION__);
     }
-#endif
     return ret;
 }
 
 int av_qsv_list_unlock(av_qsv_list *l){
     int ret = 0;
-#if HAVE_THREADS
     if (l->mutex){
         ret = pthread_mutex_unlock(l->mutex);
         if( ret )
             av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",ret, __FUNCTION__);
     }
-#endif
     return ret;
 }
 
@@ -644,3 +602,5 @@ void av_qsv_wait_on_sync(av_qsv_context *qsv, av_qsv_stage *stage)
             }
         }
 }
+
+#endif // USE_QSV

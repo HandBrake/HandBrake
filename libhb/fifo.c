@@ -10,7 +10,7 @@
 #include "hb.h"
 #include "openclwrapper.h"
 #ifdef USE_QSV
-#include "libavcodec/qsv.h"
+#include "qsv_libav.h"
 #endif
 
 #ifndef SYS_DARWIN
