@@ -73,7 +73,7 @@ static hb_filter_param_t deinterlace_presets[] =
     { 5, "Bob",                "bob",          "7:-1"            },
     { 0,  NULL,                NULL,           NULL              },
     { 2, "Fast",               "fast",         "1:-1:"           },
-    { 3, "Slow",               "slow",         "3:-1:"           },
+    { 3, "Slow",               "slow",         "1:-1:"           },
     { 4, "Slower",             "slower",       "3:-1:"           }
 };
 
