@@ -809,7 +809,6 @@ static void detect_combed_segment( hb_filter_private_t * pv, int segment_start, 
        AviSynth and tritical's IsCombedT and
        IsCombedTIVTC plugins.                       */
 
-
     /* Comb scoring algorithm */
     int spatial_metric  = pv->spatial_metric;
     /* Motion threshold */
@@ -2181,7 +2180,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     decomb_prev_thread_args = NULL;
     for( ii = 0; ii < pv->comb_check_nthreads; ii++ )
     {
-        decomb_thread_arg_t *thread_args, *decomb_prev_thread_args = NULL;
+        decomb_thread_arg_t *thread_args;
 
         thread_args = taskset_thread_args( &pv->decomb_check_taskset, ii );
         thread_args->pv = pv;
