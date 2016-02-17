@@ -30,8 +30,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "libavcodec/qsv.h"
 #include "qsv_filter.h"
+#include "qsv_libav.h"
 
 struct hb_filter_private_s
 {

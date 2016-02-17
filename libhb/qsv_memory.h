@@ -29,8 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_MEMORY_H
 #define QSV_MEMORY_H
 
-#include "libavcodec/qsv.h"
 #include "mfx/mfxplugin.h"
+#include "qsv_libav.h"
 
 typedef struct{
 
