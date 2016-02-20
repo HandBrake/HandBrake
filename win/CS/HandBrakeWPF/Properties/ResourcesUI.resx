@@ -866,4 +866,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Preset_SubtitleDefaults_Title" xml:space="preserve">
     <value>Subtitle Defaults</value>
   </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
+  </data>
 </root>

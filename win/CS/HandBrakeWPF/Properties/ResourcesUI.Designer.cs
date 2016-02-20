@@ -1629,6 +1629,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The selected titles will be added using the  &quot;{0}&quot;  preset..
+        /// </summary>
+        public static string QueueSelection_UsingPreset {
+            get {
+                return ResourceManager.GetString("QueueSelection_UsingPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose titles:.
         /// </summary>
         public static string QueueSelectionView_ChooseTitles {

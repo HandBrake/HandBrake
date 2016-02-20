@@ -8,7 +8,7 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
         Width="550"
-        Height="450"
+        Height="475"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -100,6 +100,10 @@
 
         <!-- Checlist -->
         <StackPanel Orientation="Vertical" Grid.Row="3" Margin="10,10,10,0">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="{Binding CurrentPreset}" TextWrapping="Wrap" />
+            </StackPanel>
+          
             <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoNameWarning}"
                        TextWrapping="Wrap" Visibility="{Binding IsAutoNamingEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
         </StackPanel>

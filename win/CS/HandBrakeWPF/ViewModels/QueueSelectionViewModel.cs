@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -25,27 +26,13 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class QueueSelectionViewModel : ViewModelBase, IQueueSelectionViewModel
     {
-        /// <summary>
-        /// The error service.
-        /// </summary>
         private readonly IErrorService errorService;
-
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// The ordered by duration.
-        /// </summary>
         private bool orderedByDuration;
-
-        /// <summary>
-        /// The ordered by title.
-        /// </summary>
         private bool orderedByTitle;
-
-        /// <summary>
-        /// The add to queue.
-        /// </summary>
         private Action<IEnumerable<SelectionTitle>> addToQueue;
+
+        private string currentPreset;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueSelectionViewModel"/> class. 
@@ -74,6 +61,26 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the selected titles.
         /// </summary>
         public BindingList<SelectionTitle> TitleList { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current preset.
+        /// </summary>
+        public string CurrentPreset
+        {
+            get
+            {
+                return this.currentPreset;
+            }
+            set
+            {
+                if (value == this.currentPreset)
+                {
+                    return;
+                }
+                this.currentPreset = value;
+                this.NotifyOfPropertyChange(() => this.CurrentPreset);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether ordered by title.
@@ -202,7 +209,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="addAction">
         /// The add Action.
         /// </param>
-        public void Setup(Source scannedSource, string srcName, Action<IEnumerable<SelectionTitle>> addAction)
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void Setup(Source scannedSource, string srcName, Action<IEnumerable<SelectionTitle>> addAction, Preset preset)
         {
             this.TitleList.Clear();
             this.addToQueue = addAction;
@@ -218,6 +228,11 @@ namespace HandBrakeWPF.ViewModels
                     SelectionTitle title = new SelectionTitle(item, srcName) { IsSelected = true };
                     TitleList.Add(title);
                 }
+            }
+
+            if (preset != null)
+            {
+                this.CurrentPreset = string.Format(ResourcesUI.QueueSelection_UsingPreset, preset.Name);
             }
 
             this.NotifyOfPropertyChange(() => this.IsAutoNamingEnabled);

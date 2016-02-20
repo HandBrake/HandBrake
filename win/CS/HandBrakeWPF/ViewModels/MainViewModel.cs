@@ -1470,7 +1470,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedTitle = title.Title;
                     this.AddToQueue();
                 }
-            });
+            }, this.selectedPreset);
 
             if (window != null)
             {
