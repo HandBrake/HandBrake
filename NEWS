@@ -1,12 +1,12 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
 
-Changes between 0.10.2 and 1.0
+Changes between 0.10.5 and 1.0
 
   Core
     - Updated Libraries:
         LibAV 11.3
-        x265 1.8
+        x265 1.9
         x264 r144
         libmfx v6.0
         freetype 2.6
@@ -16,10 +16,11 @@ Changes between 0.10.2 and 1.0
     - New JSON based preset system. Including support in HandBrakeCLI
     - Performance Improvements
         NLMeans now has SSE2 optimisations. (Approx 1~6% improvement)
-        FDK AAC Encoder compiler optimizations re-enabled which brings speed just behind libav aac.
     - Pad Filter
     - Additional Framerate selections.
-    - Intel QuickSync? H.265 (HEVC) Encoder. (Works on Intel Skylake or newer CPU's only)
+    - Intel QuickSync H.265 (HEVC) Encoder. (Works on Intel Skylake or newer CPU's only)
+    - Removed the FDK AAC encoder. (OSX still uses CoreAudio as default. Windows and Linux use LibAV as default.)
+      + Please see out AAC Encoder Change Announcement to understand what this means. 
     - Misc Bug fixes and improvements.
     
   Windows
@@ -28,6 +29,7 @@ Changes between 0.10.2 and 1.0
         Stopping an encode will finalise the file so that it's playable.
 		Reduced Installer / Install Size. (HandBrakeCLI is no longer included in the package)
     - Added support for Quality based audio encoding.
+    - Chapters tab can now import, tsv, xml and txt formatted chapters.
     - Improved the "Configure Default" options for the Audio and Subtitle Tabs
         Audio: Default settings for track behavior is now configurable.
         Subtitle: Burn-in Behavior mode now selectable.
@@ -35,6 +37,7 @@ Changes between 0.10.2 and 1.0
     
   Mac
     - XQuartz is no longer required for Subtitle burn-in to operate.
+    - Updated Sparkle Updater Library.
     - Misc Bug fixes and improvements.
     
   Linux
@@ -45,7 +48,24 @@ Changes between 0.10.2 and 1.0
     - Preset System. You can now import and export presets from the CLI to and from the other UI's
 
 
+    
+Changes between 0.10.3 and 0.10.5
 
+  - Removal of FDK AAC from our binary releases. --enable-fdk is required for "non-free" builds if compiling from source. 
+ 	 + Please see out AAC Encoder Change Announcement to understand what this means. 
+  - Updated x265 to 1.9 which brings bug fixes and performance improvements.
+  - Improvements in large AVI file handling.
+  - Assorted bug fixes and performance improvements.
+  
+  
+  
+Changes between 0.10.2 and 0.10.3
+
+  - Updated x265 to 1.8 which brings numerous bug fixes and some performance improvements.
+  - Assorted bug fixes and performance improvements.
+   
+
+   
 Changes between 0.10.1 and 0.10.2
 
   - Assorted bug fixes and performance improvements.
