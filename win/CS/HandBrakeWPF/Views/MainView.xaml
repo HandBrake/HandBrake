@@ -8,6 +8,7 @@
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
+             xmlns:menu="clr-namespace:HandBrakeWPF.Commands.Menu"
              AllowDrop="True"
         FontSize="11"
         cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -123,6 +124,18 @@
                     <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}"
                               Header="S_how Preset Panel">
                     </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_Queue" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                    <MenuItem Header="Add to Queue" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
+                    <MenuItem Header="All Selection to Queue" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
+                    <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Import}" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                 </MenuItem>
 
                 <MenuItem Header="_Help">

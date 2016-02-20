@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Input;
 
     using Caliburn.Micro;
 
@@ -25,6 +26,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
@@ -220,6 +222,9 @@ namespace HandBrakeWPF.ViewModels
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
                     break;
             }
+
+            // Setup Commands
+            this.QueueCommand = new QueueCommands(this.QueueViewModel);
 
             HandBrakeInstanceManager.Init();
         }
@@ -1173,6 +1178,12 @@ namespace HandBrakeWPF.ViewModels
         /// Flag to indicate if the queue is showing on the main view. (I.e  inline queue display)
         /// </summary>
         public bool IsQueueShowingInLine { get; set; } = false;
+
+        #endregion
+
+        #region Commands 
+
+        public ICommand QueueCommand { get; set; }
 
         #endregion
 

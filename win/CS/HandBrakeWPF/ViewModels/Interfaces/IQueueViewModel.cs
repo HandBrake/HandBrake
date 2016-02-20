@@ -21,5 +21,30 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The action.
         /// </param>
         void WhenDone(string action);
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        void Import();
+
+        /// <summary>
+        /// The export.
+        /// </summary>
+        void Export();
+
+        /// <summary>
+        /// The clear completed.
+        /// </summary>
+        void ClearCompleted();
+
+        /// <summary>
+        /// The clear.
+        /// </summary>
+        void Clear();
+
+        /// <summary>
+        /// The remove selected jobs.
+        /// </summary>
+        void RemoveSelectedJobs();
     }
 }
