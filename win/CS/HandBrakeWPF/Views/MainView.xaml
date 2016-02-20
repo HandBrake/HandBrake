@@ -127,6 +127,8 @@
                 </MenuItem>
 
                 <MenuItem Header="_Queue" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                    <MenuItem Header="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]"  InputGestureText="Ctrl + Q" />
+                    <Separator />
                     <MenuItem Header="Add to Queue" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
                     <MenuItem Header="All Selection to Queue" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
