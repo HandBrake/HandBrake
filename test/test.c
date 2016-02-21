@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -40,6 +41,14 @@
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IODVDMedia.h>
 #endif
+
+#define NLMEANS_DEFAULT_PRESET      "medium"
+#define DEINTERLACE_DEFAULT_PRESET  "default"
+#define DECOMB_DEFAULT_PRESET       "default"
+#define DETELECINE_DEFAULT_PRESET   "default"
+#define HQDN3D_DEFAULT_PRESET       "medium"
+#define ROTATE_DEFAULT              "angle=180:hflip=0"
+#define DEBLOCK_DEFAULT             "qp=5"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -897,6 +906,170 @@ void SigHandler( int i_signal )
 /****************************************************************************
  * ShowHelp:
  ****************************************************************************/
+static void showFilterPresets(FILE* const out, int filter_id)
+{
+    char ** names = hb_filter_get_presets_short_name(filter_id);
+    char  * slash = "", * newline;
+    int     ii, count = 0, linelen = 0;
+
+#ifdef USE_QSV
+if (filter_id == HB_FILTER_DEINTERLACE && hb_qsv_available())
+{
+    count = 1;
+}
+#endif
+
+    // Count number of entries we want to display
+    for (ii = 0; names[ii] != NULL; ii++)
+    {
+        if (!strcasecmp(names[ii], "custom") || // skip custom
+            !strcasecmp(names[ii], "off")    || // skip off
+            !strcasecmp(names[ii], "default"))  // skip default
+            continue;
+        count++;
+    }
+
+    // If there are no entries, display nothing.
+    if (count == 0)
+    {
+        return;
+    }
+    fprintf(out, "                           Presets:\n"
+                 "                             <");
+    for (ii = 0; names[ii] != NULL; ii++)
+    {
+        if (!strcasecmp(names[ii], "custom") || // skip custom
+            !strcasecmp(names[ii], "off")    || // skip off
+            !strcasecmp(names[ii], "default"))  // skip default
+            continue;
+        int len = strlen(names[ii]) + 1;
+        if (linelen + len > 48)
+        {
+            newline = "\n                              ";
+            linelen = 0;
+        }
+        else
+        {
+            newline = "";
+        }
+        fprintf(out, "%s%s%s", slash, newline, names[ii]);
+        linelen += len;
+        slash = "/";
+    }
+#ifdef USE_QSV
+if (filter_id == HB_FILTER_DEINTERLACE && hb_qsv_available())
+{
+    fprintf(out, "/qsv");
+}
+#endif
+    fprintf(out, ">\n");
+    hb_str_vfree(names);
+}
+
+static void showFilterKeys(FILE* const out, int filter_id)
+{
+    char ** keys = hb_filter_get_keys(filter_id);
+    char  * colon = "", * newline;
+    int     ii, linelen = 0;
+
+    fprintf(out, "                           Custom Format:\n"
+                 "                             <");
+    for (ii = 0; keys[ii] != NULL; ii++)
+    {
+        int c = tolower(keys[ii][0]);
+        int len = strlen(keys[ii]) + 3;
+        if (linelen + len > 48)
+        {
+            newline = "\n                              ";
+            linelen = 0;
+        }
+        else
+        {
+            newline = "";
+        }
+        fprintf(out, "%s%s%s=%c", colon, newline, keys[ii], c);
+        linelen += len;
+        colon = ":";
+    }
+    fprintf(out, ">\n");
+    hb_str_vfree(keys);
+}
+
+static void showFilterDefault(FILE* const out, int filter_id)
+{
+    const char * preset = "default";
+
+    fprintf(out, "                           Default:\n"
+                 "                             <");
+    switch (filter_id)
+    {
+        case HB_FILTER_NLMEANS:
+            preset = NLMEANS_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DEINTERLACE:
+            preset = DEINTERLACE_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DECOMB:
+            preset = DECOMB_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DETELECINE:
+            preset = DETELECINE_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_HQDN3D:
+            preset = HQDN3D_DEFAULT_PRESET;
+            break;
+        default:
+            break;
+    }
+    switch (filter_id)
+    {
+        case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_NLMEANS:
+        case HB_FILTER_DECOMB:
+        case HB_FILTER_DETELECINE:
+        case HB_FILTER_HQDN3D:
+        {
+            hb_dict_t * settings;
+            settings = hb_generate_filter_settings(filter_id, preset,
+                                                   NULL, NULL);
+            char * str = hb_filter_settings_string(filter_id, settings);
+            hb_value_free(&settings);
+
+            char ** split = hb_str_vsplit(str, ':');
+            char  * colon = "", * newline;
+            int     ii, linelen = 0;
+
+            for (ii = 0; split[ii] != NULL; ii++)
+            {
+                int len = strlen(split[ii]) + 1;
+                if (linelen + len > 48)
+                {
+                    newline = "\n                              ";
+                    linelen = 0;
+                }
+                else
+                {
+                    newline = "";
+                }
+                fprintf(out, "%s%s%s", colon, newline, split[ii]);
+                linelen += len;
+                colon = ":";
+            }
+            hb_str_vfree(split);
+            free(str);
+        } break;
+        case HB_FILTER_ROTATE:
+            fprintf(out, "%s", ROTATE_DEFAULT);
+            break;
+        case HB_FILTER_DEBLOCK:
+            fprintf(out, "%s", DEBLOCK_DEFAULT);
+            break;
+        default:
+            break;
+    }
+    fprintf(out, ">\n");
+}
+
 static void ShowHelp()
 {
     int i, clock_min, clock_max, clock;
@@ -1261,64 +1434,61 @@ static void ShowHelp()
 "                           (default: detected from source)\n"
 "\n"
 "### Filters---------------------------------------------------------------\n\n"
-"   -d, --deinterlace       Unconditionally deinterlaces all frames\n"
-"         <");
-hb_filter_param_t * param = hb_filter_param_get_presets(HB_FILTER_DEINTERLACE);
-// Skip "custom"
-for (i = 1; param != NULL && param[i].name != NULL; i++)
-{
-    fprintf(out, "%s%s", i > 1 ? "/" : "", param[i].short_name);
-}
-#ifdef USE_QSV
-if (hb_qsv_available())
-{
-    fprintf(out, "/qsv");
-}
-#endif
-     fprintf( out, "> or omitted (default settings)\n"
-     "           or\n"
-"         <YM:FP>           Yadif Mode:Field Parity (default 3:-1)\n"
-"       --no-deinterlace    Disable preset deinterlace filter\n"
-"   -5, --decomb            Selectively deinterlaces when it detects combing\n"
-"         <fast/bob> or omitted (default settings)\n"
-"          or\n"
-"         <MO:ME:MT:ST:BT:BX:BY:MG:VA:LA:DI:ER:NO:MD:PP:FD>\n"
-"         (default: 7:2:6:9:80:16:16:10:20:20:4:2:50:24:1:-1)\n"
-"       --no-decomb         Disable preset decomb filter\n"
+"   -d, --deinterlace       Unconditionally deinterlaces all frames\n");
+    showFilterPresets(out, HB_FILTER_DEINTERLACE);
+    showFilterKeys(out, HB_FILTER_DEINTERLACE);
+    showFilterDefault(out, HB_FILTER_DEINTERLACE);
+    fprintf( out,
+"   --no-deinterlace        Disable preset deinterlace filter\n"
+"   -5, --decomb            Selectively deinterlaces when it detects combing\n");
+    showFilterPresets(out, HB_FILTER_DECOMB);
+    showFilterKeys(out, HB_FILTER_DECOMB);
+    showFilterDefault(out, HB_FILTER_DECOMB);
+    fprintf( out,
+"   --no-decomb             Disable preset decomb filter\n"
 "   -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
 "                           Note: this filter drops duplicate frames to\n"
 "                           restore the pre-telecine framerate, unless you\n"
 "                           specify a constant framerate\n"
-"                           (--rate 29.97 --cfr)\n"
-"         <L:R:T:B:SB:MP:FD> (default 1:1:4:4:0:0:-1)\n"
-"       --no-detelecine     Disable preset detelecine filter\n"
-"   -8, --hqdn3d            Denoise video with hqdn3d filter\n"
-"         <ultralight/light/medium/strong> or omitted (default settings)\n"
-"          or\n"
-"         <SL:SCb:SCr:TL:TCb:TCr>\n"
-"         (default: 4:3:3:6:4.5:4.5)\n"
-"       --no-hqdn3d         Disable preset hqdn3d filter\n"
-"       --denoise           Legacy alias for '--hqdn3d'\n"
-"   --nlmeans               Denoise video with nlmeans filter\n"
-"         <ultralight/light/medium/strong> or omitted\n"
-"          or\n"
-"         <SY:OTY:PSY:RY:FY:PY:Sb:OTb:PSb:Rb:Fb:Pb:Sr:OTr:PSr:Rr:Fr:Pr>\n"
-"         (default 8:1:7:3:2:0)\n"
+"                           (--rate 29.97 --cfr)\n");
+    showFilterPresets(out, HB_FILTER_DETELECINE);
+    showFilterKeys(out, HB_FILTER_DETELECINE);
+    showFilterDefault(out, HB_FILTER_DETELECINE);
+    fprintf( out,
+"   --no-detelecine         Disable preset detelecine filter\n"
+"   -8, --hqdn3d            Denoise video with hqdn3d filter\n");
+    showFilterPresets(out, HB_FILTER_HQDN3D);
+    showFilterKeys(out, HB_FILTER_HQDN3D);
+    showFilterDefault(out, HB_FILTER_HQDN3D);
+    fprintf( out,
+"   --no-hqdn3d             Disable preset hqdn3d filter\n"
+"   --denoise               Legacy alias for '--hqdn3d'\n"
+"   --nlmeans               Denoise video with nlmeans filter\n");
+    showFilterPresets(out, HB_FILTER_NLMEANS);
+    showFilterKeys(out, HB_FILTER_NLMEANS);
+    showFilterDefault(out, HB_FILTER_NLMEANS);
+    fprintf( out,
+
 "   --no-nlmeans            Disable preset nlmeans filter\n"
 "   --nlmeans-tune          Tune nlmeans filter to content type\n"
 "                           Note: only works in conjunction with presets\n"
 "                           ultralight/light/medium/strong.\n"
-"         <none/film/grain/highmotion/animation> or omitted (default none)\n"
-"   -7, --deblock           Deblock video with pp7 filter\n"
-"         <QP:M>            (default 5:2)\n"
-"       --no-deblock        Disable preset deblock filter\n"
-"        --rotate           Rotate image or flip its axes.\n"
-"         <angle>:<mirror>  Angle rotates clockwise, can be one of:\n"
+"                           Tunes:\n"
+"                             <none/film/grain/highmotion/animation>\n"
+"   -7, --deblock           Deblock video with pp7 filter\n");
+    showFilterKeys(out, HB_FILTER_DEBLOCK);
+    showFilterDefault(out, HB_FILTER_DEBLOCK);
+    fprintf( out,
+"   --no-deblock            Disable preset deblock filter\n"
+"   --rotate                Rotate image or flip its axes.\n"
+"                           angle rotates clockwise, can be one of:\n"
 "                              0, 90, 180, 270\n"
-"                           Mirror flips the image on the x axis.\n"
-"                           Default: 180:0 (rotate 180 degrees)\n"
+"                           hflip flips the image on the x axis.\n");
+    showFilterKeys(out, HB_FILTER_ROTATE);
+    showFilterDefault(out, HB_FILTER_ROTATE);
+    fprintf( out,
 "   -g, --grayscale         Grayscale encoding\n"
-"       --no-grayscale      Disable preset 'grayscale'\n"
+"   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
 "### Subtitle Options------------------------------------------------------\n\n"
 "      --subtitle-lang-list Specifiy a comma separated list of subtitle\n"
@@ -2092,7 +2262,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deinterlace = strdup("default");
+                    deinterlace = strdup(DEINTERLACE_DEFAULT_PRESET);
                 }
                 break;
             case '7':
@@ -2103,7 +2273,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deblock = strdup("5");
+                    deblock = strdup(DEBLOCK_DEFAULT);
                 }
                 break;
             case '8':
@@ -2114,7 +2284,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    hqdn3d = strdup("default");
+                    hqdn3d = strdup(HQDN3D_DEFAULT_PRESET);
                 }
                 break;
             case FILTER_NLMEANS:
@@ -2125,7 +2295,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    nlmeans = strdup("medium");
+                    nlmeans = strdup(NLMEANS_DEFAULT_PRESET);
                 }
                 break;
             case FILTER_NLMEANS_TUNE:
@@ -2140,7 +2310,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    detelecine = strdup("default");
+                    detelecine = strdup(DETELECINE_DEFAULT_PRESET);
                 }
                 break;
             case '5':
@@ -2151,7 +2321,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    decomb = strdup("default");
+                    decomb = strdup(DECOMB_DEFAULT_PRESET);
                 }
                 break;
             case 'g':
@@ -2165,7 +2335,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    rotate = strdup("180:0");
+                    rotate = strdup(ROTATE_DEFAULT);
                 }
                 break;
             case KEEP_DISPLAY_ASPECT:
@@ -2428,7 +2598,7 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --deblock and --no-deblock\n");
             return -1;
         }
-        if (hb_validate_filter_settings(HB_FILTER_DEBLOCK, deblock))
+        if (hb_validate_filter_string(HB_FILTER_DEBLOCK, deblock))
         {
             fprintf(stderr, "Invalid deblock option %s\n", deblock);
             return -1;
@@ -2444,13 +2614,13 @@ static int ParseOptions( int argc, char ** argv )
             return -1;
         }
         if (!hb_validate_filter_preset(HB_FILTER_DETELECINE,
-                                       detelecine, NULL))
+                                       detelecine, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DETELECINE, detelecine))
+        else if (!hb_validate_filter_string(HB_FILTER_DETELECINE, detelecine))
         {
             detelecine_custom = 1;
         }
@@ -2469,7 +2639,7 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --pad and --no-pad\n");
             return -1;
         }
-        else if (hb_validate_filter_settings(HB_FILTER_PAD, pad))
+        else if (hb_validate_filter_string(HB_FILTER_PAD, pad))
         {
             fprintf(stderr, "Invalid pad option %s\n", pad);
             return -1;
@@ -2485,13 +2655,13 @@ static int ParseOptions( int argc, char ** argv )
             return -1;
         }
         if (!hb_validate_filter_preset(HB_FILTER_DEINTERLACE,
-                                       deinterlace, NULL))
+                                       deinterlace, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DEINTERLACE, deinterlace))
+        else if (!hb_validate_filter_string(HB_FILTER_DEINTERLACE, deinterlace))
         {
             deinterlace_custom = 1;
         }
@@ -2510,13 +2680,13 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --decomb and --no-decomb\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_DECOMB, decomb, NULL))
+        if (!hb_validate_filter_preset(HB_FILTER_DECOMB, decomb, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DECOMB, decomb))
+        else if (!hb_validate_filter_string(HB_FILTER_DECOMB, decomb))
         {
             decomb_custom = 1;
         }
@@ -2535,13 +2705,13 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --hqdn3d and --no-hqdn3d\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_HQDN3D, hqdn3d, NULL))
+        if (!hb_validate_filter_preset(HB_FILTER_HQDN3D, hqdn3d, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_HQDN3D, hqdn3d))
+        else if (!hb_validate_filter_string(HB_FILTER_HQDN3D, hqdn3d))
         {
             hqdn3d_custom = 1;
         }
@@ -2560,13 +2730,14 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --nlmeans and --no-nlmeans\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_NLMEANS, nlmeans, nlmeans_tune))
+        if (!hb_validate_filter_preset(HB_FILTER_NLMEANS, nlmeans,
+                                       nlmeans_tune, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_NLMEANS, nlmeans))
+        else if (!hb_validate_filter_string(HB_FILTER_NLMEANS, nlmeans))
         {
             nlmeans_custom = 1;
         }
@@ -3457,7 +3628,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (deblock != NULL)
     {
-        hb_dict_set(preset, "PictureDeblock", hb_value_string(deblock));
+        hb_dict_set(preset, "PictureDeblock", hb_value_string("custom"));
+        hb_dict_set(preset, "PictureDeblockCustom", hb_value_string(deblock));
     }
     if (rotate != NULL)
     {

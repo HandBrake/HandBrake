@@ -381,11 +381,14 @@ void hb_display_job_info(hb_job_t *job)
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
-            if( filter->settings && *filter->settings )
-                hb_log("     + %s (%s)", filter->name, filter->settings);
+            char * settings = hb_filter_settings_string(filter->id,
+                                                        filter->settings);
+            if (settings != NULL)
+                hb_log("     + %s (%s)", filter->name, settings);
             else
                 hb_log("     + %s (default settings)", filter->name);
-            if( filter->info )
+            free(settings);
+            if (filter->info)
             {
                 hb_filter_info_t * info;
 
@@ -899,7 +902,7 @@ static int sanitize_subtitles( hb_job_t * job )
         // not required to add the subtitle rendering filter since
         // we will always try to do it here.
         hb_filter_object_t *filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-        hb_add_filter(job, filter, NULL);
+        hb_add_filter_dict(job, filter, NULL);
     }
 
     return 0;
@@ -1273,9 +1276,9 @@ static int sanitize_qsv( hb_job_t * job )
             {
                 // we need filters to copy to system memory and back
                 filter = hb_filter_init(HB_FILTER_QSV_PRE);
-                hb_add_filter(job, filter, NULL);
+                hb_add_filter_dict(job, filter, NULL);
                 filter = hb_filter_init(HB_FILTER_QSV_POST);
-                hb_add_filter(job, filter, NULL);
+                hb_add_filter_dict(job, filter, NULL);
             }
             if (vpp_settings[0] != job->title->geometry.width  ||
                 vpp_settings[1] != job->title->geometry.height ||
@@ -1286,17 +1289,18 @@ static int sanitize_qsv( hb_job_t * job )
                 vpp_settings[6] >= 1 /* deinterlace */)
             {
                 // we need the VPP filter
-                char *settings = hb_strdup_printf("%d:%d:%d:%d:%d:%d_dei:%d",
-                                                  vpp_settings[0],
-                                                  vpp_settings[1],
-                                                  vpp_settings[2],
-                                                  vpp_settings[3],
-                                                  vpp_settings[4],
-                                                  vpp_settings[5],
-                                                  vpp_settings[6]);
+                hb_dict_t * dict = hb_dict_init();
+                hb_dict_set(dict, "width", hb_value_int(vpp_settings[0]));
+                hb_dict_set(dict, "height", hb_value_int(vpp_settings[1]));
+                hb_dict_set(dict, "crop-top", hb_value_int(vpp_settings[2]));
+                hb_dict_set(dict, "crop-bottom", hb_value_int(vpp_settings[3]));
+                hb_dict_set(dict, "crop-left", hb_value_int(vpp_settings[4]));
+                hb_dict_set(dict, "crop-right", hb_value_int(vpp_settings[5]));
+                hb_dict_set(dict, "deinterlace", hb_value_int(vpp_settings[6]));
+
                 filter = hb_filter_init(HB_FILTER_QSV);
-                hb_add_filter(job, filter, settings);
-                free(settings);
+                hb_add_filter_dict(job, filter, dict);
+                hb_value_free(&dict);
             }
         }
     }

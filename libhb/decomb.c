@@ -118,7 +118,7 @@ typedef struct yadif_thread_arg_s {
 
 struct hb_filter_private_s
 {
-    // Decomb parameters
+    // Decomb detect parameters
     int              mode;
     int              filter_mode;
     int              spatial_metric;
@@ -127,6 +127,7 @@ struct hb_filter_private_s
     int              block_threshold;
     int              block_width;
     int              block_height;
+
     int            * block_score;
     int              comb_check_complete;
     int              comb_check_nthreads;
@@ -135,6 +136,16 @@ struct hb_filter_private_s
 
     float            gamma_lut[256];
 
+    /* Make buffers to store a comb masks. */
+    hb_buffer_t    * mask;
+    hb_buffer_t    * mask_filtered;
+    hb_buffer_t    * mask_temp;
+    int              mask_box_x;
+    int              mask_box_y;
+    uint8_t          mask_box_color;
+
+    // Deinterlace parameters
+    int              parity;
     // EEDI2 parameters
     int              magnitude_threshold;
     int              variance_threshold;
@@ -145,7 +156,6 @@ struct hb_filter_private_s
     int              maximum_search_distance;
     int              post_processing;
 
-    int              parity;
     int              tff;
 
     int              yadif_ready;
@@ -155,14 +165,6 @@ struct hb_filter_private_s
     int              unfiltered_frames;
 
     hb_buffer_t    * ref[3];
-
-    /* Make buffers to store a comb masks. */
-    hb_buffer_t    * mask;
-    hb_buffer_t    * mask_filtered;
-    hb_buffer_t    * mask_temp;
-    int              mask_box_x;
-    int              mask_box_y;
-    uint8_t          mask_box_color;
 
 
     hb_buffer_t    * eedi_half[4];
@@ -202,15 +204,26 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
 static void hb_decomb_close( hb_filter_object_t * filter );
 
+static const char decomb_template[] =
+    "mode=^"HB_INT_REG"$:spatial-metric=^([012])$:"
+    "motion-thresh=^"HB_INT_REG"$:spatial-thresh=^"HB_INT_REG"$:"
+    "filter-mode=^([012])$:block-thresh=^"HB_INT_REG"$:"
+    "block-width=^"HB_INT_REG"$:block-height=^"HB_INT_REG"$:"
+    "magnitude-thresh=^"HB_INT_REG"$:variance-thresh=^"HB_INT_REG"$:"
+    "laplacian-thresh=^"HB_INT_REG"$:dilation-thresh=^"HB_INT_REG"$:"
+    "erosion-thresh=^"HB_INT_REG"$:noise-thresh=^"HB_INT_REG"$:"
+    "search-distance=^"HB_INT_REG"$:postproc=^([0-3])$:parity=^([01])$";
+
 hb_filter_object_t hb_filter_decomb =
 {
-    .id            = HB_FILTER_DECOMB,
-    .enforce_order = 1,
-    .name          = "Decomb",
-    .settings      = NULL,
-    .init          = hb_decomb_init,
-    .work          = hb_decomb_work,
-    .close         = hb_decomb_close,
+    .id                = HB_FILTER_DECOMB,
+    .enforce_order     = 1,
+    .name              = "Decomb",
+    .settings          = NULL,
+    .init              = hb_decomb_init,
+    .work              = hb_decomb_work,
+    .close             = hb_decomb_close,
+    .settings_template = decomb_template,
 };
 
 // Borrowed from libav
@@ -1976,8 +1989,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     pv->yadif_ready    = 0;
 
-    pv->mode     = MODE_YADIF | MODE_BLEND | MODE_CUBIC |
-                   MODE_GAMMA | MODE_FILTER;
+    pv->mode  = MODE_YADIF | MODE_BLEND | MODE_CUBIC |
+                MODE_GAMMA | MODE_FILTER;
     pv->filter_mode = FILTER_ERODE_DILATE;
     pv->spatial_metric = 2;
     pv->motion_threshold = 3;
@@ -1997,26 +2010,44 @@ static int hb_decomb_init( hb_filter_object_t * filter,
 
     pv->parity   = PARITY_DEFAULT;
 
-    if( filter->settings )
+    if (filter->settings)
     {
-        sscanf( filter->settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
-                &pv->mode,
-                &pv->spatial_metric,
-                &pv->motion_threshold,
-                &pv->spatial_threshold,
-                &pv->filter_mode,
-                &pv->block_threshold,
-                &pv->block_width,
-                &pv->block_height,
-                &pv->magnitude_threshold,
-                &pv->variance_threshold,
-                &pv->laplacian_threshold,
-                &pv->dilation_threshold,
-                &pv->erosion_threshold,
-                &pv->noise_threshold,
-                &pv->maximum_search_distance,
-                &pv->post_processing,
-                &pv->parity );
+        hb_value_t * dict = filter->settings;
+
+        // Get comb detection settings
+        hb_dict_extract_int(&pv->mode, dict, "mode");
+        hb_dict_extract_int(&pv->spatial_metric, dict, "spatial-metric");
+        hb_dict_extract_int(&pv->motion_threshold, dict,
+                            "motion-thresh");
+        hb_dict_extract_int(&pv->spatial_threshold, dict,
+                            "spatial-thresh");
+        hb_dict_extract_int(&pv->filter_mode, dict, "filter-mode");
+        hb_dict_extract_int(&pv->block_threshold, dict,
+                            "block-thresh");
+        hb_dict_extract_int(&pv->block_width, dict, "block-width");
+        hb_dict_extract_int(&pv->block_height, dict, "block-height");
+
+        // Get deinterlace settings
+        hb_dict_extract_int(&pv->parity, dict, "parity");
+        if (pv->mode & MODE_EEDI2)
+        {
+            hb_dict_extract_int(&pv->magnitude_threshold, dict,
+                                "magnitude-thresh");
+            hb_dict_extract_int(&pv->variance_threshold, dict,
+                                "variance-thresh");
+            hb_dict_extract_int(&pv->laplacian_threshold, dict,
+                                "laplacian-thresh");
+            hb_dict_extract_int(&pv->dilation_threshold, dict,
+                                "dilation-thresh");
+            hb_dict_extract_int(&pv->erosion_threshold, dict,
+                                "erosion-thresh");
+            hb_dict_extract_int(&pv->noise_threshold, dict,
+                                "noise-thresh");
+            hb_dict_extract_int(&pv->maximum_search_distance, dict,
+                                "search-distance");
+            hb_dict_extract_int(&pv->post_processing, dict,
+                                "postproc");
+        }
     }
 
     pv->cpu_count = hb_get_cpu_count();
@@ -2638,8 +2669,10 @@ static int hb_decomb_work( hb_filter_object_t * filter,
             if ((pv->mode & MODE_MASK) && pv->spatial_metric >= 0 )
             {
                 if (pv->mode == MODE_MASK ||
-                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_FILTER)) ||
-                    ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
+                    ((pv->mode & MODE_MASK) &&
+                     (pv->mode & MODE_FILTER)) ||
+                    ((pv->mode & MODE_MASK) &&
+                     (pv->mode & MODE_GAMMA)) ||
                     pv->is_combed)
                 {
                     apply_mask(pv, hb_buffer_list_tail(&list));

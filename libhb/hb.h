@@ -17,7 +17,6 @@ extern "C" {
 #include "common.h"
 #include "project.h"
 #include "compat.h"
-#include "hb_dict.h"
 #include "hb_json.h"
 #include "preset.h"
 #include "plist.h"
@@ -87,8 +86,11 @@ hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_geometry_settings_t *geo,
                                       hb_geometry_t *result);
+void          hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
+                                  const hb_dict_t * settings_in );
 void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, 
-                const char * settings );
+                             const char * settings );
+void          hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter );
 
 /* Handling jobs */
 int           hb_count( hb_handle_t * );

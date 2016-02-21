@@ -1334,13 +1334,63 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
  * @param job Handle to hb_job_t
  * @param settings to give the filter
  */
-void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * settings_in )
+void hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter_dict )
 {
-    char * settings = NULL;
+    int new_id = hb_dict_get_int(filter_dict, "ID");
 
-    if ( settings_in != NULL )
+    hb_filter_object_t * filter = hb_filter_get(new_id);
+    if (filter == NULL)
     {
-        settings = strdup( settings_in );
+        hb_error("hb_add_filter2: Invalid filter ID %d", new_id);
+        hb_value_free(&filter_dict);
+        return;
+    }
+    if (filter->enforce_order)
+    {
+        // Find the position in the filter chain this filter belongs in
+        int ii, len;
+
+        len = hb_value_array_len(list);
+        for( ii = 0; ii < len; ii++ )
+        {
+            hb_value_t * f = hb_value_array_get(list, ii);
+            int id = hb_dict_get_int(f, "ID");
+            if (id > new_id)
+            {
+                hb_value_array_insert(list, ii, filter_dict);
+                return;
+            }
+            else if ( id == new_id )
+            {
+                // Don't allow the same filter to be added twice
+                hb_value_free(&filter_dict);
+                return;
+            }
+        }
+    }
+    // No position found or order not enforced for this filter
+    hb_value_array_append(list, filter_dict);
+}
+
+/**
+ * Add a filter to a jobs filter list
+ *
+ * @param job Handle to hb_job_t
+ * @param settings to give the filter
+ */
+void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
+                         const hb_dict_t * settings_in )
+{
+    hb_dict_t * settings;
+
+    // Always set filter->settings to a valid hb_dict_t
+    if (settings_in == NULL)
+    {
+        settings = hb_dict_init();
+    }
+    else
+    {
+        settings = hb_value_dup(settings_in);
     }
     filter->settings = settings;
     if( filter->enforce_order )
@@ -1365,6 +1415,25 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * se
     }
     // No position found or order not enforced for this filter
     hb_list_add( job->list_filter, filter );
+}
+
+/**
+ * Add a filter to a jobs filter list
+ *
+ * @param job Handle to hb_job_t
+ * @param settings to give the filter
+ */
+void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
+                    const char * settings_in )
+{
+    hb_dict_t * settings = hb_parse_filter_settings(settings_in);
+    if (settings_in != NULL && settings == NULL)
+    {
+        hb_log("hb_add_filter: failed to parse filter settings!");
+        return;
+    }
+    hb_add_filter_dict(job, filter, settings);
+    hb_value_free(&settings);
 }
 
 /**

@@ -58,15 +58,19 @@ static int hb_deblock_work( hb_filter_object_t * filter,
 
 static void hb_deblock_close( hb_filter_object_t * filter );
 
+static const char deblock_template[] =
+    "qp=^"HB_INT_REG"$:mode=^([012])$:disable=^"HB_BOOL_REG"$";
+
 hb_filter_object_t hb_filter_deblock =
 {
-    .id            = HB_FILTER_DEBLOCK,
-    .enforce_order = 1,
-    .name          = "Deblock (pp7)",
-    .settings      = NULL,
-    .init          = hb_deblock_init,
-    .work          = hb_deblock_work,
-    .close         = hb_deblock_close,
+    .id                = HB_FILTER_DEBLOCK,
+    .enforce_order     = 1,
+    .name              = "Deblock (pp7)",
+    .settings          = NULL,
+    .init              = hb_deblock_init,
+    .work              = hb_deblock_work,
+    .close             = hb_deblock_close,
+    .settings_template = deblock_template,
 };
 
 static inline void pp7_dct_a( DCTELEM * dst, uint8_t * src, int stride )
@@ -346,10 +350,8 @@ static int hb_deblock_init( hb_filter_object_t * filter,
     pv->pp7_mode  = PP7_MODE_DEFAULT;
     pv->pp7_mpeg2 = 1; /*mpi->qscale_type;*/
 
-    if( filter->settings )
-    {
-        sscanf( filter->settings, "%d:%d", &pv->pp7_qp, &pv->pp7_mode );
-    }
+    hb_dict_extract_int(&pv->pp7_mode, filter->settings, "mode");
+    hb_dict_extract_int(&pv->pp7_qp, filter->settings, "qp");
 
     if( pv->pp7_qp < 0 )
     {

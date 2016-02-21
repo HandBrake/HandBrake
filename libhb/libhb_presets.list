@@ -1,7 +1,7 @@
 <resources>
     <section name="PresetTemplate">
-        <integer name="VersionMajor" value="11" />
-        <integer name="VersionMinor" value="1" />
+        <integer name="VersionMajor" value="12" />
+        <integer name="VersionMinor" value="0" />
         <integer name="VersionMicro" value="0" />
         <json name="Preset" file="preset_template.json" />
     </section>

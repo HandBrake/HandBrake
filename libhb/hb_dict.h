@@ -9,6 +9,7 @@
 #if !defined(HB_DICT_H)
 #define HB_DICT_H
 
+#include "hbtypes.h"
 #include <jansson.h>
 
 #define HB_VALUE_TYPE_DICT      JSON_OBJECT
@@ -37,13 +38,35 @@ typedef void*      hb_dict_iter_t;
 hb_dict_t *       hb_dict_init(void);
 /* free dictionary and release references to all values it contains */
 void              hb_dict_free(hb_dict_t ** dict_ptr);
+/* return number of member elements in the dictionary */
+int               hb_dict_elements(hb_dict_t * dict);
 /* add value to dictionary.  dictionary takes ownership of value */
 void              hb_dict_set(hb_dict_t * dict, const char * key,
                               hb_value_t * value);
+void              hb_dict_case_set(hb_dict_t * dict, const char *key,
+                                   hb_value_t *value);
 /* remove value from dictionary.  releases reference to value */
 int               hb_dict_remove(hb_dict_t * dict, const char * key);
 /* get value from dictionary.  value has borrowed reference */
 hb_value_t *      hb_dict_get(const hb_dict_t * dict, const char * key);
+int               hb_dict_extract_int(int *dst,
+                                      const hb_dict_t * dict,
+                                      const char * key);
+int               hb_dict_extract_double(double *dst,
+                                         const hb_dict_t * dict,
+                                         const char * key);
+int               hb_dict_extract_bool(int *dst,
+                                       const hb_dict_t * dict,
+                                       const char * key);
+int               hb_dict_extract_string(char **dst,
+                                         const hb_dict_t * dict,
+                                         const char * key);
+int               hb_dict_extract_rational(hb_rational_t *dst,
+                                           const hb_dict_t * dict,
+                                           const char * key);
+int               hb_dict_extract_int_array(int *dst, int count,
+                                            const hb_dict_t * dict,
+                                            const char * key);
 
 /* dict iterator
  * hb_dict_iter_init(dict) returns an iter to the first key/value in the dict
@@ -81,6 +104,10 @@ void               hb_value_array_remove(hb_value_array_t *array, int index);
 /* clears dst and performs a deep copy */
 void               hb_value_array_copy(hb_value_array_t *dst,
                                        const hb_value_array_t *src, int count);
+/* appends copy of value to array.  if value is an array, appends a copy of
+ * each element to array */
+void               hb_value_array_concat(hb_value_array_t *array,
+                                         hb_value_t *value);
 size_t             hb_value_array_len(const hb_value_array_t *array);
 
 /* hb_value_t */
@@ -92,6 +119,7 @@ void         hb_value_decref(hb_value_t *value);
 void         hb_value_free(hb_value_t **value);
 
 /* Create new hb_value_t */
+hb_value_t * hb_value_null();
 hb_value_t * hb_value_string(const char *value);
 hb_value_t * hb_value_int(json_int_t value);
 hb_value_t * hb_value_double(double value);
@@ -124,5 +152,11 @@ int          hb_value_write_json(hb_value_t *value, const char *path);
  * an hb_dict_t dictionary. */
 hb_dict_t * hb_encopts_to_dict(const char * encopts, int encoder);
 char      * hb_dict_to_encopts(const hb_dict_t * dict);
+
+/* convenience macros */
+#define hb_dict_get_string(dict, key) hb_value_get_string(hb_dict_get(dict, key))
+#define hb_dict_get_int(dict, key) hb_value_get_int(hb_dict_get(dict, key))
+#define hb_dict_get_double(dict, key) hb_value_get_double(hb_dict_get(dict, key))
+#define hb_dict_get_bool(dict, key) hb_value_get_bool(hb_dict_get(dict, key))
 
 #endif // !defined(HB_DICT_H)

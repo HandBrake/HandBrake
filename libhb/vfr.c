@@ -48,16 +48,20 @@ static int hb_vfr_work( hb_filter_object_t * filter,
 static void hb_vfr_close( hb_filter_object_t * filter );
 static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter );
 
+static const char hb_vfr_template[] =
+    "mode=^([012])$:rate=^"HB_RATIONAL_REG"$";
+
 hb_filter_object_t hb_filter_vfr =
 {
-    .id            = HB_FILTER_VFR,
-    .enforce_order = 1,
-    .name          = "Framerate Shaper",
-    .settings      = NULL,
-    .init          = hb_vfr_init,
-    .work          = hb_vfr_work,
-    .close         = hb_vfr_close,
-    .info          = hb_vfr_info,
+    .id                = HB_FILTER_VFR,
+    .enforce_order     = 1,
+    .name              = "Framerate Shaper",
+    .settings          = NULL,
+    .init              = hb_vfr_init,
+    .work              = hb_vfr_work,
+    .close             = hb_vfr_close,
+    .info              = hb_vfr_info,
+    .settings_template = hb_vfr_template,
 };
 
 // Create gamma lookup table.
@@ -301,11 +305,8 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
 
     pv->cfr              = init->cfr;
     pv->input_vrate = pv->vrate = init->vrate;
-    if (filter->settings != NULL)
-    {
-        sscanf(filter->settings, "%d:%d:%d",
-               &pv->cfr, &pv->vrate.num, &pv->vrate.den);
-    }
+    hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
+    hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
 
     pv->job = init->job;
 
