@@ -493,7 +493,7 @@ namespace HandBrakeWPF.ViewModels
         public void AddAllRemainingForSelectedLanguages()
         {
             // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(true))
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(false))
             {
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
