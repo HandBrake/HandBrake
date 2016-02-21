@@ -20,7 +20,7 @@ Changes between 0.10.5 and 1.0
     - Additional Framerate selections.
     - Intel QuickSync H.265 (HEVC) Encoder. (Works on Intel Skylake or newer CPU's only)
     - Removed the FDK AAC encoder. (OSX still uses CoreAudio as default. Windows and Linux use LibAV as default.)
-      + Please see out AAC Encoder Change Announcement to understand what this means. 
+      + Please see our AAC Encoder Change Announcement to understand what this means. 
     - Misc Bug fixes and improvements.
     
   Windows
