@@ -45,24 +45,26 @@
 {
     id delegate = [self delegate];
 
-    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
-    if ((key == NSDeleteCharacter || key == NSDeleteFunctionKey) &&
-        [delegate respondsToSelector:@selector(HB_deleteSelectionFromTableView:)])
+    NSString *characters = [event charactersIgnoringModifiers];
+    if (characters.length)
     {
-        if ([self selectedRow] == -1)
+        unichar key = [characters characterAtIndex:0];
+        if ((key == NSDeleteCharacter || key == NSDeleteFunctionKey) &&
+            [delegate respondsToSelector:@selector(HB_deleteSelectionFromTableView:)])
         {
-            NSBeep();
+            if ([self selectedRow] == -1)
+            {
+                NSBeep();
+            }
+            else
+            {
+                [delegate HB_deleteSelectionFromTableView:self];
+            }
+            return;
         }
-        else
-        {
-            [delegate HB_deleteSelectionFromTableView:self];
-        }
-        return;
     }
-    else
-    {
-        [super keyDown:event];
-    }
+
+    [super keyDown:event];
 }
 
 /**
