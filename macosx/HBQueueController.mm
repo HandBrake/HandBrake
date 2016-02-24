@@ -69,7 +69,13 @@
 {
     id delegate = [self delegate];
 
-    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    unichar key = 0;
+    NSString *characters = [event charactersIgnoringModifiers];
+    if (characters.length)
+    {
+        key = [characters characterAtIndex:0];
+    }
+
     if ((key == NSDeleteCharacter || key == NSDeleteFunctionKey) &&
                [delegate respondsToSelector:@selector(removeSelectedQueueItem:)])
     {
