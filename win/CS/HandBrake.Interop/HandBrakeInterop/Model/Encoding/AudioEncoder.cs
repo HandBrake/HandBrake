@@ -22,14 +22,6 @@ namespace HandBrake.Interop.Model.Encoding
         [ShortName("av_aac")]
         ffaac,
 
-        [Display(Name = "AAC (FDK)")]
-        [ShortName("fdk_aac")]
-        fdkaac,
-
-        [Display(Name = "HE-AAC (FDK)")]
-        [ShortName("fdk_haac")]
-        fdkheaac,
-
         [Display(Name = "MP3")]
         [ShortName("mp3")]
         Lame,

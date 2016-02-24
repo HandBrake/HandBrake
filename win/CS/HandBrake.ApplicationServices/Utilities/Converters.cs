@@ -169,9 +169,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 case "ffaac":
                     return AudioEncoder.ffaac;
                 case "fdk_aac":
-                    return AudioEncoder.fdkaac;
+                    return AudioEncoder.ffaac;
                 case "fdk_haac":
-                    return AudioEncoder.fdkheaac;
+                    return AudioEncoder.ffaac;
                 case "mp3":
                 case "lame":
                     return AudioEncoder.Lame;
@@ -218,11 +218,11 @@ namespace HandBrake.ApplicationServices.Utilities
                     return AudioEncoder.ffaac;
                 case "AAC (FDK)":
                 case "AAC (CoreAudio)":
-                    return AudioEncoder.fdkaac;
+                    return AudioEncoder.ffaac;
                 case "HE-AAC (FDK)":
                 case "HE-AAC (CoreAudio)":
                 case "HE-AAC":
-                    return AudioEncoder.fdkheaac;
+                    return AudioEncoder.ffaac;
                 case "MP3 (lame)":
                 case "MP3":
                     return AudioEncoder.Lame;

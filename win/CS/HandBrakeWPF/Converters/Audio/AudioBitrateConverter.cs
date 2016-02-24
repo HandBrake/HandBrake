@@ -100,14 +100,6 @@ namespace HandBrakeWPF.Converters.Audio
                     case AudioEncoder.ffflac24:
                         max = 1536; // Since we don't care, just set it to the max.
                         break;
-                    case AudioEncoder.fdkaac:
-                        low = channels * samplerate * 2 / 3000;
-                        max = channels * samplerate * 6 / 1000;
-                        break;
-                    case AudioEncoder.fdkheaac:
-                        low = (channels * (12 + (4 * (samplerate >= 44100 ? 1 : 0))));
-                        max = (channels - (channels > 2 ? 1 : 0)) * (48 + (16 * (samplerate >= 22050 ? 1 : 0)));
-                        break;
                     default:
                         max = 768;
                         break;
@@ -234,10 +226,6 @@ namespace HandBrakeWPF.Converters.Audio
                 // AC-3 < 32 kHz suffers from poor hardware compatibility
                 bestSamplerate = 32000;
             } 
-            else if ((samplerate < 16000) && (track.Encoder == AudioEncoder.fdkheaac))
-            {
-                bestSamplerate = 16000;
-            }
             else
             {
                 bestSamplerate = samplerate;
