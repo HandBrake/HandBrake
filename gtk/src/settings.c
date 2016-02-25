@@ -422,7 +422,7 @@ ghb_widget_value(GtkWidget *widget)
     }
     else
     {
-        g_warning("Attempt to set unknown widget type: %s\n", name);
+        g_warning("Attempt to get unknown widget type, name %s", name);
         g_free(value);
         value = NULL;
     }
@@ -514,7 +514,7 @@ ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget)
 void
 ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 {
-    GhbType type;
+    GType type;
     gchar *str, *tmp;
     gint ival;
     gdouble dval;
@@ -687,7 +687,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     }
     else
     {
-        g_warning("Attempt to set unknown widget type %s", name);
+        g_warning("Attempt to set unknown widget type, name %s", name);
     }
     g_free(tmp);
 }
