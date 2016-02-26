@@ -130,7 +130,7 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 /**
  *  An array of HBTitles found by the latest scan.
  */
-@property (nonatomic, readonly, nullable) NSArray<HBTitle *> *titles;
+@property (nonatomic, readonly, copy) NSArray<HBTitle *> *titles;
 
 /**
  *  This function converts an image created by libhb (specified via index)

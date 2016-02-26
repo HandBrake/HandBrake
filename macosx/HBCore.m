@@ -45,7 +45,7 @@ static void hb_error_handler(const char *errmsg)
 @property (nonatomic, readonly) dispatch_queue_t updateTimerQueue;
 
 /// Current scanned titles.
-@property (nonatomic, readwrite, strong) NSArray<HBTitle *> *titles;
+@property (nonatomic, readwrite, copy) NSArray<HBTitle *> *titles;
 
 /// Progress handler.
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
@@ -96,6 +96,8 @@ static void hb_error_handler(const char *errmsg)
         _name = @"HBCore";
         _state = HBStateIdle;
         _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
+        _titles = @[];
+
         _hb_state = malloc(sizeof(struct hb_state_s));
         _logLevel = level;
 
@@ -197,7 +199,7 @@ static void hb_error_handler(const char *errmsg)
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
 
     // Reset the titles array
-    self.titles = nil;
+    self.titles = @[];
 
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
