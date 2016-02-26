@@ -27,7 +27,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _detelecineCustomString = @"";
         _deinterlace = @"off";
         _deinterlaceCustomString = @"";
-        _deinterlacePreset = @"fast";
+        _deinterlacePreset = @"default";
         _denoise = @"off";
         _denoiseCustomString = @"";
         _denoisePreset = @"medium";
@@ -114,13 +114,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         [[self.undo prepareWithInvocationTarget:self] setDeinterlacePreset:_deinterlacePreset];
     }
+
     if (deinterlacePreset)
     {
         _deinterlacePreset = [deinterlacePreset copy];
-    }
-    else
-    {
-        _deinterlacePreset = @"fast";
     }
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
@@ -138,10 +135,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         filter_id = HB_FILTER_DEINTERLACE;
     }
 
-    if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL) ||
-        ([self.deinterlacePreset isEqualToString:@"default"] && filter_id == HB_FILTER_DEINTERLACE))
+    if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL))
     {
-        _deinterlacePreset = @"fast";
+        _deinterlacePreset = @"default";
     }
 }
 
