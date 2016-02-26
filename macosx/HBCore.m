@@ -10,6 +10,7 @@
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
+#import "HBStateFormatter+Private.h"
 #import "HBTitlePrivate.h"
 
 #include <dlfcn.h>
@@ -98,6 +99,7 @@ static void hb_error_handler(const char *errmsg)
         _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
         _titles = @[];
 
+        _stateFormatter = [[HBStateFormatter alloc] init];
         _hb_state = malloc(sizeof(struct hb_state_s));
         _logLevel = level;
 
@@ -557,7 +559,20 @@ static void hb_error_handler(const char *errmsg)
 {
     if (self.progressHandler)
     {
-        self.progressHandler(self.state, *(self.hb_state));
+        hb_state_t state = *(self.hb_state);
+        HBProgress progress = {0, 0, 0, 0};
+        progress.percent = [self.stateFormatter stateToPercentComplete:state];
+
+        if (state.state == HB_STATE_WORKING)
+        {
+            progress.hours = state.param.working.hours;
+            progress.minutes = state.param.working.minutes;
+            progress.seconds = state.param.working.seconds;
+        }
+
+        NSString *info = [self.stateFormatter stateToString:state];
+
+        self.progressHandler(self.state, progress, info);
     }
 }
 

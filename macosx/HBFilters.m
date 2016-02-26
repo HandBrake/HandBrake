@@ -7,6 +7,8 @@
 #import "HBFilters.h"
 #import "HBCodingUtilities.h"
 #import "NSDictionary+HBAdditions.h"
+#import "HBMutablePreset.h"
+
 #include "hb.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
@@ -280,33 +282,37 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"deinterlace", @"deinterlacePreset", @"deinterlaceCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"grayscale", nil];
     }
-    if ([key isEqualToString:@"customDetelecineSelected"] ||
-        [key isEqualToString:@"customDeinterlaceSelected"])
+    else if ([key isEqualToString:@"customDetelecineSelected"])
     {
-        retval = [NSSet setWithObjects:@"detelecine", @"deinterlace", nil];
+        retval = [NSSet setWithObjects:@"detelecine", nil];
     }
-    if ([key isEqualToString:@"denoiseTunesAvailable"] ||
+    else if ([key isEqualToString:@"denoiseTunesAvailable"] ||
         [key isEqualToString:@"customDenoiseSelected"])
     {
         retval = [NSSet setWithObjects:@"denoise", @"denoisePreset", nil];
     }
-    if ([key isEqualToString:@"denoiseEnabled"])
+    else if ([key isEqualToString:@"denoiseEnabled"])
     {
         retval = [NSSet setWithObject:@"denoise"];
     }
-    if ([key isEqualToString:@"deinterlaceEnabled"])
+    else if ([key isEqualToString:@"deinterlaceEnabled"])
     {
         retval = [NSSet setWithObject:@"deinterlace"];
     }
-    if ([key isEqualToString:@"customDeinterlaceSelected"] ||
+    else if ([key isEqualToString:@"customDeinterlaceSelected"] ||
         [key isEqualToString:@"deinterlacePresets"])
     {
         retval = [NSSet setWithObjects:@"deinterlace", @"deinterlacePreset", nil];
     }
-    if ([key isEqualToString:@"deblockSummary"])
+    else if ([key isEqualToString:@"deblockSummary"])
     {
         retval = [NSSet setWithObject:@"deblock"];
     }
+    else
+    {
+        retval = [NSSet set];
+    }
+
     return retval;
 }
 

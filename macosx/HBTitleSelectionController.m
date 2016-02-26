@@ -5,7 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitleSelectionController.h"
-#import "HBTitle.h"
+
+@import HandBrakeKit.HBTitle;
 
 @interface HBTitleSelection : NSObject
 @property (nonatomic, readonly) HBTitle *title;

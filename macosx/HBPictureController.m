@@ -5,8 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPictureController.h"
-#import "HBFilters.h"
-#import "HBPicture.h"
+
+@import HandBrakeKit.HBFilters;
+@import HandBrakeKit.HBPicture;
 
 static void *HBPictureControllerContext = &HBPictureControllerContext;
 

@@ -5,8 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAudioDefaultsController.h"
-#import "HBAudioDefaults.h"
 #import "HBLanguagesSelection.h"
+
+@import HandBrakeKit.HBAudioDefaults;
 
 static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 

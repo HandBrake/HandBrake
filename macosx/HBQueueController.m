@@ -6,19 +6,11 @@
 
 #import "HBQueueController.h"
 
-#import "HBCore.h"
 #import "HBController.h"
 #import "HBAppDelegate.h"
 
 #import "HBQueueOutlineView.h"
-#import "HBUtilities.h"
 
-#import "HBJob.h"
-#import "HBJob+UIAdditions.h"
-
-#import "HBStateFormatter.h"
-
-#import "HBDistributedArray.h"
 #import "NSArray+HBAdditions.h"
 
 #import "HBDockTile.h"
@@ -26,6 +18,8 @@
 #import "HBOutputRedirect.h"
 #import "HBJobOutputFileWriter.h"
 #import "HBPreferencesController.h"
+
+@import HandBrakeKit;
 
 // Pasteboard type for or drag operations
 #define DragDropSimplePboardType    @"HBQueueCustomOutlineViewPboardType"
@@ -657,12 +651,11 @@
 - (void)encodeJob:(HBJob *)job
 {
     NSParameterAssert(job);
-    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
 
     // Progress handler
-    void (^progressHandler)(HBState state, hb_state_t hb_state) = ^(HBState state, hb_state_t hb_state)
+    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
     {
-        NSString *status = [formatter stateToString:hb_state title:nil];
+        NSString *status = info;
         self.progressTextField.stringValue = status;
         [self.controller setQueueInfo:status progress:0 hidden:NO];
     };
@@ -701,23 +694,19 @@
     // Reset the title in the job.
     job.title = self.core.titles[0];
 
-    HBStateFormatter *converter = [[HBStateFormatter alloc] init];
-    NSString *destinationName = job.destURL.lastPathComponent;
+    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+    formatter.title = job.destURL.lastPathComponent;
+    self.core.stateFormatter = formatter;
 
     // Progress handler
-    void (^progressHandler)(HBState state, hb_state_t hb_state) = ^(HBState state, hb_state_t hb_state)
+    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
     {
-        NSString *string = [converter stateToString:hb_state title:destinationName];
-        CGFloat progress = [converter stateToPercentComplete:hb_state];
-
         if (state == HBStateWorking)
         {
             // Update dock icon
-            if (self.dockIconProgress < 100.0 * progress)
+            if (self.dockIconProgress < 100.0 * progress.percent)
             {
-                #define p hb_state.param.working
-                [self.dockTile updateDockIcon:progress hours:p.hours minutes:p.minutes seconds:p.seconds];
-                #undef p
+                [self.dockTile updateDockIcon:progress.percent hours:progress.hours minutes:progress.minutes seconds:progress.seconds];
                 self.dockIconProgress += dockTileUpdateFrequency;
             }
         }
@@ -727,8 +716,8 @@
         }
 
         // Update text field
-        self.progressTextField.stringValue = string;
-        [self.controller setQueueInfo:string progress:progress hidden:NO];
+        self.progressTextField.stringValue = info;
+        [self.controller setQueueInfo:info progress:progress.percent hidden:NO];
     };
 
     // Completion handler

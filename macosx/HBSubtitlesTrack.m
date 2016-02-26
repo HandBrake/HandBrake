@@ -294,6 +294,10 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     {
         retval = [NSSet setWithObjects: @"isEnabled", @"sourceTrackIdx", nil];
     }
+    else
+    {
+        retval = [NSSet set];
+    }
 
     return retval;
 }

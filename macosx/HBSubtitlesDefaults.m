@@ -6,6 +6,7 @@
 
 #import "HBSubtitlesDefaults.h"
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
 
 @implementation HBSubtitlesDefaults
 

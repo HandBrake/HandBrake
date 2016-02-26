@@ -1,10 +1,8 @@
-//
-//  NSArray+NSArray_HBArrayAdditions.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 22/07/15.
-//
-//
+/*  NSArray+HBAdditions.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "NSArray+HBAdditions.h"
 

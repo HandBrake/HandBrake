@@ -6,8 +6,8 @@
 
 #import "HBVideoController.h"
 #import "HBAdvancedController.h"
-#import "HBVideo+UIAdditions.h"
-#import "HBJob.h"
+
+@import HandBrakeKit;
 
 #include "hb.h"
 

@@ -7,8 +7,8 @@
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
 
-#import "HBSubtitles.h"
-#import "HBSubtitlesDefaults.h"
+@import HandBrakeKit.HBSubtitles;
+@import HandBrakeKit.HBSubtitlesDefaults;
 
 @interface HBSubtitlesController ()
 

@@ -5,8 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPresetsViewController.h"
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
+
+@import HandBrakeKit.HBPresetsManager;
+@import HandBrakeKit.HBPreset;
 
 // drag and drop pasteboard type
 #define kHandBrakePresetPBoardType @"handBrakePresetPBoardType"

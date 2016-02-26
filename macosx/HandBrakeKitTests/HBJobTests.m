@@ -13,6 +13,7 @@
 #import "HBJob+UIAdditions.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
+#import "HBMutablePreset.h"
 
 @interface HBJobTests : XCTestCase
 

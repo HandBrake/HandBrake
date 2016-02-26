@@ -6,12 +6,8 @@
 //
 
 #import "HBPreviewGenerator.h"
-#import "HBUtilities.h"
 
-#import "HBCore.h"
-#import "HBJob.h"
-#import "HBStateFormatter.h"
-#import "HBPicture+UIAdditions.h"
+@import HandBrakeKit;
 
 @interface HBPreviewGenerator ()
 
@@ -177,12 +173,12 @@
 
     NSURL *destURL = nil;
     // Generate the file url and directories.
-    if (self.job.container & HB_MUX_MASK_MP4)
+    if (self.job.container & 0x030000 /*HB_MUX_MASK_MP4*/)
     {
         // we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly.
         destURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
     }
-    else if (self.job.container & HB_MUX_MASK_MKV)
+    else if (self.job.container & 0x300000 /*HB_MUX_MASK_MKV*/)
     {
         destURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
     }
@@ -216,12 +212,13 @@
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.twoLines = NO;
     formatter.showPassNumber = NO;
+    formatter.title = NSLocalizedString(@"preview", nil);
 
     // start the actual encode
     [self.core encodeJob:job
-         progressHandler:^(HBState state, hb_state_t hb_state) {
-             [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state]
-                                      info:[formatter stateToString:hb_state title:@"preview"]];
+         progressHandler:^(HBState state, HBProgress progress, NSString *info) {
+             [self.delegate updateProgress:progress.percent
+                                      info:info];
          }
        completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle

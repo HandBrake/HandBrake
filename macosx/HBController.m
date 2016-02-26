@@ -13,7 +13,6 @@
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
-#import "HBUtilities.h"
 
 #import "HBPictureViewController.h"
 #import "HBVideoController.h"
@@ -28,10 +27,7 @@
 #import "HBPresetsViewController.h"
 #import "HBAddPresetController.h"
 
-#import "HBCore.h"
-#import "HBTitle.h"
-#import "HBJob.h"
-#import "HBStateFormatter.h"
+@import HandBrakeKit;
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate, NSDraggingDestination>
 {
@@ -548,17 +544,15 @@
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
         int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
 
-        HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
-
         [self.core scanURL:mediaURL
                 titleIndex:index
                   previews:hb_num_previews minDuration:min_title_duration_seconds
-           progressHandler:^(HBState state, hb_state_t hb_state)
+           progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
-             fSrcDVD2Field.stringValue = [formatter stateToString:hb_state title:nil];
+             fSrcDVD2Field.stringValue = info;
              fScanIndicator.hidden = NO;
              fScanHorizontalLine.hidden = YES;
-             fScanIndicator.doubleValue = [formatter stateToPercentComplete:hb_state];
+             fScanIndicator.doubleValue = progress.percent;
          }
          completionHandler:^(HBCoreResult result)
          {
@@ -826,7 +820,7 @@
 - (void)chapterPopUpChanged:(NSNotification *)notification
 {
     // We're changing the chapter range - we may need to flip the m4v/mp4 extension
-    if (self.job.container & HB_MUX_MASK_MP4)
+    if (self.job.container & 0x030000 /*HB_MUX_MASK_MP4*/)
     {
         [self updateFileExtension:notification];
     }

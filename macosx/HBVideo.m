@@ -7,6 +7,8 @@
 #import "HBVideo.h"
 #import "HBJob.h"
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
+
 #include "hb.h"
 
 NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
@@ -322,21 +324,26 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     // Tell KVO to reload the x264 unparse string
     // after values changes.
-    if ([key isEqualToString:@"unparseOptions"])
+    else if ([key isEqualToString:@"unparseOptions"])
     {
         retval = [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",
                   @"videoOptionExtra", @"fastDecode", @"job.picture.width", @"job.picture.height", nil];
     }
 
-    if ([key isEqualToString:@"encoders"])
+    else if ([key isEqualToString:@"encoders"])
     {
         retval = [NSSet setWithObjects:@"job.container", nil];
     }
 
-    if ([key isEqualToString:@"fastDecodeSupported"] ||
+    else if ([key isEqualToString:@"fastDecodeSupported"] ||
         [key isEqualToString:@"turboTwoPassSupported"])
     {
         retval = [NSSet setWithObjects:@"encoder", nil];
+    }
+
+    else
+    {
+        retval = [NSSet set];
     }
 
     return retval;

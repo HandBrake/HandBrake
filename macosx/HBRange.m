@@ -159,13 +159,16 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
         retval = [NSSet setWithObjects:@"type", @"chapterStart", @"chapterStop", @"frameStart", @"frameStop",
                   @"secondsStart", @"secondsStop",nil];
     }
-
-    if ([key isEqualToString:@"chaptersSelected"] ||
-        [key isEqualToString:@"secondsSelected"] ||
-        [key isEqualToString:@"framesSelected"])
+    else if ([key isEqualToString:@"chaptersSelected"] ||
+             [key isEqualToString:@"secondsSelected"] ||
+             [key isEqualToString:@"framesSelected"])
     {
         retval = [NSSet setWithObjects:@"type",nil];
 
+    }
+    else
+    {
+        retval = [NSSet set];
     }
 
     return retval;

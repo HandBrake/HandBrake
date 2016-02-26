@@ -671,6 +671,11 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         retval = [NSSet setWithObjects:@"track", @"mixdown", nil];
     }
+    else
+    {
+        retval = [NSSet set];
+    }
+
     return retval;
 }
 

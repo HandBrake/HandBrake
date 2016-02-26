@@ -5,8 +5,8 @@
     It may be used under the terms of the GNU General Public License. */
     
 #import "HBAdvancedController.h"
-#import "HBVideo.h"
-#import "HBVideo+UIAdditions.h"
+
+@import HandBrakeKit;
 
 @interface HBAdvancedController ()
 {

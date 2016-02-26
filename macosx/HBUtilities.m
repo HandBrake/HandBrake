@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBUtilities.h"
+#import <Cocoa/Cocoa.h>
 
 #import "HBTitle.h"
 #import "HBJob.h"

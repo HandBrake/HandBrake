@@ -8,6 +8,7 @@
 #import "HBTitle.h"
 
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
 
 #include "hb.h"
 
@@ -430,15 +431,20 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         retval = [NSSet setWithObjects:@"anamorphicMode", nil];
     }
 
-    if ([key isEqualToString:@"maxWidth"] ||
+    else if ([key isEqualToString:@"maxWidth"] ||
         [key isEqualToString:@"maxHeight"])
     {
         retval = [NSSet setWithObjects:@"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
     }
 
-    if ([key isEqualToString:@"info"] || [key isEqualToString:@"summary"])
+    else if ([key isEqualToString:@"info"] || [key isEqualToString:@"summary"])
     {
         retval = [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
+    }
+
+    else
+    {
+        retval = [NSSet set];
     }
 
     return retval;

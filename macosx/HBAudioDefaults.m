@@ -7,6 +7,8 @@
 #import "HBAudioDefaults.h"
 #import "HBAudioTrackPreset.h"
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
+
 #import "hb.h"
 #import "lang.h"
 

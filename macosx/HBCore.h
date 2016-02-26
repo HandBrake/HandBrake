@@ -5,24 +5,34 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#include "hb.h"
 
 @class HBJob;
 @class HBPicture;
 @class HBTitle;
+@class HBStateFormatter;
 
 NS_ASSUME_NONNULL_BEGIN
 
+struct HBProgress
+{
+    double percent;
+
+    int   hours;
+    int   minutes;
+    int   seconds;
+};
+typedef struct HBProgress HBProgress;
+
 // These constants specify the current state of HBCore.
 typedef NS_ENUM(NSUInteger, HBState) {
-    HBStateIdle      = HB_STATE_IDLE,        ///< HB is doing nothing
-    HBStateScanning  = HB_STATE_SCANNING,    ///< HB is scanning
-    HBStateScanDone  = HB_STATE_SCANDONE,    ///< Scanning has been completed
-    HBStateWorking   = HB_STATE_WORKING,     ///< HB is encoding
-    HBStatePaused    = HB_STATE_PAUSED,      ///< Encoding is paused
-    HBStateWorkDone  = HB_STATE_WORKDONE,    ///< Encoding has been completed
-    HBStateMuxing    = HB_STATE_MUXING,      ///< HB is muxing
-    HBStateSearching = HB_STATE_SEARCHING    ///< HB is searching
+    HBStateIdle      = 1,       ///< HB is doing nothing
+    HBStateScanning  = 2,       ///< HB is scanning
+    HBStateScanDone  = 4,       ///< Scanning has been completed
+    HBStateWorking   = 8,       ///< HB is encoding
+    HBStatePaused    = 16,      ///< Encoding is paused
+    HBStateWorkDone  = 32,      ///< Encoding has been completed
+    HBStateMuxing    = 64,      ///< HB is muxing
+    HBStateSearching = 128      ///< HB is searching
 };
 
 // These constants specify the result of a scan or encode.
@@ -32,7 +42,7 @@ typedef NS_ENUM(NSUInteger, HBCoreResult) {
     HBCoreResultFailed,
 };
 
-typedef void (^HBCoreProgressHandler)(HBState state, hb_state_t hb_state);
+typedef void (^HBCoreProgressHandler)(HBState state, HBProgress progress, NSString *info);
 typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 
 /**
@@ -88,6 +98,12 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  Log level.
  */
 @property (nonatomic, readwrite) int logLevel;
+
+
+/**
+ *  State formatter.
+ */
+@property (nonatomic, readwrite, strong) HBStateFormatter *stateFormatter;
 
 /**
  * Current state of HBCore.

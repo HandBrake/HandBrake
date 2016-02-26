@@ -5,10 +5,10 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAudioController.h"
-
-#import "HBAudio.h"
-#import "HBAudioDefaults.h"
 #import "HBAudioDefaultsController.h"
+
+@import HandBrakeKit.HBAudio;
+@import HandBrakeKit.HBAudioDefaults;
 
 @interface HBAudioController ()
 

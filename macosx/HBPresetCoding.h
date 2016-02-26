@@ -6,8 +6,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HBPreset.h"
-#import "HBMutablePreset.h"
+@class HBPreset;
+@class HBMutablePreset;
 
 @protocol HBPresetCoding <NSObject>
 

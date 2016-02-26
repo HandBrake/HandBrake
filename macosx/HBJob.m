@@ -11,6 +11,7 @@
 #import "HBSubtitlesDefaults.h"
 
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
 
 #include "hb.h"
 
@@ -180,16 +181,19 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
-    NSSet *retval = nil;
+    NSSet *retval = [NSSet set];
 
     if ([key isEqualToString:@"mp4OptionsEnabled"])
     {
         retval = [NSSet setWithObjects:@"container", nil];
     }
-
-    if ([key isEqualToString:@"mp4iPodCompatibleEnabled"])
+    else if ([key isEqualToString:@"mp4iPodCompatibleEnabled"])
     {
         retval = [NSSet setWithObjects:@"container", @"video.encoder", nil];
+    }
+    else
+    {
+        retval = [NSSet set];
     }
 
     return retval;

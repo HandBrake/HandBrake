@@ -5,14 +5,11 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAddPresetController.h"
-#import "HBPreset.h"
-#import "HBMutablePreset.h"
-
-#import "HBAudioDefaults.h"
-#import "HBSubtitlesDefaults.h"
 
 #import "HBAudioDefaultsController.h"
 #import "HBSubtitlesDefaultsController.h"
+
+@import HandBrakeKit;
 
 typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     HBAddPresetControllerModeNone,

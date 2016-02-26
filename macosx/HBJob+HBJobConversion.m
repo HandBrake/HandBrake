@@ -462,7 +462,7 @@
                     self.picture.width, self.picture.height,
                     self.picture.cropTop, self.picture.cropBottom,
                     self.picture.cropLeft, self.picture.cropRight].UTF8String);
-    
+
     // Add grayscale filter
     if (self.filters.grayscale)
     {

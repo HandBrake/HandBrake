@@ -310,6 +310,10 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     {
         retval = [NSSet setWithObjects:@"encoder", @"mixdown", @"sampleRate", nil];
     }
+    else
+    {
+        retval = [NSSet set];
+    }
 
     return retval;
 }

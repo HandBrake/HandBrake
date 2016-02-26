@@ -13,8 +13,9 @@
 #import "HBPreferencesController.h"
 #import "HBQueueController.h"
 #import "HBOutputPanelController.h"
-#import "HBCore.h"
 #import "HBController.h"
+
+@import HandBrakeKit;
 
 #define PRESET_FILE @"UserPresets.json"
 #define QUEUE_FILE @"Queue.hbqueue"

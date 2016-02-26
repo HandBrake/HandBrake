@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#include "hb.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,20 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HBStateFormatter : NSObject
 
 /**
- *  Returns a string containing the formatted value of the provided hb_state_t struct.
- *
- *  @param s     hb_state_t
- *  @param title the title of the current job
+ *  The title to show in the output info.
  */
-- (NSString *)stateToString:(hb_state_t)s title:(nullable NSString *)title;
-
-/**
- *  Returns a CGFloat containing the completion percent.
- *  the CGFloat range is [0,1]
- *
- *  @param s hb_state_t
- */
-- (CGFloat)stateToPercentComplete:(hb_state_t)s;
+@property (nonatomic, readwrite, copy) NSString *title;
 
 /**
  *  Break the output string in two lines.
