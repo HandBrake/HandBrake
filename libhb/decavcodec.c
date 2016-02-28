@@ -1307,8 +1307,9 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // point frame.pts should hold the frame's pts from the original data
         // stream or AV_NOPTS_VALUE if it didn't have one. in the latter case
         // we generate the next pts in sequence for it.
-        if ( !pv->frame_duration_set )
-            compute_frame_duration( pv );
+
+        // recompute the frame/field duration, because sometimes it changes
+        compute_frame_duration( pv );
 
         double pts;
         double frame_dur = pv->duration;
