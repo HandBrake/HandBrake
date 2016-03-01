@@ -568,12 +568,21 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
     if (title->video_codec == WORK_NONE)
     {
         hb_error("No video decoder set!");
+        free(info_list);
+        crop_record_free(crops);
         return 0;
     }
     hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
     vid_decoder->codec_param = title->video_codec_param;
     vid_decoder->title = title;
-    vid_decoder->init( vid_decoder, NULL );
+
+    if (vid_decoder->init(vid_decoder, NULL))
+    {
+        hb_error("Decoder init failed!");
+        free(info_list);
+        crop_record_free(crops);
+        return 0;
+    }
 
     for( i = 0; i < data->preview_count; i++ )
     {
