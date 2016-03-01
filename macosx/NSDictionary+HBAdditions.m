@@ -6,7 +6,74 @@
 
 #import "NSDictionary+HBAdditions.h"
 
-@implementation NSDictionary (HBAddtions)
+#pragma mark - NSDictionary to hb_dict_t
+
+@implementation NSObject (HBValueAdditions)
+
+- (hb_value_t *)hb_value
+{
+    return NULL;
+}
+
+@end
+
+@implementation NSNumber (HBValueAdditions)
+
+- (hb_value_t *)hb_value
+{
+    hb_value_t *result = NULL;
+
+    const char *objCType = self.objCType;
+
+    if((strcmp(objCType, @encode(float))) == 0 ||
+       (strcmp(objCType, @encode(double))) == 0)
+    {
+        result = hb_value_double(self.doubleValue);
+    }
+    else if((strcmp(objCType, @encode(BOOL))) == 0)
+    {
+        result = hb_value_bool(self.boolValue);
+    }
+    else
+    {
+        result = hb_value_int(self.integerValue);
+    }
+
+    return result;
+}
+
+@end
+
+@implementation NSString (HBValueAdditions)
+
+- (nullable hb_value_t *)hb_value
+{
+    return hb_value_string(self.UTF8String);
+}
+
+@end
+
+@implementation NSArray (HBValueAdditions)
+
+- (hb_value_array_t *)hb_value
+{
+    hb_value_array_t *result = hb_value_array_init();
+
+    for (id obj in self)
+    {
+        hb_value_t *val = [obj hb_value];
+        if (val)
+        {
+            hb_value_array_append(result, val);
+        }
+    }
+
+    return result;
+}
+
+@end
+
+@implementation NSDictionary (HBValueAdditions)
 
 - (instancetype)initWithHBDict:(const hb_dict_t *)dict
 {
@@ -18,9 +85,22 @@
     return self;
 }
 
-- (hb_dict_t *)hb_dictValue
+- (hb_dict_t *)hb_value
 {
-    return convertObjcDictToHBValue(self);
+    hb_dict_t *result = hb_dict_init();
+
+    [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop)
+    {
+        NSAssert([key isKindOfClass:[NSString class]], @"[NSDictionary+HBAdditions] unsupported key type");
+
+        hb_value_t *val = [obj hb_value];
+        if (val)
+        {
+            hb_dict_set(result, [key UTF8String], val);
+        }
+     }];
+
+    return result;
 }
 
 #pragma mark - hb_dict_t to NSDictionary
@@ -107,85 +187,6 @@ static NSArray * convertArrayToObjcType(const hb_value_array_t *array)
     }
 
     return [result copy];
-}
-
-#pragma mark - NSDictionary to hb_dict_t
-
-static hb_value_t * objcValueToHBValue(id val)
-{
-    hb_value_t *result = NULL;
-
-    if ([val isKindOfClass:[NSNumber class]])
-    {
-        NSNumber *number = val;
-        const char *objCType = number.objCType;
-
-        if((strcmp(objCType, @encode(float))) == 0 ||
-           (strcmp(objCType, @encode(double))) == 0)
-        {
-            result = hb_value_double(number.doubleValue);
-        }
-        else if((strcmp(objCType, @encode(BOOL))) == 0)
-        {
-            result = hb_value_bool(number.boolValue);
-        }
-        else
-        {
-            result = hb_value_int(number.integerValue);
-        }
-
-    }
-    else if ([val isKindOfClass:[NSString class]])
-    {
-        NSString *string = val;
-        result = hb_value_string(string.UTF8String);
-
-    }
-    else if ([val isKindOfClass:[NSDictionary class]])
-    {
-        result = convertObjcDictToHBValue(val);
-    }
-    else if ([val isKindOfClass:[NSArray class]])
-    {
-        result = convertObjcArrayToHBValue(val);
-    }
-    
-    return result;
-}
-
-static hb_dict_t * convertObjcDictToHBValue(NSDictionary *dict)
-{
-    hb_dict_t *result = hb_dict_init();
-
-    [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop)
-    {
-        if ([key isKindOfClass:[NSString class]])
-        {
-            hb_value_t *val = objcValueToHBValue(obj);
-            if (val)
-            {
-                hb_dict_set(result, [key UTF8String], objcValueToHBValue(obj));
-            }
-        }
-    }];
-
-    return result;
-}
-
-static hb_value_array_t * convertObjcArrayToHBValue(NSArray *array)
-{
-    hb_value_array_t *result = hb_value_array_init();
-
-    for (id obj in array)
-    {
-        hb_value_t *val = objcValueToHBValue(obj);
-        if (val)
-        {
-            hb_value_array_append(result, objcValueToHBValue(obj));
-        }
-    }
-
-    return result;
 }
 
 @end

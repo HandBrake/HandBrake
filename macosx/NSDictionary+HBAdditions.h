@@ -9,10 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSDictionary (HBAddtions)
+@interface NSDictionary (HBValueAdditions)
 
 - (instancetype)initWithHBDict:(const hb_dict_t *)dict;
-- (hb_dict_t *)hb_dictValue;
+- (hb_dict_t *)hb_value;
 
 @end
 
