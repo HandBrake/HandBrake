@@ -1724,8 +1724,8 @@ namespace HandBrakeWPF.ViewModels
                 this.Destination = saveFileDialog.FileName;
 
                 // Disk Space Check
-                string drive = Path.GetPathRoot(this.Destination);
-                if (drive != null)
+                string drive = Path.GetPathRoot(this.Destination);             
+                if (drive != null && !drive.StartsWith(@"\\"))
                 {
                     DriveInfo c = new DriveInfo(drive);
                     if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
