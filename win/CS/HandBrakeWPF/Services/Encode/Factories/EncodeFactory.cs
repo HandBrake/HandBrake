@@ -410,50 +410,20 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Deinterlace
             if (job.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
             {
-                string options;
-                if (job.Deinterlace == Deinterlace.Fast)
-                {
-                    options = "0";
-                }
-                else if (job.Deinterlace == Deinterlace.Slow)
-                {
-                    options = "1";
-                }
-                else if (job.Deinterlace == Deinterlace.Slower)
-                {
-                    options = "3";
-                }
-                else if (job.Deinterlace == Deinterlace.Bob)
-                {
-                    options = "15";
-                }
-                else
-                {
-                    options = job.CustomDeinterlace;
-                }
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace), job.CustomDeinterlace);
+                string settings = Marshal.PtrToStringAnsi(settingsPtr);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = options };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = settings };
                 filter.FilterList.Add(filterItem);
             }
 
             // Decomb
             if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
-                string options;
-                if (job.Decomb == Decomb.Fast)
-                {
-                    options = "7:2:6:9:1:80";
-                }
-                else if (job.Decomb == Decomb.Bob)
-                {
-                    options = "455";
-                }
-                else
-                {
-                    options = job.CustomDecomb;
-                }
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings((int)hb_filter_ids.HB_FILTER_DECOMB, EnumHelper<Decomb>.GetShortName(job.Decomb), job.CustomDecomb);
+                string settings = Marshal.PtrToStringAnsi(settingsPtr);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = options };
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = settings };
                 filter.FilterList.Add(filterItem);
             }
 
@@ -512,7 +482,9 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Rotate
             if (job.Rotation != 0 || job.FlipVideo)
             {
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = string.Format("{0}:{1}", job.Rotation, job.FlipVideo ? "1" : "0") };
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings((int)hb_filter_ids.HB_FILTER_ROTATE, string.Format("{0}:{1}", job.Rotation, job.FlipVideo ? "1" : "0"), string.Empty);
+                string settings = Marshal.PtrToStringAnsi(settingsPtr);
+                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = settings };
                 filter.FilterList.Add(filterItem);
             }
 
