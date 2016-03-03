@@ -74,7 +74,7 @@ static const iso639_lang_t languages[] =
   { "Gujarati", "ગુજરાતી", "gu", "guj" },
   { "Haitian", "", "ht", "hat" },
   { "Hausa", "Hausa", "ha", "hau" },
-  { "Hebrew", "עברית", "he", "heb" },
+  { "Hebrew", "עברית", "he", "heb", "", "iw" },
   { "Herero", "Otjiherero", "hz", "her" },
   { "Hindi", "हिंदी", "hi", "hin" },
   { "Hiri Motu", "", "ho", "hmo" },
@@ -85,11 +85,11 @@ static const iso639_lang_t languages[] =
   { "Inuktitut", "Inuktitut", "iu", "iku" },
   { "Interlingue", "", "ie", "ile" },
   { "Interlingua", "", "ia", "ina" },
-  { "Indonesian", "Bahasa Indonesia", "id", "ind" },
+  { "Indonesian", "Bahasa Indonesia", "id", "ind", "", "in" },
   { "Inupiaq", "", "ik", "ipk" },
   { "Irish", "Gaeilge", "ga", "gle" },
   { "Italian", "italiano", "it", "ita" },
-  { "Javanese", "Basa Jawa", "jv", "jav" },
+  { "Javanese", "Basa Jawa", "jv", "jav", "", "jw" },
   { "Japanese", "日本語", "ja", "jpn" },
   { "Kannada", "", "kn", "kan" },
   { "Kashmiri", "کٲشُر", "ks", "kas" },
@@ -194,7 +194,7 @@ static const iso639_lang_t languages[] =
   { "Walloon", "Walon", "wa", "wln" },
   { "Wolof", "Wolof", "wo", "wol" },
   { "Xhosa", "isiXhosa", "xh", "xho" },
-  { "Yiddish", "ייִדיש", "yi", "yid" },
+  { "Yiddish", "ייִדיש", "yi", "yid", "", "ji" },
   { "Yoruba", "Èdè Yorùbá", "yo", "yor" },
   { "Zhuang", "Vahcuengh", "za", "zha" },
   { "Zulu", "isiZulu", "zu", "zul" },
@@ -217,6 +217,7 @@ const int lang_lookup_index( const char * str )
     {
         lang = &languages[ii];
         if ((lang->iso639_1    != NULL && !strcasecmp(lang->iso639_1,  str)) ||
+            (lang->iso639      != NULL && !strcasecmp(lang->iso639,    str)) ||
             (lang->iso639_2    != NULL && !strcasecmp(lang->iso639_2,  str)) ||
             (lang->iso639_2b   != NULL && !strcasecmp(lang->iso639_2b, str)) ||
             (lang->eng_name    != NULL && !strcasecmp(lang->eng_name,  str)) ||
@@ -252,7 +253,8 @@ iso639_lang_t * lang_for_code( int code )
 
     for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
     {
-        if( !strncmp( lang->iso639_1, code_string, 2 ) )
+        if( !strncmp( lang->iso639_1, code_string, 2 ) ||
+        	(lang->iso639 != NULL && !strncmp(lang->iso639, code_string, 2)) )
         {
             return lang;
         }
