@@ -19,8 +19,8 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("off")]
         Off = 0,
 
-        [ShortName("Deinterlace")]
-        Deinterlace = 1,
+        [ShortName("Yadif")]
+        Yadif = 1,
 
         [ShortName("Decomb")]
         Decomb = 2

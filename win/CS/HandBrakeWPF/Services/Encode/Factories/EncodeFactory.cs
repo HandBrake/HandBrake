@@ -414,7 +414,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Deinterlace
-            if (job.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace),  null, job.CustomDeinterlace);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);

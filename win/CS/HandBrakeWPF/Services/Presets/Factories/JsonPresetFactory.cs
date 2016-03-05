@@ -104,17 +104,17 @@ namespace HandBrakeWPF.Services.Presets.Factories
             {
                 case "decomb":
                     preset.Task.Decomb = Decomb.Default;
-                    preset.Task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.Deinterlace = Deinterlace.Default;
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Decomb;
                     break;
                 case "deinterlace":
                     preset.Task.Decomb = Decomb.Default;
-                    preset.Task.Deinterlace = Deinterlace.Fast;
-                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Deinterlace;
+                    preset.Task.Deinterlace = Deinterlace.Default;
+                    preset.Task.DeinterlaceFilter = DeinterlaceFilter.Yadif;
                     break;
                 default:
                     preset.Task.Decomb = Decomb.Default;
-                    preset.Task.Deinterlace = Deinterlace.Fast;
+                    preset.Task.Deinterlace = Deinterlace.Default;
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Off;
                     break;
             }
@@ -146,7 +146,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
-            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
                 switch (importedPreset.PictureDeinterlaceFilter)
                 {
@@ -156,17 +156,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     case "bob":
                         preset.Task.Deinterlace = Deinterlace.Bob;
                         break;
-                    case "fast":
-                        preset.Task.Deinterlace = Deinterlace.Fast;
+                    case "skip-spatial":
+                        preset.Task.Deinterlace = Deinterlace.SkipSpatialCheck;
                         break;
-                    case "slow":
-                        preset.Task.Deinterlace = Deinterlace.Slow;
-                        break;
-                    case "slower":
-                        preset.Task.Deinterlace = Deinterlace.Slower;
+                    case "default":
+                        preset.Task.Deinterlace = Deinterlace.Default;
                         break;
                     default:
-                        preset.Task.Deinterlace = Deinterlace.Fast;
+                        preset.Task.Deinterlace = Deinterlace.Default;
                         break;
                 }
 
@@ -568,13 +565,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDeblock = export.Task.Deblock;
             preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? "decomb"
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? "deinterlace" : "off";
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif" : "off";
             preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb)
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
             preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? export.Task.CustomDecomb
-                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace ? export.Task.CustomDeinterlace : string.Empty;
+                : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? export.Task.CustomDeinterlace : string.Empty;
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
