@@ -362,11 +362,20 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_filter_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_filter_init(int filter_id);
 
-        [DllImport("hb.dll", EntryPoint = "hb_generate_filter_settings", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_generate_filter_settings(
+        [DllImport("hb.dll", EntryPoint = "hb_generate_filter_settings_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_generate_filter_settings_json(
             int filter_id,
             [In] [MarshalAs(UnmanagedType.LPStr)] string preset,
-            [In] [MarshalAs(UnmanagedType.LPStr)] string tune);
+            [In] [MarshalAs(UnmanagedType.LPStr)] string tune,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string custom);
+
+        /// char* hb_filter_get_presets_json(int filter_id);
+        [DllImport("hb.dll", EntryPoint = "hb_filter_get_presets_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_filter_get_presets_json(int filter_id);
+
+        /// char* hb_filter_get_tuness_json(int filter_id);
+        [DllImport("hb.dll", EntryPoint = "hb_filter_get_tunes_json", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_filter_get_tunes_json(int filter_id);
 
         [DllImport("hb.dll", EntryPoint = "hb_x264_encopt_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_x264_encopt_name(IntPtr name);
