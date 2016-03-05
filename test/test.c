@@ -2244,7 +2244,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'r':
             {
                 vrate = strdup(optarg);
-                if ( cfr != 2 )
+                if ( cfr != 1 && cfr != 2 )
                 {
                     cfr = 2;
                 }
