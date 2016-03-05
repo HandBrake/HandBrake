@@ -508,7 +508,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            string framerateString = num.HasValue ? string.Format("mode={0}:rate={1}/{2}", fm, num, den) : string.Format("{0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
+            string framerateString = num.HasValue ? string.Format("mode={0}:rate={1}/{2}", fm, num, den) : string.Format("mode={0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
             IntPtr framerateSettingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_VFR, null, null, framerateString);
             string unparsedFramerateJson = Marshal.PtrToStringAnsi(framerateSettingsPtr);
             JToken framerateSettings = JObject.Parse(unparsedFramerateJson);
