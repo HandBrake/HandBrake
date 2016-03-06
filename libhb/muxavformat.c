@@ -224,7 +224,7 @@ static int avformatInit( hb_mux_object_t * m )
             /* Taken from x264 muxers.c */
             priv_size = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 +
                         job->config.h264.pps_length;
-            priv_data = av_malloc(priv_size);
+            priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
                 hb_error("H.264 extradata: malloc failure");
@@ -260,7 +260,7 @@ static int avformatInit( hb_mux_object_t * m )
             if (job->config.mpeg4.length != 0)
             {
                 priv_size = job->config.mpeg4.length;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("MPEG4 extradata: malloc failure");
@@ -276,7 +276,7 @@ static int avformatInit( hb_mux_object_t * m )
             if (job->config.mpeg4.length != 0)
             {
                 priv_size = job->config.mpeg4.length;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("MPEG2 extradata: malloc failure");
@@ -306,7 +306,7 @@ static int avformatInit( hb_mux_object_t * m )
             }
 
             priv_size = size;
-            priv_data = av_malloc(priv_size);
+            priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
                 hb_error("Theora extradata: malloc failure");
@@ -334,7 +334,7 @@ static int avformatInit( hb_mux_object_t * m )
             if (job->config.h265.headers_length > 0)
             {
                 priv_size = job->config.h265.headers_length;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("H.265 extradata: malloc failure");
@@ -464,7 +464,7 @@ static int avformatInit( hb_mux_object_t * m )
                 }
 
                 priv_size = size;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("Vorbis extradata: malloc failure");
@@ -488,7 +488,7 @@ static int avformatInit( hb_mux_object_t * m )
                 if (audio->priv.config.extradata.length)
                 {
                     priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_malloc(priv_size);
+                    priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                     if (priv_data == NULL)
                     {
                         hb_error("FLAC extradata: malloc failure");
@@ -507,11 +507,14 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codec->codec_id = AV_CODEC_ID_AAC;
 
                 // libav mkv muxer expects there to be extradata for
-                // AAC and will crash if it is NULL.  So allocate extra
-                // byte so that av_malloc does not return NULL when length
-                // is 0.
+                // AAC and will crash if it is NULL.
+                //
+                // Also, libav can over-read the buffer by up to 8 bytes
+                // when it fills it's get_bits cache.
+                //
+                // So allocate extra bytes
                 priv_size = audio->priv.config.extradata.length;
-                priv_data = av_malloc(priv_size + 1);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("AAC extradata: malloc failure");
@@ -729,7 +732,7 @@ static int avformatInit( hb_mux_object_t * m )
                         rgb[12], rgb[13], rgb[14], rgb[15]);
 
                 priv_size = len + 1;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("VOBSUB extradata: malloc failure");
@@ -762,7 +765,7 @@ static int avformatInit( hb_mux_object_t * m )
                     if (subtitle->extradata_size)
                     {
                         priv_size = subtitle->extradata_size;
-                        priv_data = av_malloc(priv_size);
+                        priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                         if (priv_data == NULL)
                         {
                             hb_error("SSA extradata: malloc failure");
@@ -812,7 +815,7 @@ static int avformatInit( hb_mux_object_t * m )
             properties[17] = width & 0xff;
 
             priv_size = sizeof(properties);
-            priv_data = av_malloc(priv_size);
+            priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
                 hb_error("TX3G extradata: malloc failure");
@@ -870,7 +873,7 @@ static int avformatInit( hb_mux_object_t * m )
                 }
 
                 priv_size = attachment->size;
-                priv_data = av_malloc(priv_size);
+                priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
                     hb_error("Font extradata: malloc failure");
@@ -1358,7 +1361,8 @@ static int avformatEnd(hb_mux_object_t *m)
                     int priv_size;
 
                     priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_realloc(st->codec->extradata, priv_size);
+                    priv_data = av_realloc(st->codec->extradata, priv_size +
+                                           FF_INPUT_BUFFER_PADDING_SIZE);
                     if (priv_data == NULL)
                     {
                         break;
