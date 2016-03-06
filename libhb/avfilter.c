@@ -235,6 +235,7 @@ fail:
     avfilter_inout_free(&in);
     avfilter_inout_free(&out);
     avfilter_graph_free(&pv->graph);
+    free(pv->settings);
     free(pv);
 
     return 1;
@@ -318,6 +319,7 @@ static void avfilter_close( hb_filter_object_t * filter )
         return;
     }
 
+    hb_buffer_list_close(&pv->list);
     av_frame_free(&pv->frame);
     avfilter_graph_free(&pv->graph);
     free(pv->settings);

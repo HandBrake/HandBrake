@@ -327,8 +327,9 @@ static void reader_close( hb_work_object_t * w )
         free( r->stream_timing );
     }
 
-    free( r->fifos );
-    free( r );
+    free(r->fifos);
+    free(r->splice_list);
+    free(r);
 }
 
 static hb_buffer_t * splice_discontinuity( hb_work_private_t *r, hb_buffer_t *buf )
