@@ -80,17 +80,21 @@ static hb_filter_param_t detelecine_presets[] =
 
 static hb_filter_param_t comb_detect_presets[] =
 {
-    { 0, "Off",         "off",        "disable=1"       },
-    { 1, "Custom",      "custom",     NULL              },
-    { 2, "Default",     "default",
+    { 0, "Off",             "off",        "disable=1"       },
+    { 1, "Custom",          "custom",     NULL              },
+    { 2, "Default",         "default",
+      "mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:"
+      "filter-mode=2:block-thresh=40:block-width=16:block-height=16"
+                                                            },
+    { 3, "Less Sensitive",  "permissive",
       "mode=3:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
       "filter-mode=2:block-thresh=40:block-width=16:block-height=16"
-                                                        },
-    { 3, "Fast",        "fast",
-      "mode=0:spatial-metric=2:motion-thresh=6:spatial-thresh=9:"
+                                                            },
+    { 4, "Fast",            "fast",
+      "mode=0:spatial-metric=2:motion-thresh=2:spatial-thresh=3:"
       "filter-mode=1:block-thresh=80:block-width=16:block-height=16"
-                                                        },
-    { 0, NULL,          NULL,         NULL              }
+                                                            },
+    { 0, NULL,              NULL,         NULL              }
 };
 
 static hb_filter_param_t decomb_presets[] =
