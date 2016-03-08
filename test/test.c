@@ -46,6 +46,7 @@
 #define DEINTERLACE_DEFAULT_PRESET  "default"
 #define DECOMB_DEFAULT_PRESET       "default"
 #define DETELECINE_DEFAULT_PRESET   "default"
+#define COMB_DETECT_DEFAULT_PRESET  "default"
 #define HQDN3D_DEFAULT_PRESET       "medium"
 #define ROTATE_DEFAULT              "angle=180:hflip=0"
 #define DEBLOCK_DEFAULT             "qp=5"
@@ -80,6 +81,9 @@ static char *  nlmeans_tune        = NULL;
 static int     detelecine_disable  = 0;
 static int     detelecine_custom   = 0;
 static char *  detelecine          = NULL;
+static int     comb_detect_disable = 0;
+static int     comb_detect_custom  = 0;
+static char *  comb_detect         = NULL;
 static int     decomb_disable      = 0;
 static int     decomb_custom       = 0;
 static char *  decomb              = NULL;
@@ -1006,6 +1010,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_HQDN3D:
             preset = HQDN3D_DEFAULT_PRESET;
             break;
+        case HB_FILTER_COMB_DETECT:
+            preset = COMB_DETECT_DEFAULT_PRESET;
+            break;
         default:
             break;
     }
@@ -1016,6 +1023,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
+        case HB_FILTER_COMB_DETECT:
         {
             hb_dict_t * settings;
             settings = hb_generate_filter_settings(filter_id, preset,
@@ -1422,13 +1430,27 @@ static void ShowHelp()
 "                           (default: detected from source)\n"
 "\n"
 "### Filters---------------------------------------------------------------\n\n"
-"   -d, --deinterlace       Unconditionally deinterlaces all frames\n");
+"   --comb-detect           Detect interlace artifacts in frames.\n"
+"                           If not accompanied by the decomb or deinterlace\n"
+"                           filters, this filter only logs the interlaced\n"
+"                           frame count to the activity log.\n"
+"                           If accompanied by the decomb or deinterlace\n"
+"                           filters, it causes these filters to selectively\n"
+"                           deinterlace only those frames where interlacing\n"
+"                           is detected.\n");
+    showFilterPresets(out, HB_FILTER_COMB_DETECT);
+    showFilterKeys(out, HB_FILTER_COMB_DETECT);
+    showFilterDefault(out, HB_FILTER_COMB_DETECT);
+    fprintf( out,
+"   --no-comb-detect        Disable preset comb-detect filter\n"
+"   -d, --deinterlace       Deinterlaces using libav yadif.\n");
     showFilterPresets(out, HB_FILTER_DEINTERLACE);
     showFilterKeys(out, HB_FILTER_DEINTERLACE);
     showFilterDefault(out, HB_FILTER_DEINTERLACE);
     fprintf( out,
 "   --no-deinterlace        Disable preset deinterlace filter\n"
-"   -5, --decomb            Selectively deinterlaces when it detects combing\n");
+"   -5, --decomb            Deinterlaces using a combination of yadif,\n"
+"                           blend, cubic, or EEDI2 interpolation.\n");
     showFilterPresets(out, HB_FILTER_DECOMB);
     showFilterKeys(out, HB_FILTER_DECOMB);
     showFilterDefault(out, HB_FILTER_DECOMB);
@@ -1794,6 +1816,7 @@ static int ParseOptions( int argc, char ** argv )
     #define VERSION              307
     #define DESCRIBE             308
     #define PAD                  309
+    #define FILTER_COMB_DETECT   310
 
     for( ;; )
     {
@@ -1873,6 +1896,8 @@ static int ParseOptions( int argc, char ** argv )
             { "nlmeans-tune",required_argument, NULL,    FILTER_NLMEANS_TUNE },
             { "detelecine",  optional_argument, NULL,    '9' },
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
+            { "no-comb-detect", no_argument,    &comb_detect_disable, 1 },
+            { "comb-detect", optional_argument, NULL,    FILTER_COMB_DETECT },
             { "decomb",      optional_argument, NULL,    '5' },
             { "no-decomb",   no_argument,       &decomb_disable,      1 },
             { "grayscale",   no_argument,       NULL,        'g' },
@@ -2301,6 +2326,17 @@ static int ParseOptions( int argc, char ** argv )
                     detelecine = strdup(DETELECINE_DEFAULT_PRESET);
                 }
                 break;
+            case FILTER_COMB_DETECT:
+                free(comb_detect);
+                if (optarg != NULL)
+                {
+                    comb_detect = strdup(optarg);
+                }
+                else
+                {
+                    comb_detect = strdup(COMB_DETECT_DEFAULT_PRESET);
+                }
+                break;
             case '5':
                 free(decomb);
                 if (optarg != NULL)
@@ -2656,6 +2692,32 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid deinterlace option %s\n", deinterlace);
+            return -1;
+        }
+    }
+
+    if (comb_detect != NULL)
+    {
+        if (comb_detect_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --comb-detect and --no-comb-detect\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_COMB_DETECT, comb_detect,
+                                       NULL, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_COMB_DETECT, comb_detect))
+        {
+            comb_detect_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid comb-detect option %s\n", comb_detect);
             return -1;
         }
     }
@@ -3510,6 +3572,25 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (decomb_disable || deinterlace_disable)
     {
         hb_dict_set(preset, "PictureDeinterlaceFilter", hb_value_string("off"));
+    }
+    if (comb_detect_disable)
+    {
+        hb_dict_set(preset, "PictureCombDetectFilter", hb_value_string("off"));
+    }
+    if (comb_detect != NULL)
+    {
+        if (!comb_detect_custom)
+        {
+            hb_dict_set(preset, "PictureCombDetectPreset",
+                        hb_value_string(comb_detect));
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureCombDetectPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureCombDetectCustom",
+                        hb_value_string(comb_detect));
+        }
     }
     if (deinterlace != NULL)
     {
