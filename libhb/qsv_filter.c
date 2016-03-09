@@ -71,16 +71,23 @@ static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter );
 
 static void hb_qsv_filter_close( hb_filter_object_t * filter );
 
+static const char qsv_filter_template[] =
+    "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:"
+    "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
+    "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$:"
+    "deinterlace=^([01])$";
+
 hb_filter_object_t hb_filter_qsv =
 {
-    .id            = HB_FILTER_QSV,
-    .enforce_order = 1,
-    .name          = "Quick Sync Video VPP",
-    .settings      = NULL,
-    .init          = hb_qsv_filter_init,
-    .work          = hb_qsv_filter_work,
-    .close         = hb_qsv_filter_close,
-    .info          = hb_qsv_filter_info,
+    .id                = HB_FILTER_QSV,
+    .enforce_order     = 1,
+    .name              = "Quick Sync Video VPP",
+    .settings          = NULL,
+    .init              = hb_qsv_filter_init,
+    .work              = hb_qsv_filter_work,
+    .close             = hb_qsv_filter_close,
+    .info              = hb_qsv_filter_info,
+    .settings_template = qsv_filter_template,
 };
 
 static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
@@ -346,13 +353,13 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     pv->height_out = init->geometry.height;
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
 
-    if (filter->settings != NULL)
-    {
-        sscanf(filter->settings, "%d:%d:%d:%d:%d:%d_dei:%d",
-               &pv->width_out, &pv->height_out,
-               &pv->crop[0], &pv->crop[1], &pv->crop[2], &pv->crop[3],
-               &pv->deinterlace);
-    }
+    hb_dict_extract_int(&pv->width_out, filter->settings, "width");
+    hb_dict_extract_int(&pv->height_out, filter->settings, "height");
+    hb_dict_extract_int(pv->crop[0], filter->settings, "crop-top");
+    hb_dict_extract_int(pv->crop[1], filter->settings, "crop-bottom");
+    hb_dict_extract_int(pv->crop[2], filter->settings, "crop-left");
+    hb_dict_extract_int(pv->crop[3], filter->settings, "crop-right");
+    hb_dict_extract_bool(&pv->deinterlace, filter->settings, "deinterlace");
 
     pv->job = init->job;
 

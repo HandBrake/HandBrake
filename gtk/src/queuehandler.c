@@ -1071,7 +1071,6 @@ void ghb_finalize_job(GhbValue *settings)
     // Add scale filter since the above does not
     GhbValue *filter_list, *filter_dict;
     int width, height, crop[4];
-    char *filter_str;
 
     filter_list = ghb_get_job_filter_list(settings);
     width = ghb_dict_get_int(settings, "scale_width");
@@ -1082,13 +1081,18 @@ void ghb_finalize_job(GhbValue *settings)
     crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
     crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
 
-    filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d",
-                            width, height, crop[0], crop[1], crop[2], crop[3]);
+    hb_dict_t * dict = ghb_dict_new();
+    ghb_dict_set_int(dict, "width", width);
+    ghb_dict_set_int(dict, "height", height);
+    ghb_dict_set_int(dict, "crop-top", crop[0]);
+    ghb_dict_set_int(dict, "crop-bottom", crop[1]);
+    ghb_dict_set_int(dict, "crop-left", crop[2]);
+    ghb_dict_set_int(dict, "crop-right", crop[3]);
+
     filter_dict = ghb_dict_new();
     ghb_dict_set_int(filter_dict, "ID", HB_FILTER_CROP_SCALE);
-    ghb_dict_set_string(filter_dict, "Settings", filter_str);
-    hb_value_array_append(filter_list, filter_dict);
-    g_free(filter_str);
+    ghb_dict_set(filter_dict, "Settings", dict);
+    hb_add_filter2(filter_list, filter_dict);
 
     ghb_value_free(&preset);
 }

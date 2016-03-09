@@ -9,8 +9,6 @@
 #ifndef HB_PARAM_H
 #define HB_PARAM_H
 
-extern const char hb_filter_off[];
-
 typedef struct hb_filter_param_s hb_filter_param_t;
 
 struct hb_filter_param_s
@@ -21,18 +19,24 @@ struct hb_filter_param_s
     const char *settings;
 };
 
-char * hb_generate_filter_settings(int filter_id,
-                                   const char *preset, const char *tune);
-char * hb_generate_filter_settings_by_index(int filter_id, int preset,
-                                            const char *custom);
+hb_dict_t * hb_generate_filter_settings(int filter_id, const char *preset,
+                                        const char *tune, const char *custom);
+char * hb_generate_filter_settings_json(int filter_id, const char *preset,
+                                        const char *tune, const char *custom);
 
-int    hb_validate_filter_preset(int filter_id,
-                                 const char *preset, const char *tune);
-int    hb_validate_filter_settings(int filter_id, const char *filter_param);
-int    hb_validate_param_string(const char *regex_pattern,
-                                const char *param_string);
+int    hb_validate_filter_preset(int filter_id, const char *preset,
+                                 const char *tune, const char *custom);
+int    hb_validate_filter_settings(int filter_id, const hb_dict_t *settings);
+int    hb_validate_filter_settings_json(int filter_id, const char * json);
+int    hb_validate_filter_string(int filter_id, const char * filter_str);
 
 hb_filter_param_t * hb_filter_param_get_presets(int filter_id);
 hb_filter_param_t * hb_filter_param_get_tunes(int filter_id);
+
+char ** hb_filter_get_keys(int filter_id);
+char ** hb_filter_get_presets_short_name(int filter_id);
+char ** hb_filter_get_presets_name(int filter_id);
+char  * hb_filter_get_presets_json(int filter_id);
+char  * hb_filter_get_tunes_json(int filter_id);
 
 #endif // HB_PARAM_H

@@ -86,6 +86,7 @@
     <Compile Include="Interop\EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Interop\HandBrakeEncoderHelpers.cs" />
+    <Compile Include="Interop\HandBrakeFilterHelpers.cs" />
     <Compile Include="Interop\HandBrakeInstance.cs" />
     <Compile Include="Interop\HandBrakeInstanceManager.cs" />
     <Compile Include="Interop\HandBrakeLanguagesHelper.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
     <Compile Include="Interop\Json\Encode\QSV.cs" />
+    <Compile Include="Interop\Json\Filters\PresetTune.cs" />
     <Compile Include="Interop\Json\Presets\AudioList.cs" />
     <Compile Include="Interop\Json\Presets\HBPreset.cs" />
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
     <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
+    <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />

@@ -43,16 +43,22 @@ static hb_filter_info_t * hb_crop_scale_info( hb_filter_object_t * filter );
 
 static void hb_crop_scale_close( hb_filter_object_t * filter );
 
+static const char crop_scale_template[] =
+    "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:"
+    "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
+    "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$";
+
 hb_filter_object_t hb_filter_crop_scale =
 {
-    .id            = HB_FILTER_CROP_SCALE,
-    .enforce_order = 1,
-    .name          = "Crop and Scale",
-    .settings      = NULL,
-    .init          = hb_crop_scale_init,
-    .work          = hb_crop_scale_work,
-    .close         = hb_crop_scale_close,
-    .info          = hb_crop_scale_info,
+    .id                = HB_FILTER_CROP_SCALE,
+    .enforce_order     = 1,
+    .name              = "Crop and Scale",
+    .settings          = NULL,
+    .init              = hb_crop_scale_init,
+    .work              = hb_crop_scale_work,
+    .close             = hb_crop_scale_close,
+    .info              = hb_crop_scale_info,
+    .settings_template = crop_scale_template,
 };
 
 static int hb_crop_scale_init( hb_filter_object_t * filter,
@@ -81,12 +87,13 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     }
 
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
-    if( filter->settings )
-    {
-        sscanf( filter->settings, "%d:%d:%d:%d:%d:%d",
-                &pv->width_out, &pv->height_out,
-                &pv->crop[0], &pv->crop[1], &pv->crop[2], &pv->crop[3] );
-    }
+    hb_dict_extract_int(&pv->width_out, filter->settings, "width");
+    hb_dict_extract_int(&pv->height_out, filter->settings, "height");
+    hb_dict_extract_int(&pv->crop[0], filter->settings, "crop-top");
+    hb_dict_extract_int(&pv->crop[1], filter->settings, "crop-bottom");
+    hb_dict_extract_int(&pv->crop[2], filter->settings, "crop-left");
+    hb_dict_extract_int(&pv->crop[3], filter->settings, "crop-right");
+
     // Set init values so the next stage in the pipline
     // knows what it will be getting
     init->pix_fmt = pv->pix_fmt;

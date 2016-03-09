@@ -6,6 +6,7 @@
 
 #import "HBFilters.h"
 #import "HBCodingUtilities.h"
+#import "NSDictionary+HBAdditions.h"
 #include "hb.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
@@ -135,7 +136,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         filter_id = HB_FILTER_DEINTERLACE;
     }
 
-    if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL))
+    if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL, NULL))
     {
         _deinterlacePreset = @"default";
     }
@@ -412,7 +413,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     preset[@"PictureDeblock"] = @(self.deblock);
     preset[@"VideoGrayScale"] = @(self.grayscale);
-    preset[@"PictureRotate"] = [NSString stringWithFormat:@"%d:%d", self.rotate, self.flip];
+    preset[@"PictureRotate"] = [NSString stringWithFormat:@"angle=%d:hflip=%d", self.rotate, self.flip];
 }
 
 - (void)applyPreset:(HBPreset *)preset
@@ -445,17 +446,12 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         NSString *rotate = preset[@"PictureRotate"];
         if ([rotate isKindOfClass:[NSString class]])
         {
-            NSArray<NSString *> *components = [rotate componentsSeparatedByString:@":"];
-            if (components.count == 2)
-            {
-                self.rotate = [components[0] intValue];
-                self.flip = [components[1] boolValue];
-            }
-            else
-            {
-                self.rotate = 0;
-                self.flip = NO;
-            }
+            hb_dict_t * hbdict = hb_parse_filter_settings(rotate.UTF8String);
+            NSDictionary * dict = [[NSDictionary alloc] initWithHBDict:hbdict];
+            hb_value_free(&hbdict);
+
+            self.rotate = [dict[@"angle"] intValue];
+            self.flip = [dict[@"hflip"] boolValue];
         }
     }
 

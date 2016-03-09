@@ -608,7 +608,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         if (filter->settings != NULL)
         {
             hb_dict_set(filter_dict, "Settings",
-                        hb_value_string(filter->settings));
+                        hb_value_dup(filter->settings));
         }
 
         hb_value_array_append(filter_list, filter_dict);
@@ -1070,10 +1070,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         {
             filter_dict = hb_value_array_get(filter_list, ii);
             int filter_id = -1;
-            char *filter_settings = NULL;
-            result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?s}",
+            hb_value_t *filter_settings = NULL;
+            result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?o}",
                                     "ID",       unpack_i(&filter_id),
-                                    "Settings", unpack_s(&filter_settings));
+                                    "Settings", unpack_o(&filter_settings));
             if (result < 0)
             {
                 hb_error("hb_dict_to_job: failed to find filter settings: %s",
@@ -1084,7 +1084,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 hb_filter_object_t *filter;
                 filter = hb_filter_init(filter_id);
-                hb_add_filter(job, filter, filter_settings);
+                hb_add_filter_dict(job, filter, filter_settings);
             }
         }
     }
@@ -1696,4 +1696,3 @@ hb_image_t* hb_json_to_image(char *json_image)
 
     return image;
 }
-

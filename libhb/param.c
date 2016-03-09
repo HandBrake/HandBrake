@@ -8,12 +8,11 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "hb_dict.h"
 #include "param.h"
 #include "common.h"
 #include "colormap.h"
 #include <regex.h>
-
-const char hb_filter_off[] = "off";
 
 static hb_filter_param_t nlmeans_presets[] =
 {
@@ -38,43 +37,69 @@ static hb_filter_param_t nlmeans_tunes[] =
 static hb_filter_param_t hqdn3d_presets[] =
 {
     { 1, "Custom",      "custom",     NULL              },
-    { 5, "Ultralight",  "ultralight", "1:0.7:0.7:1:2:2" },
-    { 2, "Light",       "light",      "2:1:1:2:3:3"     },
-    { 3, "Medium",      "medium",     "3:2:2:2:3:3"     },
-    { 4, "Strong",      "strong",     "7:7:7:5:5:5"     },
+    { 5, "Ultralight",  "ultralight",
+      "y-spatial=1:cb-spatial=0.7:cr-spatial=0.7:"
+      "y-temporal=1:cb-temporal=2:cr-temporal=2"
+                                                        },
+    { 2, "Light",       "light",
+      "y-spatial=2:cb-spatial=1:cr-spatial=1:"
+      "y-temporal=2:cb-temporal=3:cr-temporal=3"
+                                                        },
+    { 3, "Medium",      "medium",
+      "y-spatial=3:cb-spatial=2:cr-spatial=2:"
+      "y-temporal=2:cb-temporal=3:cr-temporal=3"
+                                                        },
+    { 4, "Strong",      "strong",
+      "y-spatial=7:cb-spatial=7:cr-spatial=7:"
+      "y-temporal=5:cb-temporal=5:cr-temporal=5"
+                                                        },
     { 0, NULL,          NULL,         NULL              },
     // Legacy and aliases go below the NULL
-    { 2, "Weak",        "weak",       "2:1:1:2:3:3"     },
-    { 2, "Default",     "default",    "2:1:1:2:3:3"     },
+    { 2, "Weak",        "weak",
+      "y-spatial=2:cb-spatial=1:cr-spatial=1:"
+      "y-temporal=2:cb-temporal=3:cr-temporal=3"
+                                                        },
+    { 2, "Default",     "default",
+      "y-spatial=2:cb-spatial=1:cr-spatial=1:"
+      "y-temporal=2:cb-temporal=3:cr-temporal=3"
+                                                        },
 };
 
 static hb_filter_param_t detelecine_presets[] =
 {
-    { 0, "Off",         "off",        hb_filter_off     },
+    { 0, "Off",         "off",        "disable=1"       },
     { 1, "Custom",      "custom",     NULL              },
-    { 2, "Default",     "default",    ""                },
+    { 2, "Default",     "default",
+      "skip-top=4:skip-bottom=4:skip-left=1:skip-right=1:plane=0"
+                                                        },
     { 0, NULL,          NULL,         NULL              }
 };
 
 static hb_filter_param_t decomb_presets[] =
 {
     { 1, "Custom",      "custom",     NULL              },
-    { 2, "Default",     "default",    ""                },
-    { 3, "Fast",        "fast",       "7:2:6:9:1:80"    },
-    { 4, "Bob",         "bob",        "455"             },
+    { 2, "Default",     "default",
+      "mode=391:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
+      "filter-mode=2:block-thresh=40"
+                                                        },
+    { 3, "Fast",        "fast",
+      "mode=7:motion-thresh=6:spatial-thresh=9:"
+      "filter-mode=1:block-thresh=80"
+                                                        },
+    { 4, "Bob",         "bob",        "mode=455"        },
     { 0, NULL,          NULL,         NULL              }
 };
 
 static hb_filter_param_t deinterlace_presets[] =
 {
-    { 1, "Custom",             "custom",       NULL              },
-    { 3, "Default",            "default",      "3:-1"            },
-    { 2, "Skip Spatial Check", "skip-spatial", "1:-1"            },
-    { 5, "Bob",                "bob",          "7:-1"            },
-    { 0,  NULL,                NULL,           NULL              },
-    { 2, "Fast",               "fast",         "1:-1:"           },
-    { 3, "Slow",               "slow",         "1:-1:"           },
-    { 4, "Slower",             "slower",       "3:-1:"           }
+    { 1, "Custom",             "custom",       NULL             },
+    { 3, "Default",            "default",      "mode=3"         },
+    { 2, "Skip Spatial Check", "skip-spatial", "mode=1"         },
+    { 5, "Bob",                "bob",          "mode=7"         },
+    { 0,  NULL,                NULL,           NULL             },
+    { 2, "Fast",               "fast",         "mode=1"         },
+    { 3, "Slow",               "slow",         "mode=1"         },
+    { 4, "Slower",             "slower",       "mode=3"         }
 };
 
 typedef struct
@@ -90,7 +115,7 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_NLMEANS,     nlmeans_presets,     nlmeans_tunes,
       sizeof(nlmeans_presets) / sizeof(hb_filter_param_t)        },
 
-    { HB_FILTER_HQDN3D,      hqdn3d_presets,     NULL,
+    { HB_FILTER_HQDN3D,      hqdn3d_presets,      NULL,
       sizeof(hqdn3d_presets) / sizeof(hb_filter_param_t)         },
 
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
@@ -102,256 +127,8 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_DEINTERLACE, deinterlace_presets, NULL,
       sizeof(deinterlace_presets) / sizeof(hb_filter_param_t)    },
 
-    { HB_FILTER_INVALID,     NULL,                NULL, 0        }
+    { HB_FILTER_INVALID,     NULL,                NULL,  0       }
 };
-
-#define MODE_YADIF_ENABLE       1
-#define MODE_YADIF_SPATIAL      2
-#define MODE_YADIF_BOB          4
-#define MODE_YADIF_AUTO         8
-
-/* Deinterlace Settings
- *  mode:parity
- *
- *  mode   - yadif deinterlace mode
- *  parity - field parity
- *
- *  Modes:
- *      1 = Enabled
- *      2 = Spatial
- *      4 = Bob
- *      8 = Auto
- *
- *  Parity:
- *      0  = Top Field First
- *      1  = Bottom Field First
- *      -1 = Automatic detection of field parity
- */
-char *
-generate_deinterlace_settings(const char * settings)
-{
-    char       ** args;
-    char       * result;
-    int          ii, mode = 3, parity = -1;
-
-    args = hb_str_vsplit(settings, ':');
-    for (ii = 0; ii < 2 && args[ii]; ii++)
-    {
-        switch (ii)
-        {
-            case 0:
-                mode   = strtol(args[ii], &result, 0);
-                break;
-            case 1:
-                parity = strtol(args[ii], &result, 0);
-                break;
-        }
-    }
-    if (!(mode & MODE_YADIF_ENABLE))
-    {
-        return (char*)hb_filter_off;
-    }
-    int automatic  = !!(mode & MODE_YADIF_AUTO);
-    int bob        = !!(mode & MODE_YADIF_BOB);
-    int no_spatial = !(mode & MODE_YADIF_SPATIAL);
-    mode = bob | (no_spatial << 1);
-
-    return hb_strdup_printf("yadif='mode=%d:auto=%d:parity=%d'",
-                            mode, automatic, parity);
-}
-
-/* Rotate Settings:
- *  degrees:mirror
- *
- *  degrees - Rotation angle, may be one of 90, 180, or 270
- *  mirror  - Mirror image around x axis
- *
- * Examples:
- * Mode 180:1 Mirror then rotate 180'
- * Mode   0:1 Mirror
- * Mode 180:0 Rotate 180'
- * Mode  90:0 Rotate 90'
- * Mode 270:0 Rotate 270'
- *
- * Legacy Mode Examples (also accepted):
- * Mode 1: Flip vertically (y0 becomes yN and yN becomes y0) (aka 180:1)
- * Mode 2: Flip horizontally (x0 becomes xN and xN becomes x0) (aka 0:1)
- * Mode 3: Flip both horizontally and vertically (aka 180:0)
- * Mode 4: Rotate 90' (aka 90:0)
- * Mode 7: Flip horiz & vert plus Rotate 90' (aka 270:0)
- */
-char *
-generate_rotate_settings(const char * preset, const char * tune)
-{
-    char       ** args;
-    const char *  trans = NULL;
-    char       *  result;
-    int           ii, angle = 180, flip = 0, hflip = 0, vflip = 0;
-
-    args = hb_str_vsplit(preset, ':');
-    for (ii = 0; ii < 2 && args[ii]; ii++)
-    {
-        switch (ii)
-        {
-            case 0:
-                angle  = strtol(args[ii], &result, 0);
-                break;
-            case 1:
-                flip = strtol(args[ii], &result, 0);
-                break;
-            default:
-                break;
-        }
-    }
-    hb_str_vfree(args);
-    if (angle < 8 && ii == 1)
-    {
-        // Legacy value
-        switch (angle)
-        {
-            case 1:
-                vflip = 1;
-                break;
-            case 2:
-                hflip = 1;
-                break;
-            case 3:
-                vflip = hflip = 1;
-                break;
-            case 4:
-                trans = "clock";
-                break;
-            case 5:
-                trans = "cclock_flip";
-                break;
-            case 6:
-                trans = "clock_flip";
-                break;
-            case 7:
-                trans = "cclock";
-                break;
-            default:
-                break;
-        }
-    }
-    else
-    {
-        const char * clock;
-        const char * cclock;
-        if (flip)
-        {
-            clock  = "clock_flip";
-            cclock = "cclock_flip";
-        }
-        else
-        {
-            clock  = "clock";
-            cclock = "cclock";
-        }
-        switch (angle)
-        {
-            case 0:
-                hflip = flip;
-                break;
-            case 90:
-                trans = clock;
-                break;
-            case 180:
-                vflip = hflip = 1;
-                break;
-            case 270:
-                trans = cclock;
-                break;
-            default:
-                break;
-        }
-    }
-    if (trans != NULL)
-    {
-        return hb_strdup_printf("transpose='dir=%s'", trans);
-    }
-    else if (vflip || hflip)
-    {
-        return hb_strdup_printf("%s%s%s",
-                                vflip ? "vflip" : "",
-                                hflip ? ", "    : "",
-                                hflip ? "hflip" : "");
-    }
-    else
-    {
-        return (char*)hb_filter_off;
-    }
-}
-
-/* Pad presets and tunes
- *
- * There are currently no presets and tunes for pad
- * The custom pad string is converted to an avformat filter graph string
- */
-char *
-generate_pad_settings(const char * preset, const char * tune)
-{
-    int      width  = 0, height = 0, rgb = 0;
-    int      x = -1, y = -1, ii;
-    char  ** args;
-    char  *  result;
-
-    args = hb_str_vsplit(preset, ':');
-    for (ii = 0; ii < 5 && args[ii]; ii++)
-    {
-        if (args[ii][0] == 0 || !strcasecmp("auto", args[ii]))
-            continue;
-        switch (ii)
-        {
-            case 0:
-                width  = strtol(args[ii], &result, 0);
-                break;
-            case 1:
-                height = strtol(args[ii], &result, 0);
-                break;
-            case 2:
-                rgb  = strtol(args[ii], &result, 0);
-                if (result == args[ii])
-                {
-                    // Not a numeric value, lookup by name
-                    rgb = hb_rgb_lookup_by_name(args[2]);
-                }
-                break;
-            case 3:
-                x      = strtol(args[ii], &result, 0);
-                break;
-            case 4:
-                y      = strtol(args[ii], &result, 0);
-                break;
-            default:
-                break;
-        }
-    }
-    hb_str_vfree(args);
-
-    char x_str[20];
-    char y_str[20];
-    if (x < 0)
-    {
-        snprintf(x_str, 20, "(out_w-in_w)/2");
-    }
-    else
-    {
-        snprintf(x_str, 20, "%d", x);
-    }
-    if (y < 0)
-    {
-        snprintf(y_str, 20, "(out_h-in_h)/2");
-    }
-    else
-    {
-        snprintf(y_str, 20, "%d", y);
-    }
-    result = hb_strdup_printf(
-                    "pad='width=%d:height=%d:x=%s:y=%s:color=0x%06x'",
-                    width, height, x_str, y_str, rgb);
-    return result;
-}
 
 /* NL-means presets and tunes
  *
@@ -368,16 +145,18 @@ generate_pad_settings(const char * preset, const char * tune)
  * highmotion - like film but avoids color smearing with stronger settings
  * animation  - cel animation such as cartoons, anime
  */
-static char * generate_nlmeans_settings(const char *preset, const char *tune)
+static hb_dict_t * generate_nlmeans_settings(const char *preset,
+                                             const char *tune,
+                                             const char *custom)
 {
-    char   *opt = NULL;
+    hb_dict_t * settings;
 
     if (preset == NULL)
         return NULL;
 
-    if (!strcasecmp(preset, "custom") && tune != NULL)
+    if (preset == NULL || !strcasecmp(preset, "custom"))
     {
-        return strdup(tune);
+        return hb_parse_filter_settings(custom);
     }
     if (!strcasecmp(preset, "ultralight") ||
         !strcasecmp(preset, "light") ||
@@ -513,31 +292,38 @@ static char * generate_nlmeans_settings(const char *preset, const char *tune)
             return NULL;
         }
 
-        opt = hb_strdup_printf("%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d",
-                               strength[0], origin_tune[0], patch_size[0],
-                               range[0], frames[0], prefilter[0],
-                               strength[1], origin_tune[1], patch_size[1],
-                               range[1], frames[1], prefilter[1]);
+        settings = hb_dict_init();
+        hb_dict_set(settings, "y-strength",   hb_value_double(strength[0]));
+        hb_dict_set(settings, "y-origin-tune", hb_value_double(origin_tune[0]));
+        hb_dict_set(settings, "y-patch-size",  hb_value_int(patch_size[0]));
+        hb_dict_set(settings, "y-range",      hb_value_int(range[0]));
+        hb_dict_set(settings, "y-frame-count", hb_value_int(frames[0]));
+        hb_dict_set(settings, "y-prefilter",  hb_value_int(prefilter[0]));
 
-
+        hb_dict_set(settings, "cb-strength",   hb_value_double(strength[1]));
+        hb_dict_set(settings, "cb-origin-tune", hb_value_double(origin_tune[1]));
+        hb_dict_set(settings, "cb-patch-size",  hb_value_int(patch_size[1]));
+        hb_dict_set(settings, "cb-range",      hb_value_int(range[1]));
+        hb_dict_set(settings, "cb-frame-count", hb_value_int(frames[1]));
+        hb_dict_set(settings, "cb-prefilter",  hb_value_int(prefilter[1]));
     }
     else
     {
-        opt = strdup(preset);
+        settings = hb_parse_filter_settings(preset);
         if (tune != NULL)
         {
             fprintf(stderr, "Custom nlmeans parameters specified; ignoring nlmeans tune (%s).\n", tune);
         }
     }
 
-    return opt;
+    return settings;
 }
 
 int hb_validate_param_string(const char *regex_pattern, const char *param_string)
 {
     regex_t regex_temp;
 
-    if (regcomp(&regex_temp, regex_pattern, REG_EXTENDED) == 0)
+    if (regcomp(&regex_temp, regex_pattern, REG_EXTENDED|REG_ICASE) == 0)
     {
         if (regexec(&regex_temp, param_string, 0, NULL, 0) == 0)
         {
@@ -547,66 +333,109 @@ int hb_validate_param_string(const char *regex_pattern, const char *param_string
     }
     else
     {
-        fprintf(stderr, "hb_validate_param_string: Error compiling regex for pattern (%s).\n", param_string);
+        hb_log("hb_validate_param_string: Error compiling regex for pattern (%s).\n", param_string);
     }
 
     regfree(&regex_temp);
     return 1;
 }
 
-int hb_validate_filter_settings(int filter_id, const char *filter_param)
+int hb_validate_filter_settings(int filter_id, const hb_dict_t * settings)
 {
-    if (filter_param == NULL)
+    hb_filter_object_t * filter;
+    hb_dict_t          * settings_template;
+    hb_dict_iter_t       iter;
+
+    if (settings == NULL)
         return 0;
 
-    // Regex matches "number" followed by one or more ":number", where number is int or float
-    const char *hb_colon_separated_params_regex = "^(((([\\-])?[0-9]+([.,][0-9]+)?)|(([\\-])?[.,][0-9]+))((:((([\\-])?[0-9]+([,.][0-9]+)?)|(([\\-])?[,.][0-9]+)))+)?)$";
-    const char *hb_pad_regex = "^([0-9]*|auto)(:([0-9]*|auto)(:([a-zA-Z0-9]*|auto)(:([0-9]*|auto)(:([0-9]*|auto))?)?)?)?$";
-
-    const char *regex_pattern = NULL;
-
-    switch (filter_id)
+    // Verify that all keys in settings are in the filter settings template
+    filter = hb_filter_get(filter_id);
+    if (filter == NULL)
     {
-        case HB_FILTER_PAD:
-            regex_pattern = hb_pad_regex;
-            break;
-        case HB_FILTER_ROTATE:
-        case HB_FILTER_DEBLOCK:
-        case HB_FILTER_DETELECINE:
-        case HB_FILTER_DECOMB:
-        case HB_FILTER_DEINTERLACE:
-        case HB_FILTER_NLMEANS:
-        case HB_FILTER_HQDN3D:
-            if (filter_param[0] == 0)
-            {
-                return 0;
-            }
-            regex_pattern = hb_colon_separated_params_regex;
-            break;
-        default:
-            fprintf(stderr, "hb_validate_filter_settings: Unrecognized filter (%d).\n",
-                   filter_id);
+        hb_log("hb_validate_filter_settings: Unrecognized filter (%d).\n",
+               filter_id);
+        return 1;
+    }
+    if (filter->settings_template == NULL)
+    {
+        // filter has no template to verify settings against
+        return 0;
+    }
+    settings_template = hb_parse_filter_settings(filter->settings_template);
+    if (settings_template == NULL)
+    {
+        hb_log("hb_validate_filter_settings: invalid template!");
+        return 0;
+    }
+
+    for (iter = hb_dict_iter_init(settings);
+         iter != HB_DICT_ITER_DONE;
+         iter = hb_dict_iter_next(settings, iter))
+    {
+        const char * key;
+        hb_value_t * val;
+
+        key = hb_dict_iter_key(iter);
+
+        // Check if key found in settings is also found in the template
+        val = hb_dict_get(settings_template, key);
+        if (val == NULL)
+        {
+            // Key is missing from template, indicate invalid settings
+            hb_log("Invalid filter key (%s) for filter %s",
+                    key, filter->name);
             return 1;
-            break;
-    }
+        }
 
-    if (hb_validate_param_string(regex_pattern, filter_param) == 0)
-    {
-        return 0;
+        // If a string value is found, and it is non-empty,
+        // it is a regex pattern for allowed values.
+        const char * regex_pattern = hb_value_get_string(val);
+        if (regex_pattern != NULL && regex_pattern[0] != 0)
+        {
+            char * param;
+            param = hb_value_get_string_xform(hb_dict_get(settings, key));
+            if (hb_validate_param_string(regex_pattern, param) != 0)
+            {
+                hb_log("Invalid filter value (%s) for key %s filter %s",
+                        param, key, filter->name);
+                free(param);
+                return 1;
+            }
+            free(param);
+        }
     }
-    return 1;
+    hb_value_free(&settings_template);
+
+    return 0;
+}
+
+int hb_validate_filter_settings_json(int filter_id, const char * json)
+{
+    hb_value_t * value  = hb_value_json(json);
+    int          result = hb_validate_filter_settings(filter_id, value);
+    hb_value_free(&value);
+
+    return result;
 }
 
 static hb_filter_param_t*
 filter_param_get_presets_internal(int filter_id, int *count)
 {
     int ii;
+
+    if (count != NULL)
+    {
+        *count = 0;
+    }
     for (ii = 0; param_map[ii].filter_id != HB_FILTER_INVALID; ii++)
     {
         if (param_map[ii].filter_id == filter_id)
         {
             if (count != NULL)
+            {
                 *count = param_map[ii].count;
+            }
             return param_map[ii].presets;
         }
     }
@@ -619,13 +448,17 @@ filter_param_get_tunes_internal(int filter_id, int *count)
     int ii;
 
     if (count != NULL)
+    {
         *count = 0;
+    }
     for (ii = 0; param_map[ii].filter_id != HB_FILTER_INVALID; ii++)
     {
         if (param_map[ii].filter_id == filter_id)
         {
             if (count != NULL)
+            {
                 *count = param_map[ii].count;
+            }
             return param_map[ii].tunes;
         }
     }
@@ -651,190 +484,80 @@ filter_param_get_entry(hb_filter_param_t *table, const char *name, int count)
     return NULL;
 }
 
-static hb_filter_param_t*
-filter_param_get_entry_by_index(hb_filter_param_t *table, int index, int count)
+static hb_dict_t *
+generate_generic_settings(int filter_id, const char *preset, const char *custom)
 {
-    if (table == NULL)
-        return NULL;
-
-    int ii;
-    for (ii = 0; ii < count; ii++)
-    {
-        if (table[ii].name != NULL && table[ii].index == index)
-        {
-            return &table[ii];
-        }
-    }
-    return NULL;
-}
-
-static char *
-generate_generic_settings(int filter_id, const char *preset, const char *tune)
-{
-    char *opt = NULL;
-    int preset_count, tune_count;
-    hb_filter_param_t *preset_table, *tune_table;
-    hb_filter_param_t *preset_entry, *tune_entry;
-
-    preset_table = filter_param_get_presets_internal(filter_id, &preset_count);
-    tune_table = filter_param_get_tunes_internal(filter_id, &tune_count);
-    preset_entry = filter_param_get_entry(preset_table, preset, preset_count);
-    tune_entry = filter_param_get_entry(tune_table, tune, tune_count);
-    if (preset_entry != NULL)
-    {
-        if (!strcasecmp(preset, "custom") && tune != NULL)
-        {
-            opt = strdup(tune);
-        }
-        else if (preset_entry->settings == hb_filter_off)
-        {
-            return (char*)hb_filter_off;
-        }
-        else if (preset_entry->settings != NULL)
-        {
-            opt = hb_strdup_printf("%s%s%s", preset_entry->settings,
-                    tune_entry != NULL ? ":" : "",
-                    tune_entry != NULL ? tune_entry->settings : "");
-        }
-    }
-    else if (preset != NULL)
-    {
-        return strdup(preset);
-    }
-    return opt;
-}
-
-// Legacy: old presets store filter falues as indexes :(
-static char *
-generate_generic_settings_by_index(int filter_id, int preset,
-                                   const char *custom)
-{
-    char *opt = NULL;
     int preset_count;
     hb_filter_param_t *preset_table;
     hb_filter_param_t *preset_entry;
 
+    if (preset == NULL || !strcasecmp(preset, "custom"))
+    {
+        return hb_parse_filter_settings(custom);
+    }
+
     preset_table = filter_param_get_presets_internal(filter_id, &preset_count);
-    preset_entry = filter_param_get_entry_by_index(preset_table, preset,
-                                                   preset_count);
-    if (preset_entry != NULL)
+    preset_entry = filter_param_get_entry(preset_table, preset, preset_count);
+    if (preset_entry != NULL && preset_entry->settings != NULL)
     {
-        if (!strcasecmp(preset_entry->short_name, "custom") && custom != NULL)
-        {
-            opt = strdup(custom);
-        }
-        else if (preset_entry->settings == hb_filter_off)
-        {
-            return (char*)hb_filter_off;
-        }
-        else if (preset_entry->settings != NULL)
-        {
-            opt = hb_strdup_printf("%s", preset_entry->settings);
-        }
+        return hb_parse_filter_settings(preset_entry->settings);
     }
-    return opt;
-}
-
-char *
-hb_generate_filter_settings_by_index(int filter_id, int preset,
-                                     const char *custom)
-{
-    char *filter_param = NULL;
-
-    switch (filter_id)
-    {
-        case HB_FILTER_ROTATE:
-            if (preset <= 0)
-                filter_param = (char*)hb_filter_off;
-            else
-                filter_param = hb_strdup_printf("%d", preset);
-            break;
-        case HB_FILTER_DEBLOCK:
-            if (preset < 5)
-                filter_param = (char*)hb_filter_off;
-            else
-                filter_param = hb_strdup_printf("%d", preset);
-            break;
-        case HB_FILTER_DECOMB:
-        case HB_FILTER_DETELECINE:
-        case HB_FILTER_HQDN3D:
-            filter_param = generate_generic_settings_by_index(filter_id,
-                                                              preset, custom);
-            break;
-        case HB_FILTER_DEINTERLACE:
-        {
-            char * s;
-            s = generate_generic_settings_by_index(filter_id, preset, custom);
-            if (s == NULL || hb_validate_filter_settings(filter_id, s))
-            {
-                free(s);
-                return NULL;
-            }
-            return generate_deinterlace_settings(s);
-        } break;
-        default:
-            fprintf(stderr,
-                    "hb_generate_filter_settings: Unrecognized filter (%d).\n",
-                    filter_id);
-            break;
-    }
-
-    if (filter_param == hb_filter_off)
-        return filter_param;
-
-    if (filter_param != NULL &&
-        hb_validate_filter_settings(filter_id, filter_param) == 0)
-    {
-        return filter_param;
-    }
-    free(filter_param);
     return NULL;
 }
 
-char *
-hb_generate_filter_settings(int filter_id, const char *preset, const char *tune)
+static hb_value_t *
+generate_deblock_settings(const char * preset, const char * custom)
 {
-    char *filter_param = NULL;
+    hb_dict_t * settings = NULL;
+
+    // Deblock "presets" are just the QP value.  0 disables.
+    if ((preset == NULL || !strcasecmp(preset, "custom")))
+    {
+        settings = hb_parse_filter_settings(custom);
+    }
+    else
+    {
+        settings = hb_dict_init();
+        int qp = strtol(preset, NULL, 0);
+        if (qp < 5)
+        {
+            hb_dict_set(settings, "disable", hb_value_bool(1));
+        }
+        hb_dict_set(settings, "qp", hb_value_int(qp));
+    }
+
+    return settings;
+}
+
+hb_value_t *
+hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
+                            const char *custom)
+{
+    hb_value_t * settings = NULL;
 
     switch (filter_id)
     {
+        case HB_FILTER_DEBLOCK:
+            settings = generate_deblock_settings(preset, custom);
+            break;
         case HB_FILTER_PAD:
-            if (preset == NULL) return NULL;
-            if (!strcasecmp(preset, "off")) return (char*)hb_filter_off;
-            if (hb_validate_filter_settings(filter_id, preset)) return NULL;
-
-            return generate_pad_settings(preset, tune);
         case HB_FILTER_ROTATE:
-            if (preset == NULL) return NULL;
-            if (!strcasecmp(preset, "off")) return (char*)hb_filter_off;
-            if (hb_validate_filter_settings(filter_id, preset)) return NULL;
-
-            return generate_rotate_settings(preset, tune);
-        case HB_FILTER_NLMEANS:
-            filter_param = generate_nlmeans_settings(preset, tune);
+        case HB_FILTER_CROP_SCALE:
+        case HB_FILTER_VFR:
+        case HB_FILTER_RENDER_SUB:
+        case HB_FILTER_GRAYSCALE:
+        case HB_FILTER_QSV:
+            settings = hb_parse_filter_settings(custom);
             break;
-        case HB_FILTER_DEBLOCK:
-            if (atoi(preset) < 5)
-                filter_param = (char*)hb_filter_off;
-            else
-                filter_param = strdup(preset);
+        case HB_FILTER_NLMEANS:
+            settings = generate_nlmeans_settings(preset, tune, custom);
             break;
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
-            filter_param = generate_generic_settings(filter_id, preset, tune);
-            break;
         case HB_FILTER_DEINTERLACE:
-        {
-            char * s;
-            s = generate_generic_settings(filter_id, preset, tune);
-            if (s == NULL || hb_validate_filter_settings(filter_id, s))
-            {
-                free(s);
-                return NULL;
-            }
-            return generate_deinterlace_settings(s);
-        } break;
+            settings = generate_generic_settings(filter_id, preset, custom);
+            break;
         default:
             fprintf(stderr,
                     "hb_generate_filter_settings: Unrecognized filter (%d).\n",
@@ -842,20 +565,47 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune)
             break;
     }
 
-    if (filter_param == hb_filter_off)
-        return filter_param;
-
-    if (filter_param != NULL &&
-        hb_validate_filter_settings(filter_id, filter_param) == 0)
+    if (settings != NULL &&
+        hb_validate_filter_settings(filter_id, settings) == 0)
     {
-        return filter_param;
+        return settings;
     }
-    free(filter_param);
+    hb_value_free(&settings);
     return NULL;
+}
+
+char *
+hb_generate_filter_settings_json(int filter_id, const char *preset,
+                                 const char *tune, const char *custom)
+{
+    hb_value_t * settings;
+
+    settings = hb_generate_filter_settings(filter_id, preset, tune, custom);
+    if (settings == NULL)
+    {
+        return NULL;
+    }
+
+    char * result = hb_value_get_json(settings);
+    hb_value_free(&settings);
+    return result;
+}
+
+int hb_validate_filter_string(int filter_id, const char * filter_str)
+{
+    hb_dict_t * settings = hb_parse_filter_settings(filter_str);
+    if (settings == NULL)
+    {
+        return 1;
+    }
+    int result = hb_validate_filter_settings(filter_id, settings);
+    hb_value_free(&settings);
+    return result;
 }
 
 int
-hb_validate_filter_preset(int filter_id, const char *preset, const char *tune)
+hb_validate_filter_preset(int filter_id, const char *preset, const char *tune,
+                          const char *custom)
 {
     if (preset == NULL && tune == NULL)
         return 1;
@@ -868,41 +618,25 @@ hb_validate_filter_preset(int filter_id, const char *preset, const char *tune)
     preset_entry = filter_param_get_entry(preset_table, preset, preset_count);
     if (preset_entry == NULL || preset_entry->name == NULL)
         return 1;
-    if (tune != NULL)
+    if (!strcasecmp(preset, "custom") && custom != NULL)
     {
-        if (!strcasecmp(preset, "custom") && tune != NULL)
+        hb_dict_t * settings = hb_parse_filter_settings(custom);
+        if (settings == NULL)
         {
-            return hb_validate_filter_settings(filter_id, tune);
-        }
-        tune_table = filter_param_get_tunes_internal(filter_id, &tune_count);
-        tune_entry = filter_param_get_entry(tune_table, tune, tune_count);
-        if (tune_entry == NULL)
             return 1;
+        }
+        int result = hb_validate_filter_settings(filter_id, settings);
+        hb_value_free(&settings);
+        return result;
     }
-    return 0;
-}
-
-int
-hb_validate_filter_preset_by_index(int filter_id, int preset, const char *tune)
-{
-    int preset_count, tune_count;
-    hb_filter_param_t *preset_table, *tune_table;
-    hb_filter_param_t *preset_entry, *tune_entry;
-
-    preset_table = filter_param_get_presets_internal(filter_id, &preset_count);
-    preset_entry = filter_param_get_entry_by_index(preset_table, preset, preset_count);
-    if (preset_entry == NULL || preset_entry->name == NULL)
-        return 1;
     if (tune != NULL)
     {
-        if (!strcasecmp(preset_entry->short_name, "custom") && tune != NULL)
-        {
-            return hb_validate_filter_settings(filter_id, tune);
-        }
         tune_table = filter_param_get_tunes_internal(filter_id, &tune_count);
         tune_entry = filter_param_get_entry(tune_table, tune, tune_count);
         if (tune_entry == NULL)
+        {
             return 1;
+        }
     }
     return 0;
 }
@@ -951,5 +685,116 @@ hb_filter_param_t* hb_filter_param_get_presets(int filter_id)
 hb_filter_param_t* hb_filter_param_get_tunes(int filter_id)
 {
     return filter_param_get_tunes_internal(filter_id, NULL);
+}
+
+// Get json array of filter preset name and short_name
+char * hb_filter_get_presets_json(int filter_id)
+{
+    hb_value_array_t  * array = hb_value_array_init();
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_presets_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_dict_t * dict = hb_dict_init();
+        hb_dict_set(dict, "short_name", hb_value_string(table[ii].short_name));
+        hb_dict_set(dict, "name", hb_value_string(table[ii].name));
+        hb_value_array_append(array, dict);
+    }
+
+    char * result = hb_value_get_json(array);
+    hb_value_free(&array);
+    return result;
+}
+
+// Get json array of filter tune name and short_name
+char * hb_filter_get_tunes_json(int filter_id)
+{
+    hb_value_array_t  * array = hb_value_array_init();
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_tunes_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_dict_t * dict = hb_dict_init();
+        hb_dict_set(dict, "short_name", hb_value_string(table[ii].short_name));
+        hb_dict_set(dict, "name", hb_value_string(table[ii].name));
+        hb_value_array_append(array, dict);
+    }
+
+    char * result = hb_value_get_json(array);
+    hb_value_free(&array);
+    return result;
+}
+
+char ** hb_filter_get_presets_short_name(int filter_id)
+{
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_presets_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    char ** result = calloc(count + 1, sizeof(char*));
+    for (ii = 0; ii < count; ii++)
+    {
+        result[ii] = strdup(table[ii].short_name);
+    }
+    result[ii] = NULL;
+
+    return result;
+}
+
+char ** hb_filter_get_presets_name(int filter_id)
+{
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_presets_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    char ** result = calloc(count + 1, sizeof(char*));
+    for (ii = 0; ii < count; ii++)
+    {
+        result[ii] = strdup(table[ii].name);
+    }
+    result[ii] = NULL;
+
+    return result;
+}
+
+char ** hb_filter_get_keys(int filter_id)
+{
+    hb_filter_object_t * filter = hb_filter_get(filter_id);
+
+    if (filter == NULL || filter->settings_template == NULL)
+    {
+        return NULL;
+    }
+
+    char ** tmpl = hb_str_vsplit(filter->settings_template, ':');
+    int     ii, count = 0;
+
+    for (ii = 0; tmpl[ii] != NULL; ii++)
+    {
+        count++;
+    }
+    char ** result = calloc(count + 1, sizeof(char*));
+    for (ii = 0; tmpl[ii] != NULL; ii++)
+    {
+        char ** pair = hb_str_vsplit(tmpl[ii], '=');
+        result[ii] = strdup(pair[0]);
+        hb_str_vfree(pair);
+    }
+    result[ii] = NULL;
+    hb_str_vfree(tmpl);
+
+    return result;
 }
 

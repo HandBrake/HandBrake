@@ -9,6 +9,8 @@
 
 namespace HandBrake.ApplicationServices.Interop.Json.Encode
 {
+    using Newtonsoft.Json.Linq;
+
     /// <summary>
     /// The filter list.
     /// </summary>
@@ -22,6 +24,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the settings.
         /// </summary>
-        public string Settings { get; set; }
+        public JToken Settings { get; set; }
     }
 }

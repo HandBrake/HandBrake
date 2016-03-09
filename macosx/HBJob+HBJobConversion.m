@@ -304,14 +304,6 @@
         }
     }
 
-    if (one_burned)
-    {
-        hb_filter_object_t *filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d:%d:%d:%d",
-                                      self.picture.cropTop, self.picture.cropBottom,
-                                      self.picture.cropLeft, self.picture.cropRight].UTF8String);
-    }
-
     // Audio Defaults
     job->acodec_copy_mask = 0;
 
@@ -413,11 +405,13 @@
     if (![self.filters.detelecine isEqualToString:@"off"])
     {
         int filter_id = HB_FILTER_DETELECINE;
-        const char *filter_str = hb_generate_filter_settings(filter_id,
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
                                                              self.filters.detelecine.UTF8String,
+                                                             NULL,
                                                              self.filters.detelecineCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter(job, filter, filter_str);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
     }
 
     // Deinterlace
@@ -429,11 +423,13 @@
             filter_id = HB_FILTER_DEINTERLACE;
         }
 
-        const char *filter_str = hb_generate_filter_settings(filter_id,
-                                                             self.filters.deinterlacePreset.UTF8String,
-                                                             self.filters.deinterlaceCustomString.UTF8String);
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                            self.filters.deinterlacePreset.UTF8String,
+                                                            NULL,
+                                                            self.filters.deinterlaceCustomString.UTF8String);
         filter = hb_filter_init(filter_id);
-        hb_add_filter(job, filter, filter_str);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
     }
 
     // Denoise
@@ -441,39 +437,34 @@
     {
         int filter_id = HB_FILTER_HQDN3D;
         if ([self.filters.denoise isEqualToString:@"nlmeans"])
+        {
             filter_id = HB_FILTER_NLMEANS;
+        }
 
-        if ([self.filters.denoisePreset isEqualToString:@"custom"])
-        {
-            const char *filter_str;
-            filter_str = self.filters.denoiseCustomString.UTF8String;
-            filter = hb_filter_init(filter_id);
-            hb_add_filter(job, filter, filter_str);
-        }
-        else
-        {
-            const char *filter_str, *preset, *tune;
-            preset = self.filters.denoisePreset.UTF8String;
-            tune = self.filters.denoiseTune.UTF8String;
-            filter_str = hb_generate_filter_settings(filter_id, preset, tune);
-            filter = hb_filter_init(filter_id);
-            hb_add_filter(job, filter, filter_str);
-        }
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                  self.filters.denoisePreset.UTF8String,
+                                                  self.filters.denoiseTune.UTF8String,
+                                                  self.filters.denoiseCustomString.UTF8String);
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_dict_free(&filter_dict);
     }
 
     // Deblock (uses pp7 default)
     if (self.filters.deblock)
     {
         filter = hb_filter_init(HB_FILTER_DEBLOCK);
-        hb_add_filter(job, filter, [NSString stringWithFormat:@"%d", self.filters.deblock].UTF8String);
+        hb_add_filter(job, filter, [NSString stringWithFormat:@"qp=%d", self.filters.deblock].UTF8String);
     }
 
     // Add Crop/Scale filter
     filter = hb_filter_init(HB_FILTER_CROP_SCALE);
-    hb_add_filter( job, filter, [NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
-                                 self.picture.width, self.picture.height,
-                                 self.picture.cropTop, self.picture.cropBottom,
-                                 self.picture.cropLeft, self.picture.cropRight].UTF8String);
+    hb_add_filter( job, filter,
+                   [NSString stringWithFormat:
+                    @"width=%d:height=%d:crop-top=%d:crop-bottom=%d:crop-left=%d:crop-right=%d",
+                    self.picture.width, self.picture.height,
+                    self.picture.cropTop, self.picture.cropBottom,
+                    self.picture.cropLeft, self.picture.cropRight].UTF8String);
     
     // Add grayscale filter
     if (self.filters.grayscale)
@@ -486,17 +477,18 @@
     if (self.filters.rotate || self.filters.flip)
     {
         int filter_id = HB_FILTER_ROTATE;
-        const char *filter_str = hb_generate_filter_settings(filter_id,
-                                                             [NSString stringWithFormat:@"%d:%d", self.filters.rotate, self.filters.flip].UTF8String,
-                                                             NULL);
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             NULL, NULL,
+                                                             [NSString stringWithFormat:@"angle=%d:hflip=%d", self.filters.rotate, self.filters.flip].UTF8String);
 
         filter = hb_filter_init(filter_id);
-        hb_add_filter(job, filter, filter_str);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_dict_free(&filter_dict);
     }
 
     // Add framerate shaping filter
     filter = hb_filter_init(HB_FILTER_VFR);
-    hb_add_filter(job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
+    hb_add_filter(job, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
                                  fps_mode, fps_num, fps_den] UTF8String]);
     
     return job;

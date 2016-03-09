@@ -15,6 +15,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -334,12 +336,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether ShowDeinterlaceDecombCustom.
         /// </summary>
-        public bool ShowDeinterlaceDecombCustom => (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Decomb && this.SelectedDecomb == Decomb.Custom) || (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Deinterlace && this.SelectedDeInterlace == Deinterlace.Custom);
+        public bool ShowDeinterlaceDecombCustom => (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Decomb && this.SelectedDecomb == Decomb.Custom) || (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Yadif && this.SelectedDeInterlace == Deinterlace.Custom);
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowDelelecineCustom.
         /// </summary>
-        public bool ShowDeinterlaceCustom => this.SelectedDeinterlaceFilter == DeinterlaceFilter.Deinterlace && this.SelectedDeInterlace == Deinterlace.Custom;
+        public bool ShowDeinterlaceCustom => this.SelectedDeinterlaceFilter == DeinterlaceFilter.Yadif && this.SelectedDeInterlace == Deinterlace.Custom;
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowDenoiseCustom.
@@ -370,7 +372,7 @@ namespace HandBrakeWPF.ViewModels
                 this.deinterlaceFilter = value;
                 this.CurrentTask.DeinterlaceFilter = value;
 
-                if (this.deinterlaceFilter == DeinterlaceFilter.Deinterlace)
+                if (this.deinterlaceFilter == DeinterlaceFilter.Yadif)
                 {
                     this.IsDeinterlaceMode = true;
                     this.IsDecombMode = false;
@@ -559,9 +561,9 @@ namespace HandBrakeWPF.ViewModels
 
                 this.SelectedDecomb = preset.Task.Decomb;
                 this.SelectedDeInterlace = preset.Task.Deinterlace;
-                if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Deinterlace)
+                if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
                 {
-                    this.SelectedDeinterlaceFilter = DeinterlaceFilter.Deinterlace;
+                    this.SelectedDeinterlaceFilter = DeinterlaceFilter.Yadif;
                 }
                 else if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
                 {
@@ -571,7 +573,6 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
                 }
-
 
                 this.Grayscale = preset.Task.Grayscale;
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
@@ -593,7 +594,7 @@ namespace HandBrakeWPF.ViewModels
                 // Default everything to off
                 this.SelectedDenoise = Denoise.Off;
                 this.SelectedDecomb = Decomb.Default;
-                this.SelectedDeInterlace = Deinterlace.Fast;
+                this.SelectedDeInterlace = Deinterlace.Default;
                 this.SelectedDetelecine = Detelecine.Off;
                 this.Grayscale = false;
                 this.DeblockValue = 0;

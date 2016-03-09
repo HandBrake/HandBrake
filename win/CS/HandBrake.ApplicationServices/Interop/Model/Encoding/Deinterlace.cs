@@ -16,19 +16,16 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// </summary>
     public enum Deinterlace
     {
-        [ShortName("fast")]
-        Fast,
+        [ShortName("custom")]
+        Custom,
 
-        [ShortName("slow")]
-        Slow,
+        [ShortName("default")]
+        Default,
 
-        [ShortName("slower")]
-        Slower,
+        [ShortName("skip-spatial")]
+        SkipSpatialCheck,
 
         [ShortName("bob")]
-        Bob,
-
-        [ShortName("custom")]
-        Custom
+        Bob
     }
 }

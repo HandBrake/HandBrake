@@ -154,15 +154,27 @@ static void nlmeans_close(hb_filter_object_t *filter);
 
 static void nlmeans_filter_thread(void *thread_args_v);
 
+static const char nlmeans_template[] =
+    "y-strength=^"HB_FLOAT_REG"$:y-origin-tune=^"HB_FLOAT_REG"$:"
+    "y-patch-size=^"HB_INT_REG"$:y-range=^"HB_INT_REG"$:"
+    "y-frame-count=^"HB_INT_REG"$:y-prefilter=^"HB_INT_REG"$:"
+    "cb-strength=^"HB_FLOAT_REG"$:cb-origin-tune=^"HB_FLOAT_REG"$:"
+    "cb-patch-size=^"HB_INT_REG"$:cb-range=^"HB_INT_REG"$:"
+    "cb-frame-count=^"HB_INT_REG"$:cb-prefilter=^"HB_INT_REG"$:"
+    "cr-strength=^"HB_FLOAT_REG"$:cr-origin-tune=^"HB_FLOAT_REG"$:"
+    "cr-patch-size=^"HB_INT_REG"$:cr-range=^"HB_INT_REG"$:"
+    "cr-frame-count=^"HB_INT_REG"$:cr-prefilter=^"HB_INT_REG"$";
+
 hb_filter_object_t hb_filter_nlmeans =
 {
-    .id            = HB_FILTER_NLMEANS,
-    .enforce_order = 1,
-    .name          = "Denoise (nlmeans)",
-    .settings      = NULL,
-    .init          = nlmeans_init,
-    .work          = nlmeans_work,
-    .close         = nlmeans_close,
+    .id                = HB_FILTER_NLMEANS,
+    .enforce_order     = 1,
+    .name              = "Denoise (nlmeans)",
+    .settings          = NULL,
+    .init              = nlmeans_init,
+    .work              = nlmeans_work,
+    .close             = nlmeans_close,
+    .settings_template = nlmeans_template,
 };
 
 static void nlmeans_border(uint8_t *src,
@@ -792,10 +804,27 @@ static int nlmeans_init(hb_filter_object_t *filter,
     // Read user parameters
     if (filter->settings != NULL)
     {
-        sscanf(filter->settings, "%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d",
-               &pv->strength[0], &pv->origin_tune[0], &pv->patch_size[0], &pv->range[0], &pv->nframes[0], &pv->prefilter[0],
-               &pv->strength[1], &pv->origin_tune[1], &pv->patch_size[1], &pv->range[1], &pv->nframes[1], &pv->prefilter[1],
-               &pv->strength[2], &pv->origin_tune[2], &pv->patch_size[2], &pv->range[2], &pv->nframes[2], &pv->prefilter[2]);
+        hb_dict_t * dict = filter->settings;
+        hb_dict_extract_double(&pv->strength[0],    dict, "y-strength");
+        hb_dict_extract_double(&pv->origin_tune[0], dict, "y-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[0],     dict, "y-patch-size");
+        hb_dict_extract_int(&pv->range[0],          dict, "y-range");
+        hb_dict_extract_int(&pv->nframes[0],        dict, "y-frame-count");
+        hb_dict_extract_int(&pv->prefilter[0],      dict, "y-prefilter");
+
+        hb_dict_extract_double(&pv->strength[1],    dict, "cb-strength");
+        hb_dict_extract_double(&pv->origin_tune[1], dict, "cb-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[1],     dict, "cb-patch-size");
+        hb_dict_extract_int(&pv->range[1],          dict, "cb-range");
+        hb_dict_extract_int(&pv->nframes[1],        dict, "cb-frame-count");
+        hb_dict_extract_int(&pv->prefilter[1],      dict, "cb-prefilter");
+
+        hb_dict_extract_double(&pv->strength[2],    dict, "cr-strength");
+        hb_dict_extract_double(&pv->origin_tune[2], dict, "cr-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[2],     dict, "cr-patch-size");
+        hb_dict_extract_int(&pv->range[2],          dict, "cr-range");
+        hb_dict_extract_int(&pv->nframes[2],        dict, "cr-frame-count");
+        hb_dict_extract_int(&pv->prefilter[2],      dict, "cr-prefilter");
     }
 
     // Cascade values

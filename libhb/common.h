@@ -10,6 +10,8 @@
 #ifndef HB_COMMON_H
 #define HB_COMMON_H
 
+#include "hbtypes.h"
+#include "hb_dict.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,41 +82,6 @@
 #define HB_MAX_WIDTH    20480
 #define HB_MAX_HEIGHT   20480
 
-typedef struct hb_handle_s hb_handle_t;
-typedef struct hb_hwd_s hb_hwd_t;
-typedef struct hb_list_s hb_list_t;
-typedef struct hb_buffer_list_s hb_buffer_list_t;
-typedef struct hb_rate_s hb_rate_t;
-typedef struct hb_dither_s hb_dither_t;
-typedef struct hb_mixdown_s hb_mixdown_t;
-typedef struct hb_encoder_s hb_encoder_t;
-typedef struct hb_container_s hb_container_t;
-typedef struct hb_rational_s hb_rational_t;
-typedef struct hb_geometry_s hb_geometry_t;
-typedef struct hb_geometry_settings_s hb_geometry_settings_t;
-typedef struct hb_image_s hb_image_t;
-typedef struct hb_job_s  hb_job_t;
-typedef struct hb_title_set_s hb_title_set_t;
-typedef struct hb_title_s hb_title_t;
-typedef struct hb_chapter_s hb_chapter_t;
-typedef struct hb_audio_s hb_audio_t;
-typedef struct hb_audio_config_s hb_audio_config_t;
-typedef struct hb_subtitle_s hb_subtitle_t;
-typedef struct hb_subtitle_config_s hb_subtitle_config_t;
-typedef struct hb_attachment_s hb_attachment_t;
-typedef struct hb_metadata_s hb_metadata_t;
-typedef struct hb_coverart_s hb_coverart_t;
-typedef struct hb_state_s hb_state_t;
-typedef union  hb_esconfig_u     hb_esconfig_t;
-typedef struct hb_work_private_s hb_work_private_t;
-typedef struct hb_work_object_s  hb_work_object_t;
-typedef struct hb_filter_private_s hb_filter_private_t;
-typedef struct hb_filter_object_s  hb_filter_object_t;
-typedef struct hb_buffer_s hb_buffer_t;
-typedef struct hb_buffer_settings_s hb_buffer_settings_t;
-typedef struct hb_image_format_s hb_image_format_t;
-typedef struct hb_fifo_s hb_fifo_t;
-typedef struct hb_lock_s hb_lock_t;
 typedef enum
 {
      HB_ERROR_NONE         = 0,
@@ -1223,7 +1190,7 @@ struct hb_filter_object_s
     int                   id;
     int                   enforce_order;
     char                * name;
-    char                * settings;
+    hb_dict_t           * settings;
 
 #ifdef __LIBHB__
     int                (* init)     ( hb_filter_object_t *, hb_filter_init_t * );
@@ -1232,6 +1199,8 @@ struct hb_filter_object_s
                                       hb_buffer_t **, hb_buffer_t ** );
     void               (* close)    ( hb_filter_object_t * );
     hb_filter_info_t * (* info)     ( hb_filter_object_t * );
+
+    const char          * settings_template;
 
     hb_fifo_t           * fifo_in;
     hb_fifo_t           * fifo_out;
@@ -1286,11 +1255,18 @@ enum
     HB_FILTER_LAST = HB_FILTER_QSV
 };
 
+hb_filter_object_t * hb_filter_get( int filter_id );
 hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
 hb_list_t          * hb_filter_list_copy(const hb_list_t *src);
 void                 hb_filter_close( hb_filter_object_t ** );
 void                 hb_filter_info_close( hb_filter_info_t ** );
+hb_dict_t          * hb_parse_filter_settings(const char * settings);
+char               * hb_parse_filter_settings_json(const char * settings_str);
+char               * hb_filter_settings_string(int filter_id,
+                                               hb_value_t * value);
+char               * hb_filter_settings_string_json(int filter_id,
+                                                    const char * json);
 
 typedef void hb_error_handler_t( const char *errmsg );
 
@@ -1325,5 +1301,13 @@ const char * hb_x264_encopt_name( const char * name );
 // x265 option name/synonym helper
 const char * hb_x265_encopt_name( const char * name );
 #endif
+
+#define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
+#define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
+#define HB_NEG_INT_REG   "(([-]?[0-9]+)"
+#define HB_INT_REG       "([0-9]+)"
+#define HB_RATIONAL_REG  "([0-9]+/[0-9]+)"
+#define HB_BOOL_REG      "(yes|no|true|false|[01])"
+#define HB_ALL_REG       "(.*)"
 
 #endif

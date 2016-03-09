@@ -3690,7 +3690,7 @@ hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
     hb_filter_object_t * filter_copy = malloc( sizeof( hb_filter_object_t ) );
     memcpy( filter_copy, filter, sizeof( hb_filter_object_t ) );
     if( filter->settings )
-        filter_copy->settings = strdup( filter->settings );
+        filter_copy->settings = hb_value_dup(filter->settings);
     return filter_copy;
 }
 
@@ -3723,7 +3723,7 @@ hb_list_t *hb_filter_list_copy(const hb_list_t *src)
  * @param filter_id The type of filter to get.
  * @returns The requested filter object.
  */
-hb_filter_object_t * hb_filter_init( int filter_id )
+hb_filter_object_t * hb_filter_get( int filter_id )
 {
     hb_filter_object_t * filter;
     switch( filter_id )
@@ -3798,7 +3798,12 @@ hb_filter_object_t * hb_filter_init( int filter_id )
             filter = NULL;
             break;
     }
-    return hb_filter_copy( filter );
+    return filter;
+}
+
+hb_filter_object_t * hb_filter_init( int filter_id )
+{
+    return hb_filter_copy(hb_filter_get(filter_id));
 }
 
 /**********************************************************************
@@ -3810,7 +3815,7 @@ void hb_filter_close( hb_filter_object_t ** _f )
 {
     hb_filter_object_t * f = *_f;
 
-    free(f->settings);
+    hb_value_free(&f->settings);
 
     free( f );
     *_f = NULL;
@@ -3832,6 +3837,292 @@ void hb_filter_info_close( hb_filter_info_t ** _fi )
 
     free( fi );
     *_fi = NULL;
+}
+
+static char * append_string(char * dst, const char * src)
+{
+    int dst_len = 0, src_len, len;
+
+    if (src == NULL)
+    {
+        return dst;
+    }
+
+    src_len = len = strlen(src) + 1;
+    if (dst != NULL)
+    {
+        dst_len = strlen(dst);
+        len += dst_len;
+    }
+    char * tmp = realloc(dst, len);
+    if (tmp == NULL)
+    {
+        // Failed to allocate required space
+        return dst;
+    }
+    dst = tmp;
+    memcpy(dst + dst_len, src, src_len);
+    return dst;
+}
+
+static char * stringify_array(int filter_id, hb_value_array_t * array)
+{
+    char * result = strdup("");
+    int    ii;
+    int    len = hb_value_array_len(array);
+    int    first = 1;
+
+    if (hb_value_array_len(array) == 0)
+    {
+        return result;
+    }
+    for (ii = 0; ii < len; ii++)
+    {
+        hb_value_t * val = hb_value_array_get(array, ii);
+        char       * str = hb_filter_settings_string(filter_id, val);
+        if (str != NULL)
+        {
+            if (!first)
+            {
+                result = append_string(result, ",");
+            }
+            first = 0;
+            if (hb_value_type(val) == HB_VALUE_TYPE_DICT)
+            {
+                result = append_string(result, str);
+            }
+            else if (hb_value_type(val) == HB_VALUE_TYPE_ARRAY)
+            {
+                result = append_string(result, "[");
+                result = append_string(result, str);
+                result = append_string(result, "]");
+            }
+            else
+            {
+                result = append_string(result, str);
+            }
+            free(str);
+        }
+    }
+
+    return result;
+}
+
+static char * stringify_dict(int filter_id, hb_dict_t * dict)
+{
+    char            * result = strdup("");
+    const char      * key;
+    char           ** keys = NULL;
+    hb_value_t      * val;
+    hb_dict_iter_t    iter;
+    int               first = 1;
+
+    if (hb_dict_elements(dict) == 0)
+    {
+        return result;
+    }
+    // Check for dict containing rational value
+    if (hb_dict_elements(dict) == 2)
+    {
+        hb_value_t *num_val = hb_dict_get(dict, "Num");
+        hb_value_t *den_val = hb_dict_get(dict, "Den");
+        if (num_val != NULL && den_val != NULL &&
+            hb_value_type(num_val) == HB_VALUE_TYPE_INT &&
+            hb_value_type(den_val) == HB_VALUE_TYPE_INT)
+        {
+            int num = hb_value_get_int(num_val);
+            int den = hb_value_get_int(den_val);
+            char * str = hb_strdup_printf("%d/%d", num, den);
+            result = append_string(result, str);
+            free(str);
+            return result;
+        }
+    }
+    hb_filter_object_t * filter = hb_filter_get(filter_id);
+    if (filter != NULL)
+    {
+        keys = hb_filter_get_keys(filter_id);
+        if (keys != NULL && keys[0] == NULL)
+        {
+            hb_str_vfree(keys);
+            keys = NULL;
+        }
+    }
+
+    int done, ii = 0;
+    iter = hb_dict_iter_init(dict);
+    if (keys == NULL)
+    {
+        done = !hb_dict_iter_next_ex(dict, &iter, &key, NULL);
+    }
+    else
+    {
+        done = (key = keys[ii]) == NULL;
+    }
+    while (!done)
+    {
+        val = hb_dict_get(dict, key);
+        if (val != NULL)
+        {
+            if (!first)
+            {
+                result = append_string(result, ":");
+            }
+            first = 0;
+            result = append_string(result, key);
+            int elements = 1;
+
+            if (hb_value_type(val) == HB_VALUE_TYPE_NULL)
+            {
+                elements = 0;
+            }
+            else if (hb_value_type(val) == HB_VALUE_TYPE_DICT)
+            {
+                elements = hb_dict_elements(val);
+            }
+            else if (hb_value_type(val) == HB_VALUE_TYPE_ARRAY)
+            {
+                elements = hb_value_array_len(val);
+            }
+            if (elements != 0)
+            {
+                char * str = hb_filter_settings_string(filter_id, val);
+                if (str != NULL)
+                {
+                    result = append_string(result, "=");
+                    if (hb_value_type(val) == HB_VALUE_TYPE_DICT)
+                    {
+                        result = append_string(result, "'");
+                        result = append_string(result, str);
+                        result = append_string(result, "'");
+                    }
+                    else if (hb_value_type(val) == HB_VALUE_TYPE_ARRAY)
+                    {
+                        result = append_string(result, "[");
+                        result = append_string(result, str);
+                        result = append_string(result, "]");
+                    }
+                    else
+                    {
+                        result = append_string(result, str);
+                    }
+                    free(str);
+                }
+            }
+        }
+        ii++;
+        if (keys == NULL)
+        {
+            done = !hb_dict_iter_next_ex(dict, &iter, &key, NULL);
+        }
+        else
+        {
+            done = (key = keys[ii]) == NULL;
+        }
+    }
+    hb_str_vfree(keys);
+
+    return result;
+}
+
+char * hb_filter_settings_string(int filter_id, hb_value_t * value)
+{
+    if (value == NULL || hb_value_type(value) == HB_VALUE_TYPE_NULL)
+    {
+        return strdup("");
+    }
+    if (hb_value_type(value) == HB_VALUE_TYPE_DICT)
+    {
+        return stringify_dict(filter_id, value);
+    }
+    if (hb_value_type(value) == HB_VALUE_TYPE_ARRAY)
+    {
+        return stringify_array(filter_id, value);
+    }
+    return hb_value_get_string_xform(value);
+}
+
+char * hb_filter_settings_string_json(int filter_id, const char * json)
+{
+    hb_value_t * value  = hb_value_json(json);
+    char       * result = hb_filter_settings_string(filter_id, value);
+    hb_value_free(&value);
+
+    return result;
+}
+
+hb_dict_t * hb_parse_filter_settings(const char * settings_str)
+{
+    hb_dict_t  * dict = hb_dict_init();
+    char      ** settings_list = hb_str_vsplit(settings_str, ':');
+    int          ii;
+
+    for (ii = 0; settings_list[ii] != NULL; ii++)
+    {
+        char * key, * value;
+        char ** settings_pair = hb_str_vsplit(settings_list[ii], '=');
+        if (settings_pair[0] == NULL || settings_pair[1] == NULL)
+        {
+            // Parse error. Not key=value pair.
+            hb_str_vfree(settings_list);
+            hb_str_vfree(settings_pair);
+            hb_value_free(&dict);
+            hb_log("hb_parse_filter_settings: Error parsing (%s)",
+                   settings_str);
+            return NULL;
+        }
+        key   = settings_pair[0];
+        value = settings_pair[1];
+
+        int last = strlen(value) - 1;
+        // Check if value was quoted dictionary and remove quotes
+        // and parse the sub-dictionary.  This should only happen
+        // for avfilter settings.
+        if (last > 0 && value[0] == '\'' && value[last] == '\'')
+        {
+            char * str = strdup(value + 1);
+            str[last - 1] = 0;
+            hb_dict_t * sub_dict = hb_parse_filter_settings(str);
+            free(str);
+            if (sub_dict == NULL)
+            {
+                // Parse error. Not key=value pair.
+                hb_str_vfree(settings_list);
+                hb_str_vfree(settings_pair);
+                hb_value_free(&dict);
+                hb_log("hb_parse_filter_settings: Error parsing (%s)",
+                       settings_str);
+                return NULL;
+            }
+            hb_dict_case_set(dict, key, sub_dict);
+        }
+        // Check if value was quoted string and remove quotes
+        else if (last > 0 && value[0] == '"' && value[last] == '"')
+        {
+            char * str = strdup(value + 1);
+            str[last - 1] = 0;
+            hb_dict_case_set(dict, key, hb_value_string(str));
+            free(str);
+        }
+        else
+        {
+            hb_dict_case_set(dict, key, hb_value_string(value));
+        }
+
+        hb_str_vfree(settings_pair);
+    }
+    hb_str_vfree(settings_list);
+
+    return dict;
+}
+
+char * hb_parse_filter_settings_json(const char * settings_str)
+{
+    hb_dict_t * dict = hb_parse_filter_settings(settings_str);
+    char      * result = hb_value_get_json(dict);
+    hb_value_free(&dict);
+
+    return result;
 }
 
 /**********************************************************************

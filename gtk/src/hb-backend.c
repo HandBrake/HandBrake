@@ -3741,12 +3741,10 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
                                            "PictureDeinterlaceFilter");
         deint_preset = ghb_dict_get_string(settings,
                                            "PictureDeinterlacePreset");
-        if (!strcasecmp(deint_preset, "custom"))
-        {
-            deint_custom = ghb_dict_get_string(settings,
-                                               "PictureDeinterlaceCustom");
-        }
-        if (hb_validate_filter_preset(filter_id, deint_preset, deint_custom))
+        deint_custom = ghb_dict_get_string(settings,
+                                           "PictureDeinterlaceCustom");
+        if (hb_validate_filter_preset(filter_id, deint_preset, NULL,
+                                      deint_custom))
         {
             if (deint_custom != NULL)
             {
@@ -3780,12 +3778,9 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         int filter_id;
 
         filter_id = HB_FILTER_DETELECINE;
-        if (!strcasecmp(detel_preset, "custom"))
-        {
-            detel_custom = ghb_dict_get_string(settings,
-                                               "PictureDetelecineCustom");
-        }
-        if (hb_validate_filter_preset(filter_id, detel_preset, detel_custom))
+        detel_custom = ghb_dict_get_string(settings, "PictureDetelecineCustom");
+        if (hb_validate_filter_preset(filter_id, detel_preset, NULL,
+                                      detel_custom))
         {
             if (detel_custom != NULL)
             {
@@ -3820,32 +3815,17 @@ ghb_validate_filters(GhbValue *settings, GtkWindow *parent)
         {
             denoise_tune = ghb_dict_get_string(settings, "PictureDenoiseTune");
         }
-        if (!strcasecmp(denoise_preset, "custom"))
+        denoise_custom = ghb_dict_get_string(settings, "PictureDenoiseCustom");
+        if (hb_validate_filter_preset(filter_id, denoise_preset, denoise_tune,
+                                      denoise_custom))
         {
-            denoise_custom = ghb_dict_get_string(settings,
-                                               "PictureDenoiseCustom");
-        }
-        if (hb_validate_filter_preset(filter_id, denoise_preset,
-                denoise_custom != NULL ? denoise_custom : denoise_tune))
-        {
-            if (denoise_custom != NULL)
-            {
-                message = g_strdup_printf(
-                            _("Invalid Denoise Settings:\n\n"
-                              "Filter: %s\n"
-                              "Preset: %s\n"
-                              "Custom: %s\n"), denoise_filter, denoise_preset,
-                                               denoise_custom);
-            }
-            else
-            {
-                message = g_strdup_printf(
-                            _("Invalid Denoise Settings:\n\n"
-                              "Filter: %s\n"
-                              "Preset: %s\n"
-                              "Tune:   %s\n"), denoise_filter, denoise_preset,
-                                               denoise_tune);
-            }
+            message = g_strdup_printf(
+                        _("Invalid Denoise Settings:\n\n"
+                          "Filter: %s\n"
+                          "Preset: %s\n"
+                          "Tune:   %s\n"
+                          "Custom: %s\n"), denoise_filter, denoise_preset,
+                                           denoise_tune, denoise_custom);
             ghb_message_dialog(parent, GTK_MESSAGE_ERROR,
                                message, _("Cancel"), NULL);
             g_free(message);

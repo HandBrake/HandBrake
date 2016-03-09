@@ -103,15 +103,22 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
 
 static void hb_detelecine_close( hb_filter_object_t * filter );
 
+static const char detelecine_template[] =
+    "skip-left=^"HB_INT_REG"$:skip-right=^"HB_INT_REG"$:"
+    "skip-top=^"HB_INT_REG"$:skip-bottom=^"HB_INT_REG"$:"
+    "strict-breaks=^"HB_BOOL_REG"$:plane=^([012])$:parity=^([01])$:"
+    "disable=^"HB_BOOL_REG"$";
+
 hb_filter_object_t hb_filter_detelecine =
 {
-    .id            = HB_FILTER_DETELECINE,
-    .enforce_order = 1,
-    .name          = "Detelecine (pullup)",
-    .settings      = NULL,
-    .init          = hb_detelecine_init,
-    .work          = hb_detelecine_work,
-    .close         = hb_detelecine_close,
+    .id                = HB_FILTER_DETELECINE,
+    .enforce_order     = 1,
+    .name              = "Detelecine (pullup)",
+    .settings          = NULL,
+    .init              = hb_detelecine_init,
+    .work              = hb_detelecine_work,
+    .close             = hb_detelecine_close,
+    .settings_template = detelecine_template,
 };
 
 /*
@@ -826,17 +833,14 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     ctx->metric_plane  = 0;
     ctx->parity = -1;
     
-    if( filter->settings )
-    {
-        sscanf( filter->settings, "%d:%d:%d:%d:%d:%d:%d",
-                &ctx->junk_left,
-                &ctx->junk_right,
-                &ctx->junk_top,
-                &ctx->junk_bottom,
-                &ctx->strict_breaks,
-                &ctx->metric_plane,
-                &ctx->parity );
-    }
+    // "Skip" array [top, bottom, left, right]
+    hb_dict_extract_int(&ctx->junk_top, filter->settings, "skip-top");
+    hb_dict_extract_int(&ctx->junk_bottom, filter->settings, "skip-bottom");
+    hb_dict_extract_int(&ctx->junk_left, filter->settings, "skip-left");
+    hb_dict_extract_int(&ctx->junk_right, filter->settings, "skip-right");
+    hb_dict_extract_int(&ctx->strict_breaks, filter->settings, "strict-breaks");
+    hb_dict_extract_int(&ctx->metric_plane, filter->settings, "plane");
+    hb_dict_extract_int(&ctx->parity, filter->settings, "parity");
 
     ctx->format = PULLUP_FMT_Y;
     ctx->nplanes = 4;

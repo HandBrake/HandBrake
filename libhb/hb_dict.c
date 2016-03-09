@@ -7,6 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include "hb.h"
 #include "hb_dict.h"
@@ -47,6 +48,11 @@ void hb_value_free(hb_value_t **_value)
 {
     hb_value_decref(*_value);
     *_value = NULL;
+}
+
+hb_value_t * hb_value_null()
+{
+    return json_null();
 }
 
 hb_value_t * hb_value_string(const char * value)
@@ -440,19 +446,226 @@ hb_dict_t * hb_dict_init()
     return json_object();
 }
 
+int hb_dict_elements(hb_dict_t * dict)
+{
+    return json_object_size(dict);
+}
+
+static char * makelower(const char *key)
+{
+    int    ii, len = strlen(key);
+    char * lower = malloc(len + 1);
+
+    for (ii = 0; ii < len; ii++)
+    {
+        lower[ii] = tolower(key[ii]);
+    }
+    lower[ii] = '\0';
+    return lower;
+}
+
 void hb_dict_set(hb_dict_t * dict, const char *key, hb_value_t *value)
 {
     json_object_set_new(dict, key, value);
 }
 
+void hb_dict_case_set(hb_dict_t * dict, const char *key, hb_value_t *value)
+{
+    char * lower = makelower(key);
+    json_object_set_new(dict, lower, value);
+    free(lower);
+}
+
 int hb_dict_remove(hb_dict_t * dict, const char * key)
 {
-    return json_object_del(dict, key) == 0;
+    int    result;
+
+    // First try case sensitive lookup
+    result = json_object_del(dict, key) == 0;
+    if (!result)
+    {
+        // If not found, try case insensitive lookup
+        char * lower = makelower(key);
+        result = json_object_del(dict, lower) == 0;
+        free(lower);
+    }
+    return result;
 }
 
 hb_value_t * hb_dict_get(const hb_dict_t * dict, const char * key)
 {
-    return json_object_get(dict, key);
+    hb_value_t * result;
+
+    // First try case sensitive lookup
+    result = json_object_get(dict, key);
+    if (result == NULL)
+    {
+        // If not found, try case insensitive lookup
+        char * lower = makelower(key);
+        result = json_object_get(dict, lower);
+        free(lower);
+    }
+    return result;
+}
+
+//  Dictionary extraction helpers
+//
+// Extract the given key from the dict and assign to dst *only*
+// if key is found in dict.  Values are converted to the requested
+// data type.
+//
+// return: 1 - key is in dict
+//         0 - key is not in dict
+int hb_dict_extract_int(int *dst, const hb_dict_t * dict, const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (val == NULL)
+    {
+        return 0;
+    }
+
+    *dst = hb_value_get_int(val);
+    return 1;
+}
+
+int hb_dict_extract_double(double *dst, const hb_dict_t * dict,
+                                        const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (val == NULL)
+    {
+        return 0;
+    }
+
+    *dst = hb_value_get_double(val);
+    return 1;
+}
+
+int hb_dict_extract_bool(int *dst, const hb_dict_t * dict, const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (val == NULL)
+    {
+        return 0;
+    }
+
+    *dst = hb_value_get_bool(val);
+    return 1;
+}
+
+int hb_dict_extract_string(char **dst, const hb_dict_t * dict, const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (val == NULL)
+    {
+        return 0;
+    }
+
+    *dst = hb_value_get_string_xform(val);
+    return 1;
+}
+
+int hb_dict_extract_rational(hb_rational_t *dst, const hb_dict_t * dict,
+                                                 const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (val == NULL)
+    {
+        return 0;
+    }
+
+    if (hb_value_type(val) == HB_VALUE_TYPE_DICT)
+    {
+        hb_value_t * num_val = hb_dict_get(val, "Num");
+        if (num_val == NULL)
+        {
+            return 0;
+        }
+        hb_value_t * den_val = hb_dict_get(val, "Num");
+        if (den_val == NULL)
+        {
+            return 0;
+        }
+
+        dst->num = hb_value_get_int(num_val);
+        dst->den = hb_value_get_int(den_val);
+        return 1;
+    }
+    else if (hb_value_type(val) == HB_VALUE_TYPE_STRING)
+    {
+        const char * str = hb_value_get_string(val);
+        char ** rational = hb_str_vsplit(str, '/');
+        if (rational[0] != NULL && rational[1] != NULL &&
+            isdigit(rational[0][0]) && isdigit(rational[1][0]))
+        {
+            char *num_end, *den_end;
+
+            // found rational format value
+            int num = strtol(rational[0], &num_end, 0);
+            int den = strtol(rational[1], &den_end, 0);
+            // confirm that the 2 components were entirely numbers
+            if (num_end[0] == 0 && den_end[0] == 0)
+            {
+                dst->num = num;
+                dst->den = den;
+                hb_str_vfree(rational);
+                return 1;
+            }
+        }
+        hb_str_vfree(rational);
+    }
+
+    return 0;
+}
+
+int hb_dict_extract_int_array(int *dst, int count,
+                              const hb_dict_t * dict, const char * key)
+{
+    if (dict == NULL || key == NULL || dst == NULL)
+    {
+        return 0;
+    }
+
+    hb_value_t *val = hb_dict_get(dict, key);
+    if (hb_value_type(val) != HB_VALUE_TYPE_ARRAY)
+    {
+        return 0;
+    }
+
+    int len = hb_value_array_len(val);
+    count = count < len ? count : len;
+
+    int ii;
+    for (ii = 0; ii < count; ii++)
+    {
+        dst[ii] = hb_value_get_int(hb_value_array_get(val, ii));
+    }
+    return 1;
 }
 
 hb_dict_iter_t hb_dict_iter_init(const hb_dict_t *dict)
@@ -531,6 +744,26 @@ void
 hb_value_array_append(hb_value_array_t *array, hb_value_t *value)
 {
     json_array_append_new(array, value);
+}
+
+void
+hb_value_array_concat(hb_value_array_t *array, hb_value_t *value)
+{
+    if (hb_value_type(value) == HB_VALUE_TYPE_ARRAY)
+    {
+        int ii;
+        int len = hb_value_array_len(value);
+
+        for (ii = 0; ii < len; ii++)
+        {
+            hb_value_t * val = hb_value_array_get(value, ii);
+            json_array_append_new(array, hb_value_dup(val));
+        }
+    }
+    else
+    {
+        json_array_append_new(array, hb_value_dup(value));
+    }
 }
 
 void
@@ -613,3 +846,4 @@ char * hb_dict_to_encopts(const hb_dict_t * dict)
 {
     return hb_value_get_string_xform(dict);
 }
+
