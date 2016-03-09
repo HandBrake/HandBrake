@@ -105,7 +105,7 @@ static hb_value_t* xform_null(hb_value_type_t type)
         case HB_VALUE_TYPE_DOUBLE:
             return json_real(0.0);
         case HB_VALUE_TYPE_STRING:
-            return json_null();
+            return json_string("");
     }
 }
 
