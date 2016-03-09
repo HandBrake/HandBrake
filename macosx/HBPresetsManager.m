@@ -75,7 +75,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
     for (HBPreset *preset in oldPresets.children)
     {
-        [self.root.children addObject:preset];
+        [self.root insertObject:preset inChildrenAtIndex:self.root.countOfChildren];
     }
 }
 
@@ -209,7 +209,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     {
         for (NSDictionary *child in presetsDict[@"PresetList"])
         {
-            [self.root.children addObject:[[HBPreset alloc] initWithDictionary:child]];
+            [self.root insertObject:[[HBPreset alloc] initWithDictionary:child] inChildrenAtIndex:self.root.countOfChildren];
         }
 
         if (result == HBPresetLoadingResultOKUpgraded)

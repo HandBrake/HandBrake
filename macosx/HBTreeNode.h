@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Notify a delegate that something changed in the tree.
- *  KVO observing a tree looked complicated an expensive, so this is a lightweight
+ *  KVO observing a tree looks complicated and expensive, so this is a lightweight
  *  way to track the changes we need to know.
  */
 @protocol HBTreeNodeDelegate <NSObject>
