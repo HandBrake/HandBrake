@@ -117,11 +117,11 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *settings, GtkTreeIter *piter
 
     const gchar *points = _("Chapters");
     const gchar *ptop = ghb_dict_get_string(settings, "PtoPType");
-    if (!strcasecmp(ptop, "chapter"))
+    if (ptop != NULL && !strcasecmp(ptop, "chapter"))
         points = _("Chapters");
-    if (!strcasecmp(ptop, "time"))
+    if (ptop != NULL && !strcasecmp(ptop, "time"))
         points = _("Seconds");
-    if (!strcasecmp(ptop, "frame"))
+    if (ptop != NULL && !strcasecmp(ptop, "frame"))
         points = _("Frames");
 
     if (!vqtype && two_pass)
@@ -2191,7 +2191,6 @@ gboolean
 ghb_reload_queue(signal_user_data_t *ud)
 {
     GhbValue *queue;
-    gint unfinished = 0;
     gint count, ii;
     gint pid;
     gint status;
@@ -2206,18 +2205,22 @@ find_pid:
 
     queue = ghb_load_old_queue(pid);
     ghb_remove_old_queue_file(pid);
+
     // Look for unfinished entries
     count = ghb_array_len(queue);
-    for (ii = 0; ii < count; ii++)
+    for (ii = count-1; ii >= 0; ii--)
     {
         settings = ghb_array_get(queue, ii);
         status = ghb_dict_get_int(settings, "job_status");
-        if (status != GHB_QUEUE_DONE && status != GHB_QUEUE_CANCELED)
+        if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED ||
+            ghb_dict_get_value(settings, "job_status") == NULL)
         {
-            unfinished++;
+            ghb_array_remove(queue, ii);
+            continue;
         }
     }
-    if (!unfinished)
+    count = ghb_array_len(queue);
+    if (count == 0)
     {
         ghb_value_free(&queue);
         goto find_pid;
@@ -2227,17 +2230,6 @@ find_pid:
         GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
         ud->queue = queue;
-        // First get rid of any old items we don't want
-        for (ii = count-1; ii >= 0; ii--)
-        {
-            settings = ghb_array_get(queue, ii);
-            status = ghb_dict_get_int(settings, "job_status");
-            if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
-            {
-                ghb_array_remove(queue, ii);
-            }
-        }
-        count = ghb_array_len(queue);
         for (ii = 0; ii < count; ii++)
         {
             settings = ghb_array_get(queue, ii);
