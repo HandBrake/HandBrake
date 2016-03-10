@@ -20,5 +20,6 @@
 #define MODE_YADIF_ENABLE       1
 #define MODE_YADIF_SPATIAL      2
 #define MODE_YADIF_BOB          4
+#define MODE_DEINTERLACE_QSV    8
 
 #endif // HB_DECOMB_H

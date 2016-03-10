@@ -12,6 +12,9 @@
 #include "param.h"
 #include "common.h"
 #include "colormap.h"
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
 #include <regex.h>
 
 static hb_filter_param_t nlmeans_presets[] =
@@ -106,10 +109,14 @@ static hb_filter_param_t deinterlace_presets[] =
     { 3, "Default",            "default",      "mode=3"         },
     { 2, "Skip Spatial Check", "skip-spatial", "mode=1"         },
     { 5, "Bob",                "bob",          "mode=7"         },
+#ifdef USE_QSV
+    { 6, "QSV",                "qsv",          "mode=11"        },
+#endif
     { 0,  NULL,                NULL,           NULL             },
     { 2, "Fast",               "fast",         "mode=1"         },
     { 3, "Slow",               "slow",         "mode=1"         },
-    { 4, "Slower",             "slower",       "mode=3"         }
+    { 4, "Slower",             "slower",       "mode=3"         },
+    { 7, "QSV",                "qsv",          "mode=3"         }
 };
 
 typedef struct
@@ -142,6 +149,16 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_INVALID,     NULL,                NULL,  0       }
 };
+
+void hb_param_configure_qsv(void)
+{
+#ifdef USE_QSV
+    if (!hb_qsv_available())
+    {
+        memset(&deinterlace_presets[4], 0, sizeof(hb_filter_param_t));
+    }
+#endif
+}
 
 /* NL-means presets and tunes
  *

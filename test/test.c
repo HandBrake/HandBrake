@@ -912,13 +912,6 @@ static void showFilterPresets(FILE* const out, int filter_id)
     char  * slash = "", * newline;
     int     ii, count = 0, linelen = 0;
 
-#ifdef USE_QSV
-if (filter_id == HB_FILTER_DEINTERLACE && hb_qsv_available())
-{
-    count = 1;
-}
-#endif
-
     // Count number of entries we want to display
     for (ii = 0; names[ii] != NULL; ii++)
     {
@@ -956,12 +949,7 @@ if (filter_id == HB_FILTER_DEINTERLACE && hb_qsv_available())
         linelen += len;
         slash = "/";
     }
-#ifdef USE_QSV
-if (filter_id == HB_FILTER_DEINTERLACE && hb_qsv_available())
-{
-    fprintf(out, "/qsv");
-}
-#endif
+
     fprintf(out, ">\n");
     hb_str_vfree(names);
 }
