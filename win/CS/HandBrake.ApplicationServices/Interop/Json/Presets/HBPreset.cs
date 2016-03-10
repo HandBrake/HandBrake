@@ -127,6 +127,16 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PictureDeinterlaceFilter { get; set; }
 
         /// <summary>
+        /// Gets or sets the picture comb detect preset.
+        /// </summary>
+        public string PictureCombDetectPreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the picture comb detect custom.
+        /// </summary>
+        public string PictureCombDetectCustom { get; set; }
+
+        /// <summary>
         /// Gets or sets the picture deinterlace preset.
         /// </summary>
         public string PictureDeinterlacePreset { get; set; }

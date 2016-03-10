@@ -173,9 +173,35 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif || preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+            {
+                switch (importedPreset.PictureCombDetectPreset)
+                {
+                    case "off":
+                        preset.Task.CombDetect = CombDetect.Off;
+                        break;
+                    case "custom":
+                        preset.Task.CombDetect = CombDetect.Custom;
+                        break;
+                    case "default":
+                        preset.Task.CombDetect = CombDetect.Default;
+                        break;
+                    case "permissive":
+                        preset.Task.CombDetect = CombDetect.LessSensitive;
+                        break;
+                    case "fast":
+                        preset.Task.CombDetect = CombDetect.Fast;
+                        break;
+                    default:
+                        preset.Task.CombDetect = CombDetect.Off;
+                        break;
+                }
+            }
+
             preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
             preset.Task.CustomDenoise = importedPreset.PictureDenoiseCustom;
             preset.Task.CustomDetelecine = importedPreset.PictureDetelecineCustom;
+            preset.Task.CustomCombDetect = importedPreset.PictureCombDetectCustom;
 
             switch (importedPreset.PictureDetelecine)
             {
@@ -579,6 +605,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
+            preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
+            preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
 
             // Video
             preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);

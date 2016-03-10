@@ -435,6 +435,19 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 filter.FilterList.Add(filterItem);
             }
 
+            if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
+            {
+                if (job.CombDetect != CombDetect.Off)
+                {
+                    IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_COMB_DETECT, EnumHelper<CombDetect>.GetShortName(job.CombDetect), null, job.CustomCombDetect);
+                    string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
+                    JToken settings = JObject.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_COMB_DETECT, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }    
+            }
+
             // Denoise
             if (job.Denoise != Denoise.Off)
             {

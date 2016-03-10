@@ -298,9 +298,19 @@ namespace HandBrakeWPF.Services.Encode.Model
         public Decomb Decomb { get; set; }
 
         /// <summary>
+        /// Gets or sets the comb detect.
+        /// </summary>
+        public CombDetect CombDetect { get; set; }
+
+        /// <summary>
         /// Gets or sets CustomDecomb.
         /// </summary>
         public string CustomDecomb { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom comb detect.
+        /// </summary>
+        public string CustomCombDetect { get; set; }
 
         /// <summary>
         /// Gets or sets Detelecine.
