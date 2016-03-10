@@ -2867,6 +2867,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                         <property name="orientation">horizontal</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="selection-mode">none</property>
                         <property name="column-spacing">4</property>
                         <property name="row-spacing">32</property>
                         <property name="margin-top">16</property>
@@ -2965,7 +2966,7 @@ JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
 
 If a deinterlace filter is enabled, only frames that this filter finds
 to be interlaced will be deinterlaced.</property>
-                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="comb_detect_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="top_attach">0</property>

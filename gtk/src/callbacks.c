@@ -2128,6 +2128,28 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+comb_detect_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+
+    const char * comb_detect;
+    comb_detect = ghb_dict_get_string(ud->settings, "PictureCombDetectPreset");
+    if (strcasecmp(comb_detect, "off"))
+    {
+        const char * deint;
+        deint = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
+        if (!strcasecmp(deint, "off"))
+        {
+            ghb_ui_update(ud, "PictureDeinterlaceFilter",
+                          ghb_string_value("decomb"));
+        }
+    }
+}
+
+G_MODULE_EXPORT void
 deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
@@ -2137,6 +2159,14 @@ deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_update_ui_combo_box(ud, "PictureDeinterlacePreset", NULL, FALSE);
     ghb_ui_update(ud, "PictureDeinterlacePreset",
                   ghb_dict_get(ud->settings, "PictureDeinterlacePreset"));
+
+    const char * deint;
+    deint = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
+    if (!strcasecmp(deint, "off"))
+    {
+        ghb_ui_update(ud, "PictureCombDetectPreset",
+                      ghb_string_value("off"));
+    }
 }
 
 G_MODULE_EXPORT void
