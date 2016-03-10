@@ -150,7 +150,8 @@ static int      fastfirstpass = 0;
 static char *   preset_export_name   = NULL;
 static char *   preset_export_desc   = NULL;
 static char *   preset_export_file   = NULL;
-static char *   preset_name        = NULL;
+static char *   preset_name          = NULL;
+static char *   queue_import_name    = NULL;
 static int      cfr           = -1;
 static int      mp4_optimize  = -1;
 static int      ipod_atom     = -1;
@@ -173,6 +174,7 @@ static int      qsv_decode         = -1;
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
+static volatile int work_done = 0;
 static void SigHandler( int );
 
 /* Utils */
@@ -259,128 +261,11 @@ static int get_argv_utf8(int *argc_ptr, char ***argv_ptr)
 #endif
 }
 
-int main( int argc, char ** argv )
+void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
 {
-    hb_handle_t * h;
-    int           build;
-    char        * version;
-
-    hb_global_init();
-    hb_presets_builtin_update();
-
-    /* Init libhb */
-    h = hb_init(4, 0);  // Show all logging until debug level is parsed
-
-    // Get utf8 command line if windows
-    get_argv_utf8(&argc, &argv);
-
-    /* Parse command line */
-    if( ParseOptions( argc, argv ) ||
-        CheckOptions( argc, argv ) )
-    {
-        return 1;
-    }
-
-    hb_log_level_set(h, debug);
-
-    /* Register our error handler */
-    hb_register_error_handler(&hb_cli_error_handler);
-
-    hb_dvd_set_dvdnav( dvdnav );
-
-    /* Show version */
-    fprintf( stderr, "%s - %s - %s\n",
-             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
-
-    /* Check for update */
-    if( update )
-    {
-        hb_update_poll(h);
-        if( ( build = hb_check_update( h, &version ) ) > -1 )
-        {
-            fprintf( stderr, "You are using an old version of "
-                     "HandBrake.\nLatest is %s (build %d).\n", version,
-                     build );
-        }
-        else
-        {
-            fprintf( stderr, "Your version of HandBrake is up to "
-                     "date.\n" );
-        }
-        hb_close( &h );
-        hb_global_close();
-        return 0;
-    }
-
-    /* Geeky */
-    fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
-             hb_get_cpu_count() > 1 ? "s" : "" );
-
-    /* Exit ASAP on Ctrl-C */
-    signal( SIGINT, SigHandler );
-
-    // Apply all command line overrides to the preset that are possible.
-    // Some command line options are applied later to the job
-    // (e.g. chapter names, explicit audio & subtitle tracks).
-    hb_dict_t *preset_dict = PreparePreset(preset_name);
-    if (preset_dict == NULL)
-    {
-        // An appropriate error message should have already
-        // been spilled by PreparePreset.
-        return 1;
-    }
-
-    if (preset_export_name != NULL)
-    {
-        hb_dict_set(preset_dict, "PresetName",
-                    hb_value_string(preset_export_name));
-        if (preset_export_desc != NULL)
-        {
-            hb_dict_set(preset_dict, "PresetDescription",
-                        hb_value_string(preset_export_desc));
-        }
-        if (preset_export_file != NULL)
-        {
-            hb_presets_write_json(preset_dict, preset_export_file);
-        }
-        else
-        {
-            char *json;
-            json = hb_presets_package_json(preset_dict);
-            fprintf(stdout, "%s\n", json);
-        }
-        // If the user requested to export a preset, but not to
-        // transcode or scan a file, exit here.
-        if (input == NULL || (!titlescan && titleindex != 0 && output == NULL))
-        {
-            hb_value_free(&preset_dict);
-            return 0;
-        }
-    }
-
-    /* Feed libhb with a DVD to scan */
-    fprintf( stderr, "Opening %s...\n", input );
-
-    if (main_feature) {
-        /*
-         * We need to scan for all the titles in order to find the main feature
-         */
-        titleindex = 0;
-    }
-
-    hb_system_sleep_prevent(h);
-
-    // FIXME: When hardware decode is enabled, the scan must be performed
-    // with hardware decode enabled because the decoder context used during
-    // encoding phase comes from the context used during scan.  This is
-    // broken by design and I would very much like to fix this someday.
-    hb_hwd_set_enable(h, hb_value_get_bool(
-                         hb_dict_get(preset_dict, "VideoHWDecode")));
-    hb_scan(h, input, titleindex, preview_count, store_previews,
-            min_title_duration * 90000LL);
-
     /* Wait... */
-    while( !die )
+    work_done = 0;
+    while (!die && !work_done)
     {
 #if defined( __MINGW32__ )
         if( _kbhit() ) {
@@ -467,9 +352,203 @@ int main( int argc, char ** argv )
 
         HandleEvents( h, preset_dict );
     }
+}
+
+int RunQueueJob(hb_handle_t *h, hb_dict_t *job_dict)
+{
+    if (job_dict == NULL)
+    {
+        return -1;
+    }
+
+    char * json_job;
+    json_job = hb_value_get_json(job_dict);
+    hb_value_free(&job_dict);
+    if (json_job == NULL)
+    {
+        fprintf(stderr, "Error in setting up job! Aborting.\n");
+        return -1;
+    }
+
+    hb_add_json(h, json_job);
+    free(json_job);
+    hb_start( h );
+
+    EventLoop(h, NULL);
+
+    return 0;
+}
+
+int RunQueue(hb_handle_t *h, const char *queue_import_name)
+{
+    hb_value_t * queue = hb_value_read_json(queue_import_name);
+
+    if (hb_value_type(queue) == HB_VALUE_TYPE_DICT)
+    {
+        return RunQueueJob(h, hb_dict_get(queue, "Job"));
+    }
+    else if (hb_value_type(queue) == HB_VALUE_TYPE_ARRAY)
+    {
+        int ii, count, result = 0;
+
+        count = hb_value_array_len(queue);
+        for (ii = 0; ii < count; ii++)
+        {
+            hb_dict_t * entry = hb_value_array_get(queue, ii);
+            int ret = RunQueueJob(h, hb_dict_get(entry, "Job"));
+            if (ret < 0)
+            {
+                result = ret;
+            }
+            if (die)
+            {
+                break;
+            }
+        }
+        return result;
+    }
+    else
+    {
+        fprintf(stderr, "Error: Invalid queue file %s\n", queue_import_name);
+        return -1;
+    }
+    return 0;
+}
+
+int main( int argc, char ** argv )
+{
+    hb_handle_t * h;
+    int           build;
+    char        * version;
+
+    hb_global_init();
+    hb_presets_builtin_update();
+
+    /* Init libhb */
+    h = hb_init(4, 0);  // Show all logging until debug level is parsed
+
+    // Get utf8 command line if windows
+    get_argv_utf8(&argc, &argv);
+
+    /* Parse command line */
+    if( ParseOptions( argc, argv ) ||
+        CheckOptions( argc, argv ) )
+    {
+        return 1;
+    }
+
+    hb_log_level_set(h, debug);
+
+    /* Register our error handler */
+    hb_register_error_handler(&hb_cli_error_handler);
+
+    hb_dvd_set_dvdnav( dvdnav );
+
+    /* Show version */
+    fprintf( stderr, "%s - %s - %s\n",
+             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+
+    /* Check for update */
+    if( update )
+    {
+        hb_update_poll(h);
+        if( ( build = hb_check_update( h, &version ) ) > -1 )
+        {
+            fprintf( stderr, "You are using an old version of "
+                     "HandBrake.\nLatest is %s (build %d).\n", version,
+                     build );
+        }
+        else
+        {
+            fprintf( stderr, "Your version of HandBrake is up to "
+                     "date.\n" );
+        }
+        hb_close( &h );
+        hb_global_close();
+        return 0;
+    }
+
+    /* Geeky */
+    fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
+             hb_get_cpu_count() > 1 ? "s" : "" );
+
+    /* Exit ASAP on Ctrl-C */
+    signal( SIGINT, SigHandler );
+
+    if (queue_import_name != NULL)
+    {
+        hb_system_sleep_prevent(h);
+        RunQueue(h, queue_import_name);
+    }
+    else
+    {
+        // Apply all command line overrides to the preset that are possible.
+        // Some command line options are applied later to the job
+        // (e.g. chapter names, explicit audio & subtitle tracks).
+        hb_dict_t *preset_dict = PreparePreset(preset_name);
+        if (preset_dict == NULL)
+        {
+            // An appropriate error message should have already
+            // been spilled by PreparePreset.
+            return 1;
+        }
+
+        if (preset_export_name != NULL)
+        {
+            hb_dict_set(preset_dict, "PresetName",
+                        hb_value_string(preset_export_name));
+            if (preset_export_desc != NULL)
+            {
+                hb_dict_set(preset_dict, "PresetDescription",
+                            hb_value_string(preset_export_desc));
+            }
+            if (preset_export_file != NULL)
+            {
+                hb_presets_write_json(preset_dict, preset_export_file);
+            }
+            else
+            {
+                char *json;
+                json = hb_presets_package_json(preset_dict);
+                fprintf(stdout, "%s\n", json);
+            }
+            // If the user requested to export a preset, but not to
+            // transcode or scan a file, exit here.
+            if (input == NULL ||
+                (!titlescan && titleindex != 0 && output == NULL))
+            {
+                hb_value_free(&preset_dict);
+                return 0;
+            }
+        }
+
+        /* Feed libhb with a DVD to scan */
+        fprintf( stderr, "Opening %s...\n", input );
+
+        if (main_feature) {
+            /*
+             * We need to scan for all the titles in order to
+             * find the main feature
+             */
+            titleindex = 0;
+        }
+
+        hb_system_sleep_prevent(h);
+
+        // FIXME: When hardware decode is enabled, the scan must be performed
+        // with hardware decode enabled because the decoder context used during
+        // encoding phase comes from the context used during scan.  This is
+        // broken by design and I would very much like to fix this someday.
+        hb_hwd_set_enable(h, hb_value_get_bool(
+                             hb_dict_get(preset_dict, "VideoHWDecode")));
+        hb_scan(h, input, titleindex, preview_count, store_previews,
+                min_title_duration * 90000LL);
+
+        EventLoop(h, preset_dict);
+        hb_value_free(&preset_dict);
+    }
 
     /* Clean up */
-    hb_value_free(&preset_dict);
     hb_close(&h);
     hb_global_close();
     hb_str_vfree(audio_copy_list);
@@ -879,7 +958,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                              p.error );
             }
             done_error = p.error;
-            die = 1;
+            work_done = 1;
             break;
 #undef p
     }
@@ -1101,6 +1180,8 @@ static void ShowHelp()
 "   --preset-export-description\n"
 "       <description>       Add a description to the new preset created with\n"
 "                           '--preset-export'\n"
+"   --queue-import-file     Import an encode queue file created by the GUI\n"
+"       <filename>\n"
 "       --no-dvdnav         Do not use dvdnav for reading DVDs\n"
 "       --no-opencl         Disable use of OpenCL\n"
 "\n"
@@ -1817,6 +1898,7 @@ static int ParseOptions( int argc, char ** argv )
     #define DESCRIBE             308
     #define PAD                  309
     #define FILTER_COMB_DETECT   310
+    #define QUEUE_IMPORT         311
 
     for( ;; )
     {
@@ -1961,6 +2043,7 @@ static int ParseOptions( int argc, char ** argv )
             { "preset-export",      required_argument, NULL, PRESET_EXPORT },
             { "preset-export-file", required_argument, NULL, PRESET_EXPORT_FILE },
             { "preset-export-description", required_argument, NULL, PRESET_EXPORT_DESC },
+            { "queue-import-file",  required_argument, NULL, QUEUE_IMPORT },
 
             { "aname",       required_argument, NULL,    'A' },
             { "color-matrix",required_argument, NULL,    'M' },
@@ -2048,6 +2131,9 @@ static int ParseOptions( int argc, char ** argv )
             }   break;
             case PRESET_IMPORT_GUI:
                 hb_presets_gui_init();
+                break;
+            case QUEUE_IMPORT:
+                queue_import_name = strdup(optarg);
                 break;
             case DVDNAV:
                 dvdnav = 0;
@@ -2841,6 +2927,12 @@ static int CheckOptions( int argc, char ** argv )
 {
     if( update )
     {
+        return 0;
+    }
+
+    if (queue_import_name != NULL)
+    {
+        // Everything should be defined in the queue.
         return 0;
     }
 
