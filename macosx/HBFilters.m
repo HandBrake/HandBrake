@@ -444,15 +444,12 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
         // Rotate
         NSString *rotate = preset[@"PictureRotate"];
-        if ([rotate isKindOfClass:[NSString class]])
-        {
-            hb_dict_t * hbdict = hb_parse_filter_settings(rotate.UTF8String);
-            NSDictionary * dict = [[NSDictionary alloc] initWithHBDict:hbdict];
-            hb_value_free(&hbdict);
+        hb_dict_t *hbdict = hb_parse_filter_settings(rotate.UTF8String);
+        NSDictionary *dict = [[NSDictionary alloc] initWithHBDict:hbdict];
+        hb_value_free(&hbdict);
 
-            self.rotate = [dict[@"angle"] intValue];
-            self.flip = [dict[@"hflip"] boolValue];
-        }
+        self.rotate = [dict[@"angle"] intValue];
+        self.flip = [dict[@"hflip"] boolValue];
     }
 
     self.notificationsEnabled = YES;
