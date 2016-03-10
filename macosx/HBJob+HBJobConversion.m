@@ -221,7 +221,6 @@
     }
 
     // Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
-    BOOL one_burned = NO;
     for (HBSubtitlesTrack *subTrack in self.subtitles.tracks)
     {
         if (subTrack.isEnabled)
@@ -268,7 +267,6 @@
                     }
                     else if (hb_subtitle_can_burn(SRTSUB))
                     {
-                        one_burned = YES;
                         sub_config.dest = RENDERSUB;
                     }
 
@@ -291,7 +289,6 @@
                         }
                         else if (hb_subtitle_can_burn(subt->source))
                         {
-                            one_burned = YES;
                             sub_config.dest = RENDERSUB;
                         }
 
