@@ -1387,13 +1387,13 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
                 title_id = ghb_dict_get_int(ud->settings, "single_title");
             else
                 title_id = 0;
-            ghb_do_scan(ud, filename, title_id, TRUE);
             if (strcmp(sourcename, filename) != 0)
             {
                 ghb_dict_set_string(ud->prefs, "default_source", filename);
                 ghb_pref_save(ud->prefs, "default_source");
                 ghb_dvd_set_current(filename, ud);
             }
+            ghb_do_scan(ud, filename, title_id, TRUE);
             g_free(filename);
         }
     }
