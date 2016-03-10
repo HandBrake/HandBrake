@@ -3644,8 +3644,8 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
         textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
         buffer = gtk_text_view_get_buffer (textview);
         gtk_text_buffer_get_end_iter(buffer, &iter);
-        utf8_text = g_convert_with_fallback(text, -1, "UTF-8", "ISO-8859-1",
-                                            "?", NULL, &length, NULL);
+        // Assume logging is in current locale
+        utf8_text = g_locale_to_utf8(text, -1, NULL, &length, NULL);
         if (utf8_text != NULL)
         {
             gtk_text_buffer_insert(buffer, &iter, utf8_text, -1);
