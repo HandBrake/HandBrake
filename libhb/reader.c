@@ -733,7 +733,11 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 if (!r->start_found && start >= r->pts_to_start)
                 {
                     // pts_to_start point found
-                    r->start_found = 1;
+                    // Note that this code path only gets executed for
+                    // medai where we have not performed an initial seek
+                    // to get close to the start time. So the 'start' time
+                    // is the time since the first frame.
+
                     if (r->stream)
                     {
                         // libav multi-threaded decoders can get into
@@ -743,6 +747,21 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         hb_stream_set_need_keyframe(r->stream, 1);
                         hb_buffer_close( &buf );
                         continue;
+                    }
+                    r->start_found = 1;
+                    // sync.c also pays attention to job->pts_to_start
+                    // It eats up the 10 second slack that we build in
+                    // to the start time here in reader (so that video
+                    // decode is clean at the start time).
+                    // sync.c expects pts_to_start to be relative to the
+                    // first timestamp it sees.
+                    if (r->job->pts_to_start > start)
+                    {
+                        r->job->pts_to_start -= start;
+                    }
+                    else
+                    {
+                        r->job->pts_to_start = 0;
                     }
                 }
                 // This log is handy when you need to debug timing problems
