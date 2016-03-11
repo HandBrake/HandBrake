@@ -55,7 +55,7 @@ typedef struct
     int                 min_len;
     hb_cond_t         * cond_full;
     hb_buffer_list_t    out_queue;
-    int                 eof;
+    hb_fifo_t         * fifo_in;
 
     // PTS synchronization
     hb_list_t         * delta_list;
@@ -673,6 +673,10 @@ static void sendEof( sync_common_t * common )
     {
         hb_buffer_list_append(&common->streams[ii].out_queue,
                               hb_buffer_eof_init());
+        // Need to prime all input fifos to ensure that work threads wake up
+        // one final time to process the end.  This is sometimes needed
+        // for sparse subtitle streeams.
+        hb_fifo_push(common->streams[ii].fifo_in, hb_buffer_eof_init());
     }
 }
 
@@ -1124,6 +1128,7 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = AV_NOPTS_VALUE;
     pv->stream->audio.audio = audio;
+    pv->stream->fifo_in     = audio->priv.fifo_raw;
 
     w = hb_get_work(common->job->h, WORK_SYNC_AUDIO);
     w->private_data = pv;
@@ -1207,6 +1212,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->first_pts         = AV_NOPTS_VALUE;
     pv->stream->next_pts          = AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
+    pv->stream->fifo_in           = subtitle->fifo_raw;
 
     w = hb_get_work(common->job->h, WORK_SYNC_SUBTITLE);
     w->private_data = pv;
@@ -1300,6 +1306,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->type        = SYNC_TYPE_VIDEO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = AV_NOPTS_VALUE;
+    pv->stream->fifo_in     = job->fifo_raw;
 
     w->fifo_in            = job->fifo_raw;
     // sync performs direct output to fifos
