@@ -26,6 +26,12 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         Bob,
 
         [ShortName("custom")]
-        Custom 
+        Custom,
+
+        [ShortName("eedi2")]
+        EEDI2,
+
+        [ShortName("eedi2bob")]
+        EEDI2Bob
     }
 }
