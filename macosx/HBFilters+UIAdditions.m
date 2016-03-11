@@ -79,6 +79,18 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+@implementation HBCombDetectionTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters combDetectionPresetsDict];
+
+    return self;
+}
+
+@end
+
 @implementation HBDeinterlaceTransformer
 
 - (instancetype)init
@@ -167,6 +179,8 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 static NSDictionary *detelecinePresetsDict = nil;
 
+static NSDictionary *combDetectionPresetsDict = nil;
+
 static NSDictionary *deinterlaceTypesDict = nil;
 static NSDictionary *decombPresetsDict = nil;
 static NSDictionary *deinterlacePresetsDict = nil;
@@ -187,6 +201,16 @@ static NSDictionary *denoiseTypesDict = nil;
     }
     return detelecinePresetsDict;
 }
+
++ (NSDictionary *)combDetectionPresetsDict
+{
+    if (!combDetectionPresetsDict)
+    {
+        combDetectionPresetsDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_COMB_DETECT);
+    }
+    return combDetectionPresetsDict;
+}
+
 
 + (NSDictionary *)deinterlaceTypesDict
 {
@@ -256,6 +280,11 @@ static NSDictionary *denoiseTypesDict = nil;
     return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
 }
 
+- (NSArray *)combDetectionSettings
+{
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_COMB_DETECT);
+}
+
 - (NSArray *)deinterlacePresets
 {
     if ([self.deinterlace isEqualToString:@"deinterlace"])
@@ -286,6 +315,11 @@ static NSDictionary *denoiseTypesDict = nil;
 - (BOOL)customDetelecineSelected
 {
     return [self.detelecine isEqualToString:@"custom"] ? YES : NO;
+}
+
+- (BOOL)customCombDetectionSelected
+{
+    return [self.combDetection isEqualToString:@"custom"] ? YES : NO;
 }
 
 - (BOOL)customDeinterlaceSelected

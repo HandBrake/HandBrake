@@ -28,6 +28,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         _detelecine = @"off";
         _detelecineCustomString = @"";
+        _combDetection = @"off";
+        _combDetectionCustomString = @"";
         _deinterlace = @"off";
         _deinterlaceCustomString = @"";
         _deinterlacePreset = @"default";
@@ -84,6 +86,41 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     else
     {
         _detelecineCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setCombDetection:(NSString *)combDetection
+{
+    if (![combDetection isEqualToString:_combDetection])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCombDetection:_combDetection];
+    }
+    if (combDetection)
+    {
+        _combDetection = [combDetection copy];
+    }
+    else
+    {
+        _combDetection = @"off";
+    }
+    [self postChangedNotification];
+}
+
+- (void)setCombDetectionCustomString:(NSString *)combDetectionCustomString
+{
+    if (![combDetectionCustomString isEqualToString:_combDetectionCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setCombDetectionCustomString:_combDetectionCustomString];
+    }
+    if (combDetectionCustomString)
+    {
+        _combDetectionCustomString = [combDetectionCustomString copy];
+    }
+    else
+    {
+        _combDetectionCustomString = @"";
     }
 
     [self postChangedNotification];
@@ -286,8 +323,12 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         retval = [NSSet setWithObjects:@"detelecine", nil];
     }
+    else if ([key isEqualToString:@"customCombDetectionSelected"])
+    {
+        retval = [NSSet setWithObjects:@"combDetection", nil];
+    }
     else if ([key isEqualToString:@"denoiseTunesAvailable"] ||
-        [key isEqualToString:@"customDenoiseSelected"])
+             [key isEqualToString:@"customDenoiseSelected"])
     {
         retval = [NSSet setWithObjects:@"denoise", @"denoisePreset", nil];
     }
@@ -300,7 +341,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         retval = [NSSet setWithObject:@"deinterlace"];
     }
     else if ([key isEqualToString:@"customDeinterlaceSelected"] ||
-        [key isEqualToString:@"deinterlacePresets"])
+             [key isEqualToString:@"deinterlacePresets"])
     {
         retval = [NSSet setWithObjects:@"deinterlace", @"deinterlacePreset", nil];
     }
@@ -327,6 +368,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         copy->_detelecine = [_detelecine copy];
         copy->_detelecineCustomString = [_detelecineCustomString copy];
+
+        copy->_combDetection = [_combDetection copy];
+        copy->_combDetectionCustomString = [_combDetectionCustomString copy];
 
         copy->_deinterlace = [_deinterlace copy];
         copy->_deinterlacePreset = [_deinterlacePreset copy];
@@ -360,6 +404,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_detelecine);
     encodeObject(_detelecineCustomString);
 
+    encodeObject(_combDetection);
+    encodeObject(_combDetectionCustomString);
+
     encodeObject(_deinterlace);
     encodeObject(_deinterlacePreset);
     encodeObject(_deinterlaceCustomString);
@@ -381,6 +428,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     decodeObject(_detelecine, NSString);
     decodeObject(_detelecineCustomString, NSString);
+
+    decodeObject(_combDetection, NSString);
+    decodeObject(_combDetectionCustomString, NSString);
 
     decodeObject(_deinterlace, NSString);
     decodeObject(_deinterlacePreset, NSString)
@@ -409,6 +459,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     preset[@"PictureDeinterlacePreset"] = self.deinterlacePreset;
     preset[@"PictureDeinterlaceCustom"] = self.deinterlaceCustomString;
 
+    preset[@"PictureCombDetectPreset"] = self.combDetection;
+    preset[@"PictureCombDetectCustom"] = self.combDetectionCustomString;
+
     preset[@"PictureDetelecine"] = self.detelecine;
     preset[@"PictureDetelecineCustom"] = self.detelecineCustomString;
 
@@ -433,6 +486,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         self.deinterlace = preset[@"PictureDeinterlaceFilter"];
         self.deinterlacePreset = preset[@"PictureDeinterlacePreset"];
         self.deinterlaceCustomString = preset[@"PictureDeinterlaceCustom"];
+
+        // Comb detection
+        self.combDetection = preset[@"PictureCombDetectPreset"];
+        self.combDetectionCustomString = preset[@"PictureCombDetectCustom"];
 
         // Detelecine
         self.detelecine = preset[@"PictureDetelecine"];

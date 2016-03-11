@@ -411,6 +411,19 @@
         hb_value_free(&filter_dict);
     }
 
+    // Comb Detection
+    if (![self.filters.combDetection isEqualToString:@"off"])
+    {
+        int filter_id = HB_FILTER_COMB_DETECT;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             self.filters.combDetection.UTF8String,
+                                                             NULL,
+                                                             self.filters.combDetectionCustomString.UTF8String);
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
+    }
+
     // Deinterlace
     if (![self.filters.deinterlace isEqualToString:@"off"])
     {
