@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Linq;
-    using System.Windows.Forms.VisualStyles;
 
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
@@ -132,8 +131,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     case "bob":
                         preset.Task.Decomb = Decomb.Bob;
                         break;
-                    case "fast":
-                        preset.Task.Decomb = Decomb.Fast;
+                    case "eedi2":
+                        preset.Task.Decomb = Decomb.EEDI2;
+                        break;
+                    case "eedi2bob":
+                        preset.Task.Decomb = Decomb.EEDI2Bob;
                         break;
                     default:
                         preset.Task.Decomb = Decomb.Default;

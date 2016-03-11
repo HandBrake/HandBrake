@@ -19,9 +19,6 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("default")]
         Default,
 
-        [ShortName("fast")]
-        Fast,
-
         [ShortName("bob")]
         Bob,
 

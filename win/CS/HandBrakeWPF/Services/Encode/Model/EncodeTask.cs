@@ -92,6 +92,8 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.CustomDeinterlace = task.CustomDeinterlace;
             this.CustomDenoise = task.CustomDenoise;
             this.CustomDetelecine = task.CustomDetelecine;
+            this.CustomCombDetect = task.CustomCombDetect;
+            this.CombDetect = task.CombDetect;
             this.Deblock = task.Deblock;
             this.Decomb = task.Decomb;
             this.Deinterlace = task.Deinterlace;
