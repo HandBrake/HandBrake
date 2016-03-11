@@ -986,7 +986,8 @@ static void OutputBuffer( sync_common_t * common )
                 {
                     buf->s.start = out_stream->next_pts;
                 }
-                if (buf->s.stop < out_stream->next_pts)
+                if (buf->s.stop != AV_NOPTS_VALUE &&
+                    buf->s.stop < out_stream->next_pts)
                 {
                     buf->s.stop = out_stream->next_pts;
                 }
