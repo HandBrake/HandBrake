@@ -2913,23 +2913,30 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
 static gint
 find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 {
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint ii, count;
     gint job_unique_id;
 
-    *job = NULL;
     g_debug("find_queue_job");
+    if (job != NULL)
+    {
+        *job = NULL;
+    }
     if (unique_id == 0)  // Invalid Id
         return -1;
 
     count = ghb_array_len(queue);
     for (ii = 0; ii < count; ii++)
     {
-        js = ghb_array_get(queue, ii);
-        job_unique_id = ghb_dict_get_int(js, "job_unique_id");
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        job_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
         if (job_unique_id == unique_id)
         {
-            *job = js;
+            if (job != NULL)
+            {
+                *job = queueDict;
+            }
             return ii;
         }
     }
@@ -2937,7 +2944,7 @@ find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 }
 
 static void
-start_new_log(signal_user_data_t *ud, GhbValue *js)
+start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
 {
     time_t  _now;
     struct tm *now;
@@ -2946,7 +2953,7 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 
     _now = time(NULL);
     now = localtime(&_now);
-    destname = ghb_dict_get_string(js, "destination");
+    destname = ghb_dict_get_string(uiDict, "destination");
     basename = g_path_get_basename(destname);
     if (ghb_dict_get_bool(ud->prefs, "EncodeLogLocation"))
     {
@@ -2985,29 +2992,31 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 }
 
 static void
-submit_job(signal_user_data_t *ud, GhbValue *settings)
+submit_job(signal_user_data_t *ud, GhbValue *queueDict)
 {
     gchar *type, *modified;
     const char *name;
-    GhbValue *js;
+    GhbValue *uiDict;
     gboolean preset_modified;
 
     g_debug("submit_job");
-    if (settings == NULL) return;
-    preset_modified = ghb_dict_get_bool(settings, "preset_modified");
-    name = ghb_dict_get_string(settings, "PresetFullName");
-    type = ghb_dict_get_int(settings, "Type") == 1 ? "Custom " : "";
+    if (queueDict == NULL) return;
+    uiDict = ghb_dict_get(queueDict, "uiSettings");
+    preset_modified = ghb_dict_get_bool(uiDict, "preset_modified");
+    name = ghb_dict_get_string(uiDict, "PresetFullName");
+    type = ghb_dict_get_int(uiDict, "Type") == 1 ? "Custom " : "";
     modified = preset_modified ? "Modified " : "";
     ghb_log("%s%sPreset: %s", modified, type, name);
 
-    ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
-    start_new_log(ud, settings);
-    int unique_id = ghb_add_job(ghb_queue_handle(), settings);
-    ghb_dict_set_int(settings, "job_unique_id", unique_id);
+    ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_RUNNING);
+    start_new_log(ud, uiDict);
+    GhbValue *job_dict = ghb_dict_get(queueDict, "Job");
+    int unique_id = ghb_add_job(ghb_queue_handle(), job_dict);
+    ghb_dict_set_int(uiDict, "job_unique_id", unique_id);
     ghb_start_queue();
 
     // Start queue activity spinner
-    int index = find_queue_job(ud->queue, unique_id, &js);
+    int index = find_queue_job(ud->queue, unique_id, NULL);
     if (index >= 0)
     {
         GtkTreeView *treeview;
@@ -3071,7 +3080,7 @@ static gint
 queue_pending_count(GhbValue *queue)
 {
     gint nn, ii, count;
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint status;
 
     nn = 0;
@@ -3079,8 +3088,9 @@ queue_pending_count(GhbValue *queue)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get(queue, ii);
-        status = ghb_dict_get_int(js, "job_status");
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             nn++;
@@ -3105,11 +3115,11 @@ ghb_update_pending(signal_user_data_t *ud)
     update_queue_labels(ud);
 }
 
-GhbValue*
+void
 ghb_start_next_job(signal_user_data_t *ud)
 {
     gint count, ii;
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint status;
     GtkWidget *progress;
 
@@ -3121,12 +3131,13 @@ ghb_start_next_job(signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get(ud->queue, ii);
-        status = ghb_dict_get_int(js, "job_status");
+        queueDict = ghb_array_get(ud->queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             ghb_inhibit_gsm(ud);
-            submit_job(ud, js);
+            submit_job(ud, queueDict);
             ghb_update_pending(ud);
 
             // Start queue activity spinner
@@ -3143,7 +3154,7 @@ ghb_start_next_job(signal_user_data_t *ud)
             }
             g_free(path);
 
-            return js;
+            return;
         }
     }
     // Nothing pending
@@ -3151,7 +3162,6 @@ ghb_start_next_job(signal_user_data_t *ud)
     ghb_notify_done(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
-    return NULL;
 }
 
 gchar*
@@ -3160,10 +3170,9 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GhbValue *js;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, &js);
+    index = find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3229,10 +3238,9 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GhbValue *js;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, &js);
+    index = find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3270,7 +3278,7 @@ ghb_backend_events(signal_user_data_t *ud)
     gchar *status_str;
     GtkProgressBar *progress;
     GtkLabel       *work_status;
-    GhbValue *js;
+    GhbValue *queueDict;
     gint index;
     GtkTreeView *treeview;
     GtkTreeModel *store;
@@ -3398,7 +3406,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
     if (status.queue.unique_id != 0)
     {
-        index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+        index = find_queue_job(ud->queue, status.queue.unique_id, NULL);
         if (index >= 0)
         {
             treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
@@ -3464,7 +3472,7 @@ ghb_backend_events(signal_user_data_t *ud)
         gint qstatus;
         const gchar *status_icon;
 
-        index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+        index = find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
         treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
         store = gtk_tree_view_get_model(treeview);
         if (ud->cancel_encode == GHB_CANCEL_ALL ||
@@ -3488,7 +3496,7 @@ ghb_backend_events(signal_user_data_t *ud)
                 qstatus = GHB_QUEUE_FAIL;
                 status_icon = "hb-stop";
         }
-        if (js != NULL)
+        if (queueDict != NULL)
         {
             gchar *path = g_strdup_printf ("%d", index);
             if (gtk_tree_model_get_iter_from_string(store, &iter, path))
@@ -3503,8 +3511,11 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ud->job_activity_log)
             g_io_channel_unref(ud->job_activity_log);
         ud->job_activity_log = NULL;
-        if (js)
-            ghb_dict_set_int(js, "job_status", qstatus);
+        if (queueDict != NULL)
+        {
+            GhbValue *uiDict = ghb_dict_get(queueDict, "uiSettings");
+            ghb_dict_set_int(uiDict, "job_status", qstatus);
+        }
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
@@ -3513,12 +3524,11 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ud->cancel_encode != GHB_CANCEL_ALL &&
             ud->cancel_encode != GHB_CANCEL_FINISH)
         {
-            ud->current_job = ghb_start_next_job(ud);
+            ghb_start_next_job(ud);
         }
         else
         {
             ghb_uninhibit_gsm();
-            ud->current_job = NULL;
             gtk_widget_hide(GTK_WIDGET(progress));
         }
         ghb_save_queue(ud->queue);

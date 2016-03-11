@@ -810,7 +810,8 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         ghb_dict_set_int(range, "SeekPoints",
             ghb_dict_get_int(ud->prefs, "preview_count"));
 
-        ud->preview->live_id = ghb_add_job(ghb_live_handle(), js);
+        GhbValue *job_dict = ghb_dict_get(js, "Job");
+        ud->preview->live_id = ghb_add_job(ghb_live_handle(), job_dict);
         ghb_start_live_encode();
         ghb_value_free(&js);
     }

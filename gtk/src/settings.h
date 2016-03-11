@@ -70,7 +70,6 @@ typedef struct
     GhbValue *settings;
     GhbValue *settings_array;
     GhbValue *queue;
-    GhbValue *current_job;
     GIOChannel *activity_log;
     GIOChannel *job_activity_log;
     preview_t *preview;
