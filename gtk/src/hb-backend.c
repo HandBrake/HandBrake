@@ -362,6 +362,12 @@ static filter_opts_t hqdn3d_preset_opts =
 };
 #endif
 
+static filter_opts_t comb_detect_opts =
+{
+    .filter_id = HB_FILTER_COMB_DETECT,
+    .preset    = TRUE
+};
+
 static filter_opts_t detel_opts =
 {
     .filter_id = HB_FILTER_DETELECINE,
@@ -491,6 +497,12 @@ combo_name_map_t combo_name_map[] =
         &vqual_granularity_opts,
         small_opts_set,
         generic_opt_get
+    },
+    {
+        "PictureCombDetectPreset",
+        &comb_detect_opts,
+        filter_opts_set,
+        filter_opt_get
     },
     {
         "PictureDeinterlaceFilter",

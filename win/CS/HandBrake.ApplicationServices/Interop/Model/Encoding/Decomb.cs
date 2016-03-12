@@ -19,13 +19,16 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("default")]
         Default,
 
-        [ShortName("fast")]
-        Fast,
-
         [ShortName("bob")]
         Bob,
 
         [ShortName("custom")]
-        Custom 
+        Custom,
+
+        [ShortName("eedi2")]
+        EEDI2,
+
+        [ShortName("eedi2bob")]
+        EEDI2Bob
     }
 }

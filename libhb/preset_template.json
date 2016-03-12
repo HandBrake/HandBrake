@@ -47,6 +47,8 @@
         "PictureDARWidth": 0,
         "PictureDeblock": 0,
         "PictureDeblockCustom": "qp=0:mode=2",
+        "PictureCombDetectCustom": "",
+        "PictureCombDetectPreset": "off",
         "PictureDeinterlaceCustom": "",
         "PictureDeinterlaceFilter": "off",
         "PictureDeinterlacePreset": "default",

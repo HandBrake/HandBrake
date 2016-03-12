@@ -1807,6 +1807,7 @@ int hb_global_init()
         hb_error("hb_qsv_info_init failed!");
         return -1;
     }
+    hb_param_configure_qsv();
 #endif
 
     /* libavcodec */

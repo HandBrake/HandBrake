@@ -12,6 +12,9 @@
 #include "param.h"
 #include "common.h"
 #include "colormap.h"
+#ifdef USE_QSV
+#include "qsv_common.h"
+#endif
 #include <regex.h>
 
 static hb_filter_param_t nlmeans_presets[] =
@@ -75,18 +78,32 @@ static hb_filter_param_t detelecine_presets[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t comb_detect_presets[] =
+{
+    { 0, "Off",             "off",        "disable=1"       },
+    { 1, "Custom",          "custom",     NULL              },
+    { 2, "Default",         "default",
+      "mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:"
+      "filter-mode=2:block-thresh=40:block-width=16:block-height=16"
+                                                            },
+    { 3, "Less Sensitive",  "permissive",
+      "mode=3:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
+      "filter-mode=2:block-thresh=40:block-width=16:block-height=16"
+                                                            },
+    { 4, "Fast",            "fast",
+      "mode=0:spatial-metric=2:motion-thresh=2:spatial-thresh=3:"
+      "filter-mode=1:block-thresh=80:block-width=16:block-height=16"
+                                                            },
+    { 0, NULL,              NULL,         NULL              }
+};
+
 static hb_filter_param_t decomb_presets[] =
 {
     { 1, "Custom",      "custom",     NULL              },
-    { 2, "Default",     "default",
-      "mode=391:spatial-metric=2:motion-thresh=3:spatial-thresh=3:"
-      "filter-mode=2:block-thresh=40"
-                                                        },
-    { 3, "Fast",        "fast",
-      "mode=7:motion-thresh=6:spatial-thresh=9:"
-      "filter-mode=1:block-thresh=80"
-                                                        },
-    { 4, "Bob",         "bob",        "mode=455"        },
+    { 2, "Default",     "default",    "mode=7"          },
+    { 4, "Bob",         "bob",        "mode=23"         },
+    { 3, "EEDI2",       "eedi2",      "mode=15"         },
+    { 4, "EEDI2 Bob",   "eedi2bob",   "mode=31"         },
     { 0, NULL,          NULL,         NULL              }
 };
 
@@ -96,10 +113,14 @@ static hb_filter_param_t deinterlace_presets[] =
     { 3, "Default",            "default",      "mode=3"         },
     { 2, "Skip Spatial Check", "skip-spatial", "mode=1"         },
     { 5, "Bob",                "bob",          "mode=7"         },
+#ifdef USE_QSV
+    { 6, "QSV",                "qsv",          "mode=11"        },
+#endif
     { 0,  NULL,                NULL,           NULL             },
     { 2, "Fast",               "fast",         "mode=1"         },
     { 3, "Slow",               "slow",         "mode=1"         },
-    { 4, "Slower",             "slower",       "mode=3"         }
+    { 4, "Slower",             "slower",       "mode=3"         },
+    { 7, "QSV",                "qsv",          "mode=3"         }
 };
 
 typedef struct
@@ -121,6 +142,9 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
       sizeof(detelecine_presets) / sizeof(hb_filter_param_t)     },
 
+    { HB_FILTER_COMB_DETECT, comb_detect_presets, NULL,
+      sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
+
     { HB_FILTER_DECOMB,      decomb_presets,      NULL,
       sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
 
@@ -129,6 +153,16 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_INVALID,     NULL,                NULL,  0       }
 };
+
+void hb_param_configure_qsv(void)
+{
+#ifdef USE_QSV
+    if (!hb_qsv_available())
+    {
+        memset(&deinterlace_presets[4], 0, sizeof(hb_filter_param_t));
+    }
+#endif
+}
 
 /* NL-means presets and tunes
  *
@@ -552,6 +586,7 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_NLMEANS:
             settings = generate_nlmeans_settings(preset, tune, custom);
             break;
+        case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:

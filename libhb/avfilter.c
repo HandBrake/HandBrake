@@ -13,6 +13,7 @@
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
+#include "decomb.h"
 
 
 /*****
@@ -508,11 +509,6 @@ static int avfilter_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-#define MODE_YADIF_ENABLE       1
-#define MODE_YADIF_SPATIAL      2
-#define MODE_YADIF_BOB          4
-#define MODE_YADIF_AUTO         8
-
 /* Deinterlace Settings
  *  mode:parity
  *
@@ -523,12 +519,13 @@ static int avfilter_work( hb_filter_object_t * filter,
  *      1 = Enabled
  *      2 = Spatial
  *      4 = Bob
- *      8 = Auto
+ *      8 = Selective
  *
  *  Parity:
  *      0  = Top Field First
  *      1  = Bottom Field First
  *      -1 = Automatic detection of field parity
+ *
  */
 static hb_dict_t *
 convert_deint_settings(const hb_dict_t * settings)
@@ -542,7 +539,7 @@ convert_deint_settings(const hb_dict_t * settings)
     {
         return hb_value_null();
     }
-    int automatic  = !!(mode & MODE_YADIF_AUTO);
+    int automatic  = !!(mode & MODE_DECOMB_SELECTIVE);
     int bob        = !!(mode & MODE_YADIF_BOB);
     int no_spatial = !(mode & MODE_YADIF_SPATIAL);
     mode = bob | (no_spatial << 1);

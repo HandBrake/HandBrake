@@ -10,7 +10,6 @@
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
-        <Converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
         <filters:DenoisePresetConverter x:Key="DenoisePresetConverter" />
     </UserControl.Resources>
 
@@ -56,31 +55,58 @@
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
                 <!-- Deinterlace -->
-                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" />
-                <StackPanel Grid.Row="1" Grid.Column="1" >
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10" />
+                <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,10">
 
                     <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilterOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
-                          SelectedItem="{Binding SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}" Margin="0,0,0,10"  />
+                          SelectedItem="{Binding SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}"  />
                     
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
-                    <TextBlock Text="Preset:" VerticalAlignment="Center" Margin="0,0,5,10" Visibility="{Binding IsDeinterlaceDecomb, Converter={StaticResource boolToVisConverter}}"  />
-                    <ComboBox Width="120" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
-                              SelectedItem="{Binding SelectedDecomb, Converter={StaticResource boolComboConverter}}"
-                              Visibility="{Binding IsDecombMode, Converter={StaticResource boolToVisConverter}}" Margin="0,0,0,10"     />
+                <Grid Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-                    <ComboBox Width="120" ItemsSource="{Binding DeInterlaceOptions, Converter={StaticResource boolComboConverter}}"  HorizontalAlignment="Left" VerticalAlignment="Center"
-                              SelectedItem="{Binding SelectedDeInterlace, Converter={StaticResource boolComboConverter}}"
-                              Visibility="{Binding IsDeinterlaceMode, Converter={StaticResource boolToVisConverter}}" Margin="0,0,0,10"   />
+               
+                    <TextBlock Text="Preset:" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="0" Grid.Row="0"  Visibility="{Binding IsDeinterlaceDecomb, Converter={StaticResource boolToVisConverter}}"  />
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                        <ComboBox Width="120" ItemsSource="{Binding DecombOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedDecomb, Converter={StaticResource boolComboConverter}}"
+                                  Visibility="{Binding IsDecombMode, Converter={StaticResource boolToVisConverter}}"  />
 
-                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="5,0,5,10" Visibility="{Binding ShowDeinterlaceDecombCustom, Converter={StaticResource boolToVisConverter}}" />
-                    <TextBox Width="120" Text="{Binding CustomDecomb, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
-                             Visibility="{Binding ShowDecombCustom, Converter={StaticResource boolToVisConverter}}" Margin="0,0,0,10"  />
+                        <ComboBox Width="120" ItemsSource="{Binding DeInterlaceOptions, Converter={StaticResource boolComboConverter}}"  HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  SelectedItem="{Binding SelectedDeInterlace, Converter={StaticResource boolComboConverter}}"
+                                  Visibility="{Binding IsDeinterlaceMode, Converter={StaticResource boolToVisConverter}}"  />
+                    </StackPanel>
 
-                    <TextBox Width="120" Text="{Binding CustomDeinterlace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
-                             Visibility="{Binding ShowDeinterlaceCustom, Converter={StaticResource boolToVisConverter}}" Margin="0,0,0,10"  />
-                </StackPanel>
+                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="0" Grid.Row="1"  Visibility="{Binding ShowDeinterlaceDecombCustom, Converter={StaticResource boolToVisConverter}}" />
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                        <TextBox Width="120" Text="{Binding CustomDecomb, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                             Visibility="{Binding ShowDecombCustom, Converter={StaticResource boolToVisConverter}}" Margin="0,5,0,0" MinHeight="22" />
+
+                        <TextBox Width="120" Text="{Binding CustomDeinterlace, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                             Visibility="{Binding ShowDeinterlaceCustom, Converter={StaticResource boolToVisConverter}}" Margin="0,5,0,0" MinHeight="22" />
+                    </StackPanel>
+
+                    <TextBlock Text="Interlace Detection:" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="3" Grid.Row="0"  Visibility="{Binding IsDeinterlaceDecomb, Converter={StaticResource boolToVisConverter}}"  />
+                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="3" Grid.Row="1"  Visibility="{Binding ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" />
+
+                    <ComboBox Width="120" Grid.Row="0" Grid.Column="4" ItemsSource="{Binding CombDetectPresets, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                              SelectedItem="{Binding SelectedCombDetectPreset, Converter={StaticResource boolComboConverter}}"
+                              Visibility="{Binding IsDeinterlaceDecomb, Converter={StaticResource boolToVisConverter}}"/>
+                    <TextBox Width="120" Grid.Row="1" Grid.Column="4" Text="{Binding CustomCombDetect, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                             Visibility="{Binding ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" Margin="0,5,0,0" MinHeight="22"  />
+                </Grid>
 
               
 
@@ -112,7 +138,7 @@
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Custom}" Margin="5,0,5,0" />
-                        <TextBox Width="120" Margin="0" Text="{Binding CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                        <TextBox Width="120" Margin="0" Text="{Binding CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" />
                     </StackPanel>
 
                 </StackPanel>

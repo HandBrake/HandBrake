@@ -216,6 +216,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Comb Detection Presets
+        /// </summary>
+        public IEnumerable<CombDetect> CombDetectPresets
+        {
+            get
+            {
+                return EnumHelper<CombDetect>.GetEnumList();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Grayscale.
         /// </summary>
         public bool Grayscale
@@ -253,6 +264,48 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+            }
+        }
+
+        public CombDetect SelectedCombDetectPreset
+        {
+            get
+            {
+                return this.CurrentTask.CombDetect;
+            }
+
+            set
+            {
+                this.CurrentTask.CombDetect = value;
+                this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
+
+                // Show / Hide the Custom Control
+                this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
+            }
+        }
+
+        /// <summary>
+        /// Show the CombDetect Custom Box.
+        /// </summary>
+        public bool ShowCombDetectCustom
+        {
+            get
+            {
+                return this.SelectedCombDetectPreset == CombDetect.Custom;
+            }
+        }
+
+        public string CustomCombDetect
+        {
+            get
+            {
+                return this.CurrentTask.CustomCombDetect;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomCombDetect = value;
+                this.NotifyOfPropertyChange(() => this.CustomCombDetect);
             }
         }
 

@@ -137,6 +137,7 @@
     <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
     <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
     <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

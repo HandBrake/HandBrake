@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Linq;
-    using System.Windows.Forms.VisualStyles;
 
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
@@ -132,8 +131,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     case "bob":
                         preset.Task.Decomb = Decomb.Bob;
                         break;
-                    case "fast":
-                        preset.Task.Decomb = Decomb.Fast;
+                    case "eedi2":
+                        preset.Task.Decomb = Decomb.EEDI2;
+                        break;
+                    case "eedi2bob":
+                        preset.Task.Decomb = Decomb.EEDI2Bob;
                         break;
                     default:
                         preset.Task.Decomb = Decomb.Default;
@@ -173,9 +175,35 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
+            if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif || preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+            {
+                switch (importedPreset.PictureCombDetectPreset)
+                {
+                    case "off":
+                        preset.Task.CombDetect = CombDetect.Off;
+                        break;
+                    case "custom":
+                        preset.Task.CombDetect = CombDetect.Custom;
+                        break;
+                    case "default":
+                        preset.Task.CombDetect = CombDetect.Default;
+                        break;
+                    case "permissive":
+                        preset.Task.CombDetect = CombDetect.LessSensitive;
+                        break;
+                    case "fast":
+                        preset.Task.CombDetect = CombDetect.Fast;
+                        break;
+                    default:
+                        preset.Task.CombDetect = CombDetect.Off;
+                        break;
+                }
+            }
+
             preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
             preset.Task.CustomDenoise = importedPreset.PictureDenoiseCustom;
             preset.Task.CustomDetelecine = importedPreset.PictureDetelecineCustom;
+            preset.Task.CustomCombDetect = importedPreset.PictureCombDetectCustom;
 
             switch (importedPreset.PictureDetelecine)
             {
@@ -579,6 +607,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
+            preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
+            preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
 
             // Video
             preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);

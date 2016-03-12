@@ -11,6 +11,7 @@
 #include "libavformat/avformat.h"
 #include "openclwrapper.h"
 #include "opencl.h"
+#include "decomb.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -1166,12 +1167,13 @@ static int sanitize_qsv( hb_job_t * job )
 
                     // CPU-based deinterlace (validated)
                     case HB_FILTER_DEINTERLACE:
-                        if (filter->settings != NULL &&
-                            strcasecmp(filter->settings, "qsv") != 0)
+                    {
+                        int mode = hb_dict_get_int(filter->settings, "mode");
+                        if (!(mode & MODE_DEINTERLACE_QSV))
                         {
                             encode_only = 1;
                         }
-                        break;
+                    } break;
 
                     // other filters will be removed
                     default:
@@ -1216,19 +1218,19 @@ static int sanitize_qsv( hb_job_t * job )
                 {
                     // cropping and scaling always done via VPP filter
                     case HB_FILTER_CROP_SCALE:
-                        if (filter->settings == NULL || *filter->settings == 0)
-                        {
-                            // VPP defaults were set above, so not a problem
-                            // however, this should never happen, print an error
-                            hb_error("do_job: '%s': no settings!", filter->name);
-                        }
-                        else
-                        {
-                            sscanf(filter->settings, "%d:%d:%d:%d:%d:%d",
-                                   &vpp_settings[0], &vpp_settings[1],
-                                   &vpp_settings[2], &vpp_settings[3],
-                                   &vpp_settings[4], &vpp_settings[5]);
-                        }
+                        hb_dict_extract_int(&vpp_settings[0], filter->settings,
+                                            "width");
+                        hb_dict_extract_int(&vpp_settings[1], filter->settings,
+                                            "height");
+                        hb_dict_extract_int(&vpp_settings[2], filter->settings,
+                                            "crop-top");
+                        hb_dict_extract_int(&vpp_settings[3], filter->settings,
+                                            "crop-bottom");
+                        hb_dict_extract_int(&vpp_settings[4], filter->settings,
+                                            "crop-left");
+                        hb_dict_extract_int(&vpp_settings[5], filter->settings,
+                                            "crop-right");
+
                         // VPP crop/scale takes precedence over OpenCL scale too
                         if (job->use_opencl)
                         {
@@ -1241,8 +1243,9 @@ static int sanitize_qsv( hb_job_t * job )
 
                     // pick VPP or CPU deinterlace depending on settings
                     case HB_FILTER_DEINTERLACE:
-                        if (filter->settings == NULL ||
-                            strcasecmp(filter->settings, "qsv") == 0)
+                    {
+                        int mode = hb_dict_get_int(filter->settings, "mode");
+                        if (mode & MODE_DEINTERLACE_QSV)
                         {
                             // deinterlacing via VPP filter
                             vpp_settings[6] = 1;
@@ -1254,7 +1257,7 @@ static int sanitize_qsv( hb_job_t * job )
                             // validated
                             num_cpu_filters++;
                         }
-                        break;
+                    } break;
 
                     // then, validated filters
                     case HB_FILTER_ROTATE: // TODO: use Media SDK for this
@@ -1307,6 +1310,31 @@ static int sanitize_qsv( hb_job_t * job )
 #endif
 
     return 0;
+}
+
+static void sanitize_filter_list(hb_list_t *list)
+{
+    // Add selective deinterlacing mode if comb detection is enabled
+    if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
+    {
+        int selective[] = {HB_FILTER_DECOMB, HB_FILTER_DEINTERLACE};
+        int ii, count = sizeof(selective) / sizeof(int);
+
+        for (ii = 0; ii < count; ii++)
+        {
+            hb_filter_object_t * filter = hb_filter_find(list, selective[ii]);
+            if (filter != NULL)
+            {
+                int mode = hb_dict_get_int(filter->settings, "mode");
+                mode |= MODE_DECOMB_SELECTIVE;
+                hb_dict_set(filter->settings, "mode", hb_value_int(mode));
+                break;
+            }
+        }
+    }
+
+    // Combine HB_FILTER_AVFILTERs that are sequential
+    hb_avfilter_combine(list);
 }
 
 /**
@@ -1416,8 +1444,7 @@ static void do_job(hb_job_t *job)
     {
         hb_filter_init_t init;
 
-        // Combine HB_FILTER_AVFILTERs that are sequential
-        hb_avfilter_combine(job->list_filter);
+        sanitize_filter_list(job->list_filter);
 
         memset(&init, 0, sizeof(init));
         init.job = job;

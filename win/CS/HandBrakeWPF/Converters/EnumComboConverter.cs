@@ -15,7 +15,6 @@ namespace HandBrakeWPF.Converters
     using System;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Queue.Model;
@@ -95,6 +94,10 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<DeinterlaceFilter>.GetEnumDisplayValues(typeof(DeinterlaceFilter));
             }
+            if (value is IEnumerable<CombDetect>)
+            {
+                return EnumHelper<CombDetect>.GetEnumDisplayValues(typeof(CombDetect));
+            }
 
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
@@ -144,6 +147,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(DeinterlaceFilter) || value.GetType() == typeof(DeinterlaceFilter))
             {
                 return EnumHelper<DeinterlaceFilter>.GetDisplay((DeinterlaceFilter)value);
+            }
+            if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
+            {
+                return EnumHelper<CombDetect>.GetDisplay((CombDetect)value);
             }
 
             return null;
@@ -215,6 +222,10 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<DeinterlaceFilter>.GetValue(value.ToString());
             }
 
+            if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
+            {
+                return EnumHelper<CombDetect>.GetValue(value.ToString());
+            }
             return null;
         }
     }

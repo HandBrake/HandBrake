@@ -1230,6 +1230,7 @@ enum
 
     // First, filters that may change the framerate (drop or dup frames)
     HB_FILTER_DETELECINE,
+    HB_FILTER_COMB_DETECT,
     HB_FILTER_DECOMB,
     HB_FILTER_DEINTERLACE,
     HB_FILTER_VFR,
@@ -1259,6 +1260,7 @@ hb_filter_object_t * hb_filter_get( int filter_id );
 hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
 hb_list_t          * hb_filter_list_copy(const hb_list_t *src);
+hb_filter_object_t * hb_filter_find(const hb_list_t *list, int filter_id);
 void                 hb_filter_close( hb_filter_object_t ** );
 void                 hb_filter_info_close( hb_filter_info_t ** );
 hb_dict_t          * hb_parse_filter_settings(const char * settings);

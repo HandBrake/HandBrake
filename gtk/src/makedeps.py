@@ -28,6 +28,7 @@ dep_map = (
     DepEntry("VideoFramerate", "VideoFrameratePFR", "auto", True, True),
     DepEntry("VideoFramerate", "VideoFramerateVFR", "auto", False, True),
     DepEntry("VideoTwoPass", "VideoTurboTwoPass", "1", False, False),
+    DepEntry("PictureCombDetectPreset", "PictureCombDetectCustom", "custom", False, True),
     DepEntry("PictureDeinterlaceFilter", "PictureDeinterlacePreset", "off", True, True),
     DepEntry("PictureDeinterlaceFilter", "PictureDeinterlacePresetLabel", "off", True, True),
     DepEntry("PictureDeinterlaceFilter", "PictureDeinterlaceCustom", "off", True, True),

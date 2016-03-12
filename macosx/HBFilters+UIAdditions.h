@@ -14,6 +14,8 @@
  */
 + (NSDictionary *)detelecinePresetsDict;
 
++ (NSDictionary *)combDetectionPresetsDict;
+
 + (NSDictionary *)deinterlaceTypesDict;
 + (NSDictionary *)decombPresetsDict;
 + (NSDictionary *)deinterlacePresetsDict;
@@ -23,6 +25,8 @@
 + (NSDictionary *)denoiseTypesDict;
 
 - (BOOL)customDetelecineSelected;
+
+@property (nonatomic, readonly) BOOL customCombDetectionSelected;
 
 - (BOOL)deinterlaceEnabled;
 - (BOOL)customDeinterlaceSelected;
@@ -34,6 +38,8 @@
 - (NSString *)deblockSummary;
 
 @property (nonatomic, readonly) NSArray *detelecineSettings;
+
+@property (nonatomic, readonly) NSArray *combDetectionSettings;
 
 @property (nonatomic, readonly) NSArray *deinterlaceTypes;
 @property (nonatomic, readonly) NSArray *deinterlacePresets;
@@ -59,6 +65,9 @@
 @end
 
 @interface HBDetelecineTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBCombDetectionTransformer : HBGenericDictionaryTransformer
 @end
 
 @interface HBDeinterlaceTransformer : HBGenericDictionaryTransformer

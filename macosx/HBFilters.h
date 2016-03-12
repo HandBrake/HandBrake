@@ -19,6 +19,9 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite, copy) NSString *detelecine;
 @property (nonatomic, readwrite, copy) NSString *detelecineCustomString;
 
+@property (nonatomic, readwrite, copy) NSString *combDetection;
+@property (nonatomic, readwrite, copy) NSString *combDetectionCustomString;
+
 @property (nonatomic, readwrite, copy) NSString *deinterlace;
 @property (nonatomic, readwrite, copy) NSString *deinterlacePreset;
 @property (nonatomic, readwrite, copy) NSString *deinterlaceCustomString;
