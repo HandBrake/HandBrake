@@ -424,7 +424,7 @@ int main( int argc, char ** argv )
     hb_presets_builtin_update();
 
     /* Init libhb */
-    h = hb_init(4, 0);  // Show all logging until debug level is parsed
+    h = hb_init(4);  // Show all logging until debug level is parsed
 
     // Get utf8 command line if windows
     get_argv_utf8(&argc, &argv);
