@@ -1098,7 +1098,8 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         if (response != GTK_RESPONSE_OK)
         {
             ghb_clear_subtitle_selection(ud->builder);
-            ghb_dict_set(ud->settings, "Subtitle", backup);
+            ghb_dict_set(ghb_get_job_settings(ud->settings),
+                         "Subtitle", backup);
             subtitle_refresh_list_ui(ud);
         }
         else
@@ -1151,7 +1152,8 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     if (response != GTK_RESPONSE_OK)
     {
         ghb_clear_subtitle_selection(ud->builder);
-        ghb_dict_set(ud->settings, "Subtitle", backup);
+        ghb_dict_set(ghb_get_job_settings(ud->settings),
+                     "Subtitle", backup);
         subtitle_refresh_list_ui(ud);
     }
     else
@@ -1532,7 +1534,8 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_dict_set(ud->settings, "Subtitle", backup);
+            ghb_dict_set(ghb_get_job_settings(ud->settings),
+                         "Subtitle", backup);
             subsettings = subtitle_get_selected_settings(ud, NULL);
             if (subsettings != NULL)
             {
