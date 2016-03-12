@@ -53,5 +53,10 @@ namespace HandBrakeWPF.Model
         /// Gets or sets the error that occurred, if any. This will be null if no error occured.
         /// </summary>
         public Exception Error { get; set; }
+
+        /// <summary>
+        /// Gets or sets the expected sh a 1 hash.
+        /// </summary>
+        public string ExpectedSHA1Hash { get; set; }
     }
 }

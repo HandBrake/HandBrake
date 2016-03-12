@@ -1124,7 +1124,7 @@ namespace HandBrakeWPF.ViewModels
         public void DownloadUpdate()
         {
             this.UpdateMessage = "Preparing for Update ...";
-            this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.DownloadComplete, this.DownloadProgress);
+            this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.updateInfo.ExpectedSHA1Hash, this.DownloadComplete, this.DownloadProgress);
         }
 
         /// <summary>
@@ -1412,10 +1412,13 @@ namespace HandBrakeWPF.ViewModels
         private void DownloadComplete(DownloadStatus info)
         {
             this.UpdateAvailable = false;
-            this.UpdateMessage = info.WasSuccessful ? Resources.OptionsViewModel_UpdateDownloaded : Resources.OptionsViewModel_UpdateFailed;
+            this.UpdateMessage = info.WasSuccessful ? Resources.OptionsViewModel_UpdateDownloaded : info.Message;
 
-            Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
-            Execute.OnUIThread(() => Application.Current.Shutdown());
+            if (info.WasSuccessful)
+            {
+                Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
+                Execute.OnUIThread(() => Application.Current.Shutdown());
+            }
         }
 
         /// <summary>

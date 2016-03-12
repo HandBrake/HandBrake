@@ -40,6 +40,11 @@ namespace HandBrakeWPF.Utilities
         public string DownloadFile { get; private set; }
 
         /// <summary>
+        /// Gets the hash for verifying the download completed correctly.
+        /// </summary>
+        public string Hash { get; private set; }
+
+        /// <summary>
         /// Get the build information from the required appcasts. Run before accessing the public vars.
         /// </summary>
         /// <param name="input">
@@ -61,6 +66,7 @@ namespace HandBrakeWPF.Utilities
                 this.Version = verShort.ToString().Replace("sparkle:shortVersionString=", string.Empty).Replace(
                     "\"", string.Empty);
                 this.DownloadFile = nodeItem["windows"].InnerText;
+                this.Hash = nodeItem["windowsHash"].InnerText;  
                 this.DescriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
             }
             catch (Exception)

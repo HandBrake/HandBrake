@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Services
     using System;
     using System.IO;
     using System.Net;
+    using System.Security.Cryptography;
+    using System.Text;
     using System.Threading;
 
     using HandBrake.ApplicationServices.Utilities;
@@ -125,6 +127,7 @@ namespace HandBrakeWPF.Services
                                 DownloadFile = reader.DownloadFile,
                                 Build = reader.Build,
                                 Version = reader.Version,
+                                ExpectedSHA1Hash = reader.Hash
                             };
 
                         callback(info2);
@@ -142,13 +145,16 @@ namespace HandBrakeWPF.Services
         /// <param name="url">
         /// The url.
         /// </param>
+        /// <param name="expectedSha1Hash">
+        /// The expected Sha 1 Hash.
+        /// </param>
         /// <param name="completed">
         /// The complete.
         /// </param>
         /// <param name="progress">
         /// The progress.
         /// </param>
-        public void DownloadFile(string url, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
+        public void DownloadFile(string url, string expectedSha1Hash, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
         {
             ThreadPool.QueueUserWorkItem(
                delegate
@@ -172,11 +178,9 @@ namespace HandBrakeWPF.Services
                        int bytesSize;
                        byte[] downBuffer = new byte[2048];
 
-                       long flength = 0;
                        while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                        {
                            localStream.Write(downBuffer, 0, bytesSize);
-                           flength = localStream.Length;
                            progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize});
                        }
 
@@ -184,19 +188,43 @@ namespace HandBrakeWPF.Services
                        localStream.Close();
 
                        completed(
-                           flength != fileSize
+                           GetSHA1(tempPath) != expectedSha1Hash
                                ? new DownloadStatus
                                    {
                                        WasSuccessful = false,
-                                       Message = "Partial Download. File is Incomplete. Please Retry the download."
+                                       Message = "Download Failed.  SHA1 Checksum Failed. Please visit the website to download this update."
                                    }
                                : new DownloadStatus { WasSuccessful = true, Message = "Download Complete." });
                    }
                    catch (Exception exc)
                    {
-                       progress(new DownloadStatus { WasSuccessful = false, Exception = exc, Message = "Download Failed." });
+                       progress(new DownloadStatus { WasSuccessful = false, Exception = exc, Message = "Download Failed. Please visit the website to download this update." });
                    }
                });
+        }
+
+        /// <summary>
+        /// The get sh a 1.
+        /// </summary>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static String GetSHA1(String fileName)
+        {
+            FileStream file = new FileStream(fileName, FileMode.Open);
+            SHA1 sha1 = new SHA1CryptoServiceProvider();
+            byte[] retVal = sha1.ComputeHash(file);
+            file.Close();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < retVal.Length; i++)
+            {
+                sb.Append(retVal[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
 
         #endregion
