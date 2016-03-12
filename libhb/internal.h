@@ -276,9 +276,8 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 }
 
 /***********************************************************************
- * Threads: update.c, scan.c, work.c, reader.c, muxcommon.c
+ * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
-hb_thread_t * hb_update_init( int * build, char * version );
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
                             const char * path, int title_index, 
                             hb_title_set_t * title_set, int preview_count, 

@@ -3025,9 +3025,9 @@ void
 ghb_backend_init(gint debug)
 {
     /* Init libhb */
-    h_scan = hb_init( debug, 0 );
-    h_queue = hb_init( debug, 0 );
-    h_live = hb_init( debug, 0 );
+    h_scan = hb_init( debug );
+    h_queue = hb_init( debug );
+    h_live = hb_init( debug );
 }
 
 void

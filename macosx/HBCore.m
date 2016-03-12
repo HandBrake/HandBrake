@@ -103,7 +103,7 @@ static void hb_error_handler(const char *errmsg)
         _hb_state = malloc(sizeof(struct hb_state_s));
         _logLevel = level;
 
-        _hb_handle = hb_init(level, 0);
+        _hb_handle = hb_init(level);
         if (!_hb_handle)
         {
             return nil;

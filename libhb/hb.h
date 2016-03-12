@@ -30,8 +30,7 @@ extern "C" {
 #define HB_DEBUG_ALL  1
 void          hb_register( hb_work_object_t * );
 void          hb_register_logger( void (*log_cb)(const char* message) );
-hb_handle_t * hb_init( int verbose, int update_check );
-void          hb_update_poll(hb_handle_t *h);
+hb_handle_t * hb_init( int verbose );
 void          hb_log_level_set(hb_handle_t *h, int level);
 
 void          hb_hwd_set_enable( hb_handle_t *h, uint8_t enable );

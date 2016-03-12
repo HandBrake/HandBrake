@@ -31,11 +31,6 @@ struct hb_handle_s
 {
     int            id;
     
-    /* The "Check for update" thread */
-    int            build;
-    char           version[32];
-    hb_thread_t  * update_thread;
-
     /* This thread's only purpose is to check other threads'
        states */
     volatile int   die;
@@ -411,46 +406,13 @@ void hb_log_level_set(hb_handle_t *h, int level)
     global_verbosity_level = level;
 }
 
-void hb_update_poll(hb_handle_t *h)
-{
-    uint64_t      date;
-
-    hb_log( "hb_update_poll: checking for updates" );
-    date             = hb_get_date();
-    h->update_thread = hb_update_init( &h->build, h->version );
-
-    for( ;; )
-    {
-        if (h->update_thread == 0)
-        {
-            // Closed by thread_func
-            break;
-        }
-        if (hb_thread_has_exited(h->update_thread))
-        {
-            /* Immediate success or failure */
-            hb_thread_close( &h->update_thread );
-            break;
-        }
-        if (hb_get_date() > date + 1000)
-        {
-            /* Still nothing after one second. Connection problem,
-               let the thread die */
-            hb_log( "hb_update_poll: connection problem, not waiting for "
-                    "update_thread" );
-            break;
-        }
-        hb_snooze( 500 );
-    }
-}
-
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
  * @param update_check signals libhb to check for updated version from HandBrake website.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init( int verbose, int update_check )
+hb_handle_t * hb_init( int verbose )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
 
@@ -459,18 +421,10 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     h->id = hb_instance_counter++;
 
-    /* Check for an update on the website if asked to */
-    h->build = -1;
-
     /* Initialize opaque for PowerManagement purposes */
     h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
-    if( update_check )
-    {
-        hb_update_poll(h);
-    }
-
-    h->title_set.list_title = hb_list_init();
+	h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
     h->state_lock  = hb_lock_init();
@@ -561,18 +515,6 @@ const char * hb_get_version( hb_handle_t * h )
 int hb_get_build( hb_handle_t * h )
 {
     return hb_build;
-}
-
-/**
- * Checks for needed update.
- * @param h Handle to hb_handle_t.
- * @param version Pointer to handle where version will be copied.
- * @return update indicator.
- */
-int hb_check_update( hb_handle_t * h, char ** version )
-{
-    *version = ( h->build < 0 ) ? NULL : h->version;
-    return h->build;
 }
 
 /**
@@ -1918,14 +1860,6 @@ static void thread_func( void * _h )
 
     while( !h->die )
     {
-        /* In case the check_update thread hangs, it'll die sooner or
-           later. Then, we join it here */
-        if( h->update_thread &&
-            hb_thread_has_exited( h->update_thread ) )
-        {
-            hb_thread_close( &h->update_thread );
-        }
-
         /* Check if the scan thread is done */
         if( h->scan_thread &&
             hb_thread_has_exited( h->scan_thread ) )

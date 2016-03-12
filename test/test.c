@@ -53,7 +53,6 @@
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
-static int     update              = 0;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
 static char *  output              = NULL;
@@ -447,26 +446,6 @@ int main( int argc, char ** argv )
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
-
-    /* Check for update */
-    if( update )
-    {
-        hb_update_poll(h);
-        if( ( build = hb_check_update( h, &version ) ) > -1 )
-        {
-            fprintf( stderr, "You are using an old version of "
-                     "HandBrake.\nLatest is %s (build %d).\n", version,
-                     build );
-        }
-        else
-        {
-            fprintf( stderr, "Your version of HandBrake is up to "
-                     "date.\n" );
-        }
-        hb_close( &h );
-        hb_global_close();
-        return 0;
-    }
 
     /* Geeky */
     fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
@@ -1160,7 +1139,6 @@ static void ShowHelp()
 "\n"
 "### General Handbrake Options---------------------------------------------\n\n"
 "   -h, --help              Print help\n"
-"   -u, --update            Check for updates and exit\n"
 "   -v, --verbose <#>       Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Use a built-in preset. Capitalization matters,\n"
 "                           and if the preset name has spaces, surround it\n"
@@ -1907,7 +1885,6 @@ static int ParseOptions( int argc, char ** argv )
             { "help",        no_argument,       NULL,    'h' },
             { "version",     no_argument,       NULL,    VERSION },
             { "describe",    no_argument,       NULL,    DESCRIBE },
-            { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
             { "no-opencl",   no_argument,       &use_opencl, 0 },
@@ -2087,9 +2064,6 @@ static int ParseOptions( int argc, char ** argv )
             case DESCRIBE:
                 printf("%s\n", hb_get_full_description());
                 exit(0);
-            case 'u':
-                update = 1;
-                break;
             case 'v':
                 if( optarg != NULL )
                 {
@@ -2925,11 +2899,6 @@ static int count_subtitles(char **subtracks)
 
 static int CheckOptions( int argc, char ** argv )
 {
-    if( update )
-    {
-        return 0;
-    }
-
     if (queue_import_name != NULL)
     {
         // Everything should be defined in the queue.
