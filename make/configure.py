@@ -1644,7 +1644,7 @@ int main()
     int     rv;
     regex_t exp;
 
-    rv = regcomp(&exp, "^[0-9]+$";", REG_EXTENDED);
+    rv = regcomp(&exp, "^[0-9]+$", REG_EXTENDED);
     if (rv != 0) {
         return 1;
     }
