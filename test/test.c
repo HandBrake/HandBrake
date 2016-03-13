@@ -417,8 +417,6 @@ int RunQueue(hb_handle_t *h, const char *queue_import_name)
 int main( int argc, char ** argv )
 {
     hb_handle_t * h;
-    int           build;
-    char        * version;
 
     hb_global_init();
     hb_presets_builtin_update();
