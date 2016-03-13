@@ -814,6 +814,11 @@ main(int argc, char *argv[])
     GError *error = NULL;
     GOptionContext *context;
 
+#if defined(_WIN32)
+    // Tell gdk pixbuf where it's loader config file is.
+    _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
+#endif
+
     hb_global_init();
 
 #ifdef ENABLE_NLS
