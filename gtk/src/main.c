@@ -817,6 +817,7 @@ main(int argc, char *argv[])
 #if defined(_WIN32)
     // Tell gdk pixbuf where it's loader config file is.
     _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
+    _putenv_s("GST_PLUGIN_PATH", "lib/gstreamer-1.0");
 #endif
 
     hb_global_init();
