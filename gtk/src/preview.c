@@ -31,6 +31,8 @@
 
 #if !defined(_WIN32)
 #include <gdk/gdkx.h>
+#else
+#include <gdk/gdkwin32.h>
 #endif
 
 #if defined(_ENABLE_GST)
@@ -196,6 +198,17 @@ ghb_preview_init(signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "preview_button_image");
     gtk_widget_get_size_request(widget, &ud->preview->button_width, &ud->preview->button_height);
 
+    widget = GHB_WIDGET(ud->builder, "preview_hud");
+    gtk_widget_realize(widget);
+    // Use a native window for the HUD.  Client side windows don't get
+    // updated properly as video changes benieth them.
+    // This also seems to be required to make the preview hud visible
+    // on win32.  otherwise it is transparent for some reason.
+    if (!gdk_window_ensure_native(gtk_widget_get_window(widget)))
+    {
+        g_message("Couldn't create native window for HUD.");
+    }
+
 #if defined(_ENABLE_GST)
     GstBus *bus;
     GstElement *xover;
@@ -208,14 +221,6 @@ ghb_preview_init(signal_user_data_t *ud)
         widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
         gtk_widget_hide (widget);
         return;
-    }
-    widget = GHB_WIDGET(ud->builder, "preview_hud");
-    gtk_widget_realize(widget);
-    // Use a native window for the HUD.  Client side windows don't get
-    // updated properly as video changes benieth them.
-    if (!gdk_window_ensure_native(gtk_widget_get_window(widget)))
-    {
-        g_message("Couldn't create native window for HUD.");
     }
 
 #if !defined(_WIN32)
@@ -232,6 +237,10 @@ ghb_preview_init(signal_user_data_t *ud)
     if (xover == NULL)
     {
         xover = gst_element_factory_make("ximagesink", "xover");
+    }
+    if (xover == NULL)
+    {
+        xover = gst_element_factory_make("autovideosink", "xover");
     }
     if (ud->preview->play == NULL || xover == NULL)
     {
@@ -698,7 +707,11 @@ live_preview_start(signal_user_data_t *ud)
         return;
     }
 
+#if defined(_WIN32)
+    uri = g_strdup_printf("file:///%s", ud->preview->current);
+#else
     uri = g_strdup_printf("file://%s", ud->preview->current);
+#endif
     gtk_image_set_from_icon_name(img, GHB_PAUSE_ICON, GTK_ICON_SIZE_BUTTON);
     ud->preview->state = PREVIEW_STATE_LIVE;
     g_object_set(G_OBJECT(ud->preview->play), "uri", uri, NULL);
