@@ -46,7 +46,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _sourceWidth = 1280;
         _sourceHeight = 720;
 
-        _anamorphicMode = HB_ANAMORPHIC_NONE;
+        _anamorphicMode = HBPictureAnarmophicModeNone;
 
         _parWidth = 1;
         _parHeight = 1;
@@ -345,7 +345,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
 }
 
-- (void)setAnamorphicMode:(int)anamorphicMode
+- (void)setAnamorphicMode:(HBPictureAnarmophicMode)anamorphicMode
 {
     if (anamorphicMode != _anamorphicMode)
     {

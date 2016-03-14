@@ -69,7 +69,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 /**
  * Returns HBOutputRedirect object used to redirect stdout.
  */
-+ (id)stdoutRedirect
++ (instancetype)stdoutRedirect
 {
 	if (!g_stdoutRedirect)
 		g_stdoutRedirect = [[HBOutputRedirect alloc] initWithStream:stdout selector:@selector(stdoutRedirect:)];
@@ -80,7 +80,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 /**
  * Returns HBOutputRedirect object used to redirect stderr.
  */
-+ (id)stderrRedirect
++ (instancetype)stderrRedirect
 {
 	if (!g_stderrRedirect)
 		g_stderrRedirect = [[HBOutputRedirect alloc] initWithStream:stderr selector:@selector(stderrRedirect:)];

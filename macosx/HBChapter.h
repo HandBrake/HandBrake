@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite) NSString *title;
 @property (nonatomic, readonly) NSString *duration;
-@property (nonatomic, readwrite) NSUInteger index;
+@property (nonatomic, readonly) NSUInteger index;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 

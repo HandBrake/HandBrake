@@ -108,7 +108,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     [self postChangedNotification];
 }
 
-- (void)setQualityType:(int)qualityType
+- (void)setQualityType:(HBVideoQualityType)qualityType
 {
     if (qualityType != _qualityType)
     {
@@ -148,7 +148,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     [self postChangedNotification];
 }
 
-- (void)setFrameRateMode:(int)frameRateMode
+- (void)setFrameRateMode:(HBVideoFrameRateMode)frameRateMode
 {
     if (frameRateMode != _frameRateMode)
     {

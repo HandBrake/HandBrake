@@ -11,6 +11,7 @@
 #import "HBJob.h"
 
 #include "common.h"
+#include "lang.h"
 
 @implementation HBUtilities
 
@@ -275,5 +276,24 @@
     return [name copy];
 }
 
++ (NSString *)iso6392CodeFor:(NSString *)aLanguage
+{
+    iso639_lang_t *lang = lang_for_english(aLanguage.UTF8String);
+    if (lang)
+    {
+        return @(lang->iso639_2);
+    }
+    return @"und";
+}
+
++ (NSString *)languageCodeForIso6392Code:(NSString *)aLanguage
+{
+    iso639_lang_t *lang = lang_for_code2(aLanguage.UTF8String);
+    if (lang)
+    {
+        return @(lang->eng_name);
+    }
+    return @"Unknown";
+}
 
 @end
