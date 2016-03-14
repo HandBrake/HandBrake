@@ -150,28 +150,11 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     return @"00:00:00";
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
++ (NSSet<NSString *> *)keyPathsForValuesAffectingDuration
 {
-    NSSet *retval = nil;
-
-    if ([key isEqualToString:@"duration"])
-    {
-        retval = [NSSet setWithObjects:@"type", @"chapterStart", @"chapterStop", @"frameStart", @"frameStop",
-                  @"secondsStart", @"secondsStop",nil];
-    }
-    else if ([key isEqualToString:@"chaptersSelected"] ||
-             [key isEqualToString:@"secondsSelected"] ||
-             [key isEqualToString:@"framesSelected"])
-    {
-        retval = [NSSet setWithObjects:@"type",nil];
-
-    }
-    else
-    {
-        retval = [NSSet set];
-    }
-
-    return retval;
+    return [NSSet setWithObjects:@"type", @"chapterStart", @"chapterStop",
+                                 @"frameStart", @"frameStop",
+                                 @"secondsStart", @"secondsStop",nil];
 }
 
 - (void)setNilValueForKey:(NSString *)key

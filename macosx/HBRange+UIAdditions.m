@@ -30,14 +30,29 @@
     return self.type == HBRangeTypeChapters;
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingChaptersSelected
+{
+    return [NSSet setWithObjects:@"type", nil];
+}
+
 - (BOOL)secondsSelected
 {
     return self.type == HBRangeTypeSeconds;
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingSecondsSelected
+{
+    return [NSSet setWithObjects:@"type", nil];
+}
+
 - (BOOL)framesSelected
 {
     return self.type == HBRangeTypeFrames;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingFramesSelected
+{
+    return [NSSet setWithObjects:@"type", nil];
 }
 
 @end

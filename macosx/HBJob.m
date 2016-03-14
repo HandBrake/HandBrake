@@ -179,26 +179,6 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    NSSet *retval = [NSSet set];
-
-    if ([key isEqualToString:@"mp4OptionsEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"container", nil];
-    }
-    else if ([key isEqualToString:@"mp4iPodCompatibleEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"container", @"video.encoder", nil];
-    }
-    else
-    {
-        retval = [NSSet set];
-    }
-
-    return retval;
-}
-
 - (NSString *)description
 {
     return self.name;

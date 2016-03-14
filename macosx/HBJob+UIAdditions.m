@@ -34,9 +34,19 @@ static NSDictionary            *shortHeightAttr;
     return ((self.container & HB_MUX_MASK_MP4) != 0);
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMp4OptionsEnabled
+{
+    return [NSSet setWithObjects:@"container", nil];
+}
+
 - (BOOL)mp4iPodCompatibleEnabled
 {
     return ((self.container & HB_MUX_MASK_MP4) != 0) && (self.video.encoder & HB_VCODEC_H264_MASK);
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMp4iPodCompatibleEnabled
+{
+    return [NSSet setWithObjects:@"container", @"video.encoder", nil];
 }
 
 - (NSArray *)angles
