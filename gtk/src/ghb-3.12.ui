@@ -8158,7 +8158,7 @@ Setting this to 0 means there is no maximum height.</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkLayout" id="preview_image">
+          <object class="GtkEventBox" id="preview_image">
             <property name="visible">True</property>
             <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
@@ -8175,7 +8175,6 @@ Setting this to 0 means there is no maximum height.</property>
                 <child>
                   <object class="GtkEventBox" id="preview_hud">
                     <property name="visible">False</property>
-                    <property name="app_paintable">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
@@ -8187,7 +8186,6 @@ Setting this to 0 means there is no maximum height.</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
                     <signal name="enter-notify-event" handler="hud_enter_cb" swapped="no"/>
                     <signal name="leave-notify-event" handler="hud_leave_cb" swapped="no"/>
-                    <signal name="size-allocate" handler="hud_size_alloc_cb" swapped="no"/>
                     <child>
                       <object class="GtkBox" id="vbox35">
                         <property name="orientation">vertical</property>
@@ -8383,10 +8381,6 @@ Setting this to 0 means there is no maximum height.</property>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="x">0</property>
-                <property name="y">0</property>
-              </packing>
             </child>
           </object>
         </child>

@@ -745,7 +745,12 @@ GtkEntry {                          \n\
 @define-color gray46 #757575;       \n\
 @define-color white  #ffffff;       \n\
                                     \n\
-#preview_hud,                       \n\
+#preview_hud                        \n\
+{                                   \n\
+    border-radius: 20px;            \n\
+    background-color: alpha(@gray18, 0.8); \n\
+    color: @white;                  \n\
+}                                   \n\
 #live_preview_play,                 \n\
 #live_duration,                     \n\
 #preview_fullscreen                 \n\
