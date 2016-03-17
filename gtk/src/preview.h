@@ -27,6 +27,8 @@
 #define GHB_PREVIEW_MAX 60
 
 void ghb_preview_init(signal_user_data_t *ud);
+void ghb_rescale_preview_image(signal_user_data_t *ud);
+void ghb_reset_preview_image(signal_user_data_t *ud);
 void ghb_set_preview_image(signal_user_data_t *ud);
 void ghb_live_preview_progress(signal_user_data_t *ud);
 void ghb_live_encode_done(signal_user_data_t *ud, gboolean success);

@@ -2026,7 +2026,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         widget = GHB_WIDGET(ud->builder, "preview_frame");
         gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 
-        ghb_set_preview_image(ud);
+        ghb_reset_preview_image(ud);
         ghb_preview_set_visible(ud);
     }
 }
@@ -2635,19 +2635,6 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     update_preview = TRUE;
 
     update_aspect_info(ud);
-}
-
-G_MODULE_EXPORT void
-show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    g_debug("show_crop_changed_cb ()");
-    ghb_widget_to_setting(ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
-    ghb_live_reset(ud);
-    if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
-    ghb_pref_save(ud->prefs, "preview_show_crop");
-    update_preview = TRUE;
 }
 
 G_MODULE_EXPORT void

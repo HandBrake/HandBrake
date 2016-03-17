@@ -751,9 +751,10 @@ GtkEntry {                          \n\
     background-color: alpha(@gray18, 0.8); \n\
     color: @white;                  \n\
 }                                   \n\
+                                    \n\
 #live_preview_play,                 \n\
 #live_duration,                     \n\
-#preview_fullscreen                 \n\
+#preview_reset                      \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray18;      \n\
@@ -776,21 +777,21 @@ GtkEntry {                          \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:prelight        \n\
+#preview_reset:prelight             \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active          \n\
+#preview_reset:active               \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active          \n\
+#preview_reset:active               \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
@@ -937,7 +938,7 @@ main(int argc, char *argv[])
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_encode_progress"), "live_encode_progress");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_fullscreen"), "preview_fullscreen");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_reset"), "preview_reset");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
 
     // Redirect stderr to the activity window
@@ -1197,6 +1198,7 @@ main(int argc, char *argv[])
     g_list_free(stack_switcher_children);
 
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
+
     gtk_widget_show(ghb_window);
 
     // Everything should be go-to-go.  Lets rock!

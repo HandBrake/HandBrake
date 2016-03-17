@@ -59,8 +59,11 @@ struct preview_s
     gboolean    progress_lock;
     gint        width;
     gint        height;
+    gint        render_width;
+    gint        render_height;
     GtkWidget * view;
     GdkPixbuf * pix;
+    GdkPixbuf * scaled_pix;
     gint        button_width;
     gint        button_height;
     gint        frame;
@@ -111,15 +114,30 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 void
 preview_set_size(signal_user_data_t *ud, int width, int height)
 {
-    GtkWidget *widget;
+    ud->preview->width = width;
+    ud->preview->height = height;
+}
+
+void
+preview_set_render_size(signal_user_data_t *ud, int width, int height)
+{
+    GtkWidget     * widget;
+    GtkWindow     * window;
+    GdkGeometry     geo;
 
     widget = GHB_WIDGET (ud->builder, "preview_image");
     gtk_widget_set_size_request(widget, width, height);
-    widget = GHB_WIDGET (ud->builder, "preview_hud_box");
-    gtk_widget_set_size_request(widget, width, height);
+    window = GTK_WINDOW(GHB_WIDGET(ud->builder, "preview_window"));
+    gtk_window_unmaximize(window);
+    gtk_window_resize(window, width, height);
+    geo.min_aspect = (double)width / height;
+    geo.max_aspect = (double)width / height;
+    geo.width_inc = geo.height_inc = 2;
+    gtk_window_set_geometry_hints(window, NULL, &geo,
+                                  GDK_HINT_ASPECT|GDK_HINT_RESIZE_INC);
 
-    ud->preview->width = width;
-    ud->preview->height = height;
+    ud->preview->render_width = width;
+    ud->preview->render_height = height;
 }
 
 void
@@ -306,6 +324,7 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
         else
             height = gst_util_uint64_scale_int(width, den, num);
 
+        preview_set_size(ud, width, height);
         if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
         {
             GdkScreen *ss;
@@ -325,11 +344,6 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
                 height = s_h * 80 / 100;
                 width = gst_util_uint64_scale_int(height, num, den);
             }
-        }
-
-        if (width != ud->preview->width || height != ud->preview->height)
-        {
-            preview_set_size(ud, width, height);
         }
     }
 }
@@ -486,29 +500,51 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
                     val = gst_structure_get_value(gstStruct, "pixbuf");
                     if (val != NULL)
                     {
-                        GdkPixbuf *pixbuf;
+                        GdkPixbuf * pix;
                         GtkWidget *widget;
                         int        width, height;
 
-                        pixbuf = GDK_PIXBUF(g_value_dup_object(val));
-                        width = gdk_pixbuf_get_width(pixbuf);
-                        height = gdk_pixbuf_get_height(pixbuf);
-                        if (width  != ud->preview->width ||
-                            height != ud->preview->height)
-                        {
-                            GdkPixbuf *tmp;
-                            tmp = gdk_pixbuf_scale_simple(pixbuf,
-                                                          ud->preview->width,
-                                                          ud->preview->height,
-                                                          GDK_INTERP_BILINEAR);
-                            g_object_unref(pixbuf);
-                            pixbuf = tmp;
-                        }
                         if (ud->preview->pix != NULL)
-                        {
                             g_object_unref(ud->preview->pix);
+                        if (ud->preview->scaled_pix != NULL)
+                            g_object_unref(ud->preview->scaled_pix);
+                        pix = GDK_PIXBUF(g_value_dup_object(val));
+                        width = gdk_pixbuf_get_width(pix);
+                        height = gdk_pixbuf_get_height(pix);
+                        if (width  != ud->preview->width ||
+                            height != ud->preview->height ||
+                            width  != ud->preview->render_width ||
+                            height != ud->preview->render_height)
+                        {
+                            double xscale, yscale;
+
+                            xscale = (double)ud->preview->render_width /
+                                             ud->preview->width;
+                            yscale = (double)ud->preview->render_height /
+                                             ud->preview->height;
+                            if (xscale <= yscale)
+                            {
+                                width  = ud->preview->render_width;
+                                height = ud->preview->height * xscale;
+                            }
+                            else
+                            {
+                                width  = ud->preview->width * yscale;
+                                height = ud->preview->render_height;
+                            }
+
+                            ud->preview->scaled_pix =
+                                gdk_pixbuf_scale_simple(pix,
+                                                        width, height,
+                                                        GDK_INTERP_BILINEAR);
+                            g_object_ref(pix);
                         }
-                        ud->preview->pix = pixbuf;
+                        else
+                        {
+                            ud->preview->scaled_pix = pix;
+                        }
+                        ud->preview->pix = ud->preview->scaled_pix;
+                        g_object_ref(ud->preview->pix);
                         widget = GHB_WIDGET (ud->builder, "preview_image");
                         gtk_widget_queue_draw(widget);
                     }
@@ -764,17 +800,119 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 #endif
 }
 
-static void _draw_pixbuf(cairo_t *cr, GdkPixbuf *pixbuf)
+static void _draw_pixbuf(signal_user_data_t * ud, cairo_t *cr, GdkPixbuf *pix)
 {
-    gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_rectangle(cr, 0, 0, ud->preview->render_width,
+                              ud->preview->render_height);
+    cairo_fill(cr);
+    cairo_rectangle(cr, 0, 0, ud->preview->render_width,
+                              ud->preview->render_height);
+    cairo_clip(cr);
+    gdk_cairo_set_source_pixbuf(cr, pix, 0, 0);
     cairo_paint(cr);
 }
 
+static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
+{
+    int         preview_width, preview_height, width, height;
+    GdkPixbuf * scaled_preview;
+
+    if (pix == NULL)
+    {
+        return;
+    }
+
+    preview_width  = gdk_pixbuf_get_width(pix);
+    preview_height = gdk_pixbuf_get_height(pix);
+
+    // Scale and display the mini-preview
+    height = MIN(ud->preview->button_height, 200);
+    width = preview_width * height / preview_height;
+    if (width > 400)
+    {
+        width = 400;
+        height = preview_height * width / preview_width;
+    }
+    if ((height >= 16) && (width >= 16))
+    {
+        scaled_preview = gdk_pixbuf_scale_simple(pix, width, height,
+                                                 GDK_INTERP_NEAREST);
+        if (scaled_preview != NULL)
+        {
+            GtkWidget * widget;
+
+            widget = GHB_WIDGET (ud->builder, "preview_button_image");
+            gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
+            g_object_unref(scaled_preview);
+        }
+    }
+}
+
+GdkPixbuf * do_preview_scaling(signal_user_data_t *ud, GdkPixbuf *pix)
+{
+    int         preview_width, preview_height, width, height;
+    GdkPixbuf * scaled_preview;
+
+    if (pix == NULL)
+    {
+        return NULL;
+    }
+
+    preview_width  = gdk_pixbuf_get_width(pix);
+    preview_height = gdk_pixbuf_get_height(pix);
+
+    if (ud->preview->render_width < 0 || ud->preview->render_height < 0)
+    {
+        // resize preview window to fit preview
+        preview_set_render_size(ud, preview_width, preview_height);
+        g_object_ref(pix);
+        return pix;
+    }
+
+    // Scale if necessary
+    if (preview_width  != ud->preview->render_width ||
+        preview_height != ud->preview->render_height)
+    {
+        double xscale, yscale;
+
+        xscale = (double)ud->preview->render_width  / preview_width;
+        yscale = (double)ud->preview->render_height / preview_height;
+        if (xscale <= yscale)
+        {
+            width  = ud->preview->render_width;
+            height = preview_height * xscale;
+        }
+        else
+        {
+            width  = preview_width * yscale;
+            height = ud->preview->render_height;
+        }
+        // Allow some slop in aspect ratio so that we fill the window
+        int delta = ud->preview->render_width - width;
+        if (delta > 0 && delta <= 6)
+            width = ud->preview->render_width;
+
+        delta = ud->preview->render_height - height;
+        if (delta > 0 && delta <= 6)
+            height = ud->preview->render_height;
+
+        scaled_preview = gdk_pixbuf_scale_simple(pix, width, height,
+                                                 GDK_INTERP_BILINEAR);
+        return scaled_preview;
+    }
+    else
+    {
+        g_object_ref(pix);
+    }
+    return pix;
+}
+
 void
-ghb_set_preview_image(signal_user_data_t *ud)
+init_preview_image(signal_user_data_t *ud)
 {
     GtkWidget *widget;
-    gint preview_width, preview_height, target_height, width, height;
+    gint width, height;
 
     g_debug("set_preview_button_image ()");
     gint title_id, titleindex;
@@ -806,47 +944,75 @@ ghb_set_preview_image(signal_user_data_t *ud)
     }
     if (ud->preview->pix != NULL)
         g_object_unref(ud->preview->pix);
+    if (ud->preview->scaled_pix != NULL)
+        g_object_unref(ud->preview->scaled_pix);
 
-    ud->preview->pix =
-        ghb_get_preview_image(title, ud->preview->frame, ud, &width, &height);
-    if (ud->preview->pix == NULL) return;
-    preview_width = gdk_pixbuf_get_width(ud->preview->pix);
-    preview_height = gdk_pixbuf_get_height(ud->preview->pix);
-    widget = GHB_WIDGET (ud->builder, "preview_image");
-    if (preview_width != ud->preview->width ||
-        preview_height != ud->preview->height)
-    {
-        preview_set_size(ud, preview_width, preview_height);
-    }
-    gtk_widget_queue_draw(widget);
+    ud->preview->pix = ghb_get_preview_image(title, ud->preview->frame,
+                                             ud, &width, &height);
+    if (ud->preview->pix == NULL)
+        return;
+
+    int pix_width, pix_height;
+    pix_width = gdk_pixbuf_get_width(ud->preview->pix);
+    pix_height = gdk_pixbuf_get_height(ud->preview->pix);
+    preview_set_size(ud, pix_width, pix_height);
 
     gchar *text = g_strdup_printf("%d x %d", width, height);
-    widget = GHB_WIDGET (ud->builder, "preview_dims");
+    widget = GHB_WIDGET(ud->builder, "preview_dims");
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
+}
 
-    g_debug("preview %d x %d", preview_width, preview_height);
-    target_height = MIN(ud->preview->button_height, 200);
-    height = target_height;
-    width = preview_width * height / preview_height;
-    if (width > 400)
-    {
-        width = 400;
-        height = preview_height * width / preview_width;
-    }
+void
+ghb_set_preview_image(signal_user_data_t *ud)
+{
+    init_preview_image(ud);
 
-    if ((height >= 16) && (width >= 16))
-    {
-        GdkPixbuf *scaled_preview;
-        scaled_preview = gdk_pixbuf_scale_simple (ud->preview->pix, width,
-                                                height, GDK_INTERP_NEAREST);
-        if (scaled_preview != NULL)
-        {
-            widget = GHB_WIDGET (ud->builder, "preview_button_image");
-            gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
-            g_object_unref(scaled_preview);
-        }
-    }
+    // Scale and display the mini-preview
+    set_mini_preview_image(ud, ud->preview->pix);
+
+    // Scale the full size preview
+    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
+
+    // Display full size preview
+    GtkWidget *widget = GHB_WIDGET(ud->builder, "preview_image");
+    gtk_widget_queue_draw(widget);
+}
+
+void
+ghb_rescale_preview_image(signal_user_data_t *ud)
+{
+    double scale = (double)ud->preview->render_width / ud->preview->width;
+    init_preview_image(ud);
+    preview_set_render_size(ud, ud->preview->width * scale,
+                                ud->preview->height * scale);
+
+    // Scale and display the mini-preview
+    set_mini_preview_image(ud, ud->preview->pix);
+
+    // Scale the full size preview
+    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
+
+    // Display full size preview
+    GtkWidget *widget = GHB_WIDGET(ud->builder, "preview_image");
+    gtk_widget_queue_draw(widget);
+}
+
+void
+ghb_reset_preview_image(signal_user_data_t *ud)
+{
+    init_preview_image(ud);
+    preview_set_render_size(ud, ud->preview->width, ud->preview->height);
+
+    // Scale and display the mini-preview
+    set_mini_preview_image(ud, ud->preview->pix);
+
+    // Scale the full size preview
+    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
+
+    // Display full size preview
+    GtkWidget *widget = GHB_WIDGET(ud->builder, "preview_image");
+    gtk_widget_queue_draw(widget);
 }
 
 G_MODULE_EXPORT gboolean
@@ -855,9 +1021,9 @@ preview_draw_cb(
     cairo_t *cr,
     signal_user_data_t *ud)
 {
-    if (ud->preview->pix != NULL)
+    if (ud->preview->scaled_pix != NULL)
     {
-        _draw_pixbuf(cr, ud->preview->pix);
+        _draw_pixbuf(ud, cr, ud->preview->scaled_pix);
     }
     return FALSE;
 }
@@ -877,7 +1043,7 @@ preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, si
             ud->preview->button_height);
     ud->preview->button_width = allocation->width;
     ud->preview->button_height = allocation->height;
-    ghb_set_preview_image(ud);
+    set_mini_preview_image(ud, ud->preview->pix);
 }
 
 void
@@ -896,7 +1062,6 @@ ghb_preview_set_visible(signal_user_data_t *ud)
     title = ghb_lookup_title(title_id, &titleindex);
     active &= title != NULL;
     widget = GHB_WIDGET(ud->builder, "preview_window");
-    gtk_widget_set_visible(widget, active);
     if (active)
     {
         gint x, y;
@@ -904,7 +1069,9 @@ ghb_preview_set_visible(signal_user_data_t *ud)
         y = ghb_dict_get_int(ud->prefs, "preview_y");
         if (x >= 0 && y >= 0)
             gtk_window_move(GTK_WINDOW(widget), x, y);
+        gtk_window_deiconify(GTK_WINDOW(widget));
     }
+    gtk_widget_set_visible(widget, active);
 }
 
 static void
@@ -950,46 +1117,24 @@ preview_menu_toggled_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_toggle_tool_button_set_active(button, active);
 }
 
-static gboolean
-go_full(signal_user_data_t *ud)
-{
-    GtkWindow *window;
-    window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
-    gtk_window_fullscreen(window);
-    ghb_set_preview_image(ud);
-    return FALSE;
-}
-
 G_MODULE_EXPORT void
-fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
+preview_reset_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 {
-    gboolean active;
-    GtkWindow *window;
+    g_debug("preview_reset_clicked_cb()");
+    preview_set_render_size(ud, ud->preview->width, ud->preview->height);
 
-    g_debug("fullscreen_clicked_cb()");
-    ghb_widget_to_setting (ud->prefs, toggle);
-    ghb_check_dependency(ud, toggle, NULL);
-    const gchar *name = ghb_get_setting_key(toggle);
-    ghb_pref_save(ud->prefs, name);
+    // On windows, preview_resize_cb does not get called when the size
+    // is reset above.  So assume it got reset and disable the
+    // "Source Resolution" button.
+    GtkWidget * widget = GHB_WIDGET(ud->builder, "preview_reset");
+    gtk_widget_hide(widget);
 
-    window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
-    active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
-    if (active)
-    {
-        gtk_window_set_resizable(window, TRUE);
-        gtk_button_set_label(GTK_BUTTON(toggle), _("Windowed"));
-        // Changing resizable property doesn't take effect immediately
-        // need to delay fullscreen till after this callback returns
-        // to mainloop
-        g_idle_add((GSourceFunc)go_full, ud);
-    }
-    else
-    {
-        gtk_window_unfullscreen(window);
-        gtk_window_set_resizable(window, FALSE);
-        gtk_button_set_label(GTK_BUTTON(toggle), _("Fullscreen"));
-        ghb_set_preview_image(ud);
-    }
+    if (ud->preview->scaled_pix != NULL)
+        g_object_unref(ud->preview->scaled_pix);
+    ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
+
+    widget = GHB_WIDGET(ud->builder, "preview_image");
+    gtk_widget_queue_draw(widget);
 }
 
 G_MODULE_EXPORT void
@@ -1145,5 +1290,75 @@ preview_configure_cb(
         ghb_prefs_store();
     }
     return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+preview_state_cb(
+    GtkWidget *widget,
+    GdkEvent  *event,
+    signal_user_data_t *ud)
+{
+    GdkEventWindowState * wse = (GdkEventWindowState*)event;
+    if (wse->type == GDK_WINDOW_STATE)
+    {
+        // Look for transition to iconified state.
+        // Toggle "Show Preview" button when iconified.
+        // I only do this because there seems to be no
+        // way to reliably disable the iconfy button without
+        // also disabling the maximize button.
+        if (wse->changed_mask & wse->new_window_state &
+            GDK_WINDOW_STATE_ICONIFIED)
+        {
+            live_preview_stop(ud);
+            GtkWidget *widget = GHB_WIDGET(ud->builder, "show_preview");
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
+        }
+    }
+    return FALSE;
+}
+
+G_MODULE_EXPORT void
+preview_resize_cb(
+    GtkWidget     *widget,
+    GdkRectangle  *rect,
+    signal_user_data_t *ud)
+{
+    if (ud->preview->render_width != rect->width ||
+        ud->preview->render_height != rect->height)
+    {
+        ud->preview->render_width  = rect->width;
+        ud->preview->render_height = rect->height;
+        if (ud->preview->scaled_pix != NULL)
+            g_object_unref(ud->preview->scaled_pix);
+        ud->preview->scaled_pix = do_preview_scaling(ud, ud->preview->pix);
+
+        GtkWidget *widget = GHB_WIDGET(ud->builder, "preview_image");
+        gtk_widget_queue_draw(widget);
+
+        if (ABS(ud->preview->render_width  - ud->preview->width)  <= 2 ||
+            ABS(ud->preview->render_height - ud->preview->height) <= 2)
+        {
+            GtkWidget * widget = GHB_WIDGET(ud->builder, "preview_reset");
+            gtk_widget_hide(widget);
+        }
+        else
+        {
+            GtkWidget * widget = GHB_WIDGET(ud->builder, "preview_reset");
+            gtk_widget_show(widget);
+        }
+    }
+}
+
+G_MODULE_EXPORT void
+show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    g_debug("show_crop_changed_cb ()");
+    ghb_widget_to_setting(ud->prefs, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_live_reset(ud);
+    if (gtk_widget_is_sensitive(widget))
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
+    ghb_pref_save(ud->prefs, "preview_show_crop");
+    ghb_rescale_preview_image(ud);
 }
 

@@ -4332,11 +4332,6 @@ ghb_get_preview_image(
     {
         gint factor = 80;
 
-        if (ghb_dict_get_bool(ud->prefs, "preview_fullscreen"))
-        {
-            factor = 100;
-        }
-
         GdkScreen *ss;
         gint s_w, s_h;
 
