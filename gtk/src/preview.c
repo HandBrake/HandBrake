@@ -802,13 +802,24 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 static void _draw_pixbuf(signal_user_data_t * ud, cairo_t *cr, GdkPixbuf *pix)
 {
-    cairo_set_source_rgb(cr, 0, 0, 0);
+    int pix_width, pix_height, hoff, voff;
+
+    cairo_save(cr);
     cairo_rectangle(cr, 0, 0, ud->preview->render_width,
                               ud->preview->render_height);
+    cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
     cairo_fill(cr);
-    cairo_rectangle(cr, 0, 0, ud->preview->render_width,
-                              ud->preview->render_height);
-    cairo_clip(cr);
+    cairo_restore(cr);
+
+    pix_width  = gdk_pixbuf_get_width(pix);
+    pix_height = gdk_pixbuf_get_height(pix);
+    hoff = MAX((ud->preview->render_width  - pix_width)  / 2, 0);
+    voff = MAX((ud->preview->render_height - pix_height) / 2, 0);
+    if (voff > 0 || hoff > 0)
+    {
+        cairo_translate(cr, hoff, voff);
+    }
+
     gdk_cairo_set_source_pixbuf(cr, pix, 0, 0);
     cairo_paint(cr);
 }
@@ -953,7 +964,7 @@ init_preview_image(signal_user_data_t *ud)
         return;
 
     int pix_width, pix_height;
-    pix_width = gdk_pixbuf_get_width(ud->preview->pix);
+    pix_width  = gdk_pixbuf_get_width(ud->preview->pix);
     pix_height = gdk_pixbuf_get_height(ud->preview->pix);
     preview_set_size(ud, pix_width, pix_height);
 
