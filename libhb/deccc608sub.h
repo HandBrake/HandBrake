@@ -70,6 +70,7 @@ struct eia608
     int ssa_counter; // Number of subs currently written
     int screenfuls_counter; // Number of meaningful screenfuls written
     int64_t current_visible_start_ms; // At what time did the current visible buffer became so?
+    int64_t current_visible_scr_sequence; // At what time did the current visible buffer became so?
     enum cc_modes mode;
     unsigned char last_c1, last_c2;
     int channel; // Currently selected channel
@@ -89,6 +90,7 @@ struct s_write {
     hb_buffer_t *hb_buffer;
     hb_buffer_t *hb_last_buffer;
     int64_t last_pts;
+    int      last_scr_sequence;
     unsigned char *enc_buffer; // Generic general purpose buffer
     unsigned enc_buffer_used;
     unsigned enc_buffer_capacity;

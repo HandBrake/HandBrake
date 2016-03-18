@@ -27,17 +27,6 @@ hb_work_object_t hb_reader =
 
 typedef struct
 {
-    int    startup;
-    double average; // average time between packets
-    double filtered_average; // average time between packets
-    int64_t last;   // last timestamp seen on this stream
-    int id;         // stream id
-    int is_audio;   // != 0 if this is an audio stream
-    int valid;      // Stream timing is not valid until next scr.
-} stream_timing_t;
-
-typedef struct
-{
     int              id;
     hb_buffer_list_t list;
 } buffer_splice_list_t;
@@ -53,20 +42,18 @@ struct hb_work_private_s
     hb_dvd_t     * dvd;
     hb_stream_t  * stream;
 
-    stream_timing_t *stream_timing;
-    int64_t        scr_offset;
-    int            sub_scr_set;
     hb_psdemux_t   demux;
     int            scr_changes;
-    uint8_t        st_slots;        // size (in slots) of stream_timing array
-    uint8_t        saw_video;       // != 0 if we've seen video
-    uint8_t        saw_audio;       // != 0 if we've seen audio
+    int64_t        scr_offset;
+    int64_t        last_pts;
 
     int            start_found;     // found pts_to_start point
     int64_t        pts_to_start;
     int            chapter_end;
+
     uint64_t       st_first;
-    uint64_t       duration;
+    int64_t        duration;
+
     hb_fifo_t   ** fifos;
 
     buffer_splice_list_t * splice_list;
@@ -77,14 +64,29 @@ struct hb_work_private_s
  * Local prototypes
  **********************************************************************/
 static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id );
-static void UpdateState( hb_work_private_t  * r, int64_t start);
 static hb_buffer_list_t * get_splice_list(hb_work_private_t * r, int id);
+static void UpdateState( hb_work_private_t  * r );
 
 /***********************************************************************
  * reader_init
  ***********************************************************************
  *
  **********************************************************************/
+static int64_t chapter_end_pts(hb_title_t * title, int chapter_end )
+{
+    hb_chapter_t * chapter;
+    int64_t        duration;
+    int            ii;
+
+    duration = 0;
+    for (ii = 0; ii < chapter_end; ii++)
+    {
+        chapter = hb_list_item(title->list_chapter, ii);
+        duration += chapter->duration;
+    }
+    return duration;
+}
+
 static int hb_reader_open( hb_work_private_t * r )
 {
     if ( r->title->type == HB_BD_TYPE )
@@ -119,6 +121,8 @@ static int hb_reader_open( hb_work_private_t * r )
         else
         {
             hb_bd_seek_chapter(r->bd, r->job->chapter_start);
+            r->duration -= chapter_end_pts(r->job->title,
+                                           r->job->chapter_start - 1);
         }
     }
     else if (r->title->type == HB_DVD_TYPE)
@@ -130,6 +134,8 @@ static int hb_reader_open( hb_work_private_t * r )
             hb_dvd_close(&r->dvd);
             return 1;
         }
+        r->duration -= chapter_end_pts(r->job->title,
+                                       r->job->chapter_start - 1);
         if (r->job->angle)
         {
             hb_dvd_set_angle(r->dvd, r->job->angle);
@@ -141,6 +147,10 @@ static int hb_reader_open( hb_work_private_t * r )
                         (r->job->seek_points ? (r->job->seek_points + 1.0)
                                              : 11.0));
         }
+        // libdvdnav doesn't have a seek to timestamp function.
+        // So we will have to decode frames until we find the correct time
+        // in sync.c
+        r->start_found = 1;
     }
     else if (r->title->type == HB_STREAM_TYPE ||
              r->title->type == HB_FF_STREAM_TYPE)
@@ -161,11 +171,17 @@ static int hb_reader_open( hb_work_private_t * r )
                 // that we want.  So we will retrieve the start time of the
                 // first packet we get, subtract that from pts_to_start, and
                 // inspect the reset of the frames in sync.
-                r->start_found = 2;
                 r->duration -= r->job->pts_to_start;
             }
-            // hb_stream_seek_ts does nothing for TS streams and will return
-            // an error.
+            else
+            {
+                // hb_stream_seek_ts does nothing for TS streams and will
+                // return an error.
+                //
+                // So we will decode frames until we find the correct time
+                // in sync.c
+                r->start_found = 1;
+            }
         }
         else
         {
@@ -187,6 +203,8 @@ static int hb_reader_open( hb_work_private_t * r )
              * Seek to the start chapter.
              */
             hb_stream_seek_chapter(r->stream, start);
+            r->duration -= chapter_end_pts(r->job->title,
+                                           r->job->chapter_start - 1);
         }
     }
     else
@@ -210,22 +228,14 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     r->title = job->title;
     r->die   = job->die;
 
-    r->st_slots = 4;
-    r->stream_timing = calloc( sizeof(stream_timing_t), r->st_slots );
-    r->stream_timing[0].id = r->title->video_id;
-    r->stream_timing[0].average = 90000. * (double)job->vrate.den /
-                                           job->vrate.num;
-    r->stream_timing[0].filtered_average = r->stream_timing[0].average;
-    r->stream_timing[0].last = -r->stream_timing[0].average;
-    r->stream_timing[0].valid = 1;
-    r->stream_timing[0].startup = 10;
-    r->stream_timing[1].id = -1;
-
     r->demux.last_scr = AV_NOPTS_VALUE;
+    r->last_pts       = AV_NOPTS_VALUE;
 
     r->chapter_end = job->chapter_end;
-    if ( !job->pts_to_start )
+    if (!job->pts_to_start)
+    {
         r->start_found = 1;
+    }
     else
     {
         // The frame at the actual start time may not be an i-frame
@@ -235,7 +245,7 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
         r->pts_to_start = MAX(0, job->pts_to_start - 1000000);
     }
 
-    if (job->pts_to_stop)
+    if (job->pts_to_stop > 0)
     {
         r->duration = job->pts_to_start + job->pts_to_stop;
     }
@@ -243,18 +253,18 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     {
         int frames = job->frame_to_start + job->frame_to_stop;
         r->duration = (int64_t)frames * job->title->vrate.den * 90000 /
-                               job->title->vrate.num;
+                                        job->title->vrate.num;
     }
     else
     {
-        hb_chapter_t *chapter;
-        int ii;
-
-        r->duration = 0;
-        for (ii = job->chapter_start; ii < job->chapter_end; ii++)
+        int count = hb_list_count(job->title->list_chapter);
+        if (count == 0 || count <= job->chapter_end)
         {
-            chapter = hb_list_item( job->title->list_chapter, ii - 1);
-            r->duration += chapter->duration;
+            r->duration = job->title->duration;
+        }
+        else
+        {
+            r->duration = chapter_end_pts(job->title, job->chapter_end);
         }
     }
 
@@ -289,7 +299,6 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     // with the reader. Specifically avcodec needs this.
     if ( hb_reader_open( r ) )
     {
-        free( r->stream_timing );
         free( r );
         return 1;
     }
@@ -318,11 +327,6 @@ static void reader_close( hb_work_object_t * w )
     else if (r->stream)
     {
         hb_stream_close(&r->stream);
-    }
-
-    if ( r->stream_timing )
-    {
-        free( r->stream_timing );
     }
 
     int ii;
@@ -389,150 +393,6 @@ static void push_buf( hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
     {
         hb_buffer_close( &buf );
     }
-}
-
-static int is_audio( hb_work_private_t *r, int id )
-{
-    int i;
-    hb_audio_t *audio;
-
-    for( i = 0; ( audio = hb_list_item( r->title->list_audio, i ) ); ++i )
-    {
-        if ( audio->id == id )
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-static int is_subtitle( hb_work_private_t *r, int id )
-{
-    int i;
-    hb_subtitle_t *sub;
-
-    for( i = 0; ( sub = hb_list_item( r->title->list_subtitle, i ) ); ++i )
-    {
-        if ( sub->id == id )
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-// The MPEG STD (Standard Target Decoder) essentially requires that we keep
-// per-stream timing so that when there's a timing discontinuity we can
-// seemlessly join packets on either side of the discontinuity. This join
-// requires that we know the timestamp of the previous packet and the
-// average inter-packet time (since we position the new packet at the end
-// of the previous packet). The next four routines keep track of this
-// per-stream timing.
-
-// find or create the per-stream timing state for 'buf'
-
-static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, int valid )
-{
-    stream_timing_t *st = r->stream_timing;
-    while ( st->id != buf->s.id && st->id != -1)
-    {
-        ++st;
-    }
-    // if we haven't seen this stream add it.
-    if ( st->id == -1 )
-    {
-        // we keep the steam timing info in an array with some power-of-two
-        // number of slots. If we don't have two slots left (one for our new
-        // entry plus one for the "-1" eol) we need to expand the array.
-        int slot = st - r->stream_timing;
-        if ( slot + 1 >= r->st_slots )
-        {
-            r->st_slots *= 2;
-            r->stream_timing = realloc( r->stream_timing, r->st_slots *
-                                        sizeof(*r->stream_timing) );
-            st = r->stream_timing + slot;
-        }
-        st->id = buf->s.id;
-        st->average = 30.*90.;
-        st->filtered_average = st->average;
-        st->startup = 10;
-        st->last = -st->average;
-        if ( ( st->is_audio = is_audio( r, buf->s.id ) ) != 0 )
-        {
-            r->saw_audio = 1;
-        }
-        st[1].id = -1;
-        st->valid = valid;
-    }
-    return st;
-}
-
-// update the average inter-packet time of the stream associated with 'buf'
-// using a recursive low-pass filter with a 16 packet time constant.
-
-static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
-{
-    stream_timing_t *st = id_to_st( r, buf, 1 );
-
-    if (buf->s.renderOffset == AV_NOPTS_VALUE)
-    {
-        st->last += st->filtered_average;
-        return;
-    }
-
-    double dt = buf->s.renderOffset - st->last;
-
-    // Protect against spurious bad timestamps
-    // timestamps should only move forward and by reasonable increments
-    if ( dt > 0 && dt < 5 * 90000LL )
-    {
-        if( st->startup )
-        {
-            st->average += ( dt - st->average ) * (1./4.);
-            st->startup--;
-        }
-        else
-        {
-            st->average += ( dt - st->average ) * (1./32.);
-        }
-        // Ignore outliers
-        if (dt < 1.5 * st->average)
-        {
-            st->filtered_average += ( dt - st->filtered_average ) * (1./32.);
-        }
-    }
-    st->last = buf->s.renderOffset;
-    st->valid = 1;
-}
-
-// use the per-stream state associated with 'buf' to compute a new scr_offset
-// such that 'buf' will follow the previous packet of this stream separated
-// by the average packet time of the stream.
-
-static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
-{
-    stream_timing_t *st = id_to_st( r, buf, 1 );
-    int64_t last;
-    if ( !st->valid )
-    {
-        // !valid means we've not received any previous data
-        // for this stream.  There is no 'last' packet time.
-        // So approximate it with video's last time.
-        last = r->stream_timing[0].last;
-        st->valid = 1;
-    }
-    else
-    {
-        last = st->last;
-    }
-    int64_t nxt = last + st->filtered_average;
-    r->scr_offset = buf->s.renderOffset - nxt;
-    // This log is handy when you need to debug timing problems...
-    //hb_log("id %x last %"PRId64" avg %g nxt %"PRId64" renderOffset %"PRId64
-    //       " scr_offset %"PRId64"",
-    //    buf->s.id, last, st->filtered_average, nxt,
-    //    buf->s.renderOffset, r->scr_offset);
-    r->scr_changes = r->demux.scr_changes;
 }
 
 static void reader_send_eof( hb_work_private_t * r )
@@ -619,10 +479,57 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     while ((buf = hb_buffer_list_rem_head(&list)) != NULL)
     {
-        fifos = GetFifoForId( r, buf->s.id );
-
-        if (fifos && r->stream && r->start_found == 2 )
+        if (buf->s.start   != AV_NOPTS_VALUE &&
+            r->scr_changes != r->demux.scr_changes)
         {
+            // First valid timestamp after an SCR change.  Update
+            // the per-stream scr sequence number
+            r->scr_changes = r->demux.scr_changes;
+
+            // libav tries to be too smart with timestamps and
+            // enforces unnecessary conditions.  One such condition
+            // is that subtitle timestamps must be monotonically
+            // increasing.  To encure this is the case, we calculate
+            // an offset upon each SCR change that will guarantee this.
+            // This is just a very rough SCR offset.  A fine grained
+            // offset that maintains proper sync is calculated in sync.c
+            if (r->last_pts != AV_NOPTS_VALUE)
+            {
+                r->scr_offset  = r->last_pts + 90000 - buf->s.start;
+            }
+            else
+            {
+                r->scr_offset  = -buf->s.start;
+            }
+        }
+        // Set the scr sequence that this buffer's timestamps are
+        // referenced to.
+        buf->s.scr_sequence = r->scr_changes;
+        if (buf->s.start != AV_NOPTS_VALUE)
+        {
+            buf->s.start += r->scr_offset;
+        }
+        if (buf->s.renderOffset != AV_NOPTS_VALUE)
+        {
+            buf->s.renderOffset += r->scr_offset;
+        }
+        if (buf->s.start > r->last_pts)
+        {
+            r->last_pts = buf->s.start;
+            UpdateState(r);
+        }
+
+        fifos = GetFifoForId( r, buf->s.id );
+        if (fifos && r->stream && !r->start_found)
+        {
+            // libav is allowing SSA subtitles to leak through that are
+            // prior to the seek point.  So only make the adjustment to
+            // pts_to_start after we see the next video buffer.
+            if (buf->s.id != r->job->title->video_id)
+            {
+                hb_buffer_close(&buf);
+                continue;
+            }
             // We will inspect the timestamps of each frame in sync
             // to skip from this seek point to the timestamp we
             // want to start at.
@@ -638,176 +545,9 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             r->start_found = 1;
         }
 
-        if ( fifos && ! r->saw_video && !r->job->indepth_scan )
-        {
-            // The first data packet with a PTS from an audio or video stream
-            // that we're decoding defines 'time zero'. Discard packets until
-            // we get one.
-            if (buf->s.start != AV_NOPTS_VALUE &&
-                buf->s.renderOffset != AV_NOPTS_VALUE &&
-                 (buf->s.id == r->title->video_id ||
-                  is_audio( r, buf->s.id)))
-            {
-                // force a new scr offset computation
-                r->scr_changes = r->demux.scr_changes - 1;
-                // create a stream state if we don't have one so the
-                // offset will get computed correctly.
-                id_to_st( r, buf, 1 );
-                r->saw_video = 1;
-                hb_log( "reader: first SCR %"PRId64" id 0x%x DTS %"PRId64,
-                        r->demux.last_scr, buf->s.id, buf->s.renderOffset );
-            }
-            else
-            {
-                fifos = NULL;
-            }
-        }
-
-        if ( r->job->indepth_scan || fifos )
-        {
-            if ( buf->s.renderOffset != AV_NOPTS_VALUE )
-            {
-                if ( r->scr_changes != r->demux.scr_changes )
-                {
-                    // This is the first audio or video packet after an SCR
-                    // change. Compute a new scr offset that would make this
-                    // packet follow the last of this stream with the
-                    // correct average spacing.
-                    stream_timing_t *st = id_to_st( r, buf, 0 );
-
-                    // if this is the video stream and we don't have
-                    // audio yet or this is an audio stream
-                    // generate a new scr
-                    if ( st->is_audio ||
-                         ( st == r->stream_timing && !r->saw_audio ) )
-                    {
-                        new_scr_offset( r, buf );
-                        r->sub_scr_set = 0;
-                    }
-                    else
-                    {
-                        // defer the scr change until we get some
-                        // audio since audio has a timestamp per
-                        // frame but video & subtitles don't. Clear
-                        // the timestamps so the decoder will generate
-                        // them from the frame durations.
-                        if (is_subtitle(r, buf->s.id) &&
-                            buf->s.start != AV_NOPTS_VALUE)
-                        {
-                            if (!r->sub_scr_set)
-                            {
-                                // We can't generate timestamps in the
-                                // subtitle decoder as we can for
-                                // audio & video.  So we need to make
-                                // the closest guess that we can
-                                // for the subtitles start time here.
-                                int64_t last = r->stream_timing[0].last;
-                                r->scr_offset = buf->s.start - last;
-                                r->sub_scr_set = 1;
-                            }
-                        }
-                        else
-                        {
-                            buf->s.start = AV_NOPTS_VALUE;
-                            buf->s.renderOffset = AV_NOPTS_VALUE;
-                        }
-                    }
-                }
-            }
-            if ( buf->s.start != AV_NOPTS_VALUE )
-            {
-                int64_t start = buf->s.start - r->scr_offset;
-
-                if (!r->start_found || r->job->indepth_scan)
-                {
-                    UpdateState( r, start );
-                }
-
-                if (r->job->indepth_scan && r->job->pts_to_stop &&
-                    start >= r->pts_to_start + r->job->pts_to_stop)
-                {
-                    // sync normally would terminate p-to-p
-                    // but sync doesn't run during indepth scan
-                    hb_log("reader: reached pts %"PRId64", exiting early", start);
-                    reader_send_eof(r);
-                    hb_buffer_list_close(&list);
-                    return HB_WORK_DONE;
-                }
-
-                if (!r->start_found && start >= r->pts_to_start)
-                {
-                    // pts_to_start point found
-                    // Note that this code path only gets executed for
-                    // medai where we have not performed an initial seek
-                    // to get close to the start time. So the 'start' time
-                    // is the time since the first frame.
-
-                    if (r->stream)
-                    {
-                        // libav multi-threaded decoders can get into
-                        // a bad state if the initial data is not
-                        // decodable.  So try to improve the chances of
-                        // a good start by waiting for an initial iframe
-                        hb_stream_set_need_keyframe(r->stream, 1);
-                        hb_buffer_close( &buf );
-                        continue;
-                    }
-                    r->start_found = 1;
-                    // sync.c also pays attention to job->pts_to_start
-                    // It eats up the 10 second slack that we build in
-                    // to the start time here in reader (so that video
-                    // decode is clean at the start time).
-                    // sync.c expects pts_to_start to be relative to the
-                    // first timestamp it sees.
-                    if (r->job->pts_to_start > start)
-                    {
-                        r->job->pts_to_start -= start;
-                    }
-                    else
-                    {
-                        r->job->pts_to_start = 0;
-                    }
-                }
-                // This log is handy when you need to debug timing problems
-                //hb_log("id %x scr_offset %"PRId64
-                //       " start %"PRId64" --> %"PRId64"",
-                //        buf->s.id, r->scr_offset, buf->s.start,
-                //        buf->s.start - r->scr_offset);
-                buf->s.start -= r->scr_offset;
-                if ( buf->s.stop != AV_NOPTS_VALUE )
-                {
-                    buf->s.stop -= r->scr_offset;
-                }
-            }
-            if ( buf->s.renderOffset != AV_NOPTS_VALUE )
-            {
-                // This packet is referenced to the same SCR as the last.
-                // Adjust timestamp to remove the System Clock Reference
-                // offset then update the average inter-packet time
-                // for this stream.
-                buf->s.renderOffset -= r->scr_offset;
-                update_ipt( r, buf );
-            }
-#if 0
-            // JAS: This was added to fix a rare "audio time went backward"
-            // sync error I found in one sample.  But it has a bad side
-            // effect on DVDs, causing frequent "adding silence" sync
-            // errors. So I am disabling it.
-            else
-            {
-                update_ipt( r, buf );
-            }
-#endif
-        }
         buf = splice_discontinuity(r, buf);
-        if( fifos && buf != NULL )
+        if (fifos && buf != NULL)
         {
-            if ( !r->start_found )
-            {
-                hb_buffer_close( &buf );
-                continue;
-            }
-
             /* if there are mutiple output fifos, send a copy of the
              * buffer down all but the first (we have to not ship the
              * original buffer or we'll race with the thread that's
@@ -832,11 +572,17 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-static void UpdateState( hb_work_private_t  * r, int64_t start)
+static void UpdateState( hb_work_private_t  * r )
 {
     hb_state_t state;
     uint64_t now;
     double avg;
+
+    if (!r->job->indepth_scan || !r->start_found)
+    {
+        // Only update state when sync.c is not handling state updates
+        return;
+    }
 
     now = hb_get_date();
     if( !r->st_first )
@@ -846,16 +592,8 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
 
     hb_get_state2(r->job->h, &state);
 #define p state.param.working
-    if ( !r->job->indepth_scan )
-    {
-        state.state = HB_STATE_SEARCHING;
-        p.progress  = (float) start / (float) r->job->pts_to_start;
-    }
-    else
-    {
-        state.state = HB_STATE_WORKING;
-        p.progress  = (float) start / (float) r->duration;
-    }
+    state.state = HB_STATE_WORKING;
+    p.progress  = (float) r->last_pts / (float) r->duration;
     if( p.progress > 1.0 )
     {
         p.progress = 1.0;
@@ -866,11 +604,12 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
     {
         int eta;
 
-        avg = 1000.0 * (double)start / (now - r->st_first);
-        if ( !r->job->indepth_scan )
-            eta = ( r->job->pts_to_start - start ) / avg;
-        else
-            eta = ( r->duration - start ) / avg;
+        avg = 1000.0 * (double)r->last_pts / (now - r->st_first);
+        eta = (r->duration - r->last_pts) / avg;
+        if (eta < 0)
+        {
+            eta = 0;
+        }
         p.hours   = eta / 3600;
         p.minutes = ( eta % 3600 ) / 60;
         p.seconds = eta % 60;
@@ -885,6 +624,7 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
 
     hb_set_state( r->job->h, &state );
 }
+
 /***********************************************************************
  * GetFifoForId
  ***********************************************************************
@@ -898,9 +638,9 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
     hb_subtitle_t * subtitle;
     int             i, n;
 
-    if( id == title->video_id )
+    if (id == title->video_id)
     {
-        if (job->indepth_scan && !job->frame_to_stop)
+        if (job->indepth_scan && r->start_found)
         {
             /*
              * Ditch the video here during the indepth scan until
@@ -919,7 +659,7 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
         }
     }
 
-    for( i = n = 0; i < hb_list_count( job->list_subtitle ); i++ )
+    for (i = n = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
         subtitle =  hb_list_item( job->list_subtitle, i );
         if (id == subtitle->id)
@@ -928,24 +668,24 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
             r->fifos[n++] = subtitle->fifo_in;
         }
     }
-    if ( n != 0 )
+    if (n != 0)
     {
         r->fifos[n] = NULL;
         return r->fifos;
     }
 
-    if( !job->indepth_scan )
+    if (!job->indepth_scan)
     {
-        for( i = n = 0; i < hb_list_count( job->list_audio ); i++ )
+        for (i = n = 0; i < hb_list_count( job->list_audio ); i++)
         {
             audio = hb_list_item( job->list_audio, i );
-            if( id == audio->id )
+            if (id == audio->id)
             {
                 r->fifos[n++] = audio->priv.fifo_in;
             }
         }
 
-        if( n != 0 )
+        if (n != 0)
         {
             r->fifos[n] = NULL;
             return r->fifos;

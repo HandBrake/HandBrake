@@ -393,12 +393,13 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             int loc             = b->cl.buffer_location;
 
             memset( b, 0, sizeof(hb_buffer_t) );
-            b->alloc = buffer_pool->buffer_size;
-            b->size = size;
-            b->data = data;
-            b->s.start = AV_NOPTS_VALUE;
-            b->s.stop = AV_NOPTS_VALUE;
+            b->alloc          = buffer_pool->buffer_size;
+            b->size           = size;
+            b->data           = data;
+            b->s.start        = AV_NOPTS_VALUE;
+            b->s.stop         = AV_NOPTS_VALUE;
             b->s.renderOffset = AV_NOPTS_VALUE;
+            b->s.scr_sequence = -1;
 
             /* OpenCL */
             b->cl.buffer          = buffer;
@@ -470,9 +471,10 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
         buffers.allocated += b->alloc;
         hb_unlock(buffers.lock);
     }
-    b->s.start = AV_NOPTS_VALUE;
-    b->s.stop = AV_NOPTS_VALUE;
+    b->s.start        = AV_NOPTS_VALUE;
+    b->s.stop         = AV_NOPTS_VALUE;
     b->s.renderOffset = AV_NOPTS_VALUE;
+    b->s.scr_sequence = -1;
 #if defined(HB_BUFFER_DEBUG)
     hb_lock(buffers.lock);
     hb_list_add(buffers.alloc_list, b);
