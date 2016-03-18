@@ -59,7 +59,6 @@ namespace HandBrakeWPF.ViewModels
         private bool showPeakFramerate;
         private int rf;
         private bool canClear;
-        private bool useAdvancedTab;
         private bool displayTurboFirstPass;
         private int videoPresetMaxValue;
         private int videoPresetValue;
@@ -137,24 +136,15 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.useAdvancedTab;
+                return this.Task.ShowAdvancedTab;
             }
             set
             {
-                if (!Equals(value, this.useAdvancedTab))
+                if (!Equals(value, this.Task.ShowAdvancedTab))
                 {
                     // Set the Advanced Tab up with the current settings, if we can.
-                    if (value)
-                    {
-                        this.Task.AdvancedEncoderOptions = this.GetActualx264Query();
-                    }
+                    this.Task.AdvancedEncoderOptions = value ? this.GetActualx264Query() : string.Empty;
 
-                    if (!value)
-                    {
-                        this.Task.AdvancedEncoderOptions = string.Empty;
-                    }
-
-                    this.useAdvancedTab = value;
                     this.Task.ShowAdvancedTab = value;
                     this.NotifyOfPropertyChange(() => this.UseAdvancedTab);
                 }
@@ -942,7 +932,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
-                this.UseAdvancedTab = !string.IsNullOrEmpty(preset.Task.AdvancedEncoderOptions) && this.ShowAdvancedTab;
+                this.UseAdvancedTab = (!string.IsNullOrEmpty(preset.Task.AdvancedEncoderOptions) && this.ShowAdvancedTab) || preset.Task.ShowAdvancedTab;
             }
         }
 
