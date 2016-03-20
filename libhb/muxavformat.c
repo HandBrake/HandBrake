@@ -47,8 +47,6 @@ struct hb_mux_object_s
 
     int                 ntracks;
     hb_mux_data_t    ** tracks;
-
-    int64_t             chapter_delay;
 };
 
 enum
@@ -199,7 +197,7 @@ static int avformatInit( hb_mux_object_t * m )
     job->mux_data = track;
 
     track->type = MUX_TYPE_VIDEO;
-    track->prev_chapter_tc = AV_NOPTS_VALUE;
+    track->prev_chapter_tc = 0;
     track->st = avformat_new_stream(m->oc, NULL);
     if (track->st == NULL)
     {
@@ -1028,7 +1026,7 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
     // delayed stream timestamps.  It makes no corrections to the chapter 
     // track.  A patch to libav would touch a lot of things, so for now,
     // work around the issue here.
-    chap->start = start + m->chapter_delay;
+    chap->start = start;
     chap->end = end;
     av_dict_set(&chap->metadata, "title", title, 0);
 
@@ -1042,23 +1040,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     hb_job_t *job     = m->job;
     uint8_t sub_out[2048];
 
-    if (track->type == MUX_TYPE_VIDEO &&
-        track->prev_chapter_tc == AV_NOPTS_VALUE)
-    {
-        // Chapter timestamps are biased the same as video timestamps.
-        // This needs to be reflected in the initial chapter timestamp.
-        //
-        // TODO: Don't assume the first chapter is at 0.  Pass the first
-        // chapter through the pipeline instead of dropping it as we
-        // currently do.
-        m->chapter_delay = av_rescale_q(m->job->config.h264.init_delay,
-                                        (AVRational){1,90000},
-                                        track->st->time_base);
-        track->prev_chapter_tc = -m->chapter_delay;
-    }
-    // We only compute dts duration for MP4 files
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
+        // compute dts duration for MP4 files
         hb_buffer_t * tmp;
 
         // delay by one frame so that we can compute duration properly.
@@ -1069,6 +1053,19 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     if (buf == NULL)
         return 0;
 
+    if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV))
+    {
+        // libav matroska muxer doesn't write dts to the output, but
+        // if it sees a negative dts, it applies an offset to both pts
+        // and dts to make it positive.  This offset breaks chapter
+        // start times and A/V sync.  libav also requires that dts is
+        // "monotically increasing", which means it last_dts <= next_dts.
+        // So we can't set dts = pts because pts can go backwards due to
+        // bframes. So set dts = 0 for mkv.
+        buf->s.renderOffset = 0;
+        // Note: for MP4, libav allows negative dts and creates an edts
+        // (edit list) entry in this case.
+    }
     if (buf->s.renderOffset == AV_NOPTS_VALUE)
     {
         dts = av_rescale_q(buf->s.start, (AVRational){1,90000},
