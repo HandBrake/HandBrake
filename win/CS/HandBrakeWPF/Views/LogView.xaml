@@ -17,6 +17,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+                       
             <ToolBar Grid.Row="0"
                      ToolBar.OverflowMode="Never" 
                      ToolBarTray.IsLocked="True"
@@ -38,7 +39,26 @@
 
             </ToolBar>
 
-            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText" />
+            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText">
+
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
+                            <MenuItem.Icon>
+                                <Image Width="16" Source="Images/copy.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
+                            <MenuItem.Icon>
+                                <Image Width="16" Source="Images/folder.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Auto Scroll" IsCheckable="True" IsChecked="True" x:Name="AutoScroll" />
+                        
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
 
         </Grid>
 

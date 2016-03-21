@@ -170,19 +170,19 @@ namespace HandBrakeWPF.Services.Encode
         /// <summary>
         /// The write file.
         /// </summary>
-        /// <param name="fileName">
-        /// The file name.
-        /// </param>
         /// <param name="content">
         /// The content.
         /// </param>
-        private void WriteFile(string fileName, string content)
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        private void WriteFile(string content, string fileName)
         {
             try
             {
                 using (StreamWriter fileWriter = new StreamWriter(fileName) { AutoFlush = true })
                 {
-                    fileWriter.WriteLineAsync(content);
+                    fileWriter.Write(content);
                 }
             }
             catch (Exception exc)

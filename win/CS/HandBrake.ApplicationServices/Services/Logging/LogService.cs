@@ -120,7 +120,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
                     this.messageIndex = this.messageIndex + 1;
                     msg = new LogMessage(
                             "Log Service Pausing. Too Many Log messages. This may indicate a problem with your encode.",
-                            LogMessageType.Vital,
+                            LogMessageType.Application,
                             LogLevel.Error,
                             this.messageIndex);
                     this.logMessages.Add(msg);
@@ -204,7 +204,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
             }
             catch (Exception exc)
             {
-                this.LogMessage("Failed to Initialise Disk Logging. " + Environment.NewLine + exc, LogMessageType.Vital, LogLevel.Error);
+                this.LogMessage("Failed to Initialise Disk Logging. " + Environment.NewLine + exc, LogMessageType.Application, LogLevel.Error);
 
                 if (this.fileWriter != null)
                 {
@@ -227,7 +227,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
         public void SetupLogHeader(string header)
         {
             this.logHeader = header;
-            this.LogMessage(header, LogMessageType.Vital, LogLevel.Info);
+            this.LogMessage(header, LogMessageType.Application, LogLevel.Info);
         }
 
         /// <summary>

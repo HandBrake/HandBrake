@@ -205,7 +205,7 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="message">Log message content</param>
         protected void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("# {0}", message), LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
         #endregion
     }

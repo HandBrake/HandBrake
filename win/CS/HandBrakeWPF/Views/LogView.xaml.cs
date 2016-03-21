@@ -77,7 +77,11 @@ namespace HandBrakeWPF.Views
             {
                 // This works better than Data Binding because of the scroll.
                 this.logText.AppendText(Environment.NewLine + e.Log.Content);
-                this.logText.ScrollToEnd();
+
+                if (this.AutoScroll.IsChecked)
+                {
+                    this.logText.ScrollToEnd();
+                }
             }
         }
 

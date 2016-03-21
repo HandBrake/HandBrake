@@ -17,6 +17,6 @@ namespace HandBrake.ApplicationServices.Services.Logging.Model
         ScanOrEncode,
         API,
         Progress,
-        Vital,
+        Application,
     }
 }
