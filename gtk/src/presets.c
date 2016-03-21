@@ -685,8 +685,8 @@ presets_add_config_file(const gchar *name)
             return -2;
         }
 
-        hb_value_t *backup = hb_value_dup(preset);
-        int result = hb_presets_import(preset);
+        hb_value_t *imported;
+        int result = hb_presets_import(preset, &imported);
         if (result)
         {
             // hb_presets_import modified the preset.  So make a backup
@@ -694,19 +694,19 @@ presets_add_config_file(const gchar *name)
             config  = ghb_get_user_config_dir(NULL);
             path    = g_strdup_printf ("%s/presets.%d.%d.%d.json",
                             config, major, minor, micro);
-            hb_value_write_json(backup, path);
+            hb_value_write_json(preset, path);
             g_free(config);
             g_free(path);
         }
-        hb_value_free(&backup);
 
-        hb_presets_add(preset);
+        hb_presets_add(imported);
         if (major != hb_major || minor != hb_minor || micro != hb_micro)
         {
             // Reload hb builtin presets
             hb_presets_builtin_update();
             store_presets();
         }
+        hb_value_free(&imported);
         hb_value_free(&preset);
         return 0;
     }

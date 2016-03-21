@@ -31,8 +31,10 @@ static hb_value_t *hb_preset_template = NULL;
 static hb_value_t *hb_presets = NULL;
 static hb_value_t *hb_presets_builtin = NULL;
 
-static void preset_clean(hb_value_t *preset, hb_value_t *template);
-static int  preset_import(hb_value_t *preset, int major, int minor, int micro);
+static void         preset_clean(hb_value_t *preset, hb_value_t *template);
+static int          preset_import(hb_value_t *preset, int major, int minor,
+                                  int micro);
+static hb_value_t * presets_package(const hb_value_t *presets);
 
 enum
 {
@@ -2724,40 +2726,54 @@ int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
     return -1;
 }
 
-void hb_presets_update_version(hb_value_t *preset)
+hb_value_t * hb_presets_update_version(hb_value_t *presets)
 {
-    if (hb_value_type(preset) == HB_VALUE_TYPE_DICT)
+    if (hb_value_type(presets) == HB_VALUE_TYPE_DICT)
     {
         // Is this a single preset or a packaged collection of presets?
-        hb_value_t *val = hb_dict_get(preset, "PresetName");
+        hb_value_t *val = hb_dict_get(presets, "PresetName");
         if (val == NULL)
         {
-            val = hb_dict_get(preset, "VersionMajor");
+            val = hb_dict_get(presets, "VersionMajor");
             if (val != NULL)
             {
-                hb_dict_set(preset, "VersionMajor",
+                hb_dict_set(presets, "VersionMajor",
                             hb_value_int(hb_preset_version_major));
-                hb_dict_set(preset, "VersionMinor",
+                hb_dict_set(presets, "VersionMinor",
                             hb_value_int(hb_preset_version_minor));
-                hb_dict_set(preset, "VersionMicro",
+                hb_dict_set(presets, "VersionMicro",
                             hb_value_int(hb_preset_version_micro));
+                hb_value_incref(presets);
+                return presets;
             }
+            // Unrecoginzable preset file format
+            return NULL;
         }
     }
+    return presets_package(presets);
 }
 
-int hb_presets_import(hb_value_t *preset)
+int hb_presets_import(const hb_value_t *in, hb_value_t **out)
 {
-    preset_import_context_t ctx;
+    preset_import_context_t   ctx;
+    hb_value_t              * dup;
 
     ctx.do_ctx.path.depth = 1;
     ctx.result = 0;
-    hb_presets_version(preset, &ctx.major, &ctx.minor, &ctx.micro);
-    presets_do(do_preset_import, preset, (preset_do_context_t*)&ctx);
+
+    // Done modify the input
+    dup = hb_value_dup(in);
+    hb_presets_version(dup, &ctx.major, &ctx.minor, &ctx.micro);
+    presets_do(do_preset_import, dup, (preset_do_context_t*)&ctx);
     if (ctx.result)
     {
-        hb_presets_update_version(preset);
+        *out = hb_presets_update_version(dup);
     }
+    else
+    {
+        *out = hb_value_dup(in);
+    }
+    hb_value_free(&dup);
 
     return ctx.result;
 }
@@ -2774,12 +2790,14 @@ int hb_presets_import_json(const char *in, char **out)
     if (dict == NULL)
         return 0;
 
-    result = hb_presets_import(dict);
+    hb_value_t * imported;
+    result = hb_presets_import(dict, &imported);
     if (out != NULL)
     {
-        *out = hb_value_get_json(dict);
+        *out = hb_value_get_json(imported);
     }
     hb_value_free(&dict);
+    hb_value_free(&imported);
     return result;
 }
 
@@ -2800,21 +2818,18 @@ char * hb_presets_clean_json(const char *json)
 static hb_value_t * presets_unpackage(const hb_value_t *packaged_presets)
 {
     // Do any legacy translations.
-    hb_value_t *tmp = hb_value_dup(packaged_presets);
-    hb_presets_import(tmp);
-    if (hb_value_type(tmp) == HB_VALUE_TYPE_ARRAY)
-    {
-        // Not packaged
-        return tmp;
-    }
-    if (hb_dict_get(tmp, "PresetName") != NULL)
-    {
-        // Bare single preset
-        return tmp;
-    }
-    hb_value_t *presets = hb_dict_get(tmp, "PresetList");
-    hb_value_incref(presets);
+    hb_value_t * imported;
+    hb_value_t * tmp = hb_value_dup(packaged_presets);
+    hb_presets_import(tmp, &imported);
     hb_value_free(&tmp);
+    if (imported == NULL)
+    {
+        // Invalid preset format, return an empty array
+        return hb_value_array_init();
+    }
+    hb_value_t *presets = hb_dict_get(imported, "PresetList");
+    hb_value_incref(presets);
+    hb_value_free(&imported);
     return presets;
 }
 
