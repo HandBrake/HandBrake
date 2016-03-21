@@ -104,11 +104,11 @@
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left" />
-
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding ResetWhenDoneAction}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" IsChecked="{Binding ResetWhenDoneAction}" />
+                                
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

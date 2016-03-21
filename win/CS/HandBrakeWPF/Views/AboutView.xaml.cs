@@ -9,7 +9,9 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Diagnostics;
     using System.Windows.Controls;
+    using System.Windows.Navigation;
 
     /// <summary>
     /// Interaction logic for AboutView.xaml
@@ -22,6 +24,20 @@ namespace HandBrakeWPF.Views
         public AboutView()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// The handbrake website_ on request navigate.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void HandbrakeWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start("https://handbrake.fr");
         }
     }
 }
