@@ -9,8 +9,12 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
+
+    using HandBrakeWPF.ViewModels;
 
     /// <summary>
     /// Interaction logic for LogView.xaml
@@ -22,7 +26,59 @@ namespace HandBrakeWPF.Views
         /// </summary>
         public LogView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.DataContextChanged += this.LogView_DataContextChanged;
+        }
+
+        /// <summary>
+        /// The log view_ data context changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void LogView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            LogViewModel vm = e.NewValue as LogViewModel;
+            if (vm != null)
+            {
+                this.logText.AppendText(vm.ActivityLog);
+                vm.LogMessageReceived += this.Vm_LogMessageReceived;
+            }
+        }
+
+        /// <summary>
+        /// The vm_ log message received.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void Vm_LogMessageReceived(object sender, HandBrake.ApplicationServices.Services.Logging.EventArgs.LogEventArgs e)
+        {
+            if (e == null)
+            {
+                LogViewModel vm = this.DataContext as LogViewModel;
+                if (vm != null)
+                {
+                    this.logText.Clear();
+                    this.logText.AppendText(vm.ActivityLog);
+                }
+                else
+                {
+                    Debug.WriteLine("Failed to Reset Log correctly.");
+                }
+            }
+            else
+            {
+                // This works better than Data Binding because of the scroll.
+                this.logText.AppendText(Environment.NewLine + e.Log.Content);
+                this.logText.ScrollToEnd();
+            }
         }
 
         /// <summary>

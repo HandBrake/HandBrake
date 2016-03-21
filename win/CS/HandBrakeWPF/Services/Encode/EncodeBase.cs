@@ -13,11 +13,10 @@ namespace HandBrakeWPF.Services.Encode
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Text;
 
     using HandBrake.ApplicationServices.Model;
-
-    using HandBrakeWPF.Utilities;
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeCompletedStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeCompletedStatus;
@@ -31,38 +30,11 @@ namespace HandBrakeWPF.Services.Encode
     /// </summary>
     public class EncodeBase
     {
-        #region Private Variables
-
-        /// <summary>
-        /// A Lock for the filewriter
-        /// </summary>
-        private static readonly object FileWriterLock = new object();
-
-        /// <summary>
-        /// The Log File Header
-        /// </summary>
-        private readonly StringBuilder header;
-
-        /// <summary>
-        /// The Log Buffer
-        /// </summary>
-        private StringBuilder logBuffer;
-
-        /// <summary>
-        /// The Log file writer
-        /// </summary>
-        private StreamWriter fileWriter;
-
-        #endregion
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeBase"/> class.
         /// </summary>
         public EncodeBase()
-        {
-            this.logBuffer = new StringBuilder();
-            this.header = GeneralUtilities.CreateLogHeader();
-            this.LogIndex = 0;
+        {    
         }
 
         #region Events
@@ -90,39 +62,6 @@ namespace HandBrakeWPF.Services.Encode
         /// Gets or sets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding { get; protected set; }
-
-        /// <summary>
-        /// Gets ActivityLog.
-        /// </summary>
-        public string ActivityLog
-        {
-            get
-            {
-                string noLog = "There is no log information to display." + Environment.NewLine + Environment.NewLine
-                 + "This window will only display logging information after you have started an encode." + Environment.NewLine
-                 + Environment.NewLine + "You can find previous log files in the log directory or by clicking the 'Open Log Directory' button above.";
-                
-                return string.IsNullOrEmpty(this.logBuffer.ToString())
-                           ? noLog
-                           : this.header + this.logBuffer.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the log index.
-        /// </summary>
-        public int LogIndex { get; private set; }
-
-        /// <summary>
-        /// Gets LogBuffer.
-        /// </summary>
-        public StringBuilder LogBuffer
-        {
-            get
-            {
-                return this.logBuffer;
-            }
-        }
 
         #endregion
 
@@ -156,8 +95,6 @@ namespace HandBrakeWPF.Services.Encode
             {
                 handler(this, e);
             }
-
-            this.LogIndex = 0; // Reset
         }
 
         /// <summary>
@@ -186,6 +123,9 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="destination">
         /// The Destination File Path
         /// </param>
+        /// <param name="isPreview">
+        /// The is Preview.
+        /// </param>
         /// <param name="configuration">
         /// The configuration.
         /// </param>
@@ -193,15 +133,12 @@ namespace HandBrakeWPF.Services.Encode
         {
             try
             {
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                                "\\HandBrake\\logs";
-
-                string tempLogFile = Path.Combine(logDir, isPreview ? $"preview_encode_log{GeneralUtilities.ProcessId}.txt" : string.Format("last_encode_log{0}.txt", GeneralUtilities.ProcessId));
-
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
-                string encodeLogFile = destinationFile + " " +
-                                       DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
+                string encodeLogFile = destinationFile + " " + DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
+                ILog log = LogService.GetLogger();
+                string logContent = log.ActivityLog;
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))
@@ -210,19 +147,18 @@ namespace HandBrakeWPF.Services.Encode
                 }
 
                 // Copy the Log to HandBrakes log folder in the users applciation data folder.
-                File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
+                this.WriteFile(logContent, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
                 if (configuration.SaveLogWithVideo)
                 {
-                    File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
+                    this.WriteFile(logContent, Path.Combine(encodeDestinationPath, encodeLogFile));
                 }
 
                 // Save a copy of the log file to a user specified location
                 if (Directory.Exists(configuration.SaveLogCopyDirectory) && configuration.SaveLogToCopyDirectory)
                 {
-                    File.Copy(
-                        tempLogFile, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
+                    this.WriteFile(logContent, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
                 }
             }
             catch (Exception exc)
@@ -232,116 +168,26 @@ namespace HandBrakeWPF.Services.Encode
         }
 
         /// <summary>
-        /// Setup the logging.
+        /// The write file.
         /// </summary>
-        protected void SetupLogging(bool isPreviewEncode)
-        {
-            this.ShutdownFileWriter();
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logFile = Path.Combine(logDir, isPreviewEncode ? $"preview_last_encode_log{GeneralUtilities.ProcessId}.txt" : $"last_encode_log{GeneralUtilities.ProcessId}.txt");
-
-            try
-            {
-                this.logBuffer = new StringBuilder();
-
-                this.logBuffer.AppendLine();
-
-                // Clear the current Encode Logs)
-                if (File.Exists(logFile))
-                {
-                    File.Delete(logFile);
-                }
-
-                lock (FileWriterLock)
-                {
-                    this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                    this.fileWriter.WriteLine(this.header);
-                    this.fileWriter.WriteLine();
-                }
-            }
-            catch (Exception)
-            {
-                if (this.fileWriter != null)
-                {
-                    lock (FileWriterLock)
-                    {
-                        this.fileWriter.Flush();
-                        this.fileWriter.Close();
-                        this.fileWriter.Dispose();
-                    }                
-                }
-
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// The service log message.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
+        /// <param name="fileName">
+        /// The file name.
         /// </param>
-        protected void ServiceLogMessage(string message)
-        {
-            this.ProcessLogMessage(string.Format("# {0}", message));
-        }
-
-        /// <summary>
-        /// Process an Incomming Log Message.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
+        /// <param name="content">
+        /// The content.
         /// </param>
-        protected void ProcessLogMessage(string message)
-        {
-            if (!string.IsNullOrEmpty(message))
-            {
-                try
-                {
-                    this.LogIndex = this.LogIndex + 1;
-
-                    lock (this.LogBuffer)
-                    {
-                        this.LogBuffer.AppendLine(message);
-                    }
-
-                    lock (FileWriterLock)
-                    {
-                        if (this.fileWriter != null && this.fileWriter.BaseStream.CanWrite)
-                        {
-                            this.fileWriter.WriteLine(message);
-                        }
-                    }
-                }
-                catch (Exception exc)
-                {
-                    Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
-                }
-            }
-        }
-
-        /// <summary>
-        /// Shutdown and Dispose of the File Writer.
-        /// </summary>
-        protected void ShutdownFileWriter()
+        private void WriteFile(string fileName, string content)
         {
             try
             {
-                lock (FileWriterLock)
+                using (StreamWriter fileWriter = new StreamWriter(fileName) { AutoFlush = true })
                 {
-                    if (this.fileWriter != null)
-                    {
-                        this.fileWriter.Flush();
-                        this.fileWriter.Close();
-                        this.fileWriter.Dispose();
-                    }
-
-                    this.fileWriter = null;
+                    fileWriter.WriteLineAsync(content);
                 }
             }
             catch (Exception exc)
             {
-                Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
+                Debug.WriteLine(exc);
             }
         }
 

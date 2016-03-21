@@ -14,9 +14,5 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface ILogViewModel
     {
-        /// <summary>
-        /// Gets or sets the selected tab.
-        /// </summary>
-        int SelectedTab { get; set; }
     }
 }

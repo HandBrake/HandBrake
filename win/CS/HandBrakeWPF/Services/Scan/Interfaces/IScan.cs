@@ -66,11 +66,6 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         bool IsScanning { get; }
 
         /// <summary>
-        /// Gets ActivityLog.
-        /// </summary>
-        string ActivityLog { get; }
-
-        /// <summary>
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>

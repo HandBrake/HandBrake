@@ -14,10 +14,9 @@ namespace HandBrake.ApplicationServices.Services.Logging.Model
     /// </summary>
     public enum LogMessageType
     {
-        scanJson,
-        encodeJson,
-        anamorphicJson,
-        progressJson,
-        libhb,
+        ScanOrEncode,
+        API,
+        Progress,
+        Vital,
     }
 }

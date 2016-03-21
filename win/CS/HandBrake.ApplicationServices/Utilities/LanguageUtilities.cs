@@ -277,6 +277,15 @@ namespace HandBrake.ApplicationServices.Utilities
             return iso6392Codes;
         }
 
+        /// <summary>
+        /// The get language names.
+        /// </summary>
+        /// <param name="languageCodes">
+        /// The language codes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
         public static List<string> GetLanguageNames(IList<string> languageCodes)
         {
             // Translate to Iso Codes

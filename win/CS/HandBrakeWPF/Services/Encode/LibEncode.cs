@@ -16,6 +16,9 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
+    using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Services.Encode.Factories;
@@ -30,7 +33,7 @@ namespace HandBrakeWPF.Services.Encode
     {
         #region Private Variables
 
-        private static readonly object LogLock = new object();
+        private ILog log = LogService.GetLogger();
         private IHandBrakeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
@@ -70,8 +73,6 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Create a new HandBrake instance
                 // Setup the HandBrake Instance
-                HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
-                HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
                 this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
@@ -79,11 +80,11 @@ namespace HandBrakeWPF.Services.Encode
 
                 this.IsEncoding = true;
                 this.isPreviewInstance = task.IsPreviewEncode;
-                this.SetupLogging(task.IsPreviewEncode);
 
                 // Verify the Destination Path Exists, and if not, create it.
                 this.VerifyEncodeDestinationPath(task);
 
+                this.log.Reset(); // Reset so we have a clean log for the start of the encode.
                 this.ServiceLogMessage("Starting Encode ...");
 
                 // Get an EncodeJob object for the Interop Library
@@ -97,7 +98,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.IsEncoding = false;
 
                 this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
-                this.InvokeEncodeCompleted(new HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source));
             }
         }
 
@@ -150,40 +151,6 @@ namespace HandBrakeWPF.Services.Encode
         #region HandBrakeInstance Event Handlers.
 
         /// <summary>
-        /// Log a message
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The MessageLoggedEventArgs.
-        /// </param>
-        private void HandBrakeInstanceErrorLogged(object sender, MessageLoggedEventArgs e)
-        {
-            lock (LogLock)
-            {
-                this.ProcessLogMessage(e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Log a message
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The MessageLoggedEventArgs.
-        /// </param>
-        private void HandBrakeInstanceMessageLogged(object sender, MessageLoggedEventArgs e)
-        {
-            lock (LogLock)
-            {
-                this.ProcessLogMessage(e.Message);
-            }
-        }
-
-        /// <summary>
         /// Encode Progress Event Handler
         /// </summary>
         /// <param name="sender">
@@ -194,7 +161,7 @@ namespace HandBrakeWPF.Services.Encode
         /// </param>
         private void InstanceEncodeProgress(object sender, EncodeProgressEventArgs e)
         {
-           HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs args = new HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs
+            EventArgs.EncodeProgressEventArgs args = new EventArgs.EncodeProgressEventArgs
             {
                 AverageFrameRate = e.AverageFrameRate, 
                 CurrentFrameRate = e.CurrentFrameRate, 
@@ -221,22 +188,24 @@ namespace HandBrakeWPF.Services.Encode
         {
             this.IsEncoding = false;
             this.ServiceLogMessage("Encode Completed ...");
-
-            // Stop Logging.
-            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
-            
+           
             // Handling Log Data 
             this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
-
-            // Cleanup
-            this.ShutdownFileWriter();
 
             // Raise the Encode Completed EVent.
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination)
-                    : new HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination));
+        }
+
+        /// <summary>
+        /// Service Log Message.
+        /// </summary>
+        /// <param name="message">Log message content</param>
+        protected void ServiceLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("# {0}", message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
         #endregion
     }

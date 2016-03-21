@@ -11,15 +11,18 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Diagnostics;
+    using System.Text;
     using System.Windows;
 
-    using HandBrakeWPF.Services.Scan.EventArgs;
-    using HandBrakeWPF.Services.Scan.Interfaces;
+    using Caliburn.Micro;
+
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.EventArgs;
+    using HandBrake.ApplicationServices.Services.Logging.Model;
+
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using ILog = HandBrake.ApplicationServices.Services.Logging.Interfaces.ILog;
 
     /// <summary>
     /// The Log View Model
@@ -28,83 +31,37 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Private Fields
 
-        /// <summary>
-        /// Backing field for the encodeService service
-        /// </summary>
-        private readonly IEncode encodeService;
-
-        /// <summary>
-        /// Backing field for the Scan Service
-        /// </summary>
-        private readonly IScan scanService;
-
-        /// <summary>
-        /// The selected tab.
-        /// </summary>
-        private int selectedTab;
-
-        /// <summary>
-        /// The encode log index.
-        /// </summary>
-        private int encodeLogIndex;
+        private readonly ILog logService;
+        private StringBuilder log = new StringBuilder();
+        private long lastReadIndex;
 
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogViewModel"/> class.
         /// </summary>
-        /// <param name="encodeService">
-        /// The encode service.
-        /// </param>
-        /// <param name="scanService">
-        /// The scan service.
-        /// </param>
-        public LogViewModel(IEncode encodeService, IScan scanService)
+        public LogViewModel()
         {
-            this.encodeService = encodeService;
-            this.scanService = scanService;
+            this.logService = LogService.GetLogger();
             this.Title = "Log Viewer";
-            this.encodeLogIndex = 0;
-        }
-
-        /// <summary>
-        /// Gets or sets the selected tab.
-        /// </summary>
-        public int SelectedTab
-        {
-            get
-            {
-                return this.selectedTab;
-            }
-            set
-            {
-                this.selectedTab = value;
-                this.NotifyOfPropertyChange(() => this.SelectedTab);
-            }
         }
 
         /// <summary>
         /// Gets Log.
         /// </summary>
-        public string ScanLog
+        public string ActivityLog
         {
             get
             {
-                return this.scanService.ActivityLog;
+                return this.log.ToString();
             }
         }
 
         /// <summary>
-        /// Gets the encodelog.
+        /// The log message received.
         /// </summary>
-        public string EncodeLog
-        {
-            get
-            {
-                return this.encodeService.ActivityLog;
-            }
-        }
-
+        public event EventHandler<LogEventArgs> LogMessageReceived;
+    
         /// <summary>
         /// Open the Log file directory
         /// </summary>
@@ -121,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CopyLog()
         {
-            Clipboard.SetDataObject(this.SelectedTab == 1 ? this.ScanLog : this.EncodeLog, true);
+            Clipboard.SetDataObject(this.ActivityLog, true);
         }
 
         /// <summary>
@@ -129,49 +86,26 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         protected override void OnActivate()
         {
-            this.scanService.ScanCompleted += ScanServiceScanCompleted;
-            this.encodeService.EncodeCompleted += EncodeServiceEncodeCompleted;
-            this.encodeService.EncodeStatusChanged += this.EncodeServiceEncodeStatusChanged;
-            this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
-            this.scanService.ScanStarted += this.scanService_ScanStared;
-            this.encodeService.EncodeStarted += this.encodeService_EncodeStarted;
-            base.OnActivate();
+            this.logService.MessageLogged += this.LogService_MessageLogged;
+            this.logService.LogReset += LogService_LogReset;
 
-            this.NotifyOfPropertyChange(() => this.ScanLog);
-            this.NotifyOfPropertyChange(() => this.EncodeLog);
-        }
-
-        /// <summary>
-        /// Scan Status has changed, update log window.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ScanServiceScanStatusChanged(object sender, ScanProgressEventArgs e)
-        {
-            this.NotifyOfPropertyChange(() => this.ScanLog);
-        }
-
-        /// <summary>
-        /// Encode Status has changed, update log window
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void EncodeServiceEncodeStatusChanged(object sender, EncodeProgressEventArgs e)
-        {
-            if (encodeLogIndex != this.encodeService.LogIndex || this.encodeService.LogIndex == -1)
+            // Refresh the Log Display
+            this.log.Clear();
+            foreach (LogMessage logMessage in this.logService.LogMessages)
             {
-                this.NotifyOfPropertyChange(() => this.EncodeLog);
+                this.log.AppendLine(logMessage.Content);
+                this.lastReadIndex = logMessage.MessageIndex;
+
+                if (this.lastReadIndex > logMessage.MessageIndex)
+                {
+                    throw new Exception("Log Message Index Error");
+                }
             }
 
-            encodeLogIndex = this.encodeService.LogIndex;
+            this.OnLogMessageReceived(null);
+            this.NotifyOfPropertyChange("ActivityLog");
+
+            base.OnActivate();
         }
 
         /// <summary>
@@ -182,18 +116,14 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         protected override void OnDeactivate(bool close)
         {
-            this.scanService.ScanCompleted -= ScanServiceScanCompleted;
-            this.encodeService.EncodeCompleted -= EncodeServiceEncodeCompleted;
-            this.encodeService.EncodeStatusChanged -= this.EncodeServiceEncodeStatusChanged;
-            this.scanService.ScanStatusChanged -= this.ScanServiceScanStatusChanged;
-            this.scanService.ScanStarted -= this.scanService_ScanStared;
-            this.encodeService.EncodeStarted -= this.encodeService_EncodeStarted;
+            this.logService.MessageLogged -= this.LogService_MessageLogged;
+            this.logService.LogReset -= this.LogService_LogReset;
 
             base.OnDeactivate(close);
         }
 
         /// <summary>
-        /// Scan Completed Event Handler.
+        /// The log service_ log reset.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -201,13 +131,28 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void ScanServiceScanCompleted(object sender, ScanCompletedEventArgs e)
+        private void LogService_LogReset(object sender, EventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.ScanLog);
+            this.log.Clear();
+            this.lastReadIndex = 0;
+
+            foreach (LogMessage logMessage in this.logService.LogMessages)
+            {
+                this.log.AppendLine(logMessage.Content);
+                this.lastReadIndex = logMessage.MessageIndex;
+
+                if (this.lastReadIndex > logMessage.MessageIndex)
+                {
+                    throw new Exception("Log Message Index Error");
+                }
+            }
+
+            this.NotifyOfPropertyChange("ActivityLog");
+            this.OnLogMessageReceived(null);
         }
 
         /// <summary>
-        /// Encode Completed Event Handler.
+        /// The log service_ message logged.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -215,38 +160,34 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        private void LogService_MessageLogged(object sender, LogEventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.EncodeLog);
+            if (this.lastReadIndex < e.Log.MessageIndex)
+            {
+                Execute.OnUIThreadAsync(
+                    () =>
+                        {
+                            this.lastReadIndex = e.Log.MessageIndex;
+                            this.log.AppendLine(e.Log.Content);
+                            this.OnLogMessageReceived(e);
+                            this.NotifyOfPropertyChange("ActivityLog");
+                        });
+            }
         }
 
         /// <summary>
-        /// The encode service encode started.
+        /// Trigger a faster / smoother way of updating the log window.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
         /// <param name="e">
         /// The e.
         /// </param>
-        private void encodeService_EncodeStarted(object sender, EventArgs e)
+        protected virtual void OnLogMessageReceived(LogEventArgs e)
         {
-            this.encodeLogIndex = -1; // Reset the log index.
-            this.SelectedTab = 0;
-        }
-
-        /// <summary>
-        /// The scan service scan stared.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void scanService_ScanStared(object sender, EventArgs e)
-        {
-            this.SelectedTab = 1;
+            var onLogMessageReceived = this.LogMessageReceived;
+            if (onLogMessageReceived != null)
+            {
+                onLogMessageReceived.Invoke(this, e);
+            }
         }
     }
 }

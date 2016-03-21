@@ -181,7 +181,9 @@
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
     <Compile Include="Model\VideoScaler.cs" />
-    <Compile Include="Services\Logging\LogHelper.cs" />
+    <Compile Include="Services\Logging\EventArgs\LogEventArgs.cs" />
+    <Compile Include="Services\Logging\Interfaces\ILog.cs" />
+    <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Logging\Model\LogLevel.cs" />
     <Compile Include="Services\Logging\Model\LogMessage.cs" />
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />

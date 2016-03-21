@@ -12,19 +12,18 @@ namespace HandBrakeWPF.Services.Scan
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.IO;
-    using System.Text;
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.Scan;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
+    using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
@@ -32,7 +31,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
@@ -46,54 +44,10 @@ namespace HandBrakeWPF.Services.Scan
     {
         #region Private Variables
 
-        /// <summary>
-        /// Lock for the log file
-        /// </summary>
-        static readonly object LogLock = new object();
-
-        /// <summary>
-        /// Log data from HandBrakeInstance
-        /// </summary>
-        private readonly StringBuilder logging;
-
-        /// <summary>
-        /// The Log File Header
-        /// </summary>
-        private readonly StringBuilder header;
-
-        /// <summary>
-        /// The Current source scan path.
-        /// </summary>
+        private readonly ILog log = LogService.GetLogger();
         private string currentSourceScanPath;
-
-        /// <summary>
-        /// The log dir.
-        /// </summary>
-        private static string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-
-        /// <summary>
-        /// The dvd info path.
-        /// </summary>
-        private string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", GeneralUtilities.ProcessId));
-
-        /// <summary>
-        /// The scan log.
-        /// </summary>
-        private StreamWriter scanLog;
-
-        /// <summary>
-        /// LibHB Instance
-        /// </summary>
         private IHandBrakeInstance instance;
-
-        /// <summary>
-        /// The post scan operation.
-        /// </summary>
         private Action<bool, Source> postScanOperation;
-
-        /// <summary>
-        /// Global to handle cancelled scans.
-        /// </summary>
         private bool isCancelled = false;
 
         #endregion
@@ -103,8 +57,6 @@ namespace HandBrakeWPF.Services.Scan
         /// </summary>
         public LibScan()
         {
-            this.logging = new StringBuilder();
-            this.header = GeneralUtilities.CreateLogHeader();
             this.IsScanning = false;
         }
 
@@ -134,21 +86,6 @@ namespace HandBrakeWPF.Services.Scan
         /// </summary>
         public bool IsScanning { get; private set; }
 
-        /// <summary>
-        /// Gets ActivityLog.
-        /// </summary>
-        public string ActivityLog
-        {
-            get
-            {
-                string noLog = "There is no log information to display." + Environment.NewLine + Environment.NewLine
-                                + "This window will only display logging information after you have scanned a source." + Environment.NewLine
-                                + Environment.NewLine + "You can find previous log files in the log directory or by clicking the 'Open Log Directory' button above.";
-
-                return string.IsNullOrEmpty(this.logging.ToString()) ? noLog : this.header + this.logging.ToString();
-            }
-        }
-
         #endregion
 
         #region Public Methods
@@ -176,12 +113,6 @@ namespace HandBrakeWPF.Services.Scan
             {
                 try
                 {
-                    lock (LogLock)
-                    {
-                        this.scanLog.Close();
-                        this.scanLog.Dispose();
-                        this.scanLog = null;
-                    }
                     this.instance.Dispose();
                 }
                 catch (Exception)
@@ -193,33 +124,7 @@ namespace HandBrakeWPF.Services.Scan
             // Handle the post scan operation.
             this.postScanOperation = postAction;
 
-            // Clear down the logging
-            this.logging.Clear();
-
-            try
-            {
-                // Make we don't pick up a stale last_scan_log_xyz.txt (and that we have rights to the file)
-                if (File.Exists(this.dvdInfoPath))
-                {
-                    File.Delete(this.dvdInfoPath);
-                }
-            }
-            catch (Exception exc)
-            {
-                Debug.WriteLine(exc);
-            }
-
-            if (!Directory.Exists(Path.GetDirectoryName(this.dvdInfoPath)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(this.dvdInfoPath));
-            }
-
-            // Create a new scan log.
-            this.scanLog = new StreamWriter(this.dvdInfoPath);
-
             // Create a new HandBrake Instance.
-            HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
             this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
@@ -238,16 +143,6 @@ namespace HandBrakeWPF.Services.Scan
                 this.ServiceLogMessage("Stopping Scan.");
                 this.IsScanning = false;
                 this.instance.StopScan();
-
-                lock (LogLock)
-                {
-                    if (this.scanLog != null)
-                    {
-                        this.scanLog.Close();
-                        this.scanLog.Dispose();
-                        this.scanLog = null;
-                    }
-                }
             }
             catch (Exception exc)
             {
@@ -339,8 +234,6 @@ namespace HandBrakeWPF.Services.Scan
         {
             try
             {
-                this.logging.Clear();
-
                 string source = sourcePath.ToString().EndsWith("\\") ? string.Format("\"{0}\\\\\"", sourcePath.ToString().TrimEnd('\\'))
                               : "\"" + sourcePath + "\"";
                 this.currentSourceScanPath = source;
@@ -362,8 +255,7 @@ namespace HandBrakeWPF.Services.Scan
                 this.ServiceLogMessage("Scan Failed ..." + Environment.NewLine + exc);
                 this.Stop();
 
-                if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()", null));
+                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()", null));
             }
         }
 
@@ -384,22 +276,6 @@ namespace HandBrakeWPF.Services.Scan
             this.ServiceLogMessage("Scan Finished ...");
             bool cancelled = this.isCancelled;
             this.isCancelled = false;
-
-            // Write the log file out before we start processing incase we crash.
-            try
-            {
-                if (this.scanLog != null)
-                {
-                    this.scanLog.Flush();
-                }
-            }
-            catch (Exception exc)
-            {
-                Debug.WriteLine(exc);
-            }
-
-            HandBrakeUtils.MessageLogged -= this.HandBrakeInstanceMessageLogged;
-            HandBrakeUtils.ErrorLogged -= this.HandBrakeInstanceErrorLogged;
 
             // TODO -> Might be a better place to fix this.
             string path = this.currentSourceScanPath;
@@ -449,8 +325,8 @@ namespace HandBrakeWPF.Services.Scan
         {
             if (this.ScanStatusChanged != null)
             {
-                HandBrakeWPF.Services.Scan.EventArgs.ScanProgressEventArgs eventArgs =
-                    new HandBrakeWPF.Services.Scan.EventArgs.ScanProgressEventArgs
+                EventArgs.ScanProgressEventArgs eventArgs =
+                    new EventArgs.ScanProgressEventArgs
                         {
                             CurrentTitle = e.CurrentTitle,
                             Titles = e.Titles,
@@ -459,34 +335,6 @@ namespace HandBrakeWPF.Services.Scan
 
                 this.ScanStatusChanged(this, eventArgs);
             }
-        }
-
-        /// <summary>
-        /// Log a message
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The MessageLoggedEventArgs.
-        /// </param>
-        private void HandBrakeInstanceErrorLogged(object sender, MessageLoggedEventArgs e)
-        {
-            this.LogMessage(e.Message);
-        }
-
-        /// <summary>
-        /// Log a message
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The MessageLoggedEventArgs.
-        /// </param>
-        private void HandBrakeInstanceMessageLogged(object sender, MessageLoggedEventArgs e)
-        {
-            this.LogMessage(e.Message);
         }
 
         /// <summary>
@@ -587,25 +435,6 @@ namespace HandBrakeWPF.Services.Scan
         }
 
         /// <summary>
-        /// The log message.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
-        /// </param>
-        private void LogMessage(string message)
-        {
-            lock (LogLock)
-            {
-                if (this.scanLog != null)
-                {
-                    this.scanLog.WriteLine(message);
-                }
-
-                this.logging.AppendLine(message);
-            }
-        }
-
-        /// <summary>
         /// The service log message.
         /// </summary>
         /// <param name="message">
@@ -613,7 +442,7 @@ namespace HandBrakeWPF.Services.Scan
         /// </param>
         protected void ServiceLogMessage(string message)
         {
-            this.LogMessage(string.Format("# {0}", message));
+            this.log.LogMessage(string.Format("{0} # {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
         #endregion
     }

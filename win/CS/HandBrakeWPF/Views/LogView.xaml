@@ -38,51 +38,8 @@
 
             </ToolBar>
 
+            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText" />
 
-            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Margin="0,3,0,0">
-                <TabItem>
-                    <TabItem.Header>
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_EncodeLog}" Padding="4">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </TabItem.Header>
-
-                    <TextBox
-                     AcceptsReturn="True"
-                     IsReadOnly="True"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Text="{Binding EncodeLog, Mode=OneWay,  UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap" />
-                </TabItem>
-
-                <TabItem>
-                    <TabItem.Header>
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_ScanLog}" Padding="4">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </TabItem.Header>
-                    <TextBox AcceptsReturn="True" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                             Text="{Binding ScanLog, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextWrapping="Wrap" />
-                </TabItem>
-
-            </TabControl>
         </Grid>
 
     </Grid>

@@ -23,6 +23,8 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.HbLib;
+    using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
@@ -56,6 +58,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Action = System.Action;
     using Execute = Caliburn.Micro.Execute;
+    using ILog = HandBrake.ApplicationServices.Services.Logging.Interfaces.ILog;
+    using LogManager = HandBrakeWPF.Helpers.LogManager;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -226,6 +230,7 @@ namespace HandBrakeWPF.ViewModels
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
 
+            LogManager.Init();
             HandBrakeInstanceManager.Init();
         }
 
@@ -1277,14 +1282,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (window != null)
             {
-                ILogViewModel logvm = (ILogViewModel)window.DataContext;
-                logvm.SelectedTab = this.IsEncoding ? 0 : 1;
                 window.Activate();
             }
             else
             {
                 ILogViewModel logvm = IoC.Get<ILogViewModel>();
-                logvm.SelectedTab = this.IsEncoding ? 0 : 1;
                 this.windowManager.ShowWindow(logvm);
             }
         }

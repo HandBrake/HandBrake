@@ -65,16 +65,6 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         bool IsEncoding { get; }
 
         /// <summary>
-        /// Gets ActivityLog.
-        /// </summary>
-        string ActivityLog { get; }
-
-        /// <summary>
-        /// Gets the log index. The current log row counter.
-        /// </summary>
-        int LogIndex { get; }
-
-        /// <summary>
         /// Gets a value indicating whether is pasued.
         /// </summary>
         bool IsPasued { get; }
