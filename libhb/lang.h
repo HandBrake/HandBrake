@@ -17,7 +17,7 @@ typedef struct iso639_lang_t
     char * iso639_1;        /* ISO-639-1 (2 characters) code */
     char * iso639_2;        /* ISO-639-2/t (3 character) code */
     char * iso639_2b;       /* ISO-639-2/b code (if different from above) */
-
+	char * iso639;			/* Obsolete ISO-639 code (if changed in ISO-639-1) */
 } iso639_lang_t;
 
 #ifdef __cplusplus
