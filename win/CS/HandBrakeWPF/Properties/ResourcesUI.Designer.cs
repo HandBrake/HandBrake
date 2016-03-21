@@ -1096,15 +1096,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable DXVA Hardware Accelerated Decoding.
-        /// </summary>
-        public static string Options_DXVA {
-            get {
-                return ResourceManager.GetString("Options_DXVA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Format:.
         /// </summary>
         public static string Options_Format {

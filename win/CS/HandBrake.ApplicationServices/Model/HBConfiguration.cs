@@ -25,11 +25,6 @@ namespace HandBrake.ApplicationServices.Model
         public bool DisableQuickSyncDecoding { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether enable dxva.
-        /// </summary>
-        public bool EnableDxva { get; set; }
-
-        /// <summary>
         /// Gets or sets the scaling mode.
         /// </summary>
         public VideoScaler ScalingMode { get; set; }

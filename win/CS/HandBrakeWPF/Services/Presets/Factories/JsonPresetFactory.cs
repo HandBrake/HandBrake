@@ -615,7 +615,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoFramerate = export.Task.Framerate.ToString();
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
             preset.VideoGrayScale = export.Task.Grayscale;
-            preset.VideoHWDecode = false;
             preset.VideoLevel = export.Task.VideoLevel.ShortName;
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
             preset.VideoPreset = export.Task.VideoPreset.ShortName;

@@ -84,7 +84,6 @@ namespace HandBrakeWPF.ViewModels
         private bool removePunctuation;
         private bool resetWhenDoneAction;
         private VideoScaler selectedScalingMode;
-        private bool enableDxvaDecoding;
         private bool disableQuickSyncDecoding;
         private bool isClScaling;
         private bool showQueueInline;
@@ -874,26 +873,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether enable dxva decoding.
-        /// </summary>
-        public bool EnableDxvaDecoding
-        {
-            get
-            {
-                return this.enableDxvaDecoding;
-            }
-            set
-            {
-                if (value.Equals(this.enableDxvaDecoding))
-                {
-                    return;
-                }
-                this.enableDxvaDecoding = value;
-                this.NotifyOfPropertyChange(() => this.EnableDxvaDecoding);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the selected scaling mode.
         /// </summary>
         public VideoScaler SelectedScalingMode
@@ -1223,7 +1202,6 @@ namespace HandBrakeWPF.ViewModels
             // Video
             // #############################
             this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding);
-            this.EnableDxvaDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva);
             this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
 
             // #############################
@@ -1325,7 +1303,6 @@ namespace HandBrakeWPF.ViewModels
 
             /* Video */
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
-            this.userSettingService.SetUserSetting(UserSettingConstants.EnableDxva, this.EnableDxvaDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
 
             /* System and Logging */

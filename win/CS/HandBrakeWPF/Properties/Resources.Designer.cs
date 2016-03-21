@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2015 The HandBrake Team
+        ///   Looks up a localized string similar to Copyright (C) 2003-2016 The HandBrake Team
         ///
         ///This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
@@ -1724,15 +1724,6 @@ namespace HandBrakeWPF.Properties {
         public static string UserSettings_YourSettingsHaveBeenReset {
             get {
                 return ResourceManager.GetString("UserSettings_YourSettingsHaveBeenReset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Accelerates H.264, MPEG-4, VC1 and WMV3  and can provide a small speed improvement on lower end hardware..
-        /// </summary>
-        public static string Video_DxvaDecode {
-            get {
-                return ResourceManager.GetString("Video_DxvaDecode", resourceCulture);
             }
         }
         

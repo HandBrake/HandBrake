@@ -167,11 +167,6 @@ namespace HandBrakeWPF
         public const string DisableQuickSyncDecoding = "DisableQuickSyncDecoding";
 
         /// <summary>
-        /// The enable dxva.
-        /// </summary>
-        public const string EnableDxva = "EnableDxva";
-
-        /// <summary>
         /// The scaling mode.
         /// </summary>
         public const string ScalingMode = "ScalingMode";

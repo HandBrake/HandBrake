@@ -17,12 +17,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Utilities;
 
@@ -46,12 +44,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     /// </summary>
     internal class EncodeFactory
     {
-        /*
-         * TODO:
-         * 1. OpenCL and HWD Support 
-         * 2. Rotate Support
-         */
-
         /// <summary>
         /// The create.
         /// </summary>
@@ -309,7 +301,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;
-            video.HWDecode = configuration.EnableDxva;
             video.QSV.Decode = !configuration.DisableQuickSyncDecoding;
 
             return video;

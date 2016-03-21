@@ -735,9 +735,6 @@
   <data name="Options_DvdRead" xml:space="preserve">
     <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
-  <data name="Options_DXVA" xml:space="preserve">
-    <value>Enable DXVA Hardware Accelerated Decoding</value>
-  </data>
   <data name="Options_Format" xml:space="preserve">
     <value>Format:</value>
   </data>
