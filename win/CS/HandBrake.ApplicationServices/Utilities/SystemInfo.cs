@@ -146,10 +146,17 @@ namespace HandBrake.ApplicationServices.Utilities
                             }
                         }
 
-                        if (!string.IsNullOrEmpty(gpu) && !string.IsNullOrEmpty(version))
+                        if (string.IsNullOrEmpty(gpu))
                         {
-                            gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
+                            gpu = "Unknown GPU";
                         }
+
+                        if (string.IsNullOrEmpty(version))
+                        {
+                            version = "Unknown Driver Version";
+                        }
+
+                        gpuInfo.Add(string.Format("{0} - {1}", gpu, version));
                     }
                 }
                 catch (Exception)
