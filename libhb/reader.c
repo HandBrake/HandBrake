@@ -327,6 +327,12 @@ static void reader_close( hb_work_object_t * w )
         free( r->stream_timing );
     }
 
+    int ii;
+    for (ii = 0; ii < r->splice_list_size; ii++)
+    {
+        hb_buffer_list_close(&r->splice_list[ii].list);
+    }
+
     free(r->fifos);
     free(r->splice_list);
     free(r);
