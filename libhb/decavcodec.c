@@ -1058,12 +1058,12 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
 {
     /*  Rotate the cadence tracking. */
     int i = 0;
-    for(i=11; i > 0; i--)
+    for (i = 11; i > 0; i--)
     {
         cadence[i] = cadence[i-1];
     }
 
-    if ( !(flags & PROGRESSIVE) && !(flags & TOP_FIRST) )
+    if (!(flags & PROGRESSIVE) && !(flags & TOP_FIRST))
     {
         /* Not progressive, not top first...
            That means it's probably bottom
@@ -1072,7 +1072,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
         cadence[0] = BT;
     }
-    else if ( !(flags & PROGRESSIVE) && (flags & TOP_FIRST) )
+    else if (!(flags & PROGRESSIVE) && (flags & TOP_FIRST))
     {
         /* Not progressive, top is first,
            Two fields displayed.
@@ -1080,7 +1080,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
         cadence[0] = TB;
     }
-    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             !(flags & TOP_FIRST) && !(flags & REPEAT_FIRST))
     {
         /* Progressive, but noting else.
            That means Bottom first,
@@ -1089,7 +1090,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
         cadence[0] = BT_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             !(flags & TOP_FIRST) && (flags & REPEAT_FIRST))
     {
         /* Progressive, and repeat. .
            That means Bottom first,
@@ -1098,7 +1100,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
         cadence[0] = BTB_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             (flags & TOP_FIRST) && !(flags & REPEAT_FIRST))
     {
         /* Progressive, top first.
            That means top first,
@@ -1107,7 +1110,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
         cadence[0] = TB_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             (flags & TOP_FIRST) && (flags & REPEAT_FIRST))
     {
         /* Progressive, top, repeat.
            That means top first,
@@ -1117,10 +1121,16 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         cadence[0] = TBT_PROG;
     }
 
-    if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+    if ((cadence[2] <= TB) && (cadence[1] <= TB) &&
+        (cadence[0] > TB) && (cadence[11]))
+    {
         hb_log("%fs: Video -> Film", (float)start / 90000);
-    if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+    }
+    if ((cadence[2] > TB) && (cadence[1] <= TB) &&
+        (cadence[0] <= TB) && (cadence[11]))
+    {
         hb_log("%fs: Film -> Video", (float)start / 90000);
+    }
 }
 
 // send cc_buf to the CC decoder(s)
