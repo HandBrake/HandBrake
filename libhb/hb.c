@@ -6,7 +6,7 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #include "hb.h"
 #include "opencl.h"
 #include "hbffmpeg.h"
@@ -30,7 +30,7 @@
 struct hb_handle_s
 {
     int            id;
-    
+
     /* This thread's only purpose is to check other threads'
        states */
     volatile int   die;
@@ -59,7 +59,7 @@ struct hb_handle_s
        increments each time the scan thread completes*/
     int            scanCount;
     volatile int   scan_die;
-    
+
     /* Stash of persistent data between jobs, for stuff
        like correcting frame count and framerate estimates
        on multi-pass encodes where frames get dropped.     */
@@ -140,7 +140,7 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
 {
     int ret;
 
-    if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) && 
+    if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) &&
         (codec->type == AVMEDIA_TYPE_VIDEO))
     {
         avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
@@ -254,7 +254,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
         av_opt_set_int(ctx, "dst_format", dstFormat, 0);
         av_opt_set_int(ctx, "sws_flags", flags, 0);
 
-        sws_setColorspaceDetails( ctx, 
+        sws_setColorspaceDetails( ctx,
                       sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
                       srcRange, // src range 0 = MPG, 1 = JPG
                       sws_getCoefficients( SWS_CS_DEFAULT ), // dst colorspace
@@ -267,7 +267,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
             hb_error("Cannot initialize resampling context");
             sws_freeContext(ctx);
             ctx = NULL;
-        } 
+        }
     }
     return ctx;
 }
@@ -634,8 +634,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 #endif
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
-                                   &h->title_set, preview_count, 
+    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
+                                   &h->title_set, preview_count,
                                    store_previews, min_duration );
 }
 
@@ -860,7 +860,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
         threshold = prog_threshold;
     }
 
-    /* One pas for Y, one pass for Cb, one pass for Cr */    
+    /* One pas for Y, one pass for Cb, one pass for Cr */
     for( k = 0; k < 3; k++ )
     {
         uint8_t * data = buf->plane[k].data;
@@ -907,7 +907,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 
     /* HandBrake is all yuv420, so weight the average percentage of all 3 planes accordingly.*/
     int average_cc = ( 2 * cc[0] + ( cc[1] / 2 ) + ( cc[2] / 2 ) ) / 3;
-    
+
     /* Now see if that average percentage of combed pixels surpasses the threshold percentage given by the user.*/
     if( average_cc > threshold )
     {
@@ -1448,7 +1448,7 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
          * language.
          */
         job_copy->list_subtitle = hb_list_init();
-    
+
         for( i = 0; i < hb_list_count( job->title->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( job->title->list_subtitle, i );
@@ -1709,7 +1709,7 @@ void hb_close( hb_handle_t ** _h )
     hb_title_t * title;
 
     h->die = 1;
-    
+
     hb_thread_close( &h->main_thread );
 
     while( ( title = hb_list_item( h->title_set.list_title, 0 ) ) )
@@ -1787,7 +1787,7 @@ int hb_global_init()
 #ifdef USE_QSV
     hb_register(&hb_encqsv);
 #endif
-    
+
     hb_x264_global_init();
     hb_common_global_init();
 
@@ -1810,7 +1810,7 @@ void hb_global_close()
     char dirname[1024];
     DIR * dir;
     struct dirent * entry;
-    
+
     hb_presets_free();
 
     /* OpenCL library (dynamically loaded) */
@@ -1939,7 +1939,7 @@ static void redirect_thread_func(void * _data)
     dup2(pfd[1], /*stderr*/ 2);
 #endif
     FILE * log_f = fdopen(pfd[0], "rb");
-    
+
     char line_buffer[500];
     while(fgets(line_buffer, 500, log_f) != NULL)
     {
