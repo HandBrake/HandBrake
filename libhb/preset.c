@@ -3026,8 +3026,12 @@ hb_preset_index_t * hb_presets_get_default_index(void)
 
 hb_dict_t * hb_presets_get_default(void)
 {
-    hb_preset_index_t *path = hb_presets_get_default_index();
-    return hb_preset_get(path);
+    hb_dict_t *         preset;
+    hb_preset_index_t * path = hb_presets_get_default_index();
+
+    preset = hb_preset_get(path);
+    free(path);
+    return preset;
 }
 
 char * hb_presets_get_default_json(void)
