@@ -1763,18 +1763,26 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     stream->chapter = chapter_num - 1;
     stream->chapter_end = sum_dur;
 
-    int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 ) + ffmpeg_initial_timestamp( stream );
-
-    hb_deep_log( 2, "Seeking to chapter %d: starts %"PRId64", ends %"PRId64", AV pos %"PRId64,
-                 chapter_num, sum_dur - chapter->duration, sum_dur, pos);
-
-    if ( chapter_num > 1 && pos > 0 )
+    if (chapter != NULL && chapter_num > 1)
     {
-        AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
-        // timebase must be adjusted to match timebase of stream we are
-        // using for seeking.
-        pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
-        avformat_seek_file( stream->ffmpeg_ic, stream->ffmpeg_video_id, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
+        int64_t pos = (((sum_dur - chapter->duration) * AV_TIME_BASE) / 90000) +
+                      ffmpeg_initial_timestamp(stream);
+
+        if (pos > 0)
+        {
+            hb_deep_log(2,
+                        "Seeking to chapter %d: starts %"PRId64", ends %"PRId64
+                        ", AV pos %"PRId64,
+                        chapter_num, sum_dur - chapter->duration, sum_dur, pos);
+
+            AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
+            // timebase must be adjusted to match timebase of stream we are
+            // using for seeking.
+            pos = av_rescale(pos, st->time_base.den,
+                             AV_TIME_BASE * (int64_t)st->time_base.num);
+            avformat_seek_file(stream->ffmpeg_ic, stream->ffmpeg_video_id, 0,
+                               pos, pos, AVSEEK_FLAG_BACKWARD);
+        }
     }
     return 1;
 }
