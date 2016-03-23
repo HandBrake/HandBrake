@@ -66,7 +66,7 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
  */
 struct hb_buffer_settings_s
 {
-    enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF, OTHER_BUF } type;
+    enum { OTHER_BUF, AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF } type;
 
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // start time of frame
