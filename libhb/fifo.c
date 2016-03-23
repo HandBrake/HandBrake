@@ -430,6 +430,9 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             free( b );
             return NULL;
         }
+#if defined(HB_BUFFER_DEBUG)
+        memset(b->data, 0, b->size);
+#endif
         hb_lock(buffers.lock);
         buffers.allocated += b->alloc;
         hb_unlock(buffers.lock);
@@ -465,6 +468,9 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
         size = size_to_pool( size )->buffer_size;
         b->data  = realloc( b->data, size );
         b->alloc = size;
+#if defined(HB_BUFFER_DEBUG)
+        memset(b->data, 0, b->size);
+#endif
 
         hb_lock(buffers.lock);
         buffers.allocated += size - orig;
