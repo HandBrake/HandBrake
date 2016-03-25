@@ -132,7 +132,6 @@
 		A91CE2C81C7DABBC0068F46F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
 		A91CE2C91C7DABBC0068F46F /* libx265.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CC9E74191EBEA500C69D81 /* libx265.a */; };
 		A91CE2CA1C7DABBC0068F46F /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
-		A91CE2CD1C7DABBC0068F46F /* libltdl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CB1C7DABBC0068F46F /* libltdl.a */; };
 		A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */; };
 		A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */; };
 		A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D11C7DABDA0068F46F /* libz.tbd */; };
@@ -392,7 +391,6 @@
 		A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputFileWriter.m; sourceTree = "<group>"; };
 		A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBJobOutputFileWriter.h; sourceTree = "<group>"; };
 		A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobOutputFileWriter.m; sourceTree = "<group>"; };
-		A91CE2CB1C7DABBC0068F46F /* libltdl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libltdl.a; path = "../../../Library/Developer/Xcode/DerivedData/HandBrake-bmmnjzrlaitphwcfpfkndzpwsyph/Build/Products/release/external/contrib/lib/libltdl.a"; sourceTree = "<group>"; };
 		A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../../Library/Developer/Xcode/DerivedData/HandBrake-bmmnjzrlaitphwcfpfkndzpwsyph/Build/Products/release/external/contrib/lib/libvorbisfile.a"; sourceTree = "<group>"; };
 		A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		A91CE2D11C7DABDA0068F46F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -592,7 +590,6 @@
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
 				A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
-				A91CE2CD1C7DABBC0068F46F /* libltdl.a in Frameworks */,
 				A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
@@ -716,7 +713,6 @@
 				A91CE2D31C7DABE40068F46F /* libiconv.tbd */,
 				A91CE2D11C7DABDA0068F46F /* libz.tbd */,
 				A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */,
-				A91CE2CB1C7DABBC0068F46F /* libltdl.a */,
 				A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */,
 				A9B34D74197696FE00871B7D /* DiskArbitration.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
