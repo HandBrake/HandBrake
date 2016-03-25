@@ -1479,7 +1479,7 @@ static hb_buffer_t * hb_ps_stream_getVideo(
             idx = index_of_ps_stream( stream, pes_info.stream_id,
                                       pes_info.stream_id_ext );
         }
-        if ( stream->pes.list[idx].stream_kind == V )
+        if ( idx >= 0 && stream->pes.list[idx].stream_kind == V )
         {
             if ( pes_info.pts != AV_NOPTS_VALUE )
             {
