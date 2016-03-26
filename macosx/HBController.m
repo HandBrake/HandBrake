@@ -312,6 +312,14 @@
     return contentSize;
 }
 
+- (void)setNilValueForKey:(NSString *)key
+{
+    if ([key isEqualToString:@"scanSpecificTitleIdx"])
+    {
+        [self setValue:@0 forKey:key];
+    }
+}
+
 #pragma mark - UI Validation
 
 - (BOOL)validateToolbarItem:(NSToolbarItem *)toolbarItem
@@ -778,7 +786,7 @@
                  [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
              }
 
-             NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitle : 0;
+             NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
              [self openURL:panel.URL titleIndex:titleIdx];
          }
      }];
