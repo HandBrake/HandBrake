@@ -119,6 +119,7 @@
     <Compile Include="Interop\Json\Presets\HBPreset.cs" />
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
     <Compile Include="Interop\Json\Presets\PresetTransportContainer.cs" />
+    <Compile Include="Interop\Json\Queue\Task.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioTrack.cs" />

@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
     using System.Windows;
 
@@ -332,14 +333,22 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog dialog = new SaveFileDialog
                 {
-                    Filter = "HandBrake Queue Files (*.hbq)|*.hbq", 
+                    Filter = "Legacy Queue Files (*.hbq)|*.hbq|Json for CLI (*.json)|*.json", 
                     OverwritePrompt = true, 
                     DefaultExt = ".hbq", 
                     AddExtension = true
                 };
+
             if (dialog.ShowDialog() == true)
             {
-                this.queueProcessor.BackupQueue(dialog.FileName);
+                if (Path.GetExtension(dialog.FileName).ToLower().Trim() == ".json")
+                {
+                    this.queueProcessor.ExportJson(dialog.FileName);
+                }
+                else
+                {
+                    this.queueProcessor.BackupQueue(dialog.FileName);
+                }
             }
         }
 
@@ -348,7 +357,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Legacy Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
                 this.queueProcessor.RestoreQueue(dialog.FileName);

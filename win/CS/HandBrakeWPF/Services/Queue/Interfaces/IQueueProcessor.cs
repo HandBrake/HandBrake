@@ -107,6 +107,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         void BackupQueue(string exportPath);
 
         /// <summary>
+        /// Export the Queue the standardised JSON format.
+        /// </summary>
+        /// <param name="exportPath">
+        /// The export path.
+        /// </param>
+        void ExportJson(string exportPath);
+
+        /// <summary>
         /// Checks the current queue for an existing instance of the specified destination.
         /// </summary>
         /// <param name="destination">

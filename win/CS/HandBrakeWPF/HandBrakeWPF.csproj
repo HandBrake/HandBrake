@@ -190,6 +190,7 @@
     <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
+    <Compile Include="Services\Encode\Factories\QueueFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
     <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />

@@ -18,7 +18,12 @@ namespace HandBrakeWPF.Services.Queue
     using System.Windows;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices.Model;
+
+    using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Factories;
+    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
@@ -234,6 +239,25 @@ namespace HandBrakeWPF.Services.Queue
                 List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
                 var serializer = new XmlSerializer(typeof(List<QueueTask>));
                 serializer.Serialize(strm, tasks);
+                strm.Close();
+                strm.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Export the Queue the standardised JSON format.
+        /// </summary>
+        public void ExportJson(string exportPath)
+        {
+            List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
+            List<EncodeTask> workUnits = jobs.Select(job => job.Task).ToList();
+            HBConfiguration config = HBConfigurationFactory.Create(); // Default to current settings for now. These will hopefully go away in the future.
+
+            string json = QueueFactory.GetQueueJson(workUnits, config);
+
+            using (var strm = new StreamWriter(exportPath, false))
+            {
+                strm.Write(json);
                 strm.Close();
                 strm.Dispose();
             }
