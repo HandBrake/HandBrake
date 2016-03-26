@@ -214,6 +214,8 @@
     formatter.showPassNumber = NO;
     formatter.title = NSLocalizedString(@"preview", nil);
 
+    self.core.stateFormatter = formatter;
+
     // start the actual encode
     [self.core encodeJob:job
          progressHandler:^(HBState state, HBProgress progress, NSString *info) {
