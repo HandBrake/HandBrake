@@ -31,6 +31,11 @@ namespace HandBrakeWPF.Helpers
             ILog log = LogService.GetLogger();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("activity_log{0}.txt", GeneralUtilities.ProcessId));
+            if (!Directory.Exists(Path.GetDirectoryName(logFile)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(logFile));
+            }
+
             log.Enable();
             log.SetupLogHeader(GeneralUtilities.CreateLogHeader().ToString());
             log.EnableLoggingToDisk(logFile, true);

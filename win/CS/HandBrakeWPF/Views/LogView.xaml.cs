@@ -60,28 +60,39 @@ namespace HandBrakeWPF.Views
         /// </param>
         private void Vm_LogMessageReceived(object sender, HandBrake.ApplicationServices.Services.Logging.EventArgs.LogEventArgs e)
         {
-            if (e == null)
+            try
             {
-                LogViewModel vm = this.DataContext as LogViewModel;
-                if (vm != null)
+                if (e == null)
                 {
-                    this.logText.Clear();
-                    this.logText.AppendText(vm.ActivityLog);
+                    Caliburn.Micro.Execute.OnUIThread(
+                        () =>
+                            {
+                                LogViewModel vm = this.DataContext as LogViewModel;
+                                if (vm != null)
+                                {
+                                    this.logText.Clear();
+                                    this.logText.AppendText(vm.ActivityLog);
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("Failed to Reset Log correctly.");
+                                }
+                            });   
                 }
                 else
                 {
-                    Debug.WriteLine("Failed to Reset Log correctly.");
+                    // This works better than Data Binding because of the scroll.
+                    this.logText.AppendText(Environment.NewLine + e.Log.Content);
+
+                    if (this.AutoScroll.IsChecked)
+                    {
+                        this.logText.ScrollToEnd();
+                    }
                 }
             }
-            else
+            catch (Exception exc)
             {
-                // This works better than Data Binding because of the scroll.
-                this.logText.AppendText(Environment.NewLine + e.Log.Content);
-
-                if (this.AutoScroll.IsChecked)
-                {
-                    this.logText.ScrollToEnd();
-                }
+                Debug.WriteLine(exc);
             }
         }
 
