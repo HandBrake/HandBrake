@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -53,22 +54,29 @@ namespace HandBrakeWPF.Helpers
                 IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
                 foreach (FileInfo file in logFiles)
                 {
-                    using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
+                    try
                     {
-                        List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
-                        if (list != null && list.Count == 0)
+                        using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                         {
-                            removeFiles.Add(file.FullName);
-                        }
-
-                        if (list != null && list.Count != 0)
-                        {
-                            List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
-                            if (tasks.Count != 0)
+                            List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
+                            if (list != null && list.Count == 0)
                             {
-                                queueFiles.Add(file.Name);
+                                removeFiles.Add(file.FullName);
+                            }
+
+                            if (list != null && list.Count != 0)
+                            {
+                                List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
+                                if (tasks.Count != 0)
+                                {
+                                    queueFiles.Add(file.Name);
+                                }
                             }
                         }
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.WriteLine(exc);
                     }
                 }
 
@@ -90,8 +98,9 @@ namespace HandBrakeWPF.Helpers
 
                 return queueFiles;
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                Debug.WriteLine(exc);
                 return new List<string>(); // Keep quiet about the error.
             }
         }
