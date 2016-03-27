@@ -1053,15 +1053,17 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     if (buf == NULL)
         return 0;
 
-    if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV))
+    if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV) &&
+        buf->s.renderOffset < 0)
     {
         // libav matroska muxer doesn't write dts to the output, but
         // if it sees a negative dts, it applies an offset to both pts
         // and dts to make it positive.  This offset breaks chapter
         // start times and A/V sync.  libav also requires that dts is
         // "monotically increasing", which means it last_dts <= next_dts.
-        // So we can't set dts = pts because pts can go backwards due to
-        // bframes. So set dts = 0 for mkv.
+        // It also uses dts to determine track interleaving, so we need
+        // to provide some reasonable dts value.
+        // So when renderOffset < 0, set to 0 for mkv.
         buf->s.renderOffset = 0;
         // Note: for MP4, libav allows negative dts and creates an edts
         // (edit list) entry in this case.
