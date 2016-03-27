@@ -1608,7 +1608,7 @@ static void
 settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
 {
     GhbValue *dict;
-    gboolean  replace = FALSE;
+    gboolean  replace = FALSE, def = FALSE;
 
     dict = hb_preset_get(path);
     if (dict != NULL)
@@ -1617,6 +1617,7 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
         int         type;
         const char *s;
 
+        def       = ghb_dict_get_bool(dict, "Default");
         is_folder = ghb_dict_get_bool(dict, "Folder");
         type      = ghb_dict_get_int(dict, "Type");
         s         = ghb_dict_get_string(dict, "PresetName");
@@ -1670,6 +1671,8 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
     free(new_name);
     if (replace)
     {
+        // If we are replacing the default preset, re-mark it as default
+        ghb_dict_set_bool(dict, "Default", def);
         // Already exists, update its description
         if (hb_preset_set(path, dict) >= 0)
         {
