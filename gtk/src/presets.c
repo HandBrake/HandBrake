@@ -330,13 +330,13 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     }
 
     const gchar *mode = ghb_dict_get_string(settings, "VideoFramerateMode");
-    if (strcmp(mode, "cfr") == 0)
+    if (mode != NULL && strcmp(mode, "cfr") == 0)
     {
         ghb_dict_set_bool(settings, "VideoFramerateCFR", TRUE);
         ghb_dict_set_bool(settings, "VideoFrameratePFR", FALSE);
         ghb_dict_set_bool(settings, "VideoFramerateVFR", FALSE);
     }
-    else if (strcmp(mode, "pfr") == 0)
+    else if (mode != NULL && strcmp(mode, "pfr") == 0)
     {
         ghb_dict_set_bool(settings, "VideoFramerateCFR", FALSE);
         ghb_dict_set_bool(settings, "VideoFrameratePFR", TRUE);
@@ -388,30 +388,33 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     char *tok;
 
     videoTune = g_strdup(ghb_dict_get_string(settings, "VideoTune"));
-    tok = strtok_r(videoTune, ",./-+", &saveptr);
-    ghb_dict_set_bool(settings, "x264FastDecode", FALSE);
-    ghb_dict_set_bool(settings, "x264ZeroLatency", FALSE);
-    while (tok != NULL)
+    if (videoTune != NULL)
     {
-        if (!strcasecmp(tok, "fastdecode"))
+        tok = strtok_r(videoTune, ",./-+", &saveptr);
+        ghb_dict_set_bool(settings, "x264FastDecode", FALSE);
+        ghb_dict_set_bool(settings, "x264ZeroLatency", FALSE);
+        while (tok != NULL)
         {
-            ghb_dict_set_bool(settings, "x264FastDecode", TRUE);
+            if (!strcasecmp(tok, "fastdecode"))
+            {
+                ghb_dict_set_bool(settings, "x264FastDecode", TRUE);
+            }
+            else if (!strcasecmp(tok, "zerolatency"))
+            {
+                ghb_dict_set_bool(settings, "x264ZeroLatency", TRUE);
+            }
+            else if (tune == NULL)
+            {
+                tune = g_strdup(tok);
+            }
+            else
+            {
+                ghb_log("Superfluous tunes! %s", tok);
+            }
+            tok = strtok_r(NULL, ",./-+", &saveptr);
         }
-        else if (!strcasecmp(tok, "zerolatency"))
-        {
-            ghb_dict_set_bool(settings, "x264ZeroLatency", TRUE);
-        }
-        else if (tune == NULL)
-        {
-            tune = g_strdup(tok);
-        }
-        else
-        {
-            ghb_log("Superfluous tunes! %s", tok);
-        }
-        tok = strtok_r(NULL, ",./-+", &saveptr);
+        g_free(videoTune);
     }
-    g_free(videoTune);
     if (tune != NULL)
     {
         ghb_dict_set_string(settings, "VideoTune", tune);
