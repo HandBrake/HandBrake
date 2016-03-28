@@ -2032,7 +2032,7 @@ void hb_presets_clean(hb_value_t *preset)
 static void import_custom_11_1_0(hb_value_t * preset, int filter_id,
                                  const char * key)
 {
-    const char *str = hb_dict_get_string(preset, key);
+    char *str = hb_value_get_string_xform(hb_dict_get(preset, key));
     if (str == NULL)
     {
         return;
@@ -2051,6 +2051,7 @@ static void import_custom_11_1_0(hb_value_t * preset, int filter_id,
     char ** tmpl   = hb_str_vsplit(filter->settings_template, ':');
     int     ii;
 
+    free(str);
     hb_dict_t * dict = hb_dict_init();
     for (ii = 0; values[ii] != NULL; ii++)
     {
