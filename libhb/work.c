@@ -493,7 +493,7 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->vquality >= 0)
+        if (job->vquality > HB_INVALID_VIDEO_QUALITY)
         {
             hb_log("     + quality: %.2f (%s)", job->vquality,
                    hb_video_quality_get_name(job->vcodec));

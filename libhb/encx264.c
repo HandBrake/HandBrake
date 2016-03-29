@@ -484,7 +484,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.vui.i_sar_width  = job->par.num;
     param.vui.i_sar_height = job->par.den;
 
-    if( job->vquality >= 0 )
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         /* Constant RF */
         param.rc.i_rc_method = X264_RC_CRF;

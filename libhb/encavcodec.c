@@ -182,7 +182,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Now set the things in context that we don't want to allow
     // the user to override.
-    if( job->vquality < 0.0 )
+    if (job->vquality <= HB_INVALID_VIDEO_QUALITY)
     {
         /* Average bitrate */
         context->bit_rate = 1000 * job->vbitrate;

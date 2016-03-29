@@ -481,7 +481,7 @@ struct hb_job_s
 
     /* Video settings:
          vcodec:            output codec
-         vquality:          output quality (if < 0.0, bitrate is used instead)
+         vquality:          output quality (if invalid, bitrate is used instead)
          vbitrate:          output bitrate (Kbps)
          vrate:             output framerate
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
@@ -509,6 +509,9 @@ struct hb_job_s
 #define HB_VCODEC_X265_16BIT   0x0008000
 #define HB_VCODEC_X265_MASK    0x000F000
 #define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265)
+
+/* define an invalid CQ value compatible with all CQ-capable codecs */
+#define HB_INVALID_VIDEO_QUALITY (-1000.)
 
     int             vcodec;
     double          vquality;

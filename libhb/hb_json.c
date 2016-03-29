@@ -497,7 +497,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "ColorMatrixCode",
                             hb_value_int(job->color_matrix_code));
     }
-    if (job->vquality >= 0)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
     }
