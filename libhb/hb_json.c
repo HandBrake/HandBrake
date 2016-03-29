@@ -989,6 +989,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_level(job, video_level);
     hb_job_set_encoder_options(job, video_options);
 
+    // sanitize video quality
+    if (job->vbitrate > 0)
+    {
+        job->vquality = HB_INVALID_VIDEO_QUALITY;
+    }
+
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
     if (meta_name != NULL && meta_name[0] != 0)
