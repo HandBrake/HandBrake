@@ -3484,7 +3484,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->par = resultGeo.par;
 
     job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
-    job->vquality   = -1.0;
+    job->vquality   = HB_INVALID_VIDEO_QUALITY;
     job->vbitrate   = 1000;
     job->twopass    = 0;
     job->pass_id    = HB_PASS_ENCODE;

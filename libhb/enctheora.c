@@ -77,7 +77,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     ti.aspect_denominator = job->par.den;
     ti.colorspace = TH_CS_UNSPECIFIED;
     ti.pixel_fmt = TH_PF_420;
-    if (job->vquality < 0.0)
+    if (job->vquality <= HB_INVALID_VIDEO_QUALITY)
     {
         ti.target_bitrate = job->vbitrate * 1000;
         ti.quality = 0;

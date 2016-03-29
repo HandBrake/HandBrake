@@ -249,7 +249,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         goto fail;
     }
 
-    if (job->vquality >= 0.)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         param->rc.rateControlMode = X265_RC_CRF;
         param->rc.rfConstant      = job->vquality;

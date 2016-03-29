@@ -1551,7 +1551,7 @@ int hb_add( hb_handle_t * h, hb_job_t * job )
 
 void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
 {
-    if (job->vquality >= 0)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         job->twopass = 0;
     }
