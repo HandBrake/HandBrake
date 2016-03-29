@@ -1212,12 +1212,10 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-#ifdef USE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-#endif
             *direction   = 1;
             *granularity = 0.1;
             *low         = 0.;
@@ -1262,12 +1260,10 @@ const char* hb_video_quality_get_name(uint32_t codec)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-#ifdef USE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-#endif
             return "RF";
 
         case HB_VCODEC_FFMPEG_VP8:
