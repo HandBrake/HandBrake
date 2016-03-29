@@ -1210,15 +1210,38 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
     switch (codec)
     {
+        /*
+         * H.264/H.265: *low
+         * = 51 - (QP_MAX_SPEC)
+         * = 51 - (51 + QP_BD_OFFSET)
+         * =  0 - (QP_BD_OFFSET)
+         * =  0 - (6*(BIT_DEPTH-8))     (libx264)
+         * =  0 - (6*(X265_DEPTH-8))    (libx265)
+         */
         case HB_VCODEC_X264_8BIT:
-        case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_X265_8BIT:
-        case HB_VCODEC_X265_10BIT:
-        case HB_VCODEC_X265_12BIT:
-        case HB_VCODEC_X265_16BIT:
             *direction   = 1;
             *granularity = 0.1;
             *low         = 0.;
+            *high        = 51.;
+            break;
+        case HB_VCODEC_X264_10BIT:
+        case HB_VCODEC_X265_10BIT:
+            *direction   = 1;
+            *granularity = 0.1;
+            *low         = -12.;
+            *high        = 51.;
+            break;
+        case HB_VCODEC_X265_12BIT:
+            *direction   = 1;
+            *granularity = 0.1;
+            *low         = -24.;
+            *high        = 51.;
+            break;
+        case HB_VCODEC_X265_16BIT:
+            *direction   = 1;
+            *granularity = 0.1;
+            *low         = -48.;
             *high        = 51.;
             break;
 
