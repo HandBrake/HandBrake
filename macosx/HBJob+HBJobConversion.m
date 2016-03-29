@@ -210,7 +210,7 @@
     {
         case 0:
             // ABR
-            job->vquality = -1.0;
+            job->vquality = HB_INVALID_VIDEO_QUALITY;
             job->vbitrate = self.video.avgBitrate;
             break;
         case 1:
