@@ -188,6 +188,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         granularity = [[NSUserDefaults standardUserDefaults]
                        floatForKey:@"x264CqSliderFractional"];
     }
+    fVidQualitySlider.minValue = minValue;
+    fVidQualitySlider.maxValue = maxValue;
     [fVidQualitySlider setNumberOfTickMarks:(int)((maxValue - minValue) *
                                              (1.0f / granularity)) + 1];
 
