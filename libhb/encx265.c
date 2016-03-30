@@ -108,11 +108,11 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     depth                = hb_video_encoder_get_depth(job->vcodec);
     profile_names        = hb_video_encoder_get_profiles(job->vcodec);
-    pv->api              = x265_api_get(depth);
+    pv->api              = x265_api_query(depth, X265_BUILD, NULL);
 
     if (pv->api == NULL)
     {
-        hb_error("encx265: x265_api_get failed, bit depth %d.", depth);
+        hb_error("encx265: x265_api_query failed, bit depth %d.", depth);
         goto fail;
     }
 

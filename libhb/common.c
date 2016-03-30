@@ -262,7 +262,7 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_X265_16BIT:
         {
             const x265_api *api;
-            api = x265_api_get(hb_video_encoder_get_depth(encoder));
+            api = x265_api_query(hb_video_encoder_get_depth(encoder), X265_BUILD, NULL);
             return (api != NULL);
         };
 #endif
