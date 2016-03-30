@@ -2326,7 +2326,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
-    if ((vcodec & HB_VCODEC_X264_MASK) && vquality < 1.0)
+    if (vcodec == HB_VCODEC_X264_8BIT && vquality < 1.0)
     {
         // Set Profile to auto for lossless x264
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
@@ -2343,7 +2343,14 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         step = min_step;
     }
     gdouble val = gtk_range_get_value(GTK_RANGE(widget));
-    val = ((int)((val + step / 2) / step)) * step;
+    if (val < 0)
+    {
+        val = ((int)((val - step / 2) / step)) * step;
+    }
+    else
+    {
+        val = ((int)((val + step / 2) / step)) * step;
+    }
     if (val < min)
     {
         val = min;
@@ -5169,7 +5176,6 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
         } break;
 
         case HB_VCODEC_X264_8BIT:
-        case HB_VCODEC_X264_10BIT:
         {
             if (val == 0.0)
             {
@@ -5177,6 +5183,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
                                        vqname, val);
             }
         } // Falls through to default
+        case HB_VCODEC_X264_10BIT:
         default:
         {
             return g_strdup_printf("%s: %.4g", vqname, val);
