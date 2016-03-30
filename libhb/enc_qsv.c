@@ -1404,7 +1404,8 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     // AsyncDepth has now been set and/or modified by Media SDK
-    pv->max_async_depth = videoParam.AsyncDepth;
+    // fall back to default if zero
+    pv->max_async_depth = videoParam.AsyncDepth ? videoParam.AsyncDepth : AV_QSV_ASYNC_DEPTH_DEFAULT;
     pv->async_depth     = 0;
 
     return 0;
