@@ -553,14 +553,41 @@ generate_deblock_settings(const char * preset, const char * custom)
     {
         settings = hb_dict_init();
         int qp = strtol(preset, NULL, 0);
-        if (qp < 5)
-        {
-            hb_dict_set(settings, "disable", hb_value_bool(1));
-        }
         hb_dict_set(settings, "qp", hb_value_int(qp));
     }
 
     return settings;
+}
+
+static void check_filter_status(int filter_id, hb_value_t *settings)
+{
+    int disable = 0;
+
+    if (settings == NULL)
+    {
+        return;
+    }
+    switch (filter_id)
+    {
+        case HB_FILTER_ROTATE:
+        {
+            int angle = hb_dict_get_int(settings, "angle");
+            int hflip = hb_dict_get_int(settings, "hflip");
+            disable = angle == 0 && hflip == 0;
+        } break;
+        case HB_FILTER_DEBLOCK:
+        {
+            int qp = hb_dict_get_int(settings, "qp");
+            disable = qp < 5;
+        } break;
+        default:
+        {
+        } break;
+    }
+    if (disable)
+    {
+        hb_dict_set(settings, "disable", hb_value_bool(disable));
+    }
 }
 
 hb_value_t *
@@ -599,6 +626,7 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
                     filter_id);
             break;
     }
+    check_filter_status(filter_id, settings);
 
     if (settings != NULL &&
         hb_validate_filter_settings(filter_id, settings) == 0)

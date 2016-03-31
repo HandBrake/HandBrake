@@ -76,7 +76,7 @@ hb_filter_object_t hb_filter_pad =
 };
 
 const char rotate_template[] =
-    "angle=^(0|90|180|270)$:hflip=^"HB_BOOL_REG"$";
+    "angle=^(0|90|180|270)$:hflip=^"HB_BOOL_REG"$:disable=^"HB_BOOL_REG"$";
 
 hb_filter_object_t hb_filter_rotate =
 {
