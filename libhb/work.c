@@ -1411,16 +1411,6 @@ static void do_job(hb_job_t *job)
         goto cleanup;
     }
 
-    // sanitize_qsv looks for subtitle render filter, so must happen after
-    // sanitize_subtitle
-    result = sanitize_qsv(job);
-    if (result)
-    {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
-        *job->die = 1;
-        goto cleanup;
-    }
-
 #ifdef USE_HWD
     /*
      * Check support for and enable DXVA2-accelerated when applicable; we need:
@@ -1504,6 +1494,16 @@ static void do_job(hb_job_t *job)
         memset(job->crop, 0, sizeof(int[4]));
         job->vrate = title->vrate;
         job->cfr = 0;
+    }
+
+    // sanitize_qsv looks for subtitle render filter, so must happen after
+    // sanitize_subtitle
+    result = sanitize_qsv(job);
+    if (result)
+    {
+        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->die = 1;
+        goto cleanup;
     }
 
     /*
