@@ -814,6 +814,9 @@ static void prune_streams(hb_stream_t *d)
 hb_stream_t *
 hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
 {
+    // ignore non-error messages from libavformat (and libavcodec, too)
+    av_log_set_level(AV_LOG_ERROR);
+
     FILE *f = hb_fopen(path, "rb");
     if ( f == NULL )
     {
@@ -4992,8 +4995,6 @@ void hb_ps_stream_reset(hb_stream_t *stream)
 static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 {
     AVFormatContext *info_ic = NULL;
-
-    av_log_set_level( AV_LOG_ERROR );
 
     // Increase probe buffer size
     // The default (5MB) is not big enough to successfully scan
