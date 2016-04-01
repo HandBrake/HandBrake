@@ -107,9 +107,10 @@ ifeq (none,$(FFMPEG.GCC.O))
     FFMPEG.CONFIGURE.extra += --disable-optimizations
 endif
 
-ifeq (1,$(FEATURE.qsv))
-   FFMPEG.CONFIGURE.extra += --enable-qsv
-endif
+## not supported in release/11 branch without our patch
+## ifeq (1,$(FEATURE.qsv))
+##   FFMPEG.CONFIGURE.extra += --enable-qsv
+## endif
 
 ## enable compile verbosity
 FFMPEG.BUILD.extra = V=1
