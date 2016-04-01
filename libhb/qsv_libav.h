@@ -143,11 +143,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AV_QSV_ALIGN32(X)                      (((mfxU32)((X)+31)) & (~ (mfxU32)31))
 #define AV_QSV_ALIGN16(value)                  (((value + 15) >> 4) << 4)
 #ifndef AV_QSV_PRINT_RET_MSG
-#define AV_QSV_PRINT_RET_MSG(ERR)              { av_log(NULL, AV_LOG_FATAL,"Error code %d,\t%s\t%d\n", ERR, __FUNCTION__, __LINE__); }
+#define AV_QSV_PRINT_RET_MSG(ERR)              { fprintf(stderr, "Error code %d,\t%s\t%d\n", ERR, __FUNCTION__, __LINE__); }
 #endif
 
 #ifndef AV_QSV_DEBUG_ASSERT
-#define AV_QSV_DEBUG_ASSERT(x,y)               {if ((x)) {av_log(NULL, AV_LOG_FATAL,"\nASSERT: %s\n",y);};}
+#define AV_QSV_DEBUG_ASSERT(x,y)               { if ((x)) { fprintf(stderr, "\nASSERT: %s\n", y); } }
 #endif
 
 #define AV_QSV_CHECK_RESULT(P, X, ERR)             {if ((X) > (P)) {AV_QSV_PRINT_RET_MSG(ERR); return ERR;}}

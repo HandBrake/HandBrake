@@ -63,8 +63,7 @@ int av_qsv_get_free_sync(av_qsv_space * space, av_qsv_context * qsv)
             }
         }
         if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
-            av_log(NULL, AV_LOG_FATAL, "not enough to have %d sync point(s) allocated\n",
-                   space->sync_num);
+            hb_error("QSV: not enough to have %d sync point(s) allocated", space->sync_num);
             break;
         }
         av_qsv_sleep(5);
@@ -98,8 +97,7 @@ int av_qsv_get_free_surface(av_qsv_space * space, av_qsv_context * qsv,
             }
         }
         if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
-            av_log(NULL, AV_LOG_FATAL,
-                   "not enough to have %d surface(s) allocated\n", up);
+            hb_error("QSV: not enough to have %d surface(s) allocated", up);
             break;
         }
         av_qsv_sleep(5);
@@ -199,7 +197,7 @@ void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
             if (qsv->qts_seq_mutex){
                 mut_ret = pthread_mutex_init(qsv->qts_seq_mutex, NULL);
                 if(mut_ret)
-                    av_log(NULL, AV_LOG_ERROR, "pthread_mutex_init issue[%d] at %s\n",mut_ret,__FUNCTION__);
+                    hb_log("QSV: pthread_mutex_init issue[%d] at %s", mut_ret, __FUNCTION__);
             }
 
         } else
@@ -228,7 +226,7 @@ int av_qsv_context_clean(av_qsv_context * qsv)
         if (qsv->qts_seq_mutex) {
             mut_ret = pthread_mutex_destroy(qsv->qts_seq_mutex);
             if(mut_ret)
-                av_log(NULL, AV_LOG_ERROR, "pthread_mutex_destroy issue[%d] at %s\n", mut_ret,__FUNCTION__);
+                hb_log("QSV: pthread_mutex_destroy issue[%d] at %s", mut_ret, __FUNCTION__);
             qsv->qts_seq_mutex = 0;
         }
 
@@ -348,7 +346,7 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
     if (iter == 0 && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_lock(qsv->qts_seq_mutex);
         if(mut_ret)
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_lock issue[%d] at %s", mut_ret, __FUNCTION__);
     }
 
     if (end == 0)
@@ -376,7 +374,7 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
     if (iter == 0 && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_unlock(qsv->qts_seq_mutex);
         if(mut_ret)
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",mut_ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_unlock issue[%d] at %s", mut_ret, __FUNCTION__);
     }
 }
 
@@ -388,7 +386,7 @@ void av_qsv_dts_pop(av_qsv_context * qsv)
     if (qsv && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_lock(qsv->qts_seq_mutex);
         if(mut_ret)
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_lock issue[%d] at %s", mut_ret, __FUNCTION__);
     }
 
     if (av_qsv_list_count(qsv->dts_seq)) {
@@ -399,7 +397,7 @@ void av_qsv_dts_pop(av_qsv_context * qsv)
     if (qsv && qsv->qts_seq_mutex){
         mut_ret = pthread_mutex_unlock(qsv->qts_seq_mutex);
         if(mut_ret)
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",mut_ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_lock issue[%d] at %s", mut_ret, __FUNCTION__);
         }
 }
 
@@ -422,13 +420,13 @@ av_qsv_list *av_qsv_list_init(int is_threaded)
         if (l->mutex){
             mut_ret = pthread_mutexattr_init(&l->mta);
             if( mut_ret )
-                av_log(NULL, AV_LOG_ERROR, "pthread_mutexattr_init issue[%d] at %s\n",mut_ret, __FUNCTION__);
+                hb_log("QSV: pthread_mutexattr_init issue[%d] at %s", mut_ret, __FUNCTION__);
             mut_ret = pthread_mutexattr_settype(&l->mta, PTHREAD_MUTEX_RECURSIVE /*PTHREAD_MUTEX_ERRORCHECK*/);
             if( mut_ret )
-                av_log(NULL, AV_LOG_ERROR, "pthread_mutexattr_settype issue[%d] at %s\n",mut_ret, __FUNCTION__);
+                hb_log("QSV: pthread_mutexattr_settype issue[%d] at %s", mut_ret, __FUNCTION__);
             mut_ret = pthread_mutex_init(l->mutex, &l->mta);
             if( mut_ret )
-                av_log(NULL, AV_LOG_ERROR, "pthread_mutex_init issue[%d] at %s\n",mut_ret, __FUNCTION__);
+                hb_log("QSV: pthread_mutex_init issue[%d] at %s", mut_ret, __FUNCTION__);
         }
     } else
         l->mutex = 0;
@@ -541,7 +539,7 @@ void av_qsv_list_close(av_qsv_list ** _l)
     if (l->mutex){
         mut_ret = pthread_mutex_unlock(l->mutex);
         if( mut_ret )
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",mut_ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_unlock issue[%d] at %s", mut_ret, __FUNCTION__);
         mut_ret = pthread_mutex_destroy(&l->mutex);
         mut_ret = pthread_mutexattr_destroy(&l->mta);
     }
@@ -553,7 +551,7 @@ int av_qsv_list_lock(av_qsv_list *l){
     if (l->mutex){
         ret = pthread_mutex_lock(l->mutex);
         if( ret )
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_lock issue[%d] at %s\n",ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_lock issue[%d] at %s", ret, __FUNCTION__);
     }
     return ret;
 }
@@ -563,7 +561,7 @@ int av_qsv_list_unlock(av_qsv_list *l){
     if (l->mutex){
         ret = pthread_mutex_unlock(l->mutex);
         if( ret )
-            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",ret, __FUNCTION__);
+            hb_log("QSV: pthread_mutex_unlock issue[%d] at %s", ret, __FUNCTION__);
     }
     return ret;
 }
