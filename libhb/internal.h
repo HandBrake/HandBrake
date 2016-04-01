@@ -10,7 +10,7 @@
 #include "hbffmpeg.h"
 #include "extras/cl.h"
 #ifdef USE_QSV
-#include "libavcodec/qsv.h"
+#include "qsv_libav.h"
 #endif
 
 /***********************************************************************
