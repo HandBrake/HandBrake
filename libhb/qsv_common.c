@@ -912,9 +912,17 @@ const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 
 int hb_qsv_decode_is_enabled(hb_job_t *job)
 {
-    return ((job != NULL && job->qsv.decode)                        &&
-            (job->vcodec                      & HB_VCODEC_QSV_MASK) &&
-            (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
+    /*
+     * XXX: we haven't yet adjusted our QSV decoder wrapper to use libav's new
+     *      QSV-accelerated decoder, and our old custom QSV-accelerated decoder
+     *      for libav hasn't been updated to work with newer libav releases, so
+     *      we can't use QSV-accelerated decoding at all for the time being.
+     *
+     * return ((job != NULL && job->qsv.decode)                        &&
+     *         (job->vcodec                      & HB_VCODEC_QSV_MASK) &&
+     *         (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
+     */
+    return 0;
 }
 
 int hb_qsv_copyframe_is_slow(int encoder)

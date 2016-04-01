@@ -26,8 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifndef AVCODEC_QSV_H
-#define AVCODEC_QSV_H
+#ifndef HB_QSV_LIBAV_H
+#define HB_QSV_LIBAV_H
 
 /**
  * @file
@@ -120,11 +120,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "libavutil/mem.h"
 #include "libavutil/time.h"
 
-#ifdef HAVE_AV_CONFIG_H
-#include "config.h"
-#endif
-
-#if HAVE_THREADS
 #if defined (__GNUC__)
 #include <pthread.h>
 #define ff_qsv_atomic_inc(ptr) __sync_add_and_fetch(ptr,1)
@@ -138,13 +133,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #define ff_qsv_atomic_inc(ptr) InterlockedIncrement(ptr)
 #define ff_qsv_atomic_dec(ptr) InterlockedDecrement (ptr)
-#else
-// targeting only for MinGW or MSVC
-#endif
-
-#else
-#define ff_qsv_atomic_inc(ptr) ((*ptr)++)
-#define ff_qsv_atomic_dec(ptr) ((*ptr)--)
 #endif
 
 
@@ -202,9 +190,7 @@ typedef enum AV_QSV_STAGE_TYPE {
 typedef struct av_qsv_list {
     // practically pthread_mutex_t
     void *mutex;
-#if HAVE_THREADS
     pthread_mutexattr_t   mta;
-#endif
 
     void **items;
     int items_alloc;
@@ -491,4 +477,4 @@ void *av_qsv_list_item(av_qsv_list *, int);
 
 /* @} */
 
-#endif                          //AVCODEC_QSV_H
+#endif // HB_QSV_LIBAV_H
