@@ -103,7 +103,7 @@ typedef enum
 #include "libavutil/channel_layout.h"
 
 #ifdef USE_QSV
-#include "libavcodec/qsv.h"
+#include "qsv_libav.h"
 #endif
 
 struct hb_buffer_list_s
