@@ -993,18 +993,22 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_level(job, video_level);
     hb_job_set_encoder_options(job, video_options);
 
-    // If both vbitrate and vquality were specified, vbitrate is used
+    // If both vbitrate and vquality were specified, vbitrate is used;
+    // we need to ensure the unused rate contro mode is always set to an
+    // invalid value, as if both values aere valid, behavior is undefined
+    // (some encoders first check for a valid vquality, whereas others
+    //  check for a valid vbitrate instead)
     if (vbitrate > 0)
     {
         job->vbitrate = vbitrate;
         job->vquality = HB_INVALID_VIDEO_QUALITY;
     }
-    else if (vquality != HB_INVALID_VIDEO_QUALITY)
+    else if (vquality > HB_INVALID_VIDEO_QUALITY)
     {
+        job->vbitrate = -1;
         job->vquality = vquality;
     }
-    // If neither vbitrate or vquality were specified, defaults are used
-    // defaults are set in job_setup()
+    // If neither were specified, defaults are used (set in job_setup())
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
