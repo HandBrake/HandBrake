@@ -123,7 +123,7 @@ static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
 static int      loose_crop               = -1;
 static char *   vrate                    = NULL;
-static float    vquality                 = -1.0;
+static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
 static int      vbitrate                 = 0;
 static int      mux                      = 0;
 static int      anamorphic_mode     = -1;
@@ -3497,7 +3497,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoOptionExtra", hb_value_string(advanced_opts));
     }
-    if (vquality >= 0)
+    if (vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(preset, "VideoQualityType", hb_value_int(2));
         hb_dict_set(preset, "VideoQualitySlider", hb_value_double(vquality));
