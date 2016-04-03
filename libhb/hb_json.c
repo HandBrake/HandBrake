@@ -810,22 +810,26 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         return NULL;
     }
 
-    hb_value_array_t *chapter_list = NULL;
-    hb_value_array_t *audio_list = NULL;
-    hb_value_array_t *subtitle_list = NULL;
-    hb_value_array_t *filter_list = NULL;
-    hb_value_t *mux = NULL, *vcodec = NULL;
-    hb_value_t *acodec_copy_mask = NULL, *acodec_fallback = NULL;
-    char *destfile = NULL;
-    char *range_type = NULL;
-    char *video_preset = NULL, *video_tune = NULL;
-    char *video_profile = NULL, *video_level = NULL;
-    char *video_options = NULL;
-    int   subtitle_search_burn = 0;
-    char *meta_name = NULL, *meta_artist = NULL, *meta_album_artist = NULL;
-    char *meta_release = NULL, *meta_comment = NULL, *meta_genre = NULL;
-    char *meta_composer = NULL, *meta_desc = NULL, *meta_long_desc = NULL;
-    json_int_t range_start = -1, range_end = -1, range_seek_points = -1;
+    hb_value_array_t * chapter_list = NULL;
+    hb_value_array_t * audio_list = NULL;
+    hb_value_array_t * subtitle_list = NULL;
+    hb_value_array_t * filter_list = NULL;
+    hb_value_t       * mux = NULL, * vcodec = NULL;
+    hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
+    char             * destfile = NULL;
+    char             * range_type = NULL;
+    char             * video_preset = NULL, * video_tune = NULL;
+    char             * video_profile = NULL, * video_level = NULL;
+    char             * video_options = NULL;
+    int                subtitle_search_burn = 0;
+    char             * meta_name = NULL, * meta_artist = NULL;
+    char             * meta_album_artist = NULL, * meta_release = NULL;
+    char             * meta_comment = NULL, * meta_genre = NULL;
+    char             * meta_composer = NULL, * meta_desc = NULL;
+    char             * meta_long_desc = NULL;
+    json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
+    int                vbitrate = -1;
+    double             vquality = HB_INVALID_VIDEO_QUALITY;
 
     result = json_unpack_ex(dict, &error, 0,
     "{"
@@ -875,8 +879,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Den",                  unpack_i(&job->par.den),
         "Video",
             "Encoder",              unpack_o(&vcodec),
-            "Quality",              unpack_f(&job->vquality),
-            "Bitrate",              unpack_i(&job->vbitrate),
+            "Quality",              unpack_f(&vquality),
+            "Bitrate",              unpack_i(&vbitrate),
             "Preset",               unpack_s(&video_preset),
             "Tune",                 unpack_s(&video_tune),
             "Profile",              unpack_s(&video_profile),
@@ -989,11 +993,18 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_level(job, video_level);
     hb_job_set_encoder_options(job, video_options);
 
-    // sanitize video quality
-    if (job->vbitrate > 0)
+    // If both vbitrate and vquality were specified, vbitrate is used
+    if (vbitrate > 0)
     {
+        job->vbitrate = vbitrate;
         job->vquality = HB_INVALID_VIDEO_QUALITY;
     }
+    else if (vquality != HB_INVALID_VIDEO_QUALITY)
+    {
+        job->vquality = vquality;
+    }
+    // If neither vbitrate or vquality were specified, defaults are used
+    // defaults are set in job_setup()
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;

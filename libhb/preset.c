@@ -1434,7 +1434,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Quality",
                     hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
                                    HB_VALUE_TYPE_DOUBLE));
-        hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+        hb_dict_remove(video_dict, "Bitrate");
     }
     else if (vqtype == 1)   // ABR
     {
@@ -1447,7 +1447,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Turbo",
                     hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
                                    HB_VALUE_TYPE_BOOL));
-        hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+        hb_dict_remove(video_dict, "Quality");
     }
     else
     {
@@ -1456,7 +1456,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         {
             hb_dict_set(video_dict, "Quality",
                         hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
-            hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+            hb_dict_remove(video_dict, "Bitrate");
         }
         else
         {
@@ -1469,7 +1469,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_set(video_dict, "Turbo",
                         hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
                                        HB_VALUE_TYPE_BOOL));
-            hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+            hb_dict_remove(video_dict, "Quality");
         }
     }
     qsv = hb_dict_get(video_dict, "QSV");
