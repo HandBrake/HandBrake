@@ -1,0 +1,20 @@
+diff --git a/src/libbluray/bdnav/navigation.c b/src/libbluray/bdnav/navigation.c
+index 60eccbb..4752196 100644
+--- a/src/libbluray/bdnav/navigation.c
++++ b/src/libbluray/bdnav/navigation.c
+@@ -754,6 +754,15 @@ uint32_t nav_chapter_get_current(NAV_CLIP *clip, uint32_t clip_pkt)
+             else
+                 return 0;
+         }
++        if (mark->clip_ref < clip->ref) {
++            if ( ii == title->chap_list.count - 1 ) {
++                return ii;
++            }
++            mark = &title->chap_list.mark[ii+1];
++            if (mark->clip_ref == clip->ref && mark->clip_pkt > clip_pkt) {
++                return ii;
++            }
++        }
+         if (mark->clip_ref == clip->ref && mark->clip_pkt <= clip_pkt) {
+             if ( ii == title->chap_list.count - 1 ) {
+                 return ii;
