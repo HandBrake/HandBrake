@@ -97,6 +97,10 @@ static int hb_reader_open( hb_work_private_t * r )
             hb_bd_close(&r->bd);
             return 1;
         }
+        if (r->job->angle > 1)
+        {
+            hb_bd_set_angle(r->bd, r->job->angle - 1);
+        }
         if (r->job->start_at_preview)
         {
             // XXX code from DecodePreviews - should go into its own routine
@@ -116,10 +120,6 @@ static int hb_reader_open( hb_work_private_t * r )
         else
         {
             hb_bd_seek_chapter(r->bd, r->job->chapter_start);
-        }
-        if (r->job->angle > 1)
-        {
-            hb_bd_set_angle(r->bd, r->job->angle - 1);
         }
     }
     else if (r->title->type == HB_DVD_TYPE)
