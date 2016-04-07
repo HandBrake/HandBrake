@@ -158,66 +158,69 @@
 {
     // Set the picture size display fields below the Preview Picture
     NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
-    NSSize imageScaledSize = imageSize;
 
-    if (self.window.backingScaleFactor != 1.0)
-    {
-        // HiDPI mode usually display everything
-        // with douple pixel count, but we don't
-        // want to double the size of the video
-        imageScaledSize.height /= self.window.backingScaleFactor;
-        imageScaledSize.width /= self.window.backingScaleFactor;
-    }
+    if (imageSize.width > 0 && imageSize.height > 0) {
+        NSSize imageScaledSize = imageSize;
 
-    NSSize frameSize = self.frame.size;
-
-    if (self.showBorder == YES)
-    {
-        frameSize.width -= BORDER_SIZE * 2;
-        frameSize.height -= BORDER_SIZE * 2;
-    }
-
-    if (self.fitToView == YES)
-    {
-        // We are in Fit to View mode so, we have to get the ratio for height and width against the window
-        // size so we can scale from there.
-        imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
-    }
-    else
-    {
-        // If the image is larger then the view, scale the image
-        if (imageScaledSize.width > frameSize.width || imageScaledSize.height > frameSize.height)
+        if (self.window.backingScaleFactor != 1.0)
         {
+            // HiDPI mode usually display everything
+            // with douple pixel count, but we don't
+            // want to double the size of the video
+            imageScaledSize.height /= self.window.backingScaleFactor;
+            imageScaledSize.width /= self.window.backingScaleFactor;
+        }
+
+        NSSize frameSize = self.frame.size;
+
+        if (self.showBorder == YES)
+        {
+            frameSize.width -= BORDER_SIZE * 2;
+            frameSize.height -= BORDER_SIZE * 2;
+        }
+
+        if (self.fitToView == YES)
+        {
+            // We are in Fit to View mode so, we have to get the ratio for height and width against the window
+            // size so we can scale from there.
             imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
         }
+        else
+        {
+            // If the image is larger then the view, scale the image
+            if (imageScaledSize.width > frameSize.width || imageScaledSize.height > frameSize.height)
+            {
+                imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
+            }
+        }
+
+        [NSAnimationContext beginGrouping];
+        [[NSAnimationContext currentContext] setDuration:0];
+
+        // Resize the CALayers
+        CGRect backRect = CGRectMake(0, 0, imageScaledSize.width + (BORDER_SIZE * 2), imageScaledSize.height + (BORDER_SIZE * 2));
+        CGRect pictureRect = CGRectMake(0, 0, imageScaledSize.width, imageScaledSize.height);
+
+        backRect = CGRectIntegral(backRect);
+        pictureRect = CGRectIntegral(pictureRect);
+
+        self.backLayer.bounds = backRect;
+        self.pictureLayer.bounds = pictureRect;
+
+        // Position the CALayers
+        CGPoint anchor = CGPointMake(floor((self.frame.size.width - pictureRect.size.width) / 2),
+                                     floor((self.frame.size.height - pictureRect.size.height) / 2));
+        [self.pictureLayer setPosition:anchor];
+
+        CGPoint backAchor = CGPointMake(anchor.x - BORDER_SIZE, anchor.y - BORDER_SIZE);
+        [self.backLayer setPosition:backAchor];
+        
+        [NSAnimationContext endGrouping];
+        
+        // Update the proprierties
+        self.scale = self.pictureLayer.frame.size.width / imageSize.width;
+        self.pictureFrame = self.pictureLayer.frame;
     }
-
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:0];
-
-    // Resize the CALayers
-    CGRect backRect = CGRectMake(0, 0, imageScaledSize.width + (BORDER_SIZE * 2), imageScaledSize.height + (BORDER_SIZE * 2));
-    CGRect pictureRect = CGRectMake(0, 0, imageScaledSize.width, imageScaledSize.height);
-
-    backRect = CGRectIntegral(backRect);
-    pictureRect = CGRectIntegral(pictureRect);
-
-    self.backLayer.bounds = backRect;
-    self.pictureLayer.bounds = pictureRect;
-
-    // Position the CALayers
-    CGPoint anchor = CGPointMake(floor((self.frame.size.width - pictureRect.size.width) / 2),
-                                 floor((self.frame.size.height - pictureRect.size.height) / 2));
-    [self.pictureLayer setPosition:anchor];
-
-    CGPoint backAchor = CGPointMake(anchor.x - BORDER_SIZE, anchor.y - BORDER_SIZE);
-    [self.backLayer setPosition:backAchor];
-
-    [NSAnimationContext endGrouping];
-
-    // Update the proprierties
-    self.scale = self.pictureLayer.frame.size.width / imageSize.width;
-    self.pictureFrame = self.pictureLayer.frame;
 }
 
 /**
