@@ -100,20 +100,20 @@
     self.pictureLayer.hidden = hidden ;
     self.backLayer.hidden = hidden || !self.showBorder;
 
-    [self layout];
+    [self _updatePreviewLayout];
 }
 
 - (void)setFitToView:(BOOL)fitToView
 {
     _fitToView = fitToView;
-    [self layout];
+    [self _updatePreviewLayout];
 }
 
 - (void)setShowBorder:(BOOL)showBorder
 {
     _showBorder = showBorder;
     self.backLayer.hidden = !showBorder;
-    [self layout];
+    [self _updatePreviewLayout];
 }
 
 - (void)setFrame:(NSRect)newRect {
@@ -125,7 +125,7 @@
         [super setFrame:newRect];
     }
 
-    [self layout];
+    [self _updatePreviewLayout];
 }
 
 - (NSSize)scaledSize:(NSSize)source toFit:(NSSize)destination
@@ -154,7 +154,7 @@
 /**
  *  Updates the sublayers layout.
  */
-- (void)layout
+- (void)_updatePreviewLayout
 {
     // Set the picture size display fields below the Preview Picture
     NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
