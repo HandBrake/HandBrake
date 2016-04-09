@@ -2,6 +2,8 @@
 win/CS/*/bin
 win/CS/*/obj
 win/CS/*.suo
+win/CS/*.VC.opendb
+win/CS/*.VC.db
 
 # Xcode user data
 xcuserdata
