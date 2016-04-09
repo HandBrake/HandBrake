@@ -384,7 +384,8 @@ namespace HandBrakeWPF.Services.Scan
                 int currentAudioTrack = 1;
                 foreach (SourceAudioTrack track in title.AudioList)
                 {
-                    converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.BitRate));
+                    
+                    converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.BitRate, track.ChannelLayout));
                     currentAudioTrack++;
                 }
 

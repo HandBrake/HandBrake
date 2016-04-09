@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Globalization;
     using System.Linq;
 
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Json.Presets;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
@@ -399,7 +400,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
-                    track.MixDown = EnumHelper<Mixdown>.GetValue(audioTrack.AudioMixdown);
+                    track.MixDown = audioTrack.AudioMixdown;
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
@@ -540,7 +541,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     AudioCompressionLevel = 0, // TODO
                     AudioDitherMethod = null,  // TODO
                     AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
-                    AudioMixdown = EnumHelper<Mixdown>.GetShortName(item.MixDown),
+                    AudioMixdown = item.MixDown,
                     AudioNormalizeMixLevel = false, // TODO
                     AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(),  // TODO check formatting.
                     AudioTrackDRCSlider = item.DRC,

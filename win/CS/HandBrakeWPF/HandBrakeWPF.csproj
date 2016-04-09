@@ -148,6 +148,8 @@
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\Audio\AudioMixdownListConverter.cs" />
+    <Compile Include="Converters\Audio\AudioMixdownConverter.cs" />
     <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
     <Compile Include="Converters\Audio\AudioTrackDefaultBehaviourConverter.cs" />
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />

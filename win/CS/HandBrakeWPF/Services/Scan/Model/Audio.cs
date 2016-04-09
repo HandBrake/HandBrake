@@ -48,8 +48,12 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <param name="bitrate">
         /// The bitrate.
         /// </param>
-        public Audio(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate)
+        /// <param name="channelLayout">
+        /// The channel Layout.
+        /// </param>
+        public Audio(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate, int channelLayout)
         {
+            this.ChannelLayout = channelLayout;
             this.TrackNumber = trackNumber;
             this.Language = language;
             this.LanguageCode = languageCode;
@@ -93,6 +97,11 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// Gets or sets The bitrate (in kbps) of this Audio Track
         /// </summary>
         public int Bitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the channel layout of the source track (mixdown)
+        /// </summary>
+        public int ChannelLayout { get; set; }
 
         /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI

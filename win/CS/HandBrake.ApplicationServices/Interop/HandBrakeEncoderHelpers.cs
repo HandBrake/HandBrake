@@ -392,6 +392,22 @@ namespace HandBrake.ApplicationServices.Interop
         }
 
         /// <summary>
+        /// Determines if a mixdown is available for a given track and encoder.
+        /// </summary>
+        /// <param name="mixdown">
+        /// The mixdown to evaluate.
+        /// </param>
+        /// <param name="encoder">
+        /// The encoder to evaluate.
+        /// </param>
+        /// <param name="channelLayout">channel layout of the source track</param>
+        /// <returns>True if available.</returns>
+        public static bool MixdownIsSupported(HBMixdown mixdown, HBAudioEncoder encoder, int channelLayout)
+        {
+            return HBFunctions.hb_mixdown_is_supported(mixdown.Id, (uint)encoder.Id, (uint)channelLayout) > 0;
+        }
+
+        /// <summary>
         /// Determines if DRC can be applied to the given track with the given encoder.
         /// </summary>
         /// <param name="trackNumber">

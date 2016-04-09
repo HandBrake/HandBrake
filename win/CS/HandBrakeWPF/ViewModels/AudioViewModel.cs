@@ -76,7 +76,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
-            this.AudioMixdowns = EnumHelper<Mixdown>.GetEnumList();
             this.SourceTracks = new List<Audio>();
         }
 
@@ -98,11 +97,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets AudioEncoders.
         /// </summary>
         public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
-
-        /// <summary>
-        /// Gets or sets AudioMixdowns.
-        /// </summary>
-        public IEnumerable<Mixdown> AudioMixdowns { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.

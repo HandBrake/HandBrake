@@ -169,7 +169,6 @@
     <Compile Include="Interop\Model\Encoding\HBMixdown.cs" />
     <Compile Include="Interop\Model\Encoding\HBRate.cs" />
     <Compile Include="Interop\Model\Encoding\HBVideoEncoder.cs" />
-    <Compile Include="Interop\Model\Encoding\Mixdown.cs" />
     <Compile Include="Interop\Model\Encoding\PictureRotation.cs" />
     <Compile Include="Interop\Model\Encoding\ScaleMethod.cs" />
     <Compile Include="Interop\Model\Encoding\VideoEncoder.cs" />

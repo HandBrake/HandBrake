@@ -58,10 +58,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValues(typeof(VideoEncoder));
             }
-            if (value is IEnumerable<Mixdown>)
-            {
-                return EnumHelper<Mixdown>.GetEnumDisplayValues(typeof(Mixdown));
-            }
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
@@ -103,12 +99,7 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)value);
-            }
-            if (targetType == typeof(Mixdown) || value.GetType() == typeof(Mixdown))
-            {
-                return EnumHelper<Mixdown>.GetDisplay((Mixdown)value);
-            }
-  
+            } 
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
@@ -182,10 +173,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(Mixdown) || value.GetType() == typeof(Mixdown))
-            {
-                return EnumHelper<Mixdown>.GetValue(value.ToString());
             }
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {

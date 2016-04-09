@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private double drc;
         private HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder encoder;
         private int gain;
-        private Mixdown mixDown;
+        private string mixDown;
         private double sampleRate;
         [NonSerialized]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -52,7 +52,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             // Default Values
             this.Encoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffaac;
-            this.MixDown = Mixdown.DolbyProLogicII;
+            this.MixDown = HandBrakeEncoderHelpers.Mixdowns.FirstOrDefault(m => m.ShortName == "dpl2")?.ShortName;
             this.SampleRate = 48;
             this.Bitrate = 160;
             this.DRC = 0;
@@ -137,13 +137,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         }
 
         /// <summary>
-        ///   Gets or sets Audio Mixdown
+        ///   Gets or sets Audio Mixdown (ShortName)
         /// </summary>
-        public Mixdown MixDown
+        public string MixDown
         {
             get
             {
-                return this.IsPassthru ? Mixdown.Auto : this.mixDown;
+                return this.IsPassthru ? null : this.mixDown;
             }
 
             set
@@ -151,7 +151,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.mixDown = value;
                 this.NotifyOfPropertyChange(() => this.MixDown);
                 this.SetupLimits();
-                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -173,8 +172,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.IsBitrateVisible);
                 this.NotifyOfPropertyChange(() => this.IsQualityVisible);
                 this.NotifyOfPropertyChange(() => this.IsRateTypeVisible);
-                this.SetupLimits();
                 this.NotifyOfPropertyChange(() => this.TrackReference);
+                this.GetDefaultMixdownIfNull();
+                this.SetupLimits();
 
                 // Refresh the available encoder rate types.
                 this.NotifyOfPropertyChange(() => this.AudioEncoderRateTypes);
@@ -200,7 +200,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.sampleRate = value;
                 this.NotifyOfPropertyChange(() => this.SampleRate);
                 this.SetupLimits();
-                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -283,18 +282,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         }
 
         /// <summary>
-        ///   Gets AudioMixdownDisplayValue.
-        /// </summary>
-        [JsonIgnore]
-        public string AudioMixdownDisplayValue
-        {
-            get
-            {
-                return EnumHelper<Mixdown>.GetDisplay(this.MixDown);
-            }
-        }
-
-        /// <summary>
         ///   Gets the The UI display value for bit rate
         /// </summary>
         [JsonIgnore]
@@ -369,6 +356,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             {
                 this.scannedTrack = value;
                 this.NotifyOfPropertyChange(() => this.ScannedTrack);
+                this.NotifyOfPropertyChange(() => this.TrackReference);
+
+                this.GetDefaultMixdownIfNull();
             }
         }
 
@@ -550,7 +540,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             // Based on the users settings, find the high and low bitrates.
             HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
             HBRate rate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(t => t.Name == this.SampleRate.ToString(CultureInfo.InvariantCulture));
-            HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(EnumHelper<Mixdown>.GetShortName(this.MixDown));
+            HBMixdown mixdown = this.mixDown != null ? HandBrakeEncoderHelpers.GetMixdown(this.mixDown) : HandBrakeEncoderHelpers.GetMixdown("dpl2");
 
             BitrateLimits limits = HandBrakeEncoderHelpers.GetBitrateLimits(hbaenc, rate != null ? rate.Rate : 48000, mixdown);
             if (limits != null)
@@ -630,6 +620,22 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
 
             this.NotifyOfPropertyChange(() => this.EncoderQualityValues);
+        }
+
+        /// <summary>
+        /// Set the default mixdown when the mixdown is null or "none"
+        /// </summary>
+        private void GetDefaultMixdownIfNull()
+        {
+            if ((this.mixDown == null || this.mixDown == "none" ) && this.ScannedTrack != null)
+            {
+                HBAudioEncoder aencoder =
+                    HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
+
+                HBMixdown mixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
+
+                this.MixDown = mixdown.ShortName;
+            }
         }
 
         #endregion
