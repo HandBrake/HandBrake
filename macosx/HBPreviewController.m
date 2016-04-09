@@ -91,11 +91,8 @@ typedef enum ViewMode : NSUInteger {
     if (centerString.length)
     {
         NSPoint center = NSPointFromString(centerString);
-        NSRect frame = self.window.frame;
-        [self.window setFrameOrigin:NSMakePoint(center.x - floor(frame.size.width / 2),
-                                                center.y - floor(frame.size.height / 2))];
-
         self.windowCenterPoint = center;
+        [self resizeWindowForViewSize:NSMakeSize(MIN_WIDTH, MIN_HEIGHT) animate:NO];
     }
     else
     {
