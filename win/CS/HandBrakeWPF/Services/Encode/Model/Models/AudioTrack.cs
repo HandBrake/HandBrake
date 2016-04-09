@@ -148,9 +148,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
             set
             {
-                this.mixDown = value;
-                this.NotifyOfPropertyChange(() => this.MixDown);
-                this.SetupLimits();
+                if (!object.Equals(this.mixDown, value))
+                {
+                    this.mixDown = value;
+                    this.NotifyOfPropertyChange(() => this.MixDown);
+                    this.SetupLimits();
+                }
             }
         }
 
@@ -166,6 +169,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
             set
             {
+                if (object.Equals(this.encoder, value))
+                {
+                    return;
+                }
+
                 this.encoder = value;
                 this.NotifyOfPropertyChange(() => this.Encoder);
                 this.NotifyOfPropertyChange(() => this.IsPassthru);
@@ -627,14 +635,24 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// </summary>
         private void GetDefaultMixdownIfNull()
         {
-            if ((this.mixDown == null || this.mixDown == "none" ) && this.ScannedTrack != null)
+            if (this.ScannedTrack == null)
             {
-                HBAudioEncoder aencoder =
-                    HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
+                return;
+            }
 
-                HBMixdown mixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
+            HBAudioEncoder aencoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
+            HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
+            HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, aencoder, (uint)this.ScannedTrack.ChannelLayout);
+            HBMixdown defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
 
-                this.MixDown = mixdown.ShortName;
+
+            if (this.mixDown == null || this.mixDown == "none")
+            {
+                this.MixDown = defaultMixdown.ShortName;
+            }
+            else
+            {
+                this.MixDown = sanitisedMixdown.ShortName;
             }
         }
 

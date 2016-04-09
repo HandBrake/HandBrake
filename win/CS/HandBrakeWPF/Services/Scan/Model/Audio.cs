@@ -39,8 +39,8 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <param name="description">
         /// The description.
         /// </param>
-        /// <param name="format">
-        /// The format.
+        /// <param name="codec">
+        /// The codec.
         /// </param>
         /// <param name="sampleRate">
         /// The sample rate.
@@ -51,14 +51,14 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <param name="channelLayout">
         /// The channel Layout.
         /// </param>
-        public Audio(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate, int channelLayout)
+        public Audio(int trackNumber, string language, string languageCode, string description, int codec, int sampleRate, int bitrate, int channelLayout)
         {
             this.ChannelLayout = channelLayout;
             this.TrackNumber = trackNumber;
             this.Language = language;
             this.LanguageCode = languageCode;
             this.Description = description;
-            this.Format = format;
+            this.Codec = codec;
             this.SampleRate = sampleRate;
             this.Bitrate = bitrate;
         }
@@ -86,7 +86,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <summary>
         /// Gets or sets The primary format of this Audio Track
         /// </summary>
-        public string Format { get; set; }
+        public int Codec { get; set; }
 
         /// <summary>
         /// Gets or sets The frequency (in MHz) of this Audio Track
@@ -138,7 +138,7 @@ namespace HandBrakeWPF.Services.Scan.Model
                 return true;
             }
 
-            return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.Format, this.Format);
+            return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.Codec, this.Codec);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace HandBrakeWPF.Services.Scan.Model
                 int result = this.TrackNumber;
                 result = (result * 397) ^ (this.Language != null ? this.Language.GetHashCode() : 0);
                 result = (result * 397) ^ (this.LanguageCode != null ? this.LanguageCode.GetHashCode() : 0);
-                result = (result * 397) ^ (this.Format != null ? this.Format.GetHashCode() : 0);
+                result = (result * 397) ^ (this.Codec != null ? this.Codec.GetHashCode() : 0);
                 return result;
             }
         }
