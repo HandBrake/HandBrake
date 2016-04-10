@@ -87,20 +87,20 @@ pkg.push.src.deb:: $(PKG.src.deb.stamp)
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
-	$(MKDIR.exe) -p $(STAGE.out.src/)xenail
-	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)xenail/
-	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)xenail/$(PKG.deb.basename)/version.txt
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)xenail/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)xenail/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/control.xenail $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/control
-	$(CP.exe) $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/rules.xenail $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~xenail1) xenail; urgency=low" > $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/changelog
-	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)xenail/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)xenail/$(PKG.src.deb.tar) -C $(STAGE.out.src/)xenail $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)xenail/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
+	$(MKDIR.exe) -p $(STAGE.out.src/)xenial
+	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)xenial/
+	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)xenial/$(PKG.deb.basename)/version.txt
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)xenial/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)xenial/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/control.xenial $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/rules.xenial $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/rules
+	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~xenial1) xenial; urgency=low" > $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)xenial/$(PKG.src.deb.tar) -C $(STAGE.out.src/)xenial $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)xenial/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)wily
 	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)wily/
 	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)wily/$(PKG.deb.basename)/version.txt
