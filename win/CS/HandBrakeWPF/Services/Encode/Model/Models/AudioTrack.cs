@@ -160,7 +160,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         ///   Gets or sets Audio Encoder
         /// </summary>
-        public HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder Encoder
+        public AudioEncoder Encoder
         {
             get
             {
@@ -214,7 +214,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         /// Gets or sets the encoder rate type.
         /// </summary>
-        public HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType EncoderRateType
+        public AudioEncoderRateType EncoderRateType
         {
             get
             {
@@ -435,7 +435,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// Gets the audio encoder rate types.
         /// </summary>
         [JsonIgnore]
-        public IEnumerable<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType> AudioEncoderRateTypes
+        public IEnumerable<AudioEncoderRateType> AudioEncoderRateTypes
         {
             get
             {

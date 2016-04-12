@@ -340,7 +340,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(item.MixDown);
-                Validate.NotNull(mixdown, "Unrecognized audio mixdown:" + item.MixDown);
 
                 HBRate sampleRate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(s => s.Name == item.SampleRate.ToString(CultureInfo.InvariantCulture));
 
@@ -350,7 +349,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     DRC = item.DRC,
                     Encoder = encoder.Id,
                     Gain = item.Gain,
-                    Mixdown = mixdown.Id,
+                    Mixdown = mixdown != null ? mixdown.Id : -1,
                     NormalizeMixLevel = false,
                     Samplerate = sampleRate != null ? sampleRate.Rate : 0,
                     Name = item.TrackName,
