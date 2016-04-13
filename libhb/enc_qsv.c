@@ -1424,48 +1424,6 @@ void encqsvClose(hb_work_object_t *w)
         av_qsv_context *qsv_ctx       = pv->job->qsv.ctx;
         av_qsv_space   *qsv_enc_space = pv->job->qsv.ctx->enc_space;
 
-        if (qsv_enc_space != NULL)
-        {
-            if (qsv_enc_space->is_init_done)
-            {
-                for (i = av_qsv_list_count(qsv_enc_space->tasks); i > 1; i--)
-                {
-                    av_qsv_task *task = av_qsv_list_item(qsv_enc_space->tasks,
-                                                         i - 1);
-                    if (task != NULL)
-                    {
-                        if (task->bs != NULL)
-                        {
-                            av_freep(&task->bs->Data);
-                        }
-                        av_qsv_list_rem(qsv_enc_space->tasks, task);
-                        av_freep(&task->bs);
-                        av_freep(&task);
-                    }
-                }
-                av_qsv_list_close(&qsv_enc_space->tasks);
-
-                for (i = 0; i < qsv_enc_space->surface_num; i++)
-                {
-                    if (pv->is_sys_mem)
-                    {
-                        av_freep(&qsv_enc_space->p_surfaces[i]->Data.VU);
-                        av_freep(&qsv_enc_space->p_surfaces[i]->Data.Y);
-                    }
-                    av_freep(&qsv_enc_space->p_surfaces[i]);
-                }
-                qsv_enc_space->surface_num = 0;
-
-                for (i = 0; i < qsv_enc_space->sync_num; i++)
-                {
-                    av_freep(&qsv_enc_space->p_syncp[i]->p_sync);
-                    av_freep(&qsv_enc_space->p_syncp[i]);
-                }
-                qsv_enc_space->sync_num = 0;
-            }
-            qsv_enc_space->is_init_done = 0;
-        }
-
         if (qsv_ctx != NULL)
         {
             /* Unload MFX plug-ins */
@@ -1476,6 +1434,48 @@ void encqsvClose(hb_work_object_t *w)
 
             /* QSV context cleanup and MFXClose */
             av_qsv_context_clean(qsv_ctx);
+
+            if (qsv_enc_space != NULL)
+            {
+                if (qsv_enc_space->is_init_done)
+                {
+                    for (i = av_qsv_list_count(qsv_enc_space->tasks); i > 1; i--)
+                    {
+                        av_qsv_task *task = av_qsv_list_item(qsv_enc_space->tasks,
+                                                             i - 1);
+                        if (task != NULL)
+                        {
+                            if (task->bs != NULL)
+                            {
+                                av_freep(&task->bs->Data);
+                            }
+                            av_qsv_list_rem(qsv_enc_space->tasks, task);
+                            av_freep(&task->bs);
+                            av_freep(&task);
+                        }
+                    }
+                    av_qsv_list_close(&qsv_enc_space->tasks);
+
+                    for (i = 0; i < qsv_enc_space->surface_num; i++)
+                    {
+                        if (pv->is_sys_mem)
+                        {
+                            av_freep(&qsv_enc_space->p_surfaces[i]->Data.VU);
+                            av_freep(&qsv_enc_space->p_surfaces[i]->Data.Y);
+                        }
+                        av_freep(&qsv_enc_space->p_surfaces[i]);
+                    }
+                    qsv_enc_space->surface_num = 0;
+
+                    for (i = 0; i < qsv_enc_space->sync_num; i++)
+                    {
+                        av_freep(&qsv_enc_space->p_syncp[i]->p_sync);
+                        av_freep(&qsv_enc_space->p_syncp[i]);
+                    }
+                    qsv_enc_space->sync_num = 0;
+                }
+                qsv_enc_space->is_init_done = 0;
+            }
 
             if (pv->is_sys_mem)
             {
