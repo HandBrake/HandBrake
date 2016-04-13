@@ -816,7 +816,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder != VideoEncoder.X264_10 ? string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()) : Resources.Video_EncoderExtraArgsTooltip ;
+                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? string.Format(Resources.Video_EncoderExtraArgs, this.GetActualx264Query()) : Resources.Video_EncoderExtraArgsTooltip;
             }
         }
 
