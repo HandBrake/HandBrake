@@ -1,8 +1,7 @@
-diff --git a/configure b/configure
-index 5085333..7283fb1 100755
---- a/configure
-+++ b/configure
-@@ -134,6 +134,7 @@ Component options:
+diff -urN libav-v11.3-0-g00abc00.orig/configure libav-v11.3-0-g00abc00/configure
+--- libav-v11.3-0-g00abc00.orig/configure	2015-03-08 19:51:11.000000000 -0600
++++ libav-v11.3-0-g00abc00/configure	2016-04-13 12:28:40.722102691 -0600
+@@ -132,6 +132,7 @@
  
  Hardware accelerators:
    --enable-dxva2           enable DXVA2 code
@@ -10,7 +9,7 @@ index 5085333..7283fb1 100755
    --enable-vaapi           enable VAAPI code
    --enable-vda             enable VDA code
    --enable-vdpau           enable VDPAU code
-@@ -1198,6 +1199,7 @@ FEATURE_LIST="
+@@ -1188,6 +1189,7 @@
  
  HWACCEL_LIST="
      dxva2
@@ -18,7 +17,7 @@ index 5085333..7283fb1 100755
      vaapi
      vda
      vdpau
-@@ -1939,6 +1941,7 @@ zmbv_encoder_deps="zlib"
+@@ -1919,6 +1921,7 @@
  
  # hardware accelerators
  dxva2_deps="dxva2api_h"
@@ -26,7 +25,7 @@ index 5085333..7283fb1 100755
  vaapi_deps="va_va_h"
  vda_deps="VideoDecodeAcceleration_VDADecoder_h pthreads"
  vda_extralibs="-framework CoreFoundation -framework VideoDecodeAcceleration -framework QuartzCore"
-@@ -1950,6 +1953,8 @@ h263_vdpau_hwaccel_deps="vdpau"
+@@ -1930,6 +1933,8 @@
  h263_vdpau_hwaccel_select="h263_decoder"
  h264_dxva2_hwaccel_deps="dxva2"
  h264_dxva2_hwaccel_select="h264_decoder"
@@ -35,7 +34,7 @@ index 5085333..7283fb1 100755
  h264_vaapi_hwaccel_deps="vaapi"
  h264_vaapi_hwaccel_select="h264_decoder"
  h264_vda_hwaccel_deps="vda"
-@@ -4115,6 +4120,7 @@ check_header dxva2api.h
+@@ -4080,6 +4085,7 @@
  check_header io.h
  check_header mach/mach_time.h
  check_header malloc.h
@@ -43,47 +42,10 @@ index 5085333..7283fb1 100755
  check_header poll.h
  check_header sys/mman.h
  check_header sys/param.h
-diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index 419dcb6..5208d5b 100644
---- a/libavcodec/Makefile
-+++ b/libavcodec/Makefile
-@@ -4,6 +4,7 @@ HEADERS = avcodec.h                                                     \
-           avfft.h                                                       \
-           dv_profile.h                                                  \
-           dxva2.h                                                       \
-+          qsv.h                                                         \
-           vaapi.h                                                       \
-           vda.h                                                         \
-           vdpau.h                                                       \
-@@ -75,6 +76,7 @@ OBJS-$(CONFIG_MPEGVIDEO)               += mpegvideo.o mpegvideodsp.o    \
- OBJS-$(CONFIG_MPEGVIDEOENC)            += mpegvideo_enc.o mpeg12data.o  \
-                                           motion_est.o ratecontrol.o    \
-                                           mpegvideoencdsp.o
-+OBJS-$(CONFIG_QSV)                     += qsv.o
- OBJS-$(CONFIG_PIXBLOCKDSP)             += pixblockdsp.o
- OBJS-$(CONFIG_QPELDSP)                 += qpeldsp.o
- OBJS-$(CONFIG_RANGECODER)              += rangecoder.o
-@@ -216,6 +218,7 @@ OBJS-$(CONFIG_H264_DECODER)            += h264.o h264_cabac.o h264_cavlc.o \
-                                           h264_direct.o h264_loopfilter.o  \
-                                           h264_mb.o h264_picture.o h264_ps.o \
-                                           h264_refs.o h264_sei.o h264_slice.o
-+OBJS-$(CONFIG_H264_QSV_DECODER)        += qsv_h264.o
- OBJS-$(CONFIG_HEVC_DECODER)            += hevc.o hevc_mvs.o hevc_ps.o hevc_sei.o \
-                                           hevc_cabac.o hevc_refs.o hevcpred.o    \
-                                           hevcdsp.o hevc_filter.o
-@@ -712,6 +715,7 @@ SKIPHEADERS                            += %_tablegen.h                  \
- SKIPHEADERS-$(CONFIG_DXVA2)            += dxva2.h dxva2_internal.h
- SKIPHEADERS-$(CONFIG_LIBSCHROEDINGER)  += libschroedinger.h
- SKIPHEADERS-$(CONFIG_MPEG_XVMC_DECODER) += xvmc.h
-+SKIPHEADERS-$(CONFIG_QSV)              += qsv.h
- SKIPHEADERS-$(CONFIG_VAAPI)            += vaapi_internal.h
- SKIPHEADERS-$(CONFIG_VDA)              += vda.h vda_internal.h
- SKIPHEADERS-$(CONFIG_VDPAU)            += vdpau.h vdpau_internal.h
-diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
-index 0d46afe..b3a5dd0 100644
---- a/libavcodec/allcodecs.c
-+++ b/libavcodec/allcodecs.c
-@@ -159,6 +159,7 @@ void avcodec_register_all(void)
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/allcodecs.c libav-v11.3-0-g00abc00/libavcodec/allcodecs.c
+--- libav-v11.3-0-g00abc00.orig/libavcodec/allcodecs.c	2015-03-08 19:51:11.000000000 -0600
++++ libav-v11.3-0-g00abc00/libavcodec/allcodecs.c	2016-04-13 12:28:40.723102654 -0600
+@@ -159,6 +159,7 @@
      REGISTER_DECODER(H263I,             h263i);
      REGISTER_ENCODER(H263P,             h263p);
      REGISTER_DECODER(H264,              h264);
@@ -91,11 +53,44 @@ index 0d46afe..b3a5dd0 100644
      REGISTER_DECODER(HEVC,              hevc);
      REGISTER_DECODER(HNM4_VIDEO,        hnm4_video);
      REGISTER_ENCDEC (HUFFYUV,           huffyuv);
-diff --git a/libavcodec/qsv.c b/libavcodec/qsv.c
-new file mode 100644
-index 0000000..2c46111
---- /dev/null
-+++ b/libavcodec/qsv.c
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/Makefile libav-v11.3-0-g00abc00/libavcodec/Makefile
+--- libav-v11.3-0-g00abc00.orig/libavcodec/Makefile	2015-03-08 19:51:11.000000000 -0600
++++ libav-v11.3-0-g00abc00/libavcodec/Makefile	2016-04-13 12:28:40.723102654 -0600
+@@ -4,6 +4,7 @@
+           avfft.h                                                       \
+           dv_profile.h                                                  \
+           dxva2.h                                                       \
++          qsv.h                                                         \
+           vaapi.h                                                       \
+           vda.h                                                         \
+           vdpau.h                                                       \
+@@ -73,6 +74,7 @@
+ OBJS-$(CONFIG_MPEGVIDEOENC)            += mpegvideo_enc.o mpeg12data.o  \
+                                           motion_est.o ratecontrol.o    \
+                                           mpegvideoencdsp.o
++OBJS-$(CONFIG_QSV)                     += qsv.o
+ OBJS-$(CONFIG_PIXBLOCKDSP)             += pixblockdsp.o
+ OBJS-$(CONFIG_QPELDSP)                 += qpeldsp.o
+ OBJS-$(CONFIG_RANGECODER)              += rangecoder.o
+@@ -216,6 +218,7 @@
+                                           h264_direct.o h264_loopfilter.o  \
+                                           h264_mb.o h264_picture.o h264_ps.o \
+                                           h264_refs.o h264_sei.o h264_slice.o
++OBJS-$(CONFIG_H264_QSV_DECODER)        += qsv_h264.o
+ OBJS-$(CONFIG_HEVC_DECODER)            += hevc.o hevc_mvs.o hevc_ps.o hevc_sei.o \
+                                           hevc_cabac.o hevc_refs.o hevcpred.o    \
+                                           hevcdsp.o hevc_filter.o
+@@ -709,6 +712,7 @@
+ SKIPHEADERS-$(CONFIG_DXVA2)            += dxva2.h dxva2_internal.h
+ SKIPHEADERS-$(CONFIG_LIBSCHROEDINGER)  += libschroedinger.h
+ SKIPHEADERS-$(CONFIG_MPEG_XVMC_DECODER) += xvmc.h
++SKIPHEADERS-$(CONFIG_QSV)              += qsv.h
+ SKIPHEADERS-$(CONFIG_VAAPI)            += vaapi_internal.h
+ SKIPHEADERS-$(CONFIG_VDA)              += vda.h vda_internal.h
+ SKIPHEADERS-$(CONFIG_VDPAU)            += vdpau.h vdpau_internal.h
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c libav-v11.3-0-g00abc00/libavcodec/qsv.c
+--- libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c	1969-12-31 17:00:00.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavcodec/qsv.c	2016-04-13 12:28:40.723102654 -0600
 @@ -0,0 +1,646 @@
 +/* ********************************************************************* *\
 +
@@ -744,11 +739,9 @@ index 0000000..2c46111
 +        }
 +}
 \ No newline at end of file
-diff --git a/libavcodec/qsv.h b/libavcodec/qsv.h
-new file mode 100644
-index 0000000..52378cf
---- /dev/null
-+++ b/libavcodec/qsv.h
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.h libav-v11.3-0-g00abc00/libavcodec/qsv.h
+--- libav-v11.3-0-g00abc00.orig/libavcodec/qsv.h	1969-12-31 17:00:00.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavcodec/qsv.h	2016-04-13 12:28:40.724102616 -0600
 @@ -0,0 +1,494 @@
 +/* ********************************************************************* *\
 +
@@ -1244,12 +1237,10 @@ index 0000000..52378cf
 +/* @} */
 +
 +#endif                          //AVCODEC_QSV_H
-diff --git a/libavcodec/qsv_h264.c b/libavcodec/qsv_h264.c
-new file mode 100644
-index 0000000..53a9f16
---- /dev/null
-+++ b/libavcodec/qsv_h264.c
-@@ -0,0 +1,982 @@
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.c libav-v11.3-0-g00abc00/libavcodec/qsv_h264.c
+--- libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.c	1969-12-31 17:00:00.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavcodec/qsv_h264.c	2016-04-13 12:31:29.709715611 -0600
+@@ -0,0 +1,983 @@
 +/* ********************************************************************* *\
 +
 +Copyright (C) 2013 Intel Corporation.  All rights reserved.
@@ -1565,6 +1556,7 @@ index 0000000..53a9f16
 +    if (!qsv)
 +        return AVERROR(ENOMEM);
 +
++    qsv_decode = qsv->dec_space;
 +    if(!qsv_decode)
 +    qsv_decode = av_mallocz(sizeof(av_qsv_space));
 +    if (!qsv_decode){
@@ -2232,11 +2224,9 @@ index 0000000..53a9f16
 +    .pix_fmts       = (const enum PixelFormat[]) {AV_PIX_FMT_QSV_H264,
 +                                                  AV_PIX_FMT_NONE},
 +};
-diff --git a/libavcodec/qsv_h264.h b/libavcodec/qsv_h264.h
-new file mode 100644
-index 0000000..3cbdb3f
---- /dev/null
-+++ b/libavcodec/qsv_h264.h
+diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.h libav-v11.3-0-g00abc00/libavcodec/qsv_h264.h
+--- libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.h	1969-12-31 17:00:00.000000000 -0700
++++ libav-v11.3-0-g00abc00/libavcodec/qsv_h264.h	2016-04-13 12:28:40.724102616 -0600
 @@ -0,0 +1,65 @@
 +/* ********************************************************************* *\
 +
@@ -2303,11 +2293,10 @@ index 0000000..3cbdb3f
 +mfxStatus ff_qsv_mem_buffer_free(mfxHDL pthis, mfxMemId mid);
 +
 +#endif                          //AVCODEC_QSV_H264_H
-diff --git a/libavutil/pixfmt.h b/libavutil/pixfmt.h
-index 6af6596..70fe068 100644
---- a/libavutil/pixfmt.h
-+++ b/libavutil/pixfmt.h
-@@ -193,6 +193,7 @@ enum AVPixelFormat {
+diff -urN libav-v11.3-0-g00abc00.orig/libavutil/pixfmt.h libav-v11.3-0-g00abc00/libavutil/pixfmt.h
+--- libav-v11.3-0-g00abc00.orig/libavutil/pixfmt.h	2015-03-08 19:51:11.000000000 -0600
++++ libav-v11.3-0-g00abc00/libavutil/pixfmt.h	2016-04-13 12:28:40.724102616 -0600
+@@ -193,6 +193,7 @@
      AV_PIX_FMT_NV16,         ///< interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
      AV_PIX_FMT_NV20LE,       ///< interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian
      AV_PIX_FMT_NV20BE,       ///< interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian
