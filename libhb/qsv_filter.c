@@ -355,10 +355,10 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
 
     hb_dict_extract_int(&pv->width_out, filter->settings, "width");
     hb_dict_extract_int(&pv->height_out, filter->settings, "height");
-    hb_dict_extract_int(pv->crop[0], filter->settings, "crop-top");
-    hb_dict_extract_int(pv->crop[1], filter->settings, "crop-bottom");
-    hb_dict_extract_int(pv->crop[2], filter->settings, "crop-left");
-    hb_dict_extract_int(pv->crop[3], filter->settings, "crop-right");
+    hb_dict_extract_int(&pv->crop[0], filter->settings, "crop-top");
+    hb_dict_extract_int(&pv->crop[1], filter->settings, "crop-bottom");
+    hb_dict_extract_int(&pv->crop[2], filter->settings, "crop-left");
+    hb_dict_extract_int(&pv->crop[3], filter->settings, "crop-right");
     hb_dict_extract_bool(&pv->deinterlace, filter->settings, "deinterlace");
 
     pv->job = init->job;
