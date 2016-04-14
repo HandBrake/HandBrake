@@ -21,6 +21,9 @@ TEST.GCC.l = \
 
 ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
+ifeq ($(BUILD.system),linux)
+    TEST.GCC.l += va va-drm
+endif
 endif
 
 ifeq (1,$(FEATURE.x265))
