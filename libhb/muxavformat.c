@@ -1180,7 +1180,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     empty_pkt.size = 2;
                     empty_pkt.dts = track->duration;
                     empty_pkt.pts = track->duration;
-                    empty_pkt.duration = pts - duration;
+                    empty_pkt.duration = pts - track->duration;
                     empty_pkt.convergence_duration = empty_pkt.duration;
                     empty_pkt.stream_index = track->st->index;
                     int ret = av_interleaved_write_frame(m->oc, &empty_pkt);
