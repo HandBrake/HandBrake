@@ -164,7 +164,6 @@ static int64_t  stop_at_pts    = 0;
 static int      stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
 static int      use_opencl         = -1;
-static int      use_hwd            = -1;
 #ifdef USE_QSV
 static int      qsv_async_depth    = -1;
 static int      qsv_decode         = -1;
@@ -516,12 +515,6 @@ int main( int argc, char ** argv )
 
         hb_system_sleep_prevent(h);
 
-        // FIXME: When hardware decode is enabled, the scan must be performed
-        // with hardware decode enabled because the decoder context used during
-        // encoding phase comes from the context used during scan.  This is
-        // broken by design and I would very much like to fix this someday.
-        hb_hwd_set_enable(h, hb_value_get_bool(
-                             hb_dict_get(preset_dict, "VideoHWDecode")));
         hb_scan(h, input, titleindex, preview_count, store_previews,
                 min_title_duration * 90000LL);
 
@@ -1219,8 +1212,6 @@ static void ShowHelp()
 "   -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
 "       --no-ipod-atom      Disable 5.5G iPod tag\n"
 "   -P, --use-opencl        Use OpenCL where applicable\n"
-"   -U, --use-hwd           Use DXVA2 hardware decoding\n"
-"       --no-hwd            Disable DXVA2 hardware decoding\n"
 "\n"
 
 
@@ -1914,8 +1905,6 @@ static int ParseOptions( int argc, char ** argv )
             { "ipod-atom",   no_argument,       NULL,        'I' },
             { "no-ipod-atom",no_argument,       &ipod_atom,    0 },
             { "use-opencl",  no_argument,       NULL,        'P' },
-            { "use-hwd",     no_argument,       NULL,        'U' },
-            { "no-hwd",      no_argument,       &use_hwd,      0 },
 
             { "title",       required_argument, NULL,    't' },
             { "min-duration",required_argument, NULL,    MIN_DURATION },
@@ -2158,9 +2147,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'P':
                 use_opencl = 1;
-                break;
-            case 'U':
-                use_hwd = 1;
                 break;
             case 't':
                 titleindex = atoi( optarg );
@@ -3556,10 +3542,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
     }
 #endif
-    if (use_hwd != -1)
-    {
-        hb_dict_set(preset, "VideoHWDecode", hb_value_bool(use_hwd));
-    }
     if (use_opencl != -1)
     {
         hb_dict_set(preset, "VideoScaler",
