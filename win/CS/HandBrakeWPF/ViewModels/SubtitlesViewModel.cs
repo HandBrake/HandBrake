@@ -14,6 +14,8 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
@@ -35,27 +37,12 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
+        private readonly IWindowManager windowManager;
+
         #region Constants and Fields
 
-        /// <summary>
-        /// The Foreign Audio Search Track
-        /// </summary>
         private readonly Subtitle ForeignAudioSearchTrack;
-
-        /// <summary>
-        /// Backing field for the source subtitle tracks.
-        /// </summary>
         private IList<Subtitle> sourceTracks;
-
-        /// <summary>
-        /// The show defaults panel.
-        /// </summary>
-        private bool showDefaultsPanel;
-
-        /// <summary>
-        /// The audio behaviours.
-        /// </summary>
-        private SubtitleBehaviours subtitleBehaviours;
 
         #endregion
 
@@ -64,8 +51,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.SubtitlesViewModel"/> class.
         /// </summary>
-        public SubtitlesViewModel()
+        /// <param name="windowManager">
+        /// The window Manager.
+        /// </param>
+        public SubtitlesViewModel(IWindowManager windowManager)
         {
+            this.windowManager = windowManager;
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel();
             this.Task = new EncodeTask();
 
@@ -118,35 +109,13 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether show defaults panel.
-        /// </summary>
-        public bool ShowDefaultsPanel
-        {
-            get
-            {
-                return this.showDefaultsPanel;
-            }
-            set
-            {
-                if (value.Equals(this.showDefaultsPanel))
-                {
-                    return;
-                }
-                this.showDefaultsPanel = value;
-                this.NotifyOfPropertyChange(() => this.ShowDefaultsPanel);
-                this.NotifyOfPropertyChange(() => this.PanelTitle);
-                this.NotifyOfPropertyChange(() => this.SwitchDisplayTitle);
-            }
-        }
-
-        /// <summary>
         /// Gets the panel title.
         /// </summary>
         public string PanelTitle
         {
             get
             {
-                return this.ShowDefaultsPanel ? Resources.SubtitlesViewModel_SubDefaults : Resources.SubtitlesViewModel_SubTracks;
+                return Resources.SubtitlesViewModel_SubTracks;
             }
         }
 
@@ -157,7 +126,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowDefaultsPanel ? Resources.SubtitlesViewModel_SwitchToTracks : Resources.SubtitlesViewModel_ConfigureDefaults;
+                return Resources.SubtitlesViewModel_ConfigureDefaults;
             }
         }
 
@@ -435,19 +404,19 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Open the options screen to the Audio and Subtitles tab.
-        /// </summary>
-        public void SetDefaultBehaviour()
-        {
-            this.ShowDefaultsPanel = true;
-        }
-
-        /// <summary>
         /// The show audio defaults.
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
-            this.ShowDefaultsPanel = !this.ShowDefaultsPanel;
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
+            if (this.windowManager.ShowDialog(popup) == true)
+            {
+                // Nothing to do yet, it's by reference. 
+            }
+            else
+            {
+                // Handle other case(s)
+            }
         }
 
         /// <summary>

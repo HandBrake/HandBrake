@@ -866,4 +866,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
     <value>The selected titles will be added using the  "{0}"  preset.</value>
   </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
 </root>

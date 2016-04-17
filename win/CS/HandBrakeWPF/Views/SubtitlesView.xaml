@@ -45,13 +45,6 @@
                    VerticalAlignment="Top"
                    Text="{Binding PanelTitle}" />
 
-        <Button MinWidth="65" Grid.Row="0" Grid.Column="1"
-                Margin="0,5,10,0"
-                cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]"
-                Content="{Binding SwitchDisplayTitle}"
-                Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}}"
-                />
-
         <!-- Row 1 -->
         <Grid Grid.Row="1" Margin="10,5,10,0"
                     Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" >
@@ -120,7 +113,7 @@
                     <Separator />
                     <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -279,11 +272,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <!-- Audio Defaults -->
-        <ContentControl x:Name="SubtitleDefaultsViewModel"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0"
-              Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false, FallbackValue=Visible}" />
-
 
     </Grid>
 </UserControl>

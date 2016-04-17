@@ -124,6 +124,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video..
+        /// </summary>
+        public static string AudioView_AudioDefaultsDescription {
+            get {
+                return ResourceManager.GetString("AudioView_AudioDefaultsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;Auto Passthru&apos; Behaviour:.
         /// </summary>
         public static string AudioView_AutoPassthruBehaviour {

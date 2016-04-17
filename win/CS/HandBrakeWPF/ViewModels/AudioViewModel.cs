@@ -38,20 +38,9 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
-        /// <summary>
-        /// Backing field for the source tracks list.
-        /// </summary>
+        private readonly IWindowManager windowManager;
         private IEnumerable<Audio> sourceTracks;
-
-        /// <summary>
-        /// The current preset.
-        /// </summary>
         private Preset currentPreset;
-
-        /// <summary>
-        /// The show audio defaults panel.
-        /// </summary>
-        private bool showAudioDefaultsPanel;
 
         #region Constructors and Destructors
 
@@ -65,7 +54,8 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
-        {        
+        {
+            this.windowManager = windowManager;
             this.Task = new EncodeTask();
             this.AudioDefaultsViewModel = new AudioDefaultsViewModel(this.Task);
 
@@ -124,27 +114,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public EncodeTask Task { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show audio defaults panel.
-        /// </summary>
-        public bool ShowAudioDefaultsPanel
-        {
-            get
-            {
-                return this.showAudioDefaultsPanel;
-            }
-            set
-            {
-                if (value.Equals(this.showAudioDefaultsPanel))
-                {
-                    return;
-                }
-                this.showAudioDefaultsPanel = value;
-                this.NotifyOfPropertyChange(() => this.ShowAudioDefaultsPanel);
-                this.NotifyOfPropertyChange(() => this.PanelTitle);
-                this.NotifyOfPropertyChange(() => this.SwitchDisplayTitle);
-            }
-        }
 
         /// <summary>
         /// Gets the panel title.
@@ -153,7 +122,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowAudioDefaultsPanel ? Resources.AudioViewModel_AudioDefaults : Resources.AudioViewModel_AudioTracks;
+                return Resources.AudioViewModel_AudioTracks;
             }
         }
 
@@ -164,7 +133,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.ShowAudioDefaultsPanel ? Resources.AudioViewModel_SwitchBackToTracks : Resources.AudioViewModel_ConfigureDefaults;
+                return Resources.AudioViewModel_ConfigureDefaults;
             }
         }
 
@@ -246,21 +215,19 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Open the options screen to the Audio and Subtitles tab.
-        /// </summary>
-        public void SetDefaultBehaviour()
-        {
-            this.ShowAudioDefaultsPanel = true;
-        }
-
-        /// <summary>
         /// The show audio defaults.
         /// </summary>
         public void ShowAudioDefaults()
         {
-            // OpenOverlayPanelCommand command = new OpenOverlayPanelCommand();
-            // command.Execute(new AudioDefaultsViewModel(this.WindowManager, this.UserSettingService));
-            this.ShowAudioDefaultsPanel = !this.ShowAudioDefaultsPanel;
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
+            if (this.windowManager.ShowDialog(popup) == true)
+            {
+                // Nothing to do yet, it's by reference. 
+            }
+            else
+            {
+                // Handle other case(s)
+            }
         }
 
         #endregion

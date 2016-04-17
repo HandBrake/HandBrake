@@ -645,12 +645,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, aencoder, (uint)this.ScannedTrack.ChannelLayout);
             HBMixdown defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
 
-
             if (this.mixDown == null || this.mixDown == "none")
             {
                 this.MixDown = defaultMixdown.ShortName;
             }
-            else
+            else if (sanitisedMixdown != null)
             {
                 this.MixDown = sanitisedMixdown.ShortName;
             }

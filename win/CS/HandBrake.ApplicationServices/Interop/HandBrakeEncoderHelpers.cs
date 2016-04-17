@@ -458,6 +458,11 @@ namespace HandBrake.ApplicationServices.Interop
         /// </returns>
         public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
         {
+            if (mixdown == null)
+            {
+                return null;
+            }
+
             int sanitizedMixdown = HBFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
             if (sanitizedMixdown != -1)
             {

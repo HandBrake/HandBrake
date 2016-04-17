@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              d:DesignHeight="250"
              d:DesignWidth="600"
+             MaxHeight="600"
              Title="{Binding Title}"
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight"
@@ -29,31 +30,34 @@
 
         <TextBlock Text="{Binding WindowTitle}" FontSize="26" FontFamily="Segoe UI Light" Margin="10,10,10,5" Grid.Row="0" />
         <TextBlock Text="{Binding SubText}" Margin="10,0,0,15" Grid.Row="1" Visibility="{Binding SubTextVisible, Converter={StaticResource boolToVisConverter}}" />
-            
-        <ContentControl x:Name="ContentViewModel" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,10,10" />
 
-        <Grid Grid.Row="3"
-              Margin="0,20,0,0">
+        <ScrollViewer  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,10,10" VerticalScrollBarVisibility="Auto" >
+            <ContentControl x:Name="ContentViewModel"/>
+        </ScrollViewer>
+        
+        <Border BorderBrush="DarkGray"  Grid.Row="3"  BorderThickness="0,1,0,0"  Margin="0,20,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="1"
+                <Button Grid.Column="1"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
                     Content="{x:Static properties:ResourcesUI.Generic_Cancel}"
                     IsCancel="True"
+                    Visibility="Collapsed"
                     Padding="8,2" />
-            <Button Grid.Column="2"
+                <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Save]"
                     Content="{x:Static properties:ResourcesUI.Generic_Save}"
                     IsDefault="True"
                     Padding="8,2" />
-        </Grid>
+            </Grid>
+        </Border>
 
     </Grid>
    
