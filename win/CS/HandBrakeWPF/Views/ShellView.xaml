@@ -34,9 +34,5 @@
                         IsEnabled="{Binding IsMainPanelEnabled}" />
         <ContentControl x:Name="OptionsViewModel"  Panel.ZIndex="0"  Visibility="{Binding ShowOptions, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                         IsEnabled="{Binding IsMainPanelEnabled}" />
-
-        <DockPanel Background="Black" Opacity="0.60" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="1"
-               Visibility="{Binding ShowOverlayPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-
     </Grid>
 </Window>

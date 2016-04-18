@@ -16,7 +16,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// <summary>
     /// The Audio View Model Interface
     /// </summary>
-    public interface IAudioDefaultsViewModel : IOverlayPanel, IViewModelBase
+    public interface IAudioDefaultsViewModel : IViewModelBase
     {
         /// <summary>
         /// Gets the audio behaviours.

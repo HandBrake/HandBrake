@@ -42,11 +42,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showOptions;
 
-        private bool showOverlayPanel;
-
         private bool isMainPanelEnabled;
-
-        private IMainViewModel mainViewModel;
 
         #endregion
 
@@ -70,28 +66,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsMainPanelEnabled = true;
             this.MainViewModel = mainViewModel;
             this.OptionsViewModel = optionsViewModel;
-        }
-
-        /// <summary>
-        /// The show overlay.
-        /// </summary>
-        /// <param name="panel">
-        /// The panel.
-        /// </param>
-        public void ShowOverlay(IOverlayPanel panel)
-        {
-            this.OverlayPanelViewModel = panel;
-            this.NotifyOfPropertyChange(() => this.OverlayPanelViewModel);
-            this.ShowOverlayPanel = true;
-        }
-
-        /// <summary>
-        /// The hide overlay.
-        /// </summary>
-        public void HideOverlay()
-        {          
-            this.ShowOverlayPanel = false;
-            this.OverlayPanelViewModel = null;
         }
 
         /// <summary>
@@ -130,11 +104,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets OptionsViewModel.
         /// </summary>
         public IOptionsViewModel OptionsViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the overlay panel view model.
-        /// </summary>
-        public IOverlayPanel OverlayPanelViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowMainWindow.
@@ -185,27 +154,6 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.isMainPanelEnabled = value;
                 this.NotifyOfPropertyChange(() => this.IsMainPanelEnabled);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether show overlay panel.
-        /// </summary>
-        public bool ShowOverlayPanel
-        {
-            get
-            {
-                return this.showOverlayPanel;
-            }
-            set
-            {
-                if (value.Equals(this.showOverlayPanel))
-                {
-                    return;
-                }
-                this.showOverlayPanel = value;
-                this.IsMainPanelEnabled = !value;
-                this.NotifyOfPropertyChange(() => this.ShowOverlayPanel);
             }
         }
 

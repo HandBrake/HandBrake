@@ -138,8 +138,6 @@
     <Compile Include="Commands\Menu\QueueCommandParams.cs" />
     <Compile Include="Commands\Menu\QueueCommands.cs" />
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
-    <Compile Include="Commands\CloseOverlayPanelCommand.cs" />
-    <Compile Include="Commands\OpenOverlayPanelCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
@@ -263,7 +261,6 @@
     <Compile Include="Controls\SourceSelection.xaml.cs">
       <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Interfaces\IOverlayPanel.cs" />
     <Compile Include="ViewModels\Interfaces\IPopupWindowViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
