@@ -7,7 +7,7 @@ Changes between 0.10.5 and 1.0
     - Updated Libraries:
         LibAV 11.3
         x265 1.9
-        x264 r144
+        x264 r148
         libmfx v6.0
         freetype 2.6
         fribidi 0.19.7
@@ -19,8 +19,7 @@ Changes between 0.10.5 and 1.0
     - Pad Filter
     - Additional Framerate selections.
     - Intel QuickSync H.265 (HEVC) Encoder. (Works on Intel Skylake or newer CPU's only)
-    - Removed the FDK AAC encoder. (OSX still uses CoreAudio as default. Windows and Linux use LibAV as default.)
-      + Please see our AAC Encoder Change Announcement to understand what this means. 
+    - Improvements to the Audio Video Sync Engine to better handle bad sources.
     - Misc Bug fixes and improvements.
     
   Windows
@@ -45,7 +44,8 @@ Changes between 0.10.5 and 1.0
     - Misc Bug fixes and improvements.
 
   Command Line Interface
-    - Preset System. You can now import and export presets from the CLI to and from the other UI's
+    - Presets: You can now import and export presets from the CLI to and from the other UI's
+    - Queue: Import Queue files from the GUI's
 
 
     
