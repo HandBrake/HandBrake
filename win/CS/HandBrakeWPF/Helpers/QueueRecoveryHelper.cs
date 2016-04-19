@@ -45,13 +45,18 @@ namespace HandBrakeWPF.Helpers
         {
             try
             {
-                XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
                 string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
                 List<string> queueFiles = new List<string>();
-                List<string> removeFiles = new List<string>();
-
                 DirectoryInfo info = new DirectoryInfo(tempPath);
                 IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+
+                if (!logFiles.Any())
+                {
+                    return queueFiles;
+                }
+
+                List<string> removeFiles = new List<string>();
+                XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
                 foreach (FileInfo file in logFiles)
                 {
                     try
