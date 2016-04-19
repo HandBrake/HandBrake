@@ -253,6 +253,8 @@
     <Compile Include="Utilities\Output\CsvHelper.cs" />
     <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\DirectoryUtilities.cs" />
+    <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />

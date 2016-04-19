@@ -189,7 +189,6 @@
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
-    <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

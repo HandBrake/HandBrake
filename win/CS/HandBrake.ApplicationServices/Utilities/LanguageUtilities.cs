@@ -234,34 +234,9 @@ namespace HandBrake.ApplicationServices.Utilities
         /// The user languages.
         /// </param>
         /// <returns>
-        /// The <see cref="IList"/>.
-        /// </returns>
-        public static List<string> GetLanguageCodes(StringCollection userLanguages)
-        {
-            // Translate to Iso Codes
-            List<string> iso6392Codes = new List<string>();
-            foreach (var item in userLanguages)
-            {
-                string isoCode;
-                if (LanguageUtilities.MapLanguages().TryGetValue(item, out isoCode))
-                {
-                    iso6392Codes.Add(isoCode);
-                }
-            }
-
-            return iso6392Codes;
-        }
-
-        /// <summary>
-        /// The get language codes.
-        /// </summary>
-        /// <param name="userLanguages">
-        /// The user languages.
-        /// </param>
-        /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public static List<string> GetLanguageCodes(IList<string> userLanguages)
+        public static List<string> GetLanguageCodes(IEnumerable<string> userLanguages)
         {
             // Translate to Iso Codes
             List<string> iso6392Codes = new List<string>();
