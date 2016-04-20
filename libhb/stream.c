@@ -4340,13 +4340,19 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
         total_size += buf->size;
 
         if ( total_size > HB_MAX_PROBE_SIZE * 2 )
+        {
+            hb_buffer_close(&buf);
             break;
+        }
 
         int idx;
         idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
+        {
+            hb_buffer_close(&buf);
             continue;
+        }
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
@@ -4364,6 +4370,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
                         pes->codec_name, pes->stream_id, pes->stream_id_ext);
             }
         }
+        hb_buffer_close(&buf);
     }
     // Clean up any probe buffers and set all remaining unknown
     // streams to 'kind' N
