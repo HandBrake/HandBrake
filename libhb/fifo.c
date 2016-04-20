@@ -19,7 +19,11 @@
 
 #define FIFO_TIMEOUT 200
 //#define HB_FIFO_DEBUG 1
+// defining HB_BUFFER_DEBUG and HB_NO_BUFFER_POOL allows tracking
+// buffer memory leaks using valgrind.  The source of the leak
+// can be determined with "valgrind --leak-check=full"
 //#define HB_BUFFER_DEBUG 1
+//#define HB_NO_BUFFER_POOL 1
 
 /* Fifo */
 struct hb_fifo_s
@@ -68,7 +72,9 @@ struct hb_buffer_pools_s
 {
     int64_t allocated;
     hb_lock_t *lock;
+#if !defined(HB_NO_BUFFER_POOL)
     hb_fifo_t *pool[MAX_BUFFER_POOLS];
+#endif
 #if defined(HB_BUFFER_DEBUG)
     hb_list_t *alloc_list;
 #endif
@@ -84,6 +90,7 @@ void hb_buffer_pool_init( void )
     buffers.alloc_list = hb_list_init();
 #endif
 
+#if !defined(HB_NO_BUFFER_POOL)
     /* we allocate pools for sizes 2^10 through 2^25. requests larger than
      * 2^25 will get passed through to malloc. */
     int i;
@@ -103,6 +110,7 @@ void hb_buffer_pool_init( void )
         buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS, 1);
         buffers.pool[i]->buffer_size = 1 << i;
     }
+#endif
 }
 
 #if defined(HB_FIFO_DEBUG)
@@ -148,6 +156,7 @@ static void fifo_list_rem( hb_fifo_t * f )
     }
 }
 
+#if !defined(HB_NO_BUFFER_POOL)
 // These routines are useful for finding and debugging problems
 // with the fifos and buffer pools
 static void buffer_pool_validate( hb_fifo_t * f )
@@ -245,13 +254,12 @@ void fifo_list_validate( void )
     }
 }
 #endif
+#endif
 
 void hb_buffer_pool_free( void )
 {
     int i;
-    int count;
     int64_t freed = 0;
-    hb_buffer_t *b;
 
     hb_lock(buffers.lock);
 
@@ -265,6 +273,9 @@ void hb_buffer_pool_free( void )
     }
 #endif
 
+#if !defined(HB_NO_BUFFER_POOL)
+    hb_buffer_t * b;
+    int           count;
     for( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i)
     {
         count = 0;
@@ -288,7 +299,7 @@ void hb_buffer_pool_free( void )
                     free(b->data);
                 }
             }
-            free( b );
+            //free( b );
             count++;
         }
         if ( count )
@@ -297,6 +308,18 @@ void hb_buffer_pool_free( void )
                     buffers.pool[i]->buffer_size);
         }
     }
+#endif
+
+#if defined(HB_BUFFER_DEBUG) && defined(HB_NO_BUFFER_POOL)
+    // defining HB_BUFFER_DEBUG and HB_NO_BUFFER_POOL allows tracking
+    // buffer memory leaks using valgrind.  The source of the leak
+    // can be determined with "valgrind --leak-check=full"
+    for (i = 0; i < hb_list_count(buffers.alloc_list); i++)
+    {
+        hb_buffer_t *b = hb_list_item(buffers.alloc_list, i);
+        hb_list_rem(buffers.alloc_list, b);
+    }
+#endif
 
     hb_deep_log( 2, "Allocated %"PRId64" bytes of buffers on this pass and Freed %"PRId64" bytes, "
            "%"PRId64" bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
@@ -306,6 +329,7 @@ void hb_buffer_pool_free( void )
 
 static hb_fifo_t *size_to_pool( int size )
 {
+#if !defined(HB_NO_BUFFER_POOL)
     int i;
     for ( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i )
     {
@@ -314,6 +338,7 @@ static hb_fifo_t *size_to_pool( int size )
             return buffers.pool[i];
         }
     }
+#endif
     return NULL;
 }
 
@@ -465,12 +490,13 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
     if ( size > b->alloc || b->data == NULL )
     {
         uint32_t orig = b->data != NULL ? b->alloc : 0;
-        size = size_to_pool( size )->buffer_size;
+        hb_fifo_t *buffer_pool = size_to_pool(size);
+        if (buffer_pool != NULL)
+        {
+            size = buffer_pool->buffer_size;
+        }
         b->data  = realloc( b->data, size );
         b->alloc = size;
-#if defined(HB_BUFFER_DEBUG)
-        memset(b->data, 0, b->size);
-#endif
 
         hb_lock(buffers.lock);
         buffers.allocated += size - orig;
