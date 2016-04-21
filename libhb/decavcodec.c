@@ -2209,6 +2209,10 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
         avp.dts  = AV_NOPTS_VALUE;
 
         int len = avcodec_decode_audio4(context, pv->frame, &got_frame, &avp);
+        if (len < 0)
+        {
+            ++pv->decode_errors;
+        }
         if ((len < 0) || (!got_frame && !(loop_limit--)))
         {
             return;
@@ -2292,6 +2296,7 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                 pv->pts_next    = duration + pv->pts_next;
                 hb_buffer_list_append(&pv->list, out);
             }
+            ++pv->nframes;
         }
     }
 }
