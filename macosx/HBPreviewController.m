@@ -202,6 +202,7 @@ typedef enum ViewMode : NSUInteger {
     else
     {
         self.previewView.image = nil;
+        [self hideHud];
         self.window.title = NSLocalizedString(@"Preview", nil);
     }
 }
@@ -210,6 +211,7 @@ typedef enum ViewMode : NSUInteger {
 {
     if (self.generator)
     {
+        [self.generator cancel];
         [self switchViewToMode:ViewModePicturePreview];
         [self displayPreviewAtIndex:self.pictureIndex];
     }
@@ -223,7 +225,7 @@ typedef enum ViewMode : NSUInteger {
     {
         [self startMovieTimer];
     }
-    else
+    else if (self.currentViewMode == ViewModePicturePreview)
     {
         [self reloadPreviews];
     }
