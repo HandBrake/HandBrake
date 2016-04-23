@@ -29,7 +29,8 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="{Binding WindowTitle}" FontSize="26" FontFamily="Segoe UI Light" Margin="10,10,10,5" Grid.Row="0" />
-        <TextBlock Text="{Binding SubText}" Margin="10,0,0,15" Grid.Row="1" Visibility="{Binding SubTextVisible, Converter={StaticResource boolToVisConverter}}" />
+        <TextBlock Text="{Binding SubText}" Margin="10,0,10,15" Grid.Row="1" Visibility="{Binding SubTextVisible, Converter={StaticResource boolToVisConverter}}"
+                   TextWrapping="Wrap"/>
 
         <ScrollViewer  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,10,10" VerticalScrollBarVisibility="Auto" >
             <ContentControl x:Name="ContentViewModel"/>
