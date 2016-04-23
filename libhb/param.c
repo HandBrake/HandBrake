@@ -180,6 +180,8 @@ void hb_param_configure_qsv(void)
  * grain      - like film but preserves luma grain
  * highmotion - like film but avoids color smearing with stronger settings
  * animation  - cel animation such as cartoons, anime
+ * tape       - analog tape sources such as VHS
+ * sprite     - 1-/4-/8-/16-bit 2-dimensional games
  */
 static hb_dict_t * generate_nlmeans_settings(const char *preset,
                                              const char *tune,
