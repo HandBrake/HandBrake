@@ -237,6 +237,7 @@
     <Compile Include="Services\Scan\Model\Subtitle.cs" />
     <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Services\UserSettingService.cs" />
+    <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />

@@ -23,9 +23,6 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
@@ -48,6 +45,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
@@ -58,7 +56,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Action = System.Action;
     using Execute = Caliburn.Micro.Execute;
-    using ILog = HandBrake.ApplicationServices.Services.Logging.Interfaces.ILog;
     using LogManager = HandBrakeWPF.Helpers.LogManager;
 
     /// <summary>
@@ -1209,7 +1206,7 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.Load();
 
             // Queue Recovery
-            bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+            bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue);
 
             // If the queue is not recovered, show the source selection window by default.
             if (!queueRecovered)
@@ -1219,6 +1216,12 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 this.HasSource = true; // Enable the GUI. Needed for in-line queue.
+            }
+
+            // If the user has enabled --auto-start-queue, start the queue.
+            if (StartupOptions.AutoRestartQueue && !this.queueProcessor.IsProcessing && this.queueProcessor.Count > 0)
+            {
+                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
             }
 
             this.SelectedPreset = this.presetService.DefaultPreset;

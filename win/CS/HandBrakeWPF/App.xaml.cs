@@ -16,6 +16,7 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -58,6 +59,11 @@ namespace HandBrakeWPF
                 HandBrakeApp.ResetToDefaults();
                 Application.Current.Shutdown();
                 return;
+            }
+
+            if (e.Args.Any(f => f.Equals("--auto-start-queue")))
+            {
+                StartupOptions.AutoRestartQueue = true;
             }
 
             base.OnStartup(e);

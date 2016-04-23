@@ -454,7 +454,7 @@ namespace HandBrakeWPF.Services.Queue
                                     // Reset InProgress/Error to Waiting so it can be processed
                                     if (item.Status == QueueItemStatus.InProgress)
                                     {
-                                        item.Status = QueueItemStatus.Waiting;
+                                        item.Status = QueueItemStatus.Error;
                                     }
 
                                     this.queue.Add(item);

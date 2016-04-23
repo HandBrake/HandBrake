@@ -122,22 +122,35 @@ namespace HandBrakeWPF.Helpers
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService)
+        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
             List<string> queueFiles = CheckQueueRecovery();
             MessageBoxResult result = MessageBoxResult.None;
-            if (queueFiles.Count == 1)
+            if (!silentRecovery)
             {
-                result = errorService.ShowMessageBox(
-                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
-                        "Queue Recovery Possible", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (queueFiles.Count == 1)
+                {
+                    result =
+                        errorService.ShowMessageBox(
+                            "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
+                            "Queue Recovery Possible",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                }
+                else if (queueFiles.Count > 1)
+                {
+                    result =
+                        errorService.ShowMessageBox(
+                            "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
+                            "Queue Recovery Possible",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                }
             }
-            else if (queueFiles.Count > 1)
+            else
             {
-                result = MessageBox.Show(
-                        "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
-                        "Queue Recovery Possible", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                result = MessageBoxResult.Yes;
             }
 
             if (result == MessageBoxResult.Yes)
