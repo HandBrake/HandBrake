@@ -2133,6 +2133,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video..
+        /// </summary>
+        public static string SubtitleView_SubtitleDefaultsDescription {
+            get {
+                return ResourceManager.GetString("SubtitleView_SubtitleDefaultsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 2-Pass Encoding.
         /// </summary>
         public static string VideoView_2Pass {

@@ -408,7 +408,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, ResourcesUI.Preset_SubtitleDefaults_Title, ResourcesUI.SubtitleView_SubtitleDefaultsDescription);
             if (this.windowManager.ShowDialog(popup) == true)
             {
                 // Nothing to do yet, it's by reference. 
