@@ -52,7 +52,7 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     hb_buffer_list_clear(&pv->list_pass);
     pv->discard_subtitle = 1;
     pv->seen_forced_sub  = 0;
-    pv->last_pts         = 0;
+    pv->last_pts         = AV_NOPTS_VALUE;
     pv->context          = context;
     pv->job              = job;
 
@@ -303,7 +303,14 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     //      occurs after a discontinuity and before the
                     //      next audio or video packet which re-establishes
                     //      timing (afaik).
-                    pts = pv->last_pts + 3 * 90000LL;
+                    if (pv->last_pts == AV_NOPTS_VALUE)
+                    {
+                        pts = 0LL;
+                    }
+                    else
+                    {
+                        pts = pv->last_pts + 3 * 90000LL;
+                    }
                     hb_log("[warning] decpgssub: track %d, invalid PTS",
                            w->subtitle->out_track);
                 }
@@ -316,9 +323,10 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 // overshot the next pgs pts.
                 //
                 // assign a 1 second duration
+                hb_log("decpgssub: track %d, non-monotically increasing PTS, last %"PRId64" current %"PRId64"",
+                       w->subtitle->out_track,
+                       pv->last_pts, pts);
                 pts = pv->last_pts + 1 * 90000LL;
-                hb_log("[warning] decpgssub: track %d, non-monotically increasing PTS",
-                       w->subtitle->out_track);
             }
             pv->last_pts = pts;
 
