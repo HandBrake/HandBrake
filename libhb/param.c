@@ -34,6 +34,7 @@ static hb_filter_param_t nlmeans_tunes[] =
     { 2, "Grain",       "grain",      NULL              },
     { 3, "High Motion", "highmotion", NULL              },
     { 4, "Animation",   "animation",  NULL              },
+    { 5, "Tape",        "tape",       NULL              },
     { 0, NULL,          NULL,         NULL              }
 };
 
@@ -318,6 +319,32 @@ static hb_dict_t * generate_nlmeans_settings(const char *preset,
             else if (!strcasecmp(preset, "strong"))
             {
                 strength[0] = 10; strength[1] = 8;
+            }
+        }
+        else if (!strcasecmp(tune, "tape"))
+        {
+            strength[0]    = 3;   strength[1]    = 6;
+            origin_tune[0] = 0.8; origin_tune[1] = 0.8;
+            patch_size[0]  = 3;   patch_size[1]  = 5;
+            range[0]       = 5;   range[1]       = 5;
+            frames[0]      = 2;   frames[1]      = 2;
+            prefilter[0]   = 0;   prefilter[1]   = 0;
+            if (!strcasecmp(preset, "ultralight"))
+            {
+                strength[0]    = 1.5; strength[1]    = 5;
+                origin_tune[0] = 0.9; origin_tune[1] = 0.9;
+                frames[0]      = 1;   frames[1]      = 1;
+            }
+            else if (!strcasecmp(preset, "light"))
+            {
+                strength[0]    = 2;   strength[1]    = 6;
+                origin_tune[0] = 0.9; origin_tune[1] = 0.9;
+            }
+            else if (!strcasecmp(preset, "strong"))
+            {
+                strength[0]    = 3.5; strength[1]    = 8;
+                origin_tune[0] = 0.6; origin_tune[1] = 0.6;
+                patch_size[0]  = 5;   patch_size[1]  = 5;
             }
         }
         else
