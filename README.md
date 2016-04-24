@@ -9,8 +9,7 @@ HandBrake is a tool for converting video from nearly any format to a selection o
 **Support:** [Community forums](https://forum.handbrake.fr/)
 
 ### Submitting a Patch
-We accept pull requests here on GitHub.
 
-We prefer that larger patches are also submitted onto our  [Review Board](http://handbrake.fr/contribute.php "Review Board") for more detailed analysis and review.
+Pathches are always welcome and can be submitted here on github as a pull request.
 
-You can find the latest contributor information on the main website [contribute](http://handbrake.fr/contribute.php) page.
+For guidance, please feel free to get in touch on our IRC channels listed above.
