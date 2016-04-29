@@ -941,6 +941,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => SelectedOutputFormat);
                     this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
                     this.NotifyOfPropertyChange(() => IsMkv);
+                    this.NotifyOfPropertyChange(() => this.OptimizeMP4);
                     this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower()));
 
                     this.VideoViewModel.RefreshTask();
