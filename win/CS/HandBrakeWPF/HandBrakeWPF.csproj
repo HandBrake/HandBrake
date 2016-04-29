@@ -471,6 +471,7 @@
     <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="public.key" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AlertPanel.xaml">

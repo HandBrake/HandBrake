@@ -55,8 +55,8 @@ namespace HandBrakeWPF.Model
         public Exception Error { get; set; }
 
         /// <summary>
-        /// Gets or sets the expected sh a 1 hash.
+        /// Gets or sets the expected DSA SHA256 Signature
         /// </summary>
-        public string ExpectedSHA1Hash { get; set; }
+        public string Signature { get; set; }
     }
 }
