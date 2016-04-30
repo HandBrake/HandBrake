@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
 
         [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size2", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_set_anamorphic_size2(ref hb_geometry_s sourceGeometry, ref hb_geometry_settings_s uiGeometry, ref hb_geometry_s result);
-        
+
 
         /// Return Type: int
         ///param0: hb_handle_t*
@@ -186,17 +186,17 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_video_framerate_get_from_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_video_framerate_get_from_name(IntPtr name);
 
-//const char*      hb_video_framerate_get_name(int framerate);
-//const char*      hb_video_framerate_sanitize_name(const char *name);
+        //const char*      hb_video_framerate_get_name(int framerate);
+        //const char*      hb_video_framerate_sanitize_name(const char *name);
 
         // returns hb_rate_s
         [DllImport("hb.dll", EntryPoint = "hb_video_framerate_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_video_framerate_get_next(IntPtr last);
 
 
-//int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
-//int              hb_audio_samplerate_get_from_name(const char *name);
-//const char*      hb_audio_samplerate_get_name(int samplerate);
+        //int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
+        //int              hb_audio_samplerate_get_from_name(const char *name);
+        //const char*      hb_audio_samplerate_get_name(int samplerate);
 
         // returns hb_rate_s
         [DllImport("hb.dll", EntryPoint = "hb_audio_samplerate_get_next", CallingConvention = CallingConvention.Cdecl)]
@@ -224,7 +224,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_audio_quality_get_limits", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_audio_quality_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
 
-//float hb_audio_quality_get_best(uint32_t codec, float quality);
+        //float hb_audio_quality_get_best(uint32_t codec, float quality);
 
         [DllImport("hb.dll", EntryPoint = "hb_audio_quality_get_default", CallingConvention = CallingConvention.Cdecl)]
         public static extern float hb_audio_quality_get_default(uint codec);
@@ -233,18 +233,18 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_audio_compression_get_limits", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_audio_compression_get_limits(uint codec, ref float low, ref float high, ref float granularity, ref int direction);
 
-//float hb_audio_compression_get_best(uint32_t codec, float compression);
+        //float hb_audio_compression_get_best(uint32_t codec, float compression);
 
         [DllImport("hb.dll", EntryPoint = "hb_audio_compression_get_default", CallingConvention = CallingConvention.Cdecl)]
         public static extern float hb_audio_compression_get_default(uint codec);
 
 
-//int                hb_audio_dither_get_default();
-//int                hb_audio_dither_get_default_method(); // default method, if enabled && supported
-//int                hb_audio_dither_is_supported(uint32_t codec);
-//int                hb_audio_dither_get_from_name(const char *name);
-//const char*        hb_audio_dither_get_description(int method);
-//const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
+        //int                hb_audio_dither_get_default();
+        //int                hb_audio_dither_get_default_method(); // default method, if enabled && supported
+        //int                hb_audio_dither_is_supported(uint32_t codec);
+        //int                hb_audio_dither_get_from_name(const char *name);
+        //const char*        hb_audio_dither_get_description(int method);
+        //const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last);
 
         // hb_audio_can_apply_drc2(hb_handle_t *h, int title_idx, int audio_idx, int encoder)
         [DllImport("hb.dll", EntryPoint = "hb_audio_can_apply_drc2", CallingConvention = CallingConvention.Cdecl)]
@@ -259,8 +259,8 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_mixdown_has_remix_support", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_has_remix_support(int mixdown, ulong layout);
 
-//int                 hb_mixdown_get_discrete_channel_count(int mixdown);
-//int                 hb_mixdown_get_low_freq_channel_count(int mixdown);
+        //int                 hb_mixdown_get_discrete_channel_count(int mixdown);
+        //int                 hb_mixdown_get_low_freq_channel_count(int mixdown);
 
         [DllImport("hb.dll", EntryPoint = "hb_mixdown_get_best", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_get_best(uint codec, ulong layout, int mixdown);
@@ -268,49 +268,49 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_mixdown_get_default", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_mixdown_get_default(uint codec, ulong layout);
 
-//int                 hb_mixdown_get_from_name(const char *name);
-//const char*         hb_mixdown_get_name(int mixdown);
-//const char*         hb_mixdown_get_short_name(int mixdown);
-//const char*         hb_mixdown_sanitize_name(const char *name);
+        //int                 hb_mixdown_get_from_name(const char *name);
+        //const char*         hb_mixdown_get_name(int mixdown);
+        //const char*         hb_mixdown_get_short_name(int mixdown);
+        //const char*         hb_mixdown_sanitize_name(const char *name);
 
         [DllImport("hb.dll", EntryPoint = "hb_mixdown_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_mixdown_get_next(IntPtr last);
 
-//int                 hb_video_encoder_get_default(int muxer);
-//int                 hb_video_encoder_get_from_name(const char *name);
-//const char*         hb_video_encoder_get_name(int encoder);
-//const char*         hb_video_encoder_get_short_name(int encoder);
-//const char*         hb_video_encoder_get_long_name(int encoder);
-//const char*         hb_video_encoder_sanitize_name(const char *name);
+        //int                 hb_video_encoder_get_default(int muxer);
+        //int                 hb_video_encoder_get_from_name(const char *name);
+        //const char*         hb_video_encoder_get_name(int encoder);
+        //const char*         hb_video_encoder_get_short_name(int encoder);
+        //const char*         hb_video_encoder_get_long_name(int encoder);
+        //const char*         hb_video_encoder_sanitize_name(const char *name);
 
         [DllImport("hb.dll", EntryPoint = "hb_video_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_video_encoder_get_next(IntPtr last);
 
-/*
- * hb_audio_encoder_get_fallback_for_passthru() will sanitize a passthru codec
- * to the matching audio encoder (if any is available).
- *
- * hb_audio_encoder_get_from_name(), hb_audio_encoder_sanitize_name() will
- * sanitize legacy encoder names, but won't convert passthru to an encoder.
- */
-//int                 hb_audio_encoder_get_fallback_for_passthru(int passthru);
-//int                 hb_audio_encoder_get_default(int muxer);
-//int                 hb_audio_encoder_get_from_name(const char *name);
-//const char*         hb_audio_encoder_get_name(int encoder);
-//const char*         hb_audio_encoder_get_short_name(int encoder);
-//const char*         hb_audio_encoder_get_long_name(int encoder);
-//const char*         hb_audio_encoder_sanitize_name(const char *name);
+        /*
+         * hb_audio_encoder_get_fallback_for_passthru() will sanitize a passthru codec
+         * to the matching audio encoder (if any is available).
+         *
+         * hb_audio_encoder_get_from_name(), hb_audio_encoder_sanitize_name() will
+         * sanitize legacy encoder names, but won't convert passthru to an encoder.
+         */
+        //int                 hb_audio_encoder_get_fallback_for_passthru(int passthru);
+        //int                 hb_audio_encoder_get_default(int muxer);
+        //int                 hb_audio_encoder_get_from_name(const char *name);
+        //const char*         hb_audio_encoder_get_name(int encoder);
+        //const char*         hb_audio_encoder_get_short_name(int encoder);
+        //const char*         hb_audio_encoder_get_long_name(int encoder);
+        //const char*         hb_audio_encoder_sanitize_name(const char *name);
 
         [DllImport("hb.dll", EntryPoint = "hb_audio_encoder_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_audio_encoder_get_next(IntPtr last);
 
-//int                   hb_container_get_from_name(const char *name);
-//int                   hb_container_get_from_extension(const char *extension); // not really a container name
-//const char*           hb_container_get_name(int format);
-//const char*           hb_container_get_short_name(int format);
-//const char*           hb_container_get_long_name(int format);
-//const char*           hb_container_get_default_extension(int format);
-//const char*           hb_container_sanitize_name(const char *name);
+        //int                   hb_container_get_from_name(const char *name);
+        //int                   hb_container_get_from_extension(const char *extension); // not really a container name
+        //const char*           hb_container_get_name(int format);
+        //const char*           hb_container_get_short_name(int format);
+        //const char*           hb_container_get_long_name(int format);
+        //const char*           hb_container_get_default_extension(int format);
+        //const char*           hb_container_sanitize_name(const char *name);
 
         [DllImport("hb.dll", EntryPoint = "hb_container_get_from_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_container_get_from_name([In] [MarshalAs(UnmanagedType.LPStr)] string name);
@@ -373,7 +373,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_filter_get_presets_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_filter_get_presets_json(int filter_id);
 
-        /// char* hb_filter_get_tuness_json(int filter_id);
+        /// char* hb_filter_get_tunes_json(int filter_id);
         [DllImport("hb.dll", EntryPoint = "hb_filter_get_tunes_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_filter_get_tunes_json(int filter_id);
 
@@ -400,13 +400,13 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
 
         [DllImport("hb.dll", EntryPoint = "hb_qsv_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_available();
-        
+
         [DllImport("hb.dll", EntryPoint = "hb_qsv_info_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_qsv_info_init();
 
         // hb_image_t* hb_get_preview2(hb_handle_t* h, int title_idx, int picture, hb_geometry_settings_t* geo, int deinterlace);
         [DllImport("hb.dll", EntryPoint = "hb_get_preview2", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hb_get_preview2(IntPtr hbHandle, int title_idx, int preview_idx,  ref hb_geometry_settings_s geo, int deinterlace);
+        public static extern IntPtr hb_get_preview2(IntPtr hbHandle, int title_idx, int preview_idx, ref hb_geometry_settings_s geo, int deinterlace);
 
         // void hb_image_close(hb_image_t **_image);
         [DllImport("hb.dll", EntryPoint = "hb_image_close", CallingConvention = CallingConvention.Cdecl)]
@@ -441,7 +441,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         // char* hb_get_preview_params_json(int title_idx, int preview_idx, int deinterlace, hb_geometry_settings_t *settings)
         [DllImport("hb.dll", EntryPoint = "hb_get_preview_params_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview_params_json(int title_idx, int preview_idx, int deinterlace, ref hb_geometry_settings_s settings);
-        
+
         //void         hb_presets_builtin_init(void);
         [DllImport("hb.dll", EntryPoint = "hb_presets_builtin_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_presets_builtin_init();

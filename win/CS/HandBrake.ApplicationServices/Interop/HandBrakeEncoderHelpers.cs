@@ -625,7 +625,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </returns>
         public static double GetDefaultQuality(HBAudioEncoder encoder)
         {
-           return HBFunctions.hb_audio_quality_get_default((uint)encoder.Id);
+            return HBFunctions.hb_audio_quality_get_default((uint)encoder.Id);
         }
 
         /// <summary>

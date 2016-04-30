@@ -226,7 +226,7 @@ namespace HandBrake.ApplicationServices.Interop.Helpers
         public static List<T2> ToListFromIterator<T1, T2>(Func<IntPtr, IntPtr> iterator, Func<T1, T2> converter)
         {
             return ToListFromIterator<T1>(iterator).Select(converter).ToList();
-        } 
+        }
 
         /// <summary>
         /// Reads in a list of structs given an iterator.
