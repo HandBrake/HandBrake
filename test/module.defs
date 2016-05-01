@@ -17,7 +17,7 @@ TEST.GCC.l = \
         ass avresample avformat avcodec avfilter avutil mp3lame dvdnav \
         dvdread fontconfig fribidi ogg \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc x264 \
-        bluray freetype xml2 bz2 z jansson
+        bluray freetype xml2 bz2 z jansson harfbuzz
 
 ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1

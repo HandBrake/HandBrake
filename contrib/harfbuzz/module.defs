@@ -1,0 +1,25 @@
+__deps__ := FONTCONFIG FREETYPE
+$(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
+$(eval $(call import.CONTRIB.defs,HARFBUZZ))
+
+HARFBUZZ.FETCH.url = http://download.handbrake.fr/handbrake/contrib/harfbuzz-1.2.6.tar.bz2
+HARFBUZZ.FETCH.url += https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.6.tar.bz2
+HARFBUZZ.FETCH.md5 = 9f4b6831c86135faef011e991f59f77f
+
+# Tell configure where to find our versions of freetype and fontconfig
+HARFBUZZ.CONFIGURE.extra = \
+    --with-fontconfig=yes --with-freetype=yes \
+    FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
+    FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
+    FONTCONFIG_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfontconfig" \
+    FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+
+ifeq ($(BUILD.system),darwin)
+    HARFBUZZ.CONFIGURE.extra += --with-coretext=no --with-glib=no
+endif
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    HARFBUZZ.CONFIGURE.extra += --with-directwrite=no --with-glib=no \
+        --with-gobject=no --with-cairo=no --with-icu=no --with-graphite=no \
+        --with-uniscribe=no
+endif

@@ -1,19 +1,14 @@
-__deps__ := FONTCONFIG FREETYPE FRIBIDI
+__deps__ := YASM FONTCONFIG FREETYPE FRIBIDI HARFBUZZ
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libass-0.12.3.tar.gz
-LIBASS.FETCH.url += https://github.com/libass/libass/releases/download/0.12.3/libass-0.12.3.tar.gz
-LIBASS.FETCH.md5 =  648ee785f966c69d4b5d50948e509d93
+LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.13.2.tar.gz
+LIBASS.FETCH.url += https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.gz
+LIBASS.FETCH.md5 = b4d82616bb18e8e954b18746a105a3b8
 
-# TODO: libass >= 0.13.0
-#LIBASS.FETCH.url = https://github.com/libass/libass/releases/download/0.13.0/libass-0.13.0.tar.gz
-#LIBASS.FETCH.md5 = 44290519105b3779b8b25813a25a9914
-
-# Disable as many external dependencies as I can get away with
-# and tell configure where to find our version of freetype
+# Tell configure where to find our versions of freetype and fontconfig
 LIBASS.CONFIGURE.extra = \
-    --disable-png --disable-enca --disable-harfbuzz \
+    --enable-asm --enable-fontconfig --enable-harfbuzz \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
     FONTCONFIG_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfontconfig" \
@@ -23,4 +18,12 @@ ifneq ($(BUILD.system),linux)
 LIBASS.CONFIGURE.extra += \
     FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
     FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+endif
+
+ifeq ($(BUILD.system),darwin)
+    LIBASS.CONFIGURE.extra += --disable-coretext
+endif
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    LIBASS.CONFIGURE.extra += --disable-directwrite
 endif

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C6D76551CD7733300F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
+		1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
 		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
@@ -293,6 +295,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C15C82B1CD7722500368223 /* libharfbuzz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libharfbuzz.a; path = external/contrib/lib/libharfbuzz.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -593,6 +596,7 @@
 				27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */,
 				27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */,
 				A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */,
+				1C6D76551CD7733300F5B943 /* libharfbuzz.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +634,7 @@
 				A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */,
 				A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */,
 				A91CE2BB1C7DABBC0068F46F /* libdvdread.a in Frameworks */,
+				1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */,
 				A91CE2BC1C7DABBC0068F46F /* libfontconfig.a in Frameworks */,
 				A91CE2BD1C7DABBC0068F46F /* libfreetype.a in Frameworks */,
 				A91CE2BE1C7DABBC0068F46F /* libfribidi.a in Frameworks */,
@@ -687,6 +692,7 @@
 				27D6C74014B102DA00B785E4 /* libxml2.a */,
 				A95512881A320A12001BFC6F /* libjansson.a */,
 				A9E165511C523016003EF30E /* libavfilter.a */,
+				1C15C82B1CD7722500368223 /* libharfbuzz.a */,
 			);
 			name = "Static Libraries";
 			sourceTree = "<group>";

@@ -45,6 +45,7 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/fontconfig
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
+    MODULES += contrib/harfbuzz
     MODULES += contrib/libxml2
     MODULES += contrib/libass
     MODULES += contrib/libogg
