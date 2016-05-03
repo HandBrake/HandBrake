@@ -6,18 +6,57 @@
 
 #import "HBHUDView.h"
 
+@interface HBHUDVisualEffectsView : NSVisualEffectView
+@end
+
+@implementation HBHUDVisualEffectsView
+
+- (instancetype)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+
+    if (self)
+    {
+        self.wantsLayer = YES;
+        self.layer.cornerRadius = 4;
+
+        self.blendingMode = NSVisualEffectBlendingModeWithinWindow;
+        self.material = NSVisualEffectMaterialDark;
+        self.state = NSVisualEffectStateActive;
+
+        self.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+    }
+    return self;
+}
+
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
+@end
+
 @implementation HBHUDView
 
-+ (void)setupNewStyleHUD:(NSVisualEffectView *)view
+- (instancetype)initWithFrame:(NSRect)frame
 {
-    [view setWantsLayer:YES];
-    [view.layer setCornerRadius:4];
+    if (NSClassFromString(@"NSVisualEffectView"))
+    {
+        // If NSVisualEffectView class is loaded
+        // release ourself and return a NSVisualEffectView instance instead.
+        self = (HBHUDView *)[[HBHUDVisualEffectsView alloc] initWithFrame:frame];
+    }
+    else
+    {
+        self = [super initWithFrame:frame];
+    }
 
-    [view setBlendingMode:NSVisualEffectBlendingModeWithinWindow];
-    [view setMaterial:NSVisualEffectMaterialDark];
-    [view setState:NSVisualEffectStateActive];
+    return self;
+}
 
-    [view setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -25,7 +64,7 @@
     NSGraphicsContext  *theContext = [NSGraphicsContext currentContext];
     [theContext saveGraphicsState];
 
-    NSRect rect = NSMakeRect(0.0, 0.0, [self frame].size.width, [self frame].size.height);
+    NSRect rect = NSMakeRect(0.0, 0.0, self.frame.size.width, self.frame.size.height);
 
     // Draw a standard HUD with black transparent background and white border.
     [[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:0.0 alpha:0.6] setFill];
@@ -36,26 +75,6 @@
     [[NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rect, 1, 1) xRadius:14.0 yRadius:14.0] stroke];
 
     [theContext restoreGraphicsState];
-}
-
-- (instancetype)initWithFrame:(NSRect)frame
-{
-    if (NSClassFromString(@"NSVisualEffectView"))
-    {
-        // If NSVisualEffectView class is loaded
-        // release ourself and return a NSVisualEffectView instance instead.
-        self = [[NSClassFromString(@"NSVisualEffectView") alloc] initWithFrame:frame];
-        if (self)
-        {
-            [HBHUDView setupNewStyleHUD:(NSVisualEffectView *)self];
-        }
-    }
-    else
-    {
-        self = [super initWithFrame:frame];
-    }
-
-    return self;
 }
 
 @end
