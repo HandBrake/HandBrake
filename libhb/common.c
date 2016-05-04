@@ -102,6 +102,11 @@ hb_rate_internal_t hb_video_rates[]  =
     { { "50",                   540000, }, NULL, 1, },
     { { "59.94",                450450, }, NULL, 1, },
     { { "60",                   450000, }, NULL, 1, },
+    { { "72",                   375000, }, NULL, 1, },
+    { { "75",                   360000, }, NULL, 1, },
+    { { "90",                   300000, }, NULL, 1, },
+    { { "100",                  270000, }, NULL, 1, },
+    { { "120",                  225000, }, NULL, 1, },
 };
 int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_video_rates[0]);
 
