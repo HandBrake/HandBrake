@@ -19,7 +19,7 @@ typedef void (^HBPlayableObverser)(void);
 
 @interface HBQTKitPlayerPeriodicObserver : NSObject
 
-@property (nonatomic) HBPeriodicObverser block;
+@property (nonatomic, copy) HBPeriodicObverser block;
 
 - (void)postNotification:(NSTimeInterval)time;
 
@@ -36,7 +36,7 @@ typedef void (^HBPlayableObverser)(void);
 
 @interface HBQTKitPlayerRateObserver : NSObject
 
-@property (nonatomic) HBRateObverser block;
+@property (nonatomic, copy) HBRateObverser block;
 
 - (void)postNotification;
 

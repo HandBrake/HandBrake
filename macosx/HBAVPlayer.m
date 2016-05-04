@@ -17,7 +17,7 @@ typedef void (^HBPlayableObverser)(void);
 
 @interface HBAVPlayerRateObserver : NSObject
 
-@property (nonatomic) HBRateObverser block;
+@property (nonatomic, copy) HBRateObverser block;
 
 - (void)postNotification;
 

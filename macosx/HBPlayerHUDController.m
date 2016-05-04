@@ -61,6 +61,8 @@
     {
         [self.player removeRateObserver:self.rateObserver];
         [self.player removeTimeObserver:self.periodicObserver];
+        self.rateObserver = nil;
+        self.periodicObserver = nil;
         [self _clearTracksMenu];
     }
 
@@ -100,7 +102,16 @@
 
 - (void)dealloc
 {
-    // Remove observers
+    if (_rateObserver)
+    {
+        [_player removeRateObserver:_rateObserver];
+        _rateObserver = nil;
+    }
+    if (_periodicObserver)
+    {
+        [_player removeTimeObserver:_periodicObserver];
+        _periodicObserver = nil;
+    }
 }
 
 #pragma mark - Audio and subtitles selection menu
