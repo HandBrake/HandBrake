@@ -620,6 +620,13 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                     g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
             }
+            else if (!strncmp(p, "{preset}", strlen("{preset}")))
+            {
+                const gchar *preset_name;
+                preset_name = ghb_dict_get_string(settings, "PresetName");
+                g_string_append_printf(str, "%s", preset_name);
+                p += strlen("{preset}");
+            }
             else if (!strncmp(p, "{chapters}", strlen("{chapters}")))
             {
                 if (ghb_settings_combo_int(settings, "PtoPType") == 0)

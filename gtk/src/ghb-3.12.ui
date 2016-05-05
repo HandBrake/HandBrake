@@ -7188,7 +7188,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             </child>
                             <child>
                               <object class="GtkEntry" id="auto_name_template">
-                                <property name="tooltip_text" translatable="yes">Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}</property>
+                                <property name="tooltip_text" translatable="yes">Available Options: {source} {title} {preset} {chapters} {date} {time} {quality} {bitrate}</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
