@@ -1,0 +1,2196 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Caliburn.Micro.Platform</name>
+    </assembly>
+    <members>
+        <member name="T:Caliburn.Micro.Action">
+            <summary>
+              A host for action related attached properties.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Action.TargetProperty">
+            <summary>
+              A property definition representing the target of an <see cref="T:Caliburn.Micro.ActionMessage"/> . The DataContext of the element will be set to this instance.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Action.TargetWithoutContextProperty">
+            <summary>
+              A property definition representing the target of an <see cref="T:Caliburn.Micro.ActionMessage"/> . The DataContext of the element is not set to this instance.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Action.SetTarget(System.Windows.DependencyObject,System.Object)">
+            <summary>
+              Sets the target of the <see cref="T:Caliburn.Micro.ActionMessage"/> .
+            </summary>
+            <param name="d"> The element to attach the target to. </param>
+            <param name="target"> The target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> . </param>
+        </member>
+        <member name="M:Caliburn.Micro.Action.GetTarget(System.Windows.DependencyObject)">
+            <summary>
+              Gets the target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> .
+            </summary>
+            <param name="d"> The element to which the target is attached. </param>
+            <returns> The target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> </returns>
+        </member>
+        <member name="M:Caliburn.Micro.Action.SetTargetWithoutContext(System.Windows.DependencyObject,System.Object)">
+            <summary>
+              Sets the target of the <see cref="T:Caliburn.Micro.ActionMessage"/> .
+            </summary>
+            <param name="d"> The element to attach the target to. </param>
+            <param name="target"> The target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> . </param>
+            <remarks>
+              The DataContext will not be set.
+            </remarks>
+        </member>
+        <member name="M:Caliburn.Micro.Action.GetTargetWithoutContext(System.Windows.DependencyObject)">
+            <summary>
+              Gets the target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> .
+            </summary>
+            <param name="d"> The element to which the target is attached. </param>
+            <returns> The target for instances of <see cref="T:Caliburn.Micro.ActionMessage"/> </returns>
+        </member>
+        <member name="M:Caliburn.Micro.Action.HasTargetSet(System.Windows.DependencyObject)">
+            <summary>
+              Checks if the <see cref="T:Caliburn.Micro.ActionMessage"/> -Target was set.
+            </summary>
+            <param name="element"> DependencyObject to check </param>
+            <returns> True if Target or TargetWithoutContext was set on <paramref name="element"/> </returns>
+        </member>
+        <member name="M:Caliburn.Micro.Action.Invoke(System.Object,System.String,System.Windows.DependencyObject,System.Windows.FrameworkElement,System.Object,System.Object[])">
+            <summary>
+              Uses the action pipeline to invoke the method.
+            </summary>
+            <param name="target"> The object instance to invoke the method on. </param>
+            <param name="methodName"> The name of the method to invoke. </param>
+            <param name="view"> The view. </param>
+            <param name="source"> The source of the invocation. </param>
+            <param name="eventArgs"> The event args. </param>
+            <param name="parameters"> The method parameters. </param>
+        </member>
+        <member name="T:Caliburn.Micro.ActionExecutionContext">
+            <summary>
+            The context used during the execution of an Action or its guard.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionExecutionContext.CanExecute">
+            <summary>
+            Determines whether the action can execute.
+            </summary>
+            <remarks>Returns true if the action can execute, false otherwise.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ActionExecutionContext.EventArgs">
+            <summary>
+            Any event arguments associated with the action's invocation.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionExecutionContext.Method">
+            <summary>
+            The actual method info to be invoked.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionExecutionContext.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.ActionExecutionContext.Message">
+            <summary>
+            The message being executed.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.ActionExecutionContext.Source">
+            <summary>
+            The source from which the message originates.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.ActionExecutionContext.Target">
+            <summary>
+            The instance on which the action is invoked.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.ActionExecutionContext.View">
+            <summary>
+            The view associated with the target.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.ActionExecutionContext.Item(System.String)">
+            <summary>
+            Gets or sets additional data needed to invoke the action.
+            </summary>
+            <param name="key">The data key.</param>
+            <returns>Custom data associated with the context.</returns>
+        </member>
+        <member name="E:Caliburn.Micro.ActionExecutionContext.Disposing">
+            <summary>
+            Called when the execution context is disposed
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.ActionMessage">
+            <summary>
+            Used to send a message from the UI to a presentation model class, indicating that a particular Action should be invoked.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.IHaveParameters">
+            <summary>
+            Indicates that a message is parameterized.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IHaveParameters.Parameters">
+            <summary>
+            Represents the parameters of a message.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.EnforceGuardsDuringInvocation">
+            <summary>
+             Causes the action invocation to "double check" if the action should be invoked by executing the guard immediately before hand.
+            </summary>
+             <remarks>This is disabled by default. If multiple actions are attached to the same element, you may want to enable this so that each individaul action checks its guard regardless of how the UI state appears.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.ThrowsExceptions">
+            <summary>
+             Causes the action to throw if it cannot locate the target or the method at invocation time.
+            </summary>
+             <remarks>True by default.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.MethodNameProperty">
+            <summary>
+            Represents the method name of an action message.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.ParametersProperty">
+            <summary>
+            Represents the parameters of an action message.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:Caliburn.Micro.ActionMessage"/>.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.OnAttached">
+            <summary>
+            Called after the action is attached to an AssociatedObject.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.OnDetaching">
+            <summary>
+            Called when the action is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.Invoke(System.Object)">
+            <summary>
+            Invokes the action.
+            </summary>
+            <param name="eventArgs">The parameter to the action. If the action does not require a parameter, the parameter may be set to a null reference.</param>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.UpdateAvailability">
+            <summary>
+            Forces an update of the UI's Enabled/Disabled state based on the the preconditions associated with the method.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.InvokeAction">
+            <summary>
+            Invokes the action using the specified <see cref="T:Caliburn.Micro.ActionExecutionContext"/>
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.ApplyAvailabilityEffect">
+            <summary>
+            Applies an availability effect, such as IsEnabled, to an element.
+            </summary>
+            <remarks>Returns a value indicating whether or not the action is available.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.GetTargetMethod">
+            <summary>
+            Finds the method on the target matching the specified message.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="message">The message.</param>
+            <returns>The matching method, if available.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.SetMethodBinding">
+            <summary>
+            Sets the target, method and view on the context. Uses a bubbling strategy by default.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ActionMessage.PrepareContext">
+            <summary>
+            Prepares the action execution context for use.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ActionMessage.TryFindGuardMethod(Caliburn.Micro.ActionExecutionContext)">
+            <summary>
+            Try to find a candidate for guard function, having:
+            	- a name in the form "CanXXX"
+            	- no generic parameters
+            	- a bool return type
+            	- no parameters or a set of parameters corresponding to the action method
+            </summary>
+            <param name="context">The execution context</param>
+            <returns>A MethodInfo, if found; null otherwise</returns>
+        </member>
+        <member name="P:Caliburn.Micro.ActionMessage.MethodName">
+            <summary>
+            Gets or sets the name of the method to be invoked on the presentation model class.
+            </summary>
+            <value>The name of the method.</value>
+        </member>
+        <member name="P:Caliburn.Micro.ActionMessage.Parameters">
+            <summary>
+            Gets the parameters to pass as part of the method invocation.
+            </summary>
+            <value>The parameters.</value>
+        </member>
+        <member name="E:Caliburn.Micro.ActionMessage.Detaching">
+            <summary>
+            Occurs before the message detaches from the associated object.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.AssemblySource">
+            <summary>
+            A source of assemblies that are inspectable by the framework.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.AssemblySource.Instance">
+            <summary>
+            The singleton instance of the AssemblySource used by the framework.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.AssemblySource.FindTypeByNames">
+            <summary>
+            Finds a type which matches one of the elements in the sequence of names.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.AssemblySourceCache">
+            <summary>
+            A caching subsystem for <see cref="T:Caliburn.Micro.AssemblySource"/>.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.AssemblySourceCache.ExtractTypes">
+            <summary>
+            Extracts the types from the spezified assembly for storing in the cache.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.AssemblySourceCache.Install">
+            <summary>
+            Installs the caching subsystem.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.Bind">
+            <summary>
+              Hosts dependency properties for binding.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Bind.ModelProperty">
+            <summary>
+              Allows binding on an existing view. Use this on root UserControls, Pages and Windows; not in a DataTemplate.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Bind.ModelWithoutContextProperty">
+            <summary>
+              Allows binding on an existing view without setting the data context. Use this from within a DataTemplate.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.GetModelWithoutContext(System.Windows.DependencyObject)">
+            <summary>
+              Gets the model to bind to.
+            </summary>
+            <param name = "dependencyObject">The dependency object to bind to.</param>
+            <returns>The model.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.SetModelWithoutContext(System.Windows.DependencyObject,System.Object)">
+            <summary>
+              Sets the model to bind to.
+            </summary>
+            <param name = "dependencyObject">The dependency object to bind to.</param>
+            <param name = "value">The model.</param>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.GetModel(System.Windows.DependencyObject)">
+            <summary>
+              Gets the model to bind to.
+            </summary>
+            <param name = "dependencyObject">The dependency object to bind to.</param>
+            <returns>The model.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.SetModel(System.Windows.DependencyObject,System.Object)">
+            <summary>
+              Sets the model to bind to.
+            </summary>
+            <param name = "dependencyObject">The dependency object to bind to.</param>
+            <param name = "value">The model.</param>
+        </member>
+        <member name="F:Caliburn.Micro.Bind.AtDesignTimeProperty">
+            <summary>
+            Allows application of conventions at design-time.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.GetAtDesignTime(System.Windows.DependencyObject)">
+            <summary>
+            Gets whether or not conventions are being applied at design-time.
+            </summary>
+            <param name="dependencyObject">The ui to apply conventions to.</param>
+            <returns>Whether or not conventions are applied.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.Bind.SetAtDesignTime(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets whether or not do bind conventions at design-time.
+            </summary>
+            <param name="dependencyObject">The ui to apply conventions to.</param>
+            <param name="value">Whether or not to apply conventions.</param>
+        </member>
+        <member name="T:Caliburn.Micro.BindingScope">
+            <summary>
+            Provides methods for searching a given scope for named elements.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BindingScope.FindName(System.Collections.Generic.IEnumerable{System.Windows.FrameworkElement},System.String)">
+            <summary>
+            Searches through the list of named elements looking for a case-insensitive match.
+            </summary>
+            <param name="elementsToSearch">The named elements to search through.</param>
+            <param name="name">The name to search for.</param>
+            <returns>The named element or null if not found.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.BindingScope.AddChildResolver(System.Func{System.Type,System.Boolean},System.Func{System.Windows.DependencyObject,System.Collections.Generic.IEnumerable{System.Windows.DependencyObject}})">
+            <summary>
+            Adds a child resolver.
+            </summary>
+            <param name="filter">The type filter.</param>
+            <param name="resolver">The resolver.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BindingScope.RemoveChildResolver(System.Func{System.Windows.DependencyObject,System.Collections.Generic.IEnumerable{System.Windows.DependencyObject}})">
+            <summary>
+            Removes a child resolver.
+            </summary>
+            <param name="resolver">The resolver to remove.</param>
+            <returns>true, when the resolver was (found and) removed.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.BindingScope.GetNamedElements">
+            <summary>
+            Gets all the <see cref="T:System.Windows.FrameworkElement"/> instances with names in the scope.
+            </summary>
+            <returns>Named <see cref="T:System.Windows.FrameworkElement"/> instances in the provided scope.</returns>
+            <remarks>Pass in a <see cref="T:System.Windows.DependencyObject"/> and receive a list of named <see cref="T:System.Windows.FrameworkElement"/> instances in the same scope.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.BindingScope.FindNamedDescendants">
+            <summary>
+            Finds a set of named <see cref="T:System.Windows.FrameworkElement"/> instances in each hop in a <see cref="T:Caliburn.Micro.BindingScope.ScopeNamingRoute"/>.
+            </summary>
+            <remarks>
+            Searches all the elements in the <see cref="T:Caliburn.Micro.BindingScope.ScopeNamingRoute"/> parameter as well as the visual children of 
+            each of these elements, the <see cref="P:System.Windows.Controls.ContentControl.Content"/>, the <c>HeaderedContentControl.Header</c>,
+            the <see cref="P:System.Windows.Controls.ItemsControl.Items"/>, or the <c>HeaderedItemsControl.Header</c>, if any are found.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.BindingScope.FindScopeNamingRoute">
+            <summary>
+            Finds a path of dependency objects which traces through visual anscestry until a root which is <see langword="null"/>,
+            a <see cref="T:System.Windows.Controls.UserControl"/>, a <c>Page</c> with a dependency object <c>Page.ContentProperty</c> value, 
+            a dependency object with <see cref="F:Caliburn.Micro.View.IsScopeRootProperty"/> set to <see langword="true"/>. <see cref="T:System.Windows.Controls.ContentPresenter"/>
+            and <see cref="T:System.Windows.Controls.ItemsPresenter"/> are included in the resulting <see cref="T:Caliburn.Micro.BindingScope.ScopeNamingRoute"/> in order to track which item
+            in an items control we are scoped to.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.BindingScope.ScopeNamingRoute">
+            <summary>
+            Maintains a connection in the visual tree of dependency objects in order to record a route through it.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BindingScope.ScopeNamingRoute.AddHop(System.Windows.DependencyObject,System.Windows.DependencyObject)">
+            <summary>
+            Adds a segment to the route.
+            </summary>
+            <param name="from">The source dependency object.</param>
+            <param name="to">The target dependency object.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BindingScope.ScopeNamingRoute.TryGetHop(System.Windows.DependencyObject,System.Windows.DependencyObject@)">
+            <summary>
+            Tries to get a target dependency object given a source.
+            </summary>
+            <param name="hopSource">The possible beginning of a route segment (hop).</param>
+            <param name="hopTarget">The target of a route segment (hop).</param>
+            <returns><see langword="true"/> if <paramref name="hopSource"/> had a target recorded; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="P:Caliburn.Micro.BindingScope.ScopeNamingRoute.Root">
+            <summary>
+            Gets or sets the starting point of the route.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.BooleanToVisibilityConverter">
+            <summary>
+            An <see cref="T:System.Windows.Data.IValueConverter"/> which converts <see cref="T:System.Boolean"/> to <see cref="T:System.Windows.Visibility"/>.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BooleanToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a boolean value to a <see cref="T:System.Windows.Visibility"/> value.
+            </summary>
+            <param name="value">The value produced by the binding source.</param>
+            <param name="targetType">The type of the binding target property.</param>
+            <param name="parameter">The converter parameter to use.</param>
+            <param name="culture">The culture to use in the converter.</param>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+        </member>
+        <member name="M:Caliburn.Micro.BooleanToVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value <see cref="T:System.Windows.Visibility"/> value to a boolean value.
+            </summary>
+            <param name="value">The value that is produced by the binding target.</param>
+            <param name="targetType">The type to convert to.</param>
+            <param name="parameter">The converter parameter to use.</param>
+            <param name="culture">The culture to use in the converter.</param>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+        </member>
+        <member name="T:Caliburn.Micro.BootstrapperBase">
+            <summary>
+            Inherit from this class in order to customize the configuration of the framework.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.#ctor(System.Boolean)">
+            <summary>
+            Creates an instance of the bootstrapper.
+            </summary>
+            <param name="useApplication">Set this to false when hosting Caliburn.Micro inside and Office or WinForms application. The default is true.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.Initialize">
+            <summary>
+            Initialize the framework.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.StartDesignTime">
+            <summary>
+            Called by the bootstrapper's constructor at design time to start the framework.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.StartRuntime">
+            <summary>
+            Called by the bootstrapper's constructor at runtime to start the framework.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.PrepareApplication">
+            <summary>
+            Provides an opportunity to hook into the application object.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.Configure">
+            <summary>
+            Override to configure the framework and setup your IoC container.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.SelectAssemblies">
+            <summary>
+            Override to tell the framework where to find assemblies to inspect for views, etc.
+            </summary>
+            <returns>A list of assemblies to inspect.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.GetInstance(System.Type,System.String)">
+            <summary>
+            Override this to provide an IoC specific implementation.
+            </summary>
+            <param name="service">The service to locate.</param>
+            <param name="key">The key to locate.</param>
+            <returns>The located service.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.GetAllInstances(System.Type)">
+            <summary>
+            Override this to provide an IoC specific implementation
+            </summary>
+            <param name="service">The service to locate.</param>
+            <returns>The located services.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.BuildUp(System.Object)">
+            <summary>
+            Override this to provide an IoC specific implementation.
+            </summary>
+            <param name="instance">The instance to perform injection on.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.OnStartup(System.Object,System.Windows.StartupEventArgs)">
+            <summary>
+            Override this to add custom behavior to execute after the application starts.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The args.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.OnExit(System.Object,System.EventArgs)">
+            <summary>
+            Override this to add custom behavior on exit.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The event args.</param>
+        </member>
+        <member name="M:Caliburn.Micro.BootstrapperBase.OnUnhandledException(System.Object,System.Windows.ApplicationUnhandledExceptionEventArgs)">
+            <summary>
+            Override this to add custom behavior for unhandled exceptions.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="e">The event args.</param>
+        </member>
+        <member name="P:Caliburn.Micro.BootstrapperBase.Application">
+            <summary>
+            The application.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.ConventionManager">
+            <summary>
+            Used to configure the conventions used by the framework to apply bindings and create actions.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.BooleanToVisibilityConverter">
+            <summary>
+            Converters <see cref="T:System.Boolean"/> to/from <see cref="T:System.Windows.Visibility"/>.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.IncludeStaticProperties">
+            <summary>
+            Indicates whether or not static properties should be included during convention name matching.
+            </summary>
+            <remarks>False by default.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.OverwriteContent">
+            <summary>
+            Indicates whether or not the Content of ContentControls should be overwritten by conventional bindings.
+            </summary>
+            <remarks>False by default.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.DefaultItemTemplate">
+            <summary>
+            The default DataTemplate used for ItemsControls when required.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.DefaultHeaderTemplate">
+            <summary>
+            The default DataTemplate used for Headered controls when required.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.Singularize">
+            <summary>
+            Changes the provided word from a plural form to a singular form.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.DerivePotentialSelectionNames">
+            <summary>
+            Derives the SelectedItem property name.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.SetBinding">
+            <summary>
+            Creates a binding and sets it on the element, applying the appropriate conventions.
+            </summary>
+            <param name="viewModelType"></param>
+            <param name="path"></param>
+            <param name="property"></param>
+            <param name="element"></param>
+            <param name="convention"></param>
+            <param name="bindableProperty"></param>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ApplyBindingMode">
+            <summary>
+            Applies the appropriate binding mode to the binding.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ApplyValidation">
+            <summary>
+            Determines whether or not and what type of validation to enable on the binding.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ApplyValueConverter">
+            <summary>
+            Determines whether a value converter is is needed and applies one to the binding.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ApplyStringFormat">
+            <summary>
+            Determines whether a custom string format is needed and applies it to the binding.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ApplyUpdateSourceTrigger">
+            <summary>
+            Determines whether a custom update source trigger should be applied to the binding.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.AddElementConvention``1(System.Windows.DependencyProperty,System.String,System.String)">
+            <summary>
+            Adds an element convention.
+            </summary>
+            <typeparam name="T">The type of element.</typeparam>
+            <param name="bindableProperty">The default property for binding conventions.</param>
+            <param name="parameterProperty">The default property for action parameters.</param>
+            <param name="eventName">The default event to trigger actions.</param>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.AddElementConvention(Caliburn.Micro.ElementConvention)">
+            <summary>
+            Adds an element convention.
+            </summary>
+            <param name="convention"></param>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.GetElementConvention(System.Type)">
+            <summary>
+            Gets an element convention for the provided element type.
+            </summary>
+            <param name="elementType">The type of element to locate the convention for.</param>
+            <returns>The convention if found, null otherwise.</returns>
+            <remarks>Searches the class hierarchy for conventions.</remarks>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.HasBinding(System.Windows.FrameworkElement,System.Windows.DependencyProperty)">
+            <summary>
+            Determines whether a particular dependency property already has a binding on the provided element.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.SetBindingWithoutBindingOverwrite(System.Type,System.String,System.Reflection.PropertyInfo,System.Windows.FrameworkElement,Caliburn.Micro.ElementConvention,System.Windows.DependencyProperty)">
+            <summary>
+            Creates a binding and sets it on the element, guarding against pre-existing bindings.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.SetBindingWithoutBindingOrValueOverwrite(System.Type,System.String,System.Reflection.PropertyInfo,System.Windows.FrameworkElement,Caliburn.Micro.ElementConvention,System.Windows.DependencyProperty)">
+            <summary>
+            Creates a binding and set it on the element, guarding against pre-existing bindings and pre-existing values.
+            </summary>
+            <param name="viewModelType"></param>
+            <param name="path"></param>
+            <param name="property"></param>
+            <param name="element"></param>
+            <param name="convention"></param>
+            <param name="bindableProperty"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.ApplyItemTemplate(System.Windows.Controls.ItemsControl,System.Reflection.PropertyInfo)">
+            <summary>
+            Attempts to apply the default item template to the items control.
+            </summary>
+            <param name="itemsControl">The items control.</param>
+            <param name="property">The collection property.</param>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ConfigureSelectedItem">
+            <summary>
+            Configures the selected item convention.
+            </summary>
+            <param name="selector">The element that has a SelectedItem property.</param>
+            <param name="selectedItemProperty">The SelectedItem property.</param>
+            <param name="viewModelType">The view model type.</param>
+            <param name="path">The property path.</param>
+        </member>
+        <member name="F:Caliburn.Micro.ConventionManager.ConfigureSelectedItemBinding">
+            <summary>
+            Configures the SelectedItem binding for matched selection path.
+            </summary>
+            <param name="selector">The element that has a SelectedItem property.</param>
+            <param name="selectedItemProperty">The SelectedItem property.</param>
+            <param name="viewModelType">The view model type.</param>
+            <param name="selectionPath">The property path.</param>
+            <param name="binding">The binding to configure.</param>
+            <returns>A bool indicating whether to apply binding</returns>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.ApplyHeaderTemplate(System.Windows.FrameworkElement,System.Windows.DependencyProperty,System.Windows.DependencyProperty,System.Type)">
+            <summary>
+            Applies a header template based on <see cref="T:Caliburn.Micro.IHaveDisplayName"/>
+            </summary>
+            <param name="element"></param>
+            <param name="headerTemplateProperty"></param>
+            <param name="headerTemplateSelectorProperty"> </param>
+            <param name="viewModelType"></param>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.GetPropertyCaseInsensitive(System.Type,System.String)">
+            <summary>
+            Gets a property by name, ignoring case and searching all interfaces.
+            </summary>
+            <param name="type">The type to inspect.</param>
+            <param name="propertyName">The property to search for.</param>
+            <returns>The property or null if not found.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.ConventionManager.ApplySilverlightTriggers(System.Windows.DependencyObject,System.Windows.DependencyProperty,System.Func{System.Windows.FrameworkElement,System.Windows.Data.BindingExpression},System.Reflection.PropertyInfo,System.Windows.Data.Binding)">
+            <summary>
+            Accounts for the lack of UpdateSourceTrigger in silverlight.
+            </summary>
+            <param name="element">The element to wire for change events on.</param>
+            <param name="dependencyProperty">The property that is being bound.</param>
+            <param name="expressionSource">Gets the the binding expression that needs to be updated.</param>
+            <param name="property">The property being bound to if available.</param>
+            <param name="binding">The binding if available.</param>
+        </member>
+        <member name="T:Caliburn.Micro.ElementConvention">
+            <summary>
+            Represents the conventions for a particular element type.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ElementConvention.ElementType">
+            <summary>
+            The type of element to which the conventions apply.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ElementConvention.GetBindableProperty">
+            <summary>
+            Gets the default property to be used in binding conventions.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ElementConvention.CreateTrigger">
+            <summary>
+            The default trigger to be used when wiring actions on this element.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ElementConvention.ParameterProperty">
+            <summary>
+            The default property to be used for parameters of this type in actions.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ElementConvention.ApplyBinding">
+            <summary>
+            Applies custom conventions for elements of this type.
+            </summary>
+            <remarks>Pass the view model type, property path, property instance, framework element and its convention.</remarks>
+        </member>
+        <member name="T:Caliburn.Micro.ExtensionMethods">
+            <summary>
+            Generic extension methods used by the framework.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ExtensionMethods.GetAssemblyName(System.Reflection.Assembly)">
+            <summary>
+            Get's the name of the assembly.
+            </summary>
+            <param name="assembly">The assembly.</param>
+            <returns>The assembly's name.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.ExtensionMethods.GetAttributes``1(System.Reflection.MemberInfo,System.Boolean)">
+            <summary>
+            Gets all the attributes of a particular type.
+            </summary>
+            <typeparam name="T">The type of attributes to get.</typeparam>
+            <param name="member">The member to inspect for attributes.</param>
+            <param name="inherit">Whether or not to search for inherited attributes.</param>
+            <returns>The list of attributes found.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.ExtensionMethods.GetValueOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0)">
+            <summary>
+            Gets the value for a key. If the key does not exist, return default(TValue);
+            </summary>
+            <typeparam name="TKey">The type of the keys in the dictionary.</typeparam>
+            <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
+            <param name="dictionary">The dictionary to call this method on.</param>
+            <param name="key">The key to look up.</param>
+            <returns>The key value. default(TValue) if this key is not in the dictionary.</returns>
+        </member>
+        <member name="T:Caliburn.Micro.Message">
+            <summary>
+              Host's attached properties related to routed UI messaging.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Message.SetHandler(System.Windows.DependencyObject,System.Object)">
+            <summary>
+              Places a message handler on this element.
+            </summary>
+            <param name="d"> The element. </param>
+            <param name="value"> The message handler. </param>
+        </member>
+        <member name="M:Caliburn.Micro.Message.GetHandler(System.Windows.DependencyObject)">
+            <summary>
+              Gets the message handler for this element.
+            </summary>
+            <param name="d"> The element. </param>
+            <returns> The message handler. </returns>
+        </member>
+        <member name="F:Caliburn.Micro.Message.AttachProperty">
+            <summary>
+              A property definition representing attached triggers and messages.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Message.SetAttach(System.Windows.DependencyObject,System.String)">
+            <summary>
+              Sets the attached triggers and messages.
+            </summary>
+            <param name="d"> The element to attach to. </param>
+            <param name="attachText"> The parsable attachment text. </param>
+        </member>
+        <member name="M:Caliburn.Micro.Message.GetAttach(System.Windows.DependencyObject)">
+            <summary>
+              Gets the attached triggers and messages.
+            </summary>
+            <param name="d"> The element that was attached to. </param>
+            <returns> The parsable attachment text. </returns>
+        </member>
+        <member name="T:Caliburn.Micro.MessageBinder">
+            <summary>
+            A service that is capable of properly binding values to a method's parameters and creating instances of <see cref="T:Caliburn.Micro.IResult"/>.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.MessageBinder.SpecialValues">
+            <summary>
+            The special parameter values recognized by the message binder along with their resolvers.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.MessageBinder.CustomConverters">
+            <summary>
+            Custom converters used by the framework registered by destination type for which they will be selected.
+            The converter is passed the existing value to convert and a "context" object.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.MessageBinder.DetermineParameters(Caliburn.Micro.ActionExecutionContext,System.Reflection.ParameterInfo[])">
+            <summary>
+            Determines the parameters that a method should be invoked with.
+            </summary>
+            <param name="context">The action execution context.</param>
+            <param name="requiredParameters">The parameters required to complete the invocation.</param>
+            <returns>The actual parameter values.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.MessageBinder.EvaluateParameter">
+            <summary>
+            Transforms the textual parameter into the actual parameter.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.MessageBinder.CoerceValue(System.Type,System.Object,System.Object)">
+            <summary>
+            Coerces the provided value to the destination type.
+            </summary>
+            <param name="destinationType">The destination type.</param>
+            <param name="providedValue">The provided value.</param>
+            <param name="context">An optional context value which can be used during conversion.</param>
+            <returns>The coerced value.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.MessageBinder.GetDefaultValue(System.Type)">
+            <summary>
+            Gets the default value for a type.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The default value.</returns>
+        </member>
+        <member name="T:Caliburn.Micro.NameTransformer">
+            <summary>
+             Class for managing the list of rules for doing name transformation.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.NameTransformer.AddRule(System.String,System.String,System.String)">
+            <summary>
+             Adds a transform using a single replacement value and a global filter pattern.
+            </summary>
+            <param name = "replacePattern">Regular expression pattern for replacing text</param>
+            <param name = "replaceValue">The replacement value.</param>
+            <param name = "globalFilterPattern">Regular expression pattern for global filtering</param>
+        </member>
+        <member name="M:Caliburn.Micro.NameTransformer.AddRule(System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+             Adds a transform using a list of replacement values and a global filter pattern.
+            </summary>
+            <param name = "replacePattern">Regular expression pattern for replacing text</param>
+            <param name = "replaceValueList">The list of replacement values</param>
+            <param name = "globalFilterPattern">Regular expression pattern for global filtering</param>
+        </member>
+        <member name="M:Caliburn.Micro.NameTransformer.Transform(System.String)">
+            <summary>
+            Gets the list of transformations for a given name.
+            </summary>
+            <param name = "source">The name to transform into the resolved name list</param>
+            <returns>The transformed names.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.NameTransformer.Transform(System.String,System.Func{System.String,System.String})">
+            <summary>
+            Gets the list of transformations for a given name.
+            </summary>
+            <param name = "source">The name to transform into the resolved name list</param>
+            <param name = "getReplaceString">A function to do a transform on each item in the ReplaceValueList prior to applying the regular expression transform</param>
+            <returns>The transformed names.</returns>
+        </member>
+        <member name="P:Caliburn.Micro.NameTransformer.UseEagerRuleSelection">
+            <summary>
+            Flag to indicate if transformations from all matched rules are returned. Otherwise, transformations from only the first matched rule are returned.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.NameTransformer.Rule">
+            <summary>
+             A rule that describes a name transform.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.NameTransformer.Rule.GlobalFilterPattern">
+            <summary>
+            Regular expression pattern for global filtering
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.NameTransformer.Rule.ReplacePattern">
+            <summary>
+            Regular expression pattern for replacing text
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.NameTransformer.Rule.ReplacementValues">
+            <summary>
+            The list of replacement values
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.Parser">
+            <summary>
+            Parses text into a fully functional set of <see cref="T:System.Windows.Interactivity.TriggerBase"/> instances with <see cref="T:Caliburn.Micro.ActionMessage"/>.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Parser.Parse(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Parses the specified message text.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="text">The message text.</param>
+            <returns>The triggers parsed from the text.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.Parser.CreateTrigger">
+            <summary>
+            The function used to generate a trigger.
+            </summary>
+            <remarks>The parameters passed to the method are the the target of the trigger and string representing the trigger.</remarks>
+        </member>
+        <member name="M:Caliburn.Micro.Parser.CreateMessage(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Creates an instance of <see cref="T:Caliburn.Micro.ActionMessage"/> by parsing out the textual dsl.
+            </summary>
+            <param name="target">The target of the message.</param>
+            <param name="messageText">The textual message dsl.</param>
+            <returns>The created message.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.Parser.InterpretMessageText">
+            <summary>
+            Function used to parse a string identified as a message.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Parser.CreateParameter">
+            <summary>
+            Function used to parse a string identified as a message parameter.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Parser.BindParameter(System.Windows.FrameworkElement,Caliburn.Micro.Parameter,System.String,System.String,System.Windows.Data.BindingMode)">
+            <summary>
+            Creates a binding on a <see cref="T:Caliburn.Micro.Parameter"/>.
+            </summary>
+            <param name="target">The target to which the message is applied.</param>
+            <param name="parameter">The parameter object.</param>
+            <param name="elementName">The name of the element to bind to.</param>
+            <param name="path">The path of the element to bind to.</param>
+            <param name="bindingMode">The binding mode to use.</param>
+        </member>
+        <member name="T:Caliburn.Micro.RegExHelper">
+            <summary>
+             Helper class for encoding strings to regular expression patterns
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.RegExHelper.NameRegEx">
+            <summary>
+            Regular expression pattern for valid name
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.RegExHelper.SubNamespaceRegEx">
+            <summary>
+            Regular expression pattern for subnamespace (including dot)
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.RegExHelper.NamespaceRegEx">
+            <summary>
+            Regular expression pattern for namespace or namespace fragment
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.RegExHelper.GetCaptureGroup(System.String,System.String)">
+            <summary>
+            Creates a named capture group with the specified regular expression 
+            </summary>
+            <param name="groupName">Name of capture group to create</param>
+            <param name="regEx">Regular expression pattern to capture</param>
+            <returns>Regular expression capture group with the specified group name</returns>
+        </member>
+        <member name="M:Caliburn.Micro.RegExHelper.NamespaceToRegEx(System.String)">
+            <summary>
+            Converts a namespace (including wildcards) to a regular expression string
+            </summary>
+            <param name="srcNamespace">Source namespace to convert to regular expression</param>
+            <returns>Namespace converted to a regular expression</returns>
+        </member>
+        <member name="M:Caliburn.Micro.RegExHelper.GetNameCaptureGroup(System.String)">
+            <summary>
+            Creates a capture group for a valid name regular expression pattern
+            </summary>
+            <param name="groupName">Name of capture group to create</param>
+            <returns>Regular expression capture group with the specified group name</returns>
+        </member>
+        <member name="M:Caliburn.Micro.RegExHelper.GetNamespaceCaptureGroup(System.String)">
+            <summary>
+            Creates a capture group for a namespace regular expression pattern
+            </summary>
+            <param name="groupName">Name of capture group to create</param>
+            <returns>Regular expression capture group with the specified group name</returns>
+        </member>
+        <member name="T:Caliburn.Micro.AttachedCollection`1">
+            <summary>
+            A collection that can exist as part of a behavior.
+            </summary>
+            <typeparam name="T">The type of item in the attached collection.</typeparam>
+        </member>
+        <member name="M:Caliburn.Micro.AttachedCollection`1.#ctor">
+            <summary>
+            Creates an instance of <see cref="T:Caliburn.Micro.AttachedCollection`1"/>
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.AttachedCollection`1.Attach(System.Windows.DependencyObject)">
+            <summary>
+            Attached the collection.
+            </summary>
+            <param name="dependencyObject">The dependency object to attach the collection to.</param>
+        </member>
+        <member name="M:Caliburn.Micro.AttachedCollection`1.Detach">
+            <summary>
+            Detaches the collection.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.AttachedCollection`1.OnItemAdded(`0)">
+            <summary>
+            Called when an item is added from the collection.
+            </summary>
+            <param name="item">The item that was added.</param>
+        </member>
+        <member name="M:Caliburn.Micro.AttachedCollection`1.OnItemRemoved(`0)">
+            <summary>
+            Called when an item is removed from the collection.
+            </summary>
+            <param name="item">The item that was removed.</param>
+        </member>
+        <member name="T:Caliburn.Micro.Mouse">
+            <summary>
+            A mouse helper utility.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Mouse.Initialize(System.Windows.UIElement)">
+            <summary>
+            Initializes the mouse helper with the UIElement to use in mouse tracking.
+            </summary>
+            <param name="element">The UIElement to use for mouse tracking.</param>
+        </member>
+        <member name="P:Caliburn.Micro.Mouse.Position">
+            <summary>
+            The current position of the mouse.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.Parameter">
+            <summary>
+            Represents a parameter of an <see cref="T:Caliburn.Micro.ActionMessage"/>.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.Parameter.ValueProperty">
+            <summary>
+            A dependency property representing the parameter's value.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.Parameter.MakeAwareOf(Caliburn.Micro.ActionMessage)">
+            <summary>
+            Makes the parameter aware of the <see cref="T:Caliburn.Micro.ActionMessage"/> that it's attached to.
+            </summary>
+            <param name="owner">The action message.</param>
+        </member>
+        <member name="P:Caliburn.Micro.Parameter.Value">
+            <summary>
+            Gets or sets the value of the parameter.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:Caliburn.Micro.Parameter.Owner">
+            <summary>
+            Gets or sets the owner.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.StringSplitter">
+            <summary>
+            Helper class when splitting strings
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.StringSplitter.Split(System.String,System.Char)">
+            <summary>
+            Splits a string with a chosen separator. 
+            If a substring is contained in [...] it will not be splitted.
+            </summary>
+            <param name="message">The message to split</param>
+            <param name="separator">The separator to use when splitting</param>
+            <returns></returns>
+        </member>
+        <member name="M:Caliburn.Micro.StringSplitter.SplitParameters(System.String)">
+            <summary>
+            Splits a string with , as separator. 
+            Does not split within {},[],()
+            </summary>
+            <param name="parameters">The string to split</param>
+            <returns></returns>
+        </member>
+        <member name="T:Caliburn.Micro.XamlPlatformProvider">
+            <summary>
+            A <see cref="T:Caliburn.Micro.IPlatformProvider"/> implementation for the XAML platfrom.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Caliburn.Micro.XamlPlatformProvider"/> class.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.BeginOnUIThread(System.Action)">
+            <summary>
+            Executes the action on the UI thread asynchronously.
+            </summary>
+            <param name="action">The action to execute.</param>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.OnUIThreadAsync(System.Action)">
+            <summary>
+            Executes the action on the UI thread asynchronously.
+            </summary>
+            <param name="action">The action to execute.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.OnUIThread(System.Action)">
+            <summary>
+            Executes the action on the UI thread.
+            </summary>
+            <param name="action">The action to execute.</param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.GetFirstNonGeneratedView(System.Object)">
+            <summary>
+            Used to retrieve the root, non-framework-created view.
+            </summary>
+            <param name="view">The view to search.</param>
+            <returns>
+            The root element that was not created by the framework.
+            </returns>
+            <remarks>
+            In certain instances the services create UI elements.
+            For example, if you ask the window manager to show a UserControl as a dialog, it creates a window to host the UserControl in.
+            The WindowManager marks that element as a framework-created element so that it can determine what it created vs. what was intended by the developer.
+            Calling GetFirstNonGeneratedView allows the framework to discover what the original element was.
+            </remarks>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.ExecuteOnFirstLoad(System.Object,System.Action{System.Object})">
+            <summary>
+            Executes the handler the fist time the view is loaded.
+            </summary>
+            <param name="view">The view.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.ExecuteOnLayoutUpdated(System.Object,System.Action{System.Object})">
+            <summary>
+            Executes the handler the next time the view's LayoutUpdated event fires.
+            </summary>
+            <param name="view">The view.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="M:Caliburn.Micro.XamlPlatformProvider.GetViewCloseAction(System.Object,System.Collections.Generic.ICollection{System.Object},System.Nullable{System.Boolean})">
+            <summary>
+            Get the close action for the specified view model.
+            </summary>
+            <param name="viewModel">The view model to close.</param>
+            <param name="views">The associated views.</param>
+            <param name="dialogResult">The dialog result.</param>
+            <returns>
+            An <see cref="T:Caliburn.Micro.Action"/> to close the view model.
+            </returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="P:Caliburn.Micro.XamlPlatformProvider.InDesignMode">
+            <summary>
+            Indicates whether or not the framework is in design-time mode.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.TypeDescriptor">
+            <summary>
+            Provides information about the characteristics for a component, such as its attributes, properties, and events. This class cannot be inherited.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.TypeDescriptor.GetConverter(System.Type)">
+            <summary>
+            Returns a type converter for the specified type.
+            </summary>
+            <param name="type">The System.Type of the target component.</param>
+            <returns>A System.ComponentModel.TypeConverter for the specified type.</returns>
+        </member>
+        <member name="T:Caliburn.Micro.TypeMappingConfiguration">
+            <summary>
+            Class to specify settings for configuring type mappings by the ViewLocator or ViewModelLocator
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.DefaultSubNamespaceForViews">
+            <summary>
+            The default subnamespace for Views. Used for creating default subnamespace mappings. Defaults to "Views".
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.DefaultSubNamespaceForViewModels">
+            <summary>
+            The default subnamespace for ViewModels. Used for creating default subnamespace mappings. Defaults to "ViewModels".
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.UseNameSuffixesInMappings">
+            <summary>
+            Flag to indicate whether or not the name of the Type should be transformed when adding a type mapping. Defaults to true.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.NameFormat">
+            <summary>
+            The format string used to compose the name of a type from base name and name suffix
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.IncludeViewSuffixInViewModelNames">
+            <summary>
+            Flag to indicate if ViewModel names should include View suffixes (i.e. CustomerPageViewModel vs. CustomerViewModel)
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.ViewSuffixList">
+            <summary>
+            List of View suffixes for which default type mappings should be created. Applies only when UseNameSuffixesInMappings = true.
+            Default values are "View", "Page"
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.TypeMappingConfiguration.ViewModelSuffix">
+            <summary>
+            The name suffix for ViewModels. Applies only when UseNameSuffixesInMappings = true. The default is "ViewModel".
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.View">
+            <summary>
+            Hosts attached properties related to view models.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.IsLoadedProperty">
+            <summary>
+            A dependency property which allows the framework to track whether a certain element has already been loaded in certain scenarios.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.IsScopeRootProperty">
+            <summary>
+            A dependency property which marks an element as a name scope root.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.ApplyConventionsProperty">
+            <summary>
+            A dependency property which allows the override of convention application behavior.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.ContextProperty">
+            <summary>
+            A dependency property for assigning a context to a particular portion of the UI.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.ModelProperty">
+            <summary>
+            A dependency property for attaching a model to the UI.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.View.IsGeneratedProperty">
+            <summary>
+            Used by the framework to indicate that this element was generated.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.View.ExecuteOnLoad(System.Windows.FrameworkElement,System.Windows.RoutedEventHandler)">
+            <summary>
+            Executes the handler immediately if the element is loaded, otherwise wires it to the Loaded event.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="handler">The handler.</param>
+            <returns>true if the handler was executed immediately; false otherwise</returns>
+        </member>
+        <member name="M:Caliburn.Micro.View.ExecuteOnUnload(System.Windows.FrameworkElement,System.Windows.RoutedEventHandler)">
+            <summary>
+            Executes the handler when the element is unloaded.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="M:Caliburn.Micro.View.ExecuteOnLayoutUpdated(System.Windows.FrameworkElement,System.EventHandler)">
+            <summary>
+            Executes the handler the next time the elements's LayoutUpdated event fires.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="handler">The handler.</param>
+        </member>
+        <member name="F:Caliburn.Micro.View.GetFirstNonGeneratedView">
+            <summary>
+            Used to retrieve the root, non-framework-created view.
+            </summary>
+            <param name="view">The view to search.</param>
+            <returns>The root element that was not created by the framework.</returns>
+            <remarks>In certain instances the services create UI elements.
+            For example, if you ask the window manager to show a UserControl as a dialog, it creates a window to host the UserControl in.
+            The WindowManager marks that element as a framework-created element so that it can determine what it created vs. what was intended by the developer.
+            Calling GetFirstNonGeneratedView allows the framework to discover what the original element was. 
+            </remarks>
+        </member>
+        <member name="M:Caliburn.Micro.View.GetApplyConventions(System.Windows.DependencyObject)">
+            <summary>
+            Gets the convention application behavior.
+            </summary>
+            <param name="d">The element the property is attached to.</param>
+            <returns>Whether or not to apply conventions.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.View.SetApplyConventions(System.Windows.DependencyObject,System.Nullable{System.Boolean})">
+            <summary>
+            Sets the convention application behavior.
+            </summary>
+            <param name="d">The element to attach the property to.</param>
+            <param name="value">Whether or not to apply conventions.</param>
+        </member>
+        <member name="M:Caliburn.Micro.View.SetModel(System.Windows.DependencyObject,System.Object)">
+            <summary>
+            Sets the model.
+            </summary>
+            <param name="d">The element to attach the model to.</param>
+            <param name="value">The model.</param>
+        </member>
+        <member name="M:Caliburn.Micro.View.GetModel(System.Windows.DependencyObject)">
+            <summary>
+            Gets the model.
+            </summary>
+            <param name="d">The element the model is attached to.</param>
+            <returns>The model.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.View.GetContext(System.Windows.DependencyObject)">
+            <summary>
+            Gets the context.
+            </summary>
+            <param name="d">The element the context is attached to.</param>
+            <returns>The context.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.View.SetContext(System.Windows.DependencyObject,System.Object)">
+            <summary>
+            Sets the context.
+            </summary>
+            <param name="d">The element to attach the context to.</param>
+            <param name="value">The context.</param>
+        </member>
+        <member name="P:Caliburn.Micro.View.InDesignMode">
+            <summary>
+            Gets a value that indicates whether the process is running in design mode.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.ViewLocator">
+            <summary>
+              A strategy for determining which view to use for a given model.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.NameTransformer">
+            <summary>
+             Used to transform names.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.ContextSeparator">
+            <summary>
+              Separator used when resolving View names for context instances.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.ConfigureTypeMappings(Caliburn.Micro.TypeMappingConfiguration)">
+            <summary>
+            Specifies how type mappings are created, including default type mappings. Calling this method will
+            clear all existing name transformation rules and create new default type mappings according to the
+            configuration.
+            </summary>
+            <param name="config">An instance of TypeMappingConfiguration that provides the settings for configuration</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddDefaultTypeMapping(System.String)">
+            <summary>
+            Adds a default type mapping using the standard namespace mapping convention
+            </summary>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.RegisterViewSuffix(System.String)">
+            <summary>
+            This method registers a View suffix or synonym so that View Context resolution works properly.
+            It is automatically called internally when calling AddNamespaceMapping(), AddDefaultTypeMapping(),
+            or AddTypeMapping(). It should not need to be called explicitly unless a rule that handles synonyms
+            is added directly through the NameTransformer.
+            </summary>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View".</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddTypeMapping(System.String,System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping based on namespace RegEx replace and filter patterns
+            </summary>
+            <param name="nsSourceReplaceRegEx">RegEx replace pattern for source namespace</param>
+            <param name="nsSourceFilterRegEx">RegEx filter pattern for source namespace</param>
+            <param name="nsTargetsRegEx">Array of RegEx replace values for target namespaces</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddTypeMapping(System.String,System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping based on namespace RegEx replace and filter patterns
+            </summary>
+            <param name="nsSourceReplaceRegEx">RegEx replace pattern for source namespace</param>
+            <param name="nsSourceFilterRegEx">RegEx filter pattern for source namespace</param>
+            <param name="nsTargetRegEx">RegEx replace value for target namespace</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddNamespaceMapping(System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping based on simple namespace mapping
+            </summary>
+            <param name="nsSource">Namespace of source type</param>
+            <param name="nsTargets">Namespaces of target type as an array</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddNamespaceMapping(System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping based on simple namespace mapping
+            </summary>
+            <param name="nsSource">Namespace of source type</param>
+            <param name="nsTarget">Namespace of target type</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddSubNamespaceMapping(System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping by substituting one subnamespace for another
+            </summary>
+            <param name="nsSource">Subnamespace of source type</param>
+            <param name="nsTargets">Subnamespaces of target type as an array</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.AddSubNamespaceMapping(System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping by substituting one subnamespace for another
+            </summary>
+            <param name="nsSource">Subnamespace of source type</param>
+            <param name="nsTarget">Subnamespace of target type</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.GetOrCreateViewType">
+            <summary>
+              Retrieves the view from the IoC container or tries to create it if not found.
+            </summary>
+            <remarks>
+              Pass the type of view as a parameter and recieve an instance of the view.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.ModifyModelTypeAtDesignTime">
+            <summary>
+            Modifies the name of the type to be used at design time.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.TransformName">
+            <summary>
+            Transforms a ViewModel type name into all of its possible View type names. Optionally accepts an instance
+            of context object
+            </summary>
+            <returns>Enumeration of transformed names</returns>
+            <remarks>Arguments:
+            typeName = The name of the ViewModel type being resolved to its companion View.
+            context = An instance of the context or null.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.LocateTypeForModelType">
+            <summary>
+              Locates the view type based on the specified model type.
+            </summary>
+            <returns>The view.</returns>
+            <remarks>
+              Pass the model type, display location (or null) and the context instance (or null) as parameters and receive a view type.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.LocateForModelType">
+            <summary>
+              Locates the view for the specified model type.
+            </summary>
+            <returns>The view.</returns>
+            <remarks>
+              Pass the model type, display location (or null) and the context instance (or null) as parameters and receive a view instance.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.LocateForModel">
+            <summary>
+              Locates the view for the specified model instance.
+            </summary>
+            <returns>The view.</returns>
+            <remarks>
+              Pass the model instance, display location (or null) and the context (or null) as parameters and receive a view instance.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewLocator.DeterminePackUriFromType">
+            <summary>
+            Transforms a view type into a pack uri.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ViewLocator.InitializeComponent(System.Object)">
+            <summary>
+              When a view does not contain a code-behind file, we need to automatically call InitializeCompoent.
+            </summary>
+            <param name = "element">The element to initialize</param>
+        </member>
+        <member name="T:Caliburn.Micro.ViewModelBinder">
+            <summary>
+            Binds a view to a view model.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.ApplyConventionsByDefault">
+            <summary>
+            Gets or sets a value indicating whether to apply conventions by default.
+            </summary>
+            <value>
+            	<c>true</c> if conventions should be applied by default; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.ConventionsAppliedProperty">
+            <summary>
+            Indicates whether or not the conventions have already been applied to the view.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelBinder.ShouldApplyConventions(System.Windows.FrameworkElement)">
+            <summary>
+            Determines whether a view should have conventions applied to it.
+            </summary>
+            <param name="view">The view to check.</param>
+            <returns>Whether or not conventions should be applied to the view.</returns>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.BindProperties">
+            <summary>
+            Creates data bindings on the view's controls based on the provided properties.
+            </summary>
+            <remarks>Parameters include named Elements to search through and the type of view model to determine conventions for. Returns unmatched elements.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.BindActions">
+            <summary>
+            Attaches instances of <see cref="T:Caliburn.Micro.ActionMessage"/> to the view's controls based on the provided methods.
+            </summary>
+            <remarks>Parameters include the named elements to search through and the type of view model to determine conventions for. Returns unmatched elements.</remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.HandleUnmatchedElements">
+            <summary>
+            Allows the developer to add custom handling of named elements which were not matched by any default conventions.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelBinder.Bind">
+             <summary>
+             Binds the specified viewModel to the view.
+             </summary>
+            <remarks>Passes the the view model, view and creation context (or null for default) to use in applying binding.</remarks>
+        </member>
+        <member name="T:Caliburn.Micro.ViewModelLocator">
+            <summary>
+              A strategy for determining which view model to use for a given view.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.NameTransformer">
+            <summary>
+             Used to transform names.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.InterfaceCaptureGroupName">
+            <summary>
+            The name of the capture group used as a marker for rules that return interface types
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.ConfigureTypeMappings(Caliburn.Micro.TypeMappingConfiguration)">
+            <summary>
+            Specifies how type mappings are created, including default type mappings. Calling this method will
+            clear all existing name transformation rules and create new default type mappings according to the
+            configuration.
+            </summary>
+            <param name="config">An instance of TypeMappingConfiguration that provides the settings for configuration</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddDefaultTypeMapping(System.String)">
+            <summary>
+            Adds a default type mapping using the standard namespace mapping convention
+            </summary>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddTypeMapping(System.String,System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping based on namespace RegEx replace and filter patterns
+            </summary>
+            <param name="nsSourceReplaceRegEx">RegEx replace pattern for source namespace</param>
+            <param name="nsSourceFilterRegEx">RegEx filter pattern for source namespace</param>
+            <param name="nsTargetsRegEx">Array of RegEx replace values for target namespaces</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddTypeMapping(System.String,System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping based on namespace RegEx replace and filter patterns
+            </summary>
+            <param name="nsSourceReplaceRegEx">RegEx replace pattern for source namespace</param>
+            <param name="nsSourceFilterRegEx">RegEx filter pattern for source namespace</param>
+            <param name="nsTargetRegEx">RegEx replace value for target namespace</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddNamespaceMapping(System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping based on simple namespace mapping
+            </summary>
+            <param name="nsSource">Namespace of source type</param>
+            <param name="nsTargets">Namespaces of target type as an array</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddNamespaceMapping(System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping based on simple namespace mapping
+            </summary>
+            <param name="nsSource">Namespace of source type</param>
+            <param name="nsTarget">Namespace of target type</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddSubNamespaceMapping(System.String,System.String[],System.String)">
+            <summary>
+            Adds a standard type mapping by substituting one subnamespace for another
+            </summary>
+            <param name="nsSource">Subnamespace of source type</param>
+            <param name="nsTargets">Subnamespaces of target type as an array</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.AddSubNamespaceMapping(System.String,System.String,System.String)">
+            <summary>
+            Adds a standard type mapping by substituting one subnamespace for another
+            </summary>
+            <param name="nsSource">Subnamespace of source type</param>
+            <param name="nsTarget">Subnamespace of target type</param>
+            <param name="viewSuffix">Suffix for type name. Should  be "View" or synonym of "View". (Optional)</param>
+        </member>
+        <member name="M:Caliburn.Micro.ViewModelLocator.MakeInterface(System.String)">
+            <summary>
+              Makes a type name into an interface name.
+            </summary>
+            <param name = "typeName">The part.</param>
+            <returns></returns>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.TransformName">
+            <summary>
+            Transforms a View type name into all of its possible ViewModel type names. Accepts a flag
+            to include or exclude interface types.
+            </summary>
+            <returns>Enumeration of transformed names</returns>
+            <remarks>Arguments:
+            typeName = The name of the View type being resolved to its companion ViewModel.
+            includeInterfaces = Flag to indicate if interface types are included
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.LocateTypeForViewType">
+            <summary>
+              Determines the view model type based on the specified view type.
+            </summary>
+            <returns>The view model type.</returns>
+            <remarks>
+              Pass the view type and receive a view model type. Pass true for the second parameter to search for interfaces.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.LocateForViewType">
+            <summary>
+              Locates the view model for the specified view type.
+            </summary>
+            <returns>The view model.</returns>
+            <remarks>
+              Pass the view type as a parameter and receive a view model instance.
+            </remarks>
+        </member>
+        <member name="F:Caliburn.Micro.ViewModelLocator.LocateForView">
+            <summary>
+              Locates the view model for the specified view instance.
+            </summary>
+            <returns>The view model.</returns>
+            <remarks>
+              Pass the view instance as a parameters and receive a view model instance.
+            </remarks>
+        </member>
+        <member name="T:Caliburn.Micro.IAppBarActionMessage">
+            <summary>
+            The interface for AppBar items capable of triggering action messages.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IAppBarActionMessage.Message">
+            <summary>
+            The action message.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.AppBarButton">
+            <summary>
+            An <see cref="T:Microsoft.Phone.Shell.ApplicationBarIconButton"/> capable of triggering action messages.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.AppBarButton.Message">
+            <summary>
+            The action message.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.AppBarMenuItem">
+            <summary>
+            An <see cref="T:Microsoft.Phone.Shell.ApplicationBarMenuItem"/> capable of triggering action messages.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.AppBarMenuItem.Message">
+            <summary>
+            The action message.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.INavigationService">
+            <summary>
+              Implemented by services that provide <see cref="T:System.Uri"/> based navigation.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.INavigationService.StopLoading">
+            <summary>
+              Stops the loading process.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.INavigationService.GoBack">
+            <summary>
+              Navigates back.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.INavigationService.GoForward">
+            <summary>
+              Navigates forward.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.INavigationService.RemoveBackEntry">
+            <summary>
+              Removes the most recent entry from the back stack.
+            </summary>
+            <returns> The entry that was removed. </returns>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.Source">
+            <summary>
+              The <see cref="T:System.Uri"/> source.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.CanGoBack">
+            <summary>
+              Indicates whether the navigator can navigate back.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.CanGoForward">
+            <summary>
+              Indicates whether the navigator can navigate forward.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.CurrentSource">
+            <summary>
+              The current <see cref="T:System.Uri"/> source.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.CurrentContent">
+            <summary>
+              The current content.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.INavigationService.BackStack">
+            <summary>
+              Gets an IEnumerable that you use to enumerate the entries in back navigation history.
+            </summary>
+            <returns>List of entries in the back stack.</returns>
+        </member>
+        <member name="E:Caliburn.Micro.INavigationService.Navigated">
+            <summary>
+              Raised after navigation.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.INavigationService.Navigating">
+            <summary>
+              Raised prior to navigation.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.INavigationService.NavigationFailed">
+            <summary>
+              Raised when navigation fails.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.INavigationService.NavigationStopped">
+            <summary>
+              Raised when navigation is stopped.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.INavigationService.FragmentNavigation">
+            <summary>
+              Raised when a fragment navigation occurs.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.FrameAdapter">
+            <summary>
+              A basic implementation of <see cref="T:Caliburn.Micro.INavigationService"/> designed to adapt the <see cref="T:System.Windows.Controls.Frame"/> control.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.#ctor(System.Windows.Controls.Frame,System.Boolean)">
+            <summary>
+              Creates an instance of <see cref="T:Caliburn.Micro.FrameAdapter"/>
+            </summary>
+            <param name="frame"> The frame to represent as a <see cref="T:Caliburn.Micro.INavigationService"/> . </param>
+            <param name="treatViewAsLoaded"> Tells the frame adapter to assume that the view has already been loaded by the time OnNavigated is called. This is necessary when using the TransitionFrame. </param>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.OnNavigating(System.Object,System.Windows.Navigation.NavigatingCancelEventArgs)">
+            <summary>
+              Occurs before navigation
+            </summary>
+            <param name="sender"> The event sender. </param>
+            <param name="e"> The event args. </param>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.CanCloseOnNavigating(System.Object,System.Windows.Navigation.NavigatingCancelEventArgs)">
+            <summary>
+            Called to check whether or not to close current instance on navigating.
+            </summary>
+            <param name="sender"> The event sender from OnNavigating event. </param>
+            <param name="e"> The event args from OnNavigating event. </param>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.OnNavigated(System.Object,System.Windows.Navigation.NavigationEventArgs)">
+            <summary>
+              Occurs after navigation
+            </summary>
+            <param name="sender"> The event sender. </param>
+            <param name="e"> The event args. </param>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.TryInjectQueryString(System.Object,System.Windows.Controls.Page)">
+            <summary>
+              Attempts to inject query string parameters from the view into the view model.
+            </summary>
+            <param name="viewModel"> The view model. </param>
+            <param name="page"> The page. </param>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.StopLoading">
+            <summary>
+              Stops the loading process.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.GoBack">
+            <summary>
+              Navigates back.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.GoForward">
+            <summary>
+              Navigates forward.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.Navigate(System.Uri)">
+            <summary>
+              Navigates to the specified <see cref="T:System.Uri"/> .
+            </summary>
+            <param name="source"> The <see cref="T:System.Uri"/> to navigate to. </param>
+            <returns> Whether or not navigation succeeded. </returns>
+        </member>
+        <member name="M:Caliburn.Micro.FrameAdapter.RemoveBackEntry">
+            <summary>
+              Removes the most recent entry from the back stack.
+            </summary>
+            <returns> The entry that was removed. </returns>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.Source">
+            <summary>
+              The <see cref="T:System.Uri"/> source.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.CanGoBack">
+            <summary>
+              Indicates whether the navigator can navigate back.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.CanGoForward">
+            <summary>
+              Indicates whether the navigator can navigate forward.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.CurrentSource">
+            <summary>
+              The current <see cref="T:System.Uri"/> source.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.CurrentContent">
+            <summary>
+              The current content.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.FrameAdapter.BackStack">
+            <summary>
+              Gets an IEnumerable that you use to enumerate the entries in back navigation history.
+            </summary>
+            <returns>List of entries in the back stack.</returns>
+        </member>
+        <member name="E:Caliburn.Micro.FrameAdapter.Navigated">
+            <summary>
+              Raised after navigation.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.FrameAdapter.Navigating">
+            <summary>
+              Raised prior to navigation.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.FrameAdapter.NavigationFailed">
+            <summary>
+              Raised when navigation fails.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.FrameAdapter.NavigationStopped">
+            <summary>
+              Raised when navigation is stopped.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.FrameAdapter.FragmentNavigation">
+            <summary>
+              Raised when a fragment navigation occurs.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.IPhoneService">
+            <summary>
+              Implemented by services that provide access to the basic phone capabilities.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IPhoneService.State">
+            <summary>
+              The state that is persisted during the tombstoning process.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IPhoneService.StartupMode">
+            <summary>
+              Gets the mode in which the application was started.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Launching">
+            <summary>
+              Occurs when a fresh instance of the application is launching.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Activated">
+            <summary>
+              Occurs when a previously paused/tombstoned app is resumed/resurrected.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Deactivated">
+            <summary>
+              Occurs when the application is being paused or tombstoned.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Closing">
+            <summary>
+              Occurs when the application is closing.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Continuing">
+            <summary>
+              Occurs when the app is continuing from a temporarily paused state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Continued">
+            <summary>
+              Occurs after the app has continued from a temporarily paused state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Resurrecting">
+            <summary>
+              Occurs when the app is "resurrecting" from a tombstoned state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.IPhoneService.Resurrected">
+            <summary>
+              Occurs after the app has "resurrected" from a tombstoned state.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IPhoneService.UserIdleDetectionMode">
+            <summary>
+              Gets or sets whether user idle detection is enabled.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IPhoneService.ApplicationIdleDetectionMode">
+            <summary>
+              Gets or sets whether application idle detection is enabled.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.IPhoneService.IsResurrecting">
+            <summary>
+            Gets if the app is currently resurrecting.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.PhoneApplicationServiceAdapter">
+            <summary>
+              An implementation of <see cref="T:Caliburn.Micro.IPhoneService"/> that adapts <see cref="T:Microsoft.Phone.Shell.PhoneApplicationService"/>.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneApplicationServiceAdapter.#ctor(Microsoft.Phone.Shell.PhoneApplicationService,System.Windows.Controls.Frame)">
+            <summary>
+              Creates an instance of <see cref="T:Caliburn.Micro.PhoneApplicationServiceAdapter"/>.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneApplicationServiceAdapter.IsResurrecting">
+            <summary>
+            Gets if the app is currently resurrecting.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneApplicationServiceAdapter.State">
+            <summary>
+              The state that is persisted during the tombstoning process.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneApplicationServiceAdapter.StartupMode">
+            <summary>
+              Gets the mode in which the application was started.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Launching">
+            <summary>
+              Occurs when a fresh instance of the application is launching.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Activated">
+            <summary>
+              Occurs when a previously paused/tombstoned application instance is resumed/resurrected.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Deactivated">
+            <summary>
+              Occurs when the application is being paused or tombstoned.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Closing">
+            <summary>
+              Occurs when the application is closing.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Continuing">
+            <summary>
+              Occurs when the app is continuing from a temporarily paused state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Continued">
+            <summary>
+              Occurs after the app has continued from a temporarily paused state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Resurrecting">
+            <summary>
+              Occurs when the app is "resurrecting" from a tombstoned state.
+            </summary>
+        </member>
+        <member name="E:Caliburn.Micro.PhoneApplicationServiceAdapter.Resurrected">
+            <summary>
+              Occurs after the app has "resurrected" from a tombstoned state.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneApplicationServiceAdapter.UserIdleDetectionMode">
+            <summary>
+              Gets or sets whether user idle detection is enabled.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneApplicationServiceAdapter.ApplicationIdleDetectionMode">
+            <summary>
+              Gets or sets whether application idle detection is enabled.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.PhoneBootstrapperBase">
+            <summary>
+            A custom bootstrapper designed to setup phone applications.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Caliburn.Micro.PhoneBootstrapperBase"/> class.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.PrepareApplication">
+            <summary>
+            Provides an opportunity to hook into the application object.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.CreatePhoneApplicationFrame">
+            <summary>
+            Creates the root frame used by the application.
+            </summary>
+            <returns>The frame.</returns>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.OnLaunch(System.Object,Microsoft.Phone.Shell.LaunchingEventArgs)">
+            <summary>
+            Occurs when a fresh instance of the application is launching.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.OnActivate(System.Object,Microsoft.Phone.Shell.ActivatedEventArgs)">
+            <summary>
+            Occurs when a previously tombstoned or paused application is resurrected/resumed.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.OnDeactivate(System.Object,Microsoft.Phone.Shell.DeactivatedEventArgs)">
+            <summary>
+            Occurs when the application is being tombstoned or paused.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.PhoneBootstrapperBase.OnClose(System.Object,Microsoft.Phone.Shell.ClosingEventArgs)">
+            <summary>
+            Occurs when the application is closing.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneBootstrapperBase.PhoneService">
+            <summary>
+            The phone application service.
+            </summary>
+        </member>
+        <member name="P:Caliburn.Micro.PhoneBootstrapperBase.RootFrame">
+            <summary>
+            The root frame used for navigation.
+            </summary>
+        </member>
+        <member name="T:Caliburn.Micro.UIElementExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Windows.UIElement"/>
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.UIElementExtensions.SafeTransformToVisual(System.Windows.UIElement,System.Windows.UIElement)">
+            <summary>
+            Calls TransformToVisual on the specified element for the specified visual, suppressing the ArgumentException that can occur in some cases.
+            </summary>
+            <param name="element">Element on which to call TransformToVisual.</param>
+            <param name="visual">Visual to pass to the call to TransformToVisual.</param>
+            <returns>Resulting GeneralTransform object.</returns>
+        </member>
+        <member name="T:Caliburn.Micro.IWindowManager">
+            <summary>
+              A service that manages windows.
+            </summary>
+        </member>
+        <member name="M:Caliburn.Micro.IWindowManager.ShowDialog(System.Object,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+              Shows a modal dialog for the specified model.
+            </summary>
+            <param name = "rootModel">The root model.</param>
+            <param name="settings">The optional dialog settings.</param>
+            <param name = "context">The context.</param>
+        </member>
+        <member name="M:Caliburn.Micro.IWindowManager.ShowPopup(System.Object,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+              Shows a popup at the current mouse position.
+            </summary>
+            <param name = "rootModel">The root model.</param>
+            <param name = "context">The view context.</param>
+            <param name = "settings">The optional popup settings.</param>
+        </member>
+        <member name="T:Caliburn.Micro.WindowManager">
+            <summary>
+              A service that manages windows.
+            </summary>
+        </member>
+        <member name="F:Caliburn.Micro.WindowManager.IsSystemDialogNavigation">
+            <summary>
+            Predicate used to determine whether a page being navigated is actually a system dialog, which should 
+            cause a temporary dialog disappearance.
+            </summary>
+            <remarks>
+            The default implementation just take into account DatePicker and TimePicker pages from WP7 toolkit.
+            </remarks>
+            /// <param name = "uri">The destination page to check</param>
+        </member>
+        <member name="M:Caliburn.Micro.WindowManager.ShowDialog(System.Object,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+              Shows a modal dialog for the specified model.
+            </summary>
+            <param name = "rootModel">The root model.</param>
+            <param name = "context">The context.</param>
+            <param name = "settings">The optional dialog settings.</param>
+        </member>
+        <member name="M:Caliburn.Micro.WindowManager.ShowPopup(System.Object,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+              Shows a popup at the current mouse position.
+            </summary>
+            <param name = "rootModel">The root model.</param>
+            <param name = "context">The view context.</param>
+            <param name = "settings">The optional popup settings.</param>
+        </member>
+        <member name="M:Caliburn.Micro.WindowManager.CreatePopup(System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+              Creates a popup for hosting a popup window.
+            </summary>
+            <param name = "rootModel">The model.</param>
+            <param name = "settings">The optional popup settings.</param>
+            <returns>The popup.</returns>
+        </member>
+    </members>
+</doc>
