@@ -1035,10 +1035,10 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
 
 static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *buf)
 {
-    AVPacket pkt;
-    int64_t dts, pts, duration = AV_NOPTS_VALUE;
-    hb_job_t *job     = m->job;
-    uint8_t sub_out[2048];
+    AVPacket   pkt;
+    int64_t    dts, pts, duration = AV_NOPTS_VALUE;
+    hb_job_t * job     = m->job;
+    uint8_t  * sub_out = NULL;
 
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
@@ -1197,30 +1197,37 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 }
                 if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT)
                 {
-                    uint8_t styleatom[2048];;
-                    uint16_t stylesize = 0;
-                    uint8_t buffer[2048];
-                    uint16_t buffersize = 0;
-
-                    *buffer = '\0';
+                    uint8_t  * styleatom;
+                    uint16_t   stylesize = 0;
+                    uint8_t  * buffer;
+                    uint16_t   buffersize = 0;
 
                     /*
-                     * Copy the subtitle into buffer stripping markup and creating
-                     * style atoms for them.
+                     * Copy the subtitle into buffer stripping markup and
+                     * creating style atoms for them.
                      */
-                    hb_muxmp4_process_subtitle_style( buf->data,
-                                                      buffer,
-                                                      styleatom, &stylesize );
+                    hb_muxmp4_process_subtitle_style(buf->data, &buffer,
+                                                     &styleatom, &stylesize );
 
-                    buffersize = strlen((char*)buffer);
+                    if (buffer != NULL)
+                    {
+                        buffersize = strlen((char*)buffer);
+                        if (styleatom == NULL)
+                        {
+                            stylesize = 0;
+                        }
+                        sub_out = malloc(2 + buffersize + stylesize);
 
-                    /* Write the subtitle sample */
-                    memcpy( sub_out + 2, buffer, buffersize );
-                    memcpy( sub_out + 2 + buffersize, styleatom, stylesize);
-                    sub_out[0] = ( buffersize >> 8 ) & 0xff;
-                    sub_out[1] = buffersize & 0xff;
-                    pkt.data = sub_out;
-                    pkt.size = buffersize + stylesize + 2;
+                        /* Write the subtitle sample */
+                        memcpy(sub_out + 2, buffer, buffersize);
+                        memcpy(sub_out + 2 + buffersize, styleatom, stylesize);
+                        sub_out[0] = (buffersize >> 8) & 0xff;
+                        sub_out[1] = buffersize & 0xff;
+                        pkt.data = sub_out;
+                        pkt.size = buffersize + stylesize + 2;
+                    }
+                    free(buffer);
+                    free(styleatom);
                 }
             }
             if (track->st->codec->codec_id == AV_CODEC_ID_SSA &&
@@ -1250,7 +1257,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 ssa = strchr(ssa, ',');
                 if (ssa != NULL)
                     ssa++;
-                sprintf((char*)sub_out,
+                sub_out = (uint8_t*)hb_strdup_printf(
                     "Dialogue: %d,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,%s",
                     layer,
                     start_hh, start_mm, start_ss, start_ms,
@@ -1258,8 +1265,15 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 pkt.data = sub_out;
                 pkt.size = strlen((char*)sub_out) + 1;
             }
+            if (pkt.data == NULL)
+            {
+                // Memory allocation failure!
+                hb_error("avformatMux: subtitle memory allocation failure");
+                *job->done_error = HB_ERROR_UNKNOWN;
+                *job->die = 1;
+                return -1;
+            }
             pkt.convergence_duration = pkt.duration;
-
         } break;
         case MUX_TYPE_AUDIO:
         default:
@@ -1274,6 +1288,10 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
 
     pkt.stream_index = track->st->index;
     int ret = av_interleaved_write_frame(m->oc, &pkt);
+    if (sub_out != NULL)
+    {
+        free(sub_out);
+    }
     // Many avformat muxer functions do not check the error status
     // of the AVIOContext.  So we need to check it ourselves to detect
     // write errors (like disk full condition).

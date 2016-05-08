@@ -706,20 +706,63 @@ hb_work_object_t hb_muxer =
                      HB_STYLE_FLAG_ITALIC |   \
                      HB_STYLE_FLAG_UNDERLINE)
 
+struct output_buf_s
+{
+    int       alloc;
+    int       size;
+    uint8_t * buf;
+};
+
 typedef struct style_context_s
 {
-    uint8_t             * style_atoms;
+    struct output_buf_s   style_atoms;
     int                   style_atom_count;
     hb_subtitle_style_t   current_style;
     int                   style_start;
 } style_context_t;
 
-static void update_style_atoms(style_context_t *ctx, int stop)
+static int check_realloc_output(struct output_buf_s * output, int size)
 {
-    uint8_t *style_entry;
-    uint8_t face = 0;
+    if (output->alloc < size)
+    {
+        uint8_t * tmp;
 
-    style_entry = ctx->style_atoms + 10 + (12 * ctx->style_atom_count);
+        if (output->alloc == 0)
+        {
+            output->alloc = 1024;
+        }
+        else
+        {
+            output->alloc *= 2;
+        }
+        output->size = size;
+        tmp = realloc(output->buf, output->alloc);
+        if (tmp == NULL)
+        {
+            hb_error("realloc failed!");
+            free(output->buf);
+            output->size = 0;
+            output->alloc = 0;
+            output->buf   = NULL;
+            return 0;
+        }
+        output->buf = tmp;
+    }
+    return 1;
+}
+
+static int update_style_atoms(style_context_t *ctx, int stop)
+{
+    uint8_t * style_entry;
+    uint8_t   face = 0;
+    int       pos  = 10 + (12 * ctx->style_atom_count);
+    int       size = 10 + (12 * (ctx->style_atom_count + 1));
+
+    if (!check_realloc_output(&ctx->style_atoms, size))
+    {
+        return 0;
+    }
+    style_entry = ctx->style_atoms.buf + pos;
 
     if (ctx->current_style.flags & HB_STYLE_FLAG_BOLD)
         face |= 1;
@@ -741,11 +784,15 @@ static void update_style_atoms(style_context_t *ctx, int stop)
     style_entry[10] = (ctx->current_style.fg_rgb)       & 0xff; // b
     style_entry[11] = ctx->current_style.fg_alpha;              // a
 
+printf("rgb %x face %x alpha %d start %d stop %d\n", ctx->current_style.fg_rgb, face, ctx->current_style.fg_alpha, ctx->style_start, stop);
+
     ctx->style_atom_count++;
+
+    return 1;
 }
 
-static void update_style(style_context_t *ctx,
-                         hb_subtitle_style_t *style, int pos)
+static int update_style(style_context_t *ctx,
+                        hb_subtitle_style_t *style, int pos)
 {
     if (ctx->style_start < pos)
     {
@@ -754,7 +801,10 @@ static void update_style(style_context_t *ctx,
             ctx->current_style.fg_rgb   != style->fg_rgb               ||
             ctx->current_style.fg_alpha != style->fg_alpha)
         {
-            update_style_atoms(ctx, pos - 1);
+            if (!update_style_atoms(ctx, pos - 1))
+            {
+                return 0;
+            }
             ctx->current_style = *style;
             ctx->style_start = pos;
         }
@@ -764,13 +814,16 @@ static void update_style(style_context_t *ctx,
         ctx->current_style = *style;
         ctx->style_start = pos;
     }
+    return 1;
 }
 
-static void style_context_init(style_context_t *ctx, uint8_t *style_atoms)
+static void style_context_init(style_context_t *ctx)
 {
     memset(ctx, 0, sizeof(*ctx));
-    ctx->style_atoms = style_atoms;
-    ctx->style_start = INT_MAX;
+    ctx->style_atoms.buf   = NULL;
+    ctx->style_atoms.size  = 0;
+    ctx->style_atoms.alloc = 0;
+    ctx->style_start       = INT_MAX;
 }
 
 /*
@@ -778,18 +831,25 @@ static void style_context_init(style_context_t *ctx, uint8_t *style_atoms)
  * atom where appropriate.
  */
 void hb_muxmp4_process_subtitle_style(uint8_t *input,
-                                      uint8_t *output,
-                                      uint8_t *style_atoms, uint16_t *stylesize)
+                                      uint8_t **out_buf,
+                                      uint8_t **out_style_atoms,
+                                      uint16_t *stylesize)
 {
-    uint16_t utf8_count = 0;         // utf8 count from start of subtitle
-    int consumed, in_pos = 0, out_pos = 0, len, ii;
-    style_context_t ctx;
-    hb_subtitle_style_t style;
-    char *text, *tmp;
+    uint16_t              utf8_count = 0; // utf8 count from start of subtitle
+    int                   consumed, in_pos = 0, out_pos = 0, len, ii;
+    style_context_t       ctx;
+    hb_subtitle_style_t   style;
+    struct output_buf_s   output;
+    char                * text, * tmp;
 
-    *stylesize = 0;
-    style_context_init(&ctx, style_atoms);
+    output.buf       = NULL;
+    output.alloc     = 0;
+    output.size      = 0;
+    *out_buf         = NULL;
+    *out_style_atoms = NULL;
+    *stylesize       = 0;
 
+    style_context_init(&ctx);
     hb_ssa_style_init(&style);
 
     // Skip past the SSA preamble
@@ -821,32 +881,49 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
             }
             len++;
         }
-        strcpy((char*)output+out_pos, text);
+        if (!check_realloc_output(&output, out_pos + len + 1))
+        {
+            goto fail;
+        }
+        strcpy((char*)output.buf + out_pos, text);
         free(text);
         out_pos += len;
         in_pos += consumed;
-        update_style(&ctx, &style, out_pos - utf8_count);
+        if (!update_style(&ctx, &style, out_pos - utf8_count))
+        {
+            goto fail;
+        }
     }
     // Return to default style at end of line, flushes any pending
     // style changes
     hb_ssa_style_init(&style);
-    update_style(&ctx, &style, out_pos - utf8_count);
+    if (!update_style(&ctx, &style, out_pos - utf8_count))
+    {
+        goto fail;
+    }
 
     // null terminate output string
-    output[out_pos] = 0;
+    output.buf[out_pos] = 0;
 
     if (ctx.style_atom_count > 0)
     {
         *stylesize = 10 + (ctx.style_atom_count * 12);
 
-        memcpy(style_atoms + 4, "styl", 4);
+        memcpy(ctx.style_atoms.buf + 4, "styl", 4);
 
-        style_atoms[0] = 0;
-        style_atoms[1] = 0;
-        style_atoms[2] = (*stylesize >> 8) & 0xff;
-        style_atoms[3] = *stylesize & 0xff;
-        style_atoms[8] = (ctx.style_atom_count >> 8) & 0xff;
-        style_atoms[9] = ctx.style_atom_count & 0xff;
+        ctx.style_atoms.buf[0] = 0;
+        ctx.style_atoms.buf[1] = 0;
+        ctx.style_atoms.buf[2] = (*stylesize >> 8) & 0xff;
+        ctx.style_atoms.buf[3] = *stylesize & 0xff;
+        ctx.style_atoms.buf[8] = (ctx.style_atom_count >> 8) & 0xff;
+        ctx.style_atoms.buf[9] = ctx.style_atom_count & 0xff;
+        *out_style_atoms = ctx.style_atoms.buf;
     }
+    *out_buf = output.buf;
+    return;
+
+fail:
+    free(output.buf);
+    free(ctx.style_atoms.buf);
 }
 
