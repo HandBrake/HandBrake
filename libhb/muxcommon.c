@@ -784,8 +784,6 @@ static int update_style_atoms(style_context_t *ctx, int stop)
     style_entry[10] = (ctx->current_style.fg_rgb)       & 0xff; // b
     style_entry[11] = ctx->current_style.fg_alpha;              // a
 
-printf("rgb %x face %x alpha %d start %d stop %d\n", ctx->current_style.fg_rgb, face, ctx->current_style.fg_alpha, ctx->style_start, stop);
-
     ctx->style_atom_count++;
 
     return 1;
