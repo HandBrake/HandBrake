@@ -1051,7 +1051,29 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         buf = tmp;
     }
     if (buf == NULL)
+    {
+        if (job->mux == HB_MUX_AV_MP4 && track->type == MUX_TYPE_SUBTITLE)
+        {
+            // Write a final "empty" subtitle to terminate the last
+            // subtitle that was written
+            if (track->duration > 0)
+            {
+                AVPacket empty_pkt;
+                uint8_t empty[2] = {0,0};
+
+                av_init_packet(&empty_pkt);
+                empty_pkt.data = empty;
+                empty_pkt.size = 2;
+                empty_pkt.dts = track->duration;
+                empty_pkt.pts = track->duration;
+                empty_pkt.duration = 90;
+                empty_pkt.convergence_duration = empty_pkt.duration;
+                empty_pkt.stream_index = track->st->index;
+                av_interleaved_write_frame(m->oc, &empty_pkt);
+            }
+        }
         return 0;
+    }
 
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV) &&
         buf->s.renderOffset < 0)
