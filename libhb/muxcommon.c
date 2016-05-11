@@ -861,6 +861,11 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
     }
     in_pos = text - (char*)input;
 
+    // Always allocate enough for empty string
+    if (!check_realloc_output(&output, 1))
+    {
+        goto fail;
+    }
     while (input[in_pos] != '\0')
     {
         text = hb_ssa_to_text((char*)input + in_pos, &consumed, &style);
