@@ -25,6 +25,10 @@
 //#define HB_BUFFER_DEBUG 1
 //#define HB_NO_BUFFER_POOL 1
 
+#if defined(HB_BUFFER_DEBUG)
+#include <assert.h>
+#endif
+
 /* Fifo */
 struct hb_fifo_s
 {
@@ -80,6 +84,10 @@ struct hb_buffer_pools_s
 #endif
 } buffers;
 
+
+#if defined(HB_BUFFER_DEBUG)
+static int hb_fifo_contains( hb_fifo_t *f, hb_buffer_t *b );
+#endif
 
 void hb_buffer_pool_init( void )
 {
@@ -746,6 +754,13 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #endif
         if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
         {
+#if defined(HB_BUFFER_DEBUG)
+            if (hb_fifo_contains(buffer_pool, b))
+            {
+                hb_error("hb_buffer_close: buffer %p already freed", b);
+                assert(0);
+            }
+#endif
             hb_fifo_push_head( buffer_pool, b );
             b = next;
             continue;
@@ -1261,3 +1276,19 @@ void hb_fifo_flush( hb_fifo_t * f )
 
 }
 
+#if defined(HB_BUFFER_DEBUG)
+static int hb_fifo_contains( hb_fifo_t *f, hb_buffer_t *b )
+{
+    hb_buffer_t * tmp = f->first;
+
+    while (tmp != NULL)
+    {
+        if (b == tmp)
+        {
+            return 1;
+        }
+        tmp = tmp->next;
+    }
+    return 0;
+}
+#endif
