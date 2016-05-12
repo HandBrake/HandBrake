@@ -168,6 +168,7 @@
     <Compile Include="Helpers\MP4Helper.cs" />
     <Compile Include="Helpers\TimeSpanHelper.cs" />
     <Compile Include="Helpers\Validate.cs" />
+    <Compile Include="Model\Audio\AudioBehaviourTrack.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />

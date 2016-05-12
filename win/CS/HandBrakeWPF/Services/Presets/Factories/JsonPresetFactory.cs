@@ -394,13 +394,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
             {
                 foreach (var audioTrack in importedPreset.AudioList)
                 {
-                    AudioTrack track = new AudioTrack();
+                    AudioBehaviourTrack track = new AudioBehaviourTrack();
                     track.Bitrate = audioTrack.AudioBitrate;
 
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
-                    track.MixDown = audioTrack.AudioMixdown;
+                    track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
                     track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
@@ -410,7 +410,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     track.Gain = (int)audioTrack.AudioTrackGainSlider;
                     track.DRC = audioTrack.AudioTrackDRCSlider;
 
-                    preset.Task.AudioTracks.Add(track);
+                    preset.AudioTrackBehaviours.BehaviourTracks.Add(track);
                 }
             }
 

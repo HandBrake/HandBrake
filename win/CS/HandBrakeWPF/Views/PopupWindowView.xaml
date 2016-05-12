@@ -7,8 +7,8 @@
              xmlns:properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
              d:DesignHeight="250"
-             d:DesignWidth="600"
-             MaxHeight="600"
+             d:DesignWidth="650"
+             MaxHeight="650"
              Title="{Binding Title}"
              ResizeMode="NoResize"
              SizeToContent="WidthAndHeight"
@@ -24,7 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 

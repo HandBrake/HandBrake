@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Presets
     {
         #region Private Variables
 
-        public const int ForcePresetReset = 2;
+        public const int ForcePresetReset = 3;
         public static string UserPresetCatgoryName = "User Presets";
         private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "presets.json");
         private readonly ObservableCollection<Preset> presets = new ObservableCollection<Preset>();

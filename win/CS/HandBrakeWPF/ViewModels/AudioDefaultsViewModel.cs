@@ -10,9 +10,12 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
 
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Audio;
@@ -30,7 +33,6 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<string> availableLanguages;
         private AudioBehaviours audioBehaviours;
         private EncodeTask task;
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -47,6 +49,13 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLangaugesToMove = new BindingList<string>();
             this.AvailableLanguages = new BindingList<string>();
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
+            this.Mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns);
+
+            this.SampleRates = new ObservableCollection<string> { "Auto" };
+            foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
+            {
+                this.SampleRates.Add(item.Name);
+            }
 
             this.Setup((Preset)null, task);
         }
@@ -76,9 +85,20 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets AudioEncoders.
+        /// Gets or sets the list of audio tracks we will use as templates for generating tracks for a given source.
         /// </summary>
-        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+        public BindingList<AudioBehaviourTrack> BehaviourTracks
+        {
+            get
+            {
+                return this.AudioBehaviours.BehaviourTracks;
+            }
+            set
+            {
+                this.AudioBehaviours.BehaviourTracks = value;
+                this.NotifyOfPropertyChange(() => this.BehaviourTracks);
+            }
+        }
 
         /// <summary>
         /// Gets the audio behaviours.
@@ -98,45 +118,6 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.audioBehaviours = value;
                 this.NotifyOfPropertyChange(() => this.AudioBehaviours);
-            }
-        }
-
-        /// <summary>
-        /// Gets the audio behaviour modes.
-        /// </summary>
-        public BindingList<AudioBehaviourModes> AudioBehaviourModeList
-        {
-            get
-            {
-                return new BindingList<AudioBehaviourModes>(EnumHelper<AudioBehaviourModes>.GetEnumList().ToList());
-            }
-        }
-
-        /// <summary>
-        /// Gets the audio track default behaviour mode list.
-        /// </summary>
-        public BindingList<AudioTrackDefaultsMode> AudioTrackDefaultBehaviourModeList
-        {
-            get
-            {
-                return new BindingList<AudioTrackDefaultsMode>(EnumHelper<AudioTrackDefaultsMode>.GetEnumList().ToList());
-            }
-        }
-
-        /// <summary>
-        /// Gets AvailableLanguages.
-        /// </summary>
-        public BindingList<string> AvailableLanguages
-        {
-            get
-            {
-                return this.availableLanguages;
-            }
-
-            private set
-            {
-                this.availableLanguages = value;
-                this.NotifyOfPropertyChange("AvailableLanguages");
             }
         }
 
@@ -308,7 +289,98 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        #region Data Properties 
+
+        /// <summary>
+        /// Gets the audio behaviour modes.
+        /// </summary>
+        public BindingList<AudioBehaviourModes> AudioBehaviourModeList
+        {
+            get
+            {
+                return new BindingList<AudioBehaviourModes>(EnumHelper<AudioBehaviourModes>.GetEnumList().ToList());
+            }
+        }
+
+        /// <summary>
+        /// Gets the audio track default behaviour mode list.
+        /// </summary>
+        public BindingList<AudioTrackDefaultsMode> AudioTrackDefaultBehaviourModeList
+        {
+            get
+            {
+                return new BindingList<AudioTrackDefaultsMode>(EnumHelper<AudioTrackDefaultsMode>.GetEnumList().ToList());
+            }
+        }
+
+        /// <summary>
+        /// Gets AvailableLanguages.
+        /// </summary>
+        public BindingList<string> AvailableLanguages
+        {
+            get
+            {
+                return this.availableLanguages;
+            }
+
+            private set
+            {
+                this.availableLanguages = value;
+                this.NotifyOfPropertyChange("AvailableLanguages");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets AudioEncoders.
+        /// </summary>
+        public IEnumerable<AudioEncoder> AudioEncoders { get; set; }
+
+        /// <summary>
+        /// Gets or sets AudioEncoders.
+        /// </summary>
+        public IEnumerable<HBMixdown> Mixdowns { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets AudioBitrates.
+        /// </summary>
+        public IEnumerable<int> AudioBitrates { get; set; }
+
+        /// <summary>
+        /// Gets or sets SampleRates.
+        /// </summary>
+        public IList<string> SampleRates { get; set; }
+
+        #endregion
+
         #region Public Methods
+
+        /// <summary>
+        /// Add a new behaviour track.
+        /// </summary>
+        public void AddTrack()
+        {
+            this.BehaviourTracks.AddNew();
+        }
+
+        /// <summary>
+        /// Clear all the behaviour tracks
+        /// </summary>
+        public void ClearTracks()
+        {
+            this.BehaviourTracks.Clear();
+        }
+
+        /// <summary>
+        /// Remove the Selected Track
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public void RemoveTrack(AudioBehaviourTrack track)
+        {
+            this.BehaviourTracks.Remove(track);
+        }
 
         /// <summary>
         /// Audio List Move Left
@@ -376,8 +448,7 @@ namespace HandBrakeWPF.ViewModels
         public void Setup(Preset preset, EncodeTask task)
         {
             // Reset
-            this.AudioBehaviours.SelectedBehaviour = AudioBehaviourModes.None;
-            this.AudioBehaviours.SelectedLangauges.Clear();
+            this.AudioBehaviours = new AudioBehaviours();
 
             // Setup for this Encode Task.
             this.Task = task;
@@ -403,6 +474,11 @@ namespace HandBrakeWPF.ViewModels
                 this.AudioBehaviours.SelectedBehaviour = behaviours.SelectedBehaviour;
                 this.AudioBehaviours.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
 
+                foreach (AudioBehaviourTrack item in preset.AudioTrackBehaviours.BehaviourTracks)
+                {
+                    this.AudioBehaviours.BehaviourTracks.Add(new AudioBehaviourTrack(item));
+                }
+                
                 foreach (string selectedItem in behaviours.SelectedLangauges)
                 {
                     this.AvailableLanguages.Remove(selectedItem);

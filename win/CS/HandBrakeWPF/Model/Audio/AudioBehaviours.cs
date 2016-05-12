@@ -31,6 +31,7 @@ namespace HandBrakeWPF.Model.Audio
             this.SelectedBehaviour = AudioBehaviourModes.None;
             this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.None;
             this.SelectedLangauges = new BindingList<string>();
+            this.BehaviourTracks = new BindingList<AudioBehaviourTrack>();
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace HandBrakeWPF.Model.Audio
             this.SelectedBehaviour = behaviours.SelectedBehaviour;
             this.SelectedTrackDefaultBehaviour = behaviours.SelectedTrackDefaultBehaviour;
             this.SelectedLangauges = new BindingList<string>(behaviours.selectedLangauges.ToList());
+            this.BehaviourTracks = behaviours.BehaviourTracks;
         }
 
         /// <summary>
@@ -108,6 +110,11 @@ namespace HandBrakeWPF.Model.Audio
         }
 
         /// <summary>
+        /// The list of track templates we are going to use to generate audio tracks for a source.
+        /// </summary>
+        public BindingList<AudioBehaviourTrack> BehaviourTracks { get; set; }
+
+        /// <summary>
         /// Clone this object
         /// </summary>
         /// <returns>
@@ -116,11 +123,12 @@ namespace HandBrakeWPF.Model.Audio
         public AudioBehaviours Clone()
         {
             AudioBehaviours cloned = new AudioBehaviours
-                       {
-                           SelectedBehaviour = this.selectedBehaviour, 
-                           SelectedLangauges = new BindingList<string>(), 
-                           SelectedTrackDefaultBehaviour = this.SelectedTrackDefaultBehaviour
-                       };
+            {
+                SelectedBehaviour = this.selectedBehaviour,
+                SelectedLangauges = new BindingList<string>(),
+                SelectedTrackDefaultBehaviour = this.SelectedTrackDefaultBehaviour,
+                BehaviourTracks = this.BehaviourTracks
+            };
 
             foreach (var item in this.SelectedLangauges)
             {
