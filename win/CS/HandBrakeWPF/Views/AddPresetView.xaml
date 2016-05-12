@@ -60,7 +60,7 @@
             <TextBox Grid.Row="0"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch"
-                     Text="{Binding Preset.Name}" />
+                     Text="{Binding Preset.Name, UpdateSourceTrigger=PropertyChanged}" />
 
 
             <!--  Description  -->
@@ -70,7 +70,7 @@
             <TextBox Grid.Row="2"
                      Grid.Column="1" Margin="0,10,0,0"
                      
-                     Text="{Binding Preset.Description}" />
+                     Text="{Binding Preset.Description, UpdateSourceTrigger=PropertyChanged}" />
 
             <!--  Settings  -->
             <TextBlock Grid.Row="3" Margin="0,10,10,0"
@@ -96,12 +96,12 @@
                         Orientation="Horizontal"
                         Visibility="{Binding ShowCustomInputs,
                                              Converter={StaticResource boolToVisConverter}}">
-                <controls:NumberBox Width="60" Number="{Binding CustomWidth, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,0,0,5" 
+                <controls:NumberBox Width="60" Number="{Binding CustomWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="True" />
                 <TextBlock Margin="10,0,10,0"
                            FontWeight="Bold"
                            Text="X" />
-                <controls:NumberBox Width="60" Number="{Binding CustomHeight, Mode=TwoWay}" HorizontalAlignment="Left" Margin="0,0,0,5" 
+                <controls:NumberBox Width="60" Number="{Binding CustomHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="True" />
             </StackPanel>
             
