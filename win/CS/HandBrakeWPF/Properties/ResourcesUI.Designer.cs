@@ -1105,7 +1105,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format:.
+        ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
             get {
@@ -1407,6 +1407,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_x264Granularity {
             get {
                 return ResourceManager.GetString("Options_x264Granularity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file format entered contained invalid characters. These have been removed. .
+        /// </summary>
+        public static string OptionsView_InvalidFileFormatChars {
+            get {
+                return ResourceManager.GetString("OptionsView_InvalidFileFormatChars", resourceCulture);
             }
         }
         

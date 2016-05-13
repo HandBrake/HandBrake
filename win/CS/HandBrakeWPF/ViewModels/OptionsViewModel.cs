@@ -15,6 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -42,6 +43,8 @@ namespace HandBrakeWPF.ViewModels
 
         private readonly IUserSettingService userSettingService;
         private readonly IUpdateService updateService;
+        private readonly IErrorService errorService;
+
         private string arguments;
         private string autoNameDefaultPath;
         private bool automaticallyNameFiles;
@@ -106,11 +109,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="aboutViewModel">
         /// The about View Model.
         /// </param>
-        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel)
+        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
             this.updateService = updateService;
+            this.errorService = errorService;
             this.AboutViewModel = aboutViewModel;
             this.OnLoad();
 
@@ -390,7 +394,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.autonameFormat = value;
+                if (this.IsValidAutonameFormat(value, false))
+                {
+                    this.autonameFormat = value;   
+                } 
+
                 this.NotifyOfPropertyChange("AutonameFormat");
             }
         }
@@ -1176,7 +1184,8 @@ namespace HandBrakeWPF.ViewModels
                 this.AutoNameDefaultPath = "Click 'Browse' to set the default location";
 
             // Store auto name format
-            this.AutonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
+            string anf = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
+            this.AutonameFormat = this.IsValidAutonameFormat(anf, true) ? anf : "{source}-{title}";
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
             this.mp4ExtensionOptions.Clear();
@@ -1408,6 +1417,34 @@ namespace HandBrakeWPF.ViewModels
         public void GotoTab(OptionsTab tab)
         {
             this.SelectedTab = tab;
+        }
+
+        /// <summary>
+        /// Validate the Autoname Fileformat string
+        /// </summary>
+        /// <param name="input">The format string</param>
+        /// <param name="isSilent">Don't show an error dialog if true.</param>
+        /// <returns>True if valid</returns>
+        private bool IsValidAutonameFormat(string input, bool isSilent)
+        {
+            foreach (var characterToTest in input)
+            {
+                // we binary search for the character in the invalid set. This should be lightning fast.
+                if (Array.BinarySearch(Path.GetInvalidFileNameChars(), characterToTest) >= 0)
+                {
+                    if (!isSilent)
+                    {
+                        this.errorService.ShowMessageBox(
+                            ResourcesUI.OptionsView_InvalidFileFormatChars,
+                            Resources.Error,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

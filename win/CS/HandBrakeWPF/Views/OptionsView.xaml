@@ -185,7 +185,7 @@
                                         cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" />
 
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:ResourcesUI.Options_Format}"  Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" />
-                                <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="380"  Grid.Column="1" Grid.Row="1"  Margin="0,5,0,0"
+                                <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat, UpdateSourceTrigger=PropertyChanged}" Width="380"  Grid.Column="1" Grid.Row="1"  Margin="0,5,0,0"
                                          ToolTip="{x:Static Properties:Resources.Options_AdditionalFormatOptions}"  Style="{StaticResource LongToolTipHolder}" />
                             </Grid>
 

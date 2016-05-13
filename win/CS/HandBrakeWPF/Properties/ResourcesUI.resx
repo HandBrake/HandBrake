@@ -736,7 +736,7 @@
     <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>Format:</value>
+    <value>File Format:</value>
   </data>
   <data name="Options_General" xml:space="preserve">
     <value>General</value>
@@ -871,5 +871,8 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
     <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>The file format entered contained invalid characters. These have been removed. </value>
   </data>
 </root>
