@@ -1,6 +1,6 @@
 /* decsrtsub.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -475,7 +475,6 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             {
                 long length;
                 char *p, *q;
-                int  line = 1;
                 uint64_t start_time = ( pv->current_entry.start +
                                         pv->subtitle->config.offset ) * 90;
                 uint64_t stop_time = ( pv->current_entry.stop +
@@ -494,7 +493,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                 for (q = p = pv->current_entry.text; *p != '\0'; p++)
                 {
-                    if (*p == '\n' || *p == '\r')
+                    if (*p == '\r')
                     {
                         if (*(p + 1) == '\n' || *(p + 1) == '\r' ||
                             *(p + 1) == '\0')
@@ -503,18 +502,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                             length--;
                             continue;
                         }
-                        else if (line == 1)
-                        {
-                            // replace '\r' with '\n'
-                            *q   = '\n';
-                            line = 2;
-                        }
-                        else
-                        {
-                            // all subtitles on two lines tops
-                            // replace line breaks with spaces
-                            *q = ' ';
-                        }
+                        // replace '\r' with '\n'
+                        *q   = '\n';
                         q++;
                     }
                     else
@@ -552,7 +541,6 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     {
         long length;
         char *p, *q;
-        int  line = 1;
         uint64_t start_time = ( pv->current_entry.start +
                                 pv->subtitle->config.offset ) * 90;
         uint64_t stop_time = ( pv->current_entry.stop +
@@ -569,7 +557,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
         for (q = p = pv->current_entry.text; *p != '\0'; p++)
         {
-            if (*p == '\n' || *p == '\r')
+            if (*p == '\r')
             {
                 if (*(p + 1) == '\n' || *(p + 1) == '\r' || *(p + 1) == '\0')
                 {
@@ -577,18 +565,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                     length--;
                     continue;
                 }
-                else if (line == 1)
-                {
-                    // replace '\r' with '\n'
-                    *q   = '\n';
-                    line = 2;
-                }
-                else
-                {
-                    // all subtitles on two lines tops
-                    // replace line breaks with spaces
-                    *q = ' ';
-                }
+                // replace '\r' with '\n'
+                *q   = '\n';
                 q++;
             }
             else
@@ -622,7 +600,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 {
     int retval = 1;
     hb_work_private_t * pv;
-    hb_buffer_t *buffer;
     int i;
     hb_chapter_t * chapter;
 
@@ -632,10 +609,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         w->private_data = pv;
 
         pv->job = job;
-
-        buffer = hb_buffer_init( 0 );
-        hb_fifo_push( w->fifo_in, buffer);
-
         pv->current_state = k_state_potential_new_entry;
         pv->number_of_entries = 0;
         pv->last_entry_number = 0;
@@ -710,26 +683,18 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * in = *buf_in;
     hb_buffer_t * out = NULL;
 
     out = srt_read( pv );
-    if( out )
+    if (out != NULL)
     {
         hb_srt_to_ssa(out, ++pv->line);
-
-        /*
-         * Keep a buffer in our input fifo so that we get run.
-         */
-        hb_fifo_push( w->fifo_in, in);
-        *buf_in = NULL;
         *buf_out = out;
-    } else {
-        *buf_out = NULL;
         return HB_WORK_OK;
+    } else {
+        *buf_out = hb_buffer_eof_init();
+        return HB_WORK_DONE;
     }
-
-    return HB_WORK_OK;
 }
 
 static void decsrtClose( hb_work_object_t * w )

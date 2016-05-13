@@ -1,6 +1,6 @@
 /* qsv_common.h
  *
- * Copyright (c) 2003-2015 HandBrake Team
+ * Copyright (c) 2003-2016 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -10,8 +10,8 @@
 #ifndef HB_QSV_COMMON_H
 #define HB_QSV_COMMON_H
 
-#include "msdk/mfxvideo.h"
-#include "msdk/mfxplugin.h"
+#include "mfx/mfxvideo.h"
+#include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */

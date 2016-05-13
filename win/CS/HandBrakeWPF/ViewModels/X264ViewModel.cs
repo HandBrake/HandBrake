@@ -14,16 +14,16 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Advanced View Model
@@ -945,7 +945,7 @@ namespace HandBrakeWPF.ViewModels
             this.Task.PropertyChanged += this.Task_PropertyChanged;
             this.AdvancedOptionsString = preset.Task.AdvancedEncoderOptions;
 
-            if (task.ShowAdvancedTab && task.VideoEncoder == VideoEncoder.X264)
+            if (task.ShowAdvancedTab && task.VideoEncoder == VideoEncoder.X264 && task.VideoEncoder == VideoEncoder.X264_10)
             {
                 this.ShowX264AdvancedOptions = true;
                 this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);

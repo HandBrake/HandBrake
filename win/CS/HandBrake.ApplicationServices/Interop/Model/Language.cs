@@ -15,19 +15,38 @@ namespace HandBrake.ApplicationServices.Interop.Model
     public class Language
     {
         /// <summary>
-        /// Gets or sets the english name of the language.
+        /// Initializes a new instance of the <see cref="Language"/> class.
         /// </summary>
-        public string EnglishName { get; set; }
+        /// <param name="englishName">
+        /// The english name.
+        /// </param>
+        /// <param name="nativeName">
+        /// The native name.
+        /// </param>
+        /// <param name="code">
+        /// The code.
+        /// </param>
+        public Language(string englishName, string nativeName, string code)
+        {
+            this.EnglishName = englishName;
+            this.NativeName = nativeName;
+            this.Code = code;
+        }
 
         /// <summary>
-        /// Gets or sets the native name of the language.
+        /// Gets the english name of the language.
         /// </summary>
-        public string NativeName { get; set; }
+        public string EnglishName { get; private set; }
 
         /// <summary>
-        /// Gets or sets the language code.
+        /// Gets the native name of the language.
         /// </summary>
-        public string Code { get; set; }
+        public string NativeName { get; private set; }
+
+        /// <summary>
+        /// Gets the language code.
+        /// </summary>
+        public string Code { get; private set; }
 
         /// <summary>
         /// Gets the display string for the language.

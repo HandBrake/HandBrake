@@ -1,6 +1,6 @@
 /* json.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -403,8 +403,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:{s:o, s:o, s:o, s:o}, s:[]},"
     // Metadata
     "s:{},"
-    // Filters {Grayscale, FilterList []}
-    "s:{s:o, s:[]}"
+    // Filters {FilterList []}
+    "s:{s:[]}"
     "}",
         "SequenceID",           hb_value_int(job->sequence_id),
         "Destination",
@@ -438,7 +438,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "SubtitleList",
         "Metadata",
         "Filters",
-            "Grayscale",        hb_value_bool(job->grayscale),
             "FilterList"
     );
     if (dict == NULL)
@@ -498,7 +497,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_set(video_dict, "ColorMatrixCode",
                             hb_value_int(job->color_matrix_code));
     }
-    if (job->vquality >= 0)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
     }
@@ -609,7 +608,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         if (filter->settings != NULL)
         {
             hb_dict_set(filter_dict, "Settings",
-                        hb_value_string(filter->settings));
+                        hb_value_dup(filter->settings));
         }
 
         hb_value_array_append(filter_list, filter_dict);
@@ -751,7 +750,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.
     hb_hwd_set_enable(h, use_hwd);
-    hb_scan(h, path, title_index, 10, 0, 0);
+    hb_scan(h, path, title_index, -1, 0, 0);
 
     // Wait for scan to complete
     hb_state_t state;
@@ -811,22 +810,26 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         return NULL;
     }
 
-    hb_value_array_t *chapter_list = NULL;
-    hb_value_array_t *audio_list = NULL;
-    hb_value_array_t *subtitle_list = NULL;
-    hb_value_array_t *filter_list = NULL;
-    hb_value_t *mux = NULL, *vcodec = NULL;
-    hb_value_t *acodec_copy_mask = NULL, *acodec_fallback = NULL;
-    char *destfile = NULL;
-    char *range_type = NULL;
-    char *video_preset = NULL, *video_tune = NULL;
-    char *video_profile = NULL, *video_level = NULL;
-    char *video_options = NULL;
-    int   subtitle_search_burn = 0;
-    char *meta_name = NULL, *meta_artist = NULL, *meta_album_artist = NULL;
-    char *meta_release = NULL, *meta_comment = NULL, *meta_genre = NULL;
-    char *meta_composer = NULL, *meta_desc = NULL, *meta_long_desc = NULL;
-    json_int_t range_start = -1, range_end = -1, range_seek_points = -1;
+    hb_value_array_t * chapter_list = NULL;
+    hb_value_array_t * audio_list = NULL;
+    hb_value_array_t * subtitle_list = NULL;
+    hb_value_array_t * filter_list = NULL;
+    hb_value_t       * mux = NULL, * vcodec = NULL;
+    hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
+    char             * destfile = NULL;
+    char             * range_type = NULL;
+    char             * video_preset = NULL, * video_tune = NULL;
+    char             * video_profile = NULL, * video_level = NULL;
+    char             * video_options = NULL;
+    int                subtitle_search_burn = 0;
+    char             * meta_name = NULL, * meta_artist = NULL;
+    char             * meta_album_artist = NULL, * meta_release = NULL;
+    char             * meta_comment = NULL, * meta_genre = NULL;
+    char             * meta_composer = NULL, * meta_desc = NULL;
+    char             * meta_long_desc = NULL;
+    json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
+    int                vbitrate = -1;
+    double             vquality = HB_INVALID_VIDEO_QUALITY;
 
     result = json_unpack_ex(dict, &error, 0,
     "{"
@@ -853,7 +856,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     //           Comment, Genre, Description, LongDescription}
     "s?{s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s, s?s},"
     // Filters {FilterList}
-    "s?{s?b, s?o}"
+    "s?{s?o}"
     "}",
         "SequenceID",               unpack_i(&job->sequence_id),
         "Destination",
@@ -876,8 +879,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Den",                  unpack_i(&job->par.den),
         "Video",
             "Encoder",              unpack_o(&vcodec),
-            "Quality",              unpack_f(&job->vquality),
-            "Bitrate",              unpack_i(&job->vbitrate),
+            "Quality",              unpack_f(&vquality),
+            "Bitrate",              unpack_i(&vbitrate),
             "Preset",               unpack_s(&video_preset),
             "Tune",                 unpack_s(&video_tune),
             "Profile",              unpack_s(&video_profile),
@@ -913,7 +916,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Description",          unpack_s(&meta_desc),
             "LongDescription",      unpack_s(&meta_long_desc),
         "Filters",
-            "Grayscale",            unpack_b(&job->grayscale),
             "FilterList",           unpack_o(&filter_list)
     );
     if (result < 0)
@@ -990,6 +992,23 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_job_set_encoder_profile(job, video_profile);
     hb_job_set_encoder_level(job, video_level);
     hb_job_set_encoder_options(job, video_options);
+
+    // If both vbitrate and vquality were specified, vbitrate is used;
+    // we need to ensure the unused rate contro mode is always set to an
+    // invalid value, as if both values are valid, behavior is undefined
+    // (some encoders first check for a valid vquality, whereas others
+    //  check for a valid vbitrate instead)
+    if (vbitrate > 0)
+    {
+        job->vbitrate = vbitrate;
+        job->vquality = HB_INVALID_VIDEO_QUALITY;
+    }
+    else if (vquality > HB_INVALID_VIDEO_QUALITY)
+    {
+        job->vbitrate = -1;
+        job->vquality = vquality;
+    }
+    // If neither were specified, defaults are used (set in job_setup())
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
@@ -1072,10 +1091,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         {
             filter_dict = hb_value_array_get(filter_list, ii);
             int filter_id = -1;
-            char *filter_settings = NULL;
-            result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?s}",
+            hb_value_t *filter_settings = NULL;
+            result = json_unpack_ex(filter_dict, &error, 0, "{s:i, s?o}",
                                     "ID",       unpack_i(&filter_id),
-                                    "Settings", unpack_s(&filter_settings));
+                                    "Settings", unpack_o(&filter_settings));
             if (result < 0)
             {
                 hb_error("hb_dict_to_job: failed to find filter settings: %s",
@@ -1086,7 +1105,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 hb_filter_object_t *filter;
                 filter = hb_filter_init(filter_id);
-                hb_add_filter(job, filter, filter_settings);
+                hb_add_filter_dict(job, filter, filter_settings);
             }
         }
     }
@@ -1376,9 +1395,7 @@ int hb_add_json( hb_handle_t * h, const char * json_job )
     hb_job_t job;
 
     job.json = json_job;
-    hb_add(h, &job);
-
-    return 0;
+    return hb_add(h, &job);
 }
 
 
@@ -1700,4 +1717,3 @@ hb_image_t* hb_json_to_image(char *json_image)
 
     return image;
 }
-

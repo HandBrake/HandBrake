@@ -1,6 +1,6 @@
 /* declpcm.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -188,7 +188,9 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t *in = *buf_in;
     hb_buffer_t *buf = NULL;
+    hb_buffer_list_t list;
 
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
@@ -199,13 +201,14 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     pv->sequence = in->sequence;
 
-    /* if we have a frame to finish, add enough data from this buf to finish it */
-    if ( pv->size )
+    // if we have a frame to finish, add enough data from this buf
+    // to finish it
+    if (pv->size)
     {
-        memcpy( pv->frame + pv->pos, in->data + 6, pv->size - pv->pos );
+        memcpy(pv->frame + pv->pos, in->data + 6, pv->size - pv->pos);
         buf = Decode( w );
+        hb_buffer_list_append(&list, buf);
     }
-    *buf_out = buf;
 
     /* save the (rest of) data from this buf in our frame buffer */
     lpcmInfo( w, in );
@@ -213,18 +216,14 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     int amt = in->size - off;
     pv->pos = amt;
     memcpy( pv->frame, in->data + off, amt );
-    if ( amt >= pv->size )
+    if (amt >= pv->size)
     {
-        if ( buf )
-        {
-            buf->next = Decode( w );
-        }
-        else
-        {
-            *buf_out = Decode( w );
-        }
+        buf = Decode( w );
+        hb_buffer_list_append(&list, buf);
         pv->size = 0;
     }
+
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }
 

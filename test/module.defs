@@ -14,13 +14,16 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
-        ass avcodec avformat avutil avresample dvdnav dvdread \
-        fontconfig fribidi mp3lame ogg \
+        ass avresample avformat avcodec avfilter avutil mp3lame dvdnav \
+        dvdread fontconfig fribidi ogg \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc x264 \
         bluray freetype xml2 bz2 z jansson
 
 ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
+ifeq ($(BUILD.system),linux)
+    TEST.GCC.l += va va-drm
+endif
 endif
 
 ifeq (1,$(FEATURE.x265))

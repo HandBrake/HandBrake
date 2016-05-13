@@ -1,6 +1,6 @@
 /* preset.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -16,8 +16,8 @@
 #define HB_PRESET_PLIST_FILE    "ghb/presets"
 #define HB_PRESET_JSON_FILE     "ghb/presets.json"
 #elif defined(SYS_MINGW)
-#define HB_PRESET_PLIST_FILE    "HandBrake\\user_presets.xml"
-#define HB_PRESET_JSON_FILE     "HandBrake\\user_presets.json"
+#define HB_PRESET_PLIST_FILE    "HandBrake\\presets.xml"
+#define HB_PRESET_JSON_FILE     "HandBrake\\presets.json"
 #elif defined(SYS_DARWIN)
 #define HB_PRESET_PLIST_FILE    "HandBrake/UserPresets.plist"
 #define HB_PRESET_JSON_FILE     "HandBrake/UserPresets.json"
@@ -31,8 +31,10 @@ static hb_value_t *hb_preset_template = NULL;
 static hb_value_t *hb_presets = NULL;
 static hb_value_t *hb_presets_builtin = NULL;
 
-static void preset_clean(hb_value_t *preset, hb_value_t *template);
-static void preset_import(hb_value_t *preset, int major, int minor, int micro);
+static void         preset_clean(hb_value_t *preset, hb_value_t *template);
+static int          preset_import(hb_value_t *preset, int major, int minor,
+                                  int micro);
+static hb_value_t * presets_package(const hb_value_t *presets);
 
 enum
 {
@@ -62,6 +64,7 @@ typedef struct
     int                  major;
     int                  minor;
     int                  micro;
+    int                  result;
 } preset_import_context_t;
 
 typedef struct
@@ -150,7 +153,7 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
 static int do_preset_import(hb_value_t *preset, preset_do_context_t *do_ctx)
 {
     preset_import_context_t *ctx = (preset_import_context_t*)do_ctx;
-    preset_import(preset, ctx->major, ctx->minor, ctx->micro);
+    ctx->result |= preset_import(preset, ctx->major, ctx->minor, ctx->micro);
     return PRESET_DO_NEXT;
 }
 
@@ -246,7 +249,7 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
     else
     {
         hb_error("Error: invalid preset format in presets_do()");
-        return PRESET_DO_NEXT;
+        return PRESET_DO_DELETE;
     }
     return PRESET_DO_DONE;
 }
@@ -929,7 +932,15 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     }
     if (!strcmp(pref_lang, "und"))
     {
-        foreign_audio_search = foreign_first_audio = 0;
+        if (first_audio_lang != NULL)
+        {
+            pref_lang = first_audio_lang;
+            foreign_first_audio = 0;
+        }
+        else
+        {
+            foreign_audio_search = foreign_first_audio = 0;
+        }
     }
 
     int track;
@@ -1063,8 +1074,8 @@ static int get_video_framerate(hb_value_t *rate_value)
 
 int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
-    hb_value_t *filters_dict, *filter_list, *filter_dict;
-    char *filter_str;
+    hb_value_t * filters_dict, * filter_list, * filter_dict;
+    hb_dict_t  * filter_settings;
 
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
@@ -1075,9 +1086,6 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     filter_list = hb_value_array_init();
     hb_dict_set(filters_dict, "FilterList", filter_list);
 
-    hb_dict_set(filters_dict, "Grayscale", hb_value_xform(
-                hb_dict_get(preset, "VideoGrayScale"), HB_VALUE_TYPE_BOOL));
-
     // Detelecine filter
     hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
     if (detel_val != NULL)
@@ -1085,100 +1093,99 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         const char *custom;
         custom = hb_value_get_string(hb_dict_get(preset,
                                                 "PictureDetelecineCustom"));
-        if (hb_value_type(detel_val) == HB_VALUE_TYPE_STRING)
-        {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DETELECINE, hb_value_get_string(detel_val), custom);
-        }
-        else
-        {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DETELECINE, hb_value_get_int(detel_val), custom);
-        }
-        if (filter_str == NULL)
+        filter_settings = hb_generate_filter_settings(
+            HB_FILTER_DETELECINE, hb_value_get_string(detel_val), NULL, custom);
+
+        if (filter_settings == NULL)
         {
             char *s = hb_value_get_string_xform(detel_val);
             hb_error("Invalid detelecine filter settings (%s)", s);
             free(s);
             return -1;
         }
-        else if (filter_str != hb_filter_off)
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
         {
             filter_dict = hb_dict_init();
             hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DETELECINE));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+
+    const char *comb_preset;
+    comb_preset = hb_value_get_string(hb_dict_get(preset,
+                                      "PictureCombDetectPreset"));
+    if (comb_preset != NULL)
+    {
+        const char *comb_custom;
+        comb_custom = hb_value_get_string(hb_dict_get(preset,
+                                          "PictureCombDetectCustom"));
+        filter_settings = hb_generate_filter_settings(HB_FILTER_COMB_DETECT,
+                                                comb_preset, NULL, comb_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid comb detect filter preset (%s)", comb_preset);
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_COMB_DETECT));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
         }
     }
 
     // Decomb or deinterlace filters
-    int decomb_or_deint;
-    decomb_or_deint = hb_value_get_bool(hb_dict_get(preset,
-                                                   "PictureDecombDeinterlace"));
-    hb_value_t *decomb_val = hb_dict_get(preset, "PictureDecomb");
-    if (decomb_or_deint && decomb_val != NULL)
+    const char *deint_filter, *deint_preset, *deint_custom;
+    deint_filter = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDeinterlaceFilter"));
+    deint_preset = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDeinterlacePreset"));
+    deint_custom = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureDeinterlaceCustom"));
+    if (deint_filter != NULL && deint_preset != NULL &&
+        strcasecmp(deint_filter, "off"))
     {
-        const char *custom;
-        custom = hb_value_get_string(hb_dict_get(preset,
-                                                "PictureDecombCustom"));
-        if (hb_value_type(decomb_val) == HB_VALUE_TYPE_STRING)
+        int filter_id;
+        if (!strcasecmp(deint_filter, "decomb"))
         {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DECOMB, hb_value_get_string(decomb_val), custom);
+            filter_id = HB_FILTER_DECOMB;
+        }
+        else if (!strcasecmp(deint_filter, "deinterlace"))
+        {
+            filter_id = HB_FILTER_DEINTERLACE;
         }
         else
         {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DECOMB, hb_value_get_int(decomb_val), custom);
-        }
-        if (filter_str == NULL)
-        {
-            char *s = hb_value_get_string_xform(decomb_val);
-            hb_error("Invalid decomb filter settings (%s)", s);
-            free(s);
+            hb_error("Invalid deinterlace filter (%s)", deint_filter);
             return -1;
         }
-        else if (filter_str != hb_filter_off)
+        filter_settings = hb_generate_filter_settings(
+                        filter_id, deint_preset, NULL, deint_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid deinterlace filter preset (%s)", deint_preset);
+            return -1;
+        }
+        if (!hb_dict_get_bool(filter_settings, "disable"))
         {
             filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DECOMB));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
-        }
-    }
-
-    hb_value_t *deint_val = hb_dict_get(preset, "PictureDeinterlace");
-    if (!decomb_or_deint && deint_val != NULL)
-    {
-        const char *custom;
-        custom = hb_value_get_string(hb_dict_get(preset,
-                                                "PictureDeinterlaceCustom"));
-        if (hb_value_type(deint_val) == HB_VALUE_TYPE_STRING)
-        {
-            filter_str = hb_generate_filter_settings(
-                HB_FILTER_DEINTERLACE, hb_value_get_string(deint_val), custom);
+            hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
         }
         else
         {
-            filter_str = hb_generate_filter_settings_by_index(
-                HB_FILTER_DEINTERLACE, hb_value_get_int(deint_val), custom);
-        }
-        if (filter_str == NULL)
-        {
-            char *s = hb_value_get_string_xform(deint_val);
-            hb_error("Invalid deinterlace filter settings (%s)", s);
-            free(s);
-            return -1;
-        }
-        else if (filter_str != hb_filter_off)
-        {
-            filter_dict = hb_dict_init();
-            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEINTERLACE));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
+            hb_value_free(&filter_settings);
         }
     }
 
@@ -1193,21 +1200,19 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     if (denoise != 0)
     {
         int filter_id = denoise == 1 ? HB_FILTER_NLMEANS : HB_FILTER_HQDN3D;
-        const char *denoise_preset, *denoise_tune;
+        const char *denoise_preset, *denoise_tune, *denoise_custom;
         denoise_preset = hb_value_get_string(
                             hb_dict_get(preset, "PictureDenoisePreset"));
         if (denoise_preset != NULL)
         {
-            if (strcasecmp(denoise_preset, "custom"))
-                denoise_tune   = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDenoiseTune"));
-            else
-                denoise_tune = hb_value_get_string(
-                            hb_dict_get(preset, "PictureDenoiseCustom"));
+            denoise_tune   = hb_value_get_string(
+                        hb_dict_get(preset, "PictureDenoiseTune"));
+            denoise_custom = hb_value_get_string(
+                        hb_dict_get(preset, "PictureDenoiseCustom"));
 
-            filter_str = hb_generate_filter_settings(
-                                filter_id, denoise_preset, denoise_tune);
-            if (filter_str == NULL)
+            filter_settings = hb_generate_filter_settings(filter_id,
+                                denoise_preset, denoise_tune, denoise_custom);
+            if (filter_settings == NULL)
             {
                 hb_error("Invalid denoise filter settings (%s%s%s)",
                          denoise_preset,
@@ -1215,14 +1220,16 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
                          denoise_tune ? denoise_tune : "");
                 return -1;
             }
-            else if (filter_str != hb_filter_off)
+            else if (!hb_dict_get_bool(filter_settings, "disable"))
             {
                 filter_dict = hb_dict_init();
                 hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
-                hb_dict_set(filter_dict, "Settings",
-                            hb_value_string(filter_str));
-                hb_value_array_append(filter_list, filter_dict);
-                free(filter_str);
+                hb_dict_set(filter_dict, "Settings", filter_settings);
+                hb_add_filter2(filter_list, filter_dict);
+            }
+            else
+            {
+                hb_value_free(&filter_settings);
             }
         }
     }
@@ -1232,20 +1239,25 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
                         hb_dict_get(preset, "PictureDeblock"));
     if (deblock != NULL)
     {
-        filter_str = hb_generate_filter_settings(HB_FILTER_DEBLOCK,
-                                                 deblock, NULL);
-        if (filter_str == NULL)
+        const char * deblock_custom = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDeblockCustom"));
+        filter_settings = hb_generate_filter_settings(HB_FILTER_DEBLOCK,
+                                              deblock, NULL, deblock_custom);
+        if (filter_settings == NULL)
         {
             hb_error("Invalid deblock filter settings (%s)", deblock);
             return -1;
         }
-        else if (filter_str != hb_filter_off)
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
         {
             filter_dict = hb_dict_init();
             hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DEBLOCK));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
         }
     }
     free(deblock);
@@ -1255,23 +1267,59 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
                         hb_dict_get(preset, "PictureRotate"));
     if (rotate != NULL)
     {
-        filter_str = hb_generate_filter_settings(HB_FILTER_ROTATE,
-                                                 rotate, NULL);
-        if (filter_str == NULL)
+        filter_settings = hb_generate_filter_settings(HB_FILTER_ROTATE,
+                                                      NULL, NULL, rotate);
+        if (filter_settings == NULL)
         {
             hb_error("Invalid rotate filter settings (%s)", rotate);
             return -1;
         }
-        else if (filter_str != hb_filter_off)
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
         {
             filter_dict = hb_dict_init();
             hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_ROTATE));
-            hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-            hb_value_array_append(filter_list, filter_dict);
-            free(filter_str);
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
         }
     }
     free(rotate);
+
+    // Grayscale filter
+    if (hb_value_get_bool(hb_dict_get(preset, "VideoGrayScale")))
+    {
+        filter_dict = hb_dict_init();
+        hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_GRAYSCALE));
+        hb_add_filter2(filter_list, filter_dict);
+    }
+
+    // Pad filter
+    char *pad = hb_value_get_string_xform(hb_dict_get(preset, "PicturePad"));
+    if (pad != NULL)
+    {
+        filter_settings = hb_generate_filter_settings(HB_FILTER_PAD,
+                                                      NULL, NULL, pad);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid pad filter settings (%s)", pad);
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_PAD));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+    free(pad);
 
     hb_value_t *fr_value = hb_dict_get(preset, "VideoFramerate");
     int vrate_den = get_video_framerate(fr_value);
@@ -1290,16 +1338,29 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         !strcasecmp(hb_value_get_string(fr_mode_value), "pfr") ? 2 : 0) :
         hb_value_get_int(fr_mode_value);
 
+    filter_settings = hb_dict_init();
     if (vrate_den == 0)
-        filter_str = hb_strdup_printf("%d", fr_mode);
+    {
+        hb_dict_set(filter_settings, "mode", hb_value_int(fr_mode));
+    }
     else
-        filter_str = hb_strdup_printf("%d:%d:%d", fr_mode, clock, vrate_den);
+    {
+        char *str = hb_strdup_printf("%d/%d", clock, vrate_den);
+        hb_dict_set(filter_settings, "mode", hb_value_int(fr_mode));
+        hb_dict_set(filter_settings, "rate", hb_value_string(str));
+        free(str);
+    }
+    if (hb_validate_filter_settings(HB_FILTER_VFR, filter_settings))
+    {
+        hb_error("hb_preset_apply_filters: Internal error, invalid VFR");
+        hb_value_free(&filter_settings);
+        return -1;
+    }
 
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
-    hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-    hb_value_array_append(filter_list, filter_dict);
-    free(filter_str);
+    hb_dict_set(filter_dict, "Settings", filter_settings);
+    hb_add_filter2(filter_list, filter_dict);
 
     return 0;
 }
@@ -1347,7 +1408,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "ColorMatrixCode", hb_value_dup(color_value));
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
 
-    if (vcodec == HB_VCODEC_X264 &&
+    if ((vcodec & HB_VCODEC_X264_MASK) &&
         hb_value_get_bool(hb_dict_get(preset, "x264UseAdvancedOptions")))
     {
         hb_dict_set(video_dict, "Options",
@@ -1373,7 +1434,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Quality",
                     hb_value_xform(hb_dict_get(preset, "VideoQualitySlider"),
                                    HB_VALUE_TYPE_DOUBLE));
-        hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+        hb_dict_remove(video_dict, "Bitrate");
     }
     else if (vqtype == 1)   // ABR
     {
@@ -1386,7 +1447,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_dict_set(video_dict, "Turbo",
                     hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
                                    HB_VALUE_TYPE_BOOL));
-        hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+        hb_dict_remove(video_dict, "Quality");
     }
     else
     {
@@ -1395,7 +1456,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
         {
             hb_dict_set(video_dict, "Quality",
                         hb_value_xform(value, HB_VALUE_TYPE_DOUBLE));
-            hb_dict_set(video_dict, "Bitrate", hb_value_int(-1));
+            hb_dict_remove(video_dict, "Bitrate");
         }
         else
         {
@@ -1408,7 +1469,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_set(video_dict, "Turbo",
                         hb_value_xform(hb_dict_get(preset, "VideoTurboTwoPass"),
                                        HB_VALUE_TYPE_BOOL));
-            hb_dict_set(video_dict, "Quality", hb_value_double(-1.0));
+            hb_dict_remove(video_dict, "Quality");
         }
     }
     qsv = hb_dict_get(video_dict, "QSV");
@@ -1615,19 +1676,26 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     par_dict = NULL;
 
     hb_dict_t *filter_dict;
-    char *filter_str;
+    hb_dict_t *filter_settings;
 
-    // Setup scale filter
-    filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
-                                  resultGeo.width, resultGeo.height,
-                                  geo.crop[0], geo.crop[1],
-                                  geo.crop[2], geo.crop[3]);
+    filter_settings = hb_dict_init();
+    hb_dict_set(filter_settings, "width", hb_value_int(resultGeo.width));
+    hb_dict_set(filter_settings, "height", hb_value_int(resultGeo.height));
+    hb_dict_set(filter_settings, "crop-top", hb_value_int(geo.crop[0]));
+    hb_dict_set(filter_settings, "crop-bottom", hb_value_int(geo.crop[1]));
+    hb_dict_set(filter_settings, "crop-left", hb_value_int(geo.crop[2]));
+    hb_dict_set(filter_settings, "crop-right", hb_value_int(geo.crop[3]));
+    if (hb_validate_filter_settings(HB_FILTER_CROP_SCALE, filter_settings))
+    {
+        hb_error("hb_preset_apply_title: Internal error, invalid CROP_SCALE");
+        hb_value_free(&filter_settings);
+        goto fail;
+    }
 
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_CROP_SCALE));
-    hb_dict_set(filter_dict, "Settings", hb_value_string(filter_str));
-    free(filter_str);
-    hb_value_array_append(filter_list, filter_dict);
+    hb_dict_set(filter_dict, "Settings", filter_settings);
+    hb_add_filter2(filter_list, filter_dict);
 
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
@@ -1961,6 +2029,346 @@ void hb_presets_clean(hb_value_t *preset)
     presets_clean(preset, hb_preset_template);
 }
 
+static void import_custom_11_1_0(hb_value_t * preset, int filter_id,
+                                 const char * key)
+{
+    char *str = hb_value_get_string_xform(hb_dict_get(preset, key));
+    if (str == NULL)
+    {
+        return;
+    }
+    hb_filter_object_t * filter = hb_filter_get(filter_id);
+    if (filter == NULL)
+    {
+        hb_log("import_custom_11_1_0: invalid filter id %d\n", filter_id);
+        return;
+    }
+    if (filter->settings_template == NULL)
+    {
+        return;
+    }
+    char ** values = hb_str_vsplit(str, ':');
+    char ** tmpl   = hb_str_vsplit(filter->settings_template, ':');
+    int     ii;
+
+    free(str);
+    hb_dict_t * dict = hb_dict_init();
+    for (ii = 0; values[ii] != NULL; ii++)
+    {
+        if (tmpl[ii] == NULL)
+        {
+            // Incomplete template?
+            break;
+        }
+        char ** pair = hb_str_vsplit(tmpl[ii], '=');
+        if (pair[0] != NULL)
+        {
+            hb_dict_set(dict, pair[0], hb_value_string(values[ii]));
+        }
+        hb_str_vfree(pair);
+    }
+    hb_str_vfree(tmpl);
+    hb_str_vfree(values);
+
+    char * result = hb_filter_settings_string(filter_id, dict);
+    hb_dict_set(preset, key, hb_value_string(result));
+    free(result);
+}
+
+static void import_filters_11_1_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlaceFilter");
+    if (val != NULL)
+    {
+        const char * str = hb_value_get_string(val);
+        if (str != NULL)
+        {
+            if (strcasecmp(str, "deinterlace"))
+            {
+                import_custom_11_1_0(preset, HB_FILTER_DEINTERLACE,
+                                     "PictureDeinterlaceCustom");
+            }
+            else if (strcasecmp(str, "decomb"))
+            {
+                import_custom_11_1_0(preset, HB_FILTER_DECOMB,
+                                     "PictureDeinterlaceCustom");
+            }
+        }
+    }
+    val = hb_dict_get(preset, "PictureDenoiseFilter");
+    if (val != NULL)
+    {
+        const char * str = hb_value_get_string(val);
+        if (str != NULL)
+        {
+            if (strcasecmp(str, "hqdn3d"))
+            {
+                import_custom_11_1_0(preset, HB_FILTER_HQDN3D,
+                                     "PictureDenoiseCustom");
+            }
+            else if (strcasecmp(str, "nlmeans"))
+            {
+                import_custom_11_1_0(preset, HB_FILTER_NLMEANS,
+                                     "PictureDenoiseCustom");
+            }
+        }
+    }
+    import_custom_11_1_0(preset, HB_FILTER_DETELECINE,
+                         "PictureDetelecineCustom");
+    import_custom_11_1_0(preset, HB_FILTER_ROTATE,
+                         "PictureRotate");
+}
+
+// Split the old decomb filter into separate comb detection
+// and decomb filters.
+static void import_deint_12_0_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlaceFilter");
+    if (val == NULL)
+    {
+        return;
+    }
+    const char * deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (strcasecmp(deint, "decomb"))
+    {
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlacePreset");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (!strcasecmp(deint, "fast"))
+    {
+        // fast -> PictureCombDetectPreset fast
+        //         PictureDeinterlacePreset default
+        hb_dict_set(preset, "PictureCombDetectPreset",
+                    hb_value_string("fast"));
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    else if (!strcasecmp(deint, "bob") || !strcasecmp(deint, "default"))
+    {
+        hb_dict_set(preset, "PictureCombDetectPreset",
+                    hb_value_string("default"));
+        return;
+    }
+    else if (strcasecmp(deint, "custom"))
+    {
+        // not custom -> default
+        hb_dict_set(preset, "PictureCombDetectPreset",
+                    hb_value_string("default"));
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlaceCustom");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    // Translate custom values
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+
+    hb_dict_t * dict;
+    dict = hb_parse_filter_settings(deint);
+
+    int yadif, blend, cubic, eedi2, mask, bob, gamma, filter, composite;
+    int detect_mode, decomb_mode;
+
+    int mode = 7, spatial_metric = 2, motion_threshold = 3;
+    int spatial_threshold = 3, filter_mode = 2;
+    int block_threshold = 40, block_width = 16, block_height = 16;
+    int magnitude_threshold = 10, variance_threshold = 20;
+    int laplacian_threshold = 20;
+    int dilation_threshold = 4, erosion_threshold = 2, noise_threshold = 50;
+    int maximum_search_distance = 24, post_processing = 1, parity = -1;
+
+    hb_dict_extract_int(&mode, dict, "mode");
+    hb_dict_extract_int(&spatial_metric, dict, "spatial-metric");
+    hb_dict_extract_int(&motion_threshold, dict, "motion-thresh");
+    hb_dict_extract_int(&spatial_threshold, dict, "spatial-thresh");
+    hb_dict_extract_int(&filter_mode, dict, "filter-mode");
+    hb_dict_extract_int(&block_threshold, dict, "block-thresh");
+    hb_dict_extract_int(&block_width, dict, "block-width");
+    hb_dict_extract_int(&block_height, dict, "block-height");
+    hb_dict_extract_int(&magnitude_threshold, dict, "magnitude-thresh");
+    hb_dict_extract_int(&variance_threshold, dict, "variance-thresh");
+    hb_dict_extract_int(&laplacian_threshold, dict, "laplacian-thresh");
+    hb_dict_extract_int(&dilation_threshold, dict, "dilation-thresh");
+    hb_dict_extract_int(&erosion_threshold, dict, "erosion-thresh");
+    hb_dict_extract_int(&noise_threshold, dict, "noise-thresh");
+    hb_dict_extract_int(&maximum_search_distance, dict, "search-distance");
+    hb_dict_extract_int(&post_processing, dict, "postproc");
+    hb_dict_extract_int(&parity, dict, "parity");
+    hb_value_free(&dict);
+
+    yadif     = !!(mode & 1);
+    blend     = !!(mode & 2);
+    cubic     = !!(mode & 4);
+    eedi2     = !!(mode & 8);
+    mask      = !!(mode & 32);
+    bob       = !!(mode & 64);
+    gamma     = !!(mode & 128);
+    filter    = !!(mode & 256);
+    composite = !!(mode & 512);
+
+    detect_mode = gamma + filter * 2 + mask * 4 + composite * 8;
+    decomb_mode = yadif + blend * 2 + cubic * 4 + eedi2 * 8 + bob * 16;
+
+    char * custom = hb_strdup_printf("mode=%d:spatial-metric=%d:"
+                                     "motion-thresh=%d:spatial-thresh=%d:"
+                                     "filter-mode=%d:block-thresh=%d:"
+                                     "block-width=%d:block-height=%d",
+                                     detect_mode, spatial_metric,
+                                     motion_threshold, spatial_threshold,
+                                     filter_mode, block_threshold,
+                                     block_width, block_height);
+    hb_dict_set(preset, "PictureCombDetectCustom", hb_value_string(custom));
+    free(custom);
+
+    custom = hb_strdup_printf("mode=%d:magnitude-thresh=%d:variance-thresh=%d:"
+                              "laplacian-thresh=%d:dilation-thresh=%d:"
+                              "erosion-thresh=%d:noise-thresh=%d:"
+                              "search-distance=%d:postproc=%d:parity=%d",
+                              decomb_mode, magnitude_threshold,
+                              variance_threshold, laplacian_threshold,
+                              dilation_threshold, erosion_threshold,
+                              noise_threshold, maximum_search_distance,
+                              post_processing, parity);
+    hb_dict_set(preset, "PictureDeinterlaceCustom", hb_value_string(custom));
+    free(custom);
+}
+
+static void import_deint_11_0_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlaceFilter");
+    if (val == NULL)
+    {
+        return;
+    }
+    const char * deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (strcasecmp(deint, "deinterlace"))
+    {
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlacePreset");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    if (!strcasecmp(deint, "fast") || !strcasecmp(deint, "slow"))
+    {
+        // fast and slow -> skip-spatial
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("skip-spatial"));
+        return;
+    }
+    else if (!strcasecmp(deint, "bob") || !strcasecmp(deint, "default"))
+    {
+        return;
+    }
+    else if (strcasecmp(deint, "custom"))
+    {
+        // not custom -> default
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    val = hb_dict_get(preset, "PictureDeinterlaceCustom");
+    if (val == NULL)
+    {
+        hb_dict_set(preset, "PictureDeinterlacePreset",
+                    hb_value_string("default"));
+        return;
+    }
+    // Translate custom values
+    deint = hb_value_get_string(val);
+    if (deint == NULL)
+    {
+        // This really shouldn't happen for a valid preset
+        return;
+    }
+    int bob, spatial, yadif, mode = 3, parity = -1;
+    sscanf(deint, "%d:%d", &mode, &parity);
+    yadif   = !!(mode & 1);
+    spatial = !!(mode & 2);
+    bob     = !!(mode & 8);
+    mode = yadif + (yadif && spatial) * 2 + bob * 4;
+    char * custom = hb_strdup_printf("%d:%d", mode, parity);
+    hb_dict_set(preset, "PictureDeinterlaceCustom", hb_value_string(custom));
+    free(custom);
+}
+
+static void import_deint_10_0_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PictureDecombDeinterlace");
+    if (val != NULL)
+    {
+        int decomb_or_deint = hb_value_get_bool(val);
+        const char * deint_preset;
+        if (decomb_or_deint)
+        {
+            deint_preset = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDecomb"));
+        }
+        else
+        {
+            deint_preset = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDeinterlace"));
+        }
+        if (deint_preset != NULL && strcasecmp(deint_preset, "off"))
+        {
+            hb_dict_set(preset, "PictureDeinterlaceFilter",
+                        decomb_or_deint ? hb_value_string("decomb")
+                                        : hb_value_string("deinterlace"));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string(deint_preset));
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureDeinterlaceFilter",
+                        hb_value_string("off"));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string("default"));
+        }
+    }
+}
+
 static const char* import_indexed_filter(int filter_id, int index)
 {
     hb_filter_param_t *filter_presets;
@@ -1975,7 +2383,7 @@ static const char* import_indexed_filter(int filter_id, int index)
     return filter_presets[ii].short_name;
 }
 
-static void import_decomb(hb_value_t *preset)
+static void import_deint_0_0_0(hb_value_t *preset)
 {
     hb_value_t *val = hb_dict_get(preset, "PictureDecomb");
     if (hb_value_is_number(val))
@@ -1993,11 +2401,8 @@ static void import_decomb(hb_value_t *preset)
             hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
         }
     }
-}
 
-static void import_deint(hb_value_t *preset)
-{
-    hb_value_t *val = hb_dict_get(preset, "PictureDeinterlace");
+    val = hb_dict_get(preset, "PictureDeinterlace");
     if (hb_value_is_number(val))
     {
         const char *s;
@@ -2015,7 +2420,7 @@ static void import_deint(hb_value_t *preset)
     }
 }
 
-static void import_detel(hb_value_t *preset)
+static void import_detel_0_0_0(hb_value_t *preset)
 {
     hb_value_t *val = hb_dict_get(preset, "PictureDetelecine");
     if (hb_value_is_number(val))
@@ -2035,7 +2440,7 @@ static void import_detel(hb_value_t *preset)
     }
 }
 
-static void import_denoise(hb_value_t *preset)
+static void import_denoise_0_0_0(hb_value_t *preset)
 {
     hb_value_t *val = hb_dict_get(preset, "PictureDenoise");
     if (hb_value_is_number(val))
@@ -2058,7 +2463,7 @@ static void import_denoise(hb_value_t *preset)
     }
 }
 
-static void import_pic(hb_value_t *preset)
+static void import_pic_0_0_0(hb_value_t *preset)
 {
     if (hb_value_get_bool(hb_dict_get(preset, "UsesMaxPictureSettings")))
     {
@@ -2089,9 +2494,46 @@ static void import_pic(hb_value_t *preset)
         }
         hb_dict_set(preset, "PicturePAR", hb_value_string(s));
     }
+    else if (hb_value_type(val) == HB_VALUE_TYPE_STRING)
+    {
+        const char *v = hb_value_get_string(val);
+        const char *s;
+        char *end;
+        int pic_par = strtol(v, &end, 0);
+        if (end != v)
+        {
+            switch (pic_par)
+            {
+                default:
+                case 2:
+                    s = "loose";
+                    break;
+                case 0:
+                    s = "off";
+                    break;
+                case 1:
+                    s = "strict";
+                    break;
+                case 3:
+                    s = "custom";
+                    break;
+            }
+            hb_dict_set(preset, "PicturePAR", hb_value_string(s));
+        }
+        else
+        {
+            if (strcasecmp(v, "off") &&
+                strcasecmp(v, "strict") &&
+                strcasecmp(v, "loose") &&
+                strcasecmp(v, "custom"))
+            {
+                hb_dict_set(preset, "PicturePAR", hb_value_string("loose"));
+            }
+        }
+    }
 }
 
-static void import_audio(hb_value_t *preset)
+static void import_audio_0_0_0(hb_value_t *preset)
 {
     hb_value_t *copy = hb_dict_get(preset, "AudioCopyMask");
     if (copy != NULL)
@@ -2117,7 +2559,7 @@ static void import_audio(hb_value_t *preset)
         hb_value_array_append(copy, hb_value_string("copy:truehd"));
 }
 
-static void import_video(hb_value_t *preset)
+static void import_video_0_0_0(hb_value_t *preset)
 {
     hb_value_t *val;
 
@@ -2184,23 +2626,83 @@ static void import_video(hb_value_t *preset)
     }
 }
 
-static void preset_import(hb_value_t *preset, int major, int minor, int micro)
+static void import_12_0_0(hb_value_t *preset)
 {
+    import_deint_12_0_0(preset);
+}
+
+static void import_11_1_0(hb_value_t *preset)
+{
+    import_filters_11_1_0(preset);
+
+    // Import next...
+    import_12_0_0(preset);
+}
+
+static void import_11_0_0(hb_value_t *preset)
+{
+    import_deint_11_0_0(preset);
+
+    // Import next...
+    import_11_1_0(preset);
+}
+
+static void import_10_0_0(hb_value_t *preset)
+{
+    import_deint_10_0_0(preset);
+
+    // Import next...
+    import_11_0_0(preset);
+}
+
+static void import_0_0_0(hb_value_t *preset)
+{
+    import_video_0_0_0(preset);
+    import_pic_0_0_0(preset);
+    import_audio_0_0_0(preset);
+    import_deint_0_0_0(preset);
+    import_detel_0_0_0(preset);
+    import_denoise_0_0_0(preset);
+
+    // Import next...
+    import_10_0_0(preset);
+}
+
+static int preset_import(hb_value_t *preset, int major, int minor, int micro)
+{
+    int result = 0;
+
     if (!hb_value_get_bool(hb_dict_get(preset, "Folder")))
     {
         if (major == 0 && minor == 0 && micro == 0)
         {
             // Convert legacy presets (before versioning introduced)
-            import_video(preset);
-            import_pic(preset);
-            import_audio(preset);
-            import_decomb(preset);
-            import_deint(preset);
-            import_detel(preset);
-            import_denoise(preset);
+            import_0_0_0(preset);
+            result = 1;
+        }
+        else if (major == 10 && minor == 0 && micro == 0)
+        {
+            import_10_0_0(preset);
+            result = 1;
+        }
+        else if (major == 11 && minor == 0 && micro == 0)
+        {
+            import_11_0_0(preset);
+            result = 1;
+        }
+        else if (major == 11 && minor == 1 && micro == 0)
+        {
+            import_11_1_0(preset);
+            result = 1;
+        }
+        else if (major == 12 && minor == 0 && micro == 0)
+        {
+            import_12_0_0(preset);
+            result = 1;
         }
         preset_clean(preset, hb_preset_template);
     }
+    return result;
 }
 
 int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
@@ -2225,24 +2727,78 @@ int hb_presets_version(hb_value_t *preset, int *major, int *minor, int *micro)
     return -1;
 }
 
-void hb_presets_import(hb_value_t *preset)
+hb_value_t * hb_presets_update_version(hb_value_t *presets)
 {
-    preset_import_context_t ctx;
-
-    ctx.do_ctx.path.depth = 1;
-    hb_presets_version(preset, &ctx.major, &ctx.minor, &ctx.micro);
-    presets_do(do_preset_import, preset, (preset_do_context_t*)&ctx);
+    if (hb_value_type(presets) == HB_VALUE_TYPE_DICT)
+    {
+        // Is this a single preset or a packaged collection of presets?
+        hb_value_t *val = hb_dict_get(presets, "PresetName");
+        if (val == NULL)
+        {
+            val = hb_dict_get(presets, "VersionMajor");
+            if (val != NULL)
+            {
+                hb_dict_set(presets, "VersionMajor",
+                            hb_value_int(hb_preset_version_major));
+                hb_dict_set(presets, "VersionMinor",
+                            hb_value_int(hb_preset_version_minor));
+                hb_dict_set(presets, "VersionMicro",
+                            hb_value_int(hb_preset_version_micro));
+                hb_value_incref(presets);
+                return presets;
+            }
+            // Unrecoginzable preset file format
+            return NULL;
+        }
+    }
+    return presets_package(presets);
 }
 
-char * hb_presets_import_json(const char *json)
+int hb_presets_import(const hb_value_t *in, hb_value_t **out)
 {
-    hb_value_t * dict = hb_value_json(json);
-    if (dict == NULL)
-        return NULL;
+    preset_import_context_t   ctx;
+    hb_value_t              * dup;
 
-    hb_presets_import(dict);
-    char * result = hb_value_get_json(dict);
+    ctx.do_ctx.path.depth = 1;
+    ctx.result = 0;
+
+    // Done modify the input
+    dup = hb_value_dup(in);
+    hb_presets_version(dup, &ctx.major, &ctx.minor, &ctx.micro);
+    presets_do(do_preset_import, dup, (preset_do_context_t*)&ctx);
+    if (ctx.result)
+    {
+        *out = hb_presets_update_version(dup);
+    }
+    else
+    {
+        *out = hb_value_dup(in);
+    }
+    hb_value_free(&dup);
+
+    return ctx.result;
+}
+
+int hb_presets_import_json(const char *in, char **out)
+{
+    int result;
+
+    if (out != NULL)
+    {
+        *out = NULL;
+    }
+    hb_value_t * dict = hb_value_json(in);
+    if (dict == NULL)
+        return 0;
+
+    hb_value_t * imported;
+    result = hb_presets_import(dict, &imported);
+    if (out != NULL)
+    {
+        *out = hb_value_get_json(imported);
+    }
     hb_value_free(&dict);
+    hb_value_free(&imported);
     return result;
 }
 
@@ -2263,21 +2819,18 @@ char * hb_presets_clean_json(const char *json)
 static hb_value_t * presets_unpackage(const hb_value_t *packaged_presets)
 {
     // Do any legacy translations.
-    hb_value_t *tmp = hb_value_dup(packaged_presets);
-    hb_presets_import(tmp);
-    if (hb_value_type(tmp) == HB_VALUE_TYPE_ARRAY)
-    {
-        // Not packaged
-        return tmp;
-    }
-    if (hb_dict_get(tmp, "PresetName") != NULL)
-    {
-        // Bare single preset
-        return tmp;
-    }
-    hb_value_t *presets = hb_dict_get(tmp, "PresetList");
-    hb_value_incref(presets);
+    hb_value_t * imported;
+    hb_value_t * tmp = hb_value_dup(packaged_presets);
+    hb_presets_import(tmp, &imported);
     hb_value_free(&tmp);
+    if (imported == NULL)
+    {
+        // Invalid preset format, return an empty array
+        return hb_value_array_init();
+    }
+    hb_value_t *presets = hb_dict_get(imported, "PresetList");
+    hb_value_incref(presets);
+    hb_value_free(&imported);
     return presets;
 }
 
@@ -2474,8 +3027,12 @@ hb_preset_index_t * hb_presets_get_default_index(void)
 
 hb_dict_t * hb_presets_get_default(void)
 {
-    hb_preset_index_t *path = hb_presets_get_default_index();
-    return hb_preset_get(path);
+    hb_dict_t *         preset;
+    hb_preset_index_t * path = hb_presets_get_default_index();
+
+    preset = hb_preset_get(path);
+    free(path);
+    return preset;
 }
 
 char * hb_presets_get_default_json(void)

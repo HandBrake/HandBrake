@@ -28,6 +28,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -38,11 +39,19 @@
                     <TextBlock Margin="0,0,0,1" FontSize="16" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" Text="{Binding Version}" />
                 </StackPanel>
 
-                <TextBlock Grid.Row="1" Margin="5,10,0,5" Text="{x:Static Properties:ResourcesUI.AboutView_License}" />
+                <StackPanel Orientation="Horizontal" Grid.Row="1"  Margin="5,5,0,0">
+                    <TextBlock Text="Website: " />
+                    <TextBlock>           
+                        <Hyperlink x:Name="handbrakeWebsite" NavigateUri="/" RequestNavigate="HandbrakeWebsite_OnRequestNavigate"  >https://handbrake.fr</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
 
-                <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="2" Margin="10,0,10,10" HorizontalAlignment="Stretch"
+                <TextBlock Grid.Row="2" Margin="5,10,0,5" Text="{x:Static Properties:ResourcesUI.AboutView_License}" />
+
+                <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="3" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
 
+         
             </Grid>
         </Grid>
 

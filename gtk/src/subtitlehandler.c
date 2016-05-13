@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * subtitlehandler.c
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * subtitlehandler.c is free software.
  *
@@ -9,6 +9,17 @@
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
+ *
+ * subtitlehandler.c is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with main.c.  If not, write to:
+ *  The Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor
+ *  Boston, MA  02110-1301, USA.
  */
 
 #include <glib/gi18n.h>
@@ -1087,7 +1098,8 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         if (response != GTK_RESPONSE_OK)
         {
             ghb_clear_subtitle_selection(ud->builder);
-            ghb_dict_set(ud->settings, "Subtitle", backup);
+            ghb_dict_set(ghb_get_job_settings(ud->settings),
+                         "Subtitle", backup);
             subtitle_refresh_list_ui(ud);
         }
         else
@@ -1140,7 +1152,8 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     if (response != GTK_RESPONSE_OK)
     {
         ghb_clear_subtitle_selection(ud->builder);
-        ghb_dict_set(ud->settings, "Subtitle", backup);
+        ghb_dict_set(ghb_get_job_settings(ud->settings),
+                     "Subtitle", backup);
         subtitle_refresh_list_ui(ud);
     }
     else
@@ -1393,7 +1406,7 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             const iso639_lang_t *lang;
             GhbValue *entry = ghb_array_get(lang_list, 0);
-            lang = ghb_iso639_lookup_by_int(ghb_lookup_audio_lang(entry));
+            lang = ghb_iso639_lookup_by_int(ghb_lookup_lang(entry));
             subtitle_update_pref_lang(ud, lang);
         }
         else
@@ -1442,7 +1455,7 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
     for (ii = 0; ii < count; )
     {
         GhbValue *lang_val = ghb_array_get(lang_list, ii);
-        int idx = ghb_lookup_audio_lang(lang_val);
+        int idx = ghb_lookup_lang(lang_val);
         if (ii == 0)
         {
             const iso639_lang_t *lang;
@@ -1521,7 +1534,8 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_widget_hide(dialog);
         if (response != GTK_RESPONSE_OK)
         {
-            ghb_dict_set(ud->settings, "Subtitle", backup);
+            ghb_dict_set(ghb_get_job_settings(ud->settings),
+                         "Subtitle", backup);
             subsettings = subtitle_get_selected_settings(ud, NULL);
             if (subsettings != NULL)
             {

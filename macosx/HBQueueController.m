@@ -1,4 +1,3 @@
-
 /* HBQueueController
 
     This file is part of the HandBrake source code.
@@ -7,19 +6,11 @@
 
 #import "HBQueueController.h"
 
-#import "HBCore.h"
 #import "HBController.h"
 #import "HBAppDelegate.h"
 
 #import "HBQueueOutlineView.h"
-#import "HBUtilities.h"
 
-#import "HBJob.h"
-#import "HBJob+UIAdditions.h"
-
-#import "HBStateFormatter.h"
-
-#import "HBDistributedArray.h"
 #import "NSArray+HBAdditions.h"
 
 #import "HBDockTile.h"
@@ -28,13 +19,13 @@
 #import "HBJobOutputFileWriter.h"
 #import "HBPreferencesController.h"
 
+@import HandBrakeKit;
+
 // Pasteboard type for or drag operations
 #define DragDropSimplePboardType    @"HBQueueCustomOutlineViewPboardType"
 
 // DockTile update freqency in total percent increment
 #define dockTileUpdateFrequency     0.1f
-
-#define HB_ROW_HEIGHT_TITLE_ONLY    17.0
 
 @interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate>
 
@@ -47,25 +38,28 @@
 
 @property (nonatomic, readonly) NSMutableDictionary *descriptions;
 
-@property (nonatomic, readonly) HBDistributedArray *jobs;
-@property (nonatomic, strong)   HBJob *currentJob;
-@property (nonatomic, strong)   HBJobOutputFileWriter *currentLog;
+@property (nonatomic, readonly) HBDistributedArray<HBJob *> *jobs;
+@property (nonatomic)   HBJob *currentJob;
+@property (nonatomic)   HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic, readwrite) BOOL stop;
 
 @property (nonatomic, readwrite) NSUInteger pendingItemsCount;
 @property (nonatomic, readwrite) NSUInteger completedItemsCount;
 
-@property (nonatomic, strong) NSArray *dragNodesArray;
+@property (nonatomic) NSArray<HBJob *> *dragNodesArray;
 
 @end
 
 @implementation HBQueueController
 
-- (instancetype)init
+- (instancetype)initWithURL:(NSURL *)queueURL;
 {
+    NSParameterAssert(queueURL);
+
     if (self = [super initWithWindowNibName:@"Queue"])
     {
+        // Cached queue items descriptions
         _descriptions = [[NSMutableDictionary alloc] init];
 
         // Load the dockTile and instiante initial text fields
@@ -77,7 +71,9 @@
         // Init a separate instance of libhb for the queue
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
 
-        [self loadQueueFile];
+        // Load the queue from disk.
+        _jobs = [[HBDistributedArray alloc] initWithURL:queueURL];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_jobs];
     }
 
     return self;
@@ -95,11 +91,7 @@
     [self.outlineView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
     [self.outlineView setVerticalMotionCanBeginDrag:YES];
 
-    // Don't allow autoresizing of main column, else the "delete" column will get
-    // pushed out of view.
-    [self.outlineView setAutoresizesOutlineColumn: NO];
-
-    [self getQueueStats];
+    [self updateQueueStats];
 }
 
 #pragma mark Toolbar
@@ -207,45 +199,27 @@
     return NO;
 }
 
-#pragma mark -
-#pragma mark Queue File
-
-- (void)reloadQueue
-{
-    [self getQueueStats];
-    [self.outlineView reloadData];
-}
-
-- (void)loadQueueFile
-{
-    NSURL *queueURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"Queue.hbqueue"];
-    _jobs = [[HBDistributedArray alloc] initWithURL:queueURL];
-
-    [self reloadQueue];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_jobs];
-}
+#pragma mark - Public methods
 
 - (void)addJob:(HBJob *)item
 {
-    [self.jobs beginTransaction];
-    [self.jobs addObject:item];
-    [self.jobs commit];
-
-    [self reloadQueue];
+    NSParameterAssert(item);
+    [self addJobsFromArray:@[item]];
 }
 
-- (void)addJobsFromArray:(NSArray *)items;
+- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
 {
-    [self.jobs beginTransaction];
-    [self.jobs addObjectsFromArray:items];
-    [self.jobs commit];
-
-    [self reloadQueue];
+    NSParameterAssert(items);
+    if (items.count)
+    {
+        [self addQueueItems:items];
+    }
 }
 
 - (BOOL)jobExistAtURL:(NSURL *)url
 {
+    NSParameterAssert(url);
+
     for (HBJob *item in self.jobs)
     {
         if ([item.destURL isEqualTo:url])
@@ -256,6 +230,131 @@
     return NO;
 }
 
+- (NSUInteger)count
+{
+    return self.jobs.count;
+}
+
+/**
+ * This method will clear the queue of any encodes that are not still pending
+ * this includes both successfully completed encodes as well as cancelled encodes
+ */
+- (void)removeCompletedJobs
+{
+    [self.jobs beginTransaction];
+    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
+        return (item.state == HBJobStateCompleted || item.state == HBJobStateCanceled);
+    }];
+    [self removeQueueItemsAtIndexes:indexes];
+    [self.jobs commit];
+}
+
+/**
+ * This method will clear the queue of all encodes. effectively creating an empty queue
+ */
+- (void)removeAllJobs
+{
+    [self.jobs beginTransaction];
+    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.jobs.count)]];
+    [self.jobs commit];
+}
+
+/**
+ * This method will set any item marked as encoding back to pending
+ * currently used right after a queue reload
+ */
+- (void)setEncodingJobsAsPending
+{
+    [self.jobs beginTransaction];
+
+    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
+    NSUInteger idx = 0;
+    for (HBJob *job in self.jobs)
+    {
+        // We want to keep any queue item that is pending or was previously being encoded
+        if (job.state == HBJobStateWorking)
+        {
+            job.state = HBJobStateReady;
+            [indexes addIndex:idx];
+        }
+        idx++;
+    }
+    [self reloadQueueItemsAtIndexes:indexes];
+    [self.jobs commit];
+}
+
+#pragma mark - Private queue editing methods
+
+/**
+ *  Reloads the queue, this is called
+ *  when another HandBrake instances modifies the queue
+ */
+- (void)reloadQueue
+{
+    [self updateQueueStats];
+    [self.outlineView reloadData];
+    [self.window.undoManager removeAllActions];
+}
+
+- (void)reloadQueueItemAtIndex:(NSUInteger)idx
+{
+    [self reloadQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:idx]];
+}
+
+- (void)reloadQueueItemsAtIndexes:(NSIndexSet *)indexes
+{
+    [self.outlineView reloadDataForRowIndexes:indexes columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    [self updateQueueStats];
+}
+
+- (void)addQueueItems:(NSArray *)items
+{
+    NSParameterAssert(items);
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.jobs.count, items.count)];
+    [self addQueueItems:items atIndexes:indexes];
+}
+
+- (void)addQueueItems:(NSArray *)items atIndexes:(NSIndexSet *)indexes
+{
+    NSParameterAssert(items);
+    NSParameterAssert(indexes);
+    [self.jobs beginTransaction];
+    [self.outlineView beginUpdates];
+
+    // Forward
+    NSUInteger currentIndex = indexes.firstIndex;
+    NSUInteger currentObjectIndex = 0;
+    while (currentIndex != NSNotFound)
+    {
+        [self.jobs insertObject:items[currentObjectIndex] atIndex:currentIndex];
+        currentIndex = [indexes indexGreaterThanIndex:currentIndex];
+        currentObjectIndex++;
+    }
+
+    [self.outlineView insertItemsAtIndexes:indexes
+                                  inParent:nil
+                             withAnimation:NSTableViewAnimationSlideDown];
+
+    NSUndoManager *undo = self.window.undoManager;
+    [[undo prepareWithInvocationTarget:self] removeQueueItemsAtIndexes:indexes];
+
+    if (!undo.isUndoing)
+    {
+        if (items.count == 1)
+        {
+            [undo setActionName:NSLocalizedString(@"Add Job To Queue", nil)];
+        }
+        else
+        {
+            [undo setActionName:NSLocalizedString(@"Add Jobs To Queue", nil)];
+        }
+    }
+
+    [self.outlineView endUpdates];
+    [self updateQueueStats];
+    [self.jobs commit];
+}
+
 - (void)removeQueueItemAtIndex:(NSUInteger)index
 {
     [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
@@ -263,16 +362,138 @@
 
 - (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes
 {
-    if (self.jobs.count > [indexes lastIndex])
+    NSParameterAssert(indexes);
+
+    if (indexes.count == 0)
+    {
+        return;
+    }
+
+    [self.jobs beginTransaction];
+    [self.outlineView beginUpdates];
+
+    NSArray *removeJobs = [self.jobs objectsAtIndexes:indexes];
+
+    if (self.jobs.count > indexes.lastIndex)
     {
         [self.jobs removeObjectsAtIndexes:indexes];
     }
+
+    [self.outlineView removeItemsAtIndexes:indexes inParent:nil withAnimation:NSTableViewAnimationSlideUp];
+    [self.outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:indexes.firstIndex] byExtendingSelection:NO];
+
+    NSUndoManager *undo = self.window.undoManager;
+    [[undo prepareWithInvocationTarget:self] addQueueItems:removeJobs atIndexes:indexes];
+
+    if (!undo.isUndoing)
+    {
+        if (indexes.count == 1)
+        {
+            [undo setActionName:NSLocalizedString(@"Remove Job From Queue", nil)];
+        }
+        else
+        {
+            [undo setActionName:NSLocalizedString(@"Remove Jobs From Queue", nil)];
+        }
+    }
+
+    [self.outlineView endUpdates];
+    [self updateQueueStats];
+    [self.jobs commit];
+}
+
+- (void)moveQueueItems:(NSArray *)items toIndex:(NSUInteger)index
+{
+    [self.jobs beginTransaction];
+    [self.outlineView beginUpdates];
+
+    NSMutableArray *source = [NSMutableArray array];
+    NSMutableArray *dest = [NSMutableArray array];
+
+    for (id object in items.reverseObjectEnumerator)
+    {
+        NSUInteger sourceIndex = [self.jobs indexOfObject:object];
+        [self.jobs removeObjectAtIndex:sourceIndex];
+
+
+        if (sourceIndex < index)
+        {
+            index--;
+        }
+
+        [self.jobs insertObject:object atIndex:index];
+
+        [source addObject:@(index)];
+        [dest addObject:@(sourceIndex)];
+
+        [self.outlineView moveItemAtIndex:sourceIndex inParent:nil toIndex:index inParent:nil];
+    }
+
+    NSUndoManager *undo = self.window.undoManager;
+    [[undo prepareWithInvocationTarget:self] moveQueueItemsAtIndexes:source toIndexes:dest];
+
+    if (!undo.isUndoing)
+    {
+        if (items.count == 1)
+        {
+            [undo setActionName:NSLocalizedString(@"Move Job in Queue", nil)];
+        }
+        else
+        {
+            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", nil)];
+        }
+    }
+
+    [self.outlineView endUpdates];
+    [self.jobs commit];
+}
+
+- (void)moveQueueItemsAtIndexes:(NSArray *)source toIndexes:(NSArray *)dest
+{
+    [self.jobs beginTransaction];
+    [self.outlineView beginUpdates];
+
+    NSMutableArray *newSource = [NSMutableArray array];
+    NSMutableArray *newDest = [NSMutableArray array];
+
+    for (NSInteger idx = source.count - 1; idx >= 0; idx--)
+    {
+        NSUInteger sourceIndex = [source[idx] integerValue];
+        NSUInteger destIndex = [dest[idx] integerValue];
+
+        [newSource addObject:@(destIndex)];
+        [newDest addObject:@(sourceIndex)];
+
+        id obj = [self.jobs objectAtIndex:sourceIndex];
+        [self.jobs removeObjectAtIndex:sourceIndex];
+        [self.jobs insertObject:obj atIndex:destIndex];
+
+        [self.outlineView moveItemAtIndex:sourceIndex inParent:nil toIndex:destIndex inParent:nil];
+    }
+
+    NSUndoManager *undo = self.window.undoManager;
+    [[undo prepareWithInvocationTarget:self] moveQueueItemsAtIndexes:newSource toIndexes:newDest];
+
+    if (!undo.isUndoing)
+    {
+        if (source.count == 1)
+        {
+            [undo setActionName:NSLocalizedString(@"Move Job in Queue", nil)];
+        }
+        else
+        {
+            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", nil)];
+        }
+    }
+
+    [self.outlineView endUpdates];
+    [self.jobs commit];
 }
 
 /**
  *  Updates the queue status label.
  */
-- (void)getQueueStats
+- (void)updateQueueStats
 {
     // lets get the stats on the status of the queue array
     NSUInteger pendingCount = 0;
@@ -311,10 +532,8 @@
     self.completedItemsCount = completedCount;
 }
 
-- (NSUInteger)count
-{
-    return self.jobs.count;
-}
+#pragma mark -
+#pragma mark Queue Job Processing
 
 /**
  * Used to get the next pending queue item and return it if found
@@ -332,232 +551,195 @@
 }
 
 /**
- * This method will set any item marked as encoding back to pending
- * currently used right after a queue reload
- */
-- (void)setEncodingJobsAsPending
-{
-    [self.jobs beginTransaction];
-    for (HBJob *job in self.jobs)
-    {
-        // We want to keep any queue item that is pending or was previously being encoded
-        if (job.state == HBJobStateWorking)
-        {
-            job.state = HBJobStateReady;
-        }
-    }
-    [self.jobs commit];
-
-    [self reloadQueue];
-}
-
-/**
- * This method will clear the queue of any encodes that are not still pending
- * this includes both successfully completed encodes as well as cancelled encodes
- */
-- (void)removeCompletedJobs
-{
-    [self.jobs beginTransaction];
-    [self.jobs removeObjectsUsingBlock:^BOOL(HBJob *item) {
-        return (item.state == HBJobStateCompleted || item.state == HBJobStateCanceled);
-    }];
-    [self.jobs commit];
-    [self reloadQueue];
-}
-
-/**
- * This method will clear the queue of all encodes. effectively creating an empty queue
- */
-- (void)removeAllJobs
-{
-    [self.jobs beginTransaction];
-    [self.jobs removeAllObjects];
-    [self.jobs commit];
-
-    [self reloadQueue];
-}
-
-#pragma mark -
-#pragma mark Queue Job Processing
-
-/**
  *  Starts the queue
  */
 - (void)encodeNextQueueItem
 {
-    // Check to see if there are any more pending items in the queue
-    HBJob *nextJob = [self getNextPendingQueueItem];
+    [self.jobs beginTransaction];
+    self.currentJob = nil;
 
-    // If we still have more pending items in our queue, lets go to the next one
-    if (nextJob)
+    // since we have completed an encode, we go to the next
+    if (self.stop)
     {
-        self.currentJob = nextJob;
-        // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
-        self.currentJob.state = HBJobStateWorking;
-
-        // Tell HB to output a new activity log file for this encode
-        self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:self.currentJob];
-        [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
-        [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
-
-        // now we can go ahead and scan the new pending queue item
-        [self performScan:self.currentJob.fileURL titleIdx:self.currentJob.titleIdx];
+        self.stop = NO;
     }
     else
     {
-        self.currentJob = nil;
+        // Check to see if there are any more pending items in the queue
+        HBJob *nextJob = [self getNextPendingQueueItem];
 
-        [HBUtilities writeToActivityLog:"Queue Done, there are no more pending encodes"];
+        // If we still have more pending items in our queue, lets go to the next one
+        if (nextJob)
+        {
+            // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
+            nextJob.state = HBJobStateWorking;
 
-        // Since there are no more items to encode, go to queueCompletedAlerts
-        // for user specified alerts after queue completed
-        [self queueCompletedAlerts];
+            // Tell HB to output a new activity log file for this encode
+            self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextJob];
+            if (self.currentLog)
+            {
+                [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
+                [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
+            }
+
+            self.currentJob = nextJob;
+            [self reloadQueueItemAtIndex:[self.jobs indexOfObject:nextJob]];
+
+            // now we can go ahead and scan the new pending queue item
+            [self encodeJob:nextJob];
+
+            // erase undo manager history
+            [self.window.undoManager removeAllActions];
+        }
+        else
+        {
+            [HBUtilities writeToActivityLog:"Queue Done, there are no more pending encodes"];
+
+            // Since there are no more items to encode, go to queueCompletedAlerts
+            // for user specified alerts after queue completed
+            [self queueCompletedAlerts];
+        }
     }
+    [self.jobs commit];
 }
 
-- (void)encodeCompleted
+- (void)completedJob:(HBJob *)job result:(HBCoreResult)result;
 {
+    NSParameterAssert(job);
+    [self.jobs beginTransaction];
+
     // Since we are done with this encode, tell output to stop writing to the
     // individual encode log.
     [[HBOutputRedirect stderrRedirect] removeListener:self.currentLog];
     [[HBOutputRedirect stdoutRedirect] removeListener:self.currentLog];
+
     self.currentLog = nil;
 
     // Check to see if the encode state has not been cancelled
     // to determine if we should check for encode done notifications.
-    if (self.currentJob.state != HBJobStateCanceled)
+    if (result != HBCoreResultCancelled)
     {
-        [self jobCompletedAlerts];
-
-        // Mark the encode just finished as done
-        self.currentJob.state = HBJobStateCompleted;
-
+        [self jobCompletedAlerts:job];
         // Send to tagger
-        [self sendToExternalApp:self.currentJob.destURL];
+        [self sendToExternalApp:job.destURL];
     }
 
-    self.currentJob = nil;
+    // Mark the encode just finished
+    switch (result) {
+        case HBCoreResultDone:
+            job.state = HBJobStateCompleted;
+            break;
+        case HBCoreResultCancelled:
+            job.state = HBJobStateCanceled;
+            break;
+        default:
+            job.state = HBJobStateFailed;
+            break;
+    }
 
-    // since we have successfully completed an encode, we go to the next
-    if (!self.stop)
+    if ([self.jobs containsObject:job])
     {
-        [self encodeNextQueueItem];
+        [self reloadQueueItemAtIndex:[self.jobs indexOfObject:job]];
     }
-    self.stop = NO;
-
     [self.window.toolbar validateVisibleItems];
-    [self reloadQueue];
+    [self.jobs commit];
 }
 
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)performScan:(NSURL *)scanURL titleIdx:(NSInteger)index
+- (void)encodeJob:(HBJob *)job
 {
-    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+    NSParameterAssert(job);
+
+    // Progress handler
+    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
+    {
+        NSString *status = info;
+        self.progressTextField.stringValue = status;
+        [self.controller setQueueInfo:status progress:0 hidden:NO];
+    };
+
+    // Completion handler
+    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
+    {
+        if (result == HBCoreResultDone)
+        {
+            [self realEncodeJob:job];
+        }
+        else
+        {
+            [self completedJob:job result:result];
+            [self encodeNextQueueItem];
+        }
+    };
 
     // Only scan 10 previews before an encode - additional previews are
     // only useful for autocrop and static previews, which are already taken care of at this point
-    [self.core scanURL:scanURL
-            titleIndex:index
+    [self.core scanURL:job.fileURL
+            titleIndex:job.titleIdx
               previews:10
            minDuration:0
-       progressHandler:^(HBState state, hb_state_t hb_state) {
-           NSString *status = [formatter stateToString:hb_state title:nil];
-
-           self.progressTextField.stringValue = status;
-           [self.controller setQueueInfo:status progress:0 hidden:NO];
-       }
-   completionHandler:^(BOOL success) {
-       if (success)
-       {
-           [self doEncodeQueueItem];
-       }
-       else
-       {
-           [self.jobs beginTransaction];
-
-           self.currentJob.state = HBJobStateCanceled;
-           [self encodeCompleted];
-
-           [self.jobs commit];
-           [self reloadQueue];
-       }
-
-       [self.window.toolbar validateVisibleItems];
-   }];
+       progressHandler:progressHandler
+     completionHandler:completionHandler];
 }
 
 /**
  * This assumes that we have re-scanned and loaded up a new queue item to send to libhb
  */
-- (void)doEncodeQueueItem
+- (void)realEncodeJob:(HBJob *)job
 {
-    // Reset the title in the job.
-    self.currentJob.title = self.core.titles[0];
+    NSParameterAssert(job);
 
-    HBStateFormatter *converter = [[HBStateFormatter alloc] init];
-    NSString *destinationName = self.currentJob.destURL.lastPathComponent;
+    // Reset the title in the job.
+    job.title = self.core.titles[0];
+
+    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
+    formatter.title = job.destURL.lastPathComponent;
+    self.core.stateFormatter = formatter;
+
+    // Progress handler
+    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
+    {
+        if (state == HBStateWorking)
+        {
+            // Update dock icon
+            if (self.dockIconProgress < 100.0 * progress.percent)
+            {
+                [self.dockTile updateDockIcon:progress.percent hours:progress.hours minutes:progress.minutes seconds:progress.seconds];
+                self.dockIconProgress += dockTileUpdateFrequency;
+            }
+        }
+        else if (state == HBStateMuxing)
+        {
+            [self.dockTile updateDockIcon:1.0 withETA:@""];
+        }
+
+        // Update text field
+        self.progressTextField.stringValue = info;
+        [self.controller setQueueInfo:info progress:progress.percent hidden:NO];
+    };
+
+    // Completion handler
+    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
+    {
+        NSString *info = NSLocalizedString(@"Encode Finished.", @"");
+        self.progressTextField.stringValue = info;
+        [self.controller setQueueInfo:info progress:1.0 hidden:YES];
+
+        // Restore dock icon
+        [self.dockTile updateDockIcon:-1.0 withETA:@""];
+        self.dockIconProgress = 0;
+
+        [self completedJob:job result:result];
+        [self encodeNextQueueItem];
+    };
 
     // We should be all setup so let 'er rip
-    [self.core encodeJob:self.currentJob
-         progressHandler:^(HBState state, hb_state_t hb_state) {
-             NSString *string = [converter stateToString:hb_state title:destinationName];
-             CGFloat progress = [converter stateToPercentComplete:hb_state];
-
-             if (state == HBStateWorking)
-             {
-                 // Update dock icon
-                 if (self.dockIconProgress < 100.0 * progress)
-                 {
-                     // ETA format is [XX]X:XX:XX when ETA is greater than one hour
-                     // [X]X:XX when ETA is greater than 0 (minutes or seconds)
-                     // When these conditions doesn't applied (eg. when ETA is undefined)
-                     // we show just a tilde (~)
-
-                     #define p hb_state.param.working
-                     NSString *etaStr;
-                     if (p.hours > 0)
-                         etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
-                     else if (p.minutes > 0 || p.seconds > 0)
-                         etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
-                     else
-                         etaStr = @"~";
-                     #undef p
-
-                     [self.dockTile updateDockIcon:progress withETA:etaStr];
-                     self.dockIconProgress += dockTileUpdateFrequency;
-                 }
-             }
-             else if (state == HBStateMuxing)
-             {
-                 [self.dockTile updateDockIcon:1.0 withETA:@""];
-             }
-
-             // Update text field
-             self.progressTextField.stringValue = string;
-             [self.controller setQueueInfo:string progress:progress hidden:NO];
-         }
-     completionHandler:^(BOOL success) {
-         NSString *info = NSLocalizedString(@"Encode Finished.", @"");
-
-         self.progressTextField.stringValue = info;
-         [self.controller setQueueInfo:info progress:1.0 hidden:YES];
-
-         // Restore dock icon
-         [self.dockTile updateDockIcon:-1.0 withETA:@""];
-         self.dockIconProgress = 0;
-
-         [self.jobs beginTransaction];
-
-         [self encodeCompleted];
-
-         [self.jobs commit];
-         [self reloadQueue];
-     }];
+    [self.core encodeJob:job progressHandler:progressHandler completionHandler:completionHandler];
 
     // We are done using the title, remove it from the job
-    self.currentJob.title = nil;
+    job.title = nil;
 }
 
 /**
@@ -565,8 +747,6 @@
  */
 - (void)doCancelCurrentJob
 {
-    self.currentJob.state = HBJobStateCanceled;
-
     if (self.core.state == HBStateScanning)
     {
         [self.core cancelScan];
@@ -582,12 +762,7 @@
  */
 - (void)cancelCurrentJobAndContinue
 {
-    [self.jobs beginTransaction];
-
     [self doCancelCurrentJob];
-
-    [self.jobs commit];
-    [self reloadQueue];
 }
 
 /**
@@ -595,13 +770,16 @@
  */
 - (void)cancelCurrentJobAndStop
 {
-    [self.jobs beginTransaction];
-
     self.stop = YES;
     [self doCancelCurrentJob];
+}
 
-    [self.jobs commit];
-    [self reloadQueue];
+/**
+ * Finishes the current job and stops libhb from processing the remaining encodes.
+ */
+- (void)finishCurrentAndStop
+{
+    self.stop = YES;
 }
 
 #pragma mark - Encode Done Actions
@@ -632,19 +810,25 @@
                                clickContext:nil];
 }
 
+/**
+ *  Sends the URL to the external app
+ *  selected in the preferences.
+ *
+ *  @param fileURL the URL of the file to send
+ */
 - (void)sendToExternalApp:(NSURL *)fileURL
 {
     // This end of encode action is called as each encode rolls off of the queue
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"sendToMetaX"] == YES)
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBSendToAppEnabled"] == YES)
     {
         NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-        NSString *sendToApp = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"SendCompletedEncodeToApp"]];
+        NSString *app = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"HBSendToApp"]];
 
-        if (sendToApp)
+        if (app)
         {
-            if (![workspace openFile:fileURL.path withApplication:sendToApp])
+            if (![workspace openFile:fileURL.path withApplication:app])
             {
-                [HBUtilities writeToActivityLog:"Failed to send file to: %s", sendToApp];
+                [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
             }
         }
         else
@@ -654,7 +838,10 @@
     }
 }
 
-- (void)jobCompletedAlerts
+/**
+ *  Runs the alert for a single job
+ */
+- (void)jobCompletedAlerts:(HBJob *)job
 {
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
@@ -665,10 +852,13 @@
         {
             NSBeep();
         }
-        [self showDoneNotification:self.currentJob.destURL];
+        [self showDoneNotification:job.destURL];
     }
 }
 
+/**
+ *  Runs the global queue completed alerts
+ */
 - (void)queueCompletedAlerts
 {
     // If Play System Alert has been selected in Preferences
@@ -721,12 +911,17 @@
  */
 - (IBAction)removeSelectedQueueItem:(id)sender
 {
+    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    {
+        // Do not execture the action if the array changed.
+        [self.jobs commit];
+        return;
+    }
+
     NSMutableIndexSet *targetedRows = [[self.outlineView targetedRowIndexes] mutableCopy];
 
     if (targetedRows.count)
     {
-        [self.jobs beginTransaction];
-
         // if this is a currently encoding job, we need to be sure to alert the user,
         // to let them decide to cancel it first, then if they do, we can come back and
         // remove it
@@ -737,7 +932,7 @@
         if ([targetedRows containsIndexes:workingIndexes])
         {
             [targetedRows removeIndexes:workingIndexes];
-            NSArray *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
+            NSArray<HBJob *> *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
                 return item.state == HBJobStateWorking;
             }];
 
@@ -746,7 +941,7 @@
                 NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", nil)];
 
                 // Which window to attach the sheet to?
-                NSWindow *targetWindow = nil;
+                NSWindow *targetWindow = self.window;
                 if ([sender respondsToSelector: @selector(window)])
                 {
                     targetWindow = [sender window];
@@ -768,14 +963,8 @@
 
         // remove the non working items immediately
         [self removeQueueItemsAtIndexes:targetedRows];
-        [self getQueueStats];
-
-        [self.outlineView beginUpdates];
-        [self.outlineView removeItemsAtIndexes:targetedRows inParent:nil withAnimation:NSTableViewAnimationEffectFade];
-        [self.outlineView endUpdates];
-
-        [self.jobs commit];
     }
+    [self.jobs commit];
 }
 
 - (void)didDimissCancelCurrentJob:(NSAlert *)alert
@@ -784,10 +973,11 @@
 {
     if (returnCode == NSAlertSecondButtonReturn)
     {
+        [self.jobs beginTransaction];
+
         NSInteger index = [self.jobs indexOfObject:self.currentJob];
         [self cancelCurrentJobAndContinue];
 
-        [self.jobs beginTransaction];
         [self removeQueueItemAtIndex:index];
         [self.jobs commit];
     }
@@ -796,7 +986,7 @@
 /**
  * Show the finished encode in the finder
  */
-- (IBAction)revealSelectedQueueItems: (id)sender
+- (IBAction)revealSelectedQueueItems:(id)sender
 {
     NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
     NSMutableArray *urls = [[NSMutableArray alloc] init];
@@ -868,12 +1058,7 @@
         // or shut down when encoding is finished
         [self remindUserOfSleepOrShutdown];
 
-        [self.jobs beginTransaction];
-
         [self encodeNextQueueItem];
-
-        [self.jobs commit];
-        [self reloadQueue];
     }
 }
 
@@ -885,14 +1070,10 @@
 - (IBAction)cancelRip:(id)sender
 {
     // Which window to attach the sheet to?
-    NSWindow *window;
+    NSWindow *window = self.window;
     if ([sender respondsToSelector:@selector(window)])
     {
         window = [sender window];
-    }
-    else
-    {
-        window = self.window;
     }
 
     NSAlert *alert = [[NSAlert alloc] init];
@@ -901,6 +1082,7 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", nil)];
     [alert setAlertStyle:NSCriticalAlertStyle];
 
     [alert beginSheetModalForWindow:window
@@ -920,6 +1102,10 @@
     else if (returnCode == NSAlertThirdButtonReturn)
     {
         [self cancelCurrentJobAndContinue];
+    }
+    else if (returnCode == NSAlertThirdButtonReturn + 1)
+    {
+        [self finishCurrentAndStop];
     }
 }
 
@@ -955,9 +1141,17 @@
     }
 }
 
+/**
+ *  Resets the job state to ready.
+ */
 - (IBAction)resetJobState:(id)sender
 {
-    [self.jobs beginTransaction];
+    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    {
+        // Do not execture the action if the array changed.
+        [self.jobs commit];
+        return;
+    }
 
     NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
     NSMutableIndexSet *updatedIndexes = [NSMutableIndexSet indexSet];
@@ -966,7 +1160,7 @@
     while (currentIndex != NSNotFound) {
         HBJob *job = self.jobs[currentIndex];
 
-        if (job.state == HBJobStateCanceled || job.state == HBJobStateCompleted)
+        if (job.state == HBJobStateCanceled || job.state == HBJobStateCompleted || job.state == HBJobStateFailed)
         {
             job.state = HBJobStateReady;
             [updatedIndexes addIndex:currentIndex];
@@ -974,8 +1168,32 @@
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [self.outlineView reloadDataForRowIndexes:updatedIndexes columnIndexes:[NSIndexSet indexSetWithIndex:0]];
-    [self getQueueStats];
+    [self reloadQueueItemsAtIndexes:updatedIndexes];
+    [self.jobs commit];
+}
+
+- (void)editQueueItem:(HBJob *)job
+{
+    NSParameterAssert(job);
+    [self.jobs beginTransaction];
+
+    NSInteger index = [self.jobs indexOfObject:job];
+
+    // Cancel the encode if it's the current item
+    if (job == self.currentJob)
+    {
+        [self cancelCurrentJobAndContinue];
+    }
+
+    if ([self.controller openJob:job])
+    {
+        // Now that source is loaded and settings applied, delete the queue item from the queue
+        [self removeQueueItemAtIndex:index];
+    }
+    else
+    {
+        NSBeep();
+    }
 
     [self.jobs commit];
 }
@@ -985,9 +1203,14 @@
  */
 - (IBAction)editSelectedQueueItem:(id)sender
 {
-    [self.jobs beginTransaction];
+    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    {
+        // Do not execture the action if the array changed.
+        [self.jobs commit];
+        return;
+    }
 
-    NSInteger row = [self.outlineView clickedRow];
+    NSInteger row = self.outlineView.clickedRow;
     if (row != NSNotFound)
     {
         // if this is a currently encoding job, we need to be sure to alert the user,
@@ -999,7 +1222,7 @@
             NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", nil)];
 
             // Which window to attach the sheet to?
-            NSWindow *docWindow = nil;
+            NSWindow *docWindow = self.window;
             if ([sender respondsToSelector: @selector(window)])
             {
                 docWindow = [sender window];
@@ -1019,18 +1242,7 @@
         }
         else if (job.state != HBJobStateWorking)
         {
-            // since we are not a currently encoding item, we can just be edit it
-            HBJob *item = [[self.jobs[row] representedObject] copy];
-            if ([self.controller openJob:item])
-            {
-                // Now that source is loaded and settings applied, delete the queue item from the queue
-                [self.outlineView beginUpdates];
-                [self removeQueueItemAtIndex:row];
-                [self.outlineView removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:row] inParent:nil withAnimation:NSTableViewAnimationEffectFade];
-                [self.outlineView endUpdates];
-
-                [self getQueueStats];
-            }
+            [self editQueueItem:job];
         }
     }
 
@@ -1044,42 +1256,28 @@
     if (returnCode == NSAlertSecondButtonReturn)
     {
         HBJob *job = (__bridge HBJob *)contextInfo;
-        NSInteger index = [self.jobs indexOfObject:job];
-
-        if (job == self.currentJob)
-        {
-            [self cancelCurrentJobAndContinue];
-        }
-
-        if ([self.controller openJob:job])
-        {
-            [self.jobs beginTransaction];
-            [self.controller openJob:job];
-            [self removeQueueItemAtIndex:index];
-            [self.jobs commit];
-            [self getQueueStats];
-        }
+        [self editQueueItem:job];
     }
 }
 
 - (IBAction)clearAll:(id)sender
 {
     [self.jobs beginTransaction];
-    [self.jobs removeObjectsUsingBlock:^BOOL(HBJob *item) {
+    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
         return (item.state != HBJobStateWorking);
     }];
+    [self removeQueueItemsAtIndexes:indexes];
     [self.jobs commit];
-    [self reloadQueue];
 }
 
 - (IBAction)clearCompleted:(id)sender
 {
     [self.jobs beginTransaction];
-    [self.jobs removeObjectsUsingBlock:^BOOL(HBJob *item) {
+    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
         return (item.state == HBJobStateCompleted);
     }];
+    [self removeQueueItemsAtIndexes:indexes];
     [self.jobs commit];
-    [self reloadQueue];
 }
 
 #pragma mark -
@@ -1117,7 +1315,7 @@
     // top-level items.
     if (item == nil)
     {
-        return [self.jobs count];
+        return self.jobs.count;
     }
     else
     {
@@ -1141,6 +1339,9 @@
     [self.outlineView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(row,1)]];
 }
 
+#define HB_ROW_HEIGHT_TITLE_ONLY 17.0
+#define HB_ROW_HEIGHT_PADDING 6.0
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
 {
     if ([outlineView isItemExpanded:item])
@@ -1153,14 +1354,14 @@
         NSCell *cell = [outlineView preparedCellAtColumn:columnToWrap row:[outlineView rowForItem:item]];
         
         // See how tall it naturally would want to be if given a restricted with, but unbound height
-        NSRect constrainedBounds = NSMakeRect(0, 0, [tableColumnToWrap width], CGFLOAT_MAX);
+        NSRect constrainedBounds = NSMakeRect(0, 0, tableColumnToWrap.width, CGFLOAT_MAX);
         NSSize naturalSize = [cell cellSizeForBounds:constrainedBounds];
         
         // Make sure we have a minimum height -- use the table's set height as the minimum.
-        if (naturalSize.height > [outlineView rowHeight])
-            return naturalSize.height;
+        if (naturalSize.height > outlineView.rowHeight)
+            return naturalSize.height + HB_ROW_HEIGHT_PADDING;
         else
-            return [outlineView rowHeight];
+            return outlineView.rowHeight;
     }
     else
     {
@@ -1173,17 +1374,15 @@
     if ([tableColumn.identifier isEqualToString:@"desc"])
     {
         HBJob *job = item;
+        NSAttributedString *description = self.descriptions[@(job.hash)];
 
-        if (self.descriptions[@(job.hash)])
+        if (description == nil)
         {
-            return self.descriptions[@(job.hash)];
+            description = job.attributedDescription;
+            self.descriptions[@(job.hash)] = description;
         }
 
-        NSAttributedString *finalString = job.attributedDescription;
-
-        self.descriptions[@(job.hash)] = finalString;;
-
-        return finalString;
+        return description;
     }
     else if ([tableColumn.identifier isEqualToString:@"icon"])
     {
@@ -1199,6 +1398,10 @@
         else if (job.state == HBJobStateCanceled)
         {
             return [NSImage imageNamed:@"EncodeCanceled"];
+        }
+        else if (job.state == HBJobStateFailed)
+        {
+            return [NSImage imageNamed:@"EncodeFailed"];
         }
         else
         {
@@ -1231,7 +1434,9 @@
                 [cell setAlternateImage:[NSImage imageNamed:@"RevealHighlightPressed"]];
             }
             else
+            {
                 [cell setImage:[NSImage imageNamed:@"Reveal"]];
+            }
         }
         else
         {
@@ -1242,7 +1447,9 @@
                 [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
             }
             else
+            {
                 [cell setImage:[NSImage imageNamed:@"Delete"]];
+            }
         }
     }
 }
@@ -1261,7 +1468,7 @@
     }
 }
 
-#pragma mark NSOutlineView delegate (dragging related)
+#pragma mark NSOutlineView drag & drop
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
@@ -1294,7 +1501,7 @@
     // Don't allow dropping INTO an item since they can't really contain any children.
     if (item != nil)
     {
-        index = [self.outlineView rowForItem: item] + 1;
+        index = [self.outlineView rowForItem:item] + 1;
         item = nil;
     }
 
@@ -1304,7 +1511,7 @@
     if (encodingIndex != NSNotFound && index <= encodingIndex)
     {
         return NSDragOperationNone;
-        index = MAX (index, encodingIndex);
+        index = MAX(index, encodingIndex);
 	}
 
     [outlineView setDropItem:item dropChildIndex:index];
@@ -1313,29 +1520,7 @@
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
-    [self.jobs beginTransaction];
-    [self.outlineView beginUpdates];
-
-    for (id object in self.dragNodesArray.reverseObjectEnumerator)
-    {
-        NSUInteger sourceIndex = [self.jobs indexOfObject:object];
-        [self.jobs removeObjectAtIndex:sourceIndex];
-
-        if (sourceIndex < index)
-        {
-            index--;
-        }
-
-        [self.jobs insertObject:object atIndex:index];
-
-        NSUInteger destIndex = [self.jobs indexOfObject:object];
-
-        [self.outlineView moveItemAtIndex:sourceIndex inParent:nil toIndex:destIndex inParent:nil];
-    }
-
-    [self.outlineView endUpdates];
-    [self.jobs commit];
-
+    [self moveQueueItems:self.dragNodesArray toIndex:index];
     return YES;
 }
 

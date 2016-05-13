@@ -1,6 +1,6 @@
 /* preset.h
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -84,11 +84,11 @@ char       * hb_presets_clean_json(const char *json);
 // Import a preset.  Sanitizes and converts old key/value pairs
 // to new key/value pairs.  This is applied for you by hb_presets_add(),
 // hb_presets_add_json(), hb_presets_add_file(), and hb_presets_add_path()
-void         hb_presets_import(hb_value_t *preset);
+int          hb_presets_import(const hb_value_t *in, hb_value_t **out);
 
 // Import a json preset.  Sanitizes and converts old key/value pairs
 // to new key/value pairs.
-char       * hb_presets_import_json(const char *json);
+int          hb_presets_import_json(const char *in, char **out);
 
 // Register new presets with libhb from json string
 int          hb_presets_add_json(const char *json);

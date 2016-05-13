@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * callbacks.h
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * callbacks.h is free software.
  *
@@ -61,7 +61,7 @@ void ghb_error_dialog(
 void ghb_init_dep_map(void);
 void ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg);
 gboolean ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg);
-GhbValue* ghb_start_next_job(signal_user_data_t *ud);
+void ghb_start_next_job(signal_user_data_t *ud);
 void ghb_check_dependency(
     signal_user_data_t *ud, GtkWidget *widget, const gchar *alt_name);
 void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,

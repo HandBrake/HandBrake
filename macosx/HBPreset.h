@@ -19,13 +19,13 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *
  *  An instance of HBPreset can be an actual preset or a folder.
  */
-@interface HBPreset : HBTreeNode <NSCopying>
+@interface HBPreset : HBTreeNode <NSCopying, NSMutableCopying>
 
 - (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
-
 - (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithPreset:(HBPreset *)preset;
 
 /**
  *  Initializes a newly allocated preset object initialized with the data found at a given URL.
@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *  @return An initialized preset—which might be different than the original receiver—that contains the preset at URL,
  *  or nil if there is an error or if the contents of the resource are not and HandBrake preset.
  */
-- (nullable instancetype)initWithContentsOfURL:(NSURL *)url;
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError **)outError;
 
 /**
  *  Writes a property list or json representation of the contents of the preset to a given URL.
@@ -48,11 +48,6 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *  @return YES if the location is written successfully, otherwise NO.
  */
 - (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot;
-
-/**
- *  Removes unknown keys and normalizes values.
- */
-- (void)cleanUp;
 
 /**
  *  The name of the preset.
@@ -75,14 +70,14 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 @property (nonatomic) BOOL isDefault;
 
 /**
- *  The actual content of the preset.
+ *  Returns the value associated with a given key.
+ *
+ *  @param key The key for which to return the corresponding value.
+ *
+ *  @return The value associated with key, or nil if no value is associated with key
  */
-@property (nonatomic, strong, nullable) NSDictionary *content;
-
-/**
- *  A dictionary representation of the preset.
- */
-@property (readonly, copy) NSDictionary *dictionary;
+- (nullable id)objectForKey:(NSString *)key;
+- (nullable id)objectForKeyedSubscript:(NSString *)key;
 
 @end
 

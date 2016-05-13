@@ -13,9 +13,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
 
     /// <summary>
     /// The Add Preset View Model
@@ -39,6 +39,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="addAction">
         /// The add To Queue action
         /// </param>
-        void Setup(Source scannedSource, string sourceName, Action<IEnumerable<SelectionTitle>> addAction);
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        void Setup(Source scannedSource, string sourceName, Action<IEnumerable<SelectionTitle>> addAction, Preset preset);
     }
 }

@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Helpers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -23,6 +24,7 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
 
     using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
 
@@ -43,31 +45,43 @@ namespace HandBrakeWPF.Helpers
         {
             try
             {
-                XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
                 string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
                 List<string> queueFiles = new List<string>();
-                List<string> removeFiles = new List<string>();
-
                 DirectoryInfo info = new DirectoryInfo(tempPath);
                 IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+
+                if (!logFiles.Any())
+                {
+                    return queueFiles;
+                }
+
+                List<string> removeFiles = new List<string>();
+                XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
                 foreach (FileInfo file in logFiles)
                 {
-                    using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
+                    try
                     {
-                        List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
-                        if (list != null && list.Count == 0)
+                        using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                         {
-                            removeFiles.Add(file.FullName);
-                        }
-
-                        if (list != null && list.Count != 0)
-                        {
-                            List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
-                            if (tasks.Count != 0)
+                            List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
+                            if (list != null && list.Count == 0)
                             {
-                                queueFiles.Add(file.Name);
+                                removeFiles.Add(file.FullName);
+                            }
+
+                            if (list != null && list.Count != 0)
+                            {
+                                List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
+                                if (tasks.Count != 0)
+                                {
+                                    queueFiles.Add(file.Name);
+                                }
                             }
                         }
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.WriteLine(exc);
                     }
                 }
 
@@ -89,8 +103,9 @@ namespace HandBrakeWPF.Helpers
 
                 return queueFiles;
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                Debug.WriteLine(exc);
                 return new List<string>(); // Keep quiet about the error.
             }
         }
@@ -104,22 +119,38 @@ namespace HandBrakeWPF.Helpers
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService)
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
             List<string> queueFiles = CheckQueueRecovery();
             MessageBoxResult result = MessageBoxResult.None;
-            if (queueFiles.Count == 1)
+            if (!silentRecovery)
             {
-                result = errorService.ShowMessageBox(
-                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
-                        "Queue Recovery Possible", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (queueFiles.Count == 1)
+                {
+                    result =
+                        errorService.ShowMessageBox(
+                            "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
+                            "Queue Recovery Possible",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                }
+                else if (queueFiles.Count > 1)
+                {
+                    result =
+                        errorService.ShowMessageBox(
+                            "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
+                            "Queue Recovery Possible",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+                }
             }
-            else if (queueFiles.Count > 1)
+            else
             {
-                result = MessageBox.Show(
-                        "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
-                        "Queue Recovery Possible", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                result = MessageBoxResult.Yes;
             }
 
             if (result == MessageBoxResult.Yes)

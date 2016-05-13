@@ -10,21 +10,10 @@
 #include <IOKit/IOKitLib.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IODVDMedia.h>
+#include <IOKit/storage/IOBDMedia.h>
 #include <sys/mount.h>
 
 #import "HBDVDDetector.h"
-
-
-@interface HBDVDDetector (Private)
-
-- (NSString *)bsdName;
-- (BOOL)pathHasVideoTS;
-- (BOOL)deviceIsDVD;
-- (io_service_t)getIOKitServiceForBSDName;
-- (BOOL)isDVDService: (io_service_t)service;
-- (BOOL)isWholeMediaService: (io_service_t)service;
-
-@end
 
 
 @implementation HBDVDDetector
@@ -62,36 +51,18 @@
 }
 
 
+- (BOOL)isVideoBluRay
+{
+    return ( [self pathHasBDMV] && [self deviceIsBluRay] );
+}
+
+
 - (NSString *)devicePath
 {
     return [NSString stringWithFormat:@"/dev/%@", [self bsdName]];
 }
 
-@end
-
-
-@implementation HBDVDDetector (Private)
-
-- (NSString *)bsdName
-{
-    if ( bsdName )
-    {
-        return bsdName;
-    }
-
-    struct statfs s;
-    statfs([path fileSystemRepresentation], &s);
-
-    bsdName = @(s.f_mntfromname);
-
-    if ([bsdName hasPrefix:@"/dev/"])
-    {
-        bsdName = [bsdName substringFromIndex:5];
-    }
-
-    return bsdName;
-}
-
+#pragma mark - DVD
 
 - (BOOL)pathHasVideoTS
 {
@@ -109,12 +80,61 @@
 
 - (BOOL)deviceIsDVD
 {
+    return [self deviceIs:kIODVDMediaClass];
+}
+
+#pragma mark - BluRay
+
+- (BOOL)pathHasBDMV
+{
+    // Check one level under the path
+    if( [[NSFileManager defaultManager] fileExistsAtPath:
+         [path stringByAppendingPathComponent:@"BDMV"]] )
+    {
+        return YES;
+    }
+
+    // Now check above the path
+    return [[path pathComponents] containsObject:@"BDMV"];
+}
+
+
+- (BOOL)deviceIsBluRay
+{
+    return [self deviceIs:kIOBDMediaClass];
+}
+
+#pragma mark - Common
+
+- (NSString *)bsdName
+{
+    if ( bsdName )
+    {
+        return bsdName;
+    }
+
+    struct statfs s;
+    statfs(path.fileSystemRepresentation, &s);
+
+    bsdName = @(s.f_mntfromname);
+
+    if ([bsdName hasPrefix:@"/dev/"])
+    {
+        bsdName = [bsdName substringFromIndex:5];
+    }
+
+    return bsdName;
+}
+
+
+- (BOOL)deviceIs:(const io_name_t)class
+{
     io_service_t service = [self getIOKitServiceForBSDName];
     if( service == IO_OBJECT_NULL )
     {
         return NO;
     }
-    BOOL result = [self isDVDService:service];
+    BOOL result = [self isService:service class:class];
     IOObjectRelease(service);
     return result;
 }
@@ -136,7 +156,7 @@
 }
 
 
-- (BOOL)isDVDService: (io_service_t)service
+- (BOOL)isService: (io_service_t)service class:(const io_name_t)class
 {
     // Find the IOMedia object that represents the entire (whole) media that the
     // volume is on. 
@@ -169,16 +189,16 @@
     // so add a reference to balance.
     IOObjectRetain( service );
 
-    BOOL isDVD = NO;
+    BOOL conformsToClass = NO;
     do
     {
-        isDVD = ( [self isWholeMediaService:service] &&
-                  IOObjectConformsTo(service, kIODVDMediaClass) );
+        conformsToClass = ( [self isWholeMediaService:service] &&
+                            IOObjectConformsTo(service, class) );
         IOObjectRelease(service);
-    } while( !isDVD && (service = IOIteratorNext(iter)) );
+    } while( !conformsToClass && (service = IOIteratorNext(iter)) );
     IOObjectRelease( iter );
 
-    return isDVD;
+    return conformsToClass;
 }
 
 

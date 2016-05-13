@@ -17,6 +17,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+                       
             <ToolBar Grid.Row="0"
                      ToolBar.OverflowMode="Never" 
                      ToolBarTray.IsLocked="True"
@@ -38,51 +39,27 @@
 
             </ToolBar>
 
+            <TextBox Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" x:Name="logText">
 
-            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Margin="0,3,0,0">
-                <TabItem>
-                    <TabItem.Header>
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_EncodeLog}" Padding="4">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </TabItem.Header>
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
+                            <MenuItem.Icon>
+                                <Image Width="16" Source="Images/copy.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static Properties:ResourcesUI.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
+                            <MenuItem.Icon>
+                                <Image Width="16" Source="Images/folder.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Auto Scroll" IsCheckable="True" IsChecked="True" x:Name="AutoScroll" />
+                        
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
 
-                    <TextBox
-                     AcceptsReturn="True"
-                     IsReadOnly="True"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     Text="{Binding EncodeLog, Mode=OneWay,  UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap" />
-                </TabItem>
-
-                <TabItem>
-                    <TabItem.Header>
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.LogView_ScanLog}" Padding="4">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </TabItem.Header>
-                    <TextBox AcceptsReturn="True" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                             Text="{Binding ScanLog, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextWrapping="Wrap" />
-                </TabItem>
-
-            </TabControl>
         </Grid>
 
     </Grid>

@@ -242,40 +242,6 @@ may have problems with Weighted P-frame prediction: the Apple TV is completely i
 
 Set this if your device is struggling to play the output. (i.e. dropped frames)</value>
   </data>
-  <data name="Video_EncoderLevel" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified H.264 Levels. This will override all other settings.</value>
-  </data>
-  <data name="Video_EncoderPreset" xml:space="preserve">
-    <value>Adjusts settings to trade off compression efficiency against encoding speed.
-
-This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
-
-You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</value>
-  </data>
-  <data name="Video_EncoderProfile" xml:space="preserve">
-    <value>Limit the profile of the output stream. This will override all other settings.</value>
-  </data>
-  <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Tune settings to optimise for common scenarios
-
-This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-
-Changes will be applied after the preset but before all other parameters.</value>
-  </data>
-  <data name="Video_QualitySlider" xml:space="preserve">
-    <value>Set the desired quality factor. The encoder targets a certain quality. 
-The scale used by each video encoder is different.
-
-x264's scale is logarithmic and lower values correspond to higher quality. 
-So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
-A value of 0 means lossless and will result in a file size that is larger than the original source, 
-unless the source was also lossless. 
-Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
-
-x265 is a new encoder, so there are no recommended values yet. You'll have to experiment.
-
-FFMpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
-  </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>Warning: RF 0 is Lossless!</value>
   </data>
@@ -302,7 +268,7 @@ The above controls are only a subset of useful x264 parameters.
 This box allows you to add or modify additional or current parameters as desired. </value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2015 The HandBrake Team
+    <value>Copyright (C) 2003-2016 The HandBrake Team
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -345,9 +311,6 @@ If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; 
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
     <value>Placebo Quality |</value>
-  </data>
-  <data name="Video_DxvaDecode" xml:space="preserve">
-    <value>Accelerates H.264, MPEG-4, VC1 and WMV3  and can provide a small speed improvement on lower end hardware.</value>
   </data>
   <data name="Video_QuickSyncNotAvailable" xml:space="preserve">
     <value>QuickSync hardware not detected or enabled! 
@@ -392,7 +355,7 @@ In order to use the QuickSync encoder, you must:
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>   Pending Jobs {5}</value>
+    <value>   Pending Jobs {7}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
     <value>New Default Preset Set: {0}</value>
@@ -585,7 +548,7 @@ The Activity log may have further information.</value>
     <value>Are you sure you want to delete the preset: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>{0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}</value>
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\:mm\:ss}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
     <value>A Preset must have a Name. Please fill out the Preset Name field.</value>
@@ -618,7 +581,7 @@ The Activity log may have further information.</value>
     <value>Switch Back To Tracks</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Unable to save Chapter Makrers file! </value>
+    <value>Unable to save Chapter Markers file! </value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
     <value>Chapter marker names will NOT be saved in your encode.</value>
@@ -747,5 +710,102 @@ Please make sure VLC is installed and the directory specified in HandBrake's opt
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
     <value>Configure Defaults</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>Archived File:</value>
+  </data>
+  <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
+    <value>HandBrake has detected your presets file is from an older version.
+It will try and load the file anyway.
+If it fails, it will archive off the old file and create a new one.</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>Unable to load presets.</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+
+Your old presets file was archived to:</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> with {0} errors detected.</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>Low Disk Space</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. </value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>Line {0} is invalid. Nothing will be imported.</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>Unable to import chapter file</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>All lines in chapters file must have at least 2 columns of data</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>First column in chapters file must only contain a integer number value higher than zero (0)</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>Chapter files of type '{0}' are not currently supported.</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>Unsupported chapter file type</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>Invalid chapter information for source media</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>The number of chapters on the source media 
+and the number of chapters in the input file do not match ({0} vs {1}).
+
+Do you still want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>Chapter count doesn't match between source and input file</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>The reported duration of the chapters on the source media 
+and the duration of chapters in the input file differ greatly.
+
+It is very likely that this chapter file was produced from a different source media.
+
+Are you sure you want to import the chapter names?</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>Chapter duration doesn't match between source and input file</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>An error occured when trying to stop the scan. Please restart HandBrake.</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake is unable to upgrade your presets file to a new version format.
+Your preset file will be archived and new one created. You will need to re-create your own presets.</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
+  </data>
+  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+    <value>A problem occured when trying to save your preferences.</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>Warning, your settings have been reset!</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>Unable to load user settings file: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
   </data>
 </root>

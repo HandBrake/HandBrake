@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * main.c
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * main.c is free software.
  *
@@ -745,10 +745,16 @@ GtkEntry {                          \n\
 @define-color gray46 #757575;       \n\
 @define-color white  #ffffff;       \n\
                                     \n\
-#preview_hud,                       \n\
+#preview_hud                        \n\
+{                                   \n\
+    border-radius: 20px;            \n\
+    background-color: alpha(@gray18, 0.8); \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
 #live_preview_play,                 \n\
 #live_duration,                     \n\
-#preview_fullscreen                 \n\
+#preview_reset                      \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray18;      \n\
@@ -771,21 +777,21 @@ GtkEntry {                          \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:prelight        \n\
+#preview_reset:prelight             \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active          \n\
+#preview_reset:active               \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-#preview_fullscreen:active          \n\
+#preview_reset:active               \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
@@ -813,6 +819,12 @@ main(int argc, char *argv[])
     signal_user_data_t *ud;
     GError *error = NULL;
     GOptionContext *context;
+
+#if defined(_WIN32)
+    // Tell gdk pixbuf where it's loader config file is.
+    _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
+    _putenv_s("GST_PLUGIN_PATH", "lib/gstreamer-1.0");
+#endif
 
     hb_global_init();
 
@@ -926,7 +938,7 @@ main(int argc, char *argv[])
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_encode_progress"), "live_encode_progress");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
-    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_fullscreen"), "preview_fullscreen");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_reset"), "preview_reset");
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "activity_view"), "activity_view");
 
     // Redirect stderr to the activity window
@@ -1046,7 +1058,7 @@ main(int argc, char *argv[])
 
     gint window_width, window_height;
     GdkGeometry geo = {
-        -1, -1, 1920, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
+        -1, -1, 1920, 1080, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
     };
     GdkWindowHints geo_mask;
     geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
@@ -1186,6 +1198,7 @@ main(int argc, char *argv[])
     g_list_free(stack_switcher_children);
 
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
+
     gtk_widget_show(ghb_window);
 
     // Everything should be go-to-go.  Lets rock!

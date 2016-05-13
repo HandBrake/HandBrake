@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0710"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -11,7 +11,8 @@
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForAnalyzing = "YES"
+            hideIssues = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "273F203814ADBC200021BE6D"
@@ -25,26 +26,13 @@
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForAnalyzing = "YES"
+            hideIssues = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
                BuildableName = "HandBrakeCLI"
                BlueprintName = "HandBrakeCLI"
-               ReferencedContainer = "container:HandBrake.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A95B8D921B09F16700F2F152"
-               BuildableName = "HandBrake Tests.xctest"
-               BlueprintName = "HandBrake Tests"
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -60,9 +48,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A95B8D921B09F16700F2F152"
-               BuildableName = "HandBrake Tests.xctest"
-               BlueprintName = "HandBrake Tests"
+               BlueprintIdentifier = "A9736F0A1C7DA5FE008F1D18"
+               BuildableName = "HandBrakeKitTests.xctest"
+               BlueprintName = "HandBrakeKitTests"
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
          </TestableReference>

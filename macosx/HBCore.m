@@ -10,6 +10,7 @@
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
 
+#import "HBStateFormatter+Private.h"
 #import "HBTitlePrivate.h"
 
 #include <dlfcn.h>
@@ -45,7 +46,7 @@ static void hb_error_handler(const char *errmsg)
 @property (nonatomic, readonly) dispatch_queue_t updateTimerQueue;
 
 /// Current scanned titles.
-@property (nonatomic, readwrite, strong) NSArray *titles;
+@property (nonatomic, readwrite, copy) NSArray<HBTitle *> *titles;
 
 /// Progress handler.
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
@@ -96,9 +97,13 @@ static void hb_error_handler(const char *errmsg)
         _name = @"HBCore";
         _state = HBStateIdle;
         _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
-        _hb_state = malloc(sizeof(struct hb_state_s));
+        _titles = @[];
 
-        _hb_handle = hb_init(level, 0);
+        _stateFormatter = [[HBStateFormatter alloc] init];
+        _hb_state = malloc(sizeof(struct hb_state_s));
+        _logLevel = level;
+
+        _hb_handle = hb_init(level);
         if (!_hb_handle)
         {
             return nil;
@@ -132,10 +137,17 @@ static void hb_error_handler(const char *errmsg)
     free(_hb_state);
 }
 
+- (void)setLogLevel:(int)logLevel
+{
+    _logLevel = logLevel;
+    hb_log_level_set(_hb_handle, logLevel);
+}
+
 #pragma mark - Scan
 
 - (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
 {
+    NSAssert(url, @"[HBCore canScan:] called with nil url.");
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         if (error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
@@ -148,30 +160,34 @@ static void hb_error_handler(const char *errmsg)
 
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:url.path];
 
-    if (detector.isVideoDVD)
+    if (detector.isVideoDVD || detector.isVideoBluRay)
     {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
+        [HBUtilities writeToActivityLog:"%s trying to open a physical disc at: %s", self.name.UTF8String, url.path.UTF8String];
+        void *lib = NULL;
 
-        [HBUtilities writeToActivityLog:"%s trying to open a physical dvd at: %s", self.name.UTF8String, url.path.UTF8String];
-
-        // Notify the user that we don't support removal of copy protection.
-        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss)
+        if (detector.isVideoDVD)
         {
-            // libdvdcss was found so all is well
-            [HBUtilities writeToActivityLog:"%s libdvdcss.2.dylib found for decrypting physical dvd", self.name.UTF8String];
-            dlclose(dvdcss);
+            lib = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+        }
+        else if (detector.isVideoBluRay)
+        {
+            lib = dlopen("libaacs.dylib", RTLD_LAZY);
+        }
+
+        if (lib)
+        {
+            dlclose(lib);
+            [HBUtilities writeToActivityLog:"%s library found for decrypting physical disc", self.name.UTF8String];
         }
         else
         {
-            // compatible libdvdcss not found
-            [HBUtilities writeToActivityLog:"%s, libdvdcss.2.dylib not found for decrypting physical dvd", self.name.UTF8String];
+            // Notify the user that we don't support removal of copy protection.
+            [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disc", self.name.UTF8String];
 
             if (error) {
                 *error = [NSError errorWithDomain:@"HBErrorDomain"
                                              code:101
-                                         userInfo:@{ NSLocalizedDescriptionKey: @"libdvdcss.2.dylib not found for decrypting physical dvd" }];
+                                         userInfo:@{ NSLocalizedDescriptionKey: @"library not found for decrypting physical disc" }];
             }
         }
     }
@@ -185,7 +201,7 @@ static void hb_error_handler(const char *errmsg)
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
 
     // Reset the titles array
-    self.titles = nil;
+    self.titles = @[];
 
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
@@ -197,7 +213,7 @@ static void hb_error_handler(const char *errmsg)
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
-    if (detector.isVideoDVD)
+    if (detector.isVideoDVD || detector.isVideoBluRay)
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
@@ -267,10 +283,63 @@ static void hb_error_handler(const char *errmsg)
 
 #pragma mark - Preview images
 
+- (CGImageRef)CGImageRotatedByAngle:(CGImageRef)imgRef angle:(CGFloat)angle flipped:(BOOL)flipped CF_RETURNS_RETAINED
+{
+    CGFloat angleInRadians = angle * (M_PI / 180);
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+
+    CGRect imgRect = CGRectMake(0, 0, width, height);
+    CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
+    CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
+
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef bmContext = CGBitmapContextCreate(NULL,
+                                                   (size_t)rotatedRect.size.width,
+                                                   (size_t)rotatedRect.size.height,
+                                                   8,
+                                                   0,
+                                                   colorSpace,
+                                                   kCGImageAlphaPremultipliedFirst);
+    CGContextSetAllowsAntialiasing(bmContext, FALSE);
+    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
+    CGColorSpaceRelease(colorSpace);
+
+    // Rotate
+    CGContextTranslateCTM(bmContext,
+                          + (rotatedRect.size.width / 2),
+                          + (rotatedRect.size.height / 2));
+    CGContextRotateCTM(bmContext, -angleInRadians);
+    CGContextTranslateCTM(bmContext,
+                          - (rotatedRect.size.width / 2),
+                          - (rotatedRect.size.height / 2));
+
+    // Flip
+    if (flipped)
+    {
+        CGAffineTransform flipHorizontal = CGAffineTransformMake(-1, 0, 0, 1, floor(rotatedRect.size.width), 0);
+        CGContextConcatCTM(bmContext, flipHorizontal);
+    }
+
+    CGContextDrawImage(bmContext,
+                       CGRectMake((rotatedRect.size.width - width)/2.0f,
+                                  (rotatedRect.size.height - height)/2.0f,
+                                  width,
+                                  height),
+                       imgRef);
+
+    CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
+    CFRelease(bmContext);
+
+    return rotatedImage;
+}
+
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
                    deinterlace:(BOOL)deinterlace
+                        rotate:(int)angle
+                       flipped:(BOOL)flipped CF_RETURNS_RETAINED
 {
     CGImageRef img = NULL;
 
@@ -327,8 +396,22 @@ static void hb_error_handler(const char *errmsg)
 
         hb_image_close(&image);
     }
-    
-    return img;
+
+    if (angle || flipped)
+    {
+        CGImageRef rotatedImg = [self CGImageRotatedByAngle:img angle:angle flipped:flipped];
+        CGImageRelease(img);
+        return rotatedImg;
+    }
+    else
+    {
+        return img;
+    }
+}
+
+- (NSUInteger)imagesCountForTitle:(HBTitle *)title
+{
+    return title.hb_title->preview_count;
 }
 
 #pragma mark - Encodes
@@ -476,7 +559,20 @@ static void hb_error_handler(const char *errmsg)
 {
     if (self.progressHandler)
     {
-        self.progressHandler(self.state, *(self.hb_state));
+        hb_state_t state = *(self.hb_state);
+        HBProgress progress = {0, 0, 0, 0};
+        progress.percent = [self.stateFormatter stateToPercentComplete:state];
+
+        if (state.state == HB_STATE_WORKING)
+        {
+            progress.hours = state.param.working.hours;
+            progress.minutes = state.param.working.minutes;
+            progress.seconds = state.param.working.seconds;
+        }
+
+        NSString *info = [self.stateFormatter stateToString:state];
+
+        self.progressHandler(self.state, progress, info);
     }
 }
 
@@ -496,14 +592,23 @@ static void hb_error_handler(const char *errmsg)
 
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
+
+    HBCoreResult result = HBCoreResultDone;
     if (_hb_state->state == HB_STATE_WORKDONE)
     {
-        [self handleWorkCompletion];
+        result = [self workDone] ? HBCoreResultDone : HBCoreResultFailed;
     }
     else
     {
-        [self handleScanCompletion];
+        result = [self scanDone] ? HBCoreResultDone : HBCoreResultFailed;
     }
+
+    if (self.isCancelled)
+    {
+        result = HBCoreResultCancelled;
+    }
+
+    [self runCompletionBlockAndCleanUpWithResult:result];
 
     // Reset the cancelled state.
     self.cancelled = NO;
@@ -514,7 +619,7 @@ static void hb_error_handler(const char *errmsg)
  *
  *  @param result the result to pass to the completion block.
  */
-- (void)runCompletionBlockAndCleanUpWithResult:(BOOL)result
+- (void)runCompletionBlockAndCleanUpWithResult:(HBCoreResult)result
 {
     if (self.completionHandler)
     {
@@ -524,24 +629,6 @@ static void hb_error_handler(const char *errmsg)
         self.completionHandler = nil;
         completionHandler(result);
     }
-}
-
-/**
- * Processes scan completion.
- */
-- (void)handleScanCompletion
-{
-    BOOL result = [self scanDone];
-    [self runCompletionBlockAndCleanUpWithResult:result];
-}
-
-/**
- * Processes work completion.
- */
-- (void)handleWorkCompletion
-{
-    BOOL result = [self workDone];
-    [self runCompletionBlockAndCleanUpWithResult:result];
 }
 
 @end

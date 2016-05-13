@@ -10,16 +10,18 @@
 namespace HandBrakeWPF.Services
 {
     using System;
-    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Exceptions;
+    using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
 
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
@@ -30,7 +32,7 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// The Settings File
         /// </summary>
-        private readonly string settingsFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\settings.xml";
+        private readonly string settingsFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "settings.xml");
 
         /// <summary>
         /// The XML Serializer 
@@ -95,20 +97,6 @@ namespace HandBrakeWPF.Services
         }
 
         /// <summary>
-        /// Get an StringCollection type user setting
-        /// </summary>
-        /// <param name="name">
-        /// The setting name
-        /// </param>
-        /// <returns>
-        /// The settings value
-        /// </returns>
-        public StringCollection GetUserSettingStringCollection(string name)
-        {
-            return (StringCollection)this.userSettings[name];
-        }
-
-        /// <summary>
         /// The on setting changed.
         /// </summary>
         /// <param name="e">
@@ -144,8 +132,8 @@ namespace HandBrakeWPF.Services
             catch (Exception exc)
             {
                 throw new GeneralApplicationException(
-                    "A problem occured when trying to save your preferences.",
-                    "Any settings you changed may need to be reset the next time HandBrake launches.",
+                    Resources.UserSettings_AnErrorOccured,
+                    Resources.SettingService_SaveErrorReset,
                     exc);
             }
         }
@@ -160,6 +148,24 @@ namespace HandBrakeWPF.Services
                 // Load up the users current settings file.
                 if (File.Exists(this.settingsFile))
                 {
+                    using (StreamReader reader = new StreamReader(this.settingsFile))
+                    {
+                        Collections.SerializableDictionary<string, object> data = (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
+                        this.userSettings = data;
+                    }
+                }
+                else if (VersionHelper.IsNightly() && File.Exists(Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.xml")))
+                {
+                    // Port the release versions config to the nightly.
+                    string releasePresetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.xml");
+
+                    if (!Directory.Exists(DirectoryUtilities.GetUserStoragePath(true)))
+                    {
+                        Directory.CreateDirectory(DirectoryUtilities.GetUserStoragePath(true));
+                    }
+
+                    File.Copy(releasePresetFile, Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.xml"));
+
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         Collections.SerializableDictionary<string, object> data = (Collections.SerializableDictionary<string, object>)this.serializer.Deserialize(reader);
@@ -190,11 +196,11 @@ namespace HandBrakeWPF.Services
                     }
                     this.Save();
 
-                    throw new GeneralApplicationException("Warning, your settings have been reset!", "Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.", exc);
+                    throw new GeneralApplicationException(Resources.UserSettings_YourSettingsHaveBeenReset, Resources.UserSettings_YourSettingsAreCorrupt, exc);
                 }
                 catch (Exception)
                 {
-                    throw new GeneralApplicationException("Unable to load user settings file: " + this.settingsFile, "Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.", exc);
+                    throw new GeneralApplicationException(string.Format(Resources.UserSettings_UnableToLoad, this.settingsFile), Resources.UserSettings_UnableToLoadSolution, exc);
                 }
             }
         }

@@ -392,6 +392,22 @@ namespace HandBrake.ApplicationServices.Interop
         }
 
         /// <summary>
+        /// Determines if a mixdown is available for a given track and encoder.
+        /// </summary>
+        /// <param name="mixdown">
+        /// The mixdown to evaluate.
+        /// </param>
+        /// <param name="encoder">
+        /// The encoder to evaluate.
+        /// </param>
+        /// <param name="channelLayout">channel layout of the source track</param>
+        /// <returns>True if available.</returns>
+        public static bool MixdownIsSupported(HBMixdown mixdown, HBAudioEncoder encoder, int channelLayout)
+        {
+            return HBFunctions.hb_mixdown_is_supported(mixdown.Id, (uint)encoder.Id, (uint)channelLayout) > 0;
+        }
+
+        /// <summary>
         /// Determines if DRC can be applied to the given track with the given encoder.
         /// </summary>
         /// <param name="trackNumber">
@@ -442,8 +458,17 @@ namespace HandBrake.ApplicationServices.Interop
         /// </returns>
         public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
         {
+            if (mixdown == null)
+            {
+                return null;
+            }
+
             int sanitizedMixdown = HBFunctions.hb_mixdown_get_best((uint)encoder.Id, layout, mixdown.Id);
-            return Mixdowns.Single(m => m.Id == sanitizedMixdown);
+            if (sanitizedMixdown != -1)
+            {
+                return Mixdowns.Single(m => m.Id == sanitizedMixdown);
+            }
+            return Mixdowns.FirstOrDefault(); // "none"
         }
 
         /// <summary>
@@ -486,7 +511,7 @@ namespace HandBrake.ApplicationServices.Interop
 
             HBFunctions.hb_audio_bitrate_get_limits((uint)encoder.Id, sampleRate, mixdown.Id, ref low, ref high);
 
-            return new BitrateLimits { Low = low, High = high };
+            return new BitrateLimits(low, high);
         }
 
         /// <summary>
@@ -507,13 +532,7 @@ namespace HandBrake.ApplicationServices.Interop
 
             HBFunctions.hb_video_quality_get_limits((uint)encoder.Id, ref low, ref high, ref granularity, ref direction);
 
-            return new VideoQualityLimits
-                {
-                    Low = low, 
-                    High = high, 
-                    Granularity = granularity, 
-                    Ascending = direction == 0
-                };
+            return new VideoQualityLimits(low, high, granularity, direction == 0);
         }
 
         /// <summary>
@@ -574,13 +593,7 @@ namespace HandBrake.ApplicationServices.Interop
             int direction = 0;
             HBFunctions.hb_audio_quality_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
-            return new RangeLimits
-            {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
-                Ascending = direction == 0
-            };
+            return new RangeLimits(direction == 0, granularity, high, low);
         }
 
         /// <summary>
@@ -598,13 +611,7 @@ namespace HandBrake.ApplicationServices.Interop
             int direction = 0;
             HBFunctions.hb_audio_compression_get_limits((uint)encoderId, ref low, ref high, ref granularity, ref direction);
 
-            return new RangeLimits
-            {
-                Low = low, 
-                High = high, 
-                Granularity = granularity, 
-                Ascending = direction == 0
-            };
+            return new RangeLimits(direction == 0, granularity, high, low);
         }
 
         /// <summary>

@@ -12,33 +12,43 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel.DataAnnotations;
     using System.IO;
+    using System.Text;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Forms;
 
     using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities.Input;
+    using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using LumenWorks.Framework.IO.Csv;
-
-    using Microsoft.Win32;
+    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using MessageBox = System.Windows.Forms.MessageBox;
 
     /// <summary>
     /// The Chapters View Model
     /// </summary>
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
+        #region Constants and Fields
+
+        private readonly IErrorService errorService;
+
         /// <summary>
         /// The source chapters backing field
         /// </summary>
         private List<Chapter> sourceChaptersList;
+
+        #endregion
 
         #region Constructors and Destructors
 
@@ -51,9 +61,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        /// <param name="errorService">
+        /// The Error Service 
+        /// </param>
+        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IErrorService errorService)
         {
             this.Task = new EncodeTask();
+            this.errorService = errorService;
         }
 
         #endregion
@@ -94,49 +108,39 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Export a CSV file.
-        /// </summary>
-        public void Export()
-        {
-            var saveFileDialog = new OpenFileDialog
-            {
-                Filter = "Csv File|*.csv",
-                DefaultExt = "csv",
-                CheckPathExists = true
-            };
-            bool? dialogResult = saveFileDialog.ShowDialog();
-            if (dialogResult.HasValue && dialogResult.Value && !string.IsNullOrEmpty(saveFileDialog.FileName))
-            {
-                this.ExportChaptersToCSV(saveFileDialog.FileName);
-            }
-        }
-
-        /// <summary>
         /// Export the Chapter Markers to a CSV file
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
         /// <exception cref="GeneralApplicationException">
-        /// Thrown when exporting fails.
+        /// Thrown if exporting fails.
         /// </exception>
-        public void ExportChaptersToCSV(string filename)
+        public void Export()
         {
+            string fileName = null;
+            using (var saveFileDialog = new SaveFileDialog()
+                                        {
+                                            Filter = "Csv File|*.csv",
+                                            DefaultExt = "csv",
+                                            CheckPathExists = true,
+                                            OverwritePrompt = true
+                                        })
+            {
+                var dialogResult = saveFileDialog.ShowDialog();
+                fileName = saveFileDialog.FileName;
+
+                // Exit early if the user cancelled or the filename is invalid
+                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
+                    return;
+            }
+
             try
             {
-                string csv = string.Empty;
-
-                foreach (ChapterMarker row in this.Task.ChapterNames)
+                using (var csv = new StreamWriter(fileName))
                 {
-                    csv += row.ChapterNumber.ToString();
-                    csv += ",";
-                    csv += row.ChapterName.Replace(",", "\\,");
-                    csv += Environment.NewLine;
+                    foreach (ChapterMarker row in this.Task.ChapterNames)
+                    {
+                        csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                    }
                 }
-                var file = new StreamWriter(filename);
-                file.Write(csv);
-                file.Close();
-                file.Dispose();
             }
             catch (Exception exc)
             {
@@ -148,47 +152,133 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Import a CSV file
+        /// Imports a Chapter marker file
         /// </summary>
+        /// <exception cref="GeneralApplicationException">
+        /// Thrown if importing fails.
+        /// </exception>
         public void Import()
         {
-            var dialog = new OpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
-            bool? dialogResult = dialog.ShowDialog();
-            string filename = dialog.FileName;
-
-            if (!dialogResult.HasValue || !dialogResult.Value || string.IsNullOrEmpty(filename))
-            {
-                return;
-            }
-
-            IDictionary<int, string> chapterMap = new Dictionary<int, string>();
-            try
-            {
-                using (CsvReader csv = new CsvReader(new StreamReader(filename), false))
-                {
-                    while (csv.ReadNextRecord())
+            string filename = null;
+            string fileExtension = null;
+            using (var dialog = new OpenFileDialog()
                     {
-                        if (csv.FieldCount == 2)
-                        {
-                            int chapter;
-                            int.TryParse(csv[0], out chapter);
-                            chapterMap[chapter] = csv[1];
-                        }
-                    }
-                }
-            }
-            catch (Exception)
+                        Filter = string.Join("|", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
+                        FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
+                        CheckFileExists = true
+                    })
             {
-                // Do Nothing
+                var dialogResult = dialog.ShowDialog();
+                filename = dialog.FileName;
+
+                // Exit if the user didn't press the OK button or the file name is invalid
+                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(filename))
+                    return;
+
+                // Retrieve the file extension after we've confirmed that the user selected something to open
+                fileExtension = Path.GetExtension(filename)?.ToLowerInvariant();
+            }
+
+            var importedChapters = new Dictionary<int, Tuple<string, TimeSpan>>();
+
+            // Execute the importer based on the file extension
+            switch (fileExtension)
+            {
+                case ".csv": // comma separated file
+                case ".tsv": // tab separated file
+                    ChapterImporterCsv.Import(filename, ref importedChapters);
+                    break;
+                case ".xml":
+                    ChapterImporterXml.Import(filename, ref importedChapters);
+                    break;
+                case ".txt":
+                    ChapterImporterTxt.Import(filename, ref importedChapters);
+                    break;
+                default:
+                    throw new GeneralApplicationException(
+                        Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
+                        string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
+            }
+            
+            // Exit early if no chapter information was extracted
+            if (importedChapters == null || importedChapters.Count <= 0)
+                return;
+
+            // Validate the chaptermap against the current chapter list extracted from the source
+            string validationErrorMessage;
+            if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
+            {
+                if( !string.IsNullOrEmpty(validationErrorMessage))
+                    throw new GeneralApplicationException(Resources.ChaptersViewModel_ValidationFailedWarning, validationErrorMessage);
+
+                // The user has cancelled the import, so exit
+                return;
             }
 
             // Now iterate over each chatper we have, and set it's name
             foreach (ChapterMarker item in this.Task.ChapterNames)
             {
-                string chapterName;
-                chapterMap.TryGetValue(item.ChapterNumber, out chapterName);
-                item.ChapterName = chapterName;
+                // If we don't have a chapter name for this chapter then 
+                // fallback to the value that is already set for the chapter
+                string chapterName = item.ChapterName;
+
+                // Attempt to retrieve the imported chapter name
+                Tuple<string, TimeSpan> chapterInfo;
+                if (importedChapters.TryGetValue(item.ChapterNumber, out chapterInfo))
+                    chapterName = chapterInfo.Item1;
+
+                // Assign the chapter name unless the name is not set or only whitespace charaters
+                item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Validates any imported chapter information against the currently detected chapter information in the 
+        /// source media. If validation fails then an error message is returned via the out parameter <see cref="validationErrorMessage"/>
+        /// </summary>
+        /// <param name="importedChapters">The list of imported chapter information</param>
+        /// <param name="validationErrorMessage">In case of a validation error this variable will hold 
+        ///                                      a detailed message that can be presented to the user</param>
+        /// <returns>True if there are no errors with imported chapters, false otherwise</returns>
+        private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage)
+        {
+            validationErrorMessage = null;
+
+            // If the number of chapters don't match, prompt for confirmation
+            if (importedChapters.Count != this.Task.ChapterNames.Count)
+            {
+                if (MessageBoxResult.Yes !=
+                    this.errorService.ShowMessageBox(
+                        string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Task.ChapterNames.Count, importedChapters.Count),
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question))
+                {
+                    return false;
+                }
+            }
+
+            // If the average discrepancy in timings between chapters is either:
+            //   a) more than 15 sec for more than 2 chapters
+            //      (I chose 15sec based on empirical evidence from testing a few DVDs and comparing to chapter-marker files I downloaded)
+            //      => This check will not be performed for the first and last chapter as they're very likely to differ significantly due to language and region
+            //         differences (e.g. longer title sequences and different distributor credits)
+            var diffs = importedChapters.Zip(this.Task.ChapterNames, (import, source) => source.Duration - import.Value.Item2);
+            if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
+            {
+                if (MessageBoxResult.Yes !=
+                    this.errorService.ShowMessageBox(
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question))
+                {
+                    return false;
+                }
+            }
+
+            // All is well, we should import chapters
+            return true;
         }
 
         /// <summary>

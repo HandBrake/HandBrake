@@ -15,23 +15,46 @@ namespace HandBrake.ApplicationServices.Interop.Model
     public class VideoQualityLimits
     {
         /// <summary>
-        /// Gets or sets the inclusive lower limit for the quality.
+        /// Initializes a new instance of the <see cref="VideoQualityLimits"/> class.
         /// </summary>
-        public float Low { get; set; }
+        /// <param name="low">
+        /// The low.
+        /// </param>
+        /// <param name="high">
+        /// The high.
+        /// </param>
+        /// <param name="granularity">
+        /// The granularity.
+        /// </param>
+        /// <param name="ascending">
+        /// The ascending.
+        /// </param>
+        public VideoQualityLimits(float low, float high, float granularity, bool @ascending)
+        {
+            this.Low = low;
+            this.High = high;
+            this.Granularity = granularity;
+            this.Ascending = @ascending;
+        }
 
         /// <summary>
-        /// Gets or sets the inclusive upper limit for the quality.
+        /// Gets the inclusive lower limit for the quality.
         /// </summary>
-        public float High { get; set; }
+        public float Low { get; private set; }
 
         /// <summary>
-        /// Gets or sets the granularity for the quality.
+        /// Gets the inclusive upper limit for the quality.
         /// </summary>
-        public float Granularity { get; set; }
+        public float High { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the quality increases as the number increases.
+        /// Gets the granularity for the quality.
         /// </summary>
-        public bool Ascending { get; set; }
+        public float Granularity { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the quality increases as the number increases.
+        /// </summary>
+        public bool Ascending { get; private set; }
     }
 }

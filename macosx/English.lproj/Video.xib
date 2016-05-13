@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A225f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10102" systemVersion="15E39c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10102"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
@@ -30,7 +30,6 @@
                 <textField verticalHuggingPriority="750" id="gfa-Hb-cDP">
                     <rect key="frame" x="279" y="289" width="69" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Quality:" id="F3s-qR-qeE">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -44,7 +43,6 @@
                     <rect key="frame" x="507" y="241" width="78" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="eQl-KB-XJu">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="TQJ-nd-2BX">
                             <real key="minimum" value="0.0"/>
@@ -83,7 +81,6 @@
                 <textField verticalHuggingPriority="750" id="Pai-3Q-Gs3">
                     <rect key="frame" x="530" y="288" width="50" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="efn-Vj-Jp7"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -99,7 +96,6 @@
                     <rect key="frame" x="110" y="258" width="149" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Output framerate. 'Same as source' variable framerate is recommended. Peak framerate is 'same as source' VFR with a peak rate. VFR is incompatible with some players.</string>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -129,7 +125,6 @@
                     <rect key="frame" x="379" y="222" width="124" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Perform 2-pass encoding. 'Bitrate' rate control is a prerequisite. During the 1st pass, statistics about the video are collected. Then in the second pass, those statistics are used to make bitrate allocation decisions.</string>
-                    <animations/>
                     <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -155,7 +150,6 @@
                 <button toolTip="During the 1st pass of a 2-pass encode, use settings that speed things along." id="olm-zg-k9Y">
                     <rect key="frame" x="504" y="222" width="107" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -192,10 +186,9 @@
                         </binding>
                     </connections>
                 </button>
-                <popUpButton verticalHuggingPriority="750" id="xwK-Yu-a1e">
+                <popUpButton toolTip="Available video encoders." verticalHuggingPriority="750" id="xwK-Yu-a1e">
                     <rect key="frame" x="110" y="284" width="149" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -224,7 +217,6 @@
                 <textField verticalHuggingPriority="750" id="bAn-iZ-ieF">
                     <rect key="frame" x="6" y="263" width="101" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -237,8 +229,7 @@
                 <textField verticalHuggingPriority="750" id="rOd-nt-22T">
                     <rect key="frame" x="6" y="289" width="101" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Codec:" id="Mrb-6Q-0YM">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Encoder:" id="Mrb-6Q-0YM">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -250,7 +241,6 @@
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="lsD-0N-H8k">
                     <rect key="frame" x="354" y="234" width="145" height="70"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="145" height="18"/>
                     <size key="intercellSpacing" width="2" height="26"/>
@@ -284,7 +274,6 @@
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="Xe2-d5-nEH">
                     <rect key="frame" x="113" y="215" width="143" height="38"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="143" height="18"/>
                     <size key="intercellSpacing" width="4" height="2"/>
@@ -319,9 +308,7 @@
                     <view key="contentView">
                         <rect key="frame" x="0.0" y="0.0" width="923" height="181"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
                     </view>
-                    <animations/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
@@ -329,7 +316,6 @@
                     <rect key="frame" x="382" y="265" width="518" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</string>
-                    <animations/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
@@ -357,7 +343,6 @@
                 <textField verticalHuggingPriority="750" id="1au-ZO-l1i">
                     <rect key="frame" x="505" y="288" width="28" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -368,8 +353,7 @@
                     </connections>
                 </textField>
             </subviews>
-            <animations/>
-            <point key="canvasLocation" x="8" y="263.5"/>
+            <point key="canvasLocation" x="131" y="343.5"/>
         </view>
         <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
             <rect key="frame" x="0.0" y="0.0" width="920" height="199"/>
@@ -382,7 +366,6 @@
 
 This estabilishes your default encoder settings. Tunes, profiles, levels and advances option string will be applied to this.
 You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</string>
-                    <animations/>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="suZ-F3-AGy"/>
                     <connections>
                         <accessibilityConnection property="title" destination="0sa-ep-yfr" id="1L4-1l-EVG"/>
@@ -392,7 +375,6 @@ You should generally set this option to the slowest you can bear since slower se
                 <textField verticalHuggingPriority="750" id="0sa-ep-yfr">
                     <rect key="frame" x="35" y="160" width="79" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="iab-iA-j04">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -405,7 +387,6 @@ You should generally set this option to the slowest you can bear since slower se
                 <textField verticalHuggingPriority="750" id="gzq-SL-YVY">
                     <rect key="frame" x="35" y="137" width="79" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="zSD-4Y-1cI">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -418,7 +399,6 @@ You should generally set this option to the slowest you can bear since slower se
                 <textField verticalHuggingPriority="750" id="dY9-5D-mXX">
                     <rect key="frame" x="35" y="110" width="79" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="hib-wi-BDx">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -431,7 +411,6 @@ You should generally set this option to the slowest you can bear since slower se
                 <textField verticalHuggingPriority="750" id="BY1-IG-JvI">
                     <rect key="frame" x="35" y="84" width="79" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="QyZ-rl-uGw">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -447,7 +426,6 @@ You should generally set this option to the slowest you can bear since slower se
                     <string key="toolTip">Tune settings to optimize for common scenarios.
 
 This can improve efficiency for particular source characteristics or set characteristics of the output file. Changes will be applied after the preset but before all other parameters.</string>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dy8-w4-ycN">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -469,7 +447,6 @@ This can improve efficiency for particular source characteristics or set charact
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Sets and ensures compliance with the specified profile.
 Overrides all other settings.</string>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="oOm-hC-AoS">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -489,7 +466,6 @@ Overrides all other settings.</string>
                 <popUpButton toolTip="Sets and ensures compliance with the specified level. Overrides all other settings." verticalHuggingPriority="750" id="P7c-Zk-G99">
                     <rect key="frame" x="117" y="79" width="129" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="PhX-Wa-Vhs">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -511,7 +487,6 @@ Overrides all other settings.</string>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Reduce decoder CPU usage.
 Set this if your device is struggling to play the output (dropped frames).</string>
-                    <animations/>
                     <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5De-nU-l3h">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -529,7 +504,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="ijg-ux-uvb">
                     <rect key="frame" x="261" y="111" width="110" height="13"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ZSm-03-g0B">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -542,7 +516,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="oJk-ur-wgc">
                     <rect key="frame" x="377" y="82" width="523" height="42"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="IID-yp-or8">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -556,7 +529,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="gvn-wG-crj">
                     <rect key="frame" x="250" y="165" width="129" height="13"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="rHx-Kg-tc2">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -570,7 +542,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <button toolTip="Use Advanced Options tab for x264 settings. Use at your own risk!" id="Zs7-1Y-50A">
                     <rect key="frame" x="117" y="183" width="209" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="check" title="Use Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="sa6-r3-eVr">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -587,7 +558,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="wk1-2U-z4i">
                     <rect key="frame" x="18" y="20" width="883" height="45"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -600,7 +570,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="mkM-81-g3d">
                     <rect key="frame" x="-2" y="185" width="116" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="XIe-8Z-tIF">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -613,13 +582,11 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="g5v-MD-kdo">
                     <rect key="frame" x="120" y="189" width="780" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <font key="titleFont" metaFont="system"/>
                 </box>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="8" y="586.5"/>
         </customView>
         <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
@@ -629,7 +596,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="mL3-yC-hUj">
                     <rect key="frame" x="120" y="2" width="545" height="32"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="z0u-VS-m0l">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -642,7 +608,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 <textField verticalHuggingPriority="750" id="26w-dz-St2">
                     <rect key="frame" x="6" y="20" width="108" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="7bP-tR-sAX">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -650,7 +615,6 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                     </textFieldCell>
                 </textField>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="8" y="779"/>
         </customView>
     </objects>

@@ -1,9 +1,13 @@
-PKG.cli.zip = $(PKG.out/)$(HB.name)-$(HB.version)-$(BUILD.machine)-Win_CLI.zip
+PKG.platname = win
 
+PKG.cli.zip   = $(PKG.out/)$(HB.name)CLI-$(HB.version)-$(PKG.platname)-$(BUILD.machine).zip
+PKG.libhb.zip = $(PKG.out/)LibHB-$(HB.version)-$(PKG.platname)-$(BUILD.machine).zip
 PKG.mingw.lib = $(SRC/)libraries
 
 STAGE.out.cli/ = $(STAGE.out/)cli/
+STAGE.out.libhb/ = $(STAGE.out/)libhb/
 
 ###############################################################################
 
 BUILD.out += $(PKG.cli.zip)
+BUILD.out += $(PKG.libhb.zip)

@@ -1,12 +1,13 @@
 /* test.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -41,9 +42,17 @@
 #include <IOKit/storage/IODVDMedia.h>
 #endif
 
+#define NLMEANS_DEFAULT_PRESET      "medium"
+#define DEINTERLACE_DEFAULT_PRESET  "default"
+#define DECOMB_DEFAULT_PRESET       "default"
+#define DETELECINE_DEFAULT_PRESET   "default"
+#define COMB_DETECT_DEFAULT_PRESET  "default"
+#define HQDN3D_DEFAULT_PRESET       "medium"
+#define ROTATE_DEFAULT              "angle=180:hflip=0"
+#define DEBLOCK_DEFAULT             "qp=5"
+
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
-static int     update              = 0;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
 static char *  output              = NULL;
@@ -54,6 +63,8 @@ static int     main_feature        = 0;
 static char *  native_language     = NULL;
 static int     native_dub          = 0;
 static int     twoPass             = 0;
+static int     pad_disable         = 0;
+static char *  pad                 = NULL;
 static int     deinterlace_disable = 0;
 static int     deinterlace_custom  = 0;
 static char *  deinterlace         = NULL;
@@ -69,6 +80,9 @@ static char *  nlmeans_tune        = NULL;
 static int     detelecine_disable  = 0;
 static int     detelecine_custom   = 0;
 static char *  detelecine          = NULL;
+static int     comb_detect_disable = 0;
+static int     comb_detect_custom  = 0;
+static char *  comb_detect         = NULL;
 static int     decomb_disable      = 0;
 static int     decomb_custom       = 0;
 static char *  decomb              = NULL;
@@ -104,14 +118,14 @@ static char ** srtoffset                 = NULL;
 static char ** srtlang                   = NULL;
 static int     srtdefault                = -1;
 static int     srtburn                   = -1;
-static int      width       = 0;
-static int      height      = 0;
-static int      crop[4]     = { -1,-1,-1,-1 };
-static int      loose_crop  = -1;
-static char *   vrate       = NULL;
-static float    vquality    = -1.0;
-static int      vbitrate    = 0;
-static int      mux         = 0;
+static int      width                    = 0;
+static int      height                   = 0;
+static int      crop[4]                  = { -1,-1,-1,-1 };
+static int      loose_crop               = -1;
+static char *   vrate                    = NULL;
+static float    vquality                 = HB_INVALID_VIDEO_QUALITY;
+static int      vbitrate                 = 0;
+static int      mux                      = 0;
 static int      anamorphic_mode     = -1;
 static int      modulus             = 0;
 static int      par_height          = -1;
@@ -135,7 +149,8 @@ static int      fastfirstpass = 0;
 static char *   preset_export_name   = NULL;
 static char *   preset_export_desc   = NULL;
 static char *   preset_export_file   = NULL;
-static char *   preset_name        = NULL;
+static char *   preset_name          = NULL;
+static char *   queue_import_name    = NULL;
 static int      cfr           = -1;
 static int      mp4_optimize  = -1;
 static int      ipod_atom     = -1;
@@ -158,6 +173,7 @@ static int      qsv_decode         = -1;
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
 static volatile int die = 0;
+static volatile int work_done = 0;
 static void SigHandler( int );
 
 /* Utils */
@@ -177,10 +193,6 @@ static int         HandleEvents( hb_handle_t * h, hb_dict_t *preset_dict );
 static hb_dict_t * PreparePreset( const char *preset_name );
 static hb_dict_t * PrepareJob( hb_handle_t *h, hb_title_t *title,
                                hb_dict_t *preset_dict );
-
-static int str_vlen(char **strv);
-static void str_vfree( char **strv );
-static char** str_split( char *str, char delem );
 
 static void print_string_list(FILE *out, const char* const *list, const char *prefix);
 
@@ -248,128 +260,13 @@ static int get_argv_utf8(int *argc_ptr, char ***argv_ptr)
 #endif
 }
 
-int main( int argc, char ** argv )
+static volatile int job_running = 0;
+
+void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
 {
-    hb_handle_t * h;
-    int           build;
-    char        * version;
-
-    hb_global_init();
-    hb_presets_builtin_update();
-
-    /* Init libhb */
-    h = hb_init(4, 0);  // Show all logging until debug level is parsed
-
-    // Get utf8 command line if windows
-    get_argv_utf8(&argc, &argv);
-
-    /* Parse command line */
-    if( ParseOptions( argc, argv ) ||
-        CheckOptions( argc, argv ) )
-    {
-        return 1;
-    }
-
-    hb_log_level_set(h, debug);
-
-    /* Register our error handler */
-    hb_register_error_handler(&hb_cli_error_handler);
-
-    hb_dvd_set_dvdnav( dvdnav );
-
-    /* Show version */
-    fprintf( stderr, "%s - %s - %s\n",
-             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
-
-    /* Check for update */
-    if( update )
-    {
-        hb_update_poll(h);
-        if( ( build = hb_check_update( h, &version ) ) > -1 )
-        {
-            fprintf( stderr, "You are using an old version of "
-                     "HandBrake.\nLatest is %s (build %d).\n", version,
-                     build );
-        }
-        else
-        {
-            fprintf( stderr, "Your version of HandBrake is up to "
-                     "date.\n" );
-        }
-        hb_close( &h );
-        hb_global_close();
-        return 0;
-    }
-
-    /* Geeky */
-    fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
-             hb_get_cpu_count() > 1 ? "s" : "" );
-
-    /* Exit ASAP on Ctrl-C */
-    signal( SIGINT, SigHandler );
-
-    // Apply all command line overrides to the preset that are possible.
-    // Some command line options are applied later to the job
-    // (e.g. chapter names, explicit audio & subtitle tracks).
-    hb_dict_t *preset_dict = PreparePreset(preset_name);
-    if (preset_dict == NULL)
-    {
-        // An appropriate error message should have already
-        // been spilled by PreparePreset.
-        return 1;
-    }
-
-    if (preset_export_name != NULL)
-    {
-        hb_dict_set(preset_dict, "PresetName",
-                    hb_value_string(preset_export_name));
-        if (preset_export_desc != NULL)
-        {
-            hb_dict_set(preset_dict, "PresetDescription",
-                        hb_value_string(preset_export_desc));
-        }
-        if (preset_export_file != NULL)
-        {
-            hb_presets_write_json(preset_dict, preset_export_file);
-        }
-        else
-        {
-            char *json;
-            json = hb_presets_package_json(preset_dict);
-            fprintf(stdout, "%s\n", json);
-        }
-        // If the user requested to export a preset, but not to
-        // transcode or scan a file, exit here.
-        if (input == NULL || (!titlescan && titleindex != 0 && output == NULL))
-        {
-            hb_value_free(&preset_dict);
-            return 0;
-        }
-    }
-
-    /* Feed libhb with a DVD to scan */
-    fprintf( stderr, "Opening %s...\n", input );
-
-    if (main_feature) {
-        /*
-         * We need to scan for all the titles in order to find the main feature
-         */
-        titleindex = 0;
-    }
-
-    hb_system_sleep_prevent(h);
-
-    // FIXME: When hardware decode is enabled, the scan must be performed
-    // with hardware decode enabled because the decoder context used during
-    // encoding phase comes from the context used during scan.  This is
-    // broken by design and I would very much like to fix this someday.
-    hb_hwd_set_enable(h, hb_value_get_bool(
-                         hb_dict_get(preset_dict, "VideoHWDecode")));
-    hb_scan(h, input, titleindex, preview_count, store_previews,
-            min_title_duration * 90000LL);
-
     /* Wait... */
-    while( !die )
+    work_done = 0;
+    while (!die && !work_done)
     {
 #if defined( __MINGW32__ )
         if( _kbhit() ) {
@@ -456,25 +353,199 @@ int main( int argc, char ** argv )
 
         HandleEvents( h, preset_dict );
     }
+    job_running = 0;
+}
+
+int RunQueueJob(hb_handle_t *h, hb_dict_t *job_dict)
+{
+    if (job_dict == NULL)
+    {
+        return -1;
+    }
+
+    char * json_job;
+    json_job = hb_value_get_json(job_dict);
+    hb_value_free(&job_dict);
+    if (json_job == NULL)
+    {
+        fprintf(stderr, "Error in setting up job! Aborting.\n");
+        return -1;
+    }
+
+    hb_add_json(h, json_job);
+    free(json_job);
+    job_running = 1;
+    hb_start( h );
+
+    EventLoop(h, NULL);
+
+    return 0;
+}
+
+int RunQueue(hb_handle_t *h, const char *queue_import_name)
+{
+    hb_value_t * queue = hb_value_read_json(queue_import_name);
+
+    if (hb_value_type(queue) == HB_VALUE_TYPE_DICT)
+    {
+        return RunQueueJob(h, hb_dict_get(queue, "Job"));
+    }
+    else if (hb_value_type(queue) == HB_VALUE_TYPE_ARRAY)
+    {
+        int ii, count, result = 0;
+
+        count = hb_value_array_len(queue);
+        for (ii = 0; ii < count; ii++)
+        {
+            hb_dict_t * entry = hb_value_array_get(queue, ii);
+            int ret = RunQueueJob(h, hb_dict_get(entry, "Job"));
+            if (ret < 0)
+            {
+                result = ret;
+            }
+            if (die)
+            {
+                break;
+            }
+        }
+        return result;
+    }
+    else
+    {
+        fprintf(stderr, "Error: Invalid queue file %s\n", queue_import_name);
+        return -1;
+    }
+    return 0;
+}
+
+int main( int argc, char ** argv )
+{
+    hb_handle_t * h;
+
+    hb_global_init();
+    hb_presets_builtin_update();
+
+    /* Init libhb */
+    h = hb_init(4);  // Show all logging until debug level is parsed
+
+    // Get utf8 command line if windows
+    get_argv_utf8(&argc, &argv);
+
+    /* Parse command line */
+    if( ParseOptions( argc, argv ) ||
+        CheckOptions( argc, argv ) )
+    {
+        return 1;
+    }
+
+    hb_log_level_set(h, debug);
+
+    /* Register our error handler */
+    hb_register_error_handler(&hb_cli_error_handler);
+
+    hb_dvd_set_dvdnav( dvdnav );
+
+    /* Show version */
+    fprintf( stderr, "%s - %s - %s\n",
+             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+
+    /* Geeky */
+    fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
+             hb_get_cpu_count() > 1 ? "s" : "" );
+
+    /* Exit ASAP on Ctrl-C */
+    signal( SIGINT, SigHandler );
+
+    if (queue_import_name != NULL)
+    {
+        hb_system_sleep_prevent(h);
+        RunQueue(h, queue_import_name);
+    }
+    else
+    {
+        // Apply all command line overrides to the preset that are possible.
+        // Some command line options are applied later to the job
+        // (e.g. chapter names, explicit audio & subtitle tracks).
+        hb_dict_t *preset_dict = PreparePreset(preset_name);
+        if (preset_dict == NULL)
+        {
+            // An appropriate error message should have already
+            // been spilled by PreparePreset.
+            return 1;
+        }
+
+        if (preset_export_name != NULL)
+        {
+            hb_dict_set(preset_dict, "PresetName",
+                        hb_value_string(preset_export_name));
+            if (preset_export_desc != NULL)
+            {
+                hb_dict_set(preset_dict, "PresetDescription",
+                            hb_value_string(preset_export_desc));
+            }
+            if (preset_export_file != NULL)
+            {
+                hb_presets_write_json(preset_dict, preset_export_file);
+            }
+            else
+            {
+                char *json;
+                json = hb_presets_package_json(preset_dict);
+                fprintf(stdout, "%s\n", json);
+            }
+            // If the user requested to export a preset, but not to
+            // transcode or scan a file, exit here.
+            if (input == NULL ||
+                (!titlescan && titleindex != 0 && output == NULL))
+            {
+                hb_value_free(&preset_dict);
+                return 0;
+            }
+        }
+
+        /* Feed libhb with a DVD to scan */
+        fprintf( stderr, "Opening %s...\n", input );
+
+        if (main_feature) {
+            /*
+             * We need to scan for all the titles in order to
+             * find the main feature
+             */
+            titleindex = 0;
+        }
+
+        hb_system_sleep_prevent(h);
+
+        // FIXME: When hardware decode is enabled, the scan must be performed
+        // with hardware decode enabled because the decoder context used during
+        // encoding phase comes from the context used during scan.  This is
+        // broken by design and I would very much like to fix this someday.
+        hb_hwd_set_enable(h, hb_value_get_bool(
+                             hb_dict_get(preset_dict, "VideoHWDecode")));
+        hb_scan(h, input, titleindex, preview_count, store_previews,
+                min_title_duration * 90000LL);
+
+        EventLoop(h, preset_dict);
+        hb_value_free(&preset_dict);
+    }
 
     /* Clean up */
-    hb_value_free(&preset_dict);
     hb_close(&h);
     hb_global_close();
-    str_vfree(audio_copy_list);
-    str_vfree(abitrates);
-    str_vfree(acompressions);
-    str_vfree(aqualities);
-    str_vfree(audio_dither);
-    str_vfree(acodecs);
-    str_vfree(arates);
-    str_vfree(atracks);
-    str_vfree(audio_lang_list);
-    str_vfree(audio_gain);
-    str_vfree(dynamic_range_compression);
-    str_vfree(mixdowns);
-    str_vfree(subtitle_lang_list);
-    str_vfree(subtracks);
+    hb_str_vfree(audio_copy_list);
+    hb_str_vfree(abitrates);
+    hb_str_vfree(acompressions);
+    hb_str_vfree(aqualities);
+    hb_str_vfree(audio_dither);
+    hb_str_vfree(acodecs);
+    hb_str_vfree(arates);
+    hb_str_vfree(atracks);
+    hb_str_vfree(audio_lang_list);
+    hb_str_vfree(audio_gain);
+    hb_str_vfree(dynamic_range_compression);
+    hb_str_vfree(mixdowns);
+    hb_str_vfree(subtitle_lang_list);
+    hb_str_vfree(subtracks);
     free(acodec_fallback);
     free(native_language);
     free(format);
@@ -720,6 +791,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             hb_title_set_t * title_set;
             hb_title_t * title;
 
+            if (job_running)
+            {
+                // SCANDONE generated by a scan during execution of the job
+                break;
+            }
             title_set = hb_get_title_set( h );
             if( !title_set || !hb_list_count( title_set->list_title ) )
             {
@@ -810,6 +886,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 
             hb_add_json(h, json_job);
             free(json_job);
+            job_running = 1;
             hb_start( h );
             break;
         }
@@ -868,7 +945,8 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                              p.error );
             }
             done_error = p.error;
-            die = 1;
+            work_done = 1;
+            job_running = 0;
             break;
 #undef p
     }
@@ -899,6 +977,162 @@ void SigHandler( int i_signal )
 /****************************************************************************
  * ShowHelp:
  ****************************************************************************/
+static void showFilterPresets(FILE* const out, int filter_id)
+{
+    char ** names = hb_filter_get_presets_short_name(filter_id);
+    char  * slash = "", * newline;
+    int     ii, count = 0, linelen = 0;
+
+    // Count number of entries we want to display
+    for (ii = 0; names[ii] != NULL; ii++)
+    {
+        if (!strcasecmp(names[ii], "custom") || // skip custom
+            !strcasecmp(names[ii], "off")    || // skip off
+            !strcasecmp(names[ii], "default"))  // skip default
+            continue;
+        count++;
+    }
+
+    // If there are no entries, display nothing.
+    if (count == 0)
+    {
+        return;
+    }
+    fprintf(out, "                           Presets:\n"
+                 "                             <");
+    for (ii = 0; names[ii] != NULL; ii++)
+    {
+        if (!strcasecmp(names[ii], "custom") || // skip custom
+            !strcasecmp(names[ii], "off")    || // skip off
+            !strcasecmp(names[ii], "default"))  // skip default
+            continue;
+        int len = strlen(names[ii]) + 1;
+        if (linelen + len > 48)
+        {
+            newline = "\n                              ";
+            linelen = 0;
+        }
+        else
+        {
+            newline = "";
+        }
+        fprintf(out, "%s%s%s", slash, newline, names[ii]);
+        linelen += len;
+        slash = "/";
+    }
+
+    fprintf(out, ">\n");
+    hb_str_vfree(names);
+}
+
+static void showFilterKeys(FILE* const out, int filter_id)
+{
+    char ** keys = hb_filter_get_keys(filter_id);
+    char  * colon = "", * newline;
+    int     ii, linelen = 0;
+
+    fprintf(out, "                           Custom Format:\n"
+                 "                             <");
+    for (ii = 0; keys[ii] != NULL; ii++)
+    {
+        int c = tolower(keys[ii][0]);
+        int len = strlen(keys[ii]) + 3;
+        if (linelen + len > 48)
+        {
+            newline = "\n                              ";
+            linelen = 0;
+        }
+        else
+        {
+            newline = "";
+        }
+        fprintf(out, "%s%s%s=%c", colon, newline, keys[ii], c);
+        linelen += len;
+        colon = ":";
+    }
+    fprintf(out, ">\n");
+    hb_str_vfree(keys);
+}
+
+static void showFilterDefault(FILE* const out, int filter_id)
+{
+    const char * preset = "default";
+
+    fprintf(out, "                           Default:\n"
+                 "                             <");
+    switch (filter_id)
+    {
+        case HB_FILTER_NLMEANS:
+            preset = NLMEANS_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DEINTERLACE:
+            preset = DEINTERLACE_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DECOMB:
+            preset = DECOMB_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_DETELECINE:
+            preset = DETELECINE_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_HQDN3D:
+            preset = HQDN3D_DEFAULT_PRESET;
+            break;
+        case HB_FILTER_COMB_DETECT:
+            preset = COMB_DETECT_DEFAULT_PRESET;
+            break;
+        default:
+            break;
+    }
+    switch (filter_id)
+    {
+        case HB_FILTER_DEINTERLACE:
+        case HB_FILTER_NLMEANS:
+        case HB_FILTER_DECOMB:
+        case HB_FILTER_DETELECINE:
+        case HB_FILTER_HQDN3D:
+        case HB_FILTER_COMB_DETECT:
+        {
+            hb_dict_t * settings;
+            settings = hb_generate_filter_settings(filter_id, preset,
+                                                   NULL, NULL);
+            char * str = hb_filter_settings_string(filter_id, settings);
+            hb_value_free(&settings);
+
+            char ** split = hb_str_vsplit(str, ':');
+            char  * colon = "", * newline;
+            int     ii, linelen = 0;
+
+            for (ii = 0; split[ii] != NULL; ii++)
+            {
+                int len = strlen(split[ii]) + 1;
+                if (linelen + len > 48)
+                {
+                    newline = "\n                              ";
+                    linelen = 0;
+                }
+                else
+                {
+                    newline = "";
+                }
+                fprintf(out, "%s%s%s", colon, newline, split[ii]);
+                linelen += len;
+                colon = ":";
+            }
+            hb_str_vfree(split);
+            free(str);
+        } break;
+        case HB_FILTER_ROTATE:
+            fprintf(out, "%s", ROTATE_DEFAULT);
+            break;
+        case HB_FILTER_DEBLOCK:
+            fprintf(out, "%s", DEBLOCK_DEFAULT);
+            break;
+        default:
+            break;
+    }
+    fprintf(out, ">\n");
+}
+
 static void ShowHelp()
 {
     int i, clock_min, clock_max, clock;
@@ -914,7 +1148,6 @@ static void ShowHelp()
 "\n"
 "### General Handbrake Options---------------------------------------------\n\n"
 "   -h, --help              Print help\n"
-"   -u, --update            Check for updates and exit\n"
 "   -v, --verbose <#>       Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Use a built-in preset. Capitalization matters,\n"
 "                           and if the preset name has spaces, surround it\n"
@@ -934,6 +1167,8 @@ static void ShowHelp()
 "   --preset-export-description\n"
 "       <description>       Add a description to the new preset created with\n"
 "                           '--preset-export'\n"
+"   --queue-import-file     Import an encode queue file created by the GUI\n"
+"       <filename>\n"
 "       --no-dvdnav         Do not use dvdnav for reading DVDs\n"
 "       --no-opencl         Disable use of OpenCL\n"
 "\n"
@@ -1228,6 +1463,12 @@ static void ShowHelp()
 "       --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
 "       --loose-crop        Always crop to a multiple of the modulus\n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
+"       --pad <W:H:C:X,Y>   Add borders to pad image to WxH (e.g. letterbox)\n"
+"                           Optionally set color of pad to C (default black)\n"
+"                           Color may be HTML color name or RGB value\n"
+"                           Optionally set position of image in pad area\n"
+"                           Any value may be 'auto' in which case the\n"
+"                           default value for that field is used\n"
 "   -Y, --maxHeight   <#>   Set maximum height\n"
 "   -X, --maxWidth    <#>   Set maximum width\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
@@ -1257,58 +1498,75 @@ static void ShowHelp()
 "                           (default: detected from source)\n"
 "\n"
 "### Filters---------------------------------------------------------------\n\n"
-"   -d, --deinterlace       Unconditionally deinterlaces all frames\n"
-"         <fast/slow/slower/bob");
-#ifdef USE_QSV
-if (hb_qsv_available())
-{
-    fprintf(out, "/qsv");
-}
-#endif
-     fprintf( out, "> or omitted (default settings)\n"
-     "           or\n"
-"         <YM:FD>           (default 0:-1)\n"
-"       --no-deinterlace    Disable preset deinterlace filter\n"
-"   -5, --decomb            Selectively deinterlaces when it detects combing\n"
-"         <fast/bob> or omitted (default settings)\n"
-"          or\n"
-"         <MO:ME:MT:ST:BT:BX:BY:MG:VA:LA:DI:ER:NO:MD:PP:FD>\n"
-"         (default: 7:2:6:9:80:16:16:10:20:20:4:2:50:24:1:-1)\n"
-"       --no-decomb         Disable preset decomb filter\n"
+"   --comb-detect           Detect interlace artifacts in frames.\n"
+"                           If not accompanied by the decomb or deinterlace\n"
+"                           filters, this filter only logs the interlaced\n"
+"                           frame count to the activity log.\n"
+"                           If accompanied by the decomb or deinterlace\n"
+"                           filters, it causes these filters to selectively\n"
+"                           deinterlace only those frames where interlacing\n"
+"                           is detected.\n");
+    showFilterPresets(out, HB_FILTER_COMB_DETECT);
+    showFilterKeys(out, HB_FILTER_COMB_DETECT);
+    showFilterDefault(out, HB_FILTER_COMB_DETECT);
+    fprintf( out,
+"   --no-comb-detect        Disable preset comb-detect filter\n"
+"   -d, --deinterlace       Deinterlaces using libav yadif.\n");
+    showFilterPresets(out, HB_FILTER_DEINTERLACE);
+    showFilterKeys(out, HB_FILTER_DEINTERLACE);
+    showFilterDefault(out, HB_FILTER_DEINTERLACE);
+    fprintf( out,
+"   --no-deinterlace        Disable preset deinterlace filter\n"
+"   -5, --decomb            Deinterlaces using a combination of yadif,\n"
+"                           blend, cubic, or EEDI2 interpolation.\n");
+    showFilterPresets(out, HB_FILTER_DECOMB);
+    showFilterKeys(out, HB_FILTER_DECOMB);
+    showFilterDefault(out, HB_FILTER_DECOMB);
+    fprintf( out,
+"   --no-decomb             Disable preset decomb filter\n"
 "   -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
 "                           Note: this filter drops duplicate frames to\n"
 "                           restore the pre-telecine framerate, unless you\n"
 "                           specify a constant framerate\n"
-"                           (--rate 29.97 --cfr)\n"
-"         <L:R:T:B:SB:MP:FD> (default 1:1:4:4:0:0:-1)\n"
-"       --no-detelecine     Disable preset detelecine filter\n"
-"   -8, --hqdn3d            Denoise video with hqdn3d filter\n"
-"         <ultralight/light/medium/strong> or omitted (default settings)\n"
-"          or\n"
-"         <SL:SCb:SCr:TL:TCb:TCr>\n"
-"         (default: 4:3:3:6:4.5:4.5)\n"
-"       --no-hqdn3d         Disable preset hqdn3d filter\n"
-"       --denoise           Legacy alias for '--hqdn3d'\n"
-"   --nlmeans               Denoise video with nlmeans filter\n"
-"         <ultralight/light/medium/strong> or omitted\n"
-"          or\n"
-"         <SY:OTY:PSY:RY:FY:PY:Sb:OTb:PSb:Rb:Fb:Pb:Sr:OTr:PSr:Rr:Fr:Pr>\n"
-"         (default 8:1:7:3:2:0)\n"
+"                           (--rate 29.97 --cfr)\n");
+    showFilterPresets(out, HB_FILTER_DETELECINE);
+    showFilterKeys(out, HB_FILTER_DETELECINE);
+    showFilterDefault(out, HB_FILTER_DETELECINE);
+    fprintf( out,
+"   --no-detelecine         Disable preset detelecine filter\n"
+"   -8, --hqdn3d            Denoise video with hqdn3d filter\n");
+    showFilterPresets(out, HB_FILTER_HQDN3D);
+    showFilterKeys(out, HB_FILTER_HQDN3D);
+    showFilterDefault(out, HB_FILTER_HQDN3D);
+    fprintf( out,
+"   --no-hqdn3d             Disable preset hqdn3d filter\n"
+"   --denoise               Legacy alias for '--hqdn3d'\n"
+"   --nlmeans               Denoise video with nlmeans filter\n");
+    showFilterPresets(out, HB_FILTER_NLMEANS);
+    showFilterKeys(out, HB_FILTER_NLMEANS);
+    showFilterDefault(out, HB_FILTER_NLMEANS);
+    fprintf( out,
+
 "   --no-nlmeans            Disable preset nlmeans filter\n"
 "   --nlmeans-tune          Tune nlmeans filter to content type\n"
 "                           Note: only works in conjunction with presets\n"
 "                           ultralight/light/medium/strong.\n"
-"         <none/film/grain/highmotion/animation> or omitted (default none)\n"
-"   -7, --deblock           Deblock video with pp7 filter\n"
-"         <QP:M>            (default 5:2)\n"
-"       --no-deblock        Disable preset deblock filter\n"
-"        --rotate           Rotate image or flip its axes.\n"
-"         <angle>:<mirror>  Angle rotates clockwise, can be one of:\n"
+"                           Tunes:\n"
+"                             <none/film/grain/highmotion/animation>\n"
+"   -7, --deblock           Deblock video with pp7 filter\n");
+    showFilterKeys(out, HB_FILTER_DEBLOCK);
+    showFilterDefault(out, HB_FILTER_DEBLOCK);
+    fprintf( out,
+"   --no-deblock            Disable preset deblock filter\n"
+"   --rotate                Rotate image or flip its axes.\n"
+"                           angle rotates clockwise, can be one of:\n"
 "                              0, 90, 180, 270\n"
-"                           Mirror flips the image on the x axis.\n"
-"                           Default: 180:0 (rotate 180 degrees)\n"
+"                           hflip flips the image on the x axis.\n");
+    showFilterKeys(out, HB_FILTER_ROTATE);
+    showFilterDefault(out, HB_FILTER_ROTATE);
+    fprintf( out,
 "   -g, --grayscale         Grayscale encoding\n"
-"       --no-grayscale      Disable preset 'grayscale'\n"
+"   --no-grayscale          Disable preset 'grayscale'\n"
 "\n"
 "### Subtitle Options------------------------------------------------------\n\n"
 "      --subtitle-lang-list Specifiy a comma separated list of subtitle\n"
@@ -1448,6 +1706,7 @@ static char** str_width_split( const char *str, int width )
     if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
+        if ( ret == NULL ) return ret;
         *ret = NULL;
         return ret;
     }
@@ -1472,7 +1731,8 @@ static char** str_width_split( const char *str, int width )
     }
     count++;
     ret = calloc( ( count + 1 ), sizeof(char*) );
-
+    if ( ret == NULL ) return ret;
+    
     pos = str;
     end = pos + width;
     for (ii = 0; ii < count - 1 && end < str + len; ii++)
@@ -1544,126 +1804,11 @@ static void ShowPresets(hb_value_array_t *presets, int indent, int descriptions)
                         Indent(stderr, "    ", indent+1);
                         fprintf(stderr, "%s\n", split[ii]);
                     }
-                    str_vfree(split);
+                    hb_str_vfree(split);
                 }
             }
         }
     }
-}
-
-static char* strchr_quote(char *pos, char c, char q)
-{
-    if (pos == NULL)
-        return NULL;
-
-    while (*pos != 0 && *pos != c)
-    {
-        if (*pos == q)
-        {
-            pos = strchr_quote(pos+1, q, 0);
-            if (pos == NULL)
-                return NULL;
-            pos++;
-        }
-        else if (*pos == '\\' && *(pos+1) != 0)
-            pos += 2;
-        else
-            pos++;
-    }
-    if (*pos != c)
-        return NULL;
-    return pos;
-}
-
-static char *strndup_quote(char *str, char q, int len)
-{
-    if (str == NULL)
-        return NULL;
-
-    char * res;
-    int str_len = strlen( str );
-    int src = 0, dst = 0;
-    res = malloc( len > str_len ? str_len + 1 : len + 1 );
-
-    while (str[src] != 0 && src < len)
-    {
-        if (str[src] == q)
-            src++;
-        else if (str[src] == '\\' && str[src+1] != 0)
-        {
-            res[dst++] = str[src+1];
-            src += 2;
-        }
-        else
-            res[dst++] = str[src++];
-    }
-    res[dst] = '\0';
-    return res;
-}
-
-static int str_vlen(char **strv)
-{
-    int i;
-    if (strv == NULL)
-        return 0;
-    for (i = 0; strv[i]; i++);
-    return i;
-}
-
-static char** str_split( char *str, char delem )
-{
-    char *  pos;
-    char *  end;
-    char ** ret;
-    int     count, i;
-    char quote = '"';
-
-    if (delem == '"')
-    {
-        quote = '\'';
-    }
-    if ( str == NULL || str[0] == 0 )
-    {
-        ret = malloc( sizeof(char*) );
-        *ret = NULL;
-        return ret;
-    }
-
-    // Find number of elements in the string
-    count = 1;
-    pos = str;
-    while ( ( pos = strchr_quote( pos, delem, quote ) ) != NULL )
-    {
-        count++;
-        pos++;
-    }
-
-    ret = calloc( ( count + 1 ), sizeof(char*) );
-
-    pos = str;
-    for ( i = 0; i < count - 1; i++ )
-    {
-        end = strchr_quote( pos, delem, quote );
-        ret[i] = strndup_quote(pos, quote, end - pos);
-        pos = end + 1;
-    }
-    ret[i] = strndup_quote(pos, quote, strlen(pos));
-
-    return ret;
-}
-
-static void str_vfree( char **strv )
-{
-    int i;
-
-    if (strv == NULL)
-        return;
-
-    for ( i = 0; strv[i]; i++ )
-    {
-        free( strv[i] );
-    }
-    free( strv );
 }
 
 static double parse_hhmmss_strtok()
@@ -1738,6 +1883,9 @@ static int ParseOptions( int argc, char ** argv )
     #define PRESET_IMPORT_GUI    306
     #define VERSION              307
     #define DESCRIBE             308
+    #define PAD                  309
+    #define FILTER_COMB_DETECT   310
+    #define QUEUE_IMPORT         311
 
     for( ;; )
     {
@@ -1746,7 +1894,6 @@ static int ParseOptions( int argc, char ** argv )
             { "help",        no_argument,       NULL,    'h' },
             { "version",     no_argument,       NULL,    VERSION },
             { "describe",    no_argument,       NULL,    DESCRIBE },
-            { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
             { "no-opencl",   no_argument,       &use_opencl, 0 },
@@ -1817,6 +1964,8 @@ static int ParseOptions( int argc, char ** argv )
             { "nlmeans-tune",required_argument, NULL,    FILTER_NLMEANS_TUNE },
             { "detelecine",  optional_argument, NULL,    '9' },
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
+            { "no-comb-detect", no_argument,    &comb_detect_disable, 1 },
+            { "comb-detect", optional_argument, NULL,    FILTER_COMB_DETECT },
             { "decomb",      optional_argument, NULL,    '5' },
             { "no-decomb",   no_argument,       &decomb_disable,      1 },
             { "grayscale",   no_argument,       NULL,        'g' },
@@ -1838,6 +1987,8 @@ static int ParseOptions( int argc, char ** argv )
             { "crop",        required_argument, NULL,    'n' },
             { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
             { "no-loose-crop", no_argument,     &loose_crop, 0 },
+            { "pad",         required_argument, NULL,            PAD },
+            { "no-pad",      no_argument,       &pad_disable,    1 },
 
             // mapping of legacy option names for backwards compatibility
             { "qsv-preset",           required_argument, NULL, ENCODER_PRESET,       },
@@ -1878,6 +2029,7 @@ static int ParseOptions( int argc, char ** argv )
             { "preset-export",      required_argument, NULL, PRESET_EXPORT },
             { "preset-export-file", required_argument, NULL, PRESET_EXPORT_FILE },
             { "preset-export-description", required_argument, NULL, PRESET_EXPORT_DESC },
+            { "queue-import-file",  required_argument, NULL, QUEUE_IMPORT },
 
             { "aname",       required_argument, NULL,    'A' },
             { "color-matrix",required_argument, NULL,    'M' },
@@ -1921,9 +2073,6 @@ static int ParseOptions( int argc, char ** argv )
             case DESCRIBE:
                 printf("%s\n", hb_get_full_description());
                 exit(0);
-            case 'u':
-                update = 1;
-                break;
             case 'v':
                 if( optarg != NULL )
                 {
@@ -1966,6 +2115,9 @@ static int ParseOptions( int argc, char ** argv )
             case PRESET_IMPORT_GUI:
                 hb_presets_gui_init();
                 break;
+            case QUEUE_IMPORT:
+                queue_import_name = strdup(optarg);
+                break;
             case DVDNAV:
                 dvdnav = 0;
                 break;
@@ -1983,6 +2135,12 @@ static int ParseOptions( int argc, char ** argv )
                     {
                         free( input );
                         input = malloc( strlen( "/dev/" ) + strlen( devName ) + 1 );
+                        if( input == NULL )
+                        {
+                            fprintf( stderr, "ERROR: malloc() failed while attempting to set device path.\n" );
+                            free( devName );
+                            return -1;
+                        }
                         sprintf( input, "/dev/%s", devName );
                     }
                     free( devName );
@@ -2045,53 +2203,53 @@ static int ParseOptions( int argc, char ** argv )
                 chapter_markers = 1;
                 break;
             case AUDIO_LANG_LIST:
-                audio_lang_list = str_split(optarg, ',');
+                audio_lang_list = hb_str_vsplit(optarg, ',');
                 break;
             case SUBTITLE_LANG_LIST:
-                subtitle_lang_list = str_split(optarg, ',');
+                subtitle_lang_list = hb_str_vsplit(optarg, ',');
                 break;
             case 'a':
                 if( optarg != NULL )
                 {
-                    atracks = str_split(optarg, ',');
+                    atracks = hb_str_vsplit(optarg, ',');
                 }
                 else
                 {
-                    atracks = str_split("1", ',');
+                    atracks = hb_str_vsplit("1", ',');
                 }
                 break;
             case '6':
                 if( optarg != NULL )
                 {
-                    mixdowns = str_split(optarg, ',');
+                    mixdowns = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case 'D':
                 if( optarg != NULL )
                 {
-                    dynamic_range_compression = str_split(optarg, ',');
+                    dynamic_range_compression = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case AUDIO_GAIN:
                 if( optarg != NULL )
                 {
-                    audio_gain = str_split(optarg, ',');
+                    audio_gain = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case AUDIO_DITHER:
                 if (optarg != NULL)
                 {
-                    audio_dither = str_split(optarg, ',');
+                    audio_dither = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case NORMALIZE_MIX:
-                normalize_mix_level = str_split(optarg, ',');
+                normalize_mix_level = hb_str_vsplit(optarg, ',');
                 break;
             case 's':
-                subtracks = str_split( optarg, ',' );
+                subtracks = hb_str_vsplit( optarg, ',' );
                 break;
             case 'F':
-                subforce = str_split( optarg, ',' );
+                subforce = hb_str_vsplit( optarg, ',' );
                 break;
             case SUB_BURNED:
                 if (optarg != NULL)
@@ -2110,7 +2268,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 if (subburn > 0)
                 {
-                    if (subtracks != NULL && str_vlen(subtracks) >= subburn &&
+                    if (subtracks != NULL && hb_str_vlen(subtracks) >= subburn &&
                         !strcasecmp("scan", subtracks[subburn-1]))
                     {
                         subburn_native = 1;
@@ -2144,16 +2302,16 @@ static int ParseOptions( int argc, char ** argv )
                 native_dub = 1;
                 break;
             case SRT_FILE:
-                srtfile = str_split( optarg, ',' );
+                srtfile = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_CODESET:
-                srtcodeset = str_split( optarg, ',' );
+                srtcodeset = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_OFFSET:
-                srtoffset = str_split( optarg, ',' );
+                srtoffset = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_LANG:
-                srtlang = str_split( optarg, ',' );
+                srtlang = hb_str_vsplit( optarg, ',' );
                 break;
             case SRT_DEFAULT:
                 if( optarg != NULL )
@@ -2186,7 +2344,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deinterlace = strdup("default");
+                    deinterlace = strdup(DEINTERLACE_DEFAULT_PRESET);
                 }
                 break;
             case '7':
@@ -2197,7 +2355,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    deblock = strdup("5");
+                    deblock = strdup(DEBLOCK_DEFAULT);
                 }
                 break;
             case '8':
@@ -2208,7 +2366,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    hqdn3d = strdup("default");
+                    hqdn3d = strdup(HQDN3D_DEFAULT_PRESET);
                 }
                 break;
             case FILTER_NLMEANS:
@@ -2219,7 +2377,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    nlmeans = strdup("medium");
+                    nlmeans = strdup(NLMEANS_DEFAULT_PRESET);
                 }
                 break;
             case FILTER_NLMEANS_TUNE:
@@ -2234,7 +2392,18 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    detelecine = strdup("default");
+                    detelecine = strdup(DETELECINE_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_COMB_DETECT:
+                free(comb_detect);
+                if (optarg != NULL)
+                {
+                    comb_detect = strdup(optarg);
+                }
+                else
+                {
+                    comb_detect = strdup(COMB_DETECT_DEFAULT_PRESET);
                 }
                 break;
             case '5':
@@ -2245,7 +2414,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    decomb = strdup("default");
+                    decomb = strdup(DECOMB_DEFAULT_PRESET);
                 }
                 break;
             case 'g':
@@ -2259,7 +2428,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else
                 {
-                    rotate = strdup("180:0");
+                    rotate = strdup(ROTATE_DEFAULT);
                 }
                 break;
             case KEEP_DISPLAY_ASPECT:
@@ -2298,7 +2467,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'E':
                 if( optarg != NULL )
                 {
-                    acodecs = str_split(optarg, ',');
+                    acodecs = hb_str_vsplit(optarg, ',');
                 }
                 break;
             case 'w':
@@ -2326,17 +2495,26 @@ static int ParseOptions( int argc, char ** argv )
                 else
                     loose_crop = 1;
                 break;
+            case PAD:
+            {
+                free(pad);
+                if (optarg != NULL)
+                {
+                    pad = strdup(optarg);
+                }
+                break;
+            }
             case 'r':
             {
                 vrate = strdup(optarg);
-                if ( cfr != 2 )
+                if ( cfr != 1 && cfr != 2 )
                 {
                     cfr = 2;
                 }
                 break;
             }
             case 'R':
-                arates = str_split( optarg, ',' );
+                arates = hb_str_vsplit( optarg, ',' );
                 break;
             case 'b':
                 vbitrate = atoi( optarg );
@@ -2345,13 +2523,13 @@ static int ParseOptions( int argc, char ** argv )
                 vquality = atof( optarg );
                 break;
             case 'B':
-                abitrates = str_split( optarg, ',' );
+                abitrates = hb_str_vsplit( optarg, ',' );
                 break;
             case 'Q':
-                aqualities = str_split( optarg, ',' );
+                aqualities = hb_str_vsplit( optarg, ',' );
                 break;
             case 'C':
-                acompressions = str_split( optarg, ',' );
+                acompressions = hb_str_vsplit( optarg, ',' );
                 break;
             case ENCODER_PRESET:
                 encoder_preset = strdup( optarg );
@@ -2408,7 +2586,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'A':
                 if( optarg != NULL )
                 {
-                    anames = str_split( optarg, ',' );
+                    anames = hb_str_vsplit( optarg, ',' );
                 }
                 break;
             case PREVIEWS:
@@ -2467,7 +2645,7 @@ static int ParseOptions( int argc, char ** argv )
             }
             case ALLOWED_AUDIO_COPY:
             {
-                audio_copy_list = str_split(optarg, ',');
+                audio_copy_list = hb_str_vsplit(optarg, ',');
                 break;
             }
             case AUDIO_FALLBACK:
@@ -2513,7 +2691,7 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --deblock and --no-deblock\n");
             return -1;
         }
-        if (hb_validate_filter_settings(HB_FILTER_DEBLOCK, deblock))
+        if (hb_validate_filter_string(HB_FILTER_DEBLOCK, deblock))
         {
             fprintf(stderr, "Invalid deblock option %s\n", deblock);
             return -1;
@@ -2529,19 +2707,34 @@ static int ParseOptions( int argc, char ** argv )
             return -1;
         }
         if (!hb_validate_filter_preset(HB_FILTER_DETELECINE,
-                                       detelecine, NULL))
+                                       detelecine, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DETELECINE, detelecine))
+        else if (!hb_validate_filter_string(HB_FILTER_DETELECINE, detelecine))
         {
             detelecine_custom = 1;
         }
         else
         {
             fprintf(stderr, "Invalid detelecine option %s\n", detelecine);
+            return -1;
+        }
+    }
+
+    if (pad != NULL)
+    {
+        if (pad_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --pad and --no-pad\n");
+            return -1;
+        }
+        else if (hb_validate_filter_string(HB_FILTER_PAD, pad))
+        {
+            fprintf(stderr, "Invalid pad option %s\n", pad);
             return -1;
         }
     }
@@ -2555,19 +2748,45 @@ static int ParseOptions( int argc, char ** argv )
             return -1;
         }
         if (!hb_validate_filter_preset(HB_FILTER_DEINTERLACE,
-                                       deinterlace, NULL))
+                                       deinterlace, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DEINTERLACE, deinterlace))
+        else if (!hb_validate_filter_string(HB_FILTER_DEINTERLACE, deinterlace))
         {
             deinterlace_custom = 1;
         }
         else
         {
             fprintf(stderr, "Invalid deinterlace option %s\n", deinterlace);
+            return -1;
+        }
+    }
+
+    if (comb_detect != NULL)
+    {
+        if (comb_detect_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --comb-detect and --no-comb-detect\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_COMB_DETECT, comb_detect,
+                                       NULL, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_COMB_DETECT, comb_detect))
+        {
+            comb_detect_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid comb-detect option %s\n", comb_detect);
             return -1;
         }
     }
@@ -2580,13 +2799,13 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --decomb and --no-decomb\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_DECOMB, decomb, NULL))
+        if (!hb_validate_filter_preset(HB_FILTER_DECOMB, decomb, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_DECOMB, decomb))
+        else if (!hb_validate_filter_string(HB_FILTER_DECOMB, decomb))
         {
             decomb_custom = 1;
         }
@@ -2605,13 +2824,13 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --hqdn3d and --no-hqdn3d\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_HQDN3D, hqdn3d, NULL))
+        if (!hb_validate_filter_preset(HB_FILTER_HQDN3D, hqdn3d, NULL, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_HQDN3D, hqdn3d))
+        else if (!hb_validate_filter_string(HB_FILTER_HQDN3D, hqdn3d))
         {
             hqdn3d_custom = 1;
         }
@@ -2630,13 +2849,14 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --nlmeans and --no-nlmeans\n");
             return -1;
         }
-        if (!hb_validate_filter_preset(HB_FILTER_NLMEANS, nlmeans, nlmeans_tune))
+        if (!hb_validate_filter_preset(HB_FILTER_NLMEANS, nlmeans,
+                                       nlmeans_tune, NULL))
         {
             // Nothing to do, but must validate preset before
             // attempting to validate custom settings to prevent potential
             // false positive
         }
-        else if (!hb_validate_filter_settings(HB_FILTER_NLMEANS, nlmeans))
+        else if (!hb_validate_filter_string(HB_FILTER_NLMEANS, nlmeans))
         {
             nlmeans_custom = 1;
         }
@@ -2654,7 +2874,7 @@ static int foreign_audio_scan(char **subtracks)
 {
     if (subtracks != NULL)
     {
-        int count = str_vlen(subtracks);
+        int count = hb_str_vlen(subtracks);
         int ii;
         for (ii = 0; ii < count; ii++)
         {
@@ -2672,7 +2892,7 @@ static int count_subtitles(char **subtracks)
     int subtitle_track_count = 0;
     if (subtracks != NULL)
     {
-        int count = str_vlen(subtracks);
+        int count = hb_str_vlen(subtracks);
         int ii;
         for (ii = 0; ii < count; ii++)
         {
@@ -2688,8 +2908,9 @@ static int count_subtitles(char **subtracks)
 
 static int CheckOptions( int argc, char ** argv )
 {
-    if( update )
+    if (queue_import_name != NULL)
     {
+        // Everything should be defined in the queue.
         return 0;
     }
 
@@ -2833,7 +3054,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (subtitle_lang_list != NULL)
     {
         hb_value_array_clear(subtitle_lang_array);
-        int count = str_vlen(subtitle_lang_list);
+        int count = hb_str_vlen(subtitle_lang_list);
         for (ii = 0; ii < count; ii++)
         {
             const iso639_lang_t *lang = lang_lookup(subtitle_lang_list[ii]);
@@ -2932,7 +3153,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (audio_lang_list != NULL)
     {
         hb_value_array_clear(audio_lang_array);
-        int count = str_vlen(audio_lang_list);
+        int count = hb_str_vlen(audio_lang_list);
         for (ii = 0; ii < count; ii++)
         {
             const iso639_lang_t *lang = lang_lookup(audio_lang_list[ii]);
@@ -2987,17 +3208,17 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             list = hb_value_array_init();
             hb_dict_set(preset, "AudioList", list);
         }
-        int count = MAX(str_vlen(mixdowns),
-                    MAX(str_vlen(dynamic_range_compression),
-                    MAX(str_vlen(audio_gain),
-                    MAX(str_vlen(audio_dither),
-                    MAX(str_vlen(normalize_mix_level),
-                    MAX(str_vlen(arates),
-                    MAX(str_vlen(abitrates),
-                    MAX(str_vlen(aqualities),
-                    MAX(str_vlen(acompressions),
-                    MAX(str_vlen(acodecs),
-                        str_vlen(anames)))))))))));
+        int count = MAX(hb_str_vlen(mixdowns),
+                    MAX(hb_str_vlen(dynamic_range_compression),
+                    MAX(hb_str_vlen(audio_gain),
+                    MAX(hb_str_vlen(audio_dither),
+                    MAX(hb_str_vlen(normalize_mix_level),
+                    MAX(hb_str_vlen(arates),
+                    MAX(hb_str_vlen(abitrates),
+                    MAX(hb_str_vlen(aqualities),
+                    MAX(hb_str_vlen(acompressions),
+                    MAX(hb_str_vlen(acodecs),
+                        hb_str_vlen(anames)))))))))));
 
         hb_dict_t *audio_dict;
         // Add audio dict entries to list if needed
@@ -3012,7 +3233,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update codecs
-        if (str_vlen(acodecs) > 0)
+        if (hb_str_vlen(acodecs) > 0)
         {
             for (ii = 0; acodecs[ii] != NULL; ii++)
             {
@@ -3030,7 +3251,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update qualities
-        if (str_vlen(aqualities) > 0)
+        if (hb_str_vlen(aqualities) > 0)
         {
             for (ii = 0; aqualities[ii] != NULL &&
                          aqualities[ii][0] != 0; ii++)
@@ -3044,7 +3265,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update bitrates
-        if (str_vlen(abitrates) > 0)
+        if (hb_str_vlen(abitrates) > 0)
         {
             for (ii = 0; abitrates[ii]    != NULL &&
                          abitrates[ii][0] != 0; ii++)
@@ -3074,7 +3295,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update samplerates
-        if (str_vlen(arates) > 0)
+        if (hb_str_vlen(arates) > 0)
         {
             for (ii = 0; arates[ii]    != NULL &&
                          arates[ii][0] != 0; ii++)
@@ -3094,7 +3315,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update mixdowns
-        if (str_vlen(mixdowns) > 0)
+        if (hb_str_vlen(mixdowns) > 0)
         {
             for (ii = 0; mixdowns[ii]    != NULL &&
                          mixdowns[ii][0] != 0; ii++)
@@ -3114,7 +3335,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update mixdowns normalization
-        if (str_vlen(normalize_mix_level) > 0)
+        if (hb_str_vlen(normalize_mix_level) > 0)
         {
             for (ii = 0; normalize_mix_level[ii]    != NULL &&
                          normalize_mix_level[ii][0] != 0; ii++)
@@ -3136,7 +3357,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update DRC
-        if (str_vlen(dynamic_range_compression) > 0)
+        if (hb_str_vlen(dynamic_range_compression) > 0)
         {
             for (ii = 0;dynamic_range_compression[ii]    != NULL &&
                         dynamic_range_compression[ii][0] != 0; ii++)
@@ -3159,7 +3380,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update Gain
-        if (str_vlen(audio_gain) > 0)
+        if (hb_str_vlen(audio_gain) > 0)
         {
             for (ii = 0; audio_gain[ii]    != NULL &&
                          audio_gain[ii][0] != 0; ii++)
@@ -3181,7 +3402,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update dither method
-        if (str_vlen(audio_dither) > 0)
+        if (hb_str_vlen(audio_dither) > 0)
         {
             for (ii = 0; audio_dither[ii]    != NULL &&
                          audio_dither[ii][0] != 0; ii++)
@@ -3201,7 +3422,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update compression
-        if (str_vlen(acompressions) > 0)
+        if (hb_str_vlen(acompressions) > 0)
         {
             for (ii = 0; acompressions[ii]    != NULL &&
                          acompressions[ii][0] != 0; ii++)
@@ -3223,7 +3444,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         }
 
         // Update track names
-        if (str_vlen(anames) > 0)
+        if (hb_str_vlen(anames) > 0)
         {
             for (ii = 0; anames[ii]    != NULL &&
                          anames[ii][0] != 0; ii++)
@@ -3287,7 +3508,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoOptionExtra", hb_value_string(advanced_opts));
     }
-    if (vquality >= 0)
+    if (vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(preset, "VideoQualityType", hb_value_int(2));
         hb_dict_set(preset, "VideoQualitySlider", hb_value_double(vquality));
@@ -3418,41 +3639,61 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoGrayScale", hb_value_bool(grayscale));
     }
-    if (deinterlace_disable)
+    if (decomb_disable || deinterlace_disable)
     {
-        hb_dict_set(preset, "PictureDeinterlace", hb_value_string("off"));
+        hb_dict_set(preset, "PictureDeinterlaceFilter", hb_value_string("off"));
+    }
+    if (comb_detect_disable)
+    {
+        hb_dict_set(preset, "PictureCombDetectFilter", hb_value_string("off"));
+    }
+    if (comb_detect != NULL)
+    {
+        if (!comb_detect_custom)
+        {
+            hb_dict_set(preset, "PictureCombDetectPreset",
+                        hb_value_string(comb_detect));
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureCombDetectPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureCombDetectCustom",
+                        hb_value_string(comb_detect));
+        }
     }
     if (deinterlace != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(0));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("deinterlace"));
         if (!deinterlace_custom)
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string(deinterlace));
         }
         else
         {
-            hb_dict_set(preset, "PictureDeinterlace",
+            hb_dict_set(preset, "PictureDeinterlacePreset",
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDeinterlaceCustom",
                         hb_value_string(deinterlace));
         }
     }
-    if (decomb_disable)
-    {
-        hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
-    }
     if (decomb != NULL)
     {
-        hb_dict_set(preset, "PictureDecombDeinterlace", hb_value_int(1));
+        hb_dict_set(preset, "PictureDeinterlaceFilter",
+                    hb_value_string("decomb"));
         if (!decomb_custom)
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string(decomb));
         }
         else
         {
-            hb_dict_set(preset, "PictureDecomb", hb_value_string("custom"));
-            hb_dict_set(preset, "PictureDecombCustom", hb_value_string(decomb));
+            hb_dict_set(preset, "PictureDeinterlacePreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureDeinterlaceCustom",
+                        hb_value_string(decomb));
         }
     }
     if (detelecine_disable)
@@ -3526,11 +3767,20 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (deblock != NULL)
     {
-        hb_dict_set(preset, "PictureDeblock", hb_value_string(deblock));
+        hb_dict_set(preset, "PictureDeblock", hb_value_string("custom"));
+        hb_dict_set(preset, "PictureDeblockCustom", hb_value_string(deblock));
     }
     if (rotate != NULL)
     {
         hb_dict_set(preset, "PictureRotate", hb_value_string(rotate));
+    }
+    if (pad_disable)
+    {
+        hb_dict_set(preset, "PicturePad", hb_value_string("off"));
+    }
+    if (pad != NULL)
+    {
+        hb_dict_set(preset, "PicturePad", hb_value_string(pad));
     }
 
     return preset;
@@ -3586,11 +3836,11 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
     *one_burned |= burn;
     int def  = srtdefault == track + 1;
 
-    if (srtcodeset && track < str_vlen(srtcodeset) && srtcodeset[track])
+    if (srtcodeset && track < hb_str_vlen(srtcodeset) && srtcodeset[track])
         codeset = srtcodeset[track];
-    if (srtoffset && track < str_vlen(srtoffset) && srtoffset[track])
+    if (srtoffset && track < hb_str_vlen(srtoffset) && srtoffset[track])
         offset = strtoll(srtoffset[track], NULL, 0);
-    if (srtlang && track < str_vlen(srtlang) && srtlang[track])
+    if (srtlang && track < hb_str_vlen(srtlang) && srtlang[track])
     {
         const iso639_lang_t *lang = lang_lookup(srtlang[track]);
         if (lang != NULL)
@@ -3771,7 +4021,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Codecs */
-        int acodec;
+        int acodec = HB_ACODEC_INVALID;
         ii = 0;
         if (acodecs != NULL)
         {
@@ -3808,7 +4058,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Sample Rate */
-        int arate;
+        int arate = 0;
         ii = 0;
         if (arates != NULL)
         {
@@ -3848,7 +4098,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Mixdown */
-        int mix;
+        int mix = HB_AMIXDOWN_NONE;
         ii = 0;
         if (mixdowns != NULL)
         {
@@ -3872,7 +4122,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Bitrate */
-        int abitrate;
+        int abitrate = 0;
         ii = 0;
         if (abitrates != NULL)
         {
@@ -3899,7 +4149,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Quality */
-        double aquality;
+        double aquality = 0.;
         ii = 0;
         if (aqualities != NULL)
         {
@@ -3958,7 +4208,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio DRC */
         ii = 0;
-        double drc;
+        double drc = 0.;
         if (dynamic_range_compression)
         {
             char **drcs = dynamic_range_compression;
@@ -3983,7 +4233,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
         /* Audio Gain */
         ii = 0;
-        double gain;
+        double gain = 1.;
         if (audio_gain)
         {
             for (; audio_gain[ii] != NULL && ii < track_count; ii++)
@@ -4006,7 +4256,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         }
 
         /* Audio Dither */
-        int dither;
+        int dither = 0;
         ii = 0;
         if (audio_dither != NULL)
         {
@@ -4050,7 +4300,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 norm = atoi(nmls[ii]);
                 audio_dict = hb_value_array_get(audio_array, ii);
                 hb_dict_set(audio_dict, "NormalizeMixLevel",
-                            hb_value_int(norm));
+                            hb_value_bool(norm));
             }
             if (nmls[ii] != NULL)
             {
@@ -4063,7 +4313,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         if (ii == 1) for (; ii < track_count; ii++)
         {
             audio_dict = hb_value_array_get(audio_array, ii);
-            hb_dict_set(audio_dict, "NormalizeMixLevel", hb_value_int(norm));
+            hb_dict_set(audio_dict, "NormalizeMixLevel", hb_value_bool(norm));
         }
 
         /* Audio Track Names */

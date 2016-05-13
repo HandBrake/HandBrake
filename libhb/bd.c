@@ -1,6 +1,6 @@
 /* dvd.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -702,9 +702,9 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
     uint8_t discontinuity;
     int new_chap = 0;
 
-    discontinuity = 0;
     while ( 1 )
     {
+        discontinuity = 0;
         if ( d->next_chap != d->chapter )
         {
             new_chap = d->chapter = d->next_chap;
@@ -757,6 +757,7 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
         out = hb_ts_decode_pkt( d->stream, buf+4, new_chap, discontinuity );
         if (out != NULL)
             return out;
+        new_chap = 0;
     }
     return NULL;
 }

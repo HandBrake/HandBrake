@@ -1,10 +1,8 @@
-//
-//  HBAddPresetController.h
-//  HandBrake
-//
-//  Created by Damiano Galassi on 23/11/14.
-//
-//
+/*  HBAddPresetController.h
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
 
@@ -14,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HBAddPresetController : NSWindowController
 
-- (instancetype)initWithPreset:(HBPreset *)preset videoSize:(NSSize)size;
+- (instancetype)initWithPreset:(HBPreset *)preset customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom;
 
 @property (nonatomic, readonly) HBPreset *preset;
 

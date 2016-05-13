@@ -9,13 +9,11 @@
 
 namespace HandBrakeWPF.Services.Presets.Model
 {
-    using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Utilities;
 
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
@@ -26,7 +24,7 @@ namespace HandBrakeWPF.Services.Presets.Model
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/89
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/96
     /// </remarks>
-    public class Preset : HandBrake.ApplicationServices.Utilities.PropertyChangedBase  // Delibery not 
+    public class Preset : PropertyChangedBase  // Delibery not 
     {
         #region Constants and Fields
 
@@ -85,11 +83,6 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// Gets or sets task.
         /// </summary>
         public EncodeTask Task { get; set; }
-
-        /// <summary>
-        /// Gets or sets The version number which associates this preset with a HB build
-        /// </summary>
-        public string Version { get; set; }
 
         /// <summary>
         /// Gets or sets the audio track behaviours.

@@ -1,6 +1,6 @@
 /* ports.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -42,6 +42,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <dlfcn.h>
 #endif
 
 #ifdef SYS_CYGWIN
@@ -269,6 +270,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Haswell";
         case HB_CPU_PLATFORM_INTEL_BDW:
             return "Intel microarchitecture Broadwell";
+        case HB_CPU_PLATFORM_INTEL_SKL:
+            return "Intel microarchitecture Skylake";
         case HB_CPU_PLATFORM_INTEL_CHT:
             return "Intel microarchitecture Airmont";
 
@@ -353,6 +356,10 @@ static void init_cpu_info()
                         break;
                     case 0x4C:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_CHT;
+                        break;
+                    case 0x4E:
+                    case 0x5E:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SKL;
                         break;
                     default:
                         break;
@@ -676,7 +683,7 @@ FILE * hb_fopen(const char *path, const char *mode)
 #endif
 }
 
-HB_DIR* hb_opendir(char *path)
+HB_DIR* hb_opendir(const char *path)
 {
 #ifdef SYS_MINGW
     HB_DIR *dir;
@@ -991,6 +998,10 @@ void hb_lock_close( hb_lock_t ** _l )
 {
     hb_lock_t * l = *_l;
 
+    if (l == NULL)
+    {
+        return;
+    }
 #if defined( SYS_BEOS )
     delete_sem( l->sem );
 #elif USE_PTHREAD
@@ -1070,6 +1081,10 @@ void hb_cond_close( hb_cond_t ** _c )
 {
     hb_cond_t * c = *_c;
 
+    if (c == NULL)
+    {
+        return;
+    }
 #if defined( SYS_BEOS )
 #elif USE_PTHREAD
     pthread_cond_destroy( &c->cond );
@@ -1331,7 +1346,7 @@ void hb_system_sleep_private_disable(void *opaque)
         return;
     }
 
-    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep,
+    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
                                                    kIOPMAssertionLevelOn,
                                                    reasonForActivity,
                                                    assertionID);
@@ -1347,3 +1362,34 @@ void hb_system_sleep_private_disable(void *opaque)
     }
 #endif
 }
+
+void * hb_dlopen(const char *name)
+{
+#ifdef SYS_MINGW
+    HMODULE h = LoadLibraryA(name);
+#else
+    void *h = dlopen(name, RTLD_LAZY | RTLD_LOCAL);
+#endif
+
+    return h;
+}
+
+void * hb_dlsym(void *h, const char *name)
+{
+#ifdef SYS_MINGW
+    FARPROC p = GetProcAddress(h, name);
+#else
+    void *p = dlsym(h, name);
+#endif
+    return p;
+}
+
+int hb_dlclose(void *h)
+{
+#ifdef SYS_MINGW
+    return FreeLibrary(h);
+#else
+    return dlclose(h);
+#endif
+}
+

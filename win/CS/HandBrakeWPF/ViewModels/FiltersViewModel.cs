@@ -10,29 +10,31 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
+    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Filters View Model
     /// </summary>
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
-        /// <summary>
-        /// The is deinterlace mode.
-        /// </summary>
-        private bool isDeinterlaceMode;
+        private DeinterlaceFilter deinterlaceFilter;
 
         #region Constructors and Destructors
 
@@ -49,7 +51,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = new EncodeTask();
             this.DeblockValue = 4; // OFF
-            this.IsDeinterlaceMode = true;
+            this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
         }
 
         #endregion
@@ -203,6 +205,28 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets DeinterlaceFilterOptions.
+        /// </summary>
+        public IEnumerable<DeinterlaceFilter> DeinterlaceFilterOptions
+        {
+            get
+            {
+                return EnumHelper<DeinterlaceFilter>.GetEnumList();
+            }
+        }
+
+        /// <summary>
+        /// Comb Detection Presets
+        /// </summary>
+        public IEnumerable<CombDetect> CombDetectPresets
+        {
+            get
+            {
+                return EnumHelper<CombDetect>.GetEnumList();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Grayscale.
         /// </summary>
         public bool Grayscale
@@ -232,23 +256,56 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.CurrentTask.Deinterlace = value;
-                if (this.CurrentTask.Deinterlace != Deinterlace.Off)
-                {
-                    this.SelectedDecomb = Decomb.Off;
-                }
-
                 this.NotifyOfPropertyChange(() => this.SelectedDeInterlace);
 
                 if (value != Deinterlace.Custom) this.CustomDeinterlace = string.Empty;
 
                 // Show / Hide the Custom Control
-                this.ShowDeinterlaceCustom = this.CurrentTask.Deinterlace == Deinterlace.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+            }
+        }
 
-                if (value != Deinterlace.Off)
-                {
-                    this.IsDeinterlaceMode = true;
-                }
+        public CombDetect SelectedCombDetectPreset
+        {
+            get
+            {
+                return this.CurrentTask.CombDetect;
+            }
+
+            set
+            {
+                this.CurrentTask.CombDetect = value;
+                this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
+
+                // Show / Hide the Custom Control
+                this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
+            }
+        }
+
+        /// <summary>
+        /// Show the CombDetect Custom Box.
+        /// </summary>
+        public bool ShowCombDetectCustom
+        {
+            get
+            {
+                return this.SelectedCombDetectPreset == CombDetect.Custom;
+            }
+        }
+
+        public string CustomCombDetect
+        {
+            get
+            {
+                return this.CurrentTask.CustomCombDetect;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomCombDetect = value;
+                this.NotifyOfPropertyChange(() => this.CustomCombDetect);
             }
         }
 
@@ -265,23 +322,14 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.CurrentTask.Decomb = value;
-                if (this.CurrentTask.Decomb != Decomb.Off)
-                {
-                    this.SelectedDeInterlace = Deinterlace.Off;
-                }
-
                 this.NotifyOfPropertyChange(() => this.SelectedDecomb);
 
                 if (value != Decomb.Custom) this.CustomDecomb = string.Empty;
 
                 // Show / Hide the Custom Control
-                this.ShowDecombCustom = this.CurrentTask.Decomb == Decomb.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
-
-                if (value != Decomb.Off)
-                {
-                    this.IsDeinterlaceMode = false;
-                }
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
             }
         }
 
@@ -336,12 +384,17 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether ShowDecombCustom.
         /// </summary>
-        public bool ShowDecombCustom { get; set; }
+        public bool ShowDecombCustom => this.SelectedDeinterlaceFilter == DeinterlaceFilter.Decomb && this.SelectedDecomb == Decomb.Custom;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ShowDeinterlaceDecombCustom.
+        /// </summary>
+        public bool ShowDeinterlaceDecombCustom => (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Decomb && this.SelectedDecomb == Decomb.Custom) || (this.SelectedDeinterlaceFilter == DeinterlaceFilter.Yadif && this.SelectedDeInterlace == Deinterlace.Custom);
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowDelelecineCustom.
         /// </summary>
-        public bool ShowDeinterlaceCustom { get; set; }
+        public bool ShowDeinterlaceCustom => this.SelectedDeinterlaceFilter == DeinterlaceFilter.Yadif && this.SelectedDeInterlace == Deinterlace.Custom;
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowDenoiseCustom.
@@ -354,41 +407,64 @@ namespace HandBrakeWPF.ViewModels
         public bool ShowDetelecineCustom { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is deinterlace mode.
+        /// Gets or sets the selected deinterlace filter mode.
         /// </summary>
-        public bool IsDeinterlaceMode
+        public DeinterlaceFilter SelectedDeinterlaceFilter
         {
             get
             {
-                return this.isDeinterlaceMode;
+                return this.deinterlaceFilter;
             }
             set
             {
-                if (!Equals(this.isDeinterlaceMode, value))
+                if (value == this.deinterlaceFilter)
                 {
-                    this.isDeinterlaceMode = value;
-                    this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
-
-                    this.DeinterlaceControlText = value ? "Deinterlace:" : "Decomb:";
-
-                    if (value)
-                    {
-                        this.SelectedDecomb = Decomb.Off;
-                    }
-                    else
-                    {
-                        this.SelectedDeInterlace = Deinterlace.Off;
-                    }
-
-                    this.NotifyOfPropertyChange(() => this.DeinterlaceControlText);
+                    return;
                 }
+
+                this.deinterlaceFilter = value;
+                this.CurrentTask.DeinterlaceFilter = value;
+
+                if (this.deinterlaceFilter == DeinterlaceFilter.Yadif)
+                {
+                    this.IsDeinterlaceMode = true;
+                    this.IsDecombMode = false;
+                }
+                else if (this.deinterlaceFilter == DeinterlaceFilter.Decomb)
+                {
+                    this.IsDeinterlaceMode = false;
+                    this.IsDecombMode = true;
+                }
+                else
+                {
+                    this.IsDeinterlaceMode = false;
+                    this.IsDecombMode = false;
+                }
+
+                this.NotifyOfPropertyChange(() => this.SelectedDeinterlaceFilter);
+                this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
+                this.NotifyOfPropertyChange(() => this.IsDecombMode);
+                this.NotifyOfPropertyChange(() => this.IsDeinterlaceDecomb);
+                this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
             }
         }
 
         /// <summary>
-        /// Gets or sets the deinterlace control text.
+        /// Gets or sets a value indicating whether is deinterlace mode.
         /// </summary>
-        public string DeinterlaceControlText { get; set; }
+        public bool IsDeinterlaceMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is decomb mode.
+        /// </summary>
+        public bool IsDecombMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is deinterlace or decomb mode.
+        /// </summary>
+        public bool IsDeinterlaceDecomb => this.SelectedDeinterlaceFilter != DeinterlaceFilter.Off;
 
         /// <summary>
         /// Gets or sets the selected denoise tune.
@@ -475,6 +551,42 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<int> RotationOptions => new BindingList<int> { 0, 90, 180, 270 };
+
+        /// <summary>
+        /// Selected Rotation.
+        /// </summary>
+        public int SelectedRotation
+        {
+            get
+            {
+                return this.CurrentTask.Rotation;
+            }
+
+            set
+            {
+                this.CurrentTask.Rotation = value;
+                this.NotifyOfPropertyChange(() => this.SelectedRotation);
+            }
+        }
+
+        /// <summary>
+        /// Flip the Video
+        /// </summary>
+        public bool FlipVideo
+        {
+            get
+            {
+                return this.CurrentTask.FlipVideo;
+            }
+
+            set
+            {
+                this.CurrentTask.FlipVideo = value;
+                this.NotifyOfPropertyChange(() => this.FlipVideo);
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -498,9 +610,23 @@ namespace HandBrakeWPF.ViewModels
             {
                 // Properties
                 this.SelectedDenoise = preset.Task.Denoise;
+                this.SelectedDetelecine = preset.Task.Detelecine;
+
                 this.SelectedDecomb = preset.Task.Decomb;
                 this.SelectedDeInterlace = preset.Task.Deinterlace;
-                this.SelectedDetelecine = preset.Task.Detelecine;
+                if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
+                {
+                    this.SelectedDeinterlaceFilter = DeinterlaceFilter.Yadif;
+                }
+                else if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
+                {
+                    this.SelectedDeinterlaceFilter = DeinterlaceFilter.Decomb;
+                }
+                else
+                {
+                    this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
+                }
+
                 this.Grayscale = preset.Task.Grayscale;
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
                 this.SelectedDenoisePreset = preset.Task.DenoisePreset;
@@ -511,16 +637,23 @@ namespace HandBrakeWPF.ViewModels
                 this.CustomDeinterlace = preset.Task.CustomDeinterlace;
                 this.CustomDetelecine = preset.Task.CustomDetelecine;
                 this.CustomDenoise = preset.Task.CustomDenoise;
+
+
+                this.SelectedRotation = preset.Task.Rotation;
+                this.FlipVideo = preset.Task.FlipVideo;
             }
             else
             {
                 // Default everything to off
                 this.SelectedDenoise = Denoise.Off;
-                this.SelectedDecomb = Decomb.Off;
-                this.SelectedDeInterlace = Deinterlace.Off;
+                this.SelectedDecomb = Decomb.Default;
+                this.SelectedDeInterlace = Deinterlace.Default;
                 this.SelectedDetelecine = Detelecine.Off;
                 this.Grayscale = false;
                 this.DeblockValue = 0;
+
+                this.SelectedRotation = 0;
+                this.FlipVideo = false;
             }
         }
 
@@ -545,6 +678,14 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
             this.NotifyOfPropertyChange(() => this.CustomDetelecine);
             this.NotifyOfPropertyChange(() => this.CustomDenoise);
+
+            this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
+            this.NotifyOfPropertyChange(() => this.IsDecombMode);
+            this.NotifyOfPropertyChange(() => this.IsDeinterlaceDecomb);
+
+            this.NotifyOfPropertyChange(() => this.FlipVideo);
+            this.NotifyOfPropertyChange(() => this.SelectedRotation);
+
         }
 
         /// <summary>

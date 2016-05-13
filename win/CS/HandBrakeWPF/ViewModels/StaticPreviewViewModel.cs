@@ -20,19 +20,22 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Encode;
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Services.Scan.Interfaces;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
 
     /// <summary>
     ///     The Static Preview View Model

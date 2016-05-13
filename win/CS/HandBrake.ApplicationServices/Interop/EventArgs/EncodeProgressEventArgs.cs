@@ -17,27 +17,62 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     public class EncodeProgressEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets or sets FractionComplete.
+        /// Initializes a new instance of the <see cref="EncodeProgressEventArgs"/> class.
         /// </summary>
-        public double FractionComplete { get; set; }
+        /// <param name="fractionComplete">
+        /// The fraction complete.
+        /// </param>
+        /// <param name="currentFrameRate">
+        /// The current frame rate.
+        /// </param>
+        /// <param name="averageFrameRate">
+        /// The average frame rate.
+        /// </param>
+        /// <param name="estimatedTimeLeft">
+        /// The estimated time left.
+        /// </param>
+        /// <param name="passId">
+        /// The pass id.
+        /// </param>
+        /// <param name="pass">
+        /// The pass.
+        /// </param>
+        /// <param name="passCount">
+        /// The pass count.
+        /// </param>
+        public EncodeProgressEventArgs(double fractionComplete, double currentFrameRate, double averageFrameRate, TimeSpan estimatedTimeLeft, int passId, int pass, int passCount)
+        {
+            this.FractionComplete = fractionComplete;
+            this.CurrentFrameRate = currentFrameRate;
+            this.AverageFrameRate = averageFrameRate;
+            this.EstimatedTimeLeft = estimatedTimeLeft;
+            this.PassId = passId;
+            this.Pass = pass;
+            this.PassCount = passCount;
+        }
 
         /// <summary>
-        /// Gets or sets CurrentFrameRate.
+        /// Gets the % Complete.
         /// </summary>
-        public double CurrentFrameRate { get; set; }
+        public double FractionComplete { get; private set; }
 
         /// <summary>
-        /// Gets or sets AverageFrameRate.
+        /// Gets the Current FrameRate.
         /// </summary>
-        public double AverageFrameRate { get; set; }
+        public double CurrentFrameRate { get; private set; }
 
         /// <summary>
-        /// Gets or sets EstimatedTimeLeft.
+        /// Gets the Average FrameRate.
         /// </summary>
-        public TimeSpan EstimatedTimeLeft { get; set; }
+        public double AverageFrameRate { get; private set; }
 
         /// <summary>
-        /// Gets or sets the pass ID.
+        /// Gets the Estimated Time Left.
+        /// </summary>
+        public TimeSpan EstimatedTimeLeft { get; private set; }
+
+        /// <summary>
+        /// Gets the pass ID.
         /// </summary>
         /// <remarks>
         /// -1: Subtitle scan
@@ -45,16 +80,16 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         ///  1: Encode first pass
         ///  2: Encode second pass
         /// </remarks>
-        public int PassId { get; set; }
+        public int PassId { get; private set; }
 
         /// <summary>
-        /// Gets or sets the current encoding pass. (1-based)
+        /// Gets the current encoding pass. (1-based)
         /// </summary>
-        public int Pass { get; set; }
+        public int Pass { get; private set; }
 
         /// <summary>
-        /// Gets or sets the pass count.
+        /// Gets the pass count.
         /// </summary>
-        public int PassCount { get; set; }
+        public int PassCount { get; private set; }
     }
 }

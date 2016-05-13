@@ -22,9 +22,17 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("x264")]
         X264 = 0,
 
+        [Display(Name = "H.264 10-bit (x264)")]
+        [ShortName("x264_10bit")]
+        X264_10,
+
         [Display(Name = "H.264 (Intel QSV)")]
         [ShortName("qsv_h264")]
         QuickSync,
+
+        [Display(Name = "H.265 (Intel QSV)")]
+        [ShortName("qsv_h265")]
+        QuickSyncH265,
 
         [Display(Name = "MPEG-4")]
         [ShortName("mpeg4")]
@@ -41,6 +49,14 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "H.265 (x265)")]
         [ShortName("x265")]
         X265,
+
+        [Display(Name = "H.265 12-bit (x265)")]
+        [ShortName("x265_12bit")]
+        X265_12,
+
+        [Display(Name = "H.265 10-bit (x265)")]
+        [ShortName("x265_10bit")]
+        X265_10,
 
         [Display(Name = "VP8")]
         [ShortName("vp8")]

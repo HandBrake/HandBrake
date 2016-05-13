@@ -1,14 +1,13 @@
-//
-//  HBPictureViewController.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 24/07/15.
-//
-//
+/*  HBPictureViewController.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBPictureViewController.h"
-#import "HBFilters.h"
-#import "HBPicture.h"
+
+@import HandBrakeKit.HBFilters;
+@import HandBrakeKit.HBPicture;
 
 static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 
@@ -16,6 +15,8 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 
 @property (weak) IBOutlet NSStepper *widthStepper;
 @property (weak) IBOutlet NSStepper *heightStepper;
+
+@property (nonatomic, readwrite) NSColor *labelColor;
 
 @end
 
@@ -26,6 +27,7 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
     self = [super initWithNibName:@"HBPictureViewController" bundle:nil];
     if (self)
     {
+        _labelColor = [NSColor disabledControlTextColor];
         [self addObserver:self forKeyPath:@"self.picture.modulus" options:NSKeyValueObservingOptionInitial context:HBPictureViewControllerContext];
     }
     return self;
@@ -35,9 +37,24 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 {
     @try
     {
-        [self removeObserver:self forKeyPath:@"self.picture.modulus"];
+        [self removeObserver:self forKeyPath:@"self.picture.modulus" context:HBPictureViewControllerContext];
     }
     @catch (NSException * __unused exception) {}
+}
+
+- (void)setPicture:(HBPicture *)picture
+{
+    _picture = picture;
+
+    if (_picture)
+    {
+        self.labelColor = [NSColor controlTextColor];
+    }
+    else
+    {
+        self.labelColor = [NSColor disabledControlTextColor];
+    }
+
 }
 
 #pragma mark - KVO
@@ -46,7 +63,7 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 {
     if (context == HBPictureViewControllerContext)
     {
-        // Set the increment here, it's not possible with bidings.
+        // Set the increment here, it's not possible with bindings.
         if ([keyPath isEqualToString:@"self.picture.modulus"])
         {
             [self.widthStepper setIncrement:self.picture.modulus];

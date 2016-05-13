@@ -9,8 +9,7 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Preview
 {
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
+    using Encoding;
 
     /// <summary>
     /// The preview settings.
@@ -22,25 +21,6 @@ namespace HandBrake.ApplicationServices.Interop.Model.Preview
         /// </summary>
         public PreviewSettings()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PreviewSettings"/> class.
-        /// </summary>
-        /// <param name="task">The task.</param>
-        public PreviewSettings(EncodeTask task)
-        {
-            this.Cropping = new Cropping(task.Cropping);
-            this.MaxWidth = task.MaxWidth ?? 0;
-            this.MaxHeight = task.MaxHeight ?? 0;
-            this.KeepDisplayAspect = task.KeepDisplayAspect;
-            this.TitleNumber = task.Title;
-            this.Anamorphic = task.Anamorphic;
-            this.Modulus = task.Modulus;
-            this.Width = task.Width ?? 0;
-            this.Height = task.Height ?? 0;
-            this.PixelAspectX = task.PixelAspectX;
-            this.PixelAspectY = task.PixelAspectY;
         }
 
         /// <summary>

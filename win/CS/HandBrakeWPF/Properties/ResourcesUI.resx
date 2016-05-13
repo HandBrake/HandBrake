@@ -349,7 +349,7 @@
     <value>Move Right</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Otherwise use fallback encoder:</value>
+    <value>Fallback encoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
     <value>Reload Defaults</value>
@@ -394,7 +394,7 @@
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace</value>
+    <value>Deinterlace:</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>Denoise:</value>
@@ -553,7 +553,7 @@
     <value>Video:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>When Done::</value>
+    <value>When Done:</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>Duration:</value>
@@ -735,9 +735,6 @@
   <data name="Options_DvdRead" xml:space="preserve">
     <value>Disable LibDVDNav. (libdvdread will be used instead)</value>
   </data>
-  <data name="Options_DXVA" xml:space="preserve">
-    <value>Enable DXVA Hardware Accelerated Decoding (Experimental)"</value>
-  </data>
   <data name="Options_Format" xml:space="preserve">
     <value>Format:</value>
   </data>
@@ -833,5 +830,46 @@
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
     <value>Constant quality fractional granularity:</value>
+  </data>
+  <data name="Options_ShowQueueInline" xml:space="preserve">
+    <value>Show Queue in place of the tab controls when toggled on.</value>
+  </data>
+  <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
+    <value>Pause queue if disk space is low before starting a job.</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>Rotate:</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>Open Source</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Preset_AudioDefaults_SubText" xml:space="preserve">
+    <value>Change the behaviour of the audio track selection for this preset.  
+This will not affect your current settings in the Audio tab.</value>
+  </data>
+  <data name="Preset_AudioDefaults_Title" xml:space="preserve">
+    <value>Audio Defaults</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_SubText" xml:space="preserve">
+    <value>Change the behaviour of the subtitle track selection for this preset.  
+This will not affect your current settings in the Subtitle tab.</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_Title" xml:space="preserve">
+    <value>Subtitle Defaults</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>The selected titles will be added using the  "{0}"  preset.</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video.</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video.</value>
   </data>
 </root>

@@ -17,28 +17,55 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
     public class ScanProgressEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets or sets the total progress fraction for the scan.
+        /// Initializes a new instance of the <see cref="ScanProgressEventArgs"/> class.
         /// </summary>
-        public double Progress { get; set; }
+        /// <param name="progress">
+        /// The progress.
+        /// </param>
+        /// <param name="currentPreview">
+        /// The current preview.
+        /// </param>
+        /// <param name="previews">
+        /// The previews.
+        /// </param>
+        /// <param name="currentTitle">
+        /// The current title.
+        /// </param>
+        /// <param name="titles">
+        /// The titles.
+        /// </param>
+        public ScanProgressEventArgs(double progress, int currentPreview, int previews, int currentTitle, int titles)
+        {
+            this.Progress = progress;
+            this.CurrentPreview = currentPreview;
+            this.Previews = previews;
+            this.CurrentTitle = currentTitle;
+            this.Titles = titles;
+        }
 
         /// <summary>
-        /// Gets or sets the current preview being processed on the scan.
+        /// Gets the total progress fraction for the scan.
         /// </summary>
-        public int CurrentPreview { get; set; }
+        public double Progress { get; private set; }
 
         /// <summary>
-        /// Gets or sets the total number of previews to process.
+        /// Gets the current preview being processed on the scan.
         /// </summary>
-        public int Previews { get; set; }
+        public int CurrentPreview { get; private set; }
 
         /// <summary>
-        /// Gets or sets the current title being processed on the scan.
+        /// Gets the total number of previews to process.
         /// </summary>
-        public int CurrentTitle { get; set; }
+        public int Previews { get; private set; }
 
         /// <summary>
-        /// Gets or sets the total number of titles to process.
+        /// Gets the current title being processed on the scan.
         /// </summary>
-        public int Titles { get; set; }
+        public int CurrentTitle { get; private set; }
+
+        /// <summary>
+        /// Gets the total number of titles to process.
+        /// </summary>
+        public int Titles { get; private set; }
     }
 }

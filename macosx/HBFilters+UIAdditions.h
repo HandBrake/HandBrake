@@ -13,6 +13,10 @@
  *  Getters to get the possible values for the filters.
  */
 + (NSDictionary *)detelecinePresetsDict;
+
++ (NSDictionary *)combDetectionPresetsDict;
+
++ (NSDictionary *)deinterlaceTypesDict;
 + (NSDictionary *)decombPresetsDict;
 + (NSDictionary *)deinterlacePresetsDict;
 
@@ -21,7 +25,10 @@
 + (NSDictionary *)denoiseTypesDict;
 
 - (BOOL)customDetelecineSelected;
-- (BOOL)customDecombSelected;
+
+@property (nonatomic, readonly) BOOL customCombDetectionSelected;
+
+- (BOOL)deinterlaceEnabled;
 - (BOOL)customDeinterlaceSelected;
 
 - (BOOL)denoiseEnabled;
@@ -31,8 +38,11 @@
 - (NSString *)deblockSummary;
 
 @property (nonatomic, readonly) NSArray *detelecineSettings;
-@property (nonatomic, readonly) NSArray *deinterlaceSettings;
-@property (nonatomic, readonly) NSArray *decombSettings;
+
+@property (nonatomic, readonly) NSArray *combDetectionSettings;
+
+@property (nonatomic, readonly) NSArray *deinterlaceTypes;
+@property (nonatomic, readonly) NSArray *deinterlacePresets;
 
 @property (nonatomic, readonly) NSArray *denoiseTypes;
 @property (nonatomic, readonly) NSArray *denoisePresets;
@@ -57,10 +67,13 @@
 @interface HBDetelecineTransformer : HBGenericDictionaryTransformer
 @end
 
-@interface HBDecombTransformer : HBGenericDictionaryTransformer
+@interface HBCombDetectionTransformer : HBGenericDictionaryTransformer
 @end
 
 @interface HBDeinterlaceTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBDeinterlacePresetTransformer : HBGenericDictionaryTransformer
 @end
 
 @interface HBDenoisePresetTransformer : HBGenericDictionaryTransformer

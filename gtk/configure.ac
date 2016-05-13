@@ -7,15 +7,15 @@ AM_INIT_AUTOMAKE([1.7.9 foreign dist-bzip2 dist-zip])
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
+AC_PROG_CC(gcc clang)
 AC_ISC_POSIX
-AC_PROG_CC
-AC_PROG_CXX
+AC_PROG_CXX(g++ clang++)
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
 if test x"$CC_FOR_BUILD" = x; then
 	if test x"$cross_compiling" = x"yes"; then
-		AC_CHECK_PROGS(CC_FOR_BUILD, gcc, cc)
+		AC_CHECK_PROGS(CC_FOR_BUILD, gcc clang, cc)
 	else
 		CC_FOR_BUILD="$CC"
 	fi
@@ -157,35 +157,35 @@ PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
-HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson"
+HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavfilter -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson"
 
 case $host in
   *-*-mingw*)
     if test "x$use_libdl" = "xyes" ; then
-		HB_LIBS+=" -ldl"
+		HB_LIBS="$HB_LIBS -ldl"
 	fi
     if test "x$use_libpthread" = "xyes" ; then
-		HB_LIBS+=" -lpthread"
+		HB_LIBS="$HB_LIBS -lpthread"
     else
-        HB_LIBS+=" -lpthreadGC2"
+        HB_LIBS="$HB_LIBS -lpthreadGC2"
 	fi
-    HB_LIBS+=" -lregex -luuid"
+    HB_LIBS="$HB_LIBS -lregex -luuid"
     ;;
   *)
-    HB_LIBS+=" -ldl -lpthread"
+    HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
 esac
 
 if test "x$use_fdk_aac" = "xyes" ; then
-    HB_LIBS+=" -lfdk-aac"
+    HB_LIBS="$HB_LIBS -lfdk-aac"
 fi
 
 if test "x$use_x265" = "xyes" ; then
-    HB_LIBS+=" -lx265"
+    HB_LIBS="$HB_LIBS -lx265"
 fi
 
 if test "x$use_qsv" = "xyes" ; then
-    HB_LIBS+=" -lmfx"
+    HB_LIBS="$HB_LIBS -lmfx"
 fi
 
 AC_SUBST(HB_LIBS)

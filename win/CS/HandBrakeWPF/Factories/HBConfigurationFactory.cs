@@ -37,12 +37,10 @@ namespace HandBrakeWPF.Factories
                                          {
                                              IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav), 
                                              DisableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding), 
-                                             EnableDxva = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDxva), 
                                              ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode), 
                                              PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount), 
                                              Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity), 
                                              MinScanDuration = UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration), 
-                                             ProcessPriority = UserSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority), 
                                              SaveLogToCopyDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory), 
                                              SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo), 
                                              SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), 

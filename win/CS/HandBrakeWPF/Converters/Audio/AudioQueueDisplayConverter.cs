@@ -13,12 +13,14 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Text;
-    using System.Threading.Tasks;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+
+    using HandBrakeWPF.Utilities;
+
+    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
+    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
 
     /// <summary>
     /// Audio Queue Display Converter

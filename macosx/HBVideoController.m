@@ -6,8 +6,8 @@
 
 #import "HBVideoController.h"
 #import "HBAdvancedController.h"
-#import "HBVideo+UIAdditions.h"
-#import "HBJob.h"
+
+@import HandBrakeKit;
 
 #include "hb.h"
 
@@ -128,7 +128,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
         {
-            if (self.video.encoder == HB_VCODEC_X264)
+            if (self.video.encoder & HB_VCODEC_X264_MASK)
             {
                 fDisplayX264PresetsUnparseTextField.stringValue = [NSString stringWithFormat:@"x264 Unparse: %@", self.video.unparseOptions];
             }
@@ -188,6 +188,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         granularity = [[NSUserDefaults standardUserDefaults]
                        floatForKey:@"x264CqSliderFractional"];
     }
+    fVidQualitySlider.minValue = minValue;
+    fVidQualitySlider.maxValue = maxValue;
     [fVidQualitySlider setNumberOfTickMarks:(int)((maxValue - minValue) *
                                              (1.0f / granularity)) + 1];
 
@@ -214,7 +216,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         fPresetsBox.contentView = fPresetView;
         [self setupPresetsSlider];
 
-        if (self.video.encoder == HB_VCODEC_X264)
+        if (self.video.encoder & HB_VCODEC_X264_MASK)
         {
             self.advancedController.hidden = NO;
         }
@@ -250,7 +252,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)toggleAdvancedOptionsCheckBoxForEncoder:(int)encoder
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder == HB_VCODEC_X264))
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder & HB_VCODEC_X264_MASK))
     {
         fX264UseAdvancedOptionsCheck.hidden = NO;
         fDividerLine.hidden = YES;

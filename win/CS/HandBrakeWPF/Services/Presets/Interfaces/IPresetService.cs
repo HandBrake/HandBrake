@@ -139,13 +139,6 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         void UpdateBuiltInPresets();
 
         /// <summary>
-        /// Check if the built in Presets stored are not out of date.
-        /// Update them if they are.
-        /// </summary>
-        /// <returns>true if out of date</returns>
-        bool CheckIfPresetsAreOutOfDate();
-
-        /// <summary>
         /// Check if the preset "name" exists in either Presets or UserPresets lists.
         /// </summary>
         /// <param name="name">Name of the preset</param>

@@ -6,6 +6,7 @@
 
 #import "HBTitle.h"
 #import "HBTitlePrivate.h"
+#import "HBChapter.h"
 
 #include "lang.h"
 
@@ -19,18 +20,8 @@ extern NSString *keyAudioInputChannelLayout;
 extern NSString *keyAudioTrackLanguageIsoCode;
 
 extern NSString *keySubTrackName;
-extern NSString *keySubTrackIndex;
-extern NSString *keySubTrackLanguage;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
-
-extern NSString *keySubTrackForced;
-extern NSString *keySubTrackBurned;
-extern NSString *keySubTrackDefault;
-
-extern NSString *keySubTrackSrtOffset;
-extern NSString *keySubTrackSrtFilePath;
-extern NSString *keySubTrackSrtCharCode;
 
 @interface HBTitle ()
 
@@ -44,12 +35,6 @@ extern NSString *keySubTrackSrtCharCode;
 @end
 
 @implementation HBTitle
-
-/*- (instancetype)init
-{
-    NSAssert(false, @"[HBTitle init] should not be called");
-    return nil;
-}*/
 
 - (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured
 {
@@ -182,16 +167,15 @@ extern NSString *keySubTrackSrtCharCode;
     if (!_audioTracks)
     {
         NSMutableArray *tracks = [NSMutableArray array];
-        hb_audio_config_t *audio;
         hb_list_t *list = self.hb_title->list_audio;
         int count = hb_list_count(list);
 
         // Initialize the audio list of available audio tracks from this title
         for (int i = 0; i < count; i++)
         {
-            audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
+            hb_audio_config_t *audio = hb_list_audio_config_item(list, i);
             [tracks addObject: @{keyAudioTrackIndex: @(i + 1),
-                                           keyAudioTrackName: [NSString stringWithFormat: @"%d: %s", i, audio->lang.description],
+                                           keyAudioTrackName: [NSString stringWithFormat: @"%d: %@", i, @(audio->lang.description)],
                                            keyAudioInputBitrate: @(audio->in.bitrate / 1000),
                                            keyAudioInputSampleRate: @(audio->in.samplerate),
                                            keyAudioInputCodec: @(audio->in.codec),
@@ -211,15 +195,14 @@ extern NSString *keySubTrackSrtCharCode;
     if (!_subtitlesTracks)
     {
         NSMutableArray *tracks = [NSMutableArray array];
-        hb_subtitle_t *subtitle;
         hb_list_t *list = self.hb_title->list_subtitle;
         int count = hb_list_count(list);
 
         for (int i = 0; i < count; i++)
         {
-            subtitle = (hb_subtitle_t *) hb_list_item(self.hb_title->list_subtitle, i);
+            hb_subtitle_t *subtitle = hb_list_item(self.hb_title->list_subtitle, i);
 
-            /* Human-readable representation of subtitle->source */
+            // Human-readable representation of subtitle->source
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
             NSString *subSourceName = @(hb_subsource_name(subtitle->source));
 
@@ -229,9 +212,7 @@ extern NSString *keySubTrackSrtCharCode;
 
             /* create a dictionary of source subtitle information to store in our array */
             [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
-                                              keySubTrackIndex: @(i),
                                               keySubTrackType: @(subtitle->source),
-                                              keySubTrackLanguage: nativeLanguage,
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
 
@@ -241,11 +222,11 @@ extern NSString *keySubTrackSrtCharCode;
     return _subtitlesTracks;
 }
 
-- (NSArray *)chapters
+- (NSArray<HBChapter *> *)chapters
 {
     if (!_chapters)
     {
-        NSMutableArray *chapters = [NSMutableArray array];
+        NSMutableArray<HBChapter *> *chapters = [NSMutableArray array];
 
         for (int i = 0; i < hb_list_count(self.hb_title->list_chapter); i++)
         {
@@ -253,18 +234,19 @@ extern NSString *keySubTrackSrtCharCode;
 
             if (chapter != NULL)
             {
+                NSString *title;
                 if (chapter->title != NULL)
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"%s",
-                                         chapter->title]];
+                    title = [NSString stringWithFormat:@"%s", chapter->title];
                 }
                 else
                 {
-                    [chapters addObject:[NSString
-                                         stringWithFormat:@"Chapter %d",
-                                         i + 1]];
+                    title = [NSString stringWithFormat:@"Chapter %d", i + 1];
                 }
+
+                [chapters addObject:[[HBChapter alloc] initWithTitle:title
+                                                               index:i + 1
+                                                            duration:chapter->duration]];
             }
         }
 

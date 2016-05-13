@@ -32,6 +32,8 @@
         <Options:OptionsTabConverter x:Key="tabConverter" />
         <Options:OptionsTabNameConverter x:Key="tabNameConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Options:LogLevelConverter x:Key="LogLevelConverter" />
+        
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
@@ -102,16 +104,11 @@
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
                                 <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left" />
-
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding ResetWhenDoneAction}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ResetDoNothing}" VerticalAlignment="Center" IsChecked="{Binding ResetWhenDoneAction}" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Visibility="Collapsed">
-                                <CheckBox Content="Growl after Queue Completes" IsChecked="{Binding GrowlAfterEncode}" Margin="0,0,5,0"/>
-                                <CheckBox Content="Growl after Encode Completes" IsChecked="{Binding GrowlAfterQueue}" />
+                                
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -153,6 +150,7 @@
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AdvancedTab}" IsChecked="{Binding ShowAdvancedTab}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -214,12 +212,6 @@
 
                         <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Decoding}" FontSize="14" Margin="0,10,0,10" />
 
-                        <StackPanel Orientation="Vertical" Margin="20,0,0,0"  >
-                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_DXVA}" IsChecked="{Binding EnableDxvaDecoding}" />
-                            <TextBlock Text="{x:Static Properties:Resources.Video_DxvaDecode}" Margin="17,2,0,0" />
-
-                        </StackPanel>
-
                         <StackPanel Orientation="Vertical" Margin="20,10,0,0">
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_QsvDecode}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding DisableQuickSyncDecoding}" />
                             <TextBlock Text="{x:Static Properties:Resources.Video_QuickSyncNotAvailable}" Margin="17,2,0,0" TextWrapping="Wrap"
@@ -257,6 +249,9 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_PreventSleep}" IsChecked="{Binding PreventSleep}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_PauseQueueOnLowDiskSpace}" 
+                                      IsChecked="{Binding PauseOnLowDiskspace}" />
+
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:ResourcesUI.Options_PreviewScanCount}" VerticalAlignment="Center" Width="250" />
                                 <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
@@ -299,14 +294,14 @@
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{x:Static Properties:ResourcesUI.Options_LogLevel}" Width="250" VerticalAlignment="Center" />
-                                <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions}" SelectedItem="{Binding SelectedVerbosity}" Width="120" />
+                                <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions, Converter={StaticResource LogLevelConverter}}" SelectedItem="{Binding SelectedVerbosity, Converter={StaticResource LogLevelConverter}}" Width="120" />
                             </StackPanel>
 
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_CopyLogToEncDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_CopyLogToDir}" Margin="0,5,0,0" IsChecked="{Binding CopyLogToSepcficedLocation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:ResourcesUI.Options_LogPath}" VerticalAlignment="Center" />
-                                <TextBox Width="120" Text="{Binding LogDirectory}" />
+                                <TextBox Width="380" Text="{Binding LogDirectory}" />
                                 <Button Content="Browse" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseLogPath]" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">

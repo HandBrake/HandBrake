@@ -1,15 +1,17 @@
 /* hb.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #include "hb.h"
 #include "opencl.h"
 #include "hbffmpeg.h"
+#include "encx264.h"
+#include "libavfilter/avfilter.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -28,11 +30,6 @@
 struct hb_handle_s
 {
     int            id;
-    
-    /* The "Check for update" thread */
-    int            build;
-    char           version[32];
-    hb_thread_t  * update_thread;
 
     /* This thread's only purpose is to check other threads'
        states */
@@ -46,6 +43,7 @@ struct hb_handle_s
 
     /* The thread which processes the jobs. Others threads are launched
        from this one (see work.c) */
+    int            sequence_id;
     hb_list_t    * jobs;
     hb_job_t     * current_job;
     volatile int   work_die;
@@ -61,7 +59,7 @@ struct hb_handle_s
        increments each time the scan thread completes*/
     int            scanCount;
     volatile int   scan_die;
-    
+
     /* Stash of persistent data between jobs, for stuff
        like correcting frame count and framerate estimates
        on multi-pass encodes where frames get dropped.     */
@@ -126,6 +124,7 @@ void hb_avcodec_init()
 {
     av_lockmgr_register(ff_lockmgr_cb);
     av_register_all();
+    avfilter_register_all();
 #ifdef _WIN64
     // avresample's assembly optimizations can cause crashes under Win x86_64
     // (see http://bugzilla.libav.org/show_bug.cgi?id=496)
@@ -141,7 +140,7 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
 {
     int ret;
 
-    if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) && 
+    if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) &&
         (codec->type == AVMEDIA_TYPE_VIDEO))
     {
         avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
@@ -172,22 +171,47 @@ int hb_avcodec_close(AVCodecContext *avctx)
 }
 
 
-int hb_avpicture_fill(AVPicture *pic, hb_buffer_t *buf)
+int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 {
     int ret, ii;
 
     for (ii = 0; ii < 4; ii++)
-        pic->linesize[ii] = buf->plane[ii].stride;
+        stride[ii] = buf->plane[ii].stride;
 
-    ret = av_image_fill_pointers(pic->data, buf->f.fmt,
+    ret = av_image_fill_pointers(data, buf->f.fmt,
                                  buf->plane[0].height_stride,
-                                 buf->data, pic->linesize);
+                                 buf->data, stride);
     if (ret != buf->size)
     {
-        hb_error("Internal error hb_avpicture_fill expected %d, got %d",
+        hb_error("Internal error hb_picture_fill expected %d, got %d",
                  buf->size, ret);
     }
     return ret;
+}
+
+int hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *buf,
+                    int top, int left)
+{
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(buf->f.fmt);
+    int x_shift, y_shift;
+
+    if (desc == NULL)
+        return -1;
+
+    x_shift = desc->log2_chroma_w;
+    y_shift = desc->log2_chroma_h;
+
+    data[0] = buf->plane[0].data + top * buf->plane[0].stride + left;
+    data[1] = buf->plane[1].data + (top >> y_shift) * buf->plane[1].stride +
+              (left >> x_shift);
+    data[2] = buf->plane[2].data + (top >> y_shift) * buf->plane[2].stride +
+              (left >> x_shift);
+
+    stride[0] = buf->plane[0].stride;
+    stride[1] = buf->plane[1].stride;
+    stride[2] = buf->plane[2].stride;
+
+    return 0;
 }
 
 static int handle_jpeg(enum AVPixelFormat *format)
@@ -230,7 +254,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
         av_opt_set_int(ctx, "dst_format", dstFormat, 0);
         av_opt_set_int(ctx, "sws_flags", flags, 0);
 
-        sws_setColorspaceDetails( ctx, 
+        sws_setColorspaceDetails( ctx,
                       sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
                       srcRange, // src range 0 = MPG, 1 = JPG
                       sws_getCoefficients( SWS_CS_DEFAULT ), // dst colorspace
@@ -243,7 +267,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
             hb_error("Cannot initialize resampling context");
             sws_freeContext(ctx);
             ctx = NULL;
-        } 
+        }
     }
     return ctx;
 }
@@ -382,46 +406,13 @@ void hb_log_level_set(hb_handle_t *h, int level)
     global_verbosity_level = level;
 }
 
-void hb_update_poll(hb_handle_t *h)
-{
-    uint64_t      date;
-
-    hb_log( "hb_update_poll: checking for updates" );
-    date             = hb_get_date();
-    h->update_thread = hb_update_init( &h->build, h->version );
-
-    for( ;; )
-    {
-        if (h->update_thread == 0)
-        {
-            // Closed by thread_func
-            break;
-        }
-        if (hb_thread_has_exited(h->update_thread))
-        {
-            /* Immediate success or failure */
-            hb_thread_close( &h->update_thread );
-            break;
-        }
-        if (hb_get_date() > date + 1000)
-        {
-            /* Still nothing after one second. Connection problem,
-               let the thread die */
-            hb_log( "hb_update_poll: connection problem, not waiting for "
-                    "update_thread" );
-            break;
-        }
-        hb_snooze( 500 );
-    }
-}
-
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
  * @param update_check signals libhb to check for updated version from HandBrake website.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init( int verbose, int update_check )
+hb_handle_t * hb_init( int verbose )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
 
@@ -430,18 +421,10 @@ hb_handle_t * hb_init( int verbose, int update_check )
 
     h->id = hb_instance_counter++;
 
-    /* Check for an update on the website if asked to */
-    h->build = -1;
-
     /* Initialize opaque for PowerManagement purposes */
     h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
-    if( update_check )
-    {
-        hb_update_poll(h);
-    }
-
-    h->title_set.list_title = hb_list_init();
+	h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
     h->state_lock  = hb_lock_init();
@@ -535,18 +518,6 @@ int hb_get_build( hb_handle_t * h )
 }
 
 /**
- * Checks for needed update.
- * @param h Handle to hb_handle_t.
- * @param version Pointer to handle where version will be copied.
- * @return update indicator.
- */
-int hb_check_update( hb_handle_t * h, char ** version )
-{
-    *version = ( h->build < 0 ) ? NULL : h->version;
-    return h->build;
-}
-
-/**
  * Deletes current previews associated with titles
  * @param h Handle to hb_handle_t
  */
@@ -610,13 +581,28 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
             title = hb_list_item(h->title_set.list_title, ii);
             if (title->index == title_index)
             {
-                // Title has already been scanned.
-                hb_lock( h->state_lock );
-                h->state.state = HB_STATE_SCANDONE;
-                hb_unlock( h->state_lock );
-                return;
+                // In some cases, we don't care what the preview count is.
+                // E.g. when rescanning at the start of a job. In these
+                // cases, the caller can set preview_count to -1 to tell
+                // us to use the same count as the previous scan, if known.
+                if (preview_count < 0)
+                {
+                    preview_count = title->preview_count;
+                }
+                if (preview_count == title->preview_count)
+                {
+                    // Title has already been scanned.
+                    hb_lock( h->state_lock );
+                    h->state.state = HB_STATE_SCANDONE;
+                    hb_unlock( h->state_lock );
+                    return;
+                }
             }
         }
+    }
+    if (preview_count < 0)
+    {
+        preview_count = 10;
     }
 
     h->scan_die = 0;
@@ -648,8 +634,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 #endif
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
-                                   &h->title_set, preview_count, 
+    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index,
+                                   &h->title_set, preview_count,
                                    store_previews, min_duration );
 }
 
@@ -743,20 +729,31 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                             hb_geometry_settings_t *geo, int deinterlace)
 {
     char                 filename[1024];
-    hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
+    hb_buffer_t        * in_buf = NULL, * deint_buf = NULL;
+    hb_buffer_t        * preview_buf = NULL;
     uint32_t             swsflags;
-    AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
+    uint8_t            * preview_data[4], * crop_data[4];
+    int                  preview_stride[4], crop_stride[4];
     struct SwsContext  * context;
 
     int width = geo->geometry.width *
                 geo->geometry.par.num / geo->geometry.par.den;
     int height = geo->geometry.height;
 
+    // Set min/max dimensions to prevent failure to initialize
+    // sws context and absurd sizes.
+    //
+    // This means output image size may not match requested image size!
+    int ww = width, hh = height;
+    width  = MIN(MAX(width,                HB_MIN_WIDTH),  HB_MAX_WIDTH);
+    height = MIN(MAX(height * width  / ww, HB_MIN_HEIGHT), HB_MAX_HEIGHT);
+    width  = MIN(MAX(width  * height / hh, HB_MIN_WIDTH),  HB_MAX_WIDTH);
+
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     preview_buf = hb_frame_buffer_init(AV_PIX_FMT_RGB32, width, height);
     // fill in AVPicture
-    hb_avpicture_fill( &pic_preview, preview_buf );
+    hb_picture_fill( preview_data, preview_stride, preview_buf );
 
 
     memset( filename, 0, 1024 );
@@ -775,23 +772,19 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
         goto fail;
     }
 
-    hb_avpicture_fill( &pic_in, in_buf );
-
     if (deinterlace)
     {
         // Deinterlace and crop
         deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
                               title->geometry.width, title->geometry.height );
         hb_deinterlace(deint_buf, in_buf);
-        hb_avpicture_fill( &pic_deint, deint_buf );
-
-        av_picture_crop(&pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
+        hb_picture_crop(crop_data, crop_stride, deint_buf,
                         geo->crop[0], geo->crop[2] );
     }
     else
     {
         // Crop
-        av_picture_crop(&pic_crop, &pic_in, AV_PIX_FMT_YUV420P,
+        hb_picture_crop(crop_data, crop_stride, in_buf,
                         geo->crop[0], geo->crop[2] );
     }
 
@@ -801,11 +794,17 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                 title->geometry.height - (geo->crop[0] + geo->crop[1]),
                 AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags);
 
+    if (context == NULL)
+    {
+        // if by chance hb_sws_get_context fails, don't crash in sws_scale
+        goto fail;
+    }
+
     // Scale
     sws_scale(context,
-              (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
+              (const uint8_t * const *)crop_data, crop_stride,
               0, title->geometry.height - (geo->crop[0] + geo->crop[1]),
-              pic_preview.data, pic_preview.linesize);
+              preview_data, preview_stride);
 
     // Free context
     sws_freeContext( context );
@@ -820,6 +819,10 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     return image;
 
 fail:
+
+    hb_buffer_close( &in_buf );
+    hb_buffer_close( &deint_buf );
+    hb_buffer_close( &preview_buf );
 
     image = hb_image_init(AV_PIX_FMT_RGB32, width, height);
     return image;
@@ -857,7 +860,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
         threshold = prog_threshold;
     }
 
-    /* One pas for Y, one pass for Cb, one pass for Cr */    
+    /* One pas for Y, one pass for Cb, one pass for Cr */
     for( k = 0; k < 3; k++ )
     {
         uint8_t * data = buf->plane[k].data;
@@ -904,7 +907,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
 
     /* HandBrake is all yuv420, so weight the average percentage of all 3 planes accordingly.*/
     int average_cc = ( 2 * cc[0] + ( cc[1] / 2 ) + ( cc[2] / 2 ) ) / 3;
-    
+
     /* Now see if that average percentage of combed pixels surpasses the threshold percentage given by the user.*/
     if( average_cc > threshold )
     {
@@ -1016,12 +1019,24 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     int width, height;
     int maxWidth, maxHeight;
 
-    maxWidth = MULTIPLE_MOD_DOWN(geo->maxWidth, mod);
-    maxHeight = MULTIPLE_MOD_DOWN(geo->maxHeight, mod);
-    if (maxWidth && maxWidth < 32)
-        maxWidth = 32;
-    if (maxHeight && maxHeight < 32)
-        maxHeight = 32;
+    if (geo->maxWidth > 0)
+    {
+        maxWidth  = MIN(MAX(MULTIPLE_MOD_DOWN(geo->maxWidth, mod),
+                            HB_MIN_WIDTH), HB_MAX_WIDTH);
+    }
+    else
+    {
+        maxWidth  = HB_MAX_WIDTH;
+    }
+    if (geo->maxHeight > 0)
+    {
+        maxHeight = MIN(MAX(MULTIPLE_MOD_DOWN(geo->maxHeight, mod),
+                            HB_MIN_HEIGHT), HB_MAX_HEIGHT);
+    }
+    else
+    {
+        maxHeight = HB_MAX_HEIGHT;
+    }
 
     switch (geo->mode)
     {
@@ -1054,7 +1069,25 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 width = MULTIPLE_MOD_UP(geo->geometry.width, mod);
                 height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
             }
-            if (maxWidth && (width > maxWidth))
+
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+                if (keep_display_aspect)
+                {
+                    height = MULTIPLE_MOD(width / dar, mod);
+                }
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+                if (keep_display_aspect)
+                {
+                    width = MULTIPLE_MOD(height * dar, mod);
+                }
+            }
+            if (width > maxWidth)
             {
                 width  = maxWidth;
                 if (keep_display_aspect)
@@ -1062,7 +1095,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                     height = MULTIPLE_MOD(width / dar, mod);
                 }
             }
-            if (maxHeight && (height > maxHeight))
+            if (height > maxHeight)
             {
                 height  = maxHeight;
                 if (keep_display_aspect)
@@ -1117,13 +1150,23 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 width = MULTIPLE_MOD_UP(height * storage_aspect + 0.5, mod);
             }
 
-            if (maxWidth && (maxWidth < width))
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+                height = MULTIPLE_MOD(width / storage_aspect + 0.5, mod);
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+                width = MULTIPLE_MOD(height * storage_aspect + 0.5, mod);
+            }
+            if (width > maxWidth)
             {
                 width = maxWidth;
                 height = MULTIPLE_MOD(width / storage_aspect + 0.5, mod);
             }
-
-            if (maxHeight && (maxHeight < height))
+            if (height > maxHeight)
             {
                 height = maxHeight;
                 width = MULTIPLE_MOD(height * storage_aspect + 0.5, mod);
@@ -1140,42 +1183,26 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             /* Anamorphic 3: Power User Jamboree
                - Set everything based on specified values */
 
-            /* Use specified storage dimensions */
-            storage_aspect = (double)geo->geometry.width / geo->geometry.height;
-
             /* Time to get picture dimensions that divide cleanly.*/
             width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
             height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
 
-            /* Bind to max dimensions */
-            if (maxWidth && width > maxWidth)
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+            }
+            if (width > maxWidth)
             {
                 width = maxWidth;
-                // If we are keeping the display aspect, then we are going
-                // to be modifying the PAR anyway.  So it's preferred
-                // to let the width/height stray some from the original
-                // requested storage aspect.
-                //
-                // But otherwise, PAR and DAR will change the least
-                // if we stay as close as possible to the requested
-                // storage aspect.
-                if (!keep_display_aspect &&
-                    (maxHeight == 0 || height < maxHeight))
-                {
-                    height = width / storage_aspect + 0.5;
-                    height = MULTIPLE_MOD(height, mod);
-                }
             }
-            if (maxHeight && height > maxHeight)
+            if (height > maxHeight)
             {
                 height = maxHeight;
-                // Ditto, see comment above
-                if (!keep_display_aspect &&
-                    (maxWidth == 0 || width < maxWidth))
-                {
-                    width = height * storage_aspect + 0.5;
-                    width  = MULTIPLE_MOD(width, mod);
-                }
             }
             if (keep_display_aspect)
             {
@@ -1188,20 +1215,35 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                 dst_par_den = (int64_t)width  * cropped_height *
                                        src_par.den;
             }
-            else
-            {
-                /* If the dimensions were changed by the modulus
-                 * or by maxWidth/maxHeight, we also change the
-                 * output PAR so that the DAR is unchanged.
-                 *
-                 * PAR is the requested output display width / storage width
-                 * requested output display width is the original
-                 * requested width * original requested PAR
-                 */
-                dst_par_num = geo->geometry.width * dst_par_num;
-                dst_par_den = width * dst_par_den;
-            }
         } break;
+    }
+    if (width < HB_MIN_WIDTH || height < HB_MIN_HEIGHT ||
+        width > maxWidth     || height > maxHeight)
+    {
+        // All limits set above also attempted to keep PAR and DAR.
+        // If we are still outside limits, enforce them and modify
+        // PAR to keep DAR
+        if (width < HB_MIN_WIDTH)
+        {
+            width  = HB_MIN_WIDTH;
+        }
+        if (height < HB_MIN_HEIGHT)
+        {
+            height  = HB_MIN_HEIGHT;
+        }
+        if (width > maxWidth)
+        {
+            width = maxWidth;
+        }
+        if (height > maxHeight)
+        {
+            height = maxHeight;
+        }
+        if (keep_display_aspect && geo->mode != HB_ANAMORPHIC_NONE)
+        {
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        }
     }
 
     /* Pass the results back to the caller */
@@ -1234,13 +1276,63 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
  * @param job Handle to hb_job_t
  * @param settings to give the filter
  */
-void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * settings_in )
+void hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter_dict )
 {
-    char * settings = NULL;
+    int new_id = hb_dict_get_int(filter_dict, "ID");
 
-    if ( settings_in != NULL )
+    hb_filter_object_t * filter = hb_filter_get(new_id);
+    if (filter == NULL)
     {
-        settings = strdup( settings_in );
+        hb_error("hb_add_filter2: Invalid filter ID %d", new_id);
+        hb_value_free(&filter_dict);
+        return;
+    }
+    if (filter->enforce_order)
+    {
+        // Find the position in the filter chain this filter belongs in
+        int ii, len;
+
+        len = hb_value_array_len(list);
+        for( ii = 0; ii < len; ii++ )
+        {
+            hb_value_t * f = hb_value_array_get(list, ii);
+            int id = hb_dict_get_int(f, "ID");
+            if (id > new_id)
+            {
+                hb_value_array_insert(list, ii, filter_dict);
+                return;
+            }
+            else if ( id == new_id )
+            {
+                // Don't allow the same filter to be added twice
+                hb_value_free(&filter_dict);
+                return;
+            }
+        }
+    }
+    // No position found or order not enforced for this filter
+    hb_value_array_append(list, filter_dict);
+}
+
+/**
+ * Add a filter to a jobs filter list
+ *
+ * @param job Handle to hb_job_t
+ * @param settings to give the filter
+ */
+void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
+                         const hb_dict_t * settings_in )
+{
+    hb_dict_t * settings;
+
+    // Always set filter->settings to a valid hb_dict_t
+    if (settings_in == NULL)
+    {
+        settings = hb_dict_init();
+    }
+    else
+    {
+        settings = hb_value_dup(settings_in);
     }
     filter->settings = settings;
     if( filter->enforce_order )
@@ -1265,6 +1357,25 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * se
     }
     // No position found or order not enforced for this filter
     hb_list_add( job->list_filter, filter );
+}
+
+/**
+ * Add a filter to a jobs filter list
+ *
+ * @param job Handle to hb_job_t
+ * @param settings to give the filter
+ */
+void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
+                    const char * settings_in )
+{
+    hb_dict_t * settings = hb_parse_filter_settings(settings_in);
+    if (settings_in != NULL && settings == NULL)
+    {
+        hb_log("hb_add_filter: failed to parse filter settings!");
+        return;
+    }
+    hb_add_filter_dict(job, filter, settings);
+    hb_value_free(&settings);
 }
 
 /**
@@ -1337,7 +1448,7 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
          * language.
          */
         job_copy->list_subtitle = hb_list_init();
-    
+
         for( i = 0; i < hb_list_count( job->title->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( job->title->list_subtitle, i );
@@ -1428,16 +1539,19 @@ hb_job_t* hb_job_copy(hb_job_t * job)
     return job_copy;
 }
 
-void hb_add( hb_handle_t * h, hb_job_t * job )
+int hb_add( hb_handle_t * h, hb_job_t * job )
 {
     hb_job_t *job_copy = hb_job_copy(job);
     job_copy->h = h;
+    job_copy->sequence_id = ++h->sequence_id;
     hb_list_add(h->jobs, job_copy);
+
+    return job_copy->sequence_id;
 }
 
 void hb_job_setup_passes(hb_handle_t * h, hb_job_t * job, hb_list_t * list_pass)
 {
-    if (job->vquality >= 0)
+    if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         job->twopass = 0;
     }
@@ -1595,7 +1709,7 @@ void hb_close( hb_handle_t ** _h )
     hb_title_t * title;
 
     h->die = 1;
-    
+
     hb_thread_close( &h->main_thread );
 
     while( ( title = hb_list_item( h->title_set.list_title, 0 ) ) )
@@ -1635,6 +1749,7 @@ int hb_global_init()
         hb_error("hb_qsv_info_init failed!");
         return -1;
     }
+    hb_param_configure_qsv();
 #endif
 
     /* libavcodec */
@@ -1645,6 +1760,7 @@ int hb_global_init()
     hb_register(&hb_reader);
     hb_register(&hb_sync_video);
     hb_register(&hb_sync_audio);
+    hb_register(&hb_sync_subtitle);
     hb_register(&hb_decavcodecv);
     hb_register(&hb_decavcodeca);
     hb_register(&hb_declpcm);
@@ -1662,7 +1778,6 @@ int hb_global_init()
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
 #endif
-    hb_register(&hb_enclame);
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);
     hb_register(&hb_encx264);
@@ -1672,7 +1787,8 @@ int hb_global_init()
 #ifdef USE_QSV
     hb_register(&hb_encqsv);
 #endif
-    
+
+    hb_x264_global_init();
     hb_common_global_init();
 
     /*
@@ -1694,7 +1810,7 @@ void hb_global_close()
     char dirname[1024];
     DIR * dir;
     struct dirent * entry;
-    
+
     hb_presets_free();
 
     /* OpenCL library (dynamically loaded) */
@@ -1744,14 +1860,6 @@ static void thread_func( void * _h )
 
     while( !h->die )
     {
-        /* In case the check_update thread hangs, it'll die sooner or
-           later. Then, we join it here */
-        if( h->update_thread &&
-            hb_thread_has_exited( h->update_thread ) )
-        {
-            hb_thread_close( &h->update_thread );
-        }
-
         /* Check if the scan thread is done */
         if( h->scan_thread &&
             hb_thread_has_exited( h->scan_thread ) )
@@ -1831,7 +1939,7 @@ static void redirect_thread_func(void * _data)
     dup2(pfd[1], /*stderr*/ 2);
 #endif
     FILE * log_f = fdopen(pfd[0], "rb");
-    
+
     char line_buffer[500];
     while(fgets(line_buffer, 500, log_f) != NULL)
     {
@@ -1873,7 +1981,7 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     {
         // Set which job is being worked on
         if (h->current_job)
-            h->state.param.working.sequence_id = h->current_job->sequence_id & 0xFFFFFF;
+            h->state.param.working.sequence_id = h->current_job->sequence_id;
         else
             h->state.param.working.sequence_id = 0;
     }

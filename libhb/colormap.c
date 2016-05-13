@@ -1,6 +1,6 @@
 /* colormap.c
  *
- * Copyright (c) 2003-2015 HandBrake Team
+ * Copyright (c) 2003-2016 HandBrake Team
  * This file is part of the HandBrake source code
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -593,6 +593,7 @@ static hb_colormap_t colormap[] =
     { "purple2",                0x912CEE },
     { "purple3",                0x7D26CD },
     { "purple4",                0x551A8B },
+    { "rebeccapurple",          0x663399 },
     { "red",                    0xFF0000 },
     { "red1",                   0xFF0000 },
     { "red2",                   0xEE0000 },

@@ -1,7 +1,11 @@
 # Visual Studio
 win/CS/*/bin
 win/CS/*/obj
-win/CS/*.suo
+win/CS/**/*.suo
+win/CS/*.VC.opendb
+win/CS/*.VC.db
+win/CS/**/*.Cache
+win/CS/**/*.user
 
 # Xcode user data
 xcuserdata

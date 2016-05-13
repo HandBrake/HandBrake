@@ -56,16 +56,5 @@ namespace HandBrakeWPF.Services.Interfaces
         /// The user setting
         /// </returns>
         T GetUserSetting<T>(string name);
-
-        /// <summary>
-        /// Get an StringCollection type user setting
-        /// </summary>
-        /// <param name="name">
-        /// The setting name
-        /// </param>
-        /// <returns>
-        /// The settings value
-        /// </returns>
-        System.Collections.Specialized.StringCollection GetUserSettingStringCollection(string name);
     }
 }

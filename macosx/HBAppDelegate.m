@@ -13,10 +13,12 @@
 #import "HBPreferencesController.h"
 #import "HBQueueController.h"
 #import "HBOutputPanelController.h"
-#import "HBCore.h"
 #import "HBController.h"
 
+@import HandBrakeKit;
+
 #define PRESET_FILE @"UserPresets.json"
+#define QUEUE_FILE @"Queue.hbqueue"
 
 @interface HBAppDelegate ()
 
@@ -51,10 +53,11 @@
         _outputPanel = [[HBOutputPanelController alloc] init];
 
         // we init the HBPresetsManager
-        NSURL *presetsURL = [[HBUtilities appSupportURL] URLByAppendingPathComponent:PRESET_FILE];
-        _presetsManager = [[HBPresetsManager alloc] initWithURL:presetsURL];
+        NSURL *appSupportURL = [HBUtilities appSupportURL];
+        _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE]];
 
-        _queueController = [[HBQueueController alloc] init];
+        // Queue
+        _queueController = [[HBQueueController alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
         _queueController.delegate = self;
         _mainController = [[HBController alloc] initWithQueue:_queueController presetsManager:_presetsManager];
 
@@ -148,6 +151,7 @@
         [alert setInformativeText:NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil)];
         [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
         [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
+        [alert.buttons[1] setKeyEquivalent:@"\E"];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         NSInteger result = [alert runModal];
@@ -300,17 +304,17 @@
 
     __block NSUInteger i = 0;
     __block BOOL builtInEnded = NO;
-    [self.presetsManager.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop)
+    [self.presetsManager.root enumerateObjectsUsingBlock:^(HBPreset *obj, NSIndexPath *idx, BOOL *stop)
      {
          if (idx.length)
          {
              NSMenuItem *item = [[NSMenuItem alloc] init];
-             item.title = [obj name];
+             item.title = obj.name;
              item.tag = i++;
 
              // Set an action only to the actual presets,
              // not on the folders.
-             if ([obj isLeaf])
+             if (obj.isLeaf)
              {
                  item.action = @selector(selectPresetFromMenu:);
                  item.representedObject = obj;
@@ -318,12 +322,12 @@
              // Make the default preset font bold.
              if ([obj isEqualTo:self.presetsManager.defaultPreset])
              {
-                 NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:[obj name]
+                 NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:obj.name
                                                                                 attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
                  [item setAttributedTitle:newTitle];
              }
              // Add a separator line after the last builtIn preset
-             if ([obj isBuiltIn] == NO && builtInEnded == NO)
+             if (obj.isBuiltIn == NO && builtInEnded == NO)
              {
                  [self.presetsMenu addItem:[NSMenuItem separatorItem]];
                  builtInEnded = YES;

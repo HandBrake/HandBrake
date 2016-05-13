@@ -40,12 +40,15 @@ namespace HandBrakeWPF.Services.Interfaces
         /// <param name="url">
         /// The url.
         /// </param>
+        /// <param name="expectedSHA1Hash">
+        /// The expected SHA-1 Hash.
+        /// </param>
         /// <param name="completed">
         /// The complete.
         /// </param>
         /// <param name="progress">
         /// The progress.
         /// </param>
-        void DownloadFile(string url, Action<DownloadStatus> completed, Action<DownloadStatus> progress);
+        void DownloadFile(string url, string expectedSHA1Hash, Action<DownloadStatus> completed, Action<DownloadStatus> progress);
     }
 }

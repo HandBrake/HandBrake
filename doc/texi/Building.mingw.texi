@@ -22,7 +22,8 @@ The following are the recommended specifications for building on @value{OS-mingw
 @item Intel 64-bit hardware
 @item @value{OS-mingw} on Fedora 20+, Ubuntu 14+ or Debian 7+ using gcc 4.7+
 @item Official MinGW-w64 builds are recommended over those provided by distributions.
-@item yasm 1.2 or newer 
+@item yasm 1.3 or newer 
+@item Please be aware libfftw3-dev can cause build failures. You currently need to remove this package if installed for HandBrake to build.
 @end itemize
 
 

@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Interop
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Runtime.InteropServices;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
@@ -19,6 +18,7 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Json.Anamorphic;
     using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using Newtonsoft.Json;
@@ -28,6 +28,8 @@ namespace HandBrake.ApplicationServices.Interop
     /// </summary>
     public static class HandBrakeUtils
     {
+        private static readonly ILog log = LogService.GetLogger();
+
         /// <summary>
         /// The callback for log messages from HandBrake.
         /// </summary>
@@ -279,13 +281,14 @@ namespace HandBrake.ApplicationServices.Interop
             }
 
             IntPtr ptr = HBFunctions.hb_x264_param_unparse(
+                8,
                 preset,
                 string.Join(",", tunes),
                 extraOptions,
                 profile,
                 level,
                 width,
-                height);
+                height); // TODO add bit-depth support.
 
             string x264Settings = Marshal.PtrToStringAnsi(ptr);
 
@@ -300,7 +303,7 @@ namespace HandBrake.ApplicationServices.Interop
         public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
         {
             string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            LogHelper.LogMessage(new LogMessage(encode, LogMessageType.encodeJson, LogLevel.debug));
+            log.LogMessage(encode, LogMessageType.API, LogLevel.Debug);
             IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
             string result = Marshal.PtrToStringAnsi(json);
             return JsonConvert.DeserializeObject<Geometry>(result);
@@ -316,10 +319,9 @@ namespace HandBrake.ApplicationServices.Interop
         {
             if (MessageLogged != null)
             {
-                MessageLogged(null, new MessageLoggedEventArgs { Message = message });
+                log.LogMessage(message, LogMessageType.ScanOrEncode, LogLevel.Info);
+                MessageLogged(null, new MessageLoggedEventArgs(message));
             }
-
-            Debug.WriteLine(message);
         }
 
         /// <summary>
@@ -332,10 +334,9 @@ namespace HandBrake.ApplicationServices.Interop
         {
             if (ErrorLogged != null)
             {
-                ErrorLogged(null, new MessageLoggedEventArgs { Message = message });
+                log.LogMessage(message, LogMessageType.ScanOrEncode, LogLevel.Error);
+                ErrorLogged(null, new MessageLoggedEventArgs(message));
             }
-
-            Debug.WriteLine("ERROR: " + message);
         }
     }
 }

@@ -5,9 +5,10 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBAudioController.h"
-
-#import "HBAudio.h"
 #import "HBAudioDefaultsController.h"
+
+@import HandBrakeKit.HBAudio;
+@import HandBrakeKit.HBAudioDefaults;
 
 @interface HBAudioController ()
 
@@ -42,17 +43,24 @@
 
 - (IBAction)showSettingsSheet:(id)sender
 {
-    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:self.audio.defaults];
+    HBAudioDefaults *defaults = [self.audio.defaults copy];
+    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
 
 	[NSApp beginSheet:self.defaultsController.window
        modalForWindow:self.view.window
         modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd)
-          contextInfo:NULL];
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
 }
 
-- (void)sheetDidEnd
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
+    HBAudioDefaults *defaults = (HBAudioDefaults *)CFBridgingRelease(contextInfo);
+
+    if (returnCode == NSModalResponseOK)
+    {
+        self.audio.defaults = defaults;
+    }
     self.defaultsController = nil;
 }
 

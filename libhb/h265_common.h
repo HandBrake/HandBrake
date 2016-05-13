@@ -1,6 +1,6 @@
 /* h265_common.h
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -11,7 +11,10 @@
 #define HB_H265_COMMON_H
 
 static const char * const      hb_h265_tier_names[] = { "auto", "main", "high", NULL, };
-static const char * const   hb_h265_profile_names[] = { "auto", "main", "mainstillpicture", NULL, };
+static const char * const   hb_h265_profile_names_8bit[] = { "auto", "main", "mainstillpicture", NULL, };
+static const char * const   hb_h265_profile_names_10bit[] = { "auto", "main10", "main10-intra", NULL, };
+static const char * const   hb_h265_profile_names_12bit[] = { "auto", "main12", "main12-intra", NULL, };
+static const char * const   hb_h265_profile_names_16bit[] = { "auto", "main16", "main16-intra", NULL, };
 static const char * const     hb_h265_level_names[] = { "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL, };
 static const int    const    hb_h265_level_values[] = {     -1,    30,    60,    63,    90,    93,   120,   123,   150,   153,   156,   180,   183,   186,     0, };
 

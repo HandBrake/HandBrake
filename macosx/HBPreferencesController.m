@@ -58,7 +58,7 @@
     NSURL *desktopURL = [NSURL fileURLWithPath:desktopDirectory isDirectory:YES];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-        @"LaunchSourceBehavior":            @"Open Source",
+        @"HBShowOpenPanelAtLaunch":         @YES,
         @"DefaultLanguage":                 @"English",
         @"DefaultMpegExtension":            @"Auto",
         @"UseDvdNav":                       @"YES",
@@ -75,13 +75,17 @@
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",
         @"x264CqSliderFractional":          @"0.50",
-        @"SendCompletedEncodeToApp":        @"MetaX",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
         // Hash of the default folders, until there is a better way.
         @"HBPreviewViewExpandedStatus":     @[@(4097268371718322522), @(3576901712372066251)],
         @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591))
         }];
+
+    // Overwrite the update check interval because previous versions
+    // could be set to a dayly check.
+    NSUInteger week = 60 * 60 * 24 * 7;
+    [[NSUserDefaults standardUserDefaults] setObject:@(week) forKey:@"SUScheduledCheckInterval"];
 }
 
 /**
@@ -208,7 +212,7 @@
             NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
             /* we set the name of the app to send to in the display field */
             [fSendEncodeToAppField setStringValue:sendToAppName];
-            [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"SendCompletedEncodeToApp"];
+            [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"HBSendToApp"];
         }
     }];
 }

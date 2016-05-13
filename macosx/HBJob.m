@@ -6,12 +6,12 @@
 
 #import "HBJob.h"
 #import "HBTitle.h"
-#import "HBPreset.h"
 
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
 #import "HBCodingUtilities.h"
+#import "HBMutablePreset.h"
 
 #include "hb.h"
 
@@ -50,7 +50,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _audio = [[HBAudio alloc] initWithTitle:title];
         _subtitles = [[HBSubtitles alloc] initWithTitle:title];
 
-        _chapterTitles = [title.chapters mutableCopy];
+        _chapterTitles = [title.chapters copy];
 
         _uuid = [[NSUUID UUID] UUIDString];
 
@@ -60,47 +60,89 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     return self;
 }
 
+#pragma mark - HBPresetCoding
+
 - (void)applyPreset:(HBPreset *)preset
 {
     self.presetName = preset.name;
 
-    NSDictionary *content = preset.content;
-
-    self.container = hb_container_get_from_name([content[@"FileFormat"] UTF8String]);
+    self.container = hb_container_get_from_name([preset[@"FileFormat"] UTF8String]);
 
     // MP4 specifics options.
-    self.mp4HttpOptimize = [content[@"Mp4HttpOptimize"] boolValue];
-    self.mp4iPodCompatible = [content[@"Mp4iPodCompatible"] boolValue];
+    self.mp4HttpOptimize = [preset[@"Mp4HttpOptimize"] boolValue];
+    self.mp4iPodCompatible = [preset[@"Mp4iPodCompatible"] boolValue];
 
     // Chapter Markers
-    self.chaptersEnabled = [content[@"ChapterMarkers"] boolValue];
+    self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
 
     [@[self.audio, self.subtitles, self.filters, self.picture, self.video] makeObjectsPerformSelector:@selector(applyPreset:)
-                                                                                                           withObject:content];
+                                                                                                           withObject:preset];
 }
 
-- (void)applyCurrentSettingsToPreset:(NSMutableDictionary *)dict
+- (void)writeToPreset:(HBMutablePreset *)preset
 {
-    dict[@"FileFormat"] = @(hb_container_get_short_name(self.container));
-    dict[@"ChapterMarkers"] = @(self.chaptersEnabled);
+    preset.name = self.presetName;
+
+    preset[@"FileFormat"] = @(hb_container_get_short_name(self.container));
+    preset[@"ChapterMarkers"] = @(self.chaptersEnabled);
     // MP4 specifics options.
-    dict[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
-    dict[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
+    preset[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
+    preset[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
 
     [@[self.video, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(writeToPreset:)
-                                                                                                           withObject:dict];
+                                                                                                           withObject:preset];
+}
+
+- (void)setUndo:(NSUndoManager *)undo
+{
+    _undo = undo;
+    [@[self.video, self.range, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(setUndo:)
+                                                                                                       withObject:_undo];
+    [self.chapterTitles makeObjectsPerformSelector:@selector(setUndo:) withObject:_undo];
+}
+
+- (void)setPresetName:(NSString *)presetName
+{
+    if (![presetName isEqualToString:_presetName])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setPresetName:_presetName];
+    }
+    _presetName = [presetName copy];
+}
+
+- (void)setDestURL:(NSURL *)destURL
+{
+    if (![destURL isEqualTo:_destURL])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDestURL:_destURL];
+    }
+    _destURL = [destURL copy];
 }
 
 - (void)setContainer:(int)container
 {
+    if (container != _container)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setContainer:_container];
+    }
+
     _container = container;
 
-    [self.audio containerChanged:container];
-    [self.subtitles containerChanged:container];
+    [self.audio setContainer:container];
+    [self.subtitles setContainer:container];
     [self.video containerChanged];
 
     // post a notification for any interested observers to indicate that our video container has changed
     [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
+}
+
+- (void)setAngle:(int)angle
+{
+    if (angle != _angle)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAngle:_angle];
+    }
+    _angle = angle;
 }
 
 - (void)setTitle:(HBTitle *)title
@@ -109,27 +151,32 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     self.range.title = title;
 }
 
-- (void)setChaptersEnabled:(BOOL)chaptersEnabled
+- (void)setMp4HttpOptimize:(BOOL)mp4HttpOptimize
 {
-    _chaptersEnabled = chaptersEnabled;
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
+    if (mp4HttpOptimize != _mp4HttpOptimize)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setMp4HttpOptimize:_mp4HttpOptimize];
+    }
+    _mp4HttpOptimize = mp4HttpOptimize;
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+- (void)setMp4iPodCompatible:(BOOL)mp4iPodCompatible
 {
-    NSSet *retval = nil;
-
-    if ([key isEqualToString:@"mp4OptionsEnabled"])
+    if (mp4iPodCompatible != _mp4iPodCompatible)
     {
-        retval = [NSSet setWithObjects:@"container", nil];
+        [[self.undo prepareWithInvocationTarget:self] setMp4iPodCompatible:_mp4iPodCompatible];
     }
+    _mp4iPodCompatible = mp4iPodCompatible;
+}
 
-    if ([key isEqualToString:@"mp4iPodCompatibleEnabled"])
+- (void)setChaptersEnabled:(BOOL)chaptersEnabled
+{
+    if (chaptersEnabled != _chaptersEnabled)
     {
-        retval = [NSSet setWithObjects:@"container", @"video.encoder", nil];
+        [[self.undo prepareWithInvocationTarget:self] setChaptersEnabled:_chaptersEnabled];
     }
-
-    return retval;
+    _chaptersEnabled = chaptersEnabled;
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBChaptersChangedNotification object:self];
 }
 
 - (NSString *)description
@@ -170,7 +217,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_subtitles = [_subtitles copy];
 
         copy->_chaptersEnabled = _chaptersEnabled;
-        copy->_chapterTitles = [[NSMutableArray alloc] initWithArray:_chapterTitles copyItems:YES];
+        copy->_chapterTitles = [[NSArray alloc] initWithArray:_chapterTitles copyItems:YES];
     }
 
     return copy;
@@ -185,7 +232,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBVideoVersion"];
+    [coder encodeInt:1 forKey:@"HBJobVersion"];
 
     encodeInt(_state);
     encodeObject(_name);
@@ -215,7 +262,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
-    int version = [decoder decodeIntForKey:@"HBVideoVersion"];
+    int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
     if (version == 1 && (self = [super init]))
     {
@@ -244,7 +291,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObject(_subtitles, HBSubtitles);
 
         decodeBool(_chaptersEnabled);
-        decodeObject(_chapterTitles, NSMutableArray);
+        decodeObject(_chapterTitles, NSArray);
 
         return self;
     }

@@ -1,6 +1,6 @@
 /* decavcodec.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -81,58 +81,58 @@ typedef struct {
 
 struct hb_work_private_s
 {
-    hb_job_t        *job;
-    hb_title_t      *title;
-    AVCodecContext  *context;
-    AVCodecParserContext *parser;
-    AVFrame         *frame;
-    hb_buffer_t     *palette;
-    int             threads;
-    int             video_codec_opened;
-    hb_list_t       *list;
-    double          duration;   // frame duration (for video)
-    double          field_duration;   // field duration (for video)
-    int             frame_duration_set; // Indicates valid timing was found in stream
-    double          pts_next;   // next pts we expect to generate
-    int64_t         chap_time;  // time of next chap mark (if new_chap != 0)
-    int             new_chap;   // output chapter mark pending
-    uint32_t        nframes;
-    uint32_t        ndrops;
-    uint32_t        decode_errors;
-    int64_t         prev_pts;
-    int             brokenTS; // video stream may contain packed b-frames
-    hb_buffer_t*    delayq[HEAP_SIZE];
-    int             queue_primed;
-    pts_heap_t      pts_heap;
-    void*           buffer;
-    struct SwsContext *sws_context; // if we have to rescale or convert color space
-    int             sws_width;
-    int             sws_height;
-    int             sws_pix_fmt;
-    int cadence[12];
-    int wait_for_keyframe;
+    hb_job_t             * job;
+    hb_title_t           * title;
+    AVCodecContext       * context;
+    AVCodecParserContext * parser;
+    AVFrame              * frame;
+    hb_buffer_t          * palette;
+    int                    threads;
+    int                    video_codec_opened;
+    hb_buffer_list_t       list;
+    double                 duration;   // frame duration (for video)
+    double                 field_duration;   // field duration (for video)
+    int                    frame_duration_set; // Indicates valid timing was found in stream
+    double                 pts_next;   // next pts we expect to generate
+    int64_t                chap_time;  // time of next chap mark (if new_chap != 0)
+    int                    new_chap;   // output chapter mark pending
+    uint32_t               nframes;
+    uint32_t               ndrops;
+    uint32_t               decode_errors;
+    int64_t                prev_pts;
+    int                    brokenTS; // video stream may contain packed b-frames
+    hb_buffer_t*           delayq[HEAP_SIZE];
+    int                    queue_primed;
+    pts_heap_t             pts_heap;
+    void*                  buffer;
+    struct SwsContext    * sws_context; // if we have to rescale or convert color space
+    int                    sws_width;
+    int                    sws_height;
+    int                    sws_pix_fmt;
+    int                    cadence[12];
+    int                    wait_for_keyframe;
 #ifdef USE_HWD
-    hb_va_dxva2_t   *dxva2;
-    uint8_t         *dst_frame;
-    hb_oclscale_t   *opencl_scale;
+    hb_va_dxva2_t        * dxva2;
+    uint8_t              * dst_frame;
+    hb_oclscale_t        * opencl_scale;
 #endif
-    hb_audio_resample_t *resample;
+    hb_audio_resample_t  * resample;
 
 #ifdef USE_QSV
     // QSV-specific settings
     struct
     {
-        int decode;
-        av_qsv_config config;
-        const char *codec_name;
+        int                decode;
+        av_qsv_config      config;
+        const char       * codec_name;
 #define USE_QSV_PTS_WORKAROUND // work around out-of-order output timestamps
 #ifdef  USE_QSV_PTS_WORKAROUND
-        hb_list_t *pts_list;
+        hb_list_t        * pts_list;
 #endif
     } qsv;
 #endif
 
-    hb_list_t          * list_subtitle;
+    hb_list_t            * list_subtitle;
 };
 
 #ifdef USE_QSV_PTS_WORKAROUND
@@ -188,7 +188,6 @@ static int64_t hb_av_pop_next_pts(hb_list_t *list)
 #endif
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
-static hb_buffer_t *link_buf_list( hb_work_private_t *pv );
 
 
 static int64_t heap_pop( pts_heap_t *heap )
@@ -267,7 +266,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = job->title;
     else
         pv->title = w->title;
-    pv->list = hb_list_init();
+    hb_buffer_list_clear(&pv->list);
 
     codec       = avcodec_find_decoder(w->codec_param);
     pv->context = avcodec_alloc_context3(codec);
@@ -431,8 +430,7 @@ static void closePrivData( hb_work_private_t ** ppv )
     if ( pv )
     {
         flushDelayQueue( pv );
-        hb_buffer_t *buf = link_buf_list( pv );
-        hb_buffer_close( &buf );
+        hb_buffer_list_close(&pv->list);
 
         if ( pv->job && pv->context && pv->context->codec )
         {
@@ -470,10 +468,6 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             av_freep( &pv->context->extradata );
             av_freep( &pv->context );
-        }
-        if ( pv->list )
-        {
-            hb_list_empty( &pv->list );
         }
         hb_audio_resample_free(pv->resample);
 
@@ -535,6 +529,14 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    if (in->data != NULL)
+    {
+        memset(in->data + in->size, 0, in->alloc - in->size);
+    }
+
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
@@ -576,7 +578,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             decodeAudio( w->audio, pv, pout, pout_len, cur );
         }
     }
-    *buf_out = link_buf_list( pv );
+    *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;
 }
 
@@ -916,6 +918,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
         buf->qsv_details.qsv_atom = pv->frame->data[2];
+        buf->qsv_details.ctx      = pv->job->qsv.ctx;
         return buf;
     }
 #endif
@@ -926,8 +929,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             h != context->height)
         {
             // have to convert to our internal color space and/or rescale
-            AVPicture dstpic;
-            hb_avpicture_fill(&dstpic, buf);
+            uint8_t * data[4];
+            int       stride[4];
+            hb_picture_fill(data, stride, buf);
 
             if (pv->sws_context == NULL            ||
                 pv->sws_width   != context->width  ||
@@ -947,8 +951,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             }
             sws_scale(pv->sws_context,
                       (const uint8_t* const *)pv->frame->data,
-                      pv->frame->linesize,
-                      0, context->height, dstpic.data, dstpic.linesize);
+                      pv->frame->linesize, 0, context->height, data, stride);
         }
         else
         {
@@ -1032,10 +1035,10 @@ static void flushDelayQueue( hb_work_private_t *pv )
     int slot = pv->queue_primed ? pv->nframes & (HEAP_SIZE-1) : 0;
 
     // flush all the video packets left on our timestamp-reordering delay q
-    while ( ( buf = pv->delayq[slot] ) != NULL )
+    while ((buf = pv->delayq[slot]) != NULL)
     {
-        buf->s.start = heap_pop( &pv->pts_heap );
-        hb_list_add( pv->list, buf );
+        buf->s.start = heap_pop(&pv->pts_heap);
+        hb_buffer_list_append(&pv->list, buf);
         pv->delayq[slot] = NULL;
         slot = ( slot + 1 ) & (HEAP_SIZE-1);
     }
@@ -1055,12 +1058,12 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
 {
     /*  Rotate the cadence tracking. */
     int i = 0;
-    for(i=11; i > 0; i--)
+    for (i = 11; i > 0; i--)
     {
         cadence[i] = cadence[i-1];
     }
 
-    if ( !(flags & PROGRESSIVE) && !(flags & TOP_FIRST) )
+    if (!(flags & PROGRESSIVE) && !(flags & TOP_FIRST))
     {
         /* Not progressive, not top first...
            That means it's probably bottom
@@ -1069,7 +1072,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
         cadence[0] = BT;
     }
-    else if ( !(flags & PROGRESSIVE) && (flags & TOP_FIRST) )
+    else if (!(flags & PROGRESSIVE) && (flags & TOP_FIRST))
     {
         /* Not progressive, top is first,
            Two fields displayed.
@@ -1077,7 +1080,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
         cadence[0] = TB;
     }
-    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             !(flags & TOP_FIRST) && !(flags & REPEAT_FIRST))
     {
         /* Progressive, but noting else.
            That means Bottom first,
@@ -1086,7 +1090,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
         cadence[0] = BT_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             !(flags & TOP_FIRST) && (flags & REPEAT_FIRST))
     {
         /* Progressive, and repeat. .
            That means Bottom first,
@@ -1095,7 +1100,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
         cadence[0] = BTB_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             (flags & TOP_FIRST) && !(flags & REPEAT_FIRST))
     {
         /* Progressive, top first.
            That means top first,
@@ -1104,7 +1110,8 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
         cadence[0] = TB_PROG;
     }
-    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ((flags & PROGRESSIVE) &&
+             (flags & TOP_FIRST) && (flags & REPEAT_FIRST))
     {
         /* Progressive, top, repeat.
            That means top first,
@@ -1114,10 +1121,16 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         cadence[0] = TBT_PROG;
     }
 
-    if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+    if ((cadence[2] <= TB) && (cadence[1] <= TB) &&
+        (cadence[0] > TB) && (cadence[11]))
+    {
         hb_log("%fs: Video -> Film", (float)start / 90000);
-    if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+    }
+    if ((cadence[2] > TB) && (cadence[1] <= TB) &&
+        (cadence[0] <= TB) && (cadence[11]))
+    {
         hb_log("%fs: Film -> Video", (float)start / 90000);
+    }
 }
 
 // send cc_buf to the CC decoder(s)
@@ -1304,8 +1317,9 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // point frame.pts should hold the frame's pts from the original data
         // stream or AV_NOPTS_VALUE if it didn't have one. in the latter case
         // we generate the next pts in sequence for it.
-        if ( !pv->frame_duration_set )
-            compute_frame_duration( pv );
+
+        // recompute the frame/field duration, because sometimes it changes
+        compute_frame_duration( pv );
 
         double pts;
         double frame_dur = pv->duration;
@@ -1446,7 +1460,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
             checkCadence( pv->cadence, flags, buf->s.start );
-            hb_list_add( pv->list, buf );
+            hb_buffer_list_append(&pv->list, buf);
             ++pv->nframes;
             return got_picture;
         }
@@ -1490,7 +1504,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
             checkCadence( pv->cadence, buf->s.flags, buf->s.start );
-            hb_list_add( pv->list, buf );
+            hb_buffer_list_append(&pv->list, buf);
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
@@ -1568,30 +1582,6 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
     }
 }
 
-/*
- * Removes all packets from 'pv->list', links them together into
- * a linked-list, and returns the first packet in the list.
- */
-static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
-{
-    hb_buffer_t *head = hb_list_item( pv->list, 0 );
-
-    if ( head )
-    {
-        hb_list_rem( pv->list, head );
-
-        hb_buffer_t *last = head, *buf;
-
-        while ( ( buf = hb_list_item( pv->list, 0 ) ) != NULL )
-        {
-            hb_list_rem( pv->list, buf );
-            last->next = buf;
-            last = buf;
-        }
-    }
-    return head;
-}
-
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1604,7 +1594,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = job->title;
     else
         pv->title = w->title;
-    pv->list = hb_list_init();
+    hb_buffer_list_clear(&pv->list);
 
 #ifdef USE_QSV
     if (hb_qsv_decode_is_enabled(job))
@@ -1812,6 +1802,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_in = NULL;
     *buf_out = NULL;
 
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    if (in->data != NULL)
+    {
+        memset(in->data + in->size, 0, in->alloc - in->size);
+    }
+
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
@@ -1819,8 +1817,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             decodeVideo(w, in->data, 0, 0, pts, dts, 0);
         }
-        hb_list_add( pv->list, in );
-        *buf_out = link_buf_list( pv );
+        hb_buffer_list_append(&pv->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_WORK_DONE;
     }
 
@@ -1919,14 +1917,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
-    *buf_out = link_buf_list( pv );
+    *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;
 }
 
 static void compute_frame_duration( hb_work_private_t *pv )
 {
     double duration = 0.;
-    int64_t max_fps = 64L;
+    int64_t max_fps = 64LL;
 
     // context->time_base may be in fields, so set the max *fields* per second
     if ( pv->context->ticks_per_frame > 1 )
@@ -1956,14 +1954,14 @@ static void compute_frame_duration( hb_work_private_t *pv )
             // Because the time bases are so screwed up, we only take values
             // in the range 8fps - 64fps.
             AVRational *tb = NULL;
-            if ( st->avg_frame_rate.den * 64L > st->avg_frame_rate.num &&
-                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8L )
+            if ( st->avg_frame_rate.den * 64LL > st->avg_frame_rate.num &&
+                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8LL )
             {
                 tb = &(st->avg_frame_rate);
                 duration =  (double)tb->den / (double)tb->num;
             }
-            else if ( st->time_base.num * 64L > st->time_base.den &&
-                      st->time_base.den > st->time_base.num * 8L )
+            else if ( st->time_base.num * 64LL > st->time_base.den &&
+                      st->time_base.den > st->time_base.num * 8LL )
             {
                 tb = &(st->time_base);
                 duration =  (double)tb->num / (double)tb->den;
@@ -1971,7 +1969,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         }
         if ( !duration &&
              pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8L )
+             pv->context->time_base.den > pv->context->time_base.num * 8LL )
         {
             duration =  (double)pv->context->time_base.num /
                         (double)pv->context->time_base.den;
@@ -1986,7 +1984,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
     else
     {
         if ( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-             pv->context->time_base.den > pv->context->time_base.num * 8L )
+             pv->context->time_base.den > pv->context->time_base.num * 8LL )
         {
             duration =  (double)pv->context->time_base.num /
                             (double)pv->context->time_base.den;
@@ -2157,8 +2155,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
     if (pv->context != NULL && pv->context->codec != NULL)
     {
         flushDelayQueue( pv );
-        hb_buffer_t *buf = link_buf_list( pv );
-        hb_buffer_close( &buf );
+        hb_buffer_list_close(&pv->list);
         if ( pv->title->opaque_priv == NULL )
         {
             pv->video_codec_opened = 0;
@@ -2212,6 +2209,10 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
         avp.dts  = AV_NOPTS_VALUE;
 
         int len = avcodec_decode_audio4(context, pv->frame, &got_frame, &avp);
+        if (len < 0)
+        {
+            ++pv->decode_errors;
+        }
         if ((len < 0) || (!got_frame && !(loop_limit--)))
         {
             return;
@@ -2293,8 +2294,9 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                 out->s.duration = duration;
                 out->s.stop     = duration + pv->pts_next;
                 pv->pts_next    = duration + pv->pts_next;
-                hb_list_add(pv->list, out);
+                hb_buffer_list_append(&pv->list, out);
             }
+            ++pv->nframes;
         }
     }
 }

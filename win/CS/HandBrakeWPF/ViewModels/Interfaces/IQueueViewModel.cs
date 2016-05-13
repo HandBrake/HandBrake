@@ -14,5 +14,37 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IQueueViewModel
     {
+        /// <summary>
+        /// The when done action after a queue completes.
+        /// </summary>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        void WhenDone(string action);
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        void Import();
+
+        /// <summary>
+        /// The export.
+        /// </summary>
+        void Export();
+
+        /// <summary>
+        /// The clear completed.
+        /// </summary>
+        void ClearCompleted();
+
+        /// <summary>
+        /// The clear.
+        /// </summary>
+        void Clear();
+
+        /// <summary>
+        /// The remove selected jobs.
+        /// </summary>
+        void RemoveSelectedJobs();
     }
 }

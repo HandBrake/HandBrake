@@ -1,6 +1,6 @@
 /* stream.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -448,8 +448,11 @@ static void ts_err( hb_stream_t *stream, int curstream, char *log, ... )
     ts_warn_helper( stream, log, args );
     va_end( args );
 
-    stream->ts.list[curstream].skipbad = 1;
-    stream->ts.list[curstream].continuity = -1;
+    if (curstream >= 0)
+    {
+        stream->ts.list[curstream].skipbad = 1;
+        stream->ts.list[curstream].continuity = -1;
+    }
 }
 
 static int check_ps_sync(const uint8_t *buf)
@@ -1476,7 +1479,7 @@ static hb_buffer_t * hb_ps_stream_getVideo(
             idx = index_of_ps_stream( stream, pes_info.stream_id,
                                       pes_info.stream_id_ext );
         }
-        if ( stream->pes.list[idx].stream_kind == V )
+        if ( idx >= 0 && stream->pes.list[idx].stream_kind == V )
         {
             if ( pes_info.pts != AV_NOPTS_VALUE )
             {
@@ -1760,18 +1763,26 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     stream->chapter = chapter_num - 1;
     stream->chapter_end = sum_dur;
 
-    int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 ) + ffmpeg_initial_timestamp( stream );
-
-    hb_deep_log( 2, "Seeking to chapter %d: starts %"PRId64", ends %"PRId64", AV pos %"PRId64,
-                 chapter_num, sum_dur - chapter->duration, sum_dur, pos);
-
-    if ( chapter_num > 1 && pos > 0 )
+    if (chapter != NULL && chapter_num > 1)
     {
-        AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
-        // timebase must be adjusted to match timebase of stream we are
-        // using for seeking.
-        pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
-        avformat_seek_file( stream->ffmpeg_ic, stream->ffmpeg_video_id, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
+        int64_t pos = (((sum_dur - chapter->duration) * AV_TIME_BASE) / 90000) +
+                      ffmpeg_initial_timestamp(stream);
+
+        if (pos > 0)
+        {
+            hb_deep_log(2,
+                        "Seeking to chapter %d: starts %"PRId64", ends %"PRId64
+                        ", AV pos %"PRId64,
+                        chapter_num, sum_dur - chapter->duration, sum_dur, pos);
+
+            AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
+            // timebase must be adjusted to match timebase of stream we are
+            // using for seeking.
+            pos = av_rescale(pos, st->time_base.den,
+                             AV_TIME_BASE * (int64_t)st->time_base.num);
+            avformat_seek_file(stream->ffmpeg_ic, stream->ffmpeg_video_id, 0,
+                               pos, pos, AVSEEK_FLAG_BACKWARD);
+        }
     }
     return 1;
 }
@@ -3930,7 +3941,7 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
 static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
 {
     hb_work_info_t info;
-    hb_work_object_t *w = hb_codec_decoder( stream->h, pes->codec );
+    hb_work_object_t *w = hb_audio_decoder( stream->h, pes->codec );
 
     w->codec_param = pes->codec_param;
     int ret = w->bsinfo( w, pes->probe_buf, &info );
@@ -4329,13 +4340,19 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
         total_size += buf->size;
 
         if ( total_size > HB_MAX_PROBE_SIZE * 2 )
+        {
+            hb_buffer_close(&buf);
             break;
+        }
 
         int idx;
         idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
+        {
+            hb_buffer_close(&buf);
             continue;
+        }
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
@@ -4353,6 +4370,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
                         pes->codec_name, pes->stream_id, pes->stream_id_ext);
             }
         }
+        hb_buffer_close(&buf);
     }
     // Clean up any probe buffers and set all remaining unknown
     // streams to 'kind' N
@@ -4468,8 +4486,10 @@ static int stream_kind_to_buf_type(int kind)
 
 static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
 {
-    hb_buffer_t *buf = NULL, *first = NULL;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf = NULL;
 
+    hb_buffer_list_clear(&list);
     hb_ts_stream_t * ts_stream = &stream->ts.list[curstream];
     hb_buffer_t * b = ts_stream->buf;
     if (!ts_stream->pes_info_valid)
@@ -4534,21 +4554,15 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // we want the whole TS stream including all substreams.
         // DTS-HD is an example of this.
 
-        if (first == NULL)
+        buf = hb_buffer_init(es_size);
+        if (ts_stream->packet_len < ts_stream->pes_info.packet_len + 6)
         {
-            first = buf = hb_buffer_init(es_size);
+            buf->s.split = 1;
         }
-        else
-        {
-            hb_buffer_t *tmp = hb_buffer_init(es_size);
-            buf->next = tmp;
-            buf = tmp;
-        }
+        hb_buffer_list_append(&list, buf);
 
         buf->s.id = get_id(pes_stream);
         buf->s.type = stream_kind_to_buf_type(pes_stream->stream_kind);
-        buf->s.discontinuity = stream->ts.discontinuity;
-        stream->ts.discontinuity = 0;
         buf->s.new_chap = b->s.new_chap;
         b->s.new_chap = 0;
 
@@ -4556,6 +4570,8 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // only put timestamps on the first output buffer for this PES packet.
         if (ts_stream->packet_offset > 0)
         {
+            buf->s.discontinuity = stream->ts.discontinuity;
+            stream->ts.discontinuity = 0;
             buf->s.pcr = stream->ts.pcr;
             stream->ts.pcr = AV_NOPTS_VALUE;
             buf->s.start = ts_stream->pes_info.pts;
@@ -4579,7 +4595,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
     }
     b->size = 0;
     ts_stream->packet_offset = 0;
-    return first;
+    return hb_buffer_list_clear(&list);
 }
 
 static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx,
@@ -4604,18 +4620,17 @@ static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx,
 
 static hb_buffer_t * flush_ts_streams( hb_stream_t *stream )
 {
-    hb_buffer_t *out, **last;
+    hb_buffer_list_t list;
+    hb_buffer_t *buf;
     int ii;
 
-    last = &out;
+    hb_buffer_list_clear(&list);
     for (ii = 0; ii < stream->ts.count; ii++)
     {
-        *last = generate_output_data(stream, ii);
-        // generate_output_data can generate 0 or multiple output buffers
-        while (*last != NULL)
-            last = &(*last)->next;
+        buf = generate_output_data(stream, ii);
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 /***********************************************************************
@@ -4632,10 +4647,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
      */
     int video_index = ts_index_of_video(stream);
     int curstream;
-    hb_buffer_t *out = NULL;
-    hb_buffer_t **last;
+    hb_buffer_t *buf = NULL;
+    hb_buffer_list_t list;
 
-    last = &out;
+    hb_buffer_list_clear(&list);
 
     if (chapter > 0)
     {
@@ -4643,6 +4658,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     }
     if (discontinuity)
     {
+        // If there is a discontinuity, flush all data
+        buf = flush_ts_streams(stream);
+        hb_buffer_list_append(&list, buf);
+
         stream->ts.discontinuity = 1;
     }
 
@@ -4652,15 +4671,17 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     int pid = ((pkt[1] & 0x1F) << 8) | pkt[2];
     if ( ( curstream = index_of_pid( stream, pid ) ) < 0 )
     {
-        return NULL;
+        // Not a stream we care about
+        return hb_buffer_list_clear(&list);
     }
+
 
     // Get error
     int errorbit = (pkt[1] & 0x80) != 0;
     if (errorbit)
     {
         ts_err( stream, curstream,  "packet error bit set");
-        return NULL;
+        return hb_buffer_list_clear(&list);
     }
 
     // Get adaption header info
@@ -4669,7 +4690,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     if (adaption == 0)
     {
         ts_err( stream, curstream,  "adaptation code 0");
-        return NULL;
+        return hb_buffer_list_clear(&list);
     }
     else if (adaption == 0x2)
         adapt_len = 184;
@@ -4679,18 +4700,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         if (adapt_len > 184)
         {
             ts_err( stream, curstream,  "invalid adapt len %d", adapt_len);
-            return NULL;
+            return hb_buffer_list_clear(&list);
         }
     }
 
-    if (discontinuity)
-    {
-        // If there is a discontinuity, flush all data
-        *last = flush_ts_streams(stream);
-        // flush_ts_streams can generate 0 or multiple output buffers
-        while (*last != NULL)
-            last = &(*last)->next;
-    }
     if (adapt_len > 0)
     {
         if (pkt[5] & 0x40)
@@ -4710,10 +4723,8 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // When we get a new pcr, we flush all data that was
             // referenced to the last pcr.  This makes it easier
             // for reader to resolve pcr discontinuities.
-            *last = flush_ts_streams(stream);
-            // flush_ts_streams can generate 0 or multiple output buffers
-            while (*last != NULL)
-                last = &(*last)->next;
+            buf = flush_ts_streams(stream);
+            hb_buffer_list_append(&list, buf);
 
             int64_t pcr;
             pcr = ((uint64_t)pkt[ 6] << (33 -  8) ) |
@@ -4734,7 +4745,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
     // the video stream DTS for the PCR.
     if (!stream->ts.found_pcr && (stream->ts_flags & TS_HAS_PCR))
     {
-        return out;
+        return hb_buffer_list_clear(&list);
     }
 
     // Get continuity
@@ -4771,7 +4782,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 // a PCR when one is needed). The only thing that can
                 // change in the dup is the PCR which we grabbed above
                 // so ignore the rest.
-                return out;
+                return hb_buffer_list_clear(&list);
             }
         }
         if ( !start && (ts_stream->continuity != -1) &&
@@ -4782,7 +4793,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                     (int)continuity,
                     (ts_stream->continuity + 1) & 0xf );
             ts_stream->continuity = continuity;
-            return out;
+            return hb_buffer_list_clear(&list);
         }
         ts_stream->continuity = continuity;
 
@@ -4811,7 +4822,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         // I ran across a poorly mastered BD that does not properly pad
         // the adaptation field and causes parsing errors below if we
         // do not exit early here.
-        return out;
+        return hb_buffer_list_clear(&list);
     }
 
     /* If we get here the packet is valid - process its data */
@@ -4825,10 +4836,8 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // we have to ship the old packet before updating the pcr
             // since the packet we've been accumulating is referenced
             // to the old pcr.
-            *last = generate_output_data(stream, curstream);
-            // generate_output_data can generate 0 or multiple output buffers
-            while (*last != NULL)
-                last = &(*last)->next;
+            buf = generate_output_data(stream, curstream);
+            hb_buffer_list_append(&list, buf);
             ts_stream->pes_info_valid = 0;
             ts_stream->packet_len = 0;
         }
@@ -4839,7 +4848,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         {
             ts_err( stream, curstream, "missing start code" );
             ts_stream->skipbad = 1;
-            return out;
+            return hb_buffer_list_clear(&list);
         }
 
         // If we were skipping a bad packet, start fresh on this new PES packet
@@ -4857,7 +4866,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
                 // a DTS or PTS.
                 if (stream->ts.last_timestamp < 0 && (pes[7] >> 6) == 0)
                 {
-                    return out;
+                    return hb_buffer_list_clear(&list);
                 }
                 if ((pes[7] >> 6) != 0)
                 {
@@ -4903,12 +4912,10 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
         ts_stream->pes_info.packet_len > 0 &&
         ts_stream->packet_len >= ts_stream->pes_info.packet_len + 6)
     {
-        // generate_output_data can generate 0 or multiple output buffers
-        *last = generate_output_data(stream, curstream);
-        while (*last != NULL)
-            last = &(*last)->next;
+        buf = generate_output_data(stream, curstream);
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )
@@ -5494,7 +5501,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->demuxer = HB_NULL_DEMUXER;
     title->video_codec = 0;
     int i;
-    int pix_fmt = -1;
     for (i = 0; i < ic->nb_streams; ++i )
     {
         if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
@@ -5503,7 +5509,6 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
              title->video_codec == 0 )
         {
             AVCodecContext *context = ic->streams[i]->codec;
-            pix_fmt = context->pix_fmt;
             if ( context->pix_fmt != AV_PIX_FMT_YUV420P &&
                  !sws_isSupportedInput( context->pix_fmt ) )
             {
@@ -5607,11 +5612,11 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     return title;
 }
 
-static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
+static int64_t av_to_hb_pts( int64_t pts, double conv_factor, int64_t offset )
 {
     if ( pts == AV_NOPTS_VALUE )
         return AV_NOPTS_VALUE;
-    return (int64_t)( (double)pts * conv_factor );
+    return (int64_t)( (double)pts * conv_factor ) - offset;
 }
 
 static int ffmpeg_is_keyframe( hb_stream_t *stream )
@@ -5745,10 +5750,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     // timebase for the stream to HB's 90kHz timebase.
     AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
     double tsconv = (double)90000. * s->time_base.num / s->time_base.den;
-    int64_t offset = 90000L * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
+    int64_t offset = 90000LL * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
 
-    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv) - offset;
-    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv) - offset;
+    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv, offset);
+    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv, offset);
     if ( buf->s.renderOffset >= 0 && buf->s.start == AV_NOPTS_VALUE )
     {
         buf->s.start = buf->s.renderOffset;
@@ -5806,12 +5811,12 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->convergence_duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
         buf->s.stop = buf->s.start + buf_duration;
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
         buf->s.stop = buf->s.start + buf_duration;
     }
 

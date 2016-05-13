@@ -9,12 +9,13 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Presets.Model;
+    using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Advanced View Model
@@ -77,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetEncoder(VideoEncoder encoder)
         {
             this.X264ViewModel.SetEncoder(encoder);
-            this.ShowX264Panel = encoder == VideoEncoder.X264;
+            this.ShowX264Panel = encoder == VideoEncoder.X264 || encoder == VideoEncoder.X264_10;
         }
 
         /// <summary>

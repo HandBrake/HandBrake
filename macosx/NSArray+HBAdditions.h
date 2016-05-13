@@ -1,19 +1,10 @@
-//
-//  NSArray+NSArray_HBArrayAdditions.h
-//  HandBrake
-//
-//  Created by Damiano Galassi on 22/07/15.
-//
-//
+/*  NSArray+HBAdditions.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-
-@interface NSMutableArray (HBAdditions)
-
-- (void)removeObjectsUsingBlock:(BOOL (^)(id object))block;
-
-@end
-
 
 @interface NSArray (HBAdditions)
 

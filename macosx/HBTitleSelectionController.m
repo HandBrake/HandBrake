@@ -5,76 +5,71 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitleSelectionController.h"
-#import "HBTitle.h"
+
+@import HandBrakeKit.HBTitle;
+
+@interface HBTitleSelection : NSObject
+@property (nonatomic, readonly) HBTitle *title;
+@property (nonatomic, readonly) BOOL selected;
+@property (nonatomic, readonly, assign) NSUndoManager *undo;
+@end
+
+@implementation HBTitleSelection
+- (instancetype)initWithTitle:(HBTitle *)title undo:(NSUndoManager *)undo
+{
+    if (self = [super init])
+    {
+        _title = title;
+        _selected = YES;
+        _undo = undo;
+    }
+    return self;
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    if (selected != _selected)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setSelected:_selected];
+    }
+    _selected = selected;
+}
+@end
 
 @interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate>
 
-@property (nonatomic, readonly) NSArray *titles;
-@property (nonatomic, readonly) NSMutableArray *selection;
-
+@property (nonatomic, readwrite) NSArray<HBTitleSelection *> *titles;
 @property (nonatomic, readonly, assign) id<HBTitleSelectionDelegate> delegate;
+@property (nonatomic, readonly) NSString *message;
 
 @end
 
 @implementation HBTitleSelectionController
 
-- (instancetype)initWithTitles:(NSArray *)titles delegate:(id<HBTitleSelectionDelegate>)delegate
+- (instancetype)initWithTitles:(NSArray<HBTitle *> *)titles presetName:(NSString *)presetName delegate:(id<HBTitleSelectionDelegate>)delegate;
 {
     self = [super initWithWindowNibName:@"HBTitleSelection"];
     if (self)
     {
-        _titles = titles;
-        _selection = [[NSMutableArray alloc] initWithCapacity:titles.count];
         _delegate = delegate;
+        _message = [NSString stringWithFormat:NSLocalizedString(@"Select the titles to add to the queue using the %@ preset:" , nil), presetName];
 
-        for (NSUInteger i = 0; i < titles.count; i++)
+        NSMutableArray<HBTitleSelection *> *array = [[NSMutableArray alloc] init];
+        for (HBTitle *title in titles)
         {
-            _selection[i] = @YES;
+            [array addObject:[[HBTitleSelection alloc] initWithTitle:title undo:self.window.undoManager]];
         }
+        self.titles = [array copy];
     }
 
     return self;
 }
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+- (IBAction)deselectAll:(id)sender
 {
-    return self.titles.count;
-}
-
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    HBTitle *title = self.titles[row];
-
-    if ([tableColumn.identifier isEqualTo:@"index"])
+    for (HBTitleSelection *title in self.titles)
     {
-        return @(title.index);
-    }
-    else if ([tableColumn.identifier isEqualTo:@"title"])
-    {
-        return self.selection[row];
-    }
-    else if ([tableColumn.identifier isEqualTo:@"duration"])
-    {
-        return title.timeCode;
-    }
-
-    return nil;
-}
-
-- (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
-{
-    if ([tableColumn.identifier isEqualTo:@"title"])
-    {
-        self.selection[row] = object;
-    }
-}
-
-- (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    if ([tableColumn.identifier isEqualTo:@"title"])
-    {
-        HBTitle *title = self.titles[row];
-        [aCell setTitle:title.name];
+        title.selected = NO;
     }
 }
 
@@ -82,13 +77,11 @@
 {
     NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
 
-    [self.selection enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj boolValue])
+    [self.titles enumerateObjectsUsingBlock:^(HBTitleSelection *obj, NSUInteger idx, BOOL *stop) {
+        if (obj.selected)
         {
-            HBTitle *title = self.titles[idx];
-            [indexes addIndex:title.index];
+            [indexes addIndex:obj.title.index];
         }
-
     }];
     [self.delegate didSelectIndexes:indexes];
 }

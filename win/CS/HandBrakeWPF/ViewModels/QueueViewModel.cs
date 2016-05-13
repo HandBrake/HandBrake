@@ -12,14 +12,11 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
@@ -30,6 +27,10 @@ namespace HandBrakeWPF.ViewModels
 
     using Microsoft.Win32;
 
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+
     /// <summary>
     /// The Preview View Model
     /// </summary>
@@ -37,39 +38,12 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The Error Service Backing field
-        /// </summary>
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The User Setting Service Backing Field.
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Queue Processor Backing field
-        /// </summary>
         private readonly IQueueProcessor queueProcessor;
-
-        /// <summary>
-        /// IsEncoding Backing field
-        /// </summary>
         private bool isEncoding;
-
-        /// <summary>
-        /// Job Status Backing field.
-        /// </summary>
         private string jobStatus;
-
-        /// <summary>
-        /// Jobs pending backing field
-        /// </summary>
         private string jobsPending;
-
-        /// <summary>
-        /// Backing field for the when done action description
-        /// </summary>
         private string whenDoneAction;
 
         #endregion
@@ -97,6 +71,9 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.JobStatus = Resources.QueueViewModel_NoJobsPending;
             this.SelectedItems = new BindingList<QueueTask>();
+            this.DisplayName = "Queue";
+
+            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
         }
 
         #endregion
@@ -184,7 +161,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the selected items.
         /// </summary>
-        public BindingList<QueueTask> SelectedItems { get; set; } 
+        public BindingList<QueueTask> SelectedItems { get; set; }
 
         #endregion
 
@@ -356,14 +333,22 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog dialog = new SaveFileDialog
                 {
-                    Filter = "HandBrake Queue Files (*.hbq)|*.hbq", 
+                    Filter = "Legacy Queue Files (*.hbq)|*.hbq|Json for CLI (*.json)|*.json", 
                     OverwritePrompt = true, 
                     DefaultExt = ".hbq", 
                     AddExtension = true
                 };
+
             if (dialog.ShowDialog() == true)
             {
-                this.queueProcessor.BackupQueue(dialog.FileName);
+                if (Path.GetExtension(dialog.FileName).ToLower().Trim() == ".json")
+                {
+                    this.queueProcessor.ExportJson(dialog.FileName);
+                }
+                else
+                {
+                    this.queueProcessor.BackupQueue(dialog.FileName);
+                }
             }
         }
 
@@ -372,7 +357,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Legacy Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
                 this.queueProcessor.RestoreQueue(dialog.FileName);
@@ -417,13 +402,12 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Load();
 
-            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
-
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
-            this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
+            this.queueProcessor.EncodeService.EncodeCompleted += this.EncodeService_EncodeCompleted;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
+            this.queueProcessor.LowDiskspaceDetected += this.QueueProcessor_LowDiskspaceDetected;
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.JobStatus = Resources.QueueViewModel_QueueReady;
@@ -442,8 +426,10 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted -= this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeService_EncodeStatusChanged;
-            this.queueProcessor.EncodeService.EncodeCompleted -= EncodeService_EncodeCompleted;
+            this.queueProcessor.EncodeService.EncodeCompleted -= this.EncodeService_EncodeCompleted;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
+            this.queueProcessor.LowDiskspaceDetected -= this.QueueProcessor_LowDiskspaceDetected;
+
 
             base.OnDeactivate(close);
         }
@@ -472,6 +458,29 @@ namespace HandBrakeWPF.ViewModels
                         e.EstimatedTimeLeft, 
                         e.ElapsedTime);
             });
+        }
+
+        /// <summary>
+        /// Detect Low Disk Space before starting new queue tasks.
+        /// </summary>
+        /// <param name="sender">Event invoker. </param>
+        /// <param name="e">Event Args.</param>
+        private void QueueProcessor_LowDiskspaceDetected(object sender, EventArgs e)
+        {
+            Execute.OnUIThreadAsync(
+                () =>
+                {
+                    this.queueProcessor.Pause();
+                    this.JobStatus = Resources.QueueViewModel_QueuePending;
+                    this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+                    this.IsEncoding = false;
+
+                    this.errorService.ShowMessageBox(
+                        Resources.MainViewModel_LowDiskSpaceWarning,
+                        Resources.MainViewModel_LowDiskSpace,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                });
         }
 
         /// <summary>

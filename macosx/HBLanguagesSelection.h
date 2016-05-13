@@ -7,6 +7,8 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  *  A collection of KVO enabled model and controllers class
  *  used to populate the languages selection table view
@@ -21,6 +23,8 @@
 @property (nonatomic, readonly) NSString *language;
 @property (nonatomic, readonly) NSString *iso639_2;
 
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithLanguage:(NSString *)value iso639_2code:(NSString *)code NS_DESIGNATED_INITIALIZER;
 
@@ -31,10 +35,12 @@
  */
 @interface HBLanguagesSelection : NSObject
 
-@property (nonatomic, readonly) NSMutableArray *languagesArray;
-@property (nonatomic, readonly) NSArray *selectedLanguages;
+@property (nonatomic, readonly) NSMutableArray<HBLang *> *languagesArray;
+@property (nonatomic, readonly) NSArray<NSString *> *selectedLanguages;
 
-- (instancetype)initWithLanguages:(NSArray *)languages NS_DESIGNATED_INITIALIZER;
+@property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
+- (instancetype)initWithLanguages:(NSArray<NSString *> *)languages NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -56,3 +62,5 @@
 @property (unsafe_unretained) IBOutlet NSTableView *tableView;
 
 @end
+
+NS_ASSUME_NONNULL_END

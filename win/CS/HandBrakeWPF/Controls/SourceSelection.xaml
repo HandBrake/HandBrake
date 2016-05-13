@@ -110,6 +110,10 @@
                 </TextBlock>
                 <TextBlock Text="|"  Margin="5,0,5,0"/>
                 <TextBlock>           
+                    <Hyperlink x:Name="help" NavigateUri="/" RequestNavigate="Help_OnRequestNavigate" >Help</Hyperlink>
+                </TextBlock>
+                <TextBlock Text="|"  Margin="5,0,5,0"/>
+                <TextBlock>           
                     <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate" >About HandBrake</Hyperlink>
                 </TextBlock>
             </StackPanel>

@@ -10,8 +10,12 @@
 namespace HandBrakeWPF.Services
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
+    using System.Reflection;
+    using System.Security.Cryptography;
+    using System.Text;
     using System.Threading;
 
     using HandBrake.ApplicationServices.Utilities;
@@ -103,7 +107,6 @@ namespace HandBrakeWPF.Services
                         }
 
                         var currentBuild = HandBrakeUtils.Build;
-                        var skipBuild = this.userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion);
 
                         // Initialize variables
                         WebRequest request = WebRequest.Create(url);
@@ -118,15 +121,6 @@ namespace HandBrakeWPF.Services
 
                         int latest = int.Parse(build);
                         int current = currentBuild;
-                        int skip = skipBuild;
-
-                        // If the user wanted to skip this version, don't report the update
-                        if (latest == skip)
-                        {
-                            var info = new UpdateCheckInformation { NewVersionAvailable = false };
-                            callback(info);
-                            return;
-                        }
 
                         var info2 = new UpdateCheckInformation
                             {
@@ -135,6 +129,7 @@ namespace HandBrakeWPF.Services
                                 DownloadFile = reader.DownloadFile,
                                 Build = reader.Build,
                                 Version = reader.Version,
+                                Signature = reader.Hash
                             };
 
                         callback(info2);
@@ -152,13 +147,16 @@ namespace HandBrakeWPF.Services
         /// <param name="url">
         /// The url.
         /// </param>
+        /// <param name="expectedSignature">
+        /// The expected DSA SHA265 Signature
+        /// </param>
         /// <param name="completed">
         /// The complete.
         /// </param>
         /// <param name="progress">
         /// The progress.
         /// </param>
-        public void DownloadFile(string url, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
+        public void DownloadFile(string url, string expectedSignature, Action<DownloadStatus> completed, Action<DownloadStatus> progress)
         {
             ThreadPool.QueueUserWorkItem(
                delegate
@@ -182,11 +180,9 @@ namespace HandBrakeWPF.Services
                        int bytesSize;
                        byte[] downBuffer = new byte[2048];
 
-                       long flength = 0;
                        while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                        {
                            localStream.Write(downBuffer, 0, bytesSize);
-                           flength = localStream.Length;
                            progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize});
                        }
 
@@ -194,19 +190,70 @@ namespace HandBrakeWPF.Services
                        localStream.Close();
 
                        completed(
-                           flength != fileSize
-                               ? new DownloadStatus
+                           this.VerifyDownload(expectedSignature, tempPath)
+                               ? new DownloadStatus { WasSuccessful = true, Message = "Download Complete." } :
+                                 new DownloadStatus
                                    {
                                        WasSuccessful = false,
-                                       Message = "Partial Download. File is Incomplete. Please Retry the download."
-                                   }
-                               : new DownloadStatus { WasSuccessful = true, Message = "Download Complete." });
+                                       Message = "Download Failed.  Checksum Failed. Please visit the website to download this update."
+                                   });
                    }
                    catch (Exception exc)
                    {
-                       progress(new DownloadStatus { WasSuccessful = false, Exception = exc, Message = "Download Failed." });
+                       progress(new DownloadStatus { WasSuccessful = false, Exception = exc, Message = "Download Failed. Please visit the website to download this update." });
                    }
                });
+        }
+
+        /// <summary>
+        /// Verify the HandBrake download is Valid.
+        /// </summary>
+        /// <param name="signature">The DSA SHA256 Signature from the appcast</param>
+        /// <param name="updateFile">Path to the downloaded update file</param>
+        /// <returns>True if the file is valid, false otherwise.</returns>
+        public bool VerifyDownload(string signature, string updateFile)
+        {
+            // Sanity Checks
+            if (!File.Exists(updateFile))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(signature))
+            {
+                return false;
+            }
+
+            // Fetch our Public Key
+            string publicKey;
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("HandBrakeWPF.public.key"))
+            {
+                if (stream == null)
+                {
+                    return false;
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    publicKey = reader.ReadToEnd();
+                }
+            }
+            
+            // Verify the file against the Signature. 
+            try
+            {
+                byte[] file = File.ReadAllBytes(updateFile);
+                using (RSACryptoServiceProvider verifyProfider = new RSACryptoServiceProvider())
+                {
+                    verifyProfider.FromXmlString(publicKey);
+                    return verifyProfider.VerifyData(file, "SHA256", Convert.FromBase64String(signature));
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
         }
 
         #endregion

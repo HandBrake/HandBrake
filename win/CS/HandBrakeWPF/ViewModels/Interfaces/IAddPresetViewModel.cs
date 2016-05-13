@@ -9,12 +9,11 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Scan.Model;
-
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Services.Scan.Model;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Add Preset View Model

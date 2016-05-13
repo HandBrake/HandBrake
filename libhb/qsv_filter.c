@@ -35,29 +35,29 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 struct hb_filter_private_s
 {
-    hb_job_t            *job;
-    hb_list_t           *list;
+    hb_job_t                     * job;
+    hb_buffer_list_t               list;
 
-    int                 width_in;
-    int                 height_in;
-    int                 pix_fmt;
-    int                 pix_fmt_out;
-    int                 width_out;
-    int                 height_out;
-    int                 crop[4];
-    int                 deinterlace;
-    int                 is_frc_used;
+    int                            width_in;
+    int                            height_in;
+    int                            pix_fmt;
+    int                            pix_fmt_out;
+    int                            width_out;
+    int                            height_out;
+    int                            crop[4];
+    int                            deinterlace;
+    int                            is_frc_used;
 
     // set during init, used to configure input surfaces' "area of interest"
-    mfxU16 CropX;
-    mfxU16 CropY;
-    mfxU16 CropH;
-    mfxU16 CropW;
+    mfxU16                         CropX;
+    mfxU16                         CropY;
+    mfxU16                         CropH;
+    mfxU16                         CropW;
 
-    av_qsv_space           *vpp_space;
+    av_qsv_space                 * vpp_space;
 
     // FRC param(s)
-    mfxExtVPPFrameRateConversion    frc_config;
+    mfxExtVPPFrameRateConversion   frc_config;
 };
 
 static int hb_qsv_filter_init( hb_filter_object_t * filter,
@@ -67,21 +67,27 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
                                hb_buffer_t ** buf_in,
                                hb_buffer_t ** buf_out );
 
-static int hb_qsv_filter_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info );
+static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter );
 
 static void hb_qsv_filter_close( hb_filter_object_t * filter );
 
+static const char qsv_filter_template[] =
+    "width=^"HB_INT_REG"$:height=^"HB_INT_REG"$:"
+    "crop-top=^"HB_INT_REG"$:crop-bottom=^"HB_INT_REG"$:"
+    "crop-left=^"HB_INT_REG"$:crop-right=^"HB_INT_REG"$:"
+    "deinterlace=^([01])$";
+
 hb_filter_object_t hb_filter_qsv =
 {
-    .id            = HB_FILTER_QSV,
-    .enforce_order = 1,
-    .name          = "Quick Sync Video VPP",
-    .settings      = NULL,
-    .init          = hb_qsv_filter_init,
-    .work          = hb_qsv_filter_work,
-    .close         = hb_qsv_filter_close,
-    .info          = hb_qsv_filter_info,
+    .id                = HB_FILTER_QSV,
+    .enforce_order     = 1,
+    .name              = "Quick Sync Video VPP",
+    .settings          = NULL,
+    .init              = hb_qsv_filter_init,
+    .work              = hb_qsv_filter_work,
+    .close             = hb_qsv_filter_close,
+    .info              = hb_qsv_filter_info,
+    .settings_template = qsv_filter_template,
 };
 
 static int filter_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
@@ -339,7 +345,7 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->list = hb_list_init();
+    hb_buffer_list_clear(&pv->list);
     // list of init params provided at work.c:~700
     pv->width_in  = init->geometry.width;
     pv->height_in = init->geometry.height;
@@ -347,13 +353,13 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     pv->height_out = init->geometry.height;
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
 
-    if (filter->settings != NULL)
-    {
-        sscanf(filter->settings, "%d:%d:%d:%d:%d:%d_dei:%d",
-               &pv->width_out, &pv->height_out,
-               &pv->crop[0], &pv->crop[1], &pv->crop[2], &pv->crop[3],
-               &pv->deinterlace);
-    }
+    hb_dict_extract_int(&pv->width_out, filter->settings, "width");
+    hb_dict_extract_int(&pv->height_out, filter->settings, "height");
+    hb_dict_extract_int(&pv->crop[0], filter->settings, "crop-top");
+    hb_dict_extract_int(&pv->crop[1], filter->settings, "crop-bottom");
+    hb_dict_extract_int(&pv->crop[2], filter->settings, "crop-left");
+    hb_dict_extract_int(&pv->crop[3], filter->settings, "crop-right");
+    hb_dict_extract_bool(&pv->deinterlace, filter->settings, "deinterlace");
 
     pv->job = init->job;
 
@@ -371,15 +377,19 @@ static int hb_qsv_filter_init( hb_filter_object_t * filter,
     return 0;
 }
 
-static int hb_qsv_filter_info( hb_filter_object_t * filter,
-                               hb_filter_info_t * info )
+static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter )
 {
-
     hb_filter_private_t *pv = filter->private_data;
-    if (pv == NULL)
-        return -1;
+    hb_filter_info_t    * info;
 
-    sprintf(info->human_readable_desc,
+    if( !pv )
+        return NULL;
+
+    info = calloc(1, sizeof(hb_filter_info_t));
+    info->human_readable_desc = malloc(128);
+    info->human_readable_desc[0] = 0;
+
+    snprintf(info->human_readable_desc, 128,
             "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
             pv->width_in, pv->height_in,
             pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
@@ -389,11 +399,11 @@ static int hb_qsv_filter_info( hb_filter_object_t * filter,
 
     if (pv->deinterlace)
     {
-        sprintf(info->human_readable_desc + strlen(info->human_readable_desc),
-                ", deinterlace");
+        int len = strlen(info->human_readable_desc);
+        snprintf(info->human_readable_desc + len, 128 - len, ", deinterlace");
     }
 
-    return 0;
+    return info;
 }
 
 void qsv_filter_close( av_qsv_context* qsv, AV_QSV_STAGE_TYPE vpp_type ){
@@ -451,7 +461,7 @@ static void hb_qsv_filter_close( hb_filter_object_t * filter )
         // closing the commong stuff
         av_qsv_context_clean(qsv);
     }
-    hb_list_close(&pv->list);
+    hb_buffer_list_close(&pv->list);
     free( pv );
     filter->private_data = NULL;
 }
@@ -598,7 +608,8 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
         return HB_FILTER_OK;
     }
 
-    while(1){
+    while(1)
+    {
         int ret = filter_init(qsv,pv);
         if(ret >= 2)
             av_qsv_sleep(1);
@@ -610,67 +621,53 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        while(1){
+        while(1)
+        {
             sts = process_frame(in->qsv_details.qsv_atom, qsv, pv);
             if(sts)
-                hb_list_add(pv->list,in);
+                hb_buffer_list_append(&pv->list, in);
             else
                 break;
         }
 
-        hb_list_add( pv->list, in );
-        *buf_out = link_buf_list( pv );
+        hb_buffer_list_append(&pv->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_FILTER_DONE;
     }
 
     sts = process_frame(in->qsv_details.qsv_atom, qsv, pv);
 
-    if(sts){
-        hb_list_add(pv->list,in);
+    if(sts)
+    {
+        hb_buffer_list_append(&pv->list, in);
     }
 
-    if( hb_list_count(pv->list) ){
-        *buf_out = hb_list_item(pv->list,0);
-        out = *buf_out;
-        if(pv->is_frc_used && out)
+    out = *buf_out = hb_buffer_list_rem_head(&pv->list);
+    if (pv->is_frc_used && out != NULL)
+    {
+        if (out->qsv_details.qsv_atom)
         {
-            if(out->qsv_details.qsv_atom){
-                av_qsv_stage* stage = av_qsv_get_last_stage( out->qsv_details.qsv_atom );
-                mfxFrameSurface1 *work_surface = stage->out.p_surface;
+            av_qsv_stage* stage;
+            mfxFrameSurface1 *work_surface;
+            int64_t duration;
+            av_qsv_space *qsv_vpp;
 
-                av_qsv_wait_on_sync( qsv,stage );
+            stage        = av_qsv_get_last_stage(out->qsv_details.qsv_atom);
+            work_surface = stage->out.p_surface;
 
-                av_qsv_space *qsv_vpp = pv->vpp_space;
-                int64_t duration  = ((double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD/(double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN ) * 90000.;
-                out->s.start = work_surface->Data.TimeStamp;
-                out->s.stop = work_surface->Data.TimeStamp + duration;
-            }
+            av_qsv_wait_on_sync( qsv,stage );
+
+            qsv_vpp  = pv->vpp_space;
+            duration =
+                ((double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD /
+                 (double)qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtN ) *
+                90000.;
+            out->s.start = work_surface->Data.TimeStamp;
+            out->s.stop  = work_surface->Data.TimeStamp + duration;
         }
-        hb_list_rem(pv->list,*buf_out);
     }
-    else
-        *buf_out = NULL;
 
     return HB_FILTER_OK;
-}
-
-// see devavcode.c
-hb_buffer_t *link_buf_list( hb_filter_private_t *pv )
-{
-        hb_buffer_t *head = hb_list_item( pv->list, 0 );
-
-        if ( head )
-        {
-            hb_list_rem( pv->list, head );
-            hb_buffer_t *last = head, *buf;
-            while ( ( buf = hb_list_item( pv->list, 0 ) ) != NULL )
-            {
-                hb_list_rem( pv->list, buf );
-                last->next = buf;
-                last = buf;
-            }
-        }
-    return head;
 }
 
 #endif // USE_QSV

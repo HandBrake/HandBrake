@@ -1,6 +1,16 @@
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+__deps__ := PTHREADW32
+endif
+
 $(eval $(call import.MODULE.defs,FRIBIDI,fribidi))
 $(eval $(call import.CONTRIB.defs,FRIBIDI))
 
-FRIBIDI.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fribidi-0.19.2.tar.gz
+FRIBIDI.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.bz2
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    FRIBIDI.CONFIGURE.extra = --with-glib=no
+else ifeq (darwin,$(BUILD.system))
+    FRIBIDI.CONFIGURE.extra = --with-glib=no
+endif
 
 FRIBIDI.CONFIGURE.bootstrap = ./bootstrap;

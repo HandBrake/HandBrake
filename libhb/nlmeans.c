@@ -1,7 +1,7 @@
 /* nlmeans.c
 
    Copyright (c) 2013 Dirk Farin
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -154,15 +154,27 @@ static void nlmeans_close(hb_filter_object_t *filter);
 
 static void nlmeans_filter_thread(void *thread_args_v);
 
+static const char nlmeans_template[] =
+    "y-strength=^"HB_FLOAT_REG"$:y-origin-tune=^"HB_FLOAT_REG"$:"
+    "y-patch-size=^"HB_INT_REG"$:y-range=^"HB_INT_REG"$:"
+    "y-frame-count=^"HB_INT_REG"$:y-prefilter=^"HB_INT_REG"$:"
+    "cb-strength=^"HB_FLOAT_REG"$:cb-origin-tune=^"HB_FLOAT_REG"$:"
+    "cb-patch-size=^"HB_INT_REG"$:cb-range=^"HB_INT_REG"$:"
+    "cb-frame-count=^"HB_INT_REG"$:cb-prefilter=^"HB_INT_REG"$:"
+    "cr-strength=^"HB_FLOAT_REG"$:cr-origin-tune=^"HB_FLOAT_REG"$:"
+    "cr-patch-size=^"HB_INT_REG"$:cr-range=^"HB_INT_REG"$:"
+    "cr-frame-count=^"HB_INT_REG"$:cr-prefilter=^"HB_INT_REG"$";
+
 hb_filter_object_t hb_filter_nlmeans =
 {
-    .id            = HB_FILTER_NLMEANS,
-    .enforce_order = 1,
-    .name          = "Denoise (nlmeans)",
-    .settings      = NULL,
-    .init          = nlmeans_init,
-    .work          = nlmeans_work,
-    .close         = nlmeans_close,
+    .id                = HB_FILTER_NLMEANS,
+    .enforce_order     = 1,
+    .name              = "Denoise (nlmeans)",
+    .settings          = NULL,
+    .init              = nlmeans_init,
+    .work              = nlmeans_work,
+    .close             = nlmeans_close,
+    .settings_template = nlmeans_template,
 };
 
 static void nlmeans_border(uint8_t *src,
@@ -792,10 +804,27 @@ static int nlmeans_init(hb_filter_object_t *filter,
     // Read user parameters
     if (filter->settings != NULL)
     {
-        sscanf(filter->settings, "%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d:%lf:%lf:%d:%d:%d:%d",
-               &pv->strength[0], &pv->origin_tune[0], &pv->patch_size[0], &pv->range[0], &pv->nframes[0], &pv->prefilter[0],
-               &pv->strength[1], &pv->origin_tune[1], &pv->patch_size[1], &pv->range[1], &pv->nframes[1], &pv->prefilter[1],
-               &pv->strength[2], &pv->origin_tune[2], &pv->patch_size[2], &pv->range[2], &pv->nframes[2], &pv->prefilter[2]);
+        hb_dict_t * dict = filter->settings;
+        hb_dict_extract_double(&pv->strength[0],    dict, "y-strength");
+        hb_dict_extract_double(&pv->origin_tune[0], dict, "y-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[0],     dict, "y-patch-size");
+        hb_dict_extract_int(&pv->range[0],          dict, "y-range");
+        hb_dict_extract_int(&pv->nframes[0],        dict, "y-frame-count");
+        hb_dict_extract_int(&pv->prefilter[0],      dict, "y-prefilter");
+
+        hb_dict_extract_double(&pv->strength[1],    dict, "cb-strength");
+        hb_dict_extract_double(&pv->origin_tune[1], dict, "cb-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[1],     dict, "cb-patch-size");
+        hb_dict_extract_int(&pv->range[1],          dict, "cb-range");
+        hb_dict_extract_int(&pv->nframes[1],        dict, "cb-frame-count");
+        hb_dict_extract_int(&pv->prefilter[1],      dict, "cb-prefilter");
+
+        hb_dict_extract_double(&pv->strength[2],    dict, "cr-strength");
+        hb_dict_extract_double(&pv->origin_tune[2], dict, "cr-origin-tune");
+        hb_dict_extract_int(&pv->patch_size[2],     dict, "cr-patch-size");
+        hb_dict_extract_int(&pv->range[2],          dict, "cr-range");
+        hb_dict_extract_int(&pv->nframes[2],        dict, "cr-frame-count");
+        hb_dict_extract_int(&pv->prefilter[2],      dict, "cr-prefilter");
     }
 
     // Cascade values
@@ -1070,26 +1099,20 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
     pv->next_frame -= pv->thread_count;
 
     // Collect results from taskset
-    hb_buffer_t *last = NULL, *out = NULL;
+    hb_buffer_list_t list;
+    hb_buffer_list_clear(&list);
     for (int t = 0; t < pv->thread_count; t++)
     {
-        if (out == NULL)
-        {
-            out = last = pv->thread_data[t]->out;
-        }
-        else
-        {
-            last->next = pv->thread_data[t]->out;
-            last = pv->thread_data[t]->out;
-        }
+        hb_buffer_list_append(&list, pv->thread_data[t]->out);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
 {
-    hb_buffer_t *out = NULL, *last = NULL;
+    hb_buffer_list_t list;
 
+    hb_buffer_list_clear(&list);
     for (int f = 0; f < pv->next_frame; f++)
     {
         Frame *frame = &pv->frame[f];
@@ -1140,17 +1163,9 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
                           pv->diff_max[c]);
         }
         buf->s = frame->s;
-        if (out == NULL)
-        {
-            out = last = buf;
-        }
-        else
-        {
-            last->next = buf;
-            last = buf;
-        }
+        hb_buffer_list_append(&list, buf);
     }
-    return out;
+    return hb_buffer_list_clear(&list);
 }
 
 static int nlmeans_work(hb_filter_object_t *filter,
@@ -1162,21 +1177,17 @@ static int nlmeans_work(hb_filter_object_t *filter,
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        hb_buffer_t *last;
-        // Flush buffered frames
-        last = *buf_out = nlmeans_filter_flush(pv);
+        hb_buffer_list_t list;
+        hb_buffer_t *buf;
 
-        // And terminate the buffer list with a null buffer
-        if (last != NULL)
-        {
-            while (last->next != NULL)
-                last = last->next;
-            last->next = in;
-        }
-        else
-        {
-            *buf_out = in;
-        }
+        // Flush buffered frames
+        buf = nlmeans_filter_flush(pv);
+        hb_buffer_list_set(&list, buf);
+
+        // And terminate the buffer list with a EOF buffer
+        hb_buffer_list_append(&list, in);
+        *buf_out = hb_buffer_list_clear(&list);
+
         *buf_in  = NULL;
         return HB_FILTER_DONE;
     }

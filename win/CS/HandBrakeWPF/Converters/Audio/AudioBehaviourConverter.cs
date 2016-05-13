@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Converters.Audio
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// Audio Behaviour Converter

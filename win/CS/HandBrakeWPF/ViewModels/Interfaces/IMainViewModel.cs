@@ -11,10 +11,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using System.Windows;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-
     using HandBrakeWPF.Services.Presets.Model;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Main Window View Model

@@ -1,15 +1,21 @@
-//
-//  HBAddPresetController.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 23/11/14.
-//
-//
+/*  HBAddPresetController.m
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBAddPresetController.h"
-#import "HBPreset.h"
 
-#include "hb.h"
+#import "HBAudioDefaultsController.h"
+#import "HBSubtitlesDefaultsController.h"
+
+@import HandBrakeKit;
+
+typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
+    HBAddPresetControllerModeNone,
+    HBAddPresetControllerModeCustom,
+    HBAddPresetControllerModeSourceMaximum,
+};
 
 @interface HBAddPresetController ()
 
@@ -22,20 +28,30 @@
 @property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
 @property (nonatomic, strong) HBPreset *preset;
-@property NSSize size;
+@property (nonatomic, strong) HBMutablePreset *mutablePreset;
+
+@property (nonatomic) int width;
+@property (nonatomic) int height;
+
+@property (nonatomic) BOOL defaultToCustom;
+
+@property (nonatomic, readwrite, strong) NSWindowController *defaultsController;
+
 
 @end
 
 @implementation HBAddPresetController
 
-- (instancetype)initWithPreset:(HBPreset *)preset videoSize:(NSSize)size;
+- (instancetype)initWithPreset:(HBPreset *)preset customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom
 {
     self = [super initWithWindowNibName:@"AddPreset"];
     if (self)
     {
         NSParameterAssert(preset);
-        _preset = preset;
-        _size = size;
+        _mutablePreset = [preset mutableCopy];
+        _width = customWidth;
+        _height = customHeight;
+        _defaultToCustom = defaultToCustom;
     }
     return self;
 }
@@ -50,30 +66,39 @@
      *
      * Use [NSMenuItem tag] to store preset values for each option.
      */
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", @"")];
-    [[self.picSettingsPopUp lastItem] setTag: 0];
 
-    if ([self.preset.content[@"PicturePAR"] integerValue] != HB_ANAMORPHIC_STRICT)
+    // Default to Source Maximum
+    HBAddPresetControllerMode mode = HBAddPresetControllerModeSourceMaximum;
+
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", nil)];
+    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeNone];
+
+    if (![self.preset[@"PicturePAR"] isEqualToString:@"strict"])
     {
         // not Strict, Custom is applicable
-        [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", @"")];
-        [[self.picSettingsPopUp lastItem] setTag: 1];
+        [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", nil)];
+        [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
+
+        if (self.defaultToCustom)
+        {
+            mode = HBAddPresetControllerModeCustom;
+        }
     }
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum (post source scan)", @"")];
-    [[self.picSettingsPopUp lastItem] setTag: 2];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", nil)];
+    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];
 
-    //Default to Source Maximum
-    [self.picSettingsPopUp selectItemWithTag:2];
 
-    /* Initialize custom height and width settings to current values */
-    [self.picWidth setStringValue: [NSString stringWithFormat:@"%d", (int)self.size.width]];
-    [self.picHeight setStringValue: [NSString stringWithFormat:@"%d",(int)self.size.height]];
+    [self.picSettingsPopUp selectItemWithTag:mode];
+
+    // Initialize custom height and width settings to current values
+    [self.picWidth setIntValue:self.width];
+    [self.picHeight setIntValue:self.height];
     [self addPresetPicDropdownChanged:nil];
 }
 
 - (IBAction)addPresetPicDropdownChanged:(id)sender
 {
-    if (self.picSettingsPopUp.selectedItem.tag == 1)
+    if (self.picSettingsPopUp.selectedItem.tag == HBAddPresetControllerModeCustom)
     {
         self.picWidthHeightBox.hidden = NO;
     }
@@ -81,6 +106,45 @@
     {
         self.picWidthHeightBox.hidden = YES;
     }
+}
+
+- (IBAction)showAudioSettingsSheet:(id)sender
+{
+    HBAudioDefaults *defaults = [[HBAudioDefaults alloc] init];
+    [defaults applyPreset:self.mutablePreset];
+
+    self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
+
+    [NSApp beginSheet:self.defaultsController.window
+       modalForWindow:self.window
+        modalDelegate:self
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
+}
+
+- (IBAction)showSubtitlesSettingsSheet:(id)sender
+{
+    HBSubtitlesDefaults *defaults = [[HBSubtitlesDefaults alloc] init];
+    [defaults applyPreset:self.mutablePreset];
+
+    self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
+
+    [NSApp beginSheet:self.defaultsController.window
+       modalForWindow:self.window
+        modalDelegate:self
+       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+          contextInfo:(void *)CFBridgingRetain(defaults)];
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    id defaults = (id)CFBridgingRelease(contextInfo);
+
+    if (returnCode == NSModalResponseOK)
+    {
+        [defaults writeToPreset:self.mutablePreset];
+    }
+    self.defaultsController = nil;
 }
 
 - (IBAction)add:(id)sender
@@ -94,37 +158,34 @@
     }
     else
     {
-        self.preset.name = self.name.stringValue;
-        self.preset.presetDescription = self.desc.stringValue;
+        HBMutablePreset *newPreset = self.mutablePreset;
 
-        NSMutableDictionary *dict = [self.preset.content mutableCopy];
-
-        dict[@"PresetName"] = self.name.stringValue;
-        dict[@"PresetDescription"] = self.desc.stringValue;
+        newPreset.name = self.name.stringValue;
+        newPreset.presetDescription = self.desc.stringValue;
 
         // Get the picture size
-        dict[@"PictureWidth"] = @(self.picWidth.integerValue);
-        dict[@"PictureHeight"] = @(self.picHeight.integerValue);
+        newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
+        newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
 
         //Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-        dict[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
+        newPreset[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
 
         // Always use Picture Filter settings for the preset
-        dict[@"UsesPictureFilters"] = @YES;
+        newPreset[@"UsesPictureFilters"] = @YES;
 
-        self.preset.content = [dict copy];
+        [newPreset cleanUp];
 
-        [self.preset cleanUp];
+        self.preset = [newPreset copy];
 
-        [[self window] orderOut:nil];
-        [NSApp endSheet:[self window] returnCode:NSModalResponseContinue];
+        [self.window orderOut:nil];
+        [NSApp endSheet:self.window returnCode:NSModalResponseContinue];
     }
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window] returnCode:NSModalResponseAbort];
+    [self.window orderOut:nil];
+    [NSApp endSheet:self.window returnCode:NSModalResponseAbort];
 }
 
 @end

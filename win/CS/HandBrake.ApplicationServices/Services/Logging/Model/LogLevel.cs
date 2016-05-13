@@ -17,21 +17,26 @@ namespace HandBrake.ApplicationServices.Services.Logging.Model
         /// <summary>
         /// The info.
         /// </summary>
-        info,
+        Info,
 
         /// <summary>
         /// The warning.
         /// </summary>
-        warning, 
+        Warning, 
 
         /// <summary>
         /// The error.
         /// </summary>
-        error,      
+        Error,      
         
         /// <summary>
         /// The debug.
         /// </summary>
-        debug, 
+        Debug,
+        
+        /// <summary>
+        /// Trace Level Logging.
+        /// </summary>
+        Trace, 
     }
 }

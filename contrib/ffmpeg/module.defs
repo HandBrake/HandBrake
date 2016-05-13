@@ -1,4 +1,4 @@
-__deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX
+__deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX LAME
 ifeq (1,$(FEATURE.qsv))
 __deps__ += PTHREADW32 LIBMFX
 endif
@@ -22,17 +22,18 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avplay \
     --disable-avprobe \
     --disable-avdevice \
-    --disable-avfilter \
     --disable-muxers \
     --disable-network \
     --disable-hwaccels \
     --disable-encoders \
+    --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
     --enable-encoder=eac3 \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
+    --enable-encoder=libmp3lame \
     --enable-libvpx \
     --enable-encoder=libvpx_vp8 \
     --disable-decoder=libvpx_vp8 \

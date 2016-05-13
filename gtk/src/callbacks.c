@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * callbacks.c
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * callbacks.c is free software.
  *
@@ -9,6 +9,17 @@
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
+ *
+ * callbacks.c is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with main.c.  If not, write to:
+ *  The Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor
+ *  Boston, MA  02110-1301, USA.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -77,6 +88,7 @@
 #include "ghbcellrenderertext.h"
 #include "x264handler.h"
 
+static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
@@ -608,6 +620,13 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                     g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
             }
+            else if (!strncmp(p, "{preset}", strlen("{preset}")))
+            {
+                const gchar *preset_name;
+                preset_name = ghb_dict_get_string(settings, "PresetName");
+                g_string_append_printf(str, "%s", preset_name);
+                p += strlen("{preset}");
+            }
             else if (!strncmp(p, "{chapters}", strlen("{chapters}")))
             {
                 if (ghb_settings_combo_int(settings, "PtoPType") == 0)
@@ -1007,7 +1026,7 @@ void ghb_show_container_options(signal_user_data_t *ud)
 
     gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
-                               (enc == HB_VCODEC_X264));
+                               (enc == HB_VCODEC_X264_8BIT));
 }
 
 static void
@@ -1243,7 +1262,7 @@ start_scan(
 
     widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop Scan"));
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop\nScan"));
     gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Scan"));
 
     widget = GHB_WIDGET(ud->builder, "source_open");
@@ -1375,13 +1394,13 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
                 title_id = ghb_dict_get_int(ud->settings, "single_title");
             else
                 title_id = 0;
-            ghb_do_scan(ud, filename, title_id, TRUE);
             if (strcmp(sourcename, filename) != 0)
             {
                 ghb_dict_set_string(ud->prefs, "default_source", filename);
                 ghb_pref_save(ud->prefs, "default_source");
                 ghb_dvd_set_current(filename, ud);
             }
+            ghb_do_scan(ud, filename, title_id, TRUE);
             g_free(filename);
         }
     }
@@ -1837,7 +1856,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         gint num_chapters = hb_list_count(title->list_chapter);
 
         ghb_dict_set_int(settings, "angle", 1);
-        ghb_dict_set_int(settings, "PtoPType", 0);
+        ghb_dict_set_string(settings, "PtoPType", "chapter");
         ghb_dict_set_int(settings, "start_point", 1);
         ghb_dict_set_int(settings, "end_point", num_chapters);
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
@@ -1872,7 +1891,7 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         if (!(keep_aspect || pic_par) || pic_par == 3)
         {
             ghb_dict_set_int(settings, "scale_height",
-                             title->geometry.width - title->crop[0] - title->crop[1]);
+                             title->geometry.height - title->crop[0] - title->crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -2005,7 +2024,16 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     if (title != NULL)
     {
-        ghb_set_preview_image(ud);
+        gint preview_count;
+        preview_count = title->preview_count;
+        if (preview_count < 1)
+        {
+            preview_count = 1;
+        }
+        widget = GHB_WIDGET(ud->builder, "preview_frame");
+        gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
+
+        ghb_reset_preview_image(ud);
         ghb_preview_set_visible(ud);
     }
 }
@@ -2104,6 +2132,48 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+comb_detect_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+
+    const char * comb_detect;
+    comb_detect = ghb_dict_get_string(ud->settings, "PictureCombDetectPreset");
+    if (strcasecmp(comb_detect, "off"))
+    {
+        const char * deint;
+        deint = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
+        if (!strcasecmp(deint, "off"))
+        {
+            ghb_ui_update(ud, "PictureDeinterlaceFilter",
+                          ghb_string_value("decomb"));
+        }
+    }
+}
+
+G_MODULE_EXPORT void
+deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    ghb_update_ui_combo_box(ud, "PictureDeinterlacePreset", NULL, FALSE);
+    ghb_ui_update(ud, "PictureDeinterlacePreset",
+                  ghb_dict_get(ud->settings, "PictureDeinterlacePreset"));
+
+    const char * deint;
+    deint = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
+    if (!strcasecmp(deint, "off"))
+    {
+        ghb_ui_update(ud, "PictureCombDetectPreset",
+                      ghb_string_value("off"));
+    }
 }
 
 G_MODULE_EXPORT void
@@ -2263,7 +2333,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
     vquality = ghb_dict_get_double(ud->settings, "VideoQualitySlider");
-    if (vcodec == HB_VCODEC_X264 && vquality < 1.0)
+    if (vcodec == HB_VCODEC_X264_8BIT && vquality < 1.0)
     {
         // Set Profile to auto for lossless x264
         ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
@@ -2280,7 +2350,14 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         step = min_step;
     }
     gdouble val = gtk_range_get_value(GTK_RANGE(widget));
-    val = ((int)((val + step / 2) / step)) * step;
+    if (val < 0)
+    {
+        val = ((int)((val - step / 2) / step)) * step;
+    }
+    else
+    {
+        val = ((int)((val + step / 2) / step)) * step;
+    }
     if (val < min)
     {
         val = min;
@@ -2479,7 +2556,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH);
+        ghb_set_scale(ud, GHB_PIC_KEEP_WIDTH|GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2494,7 +2571,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
     ghb_live_reset(ud);
@@ -2510,7 +2587,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
     ghb_live_reset(ud);
 
@@ -2540,7 +2617,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
+        ghb_set_scale(ud, GHB_PIC_KEEP_DISPLAY_HEIGHT|GHB_PIC_KEEP_PAR);
 
     update_preview = TRUE;
 }
@@ -2568,23 +2645,10 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
     if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
+        ghb_set_scale(ud, GHB_PIC_KEEP_PAR);
     update_preview = TRUE;
 
     update_aspect_info(ud);
-}
-
-G_MODULE_EXPORT void
-show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    g_debug("show_crop_changed_cb ()");
-    ghb_widget_to_setting(ud->prefs, widget);
-    ghb_check_dependency(ud, widget, NULL);
-    ghb_live_reset(ud);
-    if (gtk_widget_is_sensitive(widget))
-        ghb_set_scale(ud, 0);
-    ghb_pref_save(ud->prefs, "preview_show_crop");
-    update_preview = TRUE;
 }
 
 G_MODULE_EXPORT void
@@ -2850,23 +2914,30 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
 static gint
 find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 {
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint ii, count;
     gint job_unique_id;
 
-    *job = NULL;
     g_debug("find_queue_job");
+    if (job != NULL)
+    {
+        *job = NULL;
+    }
     if (unique_id == 0)  // Invalid Id
         return -1;
 
     count = ghb_array_len(queue);
     for (ii = 0; ii < count; ii++)
     {
-        js = ghb_array_get(queue, ii);
-        job_unique_id = ghb_dict_get_int(js, "job_unique_id");
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        job_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
         if (job_unique_id == unique_id)
         {
-            *job = js;
+            if (job != NULL)
+            {
+                *job = queueDict;
+            }
             return ii;
         }
     }
@@ -2874,7 +2945,7 @@ find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
 }
 
 static void
-start_new_log(signal_user_data_t *ud, GhbValue *js)
+start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
 {
     time_t  _now;
     struct tm *now;
@@ -2883,7 +2954,7 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 
     _now = time(NULL);
     now = localtime(&_now);
-    destname = ghb_dict_get_string(js, "destination");
+    destname = ghb_dict_get_string(uiDict, "destination");
     basename = g_path_get_basename(destname);
     if (ghb_dict_get_bool(ud->prefs, "EncodeLogLocation"))
     {
@@ -2922,30 +2993,31 @@ start_new_log(signal_user_data_t *ud, GhbValue *js)
 }
 
 static void
-submit_job(signal_user_data_t *ud, GhbValue *settings)
+submit_job(signal_user_data_t *ud, GhbValue *queueDict)
 {
-    static gint unique_id = 1;
     gchar *type, *modified;
     const char *name;
-    GhbValue *js;
+    GhbValue *uiDict;
     gboolean preset_modified;
 
     g_debug("submit_job");
-    if (settings == NULL) return;
-    preset_modified = ghb_dict_get_bool(settings, "preset_modified");
-    name = ghb_dict_get_string(settings, "PresetFullName");
-    type = ghb_dict_get_int(settings, "Type") == 1 ? "Custom " : "";
+    if (queueDict == NULL) return;
+    uiDict = ghb_dict_get(queueDict, "uiSettings");
+    preset_modified = ghb_dict_get_bool(uiDict, "preset_modified");
+    name = ghb_dict_get_string(uiDict, "PresetFullName");
+    type = ghb_dict_get_int(uiDict, "Type") == 1 ? "Custom " : "";
     modified = preset_modified ? "Modified " : "";
     ghb_log("%s%sPreset: %s", modified, type, name);
 
-    ghb_dict_set_int(settings, "job_unique_id", unique_id);
-    ghb_dict_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
-    start_new_log(ud, settings);
-    ghb_add_job(ghb_queue_handle(), settings, unique_id);
+    ghb_dict_set_int(uiDict, "job_status", GHB_QUEUE_RUNNING);
+    start_new_log(ud, uiDict);
+    GhbValue *job_dict = ghb_dict_get(queueDict, "Job");
+    int unique_id = ghb_add_job(ghb_queue_handle(), job_dict);
+    ghb_dict_set_int(uiDict, "job_unique_id", unique_id);
     ghb_start_queue();
 
     // Start queue activity spinner
-    int index = find_queue_job(ud->queue, unique_id, &js);
+    int index = find_queue_job(ud->queue, unique_id, NULL);
     if (index >= 0)
     {
         GtkTreeView *treeview;
@@ -2961,8 +3033,6 @@ submit_job(signal_user_data_t *ud, GhbValue *settings)
         }
         g_free(path);
     }
-
-    unique_id++;
 }
 
 static void
@@ -3011,7 +3081,7 @@ static gint
 queue_pending_count(GhbValue *queue)
 {
     gint nn, ii, count;
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint status;
 
     nn = 0;
@@ -3019,8 +3089,9 @@ queue_pending_count(GhbValue *queue)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get(queue, ii);
-        status = ghb_dict_get_int(js, "job_status");
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             nn++;
@@ -3033,7 +3104,6 @@ void
 ghb_update_pending(signal_user_data_t *ud)
 {
     GtkLabel *label;
-    GtkToolButton *button;
     gint pending;
     gchar *str;
 
@@ -3043,24 +3113,14 @@ ghb_update_pending(signal_user_data_t *ud)
     gtk_label_set_text(label, str);
     g_free(str);
 
-    button = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
-    if (pending > 0)
-    {
-        str = g_strdup_printf(_("Queue (%d)"), pending);
-    }
-    else
-    {
-        str = g_strdup_printf(_("Queue"));
-    }
-    gtk_tool_button_set_label(button, str);
-    g_free(str);
+    update_queue_labels(ud);
 }
 
-GhbValue*
+void
 ghb_start_next_job(signal_user_data_t *ud)
 {
     gint count, ii;
-    GhbValue *js;
+    GhbValue *queueDict, *uiDict;
     gint status;
     GtkWidget *progress;
 
@@ -3072,12 +3132,13 @@ ghb_start_next_job(signal_user_data_t *ud)
     for (ii = 0; ii < count; ii++)
     {
 
-        js = ghb_array_get(ud->queue, ii);
-        status = ghb_dict_get_int(js, "job_status");
+        queueDict = ghb_array_get(ud->queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {
             ghb_inhibit_gsm(ud);
-            submit_job(ud, js);
+            submit_job(ud, queueDict);
             ghb_update_pending(ud);
 
             // Start queue activity spinner
@@ -3094,7 +3155,7 @@ ghb_start_next_job(signal_user_data_t *ud)
             }
             g_free(path);
 
-            return js;
+            return;
         }
     }
     // Nothing pending
@@ -3102,7 +3163,6 @@ ghb_start_next_job(signal_user_data_t *ud)
     ghb_notify_done(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
-    return NULL;
 }
 
 gchar*
@@ -3111,10 +3171,9 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GhbValue *js;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, &js);
+    index = find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3180,10 +3239,9 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gchar *task_str, *job_str, *status_str;
     gint qcount;
     gint index;
-    GhbValue *js;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, &js);
+    index = find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3221,7 +3279,7 @@ ghb_backend_events(signal_user_data_t *ud)
     gchar *status_str;
     GtkProgressBar *progress;
     GtkLabel       *work_status;
-    GhbValue *js;
+    GhbValue *queueDict;
     gint index;
     GtkTreeView *treeview;
     GtkTreeModel *store;
@@ -3294,7 +3352,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Source"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Open\nSource"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Choose Video Source"));
 
         widget = GHB_WIDGET(ud->builder, "source_open");
@@ -3349,7 +3407,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
     if (status.queue.unique_id != 0)
     {
-        index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+        index = find_queue_job(ud->queue, status.queue.unique_id, NULL);
         if (index >= 0)
         {
             treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
@@ -3415,7 +3473,7 @@ ghb_backend_events(signal_user_data_t *ud)
         gint qstatus;
         const gchar *status_icon;
 
-        index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+        index = find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
         treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
         store = gtk_tree_view_get_model(treeview);
         if (ud->cancel_encode == GHB_CANCEL_ALL ||
@@ -3439,7 +3497,7 @@ ghb_backend_events(signal_user_data_t *ud)
                 qstatus = GHB_QUEUE_FAIL;
                 status_icon = "hb-stop";
         }
-        if (js != NULL)
+        if (queueDict != NULL)
         {
             gchar *path = g_strdup_printf ("%d", index);
             if (gtk_tree_model_get_iter_from_string(store, &iter, path))
@@ -3454,8 +3512,11 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ud->job_activity_log)
             g_io_channel_unref(ud->job_activity_log);
         ud->job_activity_log = NULL;
-        if (js)
-            ghb_dict_set_int(js, "job_status", qstatus);
+        if (queueDict != NULL)
+        {
+            GhbValue *uiDict = ghb_dict_get(queueDict, "uiSettings");
+            ghb_dict_set_int(uiDict, "job_status", qstatus);
+        }
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
@@ -3464,12 +3525,11 @@ ghb_backend_events(signal_user_data_t *ud)
         if (ud->cancel_encode != GHB_CANCEL_ALL &&
             ud->cancel_encode != GHB_CANCEL_FINISH)
         {
-            ud->current_job = ghb_start_next_job(ud);
+            ghb_start_next_job(ud);
         }
         else
         {
             ghb_uninhibit_gsm();
-            ud->current_job = NULL;
             gtk_widget_hide(GTK_WIDGET(progress));
         }
         ghb_save_queue(ud->queue);
@@ -3625,8 +3685,8 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
         textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
         buffer = gtk_text_view_get_buffer (textview);
         gtk_text_buffer_get_end_iter(buffer, &iter);
-        utf8_text = g_convert_with_fallback(text, -1, "UTF-8", "ISO-8859-1",
-                                            "?", NULL, &length, NULL);
+        // Assume logging is in current locale
+        utf8_text = g_locale_to_utf8(text, -1, NULL, &length, NULL);
         if (utf8_text != NULL)
         {
             gtk_text_buffer_insert(buffer, &iter, utf8_text, -1);
@@ -3687,21 +3747,49 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-G_MODULE_EXPORT void
-show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_activity_labels(signal_user_data_t *ud, gboolean active)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, gtk_toggle_tool_button_get_active(
-                        GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+    GtkToolButton *button;
+
+    button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+
+    if (!active)
+    {
+        gtk_tool_button_set_label(button, "Show\nActivity");
+    }
+    else
+    {
+        gtk_tool_button_set_label(button, "Hide\nActivity");
+    }
 }
 
 G_MODULE_EXPORT void
-show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_activity_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-    gtk_widget_set_visible(widget, TRUE);
-    widget = GHB_WIDGET (ud->builder, "show_activity");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *activity_window;
+    GtkCheckMenuItem *menuitem;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    activity_window = GHB_WIDGET(ud->builder, "activity_window");
+    gtk_widget_set_visible(activity_window, active);
+    update_activity_labels(ud, active);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder,
+                                              "show_activity_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_activity_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean             active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT gboolean
@@ -3805,25 +3893,69 @@ hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
     gtk_widget_hide (widget);
 }
 
-G_MODULE_EXPORT void
-show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+update_queue_labels(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    GtkStack *stack;
+    GtkToolButton *button;
+    gboolean       active;
+    gint           pending;
+    const gchar   *show_hide;
+    gchar         *str;
 
-    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
-    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget)))
-        widget = GHB_WIDGET(ud->builder, "queue_tab");
+    button  = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    active  = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button));
+    pending = queue_pending_count(ud->queue);
+
+    if (!active)
+    {
+        show_hide = _("Show\nQueue");
+    }
     else
-        widget = GHB_WIDGET(ud->builder, "settings_tab");
-    gtk_stack_set_visible_child(stack, widget);
+    {
+        show_hide = _("Hide\nQueue");
+    }
+    if (pending > 0)
+    {
+        str = g_strdup_printf("%s (%d)", show_hide, pending);
+    }
+    else
+    {
+        str = g_strdup_printf("%s", show_hide);
+    }
+    gtk_tool_button_set_label(button, str);
+    g_free(str);
 }
 
 G_MODULE_EXPORT void
-show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_queue_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_queue");
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+    GtkWidget        *tab;
+    GtkCheckMenuItem *menuitem;
+    GtkStack         *stack;
+    gboolean          active;
+
+    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
+    if (active)
+        tab = GHB_WIDGET(ud->builder, "queue_tab");
+    else
+        tab = GHB_WIDGET(ud->builder, "settings_tab");
+    gtk_stack_set_visible_child(stack, tab);
+    update_queue_labels(ud);
+
+    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder, "show_queue_menu"));
+    gtk_check_menu_item_set_active(menuitem, active);
+}
+
+G_MODULE_EXPORT void
+show_queue_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkToggleToolButton *button;
+    gboolean active;
+
+    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
+    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
+    gtk_toggle_tool_button_set_active(button, active);
 }
 
 G_MODULE_EXPORT void
@@ -4096,15 +4228,10 @@ G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
-// FIXME?
+
     ghb_check_dependency(ud, widget, NULL);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);
-
-    gint preview_count;
-    preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-    widget = GHB_WIDGET(ud->builder, "preview_frame");
-    gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 }
 
 G_MODULE_EXPORT void
@@ -4999,69 +5126,6 @@ ghb_uninhibit_gsm()
 }
 
 G_MODULE_EXPORT gboolean
-tweak_setting_cb(
-    GtkWidget *widget,
-    GdkEventButton *event,
-    signal_user_data_t *ud)
-{
-    const gchar *name;
-    gchar *tweak_name;
-    gboolean ret = FALSE;
-    gboolean allow_tweaks;
-
-    g_debug("press %d %d", event->type, event->button);
-    allow_tweaks = ghb_dict_get_bool(ud->prefs, "allow_tweaks");
-    if (allow_tweaks && event->type == GDK_BUTTON_PRESS && event->button == 3)
-    { // Its a right mouse click
-        GtkWidget *dialog;
-        GtkEntry *entry;
-        GtkResponseType response;
-        const gchar *tweak = NULL;
-
-        name = ghb_get_setting_key(widget);
-        if (g_str_has_prefix(name, "tweak_"))
-        {
-            tweak_name = g_strdup(name);
-        }
-        else
-        {
-            tweak_name = g_strdup_printf("tweak_%s", name);
-        }
-
-        tweak = ghb_dict_get_string(ud->settings, tweak_name);
-        dialog = GHB_WIDGET(ud->builder, "tweak_dialog");
-        gtk_window_set_title(GTK_WINDOW(dialog), tweak_name);
-        entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "tweak_setting"));
-        if (tweak)
-        {
-            gtk_entry_set_text(entry, tweak);
-        }
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_hide(dialog);
-        if (response == GTK_RESPONSE_OK)
-        {
-            tweak = (gchar*)gtk_entry_get_text(entry);
-            if (ghb_validate_filter_string(tweak, -1))
-                ghb_dict_set_string(ud->settings, tweak_name, tweak);
-            else
-            {
-                GtkWindow *hb_window;
-                gchar *message;
-                hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-                message = g_strdup_printf(
-                            _("Invalid Settings:\n%s"),
-                            tweak);
-                ghb_message_dialog(hb_window, GTK_MESSAGE_ERROR, message, _("Cancel"), NULL);
-                g_free(message);
-            }
-        }
-        g_free(tweak_name);
-        ret = TRUE;
-    }
-    return ret;
-}
-
-G_MODULE_EXPORT gboolean
 easter_egg_cb(
     GtkWidget *widget,
     GdkEventButton *event,
@@ -5118,7 +5182,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
             return g_strdup_printf("%s: %d", vqname, (int)val);
         } break;
 
-        case HB_VCODEC_X264:
+        case HB_VCODEC_X264_8BIT:
         {
             if (val == 0.0)
             {
@@ -5126,6 +5190,7 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
                                        vqname, val);
             }
         } // Falls through to default
+        case HB_VCODEC_X264_10BIT:
         default:
         {
             return g_strdup_printf("%s: %.4g", vqname, val);

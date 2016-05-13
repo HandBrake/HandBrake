@@ -1,6 +1,6 @@
 /* enctheora.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -71,23 +71,13 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     ti.frame_width = (job->width + 0xf) & ~0xf;
     ti.frame_height = (job->height + 0xf) & ~0xf;
     ti.pic_x = ti.pic_y = 0;
-
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        ti.fps_numerator = interjob->vrate.num;
-        ti.fps_denominator = interjob->vrate.den;
-    }
-    else
-    {
-        ti.fps_numerator = job->vrate.num;
-        ti.fps_denominator = job->vrate.den;
-    }
+    ti.fps_numerator = job->vrate.num;
+    ti.fps_denominator = job->vrate.den;
     ti.aspect_numerator = job->par.num;
     ti.aspect_denominator = job->par.den;
     ti.colorspace = TH_CS_UNSPECIFIED;
     ti.pixel_fmt = TH_PF_420;
-    if (job->vquality < 0.0)
+    if (job->vquality <= HB_INVALID_VIDEO_QUALITY)
     {
         ti.target_bitrate = job->vbitrate * 1000;
         ti.quality = 0;
@@ -98,7 +88,8 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         ti.quality = job->vquality;
     }
 
-    keyframe_frequency = 10 * ((double)job->vrate.num / job->vrate.den + 0.5);
+    keyframe_frequency = ((double)job->orig_vrate.num / job->orig_vrate.den +
+                                  0.5) * 10;
 
     hb_log("theora: keyint: %i", keyframe_frequency);
 

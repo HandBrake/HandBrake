@@ -124,6 +124,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure how the Audio Tracks are automatically selected and configured when you select a new title or source video..
+        /// </summary>
+        public static string AudioView_AudioDefaultsDescription {
+            get {
+                return ResourceManager.GetString("AudioView_AudioDefaultsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;Auto Passthru&apos; Behaviour:.
         /// </summary>
         public static string AudioView_AutoPassthruBehaviour {
@@ -187,7 +196,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Otherwise use fallback encoder:.
+        ///   Looks up a localized string similar to Fallback encoder:.
         /// </summary>
         public static string AudioView_OtherwiseFallbackEncoder {
             get {
@@ -412,7 +421,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deinterlace.
+        ///   Looks up a localized string similar to Deinterlace:.
         /// </summary>
         public static string FiltersView_Deinterlace {
             get {
@@ -448,6 +457,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flip.
+        /// </summary>
+        public static string FiltersView_FlipVideo {
+            get {
+                return ResourceManager.GetString("FiltersView_FlipVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grayscale.
         /// </summary>
         public static string FiltersView_Grayscale {
@@ -462,6 +480,15 @@ namespace HandBrakeWPF.Properties {
         public static string FiltersView_Preset {
             get {
                 return ResourceManager.GetString("FiltersView_Preset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotate:.
+        /// </summary>
+        public static string FiltersView_Rotate {
+            get {
+                return ResourceManager.GetString("FiltersView_Rotate", resourceCulture);
             }
         }
         
@@ -534,6 +561,15 @@ namespace HandBrakeWPF.Properties {
         public static string Generic_MoveRight {
             get {
                 return ResourceManager.GetString("Generic_MoveRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Generic_Save {
+            get {
+                return ResourceManager.GetString("Generic_Save", resourceCulture);
             }
         }
         
@@ -799,6 +835,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Source.
+        /// </summary>
+        public static string MainView_SourceOpen {
+            get {
+                return ResourceManager.GetString("MainView_SourceOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Encode.
         /// </summary>
         public static string MainView_StartEncode {
@@ -1060,15 +1105,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable DXVA Hardware Accelerated Decoding (Experimental)&quot;.
-        /// </summary>
-        public static string Options_DXVA {
-            get {
-                return ResourceManager.GetString("Options_DXVA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Format:.
         /// </summary>
         public static string Options_Format {
@@ -1177,6 +1213,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pause queue if disk space is low before starting a job..
+        /// </summary>
+        public static string Options_PauseQueueOnLowDiskSpace {
+            get {
+                return ResourceManager.GetString("Options_PauseQueueOnLowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prevent the system from sleeping while encoding.
         /// </summary>
         public static string Options_PreventSleep {
@@ -1263,6 +1308,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_SendFileTo {
             get {
                 return ResourceManager.GetString("Options_SendFileTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Queue in place of the tab controls when toggled on..
+        /// </summary>
+        public static string Options_ShowQueueInline {
+            get {
+                return ResourceManager.GetString("Options_ShowQueueInline", resourceCulture);
             }
         }
         
@@ -1519,6 +1573,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change the behaviour of the audio track selection for this preset.  
+        ///This will not affect your current settings in the Audio tab..
+        /// </summary>
+        public static string Preset_AudioDefaults_SubText {
+            get {
+                return ResourceManager.GetString("Preset_AudioDefaults_SubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Defaults.
+        /// </summary>
+        public static string Preset_AudioDefaults_Title {
+            get {
+                return ResourceManager.GetString("Preset_AudioDefaults_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to file.
         /// </summary>
         public static string Preset_Export {
@@ -1533,6 +1606,34 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_Import {
             get {
                 return ResourceManager.GetString("Preset_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the behaviour of the subtitle track selection for this preset.  
+        ///This will not affect your current settings in the Subtitle tab..
+        /// </summary>
+        public static string Preset_SubtitleDefaults_SubText {
+            get {
+                return ResourceManager.GetString("Preset_SubtitleDefaults_SubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle Defaults.
+        /// </summary>
+        public static string Preset_SubtitleDefaults_Title {
+            get {
+                return ResourceManager.GetString("Preset_SubtitleDefaults_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected titles will be added using the  &quot;{0}&quot;  preset..
+        /// </summary>
+        public static string QueueSelection_UsingPreset {
+            get {
+                return ResourceManager.GetString("QueueSelection_UsingPreset", resourceCulture);
             }
         }
         
@@ -1762,7 +1863,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Done::.
+        ///   Looks up a localized string similar to When Done:.
         /// </summary>
         public static string QueueView_WhenDone {
             get {
@@ -2028,6 +2129,15 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitleView_AddAllCC {
             get {
                 return ResourceManager.GetString("SubtitleView_AddAllCC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure how the Subtitle Tracks are automatically selected and configured when you select a new title or source video..
+        /// </summary>
+        public static string SubtitleView_SubtitleDefaultsDescription {
+            get {
+                return ResourceManager.GetString("SubtitleView_SubtitleDefaultsDescription", resourceCulture);
             }
         }
         

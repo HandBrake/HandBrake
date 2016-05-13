@@ -1,14 +1,23 @@
-pkg.create.zip:: pkg.create $(PKG.cli.zip)
+pkg.create.zip:: pkg.create $(PKG.cli.zip) $(PKG.libhb.zip)
 
 $(PKG.cli.zip): | $(dir $(PKG.cli.zip))
 $(PKG.cli.zip): | $(STAGE.out.cli/)
 	cd $(STAGE.out.cli/) && $(ZIP.exe) -r $(call fn.ABSOLUTE,$(PKG.cli.zip)) .
 
+$(PKG.libhb.zip): | $(dir $(PKG.libhb.zip))
+$(PKG.libhb.zip): | $(STAGE.out.libhb/)
+	cd $(STAGE.out.libhb/) && $(ZIP.exe) -r $(call fn.ABSOLUTE,$(PKG.libhb.zip)) .
 
 $(STAGE.out.cli/):
 	-$(MKDIR.exe) -p $@
 	$(CP.exe) HandBrakeCLI.exe $(STAGE.out.cli/)
 	$(CP.exe) -R contrib/etc/fonts $(STAGE.out.cli/)/fonts/
 	$(call STAGE.doc,$(STAGE.out.cli/))
+
+$(STAGE.out.libhb/):
+	-$(MKDIR.exe) -p $@
+	$(CP.exe) libhb/hb.dll $(STAGE.out.libhb/)
+	$(CP.exe) -R contrib/etc/fonts $(STAGE.out.libhb/)/fonts/
+	$(call STAGE.doc,$(STAGE.out.libhb/))
 
 

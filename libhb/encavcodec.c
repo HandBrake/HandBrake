@@ -1,6 +1,6 @@
 /* encavcodec.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -32,8 +32,7 @@ struct hb_work_private_s
 
     int frameno_in;
     int frameno_out;
-    hb_buffer_t * delay_head;
-    hb_buffer_t * delay_tail;
+    hb_buffer_list_t delay_list;
 
     int64_t dts_delay;
 
@@ -65,6 +64,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
     pv->job = job;
+
+    hb_buffer_list_clear(&pv->delay_list);
 
     int clock_min, clock_max, clock;
     hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
@@ -101,17 +102,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set things in context that we will allow the user to 
     // override with advanced settings.
-    if( job->pass_id == HB_PASS_ENCODE_2ND )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        fps.den = interjob->vrate.den;
-        fps.num = interjob->vrate.num;
-    }
-    else
-    {
-        fps.den = job->vrate.den;
-        fps.num = job->vrate.num;
-    }
+    fps.den = job->vrate.den;
+    fps.num = job->vrate.num;
 
     // If the fps.num is the internal clock rate, there's a good chance
     // this is a standard rate that we have in our hb_video_rates table.
@@ -162,7 +154,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->time_base.den = fps.num;
     context->time_base.num = fps.den;
-    context->gop_size  = 10 * ((double)job->vrate.num / job->vrate.den + 0.5);
+    context->gop_size  = ((double)job->orig_vrate.num / job->orig_vrate.den +
+                                  0.5) * 10;
 
     /* place job->encoder_options in an hb_dict_t for convenience */
     hb_dict_t * lavc_opts = NULL;
@@ -189,7 +182,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     // Now set the things in context that we don't want to allow
     // the user to override.
-    if( job->vquality < 0.0 )
+    if (job->vquality <= HB_INVALID_VIDEO_QUALITY)
     {
         /* Average bitrate */
         context->bit_rate = 1000 * job->vbitrate;
@@ -233,6 +226,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     context->sample_aspect_ratio.num = job->par.num;
     context->sample_aspect_ratio.den = job->par.den;
+    if (job->vcodec == HB_VCODEC_FFMPEG_MPEG4)
+    {
+        // MPEG-4 Part 2 stores the PAR num/den as unsigned 8-bit fields,
+        // and libavcodec's encoder fails to initialize if we don't
+        // reduce it to fit 8-bits.
+        hb_limit_rational(&context->sample_aspect_ratio.num,
+                          &context->sample_aspect_ratio.den,
+                           context->sample_aspect_ratio.num,
+                           context->sample_aspect_ratio.den, 255);
+    }
 
     hb_log( "encavcodec: encoding with stored aspect %d/%d",
             job->par.num, job->par.den );
@@ -435,27 +438,20 @@ static uint8_t convert_pict_type( int pict_type, char pkt_flag_key, uint16_t* sf
 // This is similar to how x264 generates DTS
 static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * buf )
 {
-    if ( pv->job->areBframes )
+    if (pv->job->areBframes)
     {
         // Has dts_delay been set yet?
-        if ( pv->frameno_in <= pv->job->areBframes )
+        hb_buffer_list_append(&pv->delay_list, buf);
+        if (pv->frameno_in <= pv->job->areBframes)
         {
             // dts_delay not yet set.  queue up buffers till it is set.
-            if ( pv->delay_tail == NULL )
-            {
-                pv->delay_head = pv->delay_tail = buf;
-            }
-            else
-            {
-                pv->delay_tail->next = buf;
-                pv->delay_tail = buf;
-            }
             return NULL;
         }
 
         // We have dts_delay.  Apply it to any queued buffers renderOffset
         // and return all queued buffers.
-        if ( pv->delay_tail == NULL && buf != NULL )
+        buf = hb_buffer_list_head(&pv->delay_list);
+        while (buf != NULL)
         {
             // Use the cached frame info to get the start time of Nth frame
             // Note that start Nth frame != start time this buffer since the
@@ -467,40 +463,16 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
             }
             else
             {
-                buf->s.renderOffset =
-                    get_frame_start(pv, pv->frameno_out - pv->job->areBframes);
-            }
-            pv->frameno_out++;
-            return buf;
-        }
-        else
-        {
-            pv->delay_tail->next = buf;
-            buf = pv->delay_head;
-            while ( buf )
-            {
-                // Use the cached frame info to get the start time of Nth frame
-                // Note that start Nth frame != start time this buffer since the
-                // output buffers have rearranged start times.
-                if (pv->frameno_out < pv->job->areBframes)
-                {
-                    int64_t start = get_frame_start( pv, pv->frameno_out );
-                    buf->s.renderOffset = start - pv->dts_delay;
-                }
-                else
-                {
-                    buf->s.renderOffset = get_frame_start(pv,
+                buf->s.renderOffset = get_frame_start(pv,
                                         pv->frameno_out - pv->job->areBframes);
-                }
-                buf = buf->next;
-                pv->frameno_out++;
             }
-            buf = pv->delay_head;
-            pv->delay_head = pv->delay_tail = NULL;
-            return buf;
+            buf = buf->next;
+            pv->frameno_out++;
         }
+        buf = hb_buffer_list_clear(&pv->delay_list);
+        return buf;
     }
-    else if ( buf )
+    else if (buf != NULL)
     {
         buf->s.renderOffset = buf->s.start;
         return buf;
@@ -520,12 +492,15 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_job_t * job = pv->job;
     AVFrame  * frame;
     hb_buffer_t * in = *buf_in, * buf;
+    hb_buffer_list_t list;
     char final_flushing_call = !!(in->s.flags & HB_BUF_FLAG_EOF);
-    if ( final_flushing_call )
+
+    hb_buffer_list_clear(&list);
+    if (final_flushing_call)
     {
-        //make a flushing call to encode for codecs that can encode out of order
         /* EOF on input - send it downstream & say we're done */
-        *buf_in = NULL;
+        // make a flushing call to encode for codecs that can encode
+        // out of order
         frame = NULL;
     }
     else
@@ -560,9 +535,6 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         AVPacket pkt;
         int got_packet;
         char still_flushing = final_flushing_call;
-        hb_buffer_t* buf_head = NULL;
-        hb_buffer_t* buf_last = NULL;
-
         do
         {
             av_init_packet(&pkt);
@@ -588,15 +560,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
                 buf = process_delay_list( pv, buf );
 
-                if (buf_head == NULL)
-                {
-                    buf_head = buf;
-                }
-                else
-                {
-                    buf_last->next = buf;
-                }
-                buf_last = buf;
+                hb_buffer_list_append(&list, buf);
             }
             /* Write stats */
             if (job->pass_id == HB_PASS_ENCODE_1ST &&
@@ -605,27 +569,21 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 fprintf( pv->file, "%s", pv->context->stats_out );
             }
         } while (still_flushing);
-        if (buf_last != NULL && final_flushing_call)
+
+        if (final_flushing_call)
         {
-            buf_last->next = in;
-            buf = buf_head;
-        }
-        else if (final_flushing_call)
-        {
-            buf = in;
+            *buf_in = NULL;
+            hb_buffer_list_append(&list, in);
         }
     }
     else
     {
-        buf = NULL;
-        
         hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
     }
 
     av_frame_free( &frame );
 
-    *buf_out = buf;
-
+    *buf_out = hb_buffer_list_clear(&list);
     return final_flushing_call? HB_WORK_DONE : HB_WORK_OK;
 }
 

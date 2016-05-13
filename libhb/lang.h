@@ -1,6 +1,6 @@
 /* lang.h
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -17,7 +17,7 @@ typedef struct iso639_lang_t
     char * iso639_1;        /* ISO-639-1 (2 characters) code */
     char * iso639_2;        /* ISO-639-2/t (3 character) code */
     char * iso639_2b;       /* ISO-639-2/b code (if different from above) */
-
+	char * iso639;			/* Obsolete ISO-639 code (if changed in ISO-639-1) */
 } iso639_lang_t;
 
 #ifdef __cplusplus
@@ -25,6 +25,12 @@ extern "C" {
 #endif
 /* find language, match any of names in lang struct */
 const iso639_lang_t * lang_lookup( const char * str );
+
+/* find language table index, match any of names in lang struct */
+const int lang_lookup_index( const char * str );
+
+/* return language for an index into the language table */
+const iso639_lang_t * lang_for_index( int index );
 
 /* find language associated with ISO-639-1 language code */
 iso639_lang_t * lang_for_code( int code );

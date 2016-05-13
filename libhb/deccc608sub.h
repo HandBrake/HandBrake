@@ -1,6 +1,6 @@
 /* deccc608sub.h
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -85,6 +85,7 @@ struct s_write {
     int new_sentence;
     int new_channel;
     int in_xds_mode;
+    hb_buffer_list_t list;
     hb_buffer_t *hb_buffer;
     hb_buffer_t *hb_last_buffer;
     uint64_t last_pts;

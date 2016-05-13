@@ -6,12 +6,8 @@
 //
 
 #import "HBPreviewGenerator.h"
-#import "HBUtilities.h"
 
-#import "HBCore.h"
-#import "HBJob.h"
-#import "HBStateFormatter.h"
-#import "HBPicture+UIAdditions.h"
+@import HandBrakeKit;
 
 @interface HBPreviewGenerator ()
 
@@ -20,6 +16,8 @@
 @property (nonatomic, readonly, strong) HBJob *job;
 
 @property (nonatomic, strong) HBCore *core;
+
+@property (nonatomic) BOOL reloadInQueue;
 
 @end
 
@@ -42,7 +40,7 @@
         // Limit the cache to 60 1080p previews, the cost is in pixels
         _picturePreviews.totalCostLimit = 60 * 1920 * 1080;
 
-        _imagesCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
@@ -53,6 +51,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
     [self.core cancelEncode];
 }
 
@@ -76,13 +75,14 @@
     if (!theImage)
     {
         HBFilters *filters = self.job.filters;
-        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"] && !filters.useDecomb) ||
-                           (![filters.decomb isEqualToString:@"off"] && filters.useDecomb);
+        BOOL deinterlace = (![filters.deinterlace isEqualToString:@"off"]);
 
         theImage = (CGImageRef)[self.scanCore copyImageAtIndex:index
                                                            forTitle:self.job.title
                                                        pictureFrame:self.job.picture
-                                                        deinterlace:deinterlace];
+                                                        deinterlace:deinterlace
+                                                        rotate:self.job.filters.rotate
+                                                       flipped:self.job.filters.flip];
         if (cache && theImage)
         {
             // The cost is the number of pixels of the image
@@ -116,9 +116,21 @@
 {
     // Purge the existing picture previews so they get recreated the next time
     // they are needed.
-
     [self purgeImageCache];
+
+    // Enquee the reload call on the main runloop
+    // to avoid reloading the same image multiple times.
+    if (self.reloadInQueue == NO)
+    {
+        [[NSRunLoop mainRunLoop] performSelector:@selector(postReloadNotification) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        self.reloadInQueue = YES;
+    }
+}
+
+- (void)postReloadNotification
+{
     [self.delegate reloadPreviews];
+    self.reloadInQueue = NO;
 }
 
 - (NSString *)info
@@ -161,12 +173,12 @@
 
     NSURL *destURL = nil;
     // Generate the file url and directories.
-    if (self.job.container & HB_MUX_MASK_MP4)
+    if (self.job.container & 0x030000 /*HB_MUX_MASK_MP4*/)
     {
         // we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly.
         destURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
     }
-    else if (self.job.container & HB_MUX_MASK_MKV)
+    else if (self.job.container & 0x300000 /*HB_MUX_MASK_MKV*/)
     {
         destURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
     }
@@ -200,16 +212,19 @@
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.twoLines = NO;
     formatter.showPassNumber = NO;
+    formatter.title = NSLocalizedString(@"preview", nil);
+
+    self.core.stateFormatter = formatter;
 
     // start the actual encode
     [self.core encodeJob:job
-         progressHandler:^(HBState state, hb_state_t hb_state) {
-             [self.delegate updateProgress:[formatter stateToPercentComplete:hb_state]
-                                      info:[formatter stateToString:hb_state title:@"preview"]];
+         progressHandler:^(HBState state, HBProgress progress, NSString *info) {
+             [self.delegate updateProgress:progress.percent
+                                      info:info];
          }
-       completionHandler:^(BOOL success) {
+       completionHandler:^(HBCoreResult result) {
            // Encode done, call the delegate and close libhb handle
-           if (success)
+           if (result == HBCoreResultDone)
            {
                [self.delegate didCreateMovieAtURL:destURL];
            }

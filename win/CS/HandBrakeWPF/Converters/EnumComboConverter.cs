@@ -15,10 +15,12 @@ namespace HandBrakeWPF.Converters
     using System;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
+
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
@@ -56,10 +58,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValues(typeof(VideoEncoder));
             }
-            if (value is IEnumerable<Mixdown>)
-            {
-                return EnumHelper<Mixdown>.GetEnumDisplayValues(typeof(Mixdown));
-            }
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
@@ -88,17 +86,20 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<OutputFormat>.GetEnumDisplayValues(typeof(OutputFormat));
             }
+            if (value is IEnumerable<DeinterlaceFilter>)
+            {
+                return EnumHelper<DeinterlaceFilter>.GetEnumDisplayValues(typeof(DeinterlaceFilter));
+            }
+            if (value is IEnumerable<CombDetect>)
+            {
+                return EnumHelper<CombDetect>.GetEnumDisplayValues(typeof(CombDetect));
+            }
 
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)value);
-            }
-            if (targetType == typeof(Mixdown) || value.GetType() == typeof(Mixdown))
-            {
-                return EnumHelper<Mixdown>.GetDisplay((Mixdown)value);
-            }
-  
+            } 
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
@@ -133,7 +134,16 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<OutputFormat>.GetDisplay((OutputFormat)value);
             }
- 
+
+            if (targetType == typeof(DeinterlaceFilter) || value.GetType() == typeof(DeinterlaceFilter))
+            {
+                return EnumHelper<DeinterlaceFilter>.GetDisplay((DeinterlaceFilter)value);
+            }
+            if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
+            {
+                return EnumHelper<CombDetect>.GetDisplay((CombDetect)value);
+            }
+
             return null;
         }
 
@@ -163,10 +173,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
                 return EnumHelper<VideoEncoder>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(Mixdown) || value.GetType() == typeof(Mixdown))
-            {
-                return EnumHelper<Mixdown>.GetValue(value.ToString());
             }
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
@@ -198,6 +204,15 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<OutputFormat>.GetValue(value.ToString());
             }
 
+            if (targetType == typeof(DeinterlaceFilter) || value.GetType() == typeof(DeinterlaceFilter))
+            {
+                return EnumHelper<DeinterlaceFilter>.GetValue(value.ToString());
+            }
+
+            if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
+            {
+                return EnumHelper<CombDetect>.GetValue(value.ToString());
+            }
             return null;
         }
     }

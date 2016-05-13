@@ -8,6 +8,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class HBChapter;
+
 /**
  * HBTitles is an interface to the low-level hb_title_t.
  * the properties are lazy-loaded.
@@ -38,9 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) int autoCropLeft;
 @property (nonatomic, readonly) int autoCropRight;
 
-@property (nonatomic, readonly) NSArray *audioTracks;
-@property (nonatomic, readonly) NSArray *subtitlesTracks;
-@property (nonatomic, readonly) NSArray *chapters;
+@property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *audioTracks;
+@property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *subtitlesTracks;
+@property (nonatomic, readonly) NSArray<HBChapter *> *chapters;
 
 @end
 

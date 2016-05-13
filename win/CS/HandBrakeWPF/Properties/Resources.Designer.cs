@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2015 The HandBrake Team
+        ///   Looks up a localized string similar to Copyright (C) 2003-2016 The HandBrake Team
         ///
         ///This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
@@ -448,11 +448,130 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to save Chapter Makrers file! .
+        ///   Looks up a localized string similar to Unable to save Chapter Markers file! .
         /// </summary>
         public static string ChaptersViewModel_UnableToExportChaptersWarning {
             get {
                 return ResourceManager.GetString("ChaptersViewModel_UnableToExportChaptersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First column in chapters file must only contain a integer number value higher than zero (0).
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All lines in chapters file must have at least 2 columns of data.
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line {0} is invalid. Nothing will be imported..
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersMalformedLineMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersMalformedLineMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to import chapter file.
+        /// </summary>
+        public static string ChaptersViewModel_UnableToImportChaptersWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnableToImportChaptersWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter files of type &apos;{0}&apos; are not currently supported..
+        /// </summary>
+        public static string ChaptersViewModel_UnsupportedFileFormatMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported chapter file type.
+        /// </summary>
+        public static string ChaptersViewModel_UnsupportedFileFormatWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_UnsupportedFileFormatWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of chapters on the source media 
+        ///and the number of chapters in the input file do not match ({0} vs {1}).
+        ///
+        ///Do you still want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The number of chapters on the source media 
+        ///and the number of chapters in the input file do not match ({0} vs {1}).
+        ///
+        ///Do you still want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter count doesn&apos;t match between source and input file.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The reported duration of the chapters on the source media 
+        ///and the duration of chapters in the input file differ greatly.
+        ///
+        ///It is very likely that this chapter file was produced from a different source media.
+        ///
+        ///Are you sure you want to import the chapter names?.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter duration doesn&apos;t match between source and input file.
+        /// </summary>
+        public static string ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid chapter information for source media.
+        /// </summary>
+        public static string ChaptersViewModel_ValidationFailedWarning {
+            get {
+                return ResourceManager.GetString("ChaptersViewModel_ValidationFailedWarning", resourceCulture);
             }
         }
         
@@ -574,7 +693,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {5}.
+        ///   Looks up a localized string similar to    Pending Jobs {7}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -726,6 +845,15 @@ namespace HandBrakeWPF.Properties {
         public static string Main_QueueFinished {
             get {
                 return ResourceManager.GetString("Main_QueueFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  with {0} errors detected..
+        /// </summary>
+        public static string Main_QueueFinishedErrors {
+            get {
+                return ResourceManager.GetString("Main_QueueFinishedErrors", resourceCulture);
             }
         }
         
@@ -934,11 +1062,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}.
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\:mm\:ss}.
         /// </summary>
         public static string MainViewModel_EncodeStatusChanged_StatusLabel {
             get {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low Disk Space.
+        /// </summary>
+        public static string MainViewModel_LowDiskSpace {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning, you are running low on disk space. HandBrake will not be able to complete this encode if you run out of space. .
+        /// </summary>
+        public static string MainViewModel_LowDiskSpaceWarning {
+            get {
+                return ResourceManager.GetString("MainViewModel_LowDiskSpaceWarning", resourceCulture);
             }
         }
         
@@ -1104,6 +1250,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
+        ///Your preset file will be archived and new one created. You will need to re-create your own presets..
+        /// </summary>
+        public static string Presets_PresetForceReset {
+            get {
+                return ResourceManager.GetString("Presets_PresetForceReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Built-in presets have been reset..
         /// </summary>
         public static string Presets_ResetComplete {
@@ -1118,6 +1274,46 @@ namespace HandBrakeWPF.Properties {
         public static string Presets_ResetHeader {
             get {
                 return ResourceManager.GetString("Presets_ResetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archived File:.
+        /// </summary>
+        public static string PresetService_ArchiveFile {
+            get {
+                return ResourceManager.GetString("PresetService_ArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake has detected your presets file is from an older version.
+        ///It will try and load the file anyway.
+        ///If it fails, it will archive off the old file and create a new one..
+        /// </summary>
+        public static string PresetService_PresetsOutOfDate {
+            get {
+                return ResourceManager.GetString("PresetService_PresetsOutOfDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load presets..
+        /// </summary>
+        public static string PresetService_UnableToLoad {
+            get {
+                return ResourceManager.GetString("PresetService_UnableToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake was unable to load your presets file. It may have been from an older unsupported version of HandBrake or corrupted. 
+        ///
+        ///Your old presets file was archived to:.
+        /// </summary>
+        public static string PresetService_UnableToLoadPresets {
+            get {
+                return ResourceManager.GetString("PresetService_UnableToLoadPresets", resourceCulture);
             }
         }
         
@@ -1329,6 +1525,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occured when trying to stop the scan. Please restart HandBrake..
+        /// </summary>
+        public static string ScanService_ScanStopFailed {
+            get {
+                return ResourceManager.GetString("ScanService_ScanStopFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any settings you changed may need to be reset the next time HandBrake launches..
+        /// </summary>
+        public static string SettingService_SaveErrorReset {
+            get {
+                return ResourceManager.GetString("SettingService_SaveErrorReset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An Encode is currently running. Exiting HandBrake will stop this encode.
         ///Are you sure you wish to exit HandBrake?.
         /// </summary>
@@ -1469,11 +1683,47 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Accelerates H.264, MPEG-4, VC1 and WMV3  and can provide a small speed improvement on lower end hardware..
+        ///   Looks up a localized string similar to A problem occured when trying to save your preferences..
         /// </summary>
-        public static string Video_DxvaDecode {
+        public static string UserSettings_AnErrorOccured {
             get {
-                return ResourceManager.GetString("Video_DxvaDecode", resourceCulture);
+                return ResourceManager.GetString("UserSettings_AnErrorOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to load user settings file: {0}.
+        /// </summary>
+        public static string UserSettings_UnableToLoad {
+            get {
+                return ResourceManager.GetString("UserSettings_UnableToLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one..
+        /// </summary>
+        public static string UserSettings_UnableToLoadSolution {
+            get {
+                return ResourceManager.GetString("UserSettings_UnableToLoadSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your user settings file was corrupted or inaccessible. Settings have been reset to defaults..
+        /// </summary>
+        public static string UserSettings_YourSettingsAreCorrupt {
+            get {
+                return ResourceManager.GetString("UserSettings_YourSettingsAreCorrupt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning, your settings have been reset!.
+        /// </summary>
+        public static string UserSettings_YourSettingsHaveBeenReset {
+            get {
+                return ResourceManager.GetString("UserSettings_YourSettingsHaveBeenReset", resourceCulture);
             }
         }
         
@@ -1493,50 +1743,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_EncoderExtraArgsTooltip {
             get {
                 return ResourceManager.GetString("Video_EncoderExtraArgsTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sets and ensures compliance with the specified H.264 Levels. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderLevel {
-            get {
-                return ResourceManager.GetString("Video_EncoderLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adjusts settings to trade off compression efficiency against encoding speed.
-        ///
-        ///This establishes your default settings. Tunes, profiles, levels and advanced options string will be applied to this.
-        ///
-        ///You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files..
-        /// </summary>
-        public static string Video_EncoderPreset {
-            get {
-                return ResourceManager.GetString("Video_EncoderPreset", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Limit the profile of the output stream. This will override all other settings..
-        /// </summary>
-        public static string Video_EncoderProfile {
-            get {
-                return ResourceManager.GetString("Video_EncoderProfile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tune settings to optimise for common scenarios
-        ///
-        ///This can improve efficiency for particular source characteristics or set of characteristics of the output file.
-        ///
-        ///Changes will be applied after the preset but before all other parameters..
-        /// </summary>
-        public static string Video_EncoderTune {
-            get {
-                return ResourceManager.GetString("Video_EncoderTune", resourceCulture);
             }
         }
         
@@ -1587,22 +1793,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_PlaceboQuality {
             get {
                 return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Set the desired quality factor. The encoder targets a certain quality. 
-        ///The scale used by each video encoder is different.
-        ///
-        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
-        ///So small changes in value will result in progressively larger increases or decreases in the resulting file size. 
-        ///A value of 0 means lossless and will result in a file size that is larger than the original source, 
-        ///unless the source was also lossless. 
-        ///Suggested values are: 18 to 20 for standard definiti [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string Video_QualitySlider {
-            get {
-                return ResourceManager.GetString("Video_QualitySlider", resourceCulture);
             }
         }
         

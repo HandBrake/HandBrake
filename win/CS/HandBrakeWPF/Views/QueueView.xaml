@@ -14,6 +14,7 @@
         xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         Title="{Binding Title}"
         Width="700"
         Height="500"
@@ -32,9 +33,8 @@
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
+        <queue:PictureSettingsDescConveter x:Key="pictureSettingsDescConverter" />
         
-
-
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         </Style>
@@ -181,13 +181,13 @@
             </DockPanel>
         </ToolBar>
 
-        <StackPanel Grid.Row="1" Margin="10,20,10,20">
-            <TextBlock Text="{Binding JobsPending}" />
-            <TextBlock Text="{Binding JobStatus}" />
+        <StackPanel Grid.Row="1" Margin="10,20,10,0">
+            <TextBlock Text="{Binding JobsPending}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
         </StackPanel>
 
         <ListBox Grid.Row="2"
-                 Margin="10,0,10,10"
+                 Margin="10,20,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
@@ -250,7 +250,7 @@
                                 <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                                <TextBlock Text="{Binding Task.PictureSettingsDesc}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
+                                <TextBlock Text="{Binding Task, Converter={StaticResource pictureSettingsDescConverter}}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />

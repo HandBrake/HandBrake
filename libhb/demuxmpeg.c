@@ -1,6 +1,6 @@
 /* demuxmpeg.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -71,7 +71,7 @@ static inline void restore_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 
 /* Basic MPEG demuxer */
 
-void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state )
+void hb_demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es, hb_psdemux_t* state )
 {
     hb_buffer_t * buf_es;
     int           pos = 0;
@@ -232,7 +232,7 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
             }
             memcpy( buf_es->data, d + pos, pes_packet_end - pos );
 
-            hb_list_add( list_es, buf_es );
+            hb_buffer_list_append(list_es, buf_es);
 
             pos = pes_packet_end;
         }
@@ -248,7 +248,7 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
 // stripped off and buf has all the info gleaned from them: id is set,
 // start contains the pts (if any), renderOffset contains the dts (if any)
 // and stop contains the pcr (if it changed).
-void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
+void hb_demux_mpeg(hb_buffer_t *buf, hb_buffer_list_t *list_es,
                    hb_psdemux_t *state, int tolerance)
 {
     while ( buf )
@@ -342,19 +342,19 @@ void hb_demux_mpeg(hb_buffer_t *buf, hb_list_t *list_es,
 
         hb_buffer_t *tmp = buf->next;
         buf->next = NULL;
-        hb_list_add( list_es, buf );
+        hb_buffer_list_append(list_es, buf);
         buf = tmp;
     }
 }
 
-void hb_demux_ts(hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state)
+void hb_demux_ts(hb_buffer_t *buf, hb_buffer_list_t *list_es, hb_psdemux_t *state)
 {
     // Distance between PCRs in TS is up to 100ms, but we have seen
     // streams that exceed this, so allow up to 300ms.
     hb_demux_mpeg(buf, list_es, state, 300);
 }
 
-void hb_demux_ps(hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state)
+void hb_demux_ps(hb_buffer_t *buf, hb_buffer_list_t *list_es, hb_psdemux_t *state)
 {
     // Distance between SCRs in PS is up to 700ms
     hb_demux_mpeg(buf, list_es, state, 700);
@@ -363,7 +363,7 @@ void hb_demux_ps(hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state)
 // "null" demuxer (makes a copy of input buf & returns it in list)
 // used when the reader for some format includes its own demuxer.
 // for example, ffmpeg.
-void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state )
+void hb_demux_null( hb_buffer_t * buf, hb_buffer_list_t * list_es, hb_psdemux_t* state )
 {
     while ( buf )
     {
@@ -388,7 +388,7 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
 
         hb_buffer_t *tmp = buf->next;
         buf->next = NULL;
-        hb_list_add( list_es, buf );
+        hb_buffer_list_append(list_es, buf);
         buf = tmp;
     }
 }

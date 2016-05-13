@@ -72,11 +72,6 @@ namespace HandBrakeWPF
         public const string MinTitleLength = "MinTitleLength";
 
         /// <summary>
-        /// Skip Version
-        /// </summary>
-        public const string Skipversion = "skipversion";
-
-        /// <summary>
         /// Update Status
         /// </summary>
         public const string UpdateStatus = "updateStatus";
@@ -90,16 +85,6 @@ namespace HandBrakeWPF
         /// Vlc Path
         /// </summary>
         public const string VLCPath = "VLC_Path";
-
-        /// <summary>
-        /// Growl Encodes
-        /// </summary>
-        public const string GrowlEncode = "GrowlEncode";
-
-        /// <summary>
-        /// Growl Queues
-        /// </summary>
-        public const string GrowlQueue = "GrowlQueue";
 
         /// <summary>
         /// The Instance Id
@@ -147,6 +132,16 @@ namespace HandBrakeWPF
         public const string PreventSleep = "PreventSleep";
 
         /// <summary>
+        /// Pause Queue on Low Disk Space
+        /// </summary>
+        public const string PauseOnLowDiskspace = "PauseOnLowDiskspace";
+
+        /// <summary>
+        /// Low Disk Space Warning Level in Bytes.
+        /// </summary>
+        public const string PauseOnLowDiskspaceLevel = "LowDiskSpaceWarningLevelInBytes";
+
+        /// <summary>
         /// The remove punctuation.
         /// </summary>
         public const string RemovePunctuation = "RemovePunctuation";
@@ -170,11 +165,6 @@ namespace HandBrakeWPF
         /// The disable quick sync decoding.
         /// </summary>
         public const string DisableQuickSyncDecoding = "DisableQuickSyncDecoding";
-
-        /// <summary>
-        /// The enable dxva.
-        /// </summary>
-        public const string EnableDxva = "EnableDxva";
 
         /// <summary>
         /// The scaling mode.
@@ -220,6 +210,16 @@ namespace HandBrakeWPF
         /// The clear completed from queue.
         /// </summary>
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
+
+        /// <summary>
+        /// The Show Queue in-line option.
+        /// </summary>
+        public const string ShowQueueInline = "ShowQueueInline";
+
+        /// <summary>
+        /// Setting to allow mid-version upgrades of presets.
+        /// </summary>
+        public const string ForcePresetReset = "ForcePresetReset";
 
         #endregion
     }

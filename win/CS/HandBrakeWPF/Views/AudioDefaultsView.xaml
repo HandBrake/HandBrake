@@ -1,0 +1,162 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.AudioDefaultsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             d:DesignHeight="360"
+             d:DesignWidth="770"
+             mc:Ignorable="d"
+             x:Name="audioDefaultsTab">
+
+    <UserControl.Resources>
+        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
+        <Audio:AudioBehaviourConverter x:Key="audioBehaviourConverter" />
+        <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
+    </UserControl.Resources>
+
+    <Grid VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Row 2 -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,0,0">
+
+            <Grid Margin="0,0,0,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Audio -->
+                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
+                          ItemsSource="{Binding AudioBehaviourModeList, Converter={StaticResource audioBehaviourConverter}}" 
+                          SelectedItem="{Binding AudioBehaviours.SelectedBehaviour, Converter={StaticResource audioBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
+
+
+                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                <ComboBox Name="audioTrackBeahaviorMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
+                          ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
+                          SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,5,5,0" />
+            </Grid>
+
+            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="5,10,0,0" />
+
+            <Grid Margin="20,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
+                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="120" />
+                        </StackPanel>
+
+                        <DockPanel Grid.Column="1" Margin="10,0,10,0">
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="2">
+                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
+                            <ListBox Name="selectedLangauges" ItemsSource="{Binding AudioBehaviours.SelectedLangauges}" 
+                                     helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="120"
+                                             dd:DragDrop.DropHandler="{Binding}"
+                                             dd:DragDrop.IsDragSource="True"
+                                             dd:DragDrop.IsDropTarget="True"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_AutoPassthruBehaviour}" FontWeight="Bold" Margin="0,10,0,5" />
+            <StackPanel Margin="10,5,0,0"
+                        Orientation="Vertical">
+                <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_WhenAutoPassthru}" VerticalAlignment="Center" />
+                <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_AllowPassThruOf}" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Margin="15,5,0,0"
+                        Orientation="Horizontal">
+                <CheckBox Margin="0,0,5,0"
+                          Content="MP3" VerticalAlignment="Center"    
+                          IsChecked="{Binding AudioAllowMP3Pass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="AAC" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowAACPass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="AC3" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowAC3Pass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="E-AC3" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowEAC3Pass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="DTS" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowDTSPass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="DTSHD" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowDTSHDPass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="TrueHD" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowTrueHDPass}" />
+                <CheckBox Margin="0,0,5,0"
+                          Content="FLAC" VerticalAlignment="Center"
+                          IsChecked="{Binding AudioAllowFlacPass}" />
+
+                <TextBlock Margin="15,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
+
+                <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="5,0,5,0">
+                    <ComboBox.SelectedItem>
+                        <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                            <Binding Path="AudioEncoderFallback" />
+                        </MultiBinding>
+                    </ComboBox.SelectedItem>
+                    <ComboBox.ItemsSource>
+                        <MultiBinding Converter="{StaticResource audioEncoderConverter}" ConverterParameter="True">
+                            <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                        </MultiBinding>
+                    </ComboBox.ItemsSource>
+                </ComboBox>
+
+            </StackPanel>
+
+        </StackPanel>
+
+
+    </Grid>
+</UserControl>

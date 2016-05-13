@@ -1,0 +1,12 @@
+diff -u libass-0.12.3/libass/ass_shaper.h.orig libass-0.12.3/libass/ass_shaper.h
+--- libass-0.12.3/libass/ass_shaper.h.orig	2015-09-17 23:53:21.000000000 -0400
++++ libass-0.12.3/libass/ass_shaper.h	2015-09-17 23:54:43.000000000 -0400
+@@ -21,7 +21,7 @@
+ 
+ #include "config.h"
+ 
+-#include <fribidi.h>
++#include <fribidi/fribidi.h>
+ #include "ass_render.h"
+ 
+ void ass_shaper_info(ASS_Library *lib);

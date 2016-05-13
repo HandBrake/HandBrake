@@ -5,11 +5,41 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPresetsViewController.h"
-#import "HBPresetsManager.h"
-#import "HBPreset.h"
+
+@import HandBrakeKit.HBPresetsManager;
+@import HandBrakeKit.HBPreset;
 
 // drag and drop pasteboard type
 #define kHandBrakePresetPBoardType @"handBrakePresetPBoardType"
+
+@interface HBPresetCellView : NSTableCellView
+@end
+
+@implementation HBPresetCellView
+
+- (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle
+{
+    [super setBackgroundStyle:backgroundStyle];
+
+    // Customize the built-in preset text color
+    if ([self.objectValue isBuiltIn])
+    {
+        if (backgroundStyle == NSBackgroundStyleDark)
+        {
+            self.textField.textColor = [NSColor selectedControlTextColor];
+        }
+        else
+        {
+            self.textField.textColor = [NSColor blueColor];
+        }
+    }
+    else
+    {
+        self.textField.textColor = [NSColor controlTextColor];
+    }
+}
+
+@end
 
 @interface HBPresetsViewController () <NSOutlineViewDelegate>
 
@@ -101,7 +131,7 @@
 
     [panel beginWithCompletionHandler:^(NSInteger result)
      {
-         if (result == NSOKButton)
+         if (result == NSFileHandlingPanelOKButton)
          {
              NSURL *presetExportDirectory = [panel.URL URLByDeletingLastPathComponent];
              [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
@@ -133,12 +163,22 @@
      {
          [[NSUserDefaults standardUserDefaults] setURL:panel.directoryURL forKey:@"LastPresetImportDirectoryURL"];
 
-         for (NSURL *url in panel.URLs)
+         if (result == NSFileHandlingPanelOKButton)
          {
-             HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url];
-             for (HBPreset *child in import.children)
+             for (NSURL *url in panel.URLs)
              {
-                 [self.presets addPreset:child];
+                 NSError *error;
+                 HBPreset *import = [[HBPreset alloc] initWithContentsOfURL:url error:&error];
+
+                 if (import == nil)
+                 {
+                     [self presentError:error];
+                 }
+
+                 for (HBPreset *child in import.children)
+                 {
+                     [self.presets addPreset:child];
+                 }
              }
          }
      }];
@@ -241,43 +281,6 @@
 
     // Re-expand the items
     [self expandNodes:[self.treeController.arrangedObjects childNodes]];
-}
-
-#pragma mark - Added Functionality (optional)
-
-/* We use this to provide tooltips for the items in the presets outline view */
-- (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView
-           toolTipForCell:(NSCell *)cell
-                     rect:(NSRectPointer)rect
-              tableColumn:(NSTableColumn *)tc
-                     item:(id)item
-            mouseLocation:(NSPoint)mouseLocation
-{
-    return [[item representedObject] presetDescription];
-}
-
-/* Use to customize the font and display characteristics of the title cell */
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
-{
-    NSColor *fontColor;
-    
-    if ([self.outlineView selectedRow] == [self.outlineView rowForItem:item])
-    {
-        fontColor = [NSColor blackColor];
-    }
-    else
-    {
-        if ([[item representedObject] isBuiltIn])
-        {
-            fontColor = [NSColor blueColor];
-        }
-        else // User created preset, use a black font
-        {
-            fontColor = [NSColor blackColor];
-        }
-    }
-
-    [cell setTextColor:fontColor];
 }
 
 #pragma mark - Expanded node persistence methods

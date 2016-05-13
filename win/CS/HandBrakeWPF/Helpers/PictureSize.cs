@@ -184,7 +184,7 @@ namespace HandBrakeWPF.Helpers
                 keep = settingMode,
                 maxWidth = job.MaxWidth,
                 maxHeight = job.MaxHeight,
-                mode = (int)(hb_anamorphic_mode_t)job.AnamorphicMode,
+                mode = (int)job.AnamorphicMode,
                 modulus = job.Modulus.HasValue ? job.Modulus.Value : 16,
                 geometry = new hb_geometry_s { height = job.Height, width = job.Width, par = job.AnamorphicMode != Anamorphic.Custom ? new hb_rational_t { den = title.ParH, num = title.ParW } : new hb_rational_t { den = job.ParH, num = job.ParW }}
             };
@@ -204,7 +204,6 @@ namespace HandBrakeWPF.Helpers
             int outputHeight = result.height;
             int outputParWidth = result.par.num;
             int outputParHeight = result.par.den;
-            Debug.WriteLine("hb_set_anamorphic_size2: {0}x{1}", outputWidth, outputHeight);
             return new AnamorphicResult { OutputWidth = outputWidth, OutputHeight = outputHeight, OutputParWidth = outputParWidth, OutputParHeight = outputParHeight };
         }
     }

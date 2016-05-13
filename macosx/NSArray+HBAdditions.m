@@ -1,29 +1,10 @@
-//
-//  NSArray+NSArray_HBArrayAdditions.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 22/07/15.
-//
-//
+/*  NSArray+HBAdditions.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "NSArray+HBAdditions.h"
-
-@implementation NSMutableArray (HBAdditions)
-
-- (void)removeObjectsUsingBlock:(BOOL (^)(id object))block
-{
-    NSMutableArray *objectsToRemove = [NSMutableArray array];
-    for (id object in self)
-    {
-        if (block(object))
-        {
-            [objectsToRemove addObject:object];
-        }
-    }
-    [self removeObjectsInArray:objectsToRemove];
-}
-
-@end
 
 @implementation NSArray (HBAdditions)
 

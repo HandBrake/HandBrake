@@ -29,8 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface HBOutputRedirect : NSObject
 
-+ (id)stdoutRedirect;
-+ (id)stderrRedirect;
++ (instancetype)stdoutRedirect;
++ (instancetype)stderrRedirect;
 
 - (void)addListener:(id <HBOutputRedirectListening>)aListener;
 - (void)removeListener:(id <HBOutputRedirectListening>)aListener;

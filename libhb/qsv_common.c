@@ -1,6 +1,6 @@
 /* qsv_common.c
  *
- * Copyright (c) 2003-2015 HandBrake Team
+ * Copyright (c) 2003-2016 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -18,6 +18,7 @@
 #include "hb_dict.h"
 #include "qsv_common.h"
 #include "h264_common.h"
+#include "h265_common.h"
 
 // QSV info for each codec
 static hb_qsv_info_t *hb_qsv_info_avc       = NULL;
@@ -45,6 +46,13 @@ static hb_triplet_t hb_qsv_h264_profiles[] =
     { "Progressive High",     "high|set4",      MFX_PROFILE_AVC_PROGRESSIVE_HIGH,     },
     { NULL,                                                                           },
 };
+static hb_triplet_t hb_qsv_h265_profiles[] =
+{
+    { "Main",               "main",             MFX_PROFILE_HEVC_MAIN,   },
+    { "Main 10",            "main10",           MFX_PROFILE_HEVC_MAIN10, },
+    { "Main Still Picture", "mainstillpicture", MFX_PROFILE_HEVC_MAINSP, },
+    { NULL,                                                              },
+};
 static hb_triplet_t hb_qsv_h264_levels[] =
 {
     { "1.0", "1.0", MFX_LEVEL_AVC_1,  },
@@ -66,6 +74,23 @@ static hb_triplet_t hb_qsv_h264_levels[] =
     { "5.2", "5.2", MFX_LEVEL_AVC_52, },
     { NULL,                           },
 };
+static hb_triplet_t hb_qsv_h265_levels[] =
+{
+    { "1.0", "1.0", MFX_LEVEL_HEVC_1,  },
+    { "2.0", "2.0", MFX_LEVEL_HEVC_2,  },
+    { "2.1", "2.1", MFX_LEVEL_HEVC_21, },
+    { "3.0", "3.0", MFX_LEVEL_HEVC_3,  },
+    { "3.1", "3.1", MFX_LEVEL_HEVC_31, },
+    { "4.0", "4.0", MFX_LEVEL_HEVC_4,  },
+    { "4.1", "4.1", MFX_LEVEL_HEVC_41, },
+    { "5.0", "5.0", MFX_LEVEL_HEVC_5,  },
+    { "5.1", "5.1", MFX_LEVEL_HEVC_51, },
+    { "5.2", "5.2", MFX_LEVEL_HEVC_52, },
+    { "6.0", "6.0", MFX_LEVEL_HEVC_6,  },
+    { "6.1", "6.1", MFX_LEVEL_HEVC_61, },
+    { "6.2", "6.2", MFX_LEVEL_HEVC_62, },
+    { NULL,                            },
+};
 
 // check available Intel Media SDK version against a minimum
 #define HB_CHECK_MFX_VERSION(MFX_VERSION, MAJOR, MINOR) \
@@ -83,6 +108,8 @@ enum
     QSV_G2, // Ivy Bridge or equivalent
     QSV_G3, // Haswell or equivalent
     QSV_G4, // Broadwell or equivalent
+    QSV_G5, // Skylake or equivalent
+    QSV_FU, // always last (future processors)
 };
 static int qsv_hardware_generation(int cpu_platform)
 {
@@ -99,8 +126,11 @@ static int qsv_hardware_generation(int cpu_platform)
         case HB_CPU_PLATFORM_INTEL_HSW:
             return QSV_G3;
         case HB_CPU_PLATFORM_INTEL_BDW:
-        default:
             return QSV_G4;
+        case HB_CPU_PLATFORM_INTEL_SKL:
+            return QSV_G5;
+        default:
+            return QSV_FU;
     }
 }
 
@@ -114,7 +144,8 @@ static int qsv_implementation_is_hardware(mfxIMPL implementation)
 
 int hb_qsv_available()
 {
-    return hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264);
+    return ((hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
+            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0)); 
 }
 
 int hb_qsv_video_encoder_is_enabled(int encoder)
@@ -123,6 +154,8 @@ int hb_qsv_video_encoder_is_enabled(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_qsv_info_avc != NULL && hb_qsv_info_avc->available;
+        case HB_VCODEC_QSV_H265:
+            return hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available;
         default:
             return 0;
     }
@@ -773,23 +806,23 @@ void hb_qsv_info_print()
         }
         if (hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available)
         {
-            hb_deep_log(2, " - H.265 encoder: yes (unsupported)");
-            hb_deep_log(2, "    - preferred implementation: %s",
-                        hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation));
+            hb_log(" - H.265 encoder: yes");
+            hb_log("    - preferred implementation: %s",
+                   hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation));
             if (qsv_hardware_info_hevc.available)
             {
-                log_capabilities(2, qsv_hardware_info_hevc.capabilities,
+                log_capabilities(1, qsv_hardware_info_hevc.capabilities,
                                  "    - capabilities (hardware): ");
             }
             if (qsv_software_info_hevc.available)
             {
-                log_capabilities(2, qsv_software_info_hevc.capabilities,
+                log_capabilities(1, qsv_software_info_hevc.capabilities,
                                  "    - capabilities (software): ");
             }
         }
         else
         {
-            hb_deep_log(2, " - H.265 encoder: no");
+            hb_log(" - H.265 encoder: no");
         }
     }
 }
@@ -800,6 +833,8 @@ hb_qsv_info_t* hb_qsv_info_get(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_qsv_info_avc;
+        case HB_VCODEC_QSV_H265:
+            return hb_qsv_info_hevc;
         default:
             return NULL;
     }
@@ -1220,6 +1255,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
                 case MFX_CODEC_AVC:
                     ivalue = hb_qsv_atoindex(hb_h264_vidformat_names, value, &error);
                     break;
+                case MFX_CODEC_HEVC:
+                    ivalue = hb_qsv_atoindex(hb_h265_vidformat_names, value, &error);
+                    break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
             }
@@ -1242,6 +1280,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
                 case MFX_CODEC_AVC:
                     ivalue = hb_qsv_atoindex(hb_h264_fullrange_names, value, &error);
                     break;
+                case MFX_CODEC_HEVC:
+                    ivalue = hb_qsv_atoindex(hb_h265_fullrange_names, value, &error);
+                    break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
             }
@@ -1263,6 +1304,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
             {
                 case MFX_CODEC_AVC:
                     ivalue = hb_qsv_atoindex(hb_h264_colorprim_names, value, &error);
+                    break;
+                case MFX_CODEC_HEVC:
+                    ivalue = hb_qsv_atoindex(hb_h265_colorprim_names, value, &error);
                     break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
@@ -1287,6 +1331,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
                 case MFX_CODEC_AVC:
                     ivalue = hb_qsv_atoindex(hb_h264_transfer_names, value, &error);
                     break;
+                case MFX_CODEC_HEVC:
+                    ivalue = hb_qsv_atoindex(hb_h265_transfer_names, value, &error);
+                    break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
             }
@@ -1309,6 +1356,9 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
             {
                 case MFX_CODEC_AVC:
                     ivalue = hb_qsv_atoindex(hb_h264_colmatrix_names, value, &error);
+                    break;
+                case MFX_CODEC_HEVC:
+                    ivalue = hb_qsv_atoindex(hb_h265_colmatrix_names, value, &error);
                     break;
                 default:
                     return HB_QSV_PARAM_UNSUPPORTED;
@@ -1479,6 +1529,11 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
             case MFX_CODEC_AVC:
                 profile = hb_triplet4key(hb_qsv_h264_profiles, profile_key);
                 break;
+
+            case MFX_CODEC_HEVC:
+                profile = hb_triplet4key(hb_qsv_h265_profiles, profile_key);
+                break;
+
             default:
                 break;
         }
@@ -1501,6 +1556,11 @@ int hb_qsv_level_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char *l
             case MFX_CODEC_AVC:
                 level = hb_triplet4key(hb_qsv_h264_levels, level_key);
                 break;
+
+            case MFX_CODEC_HEVC:
+                level = hb_triplet4key(hb_qsv_h265_levels, level_key);
+                break;
+
             default:
                 break;
         }
@@ -1545,7 +1605,9 @@ const char* const* hb_qsv_profile_get_names(int encoder)
     switch (encoder)
     {
         case HB_VCODEC_QSV_H264:
-            return hb_h264_profile_names;
+            return hb_h264_profile_names_8bit;
+        case HB_VCODEC_QSV_H265:
+            return hb_h265_profile_names_8bit;
         default:
             return NULL;
     }
@@ -1557,6 +1619,8 @@ const char* const* hb_qsv_level_get_names(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_h264_level_names;
+        case HB_VCODEC_QSV_H265:
+            return hb_h265_level_names;
         default:
             return NULL;
     }
@@ -1564,36 +1628,43 @@ const char* const* hb_qsv_level_get_names(int encoder)
 
 const char* hb_qsv_video_quality_get_name(uint32_t codec)
 {
-    uint64_t caps;
+    uint64_t caps = 0;
     switch (codec)
     {
         case HB_VCODEC_QSV_H264:
-            caps = hb_qsv_info_avc != NULL ? hb_qsv_info_avc->capabilities : 0;
-            return (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? "ICQ" : "QP";
+            if (hb_qsv_info_avc != NULL) caps = hb_qsv_info_avc->capabilities;
+            break;
+
+        case HB_VCODEC_QSV_H265:
+            if (hb_qsv_info_hevc != NULL) caps = hb_qsv_info_hevc->capabilities;
+            break;
 
         default:
-            return "QP";
+            break;
     }
+    return (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? "ICQ" : "QP";
 }
 
 void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high,
                                      float *granularity, int *direction)
 {
-    uint64_t caps;
+    uint64_t caps = 0;
     switch (codec)
     {
-        case HB_VCODEC_QSV_H264:
-            caps = hb_qsv_info_avc != NULL ? hb_qsv_info_avc->capabilities : 0;
+        case HB_VCODEC_QSV_H265:
+            if (hb_qsv_info_hevc != NULL) caps = hb_qsv_info_hevc->capabilities;
             *direction   = 1;
             *granularity = 1.;
             *low         = (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? 1. : 0.;
             *high        = 51.;
             break;
 
+        case HB_VCODEC_QSV_H264:
         default:
+            if (hb_qsv_info_avc != NULL) caps = hb_qsv_info_avc->capabilities;
             *direction   = 1;
             *granularity = 1.;
-            *low         = 0.;
+            *low         = (caps & HB_QSV_CAP_RATECONTROL_ICQ) ? 1. : 0.;
             *high        = 51.;
             break;
     }
@@ -1893,6 +1964,9 @@ const char* hb_qsv_codec_name(uint32_t codec_id)
         case MFX_CODEC_AVC:
             return "H.264/AVC";
 
+        case MFX_CODEC_HEVC:
+            return "H.265/HEVC";
+
         default:
             return NULL;
     }
@@ -1905,6 +1979,10 @@ const char* hb_qsv_profile_name(uint32_t codec_id, uint16_t profile_id)
     {
         case MFX_CODEC_AVC:
             profile = hb_triplet4value(hb_qsv_h264_profiles, profile_id);
+            break;
+
+        case MFX_CODEC_HEVC:
+            profile = hb_triplet4value(hb_qsv_h265_profiles, profile_id);
             break;
 
         default:
@@ -1920,6 +1998,10 @@ const char* hb_qsv_level_name(uint32_t codec_id, uint16_t level_id)
     {
         case MFX_CODEC_AVC:
             level = hb_triplet4value(hb_qsv_h264_levels, level_id);
+            break;
+
+        case MFX_CODEC_HEVC:
+            level = hb_triplet4value(hb_qsv_h265_levels, level_id);
             break;
 
         default:

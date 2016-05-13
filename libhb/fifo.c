@@ -1,6 +1,6 @@
 /* fifo.c
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -9,6 +9,9 @@
 
 #include "hb.h"
 #include "openclwrapper.h"
+#ifdef USE_QSV
+#include "libavcodec/qsv.h"
+#endif
 
 #ifndef SYS_DARWIN
 #include <malloc.h>
@@ -16,7 +19,11 @@
 
 #define FIFO_TIMEOUT 200
 //#define HB_FIFO_DEBUG 1
+// defining HB_BUFFER_DEBUG and HB_NO_BUFFER_POOL allows tracking
+// buffer memory leaks using valgrind.  The source of the leak
+// can be determined with "valgrind --leak-check=full"
 //#define HB_BUFFER_DEBUG 1
+//#define HB_NO_BUFFER_POOL 1
 
 /* Fifo */
 struct hb_fifo_s
@@ -65,7 +72,9 @@ struct hb_buffer_pools_s
 {
     int64_t allocated;
     hb_lock_t *lock;
+#if !defined(HB_NO_BUFFER_POOL)
     hb_fifo_t *pool[MAX_BUFFER_POOLS];
+#endif
 #if defined(HB_BUFFER_DEBUG)
     hb_list_t *alloc_list;
 #endif
@@ -81,6 +90,7 @@ void hb_buffer_pool_init( void )
     buffers.alloc_list = hb_list_init();
 #endif
 
+#if !defined(HB_NO_BUFFER_POOL)
     /* we allocate pools for sizes 2^10 through 2^25. requests larger than
      * 2^25 will get passed through to malloc. */
     int i;
@@ -100,6 +110,7 @@ void hb_buffer_pool_init( void )
         buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS, 1);
         buffers.pool[i]->buffer_size = 1 << i;
     }
+#endif
 }
 
 #if defined(HB_FIFO_DEBUG)
@@ -145,6 +156,7 @@ static void fifo_list_rem( hb_fifo_t * f )
     }
 }
 
+#if !defined(HB_NO_BUFFER_POOL)
 // These routines are useful for finding and debugging problems
 // with the fifos and buffer pools
 static void buffer_pool_validate( hb_fifo_t * f )
@@ -242,13 +254,12 @@ void fifo_list_validate( void )
     }
 }
 #endif
+#endif
 
 void hb_buffer_pool_free( void )
 {
     int i;
-    int count;
     int64_t freed = 0;
-    hb_buffer_t *b;
 
     hb_lock(buffers.lock);
 
@@ -262,6 +273,9 @@ void hb_buffer_pool_free( void )
     }
 #endif
 
+#if !defined(HB_NO_BUFFER_POOL)
+    hb_buffer_t * b;
+    int           count;
     for( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i)
     {
         count = 0;
@@ -285,7 +299,7 @@ void hb_buffer_pool_free( void )
                     free(b->data);
                 }
             }
-            free( b );
+            //free( b );
             count++;
         }
         if ( count )
@@ -294,6 +308,18 @@ void hb_buffer_pool_free( void )
                     buffers.pool[i]->buffer_size);
         }
     }
+#endif
+
+#if defined(HB_BUFFER_DEBUG) && defined(HB_NO_BUFFER_POOL)
+    // defining HB_BUFFER_DEBUG and HB_NO_BUFFER_POOL allows tracking
+    // buffer memory leaks using valgrind.  The source of the leak
+    // can be determined with "valgrind --leak-check=full"
+    for (i = 0; i < hb_list_count(buffers.alloc_list); i++)
+    {
+        hb_buffer_t *b = hb_list_item(buffers.alloc_list, i);
+        hb_list_rem(buffers.alloc_list, b);
+    }
+#endif
 
     hb_deep_log( 2, "Allocated %"PRId64" bytes of buffers on this pass and Freed %"PRId64" bytes, "
            "%"PRId64" bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
@@ -303,6 +329,7 @@ void hb_buffer_pool_free( void )
 
 static hb_fifo_t *size_to_pool( int size )
 {
+#if !defined(HB_NO_BUFFER_POOL)
     int i;
     for ( i = BUFFER_POOL_FIRST; i <= BUFFER_POOL_LAST; ++i )
     {
@@ -311,6 +338,7 @@ static hb_fifo_t *size_to_pool( int size )
             return buffers.pool[i];
         }
     }
+#endif
     return NULL;
 }
 
@@ -427,6 +455,9 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             free( b );
             return NULL;
         }
+#if defined(HB_BUFFER_DEBUG)
+        memset(b->data, 0, b->size);
+#endif
         hb_lock(buffers.lock);
         buffers.allocated += b->alloc;
         hb_unlock(buffers.lock);
@@ -459,7 +490,11 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
     if ( size > b->alloc || b->data == NULL )
     {
         uint32_t orig = b->data != NULL ? b->alloc : 0;
-        size = size_to_pool( size )->buffer_size;
+        hb_fifo_t *buffer_pool = size_to_pool(size);
+        if (buffer_pool != NULL)
+        {
+            size = buffer_pool->buffer_size;
+        }
         b->data  = realloc( b->data, size );
         b->alloc = size;
 
@@ -676,6 +711,29 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
     while( b )
     {
+#ifdef USE_QSV
+        // Reclaim QSV resources before dropping the buffer.
+        // when decoding without QSV, the QSV atom will be NULL.
+        if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
+        {
+            av_qsv_stage *stage = av_qsv_get_last_stage(b->qsv_details.qsv_atom);
+            if (stage != NULL)
+            {
+                av_qsv_wait_on_sync(b->qsv_details.ctx, stage);
+                if (stage->out.sync->in_use > 0)
+                {
+                    ff_qsv_atomic_dec(&stage->out.sync->in_use);
+                }
+                if (stage->out.p_surface->Data.Locked > 0)
+                {
+                    ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
+                }
+            }
+            av_qsv_flush_stages(b->qsv_details.ctx->pipes,
+                                &b->qsv_details.qsv_atom);
+        }
+#endif
+
         hb_buffer_t * next = b->next;
         hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 

@@ -12,9 +12,9 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
     using System;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-
     using HandBrakeWPF.Services.Queue.Model;
+
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The Queue Processor
@@ -44,6 +44,12 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         event EventHandler QueuePaused;
 
+        /// <summary>
+        /// Low Diskspace has been detected.
+        /// Checked before each job starts.
+        /// </summary>
+        event EventHandler LowDiskspaceDetected;
+
         #endregion
 
         #region Properties
@@ -52,6 +58,11 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Gets the number of jobs in the queue
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Gets the number of errors detected in the queue.
+        /// </summary>
+        int ErrorCount { get; }
 
         /// <summary>
         /// Gets the IEncodeService instance.
@@ -94,6 +105,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// If this is not null or empty, this will be used instead of the standard backup location.
         /// </param>
         void BackupQueue(string exportPath);
+
+        /// <summary>
+        /// Export the Queue the standardised JSON format.
+        /// </summary>
+        /// <param name="exportPath">
+        /// The export path.
+        /// </param>
+        void ExportJson(string exportPath);
 
         /// <summary>
         /// Checks the current queue for an existing instance of the specified destination.

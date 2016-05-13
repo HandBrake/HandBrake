@@ -1,6 +1,6 @@
 /* internal.h
 
-   Copyright (c) 2003-2015 HandBrake Team
+   Copyright (c) 2003-2016 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -9,6 +9,9 @@
 
 #include "hbffmpeg.h"
 #include "extras/cl.h"
+#ifdef USE_QSV
+#include "libavcodec/qsv.h"
+#endif
 
 /***********************************************************************
  * Hardware Decode Context
@@ -63,7 +66,7 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
  */
 struct hb_buffer_settings_s
 {
-    enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF, OTHER_BUF } type;
+    enum { OTHER_BUF, AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF } type;
 
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // start time of frame
@@ -71,6 +74,7 @@ struct hb_buffer_settings_s
     int64_t       stop;         // stop time of frame
     int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
     int64_t       pcr;
+    int           split;
     uint8_t       discontinuity;
     int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
@@ -98,6 +102,11 @@ struct hb_buffer_settings_s
 #define PIC_FLAG_REPEAT_FRAME       0x0200
 #define HB_BUF_FLAG_EOF             0x0400
     uint16_t      flags;
+
+#define HB_COMB_NONE  0
+#define HB_COMB_LIGHT 1
+#define HB_COMB_HEAVY 2
+    uint8_t       combed;
 };
 
 struct hb_image_format_s
@@ -107,6 +116,8 @@ struct hb_image_format_s
     int           width;
     int           height;
     int           fmt;
+    int           window_width;
+    int           window_height;
 };
 
 struct hb_buffer_s
@@ -142,11 +153,14 @@ struct hb_buffer_s
         int           size;
     } plane[4]; // 3 Color components + alpha
 
+#ifdef USE_QSV
     struct qsv
     {
-        void *qsv_atom;
-        void *filter_details;
+        void           * qsv_atom;
+        void           * filter_details;
+        av_qsv_context * ctx;
     } qsv_details;
+#endif
 
     /* OpenCL */
     struct cl_data
@@ -181,6 +195,9 @@ int           hb_buffer_copy( hb_buffer_t * dst, const hb_buffer_t * src );
 void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
 hb_image_t  * hb_image_init(int pix_fmt, int width, int height);
 hb_image_t  * hb_buffer_to_image(hb_buffer_t *buf);
+int           hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *b);
+int           hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *b,
+                              int top, int left);
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 void          hb_fifo_register_full_cond( hb_fifo_t * f, hb_cond_t * c );
@@ -259,9 +276,8 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 }
 
 /***********************************************************************
- * Threads: update.c, scan.c, work.c, reader.c, muxcommon.c
+ * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
-hb_thread_t * hb_update_init( int * build, char * version );
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
                             const char * path, int title_index, 
                             hb_title_set_t * title_set, int preview_count, 
@@ -269,10 +285,13 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );
 void ReadLoop( void * _w );
+void hb_work_loop( void * );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( hb_handle_t *, int );
-hb_work_object_t * hb_codec_decoder( hb_handle_t *, int );
-hb_work_object_t * hb_codec_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_decoder( hb_handle_t *, int );
+hb_work_object_t * hb_audio_encoder( hb_handle_t *, int );
+hb_work_object_t * hb_video_decoder( hb_handle_t *, int, int );
+hb_work_object_t * hb_video_encoder( hb_handle_t *, int );
 
 /***********************************************************************
  * sync.c
@@ -290,11 +309,11 @@ typedef struct {
     int     new_chap;
 } hb_psdemux_t;
 
-typedef void (*hb_muxer_t)(hb_buffer_t *, hb_list_t *, hb_psdemux_t*);
+typedef void (*hb_muxer_t)(hb_buffer_t *, hb_buffer_list_t *, hb_psdemux_t*);
 
-void hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-void hb_demux_ts( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-void hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+void hb_demux_ps(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
+void hb_demux_ts(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
+void hb_demux_null(hb_buffer_t * ps_buf, hb_buffer_list_t * es_list, hb_psdemux_t *);
 
 extern const hb_muxer_t hb_demux[];
 
@@ -417,6 +436,7 @@ enum
     WORK_NONE = 0,
     WORK_SYNC_VIDEO,
     WORK_SYNC_AUDIO,
+    WORK_SYNC_SUBTITLE,
     WORK_DECCC608,
     WORK_DECVOBSUB,
     WORK_DECSRTSUB,
@@ -444,15 +464,19 @@ enum
 };
 
 extern hb_filter_object_t hb_filter_detelecine;
+extern hb_filter_object_t hb_filter_comb_detect;
+extern hb_filter_object_t hb_filter_decomb;
 extern hb_filter_object_t hb_filter_deinterlace;
+extern hb_filter_object_t hb_filter_vfr;
 extern hb_filter_object_t hb_filter_deblock;
 extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
-extern hb_filter_object_t hb_filter_decomb;
-extern hb_filter_object_t hb_filter_rotate;
-extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_render_sub;
-extern hb_filter_object_t hb_filter_vfr;
+extern hb_filter_object_t hb_filter_crop_scale;
+extern hb_filter_object_t hb_filter_rotate;
+extern hb_filter_object_t hb_filter_grayscale;
+extern hb_filter_object_t hb_filter_pad;
+extern hb_filter_object_t hb_filter_avfilter;
 
 #ifdef USE_QSV
 extern hb_filter_object_t hb_filter_qsv;
@@ -487,7 +511,9 @@ DECLARE_MUX( mkv );
 DECLARE_MUX( avformat );
 
 void hb_muxmp4_process_subtitle_style( uint8_t *input,
-                                       uint8_t *output,
-                                       uint8_t *style, uint16_t *stylesize );
+                                       uint8_t **output,
+                                       uint8_t **style, uint16_t *stylesize );
 
 void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
+void hb_avfilter_combine( hb_list_t * list );
+

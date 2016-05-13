@@ -10,7 +10,7 @@
 namespace HandBrake.ApplicationServices.Services.Logging.Model
 {
     /// <summary>
-    /// The json message.
+    /// An Immutable Log Entry.
     /// </summary>
     public class LogMessage
     {
@@ -26,11 +26,15 @@ namespace HandBrake.ApplicationServices.Services.Logging.Model
         /// <param name="logLevel">
         /// The log level.
         /// </param>
-        public LogMessage(string content, LogMessageType messageType, LogLevel logLevel)
+        /// <param name="messageIndex">
+        /// The message Index.
+        /// </param>
+        public LogMessage(string content, LogMessageType messageType, LogLevel logLevel, long messageIndex)
         {
             this.Content = content;
             this.MessageType = messageType;
             this.LogLevel = logLevel;
+            this.MessageIndex = messageIndex;
         }
 
         /// <summary>
@@ -48,5 +52,10 @@ namespace HandBrake.ApplicationServices.Services.Logging.Model
         /// Gets the log level.
         /// </summary>
         public LogLevel LogLevel { get; private set; }
+
+        /// <summary>
+        /// Gets the message index.
+        /// </summary>
+        public long MessageIndex { get; private set; }
     }
 }

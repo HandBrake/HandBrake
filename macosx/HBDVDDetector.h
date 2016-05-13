@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (HBDVDDetector *)initWithPath: (NSString *)aPath NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, getter=isVideoDVD, readonly) BOOL videoDVD;
+@property (nonatomic, getter=isVideoBluRay, readonly) BOOL videoBluRay;
+
 @property (nonatomic, readonly, copy) NSString *devicePath;
 
 @end

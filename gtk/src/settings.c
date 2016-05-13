@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * settings.c
- * Copyright (C) John Stebbins 2008-2015 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
  * settings.c is free software.
  *
@@ -10,7 +10,18 @@
  * Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
+ * settings.c is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with main.c.  If not, write to:
+ *  The Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor
+ *  Boston, MA  02110-1301, USA.
  */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <glib.h>
@@ -43,7 +54,7 @@ ghb_settings_combo_double(const GhbValue *settings, const gchar *key)
     return ghb_lookup_combo_double(key, ghb_dict_get_value(settings, key));
 }
 
-const gchar*
+gchar*
 ghb_settings_combo_option(const GhbValue *settings, const gchar *key)
 {
     return ghb_lookup_combo_option(key, ghb_dict_get_value(settings, key));
@@ -411,7 +422,7 @@ ghb_widget_value(GtkWidget *widget)
     }
     else
     {
-        g_warning("Attempt to set unknown widget type: %s\n", name);
+        g_warning("Attempt to get unknown widget type, name %s", name);
         g_free(value);
         value = NULL;
     }
@@ -503,7 +514,7 @@ ghb_widget_to_setting(GhbValue *settings, GtkWidget *widget)
 void
 ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 {
-    GhbType type;
+    GType type;
     gchar *str, *tmp;
     gint ival;
     gdouble dval;
@@ -676,7 +687,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
     }
     else
     {
-        g_warning("Attempt to set unknown widget type %s", name);
+        g_warning("Attempt to set unknown widget type, name %s", name);
     }
     g_free(tmp);
 }

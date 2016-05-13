@@ -15,13 +15,28 @@ namespace HandBrake.ApplicationServices.Interop.Model
     public class BitrateLimits
     {
         /// <summary>
-        /// Gets or sets the inclusive lower limit for the bitrate.
+        /// Initializes a new instance of the <see cref="BitrateLimits"/> class.
         /// </summary>
-        public int Low { get; set; }
+        /// <param name="low">
+        /// The low.
+        /// </param>
+        /// <param name="high">
+        /// The high.
+        /// </param>
+        public BitrateLimits(int low, int high)
+        {
+            this.Low = low;
+            this.High = high;
+        }
 
         /// <summary>
-        /// Gets or sets the inclusive upper limit for the bitrate.
+        /// Gets the inclusive lower limit for the bitrate.
         /// </summary>
-        public int High { get; set; }
+        public int Low { get; private set; }
+
+        /// <summary>
+        /// Gets the inclusive upper limit for the bitrate.
+        /// </summary>
+        public int High { get; private set; }
     }
 }

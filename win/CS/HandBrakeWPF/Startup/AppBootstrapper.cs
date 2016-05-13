@@ -11,14 +11,8 @@ namespace HandBrakeWPF.Startup
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
 
     using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Services.Encode;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Services.Scan;
-    using HandBrake.ApplicationServices.Services.Scan.Interfaces;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Interfaces;
@@ -28,8 +22,13 @@ namespace HandBrakeWPF.Startup
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Queue;
     using HandBrakeWPF.Services.Queue.Interfaces;
+    using HandBrakeWPF.Services.Scan;
+    using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
 
     /// <summary>
     /// The Castle Bootstrapper
@@ -60,7 +59,6 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IUpdateService, UpdateService>();
             this.container.Singleton<IScan, LibScan>();
             this.container.Singleton<IEncode, LibEncode>();
-            this.container.Singleton<INotificationService, NotificationService>();
             this.container.Singleton<IPrePostActionService, PrePostActionService>();
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();

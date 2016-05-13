@@ -80,14 +80,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\EnumToDescConverter.cs" />
-    <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="Interop\EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Interop\HandBrakeEncoderHelpers.cs" />
+    <Compile Include="Interop\HandBrakeFilterHelpers.cs" />
     <Compile Include="Interop\HandBrakeInstance.cs" />
     <Compile Include="Interop\HandBrakeInstanceManager.cs" />
     <Compile Include="Interop\HandBrakeLanguagesHelper.cs" />
@@ -111,15 +110,16 @@
     <Compile Include="Interop\Helpers\InteropUtilities.cs" />
     <Compile Include="Interop\Helpers\NativeList.cs" />
     <Compile Include="Interop\Helpers\Utilities.cs" />
-    <Compile Include="Interop\Helpers\Validate.cs" />
     <Compile Include="Interop\Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
     <Compile Include="Interop\Json\Encode\QSV.cs" />
+    <Compile Include="Interop\Json\Filters\PresetTune.cs" />
     <Compile Include="Interop\Json\Presets\AudioList.cs" />
     <Compile Include="Interop\Json\Presets\HBPreset.cs" />
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
     <Compile Include="Interop\Json\Presets\PresetTransportContainer.cs" />
+    <Compile Include="Interop\Json\Queue\Task.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioTrack.cs" />
@@ -138,8 +138,10 @@
     <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
+    <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
+    <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />
     <Compile Include="Interop\Json\Scan\Color.cs" />
@@ -157,7 +159,6 @@
     <Compile Include="Interop\Model\BitrateLimits.cs" />
     <Compile Include="Interop\Model\Cropping.cs" />
     <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\Container.cs" />
     <Compile Include="Interop\Model\Encoding\Decomb.cs" />
     <Compile Include="Interop\Model\Encoding\Deinterlace.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="Interop\Model\Encoding\HBMixdown.cs" />
     <Compile Include="Interop\Model\Encoding\HBRate.cs" />
     <Compile Include="Interop\Model\Encoding\HBVideoEncoder.cs" />
-    <Compile Include="Interop\Model\Encoding\Mixdown.cs" />
     <Compile Include="Interop\Model\Encoding\PictureRotation.cs" />
     <Compile Include="Interop\Model\Encoding\ScaleMethod.cs" />
     <Compile Include="Interop\Model\Encoding\VideoEncoder.cs" />
@@ -179,61 +179,22 @@
     <Compile Include="Interop\Model\Size.cs" />
     <Compile Include="Interop\Model\SourceVideoInfo.cs" />
     <Compile Include="Interop\Model\VideoQualityLimits.cs" />
-    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Model\HBConfiguration.cs" />
     <Compile Include="Model\VideoScaler.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
-    <Compile Include="Services\Logging\LogHelper.cs" />
+    <Compile Include="Services\Logging\EventArgs\LogEventArgs.cs" />
+    <Compile Include="Services\Logging\Interfaces\ILog.cs" />
+    <Compile Include="Services\Logging\LogService.cs" />
     <Compile Include="Services\Logging\Model\LogLevel.cs" />
     <Compile Include="Services\Logging\Model\LogMessage.cs" />
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="Utilities\EnumHelper.cs" />
-    <Compile Include="Utilities\Execute.cs" />
-    <Compile Include="Utilities\ExtensionMethods.cs" />
-    <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
-    <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\VersionHelper.cs" />
-    <Compile Include="Utilities\Win32.cs" />
-    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
-    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
-    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
-    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
-    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
-    <Compile Include="Services\Scan\Model\Audio.cs" />
-    <Compile Include="Services\Scan\Model\Chapter.cs" />
-    <Compile Include="Services\Scan\Model\Source.cs" />
-    <Compile Include="Services\Scan\Model\Subtitle.cs" />
-    <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\Encode\EncodeBase.cs" />
-    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
-    <Compile Include="Services\Encode\LibEncode.cs" />
-    <Compile Include="Services\Scan\LibScan.cs" />
     <Compile Include="Utilities\CharCodesUtilities.cs" />
-    <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,8 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPictureController.h"
-#import "HBFilters.h"
-#import "HBPicture.h"
+
+@import HandBrakeKit.HBFilters;
+@import HandBrakeKit.HBPicture;
 
 static void *HBPictureControllerContext = &HBPictureControllerContext;
 
@@ -54,7 +55,7 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
     {
         for (NSString *keyPath in observerdKeyPaths)
         {
-            [self removeObserver:self forKeyPath:keyPath];
+            [self removeObserver:self forKeyPath:keyPath context:HBPictureControllerContext];
         }
 
     } @catch (NSException * __unused exception) {}
@@ -70,6 +71,11 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 
     [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
+}
+
+- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    return self.previewController.window.undoManager;
 }
 
 #pragma mark - KVO

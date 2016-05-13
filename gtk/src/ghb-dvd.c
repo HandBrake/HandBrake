@@ -1,40 +1,24 @@
-/***************************************************************************
- *            ghb-dvd.c
- *
- *  Sat Apr 19 11:12:53 2008
- *  Copyright  2008-2015  John Stebbins
- *  <john at stebbins dot name>
- ****************************************************************************/
-
 /*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * ghb-dvd.c
+ * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
  *
- * This program is distributed in the hope that it will be useful,
+ * ghb-dvd.c is free software.
+ *
+ * You may redistribute it and/or modify it under the terms of the
+ * GNU General Public License, as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * ghb-dvd.c is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Library General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
- */
-
-// Well, I waisted a bit of time on this.  It seems libhb has a function for
-// this that I hadn't discovered yet. hb_dvd_name().
-
-// I borrowed most of this from the udev utility vol_id
-// Here is the authors copyright.
-/*
- * volume_id - reads filesystem label and uuid
- *
- * Copyright (C) 2004 Kay Sievers <kay.sievers@vrfy.org>
- *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by the
- *  Free Software Foundation version 2 of the License.
+ * along with main.c.  If not, write to:
+ *  The Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor
+ *  Boston, MA  02110-1301, USA.
  */
 
 #if defined(_WIN32)

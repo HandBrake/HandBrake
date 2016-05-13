@@ -35,7 +35,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string AudioEncoder { get; set; }
 
         /// <summary>
-        /// Gets or sets the audio mixdown.
+        /// Gets or sets the audio mixdown. (ShortName)
         /// </summary>
         public string AudioMixdown { get; set; }
 

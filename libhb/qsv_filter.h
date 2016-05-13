@@ -29,7 +29,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_FILTER_H
 #define QSV_FILTER_H
 
-hb_buffer_t *link_buf_list( hb_filter_private_t *pv );
 void qsv_filter_close( av_qsv_context* qsv, AV_QSV_STAGE_TYPE vpp_type );
 
 #endif // QSV_FILTER_H

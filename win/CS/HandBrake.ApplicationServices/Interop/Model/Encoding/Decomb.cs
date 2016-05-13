@@ -16,19 +16,19 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// </summary>
     public enum Decomb
     {
-        [ShortName("off")]
-        Off = 0,
-
         [ShortName("default")]
-        Default = 2,
-
-        [ShortName("fast")]
-        Fast = 3,
+        Default,
 
         [ShortName("bob")]
-        Bob = 4,
+        Bob,
 
         [ShortName("custom")]
-        Custom = 1
+        Custom,
+
+        [ShortName("eedi2")]
+        EEDI2,
+
+        [ShortName("eedi2bob")]
+        EEDI2Bob
     }
 }

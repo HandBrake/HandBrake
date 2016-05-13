@@ -16,10 +16,14 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Windows;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+
+    using HandBrakeWPF.Utilities;
+
+    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// Audio Encoder Converter
@@ -51,6 +55,13 @@ namespace HandBrakeWPF.Converters.Audio
             {
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
+
+
+                if (!HandBrakeEncoderHelpers.AudioEncoders.Any(a => a.ShortName.Contains("fdk")))
+                {
+                    encoders.Remove(AudioEncoder.fdkaac);
+                    encoders.Remove(AudioEncoder.fdkheaac);
+                }
 
                 if (task != null && task.OutputFormat != OutputFormat.Mkv)
                 {

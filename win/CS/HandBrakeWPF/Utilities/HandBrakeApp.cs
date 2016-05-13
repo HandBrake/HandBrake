@@ -47,16 +47,14 @@ namespace HandBrakeWPF.Utilities
         {
             try
             {
-                Console.WriteLine("Trying to deleting File: {0}", file);
                 if (File.Exists(file))
                 {
                     File.Delete(file);
-                    Console.WriteLine("File was deleted successfully");
                 }
             }
             catch (Exception exc)
             {
-                Console.WriteLine("Unable to Delete File: {0} {1} {2}", file, Environment.NewLine, exc);
+                throw;
             }
         }
     }

@@ -34,6 +34,7 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using Newtonsoft.Json;
@@ -54,6 +55,8 @@ namespace HandBrake.ApplicationServices.Interop
         /// The number of MS between status polls when encoding.
         /// </summary>
         private const double EncodePollIntervalMs = 250;
+
+        private readonly ILog log = LogService.GetLogger();
 
         /// <summary>
         /// The native handle to the HandBrake instance.
@@ -268,7 +271,6 @@ namespace HandBrake.ApplicationServices.Interop
         public BitmapImage GetPreview(PreviewSettings settings, int previewNumber)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
-            Validate.NotNull(title, "GetPreview: Title should not have been null. This is probably a bug.");
 
             // Create the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
@@ -503,28 +505,21 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
-            LogHelper.LogMessage(new LogMessage(statusJson, LogMessageType.progressJson, LogLevel.debug));
+            this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
             if (state != null && state.State == NativeConstants.HB_STATE_SCANNING)
             {
                 if (this.ScanProgress != null)
                 {
-                    this.ScanProgress(this, new ScanProgressEventArgs
-                    {
-                        Progress = state.Scanning.Progress, 
-                        CurrentPreview = state.Scanning.Preview, 
-                        Previews = state.Scanning.PreviewCount, 
-                        CurrentTitle = state.Scanning.Title, 
-                        Titles = state.Scanning.TitleCount
-                    });
+                    this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
             else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
             {
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-                LogHelper.LogMessage(new LogMessage(scanJson, LogMessageType.scanJson, LogLevel.debug));
+                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Trace);
                 this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
                 this.featureTitle = this.titles.MainFeature;
 
@@ -549,7 +544,7 @@ namespace HandBrake.ApplicationServices.Interop
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
 
-            LogHelper.LogMessage(new LogMessage(statusJson, LogMessageType.progressJson, LogLevel.debug));
+            this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
@@ -557,16 +552,8 @@ namespace HandBrake.ApplicationServices.Interop
             {
                 if (this.EncodeProgress != null)
                 {
-                    var progressEventArgs = new EncodeProgressEventArgs
-                    {
-                        FractionComplete = state.Working.Progress, 
-                        CurrentFrameRate = state.Working.Rate, 
-                        AverageFrameRate = state.Working.RateAvg, 
-                        EstimatedTimeLeft = new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
-                        PassId = state.Working.PassID,
-                        Pass = state.Working.Pass,
-                        PassCount = state.Working.PassCount
-                    };
+                    var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        state.Working.PassID, state.Working.Pass, state.Working.PassCount);
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
@@ -577,10 +564,9 @@ namespace HandBrake.ApplicationServices.Interop
 
                 if (this.EncodeCompleted != null)
                 {
-                    this.EncodeCompleted(this, new EncodeCompletedEventArgs
-                    {
-                        Error = state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE
-                    });
+                    this.EncodeCompleted(
+                        this,
+                        new EncodeCompletedEventArgs(state.WorkDone.Error != (int)hb_error_code.HB_ERROR_NONE));
                 }
             }
         }

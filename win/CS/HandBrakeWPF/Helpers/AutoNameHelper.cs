@@ -15,13 +15,13 @@ namespace HandBrakeWPF.Helpers
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model;
-    using HandBrake.ApplicationServices.Services.Encode.Model.Models;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Services.Interfaces;
+
+    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// The Destination AutoName Helper
@@ -116,7 +116,7 @@ namespace HandBrakeWPF.Helpers
                     switch (userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                     {
                         case 0: // Automatic
-                            destinationFilename += task.IncludeChapterMarkers || task.RequiresM4v ? ".m4v" : ".mp4";
+                            destinationFilename += task.IncludeChapterMarkers || MP4Helper.RequiresM4v(task) ? ".m4v" : ".mp4";
                             break;
                         case 1: // Always MP4
                             destinationFilename += ".mp4";

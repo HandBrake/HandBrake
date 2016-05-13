@@ -20,24 +20,47 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     public class HBVideoEncoder
     {
         /// <summary>
-        /// Gets or sets the compatible containers.
+        /// Initializes a new instance of the <see cref="HBVideoEncoder"/> class.
         /// </summary>
-        public int CompatibleContainers { get; set; }
+        /// <param name="compatibleContainers">
+        /// The compatible containers.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="shortName">
+        /// The short name.
+        /// </param>
+        public HBVideoEncoder(int compatibleContainers, string displayName, int id, string shortName)
+        {
+            this.CompatibleContainers = compatibleContainers;
+            this.DisplayName = displayName;
+            this.Id = id;
+            this.ShortName = shortName;
+        }
 
         /// <summary>
-        /// Gets or sets the display name.
+        /// Gets the compatible containers.
         /// </summary>
-        public string DisplayName { get; set; }
+        public int CompatibleContainers { get; private set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets the display name.
         /// </summary>
-        public int Id { get; set; }
+        public string DisplayName { get; private set; }
 
         /// <summary>
-        /// Gets or sets the short name.
+        /// Gets the id.
         /// </summary>
-        public string ShortName { get; set; }
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// Gets the short name.
+        /// </summary>
+        public string ShortName { get; private set; }
 
         /// <summary>
         /// Gets the list of presets this encoder supports. (null if the encoder doesn't support presets)

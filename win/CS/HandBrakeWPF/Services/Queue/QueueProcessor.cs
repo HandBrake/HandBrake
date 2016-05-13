@@ -14,17 +14,24 @@ namespace HandBrakeWPF.Services.Queue
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Windows;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Encode.EventArgs;
-    using HandBrake.ApplicationServices.Services.Encode.Interfaces;
-    using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Factories;
+    using HandBrakeWPF.Services.Encode.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
+    using HandBrakeWPF.Utilities;
 
+    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
+    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
@@ -55,6 +62,9 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         private bool clearCompleted;
 
+        private readonly IUserSettingService userSettingService;
+        private readonly IErrorService errorService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -65,11 +75,19 @@ namespace HandBrakeWPF.Services.Queue
         /// <param name="encodeService">
         /// The encode Service.
         /// </param>
+        /// <param name="userSettingService">
+        /// The user settings service.
+        /// </param>
+        /// <param name="errorService">
+        /// The Error Service.
+        /// </param>
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IEncode encodeService)
+        public QueueProcessor(IEncode encodeService, IUserSettingService userSettingService, IErrorService errorService)
         {
+            this.userSettingService = userSettingService;
+            this.errorService = errorService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -127,6 +145,8 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         public event EventHandler QueuePaused;
 
+        public event EventHandler LowDiskspaceDetected;
+
         #endregion
 
         #region Properties
@@ -139,6 +159,17 @@ namespace HandBrakeWPF.Services.Queue
             get
             {
                 return this.queue.Count(item => item.Status == QueueItemStatus.Waiting);
+            }
+        }
+
+        /// <summary>
+        /// The number of errors detected.
+        /// </summary>
+        public int ErrorCount
+        {
+            get
+            {
+                return this.queue.Count(item => item.Status == QueueItemStatus.Error);
             }
         }
 
@@ -208,6 +239,25 @@ namespace HandBrakeWPF.Services.Queue
                 List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
                 var serializer = new XmlSerializer(typeof(List<QueueTask>));
                 serializer.Serialize(strm, tasks);
+                strm.Close();
+                strm.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Export the Queue the standardised JSON format.
+        /// </summary>
+        public void ExportJson(string exportPath)
+        {
+            List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
+            List<EncodeTask> workUnits = jobs.Select(job => job.Task).ToList();
+            HBConfiguration config = HBConfigurationFactory.Create(); // Default to current settings for now. These will hopefully go away in the future.
+
+            string json = QueueFactory.GetQueueJson(workUnits, config);
+
+            using (var strm = new StreamWriter(exportPath, false))
+            {
+                strm.Write(json);
                 strm.Close();
                 strm.Dispose();
             }
@@ -404,7 +454,7 @@ namespace HandBrakeWPF.Services.Queue
                                     // Reset InProgress/Error to Waiting so it can be processed
                                     if (item.Status == QueueItemStatus.InProgress)
                                     {
-                                        item.Status = QueueItemStatus.Waiting;
+                                        item.Status = QueueItemStatus.Error;
                                     }
 
                                     this.queue.Add(item);
@@ -578,6 +628,11 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = false;
         }
 
+        protected virtual void OnLowDiskspaceDetected()
+        {
+            this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
+        }
+        
         /// <summary>
         /// Run through all the jobs on the queue.
         /// </summary>
@@ -586,6 +641,22 @@ namespace HandBrakeWPF.Services.Queue
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace))
+                {
+                    string drive = Path.GetPathRoot(job.Task.Destination);
+                    if (drive != null)
+                    {
+                        DriveInfo c = new DriveInfo(drive);
+                        if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
+                        {
+                            job.Status = QueueItemStatus.Waiting;
+                            this.InvokeQueueChanged(EventArgs.Empty);
+                            this.OnLowDiskspaceDetected();
+                            return; // Don't start the next job.
+                        }
+                    }
+                }
+
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.EncodeService.Start(job.Task, job.Configuration);
             }
@@ -600,5 +671,6 @@ namespace HandBrakeWPF.Services.Queue
         }
 
         #endregion
+
     }
 }

@@ -424,9 +424,9 @@ msgid "About HandBrake"
 msgstr "Om HandBrake"
 
 msgid ""
-"Copyright © 2008 - 2013 John Stebbins\n"
-"Copyright © 2004 - 2013, HandBrake Devs"
-msgstr "Kopibeskyttet © 2008 - 2013 John Stebbins\nKopibeskyttet © 2004 - 2013 HandBrake Devs"
+"Copyright © 2008 - 2016 John Stebbins\n"
+"Copyright © 2004 - 2016, HandBrake Devs"
+msgstr "Kopibeskyttet © 2008 - 2016 John Stebbins\nKopibeskyttet © 2004 - 2016 HandBrake Devs"
 
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."

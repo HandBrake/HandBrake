@@ -73,15 +73,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
+        internal static HBVideoEncoder NativeToVideoEncoder(hb_encoder_s encoder)
         {
-            return new HBVideoEncoder
-            {
-                Id = encoder.codec, 
-                ShortName = encoder.short_name, 
-                DisplayName = encoder.name, 
-                CompatibleContainers = encoder.muxers
-            };
+            return new HBVideoEncoder(encoder.muxers, encoder.name, encoder.codec, encoder.short_name);
         }
 
         /// <summary>
@@ -93,20 +87,17 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
+        internal static HBAudioEncoder NativeToAudioEncoder(hb_encoder_s encoder)
         {
-            var result = new HBAudioEncoder
-                             {
-                                 Id = encoder.codec, 
-                                 ShortName = encoder.short_name, 
-                                 DisplayName = encoder.name, 
-                                 CompatibleContainers = encoder.muxers,
-                                 QualityLimits = HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec), 
-                                 DefaultQuality = HBFunctions.hb_audio_quality_get_default((uint)encoder.codec), 
-                                 CompressionLimits = HandBrakeEncoderHelpers.GetAudioCompressionLimits(encoder.codec), 
-                                 DefaultCompression =
-                                 HBFunctions.hb_audio_compression_get_default((uint)encoder.codec)
-                             };
+            var result = new HBAudioEncoder(
+                encoder.muxers,
+                HandBrakeEncoderHelpers.GetAudioCompressionLimits(encoder.codec),
+                HBFunctions.hb_audio_compression_get_default((uint)encoder.codec),
+                HBFunctions.hb_audio_quality_get_default((uint)encoder.codec),
+                encoder.name,
+                encoder.codec,
+                HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec),
+                encoder.short_name);
 
             return result;
         }
@@ -120,13 +111,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted rate object.
         /// </returns>
-        public static HBRate NativeToRate(hb_rate_s rate)
+        internal static HBRate NativeToRate(hb_rate_s rate)
         {
-            return new HBRate
-                {
-                    Name = rate.name, 
-                    Rate = rate.rate
-                };
+            return new HBRate(rate.name, rate.rate);
         }
 
         /// <summary>
@@ -138,14 +125,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted model.
         /// </returns>
-        public static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
+        internal static HBMixdown NativeToMixdown(hb_mixdown_s mixdown)
         {
-            return new HBMixdown
-                {
-                    Id = mixdown.amixdown, 
-                    ShortName = mixdown.short_name, 
-                    DisplayName = mixdown.name
-                };
+            return new HBMixdown(mixdown.name, mixdown.amixdown, mixdown.short_name);
         }
 
         /// <summary>
@@ -157,15 +139,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted structure.
         /// </returns>
-        public static HBContainer NativeToContainer(hb_container_s container)
+        internal static HBContainer NativeToContainer(hb_container_s container)
         {
-            return new HBContainer
-                {
-                    DisplayName = container.name, 
-                    ShortName = container.short_name, 
-                    DefaultExtension = container.default_extension, 
-                    Id = container.format
-                };
+            return new HBContainer(container.default_extension, container.name, container.format, container.short_name);
         }
 
         /// <summary>
@@ -177,16 +153,11 @@ namespace HandBrake.ApplicationServices.Interop
         /// <returns>
         /// The converted structure.
         /// </returns>
-        public static Language NativeToLanguage(iso639_lang_t language)
+        internal static Language NativeToLanguage(iso639_lang_t language)
         {
             string englishName = InteropUtilities.ToStringFromUtf8Ptr(language.eng_name);
             string nativeName = InteropUtilities.ToStringFromUtf8Ptr(language.native_name);
-            return new Language
-                {
-                    Code = language.iso639_2, 
-                    EnglishName = englishName, 
-                    NativeName = nativeName
-                };
+            return new Language(englishName, nativeName, language.iso639_2);
         }
 
         /// <summary>
