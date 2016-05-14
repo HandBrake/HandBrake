@@ -32,10 +32,12 @@
         <TextBlock Text="{Binding SubText}" Margin="10,0,10,15" Grid.Row="1" Visibility="{Binding SubTextVisible, Converter={StaticResource boolToVisConverter}}"
                    TextWrapping="Wrap"/>
 
-        <ScrollViewer  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,10,10" VerticalScrollBarVisibility="Auto" >
-            <ContentControl x:Name="ContentViewModel"/>
-        </ScrollViewer>
-        
+        <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Grid.Row="2" Margin="0,0,0,0">
+            <ScrollViewer  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalScrollBarVisibility="Auto"   >
+                <ContentControl x:Name="ContentViewModel"/>
+            </ScrollViewer>
+        </Border>
+
         <Border BorderBrush="DarkGray"  Grid.Row="3"  BorderThickness="0,1,0,0"  Margin="0,20,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>

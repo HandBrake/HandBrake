@@ -115,6 +115,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose Behaviors:.
+        /// </summary>
+        public static string AudioDefaultView_Behaviours {
+            get {
+                return ResourceManager.GetString("AudioDefaultView_Behaviours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow passthru of:.
         /// </summary>
         public static string AudioView_AllowPassThruOf {

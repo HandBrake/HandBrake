@@ -875,4 +875,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>The file format entered contained invalid characters. These have been removed. </value>
   </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>Choose Behaviors:</value>
+  </data>
 </root>

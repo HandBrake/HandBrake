@@ -23,101 +23,109 @@
         <Audio:AudioTrackDefaultBehaviourConverter x:Key="audioTrackDefaultBehaviourConverter" />
         <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
         <Audio:AudioRateTypeConverter x:Key="audioRateTypeConverter" />
-        <Audio:AudioMixdownConverter x:Key="audioMixdownConverter" />
     </UserControl.Resources>
 
 
-    <Grid VerticalAlignment="Top">
+    <Grid VerticalAlignment="Top" Margin="10,0,0,0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Row 2 -->
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,0,0">
+        <!-- Behaviour Dropowns -->
+        <Grid Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <Grid Margin="0,0,0,0" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <!-- Audio -->
+            <TextBlock Text="{x:Static Properties:ResourcesUI.AudioDefaultView_Behaviours}" FontWeight="Bold" Margin="0,10,0,5" />
 
-                <!-- Audio -->
-                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
-                <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
+            <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSelectionBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+            <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
                           ItemsSource="{Binding AudioBehaviourModeList, Converter={StaticResource audioBehaviourConverter}}" 
                           SelectedItem="{Binding AudioBehaviours.SelectedBehaviour, Converter={StaticResource audioBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
 
+            <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="2" Margin="0,5,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+            <ComboBox Name="audioTrackBeahaviorMode" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"
+                           ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
+                           SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,5,5,0" />
+        </Grid>
 
-                <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_TrackSettingDefaultBehaviour}" Grid.Column="0" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
-                <ComboBox Name="audioTrackBeahaviorMode" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"
-                          ItemsSource="{Binding AudioTrackDefaultBehaviourModeList, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" 
-                          SelectedItem="{Binding AudioBehaviours.SelectedTrackDefaultBehaviour, Converter={StaticResource audioTrackDefaultBehaviourConverter}}" Width="210" Margin="0,5,5,0" />
-            </Grid>
+        <!-- Language Selection -->
+        <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="0,10,0,0" Grid.Row="1" Grid.Column="0"  />
+        <Grid Margin="20,5,0,0" Grid.Row="2" Grid.Column="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="5,10,0,0" />
+            <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-            <Grid Margin="20,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Horizontal">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
-                            <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
+                    <StackPanel Orientation="Vertical" Grid.Column="0">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
+                        <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120" />
+                    </StackPanel>
+
+                    <DockPanel Grid.Column="1" Margin="10,0,10,0">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                            <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                            <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                         </StackPanel>
+                    </DockPanel>
 
-                        <DockPanel Grid.Column="1" Margin="10,0,10,0">
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
-                            </StackPanel>
-                        </DockPanel>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
-                            <ListBox Name="selectedLangauges" ItemsSource="{Binding AudioBehaviours.SelectedLangauges}" 
+                    <StackPanel Orientation="Vertical" Grid.Column="2">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
+                        <ListBox Name="selectedLangauges" ItemsSource="{Binding AudioBehaviours.SelectedLangauges}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120"
                                              dd:DragDrop.DropHandler="{Binding}"
                                              dd:DragDrop.IsDragSource="True"
                                              dd:DragDrop.IsDropTarget="True"/>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </Grid>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Grid>
 
+
+        <!-- Auto Passthru -->
+        <StackPanel Orientation="Vertical" Margin="10,0,0,5"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Left">
             <TextBlock Text="{x:Static Properties:ResourcesUI.AudioView_AutoPassthruBehaviour}" FontWeight="Bold" Margin="0,10,0,5" />
-            <StackPanel Margin="10,5,0,0"
+            <StackPanel Margin="5,10,0,0"
                         Orientation="Vertical">
                 <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_WhenAutoPassthru}" VerticalAlignment="Center" />
                 <TextBlock Margin="5,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_AllowPassThruOf}" VerticalAlignment="Center" />
             </StackPanel>
-            <StackPanel Margin="15,5,0,0"
-                        Orientation="Horizontal">
+            <StackPanel Margin="10,10,0,0" 
+                        Orientation="Vertical">
                 <CheckBox Margin="0,0,5,0"
                           Content="MP3" VerticalAlignment="Center"    
                           IsChecked="{Binding AudioAllowMP3Pass}" />
@@ -142,8 +150,10 @@
                 <CheckBox Margin="0,0,5,0"
                           Content="FLAC" VerticalAlignment="Center"
                           IsChecked="{Binding AudioAllowFlacPass}" />
+            </StackPanel>
 
-                <TextBlock Margin="15,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="10,0,5,0" Text="{x:Static Properties:ResourcesUI.AudioView_OtherwiseFallbackEncoder}" />
 
                 <ComboBox VerticalAlignment="Center" Width="105" Height="22" Margin="5,0,5,0">
                     <ComboBox.SelectedItem>
@@ -160,160 +170,151 @@
                 </ComboBox>
 
             </StackPanel>
+        </StackPanel>
 
 
-            <!-- Row 2 -->
-            <TextBlock Text="Automatically add Tracks" FontWeight="Bold" Margin="0,10,0,5" />
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Add Track" cal:Message.Attach="[Event Click] = [Action AddTrack]" Margin="10,0,10,0" Padding="8,2"/>
-                <Button Content="Clear" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
-            </StackPanel>
-            
-            <ListBox VerticalAlignment="Stretch" MinHeight="50"
-                 Margin="10,10,10,10"
+        <!-- Tracks -->
+        <TextBlock Text="Automatically add Tracks" FontWeight="Bold" Margin="0,10,0,5" Grid.Row="3" Grid.Column="0" />
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0">
+            <Button Content="Add Track" cal:Message.Attach="[Event Click] = [Action AddTrack]" Margin="10,0,10,0" Padding="8,2"/>
+            <Button Content="Clear" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
+        </StackPanel>
+
+        <ListBox VerticalAlignment="Stretch" MinHeight="50"
+                 Margin="10,10,10,10" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding BehaviourTracks}"
                  SelectionMode="Extended">
 
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="Margin" Value="0,0,0,1" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="0,0,0,1" />
+                </Style>
+            </ListBox.ItemContainerStyle>
 
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
 
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Settings  -->
+                        <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,5,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <!--  Marker  -->
-                            <!--<Image Grid.Column="0" Grid.Row="0"
-                               Width="16"
-                               Height="16"
-                               Margin="8,0,8,0"
-                               Source="Images/Movies.png" />-->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="28" />
+                            </Grid.RowDefinitions>
 
-                            <!--  Settings  -->
-                            <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,5,0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                            <!--  Row 1  -->
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Codec}" />
+                            <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
+                                <ComboBox.SelectedItem>
+                                    <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                                        <Binding Path="Encoder" />
+                                    </MultiBinding>
+                                </ComboBox.SelectedItem>
+                                <ComboBox.ItemsSource>
+                                    <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                                        <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                    </MultiBinding>
+                                </ComboBox.ItemsSource>
+                            </ComboBox>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="28" />
-                                </Grid.RowDefinitions>
-
-                                <!--  Row 1  -->
-                                <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Codec}" />
-                                <ComboBox Grid.Column="3" Width="100" Height="22" Margin="5,0,5,0">
-                                    <ComboBox.SelectedItem>
-                                        <MultiBinding Converter="{StaticResource audioEncoderConverter}">
-                                            <Binding Path="Encoder" />
-                                        </MultiBinding>
-                                    </ComboBox.SelectedItem>
-                                    <ComboBox.ItemsSource>
-                                        <MultiBinding Converter="{StaticResource audioEncoderConverter}">
-                                            <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
-                                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
-                                        </MultiBinding>
-                                    </ComboBox.ItemsSource>
-                                </ComboBox>
-
-                                <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Column="4" Height="22" Width="65" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding AudioEncoderRateTypes, Converter={StaticResource audioRateTypeConverter}}"
                                       SelectedItem="{Binding EncoderRateType, Converter={StaticResource audioRateTypeConverter}}"
                                       Visibility="{Binding IsRateTypeVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
+                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding EncoderQualityValues}"
                                       SelectedItem="{Binding Quality}"
                                       Visibility="{Binding IsQualityVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                                <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
+                            <ComboBox Grid.Column="5" Width="55" Height="22" Margin="5,0,5,0" ItemsSource="{Binding Bitrates}"
                                       SelectedItem="{Binding Bitrate}"
                                       Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                                <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}"
+                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                                <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
+                            <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.Mixdowns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding MixDown}"
                                       DisplayMemberPath="DisplayName"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
 
-                                <TextBlock VerticalAlignment="Center" Grid.Column="8" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Samplerate}"
+                            <TextBlock VerticalAlignment="Center" Grid.Column="8" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Samplerate}"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                                <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
+                            <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding SampleRateDisplayValue}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
 
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_DRC}" Grid.Column="10" 
+                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_DRC}" Grid.Column="10" 
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                                <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" 
+                            <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" 
                                                     Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                                <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Gain}" Grid.Column="12" 
+                            <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Gain}" Grid.Column="12" 
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                                <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" 
+                            <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" 
                                                     Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
                                                     Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
 
-                            </Grid>
-
-                            <!--  Delete  -->
-                            <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
-                                <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/delete.png">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseDown">
-                                            <cal:ActionMessage MethodName="RemoveTrack">
-                                                <cal:Parameter Value="{Binding}" />
-                                            </cal:ActionMessage>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Image>
-                            </StackPanel>
-
                         </Grid>
 
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                        <!--  Delete  -->
+                        <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/delete.png">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <cal:ActionMessage MethodName="RemoveTrack">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Image>
+                        </StackPanel>
 
-        </StackPanel>
+                    </Grid>
 
-
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
+
 </UserControl>
