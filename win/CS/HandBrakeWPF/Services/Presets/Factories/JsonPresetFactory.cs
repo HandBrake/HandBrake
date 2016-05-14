@@ -533,7 +533,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.AudioTrackSelectionBehavior = EnumHelper<AudioBehaviourModes>.GetShortName(export.AudioTrackBehaviours.SelectedBehaviour);
             preset.AudioSecondaryEncoderMode = export.AudioTrackBehaviours.SelectedTrackDefaultBehaviour == AudioTrackDefaultsMode.FirstTrack; // TODO -> We don't support AllTracks yet in other GUIs.
             preset.AudioList = new List<AudioList>();
-            foreach (var item in export.Task.AudioTracks)
+            foreach (var item in export.AudioTrackBehaviours.BehaviourTracks)
             {
                 AudioList track = new AudioList
                 {
@@ -541,9 +541,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     AudioCompressionLevel = 0, // TODO
                     AudioDitherMethod = null,  // TODO
                     AudioEncoder = EnumHelper<AudioEncoder>.GetShortName(item.Encoder),
-                    AudioMixdown = item.MixDown,
+                    AudioMixdown = item.MixDown != null ? item.MixDown.ShortName : "dpl2",
                     AudioNormalizeMixLevel = false, // TODO
-                    AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(),  // TODO check formatting.
+                    AudioSamplerate = item.SampleRate == 0 ? "auto" : item.SampleRate.ToString(CultureInfo.InvariantCulture),  // TODO check formatting.
                     AudioTrackDRCSlider = item.DRC,
                     AudioTrackGainSlider = item.Gain,
                     AudioTrackQuality = item.Quality ?? 0,
