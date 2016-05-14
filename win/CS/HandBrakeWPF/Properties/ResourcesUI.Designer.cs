@@ -259,7 +259,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Track Setting Default Behaviour:.
+        ///   Looks up a localized string similar to For Additional Tracks:.
         /// </summary>
         public static string AudioView_TrackSettingDefaultBehaviour {
             get {

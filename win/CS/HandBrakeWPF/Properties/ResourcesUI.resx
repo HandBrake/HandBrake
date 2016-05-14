@@ -367,7 +367,7 @@
     <value>Track Selection Behaviour:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>Track Setting Default Behaviour:</value>
+    <value>For Additional Tracks:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
     <value>When 'Auto Passthru' is selected as the audio codec.</value>
