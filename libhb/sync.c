@@ -60,6 +60,7 @@ typedef struct
     hb_list_t         * delta_list;
     int64_t             pts_slip;
     double              next_pts;
+    double              last_pts;
 
     // frame statistics
     int64_t             first_pts;
@@ -653,6 +654,31 @@ static void fixAudioOverlap( sync_stream_t * stream )
     }
 }
 
+static void fixSubtitleOverlap( sync_stream_t * stream )
+{
+    hb_buffer_t * buf;
+
+    buf = hb_list_item(stream->in_queue, 0);
+    if (buf == NULL || (buf->s.flags & HB_BUF_FLAG_EOS) ||
+                       (buf->s.flags & HB_BUF_FLAG_EOF))
+    {
+        // marker to indicate the end of a subtitle
+        return;
+    }
+    // Only SSA subs can overlap
+    if (stream->subtitle.subtitle->source != SSASUB &&
+        buf->s.start <= stream->last_pts)
+    {
+        int64_t       overlap;
+        overlap = stream->last_pts - buf->s.start;
+        hb_log("sync: subtitle 0x%x time went backwards %d ms, PTS %"PRId64"",
+               stream->subtitle.subtitle->id, (int)overlap / 90,
+               buf->s.start);
+        hb_list_rem(stream->in_queue, buf);
+        hb_buffer_close(&buf);
+    }
+}
+
 static void fixStreamTimestamps( sync_stream_t * stream )
 {
     // Fix gaps and overlaps in queue
@@ -666,6 +692,10 @@ static void fixStreamTimestamps( sync_stream_t * stream )
     {
         dejitterVideo(stream);
         fixVideoOverlap(stream);
+    }
+    else if (stream->type == SYNC_TYPE_SUBTITLE)
+    {
+        fixSubtitleOverlap(stream);
     }
 }
 
@@ -739,7 +769,7 @@ static void streamFlush( sync_stream_t * stream )
                     continue;
                 }
             }
-            int64_t subtitle_next_pts = AV_NOPTS_VALUE;
+            int64_t subtitle_last_pts = AV_NOPTS_VALUE;
             if (stream->type == SYNC_TYPE_SUBTITLE)
             {
                 buf = sanitizeSubtitle(stream, buf);
@@ -753,7 +783,7 @@ static void streamFlush( sync_stream_t * stream )
                 hb_buffer_t * sub = buf;
                 while (sub != NULL)
                 {
-                    subtitle_next_pts = sub->s.start;
+                    subtitle_last_pts = sub->s.start;
                     sub = sub->next;
                 }
             }
@@ -762,11 +792,13 @@ static void streamFlush( sync_stream_t * stream )
             {
                 buf->s.start = stream->next_pts;
                 buf->s.stop  = stream->next_pts + buf->s.duration;
+                stream->last_pts = stream->next_pts;
                 stream->next_pts += buf->s.duration;
             }
             else
             {
-                stream->next_pts = subtitle_next_pts;
+                stream->next_pts =
+                stream->last_pts = subtitle_last_pts;
             }
 
             if (buf->s.stop > 0)
@@ -1097,7 +1129,7 @@ static void OutputBuffer( sync_common_t * common )
                 continue;
             }
         }
-        int64_t subtitle_next_pts = AV_NOPTS_VALUE;
+        int64_t subtitle_last_pts = AV_NOPTS_VALUE;
         if (out_stream->type == SYNC_TYPE_SUBTITLE)
         {
             buf = sanitizeSubtitle(out_stream, buf);
@@ -1111,7 +1143,7 @@ static void OutputBuffer( sync_common_t * common )
             hb_buffer_t * sub = buf;
             while (sub != NULL)
             {
-                subtitle_next_pts = sub->s.start;
+                subtitle_last_pts = sub->s.start;
                 sub = sub->next;
             }
         }
@@ -1120,11 +1152,13 @@ static void OutputBuffer( sync_common_t * common )
         {
             buf->s.start = out_stream->next_pts;
             buf->s.stop  = out_stream->next_pts + buf->s.duration;
+            out_stream->last_pts = out_stream->next_pts;
             out_stream->next_pts += buf->s.duration;
         }
         else
         {
-            out_stream->next_pts = subtitle_next_pts;
+            out_stream->next_pts =
+            out_stream->last_pts = subtitle_last_pts;
         }
 
         if (buf->s.stop > 0)
@@ -1307,6 +1341,7 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->type        = SYNC_TYPE_AUDIO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_pts    = (int64_t)AV_NOPTS_VALUE;
     pv->stream->audio.audio = audio;
     pv->stream->fifo_out    = w->fifo_out;
 
@@ -1378,6 +1413,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->type              = SYNC_TYPE_SUBTITLE;
     pv->stream->first_pts         = AV_NOPTS_VALUE;
     pv->stream->next_pts          = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
     pv->stream->fifo_out          = subtitle->fifo_out;
 
@@ -1473,6 +1509,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->type        = SYNC_TYPE_VIDEO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_pts    = (int64_t)AV_NOPTS_VALUE;
     pv->stream->fifo_out    = job->fifo_sync;
 
     w->fifo_in            = job->fifo_raw;
