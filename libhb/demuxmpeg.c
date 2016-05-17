@@ -71,7 +71,8 @@ static inline void restore_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 
 /* Basic MPEG demuxer */
 
-static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es, hb_psdemux_t* state )
+static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
+                          hb_psdemux_t* state )
 {
     hb_buffer_t * buf_es;
     int           pos = 0;
@@ -248,8 +249,8 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es, hb_psde
 // stripped off and buf has all the info gleaned from them: id is set,
 // start contains the pts (if any), renderOffset contains the dts (if any)
 // and stop contains the pcr (if it changed).
-static void demux_mpeg(hb_buffer_t *buf, hb_buffer_list_t *list_es,
-                   hb_psdemux_t *state, int tolerance)
+static void demux_mpeg( hb_buffer_t *buf, hb_buffer_list_t *list_es,
+                        hb_psdemux_t *state, int tolerance )
 {
     while ( buf )
     {
@@ -347,14 +348,16 @@ static void demux_mpeg(hb_buffer_t *buf, hb_buffer_list_t *list_es,
     }
 }
 
-static void demux_ts(hb_buffer_t *buf, hb_buffer_list_t *list_es, hb_psdemux_t *state)
+static void demux_ts( hb_buffer_t *buf, hb_buffer_list_t *list_es,
+                      hb_psdemux_t *state )
 {
     // Distance between PCRs in TS is up to 100ms, but we have seen
     // streams that exceed this, so allow up to 300ms.
     demux_mpeg(buf, list_es, state, 300);
 }
 
-static void demux_ps(hb_buffer_t *buf, hb_buffer_list_t *list_es, hb_psdemux_t *state)
+static void demux_ps( hb_buffer_t *buf, hb_buffer_list_t *list_es,
+                      hb_psdemux_t *state )
 {
     // Distance between SCRs in PS is up to 700ms
     demux_mpeg(buf, list_es, state, 700);
@@ -363,7 +366,8 @@ static void demux_ps(hb_buffer_t *buf, hb_buffer_list_t *list_es, hb_psdemux_t *
 // "null" demuxer (makes a copy of input buf & returns it in list)
 // used when the reader for some format includes its own demuxer.
 // for example, ffmpeg.
-static void demux_null( hb_buffer_t * buf, hb_buffer_list_t * list_es, hb_psdemux_t* state )
+static void demux_null( hb_buffer_t * buf, hb_buffer_list_t * list_es,
+                        hb_psdemux_t* state )
 {
     while ( buf )
     {
