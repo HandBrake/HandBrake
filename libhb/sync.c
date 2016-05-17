@@ -686,6 +686,10 @@ static void streamFlush( sync_stream_t * stream )
 {
     while (hb_list_count(stream->in_queue) > 0)
     {
+        if (!stream->common->found_first_pts)
+        {
+            checkFirstPts(stream->common);
+        }
         fixStreamTimestamps(stream);
         hb_buffer_t * buf = hb_list_item(stream->in_queue, 0);
         if (buf != NULL)
