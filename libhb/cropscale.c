@@ -23,10 +23,7 @@ struct hb_filter_private_s
     int                 height_out;
     int                 crop[4];
     
-    /* OpenCL/DXVA2 */
-    int                 use_dxva;
-    int                 use_decomb;
-    int                 use_detelecine;
+    /* OpenCL */
     hb_oclscale_t      *os; //ocl scaler handler
 
     struct SwsContext * context;
@@ -75,11 +72,7 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->width_out = init->geometry.width - (init->crop[2] + init->crop[3]);
     pv->height_out = init->geometry.height - (init->crop[0] + init->crop[1]);
 
-    /* OpenCL/DXVA2 */
-    pv->use_dxva       = hb_hwd_enabled(init->job->h);
-    pv->use_decomb     = init->job->use_decomb;
-    pv->use_detelecine = init->job->use_detelecine;
-
+    /* OpenCL */
     if (pv->job->use_opencl && pv->job->title->opencl_support)
     {
         pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
@@ -253,13 +246,9 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
         pv->height_out = in->f.height - (pv->crop[0] + pv->crop[1]);
     }
 
-    /* OpenCL/DXVA2 */
-    if ((!pv->use_dxva &&
-         !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
-         in->f.fmt == pv->pix_fmt_out && in->f.width == pv->width_out &&
-         in->f.height == pv->height_out) ||
-        (pv->use_dxva && !pv->use_decomb && !pv->use_detelecine &&
-         in->f.width  == pv->width_out && in->f.height == pv->height_out))
+    if (!pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
+        in->f.fmt == pv->pix_fmt_out && in->f.width == pv->width_out &&
+        in->f.height == pv->height_out)
     {
         *buf_out = in;
         *buf_in  = NULL;

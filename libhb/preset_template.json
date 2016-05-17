@@ -90,7 +90,6 @@
         "VideoFramerate": "auto",
         "VideoFramerateMode": "vfr",
         "VideoGrayScale": false,
-        "VideoHWDecode": false,
         "VideoScaler": "swscale",
         "VideoPreset": "medium",
         "VideoTune": "none",

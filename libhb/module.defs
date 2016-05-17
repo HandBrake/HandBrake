@@ -37,10 +37,6 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-ifeq (1,$(FEATURE.hwd))
-LIBHB.GCC.D += USE_HWD
-endif
-
 ifeq (1,$(FEATURE.libav_aac))
 LIBHB.GCC.D += USE_LIBAV_AAC
 endif

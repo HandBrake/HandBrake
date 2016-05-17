@@ -395,8 +395,8 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "s:{s:o, s:o, s:o,},"
     // PAR {Num, Den}
     "s:{s:o, s:o},"
-    // Video {Codec, QSV {Decode, AsyncDepth}}
-    "s:{s:o, s:o, s:o, s:{s:o, s:o}},"
+    // Video {Encoder, OpenCL, QSV {Decode, AsyncDepth}}
+    "s:{s:o, s:o, s:{s:o, s:o}},"
     // Audio {CopyMask, FallbackEncoder, AudioList []}
     "s:{s:[], s:o, s:[]},"
     // Subtitles {Search {Enable, Forced, Default, Burn}, SubtitleList []}
@@ -421,7 +421,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         "Video",
             "Encoder",          hb_value_int(job->vcodec),
             "OpenCL",           hb_value_bool(job->use_opencl),
-            "HWDecode",         hb_value_bool(job->use_hwd),
             "QSV",
                 "Decode",       hb_value_bool(job->qsv.decode),
                 "AsyncDepth",   hb_value_int(job->qsv.async_depth),
@@ -730,15 +729,13 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     dict = hb_value_json(json_job);
 
-    int title_index, use_hwd = 0;
+    int title_index;
     char *path = NULL;
 
-    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i}, s?{s?b}}",
+    result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i}}",
                             "Source",
                                 "Path",     unpack_s(&path),
-                                "Title",    unpack_i(&title_index),
-                            "Video",
-                                "HWDecode", unpack_b(&use_hwd)
+                                "Title",    unpack_i(&title_index)
                            );
     if (result < 0)
     {
@@ -749,7 +746,6 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
 
     // If the job wants to use Hardware decode, it must also be
     // enabled during scan.  So enable it here.
-    hb_hwd_set_enable(h, use_hwd);
     hb_scan(h, path, title_index, -1, 0, 0);
 
     // Wait for scan to complete
@@ -844,10 +840,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
     //        TwoPass, Turbo, ColorMatrixCode,
-    //        OpenCL, HWDecode, QSV {Decode, AsyncDepth}}
+    //        OpenCL, QSV {Decode, AsyncDepth}}
     "s:{s:o, s?f, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i,"
-    "   s?b, s?b, s?{s?b, s?i}},"
+    "   s?b, s?{s?b, s?i}},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
     "s?{s?o, s?o, s?o},"
     // Subtitle {Search {Enable, Forced, Default, Burn}, SubtitleList}
@@ -890,7 +886,6 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Turbo",                unpack_b(&job->fastfirstpass),
             "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
             "OpenCL",               unpack_b(&job->use_opencl),
-            "HWDecode",             unpack_b(&job->use_hwd),
             "QSV",
                 "Decode",           unpack_b(&job->qsv.decode),
                 "AsyncDepth",       unpack_i(&job->qsv.async_depth),

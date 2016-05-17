@@ -11,7 +11,6 @@
 #define HB_TYPES_H
 
 typedef struct hb_handle_s hb_handle_t;
-typedef struct hb_hwd_s hb_hwd_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_buffer_list_s hb_buffer_list_t;
 typedef struct hb_rate_s hb_rate_t;

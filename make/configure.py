@@ -1245,8 +1245,6 @@ def createCLI():
     h = IfHost( 'enable use of Intel Quick Sync Video hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
-    h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
 
     h = IfHost( 'enable use of x265 encoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-x265', default=True, action='store_true', help=h )
@@ -1780,7 +1778,6 @@ int main ()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.libav_aac',  int( options.enable_libav_aac ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
-    doc.add( 'FEATURE.hwd',        int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
 

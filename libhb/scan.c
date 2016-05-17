@@ -1070,10 +1070,9 @@ skip_preview:
 
         if (title->video_decode_support != HB_DECODE_SUPPORT_SW)
         {
-            hb_log("scan: supported video decoders:%s%s%s",
+            hb_log("scan: supported video decoders:%s%s",
                    !(title->video_decode_support & HB_DECODE_SUPPORT_SW)    ? "" : " avcodec",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)   ? "" : " qsv",
-                   !(title->video_decode_support & HB_DECODE_SUPPORT_DXVA2) ? "" : " dxva2");
+                   !(title->video_decode_support & HB_DECODE_SUPPORT_QSV)   ? "" : " qsv");
         }
 
         if( interlaced_preview_count >= ( npreviews / 2 ) )

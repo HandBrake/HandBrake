@@ -607,7 +607,6 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
     int use_opencl;
-    int use_hwd;
     PRIVATE int use_decomb;
     PRIVATE int use_detelecine;
 
@@ -983,7 +982,6 @@ struct hb_title_s
     int           video_decode_support;
 #define HB_DECODE_SUPPORT_SW    0x01 // software (libavcodec or mpeg2dec)
 #define HB_DECODE_SUPPORT_QSV   0x02 // Intel Quick Sync Video
-#define HB_DECODE_SUPPORT_DXVA2 0x04 // Microsoft DXVA2
 
     hb_metadata_t * metadata;
 
