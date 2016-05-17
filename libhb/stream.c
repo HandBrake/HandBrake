@@ -1729,7 +1729,7 @@ hb_buffer_t * hb_stream_read( hb_stream_t * src_stream )
 int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
-    if ( ic->start_time != AV_NOPTS_VALUE && ic->start_time > 0 )
+    if (ic->start_time != AV_NOPTS_VALUE)
         return ic->start_time;
     else
         return 0;
