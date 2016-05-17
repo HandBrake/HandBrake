@@ -958,20 +958,6 @@ static void OutputBuffer( sync_common_t * common )
             if (hb_list_count(stream->in_queue) > stream->min_len)
             {
                 buf = hb_list_item(stream->in_queue, 0);
-                if (stream->type == SYNC_TYPE_SUBTITLE)
-                {
-                    // Forward subtitles immediately instead of interleaving.
-                    //
-                    // Normally, we interleave output by PTS in order to
-                    // optimize sync recovery.  This results in queueing
-                    // stream data that may not get delivered to it's
-                    // respecitive output fifo until the next input data
-                    // is received for that stream.  This isn't a problem
-                    // for continuous streams like audio and video, but
-                    // it delays subtitles unacceptably.
-                    out_stream = stream;
-                    break;
-                }
                 if (buf->s.start < pts)
                 {
                     pts = buf->s.start;
@@ -1096,12 +1082,9 @@ static void OutputBuffer( sync_common_t * common )
                 default:
                     break;
             }
-            out_stream->first_frame = 1;
-            out_stream->first_pts = buf->s.start;
-            if (out_stream->type != SYNC_TYPE_SUBTITLE)
-            {
-                out_stream->next_pts  = buf->s.start;
-            }
+            out_stream->first_frame        = 1;
+            out_stream->first_pts          = buf->s.start;
+            out_stream->next_pts           = buf->s.start;
             out_stream->min_frame_duration = buf->s.duration;
         }
 
