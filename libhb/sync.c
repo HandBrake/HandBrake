@@ -122,16 +122,16 @@ struct sync_common_s
     int             done;
 
     // point-to-point support
-    int         start_found;
+    int             start_found;
 
     // sync audio work objects
-    hb_list_t * list_work;
+    hb_list_t     * list_work;
 
     // UpdateState Statistics
-    int        est_frame_count;
-    uint64_t   st_counts[4];
-    uint64_t   st_dates[4];
-    uint64_t   st_first;
+    int             est_frame_count;
+    uint64_t        st_counts[4];
+    uint64_t        st_dates[4];
+    uint64_t        st_first;
 
     int             chapter;
 };
@@ -569,8 +569,8 @@ static void fixAudioGap( sync_stream_t * stream )
     buf  = hb_list_item(stream->in_queue, 0);
     gap = buf->s.start - stream->next_pts;
 
-    // there's a gap of more than a minute between the last
-    // frame and this. assume we got a corrupted timestamp
+    // If there's a gap of more than a minute between the last
+    // frame and this, assume we got a corrupted timestamp.
     if (gap > 90 * 20 && gap < 90000LL * 60)
     {
         if (stream->gap_duration <= 0)
@@ -755,9 +755,9 @@ static void streamFlush( sync_stream_t * stream )
                     default:
                         break;
                 }
-                stream->first_frame = 1;
-                stream->first_pts = buf->s.start;
-                stream->next_pts  = buf->s.start;
+                stream->first_frame        = 1;
+                stream->first_pts          = buf->s.start;
+                stream->next_pts           = buf->s.start;
                 stream->min_frame_duration = buf->s.duration;
             }
             if (stream->type == SYNC_TYPE_AUDIO)
@@ -1327,23 +1327,23 @@ static int InitAudio( sync_common_t * common, int index )
         w->fifo_out = audio->priv.fifo_sync;
     }
 
-    pv->common              = common;
-    pv->stream              = &common->streams[1 + index];
-    pv->stream->common      = common;
-    pv->stream->cond_full   = hb_cond_init();
+    pv->common                  = common;
+    pv->stream                  = &common->streams[1 + index];
+    pv->stream->common          = common;
+    pv->stream->cond_full       = hb_cond_init();
     if (pv->stream->cond_full == NULL) goto fail;
-    pv->stream->in_queue    = hb_list_init();
-    pv->stream->max_len     = SYNC_MAX_AUDIO_QUEUE_LEN;
-    pv->stream->min_len     = SYNC_MIN_AUDIO_QUEUE_LEN;
+    pv->stream->in_queue        = hb_list_init();
+    pv->stream->max_len         = SYNC_MAX_AUDIO_QUEUE_LEN;
+    pv->stream->min_len         = SYNC_MIN_AUDIO_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
-    pv->stream->delta_list  = hb_list_init();
+    pv->stream->delta_list      = hb_list_init();
     if (pv->stream->delta_list == NULL) goto fail;
-    pv->stream->type        = SYNC_TYPE_AUDIO;
-    pv->stream->first_pts   = AV_NOPTS_VALUE;
-    pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
-    pv->stream->last_pts    = (int64_t)AV_NOPTS_VALUE;
-    pv->stream->audio.audio = audio;
-    pv->stream->fifo_out    = w->fifo_out;
+    pv->stream->type            = SYNC_TYPE_AUDIO;
+    pv->stream->first_pts       = AV_NOPTS_VALUE;
+    pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->audio.audio     = audio;
+    pv->stream->fifo_out        = w->fifo_out;
 
     if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
         audio->config.in.samplerate != audio->config.out.samplerate)
@@ -1496,25 +1496,25 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     if (pv->common->mutex == NULL) goto fail;
 
     // Set up video sync work object
-    pv->stream              = &pv->common->streams[0];
-    pv->stream->common      = pv->common;
-    pv->stream->cond_full   = hb_cond_init();
+    pv->stream                  = &pv->common->streams[0];
+    pv->stream->common          = pv->common;
+    pv->stream->cond_full       = hb_cond_init();
     if (pv->stream->cond_full == NULL) goto fail;
-    pv->stream->in_queue    = hb_list_init();
-    pv->stream->max_len     = SYNC_MAX_VIDEO_QUEUE_LEN;
-    pv->stream->min_len     = SYNC_MIN_VIDEO_QUEUE_LEN;
+    pv->stream->in_queue        = hb_list_init();
+    pv->stream->max_len         = SYNC_MAX_VIDEO_QUEUE_LEN;
+    pv->stream->min_len         = SYNC_MIN_VIDEO_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
-    pv->stream->delta_list  = hb_list_init();
+    pv->stream->delta_list      = hb_list_init();
     if (pv->stream->delta_list == NULL) goto fail;
-    pv->stream->type        = SYNC_TYPE_VIDEO;
-    pv->stream->first_pts   = AV_NOPTS_VALUE;
-    pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
-    pv->stream->last_pts    = (int64_t)AV_NOPTS_VALUE;
-    pv->stream->fifo_out    = job->fifo_sync;
+    pv->stream->type            = SYNC_TYPE_VIDEO;
+    pv->stream->first_pts       = AV_NOPTS_VALUE;
+    pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->fifo_out        = job->fifo_sync;
 
-    w->fifo_in            = job->fifo_raw;
+    w->fifo_in                  = job->fifo_raw;
     // sync performs direct output to fifos
-    w->fifo_out           = job->fifo_sync;
+    w->fifo_out                 = job->fifo_sync;
     if (job->indepth_scan)
     {
         // When doing subtitle indepth scan, the pipeline ends at sync
