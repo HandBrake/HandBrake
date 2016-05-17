@@ -2797,6 +2797,40 @@ hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
     return tail;
 }
 
+hb_buffer_t* hb_buffer_list_rem(hb_buffer_list_t *list, hb_buffer_t * b)
+{
+    hb_buffer_t * a;
+
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    if (b == list->head)
+    {
+        return hb_buffer_list_rem_head(list);
+    }
+    a = list->head;
+    while (a != NULL && a->next != b)
+    {
+        a = a->next;
+    }
+    if (a == NULL)
+    {
+        // Buffer is not in the list
+        return NULL;
+    }
+    list->count--;
+    list->size -= b->size;
+    a->next = b->next;
+    if (list->tail == b)
+    {
+        list->tail = a;
+    }
+    b->next = NULL;
+
+    return b;
+}
+
 hb_buffer_t* hb_buffer_list_head(hb_buffer_list_t *list)
 {
     if (list == NULL)
