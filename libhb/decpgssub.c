@@ -466,16 +466,18 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 }
                 else
                 {
-                    out = hb_buffer_init( 1 );
+                    out = hb_buffer_init( 0 );
 
-                    out->s.frametype = HB_FRAME_SUBTITLE;
-                    out->s.id     = in->s.id;
-                    out->s.start  = pts;
-                    out->s.stop   = pts;
-                    out->f.x      = 0;
-                    out->f.y      = 0;
-                    out->f.width  = 0;
-                    out->f.height = 0;
+                    out->s.frametype    = HB_FRAME_SUBTITLE;
+                    out->s.flags        = HB_BUF_FLAG_EOS;
+                    out->s.id           = in->s.id;
+                    out->s.start        = pts;
+                    out->s.stop         = pts;
+                    out->s.renderOffset = AV_NOPTS_VALUE;
+                    out->f.x            = 0;
+                    out->f.y            = 0;
+                    out->f.width        = 0;
+                    out->f.height       = 0;
                 }
             }
             hb_buffer_list_append(&pv->list, out);

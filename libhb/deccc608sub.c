@@ -953,11 +953,11 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
     }
     else if (wb->clear_sub_needed)
     {
-        hb_buffer_t *buffer = hb_buffer_init(1);
+        hb_buffer_t *buffer = hb_buffer_init(0);
         buffer->s.frametype = HB_FRAME_SUBTITLE;
-        buffer->s.start = ms_start;
-        buffer->s.stop = ms_start;
-        buffer->data[0] = 0;
+        buffer->s.flags     = HB_BUF_FLAG_EOS;
+        buffer->s.start     = ms_start;
+        buffer->s.stop      = ms_start;
         hb_buffer_list_append(&wb->list, buffer);
         wb->clear_sub_needed = 0;
     }

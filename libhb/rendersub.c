@@ -785,9 +785,9 @@ static int textsub_work(hb_filter_object_t * filter,
             process_sub(pv, pv->current_sub);
             hb_buffer_close(&pv->current_sub);
         }
-        if (sub->s.start == sub->s.stop)
+        if (sub->s.flags & HB_BUF_FLAG_EOS)
         {
-            // Zero duration sub used to "clear" previous sub that had
+            // marker used to "clear" previous sub that had
             // an unknown duration
             hb_buffer_close(&sub);
         }
