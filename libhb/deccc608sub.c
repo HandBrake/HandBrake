@@ -24,14 +24,6 @@ static int debug_608 = 0;
 static int cc_channel = 1;
 static int subs_delay = 0;
 
-/*
- * Get the time of the last buffer that we have received.
- */
-static int64_t get_last_pts(struct s_write *wb)
-{
-    return wb->last_pts;
-}
-
 #define fatal(N, ...) // N
 
 int rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
@@ -804,7 +796,7 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
     int wrote_something = 0;
     int i;
     int64_t ms_start = wb->data608->current_visible_start_ms;
-    //int64_t ms_end = get_last_pts(wb) + subs_delay;
+    //int64_t ms_end = wb->last_pts + subs_delay;
 
     ms_start += subs_delay;
     if (ms_start<0) // Drop screens that because of subs_delay start too early
@@ -1239,11 +1231,11 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             break;
         case COM_RESUMECAPTIONLOADING:
             wb->data608->mode=MODE_POPUP;
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             break;
         case COM_RESUMETEXTDISPLAY:
             wb->data608->mode=MODE_TEXT;
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             break;
         case COM_ROLLUP2:
             if (wb->data608->rollup_base_row + 1 < 2)
@@ -1267,7 +1259,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             wb->data608->mode=MODE_ROLLUP_2;
             erase_memory (wb, 0);
             wb->data608->cursor_column = 0;
@@ -1294,7 +1286,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             wb->data608->mode=MODE_ROLLUP_3;
             erase_memory (wb, 0);
             wb->data608->cursor_column = 0;
@@ -1321,7 +1313,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
                 handle_command(0x14, 0x2D, wb);
                 wb->rollup_cr = 1;
             }
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             wb->data608->mode = MODE_ROLLUP_4;
             wb->data608->cursor_column = 0;
             wb->data608->cursor_row = wb->data608->rollup_base_row;
@@ -1335,14 +1327,14 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             if (wb->rollup_cr && is_current_row_empty(wb))
             {
                 wb->rollup_cr = 0;
-                wb->data608->current_visible_start_ms = get_last_pts(wb);
+                wb->data608->current_visible_start_ms = wb->last_pts;
                 break;
             }
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
             roll_up(wb);
             wb->data608->cursor_column = 0;
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
             break;
         case COM_ERASENONDISPLAYEDMEMORY:
             erase_memory (wb,0);
@@ -1360,7 +1352,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
 
             // the last pts is the time to remove the previously 
             // displayed CC from the display
-            wb->data608->current_visible_start_ms = get_last_pts(wb);
+            wb->data608->current_visible_start_ms = wb->last_pts;
 
             // Write "clear" subtitle if necessary
             struct eia608_screen *data;
@@ -1374,7 +1366,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             if (wb->data608->mode == MODE_POPUP)
             {
                 swap_visible_buffer(wb);
-                wb->data608->current_visible_start_ms = get_last_pts(wb);
+                wb->data608->current_visible_start_ms = wb->last_pts;
             }
             if (write_cc_buffer(wb))
                 wb->data608->screenfuls_counter++;
@@ -1728,7 +1720,7 @@ static void process608(const unsigned char *data, int length,
 
             if ( debug_608 && !textprinted && wb->data608->channel==cc_channel )
             {   // Current FTS information after the characters are shown
-                //hb_log("Current FTS: %s\n", print_mstime(get_last_pts()));
+                //hb_log("Current FTS: %s\n", print_mstime(wb->last_pts));
             }
 
             if ((wb->data608->mode == MODE_ROLLUP_2 ||
@@ -1739,7 +1731,7 @@ static void process608(const unsigned char *data, int length,
                 // If we are showing rollup on the fly (direct_rollup)
                 // write a buffer now
                 write_cc_buffer(wb);
-                wb->data608->current_visible_start_ms = get_last_pts(wb);
+                wb->data608->current_visible_start_ms = wb->last_pts;
             }
         }
     }
