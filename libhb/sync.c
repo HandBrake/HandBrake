@@ -133,6 +133,8 @@ struct sync_common_s
     uint64_t   st_counts[4];
     uint64_t   st_dates[4];
     uint64_t   st_first;
+
+    int             chapter;
 };
 
 struct hb_work_private_s
@@ -774,6 +776,27 @@ static void streamFlush( sync_stream_t * stream )
     hb_buffer_list_append(&stream->out_queue, hb_buffer_eof_init());
 }
 
+static void log_chapter( sync_common_t *common, int chap_num,
+                         int nframes, int64_t pts )
+{
+    hb_chapter_t *c;
+
+    if ( !common->job )
+        return;
+
+    c = hb_list_item( common->job->list_chapter, chap_num - 1 );
+    if ( c && c->title )
+    {
+        hb_log("sync: \"%s\" (%d) at frame %d time %"PRId64,
+               c->title, chap_num, nframes, pts);
+    }
+    else
+    {
+        hb_log("sync: Chapter %d at frame %d time %"PRId64,
+               chap_num, nframes, pts );
+    }
+}
+
 #define TOP_FIRST PIC_FLAG_TOP_FIELD_FIRST
 #define PROGRESSIVE PIC_FLAG_PROGRESSIVE_FRAME
 #define REPEAT_FIRST PIC_FLAG_REPEAT_FIRST_FIELD
@@ -1108,6 +1131,13 @@ static void OutputBuffer( sync_common_t * common )
             if (out_stream->max_frame_duration < buf->s.duration)
             {
                 out_stream->max_frame_duration = buf->s.duration;
+            }
+            if (out_stream->type == SYNC_TYPE_VIDEO &&
+                buf->s.new_chap   > common->chapter)
+            {
+                common->chapter = buf->s.new_chap;
+                log_chapter(common, buf->s.new_chap, out_stream->frame_count,
+                            buf->s.start);
             }
             hb_buffer_list_append(&out_stream->out_queue, buf);
         }

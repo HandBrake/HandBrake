@@ -909,26 +909,6 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     return out;
 }
 
-static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
-{
-    hb_chapter_t *c;
-
-    if ( !pv->job )
-        return;
-
-    c = hb_list_item( pv->job->list_chapter, chap_num - 1 );
-    if ( c && c->title )
-    {
-        hb_log( "%s: \"%s\" (%d) at frame %u time %"PRId64,
-                pv->context->codec->name, c->title, chap_num, pv->nframes, pts );
-    }
-    else
-    {
-        hb_log( "%s: Chapter %d at frame %u time %"PRId64,
-                pv->context->codec->name, chap_num, pv->nframes, pts );
-    }
-}
-
 static void flushDelayQueue( hb_work_private_t *pv )
 {
     hb_buffer_t *buf;
@@ -1250,7 +1230,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int64_t pt
             if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
                 buf->s.new_chap = pv->new_chap;
-                log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
             }
@@ -1289,7 +1268,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int64_t pt
             if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
                 buf->s.new_chap = pv->new_chap;
-                log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
             }
