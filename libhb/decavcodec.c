@@ -87,7 +87,6 @@ struct hb_work_private_s
     hb_buffer_list_t       list;
     double                 duration;        // frame duration (for video)
     double                 field_duration;  // field duration (for video)
-    int                    frame_duration_set; // Indicates valid timing was found in stream
     double                 pts_next;        // next pts we expect to generate
     int64_t                chap_time;       // time of next chap mark (if new_chap != 0)
     int                    new_chap;        // output chapter mark pending
@@ -1848,10 +1847,6 @@ static void compute_frame_duration( hb_work_private_t *pv )
     {
         // No valid timing info found in the stream, so pick some value
         duration = 1001. / 24000.;
-    }
-    else
-    {
-        pv->frame_duration_set = 1;
     }
     pv->duration = duration * 90000.;
     pv->field_duration = pv->duration;
