@@ -2689,8 +2689,8 @@ void hb_buffer_list_append(hb_buffer_list_t *list, hb_buffer_t *buf)
     size += buf->size;
     while (end != NULL && end->next != NULL)
     {
-        size += end->size;
         end = end->next;
+        size += end->size;
         count++;
     }
     if (list->tail == NULL)
@@ -2722,8 +2722,8 @@ void hb_buffer_list_prepend(hb_buffer_list_t *list, hb_buffer_t *buf)
     size += buf->size;
     while (end != NULL && end->next != NULL)
     {
-        size += end->size;
         end = end->next;
+        size += end->size;
         count++;
     }
     if (list->tail == NULL)
