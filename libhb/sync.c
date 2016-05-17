@@ -697,25 +697,7 @@ static void streamFlush( sync_stream_t * stream )
         if (buf != NULL)
         {
             hb_list_rem(stream->in_queue, buf);
-            if ((buf->s.start < 0) ||
-                (stream->type == SYNC_TYPE_VIDEO && buf->s.duration < 256))
-            {
-                // The pipeline can't handle negative timestamps
-                // and it is sometimes not possible to avoid one
-                // at the start of the video.  There can be a
-                // significant delay before we see the first buffers
-                // from all streams.  We can't buffer indefinitely
-                // until we have seen the first PTS for all streams
-                // so sometimes we may start before we have seen
-                // the earliest PTS
-                //
-                // Also, encx264.c can't handle timestamps that are spaced
-                // less than 256 ticks apart.
-                hb_buffer_close(&buf);
-                continue;
-            }
-
-            if (!stream->first_frame)
+            if (!stream->first_frame && buf->s.start >= 0)
             {
                 switch (stream->type)
                 {
@@ -774,6 +756,22 @@ static void streamFlush( sync_stream_t * stream )
             if (stream->max_frame_duration < buf->s.duration)
             {
                 stream->max_frame_duration = buf->s.duration;
+            }
+            if ((buf->s.start < 0) ||
+                (stream->type == SYNC_TYPE_VIDEO && buf->s.duration < 256))
+            {
+                // The pipeline can't handle negative timestamps
+                // and it is sometimes not possible to avoid one
+                // at the start of the video.  There can be a
+                // significant delay before we see the first buffers
+                // from all streams.  We can't buffer indefinitely
+                // until we have seen the first PTS for all streams
+                // so sometimes we may start before we have seen
+                // the earliest PTS
+                //
+                // Also, encx264.c can't handle timestamps that are spaced
+                // less than 256 ticks apart.
+                hb_buffer_close(&buf);
             }
             hb_buffer_list_append(&stream->out_queue, buf);
         }
@@ -1049,6 +1047,93 @@ static void OutputBuffer( sync_common_t * common )
         // Out the buffer goes...
         hb_list_rem(out_stream->in_queue, buf);
         signalBuffer(out_stream);
+        if (out_stream->type == SYNC_TYPE_VIDEO)
+        {
+            UpdateState(common, out_stream->frame_count);
+        }
+        if (!out_stream->first_frame && buf->s.start >= 0)
+        {
+            switch (out_stream->type)
+            {
+                case SYNC_TYPE_VIDEO:
+                    hb_log("sync: first pts video is %"PRId64,
+                           buf->s.start);
+                    break;
+                case SYNC_TYPE_AUDIO:
+                    hb_log("sync: first pts audio 0x%x is %"PRId64,
+                           out_stream->audio.audio->id, buf->s.start);
+                    break;
+                case SYNC_TYPE_SUBTITLE:
+                    hb_log("sync: first pts subtitle 0x%x is %"PRId64,
+                           out_stream->subtitle.subtitle->id, buf->s.start);
+                    break;
+                default:
+                    break;
+            }
+            out_stream->first_frame = 1;
+            out_stream->first_pts = buf->s.start;
+            if (out_stream->type != SYNC_TYPE_SUBTITLE)
+            {
+                out_stream->next_pts  = buf->s.start;
+            }
+            out_stream->min_frame_duration = buf->s.duration;
+        }
+
+        if (out_stream->type == SYNC_TYPE_AUDIO)
+        {
+            buf = FilterAudioFrame(out_stream, buf);
+            if (buf == NULL)
+            {
+                // FilterAudioFrame can conume the buffer with no output
+                continue;
+            }
+        }
+        if (out_stream->type == SYNC_TYPE_AUDIO ||
+            out_stream->type == SYNC_TYPE_VIDEO)
+        {
+            buf->s.start = out_stream->next_pts;
+            buf->s.stop  = out_stream->next_pts + buf->s.duration;
+            out_stream->next_pts += buf->s.duration;
+        }
+        else
+        {
+            // Last ditch effort to prevent timestamps from going backwards
+            // This can (and should only) affect subtitle streams.
+            if (buf->s.start < out_stream->next_pts)
+            {
+                buf->s.start = out_stream->next_pts;
+            }
+            if (buf->s.stop != AV_NOPTS_VALUE &&
+                buf->s.stop < out_stream->next_pts)
+            {
+                buf->s.stop = out_stream->next_pts;
+            }
+            out_stream->next_pts = buf->s.start;
+        }
+
+
+        if (buf->s.stop > 0)
+        {
+            out_stream->current_duration = buf->s.stop -
+                                           out_stream->first_pts;
+        }
+        out_stream->frame_count++;
+        if (buf->s.duration > 0 &&
+            out_stream->min_frame_duration > buf->s.duration)
+        {
+            out_stream->min_frame_duration = buf->s.duration;
+        }
+        if (out_stream->max_frame_duration < buf->s.duration)
+        {
+            out_stream->max_frame_duration = buf->s.duration;
+        }
+        if (out_stream->type == SYNC_TYPE_VIDEO &&
+            buf->s.new_chap   > common->chapter)
+        {
+            common->chapter = buf->s.new_chap;
+            log_chapter(common, buf->s.new_chap, out_stream->frame_count,
+                        buf->s.start);
+        }
         if ((buf->s.start < 0) ||
             (out_stream->type == SYNC_TYPE_VIDEO && buf->s.duration < 256))
         {
@@ -1065,89 +1150,7 @@ static void OutputBuffer( sync_common_t * common )
             // less than 256 ticks apart.
             hb_buffer_close(&buf);
         }
-        else
-        {
-            if (out_stream->type == SYNC_TYPE_VIDEO)
-            {
-                UpdateState(common, out_stream->frame_count);
-            }
-            if (!out_stream->first_frame)
-            {
-                switch (out_stream->type)
-                {
-                    case SYNC_TYPE_VIDEO:
-                        hb_log("sync: first pts video is %"PRId64,
-                               buf->s.start);
-                        break;
-                    case SYNC_TYPE_AUDIO:
-                        hb_log("sync: first pts audio 0x%x is %"PRId64,
-                               out_stream->audio.audio->id, buf->s.start);
-                        break;
-                    case SYNC_TYPE_SUBTITLE:
-                        hb_log("sync: first pts subtitle 0x%x is %"PRId64,
-                               out_stream->subtitle.subtitle->id, buf->s.start);
-                        break;
-                    default:
-                        break;
-                }
-                out_stream->first_frame = 1;
-                out_stream->first_pts = buf->s.start;
-                out_stream->next_pts  = buf->s.start;
-                out_stream->min_frame_duration = buf->s.duration;
-            }
-
-            if (out_stream->type == SYNC_TYPE_AUDIO)
-            {
-                buf = FilterAudioFrame(out_stream, buf);
-            }
-            if (out_stream->type == SYNC_TYPE_AUDIO ||
-                out_stream->type == SYNC_TYPE_VIDEO)
-            {
-                buf->s.start = out_stream->next_pts;
-                buf->s.stop  = out_stream->next_pts + buf->s.duration;
-                out_stream->next_pts += buf->s.duration;
-            }
-            else
-            {
-                // Last ditch effort to prevent timestamps from going backwards
-                // This can (and should only) affect subtitle streams.
-                if (buf->s.start < out_stream->next_pts)
-                {
-                    buf->s.start = out_stream->next_pts;
-                }
-                if (buf->s.stop != AV_NOPTS_VALUE &&
-                    buf->s.stop < out_stream->next_pts)
-                {
-                    buf->s.stop = out_stream->next_pts;
-                }
-                out_stream->next_pts = buf->s.start;
-            }
-
-
-            if (buf->s.stop > 0)
-            {
-                out_stream->current_duration = buf->s.stop -
-                                               out_stream->first_pts;
-            }
-            out_stream->frame_count++;
-            if (buf->s.duration > 0 &&
-                out_stream->min_frame_duration > buf->s.duration)
-            {
-                out_stream->min_frame_duration = buf->s.duration;
-            }
-            if (out_stream->max_frame_duration < buf->s.duration)
-            {
-                out_stream->max_frame_duration = buf->s.duration;
-            }
-            if (out_stream->type == SYNC_TYPE_VIDEO &&
-                buf->s.new_chap   > common->chapter)
-            {
-                common->chapter = buf->s.new_chap;
-                log_chapter(common, buf->s.new_chap, out_stream->frame_count,
-                            buf->s.start);
-            }
-            hb_buffer_list_append(&out_stream->out_queue, buf);
-        }
+        hb_buffer_list_append(&out_stream->out_queue, buf);
     } while (full);
 }
 
