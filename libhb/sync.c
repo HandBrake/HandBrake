@@ -84,7 +84,6 @@ typedef struct
     {
         struct
         {
-            double  dejitter_pts;
             int     cadence[12];
         } video;
 
