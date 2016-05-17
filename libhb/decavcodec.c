@@ -85,12 +85,12 @@ struct hb_work_private_s
     int                    threads;
     int                    video_codec_opened;
     hb_buffer_list_t       list;
-    double                 duration;   // frame duration (for video)
-    double                 field_duration;   // field duration (for video)
+    double                 duration;        // frame duration (for video)
+    double                 field_duration;  // field duration (for video)
     int                    frame_duration_set; // Indicates valid timing was found in stream
-    double                 pts_next;   // next pts we expect to generate
-    int64_t                chap_time;  // time of next chap mark (if new_chap != 0)
-    int                    new_chap;   // output chapter mark pending
+    double                 pts_next;        // next pts we expect to generate
+    int64_t                chap_time;       // time of next chap mark (if new_chap != 0)
+    int                    new_chap;        // output chapter mark pending
     uint32_t               nframes;
     uint32_t               ndrops;
     uint32_t               decode_errors;
