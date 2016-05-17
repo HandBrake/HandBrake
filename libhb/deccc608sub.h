@@ -88,7 +88,7 @@ struct s_write {
     hb_buffer_list_t list;
     hb_buffer_t *hb_buffer;
     hb_buffer_t *hb_last_buffer;
-    uint64_t last_pts;
+    int64_t last_pts;
     unsigned char *enc_buffer; // Generic general purpose buffer
     unsigned enc_buffer_used;
     unsigned enc_buffer_capacity;
