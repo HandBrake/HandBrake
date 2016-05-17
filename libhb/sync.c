@@ -684,6 +684,8 @@ static void sendEof( sync_common_t * common )
 
 static void streamFlush( sync_stream_t * stream )
 {
+    hb_lock(stream->common->mutex);
+
     while (hb_list_count(stream->in_queue) > 0)
     {
         if (!stream->common->found_first_pts)
@@ -777,6 +779,8 @@ static void streamFlush( sync_stream_t * stream )
         }
     }
     hb_buffer_list_append(&stream->out_queue, hb_buffer_eof_init());
+
+    hb_unlock(stream->common->mutex);
 }
 
 static void log_chapter( sync_common_t *common, int chap_num,
