@@ -85,6 +85,7 @@ typedef struct
         struct
         {
             double  dejitter_pts;
+            int     cadence[12];
         } video;
 
         // Audio stream context
@@ -773,6 +774,95 @@ static void streamFlush( sync_stream_t * stream )
     hb_buffer_list_append(&stream->out_queue, hb_buffer_eof_init());
 }
 
+#define TOP_FIRST PIC_FLAG_TOP_FIELD_FIRST
+#define PROGRESSIVE PIC_FLAG_PROGRESSIVE_FRAME
+#define REPEAT_FIRST PIC_FLAG_REPEAT_FIRST_FIELD
+#define TB 8
+#define BT 16
+#define BT_PROG 32
+#define BTB_PROG 64
+#define TB_PROG 128
+#define TBT_PROG 256
+
+static void checkCadence( int * cadence, hb_buffer_t * buf )
+{
+    /*  Rotate the cadence tracking. */
+    int i = 0;
+    for (i = 11; i > 0; i--)
+    {
+        cadence[i] = cadence[i-1];
+    }
+
+    if (!(buf->s.flags & PROGRESSIVE) && !(buf->s.flags & TOP_FIRST))
+    {
+        /* Not progressive, not top first...
+           That means it's probably bottom
+           first, 2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
+        cadence[0] = BT;
+    }
+    else if (!(buf->s.flags & PROGRESSIVE) && (buf->s.flags & TOP_FIRST))
+    {
+        /* Not progressive, top is first,
+           Two fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
+        cadence[0] = TB;
+    }
+    else if ((buf->s.flags & PROGRESSIVE) &&
+             !(buf->s.flags & TOP_FIRST) && !(buf->s.flags & REPEAT_FIRST))
+    {
+        /* Progressive, but noting else.
+           That means Bottom first,
+           2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
+        cadence[0] = BT_PROG;
+    }
+    else if ((buf->s.flags & PROGRESSIVE) &&
+             !(buf->s.flags & TOP_FIRST) && (buf->s.flags & REPEAT_FIRST))
+    {
+        /* Progressive, and repeat. .
+           That means Bottom first,
+           3 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
+        cadence[0] = BTB_PROG;
+    }
+    else if ((buf->s.flags & PROGRESSIVE) &&
+             (buf->s.flags & TOP_FIRST) && !(buf->s.flags & REPEAT_FIRST))
+    {
+        /* Progressive, top first.
+           That means top first,
+           2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
+        cadence[0] = TB_PROG;
+    }
+    else if ((buf->s.flags & PROGRESSIVE) &&
+             (buf->s.flags & TOP_FIRST) && (buf->s.flags & REPEAT_FIRST))
+    {
+        /* Progressive, top, repeat.
+           That means top first,
+           3 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive repeat. Top field first, 3 fields displayed.");
+        cadence[0] = TBT_PROG;
+    }
+
+    if ((cadence[2] <= TB) && (cadence[1] <= TB) &&
+        (cadence[0] > TB) && (cadence[11]))
+    {
+        hb_log("%fs: Video -> Film", (float)buf->s.start / 90000);
+    }
+    if ((cadence[2] > TB) && (cadence[1] <= TB) &&
+        (cadence[0] <= TB) && (cadence[11]))
+    {
+        hb_log("%fs: Film -> Video", (float)buf->s.start / 90000);
+    }
+}
+
 // OutputBuffer pulls buffers from the internal sync buffer queues in
 // lowest PTS first order.  It then processes the queue the buffer is
 // pulled from for frame overlaps and gaps.
@@ -919,6 +1009,11 @@ static void OutputBuffer( sync_common_t * common )
             common->done = 1;
             sendEof(common);
             return;
+        }
+
+        if (out_stream->type == SYNC_TYPE_VIDEO)
+        {
+            checkCadence(out_stream->video.cadence, buf);
         }
 
         // Out the buffer goes...
