@@ -187,7 +187,7 @@ static void allSlip( sync_common_t * common, int64_t delta )
     for (ii = 0; ii < common->stream_count; ii++)
     {
         common->streams[ii].pts_slip += delta;
-        if (common->streams[ii].next_pts != AV_NOPTS_VALUE)
+        if (common->streams[ii].next_pts != (int64_t)AV_NOPTS_VALUE)
         {
             common->streams[ii].next_pts -= delta;
         }
@@ -960,7 +960,7 @@ static void OutputBuffer( sync_common_t * common )
             break;
         }
 
-        if (out_stream->next_pts == AV_NOPTS_VALUE)
+        if (out_stream->next_pts == (int64_t)AV_NOPTS_VALUE)
         {
             // Initialize next_pts, it is used to make timestamp corrections
             buf = hb_list_item(out_stream->in_queue, 0);
@@ -1250,7 +1250,7 @@ static int InitAudio( sync_common_t * common, int index )
     if (pv->stream->delta_list == NULL) goto fail;
     pv->stream->type        = SYNC_TYPE_AUDIO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
-    pv->stream->next_pts    = AV_NOPTS_VALUE;
+    pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
     pv->stream->audio.audio = audio;
     pv->stream->fifo_in     = audio->priv.fifo_raw;
 
@@ -1334,7 +1334,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     if (pv->stream->delta_list == NULL) goto fail;
     pv->stream->type              = SYNC_TYPE_SUBTITLE;
     pv->stream->first_pts         = AV_NOPTS_VALUE;
-    pv->stream->next_pts          = AV_NOPTS_VALUE;
+    pv->stream->next_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
     pv->stream->fifo_in           = subtitle->fifo_raw;
 
@@ -1429,7 +1429,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     if (pv->stream->delta_list == NULL) goto fail;
     pv->stream->type        = SYNC_TYPE_VIDEO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
-    pv->stream->next_pts    = AV_NOPTS_VALUE;
+    pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
     pv->stream->fifo_in     = job->fifo_raw;
 
     w->fifo_in            = job->fifo_raw;
