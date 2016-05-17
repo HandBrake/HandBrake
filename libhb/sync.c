@@ -54,8 +54,7 @@ typedef struct
     int                 max_len;
     int                 min_len;
     hb_cond_t         * cond_full;
-    hb_buffer_list_t    out_queue;
-    hb_fifo_t         * fifo_in;
+    hb_fifo_t         * fifo_out;
 
     // PTS synchronization
     hb_list_t         * delta_list;
@@ -670,18 +669,25 @@ static void fixStreamTimestamps( sync_stream_t * stream )
     }
 }
 
+static void fifo_push( hb_fifo_t * fifo, hb_buffer_t * buf )
+{
+    if (fifo != NULL)
+    {
+        hb_fifo_push(fifo, buf);
+    }
+    else
+    {
+        hb_buffer_close(&buf);
+    }
+}
+
 static void sendEof( sync_common_t * common )
 {
     int ii;
 
     for (ii = 0; ii < common->stream_count; ii++)
     {
-        hb_buffer_list_append(&common->streams[ii].out_queue,
-                              hb_buffer_eof_init());
-        // Need to prime all input fifos to ensure that work threads wake up
-        // one final time to process the end.  This is sometimes needed
-        // for sparse subtitle streeams.
-        hb_fifo_push(common->streams[ii].fifo_in, hb_buffer_eof_init());
+        fifo_push(common->streams[ii].fifo_out, hb_buffer_eof_init());
     }
 }
 
@@ -793,10 +799,10 @@ static void streamFlush( sync_stream_t * stream )
                 // less than 256 ticks apart.
                 hb_buffer_close(&buf);
             }
-            hb_buffer_list_append(&stream->out_queue, buf);
+            fifo_push(stream->fifo_out, buf);
         }
     }
-    hb_buffer_list_append(&stream->out_queue, hb_buffer_eof_init());
+    fifo_push(stream->fifo_out, hb_buffer_eof_init());
 
     hb_unlock(stream->common->mutex);
 }
@@ -1176,12 +1182,29 @@ static void OutputBuffer( sync_common_t * common )
             // less than 256 ticks apart.
             hb_buffer_close(&buf);
         }
-        hb_buffer_list_append(&out_stream->out_queue, buf);
+        fifo_push(out_stream->fifo_out, buf);
     } while (full);
 }
 
-static void Synchronize( sync_common_t * common )
+static void Synchronize( sync_stream_t * stream )
 {
+    sync_common_t * common = stream->common;
+
+    // Sync deposits output directly into fifos, so work_loop is not
+    // blocking when output fifos become full.  Wait here before
+    // performing any output when the output fifo for the input stream
+    // is full
+    if (stream->fifo_out != NULL)
+    {
+        while (!common->job->done && !*common->job->die)
+        {
+            if (hb_fifo_full_wait(stream->fifo_out))
+            {
+                break;
+            }
+        }
+    }
+
     hb_lock(common->mutex);
 
     if (!fillQueues(common))
@@ -1274,6 +1297,19 @@ static int InitAudio( sync_common_t * common, int index )
     pv = calloc(1, sizeof(hb_work_private_t));
     if (pv == NULL) goto fail;
 
+    w = hb_get_work(common->job->h, WORK_SYNC_AUDIO);
+    w->private_data = pv;
+    w->audio        = audio;
+    w->fifo_in      = audio->priv.fifo_raw;
+    if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+    {
+        w->fifo_out = audio->priv.fifo_out;
+    }
+    else
+    {
+        w->fifo_out = audio->priv.fifo_sync;
+    }
+
     pv->common              = common;
     pv->stream              = &common->streams[1 + index];
     pv->stream->common      = common;
@@ -1289,20 +1325,7 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
     pv->stream->audio.audio = audio;
-    pv->stream->fifo_in     = audio->priv.fifo_raw;
-
-    w = hb_get_work(common->job->h, WORK_SYNC_AUDIO);
-    w->private_data = pv;
-    w->audio        = audio;
-    w->fifo_in      = audio->priv.fifo_raw;
-    if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
-    {
-        w->fifo_out = audio->priv.fifo_out;
-    }
-    else
-    {
-        w->fifo_out = audio->priv.fifo_sync;
-    }
+    pv->stream->fifo_out    = w->fifo_out;
 
     if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
         audio->config.in.samplerate != audio->config.out.samplerate)
@@ -1373,7 +1396,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->first_pts         = AV_NOPTS_VALUE;
     pv->stream->next_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
-    pv->stream->fifo_in           = subtitle->fifo_raw;
+    pv->stream->fifo_out          = subtitle->fifo_out;
 
     w = hb_get_work(common->job->h, WORK_SYNC_SUBTITLE);
     w->private_data = pv;
@@ -1467,7 +1490,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->type        = SYNC_TYPE_VIDEO;
     pv->stream->first_pts   = AV_NOPTS_VALUE;
     pv->stream->next_pts    = (int64_t)AV_NOPTS_VALUE;
-    pv->stream->fifo_in     = job->fifo_raw;
+    pv->stream->fifo_out    = job->fifo_sync;
 
     w->fifo_in            = job->fifo_raw;
     // sync performs direct output to fifos
@@ -1622,7 +1645,6 @@ static void syncVideoClose( hb_work_object_t * w )
         free(delta);
     }
     hb_list_close(&pv->stream->delta_list);
-    hb_buffer_list_close(&pv->stream->out_queue);
     hb_list_empty(&pv->stream->in_queue);
     hb_cond_close(&pv->stream->cond_full);
 
@@ -2008,13 +2030,11 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->common->done)
     {
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         streamFlush(pv->stream);
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         // Ideally, we would only do this subtitle scan check in
         // syncSubtitleWork, but someone might try to do a subtitle
         // scan on a source that has no subtitles :-(
@@ -2029,8 +2049,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_in = NULL;
     QueueBuffer(pv->stream, in);
-    Synchronize(pv->common);
-    *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
+    Synchronize(pv->stream);
 
     return HB_WORK_OK;
 }
@@ -2071,7 +2090,6 @@ static void syncAudioClose( hb_work_object_t * w )
         free(delta);
     }
     hb_list_close(&pv->stream->delta_list);
-    hb_buffer_list_close(&pv->stream->out_queue);
     hb_list_empty(&pv->stream->in_queue);
     hb_cond_close(&pv->stream->cond_full);
     free(pv);
@@ -2096,20 +2114,17 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->common->done)
     {
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         streamFlush(pv->stream);
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         return HB_WORK_DONE;
     }
 
     *buf_in = NULL;
     QueueBuffer(pv->stream, in);
-    Synchronize(pv->common);
-    *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
+    Synchronize(pv->stream);
 
     return HB_WORK_OK;
 }
@@ -2382,7 +2397,6 @@ static void syncSubtitleClose( hb_work_object_t * w )
         free(delta);
     }
     hb_list_close(&pv->stream->delta_list);
-    hb_buffer_list_close(&pv->stream->out_queue);
     hb_list_empty(&pv->stream->in_queue);
     hb_cond_close(&pv->stream->cond_full);
     hb_buffer_list_close(&pv->stream->subtitle.sanitizer.list_current);
@@ -2398,7 +2412,6 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->common->done)
     {
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -2407,7 +2420,6 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // it needs to flush all subtitles.
         hb_list_add(pv->stream->in_queue, hb_buffer_eof_init());
         streamFlush(pv->stream);
-        *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
         if (pv->common->job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync.
@@ -2419,8 +2431,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_in = NULL;
     QueueBuffer(pv->stream, in);
-    Synchronize(pv->common);
-    *buf_out = hb_buffer_list_clear(&pv->stream->out_queue);
+    Synchronize(pv->stream);
 
     return HB_WORK_OK;
 }
