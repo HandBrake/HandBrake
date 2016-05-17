@@ -1056,11 +1056,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                 d->cur_vob_id = dsi_pack.dsi_gi.vobu_vob_idn;
                 d->cur_cell_id = dsi_pack.dsi_gi.vobu_c_idn;
 
-                if( d->cell_overlap )
-                {
-                    b->s.new_chap = hb_dvdread_is_break( d );
-                    d->cell_overlap = 0;
-                }
+                d->cell_overlap = 0;
             }
         }
 
@@ -1094,6 +1090,10 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
             goto top;  /* XXX need to restructure this routine & avoid goto */
         }
         d->pack_len--;
+    }
+    if (b != NULL)
+    {
+        b->s.new_chap = hb_dvdread_is_break( d );
     }
 
     d->block++;
@@ -1149,9 +1149,7 @@ static int hb_dvdread_is_break( hb_dvdread_t * d )
     pgc_t * pgc;
     int     cell;
 
-    for( i = nr_of_ptts - 1;
-         i > 0;
-         i-- )
+    for (i = nr_of_ptts - 1; i >= 0; i--)
     {
         /* Get pgc for chapter (i+1) */
         pgc_id = d->ifo->vts_ptt_srpt->title[d->ttn-1].ptt[i].pgcn;
@@ -1159,11 +1157,11 @@ static int hb_dvdread_is_break( hb_dvdread_t * d )
         pgc    = d->ifo->vts_pgcit->pgci_srp[pgc_id-1].pgc;
         cell   = pgc->program_map[pgn-1] - 1;
 
-        if( cell <= d->cell_start )
+        if( cell < d->cell_start )
             break;
 
         // This must not match against the start cell.
-        if( pgc->cell_playback[cell].first_sector == d->block && cell != d->cell_start )
+        if (pgc->cell_playback[cell].first_sector == d->block)
         {
             return i + 1;
         }

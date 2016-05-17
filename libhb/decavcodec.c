@@ -1345,10 +1345,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 pv->new_chap = 0;
                 pv->chap_time = 0;
             }
-            else if ( pv->nframes == 0 && pv->job )
-            {
-                log_chapter( pv, pv->job->chapter_start, buf->s.start );
-            }
             checkCadence( pv->cadence, flags, buf->s.start );
             hb_buffer_list_append(&pv->list, buf);
             ++pv->nframes;
@@ -1388,10 +1384,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
                 log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
-            }
-            else if ( pv->nframes == 0 && pv->job )
-            {
-                log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
             checkCadence( pv->cadence, buf->s.flags, buf->s.start );
             hb_buffer_list_append(&pv->list, buf);

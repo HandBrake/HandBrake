@@ -26,20 +26,22 @@
 
 struct hb_work_private_s
 {
-    hb_job_t * job;
-    AVCodecContext * context;
-    FILE * file;
+    hb_job_t           * job;
+    AVCodecContext     * context;
+    FILE               * file;
 
-    int frameno_in;
-    int frameno_out;
-    hb_buffer_list_t delay_list;
+    int                  frameno_in;
+    int                  frameno_out;
+    hb_buffer_list_t     delay_list;
 
-    int64_t dts_delay;
+    int64_t              dts_delay;
 
     struct {
-        int64_t start;
-        int64_t duration;
+        int64_t          start;
+        int64_t          duration;
     } frame_info[FRAME_INFO_SIZE];
+
+    hb_chapter_queue_t * chapter_queue;
 };
 
 int  encavcodecInit( hb_work_object_t *, hb_job_t * );
@@ -62,8 +64,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     AVRational fps;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
-    w->private_data = pv;
-    pv->job = job;
+    w->private_data   = pv;
+    pv->job           = job;
+    pv->chapter_queue = hb_chapter_queue_init();
 
     hb_buffer_list_clear(&pv->delay_list);
 
@@ -319,6 +322,11 @@ void encavcodecClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
+    if (pv == NULL)
+    {
+        return;
+    }
+    hb_chapter_queue_close(&pv->chapter_queue);
     if( pv->context && pv->context->codec )
     {
         hb_deep_log( 2, "encavcodec: closing libavcodec" );
@@ -513,6 +521,17 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         frame->linesize[1] = in->plane[1].stride;
         frame->linesize[2] = in->plane[2].stride;
 
+        if (in->s.new_chap > 0 && job->chapter_markers)
+        {
+            /* chapters have to start with an IDR frame so request that this
+               frame be coded as IDR. Since there may be multiple frames
+               currently buffered in the encoder remember the timestamp so
+               when this frame finally pops out of the encoder we'll mark
+               its buffer as the start of a chapter. */
+            frame->pict_type = AV_PICTURE_TYPE_I;
+            hb_chapter_enqueue(pv->chapter_queue, in);
+        }
+
         // For constant quality, setting the quality in AVCodecContext 
         // doesn't do the trick.  It must be set in the AVFrame.
         frame->quality = pv->context->global_quality;
@@ -558,6 +577,10 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 buf->s.stop     = buf->s.stop + buf->s.duration;
                 buf->s.flags   &= ~HB_FRAME_REF;
                 buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
+                if (buf->s.frametype & HB_FRAME_KEY)
+                {
+                    hb_chapter_dequeue(pv->chapter_queue, buf);
+                }
                 buf = process_delay_list( pv, buf );
 
                 hb_buffer_list_append(&list, buf);

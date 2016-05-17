@@ -43,6 +43,7 @@ struct hb_dvdread_s
     uint16_t       cur_vob_id;
     uint8_t        cur_cell_id;
     hb_handle_t  * h;
+    int            chapter;
 };
 
 struct hb_dvdnav_s

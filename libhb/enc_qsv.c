@@ -67,51 +67,43 @@ hb_work_object_t hb_encqsv =
 
 struct hb_work_private_s
 {
-    hb_job_t          * job;
-    uint32_t            frames_in;
-    uint32_t            frames_out;
-    int64_t             last_start;
+    hb_job_t           * job;
+    uint32_t             frames_in;
+    uint32_t             frames_out;
+    int64_t              last_start;
 
-    hb_qsv_param_t      param;
-    av_qsv_space        enc_space;
-    hb_qsv_info_t     * qsv_info;
+    hb_qsv_param_t       param;
+    av_qsv_space         enc_space;
+    hb_qsv_info_t      * qsv_info;
 
-    hb_list_t         * delayed_chapters;
-    int64_t             next_chapter_pts;
+    hb_chapter_queue_t * chapter_queue;
 
 #define BFRM_DELAY_MAX 16
-    int               * init_delay;
-    int                 bfrm_delay;
-    int64_t             init_pts[BFRM_DELAY_MAX + 1];
-    hb_list_t         * list_dts;
+    int                * init_delay;
+    int                  bfrm_delay;
+    int64_t              init_pts[BFRM_DELAY_MAX + 1];
+    hb_list_t          * list_dts;
 
-    int64_t             frame_duration[FRAME_INFO_SIZE];
+    int64_t              frame_duration[FRAME_INFO_SIZE];
 
-    int                 async_depth;
-    int                 max_async_depth;
+    int                  async_depth;
+    int                  max_async_depth;
 
     // if encode-only, system memory used
-    int                 is_sys_mem;
-    mfxSession          mfx_session;
-    struct SwsContext * sws_context_to_nv12;
+    int                  is_sys_mem;
+    mfxSession           mfx_session;
+    struct SwsContext  * sws_context_to_nv12;
 
     // whether to expect input from VPP or from QSV decode
-    int                 is_vpp_present;
+    int                  is_vpp_present;
 
     // whether the encoder is initialized
-    int                 init_done;
+    int                  init_done;
 
-    hb_list_t         * delayed_processing;
-    hb_buffer_list_t    encoded_frames;
+    hb_list_t          * delayed_processing;
+    hb_buffer_list_t     encoded_frames;
 
-    hb_list_t         * loaded_plugins;
-};
-
-// used in delayed_chapters list
-struct chapter_s
-{
-    int     index;
-    int64_t start;
+    hb_list_t          * loaded_plugins;
 };
 
 static void hb_qsv_add_new_dts(hb_list_t *list, int64_t new_dts)
@@ -683,8 +675,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->last_start         = INT64_MIN;
     hb_buffer_list_clear(&pv->encoded_frames);
 
-    pv->next_chapter_pts = AV_NOPTS_VALUE;
-    pv->delayed_chapters = hb_list_init();
+    pv->chapter_queue    = hb_chapter_queue_init();
 
     // default encoding parameters
     if (hb_qsv_param_default_preset(&pv->param, &pv->enc_space.m_mfxVideoParam,
@@ -1486,6 +1477,7 @@ void encqsvClose(hb_work_object_t *w)
 
     if (pv != NULL)
     {
+        hb_chapter_queue_close(&pv->chapter_queue);
         if (pv->delayed_processing != NULL)
         {
             /* the list is already empty */
@@ -1505,83 +1497,11 @@ void encqsvClose(hb_work_object_t *w)
             }
             hb_list_close(&pv->list_dts);
         }
-        if (pv->delayed_chapters != NULL)
-        {
-            struct chapter_s *item;
-            while ((item = hb_list_item(pv->delayed_chapters, 0)) != NULL)
-            {
-                hb_list_rem(pv->delayed_chapters, item);
-                free(item);
-            }
-            hb_list_close(&pv->delayed_chapters);
-        }
         hb_buffer_list_close(&pv->encoded_frames);
     }
 
     free(pv);
     w->private_data = NULL;
-}
-
-static void save_chapter(hb_work_private_t *pv, hb_buffer_t *buf)
-{
-    /*
-     * Since there may be several frames buffered in the encoder, remember the
-     * timestamp so when this frame finally pops out of the encoder we'll mark
-     * its buffer as the start of a chapter.
-     */
-    if (pv->next_chapter_pts == AV_NOPTS_VALUE)
-    {
-        pv->next_chapter_pts = buf->s.start;
-    }
-
-    /*
-     * Chapter markers are sometimes so close we can get a new
-     * one before the previous goes through the encoding queue.
-     *
-     * Dropping markers can cause weird side-effects downstream,
-     * including but not limited to missing chapters in the
-     * output, so we need to save it somehow.
-     */
-    struct chapter_s *item = malloc(sizeof(struct chapter_s));
-
-    if (item != NULL)
-    {
-        item->start = buf->s.start;
-        item->index = buf->s.new_chap;
-        hb_list_add(pv->delayed_chapters, item);
-    }
-
-    /* don't let 'work_loop' put a chapter mark on the wrong buffer */
-    buf->s.new_chap = 0;
-}
-
-static void restore_chapter(hb_work_private_t *pv, hb_buffer_t *buf)
-{
-    /* we're no longer looking for this chapter */
-    pv->next_chapter_pts = AV_NOPTS_VALUE;
-
-    /* get the chapter index from the list */
-    struct chapter_s *item = hb_list_item(pv->delayed_chapters, 0);
-
-    if (item != NULL)
-    {
-        /* we're done with this chapter */
-        hb_list_rem(pv->delayed_chapters, item);
-        buf->s.new_chap = item->index;
-        free(item);
-
-        /* we may still have another pending chapter */
-        item = hb_list_item(pv->delayed_chapters, 0);
-
-        if (item != NULL)
-        {
-            /*
-             * we're looking for this chapter now
-             * we still need it, don't remove it
-             */
-            pv->next_chapter_pts = item->start;
-        }
-    }
 }
 
 static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
@@ -1766,11 +1686,9 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
      * If we have a chapter marker pending and this frame's PTS
      * is at or after the marker's PTS, use it as the chapter start.
      */
-    if (pv->next_chapter_pts != AV_NOPTS_VALUE &&
-        pv->next_chapter_pts <= buf->s.start   &&
-        qsv_frame_is_key(bs->FrameType))
+    if (qsv_frame_is_key(bs->FrameType))
     {
-        restore_chapter(pv, buf);
+        hb_chapter_dequeue(pv->chapter_queue, buf);
     }
 
     hb_buffer_list_append(&pv->encoded_frames, buf);
@@ -2040,7 +1958,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
             goto fail;
         }
 
-        save_chapter(pv, in);
+        hb_chapter_enqueue(pv->chapter_queue, in);
     }
 
     /*

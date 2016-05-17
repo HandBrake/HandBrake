@@ -5361,3 +5361,76 @@ void hb_str_vfree( char **strv )
     free( strv );
 }
 
+hb_chapter_queue_t * hb_chapter_queue_init(void)
+{
+    hb_chapter_queue_t * q;
+
+    q = calloc(1, sizeof(*q));
+    if (q != NULL)
+    {
+        q->list_chapter = hb_list_init();
+        if (q->list_chapter == NULL)
+        {
+            free(q);
+            q = NULL;
+        }
+    }
+    return q;
+}
+
+void hb_chapter_queue_close(hb_chapter_queue_t **_q)
+{
+    hb_chapter_queue_t      * q = *_q;
+    hb_chapter_queue_item_t * item;
+
+    if (q == NULL)
+    {
+        return;
+    }
+    while ((item = hb_list_item(q->list_chapter, 0)) != NULL)
+    {
+        hb_list_rem(q->list_chapter, item);
+        free(item);
+    }
+    hb_list_close(&q->list_chapter);
+    free(q);
+    *_q = NULL;
+}
+
+void hb_chapter_enqueue(hb_chapter_queue_t *q, hb_buffer_t *buf)
+{
+    /*
+     * Chapter markers are sometimes so close we can get a new
+     * one before the previous goes through the encoding queue.
+     *
+     * Dropping markers can cause weird side-effects downstream,
+     * including but not limited to missing chapters in the
+     * output, so we need to save it somehow.
+     */
+    hb_chapter_queue_item_t *item = malloc(sizeof(hb_chapter_queue_item_t));
+    if (item != NULL)
+    {
+        item->start = buf->s.start;
+        item->new_chap = buf->s.new_chap;
+        hb_list_add(q->list_chapter, item);
+    }
+}
+
+void hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *buf)
+{
+    hb_chapter_queue_item_t *item = hb_list_item(q->list_chapter, 0);
+    if (item != NULL)
+    {
+        if (buf->s.start < item->start)
+        {
+            // Have not reached the next chapter yet.
+            return;
+        }
+
+        // we're done with this chapter
+        hb_list_rem(q->list_chapter, item);
+        buf->s.new_chap = item->new_chap;
+        free(item);
+    }
+}
+

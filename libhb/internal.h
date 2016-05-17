@@ -509,3 +509,22 @@ void hb_muxmp4_process_subtitle_style( uint8_t *input,
 void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
 void hb_avfilter_combine( hb_list_t * list );
 
+struct hb_chapter_queue_item_s
+{
+    int64_t start;
+    int     new_chap;
+};
+
+struct hb_chapter_queue_s
+{
+    hb_list_t   * list_chapter;
+};
+
+typedef struct hb_chapter_queue_item_s hb_chapter_queue_item_t;
+typedef struct hb_chapter_queue_s hb_chapter_queue_t;
+
+hb_chapter_queue_t * hb_chapter_queue_init(void);
+void                 hb_chapter_queue_close(hb_chapter_queue_t **_q);
+void                 hb_chapter_enqueue(hb_chapter_queue_t *q, hb_buffer_t *b);
+void                 hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *b);
+

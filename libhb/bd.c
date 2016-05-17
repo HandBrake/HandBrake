@@ -636,7 +636,8 @@ int hb_bd_start( hb_bd_t * d, hb_title_t *title )
     // Calling bd_get_event initializes libbluray event queue.
     bd_select_title( d->bd, d->title_info[title->index - 1]->idx );
     bd_get_event( d->bd, &event );
-    d->chapter = 1;
+    d->chapter = 0;
+    d->next_chap = 1;
     d->stream = hb_bd_stream_open( d->h, title );
     if ( d->stream == NULL )
     {
@@ -700,15 +701,10 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
     uint64_t pos;
     hb_buffer_t * out = NULL;
     uint8_t discontinuity;
-    int new_chap = 0;
 
     while ( 1 )
     {
         discontinuity = 0;
-        if ( d->next_chap != d->chapter )
-        {
-            new_chap = d->chapter = d->next_chap;
-        }
         result = next_packet( d->bd, buf );
         if ( result < 0 )
         {
@@ -737,7 +733,10 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
                 case BD_EVENT_CHAPTER:
                     // The muxers expect to only get chapter 2 and above
                     // They write chapter 1 when chapter 2 is detected.
-                    d->next_chap = event.param;
+                    if (event.param > d->chapter)
+                    {
+                        d->next_chap = event.param;
+                    }
                     break;
 
                 case BD_EVENT_PLAYITEM:
@@ -754,10 +753,19 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
             }
         }
         // buf+4 to skip the BD timestamp at start of packet
-        out = hb_ts_decode_pkt( d->stream, buf+4, new_chap, discontinuity );
+        if (d->chapter != d->next_chap)
+        {
+            d->chapter = d->next_chap;
+            out = hb_ts_decode_pkt(d->stream, buf+4, d->chapter, discontinuity);
+        }
+        else
+        {
+            out = hb_ts_decode_pkt(d->stream, buf+4, 0, discontinuity);
+        }
         if (out != NULL)
+        {
             return out;
-        new_chap = 0;
+        }
     }
     return NULL;
 }
@@ -770,7 +778,7 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
  **********************************************************************/
 int hb_bd_chapter( hb_bd_t * d )
 {
-    return d->next_chap;
+    return d->chapter;
 }
 
 /***********************************************************************

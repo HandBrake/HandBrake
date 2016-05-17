@@ -1749,20 +1749,22 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
         return 0;
     }
 
-    int64_t sum_dur = 0;
-    hb_chapter_t *chapter = NULL;
-    int i;
-    for ( i = 0; i < chapter_num; ++i)
+    // TODO: add chapter start time to hb_chapter_t
+    // The first chapter does not necessarily start at time 0.
+    int64_t        sum_dur = 0;
+    hb_chapter_t * chapter = NULL;
+    int            ii;
+    for (ii = 0; ii < chapter_num - 1; ii++)
     {
-        chapter = hb_list_item( stream->title->list_chapter, i );
+        chapter = hb_list_item(stream->title->list_chapter, ii);
         sum_dur += chapter->duration;
     }
-    stream->chapter = chapter_num - 1;
+    stream->chapter     = chapter_num - 1;
     stream->chapter_end = sum_dur;
 
     if (chapter != NULL && chapter_num > 1)
     {
-        int64_t pos = (((sum_dur - chapter->duration) * AV_TIME_BASE) / 90000) +
+        int64_t pos = ((sum_dur * AV_TIME_BASE) / 90000) +
                       ffmpeg_initial_timestamp(stream);
 
         if (pos > 0)
@@ -1770,7 +1772,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
             hb_deep_log(2,
                         "Seeking to chapter %d: starts %"PRId64", ends %"PRId64
                         ", AV pos %"PRId64,
-                        chapter_num, sum_dur - chapter->duration, sum_dur, pos);
+                        chapter_num, sum_dur, sum_dur + chapter->duration, pos);
 
             AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
             // timebase must be adjusted to match timebase of stream we are
@@ -1792,7 +1794,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
  **********************************************************************/
 int hb_stream_chapter( hb_stream_t * src_stream )
 {
-    return( src_stream->chapter + 1 );
+    return( src_stream->chapter );
 }
 
 /***********************************************************************
@@ -5829,16 +5831,20 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
          buf->s.start >= stream->chapter_end )
     {
         hb_chapter_t *chapter = hb_list_item( stream->title->list_chapter,
-                                              stream->chapter+1 );
-        if( chapter )
+                                              stream->chapter);
+        if (chapter != NULL)
         {
             stream->chapter++;
             stream->chapter_end += chapter->duration;
-            buf->s.new_chap = stream->chapter + 1;
+            buf->s.new_chap = stream->chapter;
             hb_deep_log( 2, "ffmpeg_read starting chapter %i at %"PRId64,
-                         stream->chapter + 1, buf->s.start);
+                         stream->chapter, buf->s.start);
         } else {
+            // Some titles run longer than the sum of their chapters
+            // Don't increment to a nonexistent chapter number
             // Must have run out of chapters, stop looking.
+            hb_deep_log( 2, "ffmpeg_read end of chapter %i at %"PRId64,
+                         stream->chapter, buf->s.start);
             stream->chapter_end = INT64_MAX;
             buf->s.new_chap = 0;
         }
@@ -5882,6 +5888,31 @@ static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
     AVFormatContext *ic = stream->ffmpeg_ic;
     int64_t pos;
     int ret;
+
+    // Find the initial chapter we have seeked into
+    int count = hb_list_count(stream->title->list_chapter);
+    if (count > 0)
+    {
+        int64_t        sum_dur = 0;
+        hb_chapter_t * chapter;
+        int            ii;
+        for (ii = 0; ii < count; ii++)
+        {
+            chapter = hb_list_item( stream->title->list_chapter, ii );
+            if (sum_dur + chapter->duration > ts)
+            {
+                break;
+            }
+            sum_dur += chapter->duration;
+        }
+        stream->chapter     = ii;
+        stream->chapter_end = sum_dur;
+    }
+    else
+    {
+        stream->chapter     = 0;
+        stream->chapter_end = INT64_MAX;
+    }
 
     pos = ts * AV_TIME_BASE / 90000 + ffmpeg_initial_timestamp( stream );
     AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];

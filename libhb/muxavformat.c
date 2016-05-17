@@ -197,7 +197,7 @@ static int avformatInit( hb_mux_object_t * m )
     job->mux_data = track;
 
     track->type = MUX_TYPE_VIDEO;
-    track->prev_chapter_tc = 0;
+    track->prev_chapter_tc = AV_NOPTS_VALUE;
     track->st = avformat_new_stream(m->oc, NULL);
     if (track->st == NULL)
     {
@@ -1156,33 +1156,37 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         {
             if (job->chapter_markers && buf->s.new_chap)
             {
-                hb_chapter_t *chapter;
-
-                // reached chapter N, write marker for chapter N-1
-                // we don't know the end time of chapter N-1 till we receive
-                // chapter N.  So we are always writing the previous chapter
-                // mark.
-                track->current_chapter = buf->s.new_chap - 1;
-
-                // chapter numbers start at 1, but the list starts at 0
-                chapter = hb_list_item(job->list_chapter,
-                                            track->current_chapter - 1);
-
-                // make sure we're not writing a chapter that has 0 length
-                if (chapter != NULL && track->prev_chapter_tc < pkt.pts)
+                if (track->current_chapter > 0)
                 {
-                    char title[1024];
-                    if (chapter->title != NULL)
+                    hb_chapter_t *chapter;
+
+                    // reached chapter N, write marker for chapter N-1
+                    // we don't know the end time of chapter N-1 till we receive
+                    // chapter N.  So we are always writing the previous chapter
+                    // mark.
+                    // chapter numbers start at 1, but the list starts at 0
+                    chapter = hb_list_item(job->list_chapter,
+                                           track->current_chapter - 1);
+
+                    // make sure we're not writing a chapter that has 0 length
+                    if (chapter != NULL &&
+                        track->prev_chapter_tc != AV_NOPTS_VALUE &&
+                        track->prev_chapter_tc < pkt.pts)
                     {
-                        snprintf(title, 1023, "%s", chapter->title);
+                        char title[1024];
+                        if (chapter->title != NULL)
+                        {
+                            snprintf(title, 1023, "%s", chapter->title);
+                        }
+                        else
+                        {
+                            snprintf(title, 1023, "Chapter %d",
+                                     track->current_chapter);
+                        }
+                        add_chapter(m, track->prev_chapter_tc, pkt.pts, title);
                     }
-                    else
-                    {
-                        snprintf(title, 1023, "Chapter %d",
-                                 track->current_chapter);
-                    }
-                    add_chapter(m, track->prev_chapter_tc, pkt.pts, title);
                 }
+                track->current_chapter = buf->s.new_chap;
                 track->prev_chapter_tc = pkt.pts;
             }
         } break;
@@ -1362,7 +1366,7 @@ static int avformatEnd(hb_mux_object_t *m)
         hb_chapter_t *chapter;
 
         // get the last chapter
-        chapter = hb_list_item(job->list_chapter, track->current_chapter++);
+        chapter = hb_list_item(job->list_chapter, track->current_chapter - 1);
 
         // only write the last chapter marker if it lasts at least 1.5 second
         if (chapter != NULL && chapter->duration > 135000LL)
