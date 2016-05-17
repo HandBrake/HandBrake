@@ -1575,7 +1575,6 @@ static void do_job(hb_job_t *job)
             // from a file.
             subtitle->fifo_in   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         }
-        subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
         w->fifo_in = subtitle->fifo_in;
@@ -1782,7 +1781,6 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
-            hb_fifo_close( &subtitle->fifo_sync );
             hb_fifo_close( &subtitle->fifo_out );
         }
     }
