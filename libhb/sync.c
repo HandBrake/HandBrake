@@ -457,7 +457,14 @@ static void fixVideoOverlap( sync_stream_t * stream )
             }
             hb_list_rem(stream->in_queue, buf);
             signalBuffer(stream);
-            stream->drop_duration += buf->s.duration;
+            // Video frame durations are assumed to be variable and are
+            // adjusted based on the start time of the next frame before
+            // we get to this point.
+            //
+            // Estimate duration dropped based on average framerate
+            stream->drop_duration +=
+                            90000. * stream->common->job->title->vrate.den /
+                                     stream->common->job->title->vrate.num;
             stream->drop++;
             drop++;
             hb_buffer_close(&buf);
