@@ -124,7 +124,6 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             memcpy( pv->buf->data, in->data, in->size );
             pv->buf->s.id = in->s.id;
             pv->buf->s.frametype = HB_FRAME_SUBTITLE;
-            pv->buf->sequence = in->sequence;
             pv->size_got = in->size;
             if( in->s.start >= 0 )
             {
@@ -139,7 +138,6 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             memcpy( pv->buf->data + pv->size_got, in->data, in->size );
             pv->buf->s.id = in->s.id;
-            pv->buf->sequence = in->sequence;
             pv->size_got += in->size;
             if( in->s.start >= 0 )
             {
@@ -169,7 +167,6 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         if( buf_out && *buf_out )
         {
             (*buf_out)->s.id = in->s.id;
-            (*buf_out)->sequence = in->sequence;
         }
 
         /* Wait for the next one */

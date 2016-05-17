@@ -58,7 +58,6 @@ struct hb_work_private_s
     int            sub_scr_set;
     hb_psdemux_t   demux;
     int            scr_changes;
-    uint32_t       sequence;
     uint8_t        st_slots;        // size (in slots) of stream_timing array
     uint8_t        saw_video;       // != 0 if we've seen video
     uint8_t        saw_audio;       // != 0 if we've seen audio
@@ -210,7 +209,6 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     r->job   = job;
     r->title = job->title;
     r->die   = job->die;
-    r->sequence = 0;
 
     r->st_slots = 4;
     r->stream_timing = calloc( sizeof(stream_timing_t), r->st_slots );
@@ -810,7 +808,6 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 continue;
             }
 
-            buf->sequence = r->sequence++;
             /* if there are mutiple output fifos, send a copy of the
              * buffer down all but the first (we have to not ship the
              * original buffer or we'll race with the thread that's

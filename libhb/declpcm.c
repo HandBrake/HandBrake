@@ -20,7 +20,6 @@ struct hb_work_private_s
     uint32_t    pos;        /* buffer offset for next input data */
 
     int64_t     next_pts;   /* pts for next output frame */
-    int64_t     sequence;
 
     /* the following is frame info for the frame we're currently accumulating */
     uint64_t    duration;   /* frame duratin (in 90KHz ticks) */
@@ -198,8 +197,6 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_in = NULL;
         return HB_WORK_DONE;
     }
-
-    pv->sequence = in->sequence;
 
     // if we have a frame to finish, add enough data from this buf
     // to finish it

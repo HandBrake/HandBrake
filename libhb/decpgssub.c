@@ -370,7 +370,6 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_list_close(&pv->list_pass);
 
                     out->s        = in->s;
-                    out->sequence = in->sequence;
                 }
                 out->s.frametype    = HB_FRAME_SUBTITLE;
                 out->s.renderOffset = AV_NOPTS_VALUE;
@@ -408,7 +407,6 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                     out->s.frametype     = HB_FRAME_SUBTITLE;
                     out->s.id            = in->s.id;
-                    out->sequence        = in->sequence;
                     out->s.start         = pts;
                     out->s.stop          = AV_NOPTS_VALUE;
                     out->s.renderOffset  = AV_NOPTS_VALUE;

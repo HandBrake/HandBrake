@@ -226,7 +226,7 @@ void hb_ssa_style_init(hb_subtitle_style_t *style)
     style->bg_alpha  = 0xFF;
 }
 
-static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence );
+static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size );
 
 /*
  * Decodes a single SSA packet to one or more TEXTSUB or PICTURESUB subtitle packets.
@@ -257,7 +257,7 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
 
         // Decode an individual SSA line
         buf = ssa_decode_line_to_mkv_ssa(w, (uint8_t *)curLine,
-                                         strlen(curLine), in->sequence);
+                                         strlen(curLine));
         hb_buffer_list_append(&list, buf);
     }
 
@@ -346,7 +346,7 @@ static uint8_t *find_field( uint8_t *pos, uint8_t *end, int fieldNum )
  *   ReadOrder,Marked,          Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
  *   1         2                3     4    5       6       7       8      9
  */
-static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence )
+static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * out;
@@ -397,7 +397,6 @@ static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *i
     out->s.frametype = HB_FRAME_SUBTITLE;
     out->s.start = in_start;
     out->s.stop = in_stop;
-    out->sequence = in_sequence;
 
     if( out->size == 0 )
     {

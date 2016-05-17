@@ -1110,7 +1110,7 @@ static int get_frame_type(int type)
 
 /*
  * Decodes a video frame from the specified raw packet data
- *      ('data', 'size', 'sequence').
+ *      ('data', 'size').
  * The output of this function is stored in 'pv->list', which contains a list
  * of zero or more decoded packets.
  *
@@ -1122,7 +1122,7 @@ static int get_frame_type(int type)
  * until enough packets have been decoded so that the timestamps can be
  * correctly rewritten, if this is necessary.
  */
-static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts, uint8_t frametype )
+static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int64_t pts, int64_t dts, uint8_t frametype )
 {
     hb_work_private_t *pv = w->private_data;
     int got_picture, oldlevel = 0;
@@ -1332,7 +1332,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
             buf = copy_frame( pv );
             av_frame_unref(pv->frame);
             buf->s.start = pts;
-            buf->sequence = sequence;
 
             buf->s.flags = flags;
             buf->s.frametype = frametype;
@@ -1391,7 +1390,6 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // add the new frame to the delayq & push its timestamp on the heap
         buf = copy_frame( pv );
         av_frame_unref(pv->frame);
-        buf->sequence = sequence;
         /* Store picture flags for later use by filters */
         buf->s.flags = flags;
         buf->s.frametype = frametype;
@@ -1403,7 +1401,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 
     return got_picture;
 }
-static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts, uint8_t frametype )
+static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int64_t pts, int64_t dts, uint8_t frametype )
 {
     hb_work_private_t *pv = w->private_data;
 
@@ -1436,14 +1434,14 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
 
         if ( pout_len > 0 )
         {
-            decodeFrame( w, pout, pout_len, sequence, parser_pts, parser_dts, frametype );
+            decodeFrame( w, pout, pout_len, parser_pts, parser_dts, frametype );
         }
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
     if (size <= 0)
     {
-        while (decodeFrame(w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
+        while (decodeFrame(w, NULL, 0, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
         {
             continue;
         }
@@ -1451,7 +1449,7 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
         if (pv->qsv.decode)
         {
             // flush a second time
-            while (decodeFrame(w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
+            while (decodeFrame(w, NULL, 0, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0))
             {
                 continue;
             }
@@ -1672,7 +1670,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         if (pv->context != NULL && pv->context->codec != NULL)
         {
-            decodeVideo(w, in->data, 0, 0, pts, dts, 0);
+            decodeVideo(w, in->data, 0, pts, dts, 0);
         }
         hb_buffer_list_append(&pv->list, in);
         *buf_out = hb_buffer_list_clear(&pv->list);
@@ -1762,7 +1760,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->palette = in->palette;
         in->palette = NULL;
     }
-    decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
+    decodeVideo( w, in->data, in->size, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
     *buf_out = hb_buffer_list_clear(&pv->list);
     return HB_WORK_OK;

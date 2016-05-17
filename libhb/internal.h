@@ -119,19 +119,6 @@ struct hb_buffer_s
     uint8_t *     data;     // packet data
     int           offset;   // used internally by packet lists (hb_list_t)
 
-    /*
-     * Corresponds to the order that this packet was read from the demuxer.
-     * 
-     * It is important that video decoder work-objects pass this value through
-     * from their input packets to the output packets they generate. Otherwise
-     * RENDERSUB subtitles (especially VOB subtitles) will break.
-     * 
-     * Subtitle decoder work-objects that output a renderable subtitle
-     * format (ex: PICTURESUB) must also be careful to pass the sequence number
-     * through for the same reason.
-     */
-    int64_t       sequence;
-
     hb_buffer_settings_t s;
     hb_image_format_t f;
 
