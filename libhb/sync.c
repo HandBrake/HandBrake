@@ -12,12 +12,12 @@
 #include <stdio.h>
 #include "samplerate.h"
 
-#define SYNC_MAX_VIDEO_QUEUE_LEN    20
+#define SYNC_MAX_VIDEO_QUEUE_LEN    40
 #define SYNC_MIN_VIDEO_QUEUE_LEN    12
 
 // Audio is small, buffer a lot.  It helps to ensure that we see
 // the initial PTS from all input streams before setting the 'zero' point.
-#define SYNC_MAX_AUDIO_QUEUE_LEN    60
+#define SYNC_MAX_AUDIO_QUEUE_LEN    100
 #define SYNC_MIN_AUDIO_QUEUE_LEN    30
 
 // We do not place a limit on the number of subtitle frames
