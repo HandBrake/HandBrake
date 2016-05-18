@@ -1604,13 +1604,29 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
         }
         else
         {
-            int64_t duration;
+            int64_t duration, total_duration, extra_duration = 0;
             if (job->pts_to_stop)
             {
                 duration = job->pts_to_stop + 90000;
             }
             else
             {
+                total_duration = 0;
+                for (ii = 0; ii <= hb_list_count(job->list_chapter); ii++)
+                {
+                    hb_chapter_t * chapter;
+                    chapter = hb_list_item(job->list_chapter, ii - 1);
+                    if (chapter != NULL)
+                    {
+                        total_duration += chapter->duration;
+                    }
+                }
+                // Some titles are longer than the sum duration of their
+                // chapters.  Account for this extra duration.
+                if (job->title->duration > total_duration)
+                {
+                    extra_duration = job->title->duration - total_duration;
+                }
                 duration = 0;
                 for (ii = job->chapter_start; ii <= job->chapter_end; ii++)
                 {
@@ -1620,6 +1636,10 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
                     {
                         duration += chapter->duration;
                     }
+                }
+                if (job->chapter_end == hb_list_count(job->list_chapter))
+                {
+                    duration += extra_duration;
                 }
             }
             pv->common->est_frame_count = duration * job->title->vrate.num /
