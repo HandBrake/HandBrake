@@ -426,7 +426,7 @@ static void dejitterVideo( sync_stream_t * stream )
 
         // Only dejitter video that aligns periodically
         // with the frame durations.
-        if (ABS(duration - ii * frame_duration) < 0.1)
+        if (ABS(duration - ii * frame_duration) < frame_duration / 3)
         {
             jitter_stop = ii;
         }
