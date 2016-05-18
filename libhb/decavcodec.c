@@ -105,7 +105,7 @@ struct hb_work_private_s
     int                    chap_scr;
     int                    new_chap;        // output chapter mark pending
     int64_t                last_pts;
-    int64_t                next_pts;
+    double                 next_pts;
     uint32_t               nframes;
     uint32_t               decode_errors;
     packet_info_t          packet_info;
