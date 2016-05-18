@@ -234,6 +234,24 @@ static int bd_audio_equal( BLURAY_CLIP_INFO *a, BLURAY_CLIP_INFO *b )
     return 1;
 }
 
+static void show_clip_list( BLURAY_TITLE_INFO * ti )
+{
+    int ii;
+
+    for (ii = 0; ii < ti->clip_count; ii++)
+    {
+        BLURAY_CLIP_INFO * ci = &ti->clips[ii];
+        int64_t            duration = ci->out_time - ci->in_time;
+        int                hh, mm, ss;
+
+        hh = duration / (90000 * 60 * 60);
+        mm = (duration / (90000 * 60)) % 60;
+        ss = (duration / 90000) % 60;
+        hb_log("bd:\t\t%s.M2TS -- Duration: %02d:%02d:%02d",
+               ti->clips[ii].clip_id, hh, mm, ss);
+    }
+}
+
 /***********************************************************************
  * hb_bd_title_scan
  **********************************************************************/
@@ -313,6 +331,10 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     {
         hb_log( "bd: ignoring title (too short)" );
         goto fail;
+    }
+    if (global_verbosity_level >= 2)
+    {
+        show_clip_list(ti);
     }
 
     BLURAY_STREAM_INFO * bdvideo = &ti->clips[0].video_streams[0];
