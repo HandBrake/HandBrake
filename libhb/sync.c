@@ -13,7 +13,7 @@
 #include "samplerate.h"
 
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
-#define SYNC_MIN_VIDEO_QUEUE_LEN    12
+#define SYNC_MIN_VIDEO_QUEUE_LEN    20
 
 // Audio is small, buffer a lot.  It helps to ensure that we see
 // the initial PTS from all input streams before setting the 'zero' point.
