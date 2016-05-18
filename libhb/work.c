@@ -1907,6 +1907,7 @@ void hb_work_loop( void * _w )
     // Consume data in incoming fifo till job completes so that
     // residual data does not stall the pipeline. There can be
     // residual data during point-to-point encoding.
+    hb_deep_log(3, "worker %s waiting to die", w->name);
     while ((w->die == NULL || !*w->die) &&
            !*w->done && w->fifo_in != NULL)
     {
