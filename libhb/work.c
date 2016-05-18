@@ -1504,7 +1504,7 @@ static void do_job(hb_job_t *job)
     else
 #endif
     {
-        job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        job->fifo_mpeg2  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         if (!job->indepth_scan)
         {
