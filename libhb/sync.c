@@ -1581,13 +1581,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->video.id        = job->title->video_id;
 
     w->fifo_in                  = job->fifo_raw;
-    // sync performs direct output to fifos
     w->fifo_out                 = job->fifo_sync;
-    if (job->indepth_scan)
-    {
-        // When doing subtitle indepth scan, the pipeline ends at sync
-        w->fifo_out = NULL;
-    }
 
     if (job->pass_id == HB_PASS_ENCODE_2ND)
     {
