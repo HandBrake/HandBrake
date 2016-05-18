@@ -20,6 +20,18 @@
 #define SYNC_MAX_AUDIO_QUEUE_LEN    60
 #define SYNC_MIN_AUDIO_QUEUE_LEN    30
 
+// We do not place a limit on the number of subtitle frames
+// that are buffered (max_len == INT_MAX) becuase there are
+// cases where we will receive all the subtitles for a file
+// all at once (SSA subs).
+//
+// If we did not buffer these subs here, the following deadlock
+// condition would occur:
+//   1. Subtitle decoder blocks trying to generate more subtitle
+//      lines than will fit in sync input buffers.
+//   2. This blocks the reader. Reader doesn't read any more
+//      audio or video, so sync won't receive buffers it needs
+//      to unblock subtitles.
 #define SYNC_MAX_SUBTITLE_QUEUE_LEN INT_MAX
 #define SYNC_MIN_SUBTITLE_QUEUE_LEN 0
 
@@ -1295,16 +1307,6 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 {
     hb_lock(stream->common->mutex);
 
-    // We do not place a limit on the number of subtitle frames
-    // that are buffered becuase there are cases where we will
-    // receive all the subtitles for a file all at once (SSA subs).
-    // If we did not buffer these subs here, the following deadlock
-    // condition would occur:
-    //   1. Subtitle decoder blocks trying to generate more subtitle
-    //      lines than will fit in sync input buffers.
-    //   2. This blocks the reader. Reader doesn't read any more
-    //      audio or video, so sync won't receive buffers it needs
-    //      to unblock subtitles.
     while (hb_list_count(stream->in_queue) > stream->max_len)
     {
         hb_cond_wait(stream->cond_full, stream->common->mutex);
