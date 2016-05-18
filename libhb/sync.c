@@ -96,6 +96,7 @@ typedef struct
     {
         struct
         {
+            int     id;
             int     cadence[12];
         } video;
 
@@ -1303,6 +1304,36 @@ static void updateDuration( sync_stream_t * stream, int64_t start )
     }
 }
 
+static const char * getStreamType( sync_stream_t * stream )
+{
+    switch (stream->type)
+    {
+        case SYNC_TYPE_VIDEO:
+            return "Video";
+        case SYNC_TYPE_AUDIO:
+            return "Audio";
+        case SYNC_TYPE_SUBTITLE:
+            return "Subtitle";
+        default:
+            return "Unknown";
+    }
+}
+
+static int getStreamId( sync_stream_t * stream )
+{
+    switch (stream->type)
+    {
+        case SYNC_TYPE_VIDEO:
+            return stream->video.id;
+        case SYNC_TYPE_AUDIO:
+            return stream->audio.audio->id;
+        case SYNC_TYPE_SUBTITLE:
+            return stream->subtitle.subtitle->id;
+        default:
+            return -1;
+    }
+}
+
 static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 {
     hb_lock(stream->common->mutex);
@@ -1312,14 +1343,20 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
         hb_cond_wait(stream->cond_full, stream->common->mutex);
     }
 
+    // Render offset is only useful for decoders, which are all
+    // upstream of sync.  Squash it.
+    buf->s.renderOffset = AV_NOPTS_VALUE;
+
+    hb_deep_log(11,
+        "type %8s id %x start %"PRId64" stop %"PRId64" dur %f",
+        getStreamType(stream), getStreamId(stream),
+        buf->s.start, buf->s.stop, buf->s.duration);
+
     buf->s.start -= stream->pts_slip;
     if (buf->s.stop != AV_NOPTS_VALUE)
     {
         buf->s.stop -= stream->pts_slip;
     }
-    // Render offset is only useful for decoders, which are all
-    // upstream of sync.  Squash it.
-    buf->s.renderOffset = AV_NOPTS_VALUE;
     updateDuration(stream, buf->s.start);
     hb_list_add(stream->in_queue, buf);
 
@@ -1541,6 +1578,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->fifo_out        = job->fifo_sync;
+    pv->stream->video.id        = job->title->video_id;
 
     w->fifo_in                  = job->fifo_raw;
     // sync performs direct output to fifos
