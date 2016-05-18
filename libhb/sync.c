@@ -98,6 +98,7 @@ typedef struct
         {
             int     id;
             int     cadence[12];
+            int     new_chap;
         } video;
 
         // Audio stream context
@@ -167,6 +168,30 @@ static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
 static hb_buffer_t * sanitizeSubtitle(sync_stream_t        * stream,
                                       hb_buffer_t          * sub);
 
+static void saveChap( sync_stream_t * stream, hb_buffer_t * buf )
+{
+    if (stream->type != SYNC_TYPE_VIDEO || buf == NULL)
+    {
+        return;
+    }
+    if (buf->s.new_chap > 0)
+    {
+        stream->video.new_chap = buf->s.new_chap;
+    }
+}
+
+static void restoreChap( sync_stream_t * stream, hb_buffer_t * buf )
+{
+    if (stream->type != SYNC_TYPE_VIDEO || buf == NULL)
+    {
+        return;
+    }
+    if (stream->video.new_chap > 0 && buf->s.new_chap <= 0)
+    {
+        buf->s.new_chap = stream->video.new_chap;
+        stream->video.new_chap = 0;
+    }
+}
 
 static int fillQueues( sync_common_t * common )
 {
@@ -441,7 +466,7 @@ static void dejitterVideo( sync_stream_t * stream )
 // Fix video overlaps that could not be corrected by dejitter
 static void fixVideoOverlap( sync_stream_t * stream )
 {
-    int           drop = 0, new_chap = 0;
+    int           drop = 0;
     int64_t       overlap;
     hb_buffer_t * buf;
 
@@ -464,11 +489,6 @@ static void fixVideoOverlap( sync_stream_t * stream )
             {
                 stream->drop_pts = buf->s.start;
             }
-            // Preserve chapter marks
-            if (buf->s.new_chap > 0)
-            {
-                new_chap = buf->s.new_chap;
-            }
             hb_list_rem(stream->in_queue, buf);
             signalBuffer(stream);
             // Video frame durations are assumed to be variable and are
@@ -481,14 +501,11 @@ static void fixVideoOverlap( sync_stream_t * stream )
                                      stream->common->job->title->vrate.num;
             stream->drop++;
             drop++;
+            saveChap(stream, buf);
             hb_buffer_close(&buf);
         }
         else
         {
-            if (new_chap > 0)
-            {
-                buf->s.new_chap = new_chap;
-            }
             break;
         }
     }
@@ -850,8 +867,10 @@ static void streamFlush( sync_stream_t * stream )
                 //
                 // Also, encx264.c can't handle timestamps that are spaced
                 // less than 256 ticks apart.
+                saveChap(stream, buf);
                 hb_buffer_close(&buf);
             }
+            restoreChap(stream, buf);
             fifo_push(stream->fifo_out, buf);
         }
     }
@@ -1238,8 +1257,10 @@ static void OutputBuffer( sync_common_t * common )
             //
             // Also, encx264.c can't handle timestamps that are spaced
             // less than 256 ticks apart.
+            saveChap(out_stream, buf);
             hb_buffer_close(&buf);
         }
+        restoreChap(out_stream, buf);
         fifo_push(out_stream->fifo_out, buf);
     } while (full);
 }
