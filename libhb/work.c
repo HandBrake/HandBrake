@@ -1496,6 +1496,7 @@ static void do_job(hb_job_t *job)
         job->fifo_raw    = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
         if (!job->indepth_scan)
         {
+            // When doing subtitle indepth scan, the pipeline ends at sync
             job->fifo_sync   = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
             job->fifo_render = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
             job->fifo_mpeg4  = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
@@ -1508,6 +1509,7 @@ static void do_job(hb_job_t *job)
         job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         if (!job->indepth_scan)
         {
+            // When doing subtitle indepth scan, the pipeline ends at sync
             job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
             job->fifo_render = NULL; // Attached to filter chain
             job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
@@ -1583,6 +1585,7 @@ static void do_job(hb_job_t *job)
         }
         if (!job->indepth_scan)
         {
+            // When doing subtitle indepth scan, the pipeline ends at sync
             subtitle->fifo_out = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         }
 
