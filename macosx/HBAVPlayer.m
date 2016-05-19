@@ -70,7 +70,6 @@ typedef void (^HBPlayableObverser)(void);
             // Because we want to access our AVPlayer in our ensuing set-up, we must dispatch our handler to the main queue.
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self _setUpPlaybackOfAsset:_movie withKeys:assetKeysToLoadAndTest];
-                self.loaded = YES;
             });
 
         }];
@@ -99,12 +98,14 @@ typedef void (^HBPlayableObverser)(void);
         if ([asset statusOfValueForKey:key error:&error] == AVKeyValueStatusFailed)
         {
             self.playable = NO;
+            self.loaded = YES;
             return;
         }
 
         if (!asset.isPlayable)
         {
             self.playable = NO;
+            self.loaded = YES;
             return;
         }
 
@@ -141,9 +142,11 @@ typedef void (^HBPlayableObverser)(void);
                 break;
             case AVPlayerItemStatusReadyToPlay:
                 self.playable = YES;
+                self.loaded = YES;
                 break;
             case AVPlayerItemStatusFailed:
-                self.playable = YES;
+                self.playable = NO;
+                self.loaded = YES;
                 break;
         }
 
