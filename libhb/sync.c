@@ -470,12 +470,6 @@ static void fixVideoOverlap( sync_stream_t * stream )
     int64_t       overlap;
     hb_buffer_t * buf;
 
-    if (!stream->first_frame)
-    {
-        // There are no overlaps if we haven't seen the first frame yet.
-        return;
-    }
-
     // If time goes backwards drop the frame.
     // Check if subsequent buffers also overlap.
     while ((buf = hb_list_item(stream->in_queue, 0)) != NULL)
@@ -765,12 +759,23 @@ static void streamFlush( sync_stream_t * stream )
 
     while (hb_list_count(stream->in_queue) > 0)
     {
+        hb_buffer_t * buf;
+
         if (!stream->common->found_first_pts)
         {
             checkFirstPts(stream->common);
         }
+        if (stream->next_pts == (int64_t)AV_NOPTS_VALUE)
+        {
+            // Initialize next_pts, it is used to make timestamp corrections
+            buf = hb_list_item(stream->in_queue, 0);
+            if (buf != NULL)
+            {
+                stream->next_pts  = buf->s.start;
+            }
+        }
         fixStreamTimestamps(stream);
-        hb_buffer_t * buf = hb_list_item(stream->in_queue, 0);
+        buf = hb_list_item(stream->in_queue, 0);
         if (buf != NULL)
         {
             hb_list_rem(stream->in_queue, buf);
