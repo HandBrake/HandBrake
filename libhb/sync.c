@@ -17,7 +17,7 @@
 
 // Audio is small, buffer a lot.  It helps to ensure that we see
 // the initial PTS from all input streams before setting the 'zero' point.
-#define SYNC_MAX_AUDIO_QUEUE_LEN    100
+#define SYNC_MAX_AUDIO_QUEUE_LEN    200
 #define SYNC_MIN_AUDIO_QUEUE_LEN    30
 
 // We do not place a limit on the number of subtitle frames
