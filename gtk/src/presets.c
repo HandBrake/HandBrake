@@ -679,6 +679,17 @@ presets_add_config_file(const gchar *name)
         int major, minor, micro;
         hb_presets_version(preset, &major, &minor, &micro);
         hb_presets_current_version(&hb_major, &hb_minor, &hb_micro);
+        if (major != hb_major)
+        {
+            // Make a backup whenever the preset version changes
+            config  = ghb_get_user_config_dir(NULL);
+            path    = g_strdup_printf ("%s/presets.%d.%d.%d.json",
+                            config, major, minor, micro);
+            hb_value_write_json(preset, path);
+            g_free(config);
+            g_free(path);
+        }
+
         if (major > hb_major)
         {
             // Change in major indicates non-backward compatible preset changes.
@@ -689,19 +700,7 @@ presets_add_config_file(const gchar *name)
         }
 
         hb_value_t *imported;
-        int result = hb_presets_import(preset, &imported);
-        if (result)
-        {
-            // hb_presets_import modified the preset.  So make a backup
-            // of the original.
-            config  = ghb_get_user_config_dir(NULL);
-            path    = g_strdup_printf ("%s/presets.%d.%d.%d.json",
-                            config, major, minor, micro);
-            hb_value_write_json(preset, path);
-            g_free(config);
-            g_free(path);
-        }
-
+        hb_presets_import(preset, &imported);
         hb_presets_add(imported);
         if (major != hb_major || minor != hb_minor || micro != hb_micro)
         {
