@@ -207,7 +207,7 @@ static int fillQueues( sync_common_t * common )
         {
             abort = 1;
         }
-        if (hb_list_count(stream->in_queue) < stream->min_len)
+        if (hb_list_count(stream->in_queue) <= stream->min_len)
         {
             wait = 1;
         }
