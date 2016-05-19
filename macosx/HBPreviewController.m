@@ -163,14 +163,13 @@
 
         // adjust the preview slider length
         self.pictureHUD.pictureCount = generator.imagesCount;
-        [self switchStateToHUD:self.pictureHUD];
     }
     else
     {
         self.previewView.image = nil;
-        self.currentHUD.view.hidden = YES;
         self.window.title = NSLocalizedString(@"Preview", nil);
     }
+    [self switchStateToHUD:self.pictureHUD];
 }
 
 - (void)reloadPreviews
@@ -305,8 +304,11 @@
     for (NSViewController *controller in huds) {
         controller.view.hidden = YES;
     }
-    hud.view.hidden = NO;
-    hud.view.layer.opacity = 1.0;
+    if (self.generator)
+    {
+        hud.view.hidden = NO;
+        hud.view.layer.opacity = 1.0;
+    };
 
     [self.window makeFirstResponder:hud.view];
     [self startHudTimer];
@@ -544,11 +546,39 @@
     }
 }
 
-- (void)setUpPlaybackOfURL:(NSURL *)fileURL;
+- (void)setUpPlaybackOfURL:(NSURL *)fileURL playerClass:(Class)class;
 {
-    if (self.player.isPlayable && self.currentHUD == self.encodingHUD)
+    NSArray<Class> *availablePlayerClasses = @[[HBAVPlayer class], [HBQTKitPlayer class]];
+
+    self.player = [[class alloc] initWithURL:fileURL];
+
+    if (self.player)
     {
-        [self switchStateToHUD:self.playerHUD];
+        [self.player loadPlayableValueAsynchronouslyWithCompletionHandler:^{
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.player.isPlayable && self.currentHUD == self.encodingHUD)
+                {
+                    [self switchStateToHUD:self.playerHUD];
+                }
+                else
+                {
+                    // Try to open the preview with the next player class.
+                    NSUInteger idx = [availablePlayerClasses indexOfObject:class];
+                    if (idx != NSNotFound && (idx + 1) < availablePlayerClasses.count)
+                    {
+                        Class nextPlayer = availablePlayerClasses[idx + 1];
+                        [self setUpPlaybackOfURL:fileURL playerClass:nextPlayer];
+                    }
+                    else
+                    {
+                        [self showAlert:fileURL];
+                        [self switchStateToHUD:self.pictureHUD];
+                    }
+                }
+            });
+
+        }];
     }
     else
     {
@@ -559,26 +589,7 @@
 
 - (void)didCreateMovieAtURL:(NSURL *)fileURL
 {
-    if (fileURL)
-    {
-        self.player = [[HBAVPlayer alloc] initWithURL:fileURL];
-
-		if (self.player)
-        {
-            [self.player loadPlayableValueAsynchronouslyWithCompletionHandler:^{
-
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setUpPlaybackOfURL:fileURL];
-                });
-
-            }];
-		}
-        else
-        {
-            [self showAlert:fileURL];
-            [self switchStateToHUD:self.pictureHUD];
-        }
-    }
+    [self setUpPlaybackOfURL:fileURL playerClass:[HBAVPlayer class]];
 }
 
 #pragma mark - Player mode

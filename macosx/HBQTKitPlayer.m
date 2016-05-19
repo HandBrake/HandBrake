@@ -57,6 +57,7 @@ typedef void (^HBPlayableObverser)(void);
 @property (nonatomic, strong) NSTimer *timer;
 
 @property (nonatomic, readwrite, getter=isPlayable) BOOL playable;
+@property (nonatomic, readwrite, getter=isLoaded) BOOL loaded;
 
 @property (nonatomic, strong) NSMutableSet<HBQTKitPlayerPeriodicObserver *> *periodicObservers;
 @property (nonatomic, strong) NSMutableSet<HBQTKitPlayerRateObserver *> *rateObservers;
@@ -78,38 +79,41 @@ typedef void (^HBPlayableObverser)(void);
                                       QTMovieAskUnresolvedDataRefsAttribute: @NO,
                                       QTMovieOpenForPlaybackAttribute: @YES,
                                       QTMovieIsSteppableAttribute: @YES,
-                                      QTMovieOpenAsyncRequiredAttribute: @YES,
+                                      QTMovieOpenAsyncRequiredAttribute: @NO,
+                                      QTMovieOpenAsyncOKAttribute: @NO,
                                       QTMovieApertureModeAttribute: QTMovieApertureModeClean };
 
         _movie = [[QTMovie alloc] initWithAttributes:attributes error:&outError];
         
-        if (!_movie)
+        if (_movie)
         {
-            return nil;
-        }
+            _movie.delegate = self;
 
-        _movie.delegate = self;
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(_movieRateDidChange:)
+                                                         name:QTMovieRateDidChangeNotification
+                                                       object:_movie];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(_movieRateDidChange:)
-                                                     name:QTMovieRateDidChangeNotification
-                                                   object:_movie];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(_loadStateChanged:)
-                                                     name:QTMovieLoadStateDidChangeNotification
-                                                   object:_movie];
-
-        _layer = [QTMovieLayer layerWithMovie:_movie];
-
-        if (!_layer)
-        {
-            return nil;
+            _layer = [QTMovieLayer layerWithMovie:_movie];
         }
 
         _periodicObservers = [NSMutableSet set];
         _rateObservers = [NSMutableSet set];
         _playableObservers = [NSMutableSet set];
+
+        // Can't open things async
+        // because of 23414 QTKit bugs.
+        if (_movie && _layer)
+        {
+            self.playable = YES;
+            [self _enableSubtitles];
+        }
+        else
+        {
+            self.playable = NO;
+        }
+
+        self.loaded = YES;
     }
 
     return self;
@@ -121,26 +125,15 @@ typedef void (^HBPlayableObverser)(void);
     [self _stopMovieTimer];
 }
 
-- (void)setPlayable:(BOOL)playable
+- (void)setLoaded:(BOOL)loaded
 {
-    _playable = playable;
+    _loaded = loaded;
 
     for (HBPlayableObverser block in self.playableObservers)
     {
         block();
     }
     [self.playableObservers removeAllObjects];
-}
-
-- (void)_loadStateChanged:(NSNotification *)notification
-{
-    int loadState = [[self.movie attributeForKey:QTMovieLoadStateAttribute] intValue];
-
-    if (loadState >= QTMovieLoadStateLoaded)
-    {
-        [self _enableSubtitles];
-        self.playable = YES;
-    }
 }
 
 - (void)_movieRateDidChange:(NSNotification *)notification
@@ -325,7 +318,7 @@ typedef void (^HBPlayableObverser)(void);
 
 - (void)loadPlayableValueAsynchronouslyWithCompletionHandler:(nullable void (^)(void))handler;
 {
-    if (self.playable)
+    if (self.isLoaded)
     {
         handler();
     }

@@ -40,7 +40,8 @@ typedef void (^HBPlayableObverser)(void);
 @property (nonatomic, strong) NSMutableSet<HBAVPlayerRateObserver *> *rateObservers;
 @property (nonatomic, strong) NSMutableSet<HBPlayableObverser> *playableObservers;
 
-@property (nonatomic, readwrite) BOOL playable;
+@property (nonatomic, readwrite, getter=isPlayable) BOOL playable;
+@property (nonatomic, readwrite, getter=isLoaded) BOOL loaded;
 
 @end
 
@@ -53,19 +54,8 @@ typedef void (^HBPlayableObverser)(void);
     if (self)
     {
         _movie = [AVAsset assetWithURL:url];;
-
-        if (!_movie)
-        {
-            return nil;
-        }
-
         _player = [[AVPlayer alloc] init];
         _layer = [CALayer layer];
-
-        if (!_layer || !_player)
-        {
-            return nil;
-        }
 
         _rateObservers = [NSMutableSet set];
         _playableObservers = [NSMutableSet set];
@@ -80,6 +70,7 @@ typedef void (^HBPlayableObverser)(void);
             // Because we want to access our AVPlayer in our ensuing set-up, we must dispatch our handler to the main queue.
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self _setUpPlaybackOfAsset:_movie withKeys:assetKeysToLoadAndTest];
+                self.loaded = YES;
             });
 
         }];
@@ -128,9 +119,9 @@ typedef void (^HBPlayableObverser)(void);
     }
 }
 
-- (void)setPlayable:(BOOL)playable
+- (void)setLoaded:(BOOL)loaded
 {
-    _playable = playable;
+    _loaded = loaded;
 
     for (HBPlayableObverser block in self.playableObservers)
     {
@@ -290,7 +281,7 @@ typedef void (^HBPlayableObverser)(void);
 
 - (void)loadPlayableValueAsynchronouslyWithCompletionHandler:(nullable void (^)(void))handler;
 {
-    if (self.playable)
+    if (self.isLoaded)
     {
         handler();
     }

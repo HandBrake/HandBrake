@@ -95,7 +95,9 @@
         [self.slider setMinValue:0.0];
         [self.slider setMaxValue:self.player.duration];
         [self.slider setDoubleValue:0.0];
-        
+
+        self.player.volume = self.volumeSlider.floatValue;
+
         [self.player play];
     }
 }
