@@ -3769,7 +3769,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 }
 
 
-static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int *one_burned)
+static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out_track, int *one_burned)
 {
     hb_subtitle_t *subtitle;
     // Check that the track exists
@@ -3781,12 +3781,11 @@ static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int *on
         return -1;
     }
 
-    int out_track = hb_value_array_len(list);
-    int burn = !*one_burned && subburn == out_track + 1 &&
+    int burn = !*one_burned && subburn == out_track &&
                hb_subtitle_can_burn(subtitle->source);
     *one_burned |= burn;
-    int def  = subdefault == out_track + 1;
-    int force = test_sub_list(subforce, out_track + 1);
+    int def  = subdefault == out_track;
+    int force = test_sub_list(subforce, out_track);
 
     if (!burn &&
         !hb_subtitle_can_pass(subtitle->source, mux))
@@ -3947,7 +3946,9 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
 
     hb_dict_t *subtitles_dict = hb_dict_get(job_dict, "Subtitle");
     hb_value_array_t * subtitle_array;
-    subtitle_array = hb_dict_get(subtitles_dict, "SubtitleList");
+    hb_dict_t        * subtitle_search;
+    subtitle_array  = hb_dict_get(subtitles_dict, "SubtitleList");
+    subtitle_search = hb_dict_get(subtitles_dict, "Search");
 
     hb_dict_t *audios_dict = hb_dict_get(job_dict, "Audio");
     hb_value_array_t * audio_array = hb_dict_get(audios_dict, "AudioList");
@@ -4328,7 +4329,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     int one_burned = 0;
     if (subtracks != NULL)
     {
-        int ii;
+        int ii, out_track = 0;
         for (ii = 0; subtracks[ii] != NULL; ii++)
         {
             if (strcasecmp(subtracks[ii], "none" ) == 0)
@@ -4341,6 +4342,13 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             {
                 // Taken care of already when initializing the job
                 // from a preset
+                out_track++;
+                int def  = subdefault == ii + 1;
+                int force = test_sub_list(subforce, out_track);
+                int burn = subburn == ii + 1;
+                hb_dict_set(subtitle_search, "Default", hb_value_bool(def));
+                hb_dict_set(subtitle_search, "Forced", hb_value_bool(force));
+                hb_dict_set(subtitle_search, "Burn", hb_value_bool(burn));
                 continue;
             }
 
@@ -4349,12 +4357,20 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             {
                 for (track = first - 1; track < last; track++)
                 {
-                    add_sub(subtitle_array, title, track-1, &one_burned);
+                    if (add_sub(subtitle_array, title, track - 1,
+                                out_track + 1, &one_burned) == 0)
+                    {
+                        out_track++;
+                    }
                 }
             }
             else if (sscanf(subtracks[ii], "%d", &track) == 1)
             {
-                add_sub(subtitle_array, title, track-1, &one_burned);
+                if (add_sub(subtitle_array, title, track - 1,
+                            out_track + 1, &one_burned) == 0)
+                {
+                    out_track++;
+                }
             }
             else
             {
