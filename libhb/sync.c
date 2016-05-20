@@ -1975,7 +1975,7 @@ static int mergeSubtitleOverlaps(subtitle_sanitizer_t *sanitizer)
 
     hb_buffer_list_clear(&merged_list);
     a = hb_buffer_list_head(&sanitizer->list_current);
-    start = a->s.start;
+    stop = start = a->s.start;
     while (start < last)
     {
         hb_buffer_t * merge = findOverlap(sanitizer, start, &stop);
