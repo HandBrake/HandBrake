@@ -1853,6 +1853,12 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         int len = avcodec_decode_audio4(context, pv->frame, &got_frame, &avp);
         if (len < 0)
         {
+            if (pts != AV_NOPTS_VALUE)
+            {
+                // Update next_pts since subsequent packets may have no
+                // pts and depend on next_pts being up to date
+                pv->next_pts = pts + pv->duration;
+            }
             ++pv->decode_errors;
         }
         if ((len < 0) || (!got_frame && !(loop_limit--)))
@@ -1880,7 +1886,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             {
                 samplerate = context->sample_rate;
             }
-            double duration = (90000. * pv->frame->nb_samples / samplerate);
+            pv->duration = (90000. * pv->frame->nb_samples / samplerate);
 
             if (pv->audio->config.out.codec & HB_ACODEC_PASS_FLAG)
             {
@@ -1935,7 +1941,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             {
                 out->s.scr_sequence = packet_info->scr_sequence;
                 out->s.start        = pv->frame->pkt_pts;
-                out->s.duration     = duration;
+                out->s.duration     = pv->duration;
                 if (out->s.start == AV_NOPTS_VALUE)
                 {
                     out->s.start = pv->next_pts;
@@ -1946,7 +1952,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                 }
                 if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
                 {
-                    pv->next_pts += duration;
+                    pv->next_pts += pv->duration;
                     out->s.stop  = pv->next_pts;
                 }
                 hb_buffer_list_append(&pv->list, out);

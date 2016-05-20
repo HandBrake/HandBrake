@@ -85,6 +85,7 @@ typedef struct
     double              last_pts;
 
     // SCR recovery
+    int                 last_scr_sequence;
     double              last_scr_pts;
     double              last_duration;
 
@@ -688,6 +689,56 @@ static void dejitterAudio( sync_stream_t * stream )
     }
 }
 
+static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream, int64_t dur )
+{
+    double             frame_dur, next_pts;
+    int                size;
+    hb_buffer_list_t   list;
+    hb_buffer_t      * buf;
+
+    if (stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+    {
+        return NULL;
+    }
+    frame_dur = (90000. * stream->audio.audio->config.out.samples_per_frame) /
+                          stream->audio.audio->config.in.samplerate;
+    size = sizeof(float) * stream->audio.audio->config.out.samples_per_frame *
+           hb_mixdown_get_discrete_channel_count(
+                          stream->audio.audio->config.out.mixdown );
+
+    hb_buffer_list_clear(&list);
+    next_pts = stream->next_pts;
+    while (dur >= frame_dur)
+    {
+        buf = hb_buffer_init(size);
+        memset(buf->data, 0, buf->size);
+        buf->s.start     = next_pts;
+        buf->s.duration  = frame_dur;
+        next_pts        += frame_dur;
+        buf->s.stop      = next_pts;
+        dur             -= frame_dur;
+        hb_buffer_list_append(&list, buf);
+    }
+    if (dur > 0)
+    {
+        size = sizeof(float) *
+               (dur * stream->audio.audio->config.in.samplerate / 90000) *
+               hb_mixdown_get_discrete_channel_count(
+                      stream->audio.audio->config.out.mixdown );
+        if (size > 0)
+        {
+            buf = hb_buffer_init(size);
+            memset(buf->data, 0, buf->size);
+            buf->s.start     = next_pts;
+            buf->s.duration  = frame_dur;
+            next_pts        += frame_dur;
+            buf->s.stop      = next_pts;
+            hb_buffer_list_append(&list, buf);
+        }
+    }
+    return hb_buffer_list_clear(&list);
+}
+
 // Fix audio gaps that could not be corrected with dejitter
 static void fixAudioGap( sync_stream_t * stream )
 {
@@ -711,8 +762,23 @@ static void fixAudioGap( sync_stream_t * stream )
         {
             stream->gap_pts = buf->s.start;
         }
-        addDelta(stream->common, stream->next_pts, gap);
-        applyDeltas(stream->common);
+        buf = CreateSilenceBuf(stream, gap);
+        if (buf != NULL)
+        {
+            hb_buffer_t * next;
+            int           pos;
+            for (pos = 0; buf != NULL; buf = next, pos++)
+            {
+                next = buf->next;
+                buf->next = NULL;
+                hb_list_insert(stream->in_queue, pos, buf);
+            }
+        }
+        else
+        {
+            addDelta(stream->common, stream->next_pts, gap);
+            applyDeltas(stream->common);
+        }
         stream->gap_duration += gap;
     }
     else
@@ -1476,6 +1542,36 @@ static void ProcessSCRDelayQueue( sync_common_t * common )
     }
 }
 
+static const char * getStreamType( sync_stream_t * stream )
+{
+    switch (stream->type)
+    {
+        case SYNC_TYPE_VIDEO:
+            return "Video";
+        case SYNC_TYPE_AUDIO:
+            return "Audio";
+        case SYNC_TYPE_SUBTITLE:
+            return "Subtitle";
+        default:
+            return "Unknown";
+    }
+}
+
+static int getStreamId( sync_stream_t * stream )
+{
+    switch (stream->type)
+    {
+        case SYNC_TYPE_VIDEO:
+            return stream->video.id;
+        case SYNC_TYPE_AUDIO:
+            return stream->audio.audio->id;
+        case SYNC_TYPE_SUBTITLE:
+            return stream->subtitle.subtitle->id;
+        default:
+            return -1;
+    }
+}
+
 static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
 {
     int             hash = buf->s.scr_sequence & SCR_HASH_MASK;
@@ -1483,6 +1579,17 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
     double          last_scr_pts, last_duration;
     int64_t         scr_offset = 0;
 
+    if (buf->s.scr_sequence < stream->last_scr_sequence)
+    {
+        // In decoder error conditions, the decoder can send us out of
+        // order frames.  Often the stream error will also trigger a
+        // discontinuity detection.  An out of order frame will
+        // cause an incorrect SCR offset, so drop such frames.
+        hb_deep_log(3, "SCR sequence went backwards %d -> %d",
+                    stream->last_scr_sequence, buf->s.scr_sequence);
+        hb_buffer_close(&buf);
+        return 0;
+    }
     if (buf->s.scr_sequence >= 0)
     {
         if (buf->s.scr_sequence != common->scr[hash].scr_sequence)
@@ -1511,6 +1618,12 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
                 common->scr[hash].scr_sequence = buf->s.scr_sequence;
                 common->scr[hash].scr_offset   = buf->s.start -
                                                  (last_scr_pts + last_duration);
+                hb_deep_log(4,
+                    "New SCR: type %8s id %x scr seq %d scr offset %ld "
+                    "start %"PRId64" last %f dur %f",
+                    getStreamType(stream), getStreamId(stream),
+                    buf->s.scr_sequence, common->scr[hash].scr_offset,
+                    buf->s.start, last_scr_pts, last_duration);
                 ProcessSCRDelayQueue(common);
             }
         }
@@ -1546,6 +1659,10 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
     if (last_scr_pts > stream->last_scr_pts)
     {
         stream->last_scr_pts = last_scr_pts;
+    }
+    if (buf->s.scr_sequence > stream->last_scr_sequence)
+    {
+        stream->last_scr_sequence = buf->s.scr_sequence;
     }
     stream->last_duration = buf->s.duration;
 
@@ -1620,36 +1737,6 @@ static void SortedQueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
             }
             prev = buf;
         }
-    }
-}
-
-static const char * getStreamType( sync_stream_t * stream )
-{
-    switch (stream->type)
-    {
-        case SYNC_TYPE_VIDEO:
-            return "Video";
-        case SYNC_TYPE_AUDIO:
-            return "Audio";
-        case SYNC_TYPE_SUBTITLE:
-            return "Subtitle";
-        default:
-            return "Unknown";
-    }
-}
-
-static int getStreamId( sync_stream_t * stream )
-{
-    switch (stream->type)
-    {
-        case SYNC_TYPE_VIDEO:
-            return stream->video.id;
-        case SYNC_TYPE_AUDIO:
-            return stream->audio.audio->id;
-        case SYNC_TYPE_SUBTITLE:
-            return stream->subtitle.subtitle->id;
-        default:
-            return -1;
     }
 }
 
@@ -1755,6 +1842,7 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_scr_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
     pv->stream->last_duration   = (int64_t)AV_NOPTS_VALUE;
     pv->stream->audio.audio     = audio;
     pv->stream->fifo_out        = w->fifo_out;
@@ -1830,6 +1918,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->next_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_scr_pts      = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
     pv->stream->last_duration     = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
     pv->stream->fifo_out          = subtitle->fifo_out;
@@ -1929,6 +2018,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_scr_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
     pv->stream->last_duration   = (int64_t)AV_NOPTS_VALUE;
     pv->stream->fifo_out        = job->fifo_sync;
     pv->stream->video.id        = job->title->video_id;
