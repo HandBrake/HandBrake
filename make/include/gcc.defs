@@ -5,6 +5,7 @@ GCC.strip   = $$(if $$(filter none,$$(GCC.g)),1)
 GCC.dylib   = 1
 GCC.pipe    = 1
 GCC.c_std   = 1
+GCC.cxx_std = 0
 GCC.ML      = 1
 GCC.H       = 0
 GCC.W       = all
@@ -54,6 +55,7 @@ GCC.args.minver    = -mmacosx-version-min=$(1)
 GCC.args.vis       = -fvisibility=hidden
 GCC.args.pic       = -fPIC
 GCC.args.c_std     = -std=gnu99
+GCC.args.cxx_std   = -std=c++98
 GCC.args.g.none    = -g0
 GCC.args.g.min     = -gdwarf-2 -g1
 GCC.args.g.std     = -gdwarf-2
@@ -93,6 +95,7 @@ define import.GCC
 
     $(1).GCC.pipe    = $$(GCC.pipe)
     $(1).GCC.c_std   = $$(GCC.c_std)
+    $(1).GCC.cxx_std = $$(GCC.cxx_std)
     $(1).GCC.strip   = $$(if $$(filter none,$$($(1).GCC.g)),1)
     $(1).GCC.dylib   = $$(GCC.dylib)
     $(1).GCC.ML      = $$(GCC.ML) 
@@ -128,6 +131,7 @@ define import.GCC
 
     $(1).GCC.args.pipe      = $$(GCC.args.pipe)
     $(1).GCC.args.c_std     = $$(GCC.args.c_std)
+    $(1).GCC.args.cxx_std   = $$(GCC.args.cxx_std)
     $(1).GCC.args.strip     = $$(GCC.args.strip)
     $(1).GCC.args.dylib     = $$(GCC.args.dylib)
     $(1).GCC.args.ML        = $$(GCC.args.ML)
@@ -179,11 +183,11 @@ define import.GCC
     $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ precompile headers
-    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
+    $(1).GCC.HPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
     $(1).GCC.HPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.HPP_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ compile source
-    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
+    $(1).GCC.CPP_O.args = !gxx ?cxx_std ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
     $(1).GCC.CPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.CPP_O.args),$$(1),$$(2))
 
     ###########################################################################
@@ -199,10 +203,10 @@ define import.GCC
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib
-    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs *sysroot *minvers ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB++.args = !gxx ?cxx_std ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs *sysroot *minvers ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
 
     # FUNCTION: C++ link executable
-    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?extra.exe++ ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE++.args = !gxx ?cxx_std ?pipe ?strip ?extra.exe++ ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE++.args),$$(1),$$(2))
 endef
