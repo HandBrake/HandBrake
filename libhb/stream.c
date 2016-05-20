@@ -5569,7 +5569,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 /* Ignore generic chapter names set by MakeMKV
                  * ("Chapter 00" etc.).
                  * Our default chapter names are better. */
-                if( tag && tag->value &&
+                if( tag && tag->value && tag->value[0] &&
                     ( strncmp( "Chapter ", tag->value, 8 ) ||
                       strlen( tag->value ) > 11 ) )
                 {
