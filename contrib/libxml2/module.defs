@@ -7,7 +7,7 @@ LIBXML2.FETCH.url += ftp://xmlsoft.org/libxml2/libxml2-2.7.7.tar.gz
 LIBXML2.FETCH.md5 =  9abc9959823ca9ff904f1fbcf21df066
 LIBXML2.EXTRACT.tarbase = libxml2-2.7.7
 
-# TODO: libxml2 2.9.2 is latest, tarbase not necessary with new upstream
+# TODO: libxml2 >= 2.9.2, tarbase unnecessary
 #LIBXML2.FETCH.url = ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
 #LIBXML2.FETCH.md5 = 9e6a9aca9d155737868b3dc5fd82f788
 

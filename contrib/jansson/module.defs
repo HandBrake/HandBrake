@@ -5,7 +5,7 @@ JANSSON.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/jansson-2.6.
 JANSSON.FETCH.url += http://www.digip.org/jansson/releases/jansson-2.6.tar.bz2
 JANSSON.FETCH.md5 =  c70a52488db623a26f7213c7c6b7c878
 
-# TODO: jansson 2.7 is latest
+# TODO: jansson >= 2.7
 #JANSSON.FETCH.url + http://www.digip.org/jansson/releases/jansson-2.7.tar.bz2
 #JANSSON.FETCH.md5 = ffac352f9c5f80a6ae8145d451af2c0e
 

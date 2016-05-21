@@ -10,7 +10,7 @@ FFMPEG.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libav-11.3.ta
 FFMPEG.FETCH.url += https://libav.org/releases/libav-11.3.tar.gz
 FFMPEG.FETCH.md5 =  1a2eb461b98e0f1d1d6c4d892d51ac9b
 
-# TODO: libav 11.4 is latest
+# TODO: libav >= 11.4
 #FFMPEG.FETCH.url = https://libav.org/releases/libav-11.4.tar.gz
 #FFMPEG.FETCH.md5 = 133fab51636f47d01c25b80f33f6ae3f
 

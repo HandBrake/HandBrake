@@ -4,7 +4,7 @@ $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.0-6-gcb1ae87.tar.gz
 LIBDVDREAD.FETCH.md5 = 607a5dd41b0dd2f35433d6deac79b99e
 
-# TODO: libdvdread 5.0.3 is latest
+# TODO: libdvdread >= 5.0.3
 #LIBDVDREAD.FETCH.url = https://download.videolan.org/pub/videolan/libdvdread/5.0.3/libdvdread-5.0.3.tar.bz2
 #LIBDVDREAD.FETCH.md5 = b7b7d2a782087ed2a913263087083715
 

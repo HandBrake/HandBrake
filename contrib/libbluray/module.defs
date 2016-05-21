@@ -5,7 +5,7 @@ LIBBLURAY.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libbluray-
 LIBBLURAY.FETCH.url += http://download.videolan.org/pub/videolan/libbluray/0.8.1/libbluray-0.8.1.tar.bz2
 LIBBLURAY.FETCH.md5 =  c7a89966ad091fa6075a58d31a698e70
 
-# TODO: libbluray 0.9.0 is latest
+# TODO: libbluray >= 0.9.0
 #LIBBLURAY.FETCH.url = http://download.videolan.org/pub/videolan/libbluray/0.9.0/libbluray-0.9.0.tar.bz2
 #LIBBLURAY.FETCH.md5 = a4e8077b9fd82349c767cef2ba9bd750
 

@@ -6,7 +6,7 @@ LIBASS.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libass-0.12.3
 LIBASS.FETCH.url += https://github.com/libass/libass/releases/download/0.12.3/libass-0.12.3.tar.gz
 LIBASS.FETCH.md5 =  648ee785f966c69d4b5d50948e509d93
 
-# TODO: libass 0.13.0 is latest
+# TODO: libass >= 0.13.0
 #LIBASS.FETCH.url = https://github.com/libass/libass/releases/download/0.13.0/libass-0.13.0.tar.gz
 #LIBASS.FETCH.md5 = 44290519105b3779b8b25813a25a9914
 
