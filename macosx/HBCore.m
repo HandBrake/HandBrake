@@ -563,7 +563,7 @@ static void hb_error_handler(const char *errmsg)
         HBProgress progress = {0, 0, 0, 0};
         progress.percent = [self.stateFormatter stateToPercentComplete:state];
 
-        if (state.state == HB_STATE_WORKING)
+        if (state.state == HB_STATE_WORKING || state.state == HB_STATE_PAUSED)
         {
             progress.hours = state.param.working.hours;
             progress.minutes = state.param.working.minutes;

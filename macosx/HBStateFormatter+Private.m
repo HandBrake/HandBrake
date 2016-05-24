@@ -125,6 +125,7 @@
     switch (s.state)
     {
         case HB_STATE_WORKING:
+        case HB_STATE_PAUSED:
 #define p s.param.working
             progress = (p.progress + p.pass - 1) / p.pass_count;
 #undef p
