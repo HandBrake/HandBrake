@@ -617,8 +617,8 @@ class CoreProbe( Action ):
         ## clamp
         if self.count < 1:
             self.count = 1
-        elif self.count > 32:
-            self.count = 32
+        elif self.count > 64:
+            self.count = 64
 
         if options.launch:
             if options.launch_jobs == 0:
