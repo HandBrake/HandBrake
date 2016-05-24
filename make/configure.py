@@ -1189,6 +1189,7 @@ def encodeDistfileConfig():
     data = {
         'disable-fetch':  options.disable_df_fetch,
         'disable-verify': options.disable_df_verify,
+        'jobs':           options.df_jobs,
         'verbosity':      options.df_verbosity,
         'accept-url':     options.df_accept_url,
         'deny-url':       options.df_deny_url,
@@ -1262,6 +1263,7 @@ def createCLI():
     grp = OptionGroup( cli, 'Distfile Options' )
     grp.add_option( '--disable-df-fetch', default=False, action='store_true', help='disable distfile downloads' )
     grp.add_option( '--disable-df-verify', default=False, action='store_true', help='disable distfile data verification' )
+    grp.add_option( '--df-jobs', default=1, action='store', metavar='N', type='int', help='allow N distfile downloads at once' )
     grp.add_option( '--df-verbose', default=1, action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
     grp.add_option( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
     grp.add_option( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )

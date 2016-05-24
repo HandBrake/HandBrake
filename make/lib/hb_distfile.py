@@ -71,6 +71,17 @@ class Tool(object):
         if self.options.verbosity >= Tool.LOG_INFO:
             sys.stdout.write(format % args)
 
+    ## newline not required
+    def progressf(self, percent, format, *args):
+        if self.options.verbosity >= Tool.LOG_INFO:
+            sys.stdout.write(format % args)
+            if percent >= 0:
+                sys.stdout.write("  [%-20s] %.1f%%" % ('='*int(percent*20), percent*100))
+            sys.stdout.write('\n')      # needed to flush on some systems
+            if self.options.jobs == 1:
+                sys.stdout.write('\033[F')  # reuse line
+            sys.stdout.flush()
+
     ## newline required
     def verbosef(self, format, *args):
         if self.options.verbosity >= Tool.LOG_VERBOSE:
@@ -89,7 +100,7 @@ class Tool(object):
 
     ## generate a temporary filename - not worried about race conditions
     def mktmpname(self, filename):
-        return filename + '.tmp.' + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
+        return filename + '.' + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8)) + '.tmp'
 
 ###############################################################################
 

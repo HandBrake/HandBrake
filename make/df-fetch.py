@@ -8,10 +8,13 @@
 ##
 ###############################################################################
 
+import glob
 import hashlib
+import random
 import re
 import os
 import sys
+import time
 import urllib2
 
 sys.dont_write_bytecode = True
@@ -61,6 +64,7 @@ class Tool(hb_distfile.Tool):
         self.parser.usage = '%prog [OPTIONS] URL...'
         self.parser.description = 'Fetch and verify distfile data integrity.'
         self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit with error')
+        self.parser.add_option('--jobs', default=1, action='store', metavar='N', type='int', help='allow N download jobs at once')
         self.parser.add_option('--md5', default=None, action='store', metavar='HASH', help='verify MD5 HASH against data')
         self.parser.add_option('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
         self.parser.add_option('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
@@ -70,10 +74,23 @@ class Tool(hb_distfile.Tool):
 
     def _load_config2(self, parser, data):
         parser.values.disable     = data['disable-fetch']
+        parser.values.jobs        = data['jobs']
         parser.values.accept_url  = data['accept-url']
         parser.values.deny_url    = data['deny-url']
 
     def _run(self, error):
+        # throttle instances
+        if tool.options.jobs < 1:
+            tool.options.jobs = 1
+        if tool.options.jobs > 20:
+            tool.options.jobs = 20
+        dirname = os.path.dirname(tool.options.output)
+        time.sleep(random.uniform(0.1,2))
+        active = len(glob.glob(dirname + '/*.tmp'))
+        while active >= tool.options.jobs:
+            time.sleep(2)
+            active = len(glob.glob(dirname + '/*.tmp'))
+        # handle disabled
         if self.options.disable:
             raise error('administratively disabled')
         ## create URL objects and keep active
@@ -162,6 +179,7 @@ class URL(object):
         except:
             content_length = None
         data_total = 0
+        data_total_percent = 0.0
         while True:
             data = hin.read(65536)
             if not data:
@@ -170,13 +188,20 @@ class URL(object):
                 hout.write(data)
             hasher.update(data)
             data_total += len(data)
+            if content_length and content_length > 0:
+                data_total_percent = float(data_total) / content_length
+                if data_total_percent >= 1 and data_total < content_length:
+                    data_total_percent = 0.999999
+            else:
+                data_total_percent = -1
+            tool.progressf(data_total_percent, 'downloading...  %9d bytes' % data_total)
         if content_length and content_length != data_total:
             raise error('expected %d bytes, got %d bytes' % (content_length,data_total))
-        s = 'downloaded %d bytes' % data_total
+        s = 'download total: %9d bytes\n' % data_total
         if filename:
-            s += '; MD5 (%s) = %s' % (filename,hasher.hexdigest())
+            s += 'MD5 (%s) = %s' % (filename,hasher.hexdigest())
         else:
-            s += '; MD5 = %s' % (hasher.hexdigest())
+            s += 'MD5 = %s' % (hasher.hexdigest())
         if tool.options.md5:
             md5_pass = tool.options.md5 == hasher.hexdigest()
             s += ' (%s)' % ('pass' if md5_pass else 'fail; expecting %s' % tool.options.md5)
