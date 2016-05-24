@@ -308,53 +308,17 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    NSSet *retval = nil;
-
-    // Tell KVO to reload the presets settings
-    // after a change to the encoder.
-    if ([key isEqualToString:@"presets"] ||
-        [key isEqualToString:@"tunes"] ||
-        [key isEqualToString:@"profiles"] ||
-        [key isEqualToString:@"levels"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", nil];
-    }
-
-    // Tell KVO to reload the x264 unparse string
-    // after values changes.
-    else if ([key isEqualToString:@"unparseOptions"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",
-                  @"videoOptionExtra", @"fastDecode", @"job.picture.width", @"job.picture.height", nil];
-    }
-
-    else if ([key isEqualToString:@"encoders"])
-    {
-        retval = [NSSet setWithObjects:@"job.container", nil];
-    }
-
-    else if ([key isEqualToString:@"fastDecodeSupported"] ||
-        [key isEqualToString:@"turboTwoPassSupported"])
-    {
-        retval = [NSSet setWithObjects:@"encoder", nil];
-    }
-
-    else
-    {
-        retval = [NSSet set];
-    }
-
-    return retval;
-}
-
 - (void)setNilValueForKey:(NSString *)key
 {
     [self setValue:@0 forKey:key];
 }
 
 #pragma mark -
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingPresets
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
 
 - (NSArray *)presets
 {
@@ -371,6 +335,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
 
     return [temp copy];
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingTunes
+{
+    return [NSSet setWithObjects:@"encoder", nil];
 }
 
 - (NSArray *)tunes
@@ -393,6 +362,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return [temp copy];
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingProfiles
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
 - (NSArray *)profiles
 {
     NSMutableArray *temp = [NSMutableArray array];
@@ -408,6 +382,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
 
     return [temp copy];
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingLevels
+{
+    return [NSSet setWithObjects:@"encoder", nil];
 }
 
 - (NSArray *)levels

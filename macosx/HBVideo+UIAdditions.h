@@ -25,6 +25,8 @@
 
 @property (nonatomic, readonly) NSString *unparseOptions;
 
+@property (nonatomic, readonly) NSString *constantQualityLabel;
+
 @property (nonatomic, readonly) double qualityMinValue;
 @property (nonatomic, readonly) double qualityMaxValue;
 

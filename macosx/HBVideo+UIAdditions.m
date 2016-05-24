@@ -19,6 +19,11 @@
 
 #pragma mark - Possible values
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingEncoders
+{
+    return [NSSet setWithObjects:@"job.container", nil];
+}
+
 - (NSArray *)encoders
 {
     NSMutableArray *encoders = [NSMutableArray array];
@@ -67,6 +72,11 @@
     return [framerates copy];
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingFastDecodeSupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
 - (BOOL)fastDecodeSupported
 {
     const char * const *tunes = hb_video_encoder_get_tunes(self.encoder);
@@ -81,10 +91,43 @@
     return NO;
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingTurboTwoPassSupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
 - (BOOL)turboTwoPassSupported
 {
     return ((self.encoder & HB_VCODEC_X264_MASK) ||
             (self.encoder & HB_VCODEC_X265_MASK));
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingConstantQualityLabel
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
+- (NSString *)constantQualityLabel
+{
+    if ((self.encoder & HB_VCODEC_X264_MASK) ||
+        (self.encoder & HB_VCODEC_X265_MASK))
+    {
+        return @"RF:";
+    }
+    else if (self.encoder == HB_VCODEC_FFMPEG_VP8)
+    {
+        return @"CQ:";
+    }
+    else
+    {
+        return @"QP:";
+    }
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
+{
+    return [NSSet setWithObjects:@"encoder", @"preset", @"tune", @"profile", @"level",
+            @"videoOptionExtra", @"fastDecode", @"job.picture.width", @"job.picture.height", nil];
 }
 
 /**
