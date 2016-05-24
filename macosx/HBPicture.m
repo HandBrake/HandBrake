@@ -393,9 +393,19 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 #pragma mark - Max sizes
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxWidth
+{
+    return [NSSet setWithObjects:@"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
+}
+
 - (int)maxWidth
 {
     return self.sourceWidth - self.cropRight - self.cropLeft;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxHeight
+{
+    return [NSSet setWithObjects:@"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
 }
 
 - (int)maxHeight
@@ -416,38 +426,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 - (int)sourceDisplayWidth
 {
     return (int) (self.sourceWidth * self.sourceParNum / (double)self.sourceParDen);
-}
-
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    NSSet *retval = nil;
-
-    // Tell KVO to reload the editable state.
-    if ([key isEqualToString:@"keepDisplayAspectEditable"] ||
-        [key isEqualToString:@"heightEditable"] ||
-        [key isEqualToString:@"widthEditable"] ||
-        [key isEqualToString:@"customAnamorphicEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"anamorphicMode", nil];
-    }
-
-    else if ([key isEqualToString:@"maxWidth"] ||
-        [key isEqualToString:@"maxHeight"])
-    {
-        retval = [NSSet setWithObjects:@"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
-    }
-
-    else if ([key isEqualToString:@"info"] || [key isEqualToString:@"summary"])
-    {
-        retval = [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
-    }
-
-    else
-    {
-        retval = [NSSet set];
-    }
-
-    return retval;
 }
 
 - (void)setNilValueForKey:(NSString *)key

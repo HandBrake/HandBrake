@@ -98,14 +98,12 @@ typedef void (^HBPlayableObverser)(void);
         if ([asset statusOfValueForKey:key error:&error] == AVKeyValueStatusFailed)
         {
             self.playable = NO;
-            self.loaded = YES;
             return;
         }
 
         if (!asset.isPlayable)
         {
             self.playable = NO;
-            self.loaded = YES;
             return;
         }
 
@@ -131,6 +129,12 @@ typedef void (^HBPlayableObverser)(void);
     [self.playableObservers removeAllObjects];
 }
 
+- (void)setPlayable:(BOOL)playable
+{
+    _playable = playable;
+    self.loaded = YES;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == HBAVPlayerItemStatusContext)
@@ -142,11 +146,9 @@ typedef void (^HBPlayableObverser)(void);
                 break;
             case AVPlayerItemStatusReadyToPlay:
                 self.playable = YES;
-                self.loaded = YES;
                 break;
             case AVPlayerItemStatusFailed:
                 self.playable = NO;
-                self.loaded = YES;
                 break;
         }
 

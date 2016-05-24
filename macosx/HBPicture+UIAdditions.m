@@ -16,18 +16,31 @@
 @dynamic maxHorizontalCrop;
 @dynamic maxVerticalCrop;
 
-@dynamic keepDisplayAspectEditable;
-
 #pragma mark - Editable state
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingWidthEditable
+{
+    return [NSSet setWithObjects:@"anamorphicMode", nil];
+}
 
 - (BOOL)isWidthEditable
 {
     return (self.anamorphicMode != HB_ANAMORPHIC_STRICT) ? YES : NO;
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingHeightEditable
+{
+    return [NSSet setWithObjects:@"anamorphicMode", nil];
+}
+
 - (BOOL)isHeightEditable
 {
     return (self.anamorphicMode != HB_ANAMORPHIC_STRICT) ? YES : NO;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingKeepDisplayAspectEditable
+{
+    return [NSSet setWithObjects:@"anamorphicMode", nil];
 }
 
 - (BOOL)isKeepDisplayAspectEditable
@@ -43,9 +56,19 @@
     }
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingCustomAnamorphicEnabled
+{
+    return [NSSet setWithObjects:@"anamorphicMode", nil];
+}
+
 - (BOOL)isCustomAnamorphicEnabled
 {
     return self.anamorphicMode == HB_ANAMORPHIC_CUSTOM;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingInfo
+{
+    return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
 }
 
 - (NSString *)info
@@ -96,6 +119,11 @@
     }
 
     return sizeInfo;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingSummary
+{
+    return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
 }
 
 - (NSString *)summary
