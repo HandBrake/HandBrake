@@ -17,7 +17,7 @@
 
 // Audio is small, buffer a lot.  It helps to ensure that we see
 // the initial PTS from all input streams before setting the 'zero' point.
-#define SYNC_MAX_AUDIO_QUEUE_LEN    100
+#define SYNC_MAX_AUDIO_QUEUE_LEN    200
 #define SYNC_MIN_AUDIO_QUEUE_LEN    30
 
 // We do not place a limit on the number of subtitle frames
@@ -57,12 +57,22 @@ typedef struct
 
 typedef struct sync_common_s sync_common_t;
 
+#define SCR_HASH_SZ   (2 << 3)
+#define SCR_HASH_MASK (SCR_HASH_SZ - 1)
+
+typedef struct
+{
+    int                 scr_sequence;
+    int64_t             scr_offset;
+} scr_t;
+
 typedef struct
 {
     sync_common_t     * common;
 
     // Stream I/O control
     hb_list_t         * in_queue;
+    hb_list_t         * scr_delay_queue;
     int                 max_len;
     int                 min_len;
     hb_cond_t         * cond_full;
@@ -73,6 +83,11 @@ typedef struct
     int64_t             pts_slip;
     double              next_pts;
     double              last_pts;
+
+    // SCR recovery
+    int                 last_scr_sequence;
+    double              last_scr_pts;
+    double              last_duration;
 
     // frame statistics
     int64_t             first_pts;
@@ -127,13 +142,17 @@ typedef struct
 
 struct sync_common_s
 {
-    /* Audio/Video sync thread synchronization */
+    // Audio/Video sync thread synchronization
     hb_job_t      * job;
     hb_lock_t     * mutex;
     int             stream_count;
     sync_stream_t * streams;
     int             found_first_pts;
     int             done;
+
+    // SCR adjustments
+    scr_t           scr[SCR_HASH_SZ];
+    int             first_scr;
 
     // point-to-point support
     int             start_found;
@@ -163,8 +182,10 @@ struct hb_work_private_s
 static void UpdateState( sync_common_t * common, int frame_count );
 static void UpdateSearchState( sync_common_t * common, int64_t start,
                                int frame_count );
+static int  UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf );
 static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
                                        hb_buffer_t *buf );
+static void SortedQueueBuffer( sync_stream_t * stream, hb_buffer_t * buf );
 static hb_buffer_t * sanitizeSubtitle(sync_stream_t        * stream,
                                       hb_buffer_t          * sub);
 
@@ -223,16 +244,12 @@ static void signalBuffer( sync_stream_t * stream )
     }
 }
 
-static void allSlip( sync_common_t * common, int64_t delta )
+static void scrSlip( sync_common_t * common, int64_t delta )
 {
     int ii;
-    for (ii = 0; ii < common->stream_count; ii++)
+    for (ii = 0; ii < SCR_HASH_SZ; ii++)
     {
-        common->streams[ii].pts_slip += delta;
-        if (common->streams[ii].next_pts != (int64_t)AV_NOPTS_VALUE)
-        {
-            common->streams[ii].next_pts -= delta;
-        }
+        common->scr[ii].scr_offset += delta;
     }
 }
 
@@ -240,27 +257,105 @@ static void shiftTS( sync_common_t * common, int64_t delta )
 {
     int ii, jj;
 
-    allSlip(common, delta);
+    scrSlip(common, delta);
     for (ii = 0; ii < common->stream_count; ii++)
     {
+        hb_buffer_t   * buf = NULL;
         sync_stream_t * stream = &common->streams[ii];
-        int count = hb_list_count(stream->in_queue);
+        int             count = hb_list_count(stream->in_queue);
+
         for (jj = 0; jj < count; jj++)
         {
-            hb_buffer_t * buf = hb_list_item(stream->in_queue, jj);
-            buf->s.start -= delta;
+            buf = hb_list_item(stream->in_queue, jj);
+            if (buf->s.start != AV_NOPTS_VALUE)
+            {
+                buf->s.start -= delta;
+            }
             if (buf->s.stop != AV_NOPTS_VALUE)
             {
                 buf->s.stop  -= delta;
             }
+        }
+        if (buf != NULL && buf->s.start != AV_NOPTS_VALUE)
+        {
+            stream->last_scr_pts = buf->s.start + buf->s.duration;
+        }
+        else
+        {
+            stream->last_scr_pts = (int64_t)AV_NOPTS_VALUE;
+        }
+    }
+}
+
+static void computeInitialTS( sync_common_t * common,
+                              sync_stream_t * first_stream )
+{
+    int           ii, count;
+    hb_buffer_t * prev;
+
+    // Process first_stream first since it has the initial PTS
+    prev = NULL;
+    count = hb_list_count(first_stream->in_queue);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_buffer_t * buf = hb_list_item(first_stream->in_queue, ii);
+        if (UpdateSCR(first_stream, buf))
+        {
+            if (first_stream->type == SYNC_TYPE_VIDEO && prev != NULL)
+            {
+                double duration = buf->s.start - prev->s.start;
+                if (duration > 0)
+                {
+                    prev->s.duration = duration;
+                    prev->s.stop = buf->s.start;
+                }
+            }
+        }
+        prev = buf;
+    }
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+
+        if (stream == first_stream)
+        {
+            // skip first_stream, already done
+            continue;
+        }
+
+        int jj;
+        prev = NULL;
+        for (jj = 0; jj < hb_list_count(stream->in_queue);)
+        {
+            hb_buffer_t * buf = hb_list_item(stream->in_queue, jj);
+            if (!UpdateSCR(stream, buf))
+            {
+                // Subtitle put into delay queue, remove it from in_queue
+                hb_list_rem(stream->in_queue, buf);
+            }
+            else
+            {
+                jj++;
+                if (stream->type == SYNC_TYPE_VIDEO && prev != NULL)
+                {
+                    double duration = buf->s.start - prev->s.start;
+                    if (duration > 0)
+                    {
+                        prev->s.duration = duration;
+                        prev->s.stop = buf->s.start;
+                    }
+                }
+            }
+            prev = buf;
         }
     }
 }
 
 static void checkFirstPts( sync_common_t * common )
 {
-    int ii;
-    int64_t first_pts = INT64_MAX;
+    int             ii;
+    int64_t         first_pts = INT64_MAX;
+    sync_stream_t * first_stream = NULL;
 
     for (ii = 0; ii < common->stream_count; ii++)
     {
@@ -275,22 +370,30 @@ static void checkFirstPts( sync_common_t * common )
         if (hb_list_count(stream->in_queue) > 0)
         {
             hb_buffer_t * buf = hb_list_item(stream->in_queue, 0);
-            if (first_pts > buf->s.start)
+            if (buf->s.start != AV_NOPTS_VALUE && buf->s.start < first_pts)
             {
                 first_pts = buf->s.start;
+                first_stream = stream;
             }
         }
     }
+    // We should *always* find a first pts because we let the queues
+    // fill before performing this test.
     if (first_pts != INT64_MAX)
     {
-        // Add a fudge factor to first pts to prevent negative
-        // timestamps from leaking through.  The pipeline can
-        // handle a positive offset, but some things choke on
-        // negative offsets
-        //first_pts -= 500000;
-        shiftTS(common, first_pts);
+        common->found_first_pts = 1;
+        // We may have buffers that have no timestamps (i.e. AV_NOPTS_VALUE).
+        // Compute these timestamps based on previous buffer's timestamp
+        // and duration.
+        computeInitialTS(common, first_stream);
+        // After this initialization, all AV_NOPTS_VALUE timestamps
+        // will be filled in by UpdateSCR()
     }
-    common->found_first_pts = 1;
+    else
+    {
+        // This should never happen
+        hb_error("checkFirstPts: No initial PTS found!\n");
+    }
 }
 
 static void addDelta( sync_common_t * common, int64_t start, int64_t delta)
@@ -586,6 +689,56 @@ static void dejitterAudio( sync_stream_t * stream )
     }
 }
 
+static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream, int64_t dur )
+{
+    double             frame_dur, next_pts;
+    int                size;
+    hb_buffer_list_t   list;
+    hb_buffer_t      * buf;
+
+    if (stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+    {
+        return NULL;
+    }
+    frame_dur = (90000. * stream->audio.audio->config.out.samples_per_frame) /
+                          stream->audio.audio->config.in.samplerate;
+    size = sizeof(float) * stream->audio.audio->config.out.samples_per_frame *
+           hb_mixdown_get_discrete_channel_count(
+                          stream->audio.audio->config.out.mixdown );
+
+    hb_buffer_list_clear(&list);
+    next_pts = stream->next_pts;
+    while (dur >= frame_dur)
+    {
+        buf = hb_buffer_init(size);
+        memset(buf->data, 0, buf->size);
+        buf->s.start     = next_pts;
+        buf->s.duration  = frame_dur;
+        next_pts        += frame_dur;
+        buf->s.stop      = next_pts;
+        dur             -= frame_dur;
+        hb_buffer_list_append(&list, buf);
+    }
+    if (dur > 0)
+    {
+        size = sizeof(float) *
+               (dur * stream->audio.audio->config.in.samplerate / 90000) *
+               hb_mixdown_get_discrete_channel_count(
+                      stream->audio.audio->config.out.mixdown );
+        if (size > 0)
+        {
+            buf = hb_buffer_init(size);
+            memset(buf->data, 0, buf->size);
+            buf->s.start     = next_pts;
+            buf->s.duration  = frame_dur;
+            next_pts        += frame_dur;
+            buf->s.stop      = next_pts;
+            hb_buffer_list_append(&list, buf);
+        }
+    }
+    return hb_buffer_list_clear(&list);
+}
+
 // Fix audio gaps that could not be corrected with dejitter
 static void fixAudioGap( sync_stream_t * stream )
 {
@@ -609,8 +762,23 @@ static void fixAudioGap( sync_stream_t * stream )
         {
             stream->gap_pts = buf->s.start;
         }
-        addDelta(stream->common, stream->next_pts, gap);
-        applyDeltas(stream->common);
+        buf = CreateSilenceBuf(stream, gap);
+        if (buf != NULL)
+        {
+            hb_buffer_t * next;
+            int           pos;
+            for (pos = 0; buf != NULL; buf = next, pos++)
+            {
+                next = buf->next;
+                buf->next = NULL;
+                hb_list_insert(stream->in_queue, pos, buf);
+            }
+        }
+        else
+        {
+            addDelta(stream->common, stream->next_pts, gap);
+            applyDeltas(stream->common);
+        }
         stream->gap_duration += gap;
     }
     else
@@ -1305,26 +1473,70 @@ static void Synchronize( sync_stream_t * stream )
     hb_unlock(common->mutex);
 }
 
-static void updateDuration( sync_stream_t * stream, int64_t start )
+static void updateDuration( sync_stream_t * stream )
 {
-    // The video decoder does not set an initial duration for frames.
-    // So set it here.
+    // The video decoder sets a nominal duration for frames.  But the
+    // actual duration needs to be computed from timestamps.
     if (stream->type == SYNC_TYPE_VIDEO)
     {
         int count = hb_list_count(stream->in_queue);
-        if (count > 0)
+        if (count >= 2)
         {
-            hb_buffer_t * buf = hb_list_item(stream->in_queue, count - 1);
-            double duration = start - buf->s.start;
+            hb_buffer_t * buf1 = hb_list_item(stream->in_queue, count - 1);
+            hb_buffer_t * buf2 = hb_list_item(stream->in_queue, count - 2);
+            double duration = buf1->s.start - buf2->s.start;
             if (duration > 0)
             {
-                buf->s.duration = duration;
-                buf->s.stop = start;
+                buf2->s.duration = duration;
+                buf2->s.stop = buf1->s.start;
             }
             else
             {
-                buf->s.duration = 0.;
-                buf->s.stop = buf->s.start;
+                buf2->s.duration = 0.;
+                buf2->s.start = buf2->s.stop = buf1->s.start;
+            }
+        }
+    }
+}
+
+static void ProcessSCRDelayQueue( sync_common_t * common )
+{
+    int ii, jj;
+
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        for (jj = 0; jj < hb_list_count(stream->scr_delay_queue);)
+        {
+            hb_buffer_t * buf = hb_list_item(stream->scr_delay_queue, jj);
+            int           hash = buf->s.scr_sequence & SCR_HASH_MASK;
+            if (buf->s.scr_sequence < 0)
+            {
+                // Unset scr_sequence inidicates an external stream
+                // (e.g. SRT subtitle) that is not on the same timebase
+                // as the source tracks. Do not adjust timestamps for
+                // scr_offset in this case.
+                hb_list_rem(stream->scr_delay_queue, buf);
+                SortedQueueBuffer(stream, buf);
+            }
+            else if (buf->s.scr_sequence == common->scr[hash].scr_sequence)
+            {
+                if (buf->s.start != AV_NOPTS_VALUE)
+                {
+                    buf->s.start -= common->scr[hash].scr_offset;
+                    buf->s.start -= stream->pts_slip;
+                }
+                if (buf->s.stop != AV_NOPTS_VALUE)
+                {
+                    buf->s.stop -= common->scr[hash].scr_offset;
+                    buf->s.stop -= stream->pts_slip;
+                }
+                hb_list_rem(stream->scr_delay_queue, buf);
+                SortedQueueBuffer(stream, buf);
+            }
+            else
+            {
+                jj++;
             }
         }
     }
@@ -1360,6 +1572,174 @@ static int getStreamId( sync_stream_t * stream )
     }
 }
 
+static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
+{
+    int             hash = buf->s.scr_sequence & SCR_HASH_MASK;
+    sync_common_t * common = stream->common;
+    double          last_scr_pts, last_duration;
+    int64_t         scr_offset = 0;
+
+    if (buf->s.scr_sequence < stream->last_scr_sequence)
+    {
+        // In decoder error conditions, the decoder can send us out of
+        // order frames.  Often the stream error will also trigger a
+        // discontinuity detection.  An out of order frame will
+        // cause an incorrect SCR offset, so drop such frames.
+        hb_deep_log(3, "SCR sequence went backwards %d -> %d",
+                    stream->last_scr_sequence, buf->s.scr_sequence);
+        hb_buffer_close(&buf);
+        return 0;
+    }
+    if (buf->s.scr_sequence >= 0)
+    {
+        if (buf->s.scr_sequence != common->scr[hash].scr_sequence)
+        {
+            if (stream->type == SYNC_TYPE_SUBTITLE ||
+                (stream->last_scr_pts == (int64_t)AV_NOPTS_VALUE &&
+                 common->first_scr))
+            {
+                // We got a new scr, but we have no last_scr_pts to base it
+                // off of. Delay till we can compute the scr offset from a
+                // different stream.
+                hb_list_add(stream->scr_delay_queue, buf);
+                return 0;
+            }
+            if (buf->s.start != AV_NOPTS_VALUE)
+            {
+                last_scr_pts  = stream->last_scr_pts;
+                last_duration = stream->last_duration;
+                if (last_scr_pts == (int64_t)AV_NOPTS_VALUE)
+                {
+                    last_scr_pts      = 0.;
+                    last_duration     = 0.;
+                    common->first_scr = 1;
+                }
+                // New SCR.  Compute SCR offset
+                common->scr[hash].scr_sequence = buf->s.scr_sequence;
+                common->scr[hash].scr_offset   = buf->s.start -
+                                                 (last_scr_pts + last_duration);
+                hb_deep_log(4,
+                    "New SCR: type %8s id %x scr seq %d scr offset %ld "
+                    "start %"PRId64" last %f dur %f",
+                    getStreamType(stream), getStreamId(stream),
+                    buf->s.scr_sequence, common->scr[hash].scr_offset,
+                    buf->s.start, last_scr_pts, last_duration);
+                ProcessSCRDelayQueue(common);
+            }
+        }
+        scr_offset = common->scr[hash].scr_offset;
+    }
+
+    // Adjust buffer timestamps for SCR offset
+    if (buf->s.start != AV_NOPTS_VALUE)
+    {
+        buf->s.start -= scr_offset;
+        last_scr_pts  = buf->s.start;
+    }
+    else if (stream->last_scr_pts != (int64_t)AV_NOPTS_VALUE)
+    {
+        last_scr_pts = stream->last_scr_pts + stream->last_duration;
+        buf->s.start = last_scr_pts;
+    }
+    else
+    {
+        // This should happen extremely rarely if ever.
+        // But if we get here, this is the first buffer received for
+        // this stream.  Normally, some buffers will be queued for
+        // every stream before we ever call UpdateSCR.
+        // We don't really know what it's timestamp should be,
+        // but 0 is a good guess.
+        buf->s.start = 0;
+        last_scr_pts = buf->s.start;
+    }
+    if (buf->s.stop != AV_NOPTS_VALUE)
+    {
+        buf->s.stop -= scr_offset;
+    }
+    if (last_scr_pts > stream->last_scr_pts)
+    {
+        stream->last_scr_pts = last_scr_pts;
+    }
+    if (buf->s.scr_sequence > stream->last_scr_sequence)
+    {
+        stream->last_scr_sequence = buf->s.scr_sequence;
+    }
+    stream->last_duration = buf->s.duration;
+
+    return 1;
+}
+
+// Handle broken timestamps that are out of order
+// These are usually due to a broken decoder (e.g. QSV and libav AVI packed
+// b-frame support).  But sometimes can come from a severely broken or
+// corrupted source file.
+//
+// We can pretty reliably fix out of order timestamps *if* every frame
+// has a timestamp.  But some container formats allow frames with no
+// timestamp (e.g. TS and PS).  When there is no timestamp, we will
+// compute one based on the last frames timestamp.  If the missing
+// timestamp is out of order and really belonged on an earlier frame (A),
+// this will result in the frame before (A) being long and the frame
+// after the current will overlap current.
+//
+// The condition above of one long frame and one overlap will most likely
+// get fixed by dejitterVideo. dejitterVideo finds sequences where the
+// sum of the durations of frames 1..N == (1/fps) * N. When it finds such
+// a sequence, it adjusts the frame durations to all be 1/fps. Since the
+// vast majority of video is constant framerate, this will fix the above
+// problem most of the time.
+static void SortedQueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
+{
+    int64_t start;
+    int     ii, count;
+
+    start = buf->s.start;
+    hb_list_add(stream->in_queue, buf);
+
+    // Search for the first earlier timestamp that is < this one.
+    // Under normal circumstances where the timestamps are not broken,
+    // this will only check the next to last buffer in the queue
+    // before aborting.
+    count = hb_list_count(stream->in_queue);
+    for (ii = count - 2; ii >= 0; ii--)
+    {
+        buf = hb_list_item(stream->in_queue, ii);
+        if (buf->s.start < start || start == AV_NOPTS_VALUE)
+        {
+            break;
+        }
+    }
+    if (ii < count - 2)
+    {
+        hb_buffer_t * prev = NULL;
+        int           jj;
+
+        // The timestamp was out of order.
+        // The timestamp belongs at position ii + 1
+        // Every timestamp from ii + 2 to count - 1 needs to be shifted up.
+        if (ii >= 0)
+        {
+            prev = hb_list_item(stream->in_queue, ii);
+        }
+        for (jj = ii + 1; jj < count; jj++)
+        {
+            int64_t tmp_start;
+
+            buf = hb_list_item(stream->in_queue, jj);
+            tmp_start = buf->s.start;
+            buf->s.start = start;
+            start = tmp_start;
+            if (stream->type == SYNC_TYPE_VIDEO && prev != NULL)
+            {
+                // recompute video buffer duration
+                prev->s.duration = buf->s.start - prev->s.start;
+                prev->s.stop     = buf->s.start;
+            }
+            prev = buf;
+        }
+    }
+}
+
 static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 {
     hb_lock(stream->common->mutex);
@@ -1374,17 +1754,42 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
     buf->s.renderOffset = AV_NOPTS_VALUE;
 
     hb_deep_log(11,
-        "type %8s id %x start %"PRId64" stop %"PRId64" dur %f",
-        getStreamType(stream), getStreamId(stream),
+        "type %8s id %x scr seq %d start %"PRId64" stop %"PRId64" dur %f",
+        getStreamType(stream), getStreamId(stream), buf->s.scr_sequence,
         buf->s.start, buf->s.stop, buf->s.duration);
 
-    buf->s.start -= stream->pts_slip;
-    if (buf->s.stop != AV_NOPTS_VALUE)
+    if (stream->common->found_first_pts)
     {
-        buf->s.stop -= stream->pts_slip;
+        if (UpdateSCR(stream, buf))
+        {
+            // Apply any stream slips.
+            // Stream slips will only temporarily differ between
+            // the streams.  The slips get updated in applyDeltas.  When
+            // all the deltas are absorbed, the stream slips will all
+            // be equal.
+            buf->s.start -= stream->pts_slip;
+            if (buf->s.stop != AV_NOPTS_VALUE)
+            {
+                buf->s.stop -= stream->pts_slip;
+            }
+
+            SortedQueueBuffer(stream, buf);
+            updateDuration(stream);
+        }
     }
-    updateDuration(stream, buf->s.start);
-    hb_list_add(stream->in_queue, buf);
+    else
+    {
+        if (buf->s.start == AV_NOPTS_VALUE &&
+            hb_list_count(stream->in_queue) == 0)
+        {
+            // We require an initial pts to start synchronization
+            saveChap(stream, buf);
+            hb_buffer_close(&buf);
+            hb_unlock(stream->common->mutex);
+            return;
+        }
+        SortedQueueBuffer(stream, buf);
+    }
 
     // Make adjustments for gaps found in other streams
     applyDeltas(stream->common);
@@ -1426,6 +1831,7 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->cond_full       = hb_cond_init();
     if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue        = hb_list_init();
+    pv->stream->scr_delay_queue = hb_list_init();
     pv->stream->max_len         = SYNC_MAX_AUDIO_QUEUE_LEN;
     pv->stream->min_len         = SYNC_MIN_AUDIO_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
@@ -1435,6 +1841,9 @@ static int InitAudio( sync_common_t * common, int index )
     pv->stream->first_pts       = AV_NOPTS_VALUE;
     pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
+    pv->stream->last_duration   = (int64_t)AV_NOPTS_VALUE;
     pv->stream->audio.audio     = audio;
     pv->stream->fifo_out        = w->fifo_out;
 
@@ -1498,6 +1907,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->cond_full         = hb_cond_init();
     if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue          = hb_list_init();
+    pv->stream->scr_delay_queue   = hb_list_init();
     pv->stream->max_len           = SYNC_MAX_SUBTITLE_QUEUE_LEN;
     pv->stream->min_len           = SYNC_MIN_SUBTITLE_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
@@ -1507,6 +1917,9 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->first_pts         = AV_NOPTS_VALUE;
     pv->stream->next_pts          = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts          = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_pts      = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
+    pv->stream->last_duration     = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
     pv->stream->fifo_out          = subtitle->fifo_out;
 
@@ -1594,6 +2007,7 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->cond_full       = hb_cond_init();
     if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue        = hb_list_init();
+    pv->stream->scr_delay_queue = hb_list_init();
     pv->stream->max_len         = SYNC_MAX_VIDEO_QUEUE_LEN;
     pv->stream->min_len         = SYNC_MIN_VIDEO_QUEUE_LEN;
     if (pv->stream->in_queue == NULL) goto fail;
@@ -1603,6 +2017,9 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     pv->stream->first_pts       = AV_NOPTS_VALUE;
     pv->stream->next_pts        = (int64_t)AV_NOPTS_VALUE;
     pv->stream->last_pts        = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_pts    = (int64_t)AV_NOPTS_VALUE;
+    pv->stream->last_scr_sequence = -1;
+    pv->stream->last_duration   = (int64_t)AV_NOPTS_VALUE;
     pv->stream->fifo_out        = job->fifo_sync;
     pv->stream->video.id        = job->title->video_id;
 

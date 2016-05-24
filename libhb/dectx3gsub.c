@@ -216,9 +216,10 @@ static hb_buffer_t *tx3g_decode_to_ssa(hb_work_private_t *pv, hb_buffer_t *in)
     out->size = dst - out->data;
 
     // Copy metadata from the input packet to the output packet
-    out->s.frametype = HB_FRAME_SUBTITLE;
-    out->s.start = in->s.start;
-    out->s.stop = in->s.stop;
+    out->s.frametype    = HB_FRAME_SUBTITLE;
+    out->s.start        = in->s.start;
+    out->s.stop         = in->s.stop;
+    out->s.scr_sequence = in->s.scr_sequence;
 
 fail:
     free(styleRecords);

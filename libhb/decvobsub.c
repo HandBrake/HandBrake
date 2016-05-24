@@ -38,8 +38,10 @@ struct hb_work_private_s
     int           size_got;
     int           size_rle;
     int64_t       pts;
+    int           current_scr_sequence;
     int64_t       pts_start;
     int64_t       pts_stop;
+    int           scr_sequence;
     int           pts_forced;
     int           x;
     int           y;
@@ -127,7 +129,8 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->size_got = in->size;
             if( in->s.start >= 0 )
             {
-                pv->pts      = in->s.start;
+                pv->pts                  = in->s.start;
+                pv->current_scr_sequence = in->s.scr_sequence;
             }
         }
     }
@@ -141,7 +144,8 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->size_got += in->size;
             if( in->s.start >= 0 )
             {
-                pv->pts = in->s.start;
+                pv->pts                  = in->s.start;
+                pv->current_scr_sequence = in->s.scr_sequence;
             }
         }
         else
@@ -180,7 +184,8 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // of the current sub as the start of the next.
             // This can happen if reader invalidates timestamps while 
             // waiting for an audio to update the SCR.
-            pv->pts      = pv->pts_stop;
+            pv->pts                  = pv->pts_stop;
+            pv->current_scr_sequence = pv->scr_sequence;
         }
     }
 
@@ -255,21 +260,26 @@ static void ParseControls( hb_work_object_t * w )
             switch( command )
             {
                 case 0x00: // 0x00 - FSTA_DSP - Forced Start Display, no arguments
-                    pv->pts_start = pv->pts + date * 1024;
-                    pv->pts_forced = 1;
+                    pv->pts_start    = pv->pts + date * 1024;
+                    pv->scr_sequence = pv->current_scr_sequence;
+                    pv->pts_forced   = 1;
                     w->subtitle->hits++;
                     w->subtitle->forced_hits++;
                     break;
 
                 case 0x01: // 0x01 - STA_DSP - Start Display, no arguments
-                    pv->pts_start = pv->pts + date * 1024;
-                    pv->pts_forced  = 0;
+                    pv->pts_start    = pv->pts + date * 1024;
+                    pv->scr_sequence = pv->current_scr_sequence;
+                    pv->pts_forced   = 0;
                     w->subtitle->hits++;
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
-                    if(pv->pts_stop == AV_NOPTS_VALUE)
-                        pv->pts_stop = pv->pts + date * 1024;
+                    if (pv->pts_stop == AV_NOPTS_VALUE)
+                    {
+                        pv->pts_stop     = pv->pts + date * 1024;
+                        pv->scr_sequence = pv->current_scr_sequence;
+                    }
                     break;
 
                 case 0x03: // 0x03 - SET_COLOR - Set Colour indices
@@ -346,7 +356,8 @@ static void ParseControls( hb_work_object_t * w )
                     // fading-out
                     if (currAlpha < lastAlpha && pv->pts_stop == AV_NOPTS_VALUE)
                     {
-                        pv->pts_stop = pv->pts + date * 1024;
+                        pv->pts_stop     = pv->pts + date * 1024;
+                        pv->scr_sequence = pv->current_scr_sequence;
                     }
 
                     i += 2;
@@ -382,7 +393,8 @@ static void ParseControls( hb_work_object_t * w )
     if( pv->pts_start == AV_NOPTS_VALUE )
     {
         // Set pts to end of last sub if the start time is unknown.
-        pv->pts_start = pv->pts;
+        pv->pts_start    = pv->pts;
+        pv->scr_sequence = pv->current_scr_sequence;
     }
 }
 
@@ -535,9 +547,10 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     realheight = crop[1] - crop[0] + 1;
 
     buf = hb_frame_buffer_init( AV_PIX_FMT_YUVA420P, realwidth, realheight );
-    buf->s.frametype = HB_FRAME_SUBTITLE;
-    buf->s.start  = pv->pts_start;
-    buf->s.stop   = pv->pts_stop;
+    buf->s.frametype    = HB_FRAME_SUBTITLE;
+    buf->s.start        = pv->pts_start;
+    buf->s.stop         = pv->pts_stop;
+    buf->s.scr_sequence = pv->scr_sequence;
 
     buf->f.x = pv->x + crop[2];
     buf->f.y = pv->y + crop[0];
@@ -606,8 +619,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     if (w->subtitle->config.dest == PASSTHRUSUB)
     {
-        pv->buf->s.start  = pv->pts_start;
-        pv->buf->s.stop   = pv->pts_stop;
+        pv->buf->s.start        = pv->pts_start;
+        pv->buf->s.stop         = pv->pts_stop;
+        pv->buf->s.scr_sequence = pv->scr_sequence;
         buf = pv->buf;
         pv->buf = NULL;
         return buf;
