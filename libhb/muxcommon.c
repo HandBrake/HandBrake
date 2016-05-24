@@ -727,15 +727,8 @@ static int check_realloc_output(struct output_buf_s * output, int size)
     {
         uint8_t * tmp;
 
-        if (output->alloc == 0)
-        {
-            output->alloc = 1024;
-        }
-        else
-        {
-            output->alloc *= 2;
-        }
-        output->size = size;
+        output->alloc = size + 1024;
+        output->size  = size;
         tmp = realloc(output->buf, output->alloc);
         if (tmp == NULL)
         {
