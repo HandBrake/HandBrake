@@ -30,7 +30,7 @@
 
 GhbValue *ghb_get_audio_settings(GhbValue *settings);
 GhbValue *ghb_get_audio_list(GhbValue *settings);
-void ghb_sanitize_audio_tracks(signal_user_data_t *ud);
+void ghb_sanitize_audio_track_settings(GhbValue *settings);
 const gchar* ghb_get_user_audio_lang(GhbValue *settings, const hb_title_t *title, gint track);
 void ghb_audio_list_refresh_selected(signal_user_data_t *ud);
 gint ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback_acodec, gint copy_mask);

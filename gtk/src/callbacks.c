@@ -1936,6 +1936,8 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
             update_meta(settings, "LongDescription",
                 title->metadata->long_description);
         }
+        ghb_sanitize_audio_track_settings(settings);
+        ghb_sanitize_subtitle_track_settings(settings);
     }
 
     set_destination_settings(ud, settings);

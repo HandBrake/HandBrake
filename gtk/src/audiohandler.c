@@ -446,6 +446,19 @@ static char * get_quality_string(int codec, gdouble quality)
     return s_quality;
 }
 
+void ghb_sanitize_audio_track_settings(GhbValue *settings)
+{
+    int ii;
+    GhbValue *alist = ghb_get_job_audio_list(settings);
+    int count = ghb_array_len(alist);
+
+    for (ii = 0; ii < count; ii++)
+    {
+        GhbValue *asettings = ghb_array_get(alist, ii);
+        ghb_sanitize_audio_settings(settings, asettings);
+    }
+}
+
 void ghb_sanitize_audio_tracks(signal_user_data_t *ud)
 {
     int ii;

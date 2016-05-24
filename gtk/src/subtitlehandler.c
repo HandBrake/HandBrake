@@ -409,6 +409,22 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
     g_free(desc);
 }
 
+void ghb_sanitize_subtitle_track_settings(GhbValue *settings)
+{
+    int ii;
+    GhbValue *slist = ghb_get_job_subtitle_list(settings);
+    int count = ghb_array_len(slist);
+
+    GhbValue *subtitle_search = ghb_get_job_subtitle_search(settings);
+    subtitle_set_track_description(settings, subtitle_search);
+    for (ii = 0; ii < count; ii++)
+    {
+        GhbValue *subsettings = ghb_array_get(slist, ii);
+        subtitle_set_track_description(settings, subsettings);
+    }
+}
+
+
 static GhbValue*  subtitle_add_track(
     signal_user_data_t *ud,
     GhbValue *settings,
