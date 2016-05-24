@@ -13,6 +13,7 @@ import hashlib
 import random
 import re
 import os
+import signal
 import sys
 import time
 import urllib2
@@ -20,6 +21,15 @@ import urllib2
 sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.join(sys.path[0], 'lib'))
 import hb_distfile
+
+###############################################################################
+
+def signal_handler(signal, frame):
+    sys.stderr.write('^C')
+    sys.exit(1)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 ###############################################################################
 
