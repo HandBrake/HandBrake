@@ -1,7 +1,8 @@
 ###############################################################################
 ##
-## This script is coded for minimum version of Python 2.4 .
-## Pyhthon3 is incompatible.
+## This script is coded for minimum version of Python 2.7 .
+##
+## Python3 is incompatible.
 ##
 ## Authors: konablend
 ##
@@ -9,16 +10,18 @@
 
 import fnmatch
 import glob
+import json
 import optparse
 import os
 import platform
+import random
 import re
+import string
 import subprocess
 import sys
 import time
 from datetime import datetime, timedelta
 
-from optparse import OptionGroup
 from optparse import OptionGroup
 from optparse import OptionParser
 from sys import stderr
@@ -81,13 +84,13 @@ class Configure( object ):
     def infof( self, format, *args ):
         line = format % args
         self._log_verbose.append( line )
-        if cfg.verbose >= Configure.OUT_INFO:
+        if self.verbose >= Configure.OUT_INFO:
             self._log_info.append( line )
             stdout.write( line )
     def verbosef( self, format, *args ):
         line = format % args
         self._log_verbose.append( line )
-        if cfg.verbose >= Configure.OUT_VERBOSE:
+        if self.verbose >= Configure.OUT_VERBOSE:
             stdout.write( line )
 
     ## doc is ready to be populated
@@ -97,14 +100,14 @@ class Configure( object ):
         self.src_final    = self._final_dir( self.build_dir, self.src_dir )
         self.prefix_final = self._final_dir( self.build_dir, self.prefix_dir )
 
-        cfg.infof( 'compute: makevar SRC/    = %s\n', self.src_final )
-        cfg.infof( 'compute: makevar BUILD/  = %s\n', self.build_final )
-        cfg.infof( 'compute: makevar PREFIX/ = %s\n', self.prefix_final )
+        self.infof( 'compute: makevar SRC/    = %s\n', self.src_final )
+        self.infof( 'compute: makevar BUILD/  = %s\n', self.build_final )
+        self.infof( 'compute: makevar PREFIX/ = %s\n', self.prefix_final )
 
     ## perform chdir and enable log recording
     def chdir( self ):
         if os.path.abspath( self.build_dir ) == os.path.abspath( self.src_dir ):
-            cfg.errln( 'build (scratch) directory must not be the same as top-level source root!' )
+            self.errln( 'build (scratch) directory must not be the same as top-level source root!' )
 
         if self.build_dir != os.curdir:
             if os.path.exists( self.build_dir ):
@@ -127,7 +130,7 @@ class Configure( object ):
         dir = os.path.dirname( args[0] )
         if len(args) > 1 and args[1].find('w') != -1:
             self.mkdirs( dir )
-        m = re.match( '^(.*)\.tmp$', args[0] )
+        m = re.match( '^(.*)\.tmp\..{8}$', args[0] )
         if m:
             self.infof( 'write: %s\n', m.group(1) )
         else:
@@ -136,18 +139,18 @@ class Configure( object ):
         try:
             return open( *args )
         except Exception, x:
-            cfg.errln( 'open failure: %s', x )
+            self.errln( 'open failure: %s', x )
 
     def record_log( self ):
         if not self._record:
             return
         self._record = False
         self.verbose = Configure.OUT_QUIET
-        file = cfg.open( 'log/config.info.txt', 'w' )
+        file = self.open( 'log/config.info.txt', 'w' )
         for line in self._log_info:
             file.write( line )
         file.close()
-        file = cfg.open( 'log/config.verbose.txt', 'w' )
+        file = self.open( 'log/config.verbose.txt', 'w' )
         for line in self._log_verbose:
             file.write( line )
         file.close()
@@ -208,6 +211,10 @@ class Configure( object ):
         ## special case if src == build: add build subdir
         if os.path.abspath( self.src_dir ) == os.path.abspath( self.build_dir ):
             self.build_dir = os.path.join( self.build_dir, 'build' )
+
+    ## generate a temporary filename - not worried about race conditions
+    def mktmpname( self, filename ):
+        return filename + '.tmp.' + ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
 
 ###############################################################################
 ##
@@ -1152,7 +1159,7 @@ class ConfigDocument:
         else:
             raise ValueError, 'unknown file type: ' + type
 
-        ftmp  = fname + '.tmp'
+        ftmp = cfg.mktmpname(fname)
         try:
             try:
                 file = cfg.open( ftmp, 'w' )
@@ -1173,6 +1180,41 @@ class ConfigDocument:
             os.rename( ftmp, fname )
         except Exception, x:
             cfg.errln( 'failed writing to %s\n%s', fname, x )
+
+###############################################################################
+
+def encodeDistfileConfig():
+    fname = 'distfile.cfg'
+    ftmp = cfg.mktmpname(fname)
+    data = {
+        'disable-fetch':  options.disable_df_fetch,
+        'disable-verify': options.disable_df_verify,
+        'jobs':           options.df_jobs,
+        'verbosity':      options.df_verbosity,
+        'accept-url':     options.df_accept_url,
+        'deny-url':       options.df_deny_url,
+    }
+    try:
+        try:
+            file = cfg.open( ftmp, 'w' )
+            json.dump(data, file)
+            file.write('\n')
+        finally:
+            try:
+                file.close()
+            except:
+                pass
+    except Exception, x:
+        try:
+            os.remove( ftmp )
+        except Exception, x:
+            pass
+        cfg.errln( 'failed writing to %s\n%s', ftmp, x )
+
+    try:
+        os.rename( ftmp, fname )
+    except Exception, x:
+        cfg.errln( 'failed writing to %s\n%s', fname, x )
 
 ###############################################################################
 ##
@@ -1212,8 +1254,20 @@ def createCLI():
 
     ## add hidden options
     cli.add_option( '--xcode-driver', default='bootstrap', action='store', help=optparse.SUPPRESS_HELP )
+
+    ## add general options
     cli.add_option( '--force', default=False, action='store_true', help='overwrite existing build config' )
     cli.add_option( '--verbose', default=False, action='store_true', help='increase verbosity' )
+
+    ## add distfile options
+    grp = OptionGroup( cli, 'Distfile Options' )
+    grp.add_option( '--disable-df-fetch', default=False, action='store_true', help='disable distfile downloads' )
+    grp.add_option( '--disable-df-verify', default=False, action='store_true', help='disable distfile data verification' )
+    grp.add_option( '--df-jobs', default=1, action='store', metavar='N', type='int', help='allow N distfile downloads at once' )
+    grp.add_option( '--df-verbose', default=1, action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
+    grp.add_option( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
+    grp.add_option( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
+    cli.add_option_group( grp )
 
     ## add install options
     grp = OptionGroup( cli, 'Directory Locations' )
@@ -1448,7 +1502,6 @@ try:
     class Tools:
         ar    = ToolProbe( 'AR.exe',    'ar' )
         cp    = ToolProbe( 'CP.exe',    'cp' )
-        curl  = ToolProbe( 'CURL.exe',  'curl', abort=False )
         gcc   = ToolProbe( 'GCC.gcc',   'gcc', IfHost( 'gcc-4', '*-*-cygwin*' ))
 
         if host.match( '*-*-darwin*' ):
@@ -1463,7 +1516,6 @@ try:
         ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib' )
         strip    = ToolProbe( 'STRIP.exe',    'strip' )
         tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
-        wget     = ToolProbe( 'WGET.exe',     'wget', abort=False )
         yasm     = ToolProbe( 'YASM.exe',     'yasm', abort=False, minversion=[1,2,0] )
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
@@ -1473,8 +1525,6 @@ try:
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
-
-        fetch = SelectTool( 'FETCH.select', 'fetch', ['wget',wget], ['curl',curl] )
 
     ## run tool probes
     for tool in ToolProbe.tools:
@@ -1688,7 +1738,7 @@ int main ()
     args = []
     for arg in Option.conf_args:
         args.append( arg[1] )
-    doc.add( 'CONF.args', ' '.join( args ))
+    doc.add( 'CONF.args', ' '.join(args).replace('$','$$') )
 
     doc.addBlank()
     doc.add( 'HB.title',       project.title )
@@ -1887,6 +1937,8 @@ int main ()
     ## perform
     doc.write( 'make' )
     doc.write( 'm4' )
+    encodeDistfileConfig()
+
     if options.launch:
         Launcher( targets )
 

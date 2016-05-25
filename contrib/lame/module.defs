@@ -2,4 +2,15 @@ $(eval $(call import.MODULE.defs,LAME,lame))
 $(eval $(call import.CONTRIB.defs,LAME))
 
 LAME.FETCH.url = http://download.handbrake.fr/handbrake/contrib/lame-3.98.tar.gz
+LAME.FETCH.md5 = 7036b52e792538fd665595d56b9e49a0
 LAME.EXTRACT.tarbase = lame
+
+# TODO: Upstream archive differs
+#LAME.FETCH.url = http://sourceforge.net/projects/lame/files/lame/3.98/lame-398.tar.gz
+#LAME.FETCH.md5 = f44b9f8e1b5d8835d0a77f9cc9cedd1c
+#LAME.FETCH.distfile  = lame-3.98.tar.gz
+#LAME.EXTRACT.tarbase = lame
+#
+# TODO: lame >= 3.99.5, tarbase unnecessary
+#LAME.FETCH.md5 = 84835b313d4a8b68f5349816d33e07ce
+#LAME.FETCH.url = http://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz

@@ -2,7 +2,9 @@ __deps__ := FREETYPE LIBXML2 LIBICONV
 $(eval $(call import.MODULE.defs,FONTCONFIG,fontconfig,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FONTCONFIG))
 
-FONTCONFIG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/fontconfig-2.11.94.tar.bz2
+FONTCONFIG.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/fontconfig-2.11.94.tar.bz2
+FONTCONFIG.FETCH.url += http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.94.tar.bz2
+FONTCONFIG.FETCH.md5 =  c988ea12f4117330246e041109152b4a
 FONTCONFIG.EXTRACT.tarbase = fontconfig-2.11.94
 
 #

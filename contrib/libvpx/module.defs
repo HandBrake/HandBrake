@@ -1,7 +1,13 @@
 $(eval $(call import.MODULE.defs,LIBVPX,libvpx,YASM))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
-LIBVPX.FETCH.url = http://download.handbrake.fr/contrib/libvpx-v1.3.0.tar.bz2
+LIBVPX.FETCH.url =  http://download.handbrake.fr/contrib/libvpx-v1.3.0.tar.bz2
+LIBVPX.FETCH.url += http://downloads.webmproject.org/releases/webm/libvpx-v1.3.0.tar.bz2
+LIBVPX.FETCH.md5 =  14783a148872f2d08629ff7c694eb31f
+
+# TODO: libvpx >= 1.4.0
+#LIBVPX.FETCH.url = http://downloads.webmproject.org/releases/webm/libvpx-1.4.0.tar.bz2
+#LIBVPX.FETCH.md5 = 63b1d7f59636a42eeeee9225cc14e7de
 
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =

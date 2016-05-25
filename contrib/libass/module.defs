@@ -2,7 +2,13 @@ __deps__ := FONTCONFIG FREETYPE FRIBIDI
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.12.3.tar.gz
+LIBASS.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libass-0.12.3.tar.gz
+LIBASS.FETCH.url += https://github.com/libass/libass/releases/download/0.12.3/libass-0.12.3.tar.gz
+LIBASS.FETCH.md5 =  648ee785f966c69d4b5d50948e509d93
+
+# TODO: libass >= 0.13.0
+#LIBASS.FETCH.url = https://github.com/libass/libass/releases/download/0.13.0/libass-0.13.0.tar.gz
+#LIBASS.FETCH.md5 = 44290519105b3779b8b25813a25a9914
 
 # Disable as many external dependencies as I can get away with
 # and tell configure where to find our version of freetype
