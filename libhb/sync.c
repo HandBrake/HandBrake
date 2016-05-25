@@ -866,7 +866,8 @@ static void fixSubtitleOverlap( sync_stream_t * stream )
         return;
     }
     // Only SSA subs can overlap
-    if (stream->subtitle.subtitle->source != SSASUB &&
+    if (stream->subtitle.subtitle->source      != SSASUB &&
+        stream->subtitle.subtitle->config.dest == PASSTHRUSUB &&
         buf->s.start <= stream->last_pts)
     {
         int64_t       overlap;
