@@ -78,7 +78,7 @@ class Tool(object):
             if percent >= 0:
                 sys.stdout.write("  [%-20s] %.1f%%" % ('='*int(percent*20), percent*100))
             sys.stdout.write('\n')      # needed to flush on some systems
-            if self.options.jobs == 1:
+            if self.options.jobs == 1 and os.name != 'nt':
                 sys.stdout.write('\033[F')  # reuse line
             sys.stdout.flush()
 
