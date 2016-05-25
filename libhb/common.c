@@ -5412,6 +5412,8 @@ void hb_chapter_enqueue(hb_chapter_queue_t *q, hb_buffer_t *buf)
     {
         item->start = buf->s.start;
         item->new_chap = buf->s.new_chap;
+        // Make sure work_loop doesn't also copy the chapter mark
+        buf->s.new_chap = 0;
         hb_list_add(q->list_chapter, item);
     }
 }
