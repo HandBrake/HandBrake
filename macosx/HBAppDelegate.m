@@ -292,7 +292,7 @@
 - (void)buildPresetsMenu
 {
     // First we remove all the preset menu items
-    // inserted previosly
+    // inserted previously
     NSArray *menuItems = [self.presetsMenu.itemArray copy];
     for (NSMenuItem *item in menuItems)
     {
@@ -302,42 +302,50 @@
         }
     }
 
-    __block NSUInteger i = 0;
-    __block BOOL builtInEnded = NO;
-    [self.presetsManager.root enumerateObjectsUsingBlock:^(HBPreset *obj, NSIndexPath *idx, BOOL *stop)
-     {
-         if (idx.length)
-         {
-             NSMenuItem *item = [[NSMenuItem alloc] init];
-             item.title = obj.name;
-             item.tag = i++;
+    BOOL builtInSeparatorInserted = NO;
+    for (HBPreset *preset in self.presetsManager.root.children)
+    {
+        if (preset.isBuiltIn == NO && builtInSeparatorInserted == NO)
+        {
+            [self.presetsMenu addItem:[NSMenuItem separatorItem]];
+            builtInSeparatorInserted = YES;
+        }
+        [self.presetsMenu addItem:[self buildMenuItemWithPreset:preset]];
+    }
+}
 
-             // Set an action only to the actual presets,
-             // not on the folders.
-             if (obj.isLeaf)
-             {
-                 item.action = @selector(selectPresetFromMenu:);
-                 item.representedObject = obj;
-             }
-             // Make the default preset font bold.
-             if ([obj isEqualTo:self.presetsManager.defaultPreset])
-             {
-                 NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:obj.name
-                                                                                attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
-                 [item setAttributedTitle:newTitle];
-             }
-             // Add a separator line after the last builtIn preset
-             if (obj.isBuiltIn == NO && builtInEnded == NO)
-             {
-                 [self.presetsMenu addItem:[NSMenuItem separatorItem]];
-                 builtInEnded = YES;
-             }
+- (NSMenuItem *)buildMenuItemWithPreset:(HBPreset *)preset
+{
+    NSMenuItem *item = [[NSMenuItem alloc] init];
+    item.title = preset.name;
+    item.toolTip = preset.presetDescription;
+    item.tag = 2;
 
-             item.indentationLevel = idx.length - 1;
+    if (preset.isLeaf)
+    {
+        item.action = @selector(selectPresetFromMenu:);
+        item.representedObject = preset;
 
-             [self.presetsMenu addItem:item];
-         }
-     }];
+        // Make the default preset font bold.
+        if ([preset isEqualTo:self.presetsManager.defaultPreset])
+        {
+            NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:preset.name
+                                                                           attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
+            [item setAttributedTitle:newTitle];
+        }
+    }
+    else
+    {
+        NSMenu *menu = [[NSMenu alloc] init];
+        for (HBPreset *childPreset in preset.children)
+        {
+            [menu addItem:[self buildMenuItemWithPreset:childPreset]];
+        }
+
+        item.submenu = menu;
+    }
+
+    return item;
 }
 
 /**
