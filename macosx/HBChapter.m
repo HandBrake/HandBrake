@@ -55,8 +55,9 @@
     {
         copy->_title = [_title copy];
         copy->_duration = [_duration copy];
+        copy->_index = _index;
     }
-    
+
     return copy;
 }
 
