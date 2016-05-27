@@ -215,6 +215,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_VP8;
             break;
+        case HB_VCODEC_FFMPEG_VP9:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_VP9;
+            break;
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
             w = hb_get_work(h, WORK_ENCX264);
