@@ -577,18 +577,6 @@
                      fSrcDVD2Field.stringValue = displayName;
 
                      [fSrcTitlePopUp addItemWithTitle:title.description];
-
-                     // See if this is the main feature according
-                     if (title.isFeatured)
-                     {
-                         [fSrcTitlePopUp selectItemWithTitle:title.description];
-                     }
-                 }
-
-                 // Select the first item is nothing is selected
-                 if (!fSrcTitlePopUp.selectedItem)
-                 {
-                     [fSrcTitlePopUp selectItemAtIndex:0];
                  }
 
                  completionHandler(self.core.titles);
@@ -609,7 +597,16 @@
     {
         [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
 
-        HBJob *job = [self jobFromTitle:titles.firstObject];
+        HBTitle *featuredTitle = titles.firstObject;
+        for (HBTitle *title in titles)
+        {
+            if (title.isFeatured)
+            {
+                featuredTitle = title;
+            }
+        }
+
+        HBJob *job = [self jobFromTitle:featuredTitle];
         self.job = job;
     }];
 }
@@ -715,6 +712,9 @@
         fPreviewController.generator = [[HBPreviewGenerator alloc] initWithCore:self.core job:job];
 
         HBTitle *title = job.title;
+
+        // Update the title selection popup.
+        [fSrcTitlePopUp selectItemWithTitle:title.description];
 
         // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
         if (title.isStream && self.core.titles.count > 1)
