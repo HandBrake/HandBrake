@@ -69,26 +69,6 @@ ghb_sanitize_audio_settings(GhbValue *settings, GhbValue *asettings)
     bitrate = ghb_dict_get_int(asettings, "Bitrate");
     quality = ghb_dict_get_double(asettings, "Quality");
     sr      = ghb_dict_get_int(asettings, "Samplerate");
-    val     = ghb_dict_get(asettings, "Description");
-    if (val == NULL)
-    {
-        int                title_id, track;
-        const hb_title_t  *title;
-        hb_audio_config_t *aconfig;
-
-        title_id = ghb_dict_get_int(settings, "title");
-        title    = ghb_lookup_title(title_id, NULL);
-        track    = ghb_dict_get_int(asettings, "Track");
-        aconfig  = ghb_get_audio_info(title, track);
-        if (aconfig != NULL)
-        {
-            char *desc;
-            desc = g_strdup_printf("%d - %s", track + 1,
-                                   aconfig->lang.description);
-            ghb_dict_set_string(asettings, "Description", desc);
-            g_free(desc);
-        }
-    }
     val     = ghb_dict_get(asettings, "QualityEnable");
     if (val == NULL)
     {
@@ -1090,25 +1070,6 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         audio_deps(ud, asettings, widget);
         ghb_audio_list_refresh_selected(ud);
         ghb_live_reset(ud);
-
-        // Update the track description used by the queue
-        int title_id, titleindex;
-        const hb_title_t *title;
-        int track;
-        hb_audio_config_t *aconfig;
-
-        title_id = ghb_dict_get_int(ud->settings, "title");
-        title = ghb_lookup_title(title_id, &titleindex);
-        track = ghb_dict_get_int(ud->settings, "AudioTrack");
-        aconfig = ghb_get_audio_info(title, track);
-        if (aconfig != NULL)
-        {
-            char *desc;
-            desc = g_strdup_printf("%d - %s", track + 1,
-                                   aconfig->lang.description);
-            ghb_dict_set_string(asettings, "Description", desc);
-            g_free(desc);
-        }
     }
 }
 
@@ -1393,25 +1354,8 @@ static void
 audio_add_to_settings(GhbValue *settings, GhbValue *asettings)
 {
     GhbValue *audio_list;
-    int title_id;
-    const hb_title_t *title;
-    gint titleindex;
-    hb_audio_config_t *aconfig;
 
-    title_id = ghb_dict_get_int(settings, "title");
-    title = ghb_lookup_title(title_id, &titleindex);
     audio_list = ghb_get_job_audio_list(settings);
-
-    int track = ghb_dict_get_int(asettings, "Track");
-    aconfig = ghb_get_audio_info(title, track);
-    if (aconfig != NULL)
-    {
-        char *desc;
-        desc = g_strdup_printf("%d - %s", track + 1, aconfig->lang.description);
-        ghb_dict_set_string(asettings, "Description", desc);
-        g_free(desc);
-    }
-
     ghb_array_append(audio_list, asettings);
 }
 

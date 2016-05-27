@@ -2080,6 +2080,12 @@ ghb_lookup_title(int title_id, int *index)
     return lookup_title(h_scan, title_id, index);
 }
 
+GhbValue*
+ghb_get_title_dict(int title_id)
+{
+    return hb_title_to_dict(h_scan, title_id);
+}
+
 int
 ghb_lookup_queue_title_index(int title_id)
 {

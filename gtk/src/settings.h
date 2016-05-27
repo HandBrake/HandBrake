@@ -87,7 +87,11 @@ enum
     GHB_QUEUE_DONE,
 };
 
-GhbValue *ghb_get_job_settings(GhbValue *settings);
+GhbValue* ghb_get_title_settings(GhbValue *settings);
+GhbValue* ghb_get_title_audio_list(GhbValue *settings);
+GhbValue* ghb_get_title_subtitle_list(GhbValue *settings);
+
+GhbValue* ghb_get_job_settings(GhbValue *settings);
 GhbValue* ghb_get_job_source_settings(GhbValue *settings);
 GhbValue* ghb_get_job_range_settings(GhbValue *settings);
 GhbValue* ghb_get_job_par_settings(GhbValue *settings);
@@ -96,11 +100,11 @@ GhbValue* ghb_get_job_video_settings(GhbValue *settings);
 GhbValue* ghb_get_job_metadata_settings(GhbValue *settings);
 GhbValue* ghb_get_job_chapter_list(GhbValue *settings);
 GhbValue* ghb_get_job_mp4_settings(GhbValue *settings);
-GhbValue *ghb_get_job_audio_settings(GhbValue *settings);
-GhbValue *ghb_get_job_audio_list(GhbValue *settings);
-GhbValue *ghb_get_job_subtitle_settings(GhbValue *settings);
-GhbValue *ghb_get_job_subtitle_list(GhbValue *settings);
-GhbValue *ghb_get_job_subtitle_search(GhbValue *settings);
+GhbValue* ghb_get_job_audio_settings(GhbValue *settings);
+GhbValue* ghb_get_job_audio_list(GhbValue *settings);
+GhbValue* ghb_get_job_subtitle_settings(GhbValue *settings);
+GhbValue* ghb_get_job_subtitle_list(GhbValue *settings);
+GhbValue* ghb_get_job_subtitle_search(GhbValue *settings);
 GhbValue* ghb_get_job_filter_settings(GhbValue *settings);
 GhbValue* ghb_get_job_filter_list(GhbValue *settings);
 

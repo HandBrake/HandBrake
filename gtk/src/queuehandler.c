@@ -78,6 +78,62 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
     }
 }
 
+static char *
+subtitle_get_track_description(const GhbValue *subsource,
+                               const GhbValue *subsettings)
+{
+    GhbValue *srt;
+    char *desc = NULL;
+
+    srt = ghb_dict_get(subsettings, "SRT");
+    if (srt != NULL)
+    {
+        const gchar *filename, *code;
+        const gchar *lang;
+        const iso639_lang_t *iso;
+
+        lang = ghb_dict_get_string(srt, "Language");
+        code = ghb_dict_get_string(srt, "Codeset");
+        filename = ghb_dict_get_string(srt, "Filename");
+
+        iso = lang_lookup(lang);
+        if (iso != NULL)
+        {
+            if (iso->native_name != NULL)
+                lang = iso->native_name;
+            else
+                lang = iso->eng_name;
+        }
+
+        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+        {
+            gchar *basename;
+
+            basename = g_path_get_basename(filename);
+            desc = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
+            g_free(basename);
+        }
+        else
+        {
+            desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
+        }
+    }
+    else if (subsource == NULL)
+    {
+        desc = g_strdup(_("Foreign Audio Search"));
+    }
+    else
+    {
+        int track         = ghb_dict_get_int(subsettings, "Track");
+        int source        = ghb_dict_get_int(subsource, "Source");
+        const char * lang = ghb_dict_get_string(subsource, "Language");
+        desc = g_strdup_printf("%d - %s (%s)", track + 1,
+                                lang, hb_subsource_name(source));
+    }
+
+    return desc;
+}
+
 static void
 add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *piter)
 {
@@ -553,10 +609,12 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     //      Source description, Encoder, Mix, Samplerate, Bitrate
     //      ...
     gint count, ii;
-    const GhbValue *audio_list;
+    const GhbValue * jobAudioList;
+    const GhbValue * titleAudioList;
 
-    audio_list = ghb_get_job_audio_list(queueDict);
-    count = ghb_array_len(audio_list);
+    jobAudioList   = ghb_get_job_audio_list(queueDict);
+    titleAudioList = ghb_get_title_audio_list(queueDict);
+    count          = ghb_array_len(jobAudioList);
     if (count == 1)
     {
         XPRINT(_("<b>Audio:</b> <small>"));
@@ -567,12 +625,13 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     }
     for (ii = 0; ii < count; ii++)
     {
-        const gchar *track;
-        gchar *quality = NULL;
-        GhbValue *asettings;
-        const hb_encoder_t *audio_encoder;
+        int                  track;
+        gchar              * quality = NULL;
+        GhbValue           * asettings;
+        GhbValue           * asource;
+        const hb_encoder_t * audio_encoder;
 
-        asettings = ghb_array_get(audio_list, ii);
+        asettings = ghb_array_get(jobAudioList, ii);
 
         audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
         double q = ghb_dict_get_double(asettings, "Quality");
@@ -592,7 +651,9 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
         if (sr_name == NULL)
             sr_name = "Auto";
 
-        track = ghb_dict_get_string(asettings, "Description");
+        track   = ghb_dict_get_int(asettings, "Track");
+        asource = ghb_array_get(titleAudioList, track);
+        const char * desc = ghb_dict_get_string(asource, "Description");
         const hb_mixdown_t *mix;
         mix = ghb_settings_mixdown(asettings, "Mixdown");
         if (count > 1)
@@ -600,12 +661,13 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
 
         if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
         {
-            XPRINT(_("%s --> Encoder: %s"), track, audio_encoder->name);
+            XPRINT(_("%d - %s --> Encoder: %s"),
+                   track + 1, desc, audio_encoder->name);
         }
         else
         {
-            XPRINT(_("%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"),
-             track, audio_encoder->name, mix->name, sr_name, quality);
+            XPRINT(_("%d - %s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"),
+             track + 1, desc, audio_encoder->name, mix->name, sr_name, quality);
         }
         g_free(quality);
     }
@@ -618,14 +680,16 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     // Subtitle Tracks: count
     //      Subtitle description(Subtitle options)
     //      ...
-    const GhbValue *sub_dict, *sub_list, *sub_search;
+    const GhbValue *jobSubtitleDict, *jobSubtitleList, *subtitleSearchDict;
+    const GhbValue *titleSubtitleList;
     gboolean search;
 
-    sub_dict = ghb_get_job_subtitle_settings(queueDict);
-    sub_list = ghb_dict_get(sub_dict, "SubtitleList");
-    sub_search = ghb_dict_get(sub_dict, "Search");
-    search = ghb_dict_get_bool(sub_search, "Enable");
-    count = ghb_array_len(sub_list);
+    titleSubtitleList  = ghb_get_title_subtitle_list(queueDict);
+    jobSubtitleDict    = ghb_get_job_subtitle_settings(queueDict);
+    jobSubtitleList    = ghb_dict_get(jobSubtitleDict, "SubtitleList");
+    subtitleSearchDict = ghb_dict_get(jobSubtitleDict, "Search");
+    search             = ghb_dict_get_bool(subtitleSearchDict, "Enable");
+    count              = ghb_array_len(jobSubtitleList);
     if (count + search == 1)
     {
         XPRINT(_("<b>Subtitle:</b> "));
@@ -636,39 +700,43 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     }
     if (search)
     {
-        const gchar *track;
         gboolean force, burn, def;
+        char * desc;
 
-        track = ghb_dict_get_string(sub_search, "Description");
-        force = ghb_dict_get_bool(sub_search, "Forced");
-        burn  = ghb_dict_get_bool(sub_search, "Burn");
-        def   = ghb_dict_get_bool(sub_search, "Default");
+        desc  = subtitle_get_track_description(NULL, subtitleSearchDict);
+        force = ghb_dict_get_bool(subtitleSearchDict, "Forced");
+        burn  = ghb_dict_get_bool(subtitleSearchDict, "Burn");
+        def   = ghb_dict_get_bool(subtitleSearchDict, "Default");
         if (count + search > 1)
             XPRINT("\t");
-        XPRINT("<small>%s%s%s%s</small>\n", track,
+        XPRINT("<small>%s%s%s%s</small>\n", desc,
                 force ? _(" (Forced Only)") : "",
                 burn  ? _(" (Burn)")        : "",
                 def   ? _(" (Default)")     : ""
         );
+        g_free(desc);
     }
     for (ii = 0; ii < count; ii++)
     {
-        GhbValue *subsettings, *srt;
-        const gchar *track;
+        GhbValue *subsettings, *subsource, *srt;
+        int track;
         gboolean force, burn, def;
+        char * desc;
 
-        subsettings = ghb_array_get(sub_list, ii);
-        track  = ghb_dict_get_string(subsettings, "Description");
-        srt    = ghb_dict_get(subsettings, "SRT");
-        force  = ghb_dict_get_bool(subsettings, "Forced");
-        burn   = ghb_dict_get_bool(subsettings, "Burn");
-        def    = ghb_dict_get_bool(subsettings, "Default");
+        subsettings = ghb_array_get(jobSubtitleList, ii);
+        track       = ghb_dict_get_int(subsettings, "Track");
+        subsource   = ghb_array_get(titleSubtitleList, track);
+        desc        = subtitle_get_track_description(subsource, subsettings);
+        srt         = ghb_dict_get(subsettings, "SRT");
+        force       = ghb_dict_get_bool(subsettings, "Forced");
+        burn        = ghb_dict_get_bool(subsettings, "Burn");
+        def         = ghb_dict_get_bool(subsettings, "Default");
         if (count + search > 1)
             XPRINT("\t");
 
         if (srt == NULL)
         {
-            XPRINT("<small>%s%s%s%s</small>\n", track,
+            XPRINT("<small>%s%s%s%s</small>\n", desc,
                     force ? _(" (Forced Only)") : "",
                     burn  ? _(" (Burn)")        : "",
                     def   ? _(" (Default)")     : ""
@@ -679,8 +747,9 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
             int offset = ghb_dict_get_int(subsettings, "Offset");
 
             XPRINT(_("<small> %s, Offset (ms) %d%s</small>\n"),
-                   track, offset, def ? " (Default)" : "");
+                   desc, offset, def ? " (Default)" : "");
         }
+        g_free(desc);
     }
 
     // Remove the final newline in the string
@@ -1123,12 +1192,16 @@ queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 
     ghb_finalize_job(settings);
 
-    GhbValue *queueDict = ghb_dict_new();
-    GhbValue *uiDict = ghb_value_dup(settings);
+    GhbValue *jobDict    = ghb_get_job_settings(settings);
+    GhbValue *sourceDict = ghb_get_job_source_settings(settings);
+    GhbValue *queueDict  = ghb_dict_new();
+    GhbValue *uiDict     = ghb_value_dup(settings);
     ghb_dict_remove(uiDict, "Job");
+    int       title_id   = ghb_dict_get_int(sourceDict, "Title");
+    GhbValue *titleDict  = ghb_get_title_dict(title_id);
     ghb_dict_set(queueDict, "uiSettings", uiDict);
-    ghb_dict_set(queueDict, "Job",
-                 ghb_value_dup(ghb_dict_get(settings, "Job")));
+    ghb_dict_set(queueDict, "Job", ghb_value_dup(jobDict));
+    ghb_dict_set(queueDict, "Title", titleDict);
 
     // Copy current prefs into settings
     // The job should run with the preferences that existed
@@ -1426,7 +1499,7 @@ add_multiple_titles(signal_user_data_t *ud)
         settings = ghb_array_get(ud->settings_array, ii);
         if (ghb_dict_get_bool(settings, "title_selected"))
         {
-            queue_add(ud, settings, ii);
+            queue_add(ud, settings, 1);
         }
     }
 }

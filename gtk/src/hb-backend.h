@@ -180,6 +180,7 @@ gchar* ghb_create_title_label(const hb_title_t *title);
 
 // libhb lookup helpers
 const hb_title_t* ghb_lookup_title(int title_id, int *index);
+GhbValue* ghb_get_title_dict(int title_id);
 const hb_container_t* ghb_lookup_container_by_name(const gchar *name);
 const hb_encoder_t* ghb_lookup_audio_encoder(const char *name);
 int ghb_lookup_audio_encoder_codec(const char *name);

@@ -34,8 +34,8 @@
 #include "audiohandler.h"
 #include "subtitlehandler.h"
 
-static void subtitle_set_track_description(GhbValue *settings,
-                                           GhbValue *subsettings);
+static char * subtitle_get_track_description(GhbValue *settings,
+                                             GhbValue *subsettings);
 static void subtitle_list_refresh_selected(signal_user_data_t *ud,
                                            GhbValue *subsettings);
 static void subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings);
@@ -79,7 +79,7 @@ subtitle_refresh_list_row_ui(
     gboolean forced, burned, def;
     char *info_src, *info_src_2;
     char *info_dst, *info_dst_2;
-    const char *desc;
+    char *desc;
 
 
     info_src_2 = NULL;
@@ -88,13 +88,9 @@ subtitle_refresh_list_row_ui(
     forced = ghb_dict_get_bool(subsettings, "Forced");
     burned = ghb_dict_get_bool(subsettings, "Burn");
     def = ghb_dict_get_bool(subsettings, "Default");
-    desc = ghb_dict_get_string(subsettings, "Description");
-    if (desc == NULL)
-    {
-        subtitle_set_track_description(settings, subsettings);
-        desc = ghb_dict_get_string(subsettings, "Description");
-    }
+    desc = subtitle_get_track_description(settings, subsettings);
     info_src = g_strdup_printf("<small>%s</small>", desc);
+    g_free(desc);
     if (ghb_dict_get(subsettings, "SRT") != NULL)
     {
         gint offset;
@@ -330,8 +326,8 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
         subtitle_exclusive_default_settings(settings, count-1);
 }
 
-static void
-subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
+static char *
+subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
 {
     GhbValue *srt;
     char *desc = NULL;
@@ -397,33 +393,8 @@ subtitle_set_track_description(GhbValue *settings, GhbValue *subsettings)
         }
     }
 
-    if (desc != NULL)
-    {
-        ghb_dict_set_string(subsettings, "Description", desc);
-    }
-    else
-    {
-        ghb_dict_set_string(subsettings, "Description", "Error!");
-    }
-
-    g_free(desc);
+    return desc;
 }
-
-void ghb_sanitize_subtitle_track_settings(GhbValue *settings)
-{
-    int ii;
-    GhbValue *slist = ghb_get_job_subtitle_list(settings);
-    int count = ghb_array_len(slist);
-
-    GhbValue *subtitle_search = ghb_get_job_subtitle_search(settings);
-    subtitle_set_track_description(settings, subtitle_search);
-    for (ii = 0; ii < count; ii++)
-    {
-        GhbValue *subsettings = ghb_array_get(slist, ii);
-        subtitle_set_track_description(settings, subsettings);
-    }
-}
-
 
 static GhbValue*  subtitle_add_track(
     signal_user_data_t *ud,
@@ -490,8 +461,6 @@ static GhbValue*  subtitle_add_track(
         // something.
         *burned = TRUE;
     }
-
-    subtitle_set_track_description(settings, subsettings);
 
     subtitle_add_to_settings(settings, subsettings);
 
@@ -749,7 +718,6 @@ subtitle_update_setting(GhbValue *val, const char *name, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         ghb_dict_set(subsettings, name, val);
-        subtitle_set_track_description(ud->settings, subsettings);
         subtitle_list_refresh_selected(ud, subsettings);
         ghb_live_reset(ud);
     }
@@ -768,7 +736,6 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
                                           "Track", ud);
     if (subsettings != NULL)
     {
-        subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
     }
 }
@@ -850,7 +817,6 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             ghb_dict_remove(subsettings, "SRT");
         }
-        subtitle_set_track_description(ud->settings, subsettings);
         subtitle_update_dialog_widgets(ud, subsettings);
         subtitle_list_refresh_selected(ud, subsettings);
         ghb_live_reset(ud);
@@ -891,7 +857,6 @@ srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
         if (srt != NULL)
         {
             ghb_dict_set(srt, name, val);
-            subtitle_set_track_description(ud->settings, subsettings);
             subtitle_list_refresh_selected(ud, subsettings);
             ghb_live_reset(ud);
         }
@@ -1143,8 +1108,6 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     ghb_dict_set_bool(subtitle_search, "Forced", 1);
     ghb_dict_set_bool(subtitle_search, "Default", 1);
     ghb_dict_set_bool(subtitle_search, "Burn", 0);
-
-    subtitle_set_track_description(ud->settings, subtitle_search);
 
     GtkTreeView *tv;
     GtkTreeIter ti;
