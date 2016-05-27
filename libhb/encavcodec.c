@@ -87,6 +87,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_log("encavcodecInit: VP8 encoder");
         } break;
+        case AV_CODEC_ID_VP9:
+        {
+            hb_log("encavcodecInit: VP9 encoder");
+        } break;
         default:
         {
             hb_error("encavcodecInit: unsupported encoder!");
@@ -201,7 +205,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->flags |= CODEC_FLAG_QSCALE;
         context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
         //Set constant quality for libvpx
-        if ( w->codec_param == AV_CODEC_ID_VP8 )
+        if ( w->codec_param == AV_CODEC_ID_VP8 ||
+             w->codec_param == AV_CODEC_ID_VP9 )
         {
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);

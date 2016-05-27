@@ -46,6 +46,7 @@ enum
     HB_GID_VCODEC_MPEG4,
     HB_GID_VCODEC_THEORA,
     HB_GID_VCODEC_VP8,
+    HB_GID_VCODEC_VP9,
     HB_GID_ACODEC_AAC,
     HB_GID_ACODEC_AAC_HE,
     HB_GID_ACODEC_AAC_PASS,
@@ -240,6 +241,7 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "MPEG-4",              "mpeg4",      "MPEG-4 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2",              "mpeg2",      "MPEG-2 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
     { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,                   HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP8,    },
+    { { "VP9",                 "VP9",        "VP9 (libvpx)",            HB_VCODEC_FFMPEG_VP9,                   HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP9,    },
     { { "Theora",              "theora",     "Theora (libtheora)",      HB_VCODEC_THEORA,                       HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
@@ -258,6 +260,7 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_FFMPEG_MPEG4:
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
             return 1;
 
 #ifdef USE_X265
@@ -1258,6 +1261,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
             break;
 
         case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
             *direction   = 1;
             *granularity = 1.;
             *low         = 0.;
@@ -1295,6 +1299,7 @@ const char* hb_video_quality_get_name(uint32_t codec)
             return "RF";
 
         case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
             return "CQ";
 
         default:

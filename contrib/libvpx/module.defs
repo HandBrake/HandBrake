@@ -13,7 +13,8 @@ LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \
     --enable-vp8-encoder  \
-    --disable-vp9         \
+    --enable-vp9-encoder  \
+    --disable-vp9-decoder \
     --disable-vp8-decoder \
     --disable-examples    \
     --disable-docs        \
