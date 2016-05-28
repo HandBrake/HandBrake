@@ -8,6 +8,7 @@ LIBVPX.FETCH.md5 =  49e59dd184caa255886683facea56fca
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \
+    --as=yasm \
     --enable-vp8-encoder  \
     --enable-vp9-encoder  \
     --disable-vp9-decoder \
@@ -25,4 +26,9 @@ ifeq (1-i686,$(BUILD.cross)-$(BUILD.machine))
     LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
 else ifeq (1-x86_64,$(BUILD.cross)-$(BUILD.machine))
     LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+endif
+
+ifeq (1,$(FEATURE.local_yasm))
+    LIBVPX.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    LIBVPX.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif
