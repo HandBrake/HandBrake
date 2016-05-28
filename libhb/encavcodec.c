@@ -170,8 +170,24 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         lavc_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     }
-    /* iterate through lavc_opts and have avutil parse the options for us */
+
     AVDictionary * av_opts = NULL;
+    if (job->vquality != HB_INVALID_VIDEO_QUALITY)
+    {
+        if ( w->codec_param == AV_CODEC_ID_VP8 ||
+             w->codec_param == AV_CODEC_ID_VP9 )
+        {
+            // Default quality/speed settings
+            av_dict_set( &av_opts, "deadline", "good", 0);
+            av_dict_set( &av_opts, "cpu-used", "2", 0);
+            //This value was chosen to make the bitrate high enough
+            //for libvpx to "turn off" the maximum bitrate feature
+            //that is normally applied to constant quality.
+            context->bit_rate = job->width * job->height * fps.num / fps.den;
+        }
+    }
+
+    /* iterate through lavc_opts and have avutil parse the options for us */
     hb_dict_iter_t iter;
     for (iter  = hb_dict_iter_init(lavc_opts);
          iter != HB_DICT_ITER_DONE;
@@ -211,8 +227,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "crf", quality, 0 );
-            av_dict_set( &av_opts, "deadline", "good", 0);
-            av_dict_set( &av_opts, "cpu-used", "2", 0);
             //This value was chosen to make the bitrate high enough
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
