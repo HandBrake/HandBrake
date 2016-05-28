@@ -59,7 +59,11 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         X265_10,
 
         [Display(Name = "VP8")]
-        [ShortName("vp8")]
-        VP8
+        [ShortName("VP8")]
+        VP8,
+
+        [Display(Name = "VP9")]
+        [ShortName("VP9")]
+        VP9
     }
 }

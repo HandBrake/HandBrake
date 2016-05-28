@@ -74,6 +74,7 @@ namespace HandBrakeWPF.Converters.Video
                 {
                     encoders.Remove(VideoEncoder.Theora);
                     encoders.Remove(VideoEncoder.VP8);
+                    encoders.Remove(VideoEncoder.VP9);
                 }
 
                 if (!SystemInfo.IsQsvAvailableH264)
