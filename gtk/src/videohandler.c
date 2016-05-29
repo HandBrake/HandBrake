@@ -40,6 +40,26 @@ int ghb_get_video_encoder(GhbValue *settings)
     return hb_video_encoder_get_from_name(encoder);
 }
 
+void ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset)
+{
+    const char * const * videoPresets;
+    int                  ii;
+
+    videoPresets = hb_video_encoder_get_presets(encoder);
+    for (ii = 0; preset && videoPresets && videoPresets[ii]; ii++)
+    {
+        if (!strcasecmp(preset, videoPresets[ii]))
+        {
+            ghb_dict_set_int(settings, "VideoPresetSlider", ii);
+            break;
+        }
+    }
+    if (preset != NULL)
+    {
+        ghb_dict_set_string(settings, "VideoPreset", preset);
+    }
+}
+
 G_MODULE_EXPORT void
 vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
@@ -79,6 +99,9 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
     }
+    ghb_set_video_preset(ud->settings, encoder, "medium");
+    GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
+    ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
 
     // Advanced options are only for x264
     if (!(encoder & HB_VCODEC_X264_MASK))

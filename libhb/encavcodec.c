@@ -48,6 +48,9 @@ int  encavcodecInit( hb_work_object_t *, hb_job_t * );
 int  encavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void encavcodecClose( hb_work_object_t * );
 
+static void apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
+                                 const char * preset);
+
 hb_work_object_t hb_encavcodec =
 {
     WORK_ENCAVCODEC,
@@ -55,6 +58,11 @@ hb_work_object_t hb_encavcodec =
     encavcodecInit,
     encavcodecWork,
     encavcodecClose
+};
+
+static const char * const vpx_preset_names[] =
+{
+    "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", NULL
 };
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
@@ -171,21 +179,20 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         lavc_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     }
 
-    AVDictionary * av_opts = NULL;
     if (job->vquality != HB_INVALID_VIDEO_QUALITY)
     {
         if ( w->codec_param == AV_CODEC_ID_VP8 ||
              w->codec_param == AV_CODEC_ID_VP9 )
         {
-            // Default quality/speed settings
-            av_dict_set( &av_opts, "deadline", "good", 0);
-            av_dict_set( &av_opts, "cpu-used", "2", 0);
             //This value was chosen to make the bitrate high enough
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = job->width * job->height * fps.num / fps.den;
         }
     }
+
+    AVDictionary * av_opts = NULL;
+    apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset);
 
     /* iterate through lavc_opts and have avutil parse the options for us */
     hb_dict_iter_t iter;
@@ -626,4 +633,75 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return final_flushing_call? HB_WORK_DONE : HB_WORK_OK;
 }
 
+static void apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
+{
+    if (!strcasecmp("veryfast", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "5", 0);
+    }
+    else if (!strcasecmp("faster", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "4", 0);
+    }
+    else if (!strcasecmp("fast", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "3", 0);
+    }
+    else if (!strcasecmp("medium", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "2", 0);
+    }
+    else if (!strcasecmp("slow", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "1", 0);
+    }
+    else if (!strcasecmp("slower", preset))
+    {
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "0", 0);
+    }
+    else if (!strcasecmp("veryslow", preset))
+    {
+        av_dict_set( av_opts, "deadline", "best", 0);
+        av_dict_set( av_opts, "cpu-used", "0", 0);
+    }
+    else
+    {
+        // default "medium"
+        hb_error("apply_vpx_preset: Unknown preset %s, using medium", preset);
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "2", 0);
+    }
+}
 
+static void apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
+                                 const char * preset)
+{
+    switch (vcodec)
+    {
+        case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
+            apply_vpx_preset(av_opts, preset);
+            break;
+        default:
+            break;
+    }
+}
+
+const char* const* hb_av_preset_get_names(int encoder)
+{
+    switch (encoder)
+    {
+        case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
+            return vpx_preset_names;
+
+        default:
+            return NULL;
+    }
+}

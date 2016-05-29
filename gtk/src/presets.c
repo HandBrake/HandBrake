@@ -364,23 +364,12 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
         ghb_dict_remove(settings, "x264Option");
     }
 
-    int                 ii, encoder;
-    const char * const *videoPresets;
+    int                 encoder;
     const char         *videoPreset;
 
     encoder      = ghb_get_video_encoder(settings);
-    videoPresets = hb_video_encoder_get_presets(encoder);
     videoPreset  = ghb_dict_get_string(settings, "VideoPreset");
-    for (ii = 0; videoPreset && videoPresets && videoPresets[ii]; ii++)
-    {
-        if (!strcasecmp(videoPreset, videoPresets[ii]))
-        {
-            ghb_dict_set_int(settings, "VideoPresetSlider", ii);
-            break;
-        }
-    }
-    if (videoPreset != NULL)
-        ghb_dict_set_string(settings, "VideoPreset", videoPreset);
+    ghb_set_video_preset(settings, encoder, videoPreset);
 
     char *videoTune;
     char *tune = NULL;

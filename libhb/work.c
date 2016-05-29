@@ -422,22 +422,10 @@ void hb_display_job_info(hb_job_t *job)
         hb_log("   + encoder: %s",
                hb_video_encoder_get_long_name(job->vcodec));
 
-        if (job->encoder_preset && *job->encoder_preset)
+        if (job->encoder_preset && *job->encoder_preset &&
+            hb_video_encoder_get_presets(job->vcodec) != NULL)
         {
-            switch (job->vcodec)
-            {
-                case HB_VCODEC_X264_8BIT:
-                case HB_VCODEC_X264_10BIT:
-                case HB_VCODEC_X265_8BIT:
-                case HB_VCODEC_X265_10BIT:
-                case HB_VCODEC_X265_12BIT:
-                case HB_VCODEC_X265_16BIT:
-                case HB_VCODEC_QSV_H264:
-                case HB_VCODEC_QSV_H265:
-                    hb_log("     + preset:  %s", job->encoder_preset);
-                default:
-                    break;
-            }
+            hb_log("     + preset:  %s", job->encoder_preset);
         }
         if (job->encoder_tune && *job->encoder_tune)
         {
