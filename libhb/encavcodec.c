@@ -635,7 +635,13 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 static void apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
 {
-    if (!strcasecmp("veryfast", preset))
+    if (preset == NULL)
+    {
+        // default "medium"
+        av_dict_set( av_opts, "deadline", "good", 0);
+        av_dict_set( av_opts, "cpu-used", "2", 0);
+    }
+    else if (!strcasecmp("veryfast", preset))
     {
         av_dict_set( av_opts, "deadline", "good", 0);
         av_dict_set( av_opts, "cpu-used", "5", 0);
