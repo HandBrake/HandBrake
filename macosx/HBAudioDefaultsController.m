@@ -97,6 +97,12 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
     [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
+- (IBAction)openUserGuide:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL
+                                            URLWithString:@"https://handbrake.fr/docs/en/latest/advanced/audio-subtitle-defaults.html"]];
+}
+
 - (void)dealloc
 {
     @try {

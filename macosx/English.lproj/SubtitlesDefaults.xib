@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15E33e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G7a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -102,7 +102,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
-                                    <rect key="frame" x="0.0" y="0.0" width="246" height="133"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="244" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -132,8 +132,8 @@
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <binding destination="HzO-IC-pgS" name="toolTip" keyPath="objectValue.language" id="TKz-KX-HjZ"/>
                                                                 <binding destination="HzO-IC-pgS" name="value" keyPath="objectValue.isSelected" id="5Ia-3D-sUA"/>
+                                                                <binding destination="HzO-IC-pgS" name="toolTip" keyPath="objectValue.language" id="TKz-KX-HjZ"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -143,7 +143,7 @@
                                                 <binding destination="ZBe-aP-wvq" name="value" keyPath="arrangedObjects.isSelected" id="fRp-oC-H6C"/>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="224" minWidth="10" maxWidth="3.4028234663852886e+38" id="P9C-KV-mos">
+                                        <tableColumn identifier="" width="222" minWidth="10" maxWidth="3.4028234663852886e+38" id="P9C-KV-mos">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -189,7 +189,7 @@
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
                             <rect key="frame" x="1" y="118" width="244" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -305,6 +305,17 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cancel:" target="-2" id="Ysh-pi-YX2"/>
+                        </connections>
+                    </button>
+                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="nfu-VW-cTe">
+                        <rect key="frame" x="18" y="15" width="25" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X9Q-sR-XPa">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="openUserGuide:" target="-2" id="xuY-gI-DkB"/>
                         </connections>
                     </button>
                 </subviews>

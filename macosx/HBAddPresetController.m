@@ -188,4 +188,10 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     [NSApp endSheet:self.window returnCode:NSModalResponseAbort];
 }
 
+- (IBAction)openUserGuide:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL
+                                            URLWithString:@"https://handbrake.fr/docs/en/latest/advanced/custom-presets.html"]];
+}
+
 @end
