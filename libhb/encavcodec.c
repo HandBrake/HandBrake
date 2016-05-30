@@ -48,8 +48,8 @@ int  encavcodecInit( hb_work_object_t *, hb_job_t * );
 int  encavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void encavcodecClose( hb_work_object_t * );
 
-static void apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
-                                 const char * preset);
+static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
+                                const char * preset);
 
 hb_work_object_t hb_encavcodec =
 {
@@ -192,7 +192,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     AVDictionary * av_opts = NULL;
-    apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset);
+    if (apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset))
+    {
+        av_free( context );
+        av_dict_free( &av_opts );
+        return 1;
+    }
 
     /* iterate through lavc_opts and have avutil parse the options for us */
     hb_dict_iter_t iter;
@@ -633,7 +638,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return final_flushing_call? HB_WORK_DONE : HB_WORK_OK;
 }
 
-static void apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
+static int apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
 {
     if (preset == NULL)
     {
@@ -679,24 +684,26 @@ static void apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
     else
     {
         // default "medium"
-        hb_error("apply_vpx_preset: Unknown preset %s, using medium", preset);
-        av_dict_set( av_opts, "deadline", "good", 0);
-        av_dict_set( av_opts, "cpu-used", "2", 0);
+        hb_log("apply_vpx_preset: Unknown VPx encoder preset %s", preset);
+        return -1;
     }
+
+    return 0;
 }
 
-static void apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
-                                 const char * preset)
+static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
+                                const char * preset)
 {
     switch (vcodec)
     {
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
-            apply_vpx_preset(av_opts, preset);
-            break;
+            return apply_vpx_preset(av_opts, preset);
         default:
             break;
     }
+
+    return 0;
 }
 
 const char* const* hb_av_preset_get_names(int encoder)
