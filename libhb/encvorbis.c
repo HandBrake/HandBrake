@@ -77,7 +77,7 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
                                         audio->config.out.bitrate * 1000, -1))
         {
             hb_log("encvorbis: vorbis_encode_setup_managed() failed");
-            *job->done_error = HB_ERROR_INIT;
+            *job->done_error = HB_ERROR_ENC_INIT;
             *job->die = 1;
             return -1;
         }
@@ -90,7 +90,7 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
                                     audio->config.out.quality / 10))
         {
             hb_log("encvorbis: vorbis_encode_setup_vbr() failed");
-            *job->done_error = HB_ERROR_INIT;
+            *job->done_error = HB_ERROR_ENC_INIT;
             *job->die = 1;
             return -1;
         }
@@ -100,7 +100,7 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
         vorbis_encode_setup_init(&pv->vi))
     {
         hb_log("encvorbis: vorbis_encode_ctl(ratemanage2_set) OR vorbis_encode_setup_init() failed");
-        *job->done_error = HB_ERROR_INIT;
+        *job->done_error = HB_ERROR_ENC_INIT;
         *job->die = 1;
         return -1;
     }

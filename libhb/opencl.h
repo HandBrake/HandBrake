@@ -741,7 +741,7 @@ int hb_ocl_scale(hb_buffer_t *in, hb_buffer_t *out, int *crop,
     status = method(__VA_ARGS__);                                               \
     if (status != CL_SUCCESS)                                                   \
     {                                                                           \
-        hb_error("%s:%d (%s) error: %d\n",__FUNCTION__,__LINE__,#method,status);\
+        hb_log("%s:%d (%s) error: %d\n",__FUNCTION__,__LINE__,#method,status);\
         return status;                                                          \
     }                                                                           \
 }

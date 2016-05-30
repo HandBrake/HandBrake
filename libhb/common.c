@@ -3400,7 +3400,7 @@ void hb_spam_log( char * log, ... )
  * It is meant to be use by the frontends to inform the user of 
  * failures.
  *********************************************************************/
-void hb_error( char * log, ... )
+void hb_error( int error, char * log, ... )
 {
     va_list args;
 
@@ -3412,7 +3412,7 @@ void hb_error( char * log, ... )
         string = hb_strdup_vaprintf(log, args);
         va_end( args );
 
-        error_handler(string);
+        error_handler(error, string);
         free(string);
     }
     else

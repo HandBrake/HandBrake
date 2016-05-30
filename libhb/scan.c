@@ -199,7 +199,7 @@ static void ScanFunc( void * _data )
         else
         {
             hb_title_close( &title );
-            hb_log( "scan: unrecognized file type" );
+            hb_error(HB_ERROR_SCAN, "Unrecognized file type" );
             return;
         }
     }

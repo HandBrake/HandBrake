@@ -27,7 +27,7 @@ typedef enum hb_debug_level_s
 void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va_list args) HB_WPRINTF(3,0);
 void hb_deep_log( hb_debug_level_t level, char * log, ... ) HB_WPRINTF(2,3);
 void hb_spam_log( char * fmt, ...) HB_WPRINTF(1,2);
-void hb_error( char * fmt, ...) HB_WPRINTF(1,2);
+void hb_error( int error, char * fmt, ...) HB_WPRINTF(2,3);
 void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * data, int len );
 
 int  hb_list_bytes( hb_list_t * );

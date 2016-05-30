@@ -18,7 +18,7 @@
 static BOOL globalInitialized = NO;
 
 static void (^errorHandler)(NSString *error) = NULL;
-static void hb_error_handler(const char *errmsg)
+static void hb_error_handler(int error, const char *errmsg)
 {
     NSString *error = @(errmsg);
     if (error)

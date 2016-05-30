@@ -996,7 +996,7 @@ error:
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
-    *job->done_error = HB_ERROR_INIT;
+    *job->done_error = HB_ERROR_ENC_INIT;
     *job->die = 1;
     return -1;
 }
@@ -1222,7 +1222,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         av_strerror(ret, errstr, sizeof(errstr));
                         hb_log("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt)",
                                track->st->index, errstr);
-                        hb_error("Failure to mux output packet");
+                        hb_error(HB_ERROR_ENC, "Failure to mux output packet");
                         *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                         return -1;
@@ -1302,7 +1302,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
             {
                 // Memory allocation failure!
                 hb_log("avformatMux: subtitle memory allocation failure");
-                hb_error("Failure to mux output packet");
+                hb_error(HB_ERROR_ENC, "Failure to mux output packet");
                 *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return -1;
@@ -1335,7 +1335,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
         hb_log("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
                track->st->index, errstr);
-        hb_error("Failure to mux output packet");
+        hb_error(HB_ERROR_ENC, "Failure to mux output packet");
         *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
         return -1;

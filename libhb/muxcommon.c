@@ -652,7 +652,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
             break;
         default:
             hb_log( "No muxer selected, exiting" );
-            *job->done_error = HB_ERROR_INIT;
+            *job->done_error = HB_ERROR_ENC_INIT;
             *job->die = 1;
             return -1;
         }
@@ -662,7 +662,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
             int result = mux->m->init( mux->m );
             if (result < 0)
             {
-                *job->done_error = HB_ERROR_INIT;
+                *job->done_error = HB_ERROR_ENC_INIT;
                 *job->die = 1;
                 return -1;
             }

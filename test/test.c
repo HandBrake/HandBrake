@@ -212,7 +212,7 @@ static int show_mux_warning = 1;
  * When using the CLI just display using hb_log as we always did in the past
  * make sure that we prefix with a nice ERROR message to catch peoples eyes.
  ****************************************************************************/
-static void hb_cli_error_handler ( const char *errmsg )
+static void hb_cli_error_handler ( int error, const char *errmsg )
 {
     fprintf( stderr, "ERROR: %s\n", errmsg );
 }
@@ -794,7 +794,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             {
                 /* No valid title, stop right there */
                 fprintf( stderr, "No title found.\n" );
-                done_error = HB_ERROR_WRONG_INPUT;
+                done_error = HB_ERROR_SCAN;
                 die = 1;
                 break;
             }
@@ -830,7 +830,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 if( main_feature_pos == -1 )
                 {
                     fprintf( stderr, "No main feature title found.\n" );
-                    done_error = HB_ERROR_WRONG_INPUT;
+                    done_error = HB_ERROR_ENC_INPUT;
                     die = 1;
                     break;
                 }

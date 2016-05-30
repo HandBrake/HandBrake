@@ -1718,7 +1718,7 @@ int hb_global_init()
     result = hb_platform_init();
     if (result < 0)
     {
-        hb_error("Platform specific initialization failed!");
+        hb_error(HB_ERROR_APP_INIT, "Platform specific initialization failed!");
         return -1;
     }
 
@@ -1726,7 +1726,7 @@ int hb_global_init()
     result = hb_qsv_info_init();
     if (result < 0)
     {
-        hb_error("hb_qsv_info_init failed!");
+        hb_error(HB_ERROR_APP_INIT, "hb_qsv_info_init failed!");
         return -1;
     }
     hb_param_configure_qsv();
