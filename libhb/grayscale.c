@@ -94,7 +94,7 @@ void grayscale_filter_thread( void *thread_args_v )
         grayscale_work = &pv->grayscale_arguments[segment];
         if (grayscale_work->src == NULL)
         {
-            hb_error( "Thread started when no work available" );
+            hb_spam_log( "Thread started when no work available" );
             hb_snooze(500);
             goto report_completion;
         }
@@ -180,7 +180,7 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
         taskset_init( &pv->grayscale_taskset, pv->cpu_count,
                       sizeof( grayscale_thread_arg_t ) ) == 0)
     {
-        hb_error( "grayscale could not initialize taskset" );
+        hb_spam_log( "grayscale could not initialize taskset" );
     }
 
     int ii;
@@ -199,7 +199,7 @@ static int hb_grayscale_init( hb_filter_object_t * filter,
                                  grayscale_filter_thread,
                                  HB_NORMAL_PRIORITY ) == 0)
         {
-            hb_error( "grayscale could not spawn thread" );
+            hb_spam_log( "grayscale could not spawn thread" );
         }
     }
 

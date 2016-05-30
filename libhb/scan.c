@@ -568,7 +568,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
     if (title->video_codec == WORK_NONE)
     {
-        hb_error("No video decoder set!");
+        hb_log("No video decoder set!");
         free(info_list);
         crop_record_free(crops);
         return 0;
@@ -579,7 +579,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
     if (vid_decoder->init(vid_decoder, NULL))
     {
-        hb_error("Decoder init failed!");
+        hb_log("Decoder init failed!");
         free(info_list);
         crop_record_free(crops);
         return 0;
@@ -719,7 +719,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
             {
                 // Silence compiler warning
                 buf = NULL;
-                hb_error( "Error: This can't happen!" );
+                hb_log( "Error: This can't happen!" );
                 abort = 1;
                 goto skip_preview;
             }

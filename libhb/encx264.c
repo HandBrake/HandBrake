@@ -305,7 +305,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->api   = hb_x264_api_get(bit_depth);
     if (pv->api == NULL)
     {
-        hb_error("encx264: hb_x264_api_get failed, bit-depth %d", bit_depth);
+        hb_log("encx264: hb_x264_api_get failed, bit-depth %d", bit_depth);
         return 1;
     }
 
@@ -569,7 +569,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->x264 = pv->api->encoder_open( &param );
     if ( pv->x264 == NULL )
     {
-        hb_error("encx264: x264_encoder_open failed.");
+        hb_log("encx264: x264_encoder_open failed.");
         free( pv );
         w->private_data = NULL;
         return 1;
@@ -946,7 +946,7 @@ static int apply_h264_profile(const x264_api_t *api, x264_param_t *param,
     else
     {
         // error (profile not a string), abort
-        hb_error("apply_h264_profile: no profile specified");
+        hb_log("apply_h264_profile: no profile specified");
         return -1;
     }
 }
@@ -1001,7 +1001,7 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
         if (x264_level == NULL)
         {
             // error (invalid or unsupported level), abort
-            hb_error("apply_h264_level: invalid level %s", h264_level);
+            hb_log("apply_h264_level: invalid level %s", h264_level);
             return -1;
         }
     }
@@ -1013,7 +1013,7 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
     else
     {
         // error (level not a string), abort
-        hb_error("apply_h264_level: no level specified");
+        hb_log("apply_h264_level: no level specified");
         return -1;
     }
 
@@ -1091,8 +1091,8 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
     if (param->i_width <= 0 || param->i_height <= 0)
     {
         // error (invalid width or height), abort
-        hb_error("apply_h264_level: invalid resolution (width: %d, height: %d)",
-                 param->i_width, param->i_height);
+        hb_log("apply_h264_level: invalid resolution (width: %d, height: %d)",
+               param->i_width, param->i_height);
         return -1;
     }
 

@@ -163,8 +163,8 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
                                  buf->data, stride);
     if (ret != buf->size)
     {
-        hb_error("Internal error hb_picture_fill expected %d, got %d",
-                 buf->size, ret);
+        hb_spam_log("Internal error hb_picture_fill expected %d, got %d",
+                    buf->size, ret);
     }
     return ret;
 }
@@ -244,7 +244,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                       1 << 16 ); // saturation
 
         if (sws_init_context(ctx, NULL, NULL) < 0) {
-            hb_error("Cannot initialize resampling context");
+            hb_spam_log("Cannot initialize resampling context");
             sws_freeContext(ctx);
             ctx = NULL;
         }
@@ -645,7 +645,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     file = hb_fopen(filename, "wb");
     if( !file )
     {
-        hb_error( "hb_save_preview: fopen failed (%s)", filename );
+        hb_spam_log( "hb_save_preview: fopen failed (%s)", filename );
         return -1;
     }
 
@@ -678,7 +678,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
     file = hb_fopen(filename, "rb");
     if (!file)
     {
-        hb_error( "hb_read_preview: fopen failed (%s)", filename );
+        hb_spam_log( "hb_read_preview: fopen failed (%s)", filename );
         return NULL;
     }
 
@@ -742,7 +742,7 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
     title = hb_find_title_by_index(h, title_idx);
     if (title == NULL)
     {
-        hb_error( "hb_get_preview2: invalid title (%d)", title_idx );
+        hb_spam_log( "hb_get_preview2: invalid title (%d)", title_idx );
         goto fail;
     }
 
@@ -1263,7 +1263,7 @@ void hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter_dict )
     hb_filter_object_t * filter = hb_filter_get(new_id);
     if (filter == NULL)
     {
-        hb_error("hb_add_filter2: Invalid filter ID %d", new_id);
+        hb_spam_log("hb_add_filter2: Invalid filter ID %d", new_id);
         hb_value_free(&filter_dict);
         return;
     }

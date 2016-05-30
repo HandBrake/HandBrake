@@ -114,7 +114,7 @@ hb_buffer_t* hb_nal_bitstream_annexb_to_mp4(const uint8_t *data,
     out = hb_buffer_init(out_size);
     if (out == NULL)
     {
-        hb_error("hb_nal_bitstream_annexb_to_mp4: hb_buffer_init failed");
+        hb_spam_log("hb_nal_bitstream_annexb_to_mp4: hb_buffer_init failed");
         return NULL;
     }
 
@@ -176,7 +176,7 @@ hb_buffer_t* hb_nal_bitstream_mp4_to_annexb(const uint8_t *data,
     out = hb_buffer_init(out_size);
     if (out == NULL)
     {
-        hb_error("hb_nal_bitstream_mp4_to_annexb: hb_buffer_init failed");
+        hb_spam_log("hb_nal_bitstream_mp4_to_annexb: hb_buffer_init failed");
         return NULL;
     }
 

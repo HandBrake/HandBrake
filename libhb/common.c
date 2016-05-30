@@ -3303,15 +3303,16 @@ void hb_deep_log( hb_debug_level_t level, char * log, ... )
 }
 
 /**********************************************************************
- * hb_error
+ * hb_spam_log
  **********************************************************************
  * Using whatever output is available display this error.
+ * Filters out duplicate log messages.
  *********************************************************************/
-void hb_error( char * log, ... )
+void hb_spam_log( char * log, ... )
 {
-    char        string[181]; /* 180 chars + \0 */
-    char        rep_string[181];
-    static char last_string[181];
+    char        * string;
+    char        * rep_string;
+    static char * last_string = NULL;
     static int  last_error_count = 0;
     static uint64_t last_series_error_time = 0;
     static hb_lock_t *mutex = 0;
@@ -3320,7 +3321,7 @@ void hb_error( char * log, ... )
 
     /* Convert the message to a string */
     va_start( args, log );
-    vsnprintf( string, 180, log, args );
+    string = hb_strdup_vaprintf(log, args);
     va_end( args );
 
     if( !mutex )
@@ -3332,7 +3333,7 @@ void hb_error( char * log, ... )
 
     time_now = hb_get_date();
 
-    if( strcmp( string, last_string) == 0 )
+    if (last_string != NULL && !strcmp(string, last_string))
     {
         /*
          * The last error and this one are the same, don't log it
@@ -3340,9 +3341,10 @@ void hb_error( char * log, ... )
          * ago.
          */
         last_error_count++;
-        if( last_series_error_time + ( 1000 * 1 ) > time_now )
+        if (last_series_error_time + (1000 * 1) > time_now)
         {
             hb_unlock( mutex );
+            free(string);
             return;
         }
     }
@@ -3351,18 +3353,13 @@ void hb_error( char * log, ... )
      * A new error, or the same one more than 10sec since the last one
      * did we have any of the same counted up?
      */
-    if( last_error_count > 0 )
+    if (last_string != NULL && last_error_count > 0)
     {
         /*
          * Print out the last error to ensure context for the last
          * repeated message.
          */
-        if( error_handler )
-        {
-            error_handler( last_string );
-        } else {
-            hb_log( "%s", last_string );
-        }
+        hb_log("%s", last_string);
 
         if( last_error_count > 1 )
         {
@@ -3370,15 +3367,11 @@ void hb_error( char * log, ... )
              * Only print out the repeat message for more than 2 of the
              * same, since we just printed out two of them already.
              */
-            snprintf( rep_string, 180, "Last error repeated %d times",
-                      last_error_count - 1 );
+            rep_string = hb_strdup_printf("Last error repeated %d times",
+                                          last_error_count - 1 );
 
-            if( error_handler )
-            {
-                error_handler( rep_string );
-            } else {
-                hb_log( "%s", rep_string );
-            }
+            hb_log("%s", rep_string);
+            free(rep_string);
         }
 
         last_error_count = 0;
@@ -3386,19 +3379,49 @@ void hb_error( char * log, ... )
 
     last_series_error_time = time_now;
 
-    strcpy( last_string, string );
+    free(last_string);
+    last_string = string;
 
     /*
      * Got the error in a single string, send it off to be dispatched.
      */
-    if( error_handler )
-    {
-        error_handler( string );
-    } else {
-        hb_log( "%s", string );
-    }
+    hb_log("%s", string);
 
     hb_unlock( mutex );
+}
+
+/**********************************************************************
+ * hb_error
+ **********************************************************************
+ * If error_handler is registered delivers messages through the
+ * callback.  Otherwise writes using hb_log.
+ *
+ * This should be used sparingly and with user friendly messages.
+ * It is meant to be use by the frontends to inform the user of 
+ * failures.
+ *********************************************************************/
+void hb_error( char * log, ... )
+{
+    va_list args;
+
+    if (error_handler != NULL)
+    {
+        char * string;
+
+        va_start( args, log );
+        string = hb_strdup_vaprintf(log, args);
+        va_end( args );
+
+        error_handler(string);
+        free(string);
+    }
+    else
+    {
+
+        va_start(args, log);
+        hb_valog(0, "ERROR:", log, args);
+        va_end(args);
+    }
 }
 
 void hb_register_error_handler( hb_error_handler_t * handler )
@@ -4583,7 +4606,7 @@ int hb_subtitle_add_ssa_header(hb_subtitle_t *subtitle, const char *font,
     subtitle->extradata = (uint8_t*)hb_strdup_printf(ssa_header, w, h, font, fs);
     if (subtitle->extradata == NULL)
     {
-        hb_error("hb_subtitle_add_ssa_header: malloc failed");
+        hb_log("hb_subtitle_add_ssa_header: malloc failed");
         return 0;
     }
     subtitle->extradata_size = strlen((char*)subtitle->extradata) + 1;
@@ -4622,7 +4645,7 @@ int hb_srt_add( const hb_job_t * job,
     subtitle = calloc( 1, sizeof( *subtitle ) );
     if (subtitle == NULL)
     {
-        hb_error("hb_srt_add: malloc failed");
+        hb_log("hb_srt_add: malloc failed");
         return 0;
     }
 
@@ -4697,7 +4720,7 @@ int hb_subtitle_can_pass( int source, int mux )
 
         default:
             // Internal error. Should never get here.
-            hb_error("internel error.  Bad mux %d\n", mux);
+            hb_log("internel error.  Bad mux %d\n", mux);
             return 0;
     }
 }

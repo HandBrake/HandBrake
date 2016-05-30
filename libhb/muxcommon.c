@@ -227,7 +227,7 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
         tmp = realloc(mux->track, max_tracks * sizeof(hb_track_t*));
         if (tmp == NULL)
         {
-            hb_error("add_mux_track: realloc failed, too many tracks (>%d)",
+            hb_log("add_mux_track: realloc failed, too many tracks (>%d)",
                      max_tracks);
             return;
         }
@@ -335,7 +335,7 @@ static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
     }
 }
 
-static void OutputTrackChunk( hb_mux_t *mux, int tk, hb_mux_object_t *m )
+static int OutputTrackChunk( hb_mux_t *mux, int tk, hb_mux_object_t *m )
 {
     hb_track_t *track = mux->track[tk];
     hb_buffer_t *buf;
@@ -345,8 +345,12 @@ static void OutputTrackChunk( hb_mux_t *mux, int tk, hb_mux_object_t *m )
         buf = mf_pull( mux, tk );
         track->frames += 1;
         track->bytes  += buf->size;
-        m->mux( m, track->mux_data, buf );
+        if (m->mux( m, track->mux_data, buf ) < 0)
+        {
+            return -1;
+        }
     }
+    return 0;
 }
 
 static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
@@ -405,7 +409,18 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         for ( i = 0; i < mux->ntracks; ++i )
         {
             track = mux->track[i];
-            OutputTrackChunk( mux, i, mux->m );
+            if (OutputTrackChunk( mux, i, mux->m ) < 0)
+            {
+                mux->done = 1;
+                *w->done = 1;
+                if (w->die != NULL)
+                {
+                    *w->die = 1;
+                }
+                hb_unlock( mux->mutex );
+                hb_bitvec_free(&more);
+                return HB_WORK_DONE;
+            }
             if ( mf_full( track ) )
             {
                 // If the track's fifo is still full, advance
@@ -467,7 +482,10 @@ static void muxFlush(hb_mux_t * mux)
         done = 1;
         for (ii = 0; ii < mux->ntracks; ii++)
         {
-            OutputTrackChunk(mux, ii, mux->m);
+            if (OutputTrackChunk(mux, ii, mux->m) < 0)
+            {
+                return;
+            }
             if (mux->track[ii]->mf.out != mux->track[ii]->mf.in)
             {
                 // track buffer is not empty
@@ -633,7 +651,7 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
             mux->m = hb_mux_avformat_init( job );
             break;
         default:
-            hb_error( "No muxer selected, exiting" );
+            hb_log( "No muxer selected, exiting" );
             *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             return -1;
@@ -641,7 +659,13 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
         /* Create file, write headers */
         if( mux->m )
         {
-            mux->m->init( mux->m );
+            int result = mux->m->init( mux->m );
+            if (result < 0)
+            {
+                *job->done_error = HB_ERROR_INIT;
+                *job->die = 1;
+                return -1;
+            }
         }
     }
 
@@ -732,7 +756,7 @@ static int check_realloc_output(struct output_buf_s * output, int size)
         tmp = realloc(output->buf, output->alloc);
         if (tmp == NULL)
         {
-            hb_error("realloc failed!");
+            hb_spam_log("realloc failed!");
             free(output->buf);
             output->size = 0;
             output->alloc = 0;

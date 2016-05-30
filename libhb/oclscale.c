@@ -81,7 +81,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_ocl_scale_func: OpenCL support not available");
+        hb_log("hb_ocl_scale_func: OpenCL support not available");
         return 0;
     }
 
@@ -212,7 +212,7 @@ int setupScaleWeights(cl_float xscale, cl_float yscale, int width, int height, h
 
     if (hb_ocl == NULL)
     {
-        hb_error("setupScaleWeights: OpenCL support not available");
+        hb_log("setupScaleWeights: OpenCL support not available");
         return 1;
     }
 

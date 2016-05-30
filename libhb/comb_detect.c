@@ -1166,7 +1166,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
     if (taskset_init( &pv->decomb_filter_taskset, pv->cpu_count,
                       sizeof( decomb_thread_arg_t ) ) == 0)
     {
-        hb_error( "decomb could not initialize taskset" );
+        hb_log( "decomb could not initialize taskset" );
+        return 1;
     }
 
     decomb_thread_arg_t *decomb_prev_thread_args = NULL;
@@ -1205,7 +1206,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
                                  decomb_filter_thread,
                                  HB_NORMAL_PRIORITY ) == 0)
         {
-            hb_error( "decomb could not spawn thread" );
+            hb_log( "decomb could not spawn thread" );
+            return 1;
         }
 
         decomb_prev_thread_args = thread_args;
@@ -1224,7 +1226,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
     if (taskset_init( &pv->decomb_check_taskset, pv->comb_check_nthreads,
                       sizeof( decomb_thread_arg_t ) ) == 0)
     {
-        hb_error( "decomb check could not initialize taskset" );
+        hb_log( "decomb check could not initialize taskset" );
+        return 1;
     }
 
     decomb_prev_thread_args = NULL;
@@ -1270,7 +1273,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
                                   decomb_check_thread,
                                   HB_NORMAL_PRIORITY ) == 0)
         {
-            hb_error( "decomb check could not spawn thread" );
+            hb_log( "decomb check could not spawn thread" );
+            return 1;
         }
 
         decomb_prev_thread_args = thread_args;
@@ -1281,7 +1285,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
         if (taskset_init( &pv->mask_filter_taskset, pv->cpu_count,
                           sizeof( decomb_thread_arg_t ) ) == 0)
         {
-            hb_error( "maske filter could not initialize taskset" );
+            hb_log( "maske filter could not initialize taskset" );
+            return 1;
         }
 
         decomb_prev_thread_args = NULL;
@@ -1321,7 +1326,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
                                      mask_filter_thread,
                                      HB_NORMAL_PRIORITY ) == 0)
             {
-                hb_error( "mask filter could not spawn thread" );
+                hb_log( "mask filter could not spawn thread" );
+                return 1;
             }
 
             decomb_prev_thread_args = thread_args;
@@ -1332,7 +1338,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
             if (taskset_init( &pv->mask_erode_taskset, pv->cpu_count,
                               sizeof( decomb_thread_arg_t ) ) == 0)
             {
-                hb_error( "mask erode could not initialize taskset" );
+                hb_log( "mask erode could not initialize taskset" );
+                return 1;
             }
 
             decomb_prev_thread_args = NULL;
@@ -1372,7 +1379,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
                                          mask_erode_thread,
                                          HB_NORMAL_PRIORITY ) == 0)
                 {
-                    hb_error( "mask erode could not spawn thread" );
+                    hb_log( "mask erode could not spawn thread" );
+                    return 1;
                 }
 
                 decomb_prev_thread_args = thread_args;
@@ -1381,7 +1389,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
             if (taskset_init( &pv->mask_dilate_taskset, pv->cpu_count,
                               sizeof( decomb_thread_arg_t ) ) == 0)
             {
-                hb_error( "mask dilate could not initialize taskset" );
+                hb_log( "mask dilate could not initialize taskset" );
+                return 1;
             }
 
             decomb_prev_thread_args = NULL;
@@ -1421,7 +1430,8 @@ static int comb_detect_init( hb_filter_object_t * filter,
                                          mask_dilate_thread,
                                          HB_NORMAL_PRIORITY ) == 0)
                 {
-                    hb_error( "mask dilate could not spawn thread" );
+                    hb_log( "mask dilate could not spawn thread" );
+                    return 1;
                 }
 
                 decomb_prev_thread_args = thread_args;

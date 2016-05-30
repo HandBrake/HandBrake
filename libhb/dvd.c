@@ -668,13 +668,13 @@ static int hb_dvdread_start( hb_dvd_t * e, hb_title_t *title, int chapter )
     d->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
     if( !( d->ifo = ifoOpen( d->reader, d->vts ) ) )
     {
-        hb_error( "dvd: ifoOpen failed for VTS %d", d->vts );
+        hb_log( "dvd: ifoOpen failed for VTS %d", d->vts );
         return 0;
     }
     if( !( d->file = DVDOpenFile( d->reader, d->vts,
                                   DVD_READ_TITLE_VOBS ) ) )
     {
-        hb_error( "dvd: DVDOpenFile failed for VTS %d", d->vts );
+        hb_log( "dvd: DVDOpenFile failed for VTS %d", d->vts );
         return 0;
     }
 
@@ -990,7 +990,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
             /* Wasn't a valid VOBU, try next block */
             if( ++error > 1024 )
             {
-                hb_error( "dvd: couldn't find a VOBU after 1024 blocks" );
+                hb_spam_log( "dvd: couldn't find a VOBU after 1024 blocks" );
                 hb_buffer_close( &b );
                 hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
@@ -1044,7 +1044,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                 }
                 if( d->in_cell )
                 {
-                    hb_error( "dvd: assuming missed end of cell %d at block %d", d->cell_cur, d->block );
+                    hb_spam_log( "dvd: assuming missed end of cell %d at block %d", d->cell_cur, d->block );
                     d->cell_cur  = d->cell_next;
                     d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
                     FindNextCell( d );
@@ -1084,8 +1084,8 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
             // this may be a real DVD error or may be DRM. Either way
             // we don't want to quit because of one bad block so set
             // things up so we'll advance to the next vobu and recurse.
-            hb_error( "dvd: DVDReadBlocks failed (%d), skipping to vobu %u",
-                      d->block, d->next_vobu );
+            hb_spam_log("dvd: DVDReadBlocks failed (%d), skipping to vobu %u",
+                        d->block, d->next_vobu);
             d->pack_len = 0;
             goto top;  /* XXX need to restructure this routine & avoid goto */
         }

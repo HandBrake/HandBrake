@@ -248,7 +248,7 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
     }
     else
     {
-        hb_error("Error: invalid preset format in presets_do()");
+        hb_spam_log("Error: invalid preset format in presets_do()");
         return PRESET_DO_DELETE;
     }
     return PRESET_DO_DONE;
@@ -340,8 +340,9 @@ static hb_value_t* get_audio_copy_mask(const hb_dict_t * preset, int *mask)
                 codec = hb_audio_encoder_get_from_name(s);
                 if (codec == 0)
                 {
-                    hb_error("Invalid audio codec in autopassthru copy mask (%s)", s);
-                    hb_error("Codec name is invalid or can not be copied");
+                    hb_error(
+                        "Invalid audio codec in autopassthru copy mask (%s)\n"
+                        "Codec name is invalid or can not be copied", s);
                     free(tmp);
                     hb_value_free(&out_copy_mask);
                     return NULL;
@@ -1374,7 +1375,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     }
     if (hb_validate_filter_settings(HB_FILTER_VFR, filter_settings))
     {
-        hb_error("hb_preset_apply_filters: Internal error, invalid VFR");
+        hb_error("Invalid VFR filter settings");
         hb_value_free(&filter_settings);
         return -1;
     }
@@ -1704,7 +1705,7 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     hb_dict_set(filter_settings, "crop-right", hb_value_int(geo.crop[3]));
     if (hb_validate_filter_settings(HB_FILTER_CROP_SCALE, filter_settings))
     {
-        hb_error("hb_preset_apply_title: Internal error, invalid CROP_SCALE");
+        hb_error("Invalid crop/scale filter settings");
         hb_value_free(&filter_settings);
         goto fail;
     }
@@ -1816,8 +1817,8 @@ dict_clean(hb_value_t *dict, hb_value_t *template)
                 template_type == HB_VALUE_TYPE_DICT  ||
                 template_type == HB_VALUE_TYPE_ARRAY)
             {
-                hb_error("Preset %s: Incompatible value types for key %s. "
-                         "Dropping.", preset_name, key);
+                hb_log("Preset %s: Incompatible value types for key %s. "
+                       "Dropping.", preset_name, key);
                 hb_dict_remove(dict, key);
             }
             else if (hb_value_is_number(val) &&
@@ -1831,8 +1832,8 @@ dict_clean(hb_value_t *dict, hb_value_t *template)
             else
             {
                 hb_value_t *v;
-                hb_error("Preset %s: Incorrect value type for key %s. "
-                         "Converting.", preset_name, key);
+                hb_log("Preset %s: Incorrect value type for key %s. "
+                       "Converting.", preset_name, key);
                 v = hb_value_xform(val, template_type);
                 hb_dict_set(dict, key, v);
             }
@@ -1909,7 +1910,7 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
         {
             const hb_container_t *c = hb_container_get_next(NULL);
             muxer = c->format;
-            hb_error("Preset %s: Invalid container (%s)", preset_name, s);
+            hb_log("Preset %s: Invalid container (%s)", preset_name, s);
         }
         mux = hb_container_get_short_name(muxer);
         val = hb_value_string(mux);
@@ -1930,7 +1931,7 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
         if (vcodec == HB_VCODEC_INVALID)
         {
             vcodec = hb_video_encoder_get_default(muxer);
-            hb_error("Preset %s: Invalid video encoder (%s)", preset_name, s);
+            hb_log("Preset %s: Invalid video encoder (%s)", preset_name, s);
         }
         enc = hb_video_encoder_get_short_name(vcodec);
         val = hb_value_string(enc);
@@ -1948,8 +1949,8 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             {
                 if (strcasecmp(s, "same as source"))
                 {
-                    hb_error("Preset %s: Invalid video framerate (%s)",
-                             preset_name, s);
+                    hb_log("Preset %s: Invalid video framerate (%s)",
+                           preset_name, s);
                 }
                 val = hb_value_string("auto");
                 hb_dict_set(preset, "VideoFramerate", val);
@@ -1966,8 +1967,8 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
         if (acodec == HB_ACODEC_INVALID)
         {
             acodec = hb_audio_encoder_get_default(muxer);
-            hb_error("Preset %s: Invalid audio fallback encoder (%s)",
-                     preset_name, s);
+            hb_log("Preset %s: Invalid audio fallback encoder (%s)",
+                   preset_name, s);
         }
         enc = hb_audio_encoder_get_short_name(acodec);
         val = hb_value_string(enc);
@@ -1989,8 +1990,8 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             if (acodec == HB_ACODEC_INVALID)
             {
                 acodec = hb_audio_encoder_get_default(muxer);
-                hb_error("Preset %s: Invalid audio encoder (%s)",
-                         preset_name, s);
+                hb_log("Preset %s: Invalid audio encoder (%s)",
+                       preset_name, s);
             }
             enc = hb_audio_encoder_get_short_name(acodec);
             val = hb_value_string(enc);
@@ -2006,8 +2007,8 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
                 int sr = hb_audio_samplerate_get_from_name(s);
                 if (sr < 0)
                 {
-                    hb_error("Preset %s: Invalid audio samplerate (%s)",
-                             preset_name, s);
+                    hb_log("Preset %s: Invalid audio samplerate (%s)",
+                           preset_name, s);
                     val = hb_value_string("auto");
                     hb_dict_set(adict, "AudioSamplerate", val);
                 }
@@ -2023,8 +2024,8 @@ static void preset_clean(hb_value_t *preset, hb_value_t *template)
             {
                 // work.c do_job() sanitizes NONE to default mixdown
                 mixdown = HB_AMIXDOWN_NONE;
-                hb_error("Preset %s: Invalid audio mixdown (%s)",
-                         preset_name, s);
+                hb_log("Preset %s: Invalid audio mixdown (%s)",
+                       preset_name, s);
             }
             mix = hb_mixdown_get_short_name(mixdown);
             val = hb_value_string(mix);
@@ -2414,7 +2415,7 @@ static void import_deint_0_0_0(hb_value_t *preset)
         }
         else
         {
-            hb_error("Invalid decomb index %d", index);
+            hb_log("Invalid decomb index %d", index);
             hb_dict_set(preset, "PictureDecomb", hb_value_string("off"));
         }
     }
@@ -2431,7 +2432,7 @@ static void import_deint_0_0_0(hb_value_t *preset)
         }
         else
         {
-            hb_error("Invalid deinterlace index %d", index);
+            hb_log("Invalid deinterlace index %d", index);
             hb_dict_set(preset, "PictureDeinterlace", hb_value_string("off"));
         }
     }
@@ -2451,7 +2452,7 @@ static void import_detel_0_0_0(hb_value_t *preset)
         }
         else
         {
-            hb_error("Invalid detelecine index %d", index);
+            hb_log("Invalid detelecine index %d", index);
             hb_dict_set(preset, "PictureDetelecine", hb_value_string("off"));
         }
     }
@@ -2474,7 +2475,7 @@ static void import_denoise_0_0_0(hb_value_t *preset)
         else
         {
             if (index != 0)
-                hb_error("Invalid denoise index %d", index);
+                hb_log("Invalid denoise index %d", index);
             hb_dict_set(preset, "PictureDenoiseFilter", hb_value_string("off"));
         }
     }
@@ -2931,13 +2932,21 @@ int hb_presets_gui_init(void)
 #endif
     if (dict == NULL)
     {
-        hb_error("Failed to load GUI presets file");
+        hb_error("Failed to load GUI presets file\n"
 #if defined(HB_PRESET_JSON_FILE)
-        hb_error("Attempted: %s", HB_PRESET_JSON_FILE);
+        "Attempted: %s\n"
 #endif
 #if defined(HB_PRESET_PLIST_FILE)
-        hb_error("Attempted: %s", HB_PRESET_PLIST_FILE);
+        "Attempted: %s\n"
 #endif
+#if defined(HB_PRESET_JSON_FILE)
+        , HB_PRESET_JSON_FILE
+#endif
+#if defined(HB_PRESET_PLIST_FILE)
+        , HB_PRESET_PLIST_FILE
+#endif
+                );
+
         return -1;
     }
     else
@@ -3391,7 +3400,7 @@ hb_preset_get(const hb_preset_index_t *path)
     {
         if (hb_value_array_len(folder) <= path->index[path->depth-1])
         {
-            hb_error("hb_preset_get: not found");
+            hb_log("hb_preset_get: not found");
         }
         else
         {
@@ -3400,7 +3409,7 @@ hb_preset_get(const hb_preset_index_t *path)
     }
     else
     {
-        hb_error("hb_preset_get: not found");
+        hb_log("hb_preset_get: not found");
     }
     return NULL;
 }
@@ -3420,7 +3429,7 @@ hb_preset_set(const hb_preset_index_t *path, const hb_value_t *dict)
     {
         if (hb_value_array_len(folder) <= path->index[path->depth-1])
         {
-            hb_error("hb_preset_replace: not found");
+            hb_log("hb_preset_replace: not found");
             return -1;
         }
         else
@@ -3432,7 +3441,7 @@ hb_preset_set(const hb_preset_index_t *path, const hb_value_t *dict)
     }
     else
     {
-        hb_error("hb_preset_replace: not found");
+        hb_log("hb_preset_replace: not found");
         return -1;
     }
     return 0;
@@ -3465,7 +3474,7 @@ int hb_preset_insert(const hb_preset_index_t *path, const hb_value_t *dict)
     }
     else
     {
-        hb_error("hb_preset_insert: not found");
+        hb_log("hb_preset_insert: not found");
         return -1;
     }
     return index;
@@ -3490,7 +3499,7 @@ int hb_preset_append(const hb_preset_index_t *path, const hb_value_t *dict)
     }
     else
     {
-        hb_error("hb_preset_append: not found");
+        hb_log("hb_preset_append: not found");
         return -1;
     }
     return 0;
@@ -3511,7 +3520,7 @@ hb_preset_delete(const hb_preset_index_t *path)
     {
         if (hb_value_array_len(folder) <= path->index[path->depth-1])
         {
-            hb_error("hb_preset_delete: not found");
+            hb_log("hb_preset_delete: not found");
             return -1;
         }
         else
@@ -3521,7 +3530,7 @@ hb_preset_delete(const hb_preset_index_t *path)
     }
     else
     {
-        hb_error("hb_preset_delete: not found");
+        hb_log("hb_preset_delete: not found");
         return -1;
     }
     return 0;
@@ -3541,7 +3550,7 @@ int hb_preset_move(const hb_preset_index_t *src_path,
     dst_folder = hb_presets_get_folder_children(&dst_folder_path);
     if (src_folder == NULL || dst_folder == NULL)
     {
-        hb_error("hb_preset_move: not found");
+        hb_log("hb_preset_move: not found");
         return -1;
     }
 

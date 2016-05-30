@@ -173,7 +173,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
                                                   filter->settings);
     if (avfilter_settings == NULL)
     {
-        hb_error("avfilter_init: no filter settings specified");
+        hb_log("avfilter_init: no filter settings specified");
         return 1;
     }
 
@@ -184,7 +184,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     pv->graph = avfilter_graph_alloc();
     if (pv->graph == NULL)
     {
-        hb_error("avfilter_init: avfilter_graph_alloc failed");
+        hb_log("avfilter_init: avfilter_graph_alloc failed");
         goto fail;
     }
 
@@ -199,7 +199,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     result = avfilter_graph_parse2(pv->graph, avfilter_settings, &in, &out);
     if (result < 0 || in == NULL || out == NULL)
     {
-        hb_error("avfilter_init: avfilter_graph_parse2 failed (%s)",
+        hb_log("avfilter_init: avfilter_graph_parse2 failed (%s)",
                  avfilter_settings);
         goto fail;
     }
@@ -216,7 +216,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     free(filter_args);
     if (avfilter == NULL)
     {
-        hb_error("avfilter_init: failed to create buffer source filter");
+        hb_log("avfilter_init: failed to create buffer source filter");
         goto fail;
     }
     pv->input = avfilter;
@@ -224,7 +224,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     avfilter = append_filter(pv, "format", "yuv420p");
     if (avfilter == NULL)
     {
-        hb_error("avfilter_init: failed to create pix format filter");
+        hb_log("avfilter_init: failed to create pix format filter");
         goto fail;
     }
 
@@ -240,7 +240,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     avfilter = append_filter(pv, "buffersink", NULL);
     if (avfilter == NULL)
     {
-        hb_error("avfilter_init: failed to create buffer output filter");
+        hb_log("avfilter_init: failed to create buffer output filter");
         goto fail;
     }
     pv->output = avfilter;
@@ -248,14 +248,14 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     result = avfilter_graph_config(pv->graph, NULL);
     if (result < 0)
     {
-        hb_error("avfilter_init: failed to configure filter graph");
+        hb_log("avfilter_init: failed to configure filter graph");
         goto fail;
     }
 
     pv->frame = av_frame_alloc();
     if (pv->frame == NULL)
     {
-        hb_error("avfilter_init: failed to allocate frame filter");
+        hb_log("avfilter_init: failed to allocate frame filter");
         goto fail;
     }
 

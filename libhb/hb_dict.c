@@ -85,7 +85,7 @@ hb_value_t * hb_value_json(const char *json)
     hb_value_t *val = json_loads(json, 0, &error);
     if (val == NULL)
     {
-        hb_error("hb_value_json: Failed, error %s", error.text);
+        hb_spam_log("hb_value_json: Failed, error %s", error.text);
     }
     return val;
 }
@@ -727,8 +727,8 @@ hb_value_array_set(hb_value_array_t *array, int index, hb_value_t *value)
 {
     if (index < 0 || index >= json_array_size(array))
     {
-        hb_error("hb_value_array_set: invalid index %d size %zu",
-                 index, json_array_size(array));
+        hb_spam_log("hb_value_array_set: invalid index %d size %zu",
+                    index, json_array_size(array));
         return;
     }
     json_array_set_new(array, index, value);

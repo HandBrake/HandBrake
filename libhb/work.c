@@ -1534,7 +1534,8 @@ static void do_job(hb_job_t *job)
             w = hb_audio_decoder(job->h, audio->config.in.codec);
             if (w == NULL)
             {
-                hb_error("Invalid input codec: %d", audio->config.in.codec);
+                hb_error("Invalid audio input codec: %d",
+                         audio->config.in.codec);
                 *job->done_error = HB_ERROR_WRONG_INPUT;
                 *job->die = 1;
                 goto cleanup;
@@ -1620,7 +1621,8 @@ static void do_job(hb_job_t *job)
                 w = hb_audio_encoder( job->h, audio->config.out.codec);
                 if (w == NULL)
                 {
-                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                    hb_error("Invalid audio encoder: %#x",
+                             audio->config.out.codec);
                     w = NULL;
                     *job->done_error = HB_ERROR_WRONG_INPUT;
                     *job->die = 1;
@@ -1703,7 +1705,7 @@ static void do_job(hb_job_t *job)
         w->done = &job->done;
         if (w->init( w, job ))
         {
-            hb_error( "Failure to initialise thread '%s'", w->name );
+            hb_error( "Failure to initialise '%s'", w->name );
             *job->done_error = HB_ERROR_INIT;
             *job->die = 1;
             goto cleanup;
