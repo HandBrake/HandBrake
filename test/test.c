@@ -146,6 +146,7 @@ static char *   advanced_opts   = NULL;
 static int      maxHeight     = 0;
 static int      maxWidth      = 0;
 static int      fastfirstpass = 0;
+static int      preset_import_gui    = 0;
 static char *   preset_export_name   = NULL;
 static char *   preset_export_desc   = NULL;
 static char *   preset_export_file   = NULL;
@@ -2102,6 +2103,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
             }   break;
             case PRESET_IMPORT_GUI:
+                preset_import_gui = 1;
                 hb_presets_gui_init();
                 break;
             case QUEUE_IMPORT:
@@ -3001,16 +3003,37 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             return NULL;
         }
     }
-    else
+    else if (preset_import_gui == 1)
     {
         preset = hb_presets_get_default();
+        if (preset == NULL)
+        {
+            fprintf(stderr, "Error loading presets! Aborting.\n");
+            return NULL;
+        }
+        preset = hb_value_dup(preset);
     }
-    if (preset == NULL)
+    else
     {
-        fprintf(stderr, "Error loading presets! Aborting.\n");
-        return NULL;
+        // Default settings
+        preset = hb_dict_init();
+        if (vcodec == NULL)
+        {
+            vcodec = "x264";
+            if (vquality == HB_INVALID_VIDEO_QUALITY)
+            {
+                vquality = 22;
+            }
+        }
+        if (atracks == NULL)
+        {
+            atracks = hb_str_vsplit("1", ',');
+            if (abitrates == NULL)
+            {
+                abitrates == hb_str_vsplit("160", ',');
+            }
+        }
     }
-    preset = hb_value_dup(preset);
 
     int subtitle_track_count = count_subtitles(subtracks);
     // Apply any overrides that can be made directly to the preset
