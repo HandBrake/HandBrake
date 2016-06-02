@@ -3056,8 +3056,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 return NULL;
             }
         }
-        hb_dict_set(preset, "SubtitleTrackSelectionBehavior",
-                    hb_value_string("first"));
+        if (subtitle_all == -1)
+        {
+            subtitle_all = 0;
+        }
     }
     if (native_language != NULL)
     {
