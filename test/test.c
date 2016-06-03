@@ -3517,10 +3517,12 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (vrate != NULL)
     {
         hb_dict_set(preset, "VideoFramerate", hb_value_string(vrate));
+        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("pfr"));
     }
     else
     {
         hb_dict_set(preset, "VideoFramerate", hb_value_string("auto"));
+        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("vfr"));
     }
     if (cfr != -1)
     {
