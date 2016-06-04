@@ -2,26 +2,29 @@
 # usage: build-presets
 
 SELF="${BASH_SOURCE[0]}"
-BASE_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd -P)
-BASE_DIR="${BASE_DIR:-$(pwd)}"
-LIBHB_DIR="${BASE_DIR}/../libhb"
-PRESETS_DIR="${BASE_DIR}/../preset"
+SELF_DIR=$(cd $(dirname "${SELF}") && pwd -P)
+SELF_DIR="${SELF_DIR:-$(pwd)}"
+LIBHB_DIR="${SELF_DIR}/../libhb"
+PRESETS_DIR="${SELF_DIR}/../preset"
 
 if ! cd "${PRESETS_DIR}"; then
+    echo "unable to access directory: ${PRESETS_DIR}" >2
     exit 1
 fi
 
-JSON_TEMP=$(mktemp hb_builtin_presets.json.XXX)
-C_TEMP=$(mktemp hb_builtin_presets.h.XXX)
+JSON_TEMP=$(mktemp preset_builtin.json.XXX)
+C_TEMP=$(mktemp preset_builtin.h.XXX)
 if [[ "${JSON_TEMP:-}" == "" ]] || [[ "${C_TEMP:-}" == "" ]]; then
-    echo "unable to create temporary file" >2
+    echo "unable to create temporary files" >2
     exit 1
 fi
-"${BASE_DIR}/create_resources.py" preset_builtin.list "${JSON_TEMP}" \
-&& echo 'const char hb_builtin_presets_json[] =' > "${C_TEMP}" \
-&& "${BASE_DIR}/quotestring.py" "${JSON_TEMP}" >> "${C_TEMP}" \
-&& echo ';' >> "${C_TEMP}" \
-&& cp "${C_TEMP}" "${LIBHB_DIR}/preset_builtin.h"
-rm "${JSON_TEMP}" "${C_TEMP}"
+
+trap "rm ${JSON_TEMP} ${C_TEMP}" EXIT INT TERM
+
+"${SELF_DIR}/create_resources.py" preset_builtin.list "${JSON_TEMP}"
+echo 'const char hb_builtin_presets_json[] =' > "${C_TEMP}"
+"${SELF_DIR}/quotestring.py" "${JSON_TEMP}" >> "${C_TEMP}"
+echo ';' >> "${C_TEMP}"
+cp "${C_TEMP}" "${LIBHB_DIR}/preset_builtin.h"
 
 exit 0
