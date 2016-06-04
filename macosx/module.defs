@@ -3,6 +3,7 @@ $(eval $(call import.GCC,MACOSX))
 
 MACOSX.src/   = $(SRC/)macosx/
 MACOSX.build/ = $(BUILD/)macosx/
+MACOSX.xroot/ = $(BUILD/)xroot/
 
 MACOSX.m4.in  = $(wildcard $(MACOSX.src/)*.m4)
 MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
