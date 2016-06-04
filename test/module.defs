@@ -15,8 +15,8 @@ TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
         ass avresample avformat avcodec avfilter avutil mp3lame dvdnav \
-        dvdread fontconfig fribidi ogg \
-        samplerate swscale vpx theoraenc theoradec vorbis vorbisenc x264 \
+        dvdread fontconfig fribidi \
+        samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
         bluray freetype xml2 bz2 z jansson harfbuzz
 
 ifeq (1,$(FEATURE.qsv))
