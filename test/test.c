@@ -3514,15 +3514,25 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             hb_dict_set(preset, "VideoTurboTwoPass", hb_value_bool(1));
         }
     }
+    const char *vrate_preset;
+    const char *cfr_preset;
+    vrate_preset = hb_value_get_string(hb_dict_get(preset, "VideoFramerate"));
+    cfr_preset = hb_value_get_string(hb_dict_get(preset, "VideoFramerateMode"));
     if (vrate != NULL)
     {
         hb_dict_set(preset, "VideoFramerate", hb_value_string(vrate));
-        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("pfr"));
+        if (cfr_preset == NULL || strcmp(cfr_preset, "") == 0)
+        {
+            hb_dict_set(preset, "VideoFramerateMode", hb_value_string("pfr"));
+        }
     }
-    else
+    else if (vrate_preset == NULL || strcmp(vrate_preset, "") == 0)
     {
         hb_dict_set(preset, "VideoFramerate", hb_value_string("auto"));
-        hb_dict_set(preset, "VideoFramerateMode", hb_value_string("vfr"));
+        if (cfr_preset == NULL || strcmp(cfr_preset, "") == 0)
+        {
+            hb_dict_set(preset, "VideoFramerateMode", hb_value_string("vfr"));
+        }
     }
     if (cfr != -1)
     {
