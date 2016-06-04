@@ -30,6 +30,7 @@ int hb_preset_version_micro;
 static hb_value_t *hb_preset_template = NULL;
 static hb_value_t *hb_presets = NULL;
 static hb_value_t *hb_presets_builtin = NULL;
+static hb_value_t *hb_presets_cli_default = NULL;
 
 static void         preset_clean(hb_value_t *preset, hb_value_t *template);
 static int          preset_import(hb_value_t *preset, int major, int minor,
@@ -2906,6 +2907,17 @@ void hb_presets_builtin_init(void)
     hb_value_free(&dict);
 }
 
+int hb_presets_cli_default_init(void)
+{
+    hb_value_t * dict = hb_value_json(hb_builtin_presets_json);
+    hb_presets_cli_default = hb_value_dup(hb_dict_get(dict, "PresetCLIDefault"));
+    hb_presets_clean(hb_presets_cli_default);
+
+    int result = hb_presets_add_internal(hb_presets_cli_default);
+    hb_value_free(&dict);
+    return result;
+}
+
 void hb_presets_current_version(int *major, int* minor, int *micro)
 {
     *major = hb_preset_version_major;
@@ -3097,15 +3109,11 @@ void hb_presets_builtin_update(void)
     hb_value_free(&builtin);
 }
 
-int hb_presets_add(hb_value_t *preset)
+int hb_presets_add_internal(hb_value_t *preset)
 {
     hb_preset_index_t *path;
     int                added = 0;
 
-    if (preset == NULL)
-        return -1;
-
-    preset = presets_unpackage(preset);
     if (preset == NULL)
         return -1;
 
@@ -3145,6 +3153,18 @@ int hb_presets_add(hb_value_t *preset)
     }
 
     return index;
+}
+
+int hb_presets_add(hb_value_t *preset)
+{
+    if (preset == NULL)
+        return -1;
+
+    preset = presets_unpackage(preset);
+    if (preset == NULL)
+        return -1;
+
+    return hb_presets_add_internal(preset);
 }
 
 int hb_presets_add_json(const char *json)

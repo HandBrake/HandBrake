@@ -6,4 +6,5 @@
         <json name="Preset" file="preset_template.json" />
     </section>
     <json name="PresetBuiltin" file="preset_builtin.json" />
+    <json name="PresetCLIDefault" file="preset_cli_default.json" />
 </resources>

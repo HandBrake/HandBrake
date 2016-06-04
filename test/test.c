@@ -423,6 +423,7 @@ int main( int argc, char ** argv )
 
     hb_global_init();
     hb_presets_builtin_update();
+    hb_presets_cli_default_init();
 
     /* Init libhb */
     h = hb_init(4);  // Show all logging until debug level is parsed
