@@ -116,7 +116,7 @@ static int hb_dvdnav_reset( hb_dvdnav_t * d )
     if (dvdnav_set_readahead_flag(d->dvdnav, DVD_READ_CACHE) !=
         DVDNAV_STATUS_OK)
     {
-        hb_error("Error: dvdnav_set_readahead_flag: %s\n",
+        hb_spam_log("Error: dvdnav_set_readahead_flag: %s\n",
                  dvdnav_err_to_string(d->dvdnav));
         goto fail;
     }
@@ -128,7 +128,7 @@ static int hb_dvdnav_reset( hb_dvdnav_t * d )
      **/
     if (dvdnav_set_PGC_positioning_flag(d->dvdnav, 1) != DVDNAV_STATUS_OK)
     {
-        hb_error("Error: dvdnav_set_PGC_positioning_flag: %s\n",
+        hb_spam_log("Error: dvdnav_set_PGC_positioning_flag: %s\n",
                  dvdnav_err_to_string(d->dvdnav));
         goto fail;
     }
@@ -189,8 +189,8 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, char * path )
     if (dvdnav_set_readahead_flag(d->dvdnav, DVD_READ_CACHE) !=
         DVDNAV_STATUS_OK)
     {
-        hb_error("Error: dvdnav_set_readahead_flag: %s\n",
-                 dvdnav_err_to_string(d->dvdnav));
+        hb_log("Error: dvdnav_set_readahead_flag: %s\n",
+               dvdnav_err_to_string(d->dvdnav));
         goto fail;
     }
 
@@ -201,8 +201,8 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, char * path )
      **/
     if (dvdnav_set_PGC_positioning_flag(d->dvdnav, 1) != DVDNAV_STATUS_OK)
     {
-        hb_error("Error: dvdnav_set_PGC_positioning_flag: %s\n",
-                 dvdnav_err_to_string(d->dvdnav));
+        hb_log("Error: dvdnav_set_PGC_positioning_flag: %s\n",
+               dvdnav_err_to_string(d->dvdnav));
         goto fail;
     }
 
@@ -219,7 +219,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, char * path )
     /* Open main IFO */
     if( !( d->vmg = ifoOpen( d->reader, 0 ) ) )
     {
-        hb_error( "dvd: ifoOpen failed" );
+        hb_log( "dvd: ifoOpen failed" );
         goto fail;
     }
 
@@ -871,7 +871,7 @@ static int skip_to_menu( dvdnav_t * dvdnav, int blocks )
         result = dvdnav_get_next_block( dvdnav, buf, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
-            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
+            hb_spam_log("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
             return 0;
         }
         switch ( event )
@@ -995,7 +995,7 @@ static int try_button( dvdnav_t * dvdnav, int button, hb_list_t * list_title )
             result = dvdnav_get_next_block( dvdnav, buf, &event, &len );
             if ( result == DVDNAV_STATUS_ERR )
             {
-                hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
+                hb_spam_log("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
                 goto done;
             }
             switch ( event )
@@ -1146,7 +1146,7 @@ static int try_menu(
             result = dvdnav_menu_call( d->dvdnav, menu );
             if ( result != DVDNAV_STATUS_OK )
             {
-                hb_error("dvdnav: Can not set dvd menu, %s", dvdnav_err_to_string(d->dvdnav));
+                hb_spam_log("dvdnav: Can not set dvd menu, %s", dvdnav_err_to_string(d->dvdnav));
                 goto done;
             }
         }
@@ -1165,7 +1165,7 @@ static int try_menu(
             result = dvdnav_get_next_block( d->dvdnav, buf, &event, &len );
             if ( result == DVDNAV_STATUS_ERR )
             {
-                hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+                hb_spam_log("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
                 goto done;
             }
             switch ( event )
@@ -1460,8 +1460,8 @@ static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
         result = dvdnav_part_play(d->dvdnav, t, 1);
     if (result != DVDNAV_STATUS_OK)
     {
-        hb_error( "dvd: dvdnav_*_play failed - %s", 
-                  dvdnav_err_to_string(d->dvdnav) );
+        hb_log("dvd: dvdnav_*_play failed - %s", 
+               dvdnav_err_to_string(d->dvdnav));
         return 0;
     }
     d->title = t;
@@ -1552,7 +1552,7 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
         result = dvdnav_get_next_block( d->dvdnav, buf, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
-            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+            hb_spam_log("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
             return 0;
         }
         switch ( event )
@@ -1590,8 +1590,8 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
 
     if (dvdnav_sector_search(d->dvdnav, sector, SEEK_SET) != DVDNAV_STATUS_OK)
     {
-        hb_error( "dvd: dvdnav_sector_search failed - %s", 
-                  dvdnav_err_to_string(d->dvdnav) );
+        hb_spam_log("dvd: dvdnav_sector_search failed - %s", 
+                    dvdnav_err_to_string(d->dvdnav));
         return 0;
     }
     d->chapter = 0;
@@ -1622,11 +1622,12 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
         result = dvdnav_get_next_block( d->dvdnav, b->data, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
-            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+            hb_spam_log("dvdnav: Read Error, %s",
+                        dvdnav_err_to_string(d->dvdnav));
             if (dvdnav_sector_search(d->dvdnav, 1, SEEK_CUR) != DVDNAV_STATUS_OK)
             {
-                hb_error( "dvd: dvdnav_sector_search failed - %s",
-                        dvdnav_err_to_string(d->dvdnav) );
+                hb_spam_log("dvd: dvdnav_sector_search failed - %s",
+                            dvdnav_err_to_string(d->dvdnav));
                 hb_buffer_close( &b );
                 hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
@@ -1634,7 +1635,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             error_count++;
             if (error_count > 500)
             {
-                hb_error("dvdnav: Error, too many consecutive read errors");
+                hb_spam_log("dvdnav: Error, too many consecutive read errors");
                 hb_buffer_close( &b );
                 hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;

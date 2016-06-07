@@ -172,7 +172,7 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
                                w->audio->config.out.normalize_mix_level);
     if (pv->resample == NULL)
     {
-        hb_error("declpcmInit: hb_audio_resample_init() failed");
+        hb_log("declpcmInit: hb_audio_resample_init() failed");
         return 1;
     }
 

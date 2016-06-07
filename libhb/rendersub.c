@@ -529,7 +529,7 @@ static int ssa_post_init( hb_filter_object_t * filter, hb_job_t * job )
 
     pv->ssa = ass_library_init();
     if ( !pv->ssa ) {
-        hb_error( "decssasub: libass initialization failed\n" );
+        hb_log( "decssasub: libass initialization failed\n" );
         return 1;
     }
 
@@ -1039,7 +1039,7 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
 
         default:
         {
-            hb_error("rendersub: unsupported subtitle format %d", pv->type );
+            hb_spam_log("rendersub: unsupported subtitle format %d", pv->type );
             return 1;
         } break;
     }
@@ -1080,7 +1080,7 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
 
         default:
         {
-            hb_error("rendersub: unsupported subtitle format %d", pv->type );
+            hb_log("rendersub: unsupported subtitle format %d", pv->type );
         } break;
     }
 }

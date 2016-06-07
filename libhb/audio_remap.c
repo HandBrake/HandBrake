@@ -185,7 +185,7 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
     hb_audio_remap_t *remap = calloc(1, sizeof(hb_audio_remap_t));
     if (remap == NULL)
     {
-        hb_error("hb_audio_remap_init: failed to allocate remap");
+        hb_spam_log("hb_audio_remap_init: failed to allocate remap");
         goto fail;
     }
 
@@ -221,15 +221,15 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
             break;
 
         default:
-            hb_error("hb_audio_remap_init: unsupported sample format '%s'",
-                     av_get_sample_fmt_name(sample_fmt));
+            hb_spam_log("hb_audio_remap_init: unsupported sample format '%s'",
+                        av_get_sample_fmt_name(sample_fmt));
             goto fail;
     }
 
     // input/output channel order
     if (channel_map_in == NULL || channel_map_out == NULL)
     {
-        hb_error("hb_audio_remap_init: invalid channel map(s)");
+        hb_spam_log("hb_audio_remap_init: invalid channel map(s)");
         goto fail;
     }
     remap->channel_map_in  = channel_map_in;

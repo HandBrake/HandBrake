@@ -296,7 +296,7 @@ static int utf8_fill( hb_work_private_t * pv )
             pv->end += bytes;
         } else if ( ( retval == -1 ) && ( errno == EILSEQ ) )
         {
-            hb_error( "Invalid byte for codeset in input, discard byte" );
+            hb_spam_log( "Invalid byte for codeset in input, discard byte" );
             /* Try the next byte of the input */
             pv->pos++;
         } else if ( ( retval == -1 ) && ( errno == E2BIG ) )
@@ -598,7 +598,6 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
 static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 {
-    int retval = 1;
     hb_work_private_t * pv;
     int i;
     hb_chapter_t * chapter;
@@ -627,8 +626,8 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
             {
                 pv->start_time += chapter->duration;
             } else {
-                hb_error( "Could not locate chapter %d for SRT start time", i );
-                retval = 0;
+                hb_log("Could not locate chapter %d for SRT start time", i);
+                return 1;
             }
         }
         pv->stop_time = pv->start_time;
@@ -639,44 +638,43 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
             {
                 pv->stop_time += chapter->duration;
             } else {
-                hb_error( "Could not locate chapter %d for SRT start time", i );
-                retval = 0;
+                hb_log("Could not locate chapter %d for SRT start time", i);
+                return 1;
             }
         }
 
-        hb_deep_log( 3, "SRT Start time %"PRId64", stop time %"PRId64, pv->start_time, pv->stop_time);
+        hb_deep_log(3, "SRT Start time %"PRId64", stop time %"PRId64,
+                    pv->start_time, pv->stop_time);
 
-        pv->iconv_context = iconv_open( "utf-8", pv->subtitle->config.src_codeset );
+        pv->iconv_context = iconv_open("utf-8",
+                                       pv->subtitle->config.src_codeset );
 
-
-        if( pv->iconv_context == (iconv_t) -1 )
+        if (pv->iconv_context == (iconv_t) -1)
         {
-            hb_error("Could not open the iconv library with those file formats\n");
+            hb_log("Could not initialize iconv with codeset %s\n",
+                   pv->subtitle->config.src_codeset);
+            return 1;
 
         } else {
             memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
 
             pv->file = hb_fopen(w->subtitle->config.src_filename, "r");
-
-            if( !pv->file )
+            if (!pv->file)
             {
-                hb_error("Could not open the SRT subtitle file '%s'\n",
-                         w->subtitle->config.src_filename);
-            } else {
-                retval = 0;
+                hb_log("Could not open the SRT subtitle file '%s'\n",
+                        w->subtitle->config.src_filename);
+                return 1;
             }
         }
     }
-    if (!retval)
-    {
-        // Generate generic SSA Script Info.
-        int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-        int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-        hb_subtitle_add_ssa_header(w->subtitle, "Arial",
-                                   .066 * job->title->geometry.height,
-                                   width, height);
-    }
-    return retval;
+
+    // Generate generic SSA Script Info.
+    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+    hb_subtitle_add_ssa_header(w->subtitle, "Arial",
+                               .066 * job->title->geometry.height,
+                               width, height);
+    return 0;
 }
 
 static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,

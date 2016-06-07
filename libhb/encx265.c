@@ -102,7 +102,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 
     if (pv->api == NULL)
     {
-        hb_error("encx265: x265_api_query failed, bit depth %d.", depth);
+        hb_log("encx265: x265_api_query failed, bit depth %d.", depth);
         goto fail;
     }
 
@@ -111,7 +111,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (pv->api->param_default_preset(param, job->encoder_preset,
                                       job->encoder_tune) < 0)
     {
-        hb_error("encx265: x265_param_default_preset failed. Preset (%s) Tune (%s)", job->encoder_preset, job->encoder_tune);
+        hb_log("encx265: x265_param_default_preset failed. Preset (%s) Tune (%s)", job->encoder_preset, job->encoder_tune);
         goto fail;
     }
 
@@ -301,7 +301,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     pv->x265 = pv->api->encoder_open(param);
     if (pv->x265 == NULL)
     {
-        hb_error("encx265: x265_encoder_open failed.");
+        hb_log("encx265: x265_encoder_open failed.");
         goto fail;
     }
 
@@ -314,12 +314,12 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     ret = pv->api->encoder_headers(pv->x265, &nal, &nnal);
     if (ret < 0)
     {
-        hb_error("encx265: x265_encoder_headers failed (%d)", ret);
+        hb_log("encx265: x265_encoder_headers failed (%d)", ret);
         goto fail;
     }
     if (ret > sizeof(w->config->h265.headers))
     {
-        hb_error("encx265: bitstream headers too large (%d)", ret);
+        hb_log("encx265: bitstream headers too large (%d)", ret);
         goto fail;
     }
     memcpy(w->config->h265.headers, nal->payload, ret);

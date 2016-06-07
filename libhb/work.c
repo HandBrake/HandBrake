@@ -110,9 +110,10 @@ static void work_func( void * _work )
             hb_job_t *new_job = hb_json_to_job(job->h, job->json);
             if (new_job == NULL)
             {
+                hb_error(HB_ERROR_ENC_INIT, "Failed to parse job description");
                 hb_job_close(&job);
                 hb_list_close(&passes);
-                *work->error = HB_ERROR_INIT;
+                *work->error = HB_ERROR_ENC_INIT;
                 *work->die = 1;
                 break;
             }
@@ -189,7 +190,8 @@ hb_work_object_t* hb_video_decoder(hb_handle_t *h, int vcodec, int param)
     w = hb_get_work(h, vcodec);
     if (w == NULL)
     {
-        hb_error("Invalid video decoder: codec %d, param %d", vcodec, param);
+        hb_error(HB_ERROR_ENC_INPUT,
+                 "Invalid video decoder: codec %d, param %d", vcodec, param);
         return NULL;
     }
     w->codec_param = param;
@@ -239,7 +241,8 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             break;
 #endif
         default:
-            hb_error("Unknown video codec (0x%x)", vcodec );
+            hb_error(HB_ERROR_ENC_INPUT,
+                     "Unknown video encoder (0x%x)", vcodec );
     }
 
     return w;
@@ -1391,7 +1394,7 @@ static void do_job(hb_job_t *job)
     result = sanitize_subtitles(job);
     if (result)
     {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->done_error = HB_ERROR_ENC_INPUT;
         *job->die = 1;
         goto cleanup;
     }
@@ -1401,7 +1404,7 @@ static void do_job(hb_job_t *job)
     result = sanitize_qsv(job);
     if (result)
     {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->done_error = HB_ERROR_ENC_INPUT;
         *job->die = 1;
         goto cleanup;
     }
@@ -1511,7 +1514,7 @@ static void do_job(hb_job_t *job)
     result = sanitize_audio(job);
     if (result)
     {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->done_error = HB_ERROR_ENC_INPUT;
         *job->die = 1;
         goto cleanup;
     }
@@ -1534,8 +1537,10 @@ static void do_job(hb_job_t *job)
             w = hb_audio_decoder(job->h, audio->config.in.codec);
             if (w == NULL)
             {
-                hb_error("Invalid input codec: %d", audio->config.in.codec);
-                *job->done_error = HB_ERROR_WRONG_INPUT;
+                hb_error(HB_ERROR_ENC_INPUT,
+                         "Invalid audio input codec: %d",
+                         audio->config.in.codec);
+                *job->done_error = HB_ERROR_ENC_INPUT;
                 *job->die = 1;
                 goto cleanup;
             }
@@ -1591,7 +1596,7 @@ static void do_job(hb_job_t *job)
     w = hb_video_decoder(job->h, title->video_codec, title->video_codec_param);
     if (w == NULL)
     {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->done_error = HB_ERROR_ENC_INPUT;
         *job->die = 1;
         goto cleanup;
     }
@@ -1620,9 +1625,11 @@ static void do_job(hb_job_t *job)
                 w = hb_audio_encoder( job->h, audio->config.out.codec);
                 if (w == NULL)
                 {
-                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                    hb_error(HB_ERROR_ENC_INPUT,
+                             "Invalid audio encoder: %#x",
+                             audio->config.out.codec);
                     w = NULL;
-                    *job->done_error = HB_ERROR_WRONG_INPUT;
+                    *job->done_error = HB_ERROR_ENC_INPUT;
                     *job->die = 1;
                     goto cleanup;
                 }
@@ -1658,7 +1665,7 @@ static void do_job(hb_job_t *job)
         w = hb_video_encoder(job->h, job->vcodec);
         if (w == NULL)
         {
-            *job->done_error = HB_ERROR_INIT;
+            *job->done_error = HB_ERROR_ENC_INPUT;
             *job->die = 1;
             goto cleanup;
         }
@@ -1703,8 +1710,8 @@ static void do_job(hb_job_t *job)
         w->done = &job->done;
         if (w->init( w, job ))
         {
-            hb_error( "Failure to initialise thread '%s'", w->name );
-            *job->done_error = HB_ERROR_INIT;
+            hb_error(HB_ERROR_ENC_INIT, "Failure to initialise '%s'", w->name);
+            *job->done_error = HB_ERROR_ENC_INIT;
             *job->die = 1;
             goto cleanup;
         }

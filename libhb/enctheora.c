@@ -135,13 +135,13 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         bytes = th_encode_ctl(pv->ctx, TH_ENCCTL_2PASS_OUT, &buffer, sizeof(buffer));
         if( bytes < 0 )
         {
-            hb_error("Could not set up the first pass of two-pass mode.\n");
-            hb_error("Did you remember to specify an estimated bitrate?\n");
+            hb_log("Could not set up the first pass of two-pass mode.\n");
+            hb_log("Did you remember to specify an estimated bitrate?\n");
             return 1;
         }
         if( fwrite( buffer, 1, bytes, pv->file ) < bytes )
         {
-            hb_error("Unable to write to two-pass data file.\n");
+            hb_log("Unable to write to two-pass data file.\n");
             return 1;
         }
         fflush( pv->file );
@@ -258,7 +258,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             bytes = th_encode_ctl( pv->ctx, TH_ENCCTL_2PASS_IN, NULL, 0 );
             if( bytes < 0 )
             {
-                hb_error("Error requesting stats size in second pass.");
+                hb_log("Error requesting stats size in second pass.");
                 *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;
@@ -277,7 +277,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if( size > 0 &&
                 fread( pv->stat_buf+pv->stat_fill, 1, size, pv->file ) < size )
             {
-                hb_error("Could not read frame data from two-pass data file!");
+                hb_log("Could not read frame data from two-pass data file!");
                 *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;
@@ -291,7 +291,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                  pv->stat_buf+pv->stat_read, bytes);
             if( ret < 0 )
             {
-                hb_error("Error submitting pass data in second pass.");
+                hb_log("Error submitting pass data in second pass.");
                 *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return HB_WORK_DONE;

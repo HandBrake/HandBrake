@@ -101,7 +101,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         } break;
         default:
         {
-            hb_error("encavcodecInit: unsupported encoder!");
+            hb_log("encavcodecInit: unsupported encoder!");
             return 1;
         }
     }
@@ -629,7 +629,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     else
     {
-        hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
+        hb_spam_log( "encavcodec: codec context has uninitialized codec; skipping frame" );
     }
 
     av_frame_free( &frame );

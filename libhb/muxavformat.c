@@ -139,7 +139,7 @@ static int avformatInit( hb_mux_object_t * m )
     m->oc = avformat_alloc_context();
     if (m->oc == NULL)
     {
-        hb_error( "Could not initialize avformat context." );
+        hb_log( "Could not initialize avformat context." );
         goto error;
     }
 
@@ -173,14 +173,14 @@ static int avformatInit( hb_mux_object_t * m )
 
         default:
         {
-            hb_error("Invalid Mux %x", job->mux);
+            hb_log("Invalid Mux %x", job->mux);
             goto error;
         }
     }
     m->oc->oformat = av_guess_format(muxer_name, NULL, NULL);
     if(m->oc->oformat == NULL)
     {
-        hb_error("Could not guess output format %s", muxer_name);
+        hb_log("Could not guess output format %s", muxer_name);
         goto error;
     }
     av_strlcpy(m->oc->filename, job->file, sizeof(m->oc->filename));
@@ -188,7 +188,7 @@ static int avformatInit( hb_mux_object_t * m )
                      &m->oc->interrupt_callback, NULL);
     if( ret < 0 )
     {
-        hb_error( "avio_open2 failed, errno %d", ret);
+        hb_log( "avio_open2 failed, errno %d", ret);
         goto error;
     }
 
@@ -201,7 +201,7 @@ static int avformatInit( hb_mux_object_t * m )
     track->st = avformat_new_stream(m->oc, NULL);
     if (track->st == NULL)
     {
-        hb_error("Could not initialize video stream");
+        hb_log("Could not initialize video stream");
         goto error;
     }
     track->st->time_base = m->time_base;
@@ -225,7 +225,7 @@ static int avformatInit( hb_mux_object_t * m )
             priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
-                hb_error("H.264 extradata: malloc failure");
+                hb_log("H.264 extradata: malloc failure");
                 goto error;
             }
 
@@ -261,7 +261,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("MPEG4 extradata: malloc failure");
+                    hb_log("MPEG4 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data, job->config.mpeg4.bytes, priv_size);
@@ -277,7 +277,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("MPEG2 extradata: malloc failure");
+                    hb_log("MPEG2 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data, job->config.mpeg4.bytes, priv_size);
@@ -313,7 +313,7 @@ static int avformatInit( hb_mux_object_t * m )
             priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
-                hb_error("Theora extradata: malloc failure");
+                hb_log("Theora extradata: malloc failure");
                 goto error;
             }
 
@@ -341,7 +341,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("H.265 extradata: malloc failure");
+                    hb_log("H.265 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data, job->config.h265.headers, priv_size);
@@ -349,7 +349,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         default:
-            hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
+            hb_log("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
     }
     track->st->codec->extradata = priv_data;
@@ -413,7 +413,7 @@ static int avformatInit( hb_mux_object_t * m )
         track->st = avformat_new_stream(m->oc, NULL);
         if (track->st == NULL)
         {
-            hb_error("Could not initialize audio stream");
+            hb_log("Could not initialize audio stream");
             goto error;
         }
         avcodec_get_context_defaults3(track->st->codec, NULL);
@@ -471,7 +471,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("Vorbis extradata: malloc failure");
+                    hb_log("Vorbis extradata: malloc failure");
                     goto error;
                 }
 
@@ -495,7 +495,7 @@ static int avformatInit( hb_mux_object_t * m )
                     priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                     if (priv_data == NULL)
                     {
-                        hb_error("FLAC extradata: malloc failure");
+                        hb_log("FLAC extradata: malloc failure");
                         goto error;
                     }
                     memcpy(priv_data,
@@ -521,7 +521,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("AAC extradata: malloc failure");
+                    hb_log("AAC extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data,
@@ -538,8 +538,8 @@ static int avformatInit( hb_mux_object_t * m )
                 }
                 break;
             default:
-                hb_error("muxavformat: Unknown audio codec: %x",
-                         audio->config.out.codec);
+                hb_log("muxavformat: Unknown audio codec: %x",
+                       audio->config.out.codec);
                 goto error;
         }
         track->st->codec->extradata = priv_data;
@@ -704,7 +704,7 @@ static int avformatInit( hb_mux_object_t * m )
         track->st = avformat_new_stream(m->oc, NULL);
         if (track->st == NULL)
         {
-            hb_error("Could not initialize subtitle stream");
+            hb_log("Could not initialize subtitle stream");
             goto error;
         }
         avcodec_get_context_defaults3(track->st->codec, NULL);
@@ -739,7 +739,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("VOBSUB extradata: malloc failure");
+                    hb_log("VOBSUB extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data, subidx, priv_size);
@@ -772,7 +772,7 @@ static int avformatInit( hb_mux_object_t * m )
                         priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                         if (priv_data == NULL)
                         {
-                            hb_error("SSA extradata: malloc failure");
+                            hb_log("SSA extradata: malloc failure");
                             goto error;
                         }
                         memcpy(priv_data, subtitle->extradata, priv_size);
@@ -822,7 +822,7 @@ static int avformatInit( hb_mux_object_t * m )
             priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
             if (priv_data == NULL)
             {
-                hb_error("TX3G extradata: malloc failure");
+                hb_log("TX3G extradata: malloc failure");
                 goto error;
             }
             memcpy(priv_data, properties, priv_size);
@@ -860,7 +860,7 @@ static int avformatInit( hb_mux_object_t * m )
                 AVStream *st = avformat_new_stream(m->oc, NULL);
                 if (st == NULL)
                 {
-                    hb_error("Could not initialize attachment stream");
+                    hb_log("Could not initialize attachment stream");
                     goto error;
                 }
                 avcodec_get_context_defaults3(st->codec, NULL);
@@ -880,7 +880,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("Font extradata: malloc failure");
+                    hb_log("Font extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data, attachment->data, priv_size);
@@ -979,7 +979,7 @@ static int avformatInit( hb_mux_object_t * m )
     if( ret < 0 )
     {
         av_dict_free( &av_opts );
-        hb_error( "muxavformat: avformat_write_header failed!");
+        hb_log( "muxavformat: avformat_write_header failed!");
         goto error;
     }
 
@@ -996,7 +996,7 @@ error:
     free(job->mux_data);
     job->mux_data = NULL;
     avformat_free_context(m->oc);
-    *job->done_error = HB_ERROR_INIT;
+    *job->done_error = HB_ERROR_ENC_INIT;
     *job->die = 1;
     return -1;
 }
@@ -1011,14 +1011,14 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
     chapters = av_realloc(m->oc->chapters, nchap * sizeof(AVChapter*));
     if (chapters == NULL)
     {
-        hb_error("chapter array: malloc failure");
+        hb_log("chapter array: malloc failure");
         return -1;
     }
 
     chap = av_mallocz(sizeof(AVChapter));
     if (chap == NULL)
     {
-        hb_error("chapter: malloc failure");
+        hb_log("chapter: malloc failure");
         return -1;
     }
 
@@ -1220,8 +1220,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     {
                         char errstr[64];
                         av_strerror(ret, errstr, sizeof(errstr));
-                        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt)",
-                                 track->st->index, errstr);
+                        hb_log("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt)",
+                               track->st->index, errstr);
+                        hb_error(HB_ERROR_ENC, "Failure to mux output packet");
                         *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                         return -1;
@@ -1300,7 +1301,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
             if (pkt.data == NULL)
             {
                 // Memory allocation failure!
-                hb_error("avformatMux: subtitle memory allocation failure");
+                hb_log("avformatMux: subtitle memory allocation failure");
+                hb_error(HB_ERROR_ENC, "Failure to mux output packet");
                 *job->done_error = HB_ERROR_UNKNOWN;
                 *job->die = 1;
                 return -1;
@@ -1331,8 +1333,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     {
         char errstr[64];
         av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
-        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
-                 track->st->index, errstr);
+        hb_log("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
+               track->st->index, errstr);
+        hb_error(HB_ERROR_ENC, "Failure to mux output packet");
         *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
         return -1;

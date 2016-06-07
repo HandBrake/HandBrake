@@ -72,12 +72,12 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
                 "Progress", hb_value_double(state->param.muxing.progress));
         break;
     default:
-        hb_error("hb_state_to_json: unrecognized state %d", state->state);
+        hb_spam_log("hb_state_to_json: unrecognized state %d", state->state);
         break;
     }
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_spam_log("json pack failure: %s", error.text);
     }
     return dict;
 }
@@ -161,7 +161,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     );
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_spam_log("json pack failure: %s", error.text);
         return NULL;
     }
 
@@ -243,7 +243,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         );
         if (chapter_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_spam_log("json pack failure: %s", error.text);
             return NULL;
         }
         hb_value_array_append(chapter_list, chapter_dict);
@@ -268,7 +268,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "ChannelLayout",    hb_value_int(audio->config.in.channel_layout));
         if (audio_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_spam_log("json pack failure: %s", error.text);
             return NULL;
         }
         hb_value_array_append(audio_list, audio_dict);
@@ -290,7 +290,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "LanguageCode", hb_value_string(subtitle->iso639_2));
         if (subtitle_dict == NULL)
         {
-            hb_error("json pack failure: %s", error.text);
+            hb_spam_log("json pack failure: %s", error.text);
             return NULL;
         }
         hb_value_array_append(subtitle_list, subtitle_dict);
@@ -441,7 +441,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     );
     if (dict == NULL)
     {
-        hb_error("json pack failure: %s", error.text);
+        hb_spam_log("json pack failure: %s", error.text);
         return NULL;
     }
     hb_dict_t *dest_dict = hb_dict_get(dict, "Destination");
@@ -739,7 +739,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
                            );
     if (result < 0)
     {
-        hb_error("json unpack failure, failed to find title: %s", error.text);
+        hb_spam_log("json unpack failure, failed to find title: %s", error.text);
         hb_value_free(&dict);
         return;
     }
@@ -766,9 +766,9 @@ static int validate_audio_codec_mux(int codec, int mux, int track)
     {
         if ((enc->codec == codec) && (enc->muxers & mux) == 0)
         {
-            hb_error("track %d: incompatible encoder '%s' for muxer '%s'",
-                     track + 1, enc->short_name,
-                     hb_container_get_short_name(mux));
+            hb_log("track %d: incompatible encoder '%s' for muxer '%s'",
+                   track + 1, enc->short_name,
+                   hb_container_get_short_name(mux));
             return -1;
         }
     }
@@ -795,14 +795,14 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                             "Source", "Title", unpack_i(&titleindex));
     if (result < 0)
     {
-        hb_error("hb_dict_to_job: failed to find title: %s", error.text);
+        hb_spam_log("hb_dict_to_job: failed to find title: %s", error.text);
         return NULL;
     }
 
     job = hb_job_init_by_index(h, titleindex);
     if (job == NULL)
     {
-        hb_error("hb_dict_to_job: Title %d doesn't exist", titleindex);
+        hb_spam_log("hb_dict_to_job: Title %d doesn't exist", titleindex);
         return NULL;
     }
 
@@ -915,7 +915,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     );
     if (result < 0)
     {
-        hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
+        hb_spam_log("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
     }
 
@@ -1059,8 +1059,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                                     "{s:s}", "Name", unpack_s(&name));
             if (result < 0)
             {
-                hb_error("hb_dict_to_job: failed to find chapter name: %s",
-                         error.text);
+                hb_spam_log("hb_dict_to_job: failed to find chapter name: %s",
+                            error.text);
                 goto fail;
             }
             if (name != NULL && name[0] != 0)
@@ -1092,8 +1092,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                                     "Settings", unpack_o(&filter_settings));
             if (result < 0)
             {
-                hb_error("hb_dict_to_job: failed to find filter settings: %s",
-                         error.text);
+                hb_spam_log("hb_dict_to_job: failed to find filter settings: %s",
+                            error.text);
                 goto fail;
             }
             if (filter_id >= HB_FILTER_FIRST && filter_id <= HB_FILTER_LAST)
@@ -1190,8 +1190,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 "CompressionLevel",     unpack_f(&audio.out.compression_level));
             if (result < 0)
             {
-                hb_error("hb_dict_to_job: failed to find audio settings: %s",
-                         error.text);
+                hb_spam_log("hb_dict_to_job: failed to find audio settings: %s",
+                            error.text);
                 goto fail;
             }
             if (acodec != NULL)
@@ -1288,7 +1288,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                                         "Filename", unpack_s(&srtfile));
             if (result < 0)
             {
-                hb_error("json unpack failure: %s", error.text);
+                hb_spam_log("json unpack failure: %s", error.text);
                 hb_job_close(&job);
                 return NULL;
             }
@@ -1308,7 +1308,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                         "Offset",   unpack_I(&offset));
                     if (result < 0)
                     {
-                        hb_error("json unpack failure: %s", error.text);
+                        hb_spam_log("json unpack failure: %s", error.text);
                         hb_job_close(&job);
                         return NULL;
                     }
@@ -1336,7 +1336,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                         "Codeset",  unpack_s(&srtcodeset));
                     if (result < 0)
                     {
-                        hb_error("json unpack failure: %s", error.text);
+                        hb_spam_log("json unpack failure: %s", error.text);
                         hb_job_close(&job);
                         return NULL;
                     }
@@ -1458,7 +1458,7 @@ char* hb_set_anamorphic_size_json(const char * json_param)
 
     if (json_result < 0)
     {
-        hb_error("json unpack failure: %s", error.text);
+        hb_spam_log("json unpack failure: %s", error.text);
         return NULL;
     }
 
@@ -1473,7 +1473,7 @@ char* hb_set_anamorphic_size_json(const char * json_param)
                 "Den",      hb_value_int(geo_result.par.den));
     if (dict == NULL)
     {
-        hb_error("hb_set_anamorphic_size_json: pack failure: %s", error.text);
+        hb_spam_log("hb_set_anamorphic_size_json: pack failure: %s", error.text);
         return NULL;
     }
     char *result = hb_value_get_json(dict);
@@ -1535,7 +1535,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
 
     if (json_result < 0)
     {
-        hb_error("preview params: json unpack failure: %s", error.text);
+        hb_spam_log("preview params: json unpack failure: %s", error.text);
         return NULL;
     }
 
@@ -1552,7 +1552,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
             "Height",       hb_value_int(image->height));
     if (dict == NULL)
     {
-        hb_error("hb_get_preview_json: pack failure: %s", error.text);
+        hb_spam_log("hb_get_preview_json: pack failure: %s", error.text);
         return NULL;
     }
 
@@ -1580,7 +1580,7 @@ char* hb_get_preview_json(hb_handle_t * h, const char *json_param)
         );
         if (plane_dict == NULL)
         {
-            hb_error("plane_dict: json pack failure: %s", error.text);
+            hb_spam_log("plane_dict: json pack failure: %s", error.text);
             return NULL;
         }
         hb_value_array_append(planes, plane_dict);
@@ -1632,7 +1632,7 @@ char* hb_get_preview_params_json(int title_idx, int preview_idx,
     );
     if (dict == NULL)
     {
-        hb_error("hb_get_preview_params_json: pack failure: %s", error.text);
+        hb_spam_log("hb_get_preview_params_json: pack failure: %s", error.text);
         return NULL;
     }
 
@@ -1660,7 +1660,7 @@ hb_image_t* hb_json_to_image(char *json_image)
     );
     if (json_result < 0)
     {
-        hb_error("image: json unpack failure: %s", error.text);
+        hb_spam_log("image: json unpack failure: %s", error.text);
         hb_value_free(&dict);
         return NULL;
     }
@@ -1677,7 +1677,7 @@ hb_image_t* hb_json_to_image(char *json_image)
                                  "{s:o}", "Planes", unpack_o(&planes));
     if (json_result < 0)
     {
-        hb_error("image::planes: json unpack failure: %s", error.text);
+        hb_spam_log("image::planes: json unpack failure: %s", error.text);
         hb_value_free(&dict);
         return image;
     }
@@ -1697,7 +1697,7 @@ hb_image_t* hb_json_to_image(char *json_image)
                                          "Data", unpack_s(&data));
             if (json_result < 0)
             {
-                hb_error("image::plane::data: json unpack failure: %s", error.text);
+                hb_spam_log("image::plane::data: json unpack failure: %s", error.text);
                 hb_value_free(&dict);
                 return image;
             }

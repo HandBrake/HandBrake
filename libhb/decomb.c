@@ -353,7 +353,7 @@ static void blend_filter_line(filter_param_t *filter,
     }
     else
     {
-        hb_error("Invalid value y %d heigh %d", y, height);
+        hb_spam_log("Invalid value y %d heigh %d", y, height);
         return;
     }
 
@@ -1021,7 +1021,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         taskset_init( &pv->yadif_taskset, pv->cpu_count,
                       sizeof( yadif_thread_arg_t ) ) == 0 )
     {
-        hb_error( "yadif could not initialize taskset" );
+        hb_log( "yadif could not initialize taskset" );
+        return 1;
     }
 
     yadif_thread_arg_t *yadif_prev_thread_args = NULL;
@@ -1060,7 +1061,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                                  yadif_decomb_filter_thread,
                                  HB_NORMAL_PRIORITY ) == 0 )
         {
-            hb_error( "yadif could not spawn thread" );
+            hb_log( "yadif could not spawn thread" );
         }
         yadif_prev_thread_args = thread_args;
     }
@@ -1073,7 +1074,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         if( taskset_init( &pv->eedi2_taskset, /*thread_count*/3,
                           sizeof( eedi2_thread_arg_t ) ) == 0 )
         {
-            hb_error( "eedi2 could not initialize taskset" );
+            hb_log( "eedi2 could not initialize taskset" );
+            return 1;
         }
 
         if( pv->post_processing > 1 )
@@ -1113,7 +1115,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                                       eedi2_filter_thread,
                                       HB_NORMAL_PRIORITY ) == 0 )
             {
-                hb_error( "eedi2 could not spawn thread" );
+                hb_log( "eedi2 could not spawn thread" );
+                return 1;
             }
         }
     }

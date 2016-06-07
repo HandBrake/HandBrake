@@ -1684,7 +1684,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
     }
     else
     {
-        hb_error("hb_qsv_param_default_preset: invalid pointer(s)");
+        hb_spam_log("hb_qsv_param_default_preset: invalid pointer(s)");
         return -1;
     }
     if (preset != NULL && preset[0] != '\0')
@@ -1782,7 +1782,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
         }
         else
         {
-            hb_error("hb_qsv_param_default_preset: invalid preset '%s'", preset);
+            hb_spam_log("hb_qsv_param_default_preset: invalid preset '%s'", preset);
             return -1;
         }
     }
@@ -1915,7 +1915,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
     }
     else
     {
-        hb_error("hb_qsv_param_default: invalid pointer(s)");
+        hb_spam_log("hb_qsv_param_default: invalid pointer(s)");
         return -1;
     }
     return 0;

@@ -730,13 +730,13 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
         result = next_packet( d->bd, buf );
         if ( result < 0 )
         {
-            hb_error("bd: Read Error");
+            hb_spam_log("bd: Read Error");
             pos = bd_tell( d->bd );
             bd_seek( d->bd, pos + 192 );
             error_count++;
             if (error_count > 10)
             {
-                hb_error("bd: Error, too many consecutive read errors");
+                hb_spam_log("bd: Error, too many consecutive read errors");
                 hb_set_work_error(d->h, HB_ERROR_READ);
                 return NULL;
             }

@@ -163,7 +163,7 @@ int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** 
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_binary_generated: OpenCL support not available");
+        hb_log("hb_binary_generated: OpenCL support not available");
         return 0;
     }
 
@@ -256,7 +256,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_generat_bin_from_kernel_source: OpenCL support not available");
+        hb_log("hb_generat_bin_from_kernel_source: OpenCL support not available");
         return 0;
     }
 
@@ -417,7 +417,7 @@ int hb_create_kernel( char * kernelname, KernelEnv * env )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_create_kernel: OpenCL support not available");
+        hb_log("hb_create_kernel: OpenCL support not available");
         return 0;
     }
 
@@ -435,7 +435,7 @@ int hb_release_kernel( KernelEnv * env )
 {
     if (hb_ocl == NULL)
     {
-        hb_error("hb_release_kernel: OpenCL support not available");
+        hb_log("hb_release_kernel: OpenCL support not available");
         return 0;
     }
 
@@ -467,7 +467,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_init_opencl_env: OpenCL support not available");
+        hb_log("hb_init_opencl_env: OpenCL support not available");
         return 1;
     }
 
@@ -642,7 +642,7 @@ int hb_release_opencl_env( GPUEnv *gpu_info )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_release_opencl_env: OpenCL support not available");
+        hb_log("hb_release_opencl_env: OpenCL support not available");
         return 0;
     }
 
@@ -766,7 +766,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_compile_kernel_file: OpenCL support not available");
+        hb_log("hb_compile_kernel_file: OpenCL support not available");
         return 0;
     }
 
@@ -1045,7 +1045,7 @@ int hb_create_buffer( cl_mem *cl_Buf, int flags, int size )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_create_buffer: OpenCL support not available");
+        hb_log("hb_create_buffer: OpenCL support not available");
         return 0;
     }
 
@@ -1073,7 +1073,7 @@ int hb_read_opencl_buffer( cl_mem cl_inBuf, unsigned char *outbuf, int size )
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_read_opencl_suffer: OpenCL support not available");
+        hb_log("hb_read_opencl_suffer: OpenCL support not available");
         return 0;
     }
 
@@ -1095,7 +1095,7 @@ int hb_cl_create_mapped_buffer(cl_mem *mem, unsigned char **addr, int size)
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_cl_create_mapped_buffer: OpenCL support not available");
+        hb_log("hb_cl_create_mapped_buffer: OpenCL support not available");
         return 0;
     }
 
@@ -1116,7 +1116,7 @@ int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr)
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_cl_free_mapped_buffer: OpenCL support not available");
+        hb_log("hb_cl_free_mapped_buffer: OpenCL support not available");
         return 0;
     }
 
@@ -1143,7 +1143,7 @@ int hb_copy_buffer(cl_mem src_buffer,cl_mem dst_buffer,size_t src_offset,size_t 
 {
     if (hb_ocl == NULL)
     {
-        hb_error("hb_copy_buffer: OpenCL support not available");
+        hb_log("hb_copy_buffer: OpenCL support not available");
         return 0;
     }
 
@@ -1180,7 +1180,7 @@ int hb_write_opencl_frame_buffer(cl_mem cl_inBuf,unsigned char *Ybuf,unsigned ch
 {
     if (hb_ocl == NULL)
     {
-        hb_error("hb_write_opencl_frame_buffer: OpenCL support not available");
+        hb_log("hb_write_opencl_frame_buffer: OpenCL support not available");
         return 0;
     }
 

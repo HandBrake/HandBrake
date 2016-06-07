@@ -392,7 +392,7 @@ static void checkFirstPts( sync_common_t * common )
     else
     {
         // This should never happen
-        hb_error("checkFirstPts: No initial PTS found!\n");
+        hb_log("checkFirstPts: No initial PTS found!\n");
     }
 }
 
@@ -2741,7 +2741,7 @@ static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
             if (src_process(stream->audio.src.ctx, &stream->audio.src.pkt))
             {
                 /* XXX If this happens, we're screwed */
-                hb_error("sync: audio 0x%x src_process failed", audio->id);
+                hb_spam_log("sync: audio 0x%x src_process failed", audio->id);
             }
             hb_buffer_close(&buf_raw);
 

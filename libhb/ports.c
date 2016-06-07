@@ -475,7 +475,7 @@ int hb_platform_init()
     result = !pthread_win32_process_attach_np();
     if (result)
     {
-        hb_error("pthread_win32_process_attach_np() failed!");
+        hb_log("pthread_win32_process_attach_np() failed!");
         return -1;
     }
 #endif
@@ -488,13 +488,13 @@ int hb_platform_init()
     result = setvbuf(stdout, NULL, _IONBF, 0);
     if (result)
     {
-        hb_error("setvbuf(stdout, NULL, _IONBF, 0) failed!");
+        hb_log("setvbuf(stdout, NULL, _IONBF, 0) failed!");
         return -1;
     }
     result = setvbuf(stderr, NULL, _IONBF, 0);
     if (result)
     {
-        hb_error("setvbuf(stderr, NULL, _IONBF, 0) failed!");
+        hb_log("setvbuf(stderr, NULL, _IONBF, 0) failed!");
         return -1;
     }
 #endif
@@ -567,7 +567,7 @@ void hb_get_user_config_directory( char path[512] )
     }
 #endif
 
-    hb_error("Failed to lookup user config directory!");
+    hb_log("Failed to lookup user config directory!");
     path[0] = 0;
 }
 
@@ -1275,7 +1275,7 @@ void* hb_system_sleep_opaque_init()
     opaque = calloc(sizeof(IOPMAssertionID), 1);
     if (opaque == NULL)
     {
-        hb_error("hb_system_sleep: failed to allocate opaque");
+        hb_log("hb_system_sleep: failed to allocate opaque");
         return NULL;
     }
 
@@ -1306,7 +1306,7 @@ void hb_system_sleep_private_enable(void *opaque)
 #ifdef __APPLE__
     if (opaque == NULL)
     {
-        hb_error("hb_system_sleep: opaque is NULL");
+        hb_log("hb_system_sleep: opaque is NULL");
     }
 
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
@@ -1336,7 +1336,7 @@ void hb_system_sleep_private_disable(void *opaque)
 #ifdef __APPLE__
     if (opaque == NULL)
     {
-        hb_error("hb_system_sleep: opaque is NULL");
+        hb_log("hb_system_sleep: opaque is NULL");
     }
     
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;

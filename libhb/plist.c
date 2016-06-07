@@ -242,7 +242,7 @@ start_element(
     }
     if (ii == TAG_MAP_SZ)
     {
-        hb_error("Unrecognized start tag (%s)", name);
+        hb_spam_log("Unrecognized start tag (%s)", name);
         return;
     }
     if (pd->value)
@@ -313,7 +313,7 @@ start_element(
         {
             if (pd->key == NULL)
             {
-                hb_error("No key for dictionary item");
+                hb_spam_log("No key for dictionary item");
                 hb_value_free(&gval);
             }
             else
@@ -323,7 +323,7 @@ start_element(
         }
         else
         {
-            hb_error("Invalid container type. This shouldn't happen");
+            hb_spam_log("Invalid container type. This shouldn't happen");
         }
     }
 }
@@ -358,12 +358,12 @@ end_element(
     }
     if (ii == TAG_MAP_SZ)
     {
-        hb_error("Unrecognized start tag (%s)", name);
+        hb_spam_log("Unrecognized start tag (%s)", name);
         return;
     }
     start_id.pid = queue_pop_head(pd->tag_stack);
     if (start_id.id != id)
-        hb_error("start tag != end tag: (%s %d) %d", name, id, id);
+        hb_spam_log("start tag != end tag: (%s %d) %d", name, id, id);
 
     hb_value_t *gval = NULL;
     hb_value_t *current = queue_peek_head(pd->stack);
@@ -416,7 +416,7 @@ end_element(
         } break;
         default:
         {
-            hb_error("Unhandled plist type %d", id);
+            hb_spam_log("Unhandled plist type %d", id);
         } break;
     }
     if (gval)
@@ -438,7 +438,7 @@ end_element(
         {
             if (pd->key == NULL)
             {
-                hb_error("No key for dictionary item");
+                hb_spam_log("No key for dictionary item");
                 hb_value_free(&gval);
             }
             else
@@ -448,7 +448,7 @@ end_element(
         }
         else
         {
-            hb_error("Invalid container type. This shouldn't happen");
+            hb_spam_log("Invalid container type. This shouldn't happen");
         }
     }
     if (queue_is_empty(pd->stack))
@@ -520,7 +520,7 @@ hb_plist_parse(const char *buf, size_t len)
     int result = xmlSAXUserParseMemory(&parser, &pd, buf, len);
     if (result != 0)
     {
-        hb_error("Plist parse failed");
+        hb_spam_log("Plist parse failed");
         return NULL;
     }
     xmlCleanupParser();
@@ -651,7 +651,7 @@ gval_write(FILE *file, hb_value_t *gval)
     else
     {
         // Try to make anything thats unrecognized into a string
-        hb_error("Unhandled data type %d", gtype);
+        hb_spam_log("Unhandled data type %d", gtype);
     }
 }
 

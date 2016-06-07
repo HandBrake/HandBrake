@@ -126,7 +126,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             break;
 
         default:
-            hb_error("encavcodecaInit: unsupported codec (0x%x)",
+            hb_log("encavcodecaInit: unsupported codec (0x%x)",
                      audio->config.out.codec);
             return 1;
     }
@@ -135,7 +135,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         codec = avcodec_find_encoder_by_name(codec_name);
         if (codec == NULL)
         {
-            hb_error("encavcodecaInit: avcodec_find_encoder_by_name(%s) failed",
+            hb_log("encavcodecaInit: avcodec_find_encoder_by_name(%s) failed",
                      codec_name);
             return 1;
         }
@@ -145,7 +145,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         codec = avcodec_find_encoder(codec_id);
         if (codec == NULL)
         {
-            hb_error("encavcodecaInit: avcodec_find_encoder(%d) failed",
+            hb_log("encavcodecaInit: avcodec_find_encoder(%d) failed",
                      codec_id);
             return 1;
         }
@@ -189,7 +189,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
     {
-        hb_error("encavcodecaInit: hb_avcodec_open() failed");
+        hb_log("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
     // avcodec_open populates the opts dictionary with the
@@ -219,7 +219,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         pv->avresample = avresample_alloc_context();
         if (pv->avresample == NULL)
         {
-            hb_error("encavcodecaInit: avresample_alloc_context() failed");
+            hb_log("encavcodecaInit: avresample_alloc_context() failed");
             return 1;
         }
         av_opt_set_int(pv->avresample, "in_sample_fmt",
@@ -242,7 +242,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         }
         if (avresample_open(pv->avresample))
         {
-            hb_error("encavcodecaInit: avresample_open() failed");
+            hb_log("encavcodecaInit: avresample_open() failed");
             avresample_free(&pv->avresample);
             return 1;
         }

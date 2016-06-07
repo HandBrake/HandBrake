@@ -190,7 +190,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
                                    w->audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
         {
-            hb_error("decavcodecaInit: hb_audio_resample_init() failed");
+            hb_log("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
         /*

@@ -893,7 +893,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
     if (taskset_init(&pv->taskset, pv->thread_count,
                      sizeof(nlmeans_thread_arg_t)) == 0)
     {
-        hb_error("NLMeans could not initialize taskset");
+        hb_log("NLMeans could not initialize taskset");
         goto fail;
     }
 
@@ -902,7 +902,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         pv->thread_data[ii] = taskset_thread_args(&pv->taskset, ii);
         if (pv->thread_data[ii] == NULL)
         {
-            hb_error("NLMeans could not create thread args");
+            hb_log("NLMeans could not create thread args");
             goto fail;
         }
         pv->thread_data[ii]->pv = pv;
@@ -910,7 +910,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         if (taskset_thread_spawn(&pv->taskset, ii, "nlmeans_filter",
                                  nlmeans_filter_thread, HB_NORMAL_PRIORITY) == 0)
         {
-            hb_error("NLMeans could not spawn thread");
+            hb_log("NLMeans could not spawn thread");
             goto fail;
         }
     }

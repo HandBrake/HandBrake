@@ -931,7 +931,7 @@ hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title )
     hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
     if ( d == NULL )
     {
-        hb_error( "hb_bd_stream_open: can't allocate space for stream state" );
+        hb_log( "hb_bd_stream_open: can't allocate space for stream state" );
         return NULL;
     }
 
@@ -1128,7 +1128,7 @@ static const uint8_t *next_packet( hb_stream_t *stream )
             int err;
             if ((err = ferror(stream->file_handle)) != 0)
             {
-                hb_error("next_packet: error (%d)", err);
+                hb_spam_log("next_packet: error (%d)", err);
                 hb_set_work_error(stream->h, HB_ERROR_READ);
             }
             return NULL;
@@ -2427,7 +2427,7 @@ static off_t align_to_next_packet(hb_stream_t *stream)
             int err;
             if ((err = ferror(stream->file_handle)) != 0)
             {
-                hb_error("align_to_next_packet: error (%d)", err);
+                hb_log("align_to_next_packet: error (%d)", err);
                 hb_set_work_error(stream->h, HB_ERROR_READ);
             }
             return 0;
@@ -3382,7 +3382,7 @@ done:
     int err;
     if ((err = ferror(stream->file_handle)) != 0)
     {
-        hb_error("hb_ps_read_packet: error (%d)", err);
+        hb_spam_log("hb_ps_read_packet: error (%d)", err);
         hb_set_work_error(stream->h, HB_ERROR_READ);
     }
 
@@ -3804,7 +3804,7 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                 }
                 else
                 {
-                    hb_error("Error parsing program stream map");
+                    hb_log("Error parsing program stream map");
                 }
             }
             else if ( ( pes_info.stream_id & 0xe0 ) == 0xc0 )
@@ -5693,7 +5693,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             {
                 char errstr[80];
                 av_strerror(err, errstr, 80);
-                hb_error("av_read_frame error (%d): %s", err, errstr);
+                hb_spam_log("av_read_frame error (%d): %s", err, errstr);
                 hb_set_work_error(stream->h, HB_ERROR_READ);
             }
             return NULL;
@@ -5871,7 +5871,7 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
         res = avformat_seek_file( ic, -1, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
         if (res < 0)
         {
-            hb_error("avformat_seek_file failed");
+            hb_log("avformat_seek_file failed");
         }
     }
     else
@@ -5880,7 +5880,7 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
         res = avformat_seek_file( ic, -1, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
         if (res < 0)
         {
-            hb_error("avformat_seek_file failed");
+            hb_log("avformat_seek_file failed");
         }
     }
     stream->need_keyframe = 1;

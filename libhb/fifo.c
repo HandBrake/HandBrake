@@ -439,7 +439,7 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             int status = hb_cl_create_mapped_buffer(&b->cl.buffer, &b->data, b->alloc);
             if (!status)
             {
-                hb_error("Failed to map CL buffer");
+                hb_spam_log("Failed to map CL buffer");
                 free(b);
                 return NULL;
             }
@@ -759,7 +759,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #if defined(HB_BUFFER_DEBUG)
             if (hb_fifo_contains(buffer_pool, b))
             {
-                hb_error("hb_buffer_close: buffer %p already freed", b);
+                hb_log("hb_buffer_close: buffer %p already freed", b);
                 assert(0);
             }
 #endif

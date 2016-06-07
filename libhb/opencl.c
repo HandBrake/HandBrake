@@ -50,7 +50,7 @@ hb_opencl_library_t* hb_opencl_library_init()
     hb_opencl_library_t *opencl;
     if ((opencl = calloc(1, sizeof(hb_opencl_library_t))) == NULL)
     {
-        hb_error("hb_opencl_library_init: memory allocation failure");
+        hb_log("hb_opencl_library_init: memory allocation failure");
         goto fail;
     }
 
@@ -155,19 +155,19 @@ static hb_opencl_device_t* hb_opencl_device_get(hb_opencl_library_t *opencl,
 {
     if (opencl == NULL || opencl->clGetDeviceInfo == NULL)
     {
-        hb_error("hb_opencl_device_get: OpenCL support not available");
+        hb_log("hb_opencl_device_get: OpenCL support not available");
         return NULL;
     }
     else if (device_id == NULL)
     {
-        hb_error("hb_opencl_device_get: invalid device ID");
+        hb_log("hb_opencl_device_get: invalid device ID");
         return NULL;
     }
 
     hb_opencl_device_t *device = calloc(1, sizeof(hb_opencl_device_t));
     if (device == NULL)
     {
-        hb_error("hb_opencl_device_get: memory allocation failure");
+        hb_log("hb_opencl_device_get: memory allocation failure");
         return NULL;
     }
 
@@ -240,14 +240,14 @@ static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
         opencl->clGetDeviceInfo  == NULL ||
         opencl->clGetPlatformIDs == NULL)
     {
-        hb_error("hb_opencl_devices_list_get: OpenCL support not available");
+        hb_log("hb_opencl_devices_list_get: OpenCL support not available");
         return NULL;
     }
 
     hb_list_t *list = hb_list_init();
     if (list == NULL)
     {
-        hb_error("hb_opencl_devices_list_get: memory allocation failure");
+        hb_log("hb_opencl_devices_list_get: memory allocation failure");
         return NULL;
     }
 
@@ -262,7 +262,7 @@ static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
     }
     if ((platform_ids = malloc(sizeof(cl_platform_id) * num_platforms)) == NULL)
     {
-        hb_error("hb_opencl_devices_list_get: memory allocation failure");
+        hb_log("hb_opencl_devices_list_get: memory allocation failure");
         goto fail;
     }
     if (opencl->clGetPlatformIDs(num_platforms, platform_ids, NULL) != CL_SUCCESS)
@@ -278,7 +278,7 @@ static hb_list_t* hb_opencl_devices_list_get(hb_opencl_library_t *opencl,
         }
         if ((device_ids = malloc(sizeof(cl_device_id) * num_devices)) == NULL)
         {
-            hb_error("hb_opencl_devices_list_get: memory allocation failure");
+            hb_log("hb_opencl_devices_list_get: memory allocation failure");
             goto fail;
         }
         if (opencl->clGetDeviceIDs(platform_ids[i], device_type, num_devices, device_ids, NULL) != CL_SUCCESS)

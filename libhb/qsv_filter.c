@@ -489,14 +489,14 @@ int process_frame(av_qsv_list* received_item, av_qsv_context* qsv, hb_filter_pri
     {
             if (sync_idx == -1)
             {
-                hb_error("qsv: Not enough resources allocated for QSV filter");
+                hb_spam_log("qsv: Not enough resources allocated for QSV filter");
                 ret = 0;
                 break;
             }
             if( sts == MFX_ERR_MORE_SURFACE || sts == MFX_ERR_NONE )
                surface_idx = av_qsv_get_free_surface(qsv_vpp, qsv,  &(qsv_vpp->m_mfxVideoParam.vpp.Out), QSV_PART_ANY);
             if (surface_idx == -1) {
-                hb_error("qsv: Not enough resources allocated for QSV filter");
+                hb_spam_log("qsv: Not enough resources allocated for QSV filter");
                 ret = 0;
                 break;
             }

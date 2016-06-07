@@ -17,7 +17,7 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
     hb_audio_resample_t *resample = calloc(1, sizeof(hb_audio_resample_t));
     if (resample == NULL)
     {
-        hb_error("hb_audio_resample_init: failed to allocate resample");
+        hb_spam_log("hb_audio_resample_init: failed to allocate resample");
         goto fail;
     }
 
@@ -27,8 +27,8 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
     // we don't support planar output yet
     if (av_sample_fmt_is_planar(sample_fmt))
     {
-        hb_error("hb_audio_resample_init: planar output not supported ('%s')",
-                 av_get_sample_fmt_name(sample_fmt));
+        hb_spam_log("hb_audio_resample_init: planar output not supported ('%s')",
+                    av_get_sample_fmt_name(sample_fmt));
         goto fail;
     }
 
@@ -115,7 +115,7 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
 {
     if (resample == NULL)
     {
-        hb_error("hb_audio_resample_update: resample is NULL");
+        hb_spam_log("hb_audio_resample_update: resample is NULL");
         return 1;
     }
 
@@ -141,7 +141,7 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
             resample->avresample = avresample_alloc_context();
             if (resample->avresample == NULL)
             {
-                hb_error("hb_audio_resample_update: avresample_alloc_context() failed");
+                hb_spam_log("hb_audio_resample_update: avresample_alloc_context() failed");
                 return 1;
             }
 
@@ -174,8 +174,8 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
         {
             char err_desc[64];
             av_strerror(ret, err_desc, 63);
-            hb_error("hb_audio_resample_update: avresample_open() failed (%s)",
-                     err_desc);
+            hb_spam_log("hb_audio_resample_update: avresample_open() failed (%s)",
+                        err_desc);
             // avresample won't open, start over
             avresample_free(&resample->avresample);
             return ret;
@@ -210,13 +210,13 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 {
     if (resample == NULL)
     {
-        hb_error("hb_audio_resample: resample is NULL");
+        hb_spam_log("hb_audio_resample: resample is NULL");
         return NULL;
     }
     if (resample->resample_needed && resample->avresample == NULL)
     {
-        hb_error("hb_audio_resample: resample needed but libavresample context "
-                 "is NULL");
+        hb_spam_log("hb_audio_resample: resample needed but libavresample "
+                    "context is NULL");
         return NULL;
     }
 

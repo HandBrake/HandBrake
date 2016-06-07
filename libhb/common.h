@@ -85,11 +85,14 @@
 typedef enum
 {
      HB_ERROR_NONE         = 0,
-     HB_ERROR_CANCELED     = 1,
-     HB_ERROR_WRONG_INPUT  = 2,
-     HB_ERROR_INIT         = 3,
-     HB_ERROR_UNKNOWN      = 4,
-     HB_ERROR_READ         = 5
+     HB_ERROR_CANCELED,
+     HB_ERROR_APP_INIT,
+     HB_ERROR_ENC_INIT,
+     HB_ERROR_ENC_INPUT,
+     HB_ERROR_ENC,
+     HB_ERROR_UNKNOWN,
+     HB_ERROR_READ,
+     HB_ERROR_SCAN
 } hb_error_code;
 
 #include "ports.h"
@@ -1272,7 +1275,7 @@ char               * hb_filter_settings_string(int filter_id,
 char               * hb_filter_settings_string_json(int filter_id,
                                                     const char * json);
 
-typedef void hb_error_handler_t( const char *errmsg );
+typedef void hb_error_handler_t( int error, const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
 
