@@ -66,6 +66,10 @@ Var InstallDotNET
 
 Function .onInit
 
+  ; For Silent Installs, Assume All Users
+  IfSilent 0 +2
+    SetShellVarContext all  
+
   ; Begin Only allow one version
   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "myMutex") i .r1 ?e'
   Pop $R0
@@ -170,6 +174,11 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
+
+  ; For Silent Installs, Assume All Users
+  IfSilent 0 +2
+    SetShellVarContext all  
+
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
   Abort
 FunctionEnd

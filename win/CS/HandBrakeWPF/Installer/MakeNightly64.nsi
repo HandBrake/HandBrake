@@ -66,6 +66,9 @@ Var InstallDotNET
 
 Function .onInit
 
+  IfSilent 0 +2
+    SetShellVarContext all  
+
   ; Begin Only allow one version
   System::Call 'kernel32::CreateMutexA(i 0, i 0, t "myMutex") i .r1 ?e'
   Pop $R0
@@ -170,13 +173,16 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
+  IfSilent 0 +2
+    SetShellVarContext all  
+
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
 Section Uninstall
   Delete "$INSTDIR\uninst.exe"
-  
+
   Delete "$INSTDIR\*.*"
   Delete "$INSTDIR\doc\*.*"
   Delete "$INSTDIR\fonts\*.*"
@@ -186,11 +192,12 @@ Section Uninstall
   RMDIR  "$INSTDIR\fonts\conf.d"
   RMDIR  "$INSTDIR\fonts\conf.avail"
   RMDIR  "$INSTDIR\fonts"
+  RMDir  "$INSTDIR"
+   
   Delete "$SMPROGRAMS\HandBrake Nightly\Uninstall.lnk"
   Delete "$DESKTOP\HandBrake Nightly.lnk"
   Delete "$SMPROGRAMS\HandBrake Nightly\HandBrake.lnk"
   RMDir  "$SMPROGRAMS\HandBrake Nightly"
-  RMDir  "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
