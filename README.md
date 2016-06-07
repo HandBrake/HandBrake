@@ -6,10 +6,10 @@ HandBrake is a tool for converting video from nearly any format to a selection o
 ### Community
 **IRC:** [\#Handbrake](irc://irc.freenode.net/#handbrake) and [\#Handbrake-dev](irc://irc.freenode.net/#handbrake-dev) on Freenode.
 
-**Support:** [Community forums](https://forum.handbrake.fr/)
+**Support:** [Community Forums](https://forum.handbrake.fr/)
 
 ### Submitting a Patch
 
-Pathches are always welcome and can be submitted here on github as a pull request.
+Patches are always welcome and can be submitted here on github as a pull request.
 
 For guidance, please feel free to get in touch on our IRC channels listed above.
