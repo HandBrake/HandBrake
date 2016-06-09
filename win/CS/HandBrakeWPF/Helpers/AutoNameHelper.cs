@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Presets.Model;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
@@ -41,7 +42,7 @@ namespace HandBrakeWPF.Helpers
         /// <returns>
         /// The Generated FileName
         /// </returns>
-        public static string AutoName(EncodeTask task, string sourceOrLabelName)
+        public static string AutoName(EncodeTask task, string sourceOrLabelName, Preset presetName)
         {
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             if (task.Destination == null)
@@ -54,6 +55,7 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
+                string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
 
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
@@ -88,11 +90,14 @@ namespace HandBrakeWPF.Helpers
                 if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != string.Empty)
                 {
                     destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
-                    destinationFilename = destinationFilename.Replace("{source}", sourceName)
-                                                             .Replace(Constants.Title, dvdTitle)
-                                                             .Replace(Constants.Chapters, combinedChapterTag)
-                                                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                                                             .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"));
+                    destinationFilename =
+                        destinationFilename
+                            .Replace("{source}", sourceName)
+                            .Replace(Constants.Title, dvdTitle)
+                            .Replace(Constants.Chapters, combinedChapterTag)
+                            .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
+                            .Replace(Constants.Time,DateTime.Now.ToString("HH:mm"))
+                            .Replace(Constants.Preset, sanitisedPresetName);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                     {

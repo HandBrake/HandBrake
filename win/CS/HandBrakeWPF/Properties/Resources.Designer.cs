@@ -1119,7 +1119,7 @@ namespace HandBrakeWPF.Properties {
         ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
         ///
         ///Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {quality} {bitrate}  (These only change if you scan a new source, change title or chapters).
+        ///Non-Live Options: {date} {time} {quality} {bitrate} {preset} (These only change if you scan a new source, change title or chapters).
         /// </summary>
         public static string Options_AdditionalFormatOptions {
             get {

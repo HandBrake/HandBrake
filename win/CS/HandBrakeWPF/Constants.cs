@@ -70,6 +70,11 @@ namespace HandBrakeWPF
         public const string Bitrate = "{bitrate}";
 
         /// <summary>
+        /// The preset.
+        /// </summary>
+        public const string Preset = "{preset}";
+
+        /// <summary>
         /// Preset Major Version
         /// </summary>
         public const string PresetVersionMajor = "11";
