@@ -479,7 +479,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             resync = 0;
             if (*pv->current_entry.text != '\0')
             {
-                long length;
+                long length = 0;
                 char *p, *q;
                 uint64_t start_time = ( pv->current_entry.start +
                                         pv->subtitle->config.offset ) * 90;
@@ -495,27 +495,25 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                     continue;
                 }
 
-                length = strlen( pv->current_entry.text );
-
                 for (q = p = pv->current_entry.text; *p != '\0'; p++)
                 {
-                    if (*p == '\r')
+                    if (*p == '\r' || *p == '\n')
                     {
-                        if (*(p + 1) == '\n' || *(p + 1) == '\r' ||
-                            *(p + 1) == '\0')
+                        // sanitize newline codes to a single '\n'
+                        // and delete any newline at the end of the subtitle
+                        if (*(p + 1) != '\n' && *(p + 1) != '\r' &&
+                            *(p + 1) != '\0')
                         {
-                            // followed by line break or last character, skip it
-                            length--;
-                            continue;
+                            *q   = '\n';
+                            q++;
+                            length++;
                         }
-                        // replace '\r' with '\n'
-                        *q   = '\n';
-                        q++;
                     }
                     else
                     {
                         *q = *p;
                         q++;
+                        length++;
                     }
                 }
                 *q = '\0';
@@ -545,7 +543,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
     hb_buffer_t *buffer = NULL;
     if (*pv->current_entry.text != '\0')
     {
-        long length;
+        long length = 0;
         char *p, *q;
         uint64_t start_time = ( pv->current_entry.start +
                                 pv->subtitle->config.offset ) * 90;
@@ -559,26 +557,24 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             return NULL;
         }
 
-        length = strlen( pv->current_entry.text );
-
         for (q = p = pv->current_entry.text; *p != '\0'; p++)
         {
-            if (*p == '\r')
+            if (*p == '\r' || *p == '\n')
             {
-                if (*(p + 1) == '\n' || *(p + 1) == '\r' || *(p + 1) == '\0')
+                // sanitize newline codes to a single '\n'
+                // and delete any newline at the end of the subtitle
+                if (*(p + 1) != '\n' && *(p + 1) != '\r' && *(p + 1) != '\0')
                 {
-                    // followed by line break or last character, skip it
-                    length--;
-                    continue;
+                    *q   = '\n';
+                    q++;
+                    length++;
                 }
-                // replace '\r' with '\n'
-                *q   = '\n';
-                q++;
             }
             else
             {
                 *q = *p;
                 q++;
+                length++;
             }
         }
         *q = '\0';
