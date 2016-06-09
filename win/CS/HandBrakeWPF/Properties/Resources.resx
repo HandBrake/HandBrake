@@ -808,4 +808,7 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
     <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
   </data>
+  <data name="Main_NoPermissionsOnDirectory" xml:space="preserve">
+    <value>You do not have the appropriate folder permissions to write files into the directory you have chosen.</value>
+  </data>
 </root>

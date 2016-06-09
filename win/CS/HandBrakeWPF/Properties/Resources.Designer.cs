@@ -729,6 +729,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have the appropriate folder permissions to write files into the directory you have chosen..
+        /// </summary>
+        public static string Main_NoPermissionsOnDirectory {
+            get {
+                return ResourceManager.GetString("Main_NoPermissionsOnDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Preset selected..
         /// </summary>
         public static string Main_NoPresetSelected {

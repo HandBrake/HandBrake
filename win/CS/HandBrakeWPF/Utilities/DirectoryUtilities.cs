@@ -37,5 +37,24 @@ namespace HandBrakeWPF.Utilities
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HandBrake");
             }
         }
+
+
+        /// <summary>
+        /// Simple way of checking if a directory is writeable.
+        /// </summary>
+        /// <param name="dirPath">Path to check</param>
+        /// <returns>True if writable</returns>
+        public static bool IsWritable(string dirPath)
+        {
+            try
+            {
+                using (File.Create(Path.Combine(dirPath, Path.GetRandomFileName()), 1, FileOptions.DeleteOnClose)) { }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
