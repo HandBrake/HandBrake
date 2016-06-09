@@ -180,18 +180,24 @@ void hb_srt_to_ssa(hb_buffer_t *sub_in, int line)
             ssa = (char*)sub_in->data;
             if (srt[ii] == '\r')
             {
-                ssa[pos++] = '\\';
-                ssa[pos++] = 'N';
-                ii++;
                 if (srt[ii] == '\n')
                 {
                     ii++;
                 }
+                if (srt[ii + 1] != 0)
+                {
+                    ssa[pos++] = '\\';
+                    ssa[pos++] = 'N';
+                }
+                ii++;
             }
             else if (srt[ii] == '\n')
             {
-                ssa[pos++] = '\\';
-                ssa[pos++] = 'N';
+                if (srt[ii + 1] != 0)
+                {
+                    ssa[pos++] = '\\';
+                    ssa[pos++] = 'N';
+                }
                 ii++;
             }
             else
