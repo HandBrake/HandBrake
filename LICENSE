@@ -1,0 +1,17 @@
+HandBrake License
+
+Most files in HandBrake are under the GNU General Public License Version 2
+(GPLv2) license; read the file COPYING for details.
+
+Some files are under the GNU General Public License Version 2 or any later
+version (GPLv2+), the GNU Lesser General Public License Version 2.1 or any later
+version (LGPLv2.1+), or BSD/MIT/X11-style licenses. In combination, the GPLv2
+license applies to HandBrake.
+
+The Fraunhofer AAC library (fdk-aac) is under a license incompatible with the
+GPLv2 license. Since both licenses cannot be satisfied simultaneously, binaries
+resulting from the combination of HandBrake and fdk-aac are neither free nor
+redistributable. As a result, fdk-aac is by default not included in HandBrake.
+If you wish to include fdk-aac in your personal build of HandBrake, you may do
+so by passing --enable-fdk-aac to configure and making sure not to distribute
+any resulting binaries. Please read the fdk-aac license for details.
