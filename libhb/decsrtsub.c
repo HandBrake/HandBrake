@@ -480,7 +480,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 uint64_t stop_time = ( pv->current_entry.stop +
                                        pv->subtitle->config.offset ) * 90;
 
-                if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
+                if( !( start_time >= pv->start_time && stop_time < pv->stop_time ) )
                 {
                     hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
                     memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
@@ -546,7 +546,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         uint64_t stop_time = ( pv->current_entry.stop +
                                pv->subtitle->config.offset ) * 90;
 
-        if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
+        if( !( start_time >= pv->start_time && stop_time < pv->stop_time ) )
         {
             hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
             memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
