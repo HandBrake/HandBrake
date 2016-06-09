@@ -141,3 +141,9 @@ David Rickard (RandomEngy)
 Tim Walker (Rodeo)
 
 - Miscellaneous fixes and enhancements
+
+Bradley Sepos (BradleyS)
+
+- NLMeans denoiser
+- Presets and device testing
+- Miscellaneous improvements and bug fixes
