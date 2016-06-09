@@ -1301,8 +1301,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 {
                     sub_config = subtitle->config;
                     result = json_unpack_ex(subtitle_dict, &error, 0,
-                        "{s?b, s?b, s?b, s?i}",
-                        "Default",  unpack_i(&sub_config.default_track),
+                        "{s?b, s?b, s?b, s?I}",
+                        "Default",  unpack_b(&sub_config.default_track),
                         "Forced",   unpack_b(&sub_config.force),
                         "Burn",     unpack_b(&burn),
                         "Offset",   unpack_I(&offset));
@@ -1325,7 +1325,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 char *srtlang = "und";
                 char *srtcodeset = "UTF-8";
                 result = json_unpack_ex(subtitle_dict, &error, 0,
-                    "{s?b, s?b, s?i, "      // Common
+                    "{s?b, s?b, s?I, "      // Common
                     "s?{s?s, s?s, s?s}}",   // SRT
                     "Default",  unpack_b(&sub_config.default_track),
                     "Burn",     unpack_b(&burn),
@@ -1334,12 +1334,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                         "Filename", unpack_s(&srtfile),
                         "Language", unpack_s(&srtlang),
                         "Codeset",  unpack_s(&srtcodeset));
-                    if (result < 0)
-                    {
-                        hb_error("json unpack failure: %s", error.text);
-                        hb_job_close(&job);
-                        return NULL;
-                    }
+                if (result < 0)
+                {
+                    hb_error("json unpack failure: %s", error.text);
+                    hb_job_close(&job);
+                    return NULL;
+                }
                 sub_config.offset = offset;
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;
                 strncpy(sub_config.src_codeset, srtcodeset, 39);
