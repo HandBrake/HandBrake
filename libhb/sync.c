@@ -71,6 +71,8 @@ typedef struct
     sync_common_t     * common;
 
     // Stream I/O control
+    int                 done;
+    int                 flush;
     hb_list_t         * in_queue;
     hb_list_t         * scr_delay_queue;
     int                 max_len;
@@ -148,7 +150,6 @@ struct sync_common_s
     int             stream_count;
     sync_stream_t * streams;
     int             found_first_pts;
-    int             done;
 
     // SCR adjustments
     scr_t           scr[SCR_HASH_SZ];
@@ -157,6 +158,7 @@ struct sync_common_s
     // point-to-point support
     int             start_found;
     int64_t         start_pts;
+    int64_t         stop_pts;
 
     // sync audio work objects
     hb_list_t     * list_work;
@@ -912,16 +914,6 @@ static void fifo_push( hb_fifo_t * fifo, hb_buffer_t * buf )
     }
 }
 
-static void sendEof( sync_common_t * common )
-{
-    int ii;
-
-    for (ii = 0; ii < common->stream_count; ii++)
-    {
-        fifo_push(common->streams[ii].fifo_out, hb_buffer_eof_init());
-    }
-}
-
 static void streamFlush( sync_stream_t * stream )
 {
     hb_lock(stream->common->mutex);
@@ -948,29 +940,32 @@ static void streamFlush( sync_stream_t * stream )
         if (buf != NULL)
         {
             hb_list_rem(stream->in_queue, buf);
-            if (!stream->first_frame && buf->s.start >= 0)
+            if (!stream->first_frame)
             {
-                switch (stream->type)
+                if (buf->s.start >= 0)
                 {
-                    case SYNC_TYPE_VIDEO:
-                        hb_log("sync: first pts video is %"PRId64,
-                               buf->s.start);
-                        break;
-                    case SYNC_TYPE_AUDIO:
-                        hb_log("sync: first pts audio 0x%x is %"PRId64,
-                               stream->audio.audio->id, buf->s.start);
-                        break;
-                    case SYNC_TYPE_SUBTITLE:
-                        hb_log("sync: first pts subtitle 0x%x is %"PRId64,
-                               stream->subtitle.subtitle->id, buf->s.start);
-                        break;
-                    default:
-                        break;
+                    switch (stream->type)
+                    {
+                        case SYNC_TYPE_VIDEO:
+                            hb_log("sync: first pts video is %"PRId64,
+                                   buf->s.start);
+                            break;
+                        case SYNC_TYPE_AUDIO:
+                            hb_log("sync: first pts audio 0x%x is %"PRId64,
+                                   stream->audio.audio->id, buf->s.start);
+                            break;
+                        case SYNC_TYPE_SUBTITLE:
+                            hb_log("sync: first pts subtitle 0x%x is %"PRId64,
+                                   stream->subtitle.subtitle->id, buf->s.start);
+                            break;
+                        default:
+                            break;
+                    }
+                    stream->first_frame        = 1;
+                    stream->first_pts          = buf->s.start;
+                    stream->min_frame_duration = buf->s.duration;
                 }
-                stream->first_frame        = 1;
-                stream->first_pts          = buf->s.start;
-                stream->next_pts           = buf->s.start;
-                stream->min_frame_duration = buf->s.duration;
+                stream->next_pts = buf->s.start;
             }
             if (stream->type == SYNC_TYPE_AUDIO)
             {
@@ -1051,6 +1046,32 @@ static void streamFlush( sync_stream_t * stream )
     fifo_push(stream->fifo_out, hb_buffer_eof_init());
 
     hb_unlock(stream->common->mutex);
+}
+
+static void flushStreams( sync_common_t * common )
+{
+    int ii;
+
+    // Make sure all streams are complete
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        if (!stream->done && !stream->flush)
+        {
+            return;
+        }
+    }
+
+    // Flush all streams
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        if (stream->done)
+        {
+            continue;
+        }
+        streamFlush(stream);
+    }
 }
 
 static void log_chapter( sync_common_t *common, int chap_num,
@@ -1179,13 +1200,6 @@ static void OutputBuffer( sync_common_t * common )
     sync_stream_t * out_stream;
     hb_buffer_t   * buf;
 
-    if (common->done)
-    {
-        // It is possible to get here when one stream triggers
-        // end of output (i.e. pts_to_stop or frame_to_stop) while
-        // another stream is waiting on the mutex.
-        return;
-    }
     do
     {
         full        = 0;
@@ -1231,6 +1245,13 @@ static void OutputBuffer( sync_common_t * common )
             // This should only happen if all queues are below the
             // minimum queue level
             break;
+        }
+        if (out_stream->done)
+        {
+            buf = hb_list_item(out_stream->in_queue, 0);
+            hb_list_rem(out_stream->in_queue, buf);
+            hb_buffer_close(&buf);
+            continue;
         }
 
         if (out_stream->next_pts == (int64_t)AV_NOPTS_VALUE)
@@ -1294,26 +1315,46 @@ static void OutputBuffer( sync_common_t * common )
             }
             // reset frame count to track number of frames after
             // the start position till the end of encode.
+            out_stream->frame_count = 0;
             shiftTS(common, buf->s.start);
         }
 
         // If pts_to_stop or frame_to_stop were specified, stop output
-        if (common->job->pts_to_stop &&
-            buf->s.start >= common->job->pts_to_stop )
+        if (common->stop_pts &&
+            buf->s.start >= common->stop_pts )
         {
-            hb_log("sync: reached pts %"PRId64", exiting early", buf->s.start);
-            common->done = 1;
-            sendEof(common);
+            switch (out_stream->type)
+            {
+                case SYNC_TYPE_VIDEO:
+                    hb_log("sync: reached video pts %"PRId64", exiting early",
+                           buf->s.start);
+                    break;
+                case SYNC_TYPE_AUDIO:
+                    hb_log("sync: reached audio 0x%x pts %"PRId64
+                           ", exiting early",
+                           out_stream->audio.audio->id, buf->s.start);
+                    break;
+                case SYNC_TYPE_SUBTITLE:
+                    hb_log("sync: reached subtitle 0x%x pts %"PRId64
+                           ", exiting early",
+                           out_stream->subtitle.subtitle->id, buf->s.start);
+                    break;
+                default:
+                    break;
+            }
+            out_stream->done = 1;
+            fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             return;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
             common->job->frame_to_stop &&
             out_stream->frame_count >= common->job->frame_to_stop)
         {
-            hb_log("sync: reached %d frames, exiting early",
+            hb_log("sync: reached video frame %d, exiting early",
                    out_stream->frame_count);
-            common->done = 1;
-            sendEof(common);
+            common->stop_pts = buf->s.start;
+            out_stream->done = 1;
+            fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             return;
         }
 
@@ -1329,29 +1370,32 @@ static void OutputBuffer( sync_common_t * common )
         {
             UpdateState(common, out_stream->frame_count);
         }
-        if (!out_stream->first_frame && buf->s.start >= 0)
+        if (!out_stream->first_frame)
         {
-            switch (out_stream->type)
+            if (buf->s.start >= 0)
             {
-                case SYNC_TYPE_VIDEO:
-                    hb_log("sync: first pts video is %"PRId64,
-                           buf->s.start);
-                    break;
-                case SYNC_TYPE_AUDIO:
-                    hb_log("sync: first pts audio 0x%x is %"PRId64,
-                           out_stream->audio.audio->id, buf->s.start);
-                    break;
-                case SYNC_TYPE_SUBTITLE:
-                    hb_log("sync: first pts subtitle 0x%x is %"PRId64,
-                           out_stream->subtitle.subtitle->id, buf->s.start);
-                    break;
-                default:
-                    break;
+                switch (out_stream->type)
+                {
+                    case SYNC_TYPE_VIDEO:
+                        hb_log("sync: first pts video is %"PRId64,
+                               buf->s.start);
+                        break;
+                    case SYNC_TYPE_AUDIO:
+                        hb_log("sync: first pts audio 0x%x is %"PRId64,
+                               out_stream->audio.audio->id, buf->s.start);
+                        break;
+                    case SYNC_TYPE_SUBTITLE:
+                        hb_log("sync: first pts subtitle 0x%x is %"PRId64,
+                               out_stream->subtitle.subtitle->id, buf->s.start);
+                        break;
+                    default:
+                        break;
+                }
+                out_stream->first_frame        = 1;
+                out_stream->first_pts          = buf->s.start;
+                out_stream->min_frame_duration = buf->s.duration;
             }
-            out_stream->first_frame        = 1;
-            out_stream->first_pts          = buf->s.start;
-            out_stream->next_pts           = buf->s.start;
-            out_stream->min_frame_duration = buf->s.duration;
+            out_stream->next_pts = buf->s.start;
         }
 
         if (out_stream->type == SYNC_TYPE_AUDIO)
@@ -2117,6 +2161,10 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     {
         pv->common->start_found = 1;
     }
+    if (job->pts_to_stop)
+    {
+        pv->common->stop_pts = job->pts_to_stop;
+    }
 
     return 0;
 
@@ -2575,13 +2623,14 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
-    if (pv->common->done)
+    if (pv->stream->done)
     {
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        streamFlush(pv->stream);
+        pv->stream->flush = 1;
+        flushStreams(pv->common);
         // Ideally, we would only do this subtitle scan check in
         // syncSubtitleWork, but someone might try to do a subtitle
         // scan on a source that has no subtitles :-(
@@ -2659,13 +2708,14 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
-    if (pv->common->done)
+    if (pv->stream->done)
     {
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        streamFlush(pv->stream);
+        pv->stream->flush = 1;
+        flushStreams(pv->common);
         return HB_WORK_DONE;
     }
 
@@ -2960,16 +3010,17 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
 
-    if (pv->common->done)
+    if (pv->stream->done)
     {
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
+        pv->stream->flush = 1;
         // sanitizeSubtitle requires EOF buffer to recognize that
         // it needs to flush all subtitles.
         hb_list_add(pv->stream->in_queue, hb_buffer_eof_init());
-        streamFlush(pv->stream);
+        flushStreams(pv->common);
         if (pv->common->job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync.
