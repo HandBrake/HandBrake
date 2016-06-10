@@ -387,7 +387,7 @@ msgid ""
 msgstr ""
 
 msgid "<b>Forced Only</b>"
-msgstr "<b>Nur Erzwungene>"
+msgstr "<b>Nur Erzwungene</b>"
 
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
