@@ -1398,8 +1398,21 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
     char            audio_lang[4];
 
     /* Copy the job */
-    job_copy        = calloc( sizeof( hb_job_t ), 1 );
-    memcpy( job_copy, job, sizeof( hb_job_t ) );
+    job_copy                  = calloc( sizeof( hb_job_t ), 1 );
+    memcpy(job_copy, job, sizeof(hb_job_t));
+    job_copy->json            = NULL;
+    job_copy->encoder_preset  = NULL;
+    job_copy->encoder_tune    = NULL;
+    job_copy->encoder_profile = NULL;
+    job_copy->encoder_level   = NULL;
+    job_copy->encoder_options = NULL;
+    job_copy->file            = NULL;
+    job_copy->list_chapter    = NULL;
+    job_copy->list_audio      = NULL;
+    job_copy->list_subtitle   = NULL;
+    job_copy->list_filter     = NULL;
+    job_copy->list_attachment = NULL;
+    job_copy->metadata        = NULL;
 
     /* If we're doing Foreign Audio Search, copy all subtitles matching the
      * first audio track language we find in the audio list.
@@ -1443,6 +1456,12 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
                 hb_list_add( job_copy->list_subtitle,
                              hb_subtitle_copy( subtitle ) );
             }
+        }
+        if (hb_list_count(job_copy->list_subtitle) == 0)
+        {
+            hb_log("Skipping subtitle scan.  No suitable subtitle tracks.");
+            hb_job_close(&job_copy);
+            return;
         }
     }
     else
