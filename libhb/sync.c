@@ -2647,6 +2647,10 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     QueueBuffer(pv->stream, in);
     Synchronize(pv->stream);
 
+    if (pv->stream->done)
+    {
+        return HB_WORK_DONE;
+    }
     return HB_WORK_OK;
 }
 
@@ -2723,6 +2727,10 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     QueueBuffer(pv->stream, in);
     Synchronize(pv->stream);
 
+    if (pv->stream->done)
+    {
+        return HB_WORK_DONE;
+    }
     return HB_WORK_OK;
 }
 
@@ -3034,6 +3042,10 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     QueueBuffer(pv->stream, in);
     Synchronize(pv->stream);
 
+    if (pv->stream->done)
+    {
+        return HB_WORK_DONE;
+    }
     return HB_WORK_OK;
 }
 
