@@ -1491,7 +1491,7 @@ static void Synchronize( sync_stream_t * stream )
     // blocking when output fifos become full.  Wait here before
     // performing any output when the output fifo for the input stream
     // is full
-    if (stream->fifo_out != NULL)
+    if (stream->fifo_out != NULL && common->start_found)
     {
         while (!common->job->done && !*common->job->die)
         {
@@ -1791,7 +1791,16 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 
     while (hb_list_count(stream->in_queue) > stream->max_len)
     {
-        hb_cond_wait(stream->cond_full, stream->common->mutex);
+        if (!stream->common->start_found)
+        {
+            hb_unlock(stream->common->mutex);
+            Synchronize(stream);
+            hb_lock(stream->common->mutex);
+        }
+        else
+        {
+            hb_cond_wait(stream->cond_full, stream->common->mutex);
+        }
     }
 
     // Render offset is only useful for decoders, which are all
