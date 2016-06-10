@@ -3105,7 +3105,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         selection = subtitle_all == 1 ? "all" : "first";
     }
-    else
+    else if (subtitle_track_count > 0)
     {
         selection = "none";
     }
