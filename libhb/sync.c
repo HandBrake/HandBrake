@@ -78,6 +78,7 @@ typedef struct
     int                 max_len;
     int                 min_len;
     hb_cond_t         * cond_full;
+    hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;
 
     // PTS synchronization
@@ -1184,6 +1185,48 @@ static void checkCadence( int * cadence, hb_buffer_t * buf )
     }
 }
 
+// When doing point-to-point encoding, subtitles can cause a long
+// delay in finishing the job when the stop point is reached.  This
+// is due to the sparse nature of subtitles.  We may not even see
+// any additional subtitle till we reach the end of the file.
+//
+// So when all audio and video streams have reached the end point,
+// force the termination of all subtitle streams by pushing an
+// end-of-stream buffer into each subtitles input fifo.
+// This will cause each subtitle sync worker to wake and return
+// HB_WORK_DONE.
+static void terminateSubtitleStreams( sync_common_t * common )
+{
+    int ii;
+
+    // Make sure all streams are complete
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        if (stream->type == SYNC_TYPE_SUBTITLE)
+        {
+            continue;
+        }
+        if (!stream->done)
+        {
+            return;
+        }
+    }
+
+    // Terminate all subtitle streams
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        if (stream->done || stream->type != SYNC_TYPE_SUBTITLE)
+        {
+            continue;
+        }
+        fifo_push(stream->fifo_out, hb_buffer_eof_init());
+        fifo_push(stream->fifo_in,  hb_buffer_eof_init());
+        stream->done = 1;
+    }
+}
+
 // OutputBuffer pulls buffers from the internal sync buffer queues in
 // lowest PTS first order.  It then processes the queue the buffer is
 // pulled from for frame overlaps and gaps.
@@ -1344,6 +1387,7 @@ static void OutputBuffer( sync_common_t * common )
             }
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
+            terminateSubtitleStreams(common);
             return;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
@@ -1355,6 +1399,7 @@ static void OutputBuffer( sync_common_t * common )
             common->stop_pts = buf->s.start;
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
+            terminateSubtitleStreams(common);
             return;
         }
 
@@ -1976,6 +2021,7 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream->last_duration     = (int64_t)AV_NOPTS_VALUE;
     pv->stream->subtitle.subtitle = subtitle;
     pv->stream->fifo_out          = subtitle->fifo_out;
+    pv->stream->fifo_in           = subtitle->fifo_in;
 
     w = hb_get_work(common->job->h, WORK_SYNC_SUBTITLE);
     w->private_data = pv;
