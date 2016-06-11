@@ -71,7 +71,7 @@ fi
 
 %files gui -f ghb.lang
 %defattr(-,root,root,-)
-%doc NEWS AUTHORS CREDITS THANKS COPYING
+%doc README.markdown NEWS.markdown AUTHORS.markdown THANKS.markdown COPYING LICENSE
 %{_datadir}/icons/hicolor
 %{_datadir}/applications
 %{_bindir}/ghb
