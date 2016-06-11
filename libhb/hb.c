@@ -1457,7 +1457,9 @@ static void hb_add_internal( hb_handle_t * h, hb_job_t * job, hb_list_t *list_pa
                              hb_subtitle_copy( subtitle ) );
             }
         }
-        if (hb_list_count(job_copy->list_subtitle) == 0)
+        int count = hb_list_count(job_copy->list_subtitle);
+        if (count == 0 ||
+            (count == 1 && !job_copy->select_subtitle_config.force))
         {
             hb_log("Skipping subtitle scan.  No suitable subtitle tracks.");
             hb_job_close(&job_copy);
