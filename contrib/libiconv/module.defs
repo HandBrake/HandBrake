@@ -7,5 +7,5 @@ LIBICONV.FETCH.md5 = e34509b1623cec449dfeb73d7ce9c6c6
 
 # this contrib will not build under MinGW with -std=gnu99
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    LIBICONV.GCC.args.c_std =
+    LIBICONV.GCC.args.c_std = -std=gnu89
 endif
