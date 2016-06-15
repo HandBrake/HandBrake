@@ -471,7 +471,7 @@ int hb_platform_init()
 {
     int result = 0;
 
-#if defined(SYS_MINGW) && defined(PTW32_STATIC_LIB)
+#if defined(SYS_MINGW) && defined(PTW32_VERSION)
     result = !pthread_win32_process_attach_np();
     if (result)
     {
@@ -810,7 +810,7 @@ static uint64_t hb_thread_to_integer( const hb_thread_t* t )
     #if defined( SYS_CYGWIN )
         return (uint64_t)t->thread;
     #elif defined( _WIN32 ) || defined( __MINGW32__ )
-    #if defined(PTW32_STATIC_LIB)
+    #if defined(PTW32_VERSION)
         return (uint64_t)(ptrdiff_t)t->thread.p;
     #else
         return (uint64_t)t->thread;
