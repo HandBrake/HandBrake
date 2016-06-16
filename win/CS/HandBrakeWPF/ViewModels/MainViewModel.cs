@@ -1204,6 +1204,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the presets.
             this.presetService.Load();
+            this.NotifyOfPropertyChange(() => this.Presets);
 
             // Queue Recovery
             bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue);
@@ -1874,6 +1875,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreset != null)
             {
                 this.presetService.SetDefault(this.selectedPreset);
+                this.NotifyOfPropertyChange(() => this.Presets);
                 MessageBox.Show(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else

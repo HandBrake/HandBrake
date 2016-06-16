@@ -19,6 +19,8 @@
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
+
 
         <Style TargetType="Button">
 
@@ -100,20 +102,8 @@
 
 
                 <MenuItem Header="_Presets" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                    <MenuItem Header="_Presets" ItemsSource="{Binding Presets}">
-                        <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem">
-                                <Setter Property="Tag" Value="{Binding}" />
-                                <Setter Property="cal:Action.TargetWithoutContext" Value="{Binding DataContext, ElementName=presetMenu}"/>
-                                <Setter Property="cal:Message.Attach" Value="[Event Click] = [Action PresetSelect($this.Tag)]"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
-                                        <Setter Property="FontStyle" Value="Italic" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </MenuItem.ItemContainerStyle>
-                    </MenuItem>
+
+                    <MenuItem Header="_Presets" ItemsSource="{Binding Presets, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
                     <MenuItem Header="_Import from file" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
                     <MenuItem Header="_Export to file" cal:Message.Attach="[Event Click] = [Action PresetExport]" />

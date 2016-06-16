@@ -138,6 +138,7 @@
     <Compile Include="Commands\Menu\QueueCommandParams.cs" />
     <Compile Include="Commands\Menu\QueueCommands.cs" />
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
+    <Compile Include="Commands\PresetMenuSelectCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
+    <Compile Include="Converters\PresetsMenuConverter.cs" />
     <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
