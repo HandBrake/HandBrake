@@ -5,6 +5,9 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQTKitPlayer.h"
+
+#if __HB_QTKIT_PLAYER_AVAILABLE
+
 #import <QTKit/QTKit.h>
 
 @import HandBrakeKit;
@@ -395,3 +398,5 @@ typedef void (^HBPlayableObverser)(void);
 }
 
 @end
+
+#endif

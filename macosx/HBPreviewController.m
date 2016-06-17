@@ -548,7 +548,11 @@
 
 - (void)setUpPlaybackOfURL:(NSURL *)fileURL playerClass:(Class)class;
 {
+#if __HB_QTKIT_PLAYER_AVAILABLE
     NSArray<Class> *availablePlayerClasses = @[[HBAVPlayer class], [HBQTKitPlayer class]];
+#else
+    NSArray<Class> *availablePlayerClasses = @[[HBAVPlayer class]];
+#endif
 
     self.player = [[class alloc] initWithURL:fileURL];
 

@@ -9,6 +9,10 @@
 
 #import "HBPlayer.h"
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 101200
+    #define __HB_QTKIT_PLAYER_AVAILABLE 1
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HBQTKitPlayer : NSObject <HBPlayer>
