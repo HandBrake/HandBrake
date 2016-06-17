@@ -196,6 +196,7 @@
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
     [self.window registerForDraggedTypes:@[NSFilenamesPboardType]];
+    [fMainTabView registerForDraggedTypes:@[NSFilenamesPboardType]];
 
     // Set up the preset drawer
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
@@ -249,6 +250,11 @@
     NSArray<NSURL *> *fileURLs = [self fileURLsFromPasteboard:[sender draggingPasteboard]];
     [self.window.contentView setShowFocusRing:YES];
     return fileURLs.count ? NSDragOperationGeneric : NSDragOperationNone;
+}
+
+- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender
+{
+    return YES;
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender

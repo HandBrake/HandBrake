@@ -9,9 +9,14 @@
 
 @implementation HBTabView
 
--(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
+- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
 {
     return [self.dropDelegate draggingEntered:sender];
+}
+
+- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender
+{
+    return [self.dropDelegate prepareForDragOperation:sender];
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
