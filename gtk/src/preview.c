@@ -993,6 +993,10 @@ ghb_set_preview_image(signal_user_data_t *ud)
 void
 ghb_rescale_preview_image(signal_user_data_t *ud)
 {
+    if (ud->preview->width <= 0 || ud->preview->height <= 0)
+    {
+        return;
+    }
     double scale = (double)ud->preview->render_width / ud->preview->width;
     init_preview_image(ud);
     preview_set_render_size(ud, ud->preview->width * scale,
@@ -1012,6 +1016,10 @@ ghb_rescale_preview_image(signal_user_data_t *ud)
 void
 ghb_reset_preview_image(signal_user_data_t *ud)
 {
+    if (ud->preview->width <= 0 || ud->preview->height <= 0)
+    {
+        return;
+    }
     init_preview_image(ud);
     preview_set_render_size(ud, ud->preview->width, ud->preview->height);
 
@@ -1132,6 +1140,10 @@ G_MODULE_EXPORT void
 preview_reset_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 {
     g_debug("preview_reset_clicked_cb()");
+    if (ud->preview->width <= 0 || ud->preview->height <= 0)
+    {
+        return;
+    }
     preview_set_render_size(ud, ud->preview->width, ud->preview->height);
 
     // On windows, preview_resize_cb does not get called when the size
