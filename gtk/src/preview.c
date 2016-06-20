@@ -993,12 +993,12 @@ ghb_set_preview_image(signal_user_data_t *ud)
 void
 ghb_rescale_preview_image(signal_user_data_t *ud)
 {
+    init_preview_image(ud);
     if (ud->preview->width <= 0 || ud->preview->height <= 0)
     {
         return;
     }
     double scale = (double)ud->preview->render_width / ud->preview->width;
-    init_preview_image(ud);
     preview_set_render_size(ud, ud->preview->width * scale,
                                 ud->preview->height * scale);
 
@@ -1016,11 +1016,11 @@ ghb_rescale_preview_image(signal_user_data_t *ud)
 void
 ghb_reset_preview_image(signal_user_data_t *ud)
 {
+    init_preview_image(ud);
     if (ud->preview->width <= 0 || ud->preview->height <= 0)
     {
         return;
     }
-    init_preview_image(ud);
     preview_set_render_size(ud, ud->preview->width, ud->preview->height);
 
     // Scale and display the mini-preview
