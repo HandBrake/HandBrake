@@ -40,7 +40,7 @@
 #if !defined(_WIN32)
 #include <poll.h>
 #define G_UDEV_API_IS_SUBJECT_TO_CHANGE 1
-#if defined(__linux__)
+#if defined(__linux__) && defined(_HAVE_GUDEV)
 #include <gudev/gudev.h>
 #endif
 #include <dbus/dbus-glib.h>
@@ -4406,14 +4406,14 @@ dvd_device_list()
     return dvd_devices;
 }
 
-#if defined(__linux__)
+#if defined(__linux__) && defined(_HAVE_GUDEV)
 static GUdevClient *udev_ctx = NULL;
 #endif
 
 gboolean
 ghb_is_cd(GDrive *gd)
 {
-#if defined(__linux__)
+#if defined(__linux__) && defined(_HAVE_GUDEV)
     gchar *device;
     GUdevDevice *udd;
 
@@ -4448,7 +4448,7 @@ ghb_is_cd(GDrive *gd)
 void
 ghb_udev_init()
 {
-#if defined(__linux__)
+#if defined(__linux__) && defined(_HAVE_GUDEV)
     udev_ctx = g_udev_client_new(NULL);
 #endif
 }

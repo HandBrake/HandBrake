@@ -57,6 +57,15 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/jansson
 endif
 
+ifeq (1,$(FEATURE.flatpak))
+    MODULES += contrib/lame
+    MODULES += contrib/jansson
+    MODULES += contrib/x264
+    MODULES += contrib/libass
+    MODULES += contrib/fribidi
+    MODULES += contrib/freetype
+endif
+
 ifeq (1,$(FEATURE.fdk_aac))
     MODULES += contrib/fdk-aac
 endif
