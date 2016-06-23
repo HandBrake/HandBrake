@@ -1,3 +1,4 @@
+pkg.create.flatpak:: $(PKG.gui.flatpak) $(PKG.cli.flatpak)
 pkg.create.deb:: $(PKG.gui.deb) $(PKG.cli.deb)
 pkg.create.rpm:: $(PKG.rpm.stamp)
 pkg.create.src.deb:: $(PKG.src.deb.stamp)
@@ -56,6 +57,37 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 	$(TOUCH.exe) $(PKG.rpm.stamp)
 
 #
+# Flatpak binary package rules
+#
+$(PKG.src.flatpak): $(PKG.src.tar.bz2)
+	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
+	$(CP.exe) $(PKG.src.tar.bz2) $(PKG.src.flatpak)
+
+$(PKG.contrib.flatpak):
+	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
+	$(TAR.exe) -C $(SRC/) -czf $(PWD)/$(PKG.contrib.flatpak) download
+
+$(PKG.gui.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
+	make contrib.fetch
+	$(MKDIR.exe) -p $(PKG.out.flatpak/)
+	# Relative paths in the manifest are relative to the location
+	# of the manifest.  So put it where we have staged the files that
+	# it needs.
+	$(CP.exe) $(PKG.gui.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
+	flatpak-builder --force-clean --gpg-sign=608AD8F6 --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
+	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.gui.flatpak) fr.handbrake.ghb
+
+$(PKG.cli.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
+	make contrib.fetch
+	$(MKDIR.exe) -p $(PKG.out.flatpak/)
+	# Relative paths in the manifest are relative to the location
+	# of the manifest.  So put it where we have staged the files that
+	# it needs.
+	$(CP.exe) $(PKG.cli.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
+	flatpak-builder --force-clean --gpg-sign=608AD8F6 --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
+	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.cli.flatpak) fr.handbrake.HandBrakeCLI
+
+#
 # Debian binary package rules
 #
 $(PKG.gui.tmp.deb): | $(dir $(PKG.gui.tmp.deb))
@@ -66,6 +98,7 @@ $(PKG.gui.tmp.deb): GNUmakefile
 	$(MAKE) BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure -C $(SRC/) -f debian/rules build
 	echo $(PKG.out/)
 	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.debversion)" BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure PKGDESTDIR=$(PWD)/$(PKG.out/) -C $(SRC/) -f debian/rules binary
+
 
 $(PKG.gui.deb): | $(dir $(PKG.gui.deb))
 $(PKG.gui.deb): $(PKG.gui.tmp.deb)
