@@ -20,6 +20,7 @@ icons_dep =	\
 	hb-complete.svg
 
 hb_menu = ghb.desktop
+flatpak_menu = fr.handbrake.ghb.desktop
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
@@ -166,7 +167,8 @@ uninstall-local:
 		echo "*** Icon cache not updated. After install, run this:"; \
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
-	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
+	rm -f $(DESTDIR)/$(datadir)/applications/$(flatpak_menu)
 
 install-data-local:
 	for icon in $(icons); do \
@@ -190,4 +192,5 @@ install-data-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
-	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_menu) $(DESTDIR)/$(datadir)/applications/$(flatpak_menu)
