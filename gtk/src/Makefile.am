@@ -22,6 +22,8 @@ icons_dep =	\
 hb_menu = ghb.desktop
 flatpak_menu = fr.handbrake.ghb.desktop
 
+flatpak_appdata = fr.handbrake.ghb.appdata.xml
+
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -168,7 +170,8 @@ uninstall-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
-	rm -f $(DESTDIR)/$(datadir)/applications/$(flatpak_menu)
+	rm -f $(DESTDIR)/$(datadir)/applications/$(flatpak_menu) \
+	rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)
 
 install-data-local:
 	for icon in $(icons); do \
@@ -192,5 +195,7 @@ install-data-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
+	mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
-	$(INSTALL_DATA) $(srcdir)/$(flatpak_menu) $(DESTDIR)/$(datadir)/applications/$(flatpak_menu)
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_menu) $(DESTDIR)/$(datadir)/applications/$(flatpak_menu); \
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)
