@@ -3,6 +3,8 @@
 icons =	\
 	hb-icon.svg
 
+flatpak_icon = fr.handbrake.ghb.svg
+
 icons_dep =	\
 	hb-icon.svg \
 	hb-start.svg \
@@ -156,6 +158,7 @@ uninstall-local:
 		fi; \
 		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
+	rm -f $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
@@ -178,6 +181,7 @@ install-data-local:
 		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
 		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_icon) $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
