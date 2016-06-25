@@ -62,7 +62,7 @@ static int     titlescan           = 0;
 static int     main_feature        = 0;
 static char *  native_language     = NULL;
 static int     native_dub          = 0;
-static int     twoPass             = 0;
+static int     twoPass             = -1;
 static int     pad_disable         = 0;
 static char *  pad                 = NULL;
 static int     deinterlace_disable = 0;
@@ -145,7 +145,7 @@ static char *   encoder_level   = NULL;
 static char *   advanced_opts   = NULL;
 static int      maxHeight     = 0;
 static int      maxWidth      = 0;
-static int      fastfirstpass = 0;
+static int      fastfirstpass = -1;
 static char *   preset_export_name   = NULL;
 static char *   preset_export_desc   = NULL;
 static char *   preset_export_file   = NULL;
@@ -1254,9 +1254,11 @@ static void ShowHelp()
 "   -q, --quality <number>  Set video quality\n"
 "   -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
 "   -2, --two-pass          Use two-pass mode\n"
+"       --no-two-pass       Disable two-pass mode\n"
 "   -T, --turbo             When using 2-pass use \"turbo\" options on the\n"
 "                           1st pass to improve speed\n"
 "                           (works with x264 and x265)\n"
+"       --no-turbo          Disable 2-pass mode's \"turbo\" 1st pass\n"
 "   -r, --rate              Set video framerate\n"
 "                           (" );
     rate = NULL;
@@ -1941,6 +1943,7 @@ static int ParseOptions( int argc, char ** argv )
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
             { "two-pass",    no_argument,       NULL,    '2' },
+            { "no-two-pass", no_argument,       &twoPass, 0 },
             { "deinterlace", optional_argument, NULL,    'd' },
             { "no-deinterlace", no_argument,    &deinterlace_disable, 1 },
             { "deblock",     optional_argument, NULL,    '7' },
@@ -2009,6 +2012,7 @@ static int ParseOptions( int argc, char ** argv )
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
             { "turbo",       no_argument,       NULL,    'T' },
+            { "no-turbo",    no_argument,       &fastfirstpass,    0 },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
             { "preset",      required_argument, NULL,    'Z' },
@@ -3505,13 +3509,21 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         hb_dict_set(preset, "VideoQualityType", hb_value_int(1));
         hb_dict_set(preset, "VideoAvgBitrate", hb_value_int(vbitrate));
-        if (twoPass)
+        if (twoPass == 1)
         {
             hb_dict_set(preset, "VideoTwoPass", hb_value_bool(1));
         }
-        if (fastfirstpass)
+        else if (twoPass == 0)
+        {
+            hb_dict_set(preset, "VideoTwoPass", hb_value_bool(0));
+        }
+        if (fastfirstpass == 1)
         {
             hb_dict_set(preset, "VideoTurboTwoPass", hb_value_bool(1));
+        }
+        else if (fastfirstpass == 0)
+        {
+            hb_dict_set(preset, "VideoTurboTwoPass", hb_value_bool(0));
         }
     }
     const char *vrate_preset;
