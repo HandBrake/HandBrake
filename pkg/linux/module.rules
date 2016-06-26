@@ -61,6 +61,7 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 #
 $(PKG.src.flatpak): $(PKG.src.tar.bz2)
 	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
+	-$(RM.exe) -rf $(STAGE.out.flatpak/).flatpak-builder
 	$(CP.exe) $(PKG.src.tar.bz2) $(PKG.src.flatpak)
 
 $(PKG.contrib.flatpak):
