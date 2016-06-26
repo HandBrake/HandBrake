@@ -6720,7 +6720,7 @@ const char hb_builtin_presets_json[] =
 "            \"VideoQualitySlider\": 20.0, \n"
 "            \"VideoQualityType\": 2, \n"
 "            \"VideoScaler\": \"swscale\", \n"
-"            \"VideoTune\": \"none\", \n"
+"            \"VideoTune\": \"\", \n"
 "            \"VideoTurboTwoPass\": false, \n"
 "            \"VideoTwoPass\": false, \n"
 "            \"x264Option\": \"\", \n"
