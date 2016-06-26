@@ -92,7 +92,7 @@
         "VideoGrayScale": false,
         "VideoScaler": "swscale",
         "VideoPreset": "medium",
-        "VideoTune": "none",
+        "VideoTune": "",
         "VideoProfile": "auto",
         "VideoLevel": "auto",
         "VideoOptionExtra": "",
