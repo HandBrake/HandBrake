@@ -394,7 +394,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Step 3, Setup the tracks from the preset
-            foreach (AudioBehaviourTrack track in this.currentPreset.AudioTrackBehaviours.BehaviourTracks)
+            foreach (AudioBehaviourTrack track in this.AudioBehaviours.BehaviourTracks)
             {
                 this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = this.GetPreferredAudioTrack() });
             }

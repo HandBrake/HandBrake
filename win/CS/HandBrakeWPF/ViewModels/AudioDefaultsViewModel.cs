@@ -476,8 +476,10 @@ namespace HandBrakeWPF.ViewModels
 
                 foreach (AudioBehaviourTrack item in preset.AudioTrackBehaviours.BehaviourTracks)
                 {
-                    this.AudioBehaviours.BehaviourTracks.Add(new AudioBehaviourTrack(item));
+                    this.BehaviourTracks.Add(new AudioBehaviourTrack(item));
                 }
+
+                this.NotifyOfPropertyChange(() => this.BehaviourTracks);
                 
                 foreach (string selectedItem in behaviours.SelectedLangauges)
                 {
