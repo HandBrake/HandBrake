@@ -40,6 +40,9 @@ void         hb_presets_free(void);
 
 #endif // __LIBHB__
 
+// Add the default CLI preset(s) to the currently loaded presets
+int          hb_presets_cli_default_init(void);
+
 // Get the currently supported preset format version
 void hb_presets_current_version(int *major, int* minor, int *micro);
 
