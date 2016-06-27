@@ -227,7 +227,7 @@ void hb_ssa_style_init(hb_subtitle_style_t *style)
 }
 
 static hb_buffer_t *
-ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, int scr_sequence,
+ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
                             uint8_t *in_data, int in_size );
 
 /*
@@ -258,7 +258,7 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
             continue;
 
         // Decode an individual SSA line
-        buf = ssa_decode_line_to_mkv_ssa(w, in->s.scr_sequence,
+        buf = ssa_decode_line_to_mkv_ssa(w, in,
                                          (uint8_t *)curLine, strlen(curLine));
         hb_buffer_list_append(&list, buf);
     }
@@ -323,7 +323,7 @@ static uint8_t *find_field( uint8_t *pos, uint8_t *end, int fieldNum )
  *   1         2                3     4    5       6       7       8      9
  */
 static hb_buffer_t *
-ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, int scr_sequence,
+ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
                             uint8_t *in_data, int in_size )
 {
     hb_work_private_t * pv = w->private_data;
@@ -373,9 +373,10 @@ ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, int scr_sequence,
 
     out->size           = strlen(mkvIn) + 1;
     out->s.frametype    = HB_FRAME_SUBTITLE;
-    out->s.start        = in_start;
-    out->s.stop         = in_stop;
-    out->s.scr_sequence = scr_sequence;
+    out->s.start        = in->s.start;
+    out->s.duration     = in_stop - in_start;
+    out->s.stop         = in->s.start + out->s.duration;
+    out->s.scr_sequence = in->s.scr_sequence;
 
     if( out->size == 0 )
     {
