@@ -1,0 +1,440 @@
+#!/bin/bash
+# mingw-w64-build - download and build mingw-w64 toolchain
+#
+# Project: https://github.com/bradleysepos/mingw-w64-build
+# License: MIT
+
+# checks for required external tools
+function check_dependencies {  # check_dependencies $DEP1 $DEP2 ...
+    local DEPS ERRORS
+    DEPS=("${@}");
+    ERRORS=()
+    for DEP in ${DEPS[@]}; do
+        if echo "${DEP}" | grep '/' >/dev/null 2>&1 && [[ ! -x "${DEP}" ]]; then
+            ERRORS+=("${DEP}")
+        elif ! hash "${DEP}" >/dev/null 2>&1; then
+            ERRORS+=("${DEP}")
+        fi
+    done
+    if [[ "${#ERRORS[@]}" -ne 0 ]]; then
+        echo "dependencies: ${DEPS[@]}"
+        echo "unable to find command(s): ${ERRORS[*]}" >&2
+        return 1
+    fi
+}
+
+# downloads from a url
+function download_url {  # download_file $URL $FILE $VERBOSE
+    local URL FILE VERBOSE
+    URL="${1}"
+    FILE="${2}"
+    VERBOSE="${3}"
+    if [[ "${URL:-}" == "" ]]; then
+        echo "url not specified for download" >&2
+        return 1
+    fi
+    if [[ "${FILE:-}" == "" ]]; then
+        echo "output path not specified for download url: ${FILE}" >&2
+        return 1
+    fi
+    if ! curl --head -L "${URL}" >/dev/null 2>&1; then
+        echo "unable to download from url: ${URL}" >&2
+        return 1
+    fi
+    if ! touch "${FILE}" >/dev/null 2>&1; then
+        echo "unable to create path: ${FILE}" >&2
+        return 1
+    fi
+    if [[ "${VERBOSE:-}" == true ]]; then
+        echo "curl -L \"${URL}\" -o \"${FILE}\""
+    fi
+    if ! curl -L "${URL}" -o "${FILE}"; then
+        echo "unable to download: ${URL} -> ${FILE}" >&2
+        return 1
+    fi
+}
+
+# builds mingw-w64
+function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
+    set -o pipefail
+
+    # dependencies
+    local DEPS
+    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax" "yasm")
+    check_dependencies "${DEPS[@]}" || return 1
+
+    # package names
+    CONFIG_NAME="config"
+    BINUTILS_NAME="binutils"
+    MINGW_W64_NAME="mingw-w64"
+    GMP_NAME="gmp"
+    MPFR_NAME="mpfr"
+    MPC_NAME="mpc"
+    ISL_NAME="isl"
+    GCC_NAME="gcc"
+    PTW32_NAME="pthreads-win32"
+    NAMES=("${CONFIG_NAME}" "${BINUTILS_NAME}" "${MINGW_W64_NAME}" "${GMP_NAME}" "${MPFR_NAME}" "${MPC_NAME}" "${ISL_NAME}" "${GCC_NAME}" "${PTW32_NAME}")
+
+    # versions
+    local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER PTW32_VER
+    CONFIG_VER="ddd7f33"
+    BINUTILS_VER="2.26"
+    #MINGW_W64_VER="4.0.6"
+    MINGW_W64_VER="5.0-rc2"
+    GMP_VER="6.1.0"
+    MPFR_VER="3.1.4"
+    MPC_VER="1.0.3"
+    ISL_VER="0.14"
+    GCC_VER="5.4.0"
+    PTW32_VER="2.9.1"
+    PTW32_VER_URL=$(echo "${PTW32_VER}" | sed 's/\./-/g')
+
+    # urls
+    local CONFIG_URL BINUTILS_URL MINGW_W64_URL GMP_URL MPFR_URL MPC_URL ISL_URL GCC_URL PTW32_URL
+    CONFIG_URL="http://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz"
+    BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2"
+    MINGW_W64_URL="http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2"
+    GMP_URL="https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2"
+    MPFR_URL="https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VER}.tar.gz"
+    MPC_URL="https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz"
+    ISL_URL="ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VER}.tar.bz2"
+    GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2"
+    PTW32_URL="ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-${PTW32_VER_URL}-release.tar.gz"
+    URLS=("${CONFIG_URL}" "${BINUTILS_URL}" "${MINGW_W64_URL}" "${GMP_URL}" "${MPFR_URL}" "${MPC_URL}" "${ISL_URL}" "${GCC_URL}" "${PTW32_URL}")
+
+    # filenames
+    local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG PTW32_PKG
+    CONFIG_PKG="config-${CONFIG_VER}.tar.gz"
+    BINUTILS_PKG="binutils-${BINUTILS_VER}.tar.bz2"
+    MINGW_W64_PKG="mingw-w64-v${MINGW_W64_VER}.tar.bz2"
+    GMP_PKG="gmp-${GMP_VER}.tar.bz2"
+    MPFR_PKG="mpfr-${MPFR_VER}.tar.gz"
+    MPC_PKG="mpc-${MPC_VER}.tar.gz"
+    ISL_PKG="isl-${ISL_VER}.tar.bz2"
+    GCC_PKG="gcc-${GCC_VER}.tar.bz2"
+    PTW32_PKG="pthreads-w32-${PTW32_VER_URL}-release.tar.gz"
+    PKGS=("${CONFIG_PKG}" "${BINUTILS_PKG}" "${MINGW_W64_PKG}" "${GMP_PKG}" "${MPFR_PKG}" "${MPC_PKG}" "${ISL_PKG}" "${GCC_PKG}" "${PTW32_PKG}")
+
+    # internal vars
+    local NAME VERSION SELF SELF_NAME HELP
+    NAME="mingw-w64-build"
+    VERSION="1.0.0"
+    SELF="${BASH_SOURCE[0]}"
+    SELF_NAME=$(basename "${SELF}")
+    HELP="\
+usage: ${SELF_NAME} target [install-dir]
+targets:
+  i686
+  i686.clean
+  i686.distclean
+  x86_64
+  x86_64.clean
+  x86_64.distclean
+default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
+
+    # args
+    local TARGET_PARAM TARGET_DIR
+    TARGET_PARAM="${1}"
+    TARGET_DIR="${2}"
+    if [[ "${TARGET_PARAM:-}" == "" ]]; then
+        echo -e "${HELP}"
+        echo "no target specified" >&2
+        return 1
+    fi
+    if [[ "${TARGET_DIR:-}" == "" ]]; then
+        TARGET_DIR="${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
+    fi
+
+    # target and prefix
+    local TARGET_i686 TARGET_x86_64 PREFIX_i686 PREFIX_x86_64 TARGET PREFIX
+    TARGET_i686="i686-w64-mingw32"
+    TARGET_x86_64="x86_64-w64-mingw32"
+    PREFIX_i686="mingw-w64-i686"
+    PREFIX_x86_64="mingw-w64-x86_64"
+    case "${TARGET_PARAM}" in
+        i686|i686.clean|i686.distclean|i686.pkgclean)
+            TARGET="${TARGET_i686}"
+            PREFIX="${PREFIX_i686}"
+            ;;
+        x86_64|x86_64.clean|x86_64.distclean|x86_64.pkgclean)
+            TARGET="${TARGET_x86_64}"
+            PREFIX="${PREFIX_x86_64}"
+            ;;
+    esac
+    if [[ "${PREFIX:-}" == "" ]]; then
+        echo -e "${HELP}"
+        echo "target not valid: ${TARGET_PARAM}" >&2
+        return 1
+    fi
+
+    # dirs
+    echo "path: ${TARGET_DIR}"
+    local MINGW_W64_DIR PKG_DIR SOURCE_DIR BUILD_DIR
+    MINGW_W64_DIR="${TARGET_DIR}/${PREFIX}"
+    PKG_DIR="${TARGET_DIR}/pkg"
+    SOURCE_DIR="${TARGET_DIR}/source"
+    BUILD_DIR="${TARGET_DIR}/build-${PREFIX}"
+    case "${TARGET_PARAM}" in
+        i686.clean|x86_64.clean)
+            echo "clean:"
+            echo "  rm -rf \"${BUILD_DIR}\""
+            echo "  rm -rf \"${SOURCE_DIR}\""
+            rm -rf "${BUILD_DIR}"
+            rm -rf "${SOURCE_DIR}"
+            echo "complete."
+            return 0
+            ;;
+        i686.distclean|x86_64.distclean)
+            echo "distclean:"
+            echo "  rm -rf \"${MINGW_W64_DIR}\""
+            rm -rf "${MINGW_W64_DIR}"
+            echo "complete."
+            return 0
+            ;;
+        i686.pkgclean|x86_64.pkgclean)
+            echo "pkgclean:"
+            echo "  rm -rf \"${PKG_DIR}\""
+            rm -rf "${PKG_DIR}"
+            echo "complete."
+            return 0
+            ;;
+    esac
+    mkdir -p "${TARGET_DIR}"
+    if [[ ! -d "${TARGET_DIR}" ]]; then
+        echo "unable to create directory: ${TARGET_DIR}" >&2
+        return 1
+    fi
+    if [[ -e "${MINGW_W64_DIR}" ]]; then
+        # prefix dir should not exist
+        echo "directory exists: ${MINGW_W64_DIR}" >&2
+        return 1
+    fi
+    mkdir -p "${MINGW_W64_DIR}"
+    if [[ ! -d "${MINGW_W64_DIR}" ]]; then
+        echo "unable to create directory: ${MINGW_W64_DIR}" >&2
+        return 1
+    fi
+    mkdir -p "${PKG_DIR}"
+    if [[ ! -d "${PKG_DIR}" ]]; then
+        echo "unable to create directory: ${PKG_DIR}" >&2
+        return 1
+    fi
+    mkdir -p "${SOURCE_DIR}"
+    if [[ ! -d "${SOURCE_DIR}" ]]; then
+        echo "unable to create directory: ${SOURCE_DIR}" >&2
+        return 1
+    fi
+    if [[ -e "${BUILD_DIR}" ]]; then
+        # never reuse build dir
+        rm -rf "${BUILD_DIR}"
+    fi
+    mkdir -p "${BUILD_DIR}"
+    if [[ ! -d "${BUILD_DIR}" ]]; then
+        echo "unable to create directory: ${BUILD_DIR}" >&2
+        return 1
+    fi
+
+    # verify/fetch
+    echo "verify:"
+    local DOWNLOAD_VERBOSE
+    DOWNLOAD_VERBOSE=true
+    for I in "${!PKGS[@]}"; do
+        echo "  ${PKGS[I]}"
+        if ! tar -tf "${PKG_DIR}/${PKGS[I]}" >/dev/null 2>&1; then
+            download_url "${URLS[I]}" "${PKG_DIR}/${PKGS[I]}" "${DOWNLOAD_VERBOSE}" || return 1
+        fi
+        if ! tar -tf "${PKG_DIR}/${PKGS[I]}" >/dev/null 2>&1; then
+            echo "unable to verify package: ${PKG_DIR}/${PKGS[I]}" >2
+            return 1
+        fi
+    done
+
+    # extract
+    echo "extract:"
+    for I in "${!PKGS[@]}"; do
+        echo "  ${PKGS[I]}"
+        if [[ -e "${SOURCE_DIR}/${NAMES[I]}" ]]; then
+            rm -rf "${SOURCE_DIR}/${NAMES[I]}"
+        fi
+        mkdir -p "${SOURCE_DIR}/${NAMES[I]}"
+        if ! tar -xf "${PKG_DIR}/${PKGS[I]}" -C "${SOURCE_DIR}/${NAMES[I]}" >/dev/null 2>&1; then
+            echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >2
+            return 1
+        fi
+    done
+
+    # host
+    echo "host:"
+    SYS_NAME=$(uname | awk '{ print tolower($0)}')
+    SYS_ARCH=$(uname -m)
+    SYS_TYPE=$("${SOURCE_DIR}/config/config-${CONFIG_VER}/config.guess")
+    if [[ "${SYS_NAME}" == "darwin" ]]; then
+        CPU_COUNT=$(sysctl -n hw.ncpu 2>/dev/null)
+    elif [[ "${SYS_NAME}" == "linux" ]]; then
+        CPU_COUNT=$(grep -c processor /proc/cpuinfo 2>/dev/null)
+    fi
+    CPU_COUNT="${CPU_COUNT:-1}"
+    echo "  name: ${SYS_NAME}"
+    echo "  arch: ${SYS_ARCH}"
+    echo "  type: ${SYS_TYPE}"
+    echo "  vcpu: ${CPU_COUNT}"
+
+    # build
+    echo "target: ${TARGET}"
+    echo "build:"
+
+    # binutils
+    echo "  binutils ${BINUTILS_VER}"
+    mkdir -pv "${BUILD_DIR}/binutils" > "${BUILD_DIR}/binutils.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/binutils"
+    CC=gcc CXX=g++ "${SOURCE_DIR}/binutils/binutils-${BINUTILS_VER}/configure" --build="${SYS_TYPE}" --target="${TARGET}" --with-sysroot="${MINGW_W64_DIR}" --prefix="${MINGW_W64_DIR}" --disable-shared --enable-static --disable-multilib --disable-werror >> "${BUILD_DIR}/binutils.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/binutils.log" 2>&1 || return 1
+    make install-strip >> "${BUILD_DIR}/binutils.log" 2>&1 || return 1
+
+    # update PATH
+    export PATH="${MINGW_W64_DIR}/bin:${PATH}"
+
+    # mingw-w64 headers
+    echo "  mingw-w64 ${MINGW_W64_VER} headers"
+    mkdir -pv "${BUILD_DIR}/mingw-w64-headers" > "${BUILD_DIR}/mingw-w64-headers.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/mingw-w64-headers"
+    "${SOURCE_DIR}/mingw-w64/mingw-w64-v${MINGW_W64_VER}/mingw-w64-headers/configure" --build="${SYS_TYPE}" --host="${TARGET}" --prefix="${MINGW_W64_DIR}" --enable-sdk=all >> "${BUILD_DIR}/mingw-w64-headers.log" 2>&1 || return 1
+    make install >> "${BUILD_DIR}/mingw-w64-headers.log" 2>&1 || return 1
+
+    # create symlinks
+    cd "${MINGW_W64_DIR}"
+    ln -s "${TARGET}" mingw
+    if [[ ! -d "usr" ]]; then
+        ln -s . usr
+    fi
+    if [[ ! -d "${TARGET}/include" ]]; then
+        cd "${TARGET}"
+        ln -s ../include include
+        cd "${MINGW_W64_DIR}"
+    fi
+    if [[ ! -d "${TARGET}/usr" ]]; then
+        cd "${TARGET}"
+        ln -s . usr
+        cd "${MINGW_W64_DIR}"
+    fi
+
+    # gmp
+    echo "  gmp ${GMP_VER}"
+    local GMP_DIR
+    GMP_DIR="${BUILD_DIR}/gmp-${GMP_VER}-${SYS_ARCH}"
+    mkdir -pv "${BUILD_DIR}/gmp" > "${BUILD_DIR}/gmp.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/gmp"
+    CC=gcc CXX=g++ CPPFLAGS=-fexceptions "${SOURCE_DIR}/gmp/gmp-${GMP_VER}/configure" --build="${SYS_TYPE}" --prefix="${GMP_DIR}" --enable-fat --disable-shared --enable-static --enable-cxx >> "${BUILD_DIR}/gmp.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/gmp.log" 2>&1 || return 1
+    make check >> "${BUILD_DIR}/gmp.log" 2>&1 || return 1
+    make install >> "${BUILD_DIR}/gmp.log" 2>&1 || return 1
+
+    # mpfr
+    echo "  mpfr ${MPFR_VER}"
+    local MPFR_DIR
+    MPFR_DIR="${BUILD_DIR}/mpfr-${MPFR_VER}-${SYS_ARCH}"
+    mkdir -pv "${BUILD_DIR}/mpfr" > "${BUILD_DIR}/mpfr.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/mpfr"
+    CC=gcc CXX=g++ CFLAGS="-I${GMP_DIR}/include" CPPFLAGS="-I${GMP_DIR}/include" LDFLAGS="-L${GMP_DIR}/lib" "${SOURCE_DIR}/mpfr/mpfr-${MPFR_VER}/configure" --build="${SYS_TYPE}" --prefix="${MPFR_DIR}" --disable-shared --enable-static --with-gmp="${GMP_DIR}" >> "${BUILD_DIR}/mpfr.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/mpfr.log" 2>&1 || return 1
+    make install >> "${BUILD_DIR}/mpfr.log" 2>&1 || return 1
+
+    # mpc
+    echo "  mpc ${MPC_VER}"
+    local MPC_DIR
+    MPC_DIR="${BUILD_DIR}/mpc-${MPC_VER}-${SYS_ARCH}"
+    mkdir -pv "${BUILD_DIR}/mpc" > "${BUILD_DIR}/mpc.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/mpc"
+    CC=gcc CXX=g++ CFLAGS="-I${GMP_DIR}/include -I${MPFR_DIR}/include" CPPFLAGS="-I${GMP_DIR}/include -I${MPFR_DIR}/include" LDFLAGS="-L${GMP_DIR}/lib -L${MPFR_DIR}/lib" "${SOURCE_DIR}/mpc/mpc-${MPC_VER}/configure" --build="${SYS_TYPE}" --prefix="${MPC_DIR}" --with-gmp="${GMP_DIR}" --with-mpfr="${MPFR_DIR}" --disable-shared --enable-static >> "${BUILD_DIR}/mpc.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/mpc.log" 2>&1 || return 1
+    make install >> "${BUILD_DIR}/mpc.log" 2>&1 || return 1
+
+    # isl
+    echo "  isl ${ISL_VER}"
+    local ISL_DIR
+    ISL_DIR="${BUILD_DIR}/isl-${ISL_VER}-${SYS_ARCH}"
+    mkdir -pv "${BUILD_DIR}/isl" > "${BUILD_DIR}/isl.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/isl"
+    CC=gcc CXX=g++ CFLAGS="-I${GMP_DIR}/include" CPPFLAGS="-I${GMP_DIR}/include" LDFLAGS="-L${GMP_DIR}/lib" "${SOURCE_DIR}/isl/isl-${ISL_VER}/configure" --build="${SYS_TYPE}" --prefix="${ISL_DIR}" --with-gmp="${GMP_DIR}" --disable-shared --enable-static --with-piplib=no --with-clang=no >> "${BUILD_DIR}/isl.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/isl.log" 2>&1 || return 1
+    make install >> "${BUILD_DIR}/isl.log" 2>&1 || return 1
+
+    # gcc core
+    echo "  gcc ${GCC_VER} core"
+    GCC_CONFIG_EXTRA=""
+    if [[ "${SYS_NAME}" == "darwin" ]]; then
+        GCC_CONFIG_EXTRA="--with-system-zlib"
+    fi
+    mkdir -pv "${BUILD_DIR}/gcc" > "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/gcc"
+    CFLAGS="-I${GMP_DIR}/include -I${MPFR_DIR}/include -I${MPC_DIR}/include -I${ISL_DIR}/include" CPPFLAGS="-I${GMP_DIR}/include -I${MPFR_DIR}/include -I${MPC_DIR}/include -I${ISL_DIR}/include" LDFLAGS="-L${GMP_DIR}/lib -L${MPFR_DIR}/lib -L${MPC_DIR}/lib -L${ISL_DIR}/lib" "${SOURCE_DIR}/gcc/gcc-${GCC_VER}/configure" --build="${SYS_TYPE}" --host="${SYS_TYPE}" --target="${TARGET}" --prefix="${MINGW_W64_DIR}" --with-sysroot="${MINGW_W64_DIR}" --with-gmp="${GMP_DIR}" --with-mpfr="${MPFR_DIR}" --with-mpc="${MPC_DIR}" --with-isl="${ISL_DIR}" --disable-shared --enable-static --disable-multilib --disable-nls --disable-libstdcxx-pch --disable-win32-registry --enable-checking=release --enable-languages=c,c++ --enable-fully-dynamic-string --enable-version-specific-runtime-libs --enable-lto "${GCC_CONFIG_EXTRA}" >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" all-gcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    make install-gcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+
+    # mingw-w64 runtime
+    echo "  mingw-w64 ${MINGW_W64_VER} runtime"
+    local MINGW_W64_CONFIG_EXTRA
+    MINGW_W64_CONFIG_EXTRA=""
+    if [[ "${TARGET}" == "${TARGET_i686}" ]]; then
+        MINGW_W64_CONFIG_EXTRA="--disable-lib64"
+    elif [[ "${TARGET}" == "${TARGET_x86_64}" ]]; then
+        MINGW_W64_CONFIG_EXTRA="--disable-lib32"
+    fi
+    mkdir -pv "${BUILD_DIR}/mingw-w64-crt" > "${BUILD_DIR}/mingw-w64-crt.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/mingw-w64-crt"
+    "${SOURCE_DIR}/mingw-w64/mingw-w64-v${MINGW_W64_VER}/mingw-w64-crt/configure" --build="${SYS_TYPE}" --host="${TARGET}" --prefix="${MINGW_W64_DIR}" --with-sysroot="${MINGW_W64_DIR}" "${MINGW_W64_CONFIG_EXTRA}" >> "${BUILD_DIR}/mingw-w64-crt.log" 2>&1 || return 1
+    if [[ "${SYS_NAME}" == "darwin" ]]; then
+        # parallel build fails on darwin
+        make -j 1 >> "${BUILD_DIR}/mingw-w64-crt.log" 2>&1 || return 1
+    else
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/mingw-w64-crt.log" 2>&1 || return 1
+    fi
+    make install-strip >> "${BUILD_DIR}/mingw-w64-crt.log" 2>&1 || return 1
+
+    # relocate and symlink libs
+    cd "${MINGW_W64_DIR}"
+    mv "${TARGET}/lib/"* lib/
+    rm -rf "${TARGET}/lib"
+    cd "${TARGET}"
+    ln -s ../lib lib
+
+    # gcc
+    echo "  gcc ${GCC_VER}"
+    cd "${BUILD_DIR}/gcc"
+    make -j "${CPU_COUNT}" all-target-libgcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" install-target-libgcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    make -j "${CPU_COUNT}" >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+    make install-strip >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
+
+    # pthreads-w32
+    echo "  pthreads-win32 ${PTW32_VER}"
+    mkdir -pv "${BUILD_DIR}/pthreads-win32" > "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cp -Rv "${SOURCE_DIR}/pthreads-win32/pthreads-w32-${PTW32_VER_URL}-release/"* "${BUILD_DIR}/pthreads-win32/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cd "${BUILD_DIR}/pthreads-win32"
+    make realclean >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    make CROSS="${TARGET}-" realclean GC-static >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cp -v libpthreadGC2.a "${MINGW_W64_DIR}/lib/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cp -v pthread.h sched.h semaphore.h "${MINGW_W64_DIR}/include/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cd "${MINGW_W64_DIR}/lib"
+    ln -fsv libpthreadGC2.a libpthread.a >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
+    cd "${MINGW_W64_DIR}/include"
+    for F in pthread.h sched.h semaphore.h; do
+        sed -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/ __declspec (dllimport)//g' "${F}"
+        rm -f "${F}.sedbak"
+    done
+
+    # clean up
+    cd "${MINGW_W64_DIR}"
+    find . -name "*.la" -type f -exec rm {} ";" >/dev/null 2>&1
+
+    # done
+    echo "bin: ${MINGW_W64_DIR}/bin"
+    echo "  add to your shell startup script (usually .bashrc or .bash_profile):"
+    echo "    export PATH=\"${MINGW_W64_DIR}/bin:\${PATH}\""
+    echo "complete."
+    return 0
+
+    set +o pipefail
+}
+
+mingw-w64-build "${@}"

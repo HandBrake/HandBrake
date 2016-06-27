@@ -1,15 +1,11 @@
 $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
-LIBICONV.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libiconv-1.13.tar.gz
-LIBICONV.FETCH.url += http://ftp.gnu.org/gnu/libiconv/libiconv-1.13.tar.gz
-LIBICONV.FETCH.md5 =  048032a3032ebd182150bdee30a5d533
-
-# TODO: libiconv >= 1.14
-#LIBICONV.FETCH.url = http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
-#LIBICONV.FETCH.md5 = e34509b1623cec449dfeb73d7ce9c6c6
+LIBICONV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libiconv-1.14.tar.gz
+LIBICONV.FETCH.url += https://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
+LIBICONV.FETCH.md5 = e34509b1623cec449dfeb73d7ce9c6c6
 
 # this contrib will not build under MinGW with -std=gnu99
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    LIBICONV.GCC.args.c_std =
+    LIBICONV.GCC.args.c_std = -std=gnu89
 endif
