@@ -479,6 +479,32 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     while ((buf = hb_buffer_list_rem_head(&list)) != NULL)
     {
+        fifos = GetFifoForId( r, buf->s.id );
+        if (fifos && r->stream && !r->start_found)
+        {
+            // libav is allowing SSA subtitles to leak through that are
+            // prior to the seek point.  So only make the adjustment to
+            // pts_to_start after we see the next video buffer.
+            if (buf->s.id != r->job->title->video_id)
+            {
+                hb_buffer_close(&buf);
+                continue;
+            }
+            // We will inspect the timestamps of each frame in sync
+            // to skip from this seek point to the timestamp we
+            // want to start at.
+            if (buf->s.start != AV_NOPTS_VALUE &&
+                buf->s.start < r->job->pts_to_start)
+            {
+                r->job->pts_to_start -= buf->s.start;
+            }
+            else if ( buf->s.start >= r->job->pts_to_start )
+            {
+                r->job->pts_to_start = 0;
+            }
+            r->start_found = 1;
+        }
+
         if (buf->s.start   != AV_NOPTS_VALUE &&
             r->scr_changes != r->demux.scr_changes)
         {
@@ -489,7 +515,7 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // libav tries to be too smart with timestamps and
             // enforces unnecessary conditions.  One such condition
             // is that subtitle timestamps must be monotonically
-            // increasing.  To encure this is the case, we calculate
+            // increasing.  To ensure this is the case, we calculate
             // an offset upon each SCR change that will guarantee this.
             // This is just a very rough SCR offset.  A fine grained
             // offset that maintains proper sync is calculated in sync.c
@@ -517,32 +543,6 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             r->last_pts = buf->s.start;
             UpdateState(r);
-        }
-
-        fifos = GetFifoForId( r, buf->s.id );
-        if (fifos && r->stream && !r->start_found)
-        {
-            // libav is allowing SSA subtitles to leak through that are
-            // prior to the seek point.  So only make the adjustment to
-            // pts_to_start after we see the next video buffer.
-            if (buf->s.id != r->job->title->video_id)
-            {
-                hb_buffer_close(&buf);
-                continue;
-            }
-            // We will inspect the timestamps of each frame in sync
-            // to skip from this seek point to the timestamp we
-            // want to start at.
-            if (buf->s.start != AV_NOPTS_VALUE &&
-                buf->s.start < r->job->pts_to_start)
-            {
-                r->job->pts_to_start -= buf->s.start;
-            }
-            else if ( buf->s.start >= r->job->pts_to_start )
-            {
-                r->job->pts_to_start = 0;
-            }
-            r->start_found = 1;
         }
 
         buf = splice_discontinuity(r, buf);
