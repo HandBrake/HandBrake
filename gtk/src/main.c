@@ -773,7 +773,7 @@ GtkEntry {                          \n\
 #preview_frame                      \n\
 {                                   \n\
     background: @black;             \n\
-    background-color: @gray46;      \n\
+    background-color: alpha(@gray18, 0.0); \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
