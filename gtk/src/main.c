@@ -777,7 +777,17 @@ GtkEntry {                          \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
+"
+#if GTK_CHECK_VERSION(3, 20, 0)
+"\
+#preview_reset:hover                \n\
+"
+#else
+"\
 #preview_reset:prelight             \n\
+"
+#endif
+"\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
