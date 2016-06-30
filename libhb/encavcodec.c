@@ -302,7 +302,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             fseek( pv->file, 0, SEEK_SET );
             log = malloc( size + 1 );
             log[size] = '\0';
-            fread( log, size, 1, pv->file );
+            if (size > 0 &&
+                fread( log, size, 1, pv->file ) < size)
+            {
+                hb_log( "encavcodecInit: Failed to read %s" , filename);
+            }
             fclose( pv->file );
             pv->file = NULL;
 

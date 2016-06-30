@@ -696,7 +696,13 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 
         for (hh = 0; hh < h; hh++)
         {
-            fread(data, w, 1, file);
+            if (fread(data, w, 1, file) < w)
+            {
+                hb_error( "hb_read_preview: Failed to read line %d from %s" , hh, filename );
+                hb_buffer_close(&buf);
+                break;
+            }
+
             data += stride;
         }
     }
