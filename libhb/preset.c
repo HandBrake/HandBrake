@@ -36,6 +36,7 @@ static void         preset_clean(hb_value_t *preset, hb_value_t *template);
 static int          preset_import(hb_value_t *preset, int major, int minor,
                                   int micro);
 static hb_value_t * presets_package(const hb_value_t *presets);
+static int hb_presets_add_internal(hb_value_t *);
 
 enum
 {
@@ -3109,7 +3110,7 @@ void hb_presets_builtin_update(void)
     hb_value_free(&builtin);
 }
 
-int hb_presets_add_internal(hb_value_t *preset)
+static int hb_presets_add_internal(hb_value_t *preset)
 {
     hb_preset_index_t *path;
     int                added = 0;
