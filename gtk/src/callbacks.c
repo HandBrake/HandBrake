@@ -1365,6 +1365,7 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
     dialog = GHB_WIDGET(ud->builder, "source_dialog");
     source_dialog_extra_widgets(ud, dialog);
 
+    gtk_widget_show(dialog);
     gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), sourcename);
 
     response = gtk_dialog_run(GTK_DIALOG (dialog));
