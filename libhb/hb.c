@@ -1938,7 +1938,8 @@ static void thread_func( void * _h )
 static void redirect_thread_func(void * _data)
 {
     int pfd[2];
-    pipe(pfd);
+    if (pipe(pfd))
+       return;
 #if defined( SYS_MINGW )
     // dup2 doesn't work on windows for some stupid reason
     stderr->_file = pfd[1];
