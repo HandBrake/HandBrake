@@ -1,5 +1,5 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
-    LIBDVDREAD LIBDVDNAV LIBICONV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS \
+    LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
     HARFBUZZ
 
@@ -119,7 +119,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
         ass avcodec avformat avfilter avutil avresample dvdnav dvdread fontconfig \
-        freetype mp3lame ogg samplerate swscale vpx theora vorbis vorbisenc \
+        freetype mp3lame samplerate swscale vpx theora vorbis vorbisenc ogg \
         x264 xml2 bluray jansson harfbuzz, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
