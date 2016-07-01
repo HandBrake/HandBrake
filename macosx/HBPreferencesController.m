@@ -77,8 +77,6 @@
         @"x264CqSliderFractional":          @"0.50",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
-        // Hash of the default folders, until there is a better way.
-        @"HBPreviewViewExpandedStatus":     @[@(4097268371718322522), @(3576901712372066251)],
         @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591))
         }];
 

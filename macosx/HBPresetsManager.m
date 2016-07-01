@@ -298,7 +298,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
         if ([obj isBuiltIn] && [obj isLeaf])
         {
-            if ([[obj name] isEqualToString:@"Normal"])
+            if ([[obj name] isEqualToString:@"Fast 1080p30"])
             {
                 normalPreset = obj;
             }
