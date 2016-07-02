@@ -54,6 +54,7 @@ enum
 
 static GhbValue *prefsDict = NULL;
 static gboolean prefs_modified = FALSE;
+static gchar *override_user_config_dir = NULL;
 
 static void store_prefs(void);
 static void store_presets(void);
@@ -596,7 +597,14 @@ ghb_get_user_config_dir(gchar *subdir)
     const gchar *dir;
     gchar       *config;
 
-    dir = g_get_user_config_dir();
+    if (override_user_config_dir != NULL)
+    {
+        dir = override_user_config_dir;
+    }
+    else
+    {
+        dir = g_get_user_config_dir();
+    }
     if (!g_file_test(dir, G_FILE_TEST_IS_DIR))
     {
         dir    = g_get_home_dir();
@@ -629,6 +637,12 @@ ghb_get_user_config_dir(gchar *subdir)
         g_strfreev(split);
     }
     return config;
+}
+
+void
+ghb_override_user_config_dir(char *dir)
+{
+    override_user_config_dir = dir;
 }
 
 static void
