@@ -20,12 +20,12 @@ LIBVPX.CONFIGURE.extra =  \
 ifeq (1,$(BUILD.cross))
     LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(BUILD.spec)-"
     LIBVPX.CONFIGURE.args.build =
-endif
-
-ifeq (1-i686,$(BUILD.cross)-$(BUILD.machine))
-    LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
-else ifeq (1-x86_64,$(BUILD.cross)-$(BUILD.machine))
-    LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+    LIBVPX.CONFIGURE.extra += --disable-multithread
+    ifeq (i686,$(BUILD.machine))
+        LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
+    else ifeq (x86_64,$(BUILD.machine))
+        LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
+    endif
 endif
 
 ifeq (1,$(FEATURE.local_yasm))
