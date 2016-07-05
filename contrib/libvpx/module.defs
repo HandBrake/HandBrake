@@ -10,9 +10,10 @@ LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \
     --as=yasm \
     --enable-vp8-encoder  \
+    --disable-vp8-decoder \
     --enable-vp9-encoder  \
     --disable-vp9-decoder \
-    --disable-vp8-decoder \
+    --disable-vp10        \
     --disable-examples    \
     --disable-docs        \
     --disable-unit-tests
