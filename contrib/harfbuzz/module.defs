@@ -20,6 +20,6 @@ endif
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     HARFBUZZ.CONFIGURE.extra += --with-directwrite=no --with-glib=no \
-        --with-gobject=no --with-cairo=no --with-icu=no --with-graphite=no \
+        --with-gobject=no --with-cairo=no --with-icu=no --with-graphite2=no \
         --with-uniscribe=no
 endif
