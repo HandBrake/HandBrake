@@ -15,9 +15,9 @@ LIBASS.CONFIGURE.extra = \
     FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
 
 ifneq ($(BUILD.system),linux)
-LIBASS.CONFIGURE.extra += \
-    FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
-    FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+    LIBASS.CONFIGURE.extra += \
+        FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
+        FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
 endif
 
 ifeq ($(BUILD.system),darwin)
