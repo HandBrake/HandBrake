@@ -47,6 +47,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_vp9 \
     --enable-zlib \
     --enable-bzlib \
+    --enable-pthreads \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
@@ -67,14 +68,13 @@ FFMPEG.CONFIGURE.extra += \
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))
-    FFMPEG.CONFIGURE.extra += --enable-pthreads --enable-memalign-hack
+    FFMPEG.CONFIGURE.extra += --enable-memalign-hack
     FFMPEG.GCC.args.extra += -fno-common
 else ifeq (darwin,$(BUILD.system))
     ## section for darwin-archs
-    FFMPEG.CONFIGURE.extra += --enable-pthreads --enable-cross-compile --arch=$(BUILD.machine) --target-os=darwin
+    FFMPEG.CONFIGURE.extra += --enable-cross-compile --arch=$(BUILD.machine) --target-os=darwin
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += \
-        --enable-w32threads \
         --enable-memalign-hack \
         --enable-dxva2 \
         --enable-hwaccel=h264_dxva2 \
@@ -83,11 +83,9 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
         --enable-hwaccel=vc1_dxva2 \
         --enable-hwaccel=wmv3_dxva2 \
         --target-os=mingw32 \
-        --arch=i386 \
+        --arch=$(BUILD.machine) \
         --enable-cross-compile --cross-prefix=$(BUILD.cross.prefix)
     FFMPEG.GCC.args.extra += -fno-common
-else
-    FFMPEG.CONFIGURE.extra += --enable-pthreads
 endif
 
 ifneq (none,$(FFMPEG.GCC.g))
