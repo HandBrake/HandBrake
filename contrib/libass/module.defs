@@ -20,6 +20,13 @@ ifneq ($(BUILD.system),linux)
         FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
 endif
 
+ifneq (1,$(BUILD.cross))
+    ifeq (1,$(FEATURE.local_yasm))
+        LIBASS.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+        LIBASS.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    endif
+endif
+
 ifeq ($(BUILD.system),darwin)
     LIBASS.CONFIGURE.extra += --disable-coretext
 endif
