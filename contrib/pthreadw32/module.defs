@@ -7,18 +7,20 @@ PTHREADW32.FETCH.md5 = 36ba827d6aa0fa9f9ae740a35626e2e3
 
 PTHREADW32.CONFIGURE = $(TOUCH.exe) $@
 
-PTHREADW32.BUILD.extra = CROSS=$(BUILD.cross.prefix) clean GC-static
-PTHREADW32.BUILD.ntargets = clean GC-static
+PTHREADW32.CLEAN.ntargets = realclean
+
+PTHREADW32.BUILD.extra = CROSS=$(BUILD.cross.prefix)
+PTHREADW32.BUILD.ntargets = GC-static
 
 define PTHREADW32.INSTALL
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)pthread.h $(CONTRIB.build/)include/
-    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/ __declspec (dllimport)//g' $(CONTRIB.build/)include/pthread.h
+    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/__declspec (dllexport) //g' -e 's/ __declspec (dllimport)//g' -e 's/__declspec (dllimport) //g' $(CONTRIB.build/)include/pthread.h
     $(RM.exe) -f $(CONTRIB.build/)include/pthread.h.sedbak
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)sched.h $(CONTRIB.build/)include/
-    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/ __declspec (dllimport)//g' -e 's/__declspec (dllimport) //g' $(CONTRIB.build/)include/sched.h
+    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/__declspec (dllexport) //g' -e 's/ __declspec (dllimport)//g' -e 's/__declspec (dllimport) //g' $(CONTRIB.build/)include/sched.h
     $(RM.exe) -f $(CONTRIB.build/)include/sched.h.sedbak
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)semaphore.h $(CONTRIB.build/)include/
-    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/ __declspec (dllimport)//g' $(CONTRIB.build/)include/semaphore.h
+    $(SED.exe) -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/__declspec (dllexport) //g' -e 's/ __declspec (dllimport)//g' -e 's/__declspec (dllimport) //g' $(CONTRIB.build/)include/semaphore.h
     $(RM.exe) -f $(CONTRIB.build/)include/semaphore.h.sedbak
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)libpthreadGC2.a $(CONTRIB.build/)lib/
     $(LN.exe) -sf ./libpthreadGC2.a $(CONTRIB.build/)lib/libpthread.a
@@ -27,6 +29,7 @@ endef
 
 define PTHREADW32.UNINSTALL
     $(RM.exe) -f $(CONTRIB.build/)lib/libpthreadGC2.a
+    $(RM.exe) -f $(CONTRIB.build/)lib/libpthread.a
     $(RM.exe) -f $(CONTRIB.build/)include/pthread.h
     $(RM.exe) -f $(CONTRIB.build/)include/sched.h
     $(RM.exe) -f $(CONTRIB.build/)include/semaphore.h
