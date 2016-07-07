@@ -22,7 +22,7 @@
 
 #if defined( SYS_MINGW )
 #include <io.h>
-#if defined( PTW32_STATIC_LIB )
+#if defined(PTW32_VERSION)
 #include <pthread.h>
 #endif
 #endif
