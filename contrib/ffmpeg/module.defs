@@ -1,6 +1,9 @@
 __deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX LAME
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+__deps__ += PTHREADW32
+endif
 ifeq (1,$(FEATURE.qsv))
-__deps__ += PTHREADW32 LIBMFX
+__deps__ += LIBMFX
 endif
 
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
