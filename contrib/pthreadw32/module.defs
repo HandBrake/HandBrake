@@ -7,8 +7,10 @@ PTHREADW32.FETCH.md5 = 36ba827d6aa0fa9f9ae740a35626e2e3
 
 PTHREADW32.CONFIGURE = $(TOUCH.exe) $@
 
-PTHREADW32.BUILD.extra = CROSS=$(BUILD.cross.prefix) clean GC-static
-PTHREADW32.BUILD.ntargets = clean GC-static
+PTHREADW32.CLEAN.ntargets = realclean
+
+PTHREADW32.BUILD.extra = CROSS=$(BUILD.cross.prefix) GC-static
+PTHREADW32.BUILD.ntargets = GC-static
 
 define PTHREADW32.INSTALL
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)pthread.h $(CONTRIB.build/)include/
@@ -27,6 +29,7 @@ endef
 
 define PTHREADW32.UNINSTALL
     $(RM.exe) -f $(CONTRIB.build/)lib/libpthreadGC2.a
+    $(RM.exe) -f $(CONTRIB.build/)lib/libpthread.a
     $(RM.exe) -f $(CONTRIB.build/)include/pthread.h
     $(RM.exe) -f $(CONTRIB.build/)include/sched.h
     $(RM.exe) -f $(CONTRIB.build/)include/semaphore.h
