@@ -64,6 +64,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     check_dependencies "${DEPS[@]}" || return 1
 
     # package names
+    local CONFIG_NAME BINUTILS_NAME MINGW_W64_NAME GMP_NAME MPFR_NAME MPC_NAME ISL_NAME GCC_NAME NAMES
     CONFIG_NAME="config"
     BINUTILS_NAME="binutils"
     MINGW_W64_NAME="mingw-w64"
@@ -72,11 +73,10 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPC_NAME="mpc"
     ISL_NAME="isl"
     GCC_NAME="gcc"
-    PTW32_NAME="pthreads-win32"
-    NAMES=("${CONFIG_NAME}" "${BINUTILS_NAME}" "${MINGW_W64_NAME}" "${GMP_NAME}" "${MPFR_NAME}" "${MPC_NAME}" "${ISL_NAME}" "${GCC_NAME}" "${PTW32_NAME}")
+    NAMES=("${CONFIG_NAME}" "${BINUTILS_NAME}" "${MINGW_W64_NAME}" "${GMP_NAME}" "${MPFR_NAME}" "${MPC_NAME}" "${ISL_NAME}" "${GCC_NAME}")
 
     # versions
-    local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER PTW32_VER
+    local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER
     CONFIG_VER="ddd7f33"
     BINUTILS_VER="2.26"
     #MINGW_W64_VER="4.0.6"
@@ -86,11 +86,11 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPC_VER="1.0.3"
     ISL_VER="0.14"
     GCC_VER="5.4.0"
-    PTW32_VER="2.9.1"
-    PTW32_VER_URL=$(echo "${PTW32_VER}" | sed 's/\./-/g')
+    #ISL_VER="0.12.2"
+    #GCC_VER="4.9.2"
 
     # urls
-    local CONFIG_URL BINUTILS_URL MINGW_W64_URL GMP_URL MPFR_URL MPC_URL ISL_URL GCC_URL PTW32_URL
+    local CONFIG_URL BINUTILS_URL MINGW_W64_URL GMP_URL MPFR_URL MPC_URL ISL_URL GCC_URL URLS
     CONFIG_URL="http://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz"
     BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2"
     MINGW_W64_URL="http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2"
@@ -99,11 +99,10 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPC_URL="https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz"
     ISL_URL="ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VER}.tar.bz2"
     GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2"
-    PTW32_URL="ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-${PTW32_VER_URL}-release.tar.gz"
-    URLS=("${CONFIG_URL}" "${BINUTILS_URL}" "${MINGW_W64_URL}" "${GMP_URL}" "${MPFR_URL}" "${MPC_URL}" "${ISL_URL}" "${GCC_URL}" "${PTW32_URL}")
+    URLS=("${CONFIG_URL}" "${BINUTILS_URL}" "${MINGW_W64_URL}" "${GMP_URL}" "${MPFR_URL}" "${MPC_URL}" "${ISL_URL}" "${GCC_URL}")
 
     # filenames
-    local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG PTW32_PKG
+    local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG PKGS
     CONFIG_PKG="config-${CONFIG_VER}.tar.gz"
     BINUTILS_PKG="binutils-${BINUTILS_VER}.tar.bz2"
     MINGW_W64_PKG="mingw-w64-v${MINGW_W64_VER}.tar.bz2"
@@ -112,13 +111,12 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPC_PKG="mpc-${MPC_VER}.tar.gz"
     ISL_PKG="isl-${ISL_VER}.tar.bz2"
     GCC_PKG="gcc-${GCC_VER}.tar.bz2"
-    PTW32_PKG="pthreads-w32-${PTW32_VER_URL}-release.tar.gz"
-    PKGS=("${CONFIG_PKG}" "${BINUTILS_PKG}" "${MINGW_W64_PKG}" "${GMP_PKG}" "${MPFR_PKG}" "${MPC_PKG}" "${ISL_PKG}" "${GCC_PKG}" "${PTW32_PKG}")
+    PKGS=("${CONFIG_PKG}" "${BINUTILS_PKG}" "${MINGW_W64_PKG}" "${GMP_PKG}" "${MPFR_PKG}" "${MPC_PKG}" "${ISL_PKG}" "${GCC_PKG}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="1.0.0"
+    VERSION="2.0.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -130,7 +128,7 @@ targets:
   x86_64
   x86_64.clean
   x86_64.distclean
-default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
+default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER}"
 
     # args
     local TARGET_PARAM TARGET_DIR
@@ -142,7 +140,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
         return 1
     fi
     if [[ "${TARGET_DIR:-}" == "" ]]; then
-        TARGET_DIR="${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
+        TARGET_DIR="${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER}"
     fi
 
     # target and prefix
@@ -265,6 +263,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
 
     # host
     echo "host:"
+    local SYS_NAME SYS_ARCH SYS_TYPE CPU_COUNT
     SYS_NAME=$(uname | awk '{ print tolower($0)}')
     SYS_ARCH=$(uname -m)
     SYS_TYPE=$("${SOURCE_DIR}/config/config-${CONFIG_VER}/config.guess")
@@ -361,6 +360,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
 
     # gcc core
     echo "  gcc ${GCC_VER} core"
+    local GCC_CONFIG_EXTRA
     GCC_CONFIG_EXTRA=""
     if [[ "${SYS_NAME}" == "darwin" ]]; then
         GCC_CONFIG_EXTRA="--with-system-zlib"
@@ -405,23 +405,6 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}"
     make -j "${CPU_COUNT}" install-target-libgcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
     make -j "${CPU_COUNT}" >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
     make install-strip >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
-
-    # pthreads-w32
-    echo "  pthreads-win32 ${PTW32_VER}"
-    mkdir -pv "${BUILD_DIR}/pthreads-win32" > "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cp -Rv "${SOURCE_DIR}/pthreads-win32/pthreads-w32-${PTW32_VER_URL}-release/"* "${BUILD_DIR}/pthreads-win32/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cd "${BUILD_DIR}/pthreads-win32"
-    make realclean >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    make CROSS="${TARGET}-" realclean GC-static >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cp -v libpthreadGC2.a "${MINGW_W64_DIR}/lib/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cp -v pthread.h sched.h semaphore.h "${MINGW_W64_DIR}/include/" >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cd "${MINGW_W64_DIR}/lib"
-    ln -fsv libpthreadGC2.a libpthread.a >> "${BUILD_DIR}/pthreads-win32.log" 2>&1 || return 1
-    cd "${MINGW_W64_DIR}/include"
-    for F in pthread.h sched.h semaphore.h; do
-        sed -i.sedbak -e 's/ __declspec (dllexport)//g' -e 's/ __declspec (dllimport)//g' "${F}"
-        rm -f "${F}.sedbak"
-    done
 
     # clean up
     cd "${MINGW_W64_DIR}"
