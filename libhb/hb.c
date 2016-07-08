@@ -638,6 +638,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
 {
     FILE * file;
     char   filename[1024];
+    char   reason[80];
 
     hb_get_tempory_filename( h, filename, "%d_%d_%d",
                              hb_get_instance_id(h), title, preview );
@@ -645,7 +646,10 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     file = hb_fopen(filename, "wb");
     if( !file )
     {
-        hb_error( "hb_save_preview: fopen failed (%s)", filename );
+        if (strerror_r(errno, reason, 79) != 0)
+            strcpy(reason, "unknown -- strerror_r() failed");
+
+        hb_error( "hb_save_preview: Failed to open %s (reason: %s)", filename, reason );
         return -1;
     }
 
@@ -659,11 +663,25 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
 
         for( hh = 0; hh < h; hh++ )
         {
-            fwrite( data, w, 1, file );
+            if (fwrite( data, w, 1, file ) < w)
+            {
+                if (ferror(file))
+                {
+                    if (strerror_r(errno, reason, 79) != 0)
+                        strcpy(reason, "unknown -- strerror_r() failed");
+
+                    hb_error( "hb_save_preview: Failed to write line %d to %s (reason: %s). Preview will be incomplete.",
+                              hh, filename, reason );
+                    goto done;
+                }
+            }
             data += stride;
         }
     }
+
+done:
     fclose( file );
+
     return 0;
 }
 
@@ -671,6 +689,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 {
     FILE * file;
     char   filename[1024];
+    char   reason[80];
 
     hb_get_tempory_filename(h, filename, "%d_%d_%d",
                             hb_get_instance_id(h), title->index, preview);
@@ -678,13 +697,19 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
     file = hb_fopen(filename, "rb");
     if (!file)
     {
-        hb_error( "hb_read_preview: fopen failed (%s)", filename );
+        if (strerror_r(errno, reason, 79) != 0)
+            strcpy(reason, "unknown -- strerror_r() failed");
+
+        hb_error( "hb_read_preview: Failed to open %s (reason: %s)", filename, reason );
         return NULL;
     }
 
     hb_buffer_t * buf;
     buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
                                title->geometry.width, title->geometry.height);
+
+    if (!buf)
+        goto done;
 
     int pp, hh;
     for (pp = 0; pp < 3; pp++)
@@ -696,10 +721,23 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 
         for (hh = 0; hh < h; hh++)
         {
-            fread(data, w, 1, file);
+            if (fread(data, w, 1, file) < w)
+            {
+                if (ferror(file))
+                {
+                    if (strerror_r(errno, reason, 79) != 0)
+                        strcpy(reason, "unknown -- strerror_r() failed");
+
+                    hb_error( "hb_read_preview: Failed to read line %d from %s (reason: %s). Preview will be incomplete.",
+                          hh, filename, reason );
+                    goto done;
+                }
+            }
             data += stride;
         }
     }
+
+done:
     fclose(file);
 
     return buf;
