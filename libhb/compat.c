@@ -40,3 +40,40 @@ char *strtok_r(char *s, const char *delim, char **save_ptr)
     return token;
 }
 #endif // HB_NEED_STRTOK_R
+
+#ifndef HAS_STRERROR_R
+#ifndef _GNU_SOURCE
+#include <sys/types.h>
+#include <errno.h>
+#include <string.h>
+
+#define ERRSTR_LEN 20
+
+int strerror_r(int errnum, char *strerrbuf, size_t buflen)
+{
+    int ret = 0;
+    char errstr[ERRSTR_LEN];
+
+    if (strerrbuf == NULL || buflen == 0)
+    {
+        ret = ERANGE;
+        goto done;
+    }
+
+    if(snprintf(errstr, ERRSTR_LEN - 1, "unknown error %d", errnum) < 0)
+    {
+        ret = EINVAL;
+        goto done;
+    }
+
+    if (snprintf(strerrbuf, buflen, errstr) < 0)
+    {
+        ret = EINVAL;
+        goto done;
+    }
+
+done:
+    return ret;
+}
+#endif // _GNU_SOURCE
+#endif // HAS_STRERROR_R

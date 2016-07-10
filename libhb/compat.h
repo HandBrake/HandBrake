@@ -25,4 +25,14 @@
 char *strtok_r(char *s, const char *delim, char **save_ptr);
 #endif // HB_NEED_STRTOK_R
 
+#ifndef HAS_STRERROR_R
+#ifndef _GNU_SOURCE
+#include <sys/types.h>
+/*
+ * POSIX definition of strerror_r() -- see http://pubs.opengroup.org/onlinepubs/9699919799/functions/strerror.html
+ */
+int strerror_r(int errnum, char *strerrbuf, size_t buflen);
+#endif // _GNU_SOURCE
+#endif // HAVE_STRERROR_R
+
 #endif // HB_COMPAT_H
