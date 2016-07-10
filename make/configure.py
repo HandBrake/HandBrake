@@ -1726,6 +1726,23 @@ int main ()
         strtok_r = LDProbe( 'static strtok_r', '%s -static' % Tools.gcc.pathname, '', strtok_r_test )
         strtok_r.run()
 
+    strerror_r_test = """
+#include <string.h>
+
+int main()
+{
+    /* some implementations fail if buf is less than 80 characters
+       so size it appropriately */
+    char errstr[128];
+    /* some implementations fail if err == 0 */
+    strerror_r(1, errstr, 127);
+    return 0;
+}
+"""
+
+    strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
+    strerror_r.run()
+
     ## cfg hook before doc prep
     cfg.doc_ready()
 
@@ -1858,6 +1875,10 @@ int main ()
             doc.add( 'HAS.regex', 1 )
         if strtok_r.fail:
             doc.add( 'COMPAT.strtok_r', 1 )
+    else:
+        doc.addBlank()
+        if not strerror_r.fail:
+            doc.add( 'HAS.strerror_r', 1 )
 
     doc.addMake( '' )
     doc.addMake( '## define debug mode and optimize before other includes' )
