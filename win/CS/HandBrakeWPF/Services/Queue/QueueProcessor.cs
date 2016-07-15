@@ -505,7 +505,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             if (this.IsProcessing)
             {
-                throw new Exception("Already Processing the Queue");
+                return;
             }
 
             this.clearCompleted = isClearCompleted;
