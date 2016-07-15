@@ -225,63 +225,29 @@
                     </StackPanel>
                 </Button>
 
-                <Menu Background="Transparent">
-                    <MenuItem>
-                        <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Name="QueueDrop" AutomationProperties.Name="Add to Queue"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Stretch"
-                                        VerticalContentAlignment="Stretch"
-                                        Background="Transparent"
-                                        cal:Message.Attach="[Event Click] = [Action AddToQueue]"
-                                        >
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="32"
-                                               Height="32"
-                                               SnapsToDevicePixels="True"
-                                               Source="Images/AddToQueue_small.png"
-                                               />
-                                        <Label Margin="8,0,0,0"
-                                               VerticalAlignment="Center"
-                                               Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}"
-                                               />
-                                    </StackPanel>
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type Button}">
-                                                        <Border x:Name="border"
-                                                                Background="{TemplateBinding Background}"
-                                                                SnapsToDevicePixels="True"
-                                                                >
-                                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                                              Content="{TemplateBinding Content}"
-                                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                                              />
-                                                        </Border>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
+                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="Add to Queue">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
+                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
+                        </StackPanel>
 
-                                <Path Height="5"
-                                      Margin="2,2,2,0"
+                        <Grid x:Name="dropdown" Background="Transparent" >
+                            <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                       Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{DynamicResource GlyphBrush}"
-                                      />
-                            </StackPanel>
-                        </MenuItem.Header>
-                        <MenuItem Header="Add All" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
-                        <MenuItem Header="Add Selection" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
-                    </MenuItem>
-                </Menu>
+                                      Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
+                        </Grid>
+                    
+                    </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add Current" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
+                            <MenuItem Header="Add All" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
+                            <MenuItem Header="Add Selection" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+
+                </Button>
 
                 <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
                     <StackPanel Orientation="Horizontal">
