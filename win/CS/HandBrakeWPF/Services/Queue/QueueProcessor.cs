@@ -274,7 +274,19 @@ namespace HandBrakeWPF.Services.Queue
         /// </returns>
         public bool CheckForDestinationPathDuplicates(string destination)
         {
-            return this.queue.Any(job => job.Task != null && job.Status == QueueItemStatus.Waiting && job.Task.Destination != null && job.Task.Destination.Contains(destination.Replace("\\\\", "\\")));
+            foreach (QueueTask job in this.queue)
+            {
+                if (String.Equals(
+                    job.Task.Destination,
+                    destination.Replace("\\\\", "\\"),
+                    StringComparison.OrdinalIgnoreCase)
+                    && job.Status == QueueItemStatus.Waiting)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
