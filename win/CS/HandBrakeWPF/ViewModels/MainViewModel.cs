@@ -1542,7 +1542,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.queueProcessor.IsProcessing)
             {
-                this.errorService.ShowMessageBox(Resources.Main_AlreadyEncoding, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.IsEncoding = true;
                 return;
             }
 
@@ -1589,8 +1589,8 @@ namespace HandBrakeWPF.ViewModels
             // Create the Queue Task and Start Processing
             if (this.AddToQueue())
             {
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
                 this.IsEncoding = true;
+                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
             }
         }
 
