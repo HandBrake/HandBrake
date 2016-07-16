@@ -16,6 +16,9 @@
 @property (weak) IBOutlet NSPopUpButton *durationPopUp;
 @property (weak) IBOutlet NSButton *scaleToScreenButton;
 
+@property (weak) IBOutlet NSTextField *durationLabel;
+@property (weak) IBOutlet NSTextField *durationUnitLabel;
+
 @property (nonatomic) BOOL fitToView;
 
 @end
@@ -35,6 +38,8 @@
     {
         self.scaleLabel.textColor = [NSColor whiteColor];
         self.infoLabel.textColor = [NSColor whiteColor];
+        self.durationLabel.textColor = [NSColor whiteColor];
+        self.durationUnitLabel.textColor = [NSColor whiteColor];
     }
 
     // we set the preview length popup in seconds
