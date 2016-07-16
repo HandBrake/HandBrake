@@ -1313,6 +1313,11 @@ namespace HandBrakeWPF.ViewModels
                 Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
                 if (window != null)
                 {
+                    if (window.WindowState == WindowState.Minimized)
+                    {
+                        window.WindowState = WindowState.Normal;
+                    }
+
                     window.Activate();
                 }
                 else
