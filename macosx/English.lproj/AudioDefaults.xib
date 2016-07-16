@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G7a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11129.15" systemVersion="15G26a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11129.15"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
             <connections>
-                <outlet property="TracksController" destination="I6S-EX-Dvu" id="kKd-rp-1eh"/>
                 <outlet property="showAllButton" destination="QAt-5X-NBT" id="3IW-6r-piX"/>
                 <outlet property="tableController" destination="ZBe-aP-wvq" id="HBN-Z2-bbo"/>
                 <outlet property="tracksController" destination="I6S-EX-Dvu" id="oEz-8a-ef7"/>
@@ -275,7 +273,7 @@ DQ
                             <outlet property="nextKeyView" destination="LdN-Cx-ZJY" id="scB-D1-Zvp"/>
                         </connections>
                     </button>
-                    <scrollView focusRingType="exterior" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="hGL-Ew-UVJ">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="hGL-Ew-UVJ">
                         <rect key="frame" x="20" y="81" width="773" height="140"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="jkU-Fi-GCv">
@@ -536,6 +534,7 @@ DQ
                                     </tableColumns>
                                     <connections>
                                         <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects" id="qIU-3F-B41"/>
+                                        <binding destination="I6S-EX-Dvu" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="qIU-3F-B41" id="7jj-cy-g0F"/>
                                     </connections>
                                 </tableView>
                             </subviews>
