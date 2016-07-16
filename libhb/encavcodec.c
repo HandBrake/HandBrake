@@ -67,6 +67,8 @@ static const char * const vpx_preset_names[] =
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
+    int ret = 0;
+    char reason[80];
     AVCodec * codec;
     AVCodecContext * context;
     AVRational fps;
@@ -102,7 +104,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         default:
         {
             hb_error("encavcodecInit: unsupported encoder!");
-            return 1;
+            ret = 1;
+            goto done;
         }
     }
 
@@ -111,7 +114,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "encavcodecInit: avcodec_find_encoder "
                 "failed" );
-        return 1;
+        ret = 1;
+        goto done;
     }
     context = avcodec_alloc_context3( codec );
 
@@ -196,7 +200,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_free( context );
         av_dict_free( &av_opts );
-        return 1;
+        ret = 1;
+        goto done;
     }
 
     /* iterate through lavc_opts and have avutil parse the options for us */
@@ -289,6 +294,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         if( job->pass_id == HB_PASS_ENCODE_1ST )
         {
             pv->file = hb_fopen(filename, "wb");
+            if (!pv->file) {
+                if (strerror_r(errno, reason, 79) != 0)
+                    strcpy(reason, "unknown -- strerror_r() failed");
+
+                hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                ret = 1;
+                goto done;
+            }
             context->flags |= CODEC_FLAG_PASS1;
         }
         else
@@ -297,12 +310,34 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char * log;
 
             pv->file = hb_fopen(filename, "rb");
+            if (!pv->file) {
+                if (strerror_r(errno, reason, 79) != 0)
+                    strcpy(reason, "unknown -- strerror_r() failed");
+
+                hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                ret = 1;
+                goto done;
+            }
             fseek( pv->file, 0, SEEK_END );
             size = ftell( pv->file );
             fseek( pv->file, 0, SEEK_SET );
             log = malloc( size + 1 );
             log[size] = '\0';
-            fread( log, size, 1, pv->file );
+            if (size > 0 &&
+                fread( log, size, 1, pv->file ) < size)
+            {
+                if (ferror(pv->file))
+                {
+                    if (strerror_r(errno, reason, 79) != 0)
+                        strcpy(reason, "unknown -- strerror_r() failed");
+
+                    hb_error( "encavcodecInit: Failed to read %s (reason: %s)" , filename, reason);
+                    ret = 1;
+                    fclose( pv->file );
+                    pv->file = NULL;
+                    goto done;
+                }
+            }
             fclose( pv->file );
             pv->file = NULL;
 
@@ -338,7 +373,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 context->extradata_size );
     }
 
-    return 0;
+done:
+    return ret;
 }
 
 /***********************************************************************
