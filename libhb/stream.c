@@ -3281,18 +3281,25 @@ static int hb_ps_read_packet( hb_stream_t * stream, hb_buffer_t *b )
         }
 
         // There are at least 8 bytes.  More if this is mpeg2 pack.
-        fread( cp+pos, 1, 8, stream->file_handle );
+        if (fread( cp+pos, 1, 8, stream->file_handle ) < 8)
+            goto done;
+
         int mark = cp[pos] >> 4;
         pos += 8;
 
         if ( mark != 0x02 )
         {
             // mpeg-2 pack,
-            fread( cp+pos, 1, 2, stream->file_handle );
-            pos += 2;
-            int len = cp[start+13] & 0x7;
-            fread( cp+pos, 1, len, stream->file_handle );
-            pos += len;
+            if (fread( cp+pos, 1, 2, stream->file_handle ) == 2)
+            {
+                int len = cp[start+13] & 0x7;
+                pos += 2;
+                if (len > 0 &&
+                    fread( cp+pos, 1, len, stream->file_handle ) == len)
+                    pos += len;
+                else
+                    goto done;
+            }
         }
     }
     // Non-video streams can emulate start codes, so we need
