@@ -1011,20 +1011,7 @@ lookup_param_option(const hb_filter_param_t *param, const GhbValue *gval)
 gint
 ghb_find_closest_audio_samplerate(gint irate)
 {
-    gint result;
-    const hb_rate_t *rate;
-
-    result = 0;
-    for (rate = hb_audio_samplerate_get_next(NULL); rate != NULL;
-         rate = hb_audio_samplerate_get_next(rate))
-    {
-        if (irate <= rate->rate)
-        {
-            result = rate->rate;
-            break;
-        }
-    }
-    return result;
+    return hb_audio_samplerate_find_closest(irate, HB_ACODEC_INVALID);
 }
 
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx)

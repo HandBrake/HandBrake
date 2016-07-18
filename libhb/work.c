@@ -967,9 +967,8 @@ static int sanitize_audio(hb_job_t *job)
             audio->config.out.samplerate = audio->config.in.samplerate;
         }
         best_samplerate =
-            hb_audio_samplerate_get_best(audio->config.out.codec,
-                                         audio->config.out.samplerate,
-                                         NULL);
+            hb_audio_samplerate_find_closest(audio->config.out.samplerate,
+                                             audio->config.out.codec);
         if (best_samplerate != audio->config.out.samplerate)
         {
             hb_log("work: sanitizing track %d unsupported samplerate %d Hz to %s kHz",

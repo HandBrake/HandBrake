@@ -31,6 +31,8 @@
 #include <windows.h>
 #endif
 
+static int mixdown_get_opus_coupled_stream_count(int mixdown);
+
 /**********************************************************************
  * Global variables
  *********************************************************************/
@@ -63,6 +65,7 @@ enum
     HB_GID_ACODEC_MP3_PASS,
     HB_GID_ACODEC_TRUEHD_PASS,
     HB_GID_ACODEC_VORBIS,
+    HB_GID_ACODEC_OPUS,
     HB_GID_MUX_MKV,
     HB_GID_MUX_MP4,
 };
@@ -324,6 +327,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "FLAC 16-bit",        "flac16",     "FLAC 16-bit (libavcodec)",    HB_ACODEC_FFFLAC,                      HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC 24-bit",        "flac24",     "FLAC 24-bit (libavcodec)",    HB_ACODEC_FFFLAC24,                    HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC Passthru",      "copy:flac",  "FLAC Passthru",               HB_ACODEC_FLAC_PASS,                   HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC_PASS,  },
+    { { "Opus",               "opus",     "Opus (libopus)",                HB_ACODEC_OPUS,                        HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_OPUS,     },
     { { "Auto Passthru",      "copy",       "Auto Passthru",               HB_ACODEC_AUTO_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -360,6 +364,9 @@ static int hb_audio_encoder_is_enabled(int encoder)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
             return avcodec_find_encoder(AV_CODEC_ID_FLAC) != NULL;
+
+        case HB_ACODEC_OPUS:
+            return avcodec_find_encoder(AV_CODEC_ID_OPUS) != NULL;
 
         // the following encoders are always enabled
         case HB_ACODEC_LAME:
@@ -742,56 +749,56 @@ int hb_video_framerate_get_close(hb_rational_t *framerate, double thresh)
     return result;
 }
 
-int hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift)
+int hb_audio_samplerate_is_supported(int samplerate, uint32_t codec)
 {
-    int best_samplerate;
-    if (samplerate < 32000 && (codec == HB_ACODEC_AC3    ||
-                               codec == HB_ACODEC_FFEAC3 ||
-                               codec == HB_ACODEC_CA_HAAC))
+    switch (codec)
     {
-        // ca_haac can't do samplerates < 32 kHz
-        // libav's E-AC-3 encoder can't do samplerates < 32 kHz
-        // AC-3 < 32 kHz suffers from poor hardware compatibility
-        best_samplerate = 32000;
-    }
-    else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
-    {
-        // fdk_haac can't do samplerates < 16 kHz
-        best_samplerate = 16000;
-    }
-    else
-    {
-        best_samplerate                   = hb_audio_rates_first_item->rate;
-        const hb_rate_t *audio_samplerate = NULL;
-        while ((audio_samplerate = hb_audio_samplerate_get_next(audio_samplerate)) != NULL)
-        {
-            if (samplerate == audio_samplerate->rate)
+        case HB_ACODEC_AC3:
+        case HB_ACODEC_FFEAC3:
+        case HB_ACODEC_CA_HAAC:
+            // ca_haac can't do samplerates < 32 kHz
+            // libav's E-AC-3 encoder can't do samplerates < 32 kHz
+            // AC-3 < 32 kHz suffers from poor hardware compatibility
+            if (samplerate < 32000)
+                return 0;
+            else
+                return 1;
+        case HB_ACODEC_FDK_HAAC:
+            // fdk_haac can't do samplerates < 16 kHz
+            if (samplerate < 16000)
+                return 0;
+             else
+                return 1;
+        case HB_ACODEC_OPUS:
+            switch (samplerate)
             {
-                // valid samplerate
-                best_samplerate = audio_samplerate->rate;
-                break;
+                // Opus only supports samplerates 8kHz, 12kHz, 16kHz,
+                // 24kHz, 48kHz
+                case 8000:
+                case 12000:
+                case 16000:
+                case 24000:
+                case 48000:
+                    return 1;
+                default:
+                    return 0;
             }
-            if (samplerate > audio_samplerate->rate)
-            {
-                // samplerates are sanitized downwards
-                best_samplerate = audio_samplerate->rate;
-            }
-        }
+        default:
+            return 1;
     }
-    if (sr_shift != NULL)
-    {
-        /* sr_shift: 0 -> 48000, 44100, 32000 Hz
-         *           1 -> 24000, 22050, 16000 Hz
-         *           2 -> 12000, 11025,  8000 Hz
-         *
-         * also, since samplerates are sanitized downwards:
-         *
-         * (samplerate < 32000) implies (samplerate <= 24000)
-         */
-        *sr_shift = ((best_samplerate < 16000) ? 2 :
-                     (best_samplerate < 32000) ? 1 : 0);
-    }
-    return best_samplerate;
+}
+
+int hb_audio_samplerate_get_sr_shift(int samplerate)
+{
+    /* sr_shift: 0 -> 48000, 44100, 32000 Hz
+     *           1 -> 24000, 22050, 16000 Hz
+     *           2 -> 12000, 11025,  8000 Hz
+     *
+     * also, since samplerates are sanitized downwards:
+     *
+     * (samplerate < 32000) implies (samplerate <= 24000)
+     */
+    return ((samplerate < 16000) ? 2 : (samplerate < 32000) ? 1 : 0);
 }
 
 int hb_audio_samplerate_get_from_name(const char *name)
@@ -813,7 +820,7 @@ int hb_audio_samplerate_get_from_name(const char *name)
     if (i >= hb_audio_rates_first_item->rate &&
         i <= hb_audio_rates_last_item ->rate)
     {
-        return hb_audio_samplerate_get_best(0, i, NULL);
+        return hb_audio_samplerate_find_closest(i, HB_ACODEC_INVALID);
     }
 
 fail:
@@ -846,6 +853,44 @@ const hb_rate_t* hb_audio_samplerate_get_next(const hb_rate_t *last)
         return hb_audio_rates_first_item;
     }
     return ((hb_rate_internal_t*)last)->next;
+}
+
+const hb_rate_t* hb_audio_samplerate_get_next_for_codec(const hb_rate_t *last,
+                                                        uint32_t codec)
+{
+    while ((last = hb_audio_samplerate_get_next(last)) != NULL)
+        if (hb_audio_samplerate_is_supported(last->rate, codec))
+            return last;
+
+    // None found or end of list
+    return NULL;
+}
+
+int hb_audio_samplerate_find_closest(int samplerate, uint32_t codec)
+{
+    const hb_rate_t * rate, * prev, * next;
+
+    rate = prev = next = hb_audio_samplerate_get_next_for_codec(NULL, codec);
+    while (rate != NULL && next->rate < samplerate)
+    {
+        rate = hb_audio_samplerate_get_next_for_codec(rate, codec);
+        if (rate != NULL)
+        {
+            prev = next;
+            next = rate;
+        }
+    }
+
+    int delta_prev = samplerate - prev->rate;
+    int delta_next = next->rate - samplerate;
+    if (delta_prev <= delta_next)
+    {
+        return prev->rate;
+    }
+    else
+    {
+        return next->rate;
+    }
 }
 
 // Given an input bitrate, find closest match in the set of allowed bitrates
@@ -894,11 +939,11 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
     if ((codec & HB_ACODEC_PASS_FLAG) || !(codec & HB_ACODEC_MASK))
         goto fail;
 
-    int bitrate, nchannels, sr_shift;
+    int bitrate, nchannels, nlfe, sr_shift;
     /* full-bandwidth channels, sr_shift */
-    nchannels = (hb_mixdown_get_discrete_channel_count(mixdown) -
-                 hb_mixdown_get_low_freq_channel_count(mixdown));
-    hb_audio_samplerate_get_best(codec, samplerate, &sr_shift);
+    nlfe      = hb_mixdown_get_low_freq_channel_count(mixdown);
+    nchannels = hb_mixdown_get_discrete_channel_count(mixdown) - nlfe;
+    sr_shift  = hb_audio_samplerate_get_sr_shift(samplerate);
 
     switch (codec)
     {
@@ -923,6 +968,14 @@ int hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown)
         case HB_ACODEC_FDK_HAAC:
             bitrate = nchannels * 32;
             break;
+
+        case HB_ACODEC_OPUS:
+        {
+            int coupled = mixdown_get_opus_coupled_stream_count(mixdown);
+            int uncoupled = nchannels + nlfe - 2 * coupled;
+
+            bitrate = coupled * 96 + uncoupled * 64;
+        } break;
 
         default:
             bitrate = nchannels * 80;
@@ -1070,7 +1123,8 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
 
     /* samplerate, sr_shift */
     int sr_shift;
-    samplerate = hb_audio_samplerate_get_best(codec, samplerate, &sr_shift);
+    samplerate = hb_audio_samplerate_find_closest(samplerate, codec);
+    sr_shift = hb_audio_samplerate_get_sr_shift(samplerate);
 
     /* LFE, full-bandwidth channels */
     int lfe_count, nchannels;
@@ -1172,6 +1226,11 @@ void hb_audio_bitrate_get_limits(uint32_t codec, int samplerate, int mixdown,
                                                ( 54 * (sr_shift < 2)) +
                                                (104 * (sr_shift < 1)) +
                                                ( 50 * (samplerate >= 44100)));
+            break;
+
+        case HB_ACODEC_OPUS:
+            *low  = (nchannels + lfe_count) * 6;
+            *high = (nchannels + lfe_count) * 256;
             break;
 
         // Bitrates don't apply to passthrough audio, but may apply if we
@@ -1473,6 +1532,13 @@ void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
             *high        = 127.;
             break;
 
+        case HB_ACODEC_OPUS:
+            *direction   = 0;
+            *granularity = 1.;
+            *low         = 0.;
+            *high        = 10.;
+            break;
+
         default:
             *direction   = 0;
             *granularity = 1.;
@@ -1512,6 +1578,9 @@ float hb_audio_quality_get_default(uint32_t codec)
 
         case HB_ACODEC_CA_AAC:
             return 91.;
+
+        case HB_ACODEC_OPUS:
+            return 10.;
 
         default:
             return HB_INVALID_AUDIO_QUALITY;
@@ -1658,6 +1727,34 @@ const hb_dither_t* hb_audio_dither_get_next(const hb_dither_t *last)
     return ((hb_dither_internal_t*)last)->next;
 }
 
+static int mixdown_get_opus_coupled_stream_count(int mixdown)
+{
+    switch (mixdown)
+    {
+        case HB_AMIXDOWN_7POINT1:
+        case HB_AMIXDOWN_6POINT1:
+            return 3;
+
+        case HB_AMIXDOWN_5POINT1:
+            return 2;
+
+        case HB_AMIXDOWN_MONO:
+        case HB_AMIXDOWN_LEFT:
+        case HB_AMIXDOWN_RIGHT:
+            return 0;
+
+        case HB_AMIXDOWN_NONE:
+        case HB_INVALID_AMIXDOWN:
+        case HB_AMIXDOWN_5_2_LFE:
+            // The 5F/2R/LFE configuration is currently not supported by Opus,
+            // so don't set coupled streams.
+            return 0;
+
+        default:
+            return 1;
+    }
+}
+
 int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
 {
     return (hb_mixdown_has_codec_support(mixdown, codec) &&
@@ -1679,6 +1776,7 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_VORBIS:
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
+        case HB_ACODEC_OPUS:
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
         case HB_ACODEC_LAME:
@@ -1831,6 +1929,7 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
         // the FLAC encoder defaults to the best mixdown up to 7.1
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
+        case HB_ACODEC_OPUS:
             mixdown = HB_AMIXDOWN_7POINT1;
             break;
 
@@ -2289,9 +2388,8 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                 if (audio->config.out.samplerate <= 0)
                     audio->config.out.samplerate = audio->config.in.samplerate;
                 audio->config.out.samplerate =
-                    hb_audio_samplerate_get_best(audio->config.out.codec,
-                                                 audio->config.out.samplerate,
-                                                 NULL);
+                    hb_audio_samplerate_find_closest(
+                        audio->config.out.samplerate, audio->config.out.codec);
                 int quality_not_allowed =
                     hb_audio_quality_get_default(audio->config.out.codec)
                             == HB_INVALID_AUDIO_QUALITY;
