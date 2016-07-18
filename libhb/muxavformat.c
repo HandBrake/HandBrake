@@ -485,6 +485,23 @@ static int avformatInit( hb_mux_object_t * m )
                     size += ogg_headers[jj]->bytes;
                 }
             } break;
+            case HB_ACODEC_OPUS:
+                track->st->codec->codec_id = AV_CODEC_ID_OPUS;
+
+                if (audio->priv.config.extradata.length)
+                {
+                    priv_size = audio->priv.config.extradata.length;
+                    priv_data = av_malloc(priv_size + FF_INPUT_BUFFER_PADDING_SIZE);
+                    if (priv_data == NULL)
+                    {
+                        hb_error("OPUS extradata: malloc failure");
+                        goto error;
+                    }
+                    memcpy(priv_data,
+                           audio->priv.config.extradata.bytes,
+                           audio->priv.config.extradata.length);
+                }
+                break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
                 track->st->codec->codec_id = AV_CODEC_ID_FLAC;
