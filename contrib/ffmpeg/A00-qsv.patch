@@ -1,6 +1,6 @@
-diff -urN libav-v11.3-0-g00abc00.orig/configure libav-v11.3-0-g00abc00/configure
---- libav-v11.3-0-g00abc00.orig/configure	2015-03-08 19:51:11.000000000 -0600
-+++ libav-v11.3-0-g00abc00/configure	2016-04-13 12:28:40.722102691 -0600
+diff -urN libav-11.3.org/configure libav-11.3/configure
+--- libav-11.3.org/configure	2016-07-20 13:11:06.000000000 +0200
++++ libav-11.3/configure	2016-07-20 13:12:57.000000000 +0200
 @@ -132,6 +132,7 @@
  
  Hardware accelerators:
@@ -42,20 +42,9 @@ diff -urN libav-v11.3-0-g00abc00.orig/configure libav-v11.3-0-g00abc00/configure
  check_header poll.h
  check_header sys/mman.h
  check_header sys/param.h
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/allcodecs.c libav-v11.3-0-g00abc00/libavcodec/allcodecs.c
---- libav-v11.3-0-g00abc00.orig/libavcodec/allcodecs.c	2015-03-08 19:51:11.000000000 -0600
-+++ libav-v11.3-0-g00abc00/libavcodec/allcodecs.c	2016-04-13 12:28:40.723102654 -0600
-@@ -159,6 +159,7 @@
-     REGISTER_DECODER(H263I,             h263i);
-     REGISTER_ENCODER(H263P,             h263p);
-     REGISTER_DECODER(H264,              h264);
-+    REGISTER_DECODER(H264_QSV,          h264_qsv);
-     REGISTER_DECODER(HEVC,              hevc);
-     REGISTER_DECODER(HNM4_VIDEO,        hnm4_video);
-     REGISTER_ENCDEC (HUFFYUV,           huffyuv);
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/Makefile libav-v11.3-0-g00abc00/libavcodec/Makefile
---- libav-v11.3-0-g00abc00.orig/libavcodec/Makefile	2015-03-08 19:51:11.000000000 -0600
-+++ libav-v11.3-0-g00abc00/libavcodec/Makefile	2016-04-13 12:28:40.723102654 -0600
+diff -urN libav-11.3.org/libavcodec/Makefile libav-11.3/libavcodec/Makefile
+--- libav-11.3.org/libavcodec/Makefile	2016-07-20 13:11:06.000000000 +0200
++++ libav-11.3/libavcodec/Makefile	2016-07-20 13:12:57.000000000 +0200
 @@ -4,6 +4,7 @@
            avfft.h                                                       \
            dv_profile.h                                                  \
@@ -88,10 +77,21 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/Makefile libav-v11.3-0-g00abc00
  SKIPHEADERS-$(CONFIG_VAAPI)            += vaapi_internal.h
  SKIPHEADERS-$(CONFIG_VDA)              += vda.h vda_internal.h
  SKIPHEADERS-$(CONFIG_VDPAU)            += vdpau.h vdpau_internal.h
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c libav-v11.3-0-g00abc00/libavcodec/qsv.c
---- libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c	1969-12-31 17:00:00.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavcodec/qsv.c	2016-04-13 12:28:40.723102654 -0600
-@@ -0,0 +1,646 @@
+diff -urN libav-11.3.org/libavcodec/allcodecs.c libav-11.3/libavcodec/allcodecs.c
+--- libav-11.3.org/libavcodec/allcodecs.c	2016-07-20 13:11:06.000000000 +0200
++++ libav-11.3/libavcodec/allcodecs.c	2016-07-20 13:12:57.000000000 +0200
+@@ -159,6 +159,7 @@
+     REGISTER_DECODER(H263I,             h263i);
+     REGISTER_ENCODER(H263P,             h263p);
+     REGISTER_DECODER(H264,              h264);
++    REGISTER_DECODER(H264_QSV,          h264_qsv);
+     REGISTER_DECODER(HEVC,              hevc);
+     REGISTER_DECODER(HNM4_VIDEO,        hnm4_video);
+     REGISTER_ENCDEC (HUFFYUV,           huffyuv);
+diff -urN libav-11.3.org/libavcodec/qsv.c libav-11.3/libavcodec/qsv.c
+--- libav-11.3.org/libavcodec/qsv.c	1970-01-01 01:00:00.000000000 +0100
++++ libav-11.3/libavcodec/qsv.c	2016-07-20 13:14:16.000000000 +0200
+@@ -0,0 +1,650 @@
 +/* ********************************************************************* *\
 +
 +Copyright (C) 2013 Intel Corporation.  All rights reserved.
@@ -673,8 +673,12 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c libav-v11.3-0-g00abc00/li
 +        mut_ret = pthread_mutex_unlock(l->mutex);
 +        if( mut_ret )
 +            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_unlock issue[%d] at %s\n",mut_ret, __FUNCTION__);
-+        mut_ret = pthread_mutex_destroy(&l->mutex);
++        mut_ret = pthread_mutex_destroy(l->mutex);
++        if (mut_ret)
++            av_log(NULL, AV_LOG_ERROR, "pthread_mutex_destroy issue[%d] at %s\n", mut_ret,__FUNCTION__);
 +        mut_ret = pthread_mutexattr_destroy(&l->mta);
++        if (mut_ret)
++            av_log(NULL, AV_LOG_ERROR, "pthread_mutexattr_destroy issue[%d] at %s\n", mut_ret,__FUNCTION__);
 +    }
 +#endif
 +    av_freep(_l);
@@ -738,10 +742,9 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.c libav-v11.3-0-g00abc00/li
 +            }
 +        }
 +}
-\ No newline at end of file
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.h libav-v11.3-0-g00abc00/libavcodec/qsv.h
---- libav-v11.3-0-g00abc00.orig/libavcodec/qsv.h	1969-12-31 17:00:00.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavcodec/qsv.h	2016-04-13 12:28:40.724102616 -0600
+diff -urN libav-11.3.org/libavcodec/qsv.h libav-11.3/libavcodec/qsv.h
+--- libav-11.3.org/libavcodec/qsv.h	1970-01-01 01:00:00.000000000 +0100
++++ libav-11.3/libavcodec/qsv.h	2016-07-20 13:12:57.000000000 +0200
 @@ -0,0 +1,494 @@
 +/* ********************************************************************* *\
 +
@@ -1237,9 +1240,9 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv.h libav-v11.3-0-g00abc00/li
 +/* @} */
 +
 +#endif                          //AVCODEC_QSV_H
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.c libav-v11.3-0-g00abc00/libavcodec/qsv_h264.c
---- libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.c	1969-12-31 17:00:00.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavcodec/qsv_h264.c	2016-04-13 12:31:29.709715611 -0600
+diff -urN libav-11.3.org/libavcodec/qsv_h264.c libav-11.3/libavcodec/qsv_h264.c
+--- libav-11.3.org/libavcodec/qsv_h264.c	1970-01-01 01:00:00.000000000 +0100
++++ libav-11.3/libavcodec/qsv_h264.c	2016-07-20 13:12:57.000000000 +0200
 @@ -0,0 +1,983 @@
 +/* ********************************************************************* *\
 +
@@ -2224,9 +2227,9 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.c libav-v11.3-0-g00abc
 +    .pix_fmts       = (const enum PixelFormat[]) {AV_PIX_FMT_QSV_H264,
 +                                                  AV_PIX_FMT_NONE},
 +};
-diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.h libav-v11.3-0-g00abc00/libavcodec/qsv_h264.h
---- libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.h	1969-12-31 17:00:00.000000000 -0700
-+++ libav-v11.3-0-g00abc00/libavcodec/qsv_h264.h	2016-04-13 12:28:40.724102616 -0600
+diff -urN libav-11.3.org/libavcodec/qsv_h264.h libav-11.3/libavcodec/qsv_h264.h
+--- libav-11.3.org/libavcodec/qsv_h264.h	1970-01-01 01:00:00.000000000 +0100
++++ libav-11.3/libavcodec/qsv_h264.h	2016-07-20 13:12:57.000000000 +0200
 @@ -0,0 +1,65 @@
 +/* ********************************************************************* *\
 +
@@ -2293,9 +2296,9 @@ diff -urN libav-v11.3-0-g00abc00.orig/libavcodec/qsv_h264.h libav-v11.3-0-g00abc
 +mfxStatus ff_qsv_mem_buffer_free(mfxHDL pthis, mfxMemId mid);
 +
 +#endif                          //AVCODEC_QSV_H264_H
-diff -urN libav-v11.3-0-g00abc00.orig/libavutil/pixfmt.h libav-v11.3-0-g00abc00/libavutil/pixfmt.h
---- libav-v11.3-0-g00abc00.orig/libavutil/pixfmt.h	2015-03-08 19:51:11.000000000 -0600
-+++ libav-v11.3-0-g00abc00/libavutil/pixfmt.h	2016-04-13 12:28:40.724102616 -0600
+diff -urN libav-11.3.org/libavutil/pixfmt.h libav-11.3/libavutil/pixfmt.h
+--- libav-11.3.org/libavutil/pixfmt.h	2016-07-20 13:11:07.000000000 +0200
++++ libav-11.3/libavutil/pixfmt.h	2016-07-20 13:12:57.000000000 +0200
 @@ -193,6 +193,7 @@
      AV_PIX_FMT_NV16,         ///< interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
      AV_PIX_FMT_NV20LE,       ///< interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian
