@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isSrt;
 @property (nonatomic, readonly) BOOL isEnabled;
+@property (nonatomic, readonly) BOOL isForcedSupported;
 @property (nonatomic, readonly) BOOL canPassthru;
 
 @end

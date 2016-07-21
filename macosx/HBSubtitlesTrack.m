@@ -261,6 +261,11 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     return self.sourceTrackIdx != 0;
 }
 
+- (BOOL)isForcedSupported
+{
+    return hb_subtitle_can_force(self.type) && self.isEnabled;
+}
+
 - (BOOL)canPassthru
 {
     return (BOOL)hb_subtitle_can_pass(self.type, self.container) && self.isEnabled;
