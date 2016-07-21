@@ -119,11 +119,11 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             // fFramerateVfrPfrCell
             if (self.video.frameRate == 0) // We are Same as Source
             {
-                [fFramerateVfrPfrCell setTitle:@"Variable Framerate"];
+                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Variable Framerate", nil)];
             }
             else
             {
-                [fFramerateVfrPfrCell setTitle:@"Peak Framerate (VFR)"];
+                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", nil)];
             }
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
