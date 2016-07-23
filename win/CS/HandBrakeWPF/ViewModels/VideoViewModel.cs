@@ -328,6 +328,7 @@ namespace HandBrakeWPF.ViewModels
                         this.Task.Quality = (32 - value);
                         break;    
                     case VideoEncoder.VP8:
+                    case VideoEncoder.VP9:
                         this.Task.Quality = (63 - value);
                         break;
                     case VideoEncoder.X264:
@@ -1051,6 +1052,7 @@ namespace HandBrakeWPF.ViewModels
                     break;
                 case VideoEncoder.Theora:
                 case VideoEncoder.VP8:
+                case VideoEncoder.VP9:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
                     break;
@@ -1160,6 +1162,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     break;
                 case VideoEncoder.VP8:
+                case VideoEncoder.VP9:
                     if (quality.HasValue)
                     {
                         int cq;
