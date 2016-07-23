@@ -745,6 +745,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meta Data.
+        /// </summary>
+        public static string MainView_MetaDataTab {
+            get {
+                return ResourceManager.GetString("MainView_MetaDataTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {
@@ -939,6 +948,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_WebOptimized {
             get {
                 return ResourceManager.GetString("MainView_WebOptimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meta Data.
+        /// </summary>
+        public static string MetaDataView_Title {
+            get {
+                return ResourceManager.GetString("MetaDataView_Title", resourceCulture);
             }
         }
         

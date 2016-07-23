@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;
 
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
@@ -56,6 +57,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
             this.Modulus = 16;
+            this.MetaData = new MetaData();
 
             this.VideoTunes = new List<VideoTune>();
         }
@@ -147,6 +149,8 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.VideoPreset = task.VideoPreset;
             this.VideoTunes = new List<VideoTune>(task.VideoTunes);
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
+
+            this.MetaData = new MetaData(task.MetaData);
 
             this.ShowAdvancedTab = task.ShowAdvancedTab;
         }
@@ -503,6 +507,11 @@ namespace HandBrakeWPF.Services.Encode.Model
             }
         }
 
+        #endregion
+
+        #region MetaData
+
+        public MetaData MetaData { get; set; }
         #endregion
 
         #region Preview

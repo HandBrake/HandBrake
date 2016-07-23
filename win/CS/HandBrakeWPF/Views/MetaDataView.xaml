@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.MetaDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{x:Static Properties:ResourcesUI.MetaDataView_Title}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
+
+        <!-- Metadata Input Area -->
+        <Grid Grid.Row="1"  Margin="10,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" MinHeight="25" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Album Artist:" Grid.Row="0" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MetaData.AlbumArtist, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+                     
+            <TextBlock Text="Artist:" Grid.Row="1" Grid.Column="0" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MetaData.Artist, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Comment:" Grid.Row="2" Grid.Column="0" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MetaData.Comment, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+                       
+            <TextBlock Text="Composer:" Grid.Row="3" Grid.Column="0" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MetaData.Composer, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Description:" Grid.Row="4" Grid.Column="0" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MetaData.Description, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Genre:" Grid.Row="5" Grid.Column="0" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MetaData.Genre, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Long Description:" Grid.Row="6" Grid.Column="0" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding MetaData.LongDescription, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Name:" Grid.Row="7" Grid.Column="0" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding MetaData.Name, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            
+            <TextBlock Text="Release Date:" Grid.Row="8" Grid.Column="0" />
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding MetaData.ReleaseDate, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+        </Grid>
+
+    </Grid>
+    
+</UserControl>

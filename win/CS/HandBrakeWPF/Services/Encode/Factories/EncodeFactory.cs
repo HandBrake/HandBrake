@@ -535,7 +535,19 @@ namespace HandBrakeWPF.Services.Encode.Factories
         {
             Metadata metaData = new Metadata();
 
-            /* TODO  NOT SUPPORTED YET. */
+            if (job.MetaData != null)
+            {
+                metaData.Artist = job.MetaData.Artist;
+                metaData.AlbumArtist = job.MetaData.AlbumArtist;
+                metaData.Comment = job.MetaData.Comment;
+                metaData.Composer = job.MetaData.Composer;
+                metaData.Description = job.MetaData.Description;
+                metaData.Genre = job.MetaData.Genre;
+                metaData.LongDescription = job.MetaData.LongDescription;
+                metaData.Name = job.MetaData.Name;
+                metaData.ReleaseDate = job.MetaData.ReleaseDate;
+            }
+
             return metaData;
         }
     }

@@ -16,6 +16,7 @@
     
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MinHeight" Value="20"/>
     </Style>
 
     <Style TargetType="{x:Type Button}">

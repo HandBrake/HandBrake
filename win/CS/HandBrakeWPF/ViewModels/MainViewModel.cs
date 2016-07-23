@@ -155,12 +155,15 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="queueViewModel">
         /// The queue View Model.
         /// </param>
+        /// <param name="metaDataViewModel">
+        /// The Meta Data View Model
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
             IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
-            IQueueViewModel queueViewModel)
+            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -174,6 +177,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.PictureSettingsViewModel = pictureSettingsViewModel;
             this.VideoViewModel = videoViewModel;
+            this.MetaDataViewModel = metaDataViewModel;
             this.FiltersViewModel = filtersViewModel;
             this.AudioViewModel = audioViewModel;
             this.SubtitleViewModel = subtitlesViewModel;
@@ -278,6 +282,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
+        /// <summary>
+        /// The MetaData View Model
+        /// </summary>
+        public IMetaDataViewModel MetaDataViewModel { get; set; }
+
         #endregion
 
         #region Properties
@@ -376,6 +385,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.ChaptersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.AdvancedViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.MetaDataViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
 
                     // Do this again to force an update for m4v/mp4 selection
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
@@ -2022,6 +2032,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SubtitleViewModel.UpdateTask(this.CurrentTask);
                 this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                 this.AdvancedViewModel.UpdateTask(this.CurrentTask);
+                this.MetaDataViewModel.UpdateTask(this.CurrentTask);
 
                 // Cleanup
                 this.ShowStatusWindow = false;
@@ -2093,6 +2104,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SubtitleViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
                 this.ChaptersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
                 this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
             }
         }
 
