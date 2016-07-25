@@ -67,6 +67,8 @@ namespace HandBrakeWPF.ViewModels
         private bool fastDecode;
         private bool displayTuneControls;
         private bool displayLevelControl;
+        private bool displayProfileControl;
+
         #endregion
 
         #region Constructors and Destructors
@@ -619,6 +621,26 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.displayLevelControl = value;
                 this.NotifyOfPropertyChange(() => this.DisplayLevelControl);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the profile control is displayed.
+        /// </summary>
+        public bool DisplayProfileControl
+        {
+            get
+            {
+                return this.displayProfileControl;
+            }
+            set
+            {
+                if (value.Equals(this.displayProfileControl))
+                {
+                    return;
+                }
+                this.displayProfileControl = value;
+                this.NotifyOfPropertyChange(() => this.DisplayProfileControl);
             }
         }
 
@@ -1297,12 +1319,23 @@ namespace HandBrakeWPF.ViewModels
 
             // Update control display
             this.UseAdvancedTab = selectedEncoder != VideoEncoder.QuickSync && selectedEncoder != VideoEncoder.QuickSyncH265 && this.UseAdvancedTab;
-            this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 || this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.X265_10 || this.SelectedVideoEncoder == VideoEncoder.X265_12
-                                          || this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265;
+            this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ||
+                                          this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.X265_10 || this.SelectedVideoEncoder == VideoEncoder.X265_12 ||
+                                          this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 ||
+                                          this.SelectedVideoEncoder == VideoEncoder.VP8 || this.SelectedVideoEncoder == VideoEncoder.VP9;
             this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH265;
-            this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264 || selectedEncoder == VideoEncoder.X264_10 || selectedEncoder == VideoEncoder.X265 || selectedEncoder == VideoEncoder.X265_10 || selectedEncoder == VideoEncoder.X265_12;
+            this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264 || selectedEncoder == VideoEncoder.X264_10 || 
+                                         selectedEncoder == VideoEncoder.X265 || selectedEncoder == VideoEncoder.X265_10 || selectedEncoder == VideoEncoder.X265_12;
             this.DisplayTuneControls = SelectedVideoEncoder == VideoEncoder.X264 || SelectedVideoEncoder == VideoEncoder.X264_10 || SelectedVideoEncoder == VideoEncoder.X265 || SelectedVideoEncoder == VideoEncoder.X265_10 || SelectedVideoEncoder == VideoEncoder.X265_12;
             this.DisplayLevelControl = SelectedVideoEncoder == VideoEncoder.X264 || SelectedVideoEncoder == VideoEncoder.X264_10 || this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265;
+            this.DisplayProfileControl = this.SelectedVideoEncoder == VideoEncoder.X264
+                                         || this.SelectedVideoEncoder == VideoEncoder.X264_10
+                                         || this.SelectedVideoEncoder == VideoEncoder.X265
+                                         || this.SelectedVideoEncoder == VideoEncoder.X265_10
+                                         || this.SelectedVideoEncoder == VideoEncoder.X265_12
+                                         || this.SelectedVideoEncoder == VideoEncoder.QuickSync
+                                         || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265;
+     
 
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);

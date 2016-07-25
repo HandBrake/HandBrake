@@ -177,8 +177,8 @@
 
           
                     <!-- Row 2-->
-                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderProfile}" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayOptimiseOptions, Converter={StaticResource boolToVisConverter}}"/>
-                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,10,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayOptimiseOptions, Converter={StaticResource boolToVisConverter}}"
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderProfile}" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"/>
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,10,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"
                           ItemsSource="{Binding VideoProfiles}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoProfile}"
                           Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Profile}"  />
 
