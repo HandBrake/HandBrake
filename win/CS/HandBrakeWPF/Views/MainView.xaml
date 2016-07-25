@@ -519,8 +519,23 @@
                             >
                         <ListBox.Resources>
 
+                            <Style TargetType="ToolTip">
+                                <Style.Resources>
+                                    <Style TargetType="ContentPresenter">
+                                        <Style.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </Style.Resources>
+                                    </Style>
+                                </Style.Resources>
+                                <Setter Property="MaxWidth" Value="300" />
+                            </Style>
+
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Padding" Value="0,2,0,2" />
+                                <Setter Property="ToolTip" Value="{Binding Description}" />
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="FontWeight" Value="Bold"/>
