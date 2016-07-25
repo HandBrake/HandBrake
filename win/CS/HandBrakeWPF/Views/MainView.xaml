@@ -541,6 +541,7 @@
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />

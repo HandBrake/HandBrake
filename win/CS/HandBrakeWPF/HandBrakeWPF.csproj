@@ -261,6 +261,8 @@
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
+    <Compile Include="ViewModels\ManagePresetViewModel.cs" />
     <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAudioDefaultsViewModel.cs" />
@@ -278,6 +280,9 @@
     <Compile Include="ViewModels\PopupWindowViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
+    <Compile Include="Views\ManagePresetView.xaml.cs">
+      <DependentUpon>ManagePresetView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AudioDefaultsView.xaml.cs">
       <DependentUpon>AudioDefaultsView.xaml</DependentUpon>
     </Compile>
@@ -492,6 +497,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SourceSelection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ManagePresetView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

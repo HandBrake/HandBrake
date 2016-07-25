@@ -254,6 +254,15 @@ namespace HandBrakeWPF.Services.Presets
         }
 
         /// <summary>
+        /// Replace an existing preset with a modified one.
+        /// </summary>
+        public void Replace(Preset existing, Preset replacement)
+        {
+            this.Remove(existing);
+            this.Add(replacement);
+        }
+
+        /// <summary>
         /// Remove a preset with a given name from either the built in or user preset list.
         /// </summary>
         /// <param name="preset">

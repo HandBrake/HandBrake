@@ -1845,6 +1845,34 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Manage the current Preset
+        /// </summary>
+        public void PresetManage()
+        {
+            if (this.SelectedPreset == null)
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (this.SelectedPreset.IsBuildIn)
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
+            presetViewModel.Setup(this.SelectedPreset);
+            this.windowManager.ShowDialog(presetViewModel);
+            Preset preset = presetViewModel.Preset;
+
+            this.SelectedPreset = preset; // Reselect the preset
+        }
+
+        /// <summary>
         /// Remove a Preset
         /// </summary>
         public void PresetRemove()

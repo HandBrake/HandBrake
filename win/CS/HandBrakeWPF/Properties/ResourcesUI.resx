@@ -884,4 +884,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_MetaDataTab" xml:space="preserve">
     <value>Meta Data</value>
   </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Rename Preset</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Manage Preset</value>
+  </data>
 </root>

@@ -790,6 +790,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename Preset.
+        /// </summary>
+        public static string MainView_PresetManage {
+            get {
+                return ResourceManager.GetString("MainView_PresetManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Presets.
         /// </summary>
         public static string MainView_Presets {
@@ -948,6 +957,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_WebOptimized {
             get {
                 return ResourceManager.GetString("MainView_WebOptimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Preset.
+        /// </summary>
+        public static string ManagePresetView_ManagePreset {
+            get {
+                return ResourceManager.GetString("ManagePresetView_ManagePreset", resourceCulture);
             }
         }
         

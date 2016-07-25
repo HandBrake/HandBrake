@@ -35,6 +35,30 @@ namespace HandBrakeWPF.Services.Presets.Model
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyChangedBase"/> class. 
+        /// Creates an instance of <see cref="T:HandBrakeWPF.Utilities.PropertyChangedBase"/>.
+        /// </summary>
+        public Preset()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyChangedBase"/> class. 
+        /// Creates an instance of <see cref="T:HandBrakeWPF.Utilities.PropertyChangedBase"/>.
+        /// </summary>
+        public Preset(Preset preset)
+        {
+            this.Category = preset.Category;
+            this.Description = preset.Description;
+            this.IsBuildIn = preset.IsBuildIn;
+            this.Name = preset.Name;
+            this.PictureSettingsMode = preset.PictureSettingsMode;
+            this.Task = new EncodeTask(preset.Task);
+            this.AudioTrackBehaviours = new AudioBehaviours(preset.AudioTrackBehaviours);
+            this.SubtitleTrackBehaviours = new SubtitleBehaviours(preset.SubtitleTrackBehaviours);
+        }
+
         #region Properties
 
         /// <summary>
