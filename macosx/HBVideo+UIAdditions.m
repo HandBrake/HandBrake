@@ -114,7 +114,8 @@
     {
         return @"RF:";
     }
-    else if (self.encoder == HB_VCODEC_FFMPEG_VP8)
+    else if (self.encoder == HB_VCODEC_FFMPEG_VP8 ||
+             self.encoder == HB_VCODEC_FFMPEG_VP9)
     {
         return @"CQ:";
     }
