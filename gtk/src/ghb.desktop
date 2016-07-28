@@ -2,7 +2,7 @@
 Name=HandBrake
 GenericName=Media Transcoder
 Comment=Transcodes DVD, Blu-ray, and other media
-Comment[ru]=Перекодировка DVD, Blu-ray и других файлов мультимедиа
+Comment[ru]=Перекодировка DVD, Blu-ray и других мультимедиа файлов
 Exec=ghb %f
 Icon=hb-icon
 Terminal=false
