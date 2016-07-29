@@ -93,6 +93,7 @@ namespace HandBrakeWPF.Services
                 {
                     try
                     {
+                        // Figure out which appcast we want to read.
                         string url =
                             VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
                                 ? Constants.Appcast64
@@ -108,20 +109,32 @@ namespace HandBrakeWPF.Services
 
                         var currentBuild = HandBrakeUtils.Build;
 
-                        // Initialize variables
-                        WebRequest request = WebRequest.Create(url);
+                        // Fetch the Appcast from our server.
+                        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+                        request.AllowAutoRedirect = false; // We will never do this.
                         WebResponse response = request.GetResponse();
-                        var reader = new AppcastReader();
 
-                        // Get the data, convert it to a string, and parse it into the AppcastReader
+                        // Parse the data with the AppcastReader
+                        var reader = new AppcastReader();
                         reader.GetUpdateInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
 
                         // Further parse the information
                         string build = reader.Build;
-
                         int latest = int.Parse(build);
                         int current = currentBuild;
 
+                        // Security Check
+                        // Verify the download URL is for handbrake.fr and served over https.
+                        // This prevents a compromised appcast download tricking the GUI into downloading a file, or accessing another website or local network resource.
+                        Uri uriResult;
+                        bool result = Uri.TryCreate(reader.DownloadFile, UriKind.Absolute, out uriResult) && uriResult.Scheme == Uri.UriSchemeHttps;
+                        if (!result || (uriResult.Host != "handbrake.fr" && uriResult.Host != "download.handbrake.fr"))
+                        {
+                            callback(new UpdateCheckInformation { NewVersionAvailable = false, Error = new Exception("The HandBrake update service is currently unavailable.") });
+                            return;
+                        }
+
+                        // Validate the URL from the appcast is ours.
                         var info2 = new UpdateCheckInformation
                             {
                                 NewVersionAvailable = latest > current,
