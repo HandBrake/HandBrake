@@ -41,7 +41,7 @@ function download_url {  # download_url $VERBOSE $FILE $URLS
     fi
     FAILED=()
     for I in "${!URLS[@]}"; do
-        if ! curl --fail --head -L "${URLS[I]}" >/dev/null 2>&1; then
+        if ! curl --head -Lf --connect-timeout 30 "${URLS[I]}" >/dev/null 2>&1; then
             FAILED+=("${URLS[I]}")
             if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
                 continue
@@ -56,9 +56,9 @@ function download_url {  # download_url $VERBOSE $FILE $URLS
             return 1
         fi
         if [[ "${VERBOSE:-}" == true ]]; then
-            echo "curl -Lf \"${URLS[I]}\" -o \"${FILE}\""
+            echo "curl -Lf --connect-timeout 30 \"${URLS[I]}\" -o \"${FILE}\""
         fi
-        if ! curl -Lf "${URLS[I]}" -o "${FILE}"; then
+        if ! curl -Lf --connect-timeout 30 "${URLS[I]}" -o "${FILE}"; then
             FAILED+=("${URLS[I]}")
             if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
                 continue
@@ -133,7 +133,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="2.1.0"
+    VERSION="2.2.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
