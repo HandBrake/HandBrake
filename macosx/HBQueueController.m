@@ -643,6 +643,26 @@
     }
     [self.window.toolbar validateVisibleItems];
     [self.jobs commit];
+
+    // Update UI
+    NSString *info = nil;
+    switch (result) {
+        case HBCoreResultDone:
+            info = NSLocalizedString(@"Encode Finished.", @"");
+            break;
+        case HBCoreResultCancelled:
+            info = NSLocalizedString(@"Encode Cancelled.", @"");
+            break;
+        default:
+            info = NSLocalizedString(@"Encode Failed.", @"");
+            break;
+    }
+    self.progressTextField.stringValue = info;
+    [self.controller setQueueInfo:info progress:1.0 hidden:YES];
+
+    // Restore dock icon
+    [self.dockTile updateDockIcon:-1.0 withETA:@""];
+    self.dockIconProgress = 0;
 }
 
 /**
@@ -723,14 +743,6 @@
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        NSString *info = NSLocalizedString(@"Encode Finished.", @"");
-        self.progressTextField.stringValue = info;
-        [self.controller setQueueInfo:info progress:1.0 hidden:YES];
-
-        // Restore dock icon
-        [self.dockTile updateDockIcon:-1.0 withETA:@""];
-        self.dockIconProgress = 0;
-
         [self completedJob:job result:result];
         [self encodeNextQueueItem];
     };
