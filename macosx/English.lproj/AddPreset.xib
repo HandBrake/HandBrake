@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G7a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11173.2" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" generatesPrototypingConstraints="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11173.2"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
@@ -23,59 +24,52 @@
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <rect key="contentRect" x="421" y="536" width="480" height="229"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
-            <value key="minSize" type="size" width="480" height="229"/>
             <view key="contentView" id="AcO-9f-fnb">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="229"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wy7-cF-tGv">
-                        <rect key="frame" x="18" y="192" width="95" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wy7-cF-tGv">
+                        <rect key="frame" x="18" y="193" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset Name:" id="jhj-Et-ncF">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wpk-WC-aVk">
-                        <rect key="frame" x="18" y="106" width="95" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wpk-WC-aVk">
+                        <rect key="frame" x="18" y="103" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Picture Size:" id="75B-xq-Qbe">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="YVc-5E-NjK">
-                        <rect key="frame" x="18" y="78" width="95" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="YVc-5E-NjK">
+                        <rect key="frame" x="18" y="76" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Audio:" id="HKp-K9-MF4">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="ubZ-rD-tIS">
-                        <rect key="frame" x="18" y="50" width="95" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="ubZ-rD-tIS">
+                        <rect key="frame" x="18" y="48" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Subtitles:" id="OYE-GG-Vo3">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="zDq-QP-LAu">
-                        <rect key="frame" x="18" y="168" width="95" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="zDq-QP-LAu">
+                        <rect key="frame" x="18" y="168" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Description:" id="hc8-1h-Jye">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" id="fLU-xs-0du">
-                        <rect key="frame" x="411" y="14" width="54" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLU-xs-0du">
+                        <rect key="frame" x="418" y="14" width="47" height="28"/>
                         <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Deg-rS-mRc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -87,9 +81,8 @@ DQ
                             <action selector="add:" target="-2" id="8sP-tP-fJv"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="Y03-Ts-ZA4">
-                        <rect key="frame" x="341" y="14" width="72" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y03-Ts-ZA4">
+                        <rect key="frame" x="358" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="5Xb-gz-QEa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -101,10 +94,12 @@ Gw
                             <action selector="cancel:" target="-2" id="Ygd-gd-Yd0"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="8kl-Sh-Gh7">
-                        <rect key="frame" x="119" y="145" width="341" height="37"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <textField horizontalHuggingPriority="249" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8kl-Sh-Gh7">
+                        <rect key="frame" x="99" y="144" width="361" height="38"/>
                         <string key="toolTip">Enter a description for the preset. The description will be shown when hovering the mouse over the preset name in the preset drawer.</string>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="2sm-hv-l5W"/>
+                        </constraints>
                         <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="HKY-Cq-VyU">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -114,9 +109,8 @@ Gw
                             <accessibilityConnection property="title" destination="zDq-QP-LAu" id="meT-EW-QiO"/>
                         </connections>
                     </textField>
-                    <button toolTip="The Audio Defaults of a preset control which audio track to use and with which encoder." verticalHuggingPriority="750" id="aez-2b-JXx">
-                        <rect key="frame" x="114" y="70" width="102" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button toolTip="The Audio Defaults of a preset control which audio track to use and with which encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
+                        <rect key="frame" x="94" y="68" width="102" height="28"/>
                         <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -125,9 +119,8 @@ Gw
                             <action selector="showAudioSettingsSheet:" target="-2" id="Rrt-QI-5hD"/>
                         </connections>
                     </button>
-                    <textField toolTip="Enter a name for the preset (will be displayed in the preset drawer)." verticalHuggingPriority="750" id="aKg-n4-OUS">
-                        <rect key="frame" x="119" y="190" width="341" height="19"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textField toolTip="Enter a name for the preset (will be displayed in the preset drawer)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
+                        <rect key="frame" x="99" y="190" width="361" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -137,17 +130,18 @@ Gw
                             <accessibilityConnection property="title" destination="Wy7-cF-tGv" id="qbt-Xs-S0o"/>
                         </connections>
                     </textField>
-                    <box autoresizesSubviews="NO" title="Box" borderType="none" titlePosition="noTitle" id="H9n-64-GXz">
-                        <rect key="frame" x="276" y="100" width="155" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <view key="contentView">
-                            <rect key="frame" x="0.0" y="0.0" width="155" height="25"/>
+                    <box autoresizesSubviews="NO" borderType="none" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="H9n-64-GXz">
+                        <rect key="frame" x="125" y="98" width="306" height="25"/>
+                        <view key="contentView" id="YlE-Da-0Vn">
+                            <rect key="frame" x="0.0" y="0.0" width="306" height="25"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="gOg-oO-8ar">
-                                    <rect key="frame" x="1" y="3" width="52" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
+                                    <rect key="frame" x="8" y="2" width="52" height="19"/>
                                     <string key="toolTip">Select the maximum width allowed by the preset (has no effect if the preset specifies Strict anamorphic). 0 means no limit is placed on the width.</string>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="52" id="T8n-Ik-Oc2"/>
+                                    </constraints>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="ExG-3m-WxY">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Rn4-AK-xTD"/>
                                         <font key="font" metaFont="smallSystem"/>
@@ -156,19 +150,23 @@ Gw
                                     </textFieldCell>
                                     <accessibility description="Picture Width"/>
                                 </textField>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="mQk-Ua-wzc">
-                                    <rect key="frame" x="53" y="5" width="29" height="15"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="25" translatesAutoresizingMaskIntoConstraints="NO" id="mQk-Ua-wzc">
+                                    <rect key="frame" x="60" y="5" width="29" height="14"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="25" id="Zwp-Kv-7lL"/>
+                                    </constraints>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="x" id="Nfk-ix-xIv">
                                         <font key="font" metaFont="smallSystem"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="Mga-dS-8BF">
-                                    <rect key="frame" x="82" y="3" width="52" height="19"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
+                                    <rect key="frame" x="89" y="2" width="52" height="19"/>
                                     <string key="toolTip">Select the maximum height allowed by the preset (has no effect if the preset specifies Strict anamorphic).  0 means no limit is placed on the height.</string>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="52" id="4os-w4-V7L"/>
+                                    </constraints>
                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="tBe-1m-0r9">
                                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Udu-cs-fdK"/>
                                         <font key="font" metaFont="smallSystem"/>
@@ -178,13 +176,16 @@ Gw
                                     <accessibility description="PictureHeight"/>
                                 </textField>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="mQk-Ua-wzc" firstAttribute="baseline" secondItem="Mga-dS-8BF" secondAttribute="baseline" id="244-dZ-Vqk"/>
+                                <constraint firstItem="gOg-oO-8ar" firstAttribute="baseline" secondItem="mQk-Ua-wzc" secondAttribute="baseline" id="7SB-MS-5xj"/>
+                                <constraint firstItem="Mga-dS-8BF" firstAttribute="leading" secondItem="mQk-Ua-wzc" secondAttribute="trailing" constant="2" id="q50-Bh-ZPu"/>
+                                <constraint firstItem="mQk-Ua-wzc" firstAttribute="leading" secondItem="gOg-oO-8ar" secondAttribute="trailing" constant="2" id="t2E-u9-OPx"/>
+                            </constraints>
                         </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </box>
-                    <button toolTip="The Subtitles Defaults of a preset control which subtitles track to use." verticalHuggingPriority="750" id="nWJ-0b-fUA">
-                        <rect key="frame" x="114" y="42" width="102" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button toolTip="The Subtitles Defaults of a preset control which subtitles track to use." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
+                        <rect key="frame" x="94" y="40" width="102" height="28"/>
                         <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -193,9 +194,8 @@ Gw
                             <action selector="showSubtitlesSettingsSheet:" target="-2" id="JMG-mN-fAT"/>
                         </connections>
                     </button>
-                    <popUpButton verticalHuggingPriority="750" id="z6B-ig-ouq">
-                        <rect key="frame" x="116" y="101" width="158" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z6B-ig-ouq">
+                        <rect key="frame" x="96" y="99" width="34" height="22"/>
                         <string key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').
 'Custom': choose the maximum width and height allowed by the preset (has no effect if the preset specifies Strict anamorphic).
 'Source maximum': use the source dimensions.</string>
@@ -209,9 +209,8 @@ Gw
                             <action selector="addPresetPicDropdownChanged:" target="-2" id="tfe-c5-8JF"/>
                         </connections>
                     </popUpButton>
-                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" id="AWD-QF-ZQB">
-                        <rect key="frame" x="18" y="15" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AWD-QF-ZQB">
+                        <rect key="frame" x="18" y="17" width="22" height="22"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bqf-TZ-JzM">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -221,11 +220,53 @@ Gw
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="fLU-xs-0du" firstAttribute="baseline" secondItem="Y03-Ts-ZA4" secondAttribute="baseline" id="0EW-fw-JLy"/>
+                    <constraint firstItem="ubZ-rD-tIS" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="0wx-gx-gb8"/>
+                    <constraint firstItem="aez-2b-JXx" firstAttribute="baseline" secondItem="YVc-5E-NjK" secondAttribute="baseline" id="4Q5-W8-cDd"/>
+                    <constraint firstItem="aez-2b-JXx" firstAttribute="top" secondItem="z6B-ig-ouq" secondAttribute="bottom" constant="10" id="4Z4-Zb-Xaa"/>
+                    <constraint firstItem="H9n-64-GXz" firstAttribute="centerY" secondItem="z6B-ig-ouq" secondAttribute="centerY" id="5tq-QZ-6b1"/>
+                    <constraint firstItem="H9n-64-GXz" firstAttribute="leading" secondItem="z6B-ig-ouq" secondAttribute="trailing" constant="1" id="7Vw-nX-giB"/>
+                    <constraint firstItem="Y03-Ts-ZA4" firstAttribute="top" secondItem="nWJ-0b-fUA" secondAttribute="bottom" constant="8" id="8xO-Rb-whc"/>
+                    <constraint firstItem="z6B-ig-ouq" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="bottom" constant="24" id="Ctr-hQ-r5q"/>
+                    <constraint firstAttribute="trailing" secondItem="H9n-64-GXz" secondAttribute="trailing" constant="52" id="E4M-1Z-GXf"/>
+                    <constraint firstAttribute="trailing" secondItem="aKg-n4-OUS" secondAttribute="trailing" constant="20" id="Hax-Id-7bg"/>
+                    <constraint firstAttribute="bottom" secondItem="AWD-QF-ZQB" secondAttribute="bottom" constant="20" id="INj-Gy-SO5"/>
+                    <constraint firstItem="aKg-n4-OUS" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="trailing" constant="8" id="LmP-Ky-GD4"/>
+                    <constraint firstItem="ubZ-rD-tIS" firstAttribute="baseline" secondItem="nWJ-0b-fUA" secondAttribute="baseline" id="M63-1o-d03"/>
+                    <constraint firstItem="YVc-5E-NjK" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="MIg-nV-B3M"/>
+                    <constraint firstItem="gOg-oO-8ar" firstAttribute="leading" secondItem="z6B-ig-ouq" secondAttribute="trailing" constant="6" id="Mbf-ar-zbc"/>
+                    <constraint firstItem="zDq-QP-LAu" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="NgL-7U-KIJ"/>
+                    <constraint firstItem="z6B-ig-ouq" firstAttribute="leading" secondItem="Wpk-WC-aVk" secondAttribute="trailing" constant="8" id="OwF-Ej-M37"/>
+                    <constraint firstItem="aKg-n4-OUS" firstAttribute="baseline" secondItem="Wy7-cF-tGv" secondAttribute="baseline" id="PUN-iB-1NP"/>
+                    <constraint firstAttribute="bottom" secondItem="fLU-xs-0du" secondAttribute="bottom" constant="20" id="S8Z-g9-Gqs"/>
+                    <constraint firstItem="nWJ-0b-fUA" firstAttribute="top" secondItem="aez-2b-JXx" secondAttribute="bottom" constant="10" id="SxY-XJ-yut"/>
+                    <constraint firstItem="Wy7-cF-tGv" firstAttribute="width" secondItem="zDq-QP-LAu" secondAttribute="width" id="T9T-JL-zqq"/>
+                    <constraint firstItem="Wpk-WC-aVk" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="UMW-Tx-m1x"/>
+                    <constraint firstItem="fLU-xs-0du" firstAttribute="leading" secondItem="Y03-Ts-ZA4" secondAttribute="trailing" constant="8" id="VOp-hp-vTJ"/>
+                    <constraint firstItem="z6B-ig-ouq" firstAttribute="baseline" secondItem="gOg-oO-8ar" secondAttribute="baseline" id="X7w-dY-03H"/>
+                    <constraint firstItem="aKg-n4-OUS" firstAttribute="top" secondItem="AcO-9f-fnb" secondAttribute="top" constant="20" id="ZfQ-ns-Acz"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Mga-dS-8BF" secondAttribute="trailing" constant="90" id="d33-fp-0W7"/>
+                    <constraint firstItem="8kl-Sh-Gh7" firstAttribute="leading" secondItem="zDq-QP-LAu" secondAttribute="trailing" constant="8" id="d4Q-TW-lX1"/>
+                    <constraint firstItem="H9n-64-GXz" firstAttribute="bottom" secondItem="z6B-ig-ouq" secondAttribute="bottom" id="eKn-iL-cTq"/>
+                    <constraint firstItem="nWJ-0b-fUA" firstAttribute="leading" secondItem="ubZ-rD-tIS" secondAttribute="trailing" constant="8" id="frd-Bx-84r"/>
+                    <constraint firstItem="AWD-QF-ZQB" firstAttribute="leading" secondItem="AcO-9f-fnb" secondAttribute="leading" constant="20" id="fxg-rD-EDL"/>
+                    <constraint firstAttribute="trailing" secondItem="fLU-xs-0du" secondAttribute="trailing" constant="20" id="heQ-wd-hk8"/>
+                    <constraint firstItem="Wpk-WC-aVk" firstAttribute="width" secondItem="zDq-QP-LAu" secondAttribute="width" id="kPT-Bj-dGk"/>
+                    <constraint firstItem="Wpk-WC-aVk" firstAttribute="width" secondItem="YVc-5E-NjK" secondAttribute="width" id="mF0-Ky-Lla"/>
+                    <constraint firstItem="aez-2b-JXx" firstAttribute="leading" secondItem="YVc-5E-NjK" secondAttribute="trailing" constant="8" id="mcI-hC-pLd"/>
+                    <constraint firstItem="8kl-Sh-Gh7" firstAttribute="trailing" secondItem="aKg-n4-OUS" secondAttribute="trailing" id="mfh-7S-iAZ"/>
+                    <constraint firstItem="YVc-5E-NjK" firstAttribute="width" secondItem="ubZ-rD-tIS" secondAttribute="width" id="qKt-0Q-nbW"/>
+                    <constraint firstItem="8kl-Sh-Gh7" firstAttribute="top" secondItem="aKg-n4-OUS" secondAttribute="bottom" constant="8" id="rE9-pC-SEc"/>
+                    <constraint firstItem="zDq-QP-LAu" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="top" id="rek-Ct-2lN"/>
+                    <constraint firstItem="z6B-ig-ouq" firstAttribute="baseline" secondItem="Wpk-WC-aVk" secondAttribute="baseline" id="uhy-vS-iTZ"/>
+                    <constraint firstItem="Wy7-cF-tGv" firstAttribute="leading" secondItem="AcO-9f-fnb" secondAttribute="leading" constant="20" id="wZX-bV-7uN"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="306" y="370.5"/>
+            <point key="canvasLocation" x="407" y="256"/>
         </window>
     </objects>
 </document>
