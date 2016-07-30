@@ -145,15 +145,10 @@ namespace HandBrake.ApplicationServices.Interop
         /// </param>
         public static void LoggingHandler(string message)
         {
+	        message = message.TrimEnd();
             if (!string.IsNullOrEmpty(message))
             {
-                string[] messageParts = message.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (messageParts.Length > 0)
-                {
-                    message = messageParts[0];
-                    SendMessageEvent(message);
-                }
+	            SendMessageEvent(message);
             }
         }
 
