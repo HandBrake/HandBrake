@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11173.2" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" generatesPrototypingConstraints="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11173.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
@@ -69,7 +69,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fLU-xs-0du">
-                        <rect key="frame" x="418" y="14" width="47" height="28"/>
+                        <rect key="frame" x="403" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Deg-rS-mRc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -82,7 +82,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y03-Ts-ZA4">
-                        <rect key="frame" x="358" y="14" width="62" height="28"/>
+                        <rect key="frame" x="343" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="5Xb-gz-QEa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -130,14 +130,14 @@ Gw
                             <accessibilityConnection property="title" destination="Wy7-cF-tGv" id="qbt-Xs-S0o"/>
                         </connections>
                     </textField>
-                    <box autoresizesSubviews="NO" borderType="none" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="H9n-64-GXz">
-                        <rect key="frame" x="125" y="98" width="306" height="25"/>
+                    <box autoresizesSubviews="NO" transparent="YES" borderWidth="0.0" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="H9n-64-GXz">
+                        <rect key="frame" x="128" y="96" width="300" height="24"/>
                         <view key="contentView" id="YlE-Da-0Vn">
-                            <rect key="frame" x="0.0" y="0.0" width="306" height="25"/>
+                            <rect key="frame" x="0.0" y="0.0" width="300" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
-                                    <rect key="frame" x="8" y="2" width="52" height="19"/>
+                                    <rect key="frame" x="5" y="4" width="52" height="19"/>
                                     <string key="toolTip">Select the maximum width allowed by the preset (has no effect if the preset specifies Strict anamorphic). 0 means no limit is placed on the width.</string>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="T8n-Ik-Oc2"/>
@@ -151,7 +151,7 @@ Gw
                                     <accessibility description="Picture Width"/>
                                 </textField>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="25" translatesAutoresizingMaskIntoConstraints="NO" id="mQk-Ua-wzc">
-                                    <rect key="frame" x="60" y="5" width="29" height="14"/>
+                                    <rect key="frame" x="57" y="7" width="29" height="14"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="25" id="Zwp-Kv-7lL"/>
                                     </constraints>
@@ -162,7 +162,7 @@ Gw
                                     </textFieldCell>
                                 </textField>
                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
-                                    <rect key="frame" x="89" y="2" width="52" height="19"/>
+                                    <rect key="frame" x="86" y="4" width="52" height="19"/>
                                     <string key="toolTip">Select the maximum height allowed by the preset (has no effect if the preset specifies Strict anamorphic).  0 means no limit is placed on the height.</string>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="4os-w4-V7L"/>
@@ -225,7 +225,7 @@ Gw
                     <constraint firstItem="ubZ-rD-tIS" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="0wx-gx-gb8"/>
                     <constraint firstItem="aez-2b-JXx" firstAttribute="baseline" secondItem="YVc-5E-NjK" secondAttribute="baseline" id="4Q5-W8-cDd"/>
                     <constraint firstItem="aez-2b-JXx" firstAttribute="top" secondItem="z6B-ig-ouq" secondAttribute="bottom" constant="10" id="4Z4-Zb-Xaa"/>
-                    <constraint firstItem="H9n-64-GXz" firstAttribute="centerY" secondItem="z6B-ig-ouq" secondAttribute="centerY" id="5tq-QZ-6b1"/>
+                    <constraint firstItem="H9n-64-GXz" firstAttribute="centerY" secondItem="z6B-ig-ouq" secondAttribute="centerY" constant="3" id="5tq-QZ-6b1"/>
                     <constraint firstItem="H9n-64-GXz" firstAttribute="leading" secondItem="z6B-ig-ouq" secondAttribute="trailing" constant="1" id="7Vw-nX-giB"/>
                     <constraint firstItem="Y03-Ts-ZA4" firstAttribute="top" secondItem="nWJ-0b-fUA" secondAttribute="bottom" constant="8" id="8xO-Rb-whc"/>
                     <constraint firstItem="z6B-ig-ouq" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="bottom" constant="24" id="Ctr-hQ-r5q"/>
@@ -245,10 +245,11 @@ Gw
                     <constraint firstItem="Wpk-WC-aVk" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="UMW-Tx-m1x"/>
                     <constraint firstItem="fLU-xs-0du" firstAttribute="leading" secondItem="Y03-Ts-ZA4" secondAttribute="trailing" constant="8" id="VOp-hp-vTJ"/>
                     <constraint firstItem="z6B-ig-ouq" firstAttribute="baseline" secondItem="gOg-oO-8ar" secondAttribute="baseline" id="X7w-dY-03H"/>
+                    <constraint firstItem="Y03-Ts-ZA4" firstAttribute="width" secondItem="fLU-xs-0du" secondAttribute="width" id="YYV-wg-58h"/>
                     <constraint firstItem="aKg-n4-OUS" firstAttribute="top" secondItem="AcO-9f-fnb" secondAttribute="top" constant="20" id="ZfQ-ns-Acz"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Mga-dS-8BF" secondAttribute="trailing" constant="90" id="d33-fp-0W7"/>
                     <constraint firstItem="8kl-Sh-Gh7" firstAttribute="leading" secondItem="zDq-QP-LAu" secondAttribute="trailing" constant="8" id="d4Q-TW-lX1"/>
-                    <constraint firstItem="H9n-64-GXz" firstAttribute="bottom" secondItem="z6B-ig-ouq" secondAttribute="bottom" id="eKn-iL-cTq"/>
+                    <constraint firstItem="H9n-64-GXz" firstAttribute="bottom" secondItem="z6B-ig-ouq" secondAttribute="bottom" constant="6" id="eKn-iL-cTq"/>
                     <constraint firstItem="nWJ-0b-fUA" firstAttribute="leading" secondItem="ubZ-rD-tIS" secondAttribute="trailing" constant="8" id="frd-Bx-84r"/>
                     <constraint firstItem="AWD-QF-ZQB" firstAttribute="leading" secondItem="AcO-9f-fnb" secondAttribute="leading" constant="20" id="fxg-rD-EDL"/>
                     <constraint firstAttribute="trailing" secondItem="fLU-xs-0du" secondAttribute="trailing" constant="20" id="heQ-wd-hk8"/>
@@ -266,7 +267,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="407" y="256"/>
+            <point key="canvasLocation" x="407" y="255.5"/>
         </window>
     </objects>
 </document>
