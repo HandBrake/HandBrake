@@ -3,7 +3,14 @@
             "ChildrenArray": [
                 {
                     "AudioCopyMask": [
-                        "copy:aac"
+                        "copy:aac",
+                        "copy:ac3",
+                        "copy:eac3",
+                        "copy:dtshd",
+                        "copy:dts",
+                        "copy:mp3",
+                        "copy:truehd",
+                        "copy:flac"
                     ],
                     "AudioEncoderFallback": "aac",
                     "AudioLanguageList": [
