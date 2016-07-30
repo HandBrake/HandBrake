@@ -82,7 +82,7 @@
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCode": 0,
                     "VideoEncoder": "x264",
-                    "VideoFramerate": "",
+                    "VideoFramerate": "auto",
                     "VideoFramerateMode": "vfr",
                     "VideoGrayScale": false,
                     "VideoScaler": "swscale",

@@ -6701,7 +6701,7 @@ const char hb_builtin_presets_json[] =
 "                    \"VideoAvgBitrate\": 6000, \n"
 "                    \"VideoColorMatrixCode\": 0, \n"
 "                    \"VideoEncoder\": \"x264\", \n"
-"                    \"VideoFramerate\": \"\", \n"
+"                    \"VideoFramerate\": \"auto\", \n"
 "                    \"VideoFramerateMode\": \"vfr\", \n"
 "                    \"VideoGrayScale\": false, \n"
 "                    \"VideoLevel\": \"auto\", \n"
