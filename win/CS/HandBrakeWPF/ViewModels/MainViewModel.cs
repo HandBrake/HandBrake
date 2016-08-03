@@ -1357,7 +1357,7 @@ namespace HandBrakeWPF.ViewModels
         {
             try
             {
-                Process.Start("https://docs.handbrake.fr");
+                Process.Start("https://handbrake.fr/docs");
             }
             catch (Exception exc)
             {
