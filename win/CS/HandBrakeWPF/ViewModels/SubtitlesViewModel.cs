@@ -532,8 +532,11 @@ namespace HandBrakeWPF.ViewModels
             if (this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudio
                   || this.SubtitleBehaviours.SelectedBurnInBehaviour == SubtitleBurnInBehaviourModes.ForeignAudioPreferred)
             {
-                track.Burned = true;
-                this.SetBurnedToFalseForAllExcept(track);
+                if (subtitle != null && subtitle.SubtitleType == SubtitleType.ForeignAudioSearch)
+                {
+                    track.Burned = true;
+                    this.SetBurnedToFalseForAllExcept(track);
+                }
             }
 
             // For MP4, PGS Subtitles must be burned in.
