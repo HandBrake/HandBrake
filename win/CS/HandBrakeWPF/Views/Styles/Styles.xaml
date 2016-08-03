@@ -88,4 +88,11 @@
         </Setter>
     </Style>
 
+    <!-- Fixes HorizontalContentAlignment and VerticalContentAlignment binding errors that you get when you setup MenuItems by binding their ItemSource property -->
+    <!-- https://social.msdn.microsoft.com/Forums/vstudio/en-US/42cd1554-de7a-473b-b977-ddbd6298b3d0/binding-error-when-using-compositecollection-for-menuitems?forum=wpf -->
+    <Style TargetType="MenuItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
 </ResourceDictionary>
