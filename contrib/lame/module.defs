@@ -5,6 +5,10 @@ LAME.FETCH.url = http://download.handbrake.fr/handbrake/contrib/lame-3.98.tar.gz
 LAME.FETCH.md5 = 7036b52e792538fd665595d56b9e49a0
 LAME.EXTRACT.tarbase = lame
 
+ifneq (none,$(FFMPEG.GCC.g))
+	LAME.CONFIGURE.extra += --enable-debug
+endif
+
 # TODO: Upstream archive differs
 #LAME.FETCH.url = http://sourceforge.net/projects/lame/files/lame/3.98/lame-398.tar.gz
 #LAME.FETCH.md5 = f44b9f8e1b5d8835d0a77f9cc9cedd1c
