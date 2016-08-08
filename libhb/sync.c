@@ -2863,6 +2863,7 @@ static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
                 hb_buffer_close(&buf);
                 return NULL;
             }
+            buf->size = stream->audio.src.pkt.output_frames_gen * sample_size;
             buf->s.duration = 90000. * stream->audio.src.pkt.output_frames_gen /
                               audio->config.out.samplerate;
             buf->s.start = stream->next_pts;
