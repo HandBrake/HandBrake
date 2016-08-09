@@ -1461,12 +1461,6 @@ static void ShowHelp()
 "       --crop  <T:B:L:R>   Set cropping values (default: autocrop)\n"
 "       --loose-crop        Always crop to a multiple of the modulus\n"
 "       --no-loose-crop     Disable preset 'loose-crop'\n"
-"       --pad <W:H:C:X,Y>   Add borders to pad image to WxH (e.g. letterbox)\n"
-"                           Optionally set color of pad to C (default black)\n"
-"                           Color may be HTML color name or RGB value\n"
-"                           Optionally set position of image in pad area\n"
-"                           Any value may be 'auto' in which case the\n"
-"                           default value for that field is used\n"
 "   -Y, --maxHeight   <#>   Set maximum height\n"
 "   -X, --maxWidth    <#>   Set maximum width\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
@@ -1562,6 +1556,12 @@ static void ShowHelp()
 "                           hflip flips the image on the x axis.\n");
     showFilterKeys(out, HB_FILTER_ROTATE);
     showFilterDefault(out, HB_FILTER_ROTATE);
+    fprintf( out,
+"   --pad                   Add borders to pad image (e.g. letterbox).\n"
+"                           The color of pad may be set (default black).\n"
+"                           Color may be an HTML color name or RGB value.\n"
+"                           The position of image in pad may also be set.\n");
+    showFilterKeys(out, HB_FILTER_PAD);
     fprintf( out,
 "   -g, --grayscale         Grayscale encoding\n"
 "   --no-grayscale          Disable preset 'grayscale'\n"
