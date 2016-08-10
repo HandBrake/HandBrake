@@ -93,6 +93,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     const char * const *profile_names;
 
     pv->job              = job;
+    pv->last_stop        = AV_NOPTS_VALUE;
     pv->chapter_queue    = hb_chapter_queue_init();
     w->private_data      = pv;
 
@@ -474,7 +475,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         pic_in.sliceType = X265_TYPE_AUTO;
     }
 
-    if (pv->last_stop != in->s.start)
+    if (pv->last_stop != AV_NOPTS_VALUE && pv->last_stop != in->s.start)
     {
         hb_log("encx265 input continuity err: last stop %"PRId64"  start %"PRId64,
                pv->last_stop, in->s.start);
