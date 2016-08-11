@@ -5,16 +5,17 @@
 ### Core
 
 - Updated libraries
-  - FreeType 2.6.0
+  - FreeType 2.6.5
+  - FontConfig 2.12.1
   - FriBidi 0.19.7
-  - HarfBuzz 1.2.6
+  - HarfBuzz 1.3.0
   - LibAV 11.3
   - libass 0.13.2
   - libbluray 0.9.30
   - libmfx v6.0.0
   - libvpx 1.5.0
-  - x264 r148
-  - x265 1.9
+  - x264 r148 r2705
+  - x265 2.0
 - New JSON-based API for interacting with LibHB
 - New JSON-based preset system, including support in the CLI
 - Performance improvements
@@ -42,9 +43,7 @@
   - Audio tab: Default settings for track behavior are now configurable
   - Subtitles tab: Burn-in behavior now configurable
 - Numerous usability enhancements
-- Removed DXVA decoding
-  - Current implementation was severely broken and not producing the expected performance gains
-  - May re-implement DXVA decoding at a later date if these issues can be resolved
+- Removed DXVA decoding as it was not providing sufficient improvement and causing too many issues.
 - Update checker now verifies the signature of the update file for improved security
 
 ### Mac

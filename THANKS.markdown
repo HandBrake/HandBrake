@@ -39,7 +39,6 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [GitHub](https://github.com)
 - [JetBrains ReSharper](https://www.jetbrains.com/resharper/)
 - [phpBB](http://www.phpbb.com/)
-- [ReviewBoard](http://www.reviewboard.org/)
 
 
 ## Graphics
