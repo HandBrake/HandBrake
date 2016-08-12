@@ -297,7 +297,7 @@
         <!--  Main Body  -->
         <Grid Grid.Row="1"  IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="700"/>
+                <ColumnDefinition Width="*" MinWidth="725"/>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -382,7 +382,7 @@
 
             <!--  Destination  -->
             <StackPanel Grid.Row="1"
-                        Margin="10,5,5,5"
+                        Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         >
@@ -417,7 +417,7 @@
 
             <!--  Output Options  -->
             <StackPanel Grid.Row="2"
-                        Margin="10,5,5,5"
+                        Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         >
@@ -456,11 +456,11 @@
 
             <!--  Tab Control  -->
             <TabControl Name="tabControl"
-                        Grid.Row="4"
-                        Margin="10,10,5,6"
+                        Grid.Row="3"
+                        Margin="10,10,10,6"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        MinHeight="350" MinWidth="720"
+                        
                         Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
                         >
                 <TabItem Name="pictureTab" Header="{x:Static Properties:ResourcesUI.MainView_PictureTab}">
@@ -487,7 +487,7 @@
             </TabControl>
 
             <!-- Queue in-line display if enabled -->
-            <Grid  Grid.Row="3" Margin="10,10,5,5"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+            <Grid  Grid.Row="3" Grid.Column="0" Margin="10,10,10,5"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -498,7 +498,7 @@
             </Grid>
 
             <!--  Presets  -->
-            <GroupBox Grid.RowSpan="4"
+            <GroupBox Grid.Row="0" Grid.RowSpan="4"
                       Grid.Column="1"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
@@ -695,7 +695,6 @@
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
-
         <StatusBar Name="statusBar1" Height="32" Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
 
             <StatusBarItem>
