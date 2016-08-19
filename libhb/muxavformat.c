@@ -217,6 +217,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
+        case HB_VCODEC_VCE_H264:
             track->st->codec->codec_id = AV_CODEC_ID_H264;
 
             /* Taken from x264 muxers.c */

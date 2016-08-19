@@ -7,6 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifndef HB_FFMPEG_H
+#define HB_FFMPEG_H
+
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 #include "libavutil/channel_layout.h"
@@ -33,3 +36,7 @@ struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
                    int flags);
+
+static const char* const hb_vce_preset_names[] = { "speed", "balanced", "quality", NULL, };
+
+#endif
