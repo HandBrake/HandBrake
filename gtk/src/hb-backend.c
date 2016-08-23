@@ -220,6 +220,19 @@ combo_opts_t denoise_opts =
     d_denoise_opts
 };
 
+static options_map_t d_rotate_opts[] =
+{
+    {N_("Off"),         "disable=1",   0, ""},
+    {N_("90 Degrees"),  "angle=90",   90, ""},
+    {N_("180 Degrees"), "angle=180", 180, ""},
+    {N_("270 Degrees"), "angle=270", 270, ""},
+};
+combo_opts_t rotate_opts =
+{
+    sizeof(d_rotate_opts)/sizeof(options_map_t),
+    d_rotate_opts
+};
+
 static options_map_t d_direct_opts[] =
 {
     {N_("None"),      "none",     0, "none"},
@@ -539,6 +552,12 @@ combo_name_map_t combo_name_map[] =
         &nlmeans_tune_opts,
         filter_opts_set,
         filter_opt_get
+    },
+    {
+        "PictureRotate",
+        &rotate_opts,
+        small_opts_set,
+        generic_opt_get
     },
     {
         "x264_direct",

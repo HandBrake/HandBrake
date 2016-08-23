@@ -3293,6 +3293,52 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkGrid" id="table16">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">5</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkLabel" id="PictureRotateLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Rotate Filter:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="PictureRotate">
+                                <property name="valign">GTK_ALIGN_CENTER</property>
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip_text" translatable="yes">Rotate the video in clockwise 90 degree increments.</property>
+                                <signal name="changed" handler="deint_filter_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="left_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="VideoGrayScale">
                             <property name="label" translatable="yes">Grayscale</property>
                             <property name="visible">True</property>
@@ -3307,7 +3353,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">2</property>
+                            <property name="left_attach">3</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
