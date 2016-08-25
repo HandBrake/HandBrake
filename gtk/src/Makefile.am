@@ -108,20 +108,20 @@ data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
 if GHB_GTK_3_14
-UI=ghb-3.14.ui
+UI=314
 else
 if GHB_GTK_3_12
-UI=ghb-3.12.ui
+UI=312
 else
-UI=ghb.ui
+UI=300
 endif
 endif
 
-ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI)
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/ghb.m4
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
-ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI)
-	cp $(srcdir)/$(UI) ghb.ui
+ui_res.h : ui_res.gresource.xml $(srcdir)/ghb.m4
+	m4 -Dgtk_version=$(UI) $(srcdir)/ghb.m4 > ghb.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
 ui_res.o: ui_res.h ui_res.c
