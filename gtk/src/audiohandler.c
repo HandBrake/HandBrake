@@ -199,6 +199,10 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud, GhbValue *asettings)
 
         GtkWidget *w = GHB_WIDGET(ud->builder, "AudioBitrate");
         ghb_audio_bitrate_opts_filter(GTK_COMBO_BOX(w), low, high);
+        w = GHB_WIDGET(ud->builder, "AudioMixdown");
+        ghb_mix_opts_filter(GTK_COMBO_BOX(w), acodec);
+        w = GHB_WIDGET(ud->builder, "AudioSamplerate");
+        ghb_audio_samplerate_opts_filter(GTK_COMBO_BOX(w), acodec);
 
         ghb_ui_update(ud, "AudioEncoder",
                       ghb_dict_get_value(asettings, "Encoder"));
@@ -2138,6 +2142,8 @@ void audio_def_set_limits(signal_user_data_t *ud, GtkWidget *widget, gboolean se
     ghb_audio_bitrate_opts_filter(GTK_COMBO_BOX(w), low, high);
     w = find_widget(GTK_WIDGET(row), "AudioMixdown");
     ghb_mix_opts_filter(GTK_COMBO_BOX(w), enc);
+    w = find_widget(GTK_WIDGET(row), "AudioSamplerate");
+    ghb_audio_samplerate_opts_filter(GTK_COMBO_BOX(w), enc);
 }
 
 void audio_def_set_all_limits_cb(GtkWidget *widget, gpointer data)

@@ -1355,6 +1355,28 @@ audio_samplerate_opts_set(signal_user_data_t *ud, const gchar *name,
     ghb_audio_samplerate_opts_set(combo);
 }
 
+void
+ghb_audio_samplerate_opts_filter(GtkComboBox *combo, gint acodec)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gdouble irate;
+
+    store = GTK_LIST_STORE(gtk_combo_box_get_model(combo));
+    if (!gtk_tree_model_get_iter_first( GTK_TREE_MODEL(store), &iter))
+        return;
+
+    do
+    {
+        gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &irate, -1);
+        // If irate == 0.0, the item is the "Same as Source" item,
+        // so set to TRUE. Otherwise, ask libhb
+        gtk_list_store_set(store, &iter, 1, irate == 0.0 ? TRUE :
+                hb_audio_samplerate_is_supported(irate, acodec), -1);
+    } while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
+}
+
+
 const hb_rate_t sas_rate =
 {
     .name = N_("Same as source"),

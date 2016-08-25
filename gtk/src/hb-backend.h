@@ -172,6 +172,7 @@ void ghb_audio_bitrate_opts_filter(GtkComboBox *combo, gint first_rate, gint las
 void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
 void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
+void ghb_audio_samplerate_opts_filter(GtkComboBox *combo, gint acodec);
 
 int ghb_lookup_lang(const GhbValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);
