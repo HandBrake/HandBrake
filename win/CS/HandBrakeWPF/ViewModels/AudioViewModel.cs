@@ -332,17 +332,17 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
-                    switch (this.AudioDefaultsViewModel.AudioBehaviours.SelectedTrackDefaultBehaviour)
+                    switch (this.AudioBehaviours.SelectedTrackDefaultBehaviour)
                     {
                         case AudioTrackDefaultsMode.None:
                             this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
                             break;
                         case AudioTrackDefaultsMode.FirstTrack:
-                            AudioBehaviourTrack template = this.currentPreset.AudioTrackBehaviours.BehaviourTracks.FirstOrDefault();
+                            AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
                             this.Task.AudioTracks.Add(template != null ? new AudioTrack(template) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
                             break;
                         case AudioTrackDefaultsMode.AllTracks:
-                            foreach (AudioBehaviourTrack tmpl in this.currentPreset.AudioTrackBehaviours.BehaviourTracks)
+                            foreach (AudioBehaviourTrack tmpl in this.AudioBehaviours.BehaviourTracks)
                             {
                                 this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
                             }
@@ -400,7 +400,7 @@ namespace HandBrakeWPF.ViewModels
             }
            
             // Step 4, Handle the default selection behaviour.
-            switch (this.AudioDefaultsViewModel.AudioBehaviours.SelectedBehaviour)
+            switch (this.AudioBehaviours.SelectedBehaviour)
             {
                 case AudioBehaviourModes.None:
                     this.Task.AudioTracks.Clear();
@@ -472,9 +472,9 @@ namespace HandBrakeWPF.ViewModels
             // The first track in the selected languages list is considered the preferred language.
             // So, try match tracks on this.
             IEnumerable<Audio> preferredAudioTracks = new List<Audio>();
-            if (this.AudioDefaultsViewModel.AudioBehaviours.SelectedLangauges.Count > 0)
+            if (this.AudioBehaviours.SelectedLangauges.Count > 0)
             {
-                string langName = this.AudioDefaultsViewModel.AudioBehaviours.SelectedLangauges.FirstOrDefault(w => !w.Equals(Constants.Any));
+                string langName = this.AudioBehaviours.SelectedLangauges.FirstOrDefault(w => !w.Equals(Constants.Any));
                 if (!string.IsNullOrEmpty(langName))
                 {
                     preferredAudioTracks = this.SourceTracks.Where(item => item.Language.Contains(langName));
@@ -497,7 +497,7 @@ namespace HandBrakeWPF.ViewModels
         {
             List<Audio> trackList = new List<Audio>();
 
-            List<string> isoCodes = LanguageUtilities.GetLanguageCodes(this.AudioDefaultsViewModel.AudioBehaviours.SelectedLangauges.ToArray());
+            List<string> isoCodes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
 
             if (includeAny)
             {
