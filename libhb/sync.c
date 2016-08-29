@@ -941,6 +941,7 @@ static void streamFlush( sync_stream_t * stream )
         if (buf != NULL)
         {
             hb_list_rem(stream->in_queue, buf);
+            signalBuffer(stream);
             if (!stream->first_frame)
             {
                 if (buf->s.start >= 0)
@@ -1224,6 +1225,7 @@ static void terminateSubtitleStreams( sync_common_t * common )
         fifo_push(stream->fifo_out, hb_buffer_eof_init());
         fifo_push(stream->fifo_in,  hb_buffer_eof_init());
         stream->done = 1;
+        signalBuffer(stream);
     }
 }
 
@@ -1293,6 +1295,7 @@ static void OutputBuffer( sync_common_t * common )
         {
             buf = hb_list_item(out_stream->in_queue, 0);
             hb_list_rem(out_stream->in_queue, buf);
+            signalBuffer(out_stream);
             hb_buffer_close(&buf);
             continue;
         }
@@ -1388,6 +1391,7 @@ static void OutputBuffer( sync_common_t * common )
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
+            signalBuffer(out_stream);
             return;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
@@ -1400,6 +1404,7 @@ static void OutputBuffer( sync_common_t * common )
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
+            signalBuffer(out_stream);
             return;
         }
 
@@ -1834,7 +1839,9 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 {
     hb_lock(stream->common->mutex);
 
-    while (hb_list_count(stream->in_queue) > stream->max_len)
+    while (hb_list_count(stream->in_queue) > stream->max_len &&
+           !stream->done && !stream->common->job->done &&
+           !*stream->common->job->die)
     {
         if (!stream->common->start_found)
         {
