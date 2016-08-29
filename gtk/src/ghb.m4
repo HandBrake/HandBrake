@@ -8564,6 +8564,7 @@ ifelse(eval(gtk_version <= 312), 1, filter_output([
             <child>
               <object class="GtkButton" id="source_cancel">
                 <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
                 <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8580,6 +8581,7 @@ ifelse(eval(gtk_version <= 312), 1, filter_output([
             <child>
               <object class="GtkButton" id="source_ok">
                 <property name="label" translatable="yes">_Open</property>
+                <property name="use-underline">True</property>
                 <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8698,8 +8700,8 @@ filter_output([
       </object>
     </child>
     <action-widgets>
-      <action-widget response="cancel">source_cancel</action-widget>
-      <action-widget response="no">source_ok</action-widget>
+      <action-widget response="-6">source_cancel</action-widget>
+      <action-widget response="-9">source_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkImage" id="gtk-cancel">
