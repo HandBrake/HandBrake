@@ -107,10 +107,9 @@ case $host in
   *)
     case "$host_os" in
 	linux*)
-	  pkg_gudev="gudev-1.0"
 	  ;;
     esac
-    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 gmodule-2.0 $pkg_gudev"
+    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 gmodule-2.0"
 	mingw_flag=no
     ;;
 esac
@@ -119,6 +118,14 @@ PKG_PROG_PKG_CONFIG
 GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
 
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
+
+pkg_gudev="gudev-1.0"
+PKG_CHECK_MODULES(Gudev, [$pkg_gudev], have_gudev=yes, have_gudev=no)
+if test "x$have_gudev" = "xyes" ; then
+    GHB_PACKAGES="$GHB_PACKAGES $pkg_gudev"
+	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
+	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
+fi
 
 if test "x$gst_disable" = "xno" ; then
     PKG_CHECK_MODULES(GStreamer1, [$GST1_MODULES], use_gst1=yes, use_gst1=no)

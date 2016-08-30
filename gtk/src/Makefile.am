@@ -3,6 +3,8 @@
 icons =	\
 	hb-icon.svg
 
+flatpak_icon = fr.handbrake.ghb.svg
+
 icons_dep =	\
 	hb-icon.svg \
 	hb-start.svg \
@@ -18,6 +20,9 @@ icons_dep =	\
 	hb-complete.svg
 
 hb_menu = ghb.desktop
+flatpak_menu = fr.handbrake.ghb.desktop
+
+flatpak_appdata = fr.handbrake.ghb.appdata.xml
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
@@ -156,6 +161,7 @@ uninstall-local:
 		fi; \
 		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
+	rm -f $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
@@ -163,7 +169,9 @@ uninstall-local:
 		echo "*** Icon cache not updated. After install, run this:"; \
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
-	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
+	rm -f $(DESTDIR)/$(datadir)/applications/$(flatpak_menu) \
+	rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)
 
 install-data-local:
 	for icon in $(icons); do \
@@ -178,6 +186,7 @@ install-data-local:
 		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
 		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_icon) $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
@@ -186,4 +195,7 @@ install-data-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
-	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
+	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_menu) $(DESTDIR)/$(datadir)/applications/$(flatpak_menu); \
+	$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)

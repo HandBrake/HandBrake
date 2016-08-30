@@ -28,6 +28,7 @@ PKG.rpm.src.tar.bz2 = $(STAGE.out.src/)rpm/$(PKG.rpm.basename).tar.bz2
 STAGE.out.rpm.src/ = $(STAGE.out.src/)rpm/
 
 PKG.debian  = $(PKG.in/)linux/debian
+PKG.flatpak/  = $(PKG.in/)linux/flatpak/
 PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(BUILD.machine).deb
 PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(BUILD.machine).deb
 PKG.deb.basename = $(HB.name.lower)-$(HB.debversion)
@@ -40,6 +41,18 @@ PKG.gui.tmp.deb = $(PKG.out/)$(HB.name.lower)-gtk_$(HB.debversion)_$(PKG.deb.mac
 
 PKG.native.rpm.stamp = $(RPM.out/).rpm.stamp
 PKG.rpm.stamp = $(PKG.out/).rpm.stamp
+
+PKG.out.flatpak/ = $(PKG.out/)flatpak/
+STAGE.out.flatpak/ = $(STAGE.out/)flatpak/
+PKG.src.flatpak = $(STAGE.out.flatpak/)handbrake.tar.bz2
+PKG.contrib.flatpak = $(STAGE.out.flatpak/)download.tgz
+PKG.gui.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.ghb.json
+PKG.cli.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.HandBrakeCLI.json
+PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-Flatpak_GUI_$(BUILD.machine).build
+PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-Flatpak_CLI_$(BUILD.machine).build
+PKG.repo.flatpak = $(PKG.out.flatpak/)$(HB.name)-Flatpak.repo
+PKG.cli.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-Flatpak_CLI_$(BUILD.machine).flatpak
+PKG.gui.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-Flatpak_GUI_$(BUILD.machine).flatpak
 
 PKG.gui.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-gui-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
 PKG.cli.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-cli-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
@@ -54,6 +67,8 @@ RPMROOT.out/ = $(PWD)/$(STAGE.out/)rpmroot/
 ###############################################################################
 
 BUILD.out += $(PKG.src.tar)
+BUILD.out += $(PKG.cli.flatpak)
+BUILD.out += $(PKG.gui.flatpak)
 BUILD.out += $(PKG.cli.deb)
 BUILD.out += $(PKG.gui.deb)
 BUILD.out += $(PKG.cli.rpm)
