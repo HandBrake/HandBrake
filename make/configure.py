@@ -1346,8 +1346,8 @@ def createCLI():
     h = IfHost( 'Build and use local pkg-config', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-pkgconfig', default=False, action='store_true', help=h )
 
-    if host.match( '*-*-linux*' ):
-        grp.add_option( '--flatpak', default=False, action='store_true', help='Build extra contribs for flatpak' )
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--flatpak', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
 
 
