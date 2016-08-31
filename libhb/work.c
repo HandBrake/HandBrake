@@ -218,6 +218,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_FFMPEG_VP9:
             w = hb_get_work(h, WORK_ENCAVCODEC);
             w->codec_param = AV_CODEC_ID_VP9;
+			break;
+        case HB_VCODEC_VCE_H264:
+            w = hb_get_work(h, WORK_ENCAVCODEC);
+            w->codec_param = AV_CODEC_ID_H264;
             break;
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
@@ -459,6 +463,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
+                case HB_VCODEC_VCE_H264:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -472,6 +477,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
+                case HB_VCODEC_VCE_H264:
                     hb_log("     + level:   %s", job->encoder_level);
                 default:
                     break;
