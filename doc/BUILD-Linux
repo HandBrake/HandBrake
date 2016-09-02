@@ -1,4 +1,4 @@
-Guide to Building HandBrake 20160503032620-4ab21a0-master (2016050301) on Linux
+Guide to Building HandBrake 20160902092339-aef9c01-master (2016090201) on Linux
 *******************************************************************************
 
 1 Introduction
@@ -51,12 +51,10 @@ recommended you use these versions or similar:
 
    * git - 2.4.3
    * python - Python 2.7.1
-   * curl - curl 7.21.4 (or wget)
    * m4 - GNU M4 1.4.6
    * make - GNU Make 3.81
    * patch - Patch 2.5.8
    * tar - GNU tar 1.26
-   * wget - GNU Wget 1.13.4 (or curl)
 
 The GTK UI introduces some significant extra build requirements.  GTK
 version 3.10+ is required to build the GTK UI. If you intend to disable
@@ -76,6 +74,7 @@ Ubuntu 14.04, 16.04 packages:
    * libogg-dev (cli/gui)
    * libtheora-dev (cli/gui)
    * libvorbis-dev (cli/gui)
+   * libopus-dev (cli/gui)
    * libsamplerate-dev (cli/gui)
    * libfribidi-dev (cli/gui)
    * libfreetype6-dev (cli/gui)
@@ -97,7 +96,7 @@ Ubuntu 14.04, 16.04 packages:
 
 To install these packages:
      sudo apt-get install git cmake yasm build-essential autoconf libtool \
-     zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
+     zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev libopus-dev \
      libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
      libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev libjansson-dev \
      intltool libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
@@ -132,6 +131,7 @@ Additional Fedora packages:
    * libogg-devel (cli/gui)
    * libtheora-devel (cli/gui)
    * libvorbis-devel (cli/gui)
+   * opus-devel (cli/gui)
    * libsamplerate-devel (cli/gui)
    * libxml2-devel (cli/gui)
    * fribidi-devel (cli/gui)
@@ -150,10 +150,11 @@ Additional Fedora packages:
 
 To install these packages:
      sudo yum install patch intltool libtool cmake gcc-c++ yasm zlib-devel \
-     bzip2-devel libogg-devel libtheora-devel libvorbis-devel libsamplerate-devel \
-     libxml2-devel fribidi-devel freetype-devel fontconfig-devel libass-devel \
-     lame-devel x264-devel jansson-devel dbus-glib-devel libgudev1-devel \
-     webkitgtk3-devel libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
+     bzip2-devel libogg-devel libtheora-devel libvorbis-devel opus-devel \
+     libsamplerate-devel libxml2-devel fribidi-devel freetype-devel \
+     fontconfig-devel libass-devel lame-devel x264-devel jansson-devel \
+     dbus-glib-devel libgudev1-devel webkitgtk3-devel libnotify-devel \
+     gstreamer1-devel gstreamer1-plugins-base-devel
 
 3 QuickStart
 ************
@@ -518,8 +519,7 @@ Appendix A Project Repository Details
      url:    https://github.com/HandBrake/HandBrake.git
      branch: master
      tag:
-     rev:    7187
-     hash:   4ab21a0ca630dc4bac79149a6eec598921899fe5
-     date:   2016-05-03 03:26:20
+     rev:    7475
+     hash:   aef9c01792bae5c656a6e026b31187cd4b9062d0
+     date:   2016-09-02 09:23:39
      type:   developer
-

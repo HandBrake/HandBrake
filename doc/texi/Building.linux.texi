@@ -46,6 +46,7 @@ Ubuntu 14.04, 16.04 packages:
 @item libogg-dev (cli/gui)
 @item libtheora-dev (cli/gui)
 @item libvorbis-dev (cli/gui)
+@item libopus-dev (cli/gui)
 @item libsamplerate-dev (cli/gui)
 @item libfribidi-dev (cli/gui)
 @item libfreetype6-dev (cli/gui)
@@ -69,7 +70,7 @@ Ubuntu 14.04, 16.04 packages:
 To install these packages:
 @example
 sudo apt-get install git cmake yasm build-essential autoconf libtool \
-zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
+zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev libopus-dev \
 libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
 libfontconfig1-dev libass-dev libmp3lame-dev libx264-dev libjansson-dev \
 intltool libglib2.0-dev libdbus-glib-1-dev libgtk-3-dev libgudev-1.0-dev \
@@ -114,6 +115,7 @@ Additional Fedora packages:
 @item libogg-devel (cli/gui)
 @item libtheora-devel (cli/gui)
 @item libvorbis-devel (cli/gui)
+@item opus-devel (cli/gui)
 @item libsamplerate-devel (cli/gui)
 @item libxml2-devel (cli/gui)
 @item fribidi-devel (cli/gui)
@@ -134,10 +136,11 @@ Additional Fedora packages:
 To install these packages:
 @example
 sudo yum install patch intltool libtool cmake gcc-c++ yasm zlib-devel \
-bzip2-devel libogg-devel libtheora-devel libvorbis-devel libsamplerate-devel \
-libxml2-devel fribidi-devel freetype-devel fontconfig-devel libass-devel \
-lame-devel x264-devel jansson-devel dbus-glib-devel libgudev1-devel \
-webkitgtk3-devel libnotify-devel gstreamer1-devel gstreamer1-plugins-base-devel
+bzip2-devel libogg-devel libtheora-devel libvorbis-devel opus-devel \
+libsamplerate-devel libxml2-devel fribidi-devel freetype-devel \
+fontconfig-devel libass-devel lame-devel x264-devel jansson-devel \
+dbus-glib-devel libgudev1-devel webkitgtk3-devel libnotify-devel \
+gstreamer1-devel gstreamer1-plugins-base-devel
 @end example
 
 @c %**-------------------------------------------------------------------------
