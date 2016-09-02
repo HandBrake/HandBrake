@@ -18,9 +18,10 @@ FFMPEG.FETCH.md5 =  1a2eb461b98e0f1d1d6c4d892d51ac9b
 #FFMPEG.FETCH.md5 = 133fab51636f47d01c25b80f33f6ae3f
 
 FFMPEG.CONFIGURE.deps  =
-FFMPEG.CONFIGURE.env   =
 FFMPEG.CONFIGURE.host  =
 FFMPEG.CONFIGURE.build =
+FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+FFMPEG.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
 FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
@@ -142,9 +143,4 @@ endif
 ## MPC8 Doesn't compile on SPARC
 ifeq (solaris-sparc,$(BUILD.system)-$(BUILD.machine))
     FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
-endif
-
-ifeq (1,$(FEATURE.local_yasm))
-    FFMPEG.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    FFMPEG.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif
