@@ -85,5 +85,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [Display(Name = "FLAC Passthru")]
         [ShortName("copy:flac")]
         FlacPassthru,
+
+        [Display(Name = "Opus (libopus)")]
+        [ShortName("opus")]
+        Opus,
     }
 }
