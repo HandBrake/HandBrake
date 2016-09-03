@@ -233,7 +233,7 @@ static NSMutableArray *masterBitRateArray = nil;
     }
     else if (samplerate)
     {
-        samplerate = hb_audio_samplerate_get_best(codec, samplerate, NULL);
+        samplerate = hb_audio_samplerate_find_closest(samplerate, codec);
         [self setSampleRateFromName:@(hb_audio_samplerate_get_name(samplerate))];
     }
 }
@@ -340,7 +340,7 @@ static NSMutableArray *masterBitRateArray = nil;
          audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
     {
         int rate = audio_samplerate->rate;
-        if (rate == hb_audio_samplerate_get_best(codec, rate, NULL))
+        if (rate == hb_audio_samplerate_find_closest(rate, codec))
         {
             [samplerates addObject:@{keyAudioSampleRateName: @(audio_samplerate->name),
                                      keyAudioSamplerate:     @(rate)}];

@@ -127,7 +127,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
     }
     else if (self.sampleRate)
     {
-        self.sampleRate = hb_audio_samplerate_get_best(self.encoder, self.sampleRate, NULL);
+        self.sampleRate = hb_audio_samplerate_find_closest(self.sampleRate, self.encoder);
     }
 }
 
@@ -262,7 +262,7 @@ static void *HBAudioEncoderContex = &HBAudioEncoderContex;
          audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
     {
         int rate = audio_samplerate->rate;
-        if (rate == hb_audio_samplerate_get_best(self.encoder, rate, NULL))
+        if (rate == hb_audio_samplerate_find_closest(rate, self.encoder))
         {
             [sampleRates addObject:@(audio_samplerate->name)];
         }

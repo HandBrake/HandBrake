@@ -65,6 +65,8 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
+		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
+		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */; };
 		A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
 		A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
@@ -385,6 +387,7 @@
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
+		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A903C55E1CCE78060026B0ED /* NSWindow+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+HBAdditions.h"; sourceTree = "<group>"; };
 		A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+HBAdditions.m"; sourceTree = "<group>"; };
 		A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrackPreset.h; sourceTree = "<group>"; };
@@ -572,6 +575,7 @@
 				273F202814ADB8BE0021BE6D /* libbz2.dylib in Frameworks */,
 				273F202A14ADB8D60021BE6D /* libiconv.dylib in Frameworks */,
 				273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */,
+				A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */,
 				27D6C72614B1019100B785E4 /* libhandbrake.a in Frameworks */,
 				27D6C74414B102DA00B785E4 /* libass.a in Frameworks */,
 				27D6C74614B102DA00B785E4 /* libavcodec.a in Frameworks */,
@@ -624,6 +628,7 @@
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
 				A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
+				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
 				A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
@@ -689,6 +694,7 @@
 				27D6C73E14B102DA00B785E4 /* libvorbisenc.a */,
 				22DD2C49177B94DB00EF50D3 /* libvpx.a */,
 				27D6C73F14B102DA00B785E4 /* libx264.a */,
+				A900E6BC1D7B1B4800CB6C0A /* libopus.a */,
 				27D6C74014B102DA00B785E4 /* libxml2.a */,
 				A95512881A320A12001BFC6F /* libjansson.a */,
 				A9E165511C523016003EF30E /* libavfilter.a */,
