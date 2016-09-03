@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A313a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -116,7 +115,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="8lG-Fl-ywI">
-                                                            <rect key="frame" x="0.0" y="-3" width="22" height="23"/>
+                                                            <rect key="frame" x="0.0" y="1" width="22" height="18"/>
                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="w0a-by-kw7">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -128,9 +127,8 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="8lG-Fl-ywI" firstAttribute="leading" secondItem="HzO-IC-pgS" secondAttribute="leading" constant="3" id="ADO-pf-rmU"/>
-                                                        <constraint firstItem="8lG-Fl-ywI" firstAttribute="top" secondItem="HzO-IC-pgS" secondAttribute="top" id="DE6-jn-5Qb"/>
-                                                        <constraint firstItem="8lG-Fl-ywI" firstAttribute="centerY" secondItem="HzO-IC-pgS" secondAttribute="centerY" id="qzZ-Cr-YoA"/>
+                                                        <constraint firstItem="8lG-Fl-ywI" firstAttribute="leading" secondItem="HzO-IC-pgS" secondAttribute="leading" constant="3" id="1cF-fd-WLC"/>
+                                                        <constraint firstItem="8lG-Fl-ywI" firstAttribute="top" secondItem="HzO-IC-pgS" secondAttribute="top" constant="1" id="KaA-tF-dl6"/>
                                                     </constraints>
                                                 </tableCellView>
                                             </prototypeCellViews>
@@ -168,9 +166,8 @@
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="jv9-fP-XC4" firstAttribute="centerX" secondItem="kaV-mC-lYC" secondAttribute="centerX" id="HtD-2c-tfr"/>
+                                                        <constraint firstItem="jv9-fP-XC4" firstAttribute="centerY" secondItem="kaV-mC-lYC" secondAttribute="centerY" id="E4A-JU-s88"/>
                                                         <constraint firstAttribute="trailing" secondItem="jv9-fP-XC4" secondAttribute="trailing" constant="1" id="NmL-l0-19h"/>
-                                                        <constraint firstItem="jv9-fP-XC4" firstAttribute="centerY" secondItem="kaV-mC-lYC" secondAttribute="centerY" id="eKv-ib-CLI"/>
                                                         <constraint firstItem="jv9-fP-XC4" firstAttribute="leading" secondItem="kaV-mC-lYC" secondAttribute="leading" constant="2" id="ljd-Tb-JFO"/>
                                                     </constraints>
                                                     <connections>
@@ -187,12 +184,11 @@
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="136" id="ALe-lg-Sa2"/>
                         </constraints>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
                             <rect key="frame" x="1" y="119" width="243" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
