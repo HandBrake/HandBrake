@@ -16,6 +16,7 @@
   - libvpx 1.5.0
   - x264 r148 r2705
   - x265 2.0
+- Support of Opus audio encoding via libopus
 - New JSON-based API for interacting with LibHB
 - New JSON-based preset system, including support in the CLI
 - Performance improvements
