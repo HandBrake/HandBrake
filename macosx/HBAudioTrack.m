@@ -19,338 +19,94 @@ NSString *keyAudioInputCodecParam = @"keyAudioInputCodecParam";
 NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
 NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
 
-NSString *keyAudioCodecName = @"keyAudioCodecName";
-NSString *keyAudioSupportedMuxers = @"keyAudioSupportedMuxers";
-NSString *keyAudioSampleRateName = @"keyAudioSampleRateName";
-NSString *keyAudioBitrateName = @"keyAudioBitrateName";
-NSString *keyAudioMustMatchTrack = @"keyAudioMustMatchTrack";
-NSString *keyAudioMixdownName = @"keyAudioMixdownName";
-
-NSString *keyAudioCodec = @"codec";
-NSString *keyAudioMixdown = @"mixdown";
-NSString *keyAudioSamplerate = @"samplerate";
-NSString *keyAudioBitrate = @"bitrate";
-
-static NSMutableArray *masterCodecArray = nil;
-static NSMutableArray *masterMixdownArray = nil;
-static NSMutableArray *masterBitRateArray = nil;
-
-@interface NSArray (HBAudioSupport)
-- (NSDictionary *) dictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey;
-- (NSDictionary *) lastDictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey;
-@end
-@implementation NSArray (HBAudioSupport)
-- (NSDictionary *) dictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey reverse: (BOOL) reverse
-{
-    NSDictionary *retval = nil;
-    NSEnumerator *enumerator = reverse ? [self reverseObjectEnumerator] : [self objectEnumerator];
-    NSDictionary *dict;
-    id aValue;
-
-    while (nil != (dict = [enumerator nextObject]) && !retval)
-    {
-        if (nil != (aValue = dict[aKey]) && [aValue isEqual: anObject])
-        {
-            retval = dict;
-        }
-    }
-    return retval;
-}
-- (NSDictionary *) dictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey
-{
-    return [self dictionaryWithObject: anObject matchingKey: aKey reverse: NO];
-}
-- (NSDictionary *) lastDictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey
-{
-    return [self dictionaryWithObject: anObject matchingKey: aKey reverse: YES];
-}
-
-@end
+#define DEFAULT_SAMPLERATE 48000
 
 @interface HBAudioTrack ()
-
-@property (nonatomic, readwrite) NSArray *codecs;
-@property (nonatomic, readwrite) NSArray *mixdowns;
-@property (nonatomic, readwrite) NSArray *bitRates;
-
+@property (nonatomic, readwrite) BOOL validating;
 @end
 
 @implementation HBAudioTrack
 
-#pragma mark -
-#pragma mark Object Setup
-
-+ (void)initialize
+- (instancetype)init
 {
-    if ([HBAudioTrack class] == self)
+    self = [super init];
+    if (self)
     {
-        masterCodecArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
-             audio_encoder != NULL;
-             audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
-        {
-            id audioMustMatchTrack;
-            if ((audio_encoder->codec &  HB_ACODEC_PASS_FLAG) &&
-                (audio_encoder->codec != HB_ACODEC_AUTO_PASS))
-            {
-                audioMustMatchTrack = @(audio_encoder->codec &
-                                                      ~HB_ACODEC_PASS_FLAG);
-            }
-            else
-            {
-                audioMustMatchTrack = @NO;
-            }
-            [masterCodecArray addObject:@{keyAudioCodecName:       @(audio_encoder->name),
-                                          keyAudioCodec:           @(audio_encoder->codec),
-                                          keyAudioSupportedMuxers: @(audio_encoder->muxers),
-                                          keyAudioMustMatchTrack:    audioMustMatchTrack}];
-        }
-
-        masterMixdownArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        for (const hb_mixdown_t *mixdown = hb_mixdown_get_next(NULL);
-             mixdown != NULL;
-             mixdown  = hb_mixdown_get_next(mixdown))
-        {
-            [masterMixdownArray addObject:@{keyAudioMixdownName: @(mixdown->name),
-                                            keyAudioMixdown:     @(mixdown->amixdown)}];
-        }
-
-        masterBitRateArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
-             audio_bitrate != NULL;
-             audio_bitrate  = hb_audio_bitrate_get_next(audio_bitrate))
-        {
-            [masterBitRateArray addObject:@{keyAudioBitrateName: @(audio_bitrate->name),
-                                            keyAudioBitrate:     @(audio_bitrate->rate)}];
-        }
+        // Defaults settings
+        _encoder = HB_ACODEC_CA_AAC;
+        _container = HB_MUX_MKV;
+        _sampleRate = 0;
+        _bitRate = 160;
+        _mixdown = HB_AMIXDOWN_DOLBYPLII;
     }
+    return self;
 }
 
-// Ensure the list of codecs is accurate
-// Update the current value of codec based on the revised list
-- (void) updateCodecs
+- (instancetype)initWithTrackIdx:(NSUInteger)index
+                       container:(int)container
+                      dataSource:(id<HBAudioTrackDataSource>)dataSource
+                        delegate:(id<HBAudioTrackDelegate>)delegate;
 {
-    NSMutableArray *permittedCodecs = [NSMutableArray array];
-    NSUInteger count = [masterCodecArray count];
-    NSDictionary *dict;
-
-    // First get a list of the permitted codecs based on the internal rules
-    if (nil != self.track && self.enabled)
+    self = [super init];
+    if (self)
     {
-        BOOL goodToAdd;
+        _dataSource = dataSource;
+        _sourceTrackIdx = index;
+        _container = container;
 
-        for (unsigned int i = 0; i < count; i++)
-        {
-            dict = masterCodecArray[i];
+        [self validateSettings];
 
-            // First make sure only codecs permitted by the container are here
-            goodToAdd = !!([dict[keyAudioSupportedMuxers] intValue] & self.container);
-
-            // Now we make sure if DTS or AC3 is not available in the track it is not put in the codec list, but in a general way
-            if ([dict[keyAudioMustMatchTrack] boolValue])
-            {
-                if ([dict[keyAudioMustMatchTrack] intValue] != [self.track[keyAudioInputCodec] intValue])
-                {
-                    goodToAdd = NO;
-                }
-            }
-
-            if (goodToAdd)
-            {
-                [permittedCodecs addObject: dict];
-            }
-        }
+        _delegate = delegate;
     }
 
-    // Now make sure the permitted list and the actual ones matches
-    [self setCodecs: permittedCodecs];
+    return self;
+}
 
-    // Ensure our codec is on the list of permitted codecs
-    if (!self.codec || ![permittedCodecs containsObject: self.codec])
+- (void)validateSettings
+{
+    if (_sourceTrackIdx)
     {
-        if (0 < [permittedCodecs count])
+        if (self.encoder == 0)
         {
-            self.codec = permittedCodecs[0]; // This should be defaulting to Core Audio
+            self.encoder = HB_ACODEC_CA_AAC;
+            self.bitRate = 160;
         }
         else
         {
-            self.codec = nil;
+            self.encoder = [self sanatizeEncoderValue:self.encoder];
         }
-    }
-}
-
-- (void)updateMixdowns:(BOOL)shouldSetDefault
-{
-    NSMutableArray *permittedMixdowns = [NSMutableArray array];
-    NSDictionary *dict;
-    int currentMixdown;
-
-    unsigned long long channelLayout = [self.track[keyAudioInputChannelLayout] unsignedLongLongValue];
-    NSUInteger count                 = [masterMixdownArray count];
-    int codecCodec                   = [self.codec[keyAudioCodec] intValue];
-    int theDefaultMixdown            = hb_mixdown_get_default(codecCodec, channelLayout);
-
-    for (unsigned int i = 0; i < count; i++)
-    {
-        dict = masterMixdownArray[i];
-        currentMixdown = [dict[keyAudioMixdown] intValue];
-
-        if (hb_mixdown_is_supported(currentMixdown, codecCodec, channelLayout))
-        {
-            [permittedMixdowns addObject: dict];
-        }
-    }
-
-    if (!self.enabled)
-    {
-        permittedMixdowns = nil;
-    }
-
-    // Now make sure the permitted list and the actual ones matches
-    self.mixdowns = permittedMixdowns;
-
-    // Select the proper one
-    if (shouldSetDefault)
-    {
-        self.mixdown = [permittedMixdowns dictionaryWithObject: @(theDefaultMixdown)
-                                                      matchingKey: keyAudioMixdown];
-    }
-
-    if (!self.mixdown || ![permittedMixdowns containsObject: self.mixdown])
-    {
-        self.mixdown = [permittedMixdowns lastObject];
-    }
-}
-
-- (void)validateSamplerate
-{
-    int codec      = [self.codec[keyAudioCodec] intValue];
-    int samplerate = [self.sampleRate[keyAudioSamplerate] intValue];
-
-    if (codec & HB_ACODEC_PASS_FLAG)
-    {
-        [self setSampleRateFromName:@"Auto"];
-    }
-    else if (samplerate)
-    {
-        samplerate = hb_audio_samplerate_find_closest(samplerate, codec);
-        [self setSampleRateFromName:@(hb_audio_samplerate_get_name(samplerate))];
-    }
-}
-
-- (void)updateBitRates:(BOOL)shouldSetDefault
-{
-    NSMutableArray *permittedBitRates = [NSMutableArray array];
-    NSDictionary *dict;
-    int minBitRate;
-    int maxBitRate;
-    int currentBitRate;
-    BOOL shouldAdd;
-
-    NSUInteger count = [masterBitRateArray count];
-    int trackInputBitRate = [self.track[keyAudioInputBitrate] intValue];
-    int theSampleRate = [self.sampleRate[keyAudioSamplerate] intValue];
-
-    if (0 == theSampleRate) // this means Auto
-    {
-        theSampleRate = [self.track[keyAudioInputSampleRate] intValue];
-    }
-
-    int ourCodec          = [self.codec[keyAudioCodec] intValue];
-    int ourMixdown        = [self.mixdown[keyAudioMixdown] intValue];
-    int theDefaultBitRate = hb_audio_bitrate_get_default(ourCodec, theSampleRate, ourMixdown);
-    hb_audio_bitrate_get_limits(ourCodec, theSampleRate, ourMixdown, &minBitRate, &maxBitRate);
-
-    BOOL codecIsPassthru = ([self.codec[keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG) ? YES : NO;
-    BOOL codecIsLossless = (theDefaultBitRate == -1) ? YES : NO;
-
-    if (codecIsPassthru)
-    {
-        NSDictionary *sourceBitRate = [masterBitRateArray dictionaryWithObject: @(trackInputBitRate)
-                                                                   matchingKey: keyAudioBitrate];
-        if (!sourceBitRate)
-        {
-            // the source bitrate isn't in the master array - create it
-            sourceBitRate = @{keyAudioBitrateName: [NSString stringWithFormat: @"%d", trackInputBitRate],
-                              keyAudioBitrate: @(trackInputBitRate)};
-        }
-        [permittedBitRates addObject: sourceBitRate];
-    }
-    else if (codecIsLossless)
-    {
-        NSDictionary *bitRateNotApplicable = @{keyAudioBitrateName: @"N/A",
-                                               keyAudioBitrate: @-1};
-        [permittedBitRates addObject: bitRateNotApplicable];
     }
     else
     {
-        for (unsigned int i = 0; i < count; i++)
-        {
-            dict = masterBitRateArray[i];
-            currentBitRate = [dict[keyAudioBitrate] intValue];
-
-            // First ensure the bitrate falls within range of the codec
-            shouldAdd = (currentBitRate >= minBitRate && currentBitRate <= maxBitRate);
-
-            if (shouldAdd)
-            {
-                [permittedBitRates addObject: dict];
-            }
-        }
-    }
-
-    if (!self.enabled)
-    {
-        permittedBitRates = nil;
-    }
-
-    // Make sure we are updated with the permitted list
-    self.bitRates = permittedBitRates;
-
-    // Select the proper one
-    if (shouldSetDefault)
-    {
-        [self setBitRateFromName: [NSString stringWithFormat:@"%d", theDefaultBitRate]];
-    }
-
-    if (!self.bitRate || ![permittedBitRates containsObject: self.bitRate])
-    {
-        self.bitRate = [permittedBitRates lastObject];
+        self.encoder = 0;
+        self.mixdown = 0;
+        self.sampleRate = 0;
+        self.bitRate = -1;
     }
 }
 
-#pragma mark -
-#pragma mark Accessors
+#pragma mark - Track properties
 
-- (NSArray *)sampleRates
+- (void)setSourceTrackIdx:(NSUInteger)sourceTrackIdx
 {
-    NSMutableArray *samplerates = [[NSMutableArray alloc] init];
-
-    /*
-     * Note that for the Auto value we use 0 for the sample rate because our controller will give back the track's
-     * input sample rate when it finds this 0 value as the selected sample rate.  We do this because the input
-     * sample rate depends on the track, which means it depends on the title, so cannot be nicely set up here.
-     */
-    [samplerates addObject:@{keyAudioSampleRateName: @"Auto",
-                             keyAudioSamplerate:     @0}];
-
-    int codec = [self.codec[keyAudioCodec] intValue];
-    for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
-         audio_samplerate != NULL;
-         audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
+    if (sourceTrackIdx != _sourceTrackIdx)
     {
-        int rate = audio_samplerate->rate;
-        if (rate == hb_audio_samplerate_find_closest(rate, codec))
+        [[self.undo prepareWithInvocationTarget:self] setSourceTrackIdx:_sourceTrackIdx];
+    }
+
+    NSUInteger oldIdx = _sourceTrackIdx;
+    _sourceTrackIdx = sourceTrackIdx;
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateSettings];
+
+        if (oldIdx != sourceTrackIdx)
         {
-            [samplerates addObject:@{keyAudioSampleRateName: @(audio_samplerate->name),
-                                     keyAudioSamplerate:     @(rate)}];
+            [self.delegate track:self didChangeSourceFrom:oldIdx];
         }
     }
-    return samplerates;
 }
-
-#pragma mark -
-#pragma mark Setters
 
 - (void)setContainer:(int)container
 {
@@ -362,54 +118,33 @@ static NSMutableArray *masterBitRateArray = nil;
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
-        [self updateCodecs];
+        if (self.encoder)
+        {
+            self.encoder = [self sanatizeEncoderValue:self.encoder];
+        }
     }
 }
 
-- (void)setTrack:(NSDictionary *)track
+- (void)setEncoder:(int)encoder
 {
-    if (track != _track)
+    if (encoder != _encoder)
     {
-        [[self.undo prepareWithInvocationTarget:self] setTrack:_track];
+        [[self.undo prepareWithInvocationTarget:self] setEncoder:_encoder];
     }
-    NSDictionary *oldValue = _track;
-    _track = track;
-    if (nil != _track && !(self.undo.isUndoing || self.undo.isRedoing))
+    _encoder = encoder;
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
-        [self updateCodecs];
-        [self updateMixdowns: YES];
-        if (self.enabled)
-        {
-            self.sampleRate = self.sampleRates[0]; // default to Auto
-        }
-        if ([self.dataSource.noneTrack isEqual: oldValue])
-        {
-            [self.delegate switchingTrackFromNone: self];
-        }
-        if ([self.dataSource.noneTrack isEqual: self.track])
-        {
-            [self.delegate settingTrackToNone: self];
-        }
+        self.validating = YES;
+        [self.delegate encoderChanged];
+        self.mixdown = [self sanatizeMixdownValue:self.mixdown];
+        self.sampleRate = [self sanatizeSamplerateValue:self.sampleRate];
+        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.validating = NO;
     }
 }
 
-- (void)setCodec:(NSDictionary *)codec
-{
-    if (codec != _codec)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setCodec:_codec];
-    }
-    _codec = codec;
-
-    if (!(self.undo.isUndoing || self.undo.isRedoing))
-    {
-        [self validateSamplerate];
-        [self updateMixdowns:YES];
-        [self updateBitRates:YES];
-    }
-}
-
-- (void)setMixdown:(NSDictionary *)mixdown
+- (void)setMixdown:(int)mixdown
 {
     if (mixdown != _mixdown)
     {
@@ -417,14 +152,15 @@ static NSMutableArray *masterBitRateArray = nil;
     }
     _mixdown = mixdown;
 
-    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
-        [self updateBitRates:YES];
-        [self.delegate mixdownChanged];
+        self.validating = YES;
+        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.validating = NO;
     }
 }
 
-- (void)setSampleRate:(NSDictionary *)sampleRate
+- (void)setSampleRate:(int)sampleRate
 {
     if (sampleRate != _sampleRate)
     {
@@ -432,28 +168,21 @@ static NSMutableArray *masterBitRateArray = nil;
     }
     _sampleRate = sampleRate;
 
-    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
-        [self updateBitRates: NO];
+        self.validating = YES;
+        self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        self.validating = NO;
     }
 }
 
-- (void)setBitRate:(NSDictionary *)bitRate
+- (void)setBitRate:(int)bitRate
 {
     if (bitRate != _bitRate)
     {
         [[self.undo prepareWithInvocationTarget:self] setBitRate:_bitRate];
     }
     _bitRate = bitRate;
-}
-
-- (void)setDrc:(double)drc
-{
-    if (drc != _drc)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setDrc:_drc];
-    }
-    _drc = drc;
 }
 
 - (void)setGain:(double)gain
@@ -464,83 +193,6 @@ static NSMutableArray *masterBitRateArray = nil;
     }
     _gain = gain;
 }
-
-#pragma mark -
-#pragma mark Special Setters
-
-- (void)setTrackFromIndex:(int)aValue
-{
-    self.track = [self.dataSource.masterTrackArray dictionaryWithObject: @(aValue)
-                                                            matchingKey: keyAudioTrackIndex];
-}
-
-// This returns whether it is able to set the actual codec desired.
-- (BOOL)setCodecFromName:(NSString *)aValue
-{
-    NSDictionary *dict = [self.codecs dictionaryWithObject: aValue matchingKey: keyAudioCodecName];
-    if (nil != dict)
-    {
-        self.codec = dict;
-    }
-    return (nil != dict);
-}
-
-- (void)setMixdownFromName:(NSString *)aValue
-{
-    NSDictionary *dict = [self.mixdowns dictionaryWithObject: aValue matchingKey: keyAudioMixdownName];
-    if (nil != dict)
-    {
-        self.mixdown = dict;
-    }
-}
-
-- (void)setSampleRateFromName:(NSString *)aValue
-{
-    NSDictionary *dict = [self.sampleRates dictionaryWithObject: aValue matchingKey: keyAudioSampleRateName];
-    if (nil != dict)
-    {
-        self.sampleRate = dict;
-    }
-}
-
-- (void)setBitRateFromName:(NSString *)aValue
-{
-    NSDictionary *dict = [self.bitRates dictionaryWithObject: aValue matchingKey: keyAudioBitrateName];
-    if (nil != dict)
-    {
-        self.bitRate = dict;
-    }
-}
-
-- (void)setCodecs:(NSArray *)codecs
-{
-    if (codecs != _codecs)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setCodecs:_codecs];
-    }
-    _codecs = codecs;
-}
-
-- (void)setMixdowns:(NSArray *)mixdowns
-{
-    if (mixdowns != _mixdowns)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setMixdowns:_mixdowns];
-    }
-    _mixdowns = mixdowns;
-}
-
-- (void)setBitRates:(NSArray *)bitRates
-{
-    if (bitRates != _bitRates)
-    {
-        [[self.undo prepareWithInvocationTarget:self] setBitRates:_bitRates];
-    }
-    _bitRates = bitRates;
-}
-
-#pragma mark -
-#pragma mark Validation
 
 // Because we have indicated that the binding for the gain validates immediately we can implement the
 // key value binding method to ensure the gain stays in our accepted range.
@@ -563,42 +215,214 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
-#pragma mark - Bindings Support
-
-- (NSArray *)masterTrackArray
+- (void)setDrc:(double)drc
 {
-    return self.dataSource.masterTrackArray;
+    if (drc != _drc)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDrc:_drc];
+    }
+    _drc = drc;
 }
 
-- (BOOL)enabled
+#pragma mark - Validation
+
+- (int)sanatizeEncoderValue:(int)proposedEncoder
 {
-    return (nil != self.track) ? (![self.track isEqual: self.dataSource.noneTrack]) : NO;
+    if (proposedEncoder)
+    {
+        NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+        int inputCodec = [sourceTrack[keyAudioInputCodec] intValue];
+
+        hb_encoder_t *proposedEncoderInfo = hb_audio_encoder_get_from_codec(proposedEncoder);
+
+        if (proposedEncoderInfo && proposedEncoderInfo->muxers & self.container)
+        {
+            // If the codec is passthru, see if the new source supports it.
+            if (proposedEncoderInfo->codec & HB_ACODEC_PASS_FLAG)
+            {
+                if ((proposedEncoderInfo->codec & inputCodec & HB_ACODEC_PASS_MASK))
+                {
+                    return proposedEncoder;
+                }
+            }
+            else
+            {
+                return proposedEncoder;
+            }
+        }
+
+        return HB_ACODEC_CA_AAC;
+    }
+    else
+    {
+        return proposedEncoder;
+    }
+}
+
+- (int)sanatizeMixdownValue:(int)proposedMixdown
+{
+    NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    unsigned long long channelLayout = [sourceTrack[keyAudioInputChannelLayout] unsignedLongLongValue];
+
+    if (!hb_mixdown_is_supported(proposedMixdown, self.encoder, channelLayout))
+    {
+        return hb_mixdown_get_default(self.encoder, channelLayout);
+    }
+    return proposedMixdown;
+}
+
+- (int)sanatizeSamplerateValue:(int)proposedSamplerate
+{
+    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    {
+        return 0; // Auto (same as source)
+    }
+    else if (proposedSamplerate)
+    {
+        return hb_audio_samplerate_find_closest(proposedSamplerate, self.encoder);
+    }
+    return proposedSamplerate;
+}
+
+- (int)sanatizeBitrateValue:(int)proposedBitrate
+{
+    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    {
+        return -1;
+    }
+    else if (proposedBitrate == -1) // switching from passthru
+    {
+        return hb_audio_bitrate_get_default(self.encoder,
+                                            self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE,
+                                            self.mixdown);
+    }
+    else
+    {
+        return hb_audio_bitrate_get_best(self.encoder, proposedBitrate, self.sampleRate, self.mixdown);
+    }
+}
+
+#pragma mark - Options
+
+- (NSArray<NSString *> *)encoders
+{
+    NSMutableArray<NSString *> *encoders = [[NSMutableArray alloc] init];
+
+    NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    int inputCodec = [sourceTrack[keyAudioInputCodec] intValue];
+
+    for (const hb_encoder_t *audio_encoder = hb_audio_encoder_get_next(NULL);
+         audio_encoder != NULL;
+         audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
+    {
+        if (audio_encoder->muxers & self.container)
+        {
+            if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
+            {
+                // If the codec is passthru, show only the supported ones.
+                if ((audio_encoder->codec & inputCodec & HB_ACODEC_PASS_MASK))
+                {
+                    [encoders addObject:@(audio_encoder->name)];
+                }
+            }
+            else
+            {
+                [encoders addObject:@(audio_encoder->name)];
+            }
+        }
+    }
+    return encoders;
+}
+
+- (NSArray<NSString *> *)mixdowns
+{
+    NSMutableArray<NSString *> *mixdowns = [[NSMutableArray alloc] init];
+
+    NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    unsigned long long channelLayout = [sourceTrack[keyAudioInputChannelLayout] unsignedLongLongValue];
+
+    for (const hb_mixdown_t *mixdown = hb_mixdown_get_next(NULL);
+         mixdown != NULL;
+         mixdown  = hb_mixdown_get_next(mixdown))
+    {
+        if (hb_mixdown_is_supported(mixdown->amixdown, self.encoder, channelLayout))
+        {
+            [mixdowns addObject:@(mixdown->name)];
+        }
+    }
+    return mixdowns;
+}
+
+- (NSArray<NSString *> *)sampleRates
+{
+    NSMutableArray<NSString *> *sampleRates = [[NSMutableArray alloc] init];
+    [sampleRates addObject:@"Auto"];
+
+    for (const hb_rate_t *audio_samplerate = hb_audio_samplerate_get_next(NULL);
+         audio_samplerate != NULL;
+         audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
+    {
+        int rate = audio_samplerate->rate;
+        if (rate == hb_audio_samplerate_find_closest(rate, self.encoder))
+        {
+            [sampleRates addObject:@(audio_samplerate->name)];
+        }
+    }
+    return sampleRates;
+}
+
+- (NSArray<NSString *> *)bitRates
+{
+    int minBitRate = 0;
+    int maxBitRate = 0;
+
+    hb_audio_bitrate_get_limits(self.encoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
+
+    NSMutableArray<NSString *> *bitRates = [[NSMutableArray alloc] init];
+    for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
+         audio_bitrate != NULL;
+         audio_bitrate  = hb_audio_bitrate_get_next(audio_bitrate))
+    {
+        if (audio_bitrate->rate >= minBitRate && audio_bitrate->rate <= maxBitRate)
+        {
+            [bitRates addObject:@(audio_bitrate->name)];
+        }
+    }
+    return bitRates;
+}
+
+#pragma mark - KVO UI Additions
+
+- (NSArray *)sourceTracksArray
+{
+    return [self.dataSource sourceTracksArray];
+}
+
+- (BOOL)isEnabled
+{
+    return self.sourceTrackIdx != 0;
 }
 
 - (BOOL)mixdownEnabled
 {
-    BOOL retval = self.enabled;
+    BOOL retval = self.isEnabled;
 
-    if (retval)
+    if (retval && self.mixdown == HB_AMIXDOWN_NONE)
     {
-        int myMixdown = [self.mixdown[keyAudioMixdown] intValue];
-        if (myMixdown == HB_AMIXDOWN_NONE)
-        {
-            // "None" mixdown (passthru)
-            retval = NO;
-        }
+        // "None" mixdown (passthru)
+        retval = NO;
     }
+
     return retval;
 }
 
 - (BOOL)bitrateEnabled
 {
-    BOOL retval = self.enabled;
+    BOOL retval = self.isEnabled;
 
     if (retval)
     {
-        int myCodecCodec          = [self.codec[keyAudioCodec] intValue];
-        int myCodecDefaultBitrate = hb_audio_bitrate_get_default(myCodecCodec, 0, 0);
+        int myCodecDefaultBitrate = hb_audio_bitrate_get_default(self.encoder, 0, 0);
         if (myCodecDefaultBitrate < 0)
         {
             retval = NO;
@@ -607,16 +431,17 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
-- (BOOL)DRCEnabled
+- (BOOL)drcEnabled
 {
-    BOOL retval = self.enabled;
+    BOOL retval = self.isEnabled;
 
     if (retval)
     {
-        int myTrackParam = [self.track[keyAudioInputCodecParam] intValue];
-        int myTrackCodec = [self.track[keyAudioInputCodec] intValue];
-        int myCodecCodec = [self.codec[keyAudioCodec] intValue];
-        if (!hb_audio_can_apply_drc(myTrackCodec, myTrackParam, myCodecCodec))
+        NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+
+        int inputCodec = [sourceTrack[keyAudioInputCodec] intValue];
+        int inputCodecParam = [sourceTrack[keyAudioInputCodecParam] intValue];
+        if (!hb_audio_can_apply_drc(inputCodec, inputCodecParam, self.encoder))
         {
             retval = NO;
         }
@@ -624,18 +449,52 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
-- (BOOL)PassThruDisabled
+- (BOOL)passThruDisabled
 {
-    BOOL retval = self.enabled;
+    BOOL retval = YES;
 
-    if (retval)
+    if (self.encoder & HB_ACODEC_PASS_FLAG)
     {
-        int myCodecCodec = [self.codec[keyAudioCodec] intValue];
-        if (myCodecCodec & HB_ACODEC_PASS_FLAG)
-        {
-            retval = NO;
-        }
+        retval = NO;
     }
+
+    return retval;
+}
+
+#pragma mark - KVO
+
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    NSSet *retval = nil;
+
+    if ([key isEqualToString:@"bitrateEnabled"] ||
+        [key isEqualToString:@"passThruDisabled"] ||
+        [key isEqualToString:@"mixdownEnabled"])
+    {
+        retval = [NSSet setWithObjects:@"encoder", nil];
+    }
+    else if ([key isEqualToString:@"mixdowns"] ||
+             [key isEqualToString:@"drcEnabled"])
+    {
+        retval = [NSSet setWithObjects:@"sourceTrackIdx", @"encoder", nil];
+    }
+    else if ([key isEqualToString:@"sampleRates"])
+    {
+        retval = [NSSet setWithObjects:@"encoder", @"mixdown", nil];
+    }
+    else if ([key isEqualToString:@"bitRates"])
+    {
+        retval = [NSSet setWithObjects:@"encoder", @"mixdown", @"sampleRate", nil];
+    }
+    else if ([key isEqualToString:@"encoders"])
+    {
+        retval = [NSSet setWithObjects:@"container", @"sourceTrackIdx", nil];
+    }
+    else
+    {
+        retval = [NSSet set];
+    }
+
     return retval;
 }
 
@@ -647,38 +506,6 @@ static NSMutableArray *masterBitRateArray = nil;
     }
 }
 
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-    NSSet *retval = nil;
-
-    if ([key isEqualToString:@"enabled"])
-    {
-        retval = [NSSet setWithObjects:@"track", nil];
-    }
-    else if ([key isEqualToString:@"PassThruDisabled"])
-    {
-        retval = [NSSet setWithObjects:@"track", @"codec", nil];
-    }
-    else if ([key isEqualToString:@"DRCEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"track", @"codec", nil];
-    }
-    else if ([key isEqualToString:@"bitrateEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"track", @"codec", nil];
-    }
-    else if ([key isEqualToString:@"mixdownEnabled"])
-    {
-        retval = [NSSet setWithObjects:@"track", @"mixdown", nil];
-    }
-    else
-    {
-        retval = [NSSet set];
-    }
-
-    return retval;
-}
-
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -687,18 +514,16 @@ static NSMutableArray *masterBitRateArray = nil;
 
     if (copy)
     {
-        copy->_track = [_track copy];
-        copy->_codec = [_codec copy];
-        copy->_mixdown = [_mixdown copy];
-        copy->_sampleRate = [_sampleRate copy];
-        copy->_bitRate = [_bitRate copy];
-        copy->_drc = _drc;
-        copy->_gain = _gain;
+        copy->_sourceTrackIdx = _sourceTrackIdx;
         copy->_container = _container;
 
-        copy->_codecs = [_codecs copy];
-        copy->_mixdowns = [_mixdowns copy];
-        copy->_bitRates = [_bitRates copy];
+        copy->_encoder = _encoder;
+        copy->_mixdown = _mixdown;
+        copy->_sampleRate = _sampleRate;
+        copy->_bitRate = _bitRate;
+
+        copy->_gain = _gain;
+        copy->_drc = _drc;
     }
 
     return copy;
@@ -713,38 +538,34 @@ static NSMutableArray *masterBitRateArray = nil;
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:2 forKey:@"HBAudioTrackVersion"];
+    [coder encodeInt:3 forKey:@"HBAudioTrackVersion"];
 
-    encodeObject(_track);
-    encodeObject(_codec);
-    encodeObject(_mixdown);
-    encodeObject(_sampleRate);
-    encodeObject(_bitRate);
-    encodeDouble(_drc);
-    encodeDouble(_gain);
+    encodeInteger(_sourceTrackIdx);
     encodeInt(_container);
 
-    encodeObject(_codecs);
-    encodeObject(_mixdowns);
-    encodeObject(_bitRates);
+    encodeInt(_encoder);
+    encodeInt(_mixdown);
+    encodeInt(_sampleRate);
+    encodeInt(_bitRate);
+
+    encodeDouble(_gain);
+    encodeDouble(_drc);
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
 
-    decodeObject(_track, NSDictionary);
-    decodeObject(_codec, NSDictionary);
-    decodeObject(_mixdown, NSDictionary);
-    decodeObject(_sampleRate, NSDictionary);
-    decodeObject(_bitRate, NSDictionary);
-    decodeDouble(_drc);
-    decodeDouble(_gain);
+    decodeInteger(_sourceTrackIdx);
     decodeInt(_container);
 
-    decodeObject(_codecs, NSMutableArray);
-    decodeObject(_mixdowns, NSMutableArray);
-    decodeObject(_bitRates, NSArray);
+    decodeInt(_encoder);
+    decodeInt(_mixdown);
+    decodeInt(_sampleRate);
+    decodeInt(_bitRate);
+
+    decodeDouble(_gain);
+    decodeDouble(_drc);
 
     return self;
 }

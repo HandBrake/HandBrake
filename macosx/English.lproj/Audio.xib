@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A313a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
@@ -13,32 +12,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <arrayController preservesSelection="NO" avoidsEmptySelection="NO" id="rzb-Si-Kpf">
-            <declaredKeys>
-                <string>tracks</string>
-                <string>tracks.keyAudioTrackName</string>
-                <string>track</string>
-                <string>enabled</string>
-                <string>mixdownEnabled</string>
-                <string>drc</string>
-                <string>codecs</string>
-                <string>codecs.keyAudioCodecName</string>
-                <string>codec</string>
-                <string>mixdowns</string>
-                <string>mixdowns.keyAudioMixdownName</string>
-                <string>mixdown</string>
-                <string>sampleRates</string>
-                <string>sampleRates.keyAudioSampleRateName</string>
-                <string>sampleRate</string>
-                <string>bitRates</string>
-                <string>bitRates.keyAudioBitrateName</string>
-                <string>bitRate</string>
-                <string>DRCEnabled</string>
-                <string>gain</string>
-                <string>PassThruEnabled</string>
-                <string>PassThruDisabled</string>
-                <string>bitrateEnabled</string>
-            </declaredKeys>
+        <arrayController objectClassName="HBAudioTrack" preservesSelection="NO" avoidsEmptySelection="NO" id="rzb-Si-Kpf">
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.audio.tracks" id="W0u-41-zX4"/>
             </connections>
@@ -148,9 +122,8 @@
                                                             <menu key="menu" id="hXU-xc-dxL"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="wJH-tU-zL6" name="content" keyPath="objectValue.masterTrackArray" id="pvQ-pN-TdG"/>
-                                                            <binding destination="wJH-tU-zL6" name="contentValues" keyPath="objectValue.masterTrackArray.keyAudioTrackName" previousBinding="pvQ-pN-TdG" id="Wec-Fo-DSj"/>
-                                                            <binding destination="wJH-tU-zL6" name="selectedObject" keyPath="objectValue.track" previousBinding="Wec-Fo-DSj" id="Qoy-ym-QWQ"/>
+                                                            <binding destination="wJH-tU-zL6" name="selectedIndex" keyPath="objectValue.sourceTrackIdx" previousBinding="LnY-7P-b37" id="CWi-rR-r7Y"/>
+                                                            <binding destination="wJH-tU-zL6" name="content" keyPath="objectValue.sourceTracksArray" id="LnY-7P-b37"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -190,10 +163,13 @@
                                                             </connections>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="8ed-5g-y6e" name="selectedObject" keyPath="objectValue.codec" previousBinding="cvm-Mj-Drh" id="sEl-p7-19g"/>
-                                                            <binding destination="8ed-5g-y6e" name="content" keyPath="objectValue.codecs" id="pxN-GH-Dfr"/>
-                                                            <binding destination="8ed-5g-y6e" name="contentValues" keyPath="objectValue.codecs.keyAudioCodecName" previousBinding="pxN-GH-Dfr" id="cvm-Mj-Drh"/>
-                                                            <binding destination="8ed-5g-y6e" name="enabled" keyPath="objectValue.enabled" id="V0U-a3-ZBW"/>
+                                                            <binding destination="8ed-5g-y6e" name="selectedValue" keyPath="objectValue.encoder" previousBinding="Ojx-pY-iTj" id="aRL-2h-rz1">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBEncoderTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="8ed-5g-y6e" name="content" keyPath="objectValue.encoders" id="Ojx-pY-iTj"/>
+                                                            <binding destination="8ed-5g-y6e" name="enabled" keyPath="objectValue.isEnabled" id="hNs-V2-g3t"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -230,10 +206,21 @@
                                                             <menu key="menu" id="5Ha-Of-SJF"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="JWs-Gl-4kd" name="selectedObject" keyPath="objectValue.mixdown" previousBinding="mrr-Rw-0Km" id="fAC-AG-TmT"/>
-                                                            <binding destination="JWs-Gl-4kd" name="enabled" keyPath="objectValue.mixdownEnabled" id="anJ-dk-glQ"/>
+                                                            <binding destination="JWs-Gl-4kd" name="enabled" keyPath="objectValue.isEnabled" id="tgd-cw-Xvj"/>
+                                                            <binding destination="JWs-Gl-4kd" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="N2w-i8-sMD" id="0hr-bn-M8A">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBMixdownTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="JWs-Gl-4kd" name="enabled2" keyPath="objectValue.mixdownEnabled" previousBinding="tgd-cw-Xvj" id="cYM-fO-KQf">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="JWs-Gl-4kd" name="content" keyPath="objectValue.mixdowns" id="N2w-i8-sMD"/>
-                                                            <binding destination="JWs-Gl-4kd" name="contentValues" keyPath="objectValue.mixdowns.keyAudioMixdownName" previousBinding="N2w-i8-sMD" id="mrr-Rw-0Km"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -270,10 +257,22 @@
                                                             <menu key="menu" id="phf-E4-JNn"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="iQl-Lr-pqe" name="enabled" keyPath="objectValue.mixdownEnabled" id="7np-q0-yTV"/>
-                                                            <binding destination="iQl-Lr-pqe" name="selectedObject" keyPath="objectValue.sampleRate" previousBinding="lhu-ag-YDS" id="2BU-o2-PJ0"/>
+                                                            <binding destination="iQl-Lr-pqe" name="enabled" keyPath="objectValue.isEnabled" id="XCQ-bF-dAC"/>
+                                                            <binding destination="iQl-Lr-pqe" name="enabled2" keyPath="objectValue.mixdownEnabled" previousBinding="XCQ-bF-dAC" id="apI-pR-y7v">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="iQl-Lr-pqe" name="selectedValue" keyPath="objectValue.sampleRate" previousBinding="Q5x-J9-u3J" id="hlm-8l-ATk">
+                                                                <dictionary key="options">
+                                                                    <string key="NSNullPlaceholder">Auto</string>
+                                                                    <string key="NSValueTransformerName">HBSampleRateTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="iQl-Lr-pqe" name="content" keyPath="objectValue.sampleRates" id="Q5x-J9-u3J"/>
-                                                            <binding destination="iQl-Lr-pqe" name="contentValues" keyPath="objectValue.sampleRates.keyAudioSampleRateName" previousBinding="Q5x-J9-u3J" id="lhu-ag-YDS"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -310,10 +309,21 @@
                                                             <menu key="menu" id="DFY-hE-Hi6"/>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="Acc-Cw-PLD" name="selectedObject" keyPath="objectValue.bitRate" previousBinding="cgA-Y3-ucA" id="9OJ-Wp-j0I"/>
+                                                            <binding destination="Acc-Cw-PLD" name="selectedValue" keyPath="objectValue.bitRate" previousBinding="S0T-S3-WF5" id="y8e-kU-Kay">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBIntegerTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="Acc-Cw-PLD" name="content" keyPath="objectValue.bitRates" id="S0T-S3-WF5"/>
-                                                            <binding destination="Acc-Cw-PLD" name="contentValues" keyPath="objectValue.bitRates.keyAudioBitrateName" previousBinding="S0T-S3-WF5" id="cgA-Y3-ucA"/>
-                                                            <binding destination="Acc-Cw-PLD" name="enabled" keyPath="objectValue.bitrateEnabled" id="woZ-ZV-ZQJ"/>
+                                                            <binding destination="Acc-Cw-PLD" name="enabled2" keyPath="objectValue.bitrateEnabled" previousBinding="vzn-iK-rgP" id="7aV-gO-WvY">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="Acc-Cw-PLD" name="enabled" keyPath="objectValue.isEnabled" id="vzn-iK-rgP"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -351,10 +361,18 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="wfV-Pi-jHd" name="enabled" keyPath="objectValue.PassThruDisabled" id="NnK-Vf-hM6"/>
                                                             <binding destination="wfV-Pi-jHd" name="value" keyPath="objectValue.gain" id="7hD-ql-cNT">
                                                                 <dictionary key="options">
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="wfV-Pi-jHd" name="enabled" keyPath="objectValue.isEnabled" id="OrM-Yv-Fs0"/>
+                                                            <binding destination="wfV-Pi-jHd" name="enabled2" keyPath="objectValue.passThruDisabled" previousBinding="OrM-Yv-Fs0" id="d6m-q5-unj">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -363,10 +381,18 @@
                                                         <rect key="frame" x="3" y="2" width="22" height="22"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="BBQ-FP-aQN"/>
                                                         <connections>
-                                                            <binding destination="wfV-Pi-jHd" name="enabled" keyPath="objectValue.PassThruDisabled" id="Wz3-ZW-SLi"/>
                                                             <binding destination="wfV-Pi-jHd" name="value" keyPath="objectValue.gain" id="bKN-kD-NjJ">
                                                                 <dictionary key="options">
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="wfV-Pi-jHd" name="enabled" keyPath="objectValue.isEnabled" id="7nL-Mg-i86"/>
+                                                            <binding destination="wfV-Pi-jHd" name="enabled2" keyPath="objectValue.passThruDisabled" previousBinding="7nL-Mg-i86" id="y1g-gJ-0g6">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -403,12 +429,20 @@
                                                         <rect key="frame" x="3" y="1" width="22" height="22"/>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nII-CW-aWc"/>
                                                         <connections>
-                                                            <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.DRCEnabled" id="tzk-tB-jEf"/>
+                                                            <binding destination="RMf-U7-5Td" name="enabled2" keyPath="objectValue.drcEnabled" previousBinding="UGi-Kk-MwK" id="dVM-pa-gKf">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="GxO-He-2yi">
                                                                 <dictionary key="options">
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.isEnabled" id="UGi-Kk-MwK"/>
                                                         </connections>
                                                     </slider>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yPh-4R-HRQ">
@@ -420,12 +454,20 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.DRCEnabled" id="FS6-ca-Kmi"/>
+                                                            <binding destination="RMf-U7-5Td" name="enabled2" keyPath="objectValue.drcEnabled" previousBinding="Vv3-g9-exh" id="lY2-Z2-4bl">
+                                                                <dictionary key="options">
+                                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="f0P-bz-w9a">
                                                                 <dictionary key="options">
                                                                     <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.isEnabled" id="Vv3-g9-exh"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -478,7 +520,7 @@
                 <constraint firstAttribute="bottom" secondItem="Yzu-Rk-hTv" secondAttribute="bottom" constant="20" symbolic="YES" id="uil-Nm-DIV"/>
                 <constraint firstItem="jrP-M5-2Rq" firstAttribute="baseline" secondItem="vFP-nq-IQg" secondAttribute="baseline" id="y3i-kl-lge"/>
             </constraints>
-            <point key="canvasLocation" x="730" y="-14"/>
+            <point key="canvasLocation" x="557" y="-38"/>
         </view>
         <menu id="hyy-qd-qpe">
             <items>
