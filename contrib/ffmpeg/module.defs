@@ -21,7 +21,7 @@ FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
 FFMPEG.CONFIGURE.build =
 FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-FFMPEG.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
 FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
@@ -100,21 +100,19 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 endif
 
 ifneq (none,$(FFMPEG.GCC.g))
-	FFMPEG.CONFIGURE.extra += --enable-debug
-
-ifeq (max,$(FFMPEG.GCC.g))
-    FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DDEBUG"
+    FFMPEG.CONFIGURE.extra += --enable-debug
+    ifeq (max,$(FFMPEG.GCC.g))
+        FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DDEBUG"
+    else
+        FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DNDEBUG"
+    endif
 else
-    FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DNDEBUG"
-endif
-
-else
-	FFMPEG.CONFIGURE.extra += --disable-debug
+    FFMPEG.CONFIGURE.extra += --disable-debug
     FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DNDEBUG"
 endif
 
 ifeq (none,$(FFMPEG.GCC.O))
-	FFMPEG.CONFIGURE.extra += --disable-optimizations
+    FFMPEG.CONFIGURE.extra += --disable-optimizations
 endif
 
 ifeq (1,$(FEATURE.qsv))
