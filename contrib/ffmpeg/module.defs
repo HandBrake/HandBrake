@@ -74,14 +74,12 @@ FFMPEG.CONFIGURE.extra += \
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))
-    FFMPEG.CONFIGURE.extra += --enable-memalign-hack
     FFMPEG.GCC.args.extra += -fno-common
 else ifeq (darwin,$(BUILD.system))
     ## section for darwin-archs
     FFMPEG.CONFIGURE.extra += --enable-cross-compile --arch=$(BUILD.machine) --target-os=darwin
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += \
-        --enable-memalign-hack \
         --enable-dxva2 \
         --enable-hwaccel=h264_dxva2 \
         --enable-hwaccel=hevc_dxva2 \
