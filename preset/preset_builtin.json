@@ -5660,7 +5660,7 @@
                 {
                     "AudioCopyMask": [
                     ],
-                    "AudioEncoderFallback": "vorbis",
+                    "AudioEncoderFallback": "opus",
                     "AudioLanguageList": [
                     ],
                     "AudioList": [
@@ -5668,7 +5668,7 @@
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
-                            "AudioEncoder": "vorbis",
+                            "AudioEncoder": "opus",
                             "AudioMixdown": "dpl2",
                             "AudioNormalizeMixLevel": false,
                             "AudioSamplerate": "auto",
@@ -5720,7 +5720,7 @@
                     "PictureHeight": 1080,
                     "PictureForceHeight": 0,
                     "PictureForceWidth": 0,
-                    "PresetDescription": "VP9 video (up to 1080p30) and Vorbis stereo audio, in an MKV container.",
+                    "PresetDescription": "VP9 video (up to 1080p30) and Opus stereo audio, in an MKV container.",
                     "PresetName": "VP9 MKV 1080p30",
                     "Type": 0,
                     "UsesPictureFilters": true,
@@ -5758,7 +5758,7 @@
                 {
                     "AudioCopyMask": [
                     ],
-                    "AudioEncoderFallback": "vorbis",
+                    "AudioEncoderFallback": "opus",
                     "AudioLanguageList": [
                     ],
                     "AudioList": [
@@ -5766,7 +5766,7 @@
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
-                            "AudioEncoder": "vorbis",
+                            "AudioEncoder": "opus",
                             "AudioMixdown": "dpl2",
                             "AudioNormalizeMixLevel": false,
                             "AudioSamplerate": "auto",
@@ -5818,7 +5818,7 @@
                     "PictureHeight": 720,
                     "PictureForceHeight": 0,
                     "PictureForceWidth": 0,
-                    "PresetDescription": "VP9 video (up to 720p30) and Vorbis stereo audio, in an MKV container.",
+                    "PresetDescription": "VP9 video (up to 720p30) and Opus stereo audio, in an MKV container.",
                     "PresetName": "VP9 MKV 720p30",
                     "Type": 0,
                     "UsesPictureFilters": true,
@@ -5856,7 +5856,7 @@
                 {
                     "AudioCopyMask": [
                     ],
-                    "AudioEncoderFallback": "vorbis",
+                    "AudioEncoderFallback": "opus",
                     "AudioLanguageList": [
                     ],
                     "AudioList": [
@@ -5864,7 +5864,7 @@
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
-                            "AudioEncoder": "vorbis",
+                            "AudioEncoder": "opus",
                             "AudioMixdown": "dpl2",
                             "AudioNormalizeMixLevel": false,
                             "AudioSamplerate": "auto",
@@ -5916,7 +5916,7 @@
                     "PictureHeight": 576,
                     "PictureForceHeight": 0,
                     "PictureForceWidth": 0,
-                    "PresetDescription": "VP9 video (up to 576p25) and Vorbis stereo audio, in an MKV container.",
+                    "PresetDescription": "VP9 video (up to 576p25) and Opus stereo audio, in an MKV container.",
                     "PresetName": "VP9 MKV 576p25",
                     "Type": 0,
                     "UsesPictureFilters": true,
@@ -5954,7 +5954,7 @@
                 {
                     "AudioCopyMask": [
                     ],
-                    "AudioEncoderFallback": "vorbis",
+                    "AudioEncoderFallback": "opus",
                     "AudioLanguageList": [
                     ],
                     "AudioList": [
@@ -5962,7 +5962,7 @@
                             "AudioBitrate": 160,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
-                            "AudioEncoder": "vorbis",
+                            "AudioEncoder": "opus",
                             "AudioMixdown": "dpl2",
                             "AudioNormalizeMixLevel": false,
                             "AudioSamplerate": "auto",
@@ -6014,7 +6014,7 @@
                     "PictureHeight": 480,
                     "PictureForceHeight": 0,
                     "PictureForceWidth": 0,
-                    "PresetDescription": "VP9 video (up to 480p30) and Vorbis stereo audio, in an MKV container.",
+                    "PresetDescription": "VP9 video (up to 480p30) and Opus stereo audio, in an MKV container.",
                     "PresetName": "VP9 MKV 480p30",
                     "Type": 0,
                     "UsesPictureFilters": true,
