@@ -80,12 +80,6 @@ else ifeq (darwin,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --enable-cross-compile --arch=$(BUILD.machine) --target-os=darwin
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += \
-        --enable-dxva2 \
-        --enable-hwaccel=h264_dxva2 \
-        --enable-hwaccel=hevc_dxva2 \
-        --enable-hwaccel=mpeg2_dxva2 \
-        --enable-hwaccel=vc1_dxva2 \
-        --enable-hwaccel=wmv3_dxva2 \
         --target-os=mingw32 \
         --arch=$(BUILD.machine) \
         --enable-cross-compile --cross-prefix=$(BUILD.cross.prefix)
