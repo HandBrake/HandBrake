@@ -616,10 +616,9 @@
     self.currentLog = nil;
 
     // Check to see if the encode state has not been cancelled
-    // to determine if we should check for encode done notifications.
+    // to determine if we should send it to external app.
     if (result != HBCoreResultCancelled)
     {
-        [self jobCompletedAlerts:job];
         // Send to tagger
         [self sendToExternalApp:job.destURL];
     }
@@ -649,12 +648,14 @@
     switch (result) {
         case HBCoreResultDone:
             info = NSLocalizedString(@"Encode Finished.", @"");
+            [self jobCompletedAlerts:job result:result];
             break;
         case HBCoreResultCancelled:
             info = NSLocalizedString(@"Encode Cancelled.", @"");
             break;
         default:
             info = NSLocalizedString(@"Encode Failed.", @"");
+            [self jobCompletedAlerts:job result:result];
             break;
     }
     self.progressTextField.stringValue = info;
@@ -808,18 +809,25 @@
              GROWL_NOTIFICATIONS_DEFAULT: @[SERVICE_NAME]};
 }
 
-- (void)showDoneNotification:(NSURL *)fileURL
+- (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL
 {
-    // This end of encode action is called as each encode rolls off of the queue
-    // Setup the Growl stuff
-    NSString *growlMssg = [NSString stringWithFormat:@"your HandBrake encode %@ is done!", fileURL.lastPathComponent];
-    [GrowlApplicationBridge notifyWithTitle:@"Put down that cocktail…"
-                                description:growlMssg
+    [GrowlApplicationBridge notifyWithTitle:title
+                                description:description
                            notificationName:SERVICE_NAME
                                    iconData:nil
                                    priority:0
-                                   isSticky:1
-                               clickContext:nil];
+                                   isSticky:YES
+                               clickContext:fileURL.path];
+}
+
+- (void)growlNotificationWasClicked:(id)clickContext
+{
+    // Show the file in Finder when a done notification was clicked.
+    if ([clickContext isKindOfClass:[NSString class]] && [clickContext length])
+    {
+        NSURL *fileURL = [NSURL fileURLWithPath:clickContext];
+        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[fileURL]];
+    }
 }
 
 /**
@@ -853,7 +861,7 @@
 /**
  *  Runs the alert for a single job
  */
-- (void)jobCompletedAlerts:(HBJob *)job
+- (void)jobCompletedAlerts:(HBJob *)job result:(HBCoreResult)result
 {
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
@@ -864,7 +872,11 @@
         {
             NSBeep();
         }
-        [self showDoneNotification:job.destURL];
+        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil), job.destURL];
+
+        [self showNotificationWithTitle:NSLocalizedString(@"Put down that cocktail…", nil)
+                            description:description
+                                    url:job.destURL];
     }
 }
 
