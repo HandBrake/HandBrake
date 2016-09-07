@@ -872,9 +872,24 @@
         {
             NSBeep();
         }
-        NSString *description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil), job.destURL];
 
-        [self showNotificationWithTitle:NSLocalizedString(@"Put down that cocktail…", nil)
+        NSString *title;
+        NSString *description;
+        if (result == HBCoreResultDone)
+        {
+            title = NSLocalizedString(@"Put down that cocktail…", nil);
+            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil),
+                                     job.destURL.lastPathComponent];
+
+        }
+        else
+        {
+            title = NSLocalizedString(@"Encode failed", nil);
+            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ couldn't be completed.", nil),
+                           job.destURL.lastPathComponent];
+        }
+
+        [self showNotificationWithTitle:title
                             description:description
                                     url:job.destURL];
     }
