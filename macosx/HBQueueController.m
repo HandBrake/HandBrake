@@ -535,6 +535,18 @@
 #pragma mark -
 #pragma mark Queue Job Processing
 
+#define ALMOST_5GB 5000000000
+
+- (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
+{
+    NSDictionary *dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:url.URLByDeletingLastPathComponent.path error:NULL];
+    long long freeSpace = [dict[NSFileSystemFreeSize] longLongValue];
+    if (freeSpace < ALMOST_5GB) {
+        return YES;
+    }
+    return NO;
+}
+
 /**
  * Used to get the next pending queue item and return it if found
  */
@@ -568,8 +580,15 @@
         // Check to see if there are any more pending items in the queue
         HBJob *nextJob = [self getNextPendingQueueItem];
 
+        if (nextJob && [self _isDiskSpaceLowAtURL:nextJob.destURL])
+        {
+            // Disk space is low, show an alert
+            [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
+
+            [self queueLowDiskSpaceAlert];
+        }
         // If we still have more pending items in our queue, lets go to the next one
-        if (nextJob)
+        else if (nextJob)
         {
             // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
             nextJob.state = HBJobStateWorking;
@@ -935,6 +954,15 @@
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"Finder\" to shut down"];
         [scriptObject executeAndReturnError: &errorDict];
     }
+}
+
+- (void)queueLowDiskSpaceAlert
+{
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:NSLocalizedString(@"Your destination disk is almost full.", @"")];
+    [alert setInformativeText:NSLocalizedString(@"You need to make more space available on your destination disk.", @"")];
+    [NSApp requestUserAttention:NSCriticalRequest];
+    [alert runModal];
 }
 
 #pragma mark - Queue Item Controls
