@@ -848,7 +848,7 @@ class Project( Action ):
 
             url_ctype = '_unstable'
             url_ntype = 'unstable'
-            self.build = time.strftime('%Y%m%d') + '01'
+            self.build = time.strftime('%Y%m%d', now) + '01'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         else:
             m = re.match('^([a-zA-Z]+)\.([0-9]+)$', suffix)
@@ -867,7 +867,7 @@ class Project( Action ):
                 url_ctype = '_unstable'
                 url_ntype = 'unstable'
 
-            self.build = time.strftime('%Y%m%d') + '00'
+            self.build = time.strftime('%Y%m%d', now) + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
 
         self.url_appcast = 'https://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
@@ -1484,6 +1484,8 @@ try:
         if arg == '--verbose':
             verbose = Configure.OUT_VERBOSE
 
+    now = time.gmtime(int(os.environ.get('SOURCE_DATE_EPOCH', time.time())))
+
     ## create main objects; actions/probes run() is delayed.
     ## if any actions must be run earlier (eg: for configure --help purposes)
     ## then run() must be invoked earlier. subequent run() invocations
@@ -1824,7 +1826,7 @@ int main()
     else:
         doc.add( 'BUILD.cross.prefix', '' )
 
-    doc.add( 'BUILD.date',   time.strftime('%c') )
+    doc.add( 'BUILD.date',   time.strftime('%c', now) ),
     doc.add( 'BUILD.arch',   arch.mode.mode )
 
     doc.addBlank()
