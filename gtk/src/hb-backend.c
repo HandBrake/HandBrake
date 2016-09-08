@@ -4094,8 +4094,8 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
 int
 ghb_add_job(hb_handle_t *h, GhbValue *job_dict)
 {
-    char     *json_job;
-    int       sequence_id;
+    char     * json_job;
+    int        sequence_id;
 
     json_job = hb_value_get_json(job_dict);
     sequence_id = hb_add_json(h, json_job);
