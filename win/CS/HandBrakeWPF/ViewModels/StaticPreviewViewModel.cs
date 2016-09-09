@@ -558,7 +558,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
-            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage;  // TODO 0 and 1 mean the same. Need to fix this as it knocks the video out of sync with the still preview.
+            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage +1;  
             encodeTask.PreviewEncodeDuration = this.Duration;
             QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
