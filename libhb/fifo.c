@@ -307,7 +307,7 @@ void hb_buffer_pool_free( void )
                     free(b->data);
                 }
             }
-            //free( b );
+            free( b );
             count++;
         }
         if ( count )
