@@ -2303,6 +2303,7 @@ static void syncVideoClose( hb_work_object_t * w )
     }
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
+    hb_list_empty(&pv->stream->scr_delay_queue);
     hb_cond_close(&pv->stream->cond_full);
 
     // Close work threads
@@ -2753,6 +2754,7 @@ static void syncAudioClose( hb_work_object_t * w )
     }
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
+    hb_list_empty(&pv->stream->scr_delay_queue);
     hb_cond_close(&pv->stream->cond_full);
     free(pv);
     w->private_data = NULL;
@@ -3069,6 +3071,7 @@ static void syncSubtitleClose( hb_work_object_t * w )
     }
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
+    hb_list_empty(&pv->stream->scr_delay_queue);
     hb_cond_close(&pv->stream->cond_full);
     hb_buffer_list_close(&pv->stream->subtitle.sanitizer.list_current);
     free(pv);
