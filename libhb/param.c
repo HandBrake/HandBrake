@@ -887,6 +887,42 @@ char ** hb_filter_get_presets_name(int filter_id)
     return result;
 }
 
+char ** hb_filter_get_tunes_short_name(int filter_id)
+{
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_tunes_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    char ** result = calloc(count + 1, sizeof(char*));
+    for (ii = 0; ii < count; ii++)
+    {
+        result[ii] = strdup(table[ii].short_name);
+    }
+    result[ii] = NULL;
+
+    return result;
+}
+
+char ** hb_filter_get_tunes_name(int filter_id)
+{
+    int                 ii, count = 0;
+    hb_filter_param_t * table;
+
+    table = filter_param_get_tunes_internal(filter_id, NULL);
+
+    for (count = 0; table[count].name != NULL; count++);
+    char ** result = calloc(count + 1, sizeof(char*));
+    for (ii = 0; ii < count; ii++)
+    {
+        result[ii] = strdup(table[ii].name);
+    }
+    result[ii] = NULL;
+
+    return result;
+}
+
 char ** hb_filter_get_keys(int filter_id)
 {
     hb_filter_object_t * filter = hb_filter_get(filter_id);

@@ -38,6 +38,8 @@ hb_filter_param_t * hb_filter_param_get_tunes(int filter_id);
 char ** hb_filter_get_keys(int filter_id);
 char ** hb_filter_get_presets_short_name(int filter_id);
 char ** hb_filter_get_presets_name(int filter_id);
+char ** hb_filter_get_tunes_short_name(int filter_id);
+char ** hb_filter_get_tunes_name(int filter_id);
 char  * hb_filter_get_presets_json(int filter_id);
 char  * hb_filter_get_tunes_json(int filter_id);
 
