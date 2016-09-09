@@ -475,13 +475,13 @@ namespace HandBrakeWPF.ViewModels
             Rect workArea = SystemParameters.WorkArea;
             if (ea.NewSize.Width > workArea.Width)
             {
-                this.Width = (int)Math.Round(workArea.Width, 0) - 20;
+                this.Width = (int)Math.Round(workArea.Width, 0) - 50;
                 this.Title = Resources.Preview_Scaled;
             }
 
             if (ea.NewSize.Height > workArea.Height)
             {
-                this.Height = (int)Math.Round(workArea.Height, 0) - 20;
+                this.Height = (int)Math.Round(workArea.Height, 0) - 50;
                 this.Title = Resources.Preview_Scaled;
             }
         }
