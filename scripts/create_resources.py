@@ -16,18 +16,15 @@ inc_list = list()
 stack.append(resources)
 
 
-def top(ss):
-    return ss[len(ss) - 1]
-
-
 def end_element_handler(tag):
     if tag == "section":
         stack.pop()
 
 
 def start_element_handler(tag, attr):
-    current = top(stack)
-    key = val = None
+    current = stack[-1]
+    key = None
+    val = None
     if tag == "section":
         key = attr["name"]
         val = dict()
