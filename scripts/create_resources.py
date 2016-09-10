@@ -8,6 +8,7 @@ import json
 import plistlib
 import argparse
 from xml.parsers import expat
+from xml.parsers.expat import ExpatError
 
 resources = dict()
 stack = list()
@@ -88,7 +89,14 @@ def resource_parse_file(infile):
     parser.StartElementHandler = start_element_handler
     parser.EndElementHandler = end_element_handler
     parser.CharacterDataHandler = cdata_handler
-    parser.ParseFile(infile)
+
+    try:
+        parser.ParseFile(infile)
+    except ExpatError, err:
+        print >> sys.stderr, ("Error: %s" % str(err))
+        return None
+
+    return resources
 
 
 def find_file(name):
@@ -114,8 +122,9 @@ def main():
     if args.I:
         inc_list.append(args.I)
 
-    resource_parse_file(args.infile)
-    json.dump(resources, args.outfile, indent=4, sort_keys=True)
+    parsed_res = resource_parse_file(args.infile)
+    if parsed_res:
+        json.dump(parsed_res, args.outfile, indent=4, sort_keys=True)
 
 
 main()
