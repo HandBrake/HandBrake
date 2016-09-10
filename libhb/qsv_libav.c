@@ -538,10 +538,14 @@ void av_qsv_list_close(av_qsv_list ** _l)
 
     if (l->mutex){
         mut_ret = pthread_mutex_unlock(l->mutex);
-        if( mut_ret )
+        if (mut_ret)
             hb_log("QSV: pthread_mutex_unlock issue[%d] at %s", mut_ret, __FUNCTION__);
-        mut_ret = pthread_mutex_destroy(&l->mutex);
+        mut_ret = pthread_mutex_destroy(l->mutex);
+        if (mut_ret)
+            hb_log("QSV: pthread_mutex_destroy issue[%d] at %s", mut_ret, __FUNCTION__);
         mut_ret = pthread_mutexattr_destroy(&l->mta);
+        if (mut_ret)
+            hb_log("QSV: pthread_mutexattr_destroy issue[%d] at %s", mut_ret, __FUNCTION__);
     }
     av_freep(_l);
 }
