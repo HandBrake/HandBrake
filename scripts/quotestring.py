@@ -6,8 +6,6 @@ import sys
 
 
 def main():
-    global inc_list
-
     parser = argparse.ArgumentParser(description='Creates a quoted string suitable for inclusion in a C char*')
     parser.add_argument('infile', metavar='<input>', type=argparse.FileType('r'), help='Input file to quote')
     parser.add_argument('outfile', metavar='<output>', type=argparse.FileType('w'), nargs='?',

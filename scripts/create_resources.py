@@ -13,20 +13,18 @@ from xml.parsers import expat
 
 resources = dict()
 stack = list()
+inc_list = list()
+
 stack.append(resources)
 
 def top(ss):
     return ss[len(ss)-1]
 
 def end_element_handler(tag):
-    global stack
-
     if tag == "section":
         stack.pop()
 
 def start_element_handler(tag, attr):
-    global resources, stack
-
     current = top(stack)
     key = val = None
     if tag == "section":
@@ -93,11 +91,7 @@ def resource_parse_file(infile):
     parser.CharacterDataHandler = cdata_handler
     parser.ParseFile(infile)
 
-inc_list = list()
-
 def find_file(name):
-    global inc_list
-
     for inc_dir in inc_list:
         inc = "%s/%s" % (inc_dir, name)
         if os.path.isfile(inc):
@@ -109,8 +103,6 @@ def find_file(name):
     return None
 
 def main():
-    global inc_list
-
     parser = argparse.ArgumentParser(description='Creates a resource json from a resource list')
     parser.add_argument('-I', metavar='<inc path>', help='Include path to search for files')
     parser.add_argument('infile', metavar='<resource list>', type=argparse.FileType('r'), help='Input resources file')
