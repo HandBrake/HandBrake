@@ -21,6 +21,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libmfx](https://github.com/Rodeo314/libmfx)
 - [libmpeg2dec](http://libmpeg2.sourceforge.net/)
 - [libogg](https://xiph.org/ogg/)
+- [libopus](https://www.opus-codec.org/)
 - [libpthreadsw32](https://sourceware.org/pthreads-win32/)
 - [libsamplerate](http://mega-nerd.com/SRC/)
 - [libtheora](https://theora.org/)
