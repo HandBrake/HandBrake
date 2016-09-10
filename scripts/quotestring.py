@@ -22,4 +22,3 @@ def main():
     args.outfile.write(ss)
 
 main()
-

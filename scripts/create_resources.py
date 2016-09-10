@@ -4,8 +4,6 @@
 import types
 import os
 import sys
-import time
-import datetime
 import json
 import plistlib
 import argparse
@@ -17,12 +15,15 @@ inc_list = list()
 
 stack.append(resources)
 
+
 def top(ss):
-    return ss[len(ss)-1]
+    return ss[len(ss) - 1]
+
 
 def end_element_handler(tag):
     if tag == "section":
         stack.pop()
+
 
 def start_element_handler(tag, attr):
     current = top(stack)
@@ -38,51 +39,52 @@ def start_element_handler(tag, attr):
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             try:
-                fp = open(fname)
+                with open(fname) as fp:
+                    val = json.load(fp)
             except Exception, err:
-                print >> sys.stderr, ( "Error: %s" % str(err) )
-            val = json.load(fp)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such json file %s" % fbase )
+                print >> sys.stderr, ("Error: %s" % str(err))
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such json file %s" % fbase)
             sys.exit(1)
     elif tag == "plist":
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             val = plistlib.readPlist(fname)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such plist file %s" % fbase )
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such plist file %s" % fbase)
             sys.exit(1)
     elif tag == "text":
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             try:
-                fp = open(fname)
-                val = fp.read()
+                with open(fname) as fp:
+                    val = fp.read()
             except Exception, err:
-                print >> sys.stderr, ( "Error: %s"  % str(err) )
+                print >> sys.stderr, ("Error: %s" % str(err))
                 sys.exit(1)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such string file %s" % fbase )
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such string file %s" % fbase)
             sys.exit(1)
     elif tag == "string":
         key = attr["name"]
         val = attr["value"]
 
-    if val != None:
-        if type(current) == types.DictType:
+    if val is not None:
+        if isinstance(current, types.DictType):
             current[key] = val
-        elif type(current) == types.TupleType:
+        elif isinstance(current, types.TupleType):
             current.append(val)
 
 
-def cdata_handler(str):
+def cdata_handler(s):
     return
+
 
 def resource_parse_file(infile):
     parser = expat.ParserCreate()
@@ -90,6 +92,7 @@ def resource_parse_file(infile):
     parser.EndElementHandler = end_element_handler
     parser.CharacterDataHandler = cdata_handler
     parser.ParseFile(infile)
+
 
 def find_file(name):
     for inc_dir in inc_list:
@@ -101,6 +104,7 @@ def find_file(name):
         return name
 
     return None
+
 
 def main():
     parser = argparse.ArgumentParser(description='Creates a resource json from a resource list')
@@ -116,5 +120,5 @@ def main():
     resource_parse_file(args.infile)
     json.dump(resources, args.outfile, indent=4, sort_keys=True)
 
-main()
 
+main()
