@@ -1,62 +1,27 @@
 #! /usr/bin/python
 
 import re
-import getopt
+import argparse
 import sys
 
-def usage():
-    print >> sys.stderr, (
-        "Usage: %s <input> [output]\n"
-        "Summary:\n"
-        "    Creates a quoted string suitable for inclusion in a C char*\n\n"
-        "Options:\n"
-        "    <input>   Input file to quote\n"
-        "    <output>  Output quoted string [stdout]\n"
-        % sys.argv[0]
-    )
 
 def main():
     global inc_list
 
-    OPTS = ""
-    try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], OPTS)
-    except getopt.GetoptError, err:
-        print >> sys.stderr, str(err)
-        usage()
-        sys.exit(2)
+    parser = argparse.ArgumentParser(description='Creates a quoted string suitable for inclusion in a C char*')
+    parser.add_argument('infile', metavar='<input>', type=argparse.FileType('r'), help='Input file to quote')
+    parser.add_argument('outfile', metavar='<output>', type=argparse.FileType('w'), nargs='?',
+                        default=sys.stdout, help='Output quoted string [stdout]')
+    args = parser.parse_args()
 
-    for o, a in opts:
-        usage()
-        assert False, "unhandled option"
-
-    if len(args) > 2 or len(args) < 1:
-        usage()
-        sys.exit(2)
-
-    try:
-        infile = open(args[0])
-    except Exception, err:
-        print >> sys.stderr, ( "Error: %s"  % str(err) )
-        sys.exit(1)
-
-    if len(args) > 1:
-        try:
-            outfile = open(args[1], "w")
-        except Exception, err:
-            print >> sys.stderr, ( "Error: %s"  % str(err))
-            sys.exit(1)
-    else:
-        outfile = sys.stdout
-
-    ss = infile.read()
+    ss = args.infile.read()
     ss = re.sub(r'\\', r'\\\\', ss)
     ss = re.sub(r'"', r'\\"', ss)
     pattern = re.compile("$", re.M)
     ss = re.sub(pattern, r'\\n"', ss)
     pattern = re.compile("^", re.M)
     ss = re.sub(pattern, "\"", ss)
-    outfile.write(ss)
+    args.outfile.write(ss)
 
 main()
 

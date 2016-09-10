@@ -8,7 +8,7 @@ import time
 import datetime
 import json
 import plistlib
-import getopt
+import argparse
 from xml.parsers import expat
 
 resources = dict()
@@ -93,18 +93,6 @@ def resource_parse_file(infile):
     parser.CharacterDataHandler = cdata_handler
     parser.ParseFile(infile)
 
-def usage():
-    print >> sys.stderr, (
-        "Usage: %s [-I <inc path>] <resource list> [resource json]\n"
-        "Summary:\n"
-        "    Creates a resource json from a resource list\n\n"
-        "Options:\n"
-        "    I - Include path to search for files\n"
-        "    <resource list>    Input resources file\n"
-        "    <resource json>    Output resources json file\n"
-        % sys.argv[0]
-    )
-
 inc_list = list()
 
 def find_file(name):
@@ -123,42 +111,18 @@ def find_file(name):
 def main():
     global inc_list
 
-    OPTS = "I:"
-    try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], OPTS)
-    except getopt.GetoptError, err:
-        print >> sys.stderr, str(err)
-        usage()
-        sys.exit(2)
+    parser = argparse.ArgumentParser(description='Creates a resource json from a resource list')
+    parser.add_argument('-I', metavar='<inc path>', help='Include path to search for files')
+    parser.add_argument('infile', metavar='<resource list>', type=argparse.FileType('r'), help='Input resources file')
+    parser.add_argument('outfile', metavar='<resource json>', type=argparse.FileType('w'), nargs='?',
+                        default=sys.stdout, help='Output resources json file [stdout]')
+    args = parser.parse_args()
 
-    for o, a in opts:
-        if o == "-I":
-            # add to include list
-            inc_list.append(a)
-        else:
-            assert False, "unhandled option"
+    if args.I:
+        inc_list.append(args.I)
 
-    if len(args) > 2 or len(args) < 1:
-        usage()
-        sys.exit(2)
-
-    try:
-        infile = open(args[0])
-    except Exception, err:
-        print >> sys.stderr, ( "Error: %s"  % str(err) )
-        sys.exit(1)
-
-    if len(args) > 1:
-        try:
-            outfile = open(args[1], "w")
-        except Exception, err:
-            print >> sys.stderr, ( "Error: %s"  % str(err))
-            sys.exit(1)
-    else:
-        outfile = sys.stdout
-
-    resource_parse_file(infile)
-    json.dump(resources, outfile, indent=4, sort_keys=True)
+    resource_parse_file(args.infile)
+    json.dump(resources, args.outfile, indent=4, sort_keys=True)
 
 main()
 
