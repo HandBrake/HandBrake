@@ -350,9 +350,13 @@ static void closePrivData( hb_work_private_t ** ppv )
              * MFXClose() on the QSV session. Even if decoding is complete, we
              * still need that session for QSV filtering and/or encoding, so we
              * we can't close the context here until we implement a proper fix.
+             *
+             * Interestingly, this may cause crashes even when QSV-accelerated
+             * decoding and encoding sessions are independent (e.g. decoding via
+             * libavcodec, but encoding using libhb, without us requesting any
+             * form of communication between the two libmfx sessions).
              */
-            if (pv->qsv.decode == NULL ||
-                pv->qsv.config.io_pattern != MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+            if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
 #endif
             {
                 hb_avcodec_close(pv->context);
