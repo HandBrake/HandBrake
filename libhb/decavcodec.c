@@ -351,7 +351,8 @@ static void closePrivData( hb_work_private_t ** ppv )
              * still need that session for QSV filtering and/or encoding, so we
              * we can't close the context here until we implement a proper fix.
              */
-            if (!pv->qsv.decode)
+            if (pv->qsv.decode == NULL ||
+                pv->qsv.config.io_pattern != MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
 #endif
             {
                 hb_avcodec_close(pv->context);
@@ -1052,7 +1053,9 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
     av_free_packet(&avp);
 
 #ifdef USE_QSV
-    if (pv->qsv.decode && pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
+    if (pv->qsv.decode &&
+        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY &&
+        pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
     {
         // this is quite late, but we can't be certain that the QSV context is
         // available until after we call avcodec_decode_video2() at least once
@@ -1304,7 +1307,8 @@ static void decodeVideo( hb_work_object_t *w, hb_buffer_t * in)
             continue;
         }
 #ifdef USE_QSV
-        if (pv->qsv.decode)
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
         {
             // flush a second time
             while (decodeFrame(w, NULL))
@@ -1333,12 +1337,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     hb_buffer_list_clear(&pv->list);
 
 #ifdef USE_QSV
-    if (hb_qsv_decode_is_enabled(job))
+    if ((pv->qsv.decode = hb_qsv_decode_is_enabled(job)))
     {
-        // determine which encoder we're using
+        pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
+        pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
+#if 0 // TODO: re-implement QSV zerocopy path
         hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
-        pv->qsv.decode = info != NULL;
-        if (pv->qsv.decode)
+        if (info != NULL)
         {
             // setup the QSV configuration
             pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
@@ -1352,12 +1357,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
                 // more surfaces may be needed for the lookahead
                 pv->qsv.config.additional_buffers = 160;
             }
-            pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
         }
-    }
-    else
-    {
-        pv->qsv.decode = 0;
+#endif // QSV zerocopy path
     }
 #endif
 
@@ -1395,7 +1396,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 #ifdef USE_QSV
-        if (pv->qsv.decode)
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
         {
             // set the QSV configuration before opening the decoder
             pv->context->hwaccel_context = &pv->qsv.config;
@@ -1564,7 +1566,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
 
 #ifdef USE_QSV
-        if (pv->qsv.decode)
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
         {
             // set the QSV configuration before opening the decoder
             pv->context->hwaccel_context = &pv->qsv.config;
@@ -1792,21 +1795,25 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->color_matrix = get_color_matrix(pv->context->colorspace, info->geometry);
 
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
-    switch (pv->context->codec_id)
-    {
-        case AV_CODEC_ID_H264:
-            if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P ||
-                pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P)
-            {
-#ifdef USE_QSV
-                info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
-#endif
-            }
-            break;
 
-        default:
-            break;
+#ifdef USE_QSV
+    if (avcodec_find_decoder_by_name(hb_qsv_decode_get_codec_name(pv->context->codec_id)))
+    {
+        switch (pv->context->codec_id)
+        {
+            case AV_CODEC_ID_H264:
+                if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P ||
+                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P)
+                {
+                    info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
+                }
+                break;
+
+            default:
+                break;
+        }
     }
+#endif
 
     return 1;
 }
