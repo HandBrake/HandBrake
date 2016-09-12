@@ -127,7 +127,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
         case HB_ACODEC_OPUS:
             codec_name = "libopus";
-            // Libav's libfdk-aac wrapper expects back channels for 5.1
+            // Libav's libopus wrapper expects back channels for 5.1
             // audio, and will error out unless we translate the layout
             if (channel_layout == AV_CH_LAYOUT_5POINT1)
                 channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
