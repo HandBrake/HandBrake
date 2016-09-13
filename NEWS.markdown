@@ -4,65 +4,89 @@
 
 ### Core
 
-- Updated libraries
-  - FreeType 2.6.5
-  - FontConfig 2.12.1
-  - FriBidi 0.19.7
-  - HarfBuzz 1.3.0
-  - LibAV 11.3
-  - libass 0.13.2
-  - libbluray 0.9.30
-  - libmfx v6.0.0
-  - libvpx 1.5.0
-  - x264 r148 r2705
-  - x265 2.0
-- Support of Opus audio encoding via libopus
-- New JSON-based API for interacting with LibHB
-- New JSON-based preset system, including support in the CLI
-- Performance improvements
-  - NLMeans SSE2 optimizations (approximately 1~6% faster)
-- Pad filter (CLI Only)
-- Additional framerate selections
-- Intel QuickSync H.265 (HEVC) Encoder
-  - Compatible with Intel Skylake and newer CPUs
+#### General
+
 - Improvements to audio/video sync engine to better handle difficult sources
-- New built-in presets
-  - New general use presets
-  - Updated device presets with additional presets for now common devices
-  - HandBrake 0.10.x presets are still available, marked "Legacy"
-- Miscellaneous bug fixes and improvements
+- Completely overhauled the official presets
+  - New general use presets for broad compatibility
+  - New device presets, now more up-to-date for common devices
+  - Added Matroska (MKV) presets, including VP9 video with Opus audio
+  - Official presets from HandBrake 0.10.x are still available under `Legacy`
+- New JSON-based preset system including command line support
+- New JSON-based API for interacting with libhb
+- Many miscellaneous bug fixes and improvements (over 1600 code commits!)
+
+#### Video
+
+- VP9 video encoding via libvpx
+- Intel QuickSync Video H.265/HEVC encoder
+  - Requires Intel Skylake or newer CPU
+- Rotate filter now available in all graphical user interfaces
+- New Pad filter (command line only for now)
+- Additional standard frame rate selections in the graphical user interfaces
+- Performance improvements, including assembly optimizations for the NLMeans denoise filter
+
+#### Audio
+
+- Opus audio encoding/decoding via libopus
+
+#### Subtitles
+
+- Better subtitles rendering for some languages via HarfBuzz
+
+#### Third-party libraries
+
+- Build system now supports multiple source URLs and hash verification for third-party downloads
+- Updated libraries
+  - FreeType 2.6.5 (subtitles)
+  - Fontconfig 2.12.1 (subtitles)
+  - FriBidi 0.19.7 (subtitles)
+  - Libav 11.3 (encoding/decoding/muxing)
+  - libass 0.13.2 (subtitles)
+  - libbluray 0.9.3 (Blu-ray decoding)
+  - libmfx v6.0.0 (Intel QuickSync Video encoding/decoding)
+  - libvpx 1.5.0 (VP8/VP9 video encoding)
+  - x264 148 r2705 (H.264/AVC video encoding)
+  - x265 2.0 (H.265/HEVC video encoding)
+- New libraries
+  - HarfBuzz 1.3.0 (subtitles)
+  - libopus 1.1.3 (Opus audio encoding)
 
 ### Windows
 
-- The UI now interacts with LibHB directly rather than using HandBrakeCLI.exe, bringing certain benefits
-  - Encodes can now be paused and resumed
-  - Stopping an encode will finalize the file so that it's playable
-  - Reduced installer and install size as HandBrakeCLI.exe is no longer included in the package
-- Added support for quality-based audio encoding
-- Added ability to import tsv-, xml-, and txt-formatted chapters
-- Improved the "Configure Default" options for audio and subtitles
-  - Audio tab: Default settings for track behavior are now configurable
-  - Subtitles tab: Burn-in behavior now configurable
-- Numerous usability enhancements
-- Removed DXVA decoding as it was not providing sufficient improvement and causing too many issues.
+- Graphical user interface now uses libhb directly, instead of sending commands to the command line version
+  - Encoding can now be paused and resumed
+  - Stopping encoding will finalize the partial file to be playable
+- Reduced installer and install size
+  - The command line version is no longer included in the graphical user interface installer
 - Update checker now verifies the signature of the update file for improved security
+- Added support for quality-based audio encoding
+- Added ability to import tab-separated (.tsv), XML (.xml), and plain text (.txt) chapter markers
+- Improved the "configure default" options for audio and subtitles
+  - Default audio track behavior is now configurable
+  - Subtitles burn-in behavior is now configurable
+- Removed DirectX Video Acceleration (DXVA) hardware-accelerated video decoding
+  - Was causing many issues without providing sufficient improvement to decoding efficiency
+  - May be added again at a later date if performance and stability improves
+- Numerous usability enhancements
 
 ### Mac
 
 - XQuartz is no longer required for subtitle burn-in
 - Updated Sparkle software update library
-  - Enabled DSA Signature checking for improved security
+  - Enabled DSA signature checking for improved security
 - Miscellaneous bug fixes and improvements
 
 ### Linux
 
-- Remove system tray icon due to UI performance issues on Ubuntu
+- Removed system tray icon due to UI performance issues on Ubuntu
 - Miscellaneous bug fixes and improvements
 
-### Command Line Interface
+### Command line interface
 
-- Presets are now importable and exportable from the CLI and compatible with other UIs
-- Queue can now be imported from the GUIs
+- Presets can now be imported and exported from the command line
+  - Import/export is compatible with the graphical user interfaces
+- Queue exported from the GUIs can now be imported by the command line interface (Linux and Windows only for now)
 
 
 ## HandBrake 0.10.5
