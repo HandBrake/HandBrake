@@ -403,18 +403,18 @@
 - (IBAction)openHomepage:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"http://handbrake.fr/"]];
+                                            URLWithString:@"https://handbrake.fr/"]];
 }
 
 - (IBAction)openForums:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"http://forum.handbrake.fr/"]];
+                                            URLWithString:@"https://forum.handbrake.fr/"]];
 }
 - (IBAction)openUserGuide:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"http://trac.handbrake.fr/wiki/HandBrakeGuide"]];
+                                            URLWithString:@"https://handbrake.fr/docs"]];
 }
 
 @end
