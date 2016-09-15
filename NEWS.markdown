@@ -24,7 +24,10 @@
 - Rotate filter now available in all graphical user interfaces
 - New Pad filter (command line only for now)
 - Additional standard frame rate selections in the graphical user interfaces
-- Performance improvements, including assembly optimizations for the NLMeans denoise filter
+- Performance improvements
+  - Assembly optimizations in NLMeans improve performance up to 10%
+  - Assembly optimizations in x264 improve performance for faster presets by 5-10%
+- x265 quality improvements, especially when using tune grain
 
 #### Audio
 
@@ -72,6 +75,18 @@
 
 ### Mac
 
+- Added undo/redo support to the graphical user interface
+- Added Open Recent to the File menu
+- Added Add Titles to Queue… to the File menu (batch queueing)
+- Preview prompts to open in an external application when the internal player does not support the format
+- Preview now displays volume and audio/subtitles language selection during playback
+- Picture and Filters settings are now part of the main window
+- Settings are preserved when selecting a new title (instead of reloading the last selected preset)
+- Improved support for importing/exporting comma-separated (.csv) chapter markers
+- Queue is now automatically paused when available disk space is low
+- When Done action can now be changed directly from the Queue window
+- When Done notification is now interactive (reveals the encoded file in Finder)
+- Activity Log window is now searchable (press `⌘`+`f` to activate)
 - XQuartz is no longer required for subtitle burn-in
 - Updated Sparkle software update library
   - Enabled DSA signature checking for improved security
