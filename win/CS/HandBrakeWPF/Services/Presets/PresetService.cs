@@ -521,7 +521,6 @@ namespace HandBrakeWPF.Services.Presets
                 PresetTransportContainer container = null;
                 using (StreamReader reader = new StreamReader(this.presetFile))
                 {
-
                     try
                     {
                         container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
