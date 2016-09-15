@@ -76,6 +76,7 @@
 ### Mac
 
 - Added undo/redo support to the graphical user interface
+- Improved drag and drop support
 - Added Open Recent to the File menu
 - Added Add Titles to Queue… to the File menu (batch queueing)
 - Preview prompts to open in an external application when the internal player does not support the format
