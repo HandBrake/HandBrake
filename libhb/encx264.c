@@ -845,6 +845,7 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     pv->api->encoder_encode( pv->x264, &nal, &i_nal, &pv->pic_in, &pic_out );
     if ( i_nal > 0 )
     {
+        hb_buffer_close(&tmp);
         return nal_encode( w, &pic_out, i_nal, nal );
     }
     hb_buffer_close(&tmp);
