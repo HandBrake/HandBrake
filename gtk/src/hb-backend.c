@@ -2750,8 +2750,12 @@ void ghb_init_lang_list_box(GtkListBox *list_box)
          iso639 = lang_get_next(iso639), ii++)
     {
         const char *lang;
-        if (iso639->native_name != NULL &&
-            iso639->native_name[0] != 0)
+        if (ii == 0)
+        {
+            lang = _("Any");
+        }
+        else if (iso639->native_name != NULL &&
+                 iso639->native_name[0] != 0)
         {
             lang = iso639->native_name;
         }
