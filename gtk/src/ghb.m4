@@ -7375,6 +7375,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">2</property>
+                            <property name="width-chars">6</property>
                             <property name="invisible_char">●</property>
                             <property name="shadow_type">none</property>
                             <property name="primary_icon_activatable">False</property>
@@ -7422,7 +7423,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                           <object class="GtkSpinButton" id="MinTitleDuration">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="max_length">4</property>
+                            <property name="max-length">4</property>
+                            <property name="width-chars">6</property>
                             <property name="invisible_char">●</property>
                             <property name="shadow_type">none</property>
                             <property name="primary_icon_activatable">False</property>
