@@ -1168,6 +1168,7 @@ static void ShowHelp()
 "General Options --------------------------------------------------------------\n"
 "\n"
 "   -h, --help              Print help\n"
+"   --version               Print version\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
