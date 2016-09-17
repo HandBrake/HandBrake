@@ -96,6 +96,8 @@ struct hb_buffer_settings_s
 #define PIC_FLAG_REPEAT_FRAME       0x0200
 #define HB_BUF_FLAG_EOF             0x0400
 #define HB_BUF_FLAG_EOS             0x0800
+#define HB_FLAG_FRAMETYPE_KEY       0x1000
+#define HB_FLAG_FRAMETYPE_REF       0x2000
     uint16_t      flags;
 
 #define HB_COMB_NONE  0
