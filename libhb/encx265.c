@@ -390,6 +390,11 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     // copy the bitstream data
     for (i = 0; i < nnal; i++)
     {
+        if (HB_HEVC_NALU_KEYFRAME(nal[i].type))
+        {
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+        }
         memcpy(buf->data + buf->size, nal[i].payload, nal[i].sizeBytes);
         buf->size += nal[i].sizeBytes;
     }

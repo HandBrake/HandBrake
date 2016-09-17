@@ -10,6 +10,10 @@
 #ifndef HB_H265_COMMON_H
 #define HB_H265_COMMON_H
 
+// inspired by libavcodec/hevc.h
+// in HEVC, all "random access point" NAL units are keyframes
+#define HB_HEVC_NALU_KEYFRAME(nal_unit_type) (((nal_unit_type) >= 16) && ((nal_unit_type) <= 23))
+
 static const char * const      hb_h265_tier_names[] = { "auto", "main", "high", NULL, };
 static const char * const   hb_h265_profile_names_8bit[] = { "auto", "main", "mainstillpicture", NULL, };
 static const char * const   hb_h265_profile_names_10bit[] = { "auto", "main10", "main10-intra", NULL, };
