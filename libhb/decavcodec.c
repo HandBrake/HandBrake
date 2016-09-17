@@ -1014,7 +1014,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         // libav avcodec_decode_video2() needs AVPacket flagged with
         // AV_PKT_FLAG_KEY for some codecs. For example, sequence of
         // PNG in a mov container.
-        if (packet_info->frametype & HB_FRAME_KEY)
+        if (packet_info->frametype & HB_FRAME_MASK_KEY)
         {
             avp.flags |= AV_PKT_FLAG_KEY;
         }

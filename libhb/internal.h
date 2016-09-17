@@ -79,8 +79,8 @@ struct hb_buffer_settings_s
 #define HB_FRAME_P        0x10
 #define HB_FRAME_B        0x20
 #define HB_FRAME_BREF     0x40
-#define HB_FRAME_KEY      0x0F
-#define HB_FRAME_REF      0xF0
+#define HB_FRAME_MASK_KEY 0x0F
+#define HB_FRAME_MASK_REF 0xF0
     uint8_t       frametype;
 
 // Picture flags used by filters

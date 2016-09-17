@@ -1169,7 +1169,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
             pkt.flags |= AV_PKT_FLAG_KEY;
         }
     }
-    else if (buf->s.frametype & HB_FRAME_KEY)
+    else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {
         pkt.flags |= AV_PKT_FLAG_KEY;
     }
