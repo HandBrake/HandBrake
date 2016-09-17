@@ -358,7 +358,12 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     buf->f.fmt = AV_PIX_FMT_YUV420P;
     buf->f.width = frame_width;
     buf->f.height = frame_height;
-    buf->s.frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
+    buf->s.flags = HB_FLAG_FRAMETYPE_REF;
+    buf->s.frametype = HB_FRAME_I;
+    if (th_packet_iskeyframe(&op))
+    {
+        buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+    }
     buf->s.start    = in->s.start;
     buf->s.stop     = in->s.stop;
     buf->s.duration = in->s.stop - in->s.start;

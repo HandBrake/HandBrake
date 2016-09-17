@@ -443,58 +443,36 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
 
 static uint8_t convert_pict_type( int pict_type, char pkt_flag_key, uint16_t* sflags )
 {
+    uint16_t flags = 0;
     uint8_t retval = 0;
-    switch ( pict_type )
+    switch (pict_type)
     {
-        case AV_PICTURE_TYPE_P:
-        {
-            retval = HB_FRAME_P;
-        } break;
-
         case AV_PICTURE_TYPE_B:
-        {
             retval = HB_FRAME_B;
-        } break;
+            break;
 
         case AV_PICTURE_TYPE_S:
-        {
-            retval = HB_FRAME_P;
-        } break;
-
+        case AV_PICTURE_TYPE_P:
         case AV_PICTURE_TYPE_SP:
-        {
             retval = HB_FRAME_P;
-        } break;
+            break;
+
 
         case AV_PICTURE_TYPE_BI:
         case AV_PICTURE_TYPE_SI:
         case AV_PICTURE_TYPE_I:
-        {
-            *sflags |= HB_FRAME_REF;
-            if ( pkt_flag_key )
-            {
-                retval = HB_FRAME_IDR;
-            }
-            else
-            {
-                retval = HB_FRAME_I;
-            }
-        } break;
-
         default:
         {
-            if ( pkt_flag_key )
-            {
-                //buf->s.flags |= HB_FRAME_REF;
-                *sflags |= HB_FRAME_REF;
-                retval = HB_FRAME_KEY;
-            }
-            else
-            {
-                retval = HB_FRAME_REF;
-            }
+            flags |= HB_FLAG_FRAMETYPE_REF;
+            retval = HB_FRAME_I;
         } break;
     }
+    if (pkt_flag_key)
+    {
+        flags |= HB_FLAG_FRAMETYPE_REF;
+        flags |= HB_FLAG_FRAMETYPE_KEY;
+    }
+    *sflags = flags;
     return retval;
 }
 
@@ -639,9 +617,8 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 buf->s.start    = get_frame_start( pv, frameno );
                 buf->s.duration = get_frame_duration( pv, frameno );
                 buf->s.stop     = buf->s.stop + buf->s.duration;
-                buf->s.flags   &= ~HB_FRAME_REF;
                 buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
-                if (buf->s.frametype & HB_FRAME_KEY)
+                if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
                 {
                     hb_chapter_dequeue(pv->chapter_queue, buf);
                 }

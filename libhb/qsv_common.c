@@ -2039,8 +2039,9 @@ uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
     uint16_t flags     = 0;
     uint8_t  frametype = 0;
 
-    if      (qsv_frametype & MFX_FRAMETYPE_IDR)
+    if (qsv_frametype & MFX_FRAMETYPE_IDR)
     {
+        flags |= HB_FLAG_FRAMETYPE_KEY;
         frametype = HB_FRAME_IDR;
     }
     else if (qsv_frametype & MFX_FRAMETYPE_I)
@@ -2058,7 +2059,7 @@ uint8_t hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags)
 
     if (qsv_frametype & MFX_FRAMETYPE_REF)
     {
-        flags |= HB_FRAME_REF;
+        flags |= HB_FLAG_FRAMETYPE_REF;
     }
 
     if (out_flags != NULL)

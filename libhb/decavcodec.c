@@ -957,16 +957,22 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
 
 static int get_frame_type(int type)
 {
-    switch(type)
+    switch (type)
     {
-        case AV_PICTURE_TYPE_I:
-            return HB_FRAME_I;
         case AV_PICTURE_TYPE_B:
             return HB_FRAME_B;
+
+        case AV_PICTURE_TYPE_S:
         case AV_PICTURE_TYPE_P:
+        case AV_PICTURE_TYPE_SP:
             return HB_FRAME_P;
+
+        case AV_PICTURE_TYPE_BI:
+        case AV_PICTURE_TYPE_SI:
+        case AV_PICTURE_TYPE_I:
+        default:
+            return HB_FRAME_I;
     }
-    return 0;
 }
 
 /*
