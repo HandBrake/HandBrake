@@ -84,14 +84,14 @@ struct hb_buffer_settings_s
     uint8_t       frametype;
 
 // Picture flags used by filters
-#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
-#define PIC_FLAG_REPEAT_FIRST_FIELD 0x0100
-#endif
 #ifndef PIC_FLAG_TOP_FIELD_FIRST
 #define PIC_FLAG_TOP_FIELD_FIRST    0x0008
 #endif
 #ifndef PIC_FLAG_PROGRESSIVE_FRAME
 #define PIC_FLAG_PROGRESSIVE_FRAME  0x0010
+#endif
+#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
+#define PIC_FLAG_REPEAT_FIRST_FIELD 0x0100
 #endif
 #define PIC_FLAG_REPEAT_FRAME       0x0200
 #define HB_BUF_FLAG_EOF             0x0400
