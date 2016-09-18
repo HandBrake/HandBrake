@@ -384,11 +384,17 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     {
         return NULL;
     }
-
+    buf->s.flags = 0;
     buf->size = 0;
+
     // copy the bitstream data
     for (i = 0; i < nnal; i++)
     {
+        if (HB_HEVC_NALU_KEYFRAME(nal[i].type))
+        {
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+        }
         memcpy(buf->data + buf->size, nal[i].payload, nal[i].sizeBytes);
         buf->size += nal[i].sizeBytes;
     }
@@ -406,10 +412,9 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     switch (pic_out->sliceType)
     {
         case X265_TYPE_IDR:
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             buf->s.frametype = HB_FRAME_IDR;
-            break;
-        case X265_TYPE_I:
-            buf->s.frametype = HB_FRAME_I;
             break;
         case X265_TYPE_P:
             buf->s.frametype = HB_FRAME_P;
@@ -420,12 +425,13 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
         case X265_TYPE_BREF:
             buf->s.frametype = HB_FRAME_BREF;
             break;
+        case X265_TYPE_I:
         default:
-            buf->s.frametype = 0;
+            buf->s.frametype = HB_FRAME_I;
             break;
     }
 
-    if (pic_out->sliceType == X265_TYPE_IDR)
+    if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
     {
         hb_chapter_dequeue(pv->chapter_queue, buf);
     }

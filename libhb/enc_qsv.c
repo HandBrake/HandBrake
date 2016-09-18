@@ -1595,12 +1595,6 @@ static void compute_init_delay(hb_work_private_t *pv, mfxBitstream *bs)
     pv->init_delay = NULL;
 }
 
-static int qsv_frame_is_key(mfxU16 FrameType)
-{
-    return ((FrameType  & MFX_FRAMETYPE_IDR) ||
-            (FrameType == MFX_FRAMETYPE_UNKNOWN));
-}
-
 static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
 {
     hb_buffer_t *buf;
@@ -1633,6 +1627,22 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
     bs->MaxLength  = pv->job->qsv.ctx->enc_space->p_buf_max_size;
 
     buf->s.frametype = hb_qsv_frametype_xlat(bs->FrameType, &buf->s.flags);
+    if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
+    {
+        size_t   len = buf->size;
+        uint8_t *pos = buf->data;
+        uint8_t *end = pos + len;
+        while ((pos = hb_annexb_find_next_nalu(pos, &len)) != NULL)
+        {
+            if (HB_HEVC_NALU_KEYFRAME((pos[0] >> 1) & 0x3f))
+            {
+                buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+                break;
+            }
+            len = end - pos;
+            continue;
+        }
+    }
     buf->s.start     = buf->s.renderOffset = bs->TimeStamp;
     buf->s.stop      = buf->s.start + get_frame_duration(pv, buf);
     buf->s.duration  = buf->s.stop  - buf->s.start;
@@ -1686,7 +1696,7 @@ static void qsv_bitstream_slurp(hb_work_private_t *pv, mfxBitstream *bs)
      * If we have a chapter marker pending and this frame's PTS
      * is at or after the marker's PTS, use it as the chapter start.
      */
-    if (qsv_frame_is_key(bs->FrameType))
+    if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
     {
         hb_chapter_dequeue(pv->chapter_queue, buf);
     }

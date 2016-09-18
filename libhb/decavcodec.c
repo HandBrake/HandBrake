@@ -957,16 +957,22 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
 
 static int get_frame_type(int type)
 {
-    switch(type)
+    switch (type)
     {
-        case AV_PICTURE_TYPE_I:
-            return HB_FRAME_I;
         case AV_PICTURE_TYPE_B:
             return HB_FRAME_B;
+
+        case AV_PICTURE_TYPE_S:
         case AV_PICTURE_TYPE_P:
+        case AV_PICTURE_TYPE_SP:
             return HB_FRAME_P;
+
+        case AV_PICTURE_TYPE_BI:
+        case AV_PICTURE_TYPE_SI:
+        case AV_PICTURE_TYPE_I:
+        default:
+            return HB_FRAME_I;
     }
-    return 0;
 }
 
 /*
@@ -1008,7 +1014,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         // libav avcodec_decode_video2() needs AVPacket flagged with
         // AV_PKT_FLAG_KEY for some codecs. For example, sequence of
         // PNG in a mov container.
-        if (packet_info->frametype & HB_FRAME_KEY)
+        if (packet_info->frametype & HB_FRAME_MASK_KEY)
         {
             avp.flags |= AV_PKT_FLAG_KEY;
         }

@@ -5802,9 +5802,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
              * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
              * for some codecs. For example, sequence of PNG in a mov container.
              */
-            if ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY )
+            if (stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY)
             {
-                buf->s.frametype |= HB_FRAME_KEY;
+                buf->s.flags = HB_FLAG_FRAMETYPE_KEY;
+                buf->s.frametype = HB_FRAME_I;
             }
             break;
 
