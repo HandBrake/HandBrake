@@ -776,7 +776,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
                 /* OpenCL */
                 if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
                 {
-                    hb_log("hb_buffer_pool_free: bad free %p -> buffer %p map %p",
+                    hb_log("hb_buffer_close: bad free %p -> buffer %p map %p",
                            b, b->cl.buffer, b->data);
                 }
             }
