@@ -293,17 +293,22 @@ static void shiftTS( sync_common_t * common, int64_t delta )
 static void computeInitialTS( sync_common_t * common,
                               sync_stream_t * first_stream )
 {
-    int           ii, count;
+    int           ii;
     hb_buffer_t * prev;
 
     // Process first_stream first since it has the initial PTS
     prev = NULL;
-    count = hb_list_count(first_stream->in_queue);
-    for (ii = 0; ii < count; ii++)
+    for (ii = 0; ii < hb_list_count(first_stream->in_queue);)
     {
         hb_buffer_t * buf = hb_list_item(first_stream->in_queue, ii);
-        if (UpdateSCR(first_stream, buf))
+
+        if (!UpdateSCR(first_stream, buf))
         {
+            hb_list_rem(first_stream->in_queue, buf);
+        }
+        else
+        {
+            ii++;
             if (first_stream->type == SYNC_TYPE_VIDEO && prev != NULL)
             {
                 double duration = buf->s.start - prev->s.start;
@@ -313,8 +318,8 @@ static void computeInitialTS( sync_common_t * common,
                     prev->s.stop = buf->s.start;
                 }
             }
+            prev = buf;
         }
-        prev = buf;
     }
     for (ii = 0; ii < common->stream_count; ii++)
     {
@@ -348,8 +353,8 @@ static void computeInitialTS( sync_common_t * common,
                         prev->s.stop = buf->s.start;
                     }
                 }
+                prev = buf;
             }
-            prev = buf;
         }
     }
 }
@@ -1866,7 +1871,7 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 
     if (stream->common->found_first_pts)
     {
-        if (UpdateSCR(stream, buf))
+        if (UpdateSCR(stream, buf) > 0)
         {
             // Apply any stream slips.
             // Stream slips will only temporarily differ between
