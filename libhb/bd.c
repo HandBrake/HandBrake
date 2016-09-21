@@ -286,7 +286,10 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->vts = 0;
     title->ttn = 0;
 
-    ti = d->title_info[tt - 1];
+    if (tt <= d->title_count)
+    {
+        ti = d->title_info[tt - 1];
+    }
     if ( ti == NULL )
     {
         hb_log( "bd: invalid title" );
