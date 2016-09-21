@@ -257,10 +257,7 @@ static int utf8_fill( hb_work_private_t * pv )
             pv->end = bytes;
             if( bytes == 0 )
             {
-                if( conversion )
-                    return 1;
-                else
-                    return 0;
+                return conversion;
             }
         }
 
@@ -269,8 +266,10 @@ static int utf8_fill( hb_work_private_t * pv )
         in_size = pv->end - pv->pos;
 
         retval = iconv( pv->iconv_context, &p, &in_size, &q, &out_size);
-        if( q != pv->utf8_buf + pv->utf8_pos )
+        if (q != pv->utf8_buf + pv->utf8_end)
+        {
             conversion = 1;
+        }
 
         pv->utf8_end = q - pv->utf8_buf;
         pv->pos = p - pv->buf;
@@ -281,6 +280,11 @@ static int utf8_fill( hb_work_private_t * pv )
             if (buf[0] == 0xef && buf[1] == 0xbb && buf[2] == 0xbf)
             {
                 pv->utf8_pos = 3;
+                if (pv->utf8_pos == pv->utf8_end)
+                {
+                    // If only the bom was converted, indicate no conversion
+                    conversion = 0;
+                }
             }
             pv->utf8_bom_skipped = 1;
         }
@@ -294,10 +298,7 @@ static int utf8_fill( hb_work_private_t * pv )
             bytes = fread( pv->buf + pv->end, 1, 1024 - pv->end, pv->file );
             if( bytes == 0 )
             {
-                if( !conversion )
-                    return 0;
-                else
-                    return 1;
+                return conversion;
             }
             pv->end += bytes;
         } else if ( ( retval == -1 ) && ( errno == EILSEQ ) )
