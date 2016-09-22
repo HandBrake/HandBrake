@@ -9,6 +9,7 @@
 
 #include "hb.h"
 
+//#define HB_DEBUG_CFR_DROPS 1
 #define MAX_FRAME_ANALYSIS_DEPTH 10
 
 struct hb_filter_private_s
@@ -37,6 +38,9 @@ struct hb_filter_private_s
     double        * frame_metric;
 
     unsigned        gamma_lut[256];
+#if defined(HB_DEBUG_CFR_DROPS)
+    int64_t         sequence;
+#endif
 };
 
 static int hb_vfr_init( hb_filter_object_t * filter,
@@ -188,6 +192,9 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
             pv->out_last_stop = in->s.start;
         }
 
+#if defined(HB_DEBUG_CFR_DROPS)
+        in->s.pcr = pv->sequence++;
+#endif
         hb_list_add(pv->frame_rate_list, in);
         count = hb_list_count(pv->frame_rate_list);
         if (count < 2)
@@ -234,6 +241,24 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
 
         drop_frame = find_drop_frame(pv->frame_metric, count);
         out = hb_list_item(pv->frame_rate_list, drop_frame);
+
+#if defined(HB_DEBUG_CFR_DROPS)
+        hb_log("CFR Drop: %ld metric %d", out->s.pcr, (int)pv->frame_metric[drop_frame]);
+        int jj;
+        for (jj = 0; jj < count; jj++)
+        {
+            if (jj == drop_frame)
+            {
+                fprintf(stderr, "(%4d) ", (int)pv->frame_metric[jj]);
+            }
+            else
+            {
+                fprintf(stderr, "%6d ", (int)pv->frame_metric[jj]);
+            }
+        }
+        fprintf(stderr, "\n");
+#endif
+
         hb_list_rem(pv->frame_rate_list, out);
         hb_buffer_close(&out);
         delete_metric(pv->frame_metric, drop_frame, count);
@@ -242,6 +267,13 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
     }
 
     out = hb_list_item(pv->frame_rate_list, 0);
+
+#if defined(HB_DEBUG_CFR_DROPS)
+    static int64_t lastpass = 0;
+    hb_log("CFR Pass: %ld ~ %ld metric %d", out->s.pcr, out->s.pcr - lastpass, (int)pv->frame_metric[0]);
+    lastpass = out->s.pcr;
+#endif
+
     hb_list_rem(pv->frame_rate_list, out);
     hb_buffer_list_append(&list, out);
     delete_metric(pv->frame_metric, 0, count);
