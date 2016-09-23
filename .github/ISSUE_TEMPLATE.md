@@ -8,5 +8,5 @@
 
 ### Was there any error message or error dialog, if so please detail or provide screenshots: 
 
-### Please provide the full activity log for the encode or scan attempt. You may wish to use a pastebin website and provide the URL it generates.
+### Please provide the full activity log for the encode or scan attempt. You may attach the log as a file, post a pastebin URL to the log, or place the log inline below:
 ```  Place your log in-between these back-ticks ```
