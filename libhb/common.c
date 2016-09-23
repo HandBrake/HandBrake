@@ -1532,13 +1532,6 @@ void hb_audio_quality_get_limits(uint32_t codec, float *low, float *high,
             *high        = 127.;
             break;
 
-        case HB_ACODEC_OPUS:
-            *direction   = 0;
-            *granularity = 1.;
-            *low         = 0.;
-            *high        = 10.;
-            break;
-
         default:
             *direction   = 0;
             *granularity = 1.;
@@ -1579,9 +1572,6 @@ float hb_audio_quality_get_default(uint32_t codec)
         case HB_ACODEC_CA_AAC:
             return 91.;
 
-        case HB_ACODEC_OPUS:
-            return 10.;
-
         default:
             return HB_INVALID_AUDIO_QUALITY;
     }
@@ -1611,6 +1601,13 @@ void hb_audio_compression_get_limits(uint32_t codec, float *low, float *high,
             *direction   = 1;
             *granularity = 1.;
             *high        = 9.;
+            *low         = 0.;
+            break;
+
+        case HB_ACODEC_OPUS:
+            *direction   = 0;
+            *granularity = 1.;
+            *high        = 10.;
             *low         = 0.;
             break;
 
@@ -1644,6 +1641,9 @@ float hb_audio_compression_get_default(uint32_t codec)
 
         case HB_ACODEC_LAME:
             return 2.;
+
+        case HB_ACODEC_OPUS:
+            return 10.;
 
         default:
             return -1.;
