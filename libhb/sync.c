@@ -1399,7 +1399,7 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             signalBuffer(out_stream);
-            return;
+            continue;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
             common->job->frame_to_stop &&
@@ -1412,7 +1412,7 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             signalBuffer(out_stream);
-            return;
+            continue;
         }
 
         if (out_stream->type == SYNC_TYPE_VIDEO)
