@@ -241,7 +241,7 @@ static int fillQueues( sync_common_t * common )
 
 static void signalBuffer( sync_stream_t * stream )
 {
-    if (hb_list_count(stream->in_queue) < stream->max_len ||
+    if (hb_list_count(stream->in_queue) <= stream->max_len ||
         stream->done || stream->common->job->done ||
         *stream->common->job->die)
     {
