@@ -241,7 +241,9 @@ static int fillQueues( sync_common_t * common )
 
 static void signalBuffer( sync_stream_t * stream )
 {
-    if (hb_list_count(stream->in_queue) < stream->max_len)
+    if (hb_list_count(stream->in_queue) < stream->max_len ||
+        stream->done || stream->common->job->done ||
+        *stream->common->job->die)
     {
         hb_cond_signal(stream->cond_full);
     }
@@ -1538,6 +1540,19 @@ static void OutputBuffer( sync_common_t * common )
     } while (full);
 }
 
+static void FlushBuffer( sync_common_t * common )
+{
+    hb_lock(common->mutex);
+
+    if (!common->found_first_pts)
+    {
+        checkFirstPts(common);
+    }
+    OutputBuffer(common);
+
+    hb_unlock(common->mutex);
+}
+
 static void Synchronize( sync_stream_t * stream )
 {
     sync_common_t * common = stream->common;
@@ -2693,6 +2708,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -2717,6 +2733,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -2783,6 +2800,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -2798,6 +2816,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -3091,6 +3110,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -3115,6 +3135,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
