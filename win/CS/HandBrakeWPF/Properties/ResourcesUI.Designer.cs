@@ -2331,15 +2331,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Same as source.
-        /// </summary>
-        public static string VideoView_SameAsSource {
-            get {
-                return ResourceManager.GetString("VideoView_SameAsSource", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Turbo first pass.
         /// </summary>
         public static string VideoView_TurboFirstPass {

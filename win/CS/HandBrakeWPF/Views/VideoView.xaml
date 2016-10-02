@@ -61,12 +61,9 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Framerate}" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
                     <StackPanel Orientation="Vertical">
-                        <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"  
-                                  Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_SameAsSource}"  VerticalAlignment="Center" Margin="0,5,0,0"
-                                   Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                        <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"  />
 
-                        <StackPanel Orientation="Vertical" Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}}">
+                        <StackPanel Orientation="Vertical" >
                             <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_ConstantFramerate}" IsChecked="{Binding IsConstantFramerate}" Margin="0,5,0,0"
                                          ToolTip="{x:Static Properties:ResourcesTooltips.Video_ConstantFramerate}" />
                             <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_VariableFramerate}" IsChecked="{Binding IsVariableFramerate}" Margin="0,5,0,0" 
