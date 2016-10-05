@@ -28,7 +28,7 @@
 - (IBAction)addToQueue:(id)sender;
 - (IBAction)addAllTitlesToQueue:(id)sender;
 
-- (void)setQueueState:(NSString *)info;
+- (void)setQueueState:(NSUInteger)count;
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden;
 
 - (IBAction)rip:(id)sender;

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11521.1" systemVersion="16B2338c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11521.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -14,7 +14,6 @@
                 <outlet property="fMainTabView" destination="1474" id="sl5-BZ-ymC"/>
                 <outlet property="fPictureTab" destination="eij-Sn-QmJ" id="Ccp-rO-nqD"/>
                 <outlet property="fPresetDrawer" destination="1841" id="LDc-Da-rl7"/>
-                <outlet property="fQueueStatus" destination="2006" id="o5x-Kd-lxv"/>
                 <outlet property="fRipIndicator" destination="1373" id="an5-ng-etT"/>
                 <outlet property="fScanHorizontalLine" destination="3205" id="W26-Wu-2YJ"/>
                 <outlet property="fScanIndicator" destination="3203" id="cG1-SY-gbt"/>
@@ -30,6 +29,7 @@
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
+                <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
             </connections>
         </customObject>
@@ -66,7 +66,7 @@
                         <tabViewItems>
                             <tabViewItem label="Video" identifier="1" id="1477">
                                 <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="29" width="874" height="315"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -261,12 +261,9 @@
                             </binding>
                         </connections>
                     </button>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="1623">
+                    <box verticalHuggingPriority="750" boxType="separator" id="1623">
                         <rect key="frame" x="98" y="490" width="802" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1539">
                         <rect key="frame" x="70" y="540" width="310" height="14"/>
@@ -409,12 +406,9 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="1628">
+                    <box verticalHuggingPriority="750" boxType="separator" id="1628">
                         <rect key="frame" x="292" y="434" width="608" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
                     <textField verticalHuggingPriority="750" id="1882">
                         <rect key="frame" x="121" y="430" width="165" height="14"/>
@@ -428,15 +422,6 @@
                             <binding destination="-2" name="value" keyPath="self.job.presetName" id="W9D-4K-e1F"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="2006">
-                        <rect key="frame" x="685" y="15" width="218" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" id="4925">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField verticalHuggingPriority="750" id="1556">
                         <rect key="frame" x="21" y="403" width="53" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -449,12 +434,9 @@
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="j6q-iC-kqw"/>
                         </connections>
                     </textField>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="3205">
+                    <box verticalHuggingPriority="750" boxType="separator" id="3205">
                         <rect key="frame" x="391" y="543" width="509" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
                     </box>
                     <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" id="3203">
                         <rect key="frame" x="391" y="542" width="510" height="12"/>
@@ -630,11 +612,15 @@ IA
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
+                        <size key="minSize" width="32" height="32"/>
+                        <size key="maxSize" width="32" height="32"/>
                         <connections>
                             <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7">
+                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
+                        <size key="minSize" width="40" height="32"/>
+                        <size key="maxSize" width="40" height="32"/>
                         <connections>
                             <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
                         </connections>
@@ -672,7 +658,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="1113" y="13"/>
+            <point key="canvasLocation" x="1327" y="25"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
@@ -727,12 +713,12 @@ IA
     </objects>
     <resources>
         <image name="activity" width="24" height="24"/>
-        <image name="addqueue" width="12" height="12"/>
+        <image name="addqueue" width="32" height="32"/>
         <image name="encode" width="24" height="24"/>
         <image name="pauseencode" width="24" height="24"/>
         <image name="presets" width="24" height="24"/>
         <image name="preview" width="24" height="24"/>
-        <image name="showqueue" width="24" height="24"/>
+        <image name="showqueue" width="32" height="32"/>
         <image name="source" width="24" height="24"/>
     </resources>
 </document>

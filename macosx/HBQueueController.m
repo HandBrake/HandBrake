@@ -526,7 +526,7 @@
     }
 
     self.countTextField.stringValue = string;
-    [self.controller setQueueState:string];
+    [self.controller setQueueState:pendingCount];
 
     self.pendingItemsCount = pendingCount;
     self.completedItemsCount = completedCount;

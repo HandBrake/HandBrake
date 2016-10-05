@@ -6,7 +6,7 @@
 
 #import "HBController.h"
 #import "HBFocusRingView.h"
-
+#import "HBToolbarBadgedItem.h"
 #import "HBQueueController.h"
 #import "HBTitleSelectionController.h"
 
@@ -82,7 +82,6 @@
 
     // Bottom
     IBOutlet NSTextField         * fStatusField;
-    IBOutlet NSTextField         * fQueueStatus;
     IBOutlet NSProgressIndicator * fRipIndicator;
     BOOL                           fRipIndicatorShown;
 
@@ -92,6 +91,8 @@
     
     IBOutlet NSDrawer            * fPresetDrawer;
 }
+
+@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
 @property (unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
@@ -901,9 +902,9 @@
 
 #pragma mark - Queue progress
 
-- (void)setQueueState:(NSString *)info
+- (void)setQueueState:(NSUInteger)count
 {
-    fQueueStatus.stringValue = info;
+    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
 }
 
 #define WINDOW_HEIGHT 591
