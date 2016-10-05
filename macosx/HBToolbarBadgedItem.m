@@ -85,7 +85,7 @@
 
 #pragma mark -- Private Methods
 
-- (CGColorRef)HB_NSColorToCGColor:(NSColor *)color
+- (CGColorRef)copyNSColorToCGColor:(NSColor *)color
 {
     // CGColor property of NSColor has been added only in 10.8,
     // we need to support 10.7 too.
@@ -178,7 +178,9 @@
         CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius);
         CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius);
         CGContextClosePath(context);
-        CGContextSetFillColorWithColor(context, [self HB_NSColorToCGColor:_badgeFillColor]);
+        CGColorRef fillColor = [self copyNSColorToCGColor:_badgeFillColor];
+        CGContextSetFillColorWithColor(context,fillColor);
+        CFRelease(fillColor);
         CGContextDrawPath(context, kCGPathFill);
 
         // Draw the text
