@@ -3829,13 +3829,13 @@ browse_url(const gchar *url)
 
     argv[0] = "kfmclient";
     argv[1] = "exec";
-    argv[2] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+    argv[2] = (gchar*)url;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
     if (result) return;
 
     argv[0] = "firefox";
-    argv[1] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+    argv[1] = (gchar*)url;
     argv[2] = NULL;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
@@ -3871,10 +3871,12 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_show (widget);
 }
 
+#define HB_DOCS "https://handbrake.fr/docs/"
+
 G_MODULE_EXPORT void
 guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    browse_url("http://trac.handbrake.fr/wiki/HandBrakeGuide");
+    browse_url(HB_DOCS);
 }
 
 G_MODULE_EXPORT void
