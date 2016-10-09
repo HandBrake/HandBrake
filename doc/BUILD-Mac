@@ -69,7 +69,7 @@ recommended you use these versions or similar:
 
    * git - 2.4.3
    * python - Python 2.7.1
-   * m4 - GNU M4 1.4.7
+   * m4 - GNU M4 1.4.17
    * make - GNU Make 3.81
    * patch - Patch 2.5.8
    * tar - GNU tar 1.26
