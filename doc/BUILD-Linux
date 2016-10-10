@@ -138,7 +138,7 @@ Additional Fedora packages:
    * fribidi-devel (cli/gui)
    * freetype-devel (cli/gui)
    * fontconfig-devel (cli/gui)
-   * libharfbuzz-devel (cli/gui)
+   * harfbuzz-devel (cli/gui)
    * libass-devel (cli/gui)
    * lame-devel (cli/gui)
    * x264-devel (cli/gui)
