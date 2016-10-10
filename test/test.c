@@ -2113,8 +2113,8 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         "hv::uC:f:4i:Io:PUt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
-                         "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
+                         ":hv::C:f:i:Io:Pt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
+                         "2d::D:7::8::9::5::gOw:l:n:b:q:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2735,9 +2735,15 @@ static int ParseOptions( int argc, char ** argv )
                 hb_qsv_impl_set_preferred(optarg);
                 break;
 #endif
+            case ':':
+                fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
+                return -1;
+
             default:
+            case '?':
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
                 return -1;
+
         }
 
     }
