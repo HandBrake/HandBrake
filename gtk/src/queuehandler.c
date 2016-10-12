@@ -1347,7 +1347,7 @@ title_add_multiple_set_conflict_label(
     if (are_conflicts)
     {
         msg =
-            "<span foreground='red' weight='bold'>"
+            "<span foreground='black' weight='bold'>"
             "Duplicate destination files detected.\n"
             "Duplicates will not be added to the queue."
             "</span>";

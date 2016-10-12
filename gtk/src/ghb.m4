@@ -245,7 +245,7 @@ conjunction with the "Forced" option.</property>
   </object>
   <object class="GtkAdjustment" id="adjustment24">
     <property name="lower">1</property>
-    <property name="upper">100</property>
+    <property name="upper">999</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
@@ -1131,6 +1131,7 @@ Activity</property>
                         <property name="hexpand">True</property>
                         <property name="halign">GTK_ALIGN_FILL</property>
                         <property name="margin-start">6</property>
+                        <property name="row-spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
@@ -1187,6 +1188,7 @@ This is often the feature title of a DVD.</property>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="angle">
+                                <property name="width-chars">3</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1385,6 +1387,7 @@ This is often the feature title of a DVD.</property>
                         <property name="margin-start">6</property>
                         <child>
                           <object class="GtkGrid" id="table4">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin-bottom">6</property>
@@ -1453,6 +1456,7 @@ This is often the feature title of a DVD.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">4</property>
+                            <property name="row-spacing">2</property>
                             <child>
                               <object class="GtkBox" id="hbox3">
                                 <property name="orientation">horizontal</property>
@@ -2185,6 +2189,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureLeftCrop">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2203,6 +2208,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureTopCrop">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2221,6 +2227,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureBottomCrop">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2239,6 +2246,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureRightCrop">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2411,6 +2419,7 @@ the required multiple.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_width">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2443,6 +2452,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_height">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2646,6 +2656,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayWidth">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2677,6 +2688,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayHeight">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2720,6 +2732,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARWidth">
+                                            <property name="width-chars">8</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2754,6 +2767,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARHeight">
+                                            <property name="width-chars">8</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2890,6 +2904,7 @@ filter_output([
                         <property name="halign">fill</property>
                         <child>
                           <object class="GtkGrid" id="table10">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -2960,6 +2975,7 @@ filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="comb_detect_grid">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3032,6 +3048,7 @@ filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table14">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3042,7 +3059,7 @@ filter_output([
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Deinterlace Filter:</property>
+                                <property name="label" translatable="yes">Deinterlace:</property>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -3141,6 +3158,7 @@ filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table90">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3194,6 +3212,7 @@ filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table1">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3330,6 +3349,7 @@ filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table16">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3429,7 +3449,7 @@ filter_output([
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <property name="margin-top">12</property>
                                 <property name="margin-start">24</property>
                                 <child>
@@ -3572,7 +3592,7 @@ VFR is not compatible with some players.</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <property name="margin-top">12</property>
                                 <property name="margin-end">24</property>
                                 <child>
@@ -3776,7 +3796,7 @@ Use at your own risk!</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <child>
                                   <object class="GtkLabel" id="VideoPresetLabel">
                                     <property name="visible">True</property>
@@ -4074,7 +4094,7 @@ Colon separated list of encoder options.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <child>
                                       <object class="GtkLabel" id="label4">
                                         <property name="visible">True</property>
@@ -4115,7 +4135,7 @@ Colon separated list of encoder options.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">GTK_ALIGN_END</property>
                                     <property name="margin_top">6</property>
                                     <property name="margin_bottom">6</property>
@@ -4262,7 +4282,7 @@ All other secondary audio output tracks will be encoded with first encoder only.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">end</property>
                                     <child>
                                       <object class="GtkLabel" id="labela3">
@@ -4779,7 +4799,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <child>
                                       <object class="GtkLabel" id="sub_label4">
                                         <property name="visible">True</property>
@@ -4820,7 +4840,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">GTK_ALIGN_END</property>
                                     <property name="margin_top">6</property>
                                     <property name="margin_bottom">6</property>
@@ -5307,7 +5327,7 @@ segments of the audio that are in a foreign language.</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="column_spacing">4</property>
-                                            <property name="row_spacing">2</property>
+                                            <property name="row-spacing">2</property>
                                             <property name="margin-top">6</property>
                                             <property name="margin-bottom">2</property>
                                             <property name="margin-start">12</property>
@@ -5566,7 +5586,7 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
-                                                <property name="row_spacing">2</property>
+                                                <property name="row-spacing">2</property>
                                                 <child>
                                                   <object class="GtkLabel" id="label55">
                                                     <property name="visible">True</property>
@@ -5769,7 +5789,7 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
-                                                <property name="row_spacing">2</property>
+                                                <property name="row-spacing">2</property>
                                                 <property name="margin-start">6</property>
                                                 <child>
                                                   <placeholder/>
@@ -5900,6 +5920,7 @@ Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <child>
                                               <object class="GtkGrid" id="table9">
+                                                <property name="row-spacing">2</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -6307,6 +6328,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     </child>
                     <child>
                       <object class="GtkGrid" id="metadata_tab">
+                        <property name="row-spacing">2</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
                         <property name="margin-start">24</property>
@@ -6942,6 +6964,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <property name="margin-end">12</property>
             <property name="margin_top">12</property>
             <property name="column_spacing">6</property>
+            <property name="row-spacing">2</property>
             <child>
               <object class="GtkScrolledWindow" id="title_add_multiple_scrolledwindow">
                 <property name="visible">True</property>
@@ -7484,7 +7507,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="row_spacing">2</property>
+                        <property name="row-spacing">2</property>
                         <child>
                           <object class="GtkBox" id="hbox6">
                             <property name="orientation">horizontal</property>
@@ -7548,6 +7571,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">2</property>
                             <child>
                               <object class="GtkCheckButton" id="EncodeLogLocation">
                                 <property name="label" translatable="yes">Put individual encode logs in same location as movie</property>
@@ -7736,6 +7760,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     </child>
                     <child>
                       <object class="GtkGrid" id="hidden_prefs">
+                        <property name="row-spacing">2</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8091,6 +8116,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             <child>
               <object class="GtkGrid" id="PicturePresetBox">
                 <property name="visible">True</property>
+                <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
@@ -8147,6 +8173,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="PictureWidth">
+                    <property name="width-chars">7</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8188,6 +8215,7 @@ Setting this to 0 means there is no maximum width.</property>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="PictureHeight">
+                    <property name="width-chars">7</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8437,6 +8465,7 @@ Setting this to 0 means there is no maximum height.</property>
                         </child>
                         <child>
                           <object class="GtkSpinButton" id="live_duration">
+                            <property name="width-chars">7</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Set the duration of the live preview in seconds.</property>
@@ -8632,6 +8661,7 @@ filter_output([
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="single_title">
+                    <property name="width-chars">5</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
@@ -8955,6 +8985,7 @@ filter_output([
             <child>
               <object class="GtkGrid" id="subtitle_srt_grid">
                 <property name="visible">True</property>
+                <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="column_spacing">4</property>
@@ -9078,6 +9109,7 @@ The source's character code is needed in order to perform this translation.</pro
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="SrtOffset">
+                    <property name="width-chars">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9291,6 +9323,7 @@ in your output.</property>
         </child>
         <child>
           <object class="GtkGrid" id="audio_dialog_grid1">
+            <property name="row-spacing">2</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="column_spacing">5</property>
@@ -9372,6 +9405,7 @@ Players may use this in the audio selection list.</property>
         </child>
         <child>
           <object class="GtkGrid" id="audio_dialog_grid2">
+            <property name="row-spacing">2</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">24</property>
