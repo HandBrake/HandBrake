@@ -317,6 +317,81 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
     return duration;
 }
 
+static void add_subtitle( hb_list_t * list_subtitle, int position,
+                          iso639_lang_t * lang, int lang_extension,
+                          uint32_t * palette )
+{
+    hb_subtitle_t * subtitle;
+    int ii, count;
+
+    count = hb_list_count(list_subtitle);
+    for (ii = 0; ii < count; ii++)
+    {
+        subtitle = hb_list_item(list_subtitle, ii);
+        if (((subtitle->id >> 8) & 0x1f) == position)
+        {
+            // The subtitle is already in the list
+            return;
+        }
+    }
+
+    subtitle        = calloc(sizeof(hb_subtitle_t), 1);
+    subtitle->track = count;
+    subtitle->id    = ((0x20 + position) << 8) | 0xbd;
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s",
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name);
+    snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+             lang->iso639_2);
+    subtitle->format         = PICTURESUB;
+    subtitle->source         = VOBSUB;
+    subtitle->config.dest    = RENDERSUB;
+    subtitle->stream_type    = 0xbd;
+    subtitle->substream_type = 0x20 + position;
+    subtitle->codec          = WORK_DECVOBSUB;
+
+    subtitle->type = lang_extension;
+
+    memcpy(subtitle->palette, palette, 16 * sizeof(uint32_t));
+    subtitle->palette_set = 1;
+
+    switch (lang_extension)
+    {
+        case 2:
+            strcat( subtitle->lang, " (Caption with bigger size character)" );
+            break;
+        case 3:
+            strcat( subtitle->lang, " (Caption for Children)" );
+            break;
+        case 5:
+            strcat( subtitle->lang, " (Closed Caption)" );
+            break;
+        case 6:
+            strcat( subtitle->lang, " (Closed Caption with bigger size character)" );
+            break;
+        case 7:
+            strcat( subtitle->lang, " (Closed Caption for Children)" );
+            break;
+        case 9:
+            strcat( subtitle->lang, " (Forced Caption)" );
+            break;
+        case 13:
+            strcat( subtitle->lang, " (Director's Commentary)" );
+            break;
+        case 14:
+            strcat( subtitle->lang, " (Director's Commentary with bigger size character)" );
+            break;
+        case 15:
+            strcat( subtitle->lang, " (Director's Commentary for Children)" );
+        default:
+            break;
+    }
+
+    hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", subtitle->id,
+            subtitle->lang, subtitle->iso639_2, lang_extension );
+
+    hb_list_add(list_subtitle, subtitle);
+}
+
 /***********************************************************************
  * hb_dvdnav_title_scan
  **********************************************************************/
@@ -631,14 +706,17 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     /* Check for subtitles */
     for( i = 0; i < ifo->vtsi_mat->nr_of_vts_subp_streams; i++ )
     {
-        hb_subtitle_t * subtitle;
-        int spu_control;
-        int position;
+        int             spu_control, pos, lang_ext = 0;
         iso639_lang_t * lang;
-        int lang_extension = 0;
 
         hb_log( "scan: checking subtitle %d", i + 1 );
 
+        // spu_control
+        // 0x80000000 - Subtitle enabled
+        // 0x1f000000 - Position mask for 4:3 aspect subtitle track
+        // 0x001f0000 - Position mask for Wide Screen subtitle track
+        // 0x00001f00 - Position mask for Letterbox subtitle track
+        // 0x0000001f - Position mask for Pan&Scan subtitle track
         spu_control =
             ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->subp_control[i];
 
@@ -648,86 +726,45 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             continue;
         }
 
-        if( ifo->vtsi_mat->vts_video_attr.display_aspect_ratio )
+        lang_ext = ifo->vtsi_mat->vts_subp_attr[i].code_extension;
+        lang     = lang_for_code(ifo->vtsi_mat->vts_subp_attr[i].lang_code);
+
+        // display_aspect_ratio
+        // 0     = 4:3
+        // 3     = 16:9
+        // other = invalid
+        if (ifo->vtsi_mat->vts_video_attr.display_aspect_ratio)
         {
-            switch( ifo->vtsi_mat->vts_video_attr.permitted_df )
+            // Add Wide Screen subtitle.
+            pos = (spu_control >> 16) & 0x1F;
+            add_subtitle(title->list_subtitle, pos, lang, lang_ext,
+                       ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette);
+
+            // permitted_df
+            // 1 - Letterbox not permitted
+            // 2 - Pan&Scan not permitted
+            // 3 - Letterbox and Pan&Scan not permitted
+            if (!(ifo->vtsi_mat->vts_video_attr.permitted_df & 1))
             {
-                case 1:
-                    position = spu_control & 0xFF;
-                    break;
-                case 2:
-                    position = ( spu_control >> 8 ) & 0xFF;
-                    break;
-                default:
-                    position = ( spu_control >> 16 ) & 0xFF;
+                // Letterbox permitted.  Add Letterbox subtitle.
+                pos = (spu_control >> 8) & 0x1F;
+                add_subtitle(title->list_subtitle, pos, lang, lang_ext,
+                           ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette);
+            }
+            if (!(ifo->vtsi_mat->vts_video_attr.permitted_df & 2))
+            {
+                // Pan&Scan permitted.  Add Pan&Scan subtitle.
+                pos = spu_control & 0x1F;
+                add_subtitle(title->list_subtitle, pos, lang, lang_ext,
+                           ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette);
             }
         }
         else
         {
-            position = ( spu_control >> 24 ) & 0x7F;
+            pos = (spu_control >> 24) & 0x1F;
+            add_subtitle(title->list_subtitle, pos, lang, lang_ext,
+                       ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette);
         }
-
-        lang_extension = ifo->vtsi_mat->vts_subp_attr[i].code_extension;
-
-        lang = lang_for_code( ifo->vtsi_mat->vts_subp_attr[i].lang_code );
-
-        subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
-        subtitle->track = i;
-        subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
-        snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
-             strlen(lang->native_name) ? lang->native_name : lang->eng_name);
-        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
-                  lang->iso639_2);
-        subtitle->format = PICTURESUB;
-        subtitle->source = VOBSUB;
-        subtitle->config.dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
-        subtitle->stream_type = 0xbd;
-        subtitle->substream_type = 0x20 + position;
-        subtitle->codec = WORK_DECVOBSUB;
-
-        subtitle->type = lang_extension;
-        
-        memcpy( subtitle->palette,
-            ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette,
-            16 * sizeof( uint32_t ) );
-        subtitle->palette_set = 1;
-
-        switch( lang_extension )
-        {  
-            case 2:
-                strcat( subtitle->lang, " (Caption with bigger size character)" );
-                break;
-            case 3: 
-                strcat( subtitle->lang, " (Caption for Children)" );
-                break;
-            case 5:
-                strcat( subtitle->lang, " (Closed Caption)" );
-                break;
-            case 6:
-                strcat( subtitle->lang, " (Closed Caption with bigger size character)" );
-                break;
-            case 7:
-                strcat( subtitle->lang, " (Closed Caption for Children)" );
-                break;
-            case 9:
-                strcat( subtitle->lang, " (Forced Caption)" );
-                break;
-            case 13:
-                strcat( subtitle->lang, " (Director's Commentary)" );
-                break;
-            case 14:
-                strcat( subtitle->lang, " (Director's Commentary with bigger size character)" );
-                break;
-            case 15:
-                strcat( subtitle->lang, " (Director's Commentary for Children)" );
-            default:
-                break;
-        }
-
-        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", subtitle->id,
-                subtitle->lang, subtitle->iso639_2, lang_extension );
-
-        hb_list_add( title->list_subtitle, subtitle );
     }
 
     /* Chapters */
