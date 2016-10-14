@@ -218,12 +218,10 @@ extern NSString *keySubTrackType;
             NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
             NSString *subSourceName = @(hb_subsource_name(subtitle->source));
 
-            // Use the native language name if available
-            iso639_lang_t *language = lang_for_code2(subtitle->iso639_2);
-            NSString *nativeLanguage = strlen(language->native_name) ? @(language->native_name) : @(language->eng_name);
+            NSString *lang = @(subtitle->lang);
 
             /* create a dictionary of source subtitle information to store in our array */
-            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@ (%@) (%@)", i, nativeLanguage, bitmapOrText, subSourceName],
+            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@", i, lang],
                                               keySubTrackType: @(subtitle->source),
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }

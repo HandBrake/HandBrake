@@ -95,11 +95,6 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
 
     subtitle->track = track;
     subtitle->id = bdsub->pid;
-    lang = lang_for_code2( (char*)bdsub->lang );
-    snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
-              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
-    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
-              lang->iso639_2);
 
     switch ( bdsub->coding_type )
     {
@@ -113,6 +108,13 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
             free( subtitle );
             return;
     }
+    lang = lang_for_code2( (char*)bdsub->lang );
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+             hb_subsource_name(subtitle->source));
+    snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+             lang->iso639_2);
+
     subtitle->reg_desc = STR4_TO_UINT32("HDMV");
     subtitle->stream_type = bdsub->coding_type;
     subtitle->codec = codec;

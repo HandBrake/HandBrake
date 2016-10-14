@@ -537,29 +537,33 @@ void hb_display_job_info(hb_job_t *job)
         {
             if( job->indepth_scan )
             {
-                hb_log( "   + subtitle, %s (track %d, id 0x%x) %s [%s]",
+                hb_log( "   + subtitle, %s (track %d, id 0x%x, %s)",
                         subtitle->lang, subtitle->track, subtitle->id,
-                        subtitle->format == PICTURESUB ? "Picture" : "Text",
-                        hb_subsource_name( subtitle->source ) );
+                        subtitle->format == PICTURESUB ? "Picture" : "Text");
             }
             else if( subtitle->source == SRTSUB )
             {
                 /* For SRT, print offset and charset too */
-                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) Text [SRT] -> %s%s, offset: %"PRId64", charset: %s",
-                        subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
-                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
-                        subtitle->config.default_track ? ", Default" : "",
-                        subtitle->config.offset, subtitle->config.src_codeset );
+                hb_log(" * subtitle track %d, %s (track %d, id 0x%x, Text) -> "
+                       "%s%s, offset: %"PRId64", charset: %s",
+                       subtitle->out_track, subtitle->lang, subtitle->track,
+                       subtitle->id,
+                       subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
+                                                          : "Passthrough",
+                       subtitle->config.default_track ? ", Default" : "",
+                       subtitle->config.offset, subtitle->config.src_codeset);
             }
             else
             {
-                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) %s [%s] -> %s%s%s",
-                        subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
-                        subtitle->format == PICTURESUB ? "Picture" : "Text",
-                        hb_subsource_name( subtitle->source ),
-                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
-                        subtitle->config.force ? ", Forced Only" : "",
-                        subtitle->config.default_track ? ", Default" : "" );
+                hb_log(" * subtitle track %d, %s (track %d, id 0x%x, %s) -> "
+                       "%s%s%s",
+                       subtitle->out_track, subtitle->lang, subtitle->track,
+                       subtitle->id,
+                       subtitle->format == PICTURESUB ? "Picture" : "Text",
+                       subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
+                                                          : "Passthrough",
+                       subtitle->config.force ? ", Forced Only" : "",
+                       subtitle->config.default_track ? ", Default" : "" );
             }
         }
     }
