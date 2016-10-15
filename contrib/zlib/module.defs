@@ -5,11 +5,6 @@ ZLIB.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.
 ZLIB.FETCH.md5 =  af3358a811ad3469a2e54db49f77d52a
 ZLIB.EXTRACT.tarbase = zlib
 
-# TODO: Upstream archive differs
-#ZLIB.FETCH.url += http://sourceforge.net/projects/libpng/files/zlib/1.2.3/zlib-1.2.3.tar.gz
-#ZLIB.FETCH.md5 =  debc62758716a169df9f62e6ab2bc634
-#ZLIB.EXTRACT.tarbase = zlib
-#
 # TODO: zlib >= 1.2.8
 #ZLIB.FETCH.url += http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz
 #ZLIB.FETCH.md5 =  44d667c142d7cda120332623eab69f40
