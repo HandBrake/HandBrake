@@ -9,13 +9,13 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libav-11.3.tar.gz
-FFMPEG.FETCH.url += https://libav.org/releases/libav-11.3.tar.gz
-FFMPEG.FETCH.md5 =  1a2eb461b98e0f1d1d6c4d892d51ac9b
+FFMPEG.FETCH.url    =  https://download.handbrake.fr/handbrake/contrib/libav-11.3.tar.gz
+FFMPEG.FETCH.url    += https://libav.org/releases/libav-11.3.tar.gz
+FFMPEG.FETCH.sha256 =  5a6f6d5529d2074a5a9665bd3e048cbaefbfd88d57f0b59604baa0ce3602967e
 
 # TODO: libav >= 11.4
-#FFMPEG.FETCH.url = https://libav.org/releases/libav-11.4.tar.gz
-#FFMPEG.FETCH.md5 = 133fab51636f47d01c25b80f33f6ae3f
+#FFMPEG.FETCH.url    = https://libav.org/releases/libav-11.4.tar.gz
+#FFMPEG.FETCH.sha256 = 5a6f6d5529d2074a5a9665bd3e048cbaefbfd88d57f0b59604baa0ce3602967e
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =

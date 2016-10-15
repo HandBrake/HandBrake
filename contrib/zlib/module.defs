@@ -1,13 +1,13 @@
 $(eval $(call import.MODULE.defs,ZLIB,zlib))
 $(eval $(call import.CONTRIB.defs,ZLIB))
 
-ZLIB.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
-ZLIB.FETCH.md5 =  af3358a811ad3469a2e54db49f77d52a
+ZLIB.FETCH.url    =  https://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
+ZLIB.FETCH.sha256 =  18d648555e4fc6f64aad462e4ebb5a00a205617a2292c99a30fe157c1cec1e65
 ZLIB.EXTRACT.tarbase = zlib
 
 # TODO: zlib >= 1.2.8
-#ZLIB.FETCH.url += http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz
-#ZLIB.FETCH.md5 =  44d667c142d7cda120332623eab69f40
+#ZLIB.FETCH.url    += http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz
+#ZLIB.FETCH.sha256 =  36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d
 #ZLIB.EXTRACT.tarbase = zlib
 
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra

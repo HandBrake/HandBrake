@@ -1,13 +1,13 @@
 $(eval $(call import.MODULE.defs,LIBSAMPLERATE,libsamplerate))
 $(eval $(call import.CONTRIB.defs,LIBSAMPLERATE))
 
-LIBSAMPLERATE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.4.tar.gz
-LIBSAMPLERATE.FETCH.md5 = 69ec6c05f487458f688dda8f3e722e5d
+LIBSAMPLERATE.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.4.tar.gz
+LIBSAMPLERATE.FETCH.sha256 = 4b4af3ecaee05c8875a9b113c6a2f816f06f283fb882914e57b21c0b08b67b75
 LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate
 
 # TODO: libsamplerate >= 0.1.8, tarbase unnecessary
-#LIBSAMPLERATE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.8.tar.gz
-#LIBSAMPLERATE.FETCH.md5 = 1c7fb25191b4e6e3628d198a66a84f47
 
 # Disable to avoid Carbon.h dependency on OSX
+#LIBSAMPLERATE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.8.tar.gz
+#LIBSAMPLERATE.FETCH.md5 = 1c7fb25191b4e6e3628d198a66a84f47
 LIBSAMPLERATE.CONFIGURE.extra = --disable-sndfile
