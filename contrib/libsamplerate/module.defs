@@ -5,11 +5,6 @@ LIBSAMPLERATE.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libsam
 LIBSAMPLERATE.FETCH.md5 = 69ec6c05f487458f688dda8f3e722e5d
 LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate
 
-# TODO: Upstream archive differs
-#LIBSAMPLERATE.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.4.tar.gz
-#LIBSAMPLERATE.FETCH.md5 = f6fafd5d4971a2442352c72bc3598cbd
-#LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate
-#
 # TODO: libsamplerate >= 0.1.8, tarbase unnecessary
 #LIBSAMPLERATE.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.8.tar.gz
 #LIBSAMPLERATE.FETCH.md5 = 1c7fb25191b4e6e3628d198a66a84f47
