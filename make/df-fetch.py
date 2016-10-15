@@ -75,7 +75,7 @@ class Tool(hb_distfile.Tool):
         self.parser.description = 'Fetch and verify distfile data integrity.'
         self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit with error')
         self.parser.add_option('--jobs', default=1, action='store', metavar='N', type='int', help='allow N download jobs at once')
-        self.parser.add_option('--md5', default=None, action='store', metavar='HASH', help='verify MD5 HASH against data')
+        self.parser.add_option('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
         self.parser.add_option('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
         self.parser.add_option('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
         self.parser.add_option('--exhaust-url', default=None, action='store_true', help='try all active distfiles')
@@ -172,7 +172,7 @@ class URL(object):
 
     def _download(self, error, ensure):
         filename = tool.options.output
-        hasher = hashlib.md5()
+        hasher = hashlib.sha256()
         if filename:
             tool.infof('downloading %s to %s\n' % (self.url,filename))
             ftmp = tool.mktmpname(filename)
@@ -209,19 +209,19 @@ class URL(object):
             raise error('expected %d bytes, got %d bytes' % (content_length,data_total))
         s = 'download total: %9d bytes\n' % data_total
         if filename:
-            s += 'MD5 (%s) = %s' % (filename,hasher.hexdigest())
+            s += 'sha256 (%s) = %s' % (filename,hasher.hexdigest())
         else:
-            s += 'MD5 = %s' % (hasher.hexdigest())
-        if tool.options.md5:
-            md5_pass = tool.options.md5 == hasher.hexdigest()
-            s += ' (%s)' % ('pass' if md5_pass else 'fail; expecting %s' % tool.options.md5)
+            s += 'sha256 = %s' % (hasher.hexdigest())
+        if tool.options.sha256:
+            sha256_pass = tool.options.sha256 == hasher.hexdigest()
+            s += ' (%s)' % ('pass' if sha256_pass else 'fail; expecting %s' % tool.options.sha256)
         tool.infof('%s\n' % s)
-        if filename and tool.options.md5:
-            if md5_pass:
+        if filename and tool.options.sha256:
+            if sha256_pass:
                 if os.access(filename, os.F_OK) and not os.access(filename, os.W_OK):
                     raise error("permission denied: '%s'" % filename)
             else:
-                raise error("expected MD5 hash '%s', got '%s'" % (tool.options.md5, hasher.hexdigest()))
+                raise error("expected sha256 hash '%s', got '%s'" % (tool.options.sha256, hasher.hexdigest()))
             os.rename(ftmp,filename)
             del ensure.unlink_ftmp
 

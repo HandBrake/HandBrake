@@ -2,14 +2,14 @@ __deps__ := LIBICONV
 $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
-LIBXML2.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libxml2-2.7.7.tar.gz
-LIBXML2.FETCH.url += ftp://xmlsoft.org/libxml2/libxml2-2.7.7.tar.gz
-LIBXML2.FETCH.md5 =  9abc9959823ca9ff904f1fbcf21df066
+LIBXML2.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libxml2-2.7.7.tar.gz
+LIBXML2.FETCH.url    += ftp://xmlsoft.org/libxml2/libxml2-2.7.7.tar.gz
+LIBXML2.FETCH.sha256  = af5b781418ba4fff556fa43c50086658ea8a2f31909c2b625c2ce913a1d9eb68
 LIBXML2.EXTRACT.tarbase = libxml2-2.7.7
 
 # TODO: libxml2 >= 2.9.2, tarbase unnecessary
-#LIBXML2.FETCH.url = ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
-#LIBXML2.FETCH.md5 = 9e6a9aca9d155737868b3dc5fd82f788
+#LIBXML2.FETCH.url    = ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
+#LIBXML2.FETCH.sha256 = 5178c30b151d044aefb1b08bf54c3003a0ac55c59c866763997529d60770d5bc
 
 # The Python components do not build on MinGW due to the lack of a select() call
 # in the MinGW environment.
