@@ -116,15 +116,14 @@
     return _cache;
 }
 
-- (NSImage *)HB_renderImage:(NSImage *)image withBadge:(NSString *)badge
+- (NSImage *)HB_renderImage:(NSImage *)image withBadge:(NSString *)badgeString
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.minimumLineHeight = 0.0f;
 
     NSImage *newImage = [[NSImage alloc] initWithSize:image.size];
     for (NSImageRep *rep in image.representations)
     {
-        NSSize size = rep.size;
+        NSSize size = NSMakeSize(rep.pixelsWide, rep.pixelsHigh);
         NSBitmapImageRep *newRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                            pixelsWide:(NSInteger)floor(size.width)
                                                                            pixelsHigh:(NSInteger)floor(size.height)
@@ -148,18 +147,24 @@
         CGContextDrawImage(context, imageRect, ref);
 
         // Work out the area
-        CGFloat iconsize = size.width * 0.5f;
-        CGFloat radius = iconsize * 0.5f;
-        NSPoint indent = NSMakePoint(10, 2);
+        CGFloat scaleFactor = rep.pixelsWide / rep.size.width;
+        CGFloat pointSize = 10 * scaleFactor;
 
-        NSFont *font = [NSFont boldSystemFontOfSize:10];
+        NSFont *font = [NSFont boldSystemFontOfSize:pointSize];
         NSDictionary *attr = @{NSParagraphStyleAttributeName : paragraphStyle,
-                     NSFontAttributeName : font,
-                     NSForegroundColorAttributeName : _badgeTextColor };
+                               NSFontAttributeName : font,
+                               NSForegroundColorAttributeName : _badgeTextColor };
 
-        NSRect textSize = [badge boundingRectWithSize:NSZeroSize options:NSStringDrawingOneShot attributes:attr];
-        NSRect badgeRect = NSMakeRect(size.width - textSize.size.width - indent.x, size.height - textSize.size.height - indent.y,
-                                      textSize.size.width + indent.x, textSize.size.height + indent.y);
+        NSRect textBounds = [badgeString boundingRectWithSize:NSZeroSize
+                                                      options:0
+                                                   attributes:attr];
+
+        NSPoint indent = NSMakePoint(10 * scaleFactor, 2 * scaleFactor);
+        CGFloat radius = (textBounds.size.height + indent.y) * 0.5f;
+
+        NSRect badgeRect = NSMakeRect(size.width - textBounds.size.width - indent.x, size.height - textBounds.size.height - indent.y,
+                                      textBounds.size.width + indent.x, textBounds.size.height + indent.y);
+        badgeRect = NSIntegralRect(badgeRect);
 
         // Draw the ellipse
         CGFloat minx = CGRectGetMinX(badgeRect);
@@ -184,19 +189,18 @@
         CGContextDrawPath(context, kCGPathFill);
 
         // Draw the text
-        NSRect textBounds = [badge boundingRectWithSize:NSZeroSize
-                                                options:NSStringDrawingUsesDeviceMetrics
-                                             attributes:attr];
-
-        badgeRect.origin.x = CGRectGetMidX(badgeRect) - (textSize.size.width * 0.5f);
-        badgeRect.origin.x -= (textBounds.size.width - textSize.size.width) * 0.5f;
+        badgeRect.origin.x = CGRectGetMidX(badgeRect) - (textBounds.size.width * 0.5f);
+        badgeRect.origin.x -= (textBounds.size.width - textBounds.size.width) * 0.5f;
         badgeRect.origin.y = CGRectGetMidY(badgeRect);
-        badgeRect.origin.y -= textBounds.origin.y;
-        badgeRect.origin.y -= ((textBounds.size.height - textSize.origin.y) * 0.5f);
+        badgeRect.origin.y -= textBounds.origin.y / 2;
+        badgeRect.origin.y -= ((textBounds.size.height - textBounds.origin.y) * 0.5f);
 
-        badgeRect.size.height = textSize.size.height;
-        badgeRect.size.width = textSize.size.width;
-        [badge drawInRect:badgeRect withAttributes:attr];
+        badgeRect.origin.y = floor(badgeRect.origin.y);
+        badgeRect.origin.x = ceil(badgeRect.origin.x);
+        badgeRect.size.height = textBounds.size.height;
+        badgeRect.size.width = textBounds.size.width;
+
+        [badgeString drawInRect:badgeRect withAttributes:attr];
 
         CGContextRestoreGState(context);
 
