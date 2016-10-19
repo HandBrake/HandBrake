@@ -52,6 +52,10 @@ else
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi
 
+AC_ARG_ENABLE(flatpak,
+	AS_HELP_STRING([--enable-flatpak], [enable QSV encoder]),
+	use_flatpak=yes, use_flatpak=no)
+
 AC_ARG_ENABLE(dl,
 	AS_HELP_STRING([--enable-dl], [enable libdl]),
 	use_libdl=yes, use_libdl=no)
@@ -182,6 +186,8 @@ case $host in
     HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
 esac
+
+AM_CONDITIONAL([GHB_FLATPAK], [test "$use_flatpak" = "yes"])
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS="$HB_LIBS -lfdk-aac"
