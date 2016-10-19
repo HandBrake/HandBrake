@@ -599,14 +599,14 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
     hb_buffer_t * out = *buf_out;
     int sts = 0;
 
-    av_qsv_context* qsv = pv->job->qsv.ctx;
-
     if ( !pv )
     {
         *buf_out = in;
         *buf_in = NULL;
         return HB_FILTER_OK;
     }
+    
+    av_qsv_context* qsv = pv->job->qsv.ctx;
 
     while(1)
     {
