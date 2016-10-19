@@ -2889,7 +2889,7 @@ hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
     else if (list->tail != NULL)
     {
         hb_buffer_t *end = list->head;
-        while (end != NULL && end->next != list->tail)
+        while (end->next != list->tail)
         {
             end = end->next;
         }
