@@ -1673,10 +1673,9 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     hb_title_t *title = hb_find_title_by_index(h, title_index);
     if (title == NULL)
         return -1;
-
-    int chapters;
-    chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
-    if (title != NULL && hb_list_count(title->list_chapter) <= 1)
+   
+    int chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
+    if (hb_list_count(title->list_chapter) <= 1)
         chapters = 0;
 
     // Set "Destination" settings in job
