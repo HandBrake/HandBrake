@@ -1737,16 +1737,16 @@ int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
-
-    if ( stream->hb_stream_type != ffmpeg )
-    {
-        // currently meaningliess for transport and program streams
-        return 1;
-    }
     if ( !stream || !stream->title ||
          chapter_num > hb_list_count( stream->title->list_chapter ) )
     {
         return 0;
+    }
+    
+    if ( stream->hb_stream_type != ffmpeg )
+    {
+        // currently meaningless for transport and program streams
+        return 1;
     }
 
     // TODO: add chapter start time to hb_chapter_t
