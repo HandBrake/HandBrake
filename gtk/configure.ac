@@ -53,7 +53,7 @@ else
 fi
 
 AC_ARG_ENABLE(flatpak,
-	AS_HELP_STRING([--enable-flatpak], [enable QSV encoder]),
+	AS_HELP_STRING([--enable-flatpak], [enable flatpak packaging]),
 	use_flatpak=yes, use_flatpak=no)
 
 AC_ARG_ENABLE(dl,
