@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A313a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioController">
@@ -121,6 +122,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="hXU-xc-dxL"/>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Selected track"/>
                                                         <connections>
                                                             <binding destination="wJH-tU-zL6" name="selectedIndex" keyPath="objectValue.sourceTrackIdx" previousBinding="LnY-7P-b37" id="CWi-rR-r7Y"/>
                                                             <binding destination="wJH-tU-zL6" name="content" keyPath="objectValue.sourceTracksArray" id="LnY-7P-b37"/>
@@ -162,6 +164,7 @@
                                                                 <binding destination="8ed-5g-y6e" name="enabled" keyPath="objectValue.enabled" id="MOh-YJ-qpZ"/>
                                                             </connections>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Codec"/>
                                                         <connections>
                                                             <binding destination="8ed-5g-y6e" name="selectedValue" keyPath="objectValue.encoder" previousBinding="Ojx-pY-iTj" id="aRL-2h-rz1">
                                                                 <dictionary key="options">
@@ -205,6 +208,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="5Ha-Of-SJF"/>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Mixdown"/>
                                                         <connections>
                                                             <binding destination="JWs-Gl-4kd" name="enabled" keyPath="objectValue.isEnabled" id="tgd-cw-Xvj"/>
                                                             <binding destination="JWs-Gl-4kd" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="N2w-i8-sMD" id="0hr-bn-M8A">
@@ -256,6 +260,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="phf-E4-JNn"/>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Samplerate"/>
                                                         <connections>
                                                             <binding destination="iQl-Lr-pqe" name="enabled" keyPath="objectValue.isEnabled" id="XCQ-bF-dAC"/>
                                                             <binding destination="iQl-Lr-pqe" name="enabled2" keyPath="objectValue.mixdownEnabled" previousBinding="XCQ-bF-dAC" id="apI-pR-y7v">
@@ -308,6 +313,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="DFY-hE-Hi6"/>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Bitrate"/>
                                                         <connections>
                                                             <binding destination="Acc-Cw-PLD" name="selectedValue" keyPath="objectValue.bitRate" previousBinding="S0T-S3-WF5" id="y8e-kU-Kay">
                                                                 <dictionary key="options">
@@ -360,6 +366,7 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <accessibility description="Gain"/>
                                                         <connections>
                                                             <binding destination="wfV-Pi-jHd" name="value" keyPath="objectValue.gain" id="7hD-ql-cNT">
                                                                 <dictionary key="options">
@@ -379,7 +386,9 @@
                                                     </textField>
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gtC-MM-esd">
                                                         <rect key="frame" x="3" y="2" width="22" height="22"/>
-                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="BBQ-FP-aQN"/>
+                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="0.25" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="BBQ-FP-aQN">
+                                                            <accessibility description="Gain"/>
+                                                        </sliderCell>
                                                         <connections>
                                                             <binding destination="wfV-Pi-jHd" name="value" keyPath="objectValue.gain" id="bKN-kD-NjJ">
                                                                 <dictionary key="options">
@@ -427,19 +436,21 @@
                                                 <subviews>
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o3M-fP-6Ps">
                                                         <rect key="frame" x="3" y="1" width="22" height="22"/>
-                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nII-CW-aWc"/>
+                                                        <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nII-CW-aWc">
+                                                            <accessibility description="DRC"/>
+                                                        </sliderCell>
                                                         <connections>
+                                                            <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="GxO-He-2yi">
+                                                                <dictionary key="options">
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="RMf-U7-5Td" name="enabled2" keyPath="objectValue.drcEnabled" previousBinding="UGi-Kk-MwK" id="dVM-pa-gKf">
                                                                 <dictionary key="options">
                                                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                                     <integer key="NSNullPlaceholder" value="-1"/>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="GxO-He-2yi">
-                                                                <dictionary key="options">
-                                                                    <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.isEnabled" id="UGi-Kk-MwK"/>
@@ -453,18 +464,19 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <accessibility description="DRC"/>
                                                         <connections>
+                                                            <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="f0P-bz-w9a">
+                                                                <dictionary key="options">
+                                                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                                                </dictionary>
+                                                            </binding>
                                                             <binding destination="RMf-U7-5Td" name="enabled2" keyPath="objectValue.drcEnabled" previousBinding="Vv3-g9-exh" id="lY2-Z2-4bl">
                                                                 <dictionary key="options">
                                                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                                     <integer key="NSNullPlaceholder" value="-1"/>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="RMf-U7-5Td" name="value" keyPath="objectValue.drc" id="f0P-bz-w9a">
-                                                                <dictionary key="options">
-                                                                    <bool key="NSValidatesImmediately" value="YES"/>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="RMf-U7-5Td" name="enabled" keyPath="objectValue.isEnabled" id="Vv3-g9-exh"/>
@@ -482,6 +494,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                 </tableColumns>
+                                <accessibility description="Audio tracks"/>
                                 <connections>
                                     <binding destination="rzb-Si-Kpf" name="content" keyPath="arrangedObjects" id="vu0-Hb-NuW"/>
                                     <binding destination="-2" name="enabled" keyPath="self.audio" id="1Zi-dE-qoZ">

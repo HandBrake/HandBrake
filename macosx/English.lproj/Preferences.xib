@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A270f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPreferencesController">
@@ -262,6 +262,7 @@
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                             </tokenFieldCell>
                             <connections>
+                                <accessibilityConnection property="title" destination="fF9-Q1-vYr" id="EWY-KP-WsI"/>
                                 <binding destination="61" name="enabled" keyPath="values.DefaultAutoNaming" id="VeX-1Z-Ejc"/>
                                 <binding destination="61" name="value" keyPath="values.HBAutoNamingFormat" id="Sf1-9q-Gag">
                                     <dictionary key="options">
@@ -663,11 +664,8 @@
                                 <binding destination="61" name="value" keyPath="values.HBShowAdvancedTab" id="PgA-TV-kBr"/>
                             </connections>
                         </button>
-                        <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
+                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
                             <rect key="frame" x="0.0" y="122" width="403" height="5"/>
-                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <font key="titleFont" metaFont="system"/>
                         </box>
                     </subviews>
                     <constraints>

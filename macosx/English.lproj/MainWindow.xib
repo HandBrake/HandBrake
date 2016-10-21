@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11521.1" systemVersion="16B2338c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11521.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -273,6 +273,9 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </textFieldCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
+                        </connections>
                     </textField>
                     <textField toolTip="Destination directory and filename for your encode." verticalHuggingPriority="750" id="1561">
                         <rect key="frame" x="56" y="455" width="756" height="19"/>
@@ -308,6 +311,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="Start time in seconds"/>
                         <connections>
                             <binding destination="-2" name="hidden" keyPath="self.job.range.secondsSelected" id="nK6-QE-OSQ">
                                 <dictionary key="options">
@@ -333,6 +337,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="Start time in frame"/>
                         <connections>
                             <binding destination="-2" name="value" keyPath="self.job.range.frameStart" id="gMK-Oo-iNV">
                                 <dictionary key="options">
@@ -358,6 +363,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="End time in seconds"/>
                         <connections>
                             <binding destination="-2" name="hidden" keyPath="self.job.range.secondsSelected" id="CkY-Gb-kMw">
                                 <dictionary key="options">
@@ -383,6 +389,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="End time in frames"/>
                         <connections>
                             <binding destination="-2" name="value" keyPath="self.job.range.frameStop" id="pjc-WR-Cps">
                                 <dictionary key="options">
@@ -579,9 +586,12 @@ IA
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="1542"/>
+                            <connections>
+                                <accessibilityConnection property="title" destination="1540" id="8YI-Kk-J0w"/>
+                            </connections>
                         </popUpButtonCell>
                         <connections>
-                            <accessibilityConnection property="title" destination="1540" id="KaD-KE-akF"/>
+                            <accessibilityConnection property="title" destination="1540" id="zCa-Oa-e1z"/>
                             <action selector="titlePopUpChanged:" target="-2" id="kSs-y7-Mfi"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="FoT-nx-ryU">
                                 <dictionary key="options">
@@ -658,7 +668,7 @@ IA
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="1327" y="25"/>
+            <point key="canvasLocation" x="1485" y="20"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
@@ -713,7 +723,7 @@ IA
     </objects>
     <resources>
         <image name="activity" width="24" height="24"/>
-        <image name="addqueue" width="32" height="32"/>
+        <image name="addqueue" width="12" height="12"/>
         <image name="encode" width="24" height="24"/>
         <image name="pauseencode" width="24" height="24"/>
         <image name="presets" width="24" height="24"/>

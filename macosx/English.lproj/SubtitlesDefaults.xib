@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A313a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesDefaultsController">
@@ -178,6 +179,7 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
+                                        <accessibilityConnection property="title" destination="Jsz-Er-bsF" id="yQZ-kS-4ua"/>
                                         <binding destination="ZBe-aP-wvq" name="content" keyPath="arrangedObjects" id="ak7-UG-Fqe"/>
                                         <outlet property="dataSource" destination="ZBe-aP-wvq" id="bDe-Wj-fNO"/>
                                         <outlet property="delegate" destination="ZBe-aP-wvq" id="Tgj-bB-hZ2"/>
@@ -361,7 +363,7 @@ Gw
                     <constraint firstItem="qAf-lQ-GN4" firstAttribute="width" secondItem="fPg-3n-1TN" secondAttribute="width" id="zyM-7a-twX"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="602.5" y="52"/>
+            <point key="canvasLocation" x="51" y="139"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>

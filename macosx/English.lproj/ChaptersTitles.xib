@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBChapterTitlesController">
@@ -213,6 +213,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                 </tableColumns>
+                                <accessibility description="Chapter titles"/>
                                 <connections>
                                     <binding destination="Gv0-qM-nu4" name="content" keyPath="arrangedObjects" id="XCD-5A-hAR"/>
                                     <binding destination="-2" name="enabled" keyPath="self.job" id="leT-dv-Prc">
@@ -224,7 +225,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="O2b-uL-5ea">
                         <rect key="frame" x="-100" y="-100" width="488" height="15"/>

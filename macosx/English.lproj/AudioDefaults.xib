@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11185.3" systemVersion="16A270f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11185.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
@@ -301,6 +301,7 @@ DQ
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" id="3Re-GO-fwv"/>
                                                             </popUpButtonCell>
+                                                            <accessibility description="Codec"/>
                                                             <connections>
                                                                 <binding destination="UBy-AR-7XQ" name="selectedValue" keyPath="objectValue.encoder" previousBinding="e1c-VC-o3V" id="jXp-yy-HhF">
                                                                     <dictionary key="options">
@@ -343,6 +344,7 @@ DQ
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" id="cKk-6o-udN"/>
                                                             </popUpButtonCell>
+                                                            <accessibility description="Mixdown"/>
                                                             <connections>
                                                                 <binding destination="uS1-Fd-V9I" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="Mgj-Wp-HJE" id="uAM-Z4-LBG">
                                                                     <dictionary key="options">
@@ -386,6 +388,7 @@ DQ
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" id="xhO-vr-WJF"/>
                                                             </popUpButtonCell>
+                                                            <accessibility description="Samplerate"/>
                                                             <connections>
                                                                 <binding destination="5No-Mm-bpD" name="enabled" keyPath="objectValue.mixdownEnabled" id="E9O-S2-Uq8"/>
                                                                 <binding destination="5No-Mm-bpD" name="selectedValue" keyPath="objectValue.sampleRate" previousBinding="adb-9q-L5r" id="DxT-bF-prJ">
@@ -430,6 +433,7 @@ DQ
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" id="pWk-70-S7v"/>
                                                             </popUpButtonCell>
+                                                            <accessibility description="Bitrate"/>
                                                             <connections>
                                                                 <binding destination="Bxd-gI-dFS" name="selectedValue" keyPath="objectValue.bitRate" previousBinding="aT6-o7-lFG" id="CSr-pu-s9O">
                                                                     <dictionary key="options">
@@ -474,6 +478,7 @@ DQ
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <accessibility description="Gain"/>
                                                             <connections>
                                                                 <binding destination="fhc-Nv-0Oh" name="value" keyPath="objectValue.gain" id="dSi-TT-1tH"/>
                                                                 <binding destination="fhc-Nv-0Oh" name="enabled" keyPath="objectValue.passThruDisabled" id="NpX-pb-t52"/>
@@ -482,6 +487,7 @@ DQ
                                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DbI-6O-BzA">
                                                             <rect key="frame" x="3" y="3" width="22" height="22"/>
                                                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="-0.79999999999999982" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="ea5-qc-etr"/>
+                                                            <accessibility description="Gain"/>
                                                             <connections>
                                                                 <binding destination="fhc-Nv-0Oh" name="value" keyPath="objectValue.gain" id="frc-hE-wEW"/>
                                                                 <binding destination="fhc-Nv-0Oh" name="enabled" keyPath="objectValue.passThruDisabled" id="uQZ-XI-fJG"/>
@@ -518,6 +524,7 @@ DQ
                                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DGi-Dl-5nh">
                                                             <rect key="frame" x="3" y="3" width="22" height="22"/>
                                                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="MFS-fh-Kd1"/>
+                                                            <accessibility description="DRC"/>
                                                             <connections>
                                                                 <binding destination="t2K-5D-xsX" name="value" keyPath="objectValue.drc" id="SVc-TS-Jvf"/>
                                                                 <binding destination="t2K-5D-xsX" name="enabled" keyPath="objectValue.passThruDisabled" id="VZj-BF-MXl"/>
@@ -531,6 +538,7 @@ DQ
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <accessibility description="DRC"/>
                                                             <connections>
                                                                 <binding destination="t2K-5D-xsX" name="value" keyPath="objectValue.drc" id="QDG-V6-YC7"/>
                                                                 <binding destination="t2K-5D-xsX" name="enabled" keyPath="objectValue.passThruDisabled" id="fkn-Xq-SM0"/>
@@ -549,6 +557,7 @@ DQ
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
+                                        <accessibilityConnection property="title" destination="RtZ-Cz-5mG" id="iVE-13-9dA"/>
                                         <binding destination="I6S-EX-Dvu" name="content" keyPath="arrangedObjects" id="qIU-3F-B41"/>
                                         <binding destination="I6S-EX-Dvu" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="qIU-3F-B41" id="7jj-cy-g0F"/>
                                     </connections>
@@ -690,6 +699,7 @@ Gw
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
+                                        <accessibilityConnection property="title" destination="Jsz-Er-bsF" id="qgm-4v-94Y"/>
                                         <binding destination="ZBe-aP-wvq" name="content" keyPath="arrangedObjects" id="ak7-UG-Fqe"/>
                                         <outlet property="dataSource" destination="ZBe-aP-wvq" id="Xy6-f7-IyO"/>
                                         <outlet property="delegate" destination="ZBe-aP-wvq" id="Q25-uc-GVY"/>
@@ -782,7 +792,7 @@ Gw
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
             </connections>
-            <point key="canvasLocation" x="558" y="96"/>
+            <point key="canvasLocation" x="83" y="130"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>
