@@ -78,6 +78,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         // Observer a bunch of HBVideo properties to update the UI.
         [self addObserver:self forKeyPath:@"video.encoder" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.frameRate" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
+        [self addObserver:self forKeyPath:@"video.quality" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.unparseOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.advancedOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
     }
@@ -125,6 +126,10 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             {
                 [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", nil)];
             }
+        }
+        else if ([keyPath isEqualToString:@"video.quality"])
+        {
+            fVidQualitySlider.accessibilityValue = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
         {
