@@ -285,24 +285,31 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 
     // Fix up all the internal settings that are derived from preset values.
 
-    int width, height;
-    width = ghb_dict_get_int(settings, "PictureWidth");
-    height = ghb_dict_get_int(settings, "PictureHeight");
-
     ghb_dict_set(settings, "scale_height", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureHeight")));
 
     ghb_dict_set(settings, "scale_width", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureWidth")));
 
-    gint uses_pic;
+    int width, height, uses_pic, autoscale;
+    const char * pic_par;
+
+    width    = ghb_dict_get_int(settings, "PictureWidth");
+    height   = ghb_dict_get_int(settings, "PictureHeight");
+    uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
+    pic_par  = ghb_dict_get_string(settings, "PicturePAR");
+
+    autoscale = uses_pic == 2 || (width == 0 && height == 0);
+    ghb_dict_set_bool(settings, "autoscale", autoscale);
+
+    if (!autoscale && pic_par != NULL && !strcasecmp(pic_par, "strict"))
+    {
+        ghb_dict_set_string(settings, "PicturePAR", "loose");
+    }
+
     gint vqtype;
 
-    uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
     vqtype = ghb_dict_get_int(settings, "VideoQualityType");
-
-    ghb_dict_set_bool(settings, "autoscale",
-                      uses_pic == 2 || (width == 0 && height == 0));
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
