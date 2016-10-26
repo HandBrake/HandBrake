@@ -3466,9 +3466,6 @@ ghb_backend_events(signal_user_data_t *ud)
         index = find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
         treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
         store = gtk_tree_view_get_model(treeview);
-        if (ud->cancel_encode == GHB_CANCEL_ALL ||
-            ud->cancel_encode == GHB_CANCEL_CURRENT)
-            status.queue.error = GHB_ERROR_CANCELED;
         switch( status.queue.error )
         {
             case GHB_ERROR_NONE:
