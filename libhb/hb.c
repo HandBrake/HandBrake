@@ -1699,7 +1699,8 @@ void hb_resume( hb_handle_t * h )
  */
 void hb_stop( hb_handle_t * h )
 {
-    h->work_die = 1;
+    h->work_error = HB_ERROR_CANCELED;
+    h->work_die   = 1;
     hb_resume( h );
 }
 
