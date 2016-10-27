@@ -54,9 +54,6 @@ static void hb_error_handler(const char *errmsg)
 /// Completion handler.
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
 
-/// User cancelled.
-@property (nonatomic, readwrite, getter=isCancelled) BOOL cancelled;
-
 @end
 
 @implementation HBCore
@@ -251,13 +248,8 @@ static void hb_error_handler(const char *errmsg)
 /**
  *  Creates an array of lightweight HBTitles instances.
  */
-- (BOOL)scanDone
+- (HBCoreResult)scanDone
 {
-    if (self.isCancelled)
-    {
-        return NO;
-    }
-
     hb_title_set_t *title_set = hb_get_title_set(_hb_handle);
     NSMutableArray *titles = [NSMutableArray array];
 
@@ -271,12 +263,11 @@ static void hb_error_handler(const char *errmsg)
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 
-    return (self.titles.count > 0);
+    return (self.titles.count > 0) ? HBCoreResultDone : HBCoreResultFailed;
 }
 
 - (void)cancelScan
 {
-    self.cancelled = YES;
     hb_scan_stop(_hb_handle);
     [HBUtilities writeToActivityLog:"%s scan cancelled", self.name.UTF8String];
 }
@@ -447,7 +438,7 @@ static void hb_error_handler(const char *errmsg)
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
 }
 
-- (BOOL)workDone
+- (HBCoreResult)workDone
 {
     // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
     // or someone calling hb_stop. In the latter case, hb_stop does not clear
@@ -458,16 +449,29 @@ static void hb_error_handler(const char *errmsg)
         hb_rem(_hb_handle, job);
     }
 
-    [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
-
-    return self.isCancelled || (_hb_state->param.workdone.error == 0);
+    HBCoreResult result = HBCoreResultDone;
+    switch (_hb_state->param.workdone.error)
+    {
+        case HB_ERROR_NONE:
+            result = HBCoreResultDone;
+            [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
+            break;
+        case HB_ERROR_CANCELED:
+            result = HBCoreResultCancelled;
+            [HBUtilities writeToActivityLog:"%s work canceled", self.name.UTF8String];
+            break;
+        default:
+            result = HBCoreResultFailed;
+            [HBUtilities writeToActivityLog:"%s work failed", self.name.UTF8String];
+            break;
+    }
+    return result;
 }
 
 - (void)cancelEncode
 {
-    self.cancelled = YES;
     hb_stop(_hb_handle);
-    [HBUtilities writeToActivityLog:"%s encode cancelled", self.name.UTF8String];
+    [HBUtilities writeToActivityLog:"%s encode canceled", self.name.UTF8String];
 }
 
 - (void)pause
@@ -593,25 +597,8 @@ static void hb_error_handler(const char *errmsg)
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
 
-    HBCoreResult result = HBCoreResultDone;
-    if (_hb_state->state == HB_STATE_WORKDONE)
-    {
-        result = [self workDone] ? HBCoreResultDone : HBCoreResultFailed;
-    }
-    else
-    {
-        result = [self scanDone] ? HBCoreResultDone : HBCoreResultFailed;
-    }
-
-    if (self.isCancelled)
-    {
-        result = HBCoreResultCancelled;
-    }
-
+    HBCoreResult result = (_hb_state->state == HB_STATE_WORKDONE) ? [self workDone] : [self scanDone];
     [self runCompletionBlockAndCleanUpWithResult:result];
-
-    // Reset the cancelled state.
-    self.cancelled = NO;
 }
 
 /**
