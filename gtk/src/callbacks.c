@@ -4424,13 +4424,13 @@ ghb_is_cd(GDrive *gd)
         return FALSE;
 
     udd = g_udev_client_query_by_device_file(udev_ctx, device);
-    g_free(device);
-
     if (udd == NULL)
     {
         g_message("udev: Failed to lookup device %s", device);
+        g_free(device);
         return FALSE;
     }
+    g_free(device);
 
     gint val;
     val = g_udev_device_get_property_as_int(udd, "ID_CDROM_DVD");
