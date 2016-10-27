@@ -46,7 +46,6 @@ typedef struct
     gchar *option;
     const gchar *shortOpt;
     gdouble ivalue;
-    const gchar *svalue;
 } options_map_t;
 
 typedef struct
@@ -57,9 +56,9 @@ typedef struct
 
 static options_map_t d_subtitle_track_sel_opts[] =
 {
-    {N_("None"),                                    "none",       0, "0"},
-    {N_("First Track Matching Selected Languages"), "first",      1, "1"},
-    {N_("All Tracks Matching Selected Languages"),  "all",        2, "2"},
+    {N_("None"),                                    "none",       0},
+    {N_("First Track Matching Selected Languages"), "first",      1},
+    {N_("All Tracks Matching Selected Languages"),  "all",        2},
 };
 combo_opts_t subtitle_track_sel_opts =
 {
@@ -69,10 +68,10 @@ combo_opts_t subtitle_track_sel_opts =
 
 static options_map_t d_subtitle_burn_opts[] =
 {
-    {N_("None"),                                     "none",          0, "0"},
-    {N_("Foreign Audio Subtitle Track"),             "foreign",       1, "1"},
-    {N_("First Selected Track"),                     "first",         2, "2"},
-    {N_("Foreign Audio, then First Selected Track"), "foreign_first", 3, "3"},
+    {N_("None"),                                     "none",          0},
+    {N_("Foreign Audio Subtitle Track"),             "foreign",       1},
+    {N_("First Selected Track"),                     "first",         2},
+    {N_("Foreign Audio, then First Selected Track"), "foreign_first", 3},
 };
 combo_opts_t subtitle_burn_opts =
 {
@@ -82,9 +81,9 @@ combo_opts_t subtitle_burn_opts =
 
 static options_map_t d_audio_track_sel_opts[] =
 {
-    {N_("None"),                                    "none",       0, "0"},
-    {N_("First Track Matching Selected Languages"), "first",      1, "1"},
-    {N_("All Tracks Matching Selected Languages"),  "all",        2, "2"},
+    {N_("None"),                                    "none",       0},
+    {N_("First Track Matching Selected Languages"), "first",      1},
+    {N_("All Tracks Matching Selected Languages"),  "all",        2},
 };
 combo_opts_t audio_track_sel_opts =
 {
@@ -94,9 +93,9 @@ combo_opts_t audio_track_sel_opts =
 
 static options_map_t d_point_to_point_opts[] =
 {
-    {N_("Chapters:"), "chapter", 0, "0"},
-    {N_("Seconds:"),  "time",    1, "1"},
-    {N_("Frames:"),   "frame",   2, "2"},
+    {N_("Chapters:"), "chapter", 0},
+    {N_("Seconds:"),  "time",    1},
+    {N_("Frames:"),   "frame",   2},
 };
 combo_opts_t point_to_point_opts =
 {
@@ -106,11 +105,11 @@ combo_opts_t point_to_point_opts =
 
 static options_map_t d_when_complete_opts[] =
 {
-    {N_("Do Nothing"),            "nothing",  0, "0"},
-    {N_("Show Notification"),     "notify",   1, "1"},
-    {N_("Quit Handbrake"),        "quit",     4, "4"},
-    {N_("Put Computer To Sleep"), "sleep",    2, "2"},
-    {N_("Shutdown Computer"),     "shutdown", 3, "3"},
+    {N_("Do Nothing"),            "nothing",  0},
+    {N_("Show Notification"),     "notify",   1},
+    {N_("Quit Handbrake"),        "quit",     4},
+    {N_("Put Computer To Sleep"), "sleep",    2},
+    {N_("Shutdown Computer"),     "shutdown", 3},
 };
 combo_opts_t when_complete_opts =
 {
@@ -120,10 +119,10 @@ combo_opts_t when_complete_opts =
 
 static options_map_t d_par_opts[] =
 {
-    {N_("Off"),    "off",    0, "0"},
-    {N_("Strict"), "strict", 1, "1"},
-    {N_("Loose"),  "loose",  2, "2"},
-    {N_("Custom"), "custom", 3, "3"},
+    {N_("Off"),    "off",    0},
+    {N_("Strict"), "strict", 1},
+    {N_("Loose"),  "loose",  2},
+    {N_("Custom"), "custom", 3},
 };
 combo_opts_t par_opts =
 {
@@ -133,10 +132,10 @@ combo_opts_t par_opts =
 
 static options_map_t d_alignment_opts[] =
 {
-    {"2", "2", 2, "2"},
-    {"4", "4", 4, "4"},
-    {"8", "8", 8, "8"},
-    {"16", "16", 16, "16"},
+    {"2",   "2",  2},
+    {"4",   "4",  4},
+    {"8",   "8",  8},
+    {"16", "16", 16},
 };
 combo_opts_t alignment_opts =
 {
@@ -146,10 +145,10 @@ combo_opts_t alignment_opts =
 
 static options_map_t d_logging_opts[] =
 {
-    {"0", "0", 0, "0"},
-    {"1", "1", 1, "1"},
-    {"2", "2", 2, "2"},
-    {"3", "3", 3, "3"},
+    {"0", "0", 0},
+    {"1", "1", 1},
+    {"2", "2", 2},
+    {"3", "3", 3},
 };
 combo_opts_t logging_opts =
 {
@@ -159,10 +158,10 @@ combo_opts_t logging_opts =
 
 static options_map_t d_log_longevity_opts[] =
 {
-    {N_("Week"),     "week",     7, "7"},
-    {N_("Month"),    "month",    30, "30"},
-    {N_("Year"),     "year",     365, "365"},
-    {N_("Immortal"), "immortal", 366, "366"},
+    {N_("Week"),     "week",       7},
+    {N_("Month"),    "month",     30},
+    {N_("Year"),     "year",     365},
+    {N_("Immortal"), "immortal", 366},
 };
 combo_opts_t log_longevity_opts =
 {
@@ -172,10 +171,10 @@ combo_opts_t log_longevity_opts =
 
 static options_map_t d_appcast_update_opts[] =
 {
-    {N_("Never"),   "never", 0, "never"},
-    {N_("Daily"),   "daily", 1, "daily"},
-    {N_("Weekly"),  "weekly", 2, "weekly"},
-    {N_("Monthly"), "monthly", 3, "monthly"},
+    {N_("Never"),   "never",   0},
+    {N_("Daily"),   "daily",   1},
+    {N_("Weekly"),  "weekly",  2},
+    {N_("Monthly"), "monthly", 3},
 };
 combo_opts_t appcast_update_opts =
 {
@@ -185,10 +184,10 @@ combo_opts_t appcast_update_opts =
 
 static options_map_t d_vqual_granularity_opts[] =
 {
-    {"0.2",  "0.2",  0.2,  "0.2"},
-    {"0.25", "0.25", 0.25, "0.25"},
-    {"0.5",  "0.5",  0.5,  "0.5"},
-    {"1",    "1",    1,    "1"},
+    {"0.2",  "0.2",  0.2 },
+    {"0.25", "0.25", 0.25},
+    {"0.5",  "0.5",  0.5 },
+    {"1",    "1",    1   },
 };
 combo_opts_t vqual_granularity_opts =
 {
@@ -198,9 +197,9 @@ combo_opts_t vqual_granularity_opts =
 
 static options_map_t d_deint_opts[] =
 {
-    {N_("Off"),         "off",         HB_FILTER_INVALID,     ""},
-    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB,      ""},
-    {N_("Yadif"),       "deinterlace", HB_FILTER_DEINTERLACE, ""},
+    {N_("Off"),         "off",         HB_FILTER_INVALID    },
+    {N_("Decomb"),      "decomb",      HB_FILTER_DECOMB     },
+    {N_("Yadif"),       "deinterlace", HB_FILTER_DEINTERLACE},
 };
 combo_opts_t deint_opts =
 {
@@ -210,9 +209,9 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-    {N_("Off"),     "off",     HB_FILTER_INVALID, ""},
-    {N_("NLMeans"), "nlmeans", HB_FILTER_NLMEANS, ""},
-    {N_("HQDN3D"),  "hqdn3d",  HB_FILTER_HQDN3D,  ""},
+    {N_("Off"),     "off",     HB_FILTER_INVALID},
+    {N_("NLMeans"), "nlmeans", HB_FILTER_NLMEANS},
+    {N_("HQDN3D"),  "hqdn3d",  HB_FILTER_HQDN3D },
 };
 combo_opts_t denoise_opts =
 {
@@ -222,10 +221,10 @@ combo_opts_t denoise_opts =
 
 static options_map_t d_rotate_opts[] =
 {
-    {N_("Off"),         "disable=1",   0, ""},
-    {N_("90 Degrees"),  "angle=90",   90, ""},
-    {N_("180 Degrees"), "angle=180", 180, ""},
-    {N_("270 Degrees"), "angle=270", 270, ""},
+    {N_("Off"),         "disable=1",   0},
+    {N_("90 Degrees"),  "angle=90",   90},
+    {N_("180 Degrees"), "angle=180", 180},
+    {N_("270 Degrees"), "angle=270", 270},
 };
 combo_opts_t rotate_opts =
 {
@@ -235,10 +234,10 @@ combo_opts_t rotate_opts =
 
 static options_map_t d_direct_opts[] =
 {
-    {N_("None"),      "none",     0, "none"},
-    {N_("Spatial"),   "spatial",  1, "spatial"},
-    {N_("Temporal"),  "temporal", 2, "temporal"},
-    {N_("Automatic"), "auto",     3, "auto"},
+    {N_("None"),      "none",     0},
+    {N_("Spatial"),   "spatial",  1},
+    {N_("Temporal"),  "temporal", 2},
+    {N_("Automatic"), "auto",     3},
 };
 combo_opts_t direct_opts =
 {
@@ -248,9 +247,9 @@ combo_opts_t direct_opts =
 
 static options_map_t d_badapt_opts[] =
 {
-    {N_("Off"),             "0", 0, "0"},
-    {N_("Fast"),            "1", 1, "1"},
-    {N_("Optimal"),         "2", 2, "2"},
+    {N_("Off"),             "0", 0},
+    {N_("Fast"),            "1", 1},
+    {N_("Optimal"),         "2", 2},
 };
 combo_opts_t badapt_opts =
 {
@@ -260,9 +259,9 @@ combo_opts_t badapt_opts =
 
 static options_map_t d_bpyramid_opts[] =
 {
-    {N_("Off"),    "none",   0, "none"},
-    {N_("Strict"), "strict", 1, "strict"},
-    {N_("Normal"), "normal", 2, "normal"},
+    {N_("Off"),    "none",   0},
+    {N_("Strict"), "strict", 1},
+    {N_("Normal"), "normal", 2},
 };
 combo_opts_t bpyramid_opts =
 {
@@ -272,9 +271,9 @@ combo_opts_t bpyramid_opts =
 
 static options_map_t d_weightp_opts[] =
 {
-    {N_("Off"),    "0", 0, "0"},
-    {N_("Simple"), "1", 1, "1"},
-    {N_("Smart"),  "2", 2, "2"},
+    {N_("Off"),    "0", 0},
+    {N_("Simple"), "1", 1},
+    {N_("Smart"),  "2", 2},
 };
 combo_opts_t weightp_opts =
 {
@@ -284,11 +283,11 @@ combo_opts_t weightp_opts =
 
 static options_map_t d_me_opts[] =
 {
-    {N_("Diamond"),              "dia",  0, "dia"},
-    {N_("Hexagon"),              "hex",  1, "hex"},
-    {N_("Uneven Multi-Hexagon"), "umh",  2, "umh"},
-    {N_("Exhaustive"),           "esa",  3, "esa"},
-    {N_("Hadamard Exhaustive"),  "tesa", 4, "tesa"},
+    {N_("Diamond"),              "dia",  0},
+    {N_("Hexagon"),              "hex",  1},
+    {N_("Uneven Multi-Hexagon"), "umh",  2},
+    {N_("Exhaustive"),           "esa",  3},
+    {N_("Hadamard Exhaustive"),  "tesa", 4},
 };
 combo_opts_t me_opts =
 {
@@ -298,18 +297,18 @@ combo_opts_t me_opts =
 
 static options_map_t d_subme_opts[] =
 {
-    {N_("0: SAD, no subpel"),          "0", 0, "0"},
-    {N_("1: SAD, qpel"),               "1", 1, "1"},
-    {N_("2: SATD, qpel"),              "2", 2, "2"},
-    {N_("3: SATD: multi-qpel"),        "3", 3, "3"},
-    {N_("4: SATD, qpel on all"),       "4", 4, "4"},
-    {N_("5: SATD, multi-qpel on all"), "5", 5, "5"},
-    {N_("6: RD in I/P-frames"),        "6", 6, "6"},
-    {N_("7: RD in all frames"),        "7", 7, "7"},
-    {N_("8: RD refine in I/P-frames"), "8", 8, "8"},
-    {N_("9: RD refine in all frames"), "9", 9, "9"},
-    {N_("10: QPRD in all frames"),     "10", 10, "10"},
-    {N_("11: No early terminations in analysis"), "11", 11, "11"},
+    {N_("0: SAD, no subpel"),                     "0", 0},
+    {N_("1: SAD, qpel"),                          "1", 1},
+    {N_("2: SATD, qpel"),                         "2", 2},
+    {N_("3: SATD: multi-qpel"),                   "3", 3},
+    {N_("4: SATD, qpel on all"),                  "4", 4},
+    {N_("5: SATD, multi-qpel on all"),            "5", 5},
+    {N_("6: RD in I/P-frames"),                   "6", 6},
+    {N_("7: RD in all frames"),                   "7", 7},
+    {N_("8: RD refine in I/P-frames"),            "8", 8},
+    {N_("9: RD refine in all frames"),            "9", 9},
+    {N_("10: QPRD in all frames"),                "10", 10},
+    {N_("11: No early terminations in analysis"), "11", 11},
 };
 combo_opts_t subme_opts =
 {
@@ -319,11 +318,11 @@ combo_opts_t subme_opts =
 
 static options_map_t d_analyse_opts[] =
 {
-    {N_("Most"), "p8x8,b8x8,i8x8,i4x4", 0, "p8x8,b8x8,i8x8,i4x4"},
-    {N_("None"), "none", 1, "none"},
-    {N_("Some"), "i4x4,i8x8", 2, "i4x4,i8x8"},
-    {N_("All"),  "all",  3, "all"},
-    {N_("Custom"),  "custom",  4, "all"},
+    {N_("Most"),   "p8x8,b8x8,i8x8,i4x4", 0},
+    {N_("None"),   "none",                1},
+    {N_("Some"),   "i4x4,i8x8",           2},
+    {N_("All"),    "all",                 3},
+    {N_("Custom"), "custom",              4},
 };
 combo_opts_t analyse_opts =
 {
@@ -333,9 +332,9 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-    {N_("Off"),         "0", 0, "0"},
-    {N_("Encode only"), "1", 1, "1"},
-    {N_("Always"),      "2", 2, "2"},
+    {N_("Off"),         "0", 0},
+    {N_("Encode only"), "1", 1},
+    {N_("Always"),      "2", 2},
 };
 combo_opts_t trellis_opts =
 {
@@ -1273,9 +1272,8 @@ ghb_init_combo_box(GtkComboBox *combo)
     // 2 - bool indicating whether the entry is selectable (grey or not)
     // 3 - String that is used for presets
     // 4 - Int value determined by backend
-    // 5 - String value determined by backend
-    store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN,
-                               G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
+    store = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_BOOLEAN,
+                               G_TYPE_STRING, G_TYPE_DOUBLE);
     gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
     if (!gtk_combo_box_get_has_entry(combo))
@@ -1323,7 +1321,6 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
                        1, TRUE,
                        2, "auto",
                        3, 0.0,
-                       4, "auto",
                        -1);
     g_free(str);
 
@@ -1338,7 +1335,6 @@ ghb_audio_samplerate_opts_set(GtkComboBox *combo)
                            1, TRUE,
                            2, rate->name,
                            3, (gdouble)rate->rate,
-                           4, rate->name,
                            -1);
         g_free(str);
     }
@@ -1462,7 +1458,6 @@ video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
                        1, TRUE,
                        2, "auto",
                        3, 0.0,
-                       4, "auto",
                        -1);
 
     const hb_rate_t *rate;
@@ -1490,7 +1485,6 @@ video_framerate_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, rate->name,
                            3, (gdouble)rate->rate,
-                           4, rate->name,
                            -1);
         g_free(option);
     }
@@ -1571,7 +1565,6 @@ video_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, enc->short_name,
                            3, (gdouble)enc->codec,
-                           4, enc->short_name,
                            -1);
         g_free(str);
     }
@@ -1643,7 +1636,6 @@ ghb_audio_encoder_opts_set_with_mask(
                                1, TRUE,
                                2, enc->short_name,
                                3, (gdouble)enc->codec,
-                               4, enc->short_name,
                                -1);
             g_free(str);
         }
@@ -1734,7 +1726,6 @@ audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
                                1, TRUE,
                                2, enc->short_name,
                                3, (gdouble)enc->codec,
-                               4, enc->short_name,
                                -1);
             g_free(str);
         }
@@ -1772,7 +1763,6 @@ ghb_mix_opts_set(GtkComboBox *combo)
                            1, TRUE,
                            2, mix->short_name,
                            3, (gdouble)mix->amixdown,
-                           4, mix->short_name,
                            -1);
         g_free(str);
     }
@@ -1854,7 +1844,6 @@ container_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, mux->short_name,
                            3, (gdouble)mux->format,
-                           4, mux->short_name,
                            -1);
         g_free(str);
     }
@@ -1901,7 +1890,6 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, srt_codeset_table[ii],
                            3, (gdouble)ii,
-                           4, srt_codeset_table[ii],
                            -1);
     }
 }
@@ -1936,7 +1924,6 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, iso639->iso639_2,
                            3, (gdouble)ii,
-                           4, iso639->iso639_1,
                            -1);
     }
 }
@@ -2030,7 +2017,6 @@ title_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, "none",
                            3, -1.0,
-                           4, "none",
                            -1);
         g_free(opt);
         return;
@@ -2050,7 +2036,6 @@ title_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, title_index,
                            3, (gdouble)title->index,
-                           4, title_index,
                            -1);
         g_free(opt);
         g_free(title_opt);
@@ -2162,7 +2147,6 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
                        1, TRUE,
                        2, "none",
                        3, (gdouble)0,
-                       4, "none",
                        -1);
 
     for (ii = 0; ii < count; ii++)
@@ -2175,7 +2159,6 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
                                1, TRUE,
                                2, tunes[ii],
                                3, (gdouble)ii + 1,
-                               4, tunes[ii],
                                -1);
         }
     }
@@ -2219,7 +2202,6 @@ video_profile_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, profiles[ii],
                            3, (gdouble)ii,
-                           4, profiles[ii],
                            -1);
     }
 }
@@ -2262,7 +2244,6 @@ video_level_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, levels[ii],
                            3, (gdouble)ii,
-                           4, levels[ii],
                            -1);
     }
 }
@@ -2319,7 +2300,6 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, "none",
                            3, -1.0,
-                           4, "none",
                            -1);
         g_free(opt);
         return;
@@ -2338,7 +2318,6 @@ audio_track_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, idx,
                            3, (gdouble)ii,
-                           4, idx,
                            -1);
         g_free(opt);
     }
@@ -2380,7 +2359,6 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
                     1, TRUE,
                     2, idx,
                     3, (gdouble)ii,
-                    4, idx,
                     -1);
         g_free(opt);
     }
@@ -2392,7 +2370,6 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, "0",
                            3, 0.0,
-                           4, "none",
                            -1);
     }
     gtk_combo_box_set_active (combo, 0);
@@ -2514,7 +2491,6 @@ small_opts_set(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, opts->map[ii].shortOpt,
                            3, opts->map[ii].ivalue,
-                           4, opts->map[ii].svalue,
                            -1);
         g_free(str);
     }
@@ -2552,8 +2528,6 @@ filter_opts_set2(signal_user_data_t *ud, const gchar *name,
                            1, TRUE,
                            2, param[ii].short_name,
                            3, (double)param[ii].index,
-                           4, param[ii].settings != NULL ?
-                                param[ii].settings : "",
                            -1);
         g_free(str);
     }
@@ -2969,7 +2943,6 @@ ghb_audio_bitrate_opts_set(GtkComboBox *combo)
                            1, TRUE,
                            2, rate->name,
                            3, (gdouble)rate->rate,
-                           4, rate->name,
                            -1);
         g_free(str);
     }
