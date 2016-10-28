@@ -297,7 +297,7 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
     height   = ghb_dict_get_int(settings, "PictureHeight");
     uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
 
-    autoscale = uses_pic == 2 || (width == 0 && height == 0);
+    autoscale = uses_pic != 1 || (width == 0 && height == 0);
     ghb_dict_set_bool(settings, "autoscale", autoscale);
 
     gint vqtype;

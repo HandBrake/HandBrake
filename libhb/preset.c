@@ -2162,7 +2162,7 @@ static void import_anamorphic_20_0_0(hb_value_t *preset)
         if (!strcasecmp(s, "strict"))
         {
             hb_dict_set(preset, "PicturePAR", hb_value_string("loose"));
-            hb_dict_set(preset, "UsesPictureSettings", hb_value_int(0));
+            hb_dict_set(preset, "UsesPictureSettings", hb_value_int(2));
             hb_dict_set(preset, "PictureModulus", hb_value_int(2));
         }
     }
