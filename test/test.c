@@ -1504,8 +1504,10 @@ static void ShowHelp()
 "   -X, --maxWidth  <number>\n"
 "                           Set maximum width in pixels\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
-"   --strict-anamorphic     Store pixel aspect ratio in video stream\n"
-"   --loose-anamorphic      Store pixel aspect ratio with specified display width\n"
+"   --auto-anamorphic       Store pixel aspect ratio that maximizes storage\n"
+"                           resolution\n"
+"   --loose-anamorphic      Store pixel aspect ratio that is as close as\n"
+"                           possible to the source video pixel aspect ratio\n"
 "   --custom-anamorphic     Store pixel aspect ratio in video stream and\n"
 "                           directly control all parameters.\n"
 "   --display-width <number>\n"
@@ -1525,7 +1527,6 @@ static void ShowHelp()
 "   --no-itu-par            Disable preset 'itu-par'\n"
 "   --modulus <number>      Set storage width and height modulus\n"
 "                           Dimensions will be made divisible by this number.\n"
-"                           Does not affect strict anamorphic mode (always mod 2)\n"
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
@@ -2032,10 +2033,10 @@ static int ParseOptions( int argc, char ** argv )
             { "grayscale",   no_argument,       NULL,        'g' },
             { "no-grayscale",no_argument,       &grayscale,    0 },
             { "rotate",      optional_argument, NULL,   ROTATE_FILTER },
-            { "non-anamorphic",  no_argument, &anamorphic_mode, 0 },
-            { "strict-anamorphic",  no_argument, &anamorphic_mode, 1 },
-            { "loose-anamorphic", no_argument, &anamorphic_mode, 2 },
-            { "custom-anamorphic", no_argument, &anamorphic_mode, 3 },
+            { "non-anamorphic",  no_argument, &anamorphic_mode, HB_ANAMORPHIC_NONE },
+            { "auto-anamorphic",  no_argument, &anamorphic_mode, HB_ANAMORPHIC_AUTO },
+            { "loose-anamorphic", no_argument, &anamorphic_mode, HB_ANAMORPHIC_LOOSE },
+            { "custom-anamorphic", no_argument, &anamorphic_mode, HB_ANAMORPHIC_CUSTOM },
             { "display-width", required_argument, NULL, DISPLAY_WIDTH },
             { "keep-display-aspect", optional_argument, NULL, KEEP_DISPLAY_ASPECT },
             { "no-keep-display-aspect", no_argument, &keep_display_aspect, 0 },
@@ -3691,13 +3692,13 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (display_width > 0)
     {
         keep_display_aspect = 0;
-        anamorphic_mode = 3;
+        anamorphic_mode = HB_ANAMORPHIC_CUSTOM;
         hb_dict_set(preset, "PictureDARWidth", hb_value_int(display_width));
     }
     else if (par_width > 0 && par_height > 0)
     {
         keep_display_aspect = 0;
-        anamorphic_mode = 3;
+        anamorphic_mode = HB_ANAMORPHIC_CUSTOM;
         hb_dict_set(preset, "PicturePARWidth", hb_value_int(par_width));
         hb_dict_set(preset, "PicturePARHeight", hb_value_int(par_height));
     }

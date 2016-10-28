@@ -1698,17 +1698,20 @@ update_aspect_info(signal_user_data_t *ud)
     gtk_label_set_text(GTK_LABEL(widget), text);
     switch (ghb_settings_combo_int(ud->settings, "PicturePAR"))
     {
-        case 0:
+        case HB_ANAMORPHIC_NONE:
             text = _("Off");
             break;
-        case 1:
+        case HB_ANAMORPHIC_STRICT:
             text = _("Strict");
             break;
-        case 2:
+        case HB_ANAMORPHIC_LOOSE:
             text = _("Loose");
             break;
-        case 3:
+        case HB_ANAMORPHIC_CUSTOM:
             text = _("Custom");
+            break;
+        case HB_ANAMORPHIC_AUTO:
+            text = _("Automatic");
             break;
         default:
             text = _("Unknown");
@@ -1877,7 +1880,10 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         gint pic_par;
         keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
         pic_par = ghb_settings_combo_int(settings, "PicturePAR");
-        if (!(keep_aspect || pic_par) || pic_par == 3)
+        if (!keep_aspect ||
+            pic_par == HB_ANAMORPHIC_NONE ||
+            pic_par == HB_ANAMORPHIC_AUTO ||
+            pic_par == HB_ANAMORPHIC_CUSTOM)
         {
             ghb_dict_set_int(settings, "scale_height",
                              title->geometry.height - title->crop[0] - title->crop[1]);

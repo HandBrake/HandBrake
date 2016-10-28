@@ -332,7 +332,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
             aspect_desc = _("(Aspect Lost)");
         }
     }
-    else if (!strcasecmp(pic_par, "strict") || !strcasecmp(pic_par, "loose"))
+    else if (!strcasecmp(pic_par, "auto") || !strcasecmp(pic_par, "loose"))
     {
         aspect_desc = _("(Anamorphic)");
     }

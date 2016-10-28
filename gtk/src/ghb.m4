@@ -2509,12 +2509,14 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
 &lt;small&gt;&lt;tt&gt;
-None   - Force pixel aspect ratio to 1:1.
-Loose  - Align dimensions to chosen 'Alignment' value
-         and pick pixel aspect ratio that preserves the
-         original display aspect ratio
-Strict - Keep original source dimensions and pixel
-         aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
+None      - Force pixel aspect ratio to 1:1.
+Loose     - Use a pixel aspect ratio that is as
+            close as possible to the source video pixel
+            aspect ratio while preserving the original
+            display aspect ratio
+Automatic - Use a pixel aspect ratio that maximizes
+            storage resolution while preserving the original
+            display aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
                                             <signal name="changed" handler="scale_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
