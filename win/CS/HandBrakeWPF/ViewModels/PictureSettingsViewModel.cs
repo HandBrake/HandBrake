@@ -146,7 +146,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Strict, Anamorphic.Loose, Anamorphic.Custom };
+                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
             }
         }
 
@@ -972,7 +972,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowDisplaySize = true;
                     this.ShowKeepAR = true;
                     break;
-                case Anamorphic.Strict:
+                case Anamorphic.Automatic:
                     this.WidthControlEnabled = false;
                     this.HeightControlEnabled = false;
                     this.ShowCustomAnamorphicControls = false;

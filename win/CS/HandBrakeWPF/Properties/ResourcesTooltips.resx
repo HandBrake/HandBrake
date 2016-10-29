@@ -164,11 +164,11 @@ This allows a player to initiate playback before downloading the entire file.</v
 By default, HandBrake will try and select the main title, or the longest if one isn't found.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>None   - Force pixel aspect ratio to 1:1.
-Loose  - Align dimensions to chosen 'Alignment' value
-               and pick pixel aspect ratio that preserves the
-               original display aspect ratio
-Strict - Keep original source dimensions and pixel aspect ratio</value>
+    <value>None          - Force pixel aspect ratio to 1:1.
+Loose         - Use a pixel aspect ratio that is as close as possible to the source video pixel
+                      aspect ratio while preserving the original display aspect ratio
+Automatic - Use a pixel aspect ratio that maximizes storage resolution while preserving the 
+                      original display aspect ratio.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Automatically crop black borders around edges of the video.</value>

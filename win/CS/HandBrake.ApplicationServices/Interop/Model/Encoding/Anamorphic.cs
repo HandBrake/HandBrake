@@ -21,9 +21,9 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "None")]
         [ShortName("none")]
         None = 0,
-        [Display(Name = "Strict")]
-        [ShortName("strict")]
-        Strict = 1,
+        [Display(Name = "Automatic")]
+        [ShortName("auto")]
+        Automatic = 1,
         [Display(Name = "Loose")]
         [ShortName("loose")]
         Loose = 2,

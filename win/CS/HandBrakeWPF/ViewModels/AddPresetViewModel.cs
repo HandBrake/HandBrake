@@ -181,7 +181,7 @@ namespace HandBrakeWPF.ViewModels
                         this.CustomHeight = title.Resolution.Height;
                     }
                     break;
-                case Anamorphic.Strict:
+                case Anamorphic.Automatic:
                     this.SelectedPictureSettingMode = PresetPictureSettingsMode.SourceMaximum;
                     break;
             }
