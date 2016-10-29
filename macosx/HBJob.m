@@ -5,13 +5,15 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBJob.h"
-#import "HBTitle.h"
+#import "HBJob+Private.h"
+#import "HBTitle+Private.h"
 
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
 
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
+
 
 #include "hb.h"
 
@@ -47,8 +49,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _picture = [[HBPicture alloc] initWithTitle:title];
         _filters = [[HBFilters alloc] init];
 
-        _audio = [[HBAudio alloc] initWithTitle:title];
-        _subtitles = [[HBSubtitles alloc] initWithTitle:title];
+        _audio = [[HBAudio alloc] initWithJob:self];
+        _subtitles = [[HBSubtitles alloc] initWithJob:self];
 
         _chapterTitles = [title.chapters copy];
 
@@ -64,7 +66,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)applyPreset:(HBPreset *)preset
 {
+    NSAssert(self.title, @"HBJob: calling applyPreset: without a valid title loaded");
+
     self.presetName = preset.name;
+    NSDictionary *jobSettings = [self.title jobSettingsWithPreset:preset];
 
     self.container = hb_container_get_from_name([preset[@"FileFormat"] UTF8String]);
 
@@ -75,8 +80,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     // Chapter Markers
     self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
 
-    [@[self.audio, self.subtitles, self.filters, self.picture, self.video] makeObjectsPerformSelector:@selector(applyPreset:)
-                                                                                                           withObject:preset];
+    [self.picture applyPreset:preset jobSettings:jobSettings];
+    [self.filters applyPreset:preset jobSettings:jobSettings];
+    [self.audio applyPreset:preset jobSettings:jobSettings];
+    [self.subtitles applyPreset:preset jobSettings:jobSettings];
+    [self.video applyPreset:preset jobSettings:jobSettings];
 }
 
 - (void)writeToPreset:(HBMutablePreset *)preset
@@ -289,6 +297,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         decodeObject(_audio, HBAudio);
         decodeObject(_subtitles, HBSubtitles);
+
+        _audio.job = self;
+        _video.job = self;
 
         decodeBool(_chaptersEnabled);
         decodeObject(_chapterTitles, NSArray);

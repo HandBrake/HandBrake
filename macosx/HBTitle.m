@@ -5,8 +5,10 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBTitle.h"
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
 #import "HBChapter.h"
+#import "HBPreset.h"
+#import "NSDictionary+HBAdditions.h"
 
 #include "lang.h"
 
@@ -26,6 +28,7 @@ extern NSString *keySubTrackType;
 @interface HBTitle ()
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
+@property (nonatomic, readonly) hb_handle_t *hb_handle;
 @property (nonatomic, readwrite, strong) NSString *name;
 
 @property (nonatomic, readwrite) NSArray *audioTracks;
@@ -36,7 +39,7 @@ extern NSString *keySubTrackType;
 
 @implementation HBTitle
 
-- (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured
+- (instancetype)initWithTitle:(hb_title_t *)title handle:(hb_handle_t *)handle featured:(BOOL)featured
 {
     self = [super init];
     if (self)
@@ -47,6 +50,7 @@ extern NSString *keySubTrackType;
         }
 
         _hb_title = title;
+        _hb_handle = handle;
         _featured = featured;
     }
 
@@ -254,6 +258,24 @@ extern NSString *keySubTrackType;
     }
 
     return _chapters;
+}
+
+- (NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset
+{
+    NSDictionary *result = nil;
+
+    hb_dict_t *hb_preset = [preset content].hb_value;
+    hb_dict_t *job = hb_preset_job_init(self.hb_handle, self.hb_title->index, hb_preset);
+
+    if (job)
+    {
+        result = [[NSDictionary alloc] initWithHBDict:job];
+    }
+
+    hb_dict_free(&hb_preset);
+    hb_dict_free(&job);
+
+    return result;
 }
 
 @end

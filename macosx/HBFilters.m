@@ -475,7 +475,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     preset[@"PictureRotate"] = [NSString stringWithFormat:@"angle=%d:hflip=%d", self.rotate, self.flip];
 }
 
-- (void)applyPreset:(HBPreset *)preset
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
     self.notificationsEnabled = NO;
 

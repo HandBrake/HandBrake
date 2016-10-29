@@ -26,9 +26,11 @@ extern NSString * const HBVideoChangedNotification;
 /**
  *  HBVideo
  */
-@interface HBVideo : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
+@interface HBVideo : NSObject <NSSecureCoding, NSCopying>
 
 - (instancetype)initWithJob:(HBJob *)job;
+
+@property (nonatomic, readwrite, weak) HBJob *job;
 
 - (void)containerChanged;
 
@@ -58,7 +60,6 @@ extern NSString * const HBVideoChangedNotification;
 
 @property (nonatomic, readwrite) BOOL fastDecode;
 
-@property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readonly) NSString *completeTune;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;

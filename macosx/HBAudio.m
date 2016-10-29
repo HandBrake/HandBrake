@@ -6,12 +6,15 @@
 
 #import "HBAudio.h"
 
+#import "HBJob.h"
+#import "HBJob+HBJobConversion.m"
 #import "HBTitle.h"
 #import "HBAudioTrack.h"
 #import "HBAudioTrackPreset.h"
 #import "HBAudioDefaults.h"
 
 #import "HBCodingUtilities.h"
+#import "HBJob+Private.h"
 
 #include "hb.h"
 
@@ -24,14 +27,15 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 @implementation HBAudio
 
-- (instancetype)initWithTitle:(HBTitle *)title
+- (instancetype)initWithJob:(HBJob *)job
 {
     self = [super init];
     if (self)
     {
+        _job = job;
         _container = HB_MUX_MP4;
 
-        _sourceTracks = [title.audioTracks mutableCopy];
+        _sourceTracks = [job.title.audioTracks mutableCopy];
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBAudioDefaults alloc] init];
 
@@ -112,7 +116,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)reloadDefaults
 {
-    [self addTracksFromDefaults];
+    [self addDefaultTracksFromJobSettings:self.job.jobDict];
 }
 
 - (void)setContainer:(int)container
@@ -128,8 +132,6 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         // Update the Auto Passthru Fallback Codec Popup
         // lets get the tag of the currently selected item first so we might reset it later
         [self.defaults validateEncoderFallbackForVideoContainer:container];
-
-        //[self validatePassthru];
     }
 }
 
@@ -177,12 +179,9 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 #pragma mark - Defaults
 
-- (void)addTracksFromDefaults
+- (void)addDefaultTracksFromJobSettings:(NSDictionary *)settings
 {
-    BOOL firstTrack = NO;
-    BOOL allTracks = NO;
-    NSMutableIndexSet *tracksAdded = [NSMutableIndexSet indexSet];
-    NSMutableIndexSet *tracksToAdd = [NSMutableIndexSet indexSet];
+    NSArray<NSDictionary<NSString *, id> *> *tracks = settings[@"Audio"][@"AudioList"];
 
     // Reinitialize the configured list of audio tracks
     while (self.countOfTracks)
@@ -190,144 +189,31 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         [self removeObjectFromTracksAtIndex:0];
     }
 
-    if (self.defaults.trackSelectionBehavior != HBAudioTrackSelectionBehaviorNone)
+    // Add the tracks
+    for (NSDictionary *trackDict in tracks)
     {
-        // Add tracks of Default and Alternate Language by name
-        for (NSString *languageISOCode in self.defaults.trackSelectionLanguages)
+        HBAudioTrack *track = [self trackFromSourceTrackIndex:[trackDict[@"Track"] unsignedIntegerValue] + 1];
+
+        track.drc = [trackDict[@"DRC"] doubleValue];
+        track.gain = [trackDict[@"Gain"] doubleValue];
+        track.mixdown = hb_mixdown_get_from_name([trackDict[@"Mixdown"] UTF8String]);
+        if ([trackDict[@"Samplerate"] isKindOfClass:[NSString class]])
         {
-            NSMutableIndexSet *tracksIndexes = [[self _tracksWithISOCode:languageISOCode
-                                                         selectOnlyFirst:self.defaults.trackSelectionBehavior == HBAudioTrackSelectionBehaviorFirst] mutableCopy];
-            [tracksIndexes removeIndexes:tracksAdded];
-            if (tracksIndexes.count)
-            {
-                [self _processPresetAudioArray:self.defaults.tracksArray forTracks:tracksIndexes firstOnly:firstTrack];
-                firstTrack = self.defaults.secondaryEncoderMode ? YES : NO;
-                [tracksAdded addIndexes:tracksIndexes];
-            }
+            int sampleRate = hb_audio_samplerate_get_from_name([trackDict[@"Samplerate"] UTF8String]);
+            track.sampleRate = sampleRate == -1 ? 0 : sampleRate;
         }
-
-        // If no preferred Language was found, add standard track 1
-        if (tracksAdded.count == 0 && self.sourceTracks.count > 1)
+        else
         {
-            [tracksToAdd addIndex:1];
+            track.sampleRate = [trackDict[@"Samplerate"] intValue];
         }
-    }
+        track.bitRate = [trackDict[@"Bitrate"] intValue];
+        track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
 
-    // If all tracks should be added, add all track numbers that are not yet processed
-    if (allTracks)
-    {
-        [tracksToAdd addIndexesInRange:NSMakeRange(1, self.sourceTracks.count - 1)];
-        [tracksToAdd removeIndexes:tracksAdded];
-    }
-
-    if (tracksToAdd.count)
-    {
-        [self _processPresetAudioArray:self.defaults.tracksArray forTracks:tracksToAdd firstOnly:firstTrack];
+        [self insertObject:track inTracksAtIndex:[self countOfTracks]];
     }
 
     // Add an None item
     [self addNoneTrack];
-}
-
-/**
- *  Uses the templateAudioArray from the preset to create the audios for the specified trackIndex.
- *
- *  @param templateAudioArray the track template.
- *  @param trackIndex         the index of the source track.
- *  @param firstOnly          use only the first track of the template or all.
- */
-- (void)_processPresetAudioArray:(NSArray *)templateAudioArray forTrack:(NSUInteger)trackIndex firstOnly:(BOOL)firstOnly
-{
-    for (HBAudioTrackPreset *preset in templateAudioArray)
-    {
-        HBAudioTrack *newAudio = [[HBAudioTrack alloc] initWithTrackIdx:trackIndex
-                                                              container:self.container
-                                                             dataSource:self
-                                                               delegate:self];
-        [newAudio setUndo:self.undo];
-
-        [self insertObject:newAudio inTracksAtIndex:[self countOfTracks]];
-
-        int inputCodec = [self.sourceTracks[trackIndex][keyAudioInputCodec] intValue];
-        int outputCodec = preset.encoder;
-
-        // Check if we need to use a fallback
-         if (preset.encoder & HB_ACODEC_PASS_FLAG && !(preset.encoder & inputCodec & HB_ACODEC_PASS_MASK))
-         {
-             outputCodec = hb_audio_encoder_get_fallback_for_passthru(outputCodec);
-
-             // If we couldn't find an encoder for the passthru format
-             // fall back to the selected encoder fallback
-             if (outputCodec == HB_ACODEC_INVALID)
-             {
-                 outputCodec = self.defaults.encoderFallback;
-             }
-         }
-
-        int supportedMuxers = hb_audio_encoder_get_from_codec(outputCodec)->muxers;
-
-        // If our preset wants us to support a codec that the track does not support,
-        // instead of changing the codec we remove the audio instead.
-        if (supportedMuxers & self.container)
-        {
-            newAudio.drc = preset.drc;
-            newAudio.gain = preset.gain;
-            newAudio.mixdown = preset.mixdown;
-            newAudio.sampleRate = preset.sampleRate;
-            newAudio.bitRate = preset.bitRate;
-            newAudio.encoder = outputCodec;
-        }
-        else
-        {
-            [self removeObjectFromTracksAtIndex:[self countOfTracks] - 1];
-        }
-
-
-        if (firstOnly)
-        {
-            break;
-        }
-    }
-}
-
-/**
- *  Matches the source audio tracks with the specific language iso code.
- *
- *  @param isoCode         the iso code to match.
- *  @param selectOnlyFirst whether to match only the first track for the iso code.
- *
- *  @return a NSIndexSet with the index of the matched tracks.
- */
-- (NSIndexSet *)_tracksWithISOCode:(NSString *)isoCode selectOnlyFirst:(BOOL)selectOnlyFirst
-{
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-
-    [self.sourceTracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if (idx) // Note that we skip the "None" track
-        {
-            if ([isoCode isEqualToString:@"und"] ||  [obj[keyAudioTrackLanguageIsoCode] isEqualToString:isoCode])
-            {
-                [indexes addIndex:idx];
-
-                if (selectOnlyFirst)
-                {
-                    *stop = YES;
-                }
-            }
-        }
-    }];
-
-    return indexes;
-}
-
-- (void)_processPresetAudioArray:(NSArray<HBAudioTrackPreset *> *)templateAudioArray forTracks:(NSIndexSet *)trackIndexes firstOnly:(BOOL)firstOnly
-{
-    __block BOOL firstTrack = firstOnly;
-    [trackIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        // Add the track
-        [self _processPresetAudioArray: self.defaults.tracksArray forTrack:idx firstOnly:firstTrack];
-        firstTrack = self.defaults.secondaryEncoderMode ? YES : NO;
-    }];
 }
 
 - (BOOL)anyCodecMatches:(int)codec
@@ -422,10 +308,10 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     [self.defaults writeToPreset:preset];
 }
 
-- (void)applyPreset:(HBPreset *)preset
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
-    [self.defaults applyPreset:preset];
-    [self addTracksFromDefaults];
+    [self.defaults applyPreset:preset jobSettings:settings];
+    [self addDefaultTracksFromJobSettings:settings];
 }
 
 #pragma mark -

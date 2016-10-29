@@ -553,7 +553,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return string;
 }
 
-- (void)applyPreset:(HBPreset *)preset
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
     self.notificationsEnabled = NO;
 

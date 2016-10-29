@@ -13,9 +13,20 @@
 
 #import "HBChapter.h"
 
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
+#import "HBMutablePreset.h"
 
 @implementation HBJob (HBJobConversion)
+
+- (NSDictionary *)jobDict
+{
+    NSAssert(self.title, @"HBJob: calling jobDict without a valid title loaded");
+
+    HBMutablePreset *preset = [[HBMutablePreset alloc] init];
+    [self writeToPreset:preset];
+
+    return [self.title jobSettingsWithPreset:preset];
+}
 
 /**
  *  Prepares a hb_job_t

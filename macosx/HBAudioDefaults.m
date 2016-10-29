@@ -321,6 +321,11 @@
     }
 }
 
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
+{
+    [self applyPreset:preset];
+}
+
 - (void)writeToPreset:(HBMutablePreset *)preset
 {
     // Track selection behavior

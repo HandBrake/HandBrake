@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBRange.h"
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
 #import "HBCodingUtilities.h"
 
 NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";

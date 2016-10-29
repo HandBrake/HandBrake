@@ -27,6 +27,7 @@
     {
         _name = @"New Preset";
         _presetDescription = @"";
+        _content = [[NSMutableDictionary alloc] init];
         self.isLeaf = YES;
     }
     return self;

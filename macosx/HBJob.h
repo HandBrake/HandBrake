@@ -44,6 +44,8 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
 
+- (void)applyPreset:(HBPreset *)preset;
+
 /// Current state of the job.
 @property (nonatomic, readwrite) HBJobState state;
 

@@ -11,7 +11,7 @@
 #import "HBUtilities.h"
 
 #import "HBStateFormatter+Private.h"
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
 
 #include <dlfcn.h>
 
@@ -256,7 +256,7 @@ static void hb_error_handler(const char *errmsg)
     for (int i = 0; i < hb_list_count(title_set->list_title); i++)
     {
         hb_title_t *title = (hb_title_t *) hb_list_item(title_set->list_title, i);
-        [titles addObject:[[HBTitle alloc] initWithTitle:title featured:(title->index == title_set->feature)]];
+        [titles addObject:[[HBTitle alloc] initWithTitle:title handle:self.hb_handle featured:(title->index == title_set->feature)]];
     }
 
     self.titles = [titles copy];

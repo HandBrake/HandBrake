@@ -47,6 +47,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         _sourceHeight = 720;
 
         _anamorphicMode = HBPictureAnarmophicModeNone;
+        _modulus = 2;
 
         _parWidth = 1;
         _parHeight = 1;
@@ -654,30 +655,42 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     preset[@"PictureRightCrop"]  = @(self.cropRight);
 }
 
-- (void)applyPreset:(HBPreset *)preset
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
 {
+    NSDictionary<NSString *, NSNumber *> *par = settings[@"PAR"];
+    NSDictionary<NSString *, id> *filterList = settings[@"Filters"][@"FilterList"];
+    NSDictionary<NSString *, NSNumber *> *cropScale = nil;
+
+    for (NSDictionary *dict in filterList)
+    {
+        if ([dict[@"ID"] intValue] == HB_FILTER_CROP_SCALE)
+        {
+            cropScale = dict[@"Settings"];
+        }
+    }
+
     self.validating = YES;
     self.notificationsEnabled = NO;
 
-    /* Note: objectForKey:@"UsesPictureSettings" refers to picture size, which encompasses:
-     * height, width, keep ar, anamorphic and crop settings.
-     * picture filters are handled separately below.
-     */
-    int maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
-    int maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
-    int parWidth = self.parWidth;
-    int parHeight = self.parHeight;
-    int jobMaxWidth = 0, jobMaxHeight = 0;
 
-    /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
-     * ( 2 is use max for source and 1 is use exact size when the preset was created ) and the
-     * preset completely ignores any picture sizing values in the preset.
-     */
-    if ([preset[@"UsesPictureSettings"] intValue] > 0)
+    // Check to see if UsesPictureSettings is greater than 0, as 0 means use picture sizing "None"
+    // (2 is use max for source and 1 is use exact size when the preset was created) and the
+    // preset completely ignores any picture sizing values in the preset.
+    if (cropScale && [preset[@"UsesPictureSettings"] intValue])
     {
         // If Cropping is set to custom, then recall all four crop values from
         // when the preset was created and apply them
-        if ([preset[@"PictureAutoCrop"] intValue] == 0)
+        if ([preset[@"PictureAutoCrop"] boolValue])
+        {
+            self.autocrop = YES;
+
+            // Here we use the auto crop values determined right after scan
+            self.cropTop    = [cropScale[@"crop-top"] intValue];
+            self.cropBottom = [cropScale[@"crop-bottom"] intValue];
+            self.cropLeft   = [cropScale[@"crop-left"] intValue];
+            self.cropRight  = [cropScale[@"crop-right"] intValue];
+        }
+        else
         {
             self.autocrop = NO;
 
@@ -687,19 +700,6 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
             self.cropLeft   = [preset[@"PictureLeftCrop"] intValue];
             self.cropRight  = [preset[@"PictureRightCrop"] intValue];
         }
-        else // if auto crop has been saved in preset, set to auto and use post scan auto crop
-        {
-            self.autocrop = YES;
-            /* Here we use the auto crop values determined right after scan */
-            self.cropTop    = self.autoCropTop;
-            self.cropBottom = self.autoCropBottom;
-            self.cropLeft   = self.autoCropLeft;
-            self.cropRight  = self.autoCropRight;
-        }
-
-        // crop may have changed, reset maxWidth/maxHeight
-        maxWidth = self.sourceWidth - self.cropLeft - self.cropRight;
-        maxHeight = self.sourceHeight - self.cropTop - self.cropBottom;
 
         // Set modulus
         if (preset[@"PictureModulus"])
@@ -725,81 +725,20 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
         {
             self.anamorphicMode = HB_ANAMORPHIC_CUSTOM;
-            parWidth = [preset[@"PicturePARWidth"] intValue];
-            parHeight = [preset[@"PicturePARHeight"] intValue];
         }
         else
         {
             self.anamorphicMode = HB_ANAMORPHIC_LOOSE;
         }
 
-        self.width = self.sourceWidth - self.cropLeft - self.cropRight;
-        self.height = self.sourceHeight - self.cropTop - self.cropBottom;
+        self.parWidth = [par[@"Num"] intValue];
+        self.parHeight = [par[@"Den"] intValue];
 
-        // Check to see if the "UsesPictureSettings" is 2,
-        // which means "Use max. picture size for source"
-        // If not 2 it must be 1 here which means "Use the picture
-        // size specified in the preset"
-        if ([preset[@"UsesPictureSettings"] intValue] != 2)
-        {
-             // if the preset specifies neither max. width nor height
-             // (both are 0), use the max. picture size
-             //
-             // if the specified non-zero dimensions exceed those of the
-             // source, also use the max. picture size (no upscaling)
-            if ([preset[@"PictureWidth"] intValue] > 0)
-            {
-                jobMaxWidth  = [preset[@"PictureWidth"] intValue];
-            }
-            if ([preset[@"PictureHeight"] intValue] > 0)
-            {
-                jobMaxHeight  = [preset[@"PictureHeight"] intValue];
-            }
-        }
+        self.width = [cropScale[@"width"] intValue];
+        self.height = [cropScale[@"height"] intValue];
+
+        self.displayWidth = self.width * self.parWidth / self.parHeight;
     }
-    // Modulus added to maxWidth/maxHeight to allow a small amount of
-    // upscaling to the next mod boundary. This does not apply to
-    // explicit limits set for device compatibility.  It only applies
-    // when limiting to cropped title dimensions.
-    maxWidth += self.modulus - 1;
-    maxHeight += self.modulus - 1;
-    if (jobMaxWidth == 0 || jobMaxWidth > maxWidth)
-        jobMaxWidth = maxWidth;
-    if (jobMaxHeight == 0 || jobMaxHeight > maxHeight)
-        jobMaxHeight = maxHeight;
-
-    hb_geometry_t srcGeo, resultGeo;
-    hb_geometry_settings_t uiGeo;
-
-    srcGeo.width = self.sourceWidth;
-    srcGeo.height = self.sourceHeight;
-    srcGeo.par.num = self.sourceParNum;
-    srcGeo.par.den = self.sourceParDen;
-
-    uiGeo.mode = self.anamorphicMode;
-    uiGeo.keep = self.keepDisplayAspect * HB_KEEP_DISPLAY_ASPECT;
-    uiGeo.itu_par = 0;
-    uiGeo.modulus = self.modulus;
-    int crop[4] = {self.cropTop, self.cropBottom, self.cropLeft, self.cropRight};
-    memcpy(uiGeo.crop, crop, sizeof(int[4]));
-    uiGeo.geometry.width = self.width;
-    uiGeo.geometry.height =  self.height;
-
-    hb_rational_t par = {parWidth, parHeight};
-    uiGeo.geometry.par = par;
-
-    uiGeo.maxWidth = jobMaxWidth;
-    uiGeo.maxHeight = jobMaxHeight;
-    hb_set_anamorphic_size2(&srcGeo, &uiGeo, &resultGeo);
-
-    int display_width;
-    display_width = resultGeo.width * resultGeo.par.num / resultGeo.par.den;
-
-    self.width = resultGeo.width;
-    self.height = resultGeo.height;
-    self.parWidth = resultGeo.par.num;
-    self.parHeight = resultGeo.par.den;
-    self.displayWidth = display_width;
 
     self.validating = NO;
     self.notificationsEnabled = YES;
