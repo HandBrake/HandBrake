@@ -133,7 +133,7 @@
                         <Image Grid.Column="0" Grid.Row="0"
                                Width="16"
                                Height="16"
-                               Margin="8,0,8,0"
+                               Margin="5,0,5,0"
                                Source="Images/Movies.png" />
 
                         <!--  Settings  -->
