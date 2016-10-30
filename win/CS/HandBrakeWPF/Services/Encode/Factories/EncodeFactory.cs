@@ -397,10 +397,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DETELECINE, null, null, job.CustomDetelecine);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken settings = JObject.Parse(unparsedJson);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = settings };
-                filter.FilterList.Add(filterItem);
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DETELECINE, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             // Deinterlace
@@ -408,10 +411,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace),  null, job.CustomDeinterlace);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken root = JObject.Parse(unparsedJson);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken root = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = root };
-                filter.FilterList.Add(filterItem);
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEINTERLACE, Settings = root };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             // Decomb
@@ -419,10 +425,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DECOMB, EnumHelper<Decomb>.GetShortName(job.Decomb), null, job.CustomDecomb);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken settings = JObject.Parse(unparsedJson);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = settings };
-                filter.FilterList.Add(filterItem);
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DECOMB, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb || job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
@@ -431,10 +440,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 {
                     IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_COMB_DETECT, EnumHelper<CombDetect>.GetShortName(job.CombDetect), null, job.CustomCombDetect);
                     string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                    JToken settings = JObject.Parse(unparsedJson);
+                    if (!string.IsNullOrEmpty(unparsedJson))
+                    {
+                        JToken settings = JObject.Parse(unparsedJson);
 
-                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_COMB_DETECT, Settings = settings };
-                    filter.FilterList.Add(filterItem);
+                        Filter filterItem = new Filter
+                                                {
+                                                    ID = (int)hb_filter_ids.HB_FILTER_COMB_DETECT,
+                                                    Settings = settings
+                                                };
+                        filter.FilterList.Add(filterItem);
+                    }
                 }    
             }
 
@@ -447,10 +463,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)id, job.DenoisePreset.ToString().ToLower().Replace(" ", string.Empty), job.DenoiseTune.ToString().ToLower().Replace(" ", string.Empty), job.CustomDenoise);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken settings = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)id, Settings = settings };
-                filter.FilterList.Add(filterItem);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)id, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             // Deblock
@@ -458,24 +478,30 @@ namespace HandBrakeWPF.Services.Encode.Factories
             {
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEBLOCK, null, null, string.Format("qp={0}", job.Deblock));
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken settings = JObject.Parse(unparsedJson);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = settings };
-                filter.FilterList.Add(filterItem);
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_DEBLOCK, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             // CropScale Filter
             string cropSettings = string.Format("width={0}:height={1}:crop-top={2}:crop-bottom={3}:crop-left={4}:crop-right={5}", job.Width, job.Height, job.Cropping.Top, job.Cropping.Bottom, job.Cropping.Left, job.Cropping.Right);
             IntPtr cropSettingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_CROP_SCALE, null, null, cropSettings);
             string unparsedCropSettingsJson = Marshal.PtrToStringAnsi(cropSettingsPtr);
-            JToken cropSettingsJson = JObject.Parse(unparsedCropSettingsJson);
-
-            Filter cropScale = new Filter
+            if (!string.IsNullOrEmpty(unparsedCropSettingsJson))
             {
-                ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE,
-                Settings = cropSettingsJson
-            };
-            filter.FilterList.Add(cropScale);
+                JToken cropSettingsJson = JObject.Parse(unparsedCropSettingsJson);
+
+                Filter cropScale = new Filter
+                                       {
+                                           ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE,
+                                           Settings = cropSettingsJson
+                                       };
+                filter.FilterList.Add(cropScale);
+            }
 
             // Grayscale
             if (job.Grayscale)
@@ -490,10 +516,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 string rotateSettings = string.Format("angle={0}:hflip={1}", job.Rotation, job.FlipVideo ? "1" : "0");
                 IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_ROTATE, null, null, rotateSettings);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
-                JToken settings = JObject.Parse(unparsedJson);
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
 
-                Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = settings };
-                filter.FilterList.Add(filterItem);
+                    Filter filterItem = new Filter { ID = (int)hb_filter_ids.HB_FILTER_ROTATE, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
             }
 
             // Framerate shaping filter
@@ -514,10 +543,17 @@ namespace HandBrakeWPF.Services.Encode.Factories
             string framerateString = num.HasValue ? string.Format("mode={0}:rate={1}/{2}", fm, num, den) : string.Format("mode={0}", fm); // filter_cfr, filter_vrate.num, filter_vrate.den
             IntPtr framerateSettingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_VFR, null, null, framerateString);
             string unparsedFramerateJson = Marshal.PtrToStringAnsi(framerateSettingsPtr);
-            JToken framerateSettings = JObject.Parse(unparsedFramerateJson);
+            if (!string.IsNullOrEmpty(unparsedFramerateJson))
+            {
+                JToken framerateSettings = JObject.Parse(unparsedFramerateJson);
 
-            Filter framerateShaper = new Filter { ID = (int)hb_filter_ids.HB_FILTER_VFR, Settings = framerateSettings };
-            filter.FilterList.Add(framerateShaper);
+                Filter framerateShaper = new Filter
+                                             {
+                                                 ID = (int)hb_filter_ids.HB_FILTER_VFR,
+                                                 Settings = framerateSettings
+                                             };
+                filter.FilterList.Add(framerateShaper);
+            }
 
             return filter;
         }
