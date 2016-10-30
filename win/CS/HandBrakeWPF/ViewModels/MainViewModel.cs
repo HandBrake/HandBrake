@@ -283,7 +283,7 @@ namespace HandBrakeWPF.ViewModels
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
         /// <summary>
-        /// The MetaData View Model
+        /// Gets or sets the The MetaData View Model
         /// </summary>
         public IMetaDataViewModel MetaDataViewModel { get; set; }
 
@@ -1195,6 +1195,9 @@ namespace HandBrakeWPF.ViewModels
 
         #region Commands 
 
+        /// <summary>
+        /// Gets or sets the queue command.
+        /// </summary>
         public ICommand QueueCommand { get; set; }
 
         #endregion
@@ -1399,7 +1402,6 @@ namespace HandBrakeWPF.ViewModels
                 this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOnDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-
 
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
@@ -1678,7 +1680,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Pass on the "When Done" Action to the queue view model. 
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">action</param>
         public void WhenDone(string action)
         {
             this.QueueViewModel?.WhenDone(action);

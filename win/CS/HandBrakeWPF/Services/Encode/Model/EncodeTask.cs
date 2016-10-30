@@ -511,6 +511,9 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         #region MetaData
 
+        /// <summary>
+        /// Gets or sets the meta data.
+        /// </summary>
         public MetaData MetaData { get; set; }
         #endregion
 

@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChapterImporterCsv.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Handles the importing of Chapter information from CSV files
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Utilities.Input
 {
+    using System;
+    using System.Collections.Generic;
+
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
 
@@ -24,8 +30,12 @@ namespace HandBrakeWPF.Utilities.Input
         /// <summary>
         /// Imports all chapter information from the given <see cref="filename"/> into the <see cref="chapterMap"/> dictionary.
         /// </summary>
-        /// <param name="filename">The full path and filename of the chapter marker file to import</param>
-        /// <param name="chapterMap">The dictionary that should be populated with parsed chapter markers</param>
+        /// <param name="filename">
+        /// The full path and filename of the chapter marker file to import
+        /// </param>
+        /// <param name="importedChapters">
+        /// The imported Chapters.
+        /// </param>
         public static void Import(string filename, ref Dictionary<int, Tuple<string, TimeSpan>> importedChapters)
         {
             using (TextFieldParser csv = new TextFieldParser(filename)

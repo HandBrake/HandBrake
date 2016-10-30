@@ -29,12 +29,9 @@ namespace HandBrakeWPF.Helpers
         internal static TimeSpan ParseChapterTimeStart(string chapterStartRaw)
         {
             // Format: 02:35:05 and 02:35:05.2957333
-            return TimeSpan.ParseExact(chapterStartRaw,
-                                        new[]
-                                        {
-                                                    @"hh\:mm\:ss",  // Handle whole seconds
-                                                    @"hh\:mm\:ss\.FFFFFFF"  // Handle fraction seconds
-                                        }, CultureInfo.InvariantCulture);
+            return TimeSpan.ParseExact(
+                chapterStartRaw,
+                new[] { @"hh\:mm\:ss", @"hh\:mm\:ss\.FFFFFFF" }, CultureInfo.InvariantCulture);  // Handle whole seconds then Handle fraction seconds
         }
     }
 }

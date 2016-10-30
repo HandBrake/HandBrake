@@ -38,7 +38,6 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-
         /// <summary>
         /// Simple way of checking if a directory is writeable.
         /// </summary>
@@ -48,7 +47,9 @@ namespace HandBrakeWPF.Utilities
         {
             try
             {
-                using (File.Create(Path.Combine(dirPath, Path.GetRandomFileName()), 1, FileOptions.DeleteOnClose)) { }
+                using (File.Create(Path.Combine(dirPath, Path.GetRandomFileName()), 1, FileOptions.DeleteOnClose))
+                {
+                }
                 return true;
             }
             catch

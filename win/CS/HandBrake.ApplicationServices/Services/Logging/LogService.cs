@@ -352,7 +352,9 @@ namespace HandBrake.ApplicationServices.Services.Logging
             }
         }
 
-        // Trigger the Event to notify any subscribers that the log has been reset.
+        /// <summary>
+        /// Trigger the Event to notify any subscribers that the log has been reset.
+        /// </summary>
         protected virtual void OnLogReset()
         {
             this.LogReset?.Invoke(this, System.EventArgs.Empty);

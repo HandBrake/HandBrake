@@ -109,7 +109,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public EncodeTask Task { get; set; }
 
-
         /// <summary>
         /// Gets the panel title.
         /// </summary>

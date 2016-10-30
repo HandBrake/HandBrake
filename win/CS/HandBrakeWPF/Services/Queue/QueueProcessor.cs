@@ -14,14 +14,11 @@ namespace HandBrakeWPF.Services.Queue
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using System.Windows;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model;
 
     using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -46,24 +43,11 @@ namespace HandBrakeWPF.Services.Queue
         /// A Lock object to maintain thread safety
         /// </summary>
         private static readonly object QueueLock = new object();
-
-        /// <summary>
-        /// The Queue of Job objects
-        /// </summary>
-        private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
-
-        /// <summary>
-        /// HandBrakes Queue file with a place holder for an extra string.
-        /// </summary>
-        private readonly string queueFile;
-
-        /// <summary>
-        /// The clear completed.
-        /// </summary>
-        private bool clearCompleted;
-
         private readonly IUserSettingService userSettingService;
         private readonly IErrorService errorService;
+        private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
+        private readonly string queueFile;
+        private bool clearCompleted;
 
         #endregion
 
@@ -145,6 +129,9 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         public event EventHandler QueuePaused;
 
+        /// <summary>
+        /// The low diskspace detected.
+        /// </summary>
         public event EventHandler LowDiskspaceDetected;
 
         #endregion
@@ -247,6 +234,9 @@ namespace HandBrakeWPF.Services.Queue
         /// <summary>
         /// Export the Queue the standardised JSON format.
         /// </summary>
+        /// <param name="exportPath">
+        /// The export Path.
+        /// </param>
         public void ExportJson(string exportPath)
         {
             List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
@@ -640,6 +630,9 @@ namespace HandBrakeWPF.Services.Queue
             this.IsProcessing = false;
         }
 
+        /// <summary>
+        /// The on low diskspace detected.
+        /// </summary>
         protected virtual void OnLowDiskspaceDetected()
         {
             this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
@@ -683,6 +676,5 @@ namespace HandBrakeWPF.Services.Queue
         }
 
         #endregion
-
     }
 }

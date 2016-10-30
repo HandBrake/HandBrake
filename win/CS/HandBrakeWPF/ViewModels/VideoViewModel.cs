@@ -931,7 +931,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.VideoBitrate = preset.Task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate ? preset.Task.VideoBitrate : null;
          
-
             this.NotifyOfPropertyChange(() => this.Task);
 
             if (preset.Task != null)
@@ -1336,7 +1335,6 @@ namespace HandBrakeWPF.ViewModels
                                          || this.SelectedVideoEncoder == VideoEncoder.QuickSync
                                          || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265;
      
-
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);
             this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);

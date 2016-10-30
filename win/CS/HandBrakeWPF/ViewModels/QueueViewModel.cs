@@ -430,7 +430,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.LowDiskspaceDetected -= this.QueueProcessor_LowDiskspaceDetected;
 
-
             base.OnDeactivate(close);
         }
 

@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -267,6 +265,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected comb detect preset.
+        /// </summary>
         public CombDetect SelectedCombDetectPreset
         {
             get
@@ -295,6 +296,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the custom comb detect.
+        /// </summary>
         public string CustomCombDetect
         {
             get
@@ -551,6 +555,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// The rotation options.
+        /// </summary>
         public BindingList<int> RotationOptions => new BindingList<int> { 0, 90, 180, 270 };
 
         /// <summary>
@@ -638,7 +645,6 @@ namespace HandBrakeWPF.ViewModels
                 this.CustomDetelecine = preset.Task.CustomDetelecine;
                 this.CustomDenoise = preset.Task.CustomDenoise;
 
-
                 this.SelectedRotation = preset.Task.Rotation;
                 this.FlipVideo = preset.Task.FlipVideo;
             }
@@ -685,7 +691,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.FlipVideo);
             this.NotifyOfPropertyChange(() => this.SelectedRotation);
-
         }
 
         /// <summary>

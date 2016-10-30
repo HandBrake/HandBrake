@@ -53,6 +53,15 @@ namespace HandBrakeWPF.Views
             }
         }
 
+        /// <summary>
+        /// Add to Queue button context menu handling.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void AddToQueue_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             // If we've clicked the dropdown part of the button, display the context menu below the button.

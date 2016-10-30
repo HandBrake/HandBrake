@@ -36,17 +36,18 @@ namespace HandBrakeWPF.Services.Presets.Model
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyChangedBase"/> class. 
-        /// Creates an instance of <see cref="T:HandBrakeWPF.Utilities.PropertyChangedBase"/>.
+        /// Initializes a new instance of the <see cref="Preset"/> class. 
         /// </summary>
         public Preset()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyChangedBase"/> class. 
-        /// Creates an instance of <see cref="T:HandBrakeWPF.Utilities.PropertyChangedBase"/>.
+        /// Initializes a new instance of the <see cref="Preset"/> class. 
         /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
         public Preset(Preset preset)
         {
             this.Category = preset.Category;

@@ -148,6 +148,12 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// Replace an existing preset with a modified one.
         /// </summary>
+        /// <param name="existing">
+        /// The existing.
+        /// </param>
+        /// <param name="replacement">
+        /// The replacement.
+        /// </param>
         void Replace(Preset existing, Preset replacement);
     }
 }

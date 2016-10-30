@@ -256,6 +256,12 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// Replace an existing preset with a modified one.
         /// </summary>
+        /// <param name="existing">
+        /// The existing.
+        /// </param>
+        /// <param name="replacement">
+        /// The replacement.
+        /// </param>
         public void Replace(Preset existing, Preset replacement)
         {
             this.Remove(existing);
@@ -521,7 +527,6 @@ namespace HandBrakeWPF.Services.Presets
                 PresetTransportContainer container = null;
                 using (StreamReader reader = new StreamReader(this.presetFile))
                 {
-
                     try
                     {
                         container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
