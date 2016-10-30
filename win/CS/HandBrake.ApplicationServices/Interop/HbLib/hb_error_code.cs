@@ -18,7 +18,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         HB_ERROR_CANCELED,
         HB_ERROR_WRONG_INPUT,
         HB_ERROR_INIT,
-        HB_ERROR_UNKNOW,
+        HB_ERROR_UNKNOWN,
         HB_ERROR_READ
     }
 }
