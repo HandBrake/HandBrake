@@ -729,7 +729,7 @@ If it fails, it will archive off the old file and create a new one.</value>
 Your old presets file was archived to:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> with {0} errors detected.</value>
+    <value> with {0} errors or cancellations detected.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Low Disk Space</value>
