@@ -23,6 +23,7 @@
 
 #define _GNU_SOURCE
 #include <limits.h>
+#include <ctype.h>
 #include <math.h>
 #include "hb.h"
 #include "ghbcompat.h"
@@ -436,6 +437,8 @@ static void filter_opts_set(signal_user_data_t *ud, const gchar *name,
                            void *opts, const void* data);
 static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
                            void *vopts, const void* data);
+static void denoise_opts_set(signal_user_data_t *ud, const gchar *name,
+                             void *vopts, const void* data);
 
 static GhbValue * generic_opt_get(const char *name, const void *opts,
                                   const GhbValue *gval, GhbType type);
@@ -543,7 +546,7 @@ combo_name_map_t combo_name_map[] =
     {
         "PictureDenoisePreset",
         &nlmeans_preset_opts,
-        filter_opts_set,
+        denoise_opts_set,
         filter_opt_get
     },
     {
@@ -2553,6 +2556,24 @@ deint_opts_set(signal_user_data_t *ud, const gchar *name,
     opts->filter_id = ghb_settings_combo_int(ud->settings,
                                              "PictureDeinterlaceFilter");
     filter_opts_set2(ud, name, opts->filter_id, opts->preset);
+
+    ghb_set_custom_filter_tooltip(ud, "PictureDeinterlaceCustom",
+                                  "deinterlace", opts->filter_id);
+}
+
+static void
+denoise_opts_set(signal_user_data_t *ud, const gchar *name,
+               void *vopts, const void* data)
+{
+    (void)data;  // Silence "unused variable" warning
+
+    filter_opts_t *opts = (filter_opts_t*)vopts;
+    opts->filter_id = ghb_settings_combo_int(ud->settings,
+                                             "PictureDenoiseFilter");
+    filter_opts_set2(ud, name, opts->filter_id, opts->preset);
+
+    ghb_set_custom_filter_tooltip(ud, "PictureDenoiseCustom",
+                                  "denoise", opts->filter_id);
 }
 
 combo_name_map_t*
@@ -3746,6 +3767,47 @@ ghb_lookup_filter_name(int filter_id, const char *short_name, int preset)
         }
     }
     return NULL;
+}
+
+void
+ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
+                              const char *name, const char * desc,
+                              int filter_id)
+{
+    char ** keys = hb_filter_get_keys(filter_id);
+    char  * colon = "", * newline;
+    char    tooltip[1024];
+    int     ii, linelen = 0, pos = 0;
+
+    if (keys == NULL)
+    {
+        // Filter not set
+        return;
+    }
+    pos += snprintf(tooltip + pos, 1024 - pos,
+                    "Custom %s filter string format:\n\n", desc);
+    for (ii = 0; keys[ii] != NULL && pos < 1024; ii++)
+    {
+        int c = tolower(keys[ii][0]);
+        int len = strlen(keys[ii]) + 3;
+        if (linelen + len > 60)
+        {
+            newline = "\n";
+            linelen = 0;
+        }
+        else
+        {
+            newline = "";
+        }
+        pos += snprintf(tooltip + pos, 1024 - pos, "%s%s%s=%c",
+                       colon, newline, keys[ii], c);
+        linelen += len;
+        colon = ":";
+    }
+    hb_str_vfree(keys);
+
+    GtkWidget *widget = GHB_WIDGET(ud->builder, name);
+    gtk_widget_set_tooltip_text(widget, tooltip);
 }
 
 gboolean

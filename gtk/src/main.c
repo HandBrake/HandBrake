@@ -1202,6 +1202,11 @@ main(int argc, char *argv[])
 
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
 
+    ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
+                                  "detelecine", HB_FILTER_DETELECINE);
+    ghb_set_custom_filter_tooltip(ud, "PictureCombDetectCustom",
+                                  "interlace detection", HB_FILTER_DETELECINE);
+
     gtk_widget_show(ghb_window);
 
     // Everything should be go-to-go.  Lets rock!

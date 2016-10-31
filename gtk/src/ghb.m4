@@ -3206,7 +3206,7 @@ filter_output([
                                 <property name="tooltip_text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
 Film grain and other types of high frequency noise are difficult to compress.
 Using this filter on such sources can result in smaller file sizes.</property>
-                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="denoise_filter_changed_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>

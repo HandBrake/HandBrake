@@ -2167,6 +2167,18 @@ deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    ghb_update_ui_combo_box(ud, "PictureDenoisePreset", NULL, FALSE);
+    ghb_ui_update(ud, "PictureDenoisePreset",
+                  ghb_dict_get(ud->settings, "PictureDenoisePreset"));
+}
+
+G_MODULE_EXPORT void
 title_angle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
