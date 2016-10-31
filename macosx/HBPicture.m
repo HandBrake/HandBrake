@@ -354,7 +354,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     }
     _anamorphicMode = anamorphicMode;
 
-    if (self.anamorphicMode == HB_ANAMORPHIC_STRICT ||
+    if (self.anamorphicMode == HB_ANAMORPHIC_AUTO ||
         self.anamorphicMode == HB_ANAMORPHIC_LOOSE)
     {
         self.keepDisplayAspect = YES;
@@ -631,8 +631,8 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         case HB_ANAMORPHIC_LOOSE:
             preset[@"PicturePAR"] = @"loose";
             break;
-        case HB_ANAMORPHIC_STRICT:
-            preset[@"PicturePAR"] = @"strict";
+        case HB_ANAMORPHIC_AUTO:
+            preset[@"PicturePAR"] = @"auto";
             break;
         case HB_ANAMORPHIC_CUSTOM:
             preset[@"PicturePAR"] = @"custom";
@@ -718,9 +718,9 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         {
             self.anamorphicMode = HB_ANAMORPHIC_NONE;
         }
-        else if ([preset[@"PicturePAR"] isEqualToString:@"strict"])
+        else if ([preset[@"PicturePAR"] isEqualToString:@"auto"])
         {
-            self.anamorphicMode = HB_ANAMORPHIC_STRICT;
+            self.anamorphicMode = HB_ANAMORPHIC_AUTO;
         }
         else if ([preset[@"PicturePAR"] isEqualToString:@"custom"])
         {

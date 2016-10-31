@@ -65,10 +65,6 @@ static void *HBPictureControllerContext = &HBPictureControllerContext;
 {
     [[self window] setExcludedFromWindowsMenu:YES];
 
-    /* Populate the Anamorphic NSPopUp button here */
-    [fAnamorphicPopUp removeAllItems];
-    [fAnamorphicPopUp addItemsWithTitles:@[@"None", @"Strict", @"Loose", @"Custom"]];
-
     [self resizeInspectorForTab:nil];
     [self adjustSizingDisplay:nil];
 }

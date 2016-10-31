@@ -15,7 +15,8 @@ typedef NS_ENUM(NSUInteger, HBPictureAnarmophicMode) {
     HBPictureAnarmophicModeNone,
     HBPictureAnarmophicModeStrict,
     HBPictureAnarmophicModeLoose,
-    HBPictureAnarmophicModeCustom
+    HBPictureAnarmophicModeCustom,
+    HBPictureAnarmophicModeAuto
 };
 
 extern NSString * const HBPictureChangedNotification;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -679,18 +679,13 @@ Players will scale the image in order to achieve the specified aspect.</string>
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="JqM-hb-2O2" id="zEB-S1-VbO">
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="CiU-c8-Ky6">
                             <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxWidth" id="rzD-bT-FPn"/>
                         <binding destination="-2" name="value" keyPath="self.picture.width" previousBinding="rzD-bT-FPn" id="0U8-Dc-QvL"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture.widthEditable" id="JqM-hb-2O2"/>
                         <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="uHh-Lp-0GY"/>
                     </connections>
                 </stepper>
@@ -734,7 +729,7 @@ You should use 2 unless you experience compatibility issues.</string>
                     <accessibility description="Storage Width"/>
                     <connections>
                         <accessibilityConnection property="title" destination="9oG-zm-Y0W" id="lTZ-u6-eUU"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="L1O-OF-Smb" id="Ypo-AX-fuO">
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="HGq-yI-bDz">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -744,7 +739,6 @@ You should use 2 unless you experience compatibility issues.</string>
                                 <bool key="NSValidatesImmediately" value="YES"/>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="editable" keyPath="self.picture.widthEditable" id="L1O-OF-Smb"/>
                         <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
                     </connections>
                 </textField>
@@ -790,18 +784,18 @@ You should use 2 unless you experience compatibility issues.</string>
                 <popUpButton verticalHuggingPriority="750" id="w1f-3S-up0">
                     <rect key="frame" x="93" y="232" width="83" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">None   - Force pixel aspect ratio to 1:1.
-Loose  - Align dimensions to chosen 'Alignment' value and pick pixel aspect ratio that preserves the original display aspect ratio
-Strict - Keep original source dimensions and pixel aspect ratio</string>
+                    <string key="toolTip">None  - Force pixel aspect ratio to 1:1.
+Loose - Align dimensions to chosen 'Alignment' value and pick pixel aspect ratio that preserves the original display aspect ratio.
+Automatic - Use a pixel aspect ratio that maximizes storage resolution while preserving the original display aspect ratio.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="vx1-8S-fyc">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="qSV-uB-Iup">
                             <items>
                                 <menuItem title="Off" id="1O3-th-4M5"/>
-                                <menuItem title="Strict" id="JyN-AK-Hae"/>
-                                <menuItem title="Loose" id="Uiw-Nb-u5X"/>
-                                <menuItem title="Custom" id="f12-Dh-fDw"/>
+                                <menuItem title="Auto" tag="4" id="JyN-AK-Hae"/>
+                                <menuItem title="Loose" tag="2" id="Uiw-Nb-u5X"/>
+                                <menuItem title="Custom" tag="3" id="f12-Dh-fDw"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
@@ -812,7 +806,7 @@ Strict - Keep original source dimensions and pixel aspect ratio</string>
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="selectedIndex" keyPath="self.picture.anamorphicMode" id="RJ9-6L-8mC"/>
+                        <binding destination="-2" name="selectedTag" keyPath="self.picture.anamorphicMode" id="ugL-AX-WF2"/>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" id="tHY-g2-oWj">
@@ -876,7 +870,7 @@ Strict - Keep original source dimensions and pixel aspect ratio</string>
                     <accessibility description="Storage Height"/>
                     <connections>
                         <accessibilityConnection property="title" destination="uqQ-uA-3xF" id="Cho-Kz-bXA"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture" previousBinding="GH2-sh-F1c" id="ImG-wf-FaF">
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="nha-oa-kQ8">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
@@ -886,7 +880,6 @@ Strict - Keep original source dimensions and pixel aspect ratio</string>
                                 <bool key="NSValidatesImmediately" value="YES"/>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="editable" keyPath="self.picture.heightEditable" id="GH2-sh-F1c"/>
                         <outlet property="nextKeyView" destination="2s0-5k-fjU" id="D8H-ff-R52"/>
                     </connections>
                 </textField>
@@ -953,17 +946,12 @@ Players will scale the image in order to achieve the specified aspect.</string>
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
-                        <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="Rhl-EQ-AWd" id="hqb-mF-nWe">
+                        <binding destination="-2" name="enabled" keyPath="self.picture" id="wcZ-Lg-5Y2">
                             <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.picture.height" previousBinding="yUT-oM-ZsK" id="kln-nB-kei"/>
-                        <binding destination="-2" name="enabled" keyPath="self.picture.heightEditable" id="Rhl-EQ-AWd"/>
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="yUT-oM-ZsK"/>
                     </connections>
                 </stepper>

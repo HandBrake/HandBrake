@@ -18,26 +18,6 @@
 
 #pragma mark - Editable state
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingWidthEditable
-{
-    return [NSSet setWithObjects:@"anamorphicMode", nil];
-}
-
-- (BOOL)isWidthEditable
-{
-    return (self.anamorphicMode != HB_ANAMORPHIC_STRICT) ? YES : NO;
-}
-
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingHeightEditable
-{
-    return [NSSet setWithObjects:@"anamorphicMode", nil];
-}
-
-- (BOOL)isHeightEditable
-{
-    return (self.anamorphicMode != HB_ANAMORPHIC_STRICT) ? YES : NO;
-}
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingKeepDisplayAspectEditable
 {
     return [NSSet setWithObjects:@"anamorphicMode", nil];
@@ -45,7 +25,7 @@
 
 - (BOOL)isKeepDisplayAspectEditable
 {
-    if (self.anamorphicMode == HB_ANAMORPHIC_STRICT ||
+    if (self.anamorphicMode == HB_ANAMORPHIC_AUTO ||
         self.anamorphicMode == HB_ANAMORPHIC_LOOSE)
     {
         return NO;
@@ -79,10 +59,10 @@
                 @"Source: %dx%d, ",
                 self.sourceWidth, self.sourceHeight];
 
-    if (self.anamorphicMode == HB_ANAMORPHIC_STRICT) // Original PAR Implementation
+    if (self.anamorphicMode == HB_ANAMORPHIC_AUTO)
     {
         sizeInfo = [NSString stringWithFormat:
-                    @"%@Output: %dx%d, Anamorphic: %dx%d Strict",
+                    @"%@Output: %dx%d, Anamorphic: %dx%d Auto",
                     sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else if (self.anamorphicMode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
@@ -130,13 +110,7 @@
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
     [summary appendString:self.info];
-
-    if (self.anamorphicMode != HB_ANAMORPHIC_STRICT)
-    {
-        // anamorphic is not Strict, show the modulus
-        [summary appendFormat:@", Modulus: %d", self.modulus];
-    }
-
+    [summary appendFormat:@", Modulus: %d", self.modulus];
     [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
      self.autocrop ? "Auto" : "Custom",
      self.cropTop, self.cropBottom,
