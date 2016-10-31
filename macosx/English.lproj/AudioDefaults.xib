@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAudioDefaultsController">
@@ -19,10 +19,10 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="175" y="825" width="794" height="474"/>
+            <rect key="contentRect" x="175" y="825" width="821" height="474"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="ZP2-Cp-K5w">
-                <rect key="frame" x="0.0" y="0.0" width="794" height="474"/>
+                <rect key="frame" x="0.0" y="0.0" width="821" height="474"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="fPg-3n-1TN">
@@ -80,7 +80,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sC2-52-liU">
-                        <rect key="frame" x="717" y="14" width="62" height="28"/>
+                        <rect key="frame" x="744" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -94,7 +94,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="vUx-OV-W5T">
-                        <rect key="frame" x="575" y="412" width="46" height="18"/>
+                        <rect key="frame" x="602" y="412" width="46" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="MP3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="sdZ-Rx-JoG">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -107,7 +107,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="fzd-MO-xaB">
-                        <rect key="frame" x="575" y="394" width="45" height="18"/>
+                        <rect key="frame" x="602" y="394" width="45" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="AAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="cUX-iP-UAs">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -120,7 +120,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="fgl-Ev-ELt">
-                        <rect key="frame" x="575" y="376" width="44" height="18"/>
+                        <rect key="frame" x="602" y="376" width="44" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports AC3. This permits AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="VnE-3R-bUf">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -133,7 +133,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="E93-Md-aWa">
-                        <rect key="frame" x="575" y="358" width="44" height="18"/>
+                        <rect key="frame" x="602" y="358" width="44" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="DTS" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="8mC-Wx-myL">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -146,7 +146,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="IxI-o9-jMs">
-                        <rect key="frame" x="575" y="340" width="66" height="18"/>
+                        <rect key="frame" x="602" y="340" width="66" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="DTS-HD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="LX6-kc-5vq">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -159,7 +159,7 @@ DQ
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="l4i-pd-Cbk">
-                        <rect key="frame" x="472" y="414" width="100" height="14"/>
+                        <rect key="frame" x="472" y="414" width="127" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru:" id="s6s-EH-5CB">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -167,7 +167,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <popUpButton toolTip="Set the audio codec to encode with when a suitable track can not be found for audio passthru." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LdN-Cx-ZJY">
-                        <rect key="frame" x="575" y="293" width="66" height="22"/>
+                        <rect key="frame" x="602" y="293" width="66" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="Ka4-YN-iLe"/>
                         </constraints>
@@ -192,8 +192,8 @@ DQ
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="248" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Tth-IR-7cU">
-                        <rect key="frame" x="472" y="298" width="100" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Passthru Fallback:" id="AQe-Sg-Qgh">
+                        <rect key="frame" x="472" y="298" width="127" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Auto Passthru Fallback:" id="AQe-Sg-Qgh">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -226,7 +226,7 @@ DQ
                         </connections>
                     </segmentedControl>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="os0-Jl-OXF">
-                        <rect key="frame" x="646" y="412" width="62" height="18"/>
+                        <rect key="frame" x="673" y="412" width="62" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports TrueHD. This permits TrueHD passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="TrueHD" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="z9d-P3-6UP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -239,7 +239,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="0HY-xB-cvO">
-                        <rect key="frame" x="646" y="394" width="50" height="18"/>
+                        <rect key="frame" x="673" y="394" width="50" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports FLAC. This permits FLAC passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="FLAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="naS-No-CdV">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -252,7 +252,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="BK7-c4-kkk">
-                        <rect key="frame" x="646" y="376" width="51" height="18"/>
+                        <rect key="frame" x="673" y="376" width="51" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports EAC3. This permits EAC3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="EAC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -265,19 +265,19 @@ DQ
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGL-Ew-UVJ">
-                        <rect key="frame" x="20" y="79" width="754" height="143"/>
+                        <rect key="frame" x="20" y="79" width="781" height="143"/>
                         <clipView key="contentView" id="jkU-Fi-GCv">
-                            <rect key="frame" x="1" y="0.0" width="752" height="142"/>
+                            <rect key="frame" x="1" y="0.0" width="779" height="142"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="IbE-bD-EWJ" viewBased="YES" id="ZsG-T1-vGv">
-                                    <rect key="frame" x="0.0" y="0.0" width="752" height="119"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="779" height="119"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="254" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
+                                        <tableColumn width="281" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Codec">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -291,11 +291,11 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="UBy-AR-7XQ">
-                                                    <rect key="frame" x="1" y="1" width="254" height="24"/>
+                                                    <rect key="frame" x="1" y="1" width="281" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6lx-af-rBL">
-                                                            <rect key="frame" x="0.0" y="0.0" width="254" height="22"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="281" height="22"/>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="t8s-X1-tQV">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -334,7 +334,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="uS1-Fd-V9I">
-                                                    <rect key="frame" x="258" y="1" width="151" height="24"/>
+                                                    <rect key="frame" x="285" y="1" width="151" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="igm-hS-rrD">
@@ -378,7 +378,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="5No-Mm-bpD">
-                                                    <rect key="frame" x="412" y="1" width="111" height="24"/>
+                                                    <rect key="frame" x="439" y="1" width="111" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r80-yv-59n">
@@ -423,7 +423,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="Bxd-gI-dFS">
-                                                    <rect key="frame" x="526" y="1" width="96" height="24"/>
+                                                    <rect key="frame" x="553" y="1" width="96" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hHP-dw-nba">
@@ -467,7 +467,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="fhc-Nv-0Oh">
-                                                    <rect key="frame" x="625" y="1" width="61" height="28"/>
+                                                    <rect key="frame" x="652" y="1" width="61" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xnA-03-Bul">
@@ -518,7 +518,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="t2K-5D-xsX">
-                                                    <rect key="frame" x="689" y="1" width="61" height="27"/>
+                                                    <rect key="frame" x="716" y="1" width="61" height="27"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DGi-Dl-5nh">
@@ -576,7 +576,7 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="IbE-bD-EWJ">
-                            <rect key="frame" x="0.0" y="0.0" width="752" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="779" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
@@ -592,7 +592,7 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kJY-av-BYf">
-                        <rect key="frame" x="657" y="14" width="62" height="28"/>
+                        <rect key="frame" x="684" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jn4-1L-J1g">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
