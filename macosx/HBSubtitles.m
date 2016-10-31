@@ -28,6 +28,9 @@ extern NSString *keySubTrackSrtFileURL;
 
 @interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
 
+@property (nonatomic, readwrite, weak) HBJob *job;
+@property (nonatomic, readwrite) int container;
+
 /// Used to aovid circular dependecy validation.
 @property (nonatomic, readwrite) BOOL validating;
 
@@ -40,7 +43,7 @@ extern NSString *keySubTrackSrtFileURL;
     self = [super init];
     if (self)
     {
-        _job = job;
+        job = job;
         _container = HB_MUX_MP4;
 
         _sourceTracks = [job.title.subtitlesTracks mutableCopy];

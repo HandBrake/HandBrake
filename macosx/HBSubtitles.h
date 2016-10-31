@@ -9,15 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class HBJob;
 @class HBSubtitlesTrack;
 @class HBSubtitlesDefaults;
 
 @interface HBSubtitles : NSObject <NSSecureCoding, NSCopying>
-
-- (instancetype)initWithJob:(HBJob *)job;
-
-@property (nonatomic, readwrite, weak) HBJob *job;
 
 - (void)addAllTracks;
 - (void)removeAll;
@@ -30,10 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaults *defaults;
 
-/**
- *  For internal use
- */
-@property (nonatomic, readwrite) int container;
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end

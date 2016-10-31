@@ -28,12 +28,6 @@ extern NSString * const HBVideoChangedNotification;
  */
 @interface HBVideo : NSObject <NSSecureCoding, NSCopying>
 
-- (instancetype)initWithJob:(HBJob *)job;
-
-@property (nonatomic, readwrite, weak) HBJob *job;
-
-- (void)containerChanged;
-
 @property (nonatomic, readwrite) int encoder;
 
 @property (nonatomic, readwrite) HBVideoQualityType qualityType;

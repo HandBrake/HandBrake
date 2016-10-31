@@ -25,8 +25,6 @@ extern NSString * const HBPictureChangedNotification;
  */
 @interface HBPicture : NSObject <NSSecureCoding, NSCopying>
 
-- (instancetype)initWithTitle:(HBTitle *)title;
-
 @property (nonatomic, readwrite) int width;
 @property (nonatomic, readwrite) int height;
 

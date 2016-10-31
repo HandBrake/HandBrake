@@ -15,6 +15,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 @interface HBVideo ()
 
+@property (nonatomic, readwrite, weak) HBJob *job;
+
 @property (nonatomic, readwrite) double qualityMinValue;
 @property (nonatomic, readwrite) double qualityMaxValue;
 

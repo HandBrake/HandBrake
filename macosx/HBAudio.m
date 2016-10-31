@@ -23,6 +23,10 @@
 NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 @interface HBAudio () <HBAudioTrackDataSource, HBAudioTrackDelegate>
+
+@property (nonatomic, readwrite, weak) HBJob *job;
+@property (nonatomic, readwrite) int container;
+
 @end
 
 @implementation HBAudio

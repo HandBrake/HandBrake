@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideo+UIAdditions.h"
-#import "HBJob.h"
+#import "HBJob+Private.h"
 #include "hb.h"
 
 @implementation HBVideo (UIAdditions)
