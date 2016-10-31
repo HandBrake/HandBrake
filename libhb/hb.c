@@ -1060,6 +1060,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     {
         case HB_ANAMORPHIC_NONE:
         {
+            /* "None" anamorphic, a.k.a. 1:1.
+             */
             double par, cropped_sar, dar;
             par = (double)src_geo->par.num / src_geo->par.den;
             cropped_sar = (double)cropped_width / cropped_height;
@@ -1124,7 +1126,6 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             dst_par_num = dst_par_den = 1;
         } break;
 
-        default:
         case HB_ANAMORPHIC_STRICT:
         {
             /* "Strict" anamorphic.
@@ -1198,7 +1199,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
 
         case HB_ANAMORPHIC_CUSTOM:
         {
-            /* Anamorphic 3: Power User Jamboree
+            /* "Custom" anamorphic: Power User Jamboree
                - Set everything based on specified values */
 
             /* Time to get picture dimensions that divide cleanly.*/
@@ -1234,11 +1235,51 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                        src_par.den;
             }
         } break;
+
+        default:
+        case HB_ANAMORPHIC_AUTO:
+        {
+            /* "Automatic" anamorphic.
+             *  - Uses mod-compliant dimensions, set by user
+             *  - Allows users to set the either width *or* height
+             *  - Does *not* maintain original source PAR if one
+             *    or both dimensions is limited by maxWidth/maxHeight.
+             */
+            /* Anamorphic 3: Power User Jamboree
+               - Set everything based on specified values */
+
+            /* Time to get picture dimensions that divide cleanly.*/
+            width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
+            height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
+
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+            }
+            if (width > maxWidth)
+            {
+                width = maxWidth;
+            }
+            if (height > maxHeight)
+            {
+                height = maxHeight;
+            }
+            /* Adjust the output PAR for new width/height
+             * See comment in HB_ANAMORPHIC_STRICT
+             */
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        } break;
     }
     if (width < HB_MIN_WIDTH || height < HB_MIN_HEIGHT ||
         width > maxWidth     || height > maxHeight)
     {
-        // All limits set above also attempted to keep PAR and DAR.
+        // Limits set above may have also attempted to keep PAR and DAR.
         // If we are still outside limits, enforce them and modify
         // PAR to keep DAR
         if (width < HB_MIN_WIDTH)

@@ -1730,21 +1730,27 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     {
         const char *s = hb_value_get_string(ana_mode_value);
         if (!strcasecmp(s, "none"))
-            geo.mode = 0;
+            geo.mode = HB_ANAMORPHIC_NONE;
         else if (!strcasecmp(s, "strict"))
-            geo.mode = 1;
+            geo.mode = HB_ANAMORPHIC_STRICT;
         else if (!strcasecmp(s, "custom"))
-            geo.mode = 3;
+            geo.mode = HB_ANAMORPHIC_CUSTOM;
+        else if (!strcasecmp(s, "auto"))
+            geo.mode = HB_ANAMORPHIC_AUTO;
         else // default loose
-            geo.mode = 2;
+            geo.mode = HB_ANAMORPHIC_LOOSE;
     }
     else
     {
         geo.mode = hb_value_get_int(hb_dict_get(preset, "PicturePAR"));
     }
     keep_aspect = hb_value_get_bool(hb_dict_get(preset, "PictureKeepRatio"));
-    if (geo.mode == HB_ANAMORPHIC_STRICT || geo.mode == HB_ANAMORPHIC_LOOSE)
+    if (geo.mode == HB_ANAMORPHIC_STRICT ||
+        geo.mode == HB_ANAMORPHIC_LOOSE  ||
+        geo.mode == HB_ANAMORPHIC_AUTO)
+    {
         keep_aspect = 1;
+    }
     geo.keep = keep_aspect * HB_KEEP_DISPLAY_ASPECT;
     geo.itu_par = hb_value_get_bool(hb_dict_get(preset, "PictureItuPAR"));
     geo.maxWidth = hb_value_get_int(hb_dict_get(preset, "PictureWidth"));
@@ -2145,6 +2151,21 @@ static void presets_clean(hb_value_t *presets, hb_value_t *template)
 void hb_presets_clean(hb_value_t *preset)
 {
     presets_clean(preset, hb_preset_template);
+}
+
+static void import_anamorphic_20_0_0(hb_value_t *preset)
+{
+    hb_value_t *val = hb_dict_get(preset, "PicturePAR");
+    if (hb_value_type(val) == HB_VALUE_TYPE_STRING)
+    {
+        const char *s = hb_value_get_string(val);
+        if (!strcasecmp(s, "strict"))
+        {
+            hb_dict_set(preset, "PicturePAR", hb_value_string("loose"));
+            hb_dict_set(preset, "UsesPictureSettings", hb_value_int(2));
+            hb_dict_set(preset, "PictureModulus", hb_value_int(2));
+        }
+    }
 }
 
 static void import_custom_11_1_0(hb_value_t * preset, int filter_id,
@@ -2744,9 +2765,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_20_0_0(hb_value_t *preset)
+{
+    import_anamorphic_20_0_0(preset);
+}
+
 static void import_12_0_0(hb_value_t *preset)
 {
     import_deint_12_0_0(preset);
+
+    import_20_0_0(preset);
 }
 
 static void import_11_1_0(hb_value_t *preset)
@@ -2816,6 +2844,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (major == 12 && minor == 0 && micro == 0)
         {
             import_12_0_0(preset);
+            result = 1;
+        }
+        else if (major == 20 && minor == 0 && micro == 0)
+        {
+            import_20_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);

@@ -292,20 +292,13 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
         ghb_dict_get_value(settings, "PictureWidth")));
 
     int width, height, uses_pic, autoscale;
-    const char * pic_par;
 
     width    = ghb_dict_get_int(settings, "PictureWidth");
     height   = ghb_dict_get_int(settings, "PictureHeight");
     uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
-    pic_par  = ghb_dict_get_string(settings, "PicturePAR");
 
-    autoscale = uses_pic == 2 || (width == 0 && height == 0);
+    autoscale = uses_pic != 1 || (width == 0 && height == 0);
     ghb_dict_set_bool(settings, "autoscale", autoscale);
-
-    if (!autoscale && pic_par != NULL && !strcasecmp(pic_par, "strict"))
-    {
-        ghb_dict_set_string(settings, "PicturePAR", "loose");
-    }
 
     gint vqtype;
 

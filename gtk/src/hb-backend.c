@@ -120,10 +120,10 @@ combo_opts_t when_complete_opts =
 
 static options_map_t d_par_opts[] =
 {
-    {N_("Off"),    "off",    0},
-    {N_("Strict"), "strict", 1},
-    {N_("Loose"),  "loose",  2},
-    {N_("Custom"), "custom", 3},
+    {N_("Off"),       "off",    HB_ANAMORPHIC_NONE},
+    {N_("Automatic"), "auto",   HB_ANAMORPHIC_AUTO},
+    {N_("Loose"),     "loose",  HB_ANAMORPHIC_LOOSE},
+    {N_("Custom"),    "custom", HB_ANAMORPHIC_CUSTOM},
 };
 combo_opts_t par_opts =
 {
@@ -3404,8 +3404,6 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
     gint max_width = 0;
     gint max_height = 0;
 
-    g_debug("ghb_set_scale ()\n");
-
     pic_par = ghb_settings_combo_int(settings, "PicturePAR");
     if (pic_par == HB_ANAMORPHIC_STRICT)
     {
@@ -3413,7 +3411,9 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
         ghb_dict_set_int(settings, "PictureModulus", 2);
         ghb_dict_set_bool(settings, "PictureLooseCrop", TRUE);
     }
-    if (pic_par == HB_ANAMORPHIC_STRICT || pic_par == HB_ANAMORPHIC_LOOSE)
+    if (pic_par == HB_ANAMORPHIC_STRICT ||
+        pic_par == HB_ANAMORPHIC_AUTO   ||
+        pic_par == HB_ANAMORPHIC_LOOSE)
     {
         ghb_dict_set_bool(settings, "PictureKeepRatio", TRUE);
     }
