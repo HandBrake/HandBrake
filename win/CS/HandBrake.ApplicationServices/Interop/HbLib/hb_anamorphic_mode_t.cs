@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         HB_ANAMORPHIC_NONE,
         HB_ANAMORPHIC_STRICT,
         HB_ANAMORPHIC_LOOSE,
-        HB_ANAMORPHIC_CUSTOM
+        HB_ANAMORPHIC_CUSTOM,
+        HB_ANAMORPHIC_AUTO
     } ;
 }

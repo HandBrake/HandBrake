@@ -23,7 +23,7 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         None = 0,
         [Display(Name = "Automatic")]
         [ShortName("auto")]
-        Automatic = 1,
+        Automatic = 4,
         [Display(Name = "Loose")]
         [ShortName("loose")]
         Loose = 2,

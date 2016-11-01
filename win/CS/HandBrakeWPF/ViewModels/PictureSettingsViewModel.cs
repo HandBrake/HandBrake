@@ -977,7 +977,7 @@ namespace HandBrakeWPF.ViewModels
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = false;
                     this.ShowModulus = false;
-                    this.ShowKeepAR = true;
+                    this.ShowKeepAR = false;
                     break;
 
                 case Anamorphic.Loose:
