@@ -291,6 +291,7 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
         }
         sensitive = dep_check(ud, dep_name, &hide);
         gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
         if (!sensitive && hide)
         {
             gtk_widget_hide(GTK_WIDGET(dep_object));

@@ -922,7 +922,7 @@ libx264 authors:
                     <child>
                       <object class="GtkToolButton" id="sourcetoolbutton">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                         <property name="is_important">True</property>
@@ -940,7 +940,7 @@ Source</property>
                       <object class="GtkToolButton" id="queue_add">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Add to Queue</property>
                         <property name="is_important">True</property>
@@ -958,7 +958,7 @@ Queue</property>
                       <object class="GtkToolButton" id="queue_start1">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Start Encoding</property>
                         <property name="is_important">True</property>
@@ -976,7 +976,7 @@ Encoding</property>
                       <object class="GtkToolButton" id="queue_pause1">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Pause Encoding</property>
                         <property name="is_important">True</property>
@@ -1003,7 +1003,7 @@ Encoding</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_queue">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Queue</property>
                         <property name="is_important">True</property>
@@ -1020,7 +1020,7 @@ Queue</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_preview">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                         <property name="is_important">True</property>
@@ -1037,7 +1037,7 @@ Preview</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_activity">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                         <property name="is_important">True</property>
@@ -1575,7 +1575,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                 <child>
                   <object class="GtkScrolledWindow" id="presets_scroll">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="shadow_type">etched-in</property>
                     <property name="margin-top">6</property>
                     <property name="min_content_width">200</property>
@@ -1622,7 +1622,7 @@ This allows a player to initiate playback before downloading the entire file.</p
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
             <property name="transition-duration">400</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkBox" id="settings_tab">
                 <property name="orientation">vertical</property>
@@ -1652,7 +1652,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                     <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
                     <property name="transition-duration">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                     <child>
@@ -3982,7 +3982,7 @@ Overrides all other settings.</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="VideoOptionExtraWindow">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="shadow_type">etched-in</property>
                                         <property name="hexpand">True</property>
                                         <child>
@@ -4108,14 +4108,14 @@ Colon separated list of encoder options.</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="scrolledwindow10">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="min_content_height">84</property>
                                         <child>
                                           <object class="GtkListBox" id="audio_avail_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4129,13 +4129,13 @@ Colon separated list of encoder options.</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="scrolledwindow11">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
                                           <object class="GtkListBox" id="audio_selected_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4600,13 +4600,13 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow12">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="hexpand">True</property>
                             <child>
                               <object class="GtkListBox" id="audio_list_default">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="selection_mode">none</property>
                                 <property name="activate_on_single_click">False</property>
@@ -4651,7 +4651,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_add">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add</property>
                                     <property name="icon_name">list-add</property>
@@ -4666,7 +4666,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_add_all">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add All</property>
                                     <property name="icon_name">list-add</property>
@@ -4681,7 +4681,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_reset">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Reload Defaults</property>
@@ -4703,7 +4703,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
@@ -4813,14 +4813,14 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <child>
                                       <object class="GtkScrolledWindow" id="sub_scrolledwindow10">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="min_content_height">108</property>
                                         <child>
                                           <object class="GtkListBox" id="subtitle_avail_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4834,13 +4834,13 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <child>
                                       <object class="GtkScrolledWindow" id="sub_scrolledwindow11">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
                                           <object class="GtkListBox" id="subtitle_selected_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                             <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select subtitles for.
 
 The first language in this list is your "preferred" language and will be used
@@ -5150,7 +5150,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add</property>
                                     <property name="icon_name">list-add</property>
@@ -5165,7 +5165,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add_all">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add All</property>
                                     <property name="icon_name">list-add</property>
@@ -5180,7 +5180,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add_fas">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Foreign Audio Search</property>
                                     <property name="icon_name">list-add</property>
@@ -5197,7 +5197,7 @@ segments of the audio that are in a foreign language.</property>
                                   <object class="GtkToolButton" id="subtitle_reset">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Reload Defaults</property>
@@ -5219,7 +5219,7 @@ segments of the audio that are in a foreign language.</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
@@ -6168,7 +6168,7 @@ where you are having trouble keeping fine noise.</property>
                                     <property name="margin-start">12</property>
                                     <property name="margin-end">12</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="shadow_type">etched-in</property>
                                     <child>
                                       <object class="GtkTextView" id="x264Option">
@@ -6265,7 +6265,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow3">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
                               <object class="GtkTreeView" id="chapters_list">
@@ -6326,7 +6326,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6363,7 +6363,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6400,7 +6400,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6437,7 +6437,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6474,7 +6474,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6511,7 +6511,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6548,7 +6548,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6582,7 +6582,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                           <object class="GtkScrolledWindow" id="MetaLongDescriptionScroll">
                             <property name="height_request">40</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="shadow_type">etched-in</property>
@@ -6603,6 +6603,16 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
+                        <focus-chain>
+                            <widget name="MetaName"/>
+                            <widget name="MetaArtist"/>
+                            <widget name="MetaAlbumArtist"/>
+                            <widget name="MetaReleaseDate"/>
+                            <widget name="MetaComment"/>
+                            <widget name="MetaGenre"/>
+                            <widget name="MetaDescription"/>
+                            <widget name="MetaLongDescriptionScroll"/>
+                        </focus-chain>
                       </object>
                       <packing>
                         <property name="position">10</property>
@@ -6648,7 +6658,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       <object class="GtkToolButton" id="queue_edit">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Edit</property>
@@ -6664,7 +6674,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       <object class="GtkToolButton" id="queue_reload">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Reload</property>
@@ -6682,7 +6692,7 @@ Resets the queue job to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_reload_all">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Reload All</property>
@@ -6700,7 +6710,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_delete_all">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Delete All</property>
@@ -6717,7 +6727,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_save">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Save Queue</property>
@@ -6735,7 +6745,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                       <object class="GtkToolButton" id="queue_open">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Load Queue File</property>
@@ -6758,7 +6768,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkTreeView" id="queue_list">
@@ -6934,14 +6944,14 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <child>
               <object class="GtkScrolledWindow" id="title_add_multiple_scrolledwindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="min_content_height">400</property>
                 <child>
                   <object class="GtkListBox" id="title_add_multiple_list">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
                     <property name="hexpand">True</property>
                     <property name="selection_mode">none</property>
@@ -7161,7 +7171,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <child>
               <object class="GtkNotebook" id="PrefsNotebook">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="show_border">False</property>
                 <property name="margin-start">12</property>
                 <child>
@@ -9059,7 +9069,7 @@ The source's character code is needed in order to perform this translation.</pro
                 <child>
                   <object class="GtkFileChooserButton" id="SrtFile">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">Select the SRT file to import.</property>
                     <property name="local_only">False</property>
                     <property name="hexpand">True</property>
@@ -9560,7 +9570,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <child>
                       <object class="GtkScaleButton" id="AudioTrackQualityX">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="valign">GTK_ALIGN_CENTER</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9654,7 +9664,7 @@ weather-clear</property>
                 <child>
                   <object class="GtkScaleButton" id="AudioTrackGainSlider">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9705,7 +9715,7 @@ audio-volume-medium</property>
                 <child>
                   <object class="GtkScaleButton" id="AudioTrackDRCSlider">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9908,7 +9918,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="margin-start">12</property>
                         <property name="halign">start</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
