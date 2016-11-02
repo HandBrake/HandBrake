@@ -37,6 +37,7 @@
 {
     HBAudioTrackPreset *track = [[HBAudioTrackPreset alloc] initWithContainer:self.container];
     track.undo = self.undo;
+    track.fallbackEncoder = self.encoderFallback;
     [self insertObject:track inTracksArrayAtIndex:[self countOfTracksArray]];
 }
 
@@ -139,6 +140,11 @@
         [[self.undo prepareWithInvocationTarget:self] setEncoderFallback:_encoderFallback];
     }
     _encoderFallback = encoderFallback;
+
+    for (HBAudioTrackPreset *track in self.tracksArray)
+    {
+        track.fallbackEncoder = encoderFallback;
+    }
 }
 
 - (void)setSecondaryEncoderMode:(BOOL)secondaryEncoderMode
@@ -295,6 +301,8 @@
     for (NSDictionary *track in preset[@"AudioList"])
     {
         HBAudioTrackPreset *newTrack = [[HBAudioTrackPreset alloc] init];
+        newTrack.fallbackEncoder = self.encoderFallback;
+
         if ([track[@"AudioEncoder"] isKindOfClass:[NSString class]])
         {
             newTrack.encoder = hb_audio_encoder_get_from_name([track[@"AudioEncoder"] UTF8String]);

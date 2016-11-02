@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  track properties.
  */
 @property (nonatomic, readwrite) int encoder;
+@property (nonatomic, readwrite) int fallbackEncoder;
 @property (nonatomic, readwrite) int mixdown;
 @property (nonatomic, readwrite) int sampleRate;
 @property (nonatomic, readwrite) int bitRate;
