@@ -39,13 +39,14 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         _job = job;
         _container = HB_MUX_MP4;
 
-        _sourceTracks = [job.title.audioTracks mutableCopy];
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBAudioDefaults alloc] init];
 
         // Add the none and foreign track to the source array
+        NSMutableArray *sourceTracks = [job.title.audioTracks mutableCopy];
         NSDictionary *none = @{keyAudioTrackName: NSLocalizedString(@"None", nil)};
-        [_sourceTracks insertObject:none atIndex:0];
+        [sourceTracks insertObject:none atIndex:0];
+        _sourceTracks = [sourceTracks copy];
     }
     return self;
 }
@@ -96,10 +97,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)addAllTracks
 {
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
     // Add the remainings tracks
     for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++) {
@@ -111,10 +109,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)removeAll
 {
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
     [self addNoneTrack];
 }
 
@@ -185,16 +180,14 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)addDefaultTracksFromJobSettings:(NSDictionary *)settings
 {
-    NSArray<NSDictionary<NSString *, id> *> *tracks = settings[@"Audio"][@"AudioList"];
+    NSMutableArray<HBAudioTrack *> *tracks = [NSMutableArray array];
+    NSArray<NSDictionary<NSString *, id> *> *settingsTracks = settings[@"Audio"][@"AudioList"];
 
     // Reinitialize the configured list of audio tracks
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
     // Add the tracks
-    for (NSDictionary *trackDict in tracks)
+    for (NSDictionary *trackDict in settingsTracks)
     {
         HBAudioTrack *track = [self trackFromSourceTrackIndex:[trackDict[@"Track"] unsignedIntegerValue] + 1];
 
@@ -213,8 +206,10 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         track.bitRate = [trackDict[@"Bitrate"] intValue];
         track.encoder = hb_audio_encoder_get_from_name([trackDict[@"Encoder"] UTF8String]);
 
-        [self insertObject:track inTracksAtIndex:[self countOfTracks]];
+        [tracks addObject:track];
     }
+
+    [self insertTracks:tracks atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, tracks.count)]];
 
     // Add an None item
     [self addNoneTrack];
@@ -222,17 +217,14 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (BOOL)anyCodecMatches:(int)codec
 {
-    BOOL retval = NO;
-    NSUInteger audioArrayCount = [self countOfTracks];
-    for (NSUInteger i = 0; i < audioArrayCount && !retval; i++)
+    for (HBAudioTrack *track in self.tracks)
     {
-        HBAudioTrack *anAudio = [self objectInTracksAtIndex: i];
-        if (anAudio.isEnabled && codec == anAudio.encoder)
+        if (track.isEnabled && codec == track.encoder)
         {
-            retval = YES;
+            return YES;
         }
     }
-    return retval;
+    return NO;
 }
 
 #pragma mark -
@@ -337,11 +329,24 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     [self.tracks insertObject:track atIndex:index];
 }
 
+- (void)insertTracks:(NSArray<HBAudioTrack *> *)array atIndexes:(NSIndexSet *)indexes
+{
+    [[self.undo prepareWithInvocationTarget:self] removeTracksAtIndexes:indexes];
+    [self.tracks insertObjects:array atIndexes:indexes];
+}
+
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index
 {
     HBAudioTrack *track = self.tracks[index];
     [[self.undo prepareWithInvocationTarget:self] insertObject:track inTracksAtIndex:index];
     [self.tracks removeObjectAtIndex:index];
+}
+
+- (void)removeTracksAtIndexes:(NSIndexSet *)indexes
+{
+    NSArray<HBAudioTrack *> *tracks = [self.tracks objectsAtIndexes:indexes];
+    [[self.undo prepareWithInvocationTarget:self] insertTracks:tracks atIndexes:indexes];
+    [self.tracks removeObjectsAtIndexes:indexes];
 }
 
 @end

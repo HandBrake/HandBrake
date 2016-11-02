@@ -222,7 +222,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_video.job = copy;
 
         copy->_audio = [_audio copy];
+        copy->_audio.job = copy;
         copy->_subtitles = [_subtitles copy];
+        copy->_subtitles.job = copy;
 
         copy->_chaptersEnabled = _chaptersEnabled;
         copy->_chapterTitles = [[NSArray alloc] initWithArray:_chapterTitles copyItems:YES];

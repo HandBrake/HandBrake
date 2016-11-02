@@ -28,6 +28,8 @@ extern NSString *keySubTrackSrtFileURL;
 
 @interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
 
+@property (nonatomic, readwrite) NSArray<NSDictionary *> *sourceTracks;
+
 @property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readwrite) int container;
 
@@ -43,12 +45,13 @@ extern NSString *keySubTrackSrtFileURL;
     self = [super init];
     if (self)
     {
-        job = job;
+        _job = job;
         _container = HB_MUX_MP4;
 
-        _sourceTracks = [job.title.subtitlesTracks mutableCopy];
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBSubtitlesDefaults alloc] init];
+
+        NSMutableArray *sourceTracks = [job.title.subtitlesTracks mutableCopy];
 
         NSMutableSet<NSString *> *forcedSourceNamesArray = [NSMutableSet set];
         int foreignAudioType = VOBSUB;
@@ -78,11 +81,13 @@ extern NSString *keySubTrackSrtFileURL;
 
         // Add the none and foreign track to the source array
         NSDictionary *none = @{  keySubTrackName: NSLocalizedString(@"None", nil)};
-        [_sourceTracks insertObject:none atIndex:0];
+        [sourceTracks insertObject:none atIndex:0];
 
         NSDictionary *foreign = @{ keySubTrackName: foreignAudioSearchTrackName,
                                    keySubTrackType: @(foreignAudioType) };
-        [_sourceTracks insertObject:foreign atIndex:1];
+        [sourceTracks insertObject:foreign atIndex:1];
+
+        _sourceTracks = [sourceTracks copy];
 
     }
     return self;
@@ -186,10 +191,7 @@ extern NSString *keySubTrackSrtFileURL;
 
 - (void)addAllTracks
 {
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
     // Add the remainings tracks
     for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++) {
@@ -202,10 +204,7 @@ extern NSString *keySubTrackSrtFileURL;
 
 - (void)removeAll
 {
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
     [self addNoneTrack];
 }
 
@@ -217,9 +216,11 @@ extern NSString *keySubTrackSrtFileURL;
 - (void)addSrtTrackFromURL:(NSURL *)srtURL
 {
     // Create a new entry for the subtitle source array so it shows up in our subtitle source list
-    [self.sourceTracks addObject:@{keySubTrackName: srtURL.lastPathComponent,
+    NSMutableArray *sourceTrack = [self.sourceTracks mutableCopy];
+    [sourceTrack addObject:@{keySubTrackName: srtURL.lastPathComponent,
                                    keySubTrackType: @(SRTSUB),
                                    keySubTrackSrtFileURL: srtURL}];
+    self.sourceTracks = sourceTrack;
     HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:self.sourceTracksArray.count - 1];
     [self insertObject:track inTracksAtIndex:[self countOfTracks] - 1];
 }
@@ -284,14 +285,12 @@ extern NSString *keySubTrackSrtFileURL;
 
 - (void)addDefaultTracksFromJobSettings:(NSDictionary *)settings
 {
-    NSArray<NSDictionary<NSString *, id> *> *tracks = settings[@"Subtitle"][@"SubtitleList"];
+    NSMutableArray<HBSubtitlesTrack *> *tracks = [NSMutableArray array];
+    NSArray<NSDictionary<NSString *, id> *> *settingsTracks = settings[@"Subtitle"][@"SubtitleList"];
     NSDictionary<NSString *, id> *search = settings[@"Subtitle"][@"Search"];
 
     // Reinitialize the configured list of audio tracks
-    while (self.countOfTracks)
-    {
-        [self removeObjectFromTracksAtIndex:0];
-    }
+    [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
     // Add the foreign audio search pass
     if ([search[@"Enable"] boolValue])
@@ -301,19 +300,21 @@ extern NSString *keySubTrackSrtFileURL;
         track.burnedIn = [search[@"Burn"] boolValue];
         track.forcedOnly = [search[@"Forced"] boolValue];
 
-        [self addTrack:track];
+        [tracks addObject:track];
     }
 
     // Add the tracks
-    for (NSDictionary *trackDict in tracks)
+    for (NSDictionary *trackDict in settingsTracks)
     {
         HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:[trackDict[@"Track"] unsignedIntegerValue] + 2];
 
         track.burnedIn = [trackDict[@"Burn"] boolValue];
         track.forcedOnly = [trackDict[@"Forced"] boolValue];
 
-        [self addTrack:track];
+        [tracks addObject:track];
     }
+
+    [self insertTracks:tracks atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, tracks.count)]];
 
     // Add an None item
     [self addNoneTrack];
@@ -488,11 +489,25 @@ extern NSString *keySubTrackSrtFileURL;
     [self.tracks insertObject:track atIndex:index];
 }
 
+- (void)insertTracks:(NSArray<HBSubtitlesTrack *> *)array atIndexes:(NSIndexSet *)indexes
+{
+    [[self.undo prepareWithInvocationTarget:self] removeTracksAtIndexes:indexes];
+    [self.tracks insertObjects:array atIndexes:indexes];
+}
+
 - (void)removeObjectFromTracksAtIndex:(NSUInteger)index
 {
     HBSubtitlesTrack *track = self.tracks[index];
     [[self.undo prepareWithInvocationTarget:self] insertObject:track inTracksAtIndex:index];
     [self.tracks removeObjectAtIndex:index];
 }
+
+- (void)removeTracksAtIndexes:(NSIndexSet *)indexes
+{
+    NSArray<HBSubtitlesTrack *> *tracks = [self.tracks objectsAtIndexes:indexes];
+    [[self.undo prepareWithInvocationTarget:self] insertTracks:tracks atIndexes:indexes];
+    [self.tracks removeObjectsAtIndexes:indexes];
+}
+
 
 @end

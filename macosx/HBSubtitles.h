@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addSrtTrackFromURL:(NSURL *)srtURL;
 
-@property (nonatomic, readonly) NSMutableArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBSubtitlesTrack *> *tracks;
 
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaults *defaults;

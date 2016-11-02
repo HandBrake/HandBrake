@@ -16,7 +16,7 @@ extern NSString *HBAudioChangedNotification;
 
 @interface HBAudio : NSObject <NSSecureCoding, NSCopying>
 
-@property (nonatomic, readonly) NSMutableArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBAudioTrack *> *tracks;
 
 @property (nonatomic, readwrite) HBAudioDefaults *defaults;
