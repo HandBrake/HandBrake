@@ -6603,16 +6603,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
-                        <focus-chain>
-                            <widget name="MetaName"/>
-                            <widget name="MetaArtist"/>
-                            <widget name="MetaAlbumArtist"/>
-                            <widget name="MetaReleaseDate"/>
-                            <widget name="MetaComment"/>
-                            <widget name="MetaGenre"/>
-                            <widget name="MetaDescription"/>
-                            <widget name="MetaLongDescriptionScroll"/>
-                        </focus-chain>
                       </object>
                       <packing>
                         <property name="position">10</property>
