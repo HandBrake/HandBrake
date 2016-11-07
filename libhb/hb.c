@@ -206,10 +206,32 @@ static int handle_jpeg(enum AVPixelFormat *format)
     }
 }
 
+int hb_ff_get_colorspace(int color_matrix)
+{
+    int color_space = SWS_CS_DEFAULT;
+
+    switch (color_matrix)
+    {
+        case HB_COLR_MAT_SMPTE170M:
+            color_space = SWS_CS_ITU601;
+            break;
+        case HB_COLR_MAT_SMPTE240M:
+            color_space = SWS_CS_SMPTE240M;
+            break;
+        case HB_COLR_MAT_BT709:
+            color_space = SWS_CS_ITU709;
+            break;
+        default:
+            break;
+    }
+
+    return color_space;
+}
+
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
-                   int flags)
+                   int flags, int colorspace)
 {
     struct SwsContext * ctx;
 
@@ -235,9 +257,9 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
         av_opt_set_int(ctx, "sws_flags", flags, 0);
 
         sws_setColorspaceDetails( ctx,
-                      sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
+                      sws_getCoefficients( colorspace ), // src colorspace
                       srcRange, // src range 0 = MPG, 1 = JPG
-                      sws_getCoefficients( SWS_CS_DEFAULT ), // dst colorspace
+                      sws_getCoefficients( colorspace ), // dst colorspace
                       dstRange, // dst range 0 = MPG, 1 = JPG
                       0,         // brightness
                       1 << 16,   // contrast
@@ -806,11 +828,13 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                         geo->crop[0], geo->crop[2] );
     }
 
+    int colorspace = hb_ff_get_colorspace(title->color_matrix);
+
     // Get scaling context
     context = hb_sws_get_context(
                 title->geometry.width  - (geo->crop[2] + geo->crop[3]),
                 title->geometry.height - (geo->crop[0] + geo->crop[1]),
-                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags);
+                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags, colorspace);
 
     if (context == NULL)
     {
