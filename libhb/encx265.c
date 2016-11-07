@@ -261,10 +261,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             {
                 goto fail;
             }
-            if (job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 0 &&
-                param_parse(pv, param, "slow-firstpass", "1"))
+            if (job->pass_id == HB_PASS_ENCODE_1ST)
             {
-                goto fail;
+                char slowfirstpass[2];
+                snprintf(slowfirstpass, sizeof(slowfirstpass), "%d",
+                         !job->fastfirstpass);
+                if (param_parse(pv, param, "slow-firstpass", slowfirstpass))
+                {
+                    goto fail;
+                }
             }
         }
     }
