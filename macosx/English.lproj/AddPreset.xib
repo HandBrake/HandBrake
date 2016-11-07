@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16C32e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
@@ -130,7 +130,7 @@ Gw
                             <accessibilityConnection property="title" destination="Wy7-cF-tGv" id="qbt-Xs-S0o"/>
                         </connections>
                     </textField>
-                    <box autoresizesSubviews="NO" transparent="YES" borderWidth="0.0" title="Box" boxType="custom" borderType="none" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="H9n-64-GXz">
+                    <box autoresizesSubviews="NO" boxType="custom" borderType="none" borderWidth="0.0" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H9n-64-GXz">
                         <rect key="frame" x="128" y="96" width="300" height="24"/>
                         <view key="contentView" id="YlE-Da-0Vn">
                             <rect key="frame" x="0.0" y="0.0" width="300" height="24"/>
@@ -196,9 +196,9 @@ Gw
                     </button>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z6B-ig-ouq">
                         <rect key="frame" x="96" y="99" width="34" height="22"/>
-                        <string key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').
-'Custom': choose the maximum width and height allowed by the preset (has no effect if the preset specifies Strict anamorphic).
-'Source maximum': use the source dimensions.</string>
+                        <mutableString key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').
+'Custom': choose the maximum width and height allowed by the preset.
+'Source maximum': use the source dimensions.</mutableString>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Mi7-V1-sSf">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
