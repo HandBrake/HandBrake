@@ -1647,6 +1647,10 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("container_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
+    const char * mux = ghb_dict_get_string(ud->settings, "FileFormat");
+    GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
+    ghb_dict_set_string(dest_dict, "Mux", mux);
+
     ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
     update_acodec(ud);

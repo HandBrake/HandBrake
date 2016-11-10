@@ -273,13 +273,9 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if (enc->codec == fallback &&
-            !(enc->muxers & mux))
+        if (enc->codec == fallback && !(enc->muxers & mux))
         {
-            if ( mux & HB_MUX_MASK_MKV )
-                fallback = HB_ACODEC_LAME;
-            else
-                fallback = HB_ACODEC_FFAAC;
+            fallback = hb_audio_encoder_get_default(mux);
             break;
         }
     }
@@ -291,8 +287,7 @@ ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint f
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if (enc->codec == acodec &&
-            !(enc->muxers & mux))
+        if (enc->codec == acodec && !(enc->muxers & mux))
         {
             return fallback;
         }
