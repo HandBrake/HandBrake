@@ -288,13 +288,13 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
         AV_PIX_FMT_NV12,
         pv->job->title->geometry.width, pv->job->title->geometry.height,
         AV_PIX_FMT_YUV420P,
-        SWS_LANCZOS|SWS_ACCURATE_RND);
+        SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
     pv->sws_context_to_nv12 = hb_sws_get_context(
         pv->job->title->geometry.width, pv->job->title->geometry.height,
         AV_PIX_FMT_YUV420P,
         pv->job->title->geometry.width, pv->job->title->geometry.height,
         AV_PIX_FMT_NV12,
-        SWS_LANCZOS|SWS_ACCURATE_RND);
+        SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
     return 0;
 }
 int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t * pv ){
