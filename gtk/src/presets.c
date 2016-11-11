@@ -2518,6 +2518,7 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         if (dict != NULL && !ghb_dict_get_bool(dict, "Folder"))
         {
             ghb_presets_list_clear_default(ud);
+            hb_presets_clear_default();
             ghb_dict_set_bool(dict, "Default", 1);
             ghb_presets_list_show_default(ud);
             store_presets();
