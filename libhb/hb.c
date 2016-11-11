@@ -242,9 +242,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
 
         srcRange = handle_jpeg(&srcFormat);
         dstRange = handle_jpeg(&dstFormat);
-        /* enable this when implemented in Libav
         flags |= SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
-         */
 
         av_opt_set_int(ctx, "srcw", srcW, 0);
         av_opt_set_int(ctx, "srch", srcH, 0);
