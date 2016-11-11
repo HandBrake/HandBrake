@@ -55,9 +55,7 @@ struct hb_handle_s
 
     int            paused;
     hb_lock_t    * pause_lock;
-    /* For MacGui active queue
-       increments each time the scan thread completes*/
-    int            scanCount;
+
     volatile int   scan_die;
 
     /* Stash of persistent data between jobs, for stuff
@@ -1988,11 +1986,8 @@ static void thread_func( void * _h )
                         hb_list_count( h->title_set.list_title ) );
             }
             hb_lock( h->state_lock );
-            h->state.state = HB_STATE_SCANDONE; //originally state.state
-			hb_unlock( h->state_lock );
-			/*we increment this sessions scan count by one for the MacGui
-			to trigger a new source being set */
-            h->scanCount++;
+            h->state.state = HB_STATE_SCANDONE;
+            hb_unlock( h->state_lock );
         }
 
         /* Check if the work thread is done */
