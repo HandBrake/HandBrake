@@ -116,7 +116,8 @@ extern NSString *keySubTrackType;
 
 - (int)frames
 {
-    return (int) ((self.hb_title->duration / 90000.) * (self.hb_title->vrate.num / (double)self.hb_title->vrate.den));
+    double frames = (double)self.hb_title->duration / 90000.f * self.hb_title->vrate.num / self.hb_title->vrate.den;
+    return (int)ceil(frames);
 }
 
 - (NSString *)timeCode
