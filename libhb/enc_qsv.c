@@ -527,7 +527,8 @@ int qsv_enc_init(hb_work_private_t *pv)
                                     AV_PIX_FMT_YUV420P,
                                     job->width, job->height,
                                     AV_PIX_FMT_NV12,
-                                    SWS_LANCZOS|SWS_ACCURATE_RND);
+                                    SWS_LANCZOS|SWS_ACCURATE_RND,
+                                    SWS_CS_DEFAULT);
     }
 
     // allocate tasks
