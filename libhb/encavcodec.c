@@ -67,6 +67,8 @@ static const char * const vpx_preset_names[] =
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
+    int ret = 0;
+    char reason[80];
     AVCodec * codec;
     AVCodecContext * context;
     AVRational fps;
@@ -102,7 +104,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         default:
         {
             hb_error("encavcodecInit: unsupported encoder!");
-            return 1;
+            ret = 1;
+            goto done;
         }
     }
 
@@ -111,7 +114,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "encavcodecInit: avcodec_find_encoder "
                 "failed" );
-        return 1;
+        ret = 1;
+        goto done;
     }
     context = avcodec_alloc_context3( codec );
 
@@ -196,7 +200,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_free( context );
         av_dict_free( &av_opts );
-        return 1;
+        ret = 1;
+        goto done;
     }
 
     /* iterate through lavc_opts and have avutil parse the options for us */
@@ -289,6 +294,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         if( job->pass_id == HB_PASS_ENCODE_1ST )
         {
             pv->file = hb_fopen(filename, "wb");
+            if (!pv->file) {
+                if (strerror_r(errno, reason, 79) != 0)
+                    strcpy(reason, "unknown -- strerror_r() failed");
+
+                hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                ret = 1;
+                goto done;
+            }
             context->flags |= CODEC_FLAG_PASS1;
         }
         else
@@ -297,12 +310,34 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char * log;
 
             pv->file = hb_fopen(filename, "rb");
+            if (!pv->file) {
+                if (strerror_r(errno, reason, 79) != 0)
+                    strcpy(reason, "unknown -- strerror_r() failed");
+
+                hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                ret = 1;
+                goto done;
+            }
             fseek( pv->file, 0, SEEK_END );
             size = ftell( pv->file );
             fseek( pv->file, 0, SEEK_SET );
             log = malloc( size + 1 );
             log[size] = '\0';
-            fread( log, size, 1, pv->file );
+            if (size > 0 &&
+                fread( log, size, 1, pv->file ) < size)
+            {
+                if (ferror(pv->file))
+                {
+                    if (strerror_r(errno, reason, 79) != 0)
+                        strcpy(reason, "unknown -- strerror_r() failed");
+
+                    hb_error( "encavcodecInit: Failed to read %s (reason: %s)" , filename, reason);
+                    ret = 1;
+                    fclose( pv->file );
+                    pv->file = NULL;
+                    goto done;
+                }
+            }
             fclose( pv->file );
             pv->file = NULL;
 
@@ -338,7 +373,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 context->extradata_size );
     }
 
-    return 0;
+done:
+    return ret;
 }
 
 /***********************************************************************
@@ -407,58 +443,36 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
 
 static uint8_t convert_pict_type( int pict_type, char pkt_flag_key, uint16_t* sflags )
 {
+    uint16_t flags = 0;
     uint8_t retval = 0;
-    switch ( pict_type )
+    switch (pict_type)
     {
-        case AV_PICTURE_TYPE_P:
-        {
-            retval = HB_FRAME_P;
-        } break;
-
         case AV_PICTURE_TYPE_B:
-        {
             retval = HB_FRAME_B;
-        } break;
+            break;
 
         case AV_PICTURE_TYPE_S:
-        {
-            retval = HB_FRAME_P;
-        } break;
-
+        case AV_PICTURE_TYPE_P:
         case AV_PICTURE_TYPE_SP:
-        {
             retval = HB_FRAME_P;
-        } break;
+            break;
+
 
         case AV_PICTURE_TYPE_BI:
         case AV_PICTURE_TYPE_SI:
         case AV_PICTURE_TYPE_I:
-        {
-            *sflags |= HB_FRAME_REF;
-            if ( pkt_flag_key )
-            {
-                retval = HB_FRAME_IDR;
-            }
-            else
-            {
-                retval = HB_FRAME_I;
-            }
-        } break;
-
         default:
         {
-            if ( pkt_flag_key )
-            {
-                //buf->s.flags |= HB_FRAME_REF;
-                *sflags |= HB_FRAME_REF;
-                retval = HB_FRAME_KEY;
-            }
-            else
-            {
-                retval = HB_FRAME_REF;
-            }
+            flags |= HB_FLAG_FRAMETYPE_REF;
+            retval = HB_FRAME_I;
         } break;
     }
+    if (pkt_flag_key)
+    {
+        flags |= HB_FLAG_FRAMETYPE_REF;
+        flags |= HB_FLAG_FRAMETYPE_KEY;
+    }
+    *sflags = flags;
     return retval;
 }
 
@@ -603,9 +617,8 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 buf->s.start    = get_frame_start( pv, frameno );
                 buf->s.duration = get_frame_duration( pv, frameno );
                 buf->s.stop     = buf->s.stop + buf->s.duration;
-                buf->s.flags   &= ~HB_FRAME_REF;
                 buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
-                if (buf->s.frametype & HB_FRAME_KEY)
+                if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
                 {
                     hb_chapter_dequeue(pv->chapter_queue, buf);
                 }

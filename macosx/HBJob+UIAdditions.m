@@ -190,23 +190,25 @@ static NSDictionary            *shortHeightAttr;
 
         for (HBAudioTrack *audioTrack in self.audio.tracks)
         {
-            if (audioTrack.enabled)
+            if (audioTrack.isEnabled)
             {
-                audioCodecSummary = [NSString stringWithFormat: @"%@", audioTrack.codec[keyAudioCodecName]];
-                NSNumber *drc = @(audioTrack.drc);
-                NSNumber *gain = @(audioTrack.gain);
-                NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
-                                          audioTrack.track[keyAudioTrackName],
-                                          audioTrack.codec[keyAudioCodecName],
-                                          audioTrack.mixdown[keyAudioMixdownName],
-                                          audioTrack.sampleRate[keyAudioSampleRateName],
-                                          audioTrack.bitRate[keyAudioBitrateName],
-                                          (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
-                                          (0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
+                const char *codecName = hb_audio_encoder_get_name(audioTrack.encoder);
+                const char *mixdownName = hb_mixdown_get_name(audioTrack.mixdown);
+                const char *sampleRateName = audioTrack.sampleRate ? hb_audio_samplerate_get_name(audioTrack.sampleRate) : "Auto";
+
+                audioCodecSummary = [NSString stringWithFormat: @"%@", @(codecName)];
+                NSString *detailString = [NSString stringWithFormat: @"%@ Encoder: %@, Mixdown: %@, SampleRate: %@ khz, Bitrate: %d kbps, DRC: %@, Gain: %@",
+                                          self.audio.sourceTracks[audioTrack.sourceTrackIdx][keyAudioTrackName],
+                                          @(codecName),
+                                          @(mixdownName),
+                                          @(sampleRateName),
+                                          audioTrack.bitRate,
+                                          (0.0 < audioTrack.drc) ? @(audioTrack.drc) : NSLocalizedString(@"Off", nil),
+                                          (0.0 != audioTrack.gain) ? @(audioTrack.gain) : NSLocalizedString(@"Off", nil)
                                           ];
                 [audioDetails addObject: detailString];
                 // check if we have an Auto Passthru output track
-                if ([audioTrack.codec[keyAudioCodecName] isEqualToString: @"Auto Passthru"])
+                if ([@(codecName) isEqualToString: @"Auto Passthru"])
                 {
                     autoPassthruPresent = YES;
                 }
@@ -459,32 +461,28 @@ static NSDictionary            *shortHeightAttr;
         }
         
         // Ninth Line Subtitle Details
-        int i = 0;
         for (HBSubtitlesTrack *track in self.subtitles.tracks)
         {
             // Ignore the none track.
-            if (i == self.subtitles.tracks.count - 1)
+            if (track.isEnabled)
             {
-                continue;
+                // remember that index 0 of Subtitles can contain "Foreign Audio Search
+                [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
+                [finalString appendString: self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"] withAttributes:detailAttr];
+                if (track.forcedOnly)
+                {
+                    [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
+                }
+                if (track.burnedIn)
+                {
+                    [finalString appendString: @" - Burned In" withAttributes:detailAttr];
+                }
+                if (track.def)
+                {
+                    [finalString appendString: @" - Default" withAttributes:detailAttr];
+                }
+                [finalString appendString:@"\n" withAttributes:detailAttr];
             }
-            
-            /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
-            [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
-            [finalString appendString: self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"] withAttributes:detailAttr];
-            if (track.forcedOnly)
-            {
-                [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
-            }
-            if (track.burnedIn)
-            {
-                [finalString appendString: @" - Burned In" withAttributes:detailAttr];
-            }
-            if (track.def)
-            {
-                [finalString appendString: @" - Default" withAttributes:detailAttr];
-            }
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-            i++;
         }
     }
 

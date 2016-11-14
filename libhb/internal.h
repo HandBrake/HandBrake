@@ -79,23 +79,25 @@ struct hb_buffer_settings_s
 #define HB_FRAME_P        0x10
 #define HB_FRAME_B        0x20
 #define HB_FRAME_BREF     0x40
-#define HB_FRAME_KEY      0x0F
-#define HB_FRAME_REF      0xF0
+#define HB_FRAME_MASK_KEY 0x0F
+#define HB_FRAME_MASK_REF 0xF0
     uint8_t       frametype;
 
 // Picture flags used by filters
-#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
-#define PIC_FLAG_REPEAT_FIRST_FIELD 0x0100
-#endif
 #ifndef PIC_FLAG_TOP_FIELD_FIRST
 #define PIC_FLAG_TOP_FIELD_FIRST    0x0008
 #endif
 #ifndef PIC_FLAG_PROGRESSIVE_FRAME
 #define PIC_FLAG_PROGRESSIVE_FRAME  0x0010
 #endif
+#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
+#define PIC_FLAG_REPEAT_FIRST_FIELD 0x0100
+#endif
 #define PIC_FLAG_REPEAT_FRAME       0x0200
 #define HB_BUF_FLAG_EOF             0x0400
 #define HB_BUF_FLAG_EOS             0x0800
+#define HB_FLAG_FRAMETYPE_KEY       0x1000
+#define HB_FLAG_FRAMETYPE_REF       0x2000
     uint16_t      flags;
 
 #define HB_COMB_NONE  0

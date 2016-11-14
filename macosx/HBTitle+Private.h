@@ -19,11 +19,13 @@
  *  @param title    the libhb title to wrap.
  *  @param featured whether the title is the featured one or not.
  */
-- (instancetype)initWithTitle:(hb_title_t *)title featured:(BOOL)featured;
+- (instancetype)initWithTitle:(hb_title_t *)title handle:(hb_handle_t *)handle featured:(BOOL)featured;
 
 /**
  *  The internal libhb structure.
  */
 @property (nonatomic, readonly) hb_title_t *hb_title;
+
+- (NSDictionary *)jobSettingsWithPreset:(HBPreset *)preset;
 
 @end

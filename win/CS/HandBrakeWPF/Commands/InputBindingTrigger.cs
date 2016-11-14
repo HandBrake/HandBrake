@@ -94,7 +94,7 @@ namespace HandBrakeWPF.Commands
                 return frameworkElement as Window;
 
             var parent = frameworkElement.Parent as FrameworkElement;
-            Debug.Assert(parent != null);
+            Debug.Assert(parent != null, "Null Parent");
 
             return GetWindow(parent);
         }

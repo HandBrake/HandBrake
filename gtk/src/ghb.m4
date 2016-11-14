@@ -1,3 +1,10 @@
+changequote(`[', `]')dnl
+define([filter_output],
+        [ifelse(eval(gtk_version <= 312), 1,
+            [patsubst([patsubst([$1], [margin-start], [margin-left])],
+                      [margin-end], [margin-right])],
+            [$1])])dnl
+filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Tue Jan 14 14:36:08 2014 -->
 <interface>
@@ -238,7 +245,7 @@ conjunction with the "Forced" option.</property>
   </object>
   <object class="GtkAdjustment" id="adjustment24">
     <property name="lower">1</property>
-    <property name="upper">100</property>
+    <property name="upper">999</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
@@ -340,6 +347,7 @@ conjunction with the "Forced" option.</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAboutDialog" id="hb_about">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">About HandBrake</property>
@@ -903,7 +911,7 @@ libx264 authors:
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="margin-right">12</property>
+                <property name="margin-end">12</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
                   <object class="GtkToolbar" id="toolbar1">
@@ -914,7 +922,7 @@ libx264 authors:
                     <child>
                       <object class="GtkToolButton" id="sourcetoolbutton">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                         <property name="is_important">True</property>
@@ -932,7 +940,7 @@ Source</property>
                       <object class="GtkToolButton" id="queue_add">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Add to Queue</property>
                         <property name="is_important">True</property>
@@ -950,7 +958,7 @@ Queue</property>
                       <object class="GtkToolButton" id="queue_start1">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Start Encoding</property>
                         <property name="is_important">True</property>
@@ -968,7 +976,7 @@ Encoding</property>
                       <object class="GtkToolButton" id="queue_pause1">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Pause Encoding</property>
                         <property name="is_important">True</property>
@@ -995,7 +1003,7 @@ Encoding</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_queue">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Queue</property>
                         <property name="is_important">True</property>
@@ -1012,7 +1020,7 @@ Queue</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_preview">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                         <property name="is_important">True</property>
@@ -1029,7 +1037,7 @@ Preview</property>
                     <child>
                       <object class="GtkToggleToolButton" id="show_activity">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                         <property name="is_important">True</property>
@@ -1065,7 +1073,7 @@ Activity</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="spacing">6</property>
-                        <property name="margin-left">6</property>
+                        <property name="margin-start">6</property>
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
@@ -1122,7 +1130,8 @@ Activity</property>
                         <property name="column_spacing">5</property>
                         <property name="hexpand">True</property>
                         <property name="halign">GTK_ALIGN_FILL</property>
-                        <property name="margin-left">6</property>
+                        <property name="margin-start">6</property>
+                        <property name="row-spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
@@ -1179,6 +1188,7 @@ This is often the feature title of a DVD.</property>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="angle">
+                                <property name="width-chars">3</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1360,7 +1370,7 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">&lt;b&gt;Destination&lt;/b&gt;</property>
                         <property name="halign">GTK_ALIGN_START</property>
                         <property name="use_markup">True</property>
-                        <property name="margin-left">6</property>
+                        <property name="margin-start">6</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1374,9 +1384,10 @@ This is often the feature title of a DVD.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
-                        <property name="margin-left">6</property>
+                        <property name="margin-start">6</property>
                         <child>
                           <object class="GtkGrid" id="table4">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin-bottom">6</property>
@@ -1445,6 +1456,7 @@ This is often the feature title of a DVD.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">4</property>
+                            <property name="row-spacing">2</property>
                             <child>
                               <object class="GtkBox" id="hbox3">
                                 <property name="orientation">horizontal</property>
@@ -1558,12 +1570,12 @@ This allows a player to initiate playback before downloading the entire file.</p
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
-                <property name="margin-right">6</property>
+                <property name="margin-end">6</property>
                 <property name="margin-bottom">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="presets_scroll">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="shadow_type">etched-in</property>
                     <property name="margin-top">6</property>
                     <property name="min_content_width">200</property>
@@ -1610,7 +1622,7 @@ This allows a player to initiate playback before downloading the entire file.</p
             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
             <property name="transition-duration">400</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkBox" id="settings_tab">
                 <property name="orientation">vertical</property>
@@ -1625,8 +1637,8 @@ This allows a player to initiate playback before downloading the entire file.</p
                     <property name="stack">SettingsStack</property>
                     <property name="hexpand">True</property>
                     <property name="halign">GTK_ALIGN_FILL</property>
-                    <property name="margin-left">12</property>
-                    <property name="margin-right">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1640,9 +1652,9 @@ This allows a player to initiate playback before downloading the entire file.</p
                     <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
                     <property name="transition-duration">400</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="margin-left">12</property>
-                    <property name="margin-right">12</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
                     <child>
                       <object class="GtkBox" id="summary_tab">
                         <property name="orientation">horizontal</property>
@@ -1658,7 +1670,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">0</property>
                             <property name="margin-top">10</property>
-                            <property name="margin-left">10</property>
+                            <property name="margin-start">10</property>
                             <child>
                               <object class="GtkFrame" id="frame5">
                                 <property name="visible">True</property>
@@ -1675,7 +1687,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                     <property name="column_homogeneous">True</property>
                                     <property name="margin-top">6</property>
                                     <property name="margin-bottom">2</property>
-                                    <property name="margin-left">12</property>
+                                    <property name="margin-start">12</property>
                                     <child>
                                       <object class="GtkLabel" id="labela5">
                                         <property name="visible">True</property>
@@ -1827,8 +1839,8 @@ This allows a player to initiate playback before downloading the entire file.</p
                                     <property name="column_homogeneous">True</property>
                                     <property name="margin-top">6</property>
                                     <property name="margin-bottom">2</property>
-                                    <property name="margin-left">12</property>
-                                    <property name="margin-right">2</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">2</property>
                                     <child>
                                       <object class="GtkLabel" id="label13">
                                         <property name="visible">True</property>
@@ -1947,8 +1959,8 @@ This allows a player to initiate playback before downloading the entire file.</p
                                     <property name="column_homogeneous">True</property>
                                     <property name="margin-top">6</property>
                                     <property name="margin-bottom">2</property>
-                                    <property name="margin-left">12</property>
-                                    <property name="margin-right">2</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">2</property>
                                     <child>
                                       <object class="GtkLabel" id="label14">
                                         <property name="visible">True</property>
@@ -2063,7 +2075,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="margin-top">12</property>
-                            <property name="margin-right">12</property>
+                            <property name="margin-end">12</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
                               <object class="GtkImage" id="preview_button_image">
@@ -2073,8 +2085,8 @@ This allows a player to initiate playback before downloading the entire file.</p
                                 <property name="can_focus">False</property>
                                 <property name="valign">end</property>
                                 <property name="margin-bottom">4</property>
-                                <property name="margin-left">4</property>
-                                <property name="margin-right">4</property>
+                                <property name="margin-start">4</property>
+                                <property name="margin-end">4</property>
                                 <property name="pixel_size">128</property>
                                 <property name="icon_name">hb-icon</property>
                                 <signal name="size-allocate" handler="preview_button_size_allocate_cb" swapped="no"/>
@@ -2148,14 +2160,14 @@ This allows a player to initiate playback before downloading the entire file.</p
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin-top">16</property>
-                        <property name="margin-left">16</property>
+                        <property name="margin-start">16</property>
                         <property name="spacing">16</property>
                         <child>
                           <object class="GtkBox" id="hbox75">
                             <property name="orientation">horizontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">16</property>
+                            <property name="spacing">32</property>
                             <child>
                               <object class="GtkFrame" id="Cropping2">
                                 <property name="visible">True</property>
@@ -2171,94 +2183,12 @@ This allows a player to initiate playback before downloading the entire file.</p
                                     <property name="margin-top">6</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
-                                      <object class="GtkGrid" id="table2">
+                                      <object class="GtkGrid" id="crop_grid">
+                                        <property name="row-spacing">4</property>
+                                        <property name="column-spacing">0</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <child>
-                                          <object class="GtkSpinButton" id="PictureLeftCrop">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Left Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
-                                            <property name="adjustment">adjustment13</property>
-                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="left_attach">0</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="PictureTopCrop">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Top Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
-                                            <property name="adjustment">adjustment14</property>
-                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">0</property>
-                                            <property name="left_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="PictureBottomCrop">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Bottom Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
-                                            <property name="adjustment">adjustment15</property>
-                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">2</property>
-                                            <property name="left_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="PictureRightCrop">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_text" translatable="yes">Right Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
-                                            <property name="adjustment">adjustment16</property>
-                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="left_attach">2</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
                                         <child>
                                           <object class="GtkCheckButton" id="PictureAutoCrop">
                                             <property name="label" translatable="yes">Auto Crop</property>
@@ -2272,7 +2202,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="top_attach">3</property>
+                                            <property name="top_attach">0</property>
                                             <property name="left_attach">0</property>
                                             <property name="width">2</property>
                                             <property name="height">1</property>
@@ -2294,26 +2224,88 @@ the required multiple.</property>
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="top_attach">4</property>
+                                            <property name="top_attach">1</property>
                                             <property name="left_attach">0</property>
                                             <property name="width">2</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="hbox78">
-                                        <property name="orientation">horizontal</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkSpinButton" id="PictureLeftCrop">
+                                            <property name="width-chars">7</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_text" translatable="yes">Left Crop</property>
+                                            <property name="primary_icon_activatable">False</property>
+                                            <property name="secondary_icon_activatable">False</property>
+                                            <property name="adjustment">adjustment13</property>
+                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinButton" id="PictureTopCrop">
+                                            <property name="width-chars">7</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_text" translatable="yes">Top Crop</property>
+                                            <property name="primary_icon_activatable">False</property>
+                                            <property name="secondary_icon_activatable">False</property>
+                                            <property name="adjustment">adjustment14</property>
+                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinButton" id="PictureBottomCrop">
+                                            <property name="width-chars">7</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_text" translatable="yes">Bottom Crop</property>
+                                            <property name="primary_icon_activatable">False</property>
+                                            <property name="secondary_icon_activatable">False</property>
+                                            <property name="adjustment">adjustment15</property>
+                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">3</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinButton" id="PictureRightCrop">
+                                            <property name="width-chars">7</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_text" translatable="yes">Right Crop</property>
+                                            <property name="primary_icon_activatable">False</property>
+                                            <property name="secondary_icon_activatable">False</property>
+                                            <property name="adjustment">adjustment16</property>
+                                            <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">2</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
                                         <child>
                                           <object class="GtkLabel" id="label97">
                                             <property name="visible">True</property>
@@ -2323,9 +2315,10 @@ the required multiple.</property>
                                             <property name="label" translatable="yes">Crop Dimensions:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2333,19 +2326,21 @@ the required multiple.</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">--</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
+                                        <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2382,27 +2377,49 @@ the required multiple.</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="spacing">2</property>
                                     <child>
-                                      <object class="GtkBox" id="hbox51">
-                                        <property name="orientation">horizontal</property>
+                                      <object class="GtkGrid" id="scale_grid">
+                                        <property name="row-spacing">2</property>
+                                        <property name="column-spacing">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">4</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="autoscale">
+                                            <property name="label" translatable="yes">Optimal for source</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
+    This will be the resolution that most closely matches the source resolution after cropping.</property>
+                                            <property name="halign">start</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">2</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
                                         <child>
                                           <object class="GtkLabel" id="label27">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="label" translatable="yes">width:</property>
+                                            <property name="label" translatable="yes">Width:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_width">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2415,9 +2432,10 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <signal name="value-changed" handler="scale_width_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2425,16 +2443,18 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="label" translatable="yes">height:</property>
+                                            <property name="label" translatable="yes">Height:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">2</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_height">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2446,89 +2466,10 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <signal name="value-changed" handler="scale_height_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">3</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="hbox71">
-                                        <property name="orientation">horizontal</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <child>
-                                          <object class="GtkCheckButton" id="autoscale">
-                                            <property name="label" translatable="yes">Optimal for source</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
-This will be the resolution that most closely matches the source resolution after cropping.</property>
-                                            <property name="halign">start</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="hbox20">
-                                        <property name="orientation">horizontal</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">5</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label96">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label" translatable="yes">Anamorphic:</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="PicturePAR">
-                                            <property name="visible">True</property>
-                                            <property name="valign">GTK_ALIGN_CENTER</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
-&lt;small&gt;&lt;tt&gt;
-None   - Force pixel aspect ratio to 1:1.
-Loose  - Align dimensions to chosen 'Alignment' value
-         and pick pixel aspect ratio that preserves the
-         original display aspect ratio
-Strict - Keep original source dimensions and pixel
-         aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
-                                            <signal name="changed" handler="scale_changed_cb" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -2539,12 +2480,52 @@ Strict - Keep original source dimensions and pixel
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox" id="hbox72">
-                                        <property name="orientation">horizontal</property>
+                                      <object class="GtkGrid" id="ana_grid">
+                                        <property name="row-spacing">2</property>
+                                        <property name="column-spacing">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">5</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <child>
+                                          <object class="GtkLabel" id="label96">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes">Anamorphic:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBox" id="PicturePAR">
+                                            <property name="visible">True</property>
+                                            <property name="valign">GTK_ALIGN_CENTER</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
+&lt;small&gt;&lt;tt&gt;
+None      - Force pixel aspect ratio to 1:1.
+Loose     - Use a pixel aspect ratio that is as
+            close as possible to the source video pixel
+            aspect ratio while preserving the original
+            display aspect ratio
+Automatic - Use a pixel aspect ratio that maximizes
+            storage resolution while preserving the original
+            display aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
+                                            <signal name="changed" handler="scale_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
                                         <child>
                                           <object class="GtkLabel" id="label95">
                                             <property name="visible">True</property>
@@ -2553,9 +2534,10 @@ Strict - Keep original source dimensions and pixel
                                             <property name="label" translatable="yes">Alignment:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2571,16 +2553,17 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <signal name="changed" handler="scale_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">3</property>
+                                        <property name="position">4</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2617,27 +2600,50 @@ You should use 2 unless you experience compatibility issues.</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="spacing">2</property>
                                     <child>
-                                      <object class="GtkBox" id="hbox52">
-                                        <property name="orientation">horizontal</property>
+                                      <object class="GtkGrid" id="display_grid">
+                                        <property name="row-spacing">2</property>
+                                        <property name="column-spacing">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">4</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="PictureKeepRatio">
+                                            <property name="label" translatable="yes">Keep Aspect</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip_text" translatable="yes">If enabled, the original display aspect of the source will be maintained.</property>
+                                            <property name="halign">start</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">2</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
                                         <child>
                                           <object class="GtkLabel" id="label91">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="label" translatable="yes">width:</property>
+                                            <property name="label" translatable="yes">Width:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayWidth">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2649,9 +2655,10 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <signal name="value-changed" handler="display_width_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2659,16 +2666,18 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="label" translatable="yes">height:</property>
+                                            <property name="label" translatable="yes">Height:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">2</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayHeight">
+                                            <property name="width-chars">7</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2678,9 +2687,10 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <signal name="value-changed" handler="display_height_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">3</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -2691,27 +2701,31 @@ You should use 2 unless you experience compatibility issues.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox" id="hbox79">
-                                        <property name="orientation">horizontal</property>
+                                      <object class="GtkGrid" id="aspect_grid">
+                                        <property name="row-spacing">2</property>
+                                        <property name="column-spacing">4</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">4</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">start</property>
                                         <child>
                                           <object class="GtkLabel" id="label98">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">Pixel Aspect:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARWidth">
+                                            <property name="width-chars">8</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2726,9 +2740,10 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2739,13 +2754,15 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <property name="label" translatable="yes">:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">2</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">2</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARHeight">
+                                            <property name="width-chars">8</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2758,44 +2775,12 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">3</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="left_attach">3</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="PictureKeepRatio">
-                                        <property name="label" translatable="yes">Keep Aspect</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip_text" translatable="yes">If enabled, the original display aspect of the source will be maintained.</property>
-                                        <property name="halign">start</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="hbox53">
-                                        <property name="orientation">horizontal</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="spacing">4</property>
                                         <child>
                                           <object class="GtkLabel" id="label93">
                                             <property name="width_request">100</property>
@@ -2806,9 +2791,10 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <property name="label" translatable="yes">Display Aspect:</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2816,19 +2802,21 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="halign">start</property>
                                             <property name="label" translatable="yes">--:--</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">3</property>
+                                        <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2863,17 +2851,26 @@ Players will scale the image in order to achieve the specified aspect.</property
                       </packing>
                     </child>
                     <child>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                       <object class="GtkGrid" id="filter_tab">
+]), filter_output([
+                      <object class="GtkFlowBox" id="filter_tab">
+                        <property name="orientation">horizontal</property>
+                        <property name="selection-mode">none</property>
+]))dnl
+filter_output([
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="column-spacing">4</property>
                         <property name="row-spacing">32</property>
                         <property name="margin-top">16</property>
-                        <property name="margin-left">16</property>
+                        <property name="margin-start">16</property>
                         <property name="valign">start</property>
                         <property name="halign">fill</property>
                         <child>
                           <object class="GtkGrid" id="table10">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -2931,15 +2928,20 @@ JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                               </packing>
                             </child>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">0</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="comb_detect_grid">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -2999,15 +3001,20 @@ Block Thresh: Block Width: Block Height</property>
                               </packing>
                             </child>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">0</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table14">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3018,7 +3025,7 @@ Block Thresh: Block Width: Block Height</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Deinterlace Filter:</property>
+                                <property name="label" translatable="yes">Deinterlace:</property>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -3104,15 +3111,20 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                               </packing>
                             </child>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">0</property>
                             <property name="left_attach">2</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table90">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3153,15 +3165,20 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
                               </packing>
                             </child>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
                         </child>
                         <child>
                           <object class="GtkGrid" id="table1">
+                            <property name="row-spacing">2</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_spacing">5</property>
@@ -3191,7 +3208,7 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
                                 <property name="tooltip_text" translatable="yes">Denoise filtering reduces or removes the appearance of noise and grain.
 Film grain and other types of high frequency noise are difficult to compress.
 Using this filter on such sources can result in smaller file sizes.</property>
-                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="denoise_filter_changed_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -3285,12 +3302,67 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                               </packing>
                             </child>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
                             <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="table16">
+                            <property name="row-spacing">2</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">5</property>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkLabel" id="PictureRotateLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Rotate Filter:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="PictureRotate">
+                                <property name="valign">GTK_ALIGN_CENTER</property>
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip_text" translatable="yes">Rotate the video clockwise in 90 degree increments.</property>
+                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                          </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="left_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+]))dnl
+filter_output([
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="VideoGrayScale">
@@ -3305,12 +3377,16 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                           </object>
+])dnl
+ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">2</property>
+                            <property name="left_attach">3</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+]))dnl
+filter_output([
                         </child>
                       </object>
                       <packing>
@@ -3339,9 +3415,9 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <property name="margin-top">12</property>
-                                <property name="margin-left">24</property>
+                                <property name="margin-start">24</property>
                                 <child>
                                   <object class="GtkLabel" id="label46">
                                     <property name="visible">True</property>
@@ -3482,9 +3558,9 @@ VFR is not compatible with some players.</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <property name="margin-top">12</property>
-                                <property name="margin-right">24</property>
+                                <property name="margin-end">24</property>
                                 <child>
                                   <object class="GtkScale" id="VideoQualitySlider">
                                     <property name="visible">True</property>
@@ -3657,8 +3733,8 @@ to make bitrate allocation decisions.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="margin-left">24</property>
-                            <property name="margin-right">24</property>
+                            <property name="margin-start">24</property>
+                            <property name="margin-end">24</property>
                             <child>
                               <object class="GtkCheckButton" id="x264UseAdvancedOptions">
                                 <property name="label" translatable="yes">Use Advanced Options</property>
@@ -3686,7 +3762,7 @@ Use at your own risk!</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
-                                <property name="row_spacing">2</property>
+                                <property name="row-spacing">2</property>
                                 <child>
                                   <object class="GtkLabel" id="VideoPresetLabel">
                                     <property name="visible">True</property>
@@ -3775,7 +3851,7 @@ preset but before all other parameters.</property>
 
 Set this if your device is struggling to play the output (dropped frames).</property>
                                     <property name="halign">start</property>
-                                    <property name="margin_left">2</property>
+                                    <property name="margin-start">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                   </object>
@@ -3800,7 +3876,7 @@ This is useful for broadcast of live streams.
 Since HandBrake is not suitable for live stream broadcast purposes,
 this setting is of little value here.</property>
                                     <property name="halign">start</property>
-                                    <property name="margin_left">2</property>
+                                    <property name="margin-start">2</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="video_setting_changed_cb" swapped="no"/>
                                   </object>
@@ -3906,7 +3982,7 @@ Overrides all other settings.</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="VideoOptionExtraWindow">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="shadow_type">etched-in</property>
                                         <property name="hexpand">True</property>
                                         <child>
@@ -3963,8 +4039,8 @@ Colon separated list of encoder options.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
                         <property name="margin_top">12</property>
                         <property name="margin_bottom">12</property>
                         <property name="hexpand">True</property>
@@ -3984,7 +4060,7 @@ Colon separated list of encoder options.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <child>
                                       <object class="GtkLabel" id="label4">
                                         <property name="visible">True</property>
@@ -4025,21 +4101,21 @@ Colon separated list of encoder options.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">GTK_ALIGN_END</property>
                                     <property name="margin_top">6</property>
                                     <property name="margin_bottom">6</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="scrolledwindow10">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="min_content_height">84</property>
                                         <child>
                                           <object class="GtkListBox" id="audio_avail_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4053,13 +4129,13 @@ Colon separated list of encoder options.</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="scrolledwindow11">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
                                           <object class="GtkListBox" id="audio_selected_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4165,14 +4241,14 @@ All other secondary audio output tracks will be encoded with first encoder only.
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
-                                <property name="margin_left">6</property>
+                                <property name="margin-start">6</property>
                                 <property name="spacing">2</property>
                                 <child>
                                   <object class="GtkGrid" id="grid4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">end</property>
                                     <child>
                                       <object class="GtkLabel" id="labela3">
@@ -4524,13 +4600,13 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow12">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="hexpand">True</property>
                             <child>
                               <object class="GtkListBox" id="audio_list_default">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="selection_mode">none</property>
                                 <property name="activate_on_single_click">False</property>
@@ -4564,8 +4640,8 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                             <property name="spacing">2</property>
                             <property name="margin-top">6</property>
                             <property name="margin-bottom">6</property>
-                            <property name="margin-left">6</property>
-                            <property name="margin-right">6</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
                             <child>
                               <object class="GtkToolbar" id="audio_toolbar">
                                 <property name="visible">True</property>
@@ -4575,7 +4651,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_add">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add</property>
                                     <property name="icon_name">list-add</property>
@@ -4590,7 +4666,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_add_all">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add All</property>
                                     <property name="icon_name">list-add</property>
@@ -4605,7 +4681,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                   <object class="GtkToolButton" id="audio_reset">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Reload Defaults</property>
@@ -4627,7 +4703,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
@@ -4668,8 +4744,8 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
                         <property name="margin_top">12</property>
                         <property name="margin_bottom">12</property>
                         <property name="hexpand">True</property>
@@ -4689,7 +4765,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <child>
                                       <object class="GtkLabel" id="sub_label4">
                                         <property name="visible">True</property>
@@ -4730,21 +4806,21 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="column_spacing">5</property>
-                                    <property name="row_spacing">2</property>
+                                    <property name="row-spacing">2</property>
                                     <property name="halign">GTK_ALIGN_END</property>
                                     <property name="margin_top">6</property>
                                     <property name="margin_bottom">6</property>
                                     <child>
                                       <object class="GtkScrolledWindow" id="sub_scrolledwindow10">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="min_content_height">108</property>
                                         <child>
                                           <object class="GtkListBox" id="subtitle_avail_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4758,13 +4834,13 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <child>
                                       <object class="GtkScrolledWindow" id="sub_scrolledwindow11">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
                                           <object class="GtkListBox" id="subtitle_selected_lang">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
+                                            <property name="can_focus">True</property>
                                             <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select subtitles for.
 
 The first language in this list is your "preferred" language and will be used
@@ -5063,8 +5139,8 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <property name="spacing">2</property>
                             <property name="margin-top">6</property>
                             <property name="margin-bottom">6</property>
-                            <property name="margin-left">6</property>
-                            <property name="margin-right">6</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">6</property>
                             <child>
                               <object class="GtkToolbar" id="subtitle_toolbar">
                                 <property name="visible">True</property>
@@ -5074,7 +5150,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add</property>
                                     <property name="icon_name">list-add</property>
@@ -5089,7 +5165,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add_all">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Add All</property>
                                     <property name="icon_name">list-add</property>
@@ -5104,7 +5180,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                                   <object class="GtkToolButton" id="subtitle_add_fas">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Foreign Audio Search</property>
                                     <property name="icon_name">list-add</property>
@@ -5121,7 +5197,7 @@ segments of the audio that are in a foreign language.</property>
                                   <object class="GtkToolButton" id="subtitle_reset">
                                     <property name="visible">True</property>
                                     <property name="sensitive">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
                                     <property name="label" translatable="yes">Reload Defaults</property>
@@ -5143,7 +5219,7 @@ segments of the audio that are in a foreign language.</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <child>
@@ -5217,11 +5293,11 @@ segments of the audio that are in a foreign language.</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="column_spacing">4</property>
-                                            <property name="row_spacing">2</property>
+                                            <property name="row-spacing">2</property>
                                             <property name="margin-top">6</property>
                                             <property name="margin-bottom">2</property>
-                                            <property name="margin-left">12</property>
-                                            <property name="margin-right">2</property>
+                                            <property name="margin-start">12</property>
+                                            <property name="margin-end">2</property>
                                             <child>
                                               <object class="GtkLabel" id="label49">
                                                 <property name="visible">True</property>
@@ -5469,14 +5545,14 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="margin_left">12</property>
+                                            <property name="margin-start">12</property>
                                             <child>
                                               <object class="GtkGrid" id="table5">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
-                                                <property name="row_spacing">2</property>
+                                                <property name="row-spacing">2</property>
                                                 <child>
                                                   <object class="GtkLabel" id="label55">
                                                     <property name="visible">True</property>
@@ -5679,8 +5755,8 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
-                                                <property name="row_spacing">2</property>
-                                                <property name="margin_left">6</property>
+                                                <property name="row-spacing">2</property>
+                                                <property name="margin-start">6</property>
                                                 <child>
                                                   <placeholder/>
                                                 </child>
@@ -5802,14 +5878,15 @@ Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                           <object class="GtkBox" id="vbox27">
                                             <property name="margin-top">6</property>
                                             <property name="margin-bottom">2</property>
-                                            <property name="margin-left">12</property>
-                                            <property name="margin-right">2</property>
+                                            <property name="margin-start">12</property>
+                                            <property name="margin-end">2</property>
                                             <property name="orientation">vertical</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <child>
                                               <object class="GtkGrid" id="table9">
+                                                <property name="row-spacing">2</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -6088,10 +6165,10 @@ where you are having trouble keeping fine noise.</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="scrolledwindow6">
                                     <property name="height_request">40</property>
-                                    <property name="margin_left">12</property>
-                                    <property name="margin_right">12</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">12</property>
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="shadow_type">etched-in</property>
                                     <child>
                                       <object class="GtkTextView" id="x264Option">
@@ -6188,7 +6265,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow3">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
                               <object class="GtkTreeView" id="chapters_list">
@@ -6217,10 +6294,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     </child>
                     <child>
                       <object class="GtkGrid" id="metadata_tab">
+                        <property name="row-spacing">2</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">24</property>
-                        <property name="margin-right">24</property>
+                        <property name="margin-start">24</property>
+                        <property name="margin-end">24</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -6248,7 +6326,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6285,7 +6363,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6322,7 +6400,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6359,7 +6437,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6396,7 +6474,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6433,7 +6511,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6470,7 +6548,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="hexpand">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
-                            <property name="activates_default">True</property>
+                            <property name="activates_default">False</property>
                             <property name="width_chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
@@ -6504,7 +6582,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                           <object class="GtkScrolledWindow" id="MetaLongDescriptionScroll">
                             <property name="height_request">40</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="shadow_type">etched-in</property>
@@ -6570,7 +6648,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       <object class="GtkToolButton" id="queue_edit">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Edit</property>
@@ -6586,7 +6664,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       <object class="GtkToolButton" id="queue_reload">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Reload</property>
@@ -6604,7 +6682,7 @@ Resets the queue job to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_reload_all">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Reload All</property>
@@ -6622,7 +6700,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_delete_all">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Delete All</property>
@@ -6639,7 +6717,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                       <object class="GtkToolButton" id="queue_save">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Save Queue</property>
@@ -6657,7 +6735,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                       <object class="GtkToolButton" id="queue_open">
                         <property name="visible">True</property>
                         <property name="sensitive">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="is_important">True</property>
                         <property name="label" translatable="yes">Load Queue File</property>
@@ -6680,7 +6758,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkTreeView" id="queue_list">
@@ -6728,8 +6806,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <property name="valign">end</property>
             <property name="margin-top">4</property>
             <property name="margin-bottom">4</property>
-            <property name="margin-left">12</property>
-            <property name="margin-right">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <property name="spacing">4</property>
             <child>
               <object class="GtkLabel" id="work_status">
@@ -6770,8 +6848,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="margin-bottom">6</property>
-            <property name="margin-left">12</property>
-            <property name="margin-right">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -6796,6 +6874,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="titla_add_multiple_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -6847,21 +6926,22 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
           <object class="GtkGrid" id="title_add_multiple_grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">12</property>
-            <property name="margin_right">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <property name="margin_top">12</property>
             <property name="column_spacing">6</property>
+            <property name="row-spacing">2</property>
             <child>
               <object class="GtkScrolledWindow" id="title_add_multiple_scrolledwindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="min_content_height">400</property>
                 <child>
                   <object class="GtkListBox" id="title_add_multiple_list">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
                     <property name="hexpand">True</property>
                     <property name="selection_mode">none</property>
@@ -6993,6 +7073,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
     </action-widgets>
   </object>
   <object class="GtkDialog" id="prefs_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
@@ -7080,9 +7161,9 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <child>
               <object class="GtkNotebook" id="PrefsNotebook">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="show_border">False</property>
-                <property name="margin-left">12</property>
+                <property name="margin-start">12</property>
                 <child>
                   <object class="GtkBox" id="vbox42">
                     <property name="orientation">vertical</property>
@@ -7096,7 +7177,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="spacing">4</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkComboBox" id="check_updates">
                             <property name="valign">GTK_ALIGN_CENTER</property>
@@ -7138,8 +7219,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="spacing">4</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
-                        <property name="margin-right">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
                         <child>
                           <object class="GtkComboBox" id="WhenComplete">
                             <property name="visible">True</property>
@@ -7180,7 +7261,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="can_focus">False</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkCheckButton" id="auto_name">
                             <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
@@ -7203,8 +7284,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">4</property>
-                            <property name="margin-left">18</property>
-                            <property name="margin-right">8</property>
+                            <property name="margin-start">18</property>
+                            <property name="margin-end">8</property>
                             <child>
                               <object class="GtkLabel" id="auto_name_template_label">
                                 <property name="visible">True</property>
@@ -7277,12 +7358,13 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="spacing">4</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkSpinButton" id="preview_count">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="max_length">2</property>
+                            <property name="width-chars">6</property>
                             <property name="invisible_char">●</property>
                             <property name="shadow_type">none</property>
                             <property name="primary_icon_activatable">False</property>
@@ -7325,12 +7407,13 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="spacing">4</property>
                         <property name="margin-top">6</property>
                         <property name="margin-bottom">6</property>
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <object class="GtkSpinButton" id="MinTitleDuration">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="max_length">4</property>
+                            <property name="max-length">4</property>
+                            <property name="width-chars">6</property>
                             <property name="invisible_char">●</property>
                             <property name="shadow_type">none</property>
                             <property name="primary_icon_activatable">False</property>
@@ -7384,13 +7467,13 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <property name="can_focus">False</property>
                     <property name="margin-top">6</property>
                     <property name="margin-bottom">6</property>
-                    <property name="margin-left">12</property>
+                    <property name="margin-start">12</property>
                     <child>
                       <object class="GtkGrid" id="AdvancedPrefsTable">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="row_spacing">2</property>
+                        <property name="row-spacing">2</property>
                         <child>
                           <object class="GtkBox" id="hbox6">
                             <property name="orientation">horizontal</property>
@@ -7454,6 +7537,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">2</property>
                             <child>
                               <object class="GtkCheckButton" id="EncodeLogLocation">
                                 <property name="label" translatable="yes">Put individual encode logs in same location as movie</property>
@@ -7476,7 +7560,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">4</property>
-                                <property name="margin-left">21</property>
+                                <property name="margin-start">21</property>
                                 <child>
                                   <object class="GtkComboBox" id="LoggingLevel">
                                     <property name="valign">GTK_ALIGN_CENTER</property>
@@ -7517,7 +7601,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="spacing">4</property>
-                                <property name="margin-left">21</property>
+                                <property name="margin-start">21</property>
                                 <child>
                                   <object class="GtkComboBox" id="LogLongevity">
                                     <property name="valign">GTK_ALIGN_CENTER</property>
@@ -7642,6 +7726,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     </child>
                     <child>
                       <object class="GtkGrid" id="hidden_prefs">
+                        <property name="row-spacing">2</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -7721,6 +7806,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
     </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_new_folder_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
@@ -7841,8 +7927,8 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                   <object class="GtkTextView" id="FolderDescription">
                     <property name="margin-top">6</property>
                     <property name="margin-bottom">4</property>
-                    <property name="margin-left">12</property>
-                    <property name="margin-right">4</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">4</property>
                     <property name="height_request">60</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -7883,6 +7969,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
     </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
@@ -7995,6 +8082,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             <child>
               <object class="GtkGrid" id="PicturePresetBox">
                 <property name="visible">True</property>
+                <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
@@ -8051,6 +8139,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="PictureWidth">
+                    <property name="width-chars">7</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8092,6 +8181,7 @@ Setting this to 0 means there is no maximum width.</property>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="PictureHeight">
+                    <property name="width-chars">7</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8129,8 +8219,8 @@ Setting this to 0 means there is no maximum height.</property>
                   <object class="GtkTextView" id="PresetDescription">
                     <property name="margin-top">6</property>
                     <property name="margin-bottom">4</property>
-                    <property name="margin-left">12</property>
-                    <property name="margin-right">4</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">4</property>
                     <property name="height_request">60</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -8219,8 +8309,8 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="can_focus">False</property>
                 <property name="margin-top">5</property>
                 <property name="margin-bottom">5</property>
-                <property name="margin-left">10</property>
-                <property name="margin-right">10</property>
+                <property name="margin-start">10</property>
+                <property name="margin-end">10</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
                   <object class="GtkScale" id="preview_frame">
@@ -8341,6 +8431,7 @@ Setting this to 0 means there is no maximum height.</property>
                         </child>
                         <child>
                           <object class="GtkSpinButton" id="live_duration">
+                            <property name="width-chars">7</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Set the duration of the live preview in seconds.</property>
@@ -8420,6 +8511,42 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="create_folders">False</property>
     <property name="local_only">False</property>
     <property name="transient_for">hb_window</property>
+])dnl
+ifelse(eval(gtk_version >= 314), 1, filter_output([
+    <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
+    <child type="action">
+      <object class="GtkButton" id="source_cancel">
+        <property name="label" translatable="yes">_Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">False</property>
+        <property name="has_default">False</property>
+        <property name="receives_default">False</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="source_ok">
+        <property name="label" translatable="yes">_Open</property>
+        <property name="image">gtk-ok</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="has_default">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox9">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+]), eval(gtk_version >= 312), 1, filter_output([
+    <property name="use-header-bar">0</property>
+]))dnl
+ifelse(eval(gtk_version <= 312), 1, filter_output([
     <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox9">
@@ -8434,6 +8561,7 @@ Setting this to 0 means there is no maximum height.</property>
             <child>
               <object class="GtkButton" id="source_cancel">
                 <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
                 <property name="image">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8450,6 +8578,7 @@ Setting this to 0 means there is no maximum height.</property>
             <child>
               <object class="GtkButton" id="source_ok">
                 <property name="label" translatable="yes">_Open</property>
+                <property name="use-underline">True</property>
                 <property name="image">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8471,6 +8600,8 @@ Setting this to 0 means there is no maximum height.</property>
             <property name="position">0</property>
           </packing>
         </child>
+]))dnl
+filter_output([
         <child>
           <object class="GtkBox" id="source_extra">
             <property name="orientation">vertical</property>
@@ -8496,6 +8627,7 @@ Setting this to 0 means there is no maximum height.</property>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="single_title">
+                    <property name="width-chars">5</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
@@ -8706,6 +8838,7 @@ Setting this to 0 means there is no maximum height.</property>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="subtitle_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
@@ -8818,6 +8951,7 @@ Setting this to 0 means there is no maximum height.</property>
             <child>
               <object class="GtkGrid" id="subtitle_srt_grid">
                 <property name="visible">True</property>
+                <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="column_spacing">4</property>
@@ -8925,7 +9059,7 @@ The source's character code is needed in order to perform this translation.</pro
                 <child>
                   <object class="GtkFileChooserButton" id="SrtFile">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">Select the SRT file to import.</property>
                     <property name="local_only">False</property>
                     <property name="hexpand">True</property>
@@ -8941,6 +9075,7 @@ The source's character code is needed in order to perform this translation.</pro
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="SrtOffset">
+                    <property name="width-chars">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9097,6 +9232,7 @@ in your output.</property>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="audio_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
@@ -9153,6 +9289,7 @@ in your output.</property>
         </child>
         <child>
           <object class="GtkGrid" id="audio_dialog_grid1">
+            <property name="row-spacing">2</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="column_spacing">5</property>
@@ -9234,6 +9371,7 @@ Players may use this in the audio selection list.</property>
         </child>
         <child>
           <object class="GtkGrid" id="audio_dialog_grid2">
+            <property name="row-spacing">2</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">24</property>
@@ -9422,7 +9560,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <child>
                       <object class="GtkScaleButton" id="AudioTrackQualityX">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="valign">GTK_ALIGN_CENTER</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9516,7 +9654,7 @@ weather-clear</property>
                 <child>
                   <object class="GtkScaleButton" id="AudioTrackGainSlider">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9567,7 +9705,7 @@ audio-volume-medium</property>
                 <child>
                   <object class="GtkScaleButton" id="AudioTrackDRCSlider">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="receives_default">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -9624,6 +9762,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
     </action-widgets>
   </object>
   <object class="GtkDialog" id="update_dialog">
+    <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="modal">True</property>
@@ -9728,8 +9867,8 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-left">10</property>
-                    <property name="margin-right">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
                     <property name="margin-top">5</property>
                     <property name="margin-bottom">5</property>
                     <property name="label" translatable="yes">&lt;b&gt;A new version of HandBrake is available!&lt;/b&gt;</property>
@@ -9746,8 +9885,8 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-left">10</property>
-                    <property name="margin-right">10</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
                     <property name="margin-top">5</property>
                     <property name="margin-bottom">5</property>
                     <property name="label" translatable="yes">HandBrake xxx is now available (you have yyy).</property>
@@ -9766,10 +9905,10 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="shadow_type">etched-out</property>
                     <child>
                       <object class="GtkScrolledWindow" id="update_scroll">
-                        <property name="margin-left">12</property>
+                        <property name="margin-start">12</property>
                         <property name="halign">start</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -9817,3 +9956,4 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
     <property name="page_increment">1</property>
   </object>
 </interface>
+])dnl

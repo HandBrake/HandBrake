@@ -9,13 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class HBTitle;
 @class HBSubtitlesTrack;
 @class HBSubtitlesDefaults;
 
-@interface HBSubtitles : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
-
-- (instancetype)initWithTitle:(HBTitle *)title;
+@interface HBSubtitles : NSObject <NSSecureCoding, NSCopying>
 
 - (void)addAllTracks;
 - (void)removeAll;
@@ -23,15 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addSrtTrackFromURL:(NSURL *)srtURL;
 
-@property (nonatomic, readonly) NSMutableArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBSubtitlesTrack *> *tracks;
 
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaults *defaults;
 
-/**
- *  For internal use
- */
-@property (nonatomic, readwrite) int container;
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end

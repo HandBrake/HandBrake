@@ -20,6 +20,9 @@ namespace HandBrakeWPF.Converters
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Services.Presets.Model;
 
+    /// <summary>
+    /// The presets menu converter.
+    /// </summary>
     public class PresetsMenuConverter : IValueConverter
     {
         /// <summary>Converts a value. </summary>
@@ -32,7 +35,7 @@ namespace HandBrakeWPF.Converters
         {
             IEnumerable<Preset> presets = value as IEnumerable<Preset>;
 
-            if (presets  ==null)
+            if (presets == null)
             {
                 return null;
             }

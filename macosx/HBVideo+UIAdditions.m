@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideo+UIAdditions.h"
-#import "HBJob.h"
+#import "HBJob+Private.h"
 #include "hb.h"
 
 @implementation HBVideo (UIAdditions)
@@ -114,7 +114,8 @@
     {
         return @"RF:";
     }
-    else if (self.encoder == HB_VCODEC_FFMPEG_VP8)
+    else if (self.encoder == HB_VCODEC_FFMPEG_VP8 ||
+             self.encoder == HB_VCODEC_FFMPEG_VP9)
     {
         return @"CQ:";
     }

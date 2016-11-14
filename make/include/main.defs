@@ -50,11 +50,23 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/libass
     MODULES += contrib/libogg
     MODULES += contrib/libvorbis
+    MODULES += contrib/libopus
     MODULES += contrib/libtheora
     MODULES += contrib/libsamplerate
     MODULES += contrib/lame
     MODULES += contrib/x264
     MODULES += contrib/jansson
+endif
+
+ifeq (1,$(FEATURE.flatpak))
+    MODULES += contrib/lame
+    MODULES += contrib/jansson
+    MODULES += contrib/x264
+    MODULES += contrib/harfbuzz
+    MODULES += contrib/fribidi
+    MODULES += contrib/freetype
+    MODULES += contrib/libass
+    MODULES += contrib/yasm
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))

@@ -3,16 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties" x:Name="sourcePanel">
 
-    <Grid VerticalAlignment="Stretch">
-        
+    <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0" Width="300" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -20,8 +20,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="30" />
@@ -44,67 +46,60 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseVideo}" Margin="0,10,0,0" />
             </StackPanel>
 
-            <!-- Source Type -->
-            <Grid Grid.Row="2" HorizontalAlignment="Left" Margin="20,5,0,0">
+            <!-- Source Types -->
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <!-- Ctrl + R -->
+            <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+                    Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
 
-                <!-- Ctrl + R -->
-                <Button Grid.Row="0"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
-                    Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
-
-                    <StackPanel Orientation="Horizontal" MinWidth="100">
-                        <Image Source="../Views/Images/folder32.png" Width="32" />
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenFolderWIth}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        </StackPanel>
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/folder32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenFolderWIth}" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
-                </Button>
+                </StackPanel>
+            </Button>
 
-                <!--Ctrl + F-->
-                <Button Grid.Row="1"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
-                    Margin="0,0,0,7" Padding="8" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" MinWidth="100">
-                        <Image Source="../Views/Images/File32.png" Width="32" />
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SingleVideoFile}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        </StackPanel>
+            <!--Ctrl + F-->
+            <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+                    Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/File32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SingleVideoFile}" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
-                </Button>
+                </StackPanel>
+            </Button>
 
-                <ListBox Grid.Row="2" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
                                 cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
                                 Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
                                 Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseDisc}">
-                                <StackPanel Orientation="Horizontal" MinWidth="100">
-                                    <Image Source="../Views/Images/Disc.png" Width="32" />
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenDVDBluray}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" MinWidth="100">
+                                <Image Source="../Views/Images/Disc.png" Width="32" />
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                    <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenDVDBluray}" VerticalAlignment="Center" Margin="5,0,0,0" />
                                 </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-                </ListBox>
-            </Grid>
+            </ListBox>
+
 
             <!-- Cancel Window -->
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" Padding="8,2" />
             </StackPanel>
 
-            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
                 <TextBlock>           
                     <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" >Preferences</Hyperlink>
                 </TextBlock>
@@ -119,7 +114,7 @@
             </StackPanel>
 
         </Grid>
-            
+
 
         <StackPanel Grid.Column="1" Background="Black" Opacity="0.5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
     </Grid>

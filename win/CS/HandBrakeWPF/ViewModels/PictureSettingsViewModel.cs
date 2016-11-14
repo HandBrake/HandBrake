@@ -146,7 +146,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Strict, Anamorphic.Loose, Anamorphic.Custom };
+                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
             }
         }
 
@@ -785,6 +785,9 @@ namespace HandBrakeWPF.ViewModels
                     else
                     {
                         this.Task.Width = preset.Task.Width ?? this.MaxWidth;
+
+                        int cropHeight = this.Task.Cropping.Top + this.Task.Cropping.Bottom;
+                        this.Task.Height = (preset.Task.Height ?? this.MaxHeight) - cropHeight;
                     }
 
                     // If our height is too large, let it downscale the width for us by setting the height to the lower value.
@@ -972,9 +975,9 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowDisplaySize = true;
                     this.ShowKeepAR = true;
                     break;
-                case Anamorphic.Strict:
-                    this.WidthControlEnabled = false;
-                    this.HeightControlEnabled = false;
+                case Anamorphic.Automatic:
+                    this.WidthControlEnabled = true;
+                    this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = false;
                     this.ShowModulus = false;
                     this.ShowKeepAR = false;

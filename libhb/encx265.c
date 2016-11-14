@@ -93,6 +93,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     const char * const *profile_names;
 
     pv->job              = job;
+    pv->last_stop        = AV_NOPTS_VALUE;
     pv->chapter_queue    = hb_chapter_queue_init();
     w->private_data      = pv;
 
@@ -260,10 +261,15 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             {
                 goto fail;
             }
-            if (job->pass_id == HB_PASS_ENCODE_1ST && job->fastfirstpass == 0 &&
-                param_parse(pv, param, "slow-firstpass", "1"))
+            if (job->pass_id == HB_PASS_ENCODE_1ST)
             {
-                goto fail;
+                char slowfirstpass[2];
+                snprintf(slowfirstpass, sizeof(slowfirstpass), "%d",
+                         !job->fastfirstpass);
+                if (param_parse(pv, param, "slow-firstpass", slowfirstpass))
+                {
+                    goto fail;
+                }
             }
         }
     }
@@ -383,11 +389,17 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     {
         return NULL;
     }
-
+    buf->s.flags = 0;
     buf->size = 0;
+
     // copy the bitstream data
     for (i = 0; i < nnal; i++)
     {
+        if (HB_HEVC_NALU_KEYFRAME(nal[i].type))
+        {
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
+        }
         memcpy(buf->data + buf->size, nal[i].payload, nal[i].sizeBytes);
         buf->size += nal[i].sizeBytes;
     }
@@ -405,10 +417,9 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     switch (pic_out->sliceType)
     {
         case X265_TYPE_IDR:
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
+            buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             buf->s.frametype = HB_FRAME_IDR;
-            break;
-        case X265_TYPE_I:
-            buf->s.frametype = HB_FRAME_I;
             break;
         case X265_TYPE_P:
             buf->s.frametype = HB_FRAME_P;
@@ -419,12 +430,13 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
         case X265_TYPE_BREF:
             buf->s.frametype = HB_FRAME_BREF;
             break;
+        case X265_TYPE_I:
         default:
-            buf->s.frametype = 0;
+            buf->s.frametype = HB_FRAME_I;
             break;
     }
 
-    if (pic_out->sliceType == X265_TYPE_IDR)
+    if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
     {
         hb_chapter_dequeue(pv->chapter_queue, buf);
     }
@@ -474,7 +486,7 @@ static hb_buffer_t* x265_encode(hb_work_object_t *w, hb_buffer_t *in)
         pic_in.sliceType = X265_TYPE_AUTO;
     }
 
-    if (pv->last_stop != in->s.start)
+    if (pv->last_stop != AV_NOPTS_VALUE && pv->last_stop != in->s.start)
     {
         hb_log("encx265 input continuity err: last stop %"PRId64"  start %"PRId64,
                pv->last_stop, in->s.start);

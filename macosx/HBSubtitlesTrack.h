@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
                         delegate:(id<HBTrackDelegate>)delegate;
 
 /// The index of the source in the data source tracks array.
-@property (nonatomic, readonly) NSUInteger sourceTrackIdx;
+@property (nonatomic, readwrite) NSUInteger sourceTrackIdx;
 /// Format.
 @property (nonatomic, readonly) int type;
 @property (nonatomic, readwrite) int container;
@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isSrt;
 @property (nonatomic, readonly) BOOL isEnabled;
+@property (nonatomic, readonly) BOOL isForcedSupported;
 @property (nonatomic, readonly) BOOL canPassthru;
 
 @end

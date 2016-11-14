@@ -23,35 +23,52 @@ function check_dependencies {  # check_dependencies $DEP1 $DEP2 ...
     fi
 }
 
-# downloads from a url
-function download_url {  # download_file $URL $FILE $VERBOSE
-    local URL FILE VERBOSE
-    URL="${1}"
+# downloads from one or more urls
+function download_url {  # download_url $VERBOSE $FILE $URLS
+    local VERBOSE FILE URLS I FAILED
+    OPTIND=1
+    VERBOSE="${1}"
     FILE="${2}"
-    VERBOSE="${3}"
-    if [[ "${URL:-}" == "" ]]; then
+    shift 2
+    URLS=("${@}")
+    if [[ "${#URLS[@]}" -eq 0 ]] || [[ "${URLS[0]:-}" == "" ]]; then
         echo "url not specified for download" >&2
         return 1
     fi
     if [[ "${FILE:-}" == "" ]]; then
-        echo "output path not specified for download url: ${FILE}" >&2
+        echo "output path not specified for download: ${FILE}" >&2
         return 1
     fi
-    if ! curl --head -L "${URL}" >/dev/null 2>&1; then
-        echo "unable to download from url: ${URL}" >&2
-        return 1
-    fi
-    if ! touch "${FILE}" >/dev/null 2>&1; then
-        echo "unable to create path: ${FILE}" >&2
-        return 1
-    fi
-    if [[ "${VERBOSE:-}" == true ]]; then
-        echo "curl -L \"${URL}\" -o \"${FILE}\""
-    fi
-    if ! curl -L "${URL}" -o "${FILE}"; then
-        echo "unable to download: ${URL} -> ${FILE}" >&2
-        return 1
-    fi
+    FAILED=()
+    for I in "${!URLS[@]}"; do
+        if ! curl --head -Lf --connect-timeout 30 "${URLS[I]}" >/dev/null 2>&1; then
+            FAILED+=("${URLS[I]}")
+            if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
+                continue
+            else
+                echo "unable to download from urls: ${FAILED[@]}" >&2
+                echo "unable to download to file: ${FILE}" >&2
+                return 1
+            fi
+        fi
+        if ! touch "${FILE}" >/dev/null 2>&1; then
+            echo "unable to create path: ${FILE}" >&2
+            return 1
+        fi
+        if [[ "${VERBOSE:-}" == true ]]; then
+            echo "curl -Lf --connect-timeout 30 \"${URLS[I]}\" -o \"${FILE}\""
+        fi
+        if ! curl -Lf --connect-timeout 30 "${URLS[I]}" -o "${FILE}"; then
+            FAILED+=("${URLS[I]}")
+            if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
+                continue
+            else
+                echo "unable to download from urls: ${FAILED[@]}" >&2
+                echo "unable to download to file: ${FILE}" >&2
+                return 1
+            fi
+        fi
+    done
 }
 
 # builds mingw-w64
@@ -89,18 +106,6 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     #ISL_VER="0.12.2"
     #GCC_VER="4.9.2"
 
-    # urls
-    local CONFIG_URL BINUTILS_URL MINGW_W64_URL GMP_URL MPFR_URL MPC_URL ISL_URL GCC_URL URLS
-    CONFIG_URL="http://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz"
-    BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2"
-    MINGW_W64_URL="http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2"
-    GMP_URL="https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2"
-    MPFR_URL="https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VER}.tar.gz"
-    MPC_URL="https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz"
-    ISL_URL="ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VER}.tar.bz2"
-    GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2"
-    URLS=("${CONFIG_URL}" "${BINUTILS_URL}" "${MINGW_W64_URL}" "${GMP_URL}" "${MPFR_URL}" "${MPC_URL}" "${ISL_URL}" "${GCC_URL}")
-
     # filenames
     local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG PKGS
     CONFIG_PKG="config-${CONFIG_VER}.tar.gz"
@@ -113,10 +118,22 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     GCC_PKG="gcc-${GCC_VER}.tar.bz2"
     PKGS=("${CONFIG_PKG}" "${BINUTILS_PKG}" "${MINGW_W64_PKG}" "${GMP_PKG}" "${MPFR_PKG}" "${MPC_PKG}" "${ISL_PKG}" "${GCC_PKG}")
 
+    # urls
+    local CONFIG_URLS BINUTILS_URLS MINGW_W64_URLS GMP_URLS MPFR_URLS MPC_URLS ISL_URLS GCC_URLS URLS_VARNAMES
+    CONFIG_URLS=("http://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz")
+    BINUTILS_URLS=("https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2")
+    MINGW_W64_URLS=("http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2")
+    GMP_URLS=("https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2")
+    MPFR_URLS=("https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VER}.tar.gz")
+    MPC_URLS=("https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz")
+    ISL_URLS=("ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-${ISL_VER}.tar.bz2" "http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/infrastructure/isl-${ISL_VER}.tar.bz2")
+    GCC_URLS=("https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2")
+    URLS_VARNAMES=('CONFIG_URLS' 'BINUTILS_URLS' 'MINGW_W64_URLS' 'GMP_URLS' 'MPFR_URLS' 'MPC_URLS' 'ISL_URLS' 'GCC_URLS')
+
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="2.0.0"
+    VERSION="2.2.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -234,15 +251,17 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
 
     # verify/fetch
     echo "verify:"
-    local DOWNLOAD_VERBOSE
+    local DOWNLOAD_VERBOSE I URLS_IREF URLS
     DOWNLOAD_VERBOSE=true
     for I in "${!PKGS[@]}"; do
         echo "  ${PKGS[I]}"
+        URLS_IREF="${URLS_VARNAMES[I]}[@]"
+        URLS="${!URLS_IREF}"
         if ! tar -tf "${PKG_DIR}/${PKGS[I]}" >/dev/null 2>&1; then
-            download_url "${URLS[I]}" "${PKG_DIR}/${PKGS[I]}" "${DOWNLOAD_VERBOSE}" || return 1
+            download_url "${DOWNLOAD_VERBOSE}" "${PKG_DIR}/${PKGS[I]}" ${URLS[@]} || return 1
         fi
         if ! tar -tf "${PKG_DIR}/${PKGS[I]}" >/dev/null 2>&1; then
-            echo "unable to verify package: ${PKG_DIR}/${PKGS[I]}" >2
+            echo "unable to verify package: ${PKG_DIR}/${PKGS[I]}" >&2
             return 1
         fi
     done
@@ -256,7 +275,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
         fi
         mkdir -p "${SOURCE_DIR}/${NAMES[I]}"
         if ! tar -xf "${PKG_DIR}/${PKGS[I]}" -C "${SOURCE_DIR}/${NAMES[I]}" >/dev/null 2>&1; then
-            echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >2
+            echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >&2
             return 1
         fi
     done

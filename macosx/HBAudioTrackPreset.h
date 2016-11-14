@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  track properties.
  */
 @property (nonatomic, readwrite) int encoder;
+@property (nonatomic, readwrite) int fallbackEncoder;
 @property (nonatomic, readwrite) int mixdown;
 @property (nonatomic, readwrite) int sampleRate;
 @property (nonatomic, readwrite) int bitRate;
@@ -42,19 +43,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-/**
- *  A series of value trasformers to bridge the libhb enums
- *  to the textual rapresentations used in the interface.
- */
-@interface HBEncoderTransformer : NSValueTransformer
-@end
-
-@interface HBMixdownTransformer : NSValueTransformer
-@end
-
-@interface HBSampleRateTransformer : NSValueTransformer
-@end
-
-@interface HBIntegerTransformer : NSValueTransformer
-@end

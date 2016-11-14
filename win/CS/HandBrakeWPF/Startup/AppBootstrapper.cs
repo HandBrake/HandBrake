@@ -73,6 +73,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IMainViewModel, MainViewModel>();
             this.container.Singleton<IQueueViewModel, QueueViewModel>();
             this.container.PerRequest<IAddPresetViewModel, AddPresetViewModel>();
+            this.container.PerRequest<IManagePresetViewModel, ManagePresetViewModel>();
             this.container.Singleton<ILogViewModel, LogViewModel>();
             this.container.Singleton<IAboutViewModel, AboutViewModel>();
             this.container.Singleton<IOptionsViewModel, OptionsViewModel>();
@@ -91,6 +92,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ISubtitlesViewModel, SubtitlesViewModel>();
             this.container.Singleton<IFiltersViewModel, FiltersViewModel>();
             this.container.Singleton<IVideoViewModel, VideoViewModel>();
+            this.container.Singleton<IMetaDataViewModel, MetaDataViewModel>();
 
             // Shell
             this.container.Singleton<IShellViewModel, ShellViewModel>();

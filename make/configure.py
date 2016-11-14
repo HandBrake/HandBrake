@@ -848,7 +848,7 @@ class Project( Action ):
 
             url_ctype = '_unstable'
             url_ntype = 'unstable'
-            self.build = time.strftime('%Y%m%d') + '01'
+            self.build = time.strftime('%Y%m%d', now) + '01'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         else:
             m = re.match('^([a-zA-Z]+)\.([0-9]+)$', suffix)
@@ -867,7 +867,7 @@ class Project( Action ):
                 url_ctype = '_unstable'
                 url_ntype = 'unstable'
 
-            self.build = time.strftime('%Y%m%d') + '00'
+            self.build = time.strftime('%Y%m%d', now) + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
 
         self.url_appcast = 'https://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
@@ -1346,7 +1346,10 @@ def createCLI():
     h = IfHost( 'Build and use local pkg-config', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-pkgconfig', default=False, action='store_true', help=h )
 
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--flatpak', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
+
 
     ## add Xcode options
     if host.match( '*-*-darwin*' ):
@@ -1480,6 +1483,8 @@ try:
             break
         if arg == '--verbose':
             verbose = Configure.OUT_VERBOSE
+
+    now = time.gmtime(int(os.environ.get('SOURCE_DATE_EPOCH', time.time())))
 
     ## create main objects; actions/probes run() is delayed.
     ## if any actions must be run earlier (eg: for configure --help purposes)
@@ -1821,7 +1826,7 @@ int main()
     else:
         doc.add( 'BUILD.cross.prefix', '' )
 
-    doc.add( 'BUILD.date',   time.strftime('%c') )
+    doc.add( 'BUILD.date',   time.strftime('%c', now) ),
     doc.add( 'BUILD.arch',   arch.mode.mode )
 
     doc.addBlank()
@@ -1838,6 +1843,7 @@ int main()
     doc.add( 'FEATURE.local_cmake', int( options.enable_local_cmake ))
     doc.add( 'FEATURE.local_pkgconfig', int( options.enable_local_pkgconfig ))
     doc.add( 'FEATURE.asm',        'disabled' )
+    doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))

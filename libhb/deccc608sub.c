@@ -24,8 +24,6 @@ static int debug_608 = 0;
 static int cc_channel = 1;
 static int subs_delay = 0;
 
-#define fatal(N, ...) // N
-
 int rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
 // Relationship between the first PAC byte and the row number
 
@@ -734,10 +732,11 @@ static struct eia608_screen *get_writing_buffer(struct s_write *wb)
         case MODE_ROLLUP_2: // Write directly to screen
         case MODE_ROLLUP_3:
         case MODE_ROLLUP_4:
+        case MODE_TEXT:
             use_buffer = get_current_visible_buffer(wb);
             break;
         default:
-            fatal (EXIT_BUG_BUG, "Caption mode has an illegal value at get_writing_buffer(), this is a bug.\n");
+            hb_error("Caption mode has an illegal value at get_writing_buffer(), this is a bug.");
     }
     return use_buffer;
 }
@@ -747,17 +746,20 @@ static void write_char(const unsigned char c, struct s_write *wb)
     if (wb->data608->mode != MODE_TEXT)
     {
         struct eia608_screen * use_buffer = get_writing_buffer(wb);
-        /* hb_log ("\rWriting char [%c] at %s:%d:%d\n",c,
-        use_buffer == &wb->data608->buffer1?"B1":"B2",
-        wb->data608->cursor_row,wb->data608->cursor_column); */
-        use_buffer->characters[wb->data608->cursor_row][wb->data608->cursor_column] = c;
-        use_buffer->colors[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->color;
-        use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->font;
-        use_buffer->row_used[wb->data608->cursor_row] = 1;
-        use_buffer->empty = 0;
-        if (wb->data608->cursor_column < 31)
-            wb->data608->cursor_column++;
-        use_buffer->dirty = 1;
+        if (use_buffer != NULL)
+        {
+            /* hb_log ("\rWriting char [%c] at %s:%d:%d\n",c,
+            use_buffer == &wb->data608->buffer1?"B1":"B2",
+            wb->data608->cursor_row,wb->data608->cursor_column); */
+            use_buffer->characters[wb->data608->cursor_row][wb->data608->cursor_column] = c;
+            use_buffer->colors[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->color;
+            use_buffer->fonts[wb->data608->cursor_row][wb->data608->cursor_column] = wb->data608->font;
+            use_buffer->row_used[wb->data608->cursor_row] = 1;
+            use_buffer->empty = 0;
+            if (wb->data608->cursor_column < 31)
+                wb->data608->cursor_column++;
+            use_buffer->dirty = 1;
+        }
     }
 
 }
@@ -1213,9 +1215,12 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             {
                 struct eia608_screen *data;
                 data = get_writing_buffer(wb);
-                wb->data608->cursor_column--;
-                data->characters[wb->data608->cursor_row][wb->data608->cursor_column] = ' ';
-                data->dirty = 1;
+                if (data != NULL)
+                {
+                    wb->data608->cursor_column--;
+                    data->characters[wb->data608->cursor_row][wb->data608->cursor_column] = ' ';
+                    data->dirty = 1;
+                }
             }
             break;
         case COM_TABOFFSET1:

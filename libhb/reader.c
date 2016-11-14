@@ -299,7 +299,6 @@ static int reader_init( hb_work_object_t * w, hb_job_t * job )
     // with the reader. Specifically avcodec needs this.
     if ( hb_reader_open( r ) )
     {
-        free( r );
         return 1;
     }
     return 0;

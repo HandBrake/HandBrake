@@ -39,6 +39,9 @@ namespace HandBrakeWPF.Helpers
         /// <param name="sourceOrLabelName">
         /// The Source or Label Name
         /// </param>
+        /// <param name="presetName">
+        /// The preset Name.
+        /// </param>
         /// <returns>
         /// The Generated FileName
         /// </returns>
@@ -96,7 +99,7 @@ namespace HandBrakeWPF.Helpers
                             .Replace(Constants.Title, dvdTitle)
                             .Replace(Constants.Chapters, combinedChapterTag)
                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                            .Replace(Constants.Time,DateTime.Now.ToString("HH:mm"))
+                            .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"))
                             .Replace(Constants.Preset, sanitisedPresetName);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)

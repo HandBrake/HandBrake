@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Interop
     using System.Runtime.InteropServices;
 
     using HandBrake.ApplicationServices.Interop.HbLib;
+    using HandBrake.ApplicationServices.Interop.Helpers;
     using HandBrake.ApplicationServices.Interop.Json.Filters;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
@@ -59,6 +60,45 @@ namespace HandBrake.ApplicationServices.Interop
             List<PresetTune> list = JsonConvert.DeserializeObject<List<PresetTune>>(result);
 
             return list.Select(item => new HBPresetTune(item.Name, item.Short_Name)).ToList();
+        }
+
+        /// <summary>
+        /// Gets a list of keys for custom settings for the filter.
+        /// </summary>
+        /// <param name="filter">The filter to look up.</param>
+        /// <returns>The list of keys for custom settings for the filter.</returns>
+        public static List<string> GetFilterKeys(int filter)
+        {
+            IntPtr ptr = HBFunctions.hb_filter_get_keys(filter);
+            return InteropUtilities.ToStringListFromArrayPtr(ptr);
+        }
+
+        /// <summary>
+        /// Gets the default settings for the filter.
+        /// </summary>
+        /// <param name="filter">The filter to look up.</param>
+        /// <returns>The default settings for that filter.</returns>
+        public static IDictionary<string, string> GetDefaultCustomSettings(int filter)
+        {
+            string presetName;
+
+            List<HBPresetTune> presets = GetFilterPresets(filter);
+            if (presets.Any(p => p.ShortName == "default"))
+            {
+                presetName = "default";
+            }
+            else if (presets.Any(p => p.ShortName == "medium"))
+            {
+                presetName = "medium";
+            }
+            else
+            {
+                return new Dictionary<string, string>();
+            }
+
+            IntPtr ptr = HBFunctions.hb_generate_filter_settings_json(filter, presetName, null, null);
+            string result = Marshal.PtrToStringAnsi(ptr);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
         }
     }
 }

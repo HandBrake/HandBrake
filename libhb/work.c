@@ -313,8 +313,9 @@ void hb_display_job_info(hb_job_t *job)
     }
     else if( job->frame_to_start || job->frame_to_stop )
     {
-        hb_log( "   + title %d, frames %d to %d", title->index,
-                job->frame_to_start, job->frame_to_start + job->frame_to_stop );
+        hb_log("   + title %d, frames %d to %d", title->index,
+               job->frame_to_start, job->frame_to_start +
+                                    job->frame_to_stop - 1);
     }
     else
     {
@@ -967,9 +968,8 @@ static int sanitize_audio(hb_job_t *job)
             audio->config.out.samplerate = audio->config.in.samplerate;
         }
         best_samplerate =
-            hb_audio_samplerate_get_best(audio->config.out.codec,
-                                         audio->config.out.samplerate,
-                                         NULL);
+            hb_audio_samplerate_find_closest(audio->config.out.samplerate,
+                                             audio->config.out.codec);
         if (best_samplerate != audio->config.out.samplerate)
         {
             hb_log("work: sanitizing track %d unsupported samplerate %d Hz to %s kHz",

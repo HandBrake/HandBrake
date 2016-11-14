@@ -53,6 +53,10 @@ static void decavcodecClose( hb_work_object_t * );
 static int decavcodecaInfo( hb_work_object_t *, hb_work_info_t * );
 static int decavcodecaBSInfo( hb_work_object_t *, const hb_buffer_t *, hb_work_info_t * );
 
+static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate);
+static int get_color_transfer(int color_trc);
+static int get_color_matrix(int colorspace, hb_geometry_t geometry);
+
 hb_work_object_t hb_decavcodeca =
 {
     .id = WORK_DECAVCODEC,
@@ -863,11 +867,16 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
         {
             if (pv->sws_context != NULL)
                 sws_freeContext(pv->sws_context);
+
+            hb_geometry_t geometry = {context->width, context->height};
+            int color_matrix = get_color_matrix(context->colorspace, geometry);
+
             pv->sws_context = hb_sws_get_context(context->width,
                                                  context->height,
                                                  context->pix_fmt,
                                                  w, h, AV_PIX_FMT_YUV420P,
-                                                 SWS_LANCZOS|SWS_ACCURATE_RND);
+                                                 SWS_LANCZOS|SWS_ACCURATE_RND,
+                                                 hb_ff_get_colorspace(color_matrix));
             pv->sws_width   = context->width;
             pv->sws_height  = context->height;
             pv->sws_pix_fmt = context->pix_fmt;
@@ -957,16 +966,22 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
 
 static int get_frame_type(int type)
 {
-    switch(type)
+    switch (type)
     {
-        case AV_PICTURE_TYPE_I:
-            return HB_FRAME_I;
         case AV_PICTURE_TYPE_B:
             return HB_FRAME_B;
+
+        case AV_PICTURE_TYPE_S:
         case AV_PICTURE_TYPE_P:
+        case AV_PICTURE_TYPE_SP:
             return HB_FRAME_P;
+
+        case AV_PICTURE_TYPE_BI:
+        case AV_PICTURE_TYPE_SI:
+        case AV_PICTURE_TYPE_I:
+        default:
+            return HB_FRAME_I;
     }
-    return 0;
 }
 
 /*
@@ -1008,7 +1023,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         // libav avcodec_decode_video2() needs AVPacket flagged with
         // AV_PKT_FLAG_KEY for some codecs. For example, sequence of
         // PNG in a mov container.
-        if (packet_info->frametype & HB_FRAME_KEY)
+        if (packet_info->frametype & HB_FRAME_MASK_KEY)
         {
             avp.flags |= AV_PKT_FLAG_KEY;
         }
@@ -1670,6 +1685,74 @@ static void compute_frame_duration( hb_work_private_t *pv )
     }
 }
 
+static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_rational_t rate)
+{
+    switch (color_primaries)
+    {
+        case AVCOL_PRI_BT709:
+            return HB_COLR_PRI_BT709;
+        case AVCOL_PRI_BT470BG:
+            return HB_COLR_PRI_EBUTECH;
+        case AVCOL_PRI_BT470M:
+        case AVCOL_PRI_SMPTE170M:
+        case AVCOL_PRI_SMPTE240M:
+            return HB_COLR_PRI_SMPTEC;
+        default:
+        {
+            if ((geometry.width >= 1280 || geometry.height >= 720)||
+                (geometry.width >   720 && geometry.height >  576 ))
+                // ITU BT.709 HD content
+                return HB_COLR_PRI_BT709;
+            else if (rate.den == 1080000)
+                // ITU BT.601 DVD or SD TV content (PAL)
+                return HB_COLR_PRI_EBUTECH;
+            else
+                // ITU BT.601 DVD or SD TV content (NTSC)
+                return HB_COLR_PRI_SMPTEC;
+        }
+    }
+}
+
+static int get_color_transfer(int color_trc)
+{
+    switch (color_trc)
+    {
+        case AVCOL_TRC_SMPTE240M:
+            return HB_COLR_TRA_SMPTE240M;
+        default:
+            // ITU BT.601, BT.709, anything else
+            return HB_COLR_TRA_BT709;
+    }
+}
+
+static int get_color_matrix(int colorspace, hb_geometry_t geometry)
+{
+    switch (colorspace)
+    {
+        case AVCOL_SPC_BT709:
+            return HB_COLR_MAT_BT709;
+        case AVCOL_SPC_FCC:
+        case AVCOL_SPC_BT470BG:
+        case AVCOL_SPC_SMPTE170M:
+        case AVCOL_SPC_RGB: // libswscale rgb2yuv
+            return HB_COLR_MAT_SMPTE170M;
+        case AVCOL_SPC_SMPTE240M:
+            return HB_COLR_MAT_SMPTE240M;
+        default:
+        {
+            if ((geometry.width >= 1280 || geometry.height >= 720)||
+                (geometry.width >   720 && geometry.height >  576 ))
+                // ITU BT.709 HD content
+                return HB_COLR_MAT_BT709;
+            else
+                // ITU BT.601 DVD or SD TV content (PAL)
+                // ITU BT.601 DVD or SD TV content (NTSC)
+                return HB_COLR_MAT_SMPTE170M;
+        }
+    }
+}
+
+
 static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
@@ -1700,73 +1783,9 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->level = pv->context->level;
     info->name = pv->context->codec->name;
 
-    switch( pv->context->color_primaries )
-    {
-        case AVCOL_PRI_BT709:
-            info->color_prim = HB_COLR_PRI_BT709;
-            break;
-        case AVCOL_PRI_BT470BG:
-            info->color_prim = HB_COLR_PRI_EBUTECH;
-            break;
-        case AVCOL_PRI_BT470M:
-        case AVCOL_PRI_SMPTE170M:
-        case AVCOL_PRI_SMPTE240M:
-            info->color_prim = HB_COLR_PRI_SMPTEC;
-            break;
-        default:
-        {
-            if ((info->geometry.width >= 1280 || info->geometry.height >= 720)||
-                (info->geometry.width >   720 && info->geometry.height >  576 ))
-                // ITU BT.709 HD content
-                info->color_prim = HB_COLR_PRI_BT709;
-            else if( info->rate.den == 1080000 )
-                // ITU BT.601 DVD or SD TV content (PAL)
-                info->color_prim = HB_COLR_PRI_EBUTECH;
-            else
-                // ITU BT.601 DVD or SD TV content (NTSC)
-                info->color_prim = HB_COLR_PRI_SMPTEC;
-            break;
-        }
-    }
-
-    switch( pv->context->color_trc )
-    {
-        case AVCOL_TRC_SMPTE240M:
-            info->color_transfer = HB_COLR_TRA_SMPTE240M;
-            break;
-        default:
-            // ITU BT.601, BT.709, anything else
-            info->color_transfer = HB_COLR_TRA_BT709;
-            break;
-    }
-
-    switch( pv->context->colorspace )
-    {
-        case AVCOL_SPC_BT709:
-            info->color_matrix = HB_COLR_MAT_BT709;
-            break;
-        case AVCOL_SPC_FCC:
-        case AVCOL_SPC_BT470BG:
-        case AVCOL_SPC_SMPTE170M:
-        case AVCOL_SPC_RGB: // libswscale rgb2yuv
-            info->color_matrix = HB_COLR_MAT_SMPTE170M;
-            break;
-        case AVCOL_SPC_SMPTE240M:
-            info->color_matrix = HB_COLR_MAT_SMPTE240M;
-            break;
-        default:
-        {
-            if ((info->geometry.width >= 1280 || info->geometry.height >= 720)||
-                (info->geometry.width >   720 && info->geometry.height >  576 ))
-                // ITU BT.709 HD content
-                info->color_matrix = HB_COLR_MAT_BT709;
-            else
-                // ITU BT.601 DVD or SD TV content (PAL)
-                // ITU BT.601 DVD or SD TV content (NTSC)
-                info->color_matrix = HB_COLR_MAT_SMPTE170M;
-            break;
-        }
-    }
+    info->color_prim = get_color_prim(pv->context->color_primaries, info->geometry, info->rate);
+    info->color_transfer = get_color_transfer(pv->context->color_trc);
+    info->color_matrix = get_color_matrix(pv->context->colorspace, info->geometry);
 
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
     switch (pv->context->codec_id)

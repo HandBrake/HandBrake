@@ -745,6 +745,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meta Data.
+        /// </summary>
+        public static string MainView_MetaDataTab {
+            get {
+                return ResourceManager.GetString("MainView_MetaDataTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {
@@ -777,6 +786,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_PictureTab {
             get {
                 return ResourceManager.GetString("MainView_PictureTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Preset.
+        /// </summary>
+        public static string MainView_PresetManage {
+            get {
+                return ResourceManager.GetString("MainView_PresetManage", resourceCulture);
             }
         }
         
@@ -939,6 +957,24 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_WebOptimized {
             get {
                 return ResourceManager.GetString("MainView_WebOptimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Preset.
+        /// </summary>
+        public static string ManagePresetView_ManagePreset {
+            get {
+                return ResourceManager.GetString("ManagePresetView_ManagePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meta Data.
+        /// </summary>
+        public static string MetaDataView_Title {
+            get {
+                return ResourceManager.GetString("MetaDataView_Title", resourceCulture);
             }
         }
         
@@ -2291,15 +2327,6 @@ namespace HandBrakeWPF.Properties {
         public static string VideoView_Quality {
             get {
                 return ResourceManager.GetString("VideoView_Quality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Same as source.
-        /// </summary>
-        public static string VideoView_SameAsSource {
-            get {
-                return ResourceManager.GetString("VideoView_SameAsSource", resourceCulture);
             }
         }
         

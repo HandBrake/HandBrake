@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AudioTrack.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="AudioBehaviourTrack.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -40,7 +40,7 @@ namespace HandBrakeWPF.Model.Audio
         private double? quality;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "AudioTrack" /> class.
+        /// Initializes a new instance of the <see cref="AudioBehaviourTrack"/> class. 
         /// </summary>
         public AudioBehaviourTrack()
         {
@@ -55,7 +55,7 @@ namespace HandBrakeWPF.Model.Audio
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// Initializes a new instance of the <see cref="AudioBehaviourTrack"/> class. 
         /// Copy Constructor
         /// </summary>
         /// <param name="track">
@@ -573,24 +573,24 @@ namespace HandBrakeWPF.Model.Audio
         /// </summary>
         private void GetDefaultMixdownIfNull()
         {
-            //if (this.ScannedTrack == null)
-            //{
+            // if (this.ScannedTrack == null)
+            // {
             //    return;
-            //}
+            // }
 
-            //HBAudioEncoder aencoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
-            //HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
-            //HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, aencoder, (uint)this.ScannedTrack.ChannelLayout);
-            //HBMixdown defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
+            // HBAudioEncoder aencoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.encoder));
+            // HBMixdown currentMixdown = HandBrakeEncoderHelpers.GetMixdown(this.mixDown);
+            // HBMixdown sanitisedMixdown = HandBrakeEncoderHelpers.SanitizeMixdown(currentMixdown, aencoder, (uint)this.ScannedTrack.ChannelLayout);
+            // HBMixdown defaultMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(aencoder, (uint)this.ScannedTrack.ChannelLayout);
 
-            //if (this.mixDown == null || this.mixDown == "none")
-            //{
+            // if (this.mixDown == null || this.mixDown == "none")
+            // {
             //    this.MixDown = defaultMixdown.ShortName;
-            //}
-            //else if (sanitisedMixdown != null)
-            //{
+            // }
+            // else if (sanitisedMixdown != null)
+            // {
             //    this.MixDown = sanitisedMixdown.ShortName;
-            //}
+            // }
         }
 
         #endregion

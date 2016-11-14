@@ -54,6 +54,7 @@ enum
 
 static GhbValue *prefsDict = NULL;
 static gboolean prefs_modified = FALSE;
+static gchar *override_user_config_dir = NULL;
 
 static void store_prefs(void);
 static void store_presets(void);
@@ -284,24 +285,24 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 
     // Fix up all the internal settings that are derived from preset values.
 
-    int width, height;
-    width = ghb_dict_get_int(settings, "PictureWidth");
-    height = ghb_dict_get_int(settings, "PictureHeight");
-
     ghb_dict_set(settings, "scale_height", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureHeight")));
 
     ghb_dict_set(settings, "scale_width", ghb_value_dup(
         ghb_dict_get_value(settings, "PictureWidth")));
 
-    gint uses_pic;
+    int width, height, uses_pic, autoscale;
+
+    width    = ghb_dict_get_int(settings, "PictureWidth");
+    height   = ghb_dict_get_int(settings, "PictureHeight");
+    uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
+
+    autoscale = uses_pic != 1 || (width == 0 && height == 0);
+    ghb_dict_set_bool(settings, "autoscale", autoscale);
+
     gint vqtype;
 
-    uses_pic = ghb_dict_get_int(settings, "UsesPictureSettings");
     vqtype = ghb_dict_get_int(settings, "VideoQualityType");
-
-    ghb_dict_set_bool(settings, "autoscale",
-                      uses_pic == 2 || (width == 0 && height == 0));
 
     // VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
     // *note: target is no longer used
@@ -596,7 +597,14 @@ ghb_get_user_config_dir(gchar *subdir)
     const gchar *dir;
     gchar       *config;
 
-    dir = g_get_user_config_dir();
+    if (override_user_config_dir != NULL)
+    {
+        dir = override_user_config_dir;
+    }
+    else
+    {
+        dir = g_get_user_config_dir();
+    }
     if (!g_file_test(dir, G_FILE_TEST_IS_DIR))
     {
         dir    = g_get_home_dir();
@@ -629,6 +637,12 @@ ghb_get_user_config_dir(gchar *subdir)
         g_strfreev(split);
     }
     return config;
+}
+
+void
+ghb_override_user_config_dir(char *dir)
+{
+    override_user_config_dir = dir;
 }
 
 static void
@@ -2504,6 +2518,7 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         if (dict != NULL && !ghb_dict_get_bool(dict, "Folder"))
         {
             ghb_presets_list_clear_default(ud);
+            hb_presets_clear_default();
             ghb_dict_set_bool(dict, "Default", 1);
             ghb_presets_list_show_default(ud);
             store_presets();

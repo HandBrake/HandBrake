@@ -630,9 +630,6 @@
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Quality</value>
   </data>
-  <data name="VideoView_SameAsSource" xml:space="preserve">
-    <value>Same as source</value>
-  </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Turbo first pass</value>
   </data>
@@ -877,5 +874,17 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
     <value>Choose Behaviors:</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>Meta Data</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>Meta Data</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>Rename Preset</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>Manage Preset</value>
   </data>
 </root>

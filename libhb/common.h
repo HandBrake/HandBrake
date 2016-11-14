@@ -341,10 +341,16 @@ const hb_rate_t* hb_video_framerate_get_next(const hb_rate_t *last);
 int              hb_video_framerate_get_close(hb_rational_t *framerate,
                                               double thresh);
 
-int              hb_audio_samplerate_get_best(uint32_t codec, int samplerate, int *sr_shift);
+int              hb_audio_samplerate_is_supported(int samplerate,
+                                                  uint32_t codec);
+int              hb_audio_samplerate_find_closest(int samplerate,
+                                                  uint32_t codec);
+int              hb_audio_samplerate_get_sr_shift(int samplerate);
 int              hb_audio_samplerate_get_from_name(const char *name);
 const char*      hb_audio_samplerate_get_name(int samplerate);
 const hb_rate_t* hb_audio_samplerate_get_next(const hb_rate_t *last);
+const hb_rate_t* hb_audio_samplerate_get_next_for_codec(const hb_rate_t *last,
+                                                        uint32_t codec);
 
 int              hb_audio_bitrate_get_best(uint32_t codec, int bitrate, int samplerate, int mixdown);
 int              hb_audio_bitrate_get_default(uint32_t codec, int samplerate, int mixdown);
@@ -446,7 +452,8 @@ typedef enum
     HB_ANAMORPHIC_NONE,
     HB_ANAMORPHIC_STRICT,
     HB_ANAMORPHIC_LOOSE,
-    HB_ANAMORPHIC_CUSTOM
+    HB_ANAMORPHIC_CUSTOM,
+    HB_ANAMORPHIC_AUTO
 } hb_anamorphic_mode_t;
 
 /******************************************************************************
@@ -659,7 +666,7 @@ struct hb_job_s
 /* Audio starts here */
 /* Audio Codecs: Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/NativeConstants.cs when changing these consts */
 #define HB_ACODEC_INVALID   0x00000000
-#define HB_ACODEC_MASK      0x03FFFF00
+#define HB_ACODEC_MASK      0x07FFFF00
 #define HB_ACODEC_LAME      0x00000200
 #define HB_ACODEC_VORBIS    0x00000400
 #define HB_ACODEC_AC3       0x00000800
@@ -677,7 +684,8 @@ struct hb_job_s
 #define HB_ACODEC_FDK_HAAC  0x00800000
 #define HB_ACODEC_FFEAC3    0x01000000
 #define HB_ACODEC_FFTRUEHD  0x02000000
-#define HB_ACODEC_FF_MASK   0x03FF2800
+#define HB_ACODEC_OPUS      0x04000000
+#define HB_ACODEC_FF_MASK   0x07FF2800
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK   (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD)
 #define HB_ACODEC_AUTO_PASS   (HB_ACODEC_PASS_FLAG | HB_ACODEC_PASS_MASK)

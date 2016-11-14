@@ -526,7 +526,7 @@
     }
 
     self.countTextField.stringValue = string;
-    [self.controller setQueueState:string];
+    [self.controller setQueueState:pendingCount];
 
     self.pendingItemsCount = pendingCount;
     self.completedItemsCount = completedCount;
@@ -534,6 +534,18 @@
 
 #pragma mark -
 #pragma mark Queue Job Processing
+
+#define ALMOST_5GB 5000000000
+
+- (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
+{
+    NSDictionary *dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:url.URLByDeletingLastPathComponent.path error:NULL];
+    long long freeSpace = [dict[NSFileSystemFreeSize] longLongValue];
+    if (freeSpace < ALMOST_5GB) {
+        return YES;
+    }
+    return NO;
+}
 
 /**
  * Used to get the next pending queue item and return it if found
@@ -568,8 +580,15 @@
         // Check to see if there are any more pending items in the queue
         HBJob *nextJob = [self getNextPendingQueueItem];
 
+        if (nextJob && [self _isDiskSpaceLowAtURL:nextJob.destURL])
+        {
+            // Disk space is low, show an alert
+            [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
+
+            [self queueLowDiskSpaceAlert];
+        }
         // If we still have more pending items in our queue, lets go to the next one
-        if (nextJob)
+        else if (nextJob)
         {
             // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
             nextJob.state = HBJobStateWorking;
@@ -616,10 +635,9 @@
     self.currentLog = nil;
 
     // Check to see if the encode state has not been cancelled
-    // to determine if we should check for encode done notifications.
+    // to determine if we should send it to external app.
     if (result != HBCoreResultCancelled)
     {
-        [self jobCompletedAlerts:job];
         // Send to tagger
         [self sendToExternalApp:job.destURL];
     }
@@ -643,6 +661,28 @@
     }
     [self.window.toolbar validateVisibleItems];
     [self.jobs commit];
+
+    // Update UI
+    NSString *info = nil;
+    switch (result) {
+        case HBCoreResultDone:
+            info = NSLocalizedString(@"Encode Finished.", @"");
+            [self jobCompletedAlerts:job result:result];
+            break;
+        case HBCoreResultCancelled:
+            info = NSLocalizedString(@"Encode Cancelled.", @"");
+            break;
+        default:
+            info = NSLocalizedString(@"Encode Failed.", @"");
+            [self jobCompletedAlerts:job result:result];
+            break;
+    }
+    self.progressTextField.stringValue = info;
+    [self.controller setQueueInfo:info progress:1.0 hidden:YES];
+
+    // Restore dock icon
+    [self.dockTile updateDockIcon:-1.0 withETA:@""];
+    self.dockIconProgress = 0;
 }
 
 /**
@@ -723,14 +763,6 @@
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        NSString *info = NSLocalizedString(@"Encode Finished.", @"");
-        self.progressTextField.stringValue = info;
-        [self.controller setQueueInfo:info progress:1.0 hidden:YES];
-
-        // Restore dock icon
-        [self.dockTile updateDockIcon:-1.0 withETA:@""];
-        self.dockIconProgress = 0;
-
         [self completedJob:job result:result];
         [self encodeNextQueueItem];
     };
@@ -796,18 +828,25 @@
              GROWL_NOTIFICATIONS_DEFAULT: @[SERVICE_NAME]};
 }
 
-- (void)showDoneNotification:(NSURL *)fileURL
+- (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL
 {
-    // This end of encode action is called as each encode rolls off of the queue
-    // Setup the Growl stuff
-    NSString *growlMssg = [NSString stringWithFormat:@"your HandBrake encode %@ is done!", fileURL.lastPathComponent];
-    [GrowlApplicationBridge notifyWithTitle:@"Put down that cocktail…"
-                                description:growlMssg
+    [GrowlApplicationBridge notifyWithTitle:title
+                                description:description
                            notificationName:SERVICE_NAME
                                    iconData:nil
                                    priority:0
-                                   isSticky:1
-                               clickContext:nil];
+                                   isSticky:YES
+                               clickContext:fileURL.path];
+}
+
+- (void)growlNotificationWasClicked:(id)clickContext
+{
+    // Show the file in Finder when a done notification was clicked.
+    if ([clickContext isKindOfClass:[NSString class]] && [clickContext length])
+    {
+        NSURL *fileURL = [NSURL fileURLWithPath:clickContext];
+        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[fileURL]];
+    }
 }
 
 /**
@@ -841,7 +880,7 @@
 /**
  *  Runs the alert for a single job
  */
-- (void)jobCompletedAlerts:(HBJob *)job
+- (void)jobCompletedAlerts:(HBJob *)job result:(HBCoreResult)result
 {
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
@@ -852,7 +891,26 @@
         {
             NSBeep();
         }
-        [self showDoneNotification:job.destURL];
+
+        NSString *title;
+        NSString *description;
+        if (result == HBCoreResultDone)
+        {
+            title = NSLocalizedString(@"Put down that cocktail…", nil);
+            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil),
+                                     job.destURL.lastPathComponent];
+
+        }
+        else
+        {
+            title = NSLocalizedString(@"Encode failed", nil);
+            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ couldn't be completed.", nil),
+                           job.destURL.lastPathComponent];
+        }
+
+        [self showNotificationWithTitle:title
+                            description:description
+                                    url:job.destURL];
     }
 }
 
@@ -896,6 +954,15 @@
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"Finder\" to shut down"];
         [scriptObject executeAndReturnError: &errorDict];
     }
+}
+
+- (void)queueLowDiskSpaceAlert
+{
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:NSLocalizedString(@"Your destination disk is almost full.", @"")];
+    [alert setInformativeText:NSLocalizedString(@"You need to make more space available on your destination disk.", @"")];
+    [NSApp requestUserAttention:NSCriticalRequest];
+    [alert runModal];
 }
 
 #pragma mark - Queue Item Controls

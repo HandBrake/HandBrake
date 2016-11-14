@@ -96,9 +96,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
         /// Create a track from a behaviour track.
         /// </summary>
-        /// <param name="track">The Behavior track</param>
+        /// <param name="track">
+        /// The Behavior track
+        /// </param>
         public AudioTrack(AudioBehaviourTrack track)
         {     
             this.drc = track.DRC;

@@ -46,8 +46,7 @@
                    Text="{Binding PanelTitle}" />
 
         <!-- Row 1 -->
-        <Grid Grid.Row="1" Margin="10,5,10,0"
-                    Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" >
+        <Grid Grid.Row="1" Margin="10,5,10,0">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -89,7 +88,6 @@
 
         <!-- Row 2 -->
         <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                 Visibility="{Binding ShowDefaultsPanel, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}"
                  Margin="10,10,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"

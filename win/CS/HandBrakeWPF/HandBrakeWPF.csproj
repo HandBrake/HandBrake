@@ -209,6 +209,7 @@
     <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
     <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
     <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\MetaData.cs" />
     <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
     <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
     <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
@@ -260,6 +261,8 @@
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
+    <Compile Include="ViewModels\ManagePresetViewModel.cs" />
     <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAudioDefaultsViewModel.cs" />
@@ -267,16 +270,24 @@
     <Compile Include="Controls\SourceSelection.xaml.cs">
       <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Interfaces\IMetaDataViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPopupWindowViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISubtitlesDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\MetaDataViewModel.cs" />
     <Compile Include="ViewModels\MiniViewModel.cs" />
     <Compile Include="ViewModels\PopupWindowViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
+    <Compile Include="Views\ManagePresetView.xaml.cs">
+      <DependentUpon>ManagePresetView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AudioDefaultsView.xaml.cs">
       <DependentUpon>AudioDefaultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetaDataView.xaml.cs">
+      <DependentUpon>MetaDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PopupWindowView.xaml.cs">
       <DependentUpon>PopupWindowView.xaml</DependentUpon>
@@ -489,9 +500,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ManagePresetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\AudioDefaultsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MetaDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopupWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>

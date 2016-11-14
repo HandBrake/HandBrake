@@ -9,10 +9,157 @@
 @import HandBrakeKit.HBChapter;
 @import HandBrakeKit.HBJob;
 
+@interface NSArray (HBCSVAdditions)
+
++ (nullable NSArray<NSArray<NSString *> *> *)HB_arrayWithContentsOfCSVURL:(NSURL *)url;
+
+@end
+
+@implementation NSArray (HBCSVAdditions)
+
+// CSV parsing examples
+// CSV Record:
+//     one,two,three
+// Fields:
+//     <one>
+//     <two>
+//     <three>
+// CSV Record:
+//     one, two, three
+// Fields:
+//     <one>
+//     < two>
+//     < three>
+// CSV Record:
+//     one,"2,345",three
+// Fields:
+//     <one>
+//     <2,345>
+//     <three>
+// CSV record:
+//     one,"John said, ""Hello there.""",three
+// Explanation: inside a quoted field, two double quotes in a row count
+// as an escaped double quote in the field data.
+// Fields:
+//     <one>
+//     <John said, "Hello there.">
+//     <three>
++ (nullable NSArray<NSArray<NSString *> *> *)HB_arrayWithContentsOfCSVURL:(NSURL *)url;
+{
+    NSString *str = [[NSString alloc] initWithContentsOfURL:url encoding:NSUTF8StringEncoding error:NULL];
+
+    if (str == nil)
+    {
+        return nil;
+    }
+
+    NSMutableString *csvString = [str mutableCopy];
+    [csvString replaceOccurrencesOfString:@"\r\n" withString:@"\n" options:NSLiteralSearch range:NSMakeRange(0, csvString.length)];
+    [csvString replaceOccurrencesOfString:@"\r" withString:@"\n" options:NSLiteralSearch range:NSMakeRange(0, csvString.length)];
+
+    if (!csvString)
+    {
+        return 0;
+    }
+
+    if ([csvString characterAtIndex:0] == 0xFEFF)
+    {
+        [csvString deleteCharactersInRange:NSMakeRange(0,1)];
+    }
+    if ([csvString characterAtIndex:[csvString length]-1] != '\n')
+    {
+        [csvString appendFormat:@"%c",'\n'];
+    }
+
+    NSScanner *sc = [NSScanner scannerWithString:csvString];
+    sc.charactersToBeSkipped =  nil;
+    NSMutableArray *csvArray = [NSMutableArray array];
+    [csvArray addObject:[NSMutableArray array]];
+    NSCharacterSet *commaNewlineCS = [NSCharacterSet characterSetWithCharactersInString:@",\n"];
+
+    while (sc.scanLocation < csvString.length)
+    {
+        if ([sc scanString:@"\"" intoString:NULL])
+        {
+            // Quoted field
+            NSMutableString *field = [NSMutableString string];
+            BOOL done = NO;
+            NSString *quotedString;
+            // Scan until we get to the end double quote or the EOF.
+            while (!done && sc.scanLocation < csvString.length)
+            {
+                if ([sc scanUpToString:@"\"" intoString:&quotedString])
+                {
+                    [field appendString:quotedString];
+                }
+                if ([sc scanString:@"\"\"" intoString:NULL])
+                {
+                    // Escaped double quote inside the quoted string.
+                    [field appendString:@"\""];
+                }
+                else
+                {
+                    done = YES;
+                }
+            }
+            if (sc.scanLocation < csvString.length)
+            {
+                ++sc.scanLocation;
+                BOOL nextIsNewline = [sc scanString:@"\n" intoString:NULL];
+                BOOL nextIsComma = NO;
+                if (!nextIsNewline)
+                {
+                    nextIsComma = [sc scanString:@"," intoString:NULL];
+                }
+                if (nextIsNewline || nextIsComma)
+                {
+                    [[csvArray lastObject] addObject:field];
+                    if (nextIsNewline && sc.scanLocation < csvString.length)
+                    {
+                        [csvArray addObject:[NSMutableArray array]];
+                    }
+                }
+                else
+                {
+                    // Quoted fields must be immediately followed by a comma or newline.
+                    return nil;
+                }
+            }
+            else
+            {
+                // No close quote found before EOF, so file is invalid CSV.
+                return nil;
+            }
+        }
+        else
+        {
+            NSString *field;
+            [sc scanUpToCharactersFromSet:commaNewlineCS intoString:&field];
+            BOOL nextIsNewline = [sc scanString:@"\n" intoString:NULL];
+            BOOL nextIsComma = NO;
+            if (!nextIsNewline)
+            {
+                nextIsComma = [sc scanString:@"," intoString:NULL];
+            }
+            if (nextIsNewline || nextIsComma)
+            {
+                [[csvArray lastObject] addObject:field];
+                if (nextIsNewline && sc.scanLocation < csvString.length)
+                {
+                    [csvArray addObject:[NSMutableArray array]];
+                }
+            }
+        }
+    }
+    return csvArray;
+}
+
+@end
+
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (weak) IBOutlet NSTableView *table;
-@property (nonatomic, readwrite, strong) NSArray *chapterTitles;
+@property (nonatomic, readwrite, strong) NSArray<HBChapter *> *chapterTitles;
 
 @end
 
@@ -73,6 +220,44 @@
 
 #pragma mark - Chapter Files Import / Export
 
+- (BOOL)importChaptersFromURL:(NSURL *)URL error:(NSError **)outError
+{
+    NSArray<NSArray<NSString *> *> *csvData = [NSArray HB_arrayWithContentsOfCSVURL:URL];
+    if (csvData.count == self.chapterTitles.count)
+    {
+        NSUInteger i = 0;
+        for (NSArray<NSString *> *lineFields in csvData)
+        {
+            if (lineFields.count < 2 || [lineFields[0] integerValue] != i + 1)
+            {
+                if (NULL != outError)
+                {
+                    *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid chapters CSV file", nil),
+                                                                                      NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The CSV file is not a valid chapters CSV file.", nil)}];
+                }
+                return NO;
+            }
+            i++;
+        }
+
+        NSUInteger j = 0;
+        for (NSArray<NSString *> *lineFields in csvData)
+        {
+            [self.chapterTitles[j] setTitle:lineFields[1]];
+            j++;
+        }
+        return YES;
+    }
+
+    if (NULL != outError)
+    {
+        *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Incorrect line count", nil),
+                                                                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The line count in the chapters CSV file does not match the number of chapters in the movie.", nil)}];
+    }
+
+    return NO;
+}
+
 - (IBAction)browseForChapterFile:(id)sender
 {
     // We get the current file name and path from the destination field here
@@ -80,65 +265,17 @@
 
 	// Open a panel to let the user choose the file
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-    panel.allowedFileTypes = @[@"csv"];
+    panel.allowedFileTypes = @[@"csv", @"txt"];
     panel.directoryURL = sourceDirectory;
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {
         if (result == NSFileHandlingPanelOKButton)
         {
-            NSString *csv = [[NSString alloc] initWithContentsOfURL:panel.URL encoding:NSUTF8StringEncoding error:NULL];
-            NSMutableArray *csvArray = [[csv componentsSeparatedByString:@"\n"] mutableCopy];
-            NSUInteger count = self.chapterTitles.count;
-
-            if (csvArray.count > 0)
+            NSError *error;
+            if ([self importChaptersFromURL:panel.URL error:&error] == NO)
             {
-                // if last item is empty remove it
-                if ([csvArray.lastObject length] == 0)
-                {
-                    [csvArray removeLastObject];
-                }
-            }
-            // if chapters in table is not equal to array count
-            if (count != csvArray.count)
-            {
-                [panel close];
-                [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", nil)
-                                 defaultButton:NSLocalizedString(@"OK", nil)
-                               alternateButton:NULL
-                                   otherButton:NULL
-                     informativeTextWithFormat:NSLocalizedString(@"%d chapters expected, %d chapters found in %@", nil),
-                  count, csvArray.count, panel.URL.lastPathComponent] runModal];
-            }
-            else
-            {
-                // otherwise, go ahead and populate table with array
-                NSUInteger idx = 0;
-                for (NSString *csvLine in csvArray)
-                {
-                    if (csvLine.length > 4)
-                    {
-                        // Get the Range.location of the first comma in the line and then put everything after that into chapterTitle
-                        NSRange firstCommaRange = [csvLine rangeOfString:@","];
-                        NSString *chapterTitle = [csvLine substringFromIndex:firstCommaRange.location + 1];
-                        // Since we store our chapterTitle commas as "\," for the cli, we now need to remove the escaping "\" from the title
-                        chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"\\," withString:@","];
-
-                        [self.chapterTitles[idx] setTitle:chapterTitle];
-                        idx++;
-                    }
-                    else
-                    {
-                        [panel close];
-                        [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", nil)
-                                         defaultButton:NSLocalizedString(@"OK", nil)
-                                       alternateButton:NULL
-                                           otherButton:NULL
-                             informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", nil), panel.URL.lastPathComponent] runModal];
-                        break;
-
-                    }
-                }
+                [self presentError:error];
             }
         }
     }];
@@ -164,12 +301,22 @@
             for (HBChapter *chapter in self.chapterTitles)
             {
                 // put each chapter title from the table into the array
-                [csv appendFormat:@"%03ld,",idx + 1];
+                [csv appendFormat:@"%ld,",idx + 1];
                 idx++;
 
-                // Escape any commas in the chapter name with "\,"
-                NSString *sanatizedTitle = [chapter.title stringByReplacingOccurrencesOfString:@"," withString:@"\\,"];
-                [csv appendString:sanatizedTitle];
+                NSString *sanatizedTitle = [chapter.title stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
+
+                // If the title contains any commas or quotes, add quotes
+                if ([sanatizedTitle containsString:@","] || [sanatizedTitle containsString:@"\""])
+                {
+                    [csv appendString:@"\""];
+                    [csv appendString:sanatizedTitle];
+                    [csv appendString:@"\""];
+                }
+                else
+                {
+                    [csv appendString:sanatizedTitle];
+                }
                 [csv appendString:@"\n"];
             }
 

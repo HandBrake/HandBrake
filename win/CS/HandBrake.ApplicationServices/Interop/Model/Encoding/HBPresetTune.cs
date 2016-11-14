@@ -15,7 +15,7 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     public class HBPresetTune
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// Initializes a new instance of the <see cref="HBPresetTune"/> class. 
         /// </summary>
         /// <param name="name">
         /// The name.

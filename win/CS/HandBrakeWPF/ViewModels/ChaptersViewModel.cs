@@ -208,8 +208,10 @@ namespace HandBrakeWPF.ViewModels
             string validationErrorMessage;
             if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
             {
-                if( !string.IsNullOrEmpty(validationErrorMessage))
-                    throw new GeneralApplicationException(Resources.ChaptersViewModel_ValidationFailedWarning, validationErrorMessage);
+                if (!string.IsNullOrEmpty(validationErrorMessage))
+                    throw new GeneralApplicationException(
+                              Resources.ChaptersViewModel_ValidationFailedWarning,
+                              validationErrorMessage);
 
                 // The user has cancelled the import, so exit
                 return;

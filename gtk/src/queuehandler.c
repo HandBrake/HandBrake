@@ -332,7 +332,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
             aspect_desc = _("(Aspect Lost)");
         }
     }
-    else if (!strcasecmp(pic_par, "strict") || !strcasecmp(pic_par, "loose"))
+    else if (!strcasecmp(pic_par, "auto") || !strcasecmp(pic_par, "loose"))
     {
         aspect_desc = _("(Anamorphic)");
     }
@@ -634,10 +634,9 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
         asettings = ghb_array_get(jobAudioList, ii);
 
         audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
-        double q = ghb_dict_get_double(asettings, "Quality");
-        if (ghb_dict_get_bool(asettings, "QualityEnable") &&
-            q != HB_INVALID_AUDIO_QUALITY)
+        if (ghb_audio_quality_enabled(asettings))
         {
+            double q = ghb_dict_get_double(asettings, "Quality");
             quality = ghb_format_quality(_("Quality: "), audio_encoder->codec, q);
         }
         else
@@ -1348,7 +1347,7 @@ title_add_multiple_set_conflict_label(
     if (are_conflicts)
     {
         msg =
-            "<span foreground='red' weight='bold'>"
+            "<span foreground='black' weight='bold'>"
             "Duplicate destination files detected.\n"
             "Duplicates will not be added to the queue."
             "</span>";

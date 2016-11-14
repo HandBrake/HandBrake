@@ -56,7 +56,6 @@ namespace HandBrakeWPF.Converters.Audio
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
 
-
                 if (!HandBrakeEncoderHelpers.AudioEncoders.Any(a => a.ShortName.Contains("fdk")))
                 {
                     encoders.Remove(AudioEncoder.fdkaac);
@@ -69,6 +68,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.ffflac);
                     encoders.Remove(AudioEncoder.ffflac24);
                     encoders.Remove(AudioEncoder.FlacPassthru);
+                    encoders.Remove(AudioEncoder.Opus);
                 }
 
                 if (parameter != null && parameter.ToString() == "True")

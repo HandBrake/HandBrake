@@ -22,51 +22,50 @@ extern NSString *keyAudioInputCodecParam;
 extern NSString *keyAudioInputChannelLayout;
 extern NSString *keyAudioTrackLanguageIsoCode;
 
-extern NSString *keyAudioCodecName;
-extern NSString *keyAudioSampleRateName;
-extern NSString *keyAudioBitrateName;
-extern NSString *keyAudioMixdownName;
-extern NSString *keyAudioCodec;
-extern NSString *keyAudioMixdown;
-extern NSString *keyAudioSamplerate;
-extern NSString *keyAudioBitrate;
-
 @protocol HBAudioTrackDataSource <NSObject>
-- (NSDictionary *)noneTrack;
-- (NSArray *)masterTrackArray;
+- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
+- (NSArray<NSString *> *)sourceTracksArray;
 @end
 
 @protocol HBAudioTrackDelegate <NSObject>
-- (void)settingTrackToNone:(HBAudioTrack *)newNoneTrack;
-- (void)switchingTrackFromNone:(HBAudioTrack *)noLongerNoneTrack;
-- (void)mixdownChanged;
+- (void)track:(HBAudioTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx;
+- (void)encoderChanged;
 @end
 
 @interface HBAudioTrack : NSObject <NSSecureCoding, NSCopying>
 
-@property (nonatomic, strong) NSDictionary *track;
-@property (nonatomic, strong, nullable) NSDictionary *codec;
-@property (nonatomic, strong, nullable) NSDictionary *mixdown;
-@property (nonatomic, strong, nullable) NSDictionary *sampleRate;
-@property (nonatomic, strong, nullable) NSDictionary *bitRate;
-@property (nonatomic) double drc;
-@property (nonatomic) double gain;
-@property (nonatomic) int container;
+- (instancetype)initWithTrackIdx:(NSUInteger)index
+                       container:(int)container
+                      dataSource:(id<HBAudioTrackDataSource>)dataSource
+                        delegate:(id<HBAudioTrackDelegate>)delegate;
+
+/// The index of the source in the data source tracks array.
+@property (nonatomic, readwrite) NSUInteger sourceTrackIdx;
+@property (nonatomic, readwrite) int container;
 
 @property (nonatomic, weak, nullable) id<HBAudioTrackDataSource> dataSource;
 @property (nonatomic, weak, nullable) id<HBAudioTrackDelegate> delegate;
 
-@property (nonatomic, readonly) NSArray *codecs;
-@property (nonatomic, readonly) NSArray *mixdowns;
-@property (nonatomic, readonly) NSArray *sampleRates;
-@property (nonatomic, readonly) NSArray *bitRates;
-@property (nonatomic, readonly) BOOL enabled;
+/**
+ *  track properties.
+ */
+@property (nonatomic, readwrite) int encoder;
+@property (nonatomic, readwrite) int mixdown;
+@property (nonatomic, readwrite) int sampleRate;
+@property (nonatomic, readwrite) int bitRate;
 
-- (void) setTrackFromIndex: (int) aValue;
-- (BOOL) setCodecFromName: (nullable NSString *) aValue;
-- (void) setMixdownFromName: (NSString *) aValue;
-- (void) setSampleRateFromName: (NSString *) aValue;
-- (void) setBitRateFromName: (NSString *) aValue;
+@property (nonatomic, readwrite) double gain;
+@property (nonatomic, readwrite) double drc;
+
+@property (nonatomic, readonly, getter=isEnabled) BOOL enabled;
+
+/**
+ *  Arrays of possible options for the track properties.
+ */
+@property (nonatomic, readonly) NSArray<NSString *> *encoders;
+@property (nonatomic, readonly) NSArray<NSString *> *mixdowns;
+@property (nonatomic, readonly) NSArray<NSString *> *sampleRates;
+@property (nonatomic, readonly) NSArray<NSString *> *bitRates;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 

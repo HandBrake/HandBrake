@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10109" systemVersion="15E39d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11185.3" systemVersion="16A270f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11185.3"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBTitleSelectionController">
@@ -44,10 +43,7 @@
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TFh-c7-W2w">
-                        <rect key="frame" x="425" y="14" width="64" height="28"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="54" id="Jdb-BE-Hva"/>
-                        </constraints>
+                        <rect key="frame" x="427" y="14" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mOe-XL-tl1">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -59,30 +55,14 @@ DQ
                             <action selector="add:" target="-2" id="3wk-rU-eSZ"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t5w-9e-K60">
-                        <rect key="frame" x="342" y="14" width="81" height="28"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="71" id="XN0-IF-uY5"/>
-                        </constraints>
-                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jHg-nh-9NJ">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="cancel:" target="-2" id="DP7-vq-pVX"/>
-                        </connections>
-                    </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="10" verticalLineScroll="18" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1K-L9-fU9">
                         <rect key="frame" x="20" y="57" width="464" height="151"/>
                         <clipView key="contentView" id="dTc-E7-D15">
-                            <rect key="frame" x="1" y="0.0" width="238" height="134"/>
+                            <rect key="frame" x="1" y="1" width="462" height="149"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="wM9-Ln-dr0">
-                                    <rect key="frame" x="0.0" y="0.0" width="462" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="462" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="4"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -213,7 +193,6 @@ Gw
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="KUp-wz-bHB">
                             <rect key="frame" x="1" y="119" width="223" height="15"/>
@@ -224,15 +203,29 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t5w-9e-K60">
+                        <rect key="frame" x="367" y="14" width="62" height="28"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jHg-nh-9NJ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancel:" target="-2" id="DP7-vq-pVX"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="a1K-L9-fU9" firstAttribute="trailing" secondItem="TFh-c7-W2w" secondAttribute="trailing" id="1Rv-qd-d1O"/>
-                    <constraint firstItem="TFh-c7-W2w" firstAttribute="leading" secondItem="t5w-9e-K60" secondAttribute="trailing" constant="12" id="38w-zr-7lu"/>
+                    <constraint firstItem="TFh-c7-W2w" firstAttribute="leading" secondItem="t5w-9e-K60" secondAttribute="trailing" constant="8" id="38w-zr-7lu"/>
                     <constraint firstItem="t5w-9e-K60" firstAttribute="top" secondItem="a1K-L9-fU9" secondAttribute="bottom" constant="19" id="B6W-V1-yyB"/>
                     <constraint firstAttribute="trailing" secondItem="5Jw-On-iU3" secondAttribute="trailing" constant="20" symbolic="YES" id="DFg-QW-2dB"/>
                     <constraint firstItem="t5w-9e-K60" firstAttribute="baseline" secondItem="TFh-c7-W2w" secondAttribute="baseline" id="Plr-pR-6oc"/>
                     <constraint firstItem="a1K-L9-fU9" firstAttribute="top" secondItem="5Jw-On-iU3" secondAttribute="bottom" constant="8" symbolic="YES" id="QDj-yW-Ftj"/>
                     <constraint firstItem="5Jw-On-iU3" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="Rxc-Wu-Lud"/>
+                    <constraint firstItem="TFh-c7-W2w" firstAttribute="width" secondItem="t5w-9e-K60" secondAttribute="width" id="UCk-Oi-KUJ"/>
                     <constraint firstItem="5Jw-On-iU3" firstAttribute="trailing" secondItem="a1K-L9-fU9" secondAttribute="trailing" id="ago-Pg-6Pk"/>
                     <constraint firstItem="5Jw-On-iU3" firstAttribute="leading" secondItem="a1K-L9-fU9" secondAttribute="leading" id="ht2-d9-goW"/>
                     <constraint firstItem="5Jw-On-iU3" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="l2E-Pu-aQK"/>

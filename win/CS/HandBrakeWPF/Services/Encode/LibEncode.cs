@@ -73,6 +73,8 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Create a new HandBrake instance
                 // Setup the HandBrake Instance
+                this.log.Reset(); // Reset so we have a clean log for the start of the encode.
+                this.ServiceLogMessage("Starting Encode ...");
                 this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
@@ -83,9 +85,6 @@ namespace HandBrakeWPF.Services.Encode
 
                 // Verify the Destination Path Exists, and if not, create it.
                 this.VerifyEncodeDestinationPath(task);
-
-                this.log.Reset(); // Reset so we have a clean log for the start of the encode.
-                this.ServiceLogMessage("Starting Encode ...");
 
                 // Get an EncodeJob object for the Interop Library
                 this.instance.StartEncode(EncodeFactory.Create(task, configuration));

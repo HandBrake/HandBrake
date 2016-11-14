@@ -858,7 +858,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  with {0} errors detected..
+        ///   Looks up a localized string similar to  with {0} errors or cancellations detected..
         /// </summary>
         public static string Main_QueueFinishedErrors {
             get {
@@ -1139,7 +1139,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version..
+        ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
+        ///    Please check the website for release notes..
         /// </summary>
         public static string OptionsViewModel_64bitAvailable {
             get {
@@ -1148,7 +1149,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A New Update is Available!.
+        ///   Looks up a localized string similar to A New Update is Available! Please check the website for release notes..
         /// </summary>
         public static string OptionsViewModel_NewUpdate {
             get {

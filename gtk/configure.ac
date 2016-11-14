@@ -52,6 +52,10 @@ else
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi
 
+AC_ARG_ENABLE(flatpak,
+	AS_HELP_STRING([--enable-flatpak], [enable flatpak packaging]),
+	use_flatpak=yes, use_flatpak=no)
+
 AC_ARG_ENABLE(dl,
 	AS_HELP_STRING([--enable-dl], [enable libdl]),
 	use_libdl=yes, use_libdl=no)
@@ -107,10 +111,9 @@ case $host in
   *)
     case "$host_os" in
 	linux*)
-	  pkg_gudev="gudev-1.0"
 	  ;;
     esac
-    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 gmodule-2.0 $pkg_gudev"
+    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 gmodule-2.0"
 	mingw_flag=no
     ;;
 esac
@@ -119,6 +122,14 @@ PKG_PROG_PKG_CONFIG
 GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
 
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
+
+pkg_gudev="gudev-1.0"
+PKG_CHECK_MODULES(Gudev, [$pkg_gudev], have_gudev=yes, have_gudev=no)
+if test "x$have_gudev" = "xyes" ; then
+    GHB_PACKAGES="$GHB_PACKAGES $pkg_gudev"
+	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
+	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
+fi
 
 if test "x$gst_disable" = "xno" ; then
     PKG_CHECK_MODULES(GStreamer1, [$GST1_MODULES], use_gst1=yes, use_gst1=no)
@@ -157,7 +168,7 @@ PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
-HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavfilter -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson"
+HB_LIBS="-lhandbrake -lavresample -lavformat -lavcodec -lavfilter -lavutil -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus"
 
 case $host in
   *-*-mingw*)
@@ -175,6 +186,8 @@ case $host in
     HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
 esac
+
+AM_CONDITIONAL([GHB_FLATPAK], [test "$use_flatpak" = "yes"])
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS="$HB_LIBS -lfdk-aac"

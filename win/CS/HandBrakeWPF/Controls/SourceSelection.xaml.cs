@@ -69,7 +69,7 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private void Help_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start("https://handbrake.fr/community.php");
+            Process.Start("https://handbrake.fr/docs");
         }
     }
 }

@@ -13,9 +13,20 @@
 
 #import "HBChapter.h"
 
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
+#import "HBMutablePreset.h"
 
 @implementation HBJob (HBJobConversion)
+
+- (NSDictionary *)jobDict
+{
+    NSAssert(self.title, @"HBJob: calling jobDict without a valid title loaded");
+
+    HBMutablePreset *preset = [[HBMutablePreset alloc] init];
+    [self writeToPreset:preset];
+
+    return [self.title jobSettingsWithPreset:preset];
+}
 
 /**
  *  Prepares a hb_job_t
@@ -345,29 +356,31 @@
     // Now lets add our new tracks to the audio list here
     for (HBAudioTrack *audioTrack in self.audio.tracks)
     {
-        if (audioTrack.enabled)
+        if (audioTrack.isEnabled)
         {
             hb_audio_config_t *audio = (hb_audio_config_t *)calloc(1, sizeof(*audio));
             hb_audio_config_init(audio);
 
-            NSNumber *sampleRateToUse = ([audioTrack.sampleRate[keyAudioSamplerate] intValue] == 0 ?
-                                         audioTrack.track[keyAudioInputSampleRate] :
-                                         audioTrack.sampleRate[keyAudioSamplerate]);
+            NSDictionary *inputTrack = self.audio.sourceTracks[audioTrack.sourceTrackIdx];
 
-            audio->in.track            = [audioTrack.track[keyAudioTrackIndex] intValue] -1;
+            int sampleRateToUse = (audioTrack.sampleRate == 0 ?
+                                   [inputTrack[keyAudioInputSampleRate] intValue] :
+                                   audioTrack.sampleRate);
+
+            audio->in.track = (int)audioTrack.sourceTrackIdx - 1;
 
             // We go ahead and assign values to our audio->out.<properties>
             audio->out.track                     = audio->in.track;
-            audio->out.codec                     = [audioTrack.codec[keyAudioCodec] intValue];
+            audio->out.codec                     = audioTrack.encoder;
             audio->out.compression_level         = hb_audio_compression_get_default(audio->out.codec);
-            audio->out.mixdown                   = [audioTrack.mixdown[keyAudioMixdown] intValue];
+            audio->out.mixdown                   = audioTrack.mixdown;
             audio->out.normalize_mix_level       = 0;
-            audio->out.bitrate                   = [audioTrack.bitRate[keyAudioBitrate] intValue];
-            audio->out.samplerate                = [sampleRateToUse intValue];
+            audio->out.bitrate                   = audioTrack.bitRate;
+            audio->out.samplerate                = sampleRateToUse;
             audio->out.dither_method             = hb_audio_dither_get_default();
 
             // output is not passthru so apply gain
-            if (!([[audioTrack codec][keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
+            if (!(audioTrack.encoder & HB_ACODEC_PASS_FLAG))
             {
                 audio->out.gain = audioTrack.gain;
             }
@@ -377,9 +390,9 @@
                 audio->out.gain = 0;
             }
 
-            if (hb_audio_can_apply_drc([audioTrack.track[keyAudioInputCodec] intValue],
-                                       [audioTrack.track[keyAudioInputCodecParam] intValue],
-                                       [audioTrack.codec[keyAudioCodec] intValue]))
+            if (hb_audio_can_apply_drc([inputTrack[keyAudioInputCodec] intValue],
+                                       [inputTrack[keyAudioInputCodecParam] intValue],
+                                       audioTrack.encoder))
             {
                 audio->out.dynamic_range_compression = audioTrack.drc;
             }

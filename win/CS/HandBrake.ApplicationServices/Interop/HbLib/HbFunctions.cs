@@ -377,6 +377,10 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_filter_get_tunes_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_filter_get_tunes_json(int filter_id);
 
+        // char ** hb_filter_get_keys(int filter_id);
+        [DllImport("hb.dll", EntryPoint = "hb_filter_get_keys", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_filter_get_keys(int filter_id);
+
         [DllImport("hb.dll", EntryPoint = "hb_x264_encopt_name", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_x264_encopt_name(IntPtr name);
 

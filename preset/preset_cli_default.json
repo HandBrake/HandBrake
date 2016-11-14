@@ -3,7 +3,14 @@
             "ChildrenArray": [
                 {
                     "AudioCopyMask": [
-                        "copy:aac"
+                        "copy:aac",
+                        "copy:ac3",
+                        "copy:eac3",
+                        "copy:dtshd",
+                        "copy:dts",
+                        "copy:mp3",
+                        "copy:truehd",
+                        "copy:flac"
                     ],
                     "AudioEncoderFallback": "aac",
                     "AudioLanguageList": [
@@ -57,7 +64,7 @@
                     "PictureKeepRatio": true,
                     "PictureLooseCrop": false,
                     "PictureModulus": 2,
-                    "PicturePAR": "strict",
+                    "PicturePAR": "loose",
                     "PicturePARWidth": 853,
                     "PicturePARHeight": 720,
                     "PictureRotate": "angle=0:hflip=0",
@@ -69,7 +76,7 @@
                     "PresetName": "CLI Default",
                     "Type": 0,
                     "UsesPictureFilters": true,
-                    "UsesPictureSettings": 2,
+                    "UsesPictureSettings": 0,
                     "SubtitleAddCC": false,
                     "SubtitleAddForeignAudioSearch": false,
                     "SubtitleAddForeignAudioSubtitle": false,
@@ -82,7 +89,7 @@
                     "VideoAvgBitrate": 6000,
                     "VideoColorMatrixCode": 0,
                     "VideoEncoder": "x264",
-                    "VideoFramerate": "",
+                    "VideoFramerate": "auto",
                     "VideoFramerateMode": "vfr",
                     "VideoGrayScale": false,
                     "VideoScaler": "swscale",

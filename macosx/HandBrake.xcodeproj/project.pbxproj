@@ -65,6 +65,8 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
+		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
+		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */; };
 		A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
 		A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
@@ -169,11 +171,15 @@
 		A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CF25F21990D64E0023F727 /* HBPreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D488A31996270300E9B1BA /* HBTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */; };
+		A91F97361D7B2A4E00D82DCE /* HBAudioTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */; };
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
 		A922687B1A6E569B00A8D5C5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92268791A6E569B00A8D5C5 /* MainWindow.xib */; };
+		A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */; };
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A9350F501CCA7F490089F970 /* HBQTKitPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A9350F4E1CCA7C3B0089F970 /* HBQTKitPlayer.m */; };
 		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
+		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
 		A94A98F51C858EFB004BA9BA /* HBDictTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94A98F41C858EFB004BA9BA /* HBDictTests.m */; };
@@ -385,6 +391,7 @@
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
+		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A903C55E1CCE78060026B0ED /* NSWindow+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+HBAdditions.h"; sourceTree = "<group>"; };
 		A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+HBAdditions.m"; sourceTree = "<group>"; };
 		A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrackPreset.h; sourceTree = "<group>"; };
@@ -409,9 +416,12 @@
 		A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		A91CE2D11C7DABDA0068F46F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A91CE2D31C7DABE40068F46F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTransformers.h; sourceTree = "<group>"; };
+		A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTransformers.m; sourceTree = "<group>"; };
 		A92268761A6E555500A8D5C5 /* HBAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAppDelegate.h; sourceTree = "<group>"; };
 		A92268771A6E555500A8D5C5 /* HBAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAppDelegate.m; sourceTree = "<group>"; };
 		A922687A1A6E569B00A8D5C5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainWindow.xib; sourceTree = "<group>"; };
+		A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+Private.h"; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -422,6 +432,8 @@
 		A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		A93B0DF61C804CF50051A3FA /* NSDictionary+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+HBAdditions.h"; sourceTree = "<group>"; };
 		A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+HBAdditions.m"; sourceTree = "<group>"; };
+		A93B49201DA3AA6900DD70A3 /* HBToolbarBadgedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBToolbarBadgedItem.h; sourceTree = "<group>"; };
+		A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBToolbarBadgedItem.m; sourceTree = "<group>"; };
 		A93E0ED01972957000FD67FB /* HBVideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBVideoController.h; sourceTree = "<group>"; };
 		A93E0ED11972957000FD67FB /* HBVideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBVideoController.m; sourceTree = "<group>"; };
 		A93E0ED61972958C00FD67FB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Video.xib; sourceTree = "<group>"; };
@@ -479,7 +491,7 @@
 		A98C29C31977B10600AF5DED /* HBLanguagesSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBLanguagesSelection.m; sourceTree = "<group>"; };
 		A98F38041C7DCA7E00E469C8 /* HBStateFormatter+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBStateFormatter+Private.h"; sourceTree = "<group>"; };
 		A98F38051C7DCA7E00E469C8 /* HBStateFormatter+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBStateFormatter+Private.m"; sourceTree = "<group>"; };
-		A98FD5941B19C6E400FCC7A5 /* HBTitlePrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitlePrivate.h; sourceTree = "<group>"; };
+		A98FD5941B19C6E400FCC7A5 /* HBTitle+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBTitle+Private.h"; sourceTree = "<group>"; };
 		A9906B2B1A710920001D82D5 /* HBQueueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueController.m; sourceTree = "<group>"; };
 		A990D9051A64562200139032 /* HBJob+HBJobConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+HBJobConversion.h"; sourceTree = "<group>"; };
 		A990D9061A64562200139032 /* HBJob+HBJobConversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBJob+HBJobConversion.m"; sourceTree = "<group>"; };
@@ -572,6 +584,7 @@
 				273F202814ADB8BE0021BE6D /* libbz2.dylib in Frameworks */,
 				273F202A14ADB8D60021BE6D /* libiconv.dylib in Frameworks */,
 				273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */,
+				A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */,
 				27D6C72614B1019100B785E4 /* libhandbrake.a in Frameworks */,
 				27D6C74414B102DA00B785E4 /* libass.a in Frameworks */,
 				27D6C74614B102DA00B785E4 /* libavcodec.a in Frameworks */,
@@ -624,6 +637,7 @@
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
 				A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
+				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
 				A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
@@ -689,6 +703,7 @@
 				27D6C73E14B102DA00B785E4 /* libvorbisenc.a */,
 				22DD2C49177B94DB00EF50D3 /* libvpx.a */,
 				27D6C73F14B102DA00B785E4 /* libx264.a */,
+				A900E6BC1D7B1B4800CB6C0A /* libopus.a */,
 				27D6C74014B102DA00B785E4 /* libxml2.a */,
 				A95512881A320A12001BFC6F /* libjansson.a */,
 				A9E165511C523016003EF30E /* libavfilter.a */,
@@ -1066,9 +1081,10 @@
 				A9DEC8731A23C87500C79B48 /* HBCore.m */,
 				A971281D1A2C75180088C076 /* HBTitle.h */,
 				A971281E1A2C75180088C076 /* HBTitle.m */,
-				A98FD5941B19C6E400FCC7A5 /* HBTitlePrivate.h */,
+				A98FD5941B19C6E400FCC7A5 /* HBTitle+Private.h */,
 				A9DEC87D1A23DF6F00C79B48 /* HBJob.h */,
 				A9DEC87E1A23DF6F00C79B48 /* HBJob.m */,
+				A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */,
 				A990D9051A64562200139032 /* HBJob+HBJobConversion.h */,
 				A990D9061A64562200139032 /* HBJob+HBJobConversion.m */,
 				A918066F1A4807B000FC9BED /* HBRange.h */,
@@ -1114,6 +1130,8 @@
 				A932E272198834130047D13E /* HBAudioDefaults.m */,
 				A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */,
 				A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */,
+				A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */,
+				A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -1176,6 +1194,8 @@
 				A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */,
 				A9D0FA781C1C36820003F2A9 /* HBTabView.h */,
 				A9D0FA791C1C36820003F2A9 /* HBTabView.m */,
+				A93B49201DA3AA6900DD70A3 /* HBToolbarBadgedItem.h */,
+				A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */,
 			);
 			name = "UI Views";
 			sourceTree = "<group>";
@@ -1243,9 +1263,11 @@
 				A91CE2EC1C7DAEEE0068F46F /* HBStateFormatter.h in Headers */,
 				A91CE2ED1C7DAEEE0068F46F /* HBUtilities.h in Headers */,
 				A91CE2FB1C7DB99D0068F46F /* HBPresetsManager.h in Headers */,
+				A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */,
 				A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */,
 				A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */,
 				A98B8E241C7DD2A200B810C9 /* HBPresetCoding.h in Headers */,
+				A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */,
 				A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1351,7 +1373,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				TargetAttributes = {
 					A9736F011C7DA5FE008F1D18 = {
 						CreatedOnToolsVersion = 7.3;
@@ -1484,6 +1506,7 @@
 				A96664BA1CCE493D00DA4A57 /* HBEncodingProgressHUDController.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
+				A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */,
 				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
 				A98036CD1CCA91DD007661AA /* HBAVPlayer.m in Sources */,
 				A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */,
@@ -1519,6 +1542,7 @@
 				A91CE27F1C7DA7320068F46F /* HBTitle.m in Sources */,
 				A91CE2821C7DA7320068F46F /* HBJob.m in Sources */,
 				A91CE2841C7DA7320068F46F /* HBJob+HBJobConversion.m in Sources */,
+				A91F97361D7B2A4E00D82DCE /* HBAudioTransformers.m in Sources */,
 				A91CE2861C7DA7320068F46F /* HBRange.m in Sources */,
 				A91CE2881C7DA7320068F46F /* HBVideo.m in Sources */,
 				A91CE28A1C7DA7320068F46F /* HBPicture.m in Sources */,
@@ -1754,6 +1778,7 @@
 			baseConfigurationReference = 275916DA14B2AB27007211E9 /* native.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1761,9 +1786,11 @@
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1810,6 +1837,7 @@
 			baseConfigurationReference = 275916DA14B2AB27007211E9 /* native.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1817,9 +1845,11 @@
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
@@ -1996,7 +2026,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2061,7 +2091,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2121,7 +2151,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2174,7 +2203,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

@@ -154,6 +154,9 @@ gboolean ghb_validate_vquality(GhbValue *settings);
 gboolean ghb_validate_audio(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent);
 gboolean ghb_validate_video(GhbValue *settings, GtkWindow *parent);
+void ghb_set_custom_filter_tooltip(signal_user_data_t *ud,
+                                   const char *name, const char * desc,
+                                   int filter_id);
 gboolean ghb_validate_filters(GhbValue *settings, GtkWindow *parent);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GhbValue *gval);
@@ -172,6 +175,7 @@ void ghb_audio_bitrate_opts_filter(GtkComboBox *combo, gint first_rate, gint las
 void ghb_mix_opts_set(GtkComboBox *combo);
 void ghb_mix_opts_filter(GtkComboBox *combo, gint acodec);
 void ghb_audio_samplerate_opts_set(GtkComboBox *combo);
+void ghb_audio_samplerate_opts_filter(GtkComboBox *combo, gint acodec);
 
 int ghb_lookup_lang(const GhbValue *glang);
 const iso639_lang_t* ghb_iso639_lookup_by_int(int idx);

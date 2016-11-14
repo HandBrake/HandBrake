@@ -59,13 +59,8 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 - (void)windowDidLoad {
     [super windowDidLoad];
 
-    /*
-     * Populate the preset picture settings popup.
-     *
-     * Custom is not applicable when the anamorphic mode is Strict.
-     *
-     * Use [NSMenuItem tag] to store preset values for each option.
-     */
+    // Populate the preset picture settings popup.
+    // Use [NSMenuItem tag] to store preset values for each option.
 
     // Default to Source Maximum
     HBAddPresetControllerMode mode = HBAddPresetControllerModeSourceMaximum;
@@ -73,16 +68,12 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", nil)];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeNone];
 
-    if (![self.preset[@"PicturePAR"] isEqualToString:@"strict"])
-    {
-        // not Strict, Custom is applicable
-        [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", nil)];
-        [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", nil)];
+    [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
 
-        if (self.defaultToCustom)
-        {
-            mode = HBAddPresetControllerModeCustom;
-        }
+    if (self.defaultToCustom)
+    {
+        mode = HBAddPresetControllerModeCustom;
     }
     [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", nil)];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];

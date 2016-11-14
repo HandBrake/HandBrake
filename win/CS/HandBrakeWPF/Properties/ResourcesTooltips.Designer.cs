@@ -182,11 +182,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to None   - Force pixel aspect ratio to 1:1.
-        ///Loose  - Align dimensions to chosen &apos;Alignment&apos; value
-        ///               and pick pixel aspect ratio that preserves the
-        ///               original display aspect ratio
-        ///Strict - Keep original source dimensions and pixel aspect ratio.
+        ///   Looks up a localized string similar to None          - Force pixel aspect ratio to 1:1.
+        ///Loose         - Use a pixel aspect ratio that is as close as possible to the source video pixel
+        ///                      aspect ratio while preserving the original display aspect ratio
+        ///Automatic - Use a pixel aspect ratio that maximizes storage resolution while preserving the 
+        ///                      original display aspect ratio..
         /// </summary>
         public static string PictureSettingsView_Anamorphic {
             get {

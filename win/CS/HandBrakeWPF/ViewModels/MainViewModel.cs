@@ -155,12 +155,15 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="queueViewModel">
         /// The queue View Model.
         /// </param>
+        /// <param name="metaDataViewModel">
+        /// The Meta Data View Model
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
             IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
-            IQueueViewModel queueViewModel)
+            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -174,6 +177,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.PictureSettingsViewModel = pictureSettingsViewModel;
             this.VideoViewModel = videoViewModel;
+            this.MetaDataViewModel = metaDataViewModel;
             this.FiltersViewModel = filtersViewModel;
             this.AudioViewModel = audioViewModel;
             this.SubtitleViewModel = subtitlesViewModel;
@@ -278,6 +282,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the The MetaData View Model
+        /// </summary>
+        public IMetaDataViewModel MetaDataViewModel { get; set; }
+
         #endregion
 
         #region Properties
@@ -376,6 +385,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.ChaptersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.AdvancedViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.MetaDataViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
 
                     // Do this again to force an update for m4v/mp4 selection
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
@@ -1185,6 +1195,9 @@ namespace HandBrakeWPF.ViewModels
 
         #region Commands 
 
+        /// <summary>
+        /// Gets or sets the queue command.
+        /// </summary>
         public ICommand QueueCommand { get; set; }
 
         #endregion
@@ -1347,7 +1360,7 @@ namespace HandBrakeWPF.ViewModels
         {
             try
             {
-                Process.Start("https://trac.handbrake.fr/wiki/HandBrakeGuide");
+                Process.Start("https://handbrake.fr/docs");
             }
             catch (Exception exc)
             {
@@ -1389,7 +1402,6 @@ namespace HandBrakeWPF.ViewModels
                 this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOnDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-
 
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
@@ -1668,7 +1680,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Pass on the "When Done" Action to the queue view model. 
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">action</param>
         public void WhenDone(string action)
         {
             this.QueueViewModel?.WhenDone(action);
@@ -1832,6 +1844,34 @@ namespace HandBrakeWPF.ViewModels
                 this.errorService.ShowMessageBox(
                         Resources.Main_PresetUpdated, Resources.Updated, MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        /// <summary>
+        /// Manage the current Preset
+        /// </summary>
+        public void PresetManage()
+        {
+            if (this.SelectedPreset == null)
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (this.SelectedPreset.IsBuildIn)
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            IManagePresetViewModel presetViewModel = IoC.Get<IManagePresetViewModel>();
+            presetViewModel.Setup(this.SelectedPreset);
+            this.windowManager.ShowDialog(presetViewModel);
+            Preset preset = presetViewModel.Preset;
+
+            this.SelectedPreset = preset; // Reselect the preset
         }
 
         /// <summary>
@@ -2022,6 +2062,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SubtitleViewModel.UpdateTask(this.CurrentTask);
                 this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                 this.AdvancedViewModel.UpdateTask(this.CurrentTask);
+                this.MetaDataViewModel.UpdateTask(this.CurrentTask);
 
                 // Cleanup
                 this.ShowStatusWindow = false;
@@ -2093,6 +2134,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SubtitleViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
                 this.ChaptersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
                 this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
             }
         }
 

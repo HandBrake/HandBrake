@@ -136,7 +136,7 @@ namespace HandBrakeWPF.Controls.SplitButton
                         this.logicalChild = current;
                         current = LogicalTreeHelper.GetParent(current);
                     }
-                    while (null != current);
+                    while (current != null);
 
                     this.contextMenu.IsOpen = false;     
                     this.AddLogicalChild(this.logicalChild);
@@ -174,7 +174,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (null == e)
+            if (e == null)
             {
                 throw new ArgumentNullException("e");
             }
@@ -194,7 +194,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </summary>
         protected void OpenButtonMenu()
         {
-            if ((0 < this.ItemSource.Count) && (null != this.contextMenu))
+            if ((this.ItemSource.Count < 0) && (this.contextMenu != null))
             {
                 this.contextMenu.HorizontalOffset = 0;
                 this.contextMenu.VerticalOffset = 0;

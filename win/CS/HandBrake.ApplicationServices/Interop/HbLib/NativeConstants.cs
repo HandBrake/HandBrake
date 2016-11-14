@@ -13,7 +13,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
     public class NativeConstants
     {
         // Audio encoders
-        public const uint HB_ACODEC_MASK = 0x00FFFF00;
+        public const uint HB_ACODEC_MASK = 0x03FFFF00;
         public const uint HB_ACODEC_LAME = 0x00000200;
         public const uint HB_ACODEC_VORBIS = 0x00000400;
         public const uint HB_ACODEC_AC3 = 0x00000800;
@@ -58,5 +58,10 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public const int HB_STATE_PAUSED = 16;
         public const int HB_STATE_WORKDONE = 32;
         public const int HB_STATE_MUXING = 64;
-    }
+
+        // Keep aspect ratio values
+        public const int HB_KEEP_WIDTH = 0x01;
+        public const int HB_KEEP_HEIGHT = 0x02;
+        public const int HB_KEEP_DISPLAY_ASPECT = 0x04;
+	}
 }

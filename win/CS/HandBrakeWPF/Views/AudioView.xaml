@@ -47,8 +47,7 @@
                    Text="{Binding PanelTitle}" />
 
         <!-- Row 1 -->
-        <Grid Grid.Row="1" Margin="10,5,10,0" Grid.Column="0" 
-              Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+        <Grid Grid.Row="1" Margin="10,5,10,0" Grid.Column="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -89,8 +88,7 @@
         </Grid>
 
         <!-- Row 2 -->
-        <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" 
-                 Visibility="{Binding ShowAudioDefaultsPanel, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
+        <ListBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch"
                  Margin="10,10,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
@@ -135,7 +133,7 @@
                         <Image Grid.Column="0" Grid.Row="0"
                                Width="16"
                                Height="16"
-                               Margin="8,0,8,0"
+                               Margin="5,0,5,0"
                                Source="Images/Movies.png" />
 
                         <!--  Settings  -->

@@ -11,7 +11,7 @@
 #import "HBUtilities.h"
 
 #import "HBStateFormatter+Private.h"
-#import "HBTitlePrivate.h"
+#import "HBTitle+Private.h"
 
 #include <dlfcn.h>
 
@@ -53,9 +53,6 @@ static void hb_error_handler(const char *errmsg)
 
 /// Completion handler.
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
-
-/// User cancelled.
-@property (nonatomic, readwrite, getter=isCancelled) BOOL cancelled;
 
 @end
 
@@ -251,32 +248,26 @@ static void hb_error_handler(const char *errmsg)
 /**
  *  Creates an array of lightweight HBTitles instances.
  */
-- (BOOL)scanDone
+- (HBCoreResult)scanDone
 {
-    if (self.isCancelled)
-    {
-        return NO;
-    }
-
     hb_title_set_t *title_set = hb_get_title_set(_hb_handle);
     NSMutableArray *titles = [NSMutableArray array];
 
     for (int i = 0; i < hb_list_count(title_set->list_title); i++)
     {
         hb_title_t *title = (hb_title_t *) hb_list_item(title_set->list_title, i);
-        [titles addObject:[[HBTitle alloc] initWithTitle:title featured:(title->index == title_set->feature)]];
+        [titles addObject:[[HBTitle alloc] initWithTitle:title handle:self.hb_handle featured:(title->index == title_set->feature)]];
     }
 
     self.titles = [titles copy];
 
     [HBUtilities writeToActivityLog:"%s scan done", self.name.UTF8String];
 
-    return (self.titles.count > 0);
+    return (self.titles.count > 0) ? HBCoreResultDone : HBCoreResultFailed;
 }
 
 - (void)cancelScan
 {
-    self.cancelled = YES;
     hb_scan_stop(_hb_handle);
     [HBUtilities writeToActivityLog:"%s scan cancelled", self.name.UTF8String];
 }
@@ -293,7 +284,7 @@ static void hb_error_handler(const char *errmsg)
     CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
     CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
 
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imgRef);
     CGContextRef bmContext = CGBitmapContextCreate(NULL,
                                                    (size_t)rotatedRect.size.width,
                                                    (size_t)rotatedRect.size.height,
@@ -303,7 +294,6 @@ static void hb_error_handler(const char *errmsg)
                                                    kCGImageAlphaPremultipliedFirst);
     CGContextSetAllowsAntialiasing(bmContext, FALSE);
     CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
-    CGColorSpaceRelease(colorSpace);
 
     // Rotate
     CGContextTranslateCTM(bmContext,
@@ -332,6 +322,44 @@ static void hb_error_handler(const char *errmsg)
     CFRelease(bmContext);
 
     return rotatedImage;
+}
+
+- (CGColorSpaceRef)copyColorSpaceWithColorPrimaries:(int)colorPrimaries
+{
+    const CGFloat whitePoint[] = {0.95047, 1.0, 1.08883};
+    const CGFloat blackPoint[] = {0, 0, 0};
+
+    // See https://developer.apple.com/library/content/technotes/tn2257/_index.html
+    const CGFloat gamma[] = {1.961, 1.961, 1.961};
+
+    // RGB/XYZ Matrices (D65 white point)
+    switch (colorPrimaries) {
+        case HB_COLR_PRI_EBUTECH:
+        {
+            // Rec. 601, 625 line
+            const CGFloat matrix[] = {0.4305538, 0.2220043, 0.0201822,
+                                      0.3415498, 0.7066548, 0.1295534,
+                                      0.1783523, 0.0713409, 0.9393222};
+            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
+        }
+        case HB_COLR_PRI_SMPTEC:
+        {
+            // Rec. 601, 525 line
+            const CGFloat matrix[] = {0.3935209, 0.2123764, 0.0187391,
+                                      0.3652581, 0.7010599, 0.1119339,
+                                      0.1916769, 0.0865638, 0.9583847};
+            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
+        }
+        case HB_COLR_PRI_BT709:
+        default:
+        {
+            // Rec. 709
+            const CGFloat matrix[] = {0.4124564, 0.2126729, 0.0193339,
+                                      0.3575761, 0.7151522, 0.1191920,
+                                      0.1804375, 0.0721750, 0.9503041};
+            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
+        }
+    }
 }
 
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
@@ -363,7 +391,8 @@ static void hb_error_handler(const char *errmsg)
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 3 * image->width * image->height);
         CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        CGColorSpaceRef colorSpace = [self copyColorSpaceWithColorPrimaries:title.hb_title->color_prim];
+
         img = CGImageCreate(image->width,
                             image->height,
                             8,
@@ -447,7 +476,7 @@ static void hb_error_handler(const char *errmsg)
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
 }
 
-- (BOOL)workDone
+- (HBCoreResult)workDone
 {
     // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
     // or someone calling hb_stop. In the latter case, hb_stop does not clear
@@ -458,16 +487,29 @@ static void hb_error_handler(const char *errmsg)
         hb_rem(_hb_handle, job);
     }
 
-    [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
-
-    return self.isCancelled || (_hb_state->param.workdone.error == 0);
+    HBCoreResult result = HBCoreResultDone;
+    switch (_hb_state->param.workdone.error)
+    {
+        case HB_ERROR_NONE:
+            result = HBCoreResultDone;
+            [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
+            break;
+        case HB_ERROR_CANCELED:
+            result = HBCoreResultCancelled;
+            [HBUtilities writeToActivityLog:"%s work canceled", self.name.UTF8String];
+            break;
+        default:
+            result = HBCoreResultFailed;
+            [HBUtilities writeToActivityLog:"%s work failed", self.name.UTF8String];
+            break;
+    }
+    return result;
 }
 
 - (void)cancelEncode
 {
-    self.cancelled = YES;
     hb_stop(_hb_handle);
-    [HBUtilities writeToActivityLog:"%s encode cancelled", self.name.UTF8String];
+    [HBUtilities writeToActivityLog:"%s encode canceled", self.name.UTF8String];
 }
 
 - (void)pause
@@ -593,25 +635,8 @@ static void hb_error_handler(const char *errmsg)
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
 
-    HBCoreResult result = HBCoreResultDone;
-    if (_hb_state->state == HB_STATE_WORKDONE)
-    {
-        result = [self workDone] ? HBCoreResultDone : HBCoreResultFailed;
-    }
-    else
-    {
-        result = [self scanDone] ? HBCoreResultDone : HBCoreResultFailed;
-    }
-
-    if (self.isCancelled)
-    {
-        result = HBCoreResultCancelled;
-    }
-
+    HBCoreResult result = (_hb_state->state == HB_STATE_WORKDONE) ? [self workDone] : [self scanDone];
     [self runCompletionBlockAndCleanUpWithResult:result];
-
-    // Reset the cancelled state.
-    self.cancelled = NO;
 }
 
 /**

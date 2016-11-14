@@ -125,6 +125,14 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             codec_name = "libmp3lame";
             break;
 
+        case HB_ACODEC_OPUS:
+            codec_name = "libopus";
+            // Libav's libopus wrapper expects back channels for 5.1
+            // audio, and will error out unless we translate the layout
+            if (channel_layout == AV_CH_LAYOUT_5POINT1)
+                channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
+            break;
+
         default:
             hb_error("encavcodecaInit: unsupported codec (0x%x)",
                      audio->config.out.codec);

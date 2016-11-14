@@ -239,7 +239,7 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
 {
     if (offset != _offset)
     {
-        [[self.undo prepareWithInvocationTarget:self] setOffset:_def];
+        [[self.undo prepareWithInvocationTarget:self] setOffset:_offset];
     }
     _offset = offset;
 }
@@ -261,9 +261,14 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     return self.sourceTrackIdx != 0;
 }
 
+- (BOOL)isForcedSupported
+{
+    return hb_subtitle_can_force(self.type) && self.isEnabled;
+}
+
 - (BOOL)canPassthru
 {
-    return (BOOL)hb_subtitle_can_pass(self.type, self.container) && self.isEnabled;
+    return hb_subtitle_can_pass(self.type, self.container) && self.isEnabled;
 }
 
 - (NSArray<NSString *> *)languages
@@ -290,7 +295,7 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     {
         retval = [NSSet setWithObjects: @"sourceTrackIdx", nil];
     }
-    else if ([key isEqualToString: @"canPassthru"])
+    else if ([key isEqualToString: @"canPassthru"] || [key isEqualToString: @"isForcedSupported"] )
     {
         retval = [NSSet setWithObjects: @"isEnabled", @"sourceTrackIdx", nil];
     }

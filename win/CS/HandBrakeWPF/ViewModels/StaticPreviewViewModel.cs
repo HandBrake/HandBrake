@@ -475,13 +475,13 @@ namespace HandBrakeWPF.ViewModels
             Rect workArea = SystemParameters.WorkArea;
             if (ea.NewSize.Width > workArea.Width)
             {
-                this.Width = (int)Math.Round(workArea.Width, 0) - 20;
+                this.Width = (int)Math.Round(workArea.Width, 0) - 50;
                 this.Title = Resources.Preview_Scaled;
             }
 
             if (ea.NewSize.Height > workArea.Height)
             {
-                this.Height = (int)Math.Round(workArea.Height, 0) - 20;
+                this.Height = (int)Math.Round(workArea.Height, 0) - 50;
                 this.Title = Resources.Preview_Scaled;
             }
         }
@@ -558,7 +558,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
-            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage;  // TODO 0 and 1 mean the same. Need to fix this as it knocks the video out of sync with the still preview.
+            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage + 1;  
             encodeTask.PreviewEncodeDuration = this.Duration;
             QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
@@ -591,7 +591,7 @@ namespace HandBrakeWPF.ViewModels
                             // Attempt to find VLC if it doesn't exist in the default set location.
                             string vlcPath;
 
-                            if (8 == IntPtr.Size || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+                            if (IntPtr.Size == 8 || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
                                 vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
                             else
                                 vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");

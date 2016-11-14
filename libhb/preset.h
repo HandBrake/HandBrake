@@ -149,6 +149,8 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
 // Reinitialize audio from preset defaults.
 int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
                             const hb_dict_t *preset, hb_dict_t *job_dict);
+void hb_sanitize_audio_settings(const hb_title_t * title,
+                                hb_value_t * audio_settings);
 
 // Lookup a preset in the preset list.  The "name" may contain '/'
 // separators to explicitely specify a preset within the preset lists
@@ -178,6 +180,7 @@ int          hb_preset_move(const hb_preset_index_t *src_path,
 hb_dict_t         * hb_presets_get_default(void);
 char              * hb_presets_get_default_json(void);
 hb_preset_index_t * hb_presets_get_default_index(void);
+void                hb_presets_clear_default();
 
 // Package the provided preset (wrap in dict and add version etc)
 // and write to json file

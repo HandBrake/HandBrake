@@ -297,7 +297,7 @@ format_video_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     if (video_presets != NULL)
     {
         preset = video_presets[(int)val];
-        return g_strdup_printf(" %-12s", preset);
+        return g_strdup_printf("%-10s", preset);
     }
     return g_strdup_printf(" %-12s", "ERROR");
 }

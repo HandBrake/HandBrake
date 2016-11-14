@@ -1,8 +1,8 @@
 diff --git a/x264.h b/x264.h
-index 2e4a98d..2065222 100644
+index 2b59b92..6211a64 100644
 --- a/x264.h
 +++ b/x264.h
-@@ -41,7 +41,17 @@
+@@ -45,7 +45,17 @@ extern "C" {
  
  #include "x264_config.h"
  
@@ -17,7 +17,7 @@ index 2e4a98d..2065222 100644
 +#undef  X264_VERSION
 +#endif
 +#define X264_BUILD       148
-+#define X264_VERSION " r2665 a01e339"
++#define X264_VERSION " r2705 3f5ed56"
  
  /* Application developers planning to link against a shared library version of
   * libx264 from a Microsoft Visual Studio or similar development environment

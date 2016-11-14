@@ -35,6 +35,12 @@ ifeq (1,$(BUILD.cross))
     endif
 endif
 
+ifeq (linux,$(BUILD.system))
+    ifeq (x86_64,$(BUILD.machine))
+        LIBVPX.CONFIGURE.extra += --enable-pic
+    endif
+endif
+
 ifeq (1,$(FEATURE.local_yasm))
     LIBVPX.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
     LIBVPX.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"

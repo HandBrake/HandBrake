@@ -194,7 +194,8 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
                                 in->f.width  - (pv->crop[2] + pv->crop[3]),
                                 in->f.height - (pv->crop[0] + pv->crop[1]),
                                 in->f.fmt, out->f.width, out->f.height,
-                                out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND);
+                                out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND,
+                                hb_ff_get_colorspace(pv->job->title->color_matrix));
             pv->width_in  = in->f.width;
             pv->height_in = in->f.height;
             pv->pix_fmt   = in->f.fmt;

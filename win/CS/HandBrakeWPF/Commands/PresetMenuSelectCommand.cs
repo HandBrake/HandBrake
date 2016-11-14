@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PresetsMenuConverter.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="PresetMenuSelectCommand.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -17,11 +17,19 @@ namespace HandBrakeWPF.Commands
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    /// <summary>
+    /// The preset menu select command.
+    /// </summary>
     public class PresetMenuSelectCommand : ICommand
     {
         private readonly Preset preset;
 
-        /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PresetMenuSelectCommand"/> class. 
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
         public PresetMenuSelectCommand(Preset preset)
         {
             this.preset = preset;
@@ -43,6 +51,9 @@ namespace HandBrakeWPF.Commands
             mvm.PresetSelect(this.preset);
         }
 
+        /// <summary>
+        /// The can execute changed.
+        /// </summary>
         public event EventHandler CanExecuteChanged;
     }
 }

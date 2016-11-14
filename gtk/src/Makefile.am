@@ -17,7 +17,14 @@ icons_dep =	\
 	hb-edit.svg \
 	hb-complete.svg
 
+if GHB_FLATPAK
+icons += fr.handbrake.ghb.svg
+hb_menu = fr.handbrake.ghb.desktop
+flatpak_appdata = fr.handbrake.ghb.appdata.xml
+else
 hb_menu = ghb.desktop
+endif
+
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
@@ -97,7 +104,7 @@ icon_res.h : icon_res.gresource.xml $(icons_dep)
 	glib-compile-resources --generate --target=$@ --c-name ghb_icons --manual-register --sourcedir=$(srcdir) $<
 
 icon_res.o: icon_res.c icon_res.h
-icon.o: icon_res.h
+icons.o: icon_res.h
 
 data_res.c : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps widget_reverse.deps
 	cp $(srcdir)/internal_defaults.json .
@@ -108,20 +115,20 @@ data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
 if GHB_GTK_3_14
-UI=ghb-3.14.ui
+UI=314
 else
 if GHB_GTK_3_12
-UI=ghb-3.12.ui
+UI=312
 else
-UI=ghb.ui
+UI=300
 endif
 endif
 
-ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI)
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/ghb.m4
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
-ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI)
-	cp $(srcdir)/$(UI) ghb.ui
+ui_res.h : ui_res.gresource.xml $(srcdir)/ghb.m4
+	m4 -Dgtk_version=$(UI) $(srcdir)/ghb.m4 > ghb.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
 ui_res.o: ui_res.h ui_res.c
@@ -146,15 +153,7 @@ gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/
 
 uninstall-local:
 	for icon in $(icons); do \
-		SIZE=`echo $$icon | cut -d. -f2`; \
-		FILE=`echo $$icon | cut -d. -f1,3`; \
-		if [ "$$SIZE" = "svg" ]; then \
-			SIZE="scalable"; \
-			FILE="$$FILE.svg"; \
-		else \
-			SIZE="$${SIZE}x$${SIZE}"; \
-		fi; \
-		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
+		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$$icon; \
 	done
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
@@ -164,19 +163,14 @@ uninstall-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	@-if test -n "$(flatpak_appdata)"; then \
+		rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+	fi
 
 install-data-local:
 	for icon in $(icons); do \
-		SIZE=`echo $$icon | cut -d. -f2`; \
-		FILE=`echo $$icon | cut -d. -f1,3`; \
-		if [ "$$SIZE" = "svg" ]; then \
-			SIZE="scalable"; \
-			FILE="$$FILE.svg"; \
-		else \
-			SIZE="$${SIZE}x$${SIZE}"; \
-		fi; \
-		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
-		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
+		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/; \
+		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$$icon; \
 	done
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
@@ -187,3 +181,7 @@ install-data-local:
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	@-if test -n "$(flatpak_appdata)"; then \
+		mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
+		$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+	fi

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
@@ -17,10 +17,11 @@
             <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <popUpButton verticalHuggingPriority="750" id="2Tb-KC-Ugi">
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Tb-KC-Ugi">
                     <rect key="frame" x="17" y="291" width="88" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="LnC-EY-WyR"/>
+                    </constraints>
                     <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -54,10 +55,8 @@
                         </binding>
                     </connections>
                 </popUpButton>
-                <button verticalHuggingPriority="750" id="QsM-28-Pya">
-                    <rect key="frame" x="110" y="288" width="140" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QsM-28-Pya">
+                    <rect key="frame" x="110" y="288" width="134" height="28"/>
                     <buttonCell key="cell" type="push" title="Configure Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -71,10 +70,8 @@
                         </binding>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" id="Vxx-gk-9kY">
-                    <rect key="frame" x="248" y="288" width="116" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxx-gk-9kY">
+                    <rect key="frame" x="242" y="288" width="109" height="28"/>
                     <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -88,17 +85,15 @@
                         </binding>
                     </connections>
                 </button>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Syo-rH-vof">
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Syo-rH-vof">
                     <rect key="frame" x="20" y="20" width="886" height="264"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="ljc-nW-Cnc">
                         <rect key="frame" x="1" y="0.0" width="884" height="263"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" rowSizeStyle="automatic" headerView="IiW-3a-Drv" viewBased="YES" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="246"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="240"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <animations/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -124,10 +119,8 @@
                                                 <rect key="frame" x="1" y="1" width="322" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" id="Tf3-cP-TGw">
+                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-cP-TGw">
                                                         <rect key="frame" x="0.0" y="1" width="322" height="22"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="JWk-Ab-hdY">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -139,13 +132,18 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Selected track"/>
                                                         <connections>
                                                             <binding destination="EZp-rc-7mo" name="selectedIndex" keyPath="objectValue.sourceTrackIdx" previousBinding="LeD-lR-MOf" id="zso-1b-OrL"/>
                                                             <binding destination="EZp-rc-7mo" name="content" keyPath="objectValue.sourceTracksArray" id="LeD-lR-MOf"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstItem="Tf3-cP-TGw" firstAttribute="leading" secondItem="EZp-rc-7mo" secondAttribute="leading" constant="3" id="SjK-h4-jBa"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Tf3-cP-TGw" secondAttribute="trailing" constant="3" id="Z2W-qa-AON"/>
+                                                    <constraint firstItem="Tf3-cP-TGw" firstAttribute="top" secondItem="EZp-rc-7mo" secondAttribute="top" constant="3" id="nLT-E9-asy"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -164,21 +162,25 @@
                                                 <rect key="frame" x="326" y="1" width="76" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button id="HC5-ql-Vcr">
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
                                                         <rect key="frame" x="26" y="3" width="23" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPR-9q-XBK">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Forced subtitles only"/>
                                                         <connections>
                                                             <binding destination="zKg-by-KFV" name="value" keyPath="objectValue.forcedOnly" id="iFe-SC-lu3"/>
-                                                            <binding destination="zKg-by-KFV" name="enabled" keyPath="objectValue.isEnabled" id="wpB-JZ-Upd"/>
+                                                            <binding destination="zKg-by-KFV" name="enabled" keyPath="objectValue.isForcedSupported" id="7Gt-UF-Lwy"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstItem="HC5-ql-Vcr" firstAttribute="centerY" secondItem="zKg-by-KFV" secondAttribute="centerY" id="Bnl-uV-Fds"/>
+                                                    <constraint firstItem="HC5-ql-Vcr" firstAttribute="top" secondItem="zKg-by-KFV" secondAttribute="top" constant="5" id="LGF-pz-TTr"/>
+                                                    <constraint firstItem="HC5-ql-Vcr" firstAttribute="leading" secondItem="zKg-by-KFV" secondAttribute="leading" constant="29" id="OGP-N0-fSq"/>
+                                                    <constraint firstItem="HC5-ql-Vcr" firstAttribute="centerX" secondItem="zKg-by-KFV" secondAttribute="centerX" id="mvF-fX-bf0"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -197,14 +199,13 @@
                                                 <rect key="frame" x="405" y="1" width="64" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button id="zpm-9Z-Hsq">
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
                                                         <rect key="frame" x="20" y="3" width="23" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s2E-1o-mGs">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Burned In"/>
                                                         <connections>
                                                             <binding destination="gxH-yz-YRK" name="value" keyPath="objectValue.burnedIn" id="reR-Z6-yBf">
                                                                 <dictionary key="options">
@@ -215,7 +216,12 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstItem="zpm-9Z-Hsq" firstAttribute="centerX" secondItem="gxH-yz-YRK" secondAttribute="centerX" id="Xbu-8p-kJ7"/>
+                                                    <constraint firstItem="zpm-9Z-Hsq" firstAttribute="centerY" secondItem="gxH-yz-YRK" secondAttribute="centerY" id="nLs-iU-WUw"/>
+                                                    <constraint firstItem="zpm-9Z-Hsq" firstAttribute="leading" secondItem="gxH-yz-YRK" secondAttribute="leading" constant="23" id="php-Zc-NnF"/>
+                                                    <constraint firstItem="zpm-9Z-Hsq" firstAttribute="top" secondItem="gxH-yz-YRK" secondAttribute="top" constant="5" id="ylD-H0-wie"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -234,21 +240,23 @@
                                                 <rect key="frame" x="472" y="1" width="51" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button id="mdO-Qu-3Pb">
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="mdO-Qu-3Pb">
                                                         <rect key="frame" x="14" y="4" width="22" height="18"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="kwl-qH-Dgo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Default"/>
                                                         <connections>
                                                             <binding destination="mQ6-s6-Zm2" name="enabled" keyPath="objectValue.canPassthru" id="VIq-6A-MlG"/>
                                                             <binding destination="mQ6-s6-Zm2" name="value" keyPath="objectValue.def" id="6sg-s1-xTn"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstItem="mdO-Qu-3Pb" firstAttribute="centerX" secondItem="mQ6-s6-Zm2" secondAttribute="centerX" id="hk9-EN-HLO"/>
+                                                    <constraint firstItem="mdO-Qu-3Pb" firstAttribute="centerY" secondItem="mQ6-s6-Zm2" secondAttribute="centerY" id="t3m-Ce-JH7"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -273,10 +281,8 @@
                                                 <rect key="frame" x="526" y="1" width="173" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" id="Inz-O5-B8g">
+                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
                                                         <rect key="frame" x="0.0" y="0.0" width="173" height="22"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="zIn-sc-xak">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -288,6 +294,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Srt file language"/>
                                                         <connections>
                                                             <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isSrt" id="p69-lt-dgE"/>
                                                             <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
@@ -299,7 +306,11 @@
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="Inz-O5-B8g" secondAttribute="bottom" constant="3" id="CII-4f-7Y0"/>
+                                                    <constraint firstItem="Inz-O5-B8g" firstAttribute="leading" secondItem="4bh-my-GeM" secondAttribute="leading" constant="3" id="CnV-f5-Gtx"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Inz-O5-B8g" secondAttribute="trailing" constant="3" id="NhM-0h-zLT"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -320,10 +331,8 @@
                                                 <rect key="frame" x="702" y="1" width="113" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" id="QV0-kE-4yR">
+                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
                                                         <rect key="frame" x="0.0" y="0.0" width="113" height="22"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jFr-2c-3Vv">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -335,6 +344,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Srt file char code"/>
                                                         <connections>
                                                             <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
                                                             <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
@@ -342,7 +352,11 @@
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="QV0-kE-4yR" secondAttribute="bottom" constant="3" id="3cY-6P-m7C"/>
+                                                    <constraint firstAttribute="trailing" secondItem="QV0-kE-4yR" secondAttribute="trailing" constant="3" id="56f-EX-8Xt"/>
+                                                    <constraint firstItem="QV0-kE-4yR" firstAttribute="leading" secondItem="ZBK-cc-m0z" secondAttribute="leading" constant="3" id="W3d-o2-suN"/>
+                                                </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
@@ -363,16 +377,15 @@
                                                 <rect key="frame" x="818" y="1" width="64" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="aJi-zQ-0cg">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
                                                         <rect key="frame" x="0.0" y="-3" width="64" height="14"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <animations/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="hhH-c3-gD0">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Jui-oB-oVO"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <accessibility description="Srt offset"/>
                                                         <connections>
                                                             <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isSrt" id="noe-Kh-7pa"/>
                                                             <binding destination="9tV-iL-oaF" name="value" keyPath="objectValue.offset" id="NlM-1C-Udf">
@@ -383,7 +396,11 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstItem="aJi-zQ-0cg" firstAttribute="top" secondItem="9tV-iL-oaF" secondAttribute="top" constant="6" id="AHN-d6-URf"/>
+                                                    <constraint firstItem="aJi-zQ-0cg" firstAttribute="centerX" secondItem="9tV-iL-oaF" secondAttribute="centerX" id="Dqo-dR-xOW"/>
+                                                    <constraint firstItem="aJi-zQ-0cg" firstAttribute="leading" secondItem="9tV-iL-oaF" secondAttribute="leading" constant="2" id="bUg-SG-Q9K"/>
+                                                </constraints>
                                                 <connections>
                                                     <outlet property="textField" destination="aJi-zQ-0cg" id="WSP-oS-jCs"/>
                                                 </connections>
@@ -391,6 +408,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                 </tableColumns>
+                                <accessibility description="Subtitles tracks"/>
                                 <connections>
                                     <binding destination="ssY-jQ-Nev" name="content" keyPath="arrangedObjects" id="Oj3-29-oCf"/>
                                     <binding destination="-2" name="enabled" keyPath="self.subtitles" id="pmZ-qP-DnG">
@@ -402,27 +420,32 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <animations/>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
                         <rect key="frame" x="-100" y="-100" width="685" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <tableHeaderView key="headerView" id="IiW-3a-Drv">
-                        <rect key="frame" x="0.0" y="0.0" width="884" height="17"/>
+                        <rect key="frame" x="0.0" y="0.0" width="884" height="23"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </tableHeaderView>
                 </scrollView>
             </subviews>
-            <animations/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Syo-rH-vof" secondAttribute="trailing" constant="20" symbolic="YES" id="5IB-ap-YgJ"/>
+                <constraint firstItem="2Tb-KC-Ugi" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="9Vp-q0-po2"/>
+                <constraint firstItem="2Tb-KC-Ugi" firstAttribute="leading" secondItem="Syo-rH-vof" secondAttribute="leading" id="Fni-x3-tM1"/>
+                <constraint firstItem="QsM-28-Pya" firstAttribute="baseline" secondItem="Vxx-gk-9kY" secondAttribute="baseline" id="JZu-dS-kIW"/>
+                <constraint firstItem="QsM-28-Pya" firstAttribute="leading" secondItem="2Tb-KC-Ugi" secondAttribute="trailing" constant="13" id="Txa-IP-VtQ"/>
+                <constraint firstItem="Vxx-gk-9kY" firstAttribute="leading" secondItem="QsM-28-Pya" secondAttribute="trailing" constant="8" symbolic="YES" id="aW7-PU-5SX"/>
+                <constraint firstItem="2Tb-KC-Ugi" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="10" id="bkf-sN-APi"/>
+                <constraint firstItem="Syo-rH-vof" firstAttribute="top" secondItem="2Tb-KC-Ugi" secondAttribute="bottom" constant="10" id="cGP-id-a2G"/>
+                <constraint firstItem="2Tb-KC-Ugi" firstAttribute="baseline" secondItem="QsM-28-Pya" secondAttribute="baseline" id="jnV-Dq-iyH"/>
+                <constraint firstAttribute="bottom" secondItem="Syo-rH-vof" secondAttribute="bottom" constant="20" symbolic="YES" id="mQT-2H-f1T"/>
+            </constraints>
             <point key="canvasLocation" x="521" y="-253"/>
         </customView>
         <arrayController objectClassName="HBSubtitlesTrack" id="ssY-jQ-Nev">
