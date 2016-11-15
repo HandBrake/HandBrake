@@ -2487,6 +2487,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             ghb_load_post_settings(ud);
         }
         gtk_widget_set_sensitive(widget, TRUE);
+        free(path);
     }
     else
     {

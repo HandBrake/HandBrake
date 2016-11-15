@@ -1031,6 +1031,7 @@ audio_update_setting(
 
     if (block_updates)
     {
+        ghb_value_free(&val);
         return;
     }
 
@@ -1044,6 +1045,10 @@ audio_update_setting(
         audio_deps(ud, asettings, NULL);
         ghb_audio_list_refresh_selected(ud);
         ghb_live_reset(ud);
+    }
+    else
+    {
+        ghb_value_free(&val);
     }
 }
 

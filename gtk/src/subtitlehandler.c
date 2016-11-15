@@ -860,6 +860,14 @@ srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
             subtitle_list_refresh_selected(ud, subsettings);
             ghb_live_reset(ud);
         }
+        else
+        {
+            ghb_value_free(&val);
+        }
+    }
+    else
+    {
+        ghb_value_free(&val);
     }
 }
 
