@@ -698,20 +698,24 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!Equals(this.CurrentTask.Destination, value))
                 {
-                    this.CurrentTask.Destination = value;
-                    this.NotifyOfPropertyChange(() => this.Destination);
-
-                    if (!string.IsNullOrEmpty(this.CurrentTask.Destination))
+                    if (!string.IsNullOrEmpty(value))
                     {
                         string ext = string.Empty;
                         try
                         {
-                            ext = Path.GetExtension(this.CurrentTask.Destination);
+                            ext = Path.GetExtension(value);
                         }
                         catch (ArgumentException)
                         {
-                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            this.errorService.ShowMessageBox(
+                                Resources.Main_InvalidDestination,
+                                Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
                         }
+
+                        this.CurrentTask.Destination = value;
+                        this.NotifyOfPropertyChange(() => this.Destination);
 
                         switch (ext)
                         {
@@ -725,6 +729,11 @@ namespace HandBrakeWPF.ViewModels
                                 this.SelectedOutputFormat = OutputFormat.Mp4;
                                 break;
                         }
+                    }
+                    else
+                    {
+                        this.CurrentTask.Destination = string.Empty;
+                        this.NotifyOfPropertyChange(() => this.Destination);
                     }
                 }
             }
@@ -1397,9 +1406,9 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination)))
+            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), true, this.errorService))
             {
-                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOnDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
@@ -1794,14 +1803,31 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.Destination))
             {
-                string directory = Path.GetDirectoryName(this.Destination);
-                if (!string.IsNullOrEmpty(directory))
+                try
                 {
-                    Process.Start(directory);
+                    string directory = Path.GetDirectoryName(this.Destination);
+                    if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
+                    {
+                        Process.Start(directory);
+                    }
+                    else
+                    {
+                        MessageBoxResult result =
+                            errorService.ShowMessageBox(
+                                string.Format(Resources.DirectoryUtils_CreateFolderMsg, directory),
+                                Resources.DirectoryUtils_CreateFolder,
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question);
+                        if (MessageBoxResult.Yes == result)
+                        {
+                            Directory.CreateDirectory(directory);
+                            Process.Start(directory);
+                        }
+                    }
                 }
-                else
+                catch (Exception exc)
                 {
-                    Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+                    this.errorService.ShowError(Resources.MainViewModel_UnableToLaunchDestDir, Resources.MainViewModel_UnableToLaunchDestDirSolution, exc);
                 }
             }
         }
