@@ -3519,7 +3519,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioTrackName",
-                                    hb_value_string(acodecs[ii]));
+                                    hb_value_string(anames[ii]));
             }
         }
     }
