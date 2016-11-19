@@ -1,0 +1,3070 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Åke Engelbrektson, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: HandBrake-0.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-03 13:01+0300\n"
+"PO-Revision-Date: 2016-11-19 22:00+0100\n"
+"Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
+"Language-Team: Svenska Språkfiler (https://svenskasprakfiler.se/index.html)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+msgid "Quality: "
+msgstr "Kvalitet: "
+
+#, c-format
+msgid "Bitrate: %dkbps"
+msgstr "Bithastighet: %d kbps"
+
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "Bithastighet: %.4g kbps"
+
+msgid "<small>Passthrough</small>"
+msgstr "<small>Genomströmning</small>"
+
+#, c-format
+msgid ""
+"%s\n"
+"Gain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
+msgstr ""
+"%s\n"
+"Förstärkning: %s\n"
+"DRC: %s\n"
+"Spårnamn: %s"
+
+#, c-format
+msgid ""
+"%s\n"
+"Gain: %s\n"
+"DRC: %s"
+msgstr ""
+"%s\n"
+"Förstärkning: %s\n"
+"DRC: %s"
+
+msgid "Add"
+msgstr "Lägg till"
+
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr ""
+"Lägg till en ljudkodare.\n"
+"Varje markerat källspår kodas med alla valda kodare."
+
+msgid "Set the audio codec to encode this track with."
+msgstr "Ange ljudkodek att koda detta spår med."
+
+msgid "Set the bitrate to encode this track with."
+msgstr "Ange bithastighet att koda detta spår med."
+
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr ""
+"<b>Ljudkvalitet:</b>\n"
+"Justera utdatakvalitet, för de kodare som stöder det."
+
+msgid "Set the mixdown of the output audio track."
+msgstr "Ange nermixning för utdataljudet."
+
+msgid "Set the sample rate of the output audio track."
+msgstr "Ange samplingsfrekvens för utdataljudet."
+
+msgid ""
+"<b>Audio Gain:</b>\n"
+"Adjust the amplification or attenuation of the output audio track."
+msgstr ""
+"<b>Ljudförstärkning:</b>\n"
+"Justera förstärkning eller försvagning i ljudspårets utdata."
+
+msgid "0dB"
+msgstr "0 dB"
+
+msgid "%ddB"
+msgstr "%d dB"
+
+msgid "%.4gkHz"
+msgstr "%.4gkHz"
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4gkHz)</small>"
+
+msgid ""
+"<b>Dynamic Range Compression:</b>\n"
+"Adjust the dynamic range of the output audio track.\n"
+"For source audio that has a wide dynamic range,\n"
+"very loud and very soft sequences, DRC allows you\n"
+"to 'compress' the range by making loud sounds\n"
+"softer and soft sounds louder.\n"
+msgstr ""
+"<b>Dynamic Range Compression:</b>\n"
+"Justera det dynamiska intervallet i ljudspårets utdata.\n"
+"För källjud med ett brett dynamiskt intervall,\n"
+"mycket höga och mycket låga sekvenser. DRC låter dig\n"
+"\"komprimera\" intervallet genom att göra höga ljud\n"
+"lägre och låga ljud högre.\n"
+
+msgid "Remove this audio encoder"
+msgstr "Ta bort den här ljudkodaren"
+
+msgid "Closing HandBrake will terminate encoding.\n"
+msgstr "Kodningen avbryts om HandBrake avslutas.\n"
+
+msgid "No Title Found"
+msgstr "Ingen titel hittades"
+
+msgid "none"
+msgstr "ingen"
+
+msgid "Not Selected"
+msgstr "Inte vald"
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
+msgstr "x264 med nollfördröjning vald, tvingar konstant bildfrekvens"
+
+msgid "Scanning ..."
+msgstr "Skannar ..."
+
+msgid "Stop Scan"
+msgstr "Stoppa skanning"
+
+msgid "On"
+msgstr "På"
+
+msgid "Strict"
+msgstr "Strikt"
+
+msgid "Loose"
+msgstr "Lös"
+
+msgid "Custom"
+msgstr "Anpassad"
+
+msgid "Unknown"
+msgstr "Okänd"
+
+msgid "auto"
+msgstr "auto"
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"%s in %d seconds ..."
+msgstr ""
+"%s\n"
+"\n"
+"%s på %d sekunder ..."
+
+#, c-format
+msgid "%sYour movie will be lost if you don't continue encoding."
+msgstr "%sDin film kommer att förloras om du inte fortsätter kodningen."
+
+msgid "Cancel Current and Stop"
+msgstr "Avbryt aktuell och stoppa"
+
+msgid "Cancel Current, Start Next"
+msgstr "Avbryt aktuell, starta nästa"
+
+msgid "Finish Current, then Stop"
+msgstr "Slutför aktuell, stoppa sedan"
+
+msgid "Continue Encoding"
+msgstr "Fortsätt kodningen"
+
+msgid "Custom "
+msgstr "Anppasat"
+
+msgid "Modified "
+msgstr "Ändrad"
+
+#, c-format
+msgid "Handbrake Version: %s (%d)\n"
+msgstr "Handbrake version: %s (%d)\n"
+
+#, c-format
+msgid "%d encode(s) pending"
+msgstr "%d kodning(ar) väntar"
+
+#, c-format
+msgid "job %d of %d, "
+msgstr "jobb %d av %d, "
+
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr "pass %d (undertextskanning) av %d, "
+
+#, c-format
+msgid "pass %d of %d, "
+msgstr "pass %d av %d, "
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr "Kodning: %s%s%.2f %% (%.2f fps, medelv. %.2f fps, beräkn. tid %02dh%02dm%02ds)"
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Kodning: %s%s%.2f %% (beräkn. tid %02dh%02dm%02ds)"
+
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Kodning: %s%s%.2f %%"
+
+msgid "Searching for start time, "
+msgstr "Söker efter starttid,"
+
+msgid "Scanning..."
+msgstr "Skannar ..."
+
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr "Skannar titel %d av %d ..."
+
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr "Skannar titel %d av %d förhandsgranskn. %d..."
+
+msgid "Source"
+msgstr "Källa"
+
+msgid "Choose Video Source"
+msgstr "Välj videokälla"
+
+msgid "Paused"
+msgstr "Pausad"
+
+msgid "Encode Done!"
+msgstr "Kodning klar!"
+
+msgid "Encode Canceled."
+msgstr "Kodning avbruten."
+
+msgid "Encode Failed."
+msgstr "Kodning misslyckades."
+
+msgid "Muxing: This may take a while..."
+msgstr "Muxning: Detta kan ta en stund ..."
+
+msgid "Scan this DVD source"
+msgstr "Skanna den här DVD-källan"
+
+msgid "AutoScan"
+msgstr "Autoskanna"
+
+msgid "Suspend"
+msgstr "Viloläge"
+
+#, c-format
+msgid "Suspend failed: %s"
+msgstr "Viloläge misslyckades: %s"
+
+msgid "Suspend failed"
+msgstr "Viloläge misslyckades"
+
+msgid "Shutdown"
+msgstr "Stänga av"
+
+#, c-format
+msgid "Shutdown failed: %s"
+msgstr "Avstängning misslyckades: %s"
+
+msgid "Shutdown failed"
+msgstr "Avstängning misslyckades"
+
+msgid "Encoding"
+msgstr "Kodning"
+
+#, c-format
+msgid "press %d %d"
+msgstr "tryck %d %d"
+
+#, c-format
+msgid ""
+"Invalid Settings:\n"
+"%s"
+msgstr ""
+"Ogiltiga inställningar\n"
+"%s"
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+#, c-format
+msgid "%s: %.4g (Warning: lossless)"
+msgstr "%s: %.4g (Varning! Förlustfri)"
+
+#, c-format
+msgid "HandBrake %s/%s is now available (you have %s/%d)."
+msgstr "HandBrake %s/%s finns nu tillgänglig (du har %s/%d)."
+
+msgid "Encode Complete"
+msgstr "Kodning slutförd"
+
+msgid "Put down that cocktail, Your HandBrake queue is done!"
+msgstr "Ställ ifrån dig drinken, din HandBrake-kö är klar!"
+
+msgid "Your encode is complete."
+msgstr "Din kodning är slutförd."
+
+msgid "Shutting down the computer"
+msgstr "Stänger av datorn"
+
+msgid "Putting computer to sleep"
+msgstr "Försätter datorn i viloläge"
+
+msgid "Quiting Handbrake"
+msgstr "Avslutar HandBrake"
+
+msgid "Bottom"
+msgstr "Underkant"
+
+#, c-format
+msgid "open failed: %s\n"
+msgstr "kunde inte öppna: %s\n"
+
+msgid "No key for dictionary item"
+msgstr "Ingen nyckel för ordboksobjekt"
+
+msgid "Invalid container type. This shouldn't happen"
+msgstr "Ogiltig behållartyp. Detta borde inte hända"
+
+#, c-format
+msgid "%s:missing a requried attribute"
+msgstr "%s: Saknar ett nödvändigt attribut"
+
+#, c-format
+msgid ""
+"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Summary:\n"
+"    Creates a resource plist from a resource list\n"
+"Options:\n"
+"    I - Include path to search for files\n"
+"    <in resource list>    Input resources file\n"
+"    <out resource plist>  Output resources plist file\n"
+msgstr ""
+"Användning: %s [-I <inkl. sökväg>] <inresurs-lista> <utresurs-plista>\n"
+"Sammandrag:\n"
+"    Skapar en resurs-plista av en resurslista\n"
+"Alternativ:\n"
+"    I - Inkluderad sökväg för att söka efter filer\n"
+"    <inresurs-lista>    Indataresurs list-fil\n"
+"    <utresurs-plista>  Utdataresurs plist-fil\n"
+
+msgid "language"
+msgstr "språk"
+
+msgid "Language"
+msgstr "Språk"
+
+msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
+msgstr "Det språk denna text är på, som en ISO-kod. Pango kan använda detta som vägledning vid rendering av texten. Om du inte förstår den här parametern, behöver du den troligen inte."
+
+msgid "The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string"
+msgstr "Föredragen plats för uteslutningstecken, om cellrenderingen inte har tillräcklig plats för att visa hela strängen."
+
+msgid "How to break the string into multiple lines, if the cell renderer does not have enough room to display the entire string"
+msgstr "Hur strängen skall delas på flera rader, om cellrenderingen inte har tillräcklig plats för att visa hela strängen."
+
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Rendera undertexten över videon.\n"
+"\n"
+"Undertexten blir en del av videon och kan inte avaktiveras."
+
+msgid "<b>Burned In</b>"
+msgstr "<b>Inbränd</b>"
+
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is useful for creating a \"forced\" track\n"
+"in your output."
+msgstr ""
+"Ange standard för undertextspår.\n"
+"\n"
+"De flesta spelare visar automatiskt detta\n"
+"undertextspår när videon spelas upp.\n"
+"\n"
+"Detta är användbart för att skapa ett\n"
+"\"obligatoriskt\" spår i din utdata."
+
+msgid "<b>Default</b>"
+msgstr "<b>Standard</b>"
+
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language."
+msgstr ""
+"Använd endast undertexter som har flaggats\n"
+"som obligatoriska i källans undertextspår\n"
+"\n"
+"\"Obligatoriska\" undertexter används vanligen\n"
+"för att visa undertext i scener där någon pratar\n"
+"ett främmande språk."
+
+msgid "<b>Forced Only</b>"
+msgstr "<b>Endast obligatoriska</b>"
+
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr ""
+"Lägg till (eller ta bort) en förskjutning (i millisek.)\n"
+"i början på SRT-undertextspåret.\n"
+"\n"
+"Ofta sammanfaller inte starten på en extern\n"
+"SRT-fil, med början på videon.\n"
+"Denna inställning låter dig synkronisera filerna."
+
+msgid "<b>SRT Offset</b>"
+msgstr "<b>SRT-förskjutning</b>"
+
+msgid "Off"
+msgstr "Av"
+
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Search\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr ""
+"Källans undertextspår\n"
+"\n"
+"Du kan använda valfri undertext, av de som\n"
+"identifieras i din källfil.\n"
+"\n"
+"Som tillägg finns det ett speciellt spåralternativ\n"
+"\"Sök främmande språk\".  Detta alternativ lägger\n"
+"till ett extra pass till kodningen, som söker efter\n"
+"undertexter som motsvarar scener på ett\n"
+"främmande språk. Detta alternativ används\n"
+"bäst i samband med alternativet \"Obligatoriskt\"."
+
+msgid "<b>Track</b>"
+msgstr "<b>Spår</b>"
+
+msgid "About HandBrake"
+msgstr "Om HandBrake"
+
+msgid ""
+"Copyright © 2008 - 2016 John Stebbins\n"
+"Copyright © 2004 - 2016, HandBrake Devs"
+msgstr ""
+"Copyright © 2008 - 2016 John Stebbins\n"
+"Copyright © 2004 - 2016, HandBrake Devs"
+
+msgid "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
+msgstr "HandBrake är en GPL-licensierad, multiplattform, flertrådad video-transkoder."
+
+msgid "http://handbrake.fr"
+msgstr "http://handbrake.fr"
+
+msgid ""
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the "
+"License, or (at your option) any later version.\n"
+"\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU "
+"General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+"HandBrake är fri mjukvara! Du kan återdistribuera det och/eller modifiera det, under villkoren för GNU General Public License som den publiceras av Free Software Foundation. Antingen version 2 av "
+"licensen, eller valfri senare version.\n"
+"\n"
+"HandBrake distribueras i hopp om att det skall vara användbart, men UTAN NÅGRA GARANTIER. Utan ens underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR ETT VISST ÄNDAMÅL. Se GNU General Public "
+"License för mer detaljerad info.\n"
+"\n"
+"Du bör ha fått en kopia av GNU General Public License, tillsammans med Glade. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+
+msgid "_Minimize/Maximize"
+msgstr "_Minimera/Maximera"
+
+msgid "_Pause Queue"
+msgstr "_Pausa kön"
+
+msgid "_Quit"
+msgstr "A_vsluta"
+
+msgid "_About"
+msgstr "_Om"
+
+msgid "HandBrake"
+msgstr "HandBrake"
+
+msgid "_File"
+msgstr "_Arkiv"
+
+msgid "_Source"
+msgstr "_Källa"
+
+msgid "Single _Title"
+msgstr "Enskild _titel"
+
+msgid "_Destination"
+msgstr "_Plats"
+
+msgid "_Preferences"
+msgstr "_Inställningar"
+
+msgid "_Queue"
+msgstr "_Kö"
+
+msgid "_Add"
+msgstr "_Lägg till"
+
+msgid "Add _Multiple"
+msgstr "Lägg till _flera"
+
+msgid "_Start"
+msgstr "_Starta"
+
+msgid "_Pause"
+msgstr "_Pausa"
+
+msgid "_View"
+msgstr "_Visa"
+
+msgid "HandBrake For _Dumbies"
+msgstr "HandBrake för _nybörjare"
+
+msgid "_Show Presets"
+msgstr "_Visa förinställningar"
+
+msgid "_Preview"
+msgstr "_Förhandsgranskning"
+
+msgid "_Activity Window"
+msgstr "_Aktivitetsfönster"
+
+msgid "Show _Queue"
+msgstr "Visa _kön"
+
+msgid "_Presets"
+msgstr "_Förinställningar"
+
+msgid "_Save"
+msgstr "_Spara"
+
+msgid "_Delete"
+msgstr "_Ta bort"
+
+msgid "_Make Default"
+msgstr "_Använd som standard"
+
+msgid "_New Folder"
+msgstr "_Ny mapp"
+
+msgid "_Export"
+msgstr "_Exportera"
+
+msgid "_Import"
+msgstr "_Importera"
+
+msgid "_Update Built-in Presets"
+msgstr "_Uppdatera inbyggda förinställningar"
+
+msgid "_Help"
+msgstr "_Hjälp"
+
+msgid "_Guide"
+msgstr "_Guide"
+
+msgid "Start Encoding"
+msgstr "Starta kodning"
+
+msgid "Start"
+msgstr "Starta"
+
+msgid "Pause Encoding"
+msgstr "Pausa kodning"
+
+msgid "Pause"
+msgstr "Paus"
+
+msgid "Add to Queue"
+msgstr "Lägg till i kön"
+
+msgid "Enqueue"
+msgstr "Köa"
+
+msgid "Show Queue"
+msgstr "Visa kön"
+
+msgid "Queue"
+msgstr "Kö"
+
+msgid ""
+"Open Picture Settings and Preview window.\n"
+"Here you can adjust cropping, resolution, aspect ratio, and filters."
+msgstr ""
+"Öppna bildinställningarna och förhandsgranskningsfönstret.\n"
+"Här kan du justera beskärning, upplösning, proportioner och filter."
+
+msgid "Preview"
+msgstr "Förhandsgranska"
+
+msgid "Show Activity Window"
+msgstr "Visa aktivitetsfönster"
+
+msgid "Activity"
+msgstr "Aktivitet"
+
+msgid "<b>Source:</b>"
+msgstr "<b>Källa:</b>"
+
+msgid "None"
+msgstr "Ingen"
+
+msgid "Title:"
+msgstr "Titel:"
+
+msgid ""
+"Set the title to encode.\n"
+"By default the longest title is chosen.\n"
+"This is often the feature title of a DVD."
+msgstr ""
+"Ange titel att koda.\n"
+"Som standard väljs den längsta titeln.\n"
+"Detta är ofta titeln på en DVD-skiva."
+
+msgid "Angle:"
+msgstr "Vinkling:"
+
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "För flervinklade DVD:er, välj önskad vinkling att koda."
+
+msgid "Reset All Titles"
+msgstr "Återställ alla titlar"
+
+msgid "Apply current settings to all titles"
+msgstr "Tillämpa aktuella inställningar på alla titlar"
+
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr "Intervall att koda. Kan vara avsnitt, sekunder eller bildrutor."
+
+msgid "Set the first chapter to encode."
+msgstr "Ange första avsnittet att koda."
+
+msgid "Set the last chapter to encode."
+msgstr "Ange sista avsnittet att koda."
+
+msgid "Duration:"
+msgstr "Varaktighet:"
+
+msgid "<b>Destination</b>"
+msgstr "<b>Plats</b>"
+
+msgid "File:"
+msgstr "Fil:"
+
+msgid "Destination filename for your encode."
+msgstr "Målfilnamn för din kodning."
+
+msgid "Destination directory for your encode."
+msgstr "Målmapp för din kodning."
+
+msgid "Destination Directory"
+msgstr "Målmapp"
+
+msgid "Format:"
+msgstr "Format:"
+
+msgid "Format to mux encoded tracks to."
+msgstr "Format att muxa kodade spår till."
+
+msgid "iPod 5G Support"
+msgstr "iPod 5G-stöd"
+
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Lägg till iPod Atom, nödvändiga för vissa äldre iPod:ar."
+
+msgid "Web optimized"
+msgstr "Webboptimerad"
+
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.\n"
+"This allows a player to initiate playback before downloading the entire file."
+msgstr ""
+"Optimera MP4-filens layout, för progressiv nedladdning.\n"
+"Detta låter en spelare starta uppspelning innan hela filen är nedladdad."
+
+msgid "Large file (>4GB)"
+msgstr "Stor fil (>4GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr ""
+"Tillåt 64-bitars MP4-fil som kan vara över 4GB.\n"
+"\n"
+"<b>Varning!</b> Detta alternativ kan förstöra enhetskompatibilitet."
+
+msgid "<b>Presets List</b>"
+msgstr "<b>Förinställningslista</b>"
+
+msgid "Source Codec:"
+msgstr "Källkodek:"
+
+msgid "Dimensions:"
+msgstr "Storlek:"
+
+msgid "Aspect: "
+msgstr "Proportioner:"
+
+msgid "Frame Rate:"
+msgstr "Bildfrekvens:"
+
+msgid "<b>Source Picture Parameters</b>"
+msgstr "<b>Källbildsparametrar</b>"
+
+msgid "Autocrop:"
+msgstr "Beskär automatiskt:"
+
+msgid "Crop:"
+msgstr "Beskär:"
+
+msgid "Crop Dimensions:"
+msgstr "Beskärningsstorlek:"
+
+msgid "<b>Cropping</b>"
+msgstr "<b>Beskärning</b>"
+
+msgid "Scale Dimensions:"
+msgstr "Skalningsdimensioner:"
+
+msgid "Optimal for Source:"
+msgstr "Optimalt för källan:"
+
+msgid "Anamorphic:"
+msgstr "Anamorft:"
+
+msgid "<b>Scaling</b>"
+msgstr "<b>Skalning</b>"
+
+msgid "Presentation Dimensions:"
+msgstr "Presentationsstorlek:"
+
+msgid "Summary"
+msgstr "Sammanfattning"
+
+msgid "Left Crop"
+msgstr "Beskär vänsterkant"
+
+msgid "Top Crop"
+msgstr "Beskär överkant"
+
+msgid "Bottom Crop"
+msgstr "Beskär underkant"
+
+msgid "Right Crop"
+msgstr "Beskär högerkant"
+
+msgid "Auto Crop"
+msgstr "Beskär automatiskt"
+
+msgid "Automatically crop black borders around edges of the video."
+msgstr "Beskär svarta kanter runt videon, automatiskt."
+
+msgid "Loose Crop"
+msgstr "Lös beskärning"
+
+msgid ""
+"When picture settings require that the image\n"
+"dimensions be rounded to some multiple number\n"
+"of pixels, this setting will crop a few extra pixels\n"
+"instead of doing exact cropping and then scaling to\n"
+"the required multiple."
+msgstr ""
+"När bildinställningarna kräver att bilddimensionerna\n"
+"rundas av med ett antal pixlar, kommer den här\n"
+"inställningen att skära bort några extra pixlar istället\n"
+"för att utföra en exakt beskärning och sedan skala\n"
+"bilden till erforderlig multipel."
+
+msgid "width:"
+msgstr "bredd:"
+
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Detta är den bredd som videon kommer att sparas i.\n"
+"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
+
+msgid "height:"
+msgstr "höjd:"
+
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Detta är den höjd som videon kommer att sparas i.\n"
+"Den verkliga skärmstorleken kommer att differentieras om pixelproportionerna inte är 1:1."
+
+msgid "Optimal for source"
+msgstr "Optimal för källan"
+
+msgid ""
+"If enabled, select the 'optimal' storage resolution.\n"
+"This will be the resolution that most closely matches the source resolution after cropping."
+msgstr ""
+"Vid aktivering, välj \"Optimal\" lagringsupplösning.\n"
+"Detta blir den upplösning som närmast matchar källans upplösning efter beskärning."
+
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr ""
+"<b>Anamorfa lägen:</b>\n"
+"<small><tt>\n"
+"Ingen   - Obligatoriska pixelproportioner 1:1.\n"
+"Lös  - Justerar dimensionerna till valda \"justeringsvärden\"\n"
+"     och väljer pixelproportioner som bevarar\n"
+"     ursprungliga skärmproportioner\n"
+"Strikt - Bevarar ursprunglig källstorlek och\n"
+"     pixelproportioner</tt></small>"
+
+msgid "Alignment:"
+msgstr "Justering:"
+
+msgid ""
+"Align storage dimensions to multiples of this value.\n"
+"\n"
+"This setting is only necessary for compatibility with some devices.\n"
+"You should use 2 unless you experience compatibility issues."
+msgstr ""
+"Justera lagringsdimensioner till multipler av detta värde.\n"
+"\n"
+"Denna inställning behövs bara för kompatibilitet med vissa enheter.\n"
+"Du bör använda 2, om du inte får kompatibilitetsproblem."
+
+msgid "<b>Storage Geometry</b>"
+msgstr "<b>Lagringsgeometri</b>"
+
+msgid "This is the display width. It is the result of scaling the storage dimensions by the pixel aspect."
+msgstr "Detta är skärmbredden. Den är resultatet av skalningen, av lagringsdimensioner, efter pixelproportioner."
+
+msgid "Pixel Aspect:"
+msgstr "Pixelproportion:"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Pixelproportioner definierar formen på bildpunkterna.\n"
+"\n"
+"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
+"Mediaspelare skalar bilden för att uppnå specificerade proportioner."
+
+msgid ":"
+msgstr ":"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Pixelproportioner definierar formen på bildpunkterna.\n"
+"Förhållandet 1:1 definierar en kvadratisk bildpunkt. Andra värden definierar rektangulära former.\n"
+"Mediaspelare skalar bilden för att uppnå specificerade proportioner."
+
+msgid "Keep Aspect"
+msgstr "Bevara proportioner"
+
+msgid "If enabled, the original display aspect of the source will be maintained."
+msgstr "Om aktiverad, kommer källans ursprungliga visningsproportioner att bevaras."
+
+msgid "Display Aspect:"
+msgstr "Visningsproportioner:"
+
+msgid "<b>Display Geometry</b>"
+msgstr "<b>Skärmgeometri</b>"
+
+msgid "Grayscale"
+msgstr "Gråskala"
+
+msgid "If enabled, filter colour components out of video."
+msgstr "Om aktiverad, filtreras färgkomponenter bort från videon."
+
+msgid "Deblock:"
+msgstr "Avblockera:"
+
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Avblockeringsfiltret tar bort en vanlig typ av komprimeringsartefakt.\n"
+"Tillämpas på avkodad, komprimerad video för att förbättra visuell kvalitet genom att jämna ut vassa kanter."
+
+msgid "Denoise Filter:"
+msgstr "Brusreduceringsfilter:"
+
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Brusreduceringsfilter reducerar eller tar bort förekomst av brus och kornighet.\n"
+"Grynighet och andra typer av högfrekvent brus är svårt att komprimera.\n"
+"Användning av detta filter på sådana källor, kan resultera i mindre filstorlek."
+
+msgid "Denoise Preset:"
+msgstr "Förinställd brusreducering:"
+
+msgid "Denoise Tune:"
+msgstr "Brusjustering:"
+
+msgid ""
+"Custom denoise filter string format\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr ""
+"Strängformat för anpassad brusreducering\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+msgid "Detelecine:"
+msgstr "Detelecine:"
+
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining.\n"
+"\n"
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
+msgstr ""
+"Detta filter tar bort \"kamning\", artefakter som är resultatet av telecining.\n"
+"\n"
+"Telecining är en process som justerar filmbildfrekvens på 24fps till NTSC videobildfrekvens på 30fps."
+
+msgid ""
+"Custom detelecine filter string format\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr ""
+"Strängformat för anpassat detelecine-filter\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+msgid "Decomb"
+msgstr "Decomb"
+
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced.\n"
+"\n"
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Välj filteralternativ, \"Decomb\" eller \"Avflätning\".\n"
+"\n"
+"Decomb-filtret konverterar selektivt, bildrutor som är sammanflätade.\n"
+"Detta bevarar kvaliteten i bildrutor som inte är sammanflätade.\n"
+"\n"
+"Det klassiska avflätningsfiltret (deinterlace) tillämpas på alla bildrutor.\n"
+"Bildrutor som inte är sammanflätade, kommer att drabbas av kvalitetsförsämring."
+
+msgid "Deinterlace"
+msgstr "Avflätning"
+
+msgid "Decomb:"
+msgstr "Decomb:"
+
+msgid ""
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced."
+msgstr ""
+"Decomb-filtret konverterar selektivt, bildrutor som är sammanflätade.\n"
+"Detta bevarar kvaliteten i bildrutor som inte är sammanflätade"
+
+msgid ""
+"Custom decomb filter string format\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+msgstr ""
+"Strängformat för anpassat Decomb-filter\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+
+msgid "Deinterlace:"
+msgstr "Avflätning:"
+
+msgid ""
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Det klassiska avflätningsfiltret (deinterlace) tillämpas på alla bildrutor.\n"
+"Bildrutor som inte är sammanflätade, kommer att drabbas av kvalitetsförsämring."
+
+msgid ""
+"Custom deinterlace filter string format\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+msgstr ""
+"Strängformat för anpassat avflätningsfilter\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+
+msgid "<b>Filters</b>"
+msgstr "<b>Filter</b>"
+
+msgid "Picture"
+msgstr "Bild"
+
+msgid "Video Encoder:"
+msgstr "Videokodare:"
+
+msgid "Available video encoders."
+msgstr "Tillgängliga videokodare."
+
+msgid "Framerate:"
+msgstr "Bildfrekvens:"
+
+msgid ""
+"Output framerate.\n"
+"\n"
+"'Same as source' is recommended. If your source video has\n"
+"a variable framerate, 'Same as source' will preserve it."
+msgstr ""
+"Bildfrekvens för utdata.\n"
+"\n"
+"\"Samma som källan\" rekommenderas, om din video har\n"
+"en variabel bildfrekvens. \"Samma som källan\" bevarar den."
+
+msgid "Constant Framerate"
+msgstr "Konstant bildfrekvens"
+
+msgid "Same as source"
+msgstr "Samma som källan"
+
+msgid "kbps"
+msgstr "kbps"
+
+msgid "(variable)"
+msgstr "(variabel)"
+
+msgid "(constant)"
+msgstr "(konstant)"
+
+msgid "Enables constant framerate output."
+msgstr "Aktiverar konstant bildfrekvens i utdata."
+
+msgid "Peak Framerate (VFR)"
+msgstr "Toppad bildfrekvens (VFR)"
+
+msgid ""
+"Enables variable framerate output with a peak\n"
+"rate determined by the framerate setting.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Aktiverar variabel bildfrekvens med toppar,\n"
+"beräknade efter bildfrekvensinställning.\n"
+"\n"
+"VFR är inte kompatibel med alla mediaspelare."
+
+msgid "Variable Framerate"
+msgstr "Variabel bildfrekvens"
+
+msgid ""
+"Enables variable framerate output.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Aktiverar variabel bildfrekvens i utdata.\n"
+"\n"
+"VFR är inte kompatibel med alla mediaspelare."
+
+msgid ""
+"Set the desired quality factor.\n"
+"The encoder targets a certain quality.\n"
+"The scale used by each video encoder is different.\n"
+"\n"
+"x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"So small decreases in value will result in progressively larger increases\n"
+"in the resulting file size.  A value of 0 means lossless and will result\n"
+"in a file size that is larger than the original source, unless the source\n"
+"was also lossless.\n"
+"\n"
+"FFMpeg's and Theora's scale is more linear.\n"
+"These encoders do not have a lossless mode."
+msgstr ""
+"Ange önskad kvalitetsfaktor.\n"
+"Kodaren har en viss målkvalitet.\n"
+"Skalan som används av enskilda kodare är olika.\n"
+"\n"
+"Skalan för x264 är logaritmisk och lägre värden motsvarar högre kvalitet.\n"
+"Små minskningar i värdet, resulterar alltså i progressivt högre ökningar i\n"
+"resulterande filstorlek. 0-värde innebär förlustfri kodning och resulterar i\n"
+"en filstorlek som är större än den ursprungliga källan, om inte källan också\n"
+"är förlustfri.\n"
+"\n"
+"FFMpeg- och Theora-skalan är mer linjär.\n"
+"Dessa kodare har inget förlustfritt läge."
+
+msgid "Constant Quality:"
+msgstr "Konstant kvalitet:"
+
+msgid "Bitrate (kbps):    "
+msgstr "Bithastighet (kbps):    "
+
+msgid ""
+"Set the average bitrate.\n"
+"\n"
+"The instantaneous bitrate can be much higher or lower at any point in time.\n"
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
+msgstr ""
+"Ange genomsnittlig bithastighet.\n"
+"\n"
+"Den momentana bithastigheten kan vara mycket högre eller lägre vid någon tidpunkt,\n"
+"men genomsnittet under en lång tid blir det värde som anges här. Om du behöver för\n"
+"begränsa den momentana bithastigheten, kan du titta på x264-inställningarna för\n"
+"vbv-bufsize och vbv-maxrate."
+
+msgid "2-Pass Encoding"
+msgstr "2-passkodning"
+
+msgid ""
+"Perform 2 Pass Encoding.\n"
+"\n"
+"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
+"the video are collected.  Then in the second pass, those statistics are used\n"
+"to make bitrate allocation decisions."
+msgstr ""
+"Utför 2-passkodning.\n"
+"\n"
+"Bithastighetsalternativet är förutsättningen. Under 1:a passet samlas\n"
+"statistik om videon in. Under 2:a passet, används statistiken för att\n"
+"avgöra rätt bithastighet."
+
+msgid "Turbo First Pass"
+msgstr "Turbo 1:a Pass"
+
+msgid "During the 1st pass of a 2 pass encode, use settings that speed things along."
+msgstr "Använd inställningar som skyndar på saker, under 1:a passet i en 2-passkodning."
+
+msgid "Use Advanced Options"
+msgstr "Använd avancerade alternativ"
+
+msgid ""
+"Use advanced options Tab for x264 settings.\n"
+"\n"
+"Use at your own risk!"
+msgstr ""
+"Använd avancerade alternativ för x264-inställningar.\n"
+"\n"
+"Används på egen risk!"
+
+msgid "Preset:"
+msgstr "Förinställning:"
+
+msgid ""
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
+"\n"
+"This establishes your default encoder settings.\n"
+"Tunes, profiles, levels and advanced option string will be applied to this.\n"
+"You should generally set this option to the slowest you can bear since slower\n"
+"settings will result in better quality or smaller files."
+msgstr ""
+"Justera kodningsinställningar för att väga av komprimeringseffektivitet mot kodningshastighet.\n"
+"\n"
+"Detta fastställer dina standardinställningar för kodare.\n"
+"Justeringar, profiler, nivåer och avancerade alternativ tillämpas här.\n"
+"Generellt bör du sätta detta alternativ så långsamt som du står ut med, eftersom\n"
+"långsammare inställningar resulterar i bättre kvalitet eller mindre filer."
+
+msgid "Tune:"
+msgstr "Justera:"
+
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"This can improve effeciency for particular source characteristics or set\n"
+"characteristics of the output file.  Changes will be applied after the\n"
+"preset but before all other parameters."
+msgstr ""
+"Justera inställningarna för att optimera för vanliga scenarier.\n"
+"\n"
+"Detta kan förbättra effektiviteten för vissa källegenskaper eller ange\n"
+"egenskaper för utdatafilen. Ändringar kommer att tillämpas efter\n"
+"förinställningen, men före alla andra parametrar."
+
+msgid "Fast Decode"
+msgstr "Snabb avkodning"
+
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"Set this if your device is struggling to play the output (dropped frames)."
+msgstr ""
+"Reducera CPU-belastning vid avkodning.\n"
+"\n"
+"Aktivera det här om din enhet får kämpa vid uppspelning (tappade bildrutor)."
+
+msgid "Zero Latency"
+msgstr "Nollfördröjning"
+
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"This is useful for broadcast of live streams.\n"
+"\n"
+"Since HandBrake is not suitable for live stream broadcast purposes,\n"
+"this setting is of little value here."
+msgstr ""
+"Minimera fördröjningen mellan indata till kodaren och utdata.\n"
+"\n"
+"Detta är användbart för direktströmmar (live streams). \n"
+"\n"
+"Eftersom HandBrake inte är lämplig för direktsändningsändamål,\n"
+"är denna inställning av litet värde här."
+
+msgid "Profile:"
+msgstr "Profil:"
+
+msgid ""
+"Sets and ensures compliance with the specified profile.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Ställer in och säkerställer den angivna profilen.\n"
+"\n"
+"Åsidosätter alla andra inställningar."
+
+msgid "Level:"
+msgstr "Nivå:"
+
+msgid ""
+"Sets and ensures compliance with the specified level.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Ställer in och säkerställer den angivna nivån.\n"
+"\n"
+"Åsidosätter alla andra inställningar."
+
+msgid "More Settings:"
+msgstr "Fler inställningar:"
+
+msgid ""
+"Additional encoder settings.\n"
+"\n"
+"Colon separated list of encoder options."
+msgstr ""
+"Fler kodningsinställningar.\n"
+"\n"
+"Kolonseparerad lista över kodningsalternativ."
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Selection Behavior:"
+msgstr "Välj beteende:"
+
+msgid "Remove"
+msgstr "Ta bort"
+
+msgid "Available Languages"
+msgstr "Tillgängliga språk"
+
+msgid "Selected Languages"
+msgstr "Välj språk"
+
+msgid "Use only first encoder for secondary audio"
+msgstr "Använd endast första kodaren för sekundärt ljud"
+
+msgid ""
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"All other secondary audio output tracks will be encoded with first encoder only."
+msgstr ""
+"Endast det primära ljudspåret kommer att kodas med fullständig kodarlista.\n"
+"Alla andra, sekundära ljudspår kodas endast med den första kodaren."
+
+msgid "Auto Passthru:"
+msgstr "Automatisk genomströmning:"
+
+msgid "MP3"
+msgstr "MP3"
+
+msgid ""
+"Enable this if your playback device supports MP3.\n"
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Aktivera detta om din spelarenhet stödjer MP3.\n"
+"Detta tillåter MP3-genomströmning, när automatisk genomströmning är aktiverad. "
+
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Aktivera detta om din spelarenhet stödjer AAC.\n"
+"Detta tillåter AAC-genomströmning, när automatisk genomströmning är aktiverad. "
+
+msgid ""
+"Enable this if your playback device supports AC-3.\n"
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Aktivera detta om din spelarenhet stödjer AC-3.\n"
+"Detta tillåter AC3-genomströmning, när automatisk genomströmning är aktiverad. "
+
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Aktivera detta om din spelarenhet stödjer DTS.\n"
+"Detta tillåter DTS-genomströmning, när automatisk genomströmning är aktiverad. "
+
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Aktivera detta om din spelarenhet stödjer DTS-HD.\n"
+"Detta tillåter DTSHD-genomströmning, när automatisk genomströmning är aktiverad. "
+
+msgid "Passthru Fallback:"
+msgstr "Genomströmningsreserv:"
+
+msgid "Set the audio codec to encode with when a suitable track can not be found for audio passthru."
+msgstr "Ange ljudkodek att koda med, när ett passande spår för ljudgenomströmning inte kan hittas."
+
+msgid "<b>Audio Encoder Settings:</b>"
+msgstr "<b>Ljudkodningsinställningar:</b>"
+
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Varje markerat källspår kommer att kodas med alla valda kodare"
+
+msgid "Encoder"
+msgstr "Kodare"
+
+msgid "Bitrate/Quality"
+msgstr "Bithastighet/Kvalitet"
+
+msgid "Mixdown"
+msgstr "Nermixning"
+
+msgid "Samplerate"
+msgstr "Samplingsfrekvens"
+
+msgid "Gain"
+msgstr "Förstärkning"
+
+msgid "Audio Defaults"
+msgstr "Ljudstandard"
+
+msgid "Add new audio settings to the list"
+msgstr "Lägg till nya ljudinställningar i listan"
+
+msgid "Add All"
+msgstr "Lägg till alla"
+
+msgid "Add all audio tracks to the list"
+msgstr "Lägg till alla "
+
+msgid "Reload Defaults"
+msgstr "Läs om standardinställningar"
+
+msgid "Reload all audio settings from defaults"
+msgstr "Läs om alla ljudinställningar från standard"
+
+msgid "Audio List"
+msgstr "Ljudlista"
+
+msgid "Preferred Language: None"
+msgstr "Föredraget språk: Inget"
+
+msgid "Add Foreign Audio Search Pass"
+msgstr "Lägg till sökpass för främmande språk"
+
+msgid ""
+"Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them."
+msgstr ""
+"Lägg till \"Sök främmande språk\" när standardljudspåret är ditt föredragna språk.\n"
+"Detta sökpass hittar korta sekvenser på främmande språk och tillhandahåller undertexter för dem."
+
+msgid "Add subtitle track if default audio is foreign"
+msgstr "Lägg till undertextspår om standardspråket är främmande"
+
+msgid "When the default audio track is not your preferred language, add a subtitle track."
+msgstr "Lägg till ett undertextspår, när standardljudspåret inte är ditt föredragna språk."
+
+msgid "Add Closed Captions when available"
+msgstr "Lägg till textning när tillgänglig"
+
+msgid "Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)"
+msgstr "Stängd textning är undertexter som kan läggas till valfri behållare, som ett fristående undertextspår (inte inbränt)"
+
+msgid "Subtitle Defaults"
+msgstr "Undertextstandard"
+
+msgid "Add new subtitle settings to the list"
+msgstr "Lägg till nya undertextinställningar i listan"
+
+msgid "Add all subtitle tracks to the list"
+msgstr "Lägg till alla undertextspår i listan"
+
+msgid "Reload all subtitle settings from defaults"
+msgstr "Läs om alla undertextinställningar från standard"
+
+msgid "Subtitle List"
+msgstr "Undertextlista"
+
+msgid "<small>Reference Frames:</small>"
+msgstr "<small>Referensbildrutor:</small>"
+
+msgid ""
+"Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
+"Cel animation tends to benefit from more reference frames a lot more than film content.\n"
+"\n"
+"Note that many hardware devices have limitations on the number of supported reference\n"
+"frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
+"you're absolutely sure you know what you're doing!"
+msgstr ""
+"Förnuftiga värden är ~1-6. Ju mer du ökar, desto bättre komprimering men långsammare kodning.\n"
+"Cel-animering tenderar att dra fördel av fler referensbildrutor, snarare än filminnehåll.\n"
+"\n"
+"Notera att många hårdvaruenheter har begränsningar i antalet referensbildrutor som stöds,\n"
+"så om du kodar för en handhållen  eller fristående spelare, bör du inte röra detta, såvida du inte är\n"
+"absolut säker på vad du gör!"
+
+msgid "<small>Maximum B-Frames:</small>"
+msgstr "<small>Max B-bildrutor:</small>"
+
+msgid ""
+"Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
+"\n"
+"Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.\n"
+"Cel-animated source material and B-pyramid also significantly increase the usefulness of larger\n"
+"values.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
+msgstr ""
+"Förnuftiga värden är ~2-5. Detta specificerar max antal sekventiella B-bildrutor som kodaren kan använda.\n"
+"\n"
+"Höga siffror ger generellt ingen avsevärd förbättring, såvida inte adaptiva B-bildrutor anges till \"Optimal\".\n"
+"Cel-animerat källmaterial och B-pyramid ökar också nyttan av högre värden.\n"
+"\n"
+"Basprofil krävs för iPod och liknande enheter. Kräver att B-bildrutor anges som 0 (Av)."
+
+msgid "<small>Pyramidal B-Frames:</small>"
+msgstr "<small>Pyramidala B-bildrutor:</small>"
+
+msgid ""
+"B-pyramid improves compression by creating a pyramidal structure (hence the name)\n"
+"of B-frames, allowing B-frames to reference each other to improve compression.\n"
+"\n"
+"Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
+msgstr ""
+"B-pyramid förbättrar komprimering genom att skapa en pyramidal struktur,\n"
+"som låter B-bildrutor referera till varandra för att förbättra komprimeringen.\n"
+"\n"
+"Kräver max B-bildrutor högre än 1. Optimala adaptiva B-bildrutor rekommenderas starkt, för full komprimeringsfördel."
+
+msgid "<small>Weighted P-Frames:</small>"
+msgstr "<small>Viktade P-rutor:</small>"
+
+msgid ""
+"Performs extra analysis to decide upon weighting parameters for each frame.\n"
+"\n"
+"This improves overall compression slightly and improves the quality of fades greatly.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires weighted P-frame\n"
+"prediction to be disabled.  Note that some devices and players, even those that support\n"
+"Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
+"completely incompatible with it, for example."
+msgstr ""
+"Utför extra analys för att avgöra viktningsparametrar för varje bildruta.\n"
+"\n"
+"Detta förbättrar den övergripande komprimeringen något, och förbättrar\n"
+"kvaliteten på toningar kraftigt.\n"
+"\n"
+"Basprofilen, som krävs för iPod och liknande enheter, kräver att viktad P-bildruteberäkning\n"
+"är inaktiverad. Notera att vissa enheter och spelare, även de som stöder huvudprofilen,\n"
+"kan ha problem med viktad P-bildruteberäkning. Apple-TV är t.ex helt inkompatibel."
+
+msgid "8x8 Transform"
+msgstr "8x8-transformering"
+
+msgid ""
+"The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
+"\n"
+"It improves compression by at least 5% at a very small speed cost and may\n"
+"provide an unusually high visual quality benefit compared to its compression\n"
+"gain.  However, it requires High Profile, which many devices may not support."
+msgstr ""
+"8x8-transformering är den enskilt mest användbara funktionen i x264, när det gäller komprimering-per-hastighet.\n"
+"\n"
+"Det förbättrar kompressionen med åtminstone 5%, för en mycket liten hastighetskostnad\n"
+"och erbjuder ovanlig stora visuella kvalitetsfördelar, jämfört med kompressionsvinsten.\n"
+"Det kräver dock hög profil, vilket många enheter kanske inte stödjer."
+
+msgid "CABAC Entropy Encoding"
+msgstr "CABAC entropikodning"
+
+msgid ""
+"After the encoder has done its work, it has a bunch of data that\n"
+"needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides\n"
+"two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but\n"
+"compresses significantly better (10-30%), especially at lower bitrates.\n"
+"\n"
+"If you're looking to minimize CPU requirements for video playback, disable this option.\n"
+"Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
+msgstr ""
+"Efter att kodaren har gjort sitt jobb, har den en mängd data som behöver\n"
+"komprimeras förlustfritt, liknande ZIP eller RAR. H.264 erbjuder två alternativ\n"
+"för detta. CAVLC och CABAC. CABAC kodar mycket långsammare, men komprimerar\n"
+"betydligt bättre (10-30%), speciellt vid lägre bithastigheter.\n"
+"\n"
+"Om du vill minimera CPU-kraven för videouppspelning, bör du inaktivera detta alternativ.\n"
+"Basprofilen, som krävs för iPod och liknande enheter, kräver att CABAC inaktiveras."
+
+msgid "<small><b>Encoding Features</b></small>"
+msgstr "<small><b>Kodningsfunktioner</b></small>"
+
+msgid "<small>Motion Est. Method:</small>"
+msgstr "<small>Rörelseberäknad metod:</small>"
+
+msgid ""
+"Controls the motion estimation method.\n"
+"\n"
+"Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.\n"
+"A better motion search method improves compression at the cost of speed.\n"
+"\n"
+"Diamond: performs an extremely fast and simple search using a diamond pattern.\n"
+"Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.\n"
+"Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
+"Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
+"Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
+msgstr ""
+"Kontrollerar rörelseberäkningsmetoden.\n"
+"\n"
+"Rörelseberäkning är hur kodaren beräknar hur varje bildpunktsblock i en bildruta, har flyttats.\n"
+"En bättre sökmetod för rörelse, förbättrar komprimeringen på bekostnad av hastigheten.\n"
+"\n"
+"Diamant: Utför en extremt snabb och enkel sökning med hjälp av ett diamantmönster.\n"
+"Hexagon: Utför en något mer effektiv men lite långsammare sökning  i ett hexagonmönster.\n"
+"Uttömmande: Utför en \"dum\" sökning efter varje bildpunkt över ett brett område. Betydligt långsammare för endast en liten komprimeringsvinst.\n"
+"Transformerad uttömmande: Som Uttömmande, men tar än mer exakta beslut. Ytterligare något långsammare, för endast en liten förbättring."
+
+msgid "<small>Subpel ME &amp; Mode:</small>"
+msgstr "<small>Subpel ME &amp; läge:</small>"
+
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr ""
+"Denna inställning kontrollerar både SubME och lägesbeslutsmetoder.\n"
+"\n"
+"SubME används för förfining av rörelseuppskattningar bortom enbart pixelprecision, för förbättrad kompression.\n"
+"Lägesbeslut är metoden som används för att avgöra hur varje block i bildrutan skall kodas. Ett mycket viktigt beslut.\n"
+"SAD är den snabbaste metoden, följt av SATD, RD, RD-förfining och den långsammaste, QPRD.\n"
+"6 eller högre rekommenderas starkt. Psy-RD, en mycket kraftfull optimering som hjälper till att bevara detaljer, kräver RD.\n"
+"11 inaktiverar alla tidiga avslut i analys.\n"
+"10 och 11, de mest kraftfulla och långsammaste alternativen kräver adaptiv kvantisering (aq-läge> 0) och trellis 2 (alltid)."
+
+msgid "<small>Motion Est. Range:</small>"
+msgstr "<small>Rörelseberäknat intervall:</small>"
+
+msgid ""
+"This is the distance x264 searches from its initial guess at the\n"
+"motion of a block in order to try to find its actual motion.\n"
+"\n"
+"The default is fine for most content, but extremely high motion video,\n"
+"especially at HD resolutions, may benefit from higher ranges, albeit at\n"
+"a high speed cost."
+msgstr ""
+"Detta är det avstånd x264 söker av, från sin ursprungliga uppskattning\n"
+"av ett blocks rörelse, för att försöka finna dess verkliga rörelse.\n"
+"\n"
+"Standard räcker för de flesta innehåll, men video med extremt mycket rörelse,\n"
+"speciellt med HD-upplösning, kan dra nytta av högre intervall, om än på\n"
+"bekostnad av hastighet."
+
+msgid "<small>Adaptive Direct Mode:</small>"
+msgstr "<small>Adaptivt direktläge:</small>"
+
+msgid ""
+"H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
+"\n"
+"Spatial, the default, is almost always better, but temporal is sometimes useful too.\n"
+"x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
+"adaptively select which is better for each particular frame."
+msgstr ""
+"H.264 möjliggör två olika prognoslägen, rumslig och tidsmässig, i B-bildrutor.\n"
+"\n"
+"Rumslig (standard) är nästan alltid bättre, men ibland är också tidsmässig användbar.\n"
+"x264 kan, till kostnad av en liten hastighetssänkning (och följaktligen en liten komprimeringsvinst),\n"
+"adaptivt avgöra vilket som är bäst för varje enskild bildruta."
+
+msgid "<small>Adaptive B-Frames:</small>"
+msgstr "<small>Adaptiva B-bildrutor:</small>"
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr ""
+"x264 har en mängd olika algoritmer för att avgöra när B-bildrutor skall användas och hur många som skall användas.\n"
+"\n"
+"Snabb läge tar ungefär samma tid oavsett hur många B-bildrutor du anger.\n"
+"Men tack vare snabbheten är dess beslut ofta suboptimala.\n"
+"\n"
+"Optimalt läge blir långsammare i förhållande till att maximalt antal B-bildrutor ökar,\n"
+"men ger mycket mer korrekta beslut, speciellt när de används med B-pyramid."
+
+msgid "<small>Partitions:</small>"
+msgstr "<small>Partitioner:</small>"
+
+msgid ""
+"Mode decision picks from a variety of options to make its decision:\n"
+"this option chooses what options those are.\n"
+"\n"
+"Fewer partitions to check means faster encoding, at the cost of worse\n"
+"decisions, since the best option might have been one that was turned off."
+msgstr ""
+"Lägesbeslut väljer från en mängd olika alternativ för att fatta beslut:\n"
+"Det här alternativet avgör vilka dessa alternativ är.\n"
+"\n"
+"Färre partitioner att kontrollera innebär snabbare kodning, på bekostnad\n"
+"av sämre beslut. Eftersom bästa alternativet kan vara ett som är avstängt."
+
+msgid "<small>Trellis:</small>"
+msgstr "<small>Trellis:</small>"
+
+msgid ""
+"Trellis fine-tunes the rounding of transform coefficients to\n"
+"squeeze out 3-5% more compression at the cost of some speed.\n"
+"\n"
+"\"Always\" uses trellis not only during the main encoding process, but also\n"
+"during analysis, which improves compression even more, albeit at great speed cost.\n"
+"\n"
+"Trellis costs more speed at higher bitrates and requires CABAC."
+msgstr ""
+"Trellis finjusterar avrundningen av transformeringskoefficienterna för\n"
+"att pressa ut ytterligare 3-5% kompression på bekostnad av lite fart.\n"
+"\n"
+"\"Alltid\" använder Trellis inte bara under den huvudsakliga kodningsprocessen, utan också\n"
+"under analysen, vilket förbättrar komprimeringen ännu mer, om än till stor hastighetskostnad."
+
+msgid "<small><b>Analysis</b></small>"
+msgstr "<small><b>Analys</b></small>"
+
+msgid "<small>Adaptive Quantization Strength:</small>"
+msgstr "<small>Adaptiv kvantiseringsstyrka:</small>"
+
+msgid ""
+"Adaptive quantization controls how the encoder distributes bits across the frame.\n"
+"\n"
+"Higher values take more bits away from edges and complex areas to improve areas with finer detail."
+msgstr ""
+"Adaptiv kvantisering kontrollerar hur kodaren distribuerar databitar över bildrutan.\n"
+"\n"
+"Högre värden tar bort fler bitar från kanter och komplexa områden, för att förbättra mer detaljerade områden."
+
+msgid "<small>Psychovisual Rate Distortion:</small>"
+msgstr "<small>Psykovisuell frekvensdistortion:</small>"
+
+msgid ""
+"Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
+"vision to dramatically improve apparent detail and sharpness.\n"
+"The effect can be made weaker or stronger by adjusting the strength.\n"
+"Being an RD algorithm, it requires mode decision to be at least \"6\"."
+msgstr ""
+"Psykovisuell distorsionsoptimering drar fördel av mänskliga synegenskaper,\n"
+"för att dramatiskt förbättra detaljrikedom och skärpa.\n"
+"Effekten kan göras svagare eller starkare genom att justera styrkan.\n"
+"Då det är en RD-algoritm, krävs åtminstone lägesbeslut \"6\""
+
+msgid "<small>Psychovisual Trellis:</small>"
+msgstr "<small>Psykovisuell trellis:</small>"
+
+msgid ""
+"Psychovisual trellis is an experimental algorithm to further\n"
+"improve sharpness and detail retention beyond what Psychovisual RD does.\n"
+"\n"
+"Recommended values are around 0.2, though higher values may help for very\n"
+"grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
+"and other sharp-edged graphics."
+msgstr ""
+"Psychovisuell trellis är en experimentell algoritm för att ytterligare förbättra\n"
+"skärpa och detaljlagring utöver vad psychovisual RD gör.\n"
+"\n"
+"Rekommenderat värde är runt 0.2, men högre värden kan förbättra mycket\n"
+"gryniga videor eller lägre bithastighetskodningar. Rekommenderas inte för\n"
+"cel-animering och annan skarpt avgränsad grafik."
+
+msgid "Deblocking: "
+msgstr "Avblockering: "
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
+msgstr ""
+"H.264 Avblockeringsfilter.\n"
+"\n"
+"h.264 har ett inbyggt avblockeringsfilter som jämnar ut blockerande artefakter efter avkodning\n"
+"av bildrutor. Detta förbättrar inte bara visuell kvalitet, utan är också en betydande hjälp i\n"
+"komprimeringen. Avblockeringsfiltret tar mycket CPU-kraft i anspråk, så om du strävar efter att\n"
+"minimera CPU-kraven för videouppspelning, bör du inaktivera detta.\n"
+"\n"
+"Avblockeringsfiltret har två justerbara parametrar, \"styrka\" (Alfa) och \"tröskelvärde\" (Beta).\n"
+"Den förra kontrollerar hur stark (eller svag) avblockeringen är, medan den senare kontrollerar\n"
+"hur många (eller få) kanter den tillämpas på. Lägre värden betyder svagare avblockering, högre\n"
+"betyder starkare avblockering. Standardvärde är 0 (normalstyrka) för bägge parametrarna."
+
+msgid "No DCT Decimate"
+msgstr "Ingen DCT-decimering"
+
+msgid ""
+"x264 normally zeroes out nearly-empty data blocks to save bits to\n"
+"be better used for some other purpose in the video.  However, this can\n"
+"sometimes have slight negative effects on retention of subtle grain and\n"
+"dither.\n"
+"\n"
+"Don't touch this unless you're having banding issues or other such cases\n"
+"where you are having trouble keeping fine noise."
+msgstr ""
+"Normalt nollställer x264, nästan tomma datablock för att spara bitar\n"
+"som kan användas bättre för andra ändamål i videon. Ibland kan detta\n"
+"ha en lätt negativa effekter på bevarande av subtila korn och gitter.\n"
+"\n"
+"Rör inte detta om du inte har bandproblem, eller andra sådana fall\n"
+"där du har problem med att bevara fint buller."
+
+msgid "<small><b>Psychovisual</b></small>"
+msgstr "<small><b>Psykovisuellt</b></small>"
+
+msgid ""
+"Your selected options will appear here.\n"
+"You can edit these and add additional options.\n"
+"\n"
+"Default values will not be shown. The defaults are:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
+"b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
+"subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
+"deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
+"no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+msgstr ""
+"Dina valda alternativ kommer att visas här.\n"
+"Du kan redigera dessa och lägga till fler alternativ.\n"
+"\n"
+"Standardvärden visas inte. Standardvärden är:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
+"b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
+"subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
+"deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
+"no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+
+msgid "<small><b>Current x264 Advanced Option String</b></small>"
+msgstr "<small><b>Sträng för aktuella avancerade x264-alternativ</b></small>"
+
+msgid "Advanced Video"
+msgstr "Avancerad video"
+
+msgid "Chapter Markers"
+msgstr "Avsnittsmarkörer"
+
+msgid "Add chapter markers to output file."
+msgstr "Lägg till avsnittsmarkörer i utdatafilen."
+
+msgid "Chapters"
+msgstr "Avsnitt"
+
+msgid "Actors:"
+msgstr "Aktörer:"
+
+msgid "Director:"
+msgstr "Regissör:"
+
+msgid "Release Date:"
+msgstr "Publiceringsdatum:"
+
+msgid "Comment:"
+msgstr "Kommentar:"
+
+msgid "Genre:"
+msgstr "Genre:"
+
+msgid "Description:"
+msgstr "Beskrivning:"
+
+msgid "Plot:"
+msgstr "Graf:"
+
+msgid "Tags"
+msgstr "Taggar"
+
+msgid "Settings"
+msgstr "Inställningar"
+
+msgid "Edit"
+msgstr "Redigera"
+
+msgid "Reload"
+msgstr "Läs om"
+
+msgid ""
+"Mark selected queue entry as pending.\n"
+"Resets the queue job to pending and ready to run again."
+msgstr ""
+"Märk markerad köpost som väntande.\n"
+"Återställer köat jobb till väntande och klart att köra igen."
+
+msgid "Reload All"
+msgstr "Läs om alla"
+
+msgid ""
+"Mark all queue entries as pending.\n"
+"Resets all queue jobs to pending and ready to run again."
+msgstr ""
+"Märk alla köposter som väntande.\n"
+"Återställer alla köade jobb till väntande och klara att köra igen."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Select All"
+msgstr "Markera alla"
+
+msgid "Mark all titles for adding to the queue"
+msgstr "Markera titlar för att lägga till i kön"
+
+msgid "Clear All"
+msgstr "Rensa alla"
+
+msgid "Unmark all titles"
+msgstr "Avmarkera alla titlar"
+
+msgid "Destination files OK.  No duplicates detected."
+msgstr "Målfilerna är OK. Inga dubbletter identifierade."
+
+msgid "Select this title for adding to the queue.\n"
+msgstr "Välj titel att lägga till i kön.\n"
+
+msgid "Preferences"
+msgstr "Inställningar"
+
+msgid "Automatically check for updates"
+msgstr "Sök automatiskt efter uppdateringar"
+
+msgid "When all encodes are complete"
+msgstr "När alla kodningar är slutförda"
+
+msgid "Use automatic naming (uses modified source name)"
+msgstr "Använd automatisk namngivning (använder modifierade källnamn)"
+
+msgid "Auto-Name Template"
+msgstr "Mall för autonamn"
+
+msgid "Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+msgstr "Tillgängliga alternativ: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr "Använd iPod-/iTunes-vänligt (.m4v) filtillägg för MP4"
+
+msgid "Number of previews"
+msgstr "Antal förhandsvisningar"
+
+msgid "Filter short titles (seconds)"
+msgstr "Filtrera korta titlar (sekunder)"
+
+msgid "Show system tray icon"
+msgstr "Visa ikon i systembrickan"
+
+msgid "General"
+msgstr "Allmänt"
+
+msgid "Constant Quality fractional granularity"
+msgstr "Fraktionerad kornighet i konstant kvalitet"
+
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Använd dvdnav (istället för libdvdread)"
+
+msgid "Put individual encode logs in same location as movie"
+msgstr "Spara individuella kodningsloggar i samma mapp som filmen"
+
+msgid "Activity Log Verbosity Level"
+msgstr "Utförlig aktivitetslogg"
+
+msgid "Activity Log Longevity"
+msgstr "Varaktig aktivitetslogg"
+
+msgid "Scale down High Definition previews"
+msgstr "Skala ner HD-förhandsvisningar "
+
+msgid "Automatically Scan DVD when loaded"
+msgstr "Skanna DVD automatiskt vid inmatning"
+
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Skannar DVD:n när en ny skiva matas in"
+
+msgid "Hide Advanced Video Options Tab"
+msgstr "Dölj avancerade videoalternativ"
+
+msgid ""
+"Use advanced video options at your own risk.\n"
+"We recommend that you use the controls available\n"
+"on the Video tab instead."
+msgstr ""
+"Använd avancerade videoalternativ på egen risk.\n"
+"Vi rekommenderar att du använde tillgängliga kontroller\n"
+"under videofliken istället."
+
+msgid "Delete completed jobs from queue"
+msgstr "Ta bort slutförda jobb från kön"
+
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"Som standard, behålls slutförda jobb i kön och markeras som slutförda.\n"
+"Markera det här, om du vill att kön skall rensa sig själv och ta bort slutförda jobb."
+
+msgid "Allow Tweaks"
+msgstr "Tillåt justeringar"
+
+msgid "Allow HandBrake For Dummies"
+msgstr "Tillåt HandBrake för nybörjare"
+
+msgid "Advanced"
+msgstr "Avancerat"
+
+msgid "Folder Name:"
+msgstr "Mappnamn:"
+
+msgid "<b>Description</b>"
+msgstr "<b>Beskrivning</b>"
+
+msgid "Preset Name:"
+msgstr "Förinställningsnamn:"
+
+msgid "<b>Custom Picture Dimensions</b>"
+msgstr "<b>Anpassade bildstorlekar</b>"
+
+msgid "Maximum Width:"
+msgstr "Maxbredd:"
+
+msgid "Enable maximum width limit."
+msgstr "Aktivera maxbredd."
+
+msgid ""
+"This is the maximum width that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
+"Setting this to 0 means there is no maximum width."
+msgstr ""
+"Detta är den maxbredd som videon kommer att lagras med.\n"
+"\n"
+"När en ny källa läses in, är detta det värde som kommer att tillämpas om källans bredd är längre.\n"
+"0-värde innebär att ingen maxbredd tillämpas."
+
+msgid "Maximum Height:"
+msgstr "Maxhöjd:"
+
+msgid "Enable maximum height limit."
+msgstr "Aktivera maxhöjd."
+
+msgid ""
+"This is the maximum height that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
+"Setting this to 0 means there is no maximum height."
+msgstr ""
+"Detta är den maxhöjd som videon kommer att lagras med.\n"
+"\n"
+"När en ny källa läses in, är detta det värde som kommer att tillämpas om källans höjd är högre.\n"
+"0-värde innebär att ingen maxhöjd tillämpas."
+
+msgid "Select preview frames."
+msgstr "Välj förhandsgranskningsrutor."
+
+msgid "Encode and play a short sequence of video starting from the current preview position."
+msgstr "Koda och spela upp en kort sekvens av videon, med början från aktuell förhandsgranskningsposition."
+
+msgid "<b>Duration:</b>"
+msgstr "<b>Varaktighet:</b>"
+
+msgid "Set the duration of the live preview in seconds."
+msgstr "Ange varaktighet för förhandsgranskningen, i sekunder."
+
+msgid "Show Crop"
+msgstr "Visa beskärning"
+
+msgid "Show Cropped area of the preview"
+msgstr "Visa beskuret område"
+
+msgid "Fullscreen"
+msgstr "Helskärm"
+
+msgid "View Fullscreen Preview"
+msgstr "Visa förhandsgranskning i helskärmsläge"
+
+msgid "Title Number:"
+msgstr "Titelnummer:"
+
+msgid "Detected DVD devices:"
+msgstr "Identifierade DVD-enheter:"
+
+msgid "Setting:"
+msgstr "Inställning:"
+
+msgid "Import SRT"
+msgstr "Importera SRT"
+
+msgid "Enable settings to import an SRT subtitle file"
+msgstr "Aktivera inställningar för import av SRT undertextfil"
+
+msgid "Embedded Subtitle List"
+msgstr "Inbäddad undertextlista"
+
+msgid "Enable settings to select embedded subtitles"
+msgstr "Aktivera inställningar för val av inbäddade undertexter"
+
+msgid "Character Code"
+msgstr "Teckenkod"
+
+msgid "Offset (ms)"
+msgstr "Förskjutning (ms)"
+
+msgid ""
+"Set the language of this subtitle.\n"
+"This value will be used by players in subtitle menus."
+msgstr ""
+"Ange språket i denna undertext.\n"
+"Detta värde används av spelare, i undertextmenyer."
+
+msgid ""
+"Set the character code used by the SRT file you are importing.\n"
+"\n"
+"SRTs come in all flavours of character sets.\n"
+"We translate the character set to UTF-8.\n"
+"The source's character code is needed in order to perform this translation."
+msgstr ""
+"Ange teckentabell för SRT-filen du importerar.\n"
+"\n"
+"SRT-filer finns, kodade med många olika teckentabeller.\n"
+"Vi konverterar teckentabellen till UTF-8.\n"
+"Källans teckentabell behövs för att utföra denna konvertering."
+
+msgid "Select the SRT file to import."
+msgstr "Välj SRT-fil för import."
+
+msgid "Srt File"
+msgstr "SRT-fil"
+
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr "Justera förskjutningen i millisekunder, mellan video och SRT-tidsstämplar"
+
+msgid "Track"
+msgstr "Spår"
+
+msgid "List of subtitle tracks available from your source."
+msgstr "Lista över undertextspår, tillgängliga från din källa."
+
+msgid "Forced Subtitles Only"
+msgstr "Obligatoriska undertexter endast"
+
+msgid "Burn into video"
+msgstr "Bränn in i videon"
+
+msgid ""
+"Render the subtitle over the video.\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Rendera undertexten över videon.\n"
+"Undertexten blir en del av videon och kan inte avaktiveras."
+
+msgid "Set Default Track"
+msgstr "Ange standardspår"
+
+msgid "Source Track"
+msgstr "Källspår"
+
+msgid "List of audio tracks available from your source."
+msgstr "Lista över ljudspår, tillgängliga från din källa."
+
+msgid "Track Name:"
+msgstr "Spårnamn:"
+
+msgid ""
+"Set the audio track name.\n"
+"\n"
+"Players may use this in the audio selection list."
+msgstr ""
+"Ange ljudspårsnamn.\n"
+"\n"
+"Spelare kan använda detta i ljudspårslistan."
+
+msgid "Mix"
+msgstr "Mix"
+
+msgid "Sample Rate"
+msgstr "Samplingsfrekvens"
+
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr ""
+"<b>Komprimering av dynamiskt intervall:</b> Justera dynamiskt intervall för utdataljudspår.\n"
+"\n"
+"För källjud som har ett brett dynamiskt intervall (mycket högt och mycket låga sekvenser),\n"
+"Låter DRC dig \"komprimera\" intervallet genom att göra höga ljud lägre och låga ljud högre."
+
+msgid "Enable bitrate setting"
+msgstr "Aktivera bithastighetsinställningar"
+
+msgid "Enable quality setting"
+msgstr "Aktivera kvalitetsinställningar"
+
+msgid "<b>Quality:</b> For output codec's that support it, adjust the quality of the output."
+msgstr "<b>Kvalitet:</b> Justera utdatakvalitet, för de kodekar som stöder det."
+
+msgid "00.0"
+msgstr "00.0"
+
+msgid "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output audio track."
+msgstr "<b>Ljudförstärkning:</b> Justera förstärkning eller försvagning av utgående ljudspår."
+
+msgid "Skip This Version"
+msgstr "Hoppa över den här versionen"
+
+msgid "Remind Me Later"
+msgstr "Påminn mig senare"
+
+msgid "<b>A new version of HandBrake is available!</b>"
+msgstr "<b>En ny version av HandBrake finns tillgänglig!</b>"
+
+msgid "HandBrake xxx is now available (you have yyy)."
+msgstr "HandBrake xxx finns nu tillgänglig (du har yyy)."
+
+msgid "<b>Release Notes</b>"
+msgstr "<b>Versionsnotiser</b>"
+
+msgid "First Track Matching Selected Languages"
+msgstr "Första spår som matchar valda språk"
+
+msgid "All Tracks Matching Selected Languages"
+msgstr "Alla spår som matchar de valda språken"
+
+msgid "Chapters:"
+msgstr "Avsnitt:"
+
+msgid "Seconds:"
+msgstr "Sekunder:"
+
+msgid "Frames:"
+msgstr "Bildrutor:"
+
+msgid "Do Nothing"
+msgstr "Gör ingenting"
+
+msgid "Show Notification"
+msgstr "Visa avisering"
+
+msgid "Quit Handbrake"
+msgstr "Avsluta HandBrake"
+
+msgid "Put Computer To Sleep"
+msgstr "Försätt datorn i viloläge"
+
+msgid "Shutdown Computer"
+msgstr "Stäng av datorn"
+
+msgid "Week"
+msgstr "Vecka"
+
+msgid "Month"
+msgstr "Månad"
+
+msgid "Year"
+msgstr "År"
+
+msgid "Immortal"
+msgstr "Odödlig"
+
+msgid "Never"
+msgstr "Aldrig"
+
+msgid "Daily"
+msgstr "Varje dag"
+
+msgid "Weekly"
+msgstr "Varje vecka"
+
+msgid "Monthly"
+msgstr "Varje månad"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Slower"
+msgstr "Långsammare"
+
+msgid "Ultralight"
+msgstr "Ultralätt"
+
+msgid "Light"
+msgstr "Ljus"
+
+msgid "Medium"
+msgstr "Medium"
+
+msgid "Strong"
+msgstr "Stark"
+
+msgid "Film"
+msgstr "Film"
+
+msgid "Grain"
+msgstr "Grynighet"
+
+msgid "High Motion"
+msgstr "Höghastighet"
+
+msgid "Animation"
+msgstr "Animation"
+
+msgid "Spatial"
+msgstr "Rumsliga"
+
+msgid "Temporal"
+msgstr "Temporär"
+
+msgid "Automatic"
+msgstr "Automatiskt"
+
+msgid "Optimal"
+msgstr "Optimal"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Simple"
+msgstr "Enkel"
+
+msgid "Smart"
+msgstr "Smart"
+
+msgid "Diamond"
+msgstr "Diamant"
+
+msgid "Hexagon"
+msgstr "Hexagon"
+
+msgid "Uneven Multi-Hexagon"
+msgstr "Ojämn multihexagon"
+
+msgid "Exhaustive"
+msgstr "Uttömmande"
+
+msgid "Hadamard Exhaustive"
+msgstr "Hadamard uttömmande"
+
+msgid "Most"
+msgstr "Mest"
+
+msgid "Some"
+msgstr "Vissa"
+
+msgid "All"
+msgstr "Alla"
+
+msgid "Encode only"
+msgstr "Koda endast"
+
+msgid "Always"
+msgstr "Alltid"
+
+msgid "(NTSC Film)"
+msgstr "(NTSC-film)"
+
+msgid "(PAL Film/Video)"
+msgstr "(PAL Film/Video)"
+
+msgid "(NTSC Video)"
+msgstr "(NTSC-video)"
+
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr "%d - %02dh%02dm%02ds - %s"
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr "%d (%05d.MPLS) - %02dh%02dm%02ds"
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr "%d (%05d.MPLS) - Okänd längd"
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr "%d - %02dh%02dm%02ds"
+
+msgid "%d - Unknown Length"
+msgstr "%d - Okänd längd"
+
+msgid "No Titles"
+msgstr "Inga titlar"
+
+msgid "No Audio"
+msgstr "Inget ljud"
+
+msgid "Foreign Audio Search"
+msgstr "Sök främmande språk"
+
+#, c-format
+msgid "Chapter %2d"
+msgstr "Avsnitt %2d"
+
+#, c-format
+msgid "N/A"
+msgstr "EJ TILLÄMPLIGT"
+
+#, c-format
+msgid ""
+"Invalid Deinterlace Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ogiltiga avflätningsinställningar:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Detelecine Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ogiltiga detelecine-inställningar:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Decomb Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ogiltiga decomb-inställningar\n"
+"\n"
+"%s\n"
+
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+"Theora stöds inte i MP4-behållaren.\n"
+"\n"
+"Du bör välja en annan videokodek eller behållare.\n"
+"Om du fortsätter, kommer FFMPEG att användas."
+
+msgid "Continue"
+msgstr "Fortsätt"
+
+msgid "No title found.\n"
+msgstr "Ingen titel hittades.\n"
+
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"Endast en undertext kan brännas in i videon.\n"
+"\n"
+"Du bör ändra dina undertextinställningar.\n"
+"Om du fortsätter kan vissa undertexter förloras."
+
+msgid ""
+"Srt file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+"SRT-filen finns inte, eller är ingen reguljär fil.\n"
+"\n"
+"Du måste välja en giltig fil.\n"
+"Om du fortsätter, kommer denna fil att ignoreras."
+
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"Källan stödjer inte genomströmning.\n"
+"\n"
+"Du bör välja en annan ljudkodek.\n"
+"Om du fortsätter, kommer en att väljas åt dig."
+
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"%s stöds inte i %s-behållaren.\n"
+"\n"
+"Välj en annan videokodek.\n"
+"Om du fortsätter, kommer en att väljas åt dig."
+
+#, c-format
+msgid ""
+"The source audio does not support %s mixdown.\n"
+"\n"
+"You should choose a different mixdown.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"Källjudet stödjer inte %s nermixning.\n"
+"\n"
+"Du bör välja en annan nermixning.\n"
+"Om du fortsätter, kommer en att väljas åt dig."
+
+#, c-format
+msgid ""
+"<b><big>Unable to create %s.</big></b>\n"
+"\n"
+"Internal error. Could not parse UI description.\n"
+"%s"
+msgstr ""
+"<b><big>Kan inte skapa %s.</big></b>\n"
+"\n"
+"Internt fel. Kunde inte tolka UI-beskrivning.\n"
+"%s"
+
+msgid "Index"
+msgstr "Index"
+
+msgid "Duration"
+msgstr "Varaktighet"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Job Information"
+msgstr "Jobbinformation"
+
+msgid "Track Information"
+msgstr "Spårinformation"
+
+msgid "Preset Name"
+msgstr "Förinställningsnamn"
+
+msgid "The device or file to encode"
+msgstr "Enhet eller fil att koda"
+
+msgid "The preset values to use for encoding"
+msgstr "Förinställning att använda för kodning"
+
+msgid "Spam a lot"
+msgstr "Spamma mycket"
+
+msgid "- Transcode media formats"
+msgstr "- Konvertera mediaformat"
+
+msgid "Globals"
+msgstr "Globalt"
+
+msgid "Presets"
+msgstr "Förinställningar"
+
+msgid "Folder"
+msgstr "Mapp"
+
+#, c-format
+msgid "%s path: (%s)"
+msgstr "%s sökväg: (%s)"
+
+#, c-format
+msgid "%s indices: len %d"
+msgstr "%s index: längd %d"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Failed to find parent folder when adding child."
+msgstr "Kunde inte hitta övergripande mapp när undermapp skulle läggas till."
+
+msgid "Failed to find parent folder while adding child."
+msgstr "Kunde inte hitta övergripande mapp när undermapp skulle läggas till."
+
+#, c-format
+msgid "Can't map language value: (%s)"
+msgstr "Kan inte kartlägga språkvärdet: (%s)"
+
+#, c-format
+msgid "Can't map value: (%s)"
+msgstr "Kan inte kartlägga värdet: (%s)"
+
+msgid "Subtitles"
+msgstr "Undertexter"
+
+msgid ""
+"%s: Folder already exists.\n"
+"You can not replace it with a preset."
+msgstr ""
+"%s: Mappen finns redan.\n"
+"Den kan inte ersättas av en förinställning."
+
+msgid ""
+"%s: Preset already exists.\n"
+"You can not replace it with a folder."
+msgstr ""
+"%s: Förinställningen finns redan.\n"
+"Den kan inte ersättas av en mapp."
+
+msgid "Import Preset"
+msgstr "Importera förinställning"
+
+msgid "All (*)"
+msgstr "Alla (*)"
+
+msgid "Presets (*.plist)"
+msgstr "Förinställningar (*.plist)"
+
+msgid "Export Preset"
+msgstr "Exportera förinställning"
+
+msgid ""
+"Confirm deletion of %s:\n"
+"\n"
+"%s"
+msgstr ""
+"Bekräfta borttagning av %s:\n"
+"\n"
+"%s"
+
+msgid "folder"
+msgstr "mapp"
+
+msgid "preset"
+msgstr "förinställning"
+
+msgid "No selection???  Perhaps unselected."
+msgstr "Inget markerat??? Kanske omarkerat."
+
+#, c-format
+msgid "Gstreamer Error: %s"
+msgstr "Gstreamer-fel: %s"
+
+#, c-format
+msgid ""
+"Missing GStreamer plugin\n"
+"Audio or Video may not play as expected\n"
+"\n"
+"%s"
+msgstr ""
+"GStreamer-tillägg saknas.\n"
+"Ljud eller video kanske inte spelas upp som förväntat.\n"
+"\n"
+"%s"
+
+msgid "Done"
+msgstr "Klart"
+
+msgid "Windowed"
+msgstr "Fönsterläge"
+
+msgid "Seconds"
+msgstr "Sekunder"
+
+msgid "Frames"
+msgstr "Bildrutor"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Titel %d, %s %d genom %d, 2 videopass) --> %s</small>"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Titel %d, %s %d genom %d) --> %s</small>"
+
+#, c-format
+msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
+msgstr "<b>Modifierad förinställning baserad på:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Preset:</b> <small>%s</small>\n"
+msgstr "<b>Förinställning:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Format:</b> <small>%s Container</small>\n"
+msgstr "<b>Format:</b> <small>%s Behållare</small>\n"
+
+msgid "<b>Container Options:</b><small>"
+msgstr "<b>Behållaralternativ:</b><small>"
+
+#, c-format
+msgid "%sChapter Markers"
+msgstr "%sAvsnittsmarkörer"
+
+#, c-format
+msgid "%siPod 5G Support"
+msgstr "%siPod 5G-stöd"
+
+#, c-format
+msgid "%sWeb Optimized"
+msgstr "%sWebboptimerad"
+
+#, c-format
+msgid "%sLarge File Size (>4GB)"
+msgstr "%sStor filstorlek (>4GB)"
+
+#, c-format
+msgid "<b>Destination:</b> <small>%s</small>\n"
+msgstr "<b>Plats:</b> <small>%s</small>\n"
+
+msgid "(Aspect Preserved)"
+msgstr "(Bevarade proportioner)"
+
+msgid "(Aspect Lost)"
+msgstr "(Ändrade proportioner)"
+
+msgid "(Anamorphic)"
+msgstr "(Anamorft)"
+
+msgid "(Custom Anamorphic)"
+msgstr "(Anpassad anamorfose)"
+
+msgid "<b>Picture:</b> <small>"
+msgstr "<b>Bild:</b> <small>"
+
+#, c-format
+msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
+msgstr "Källa: %d x %d, Utdata %d x %d %s, Beskär %d:%d:%d:%d"
+
+#, c-format
+msgid ", Display %d x %d"
+msgstr ", Skärm %d x %d"
+
+msgid "<b>Filters:</b><small>"
+msgstr "<b>Filter:</b> <small>"
+
+#, c-format
+msgid "%sDetelecine"
+msgstr "%sDetelecine"
+
+#, c-format
+msgid "%sDecomb"
+msgstr "%sDecomb"
+
+#, c-format
+msgid "%sDeinterlace"
+msgstr "%sAvflätning"
+
+#, c-format
+msgid "%sDenoise Filter %s:"
+msgstr "%sBrusreduceringsfilter %s:"
+
+#, c-format
+msgid "%sDeblock: %d"
+msgstr "%sAvblockera: %d"
+
+#, c-format
+msgid "%sGrayscale"
+msgstr "%sGråskala"
+
+#, c-format
+msgid "<b>Video:</b> <small>%s"
+msgstr "<b>Video:</b> <small>%s"
+
+#, c-format
+msgid ", Framerate: %s %s"
+msgstr ", Bildfrekvens: %s %s"
+
+#, c-format
+msgid ", Framerate: Peak %s (may be lower)"
+msgstr ", Bildfrekvens: Topp %s (kan vara lägre)"
+
+#, c-format
+msgid ", Framerate: %s (constant frame rate)"
+msgstr ", Bildfrekvens: %s (konstant bildfrekvens)"
+
+msgid "Error"
+msgstr "Fel"
+
+msgid "Bitrate:"
+msgstr "Bithastighet:"
+
+msgid "Bitrate"
+msgstr "Bithastighet"
+
+msgid "Quality"
+msgstr "Kvalitet"
+
+msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
+msgstr "<b>Turbo 1:a Pass:</b> <small>På</small>\n"
+
+#, c-format
+msgid "<b>Video Options:</b> <small>Preset: %s</small>"
+msgstr "<b>Videoalternativ:</b> <small>Förinställning: %s</small>"
+
+msgid "<small> - Tune: "
+msgstr "<small> - Justera: "
+
+#, c-format
+msgid "<small> - Profile: %s</small>"
+msgstr "<small> - Profil: %s</small>"
+
+#, c-format
+msgid "<small> - Level: %s</small>"
+msgstr "<small> - Nivå: %s</small>"
+
+#, c-format
+msgid "<b>Advanced Options:</b> <small>%s</small>\n"
+msgstr "<b>Avancerade alternativ:</b> <small>%s</small>\n"
+
+msgid "<b>Audio:</b> <small>"
+msgstr "<b>Ljud:</b> <small>"
+
+#, c-format
+msgid "<b>Audio Tracks: %d</b><small>"
+msgstr "<b>Ljudspår: %d</b><small>"
+
+#, c-format
+msgid "Bitrate: %d"
+msgstr "Bithastighet: %d"
+
+#, c-format
+msgid "%s --> Encoder: %s"
+msgstr "%s --> Kodare: %s"
+
+#, c-format
+msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
+msgstr "%s --> Kodare: %s, Nermixning: %s, Samplingsfrekvens: %s, %s"
+
+msgid "<b>Subtitle:</b> "
+msgstr "<b>Undertext:</b> "
+
+#, c-format
+msgid "<b>Subtitle Tracks: %d</b>\n"
+msgstr "<b>Undertextspår: %d</b>\n"
+
+msgid " (Force)"
+msgstr "(Obligatorisk)"
+
+msgid " (Burn)"
+msgstr "(Bränn)"
+
+msgid " (Default)"
+msgstr "(Standard)"
+
+#, c-format
+msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
+msgstr "<small> %s (%s), %s, Förskjutning (ms) %d%s</small>\n"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Mål: %s\n"
+"\n"
+"Ett annat köat jobb har specificerat samma mål.\n"
+"Vill du skriva över?"
+
+msgid "Overwrite"
+msgstr "Skriv över"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"This is not a valid directory."
+msgstr ""
+"Mål: %s\n"
+"\n"
+"Detta är ingen giltig mapp."
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Can not read or write the directory."
+msgstr ""
+"Mål: %s\n"
+"\n"
+"Kan inte läsa eller skriva målet."
+
+#, c-format
+msgid ""
+"Destination filesystem is almost full: %uM free\n"
+"\n"
+"Encode may be incomplete if you proceed.\n"
+msgstr ""
+"Målfilsystemet är nästan fullt: %uM ledigt\n"
+"\n"
+"Kodningen kanske inte kan slutföras om du fortsätter.\n"
+
+msgid "Proceed"
+msgstr "Fortsätt"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"File already exists.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Mål: %s\n"
+"\n"
+"Filen finns redan.\n"
+"Vill du skriva över den?"
+
+msgid ""
+"<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
+"Duplicates will not be added to the queue.</span>"
+msgstr ""
+"<span foreground='red' weight='bold'>Dubblettfiler identifierade.\n"
+"Dubbletter läggs inte till i kön.</span>"
+
+msgid "No Title"
+msgstr "Ingen titel"
+
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+"Det finns en annan titel med samma målfilsnamn.\n"
+"Denna titel kommer inte att läggas till i kön, om du inte\n"
+"ändrar utdatafilens namn.\n"
+
+msgid "Stop"
+msgstr "Stoppa"
+
+msgid "Stop Encoding"
+msgstr "Stoppa kodning"
+
+msgid "Resume"
+msgstr "Återuppta"
+
+msgid "Resume Encoding"
+msgstr "Återuppta kodningen"
+
+msgid "S_top Queue"
+msgstr "S_toppa kön"
+
+msgid "_Start Queue"
+msgstr "_Starta kön"
+
+msgid "_Resume Queue"
+msgstr "_Återuppta kön"
+
+msgid "Resume Queue"
+msgstr "Återuppta kön"
+
+msgid ""
+"You are currently encoding.  What would you like to do?\n"
+"\n"
+msgstr ""
+"Du kodar för närvarande. Vad vill du göra?\n"
+"\n"
+
+#, c-format
+msgid ""
+"You have %d unfinished job(s) in a saved queue.\n"
+"\n"
+"Would you like to reload them?"
+msgstr ""
+"Du har %d oavslutade jobb i en sparad kö.\n"
+"\n"
+"Vill du läsa in dem igen?"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Yes"
+msgstr "Ja"
+
+#, c-format
+msgid "Usage: %s infile [outfile]\n"
+msgstr "Användning: %s infil [utfil]\n"
+
+#, c-format
+msgid "Offset: %dms"
+msgstr "Förskjutning: %dms"
+
+msgid "Burned Into Video"
+msgstr "Inbränd i videon"
+
+msgid "Passthrough"
+msgstr "Genomströmning"
+
+msgid "through"
+msgstr "genom"
+
+msgid "(Forced Subtitles Only)"
+msgstr "(Endast obligatoriska undertexter)"
+
+msgid "(Default)"
+msgstr "(Standard)"
+
+msgid "Error!"
+msgstr "Fel!"
+
+#, c-format
+msgid "Preferred Language: %s"
+msgstr "Föredraget språk: %s"
+
+#, c-format
+msgid "Add %s subtitle track if default audio is not %s"
+msgstr "Lägg till %s undertextspår om standardljudet inte är %s"
+
+#, c-format
+msgid "Type %s"
+msgstr "Typ %s"
+
+#, c-format
+msgid "Type %s value %s"
+msgstr "Typ %s värde %s"
+
+#, c-format
+msgid "Type %s value %d"
+msgstr "Typ %s värde %d"
+
+#, c-format
+msgid "Type %s value %<PRId64>"
+msgstr "Typ %s värde %<PRId64>"
+
+#, c-format
+msgid "Type %s value %f"
+msgstr "Typ %s värde %f"
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"Expanded Options:\n"
+"\"%s\""
+msgstr ""
+"%s\n"
+"\n"
+"Utökade alternativ:\n"
+"\"%s\""
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"Expanded Options:\n"
+"\"\""
+msgstr ""
+"%s\n"
+"\n"
+"Utökade alternativ:\n"
+"\"\""
+
+msgid "Any"
+msgstr "Alla"
+
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, ingen subpel"
+
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, qpel på alla"
+
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, multi-qpel på alla"
+
+msgid "6: RD in I/P-frames"
+msgstr "6: RD i I-/P-bildrutor"
+
+msgid "7: RD in all frames"
+msgstr "7: RD i alla bildrutor"
+
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD-förfining i I-/P-bildrutor"
+
+msgid "9: RD refine in all frames"
+msgstr "9: RD-förfining i alla bildrutor"
+
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD i alla bildrutor"
+
+msgid "11: No early terminations in analysis"
+msgstr "11: Inga tidiga avslut i analysen."
+
+msgid "Your names"
+msgstr "Dina namn"
+
+msgid "Your emails"
+msgstr "Dina e-postadresser"
