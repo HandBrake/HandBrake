@@ -160,6 +160,8 @@ struct sync_common_s
     int             start_found;
     int64_t         start_pts;
     int64_t         stop_pts;
+    int             wait_for_frame;
+    int             wait_for_pts;
 
     // sync audio work objects
     hb_list_t     * list_work;
@@ -1331,8 +1333,7 @@ static void OutputBuffer( sync_common_t * common )
         {
             // pts_to_start or frame_to_start were specified.
             // Wait for the appropriate start point.
-            if (common->job->frame_to_start > 0 &&
-                out_stream->type == SYNC_TYPE_VIDEO)
+            if (common->wait_for_frame && out_stream->type == SYNC_TYPE_VIDEO)
             {
                 common->start_pts = buf->s.start + 1;
                 if (out_stream->frame_count >= common->job->frame_to_start)
@@ -1341,7 +1342,7 @@ static void OutputBuffer( sync_common_t * common )
                     out_stream->frame_count = 0;
                 }
             }
-            else if (common->job->pts_to_start > 0 &&
+            else if (common->wait_for_pts &&
                      out_stream->type != SYNC_TYPE_SUBTITLE)
             {
                 if (buf->s.start >= common->job->pts_to_start)
@@ -2238,6 +2239,8 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     {
         pv->common->start_found = 0;
         pv->common->start_pts = pv->common->job->pts_to_start;
+        pv->common->wait_for_frame = !!job->frame_to_start;
+        pv->common->wait_for_pts   = !!job->pts_to_start;
     }
     else
     {
@@ -3033,9 +3036,9 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     state.state = HB_STATE_SEARCHING;
 
 #define p state.param.working
-    if (job->frame_to_start)
+    if (common->wait_for_frame)
         p.progress  = (float)frame_count / job->frame_to_start;
-    else if (job->pts_to_start)
+    else if (common->wait_for_pts)
         p.progress  = (float) start / job->pts_to_start;
     else
         p.progress = 0;
@@ -3047,12 +3050,12 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     {
         int eta = 0;
 
-        if (job->frame_to_start)
+        if (common->wait_for_frame)
         {
             avg = 1000.0 * frame_count / (now - common->st_first);
             eta = (job->frame_to_start - frame_count ) / avg;
         }
-        else if (job->pts_to_start)
+        else if (common->wait_for_pts)
         {
             avg = 1000.0 * start / (now - common->st_first);
             eta = (job->pts_to_start - start) / avg;
