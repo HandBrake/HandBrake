@@ -4795,11 +4795,15 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
              !ts_stream->skipbad &&
              (continuity != ( (ts_stream->continuity + 1) & 0xf ) ) )
         {
-            ts_err( stream, curstream, "continuity error: got %d expected %d",
-                    (int)continuity,
-                    (ts_stream->continuity + 1) & 0xf );
+            if (continuity == ts_stream->continuity)
+            {
+                // Duplicate packet as defined by ITU-T Rec. H.222
+                // Drop the packet.
+                return hb_buffer_list_clear(&list);
+            }
+            ts_warn( stream, "continuity error: got %d expected %d",
+                    (int)continuity, (ts_stream->continuity + 1) & 0xf );
             ts_stream->continuity = continuity;
-            return hb_buffer_list_clear(&list);
         }
         ts_stream->continuity = continuity;
 
