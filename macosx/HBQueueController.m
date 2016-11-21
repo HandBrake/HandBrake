@@ -1114,7 +1114,7 @@
 - (IBAction)rip:(id)sender
 {
     // Rip or Cancel ?
-    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
+    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused || self.core.state == HBStateSearching)
     {
         [self cancelRip:sender];
     }

@@ -1040,7 +1040,7 @@
 - (IBAction)rip:(id)sender
 {
     // Rip or Cancel ?
-    if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused)
+    if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused || fQueueController.core.state == HBStateSearching)
 	{
         // Displays an alert asking user if the want to cancel encoding of current job.
         [fQueueController cancelRip:self];
