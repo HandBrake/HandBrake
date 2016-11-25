@@ -545,21 +545,27 @@ struct hb_job_s
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
-// see https://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
-#define HB_COLR_PRI_BT709     1
-#define HB_COLR_PRI_UNDEF     2
-#define HB_COLR_PRI_EBUTECH   5 // use for bt470bg
-#define HB_COLR_PRI_SMPTEC    6 // smpte170m; also use for bt470m and smpte240m
-// 0, 3-4, 7-65535: reserved
-#define HB_COLR_TRA_BT709     1 // also use for bt470m, bt470bg and smpte170m
-#define HB_COLR_TRA_UNDEF     2
-#define HB_COLR_TRA_SMPTE240M 7
-// 0, 3-6, 8-65535: reserved
-#define HB_COLR_MAT_BT709     1
-#define HB_COLR_MAT_UNDEF     2
-#define HB_COLR_MAT_SMPTE170M 6 // also use for fcc and bt470bg
-#define HB_COLR_MAT_SMPTE240M 7
-// 0, 3-5, 8-65535: reserved
+// see https://developer.apple.com/library/content/technotes/tn2162/_index.html
+//     https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap3/qtff3.html#//apple_ref/doc/uid/TP40000939-CH205-125526
+//     libav pixfmt.h
+#define HB_COLR_PRI_BT709        1
+#define HB_COLR_PRI_UNDEF        2
+#define HB_COLR_PRI_EBUTECH      5 // use for bt470bg
+#define HB_COLR_PRI_SMPTEC       6 // smpte170m; also use for bt470m and smpte240m
+#define HB_COLR_PRI_BT2020       9
+// 0, 3-4, 7-8, 10-65535: reserved/not implemented
+#define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
+#define HB_COLR_TRA_UNDEF        2
+#define HB_COLR_TRA_SMPTE240M    7
+#define HB_COLR_TRA_SMPTEST2084  16
+// 0, 3-6, 8-15, 17-65535: reserved/not implemented
+#define HB_COLR_MAT_BT709        1
+#define HB_COLR_MAT_UNDEF        2
+#define HB_COLR_MAT_SMPTE170M    6 // also use for fcc and bt470bg
+#define HB_COLR_MAT_SMPTE240M    7
+#define HB_COLR_MAT_BT2020_NCL   9
+#define HB_COLR_MAT_BT2020_CL    10
+// 0, 3-5, 8, 11-65535: reserved/not implemented
 
     hb_list_t     * list_chapter;
 

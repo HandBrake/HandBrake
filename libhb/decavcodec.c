@@ -1783,6 +1783,8 @@ static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_ration
         case AVCOL_PRI_SMPTE170M:
         case AVCOL_PRI_SMPTE240M:
             return HB_COLR_PRI_SMPTEC;
+        case AVCOL_PRI_BT2020:
+            return HB_COLR_PRI_BT2020;
         default:
         {
             if ((geometry.width >= 1280 || geometry.height >= 720)||
@@ -1805,6 +1807,8 @@ static int get_color_transfer(int color_trc)
     {
         case AVCOL_TRC_SMPTE240M:
             return HB_COLR_TRA_SMPTE240M;
+        case AVCOL_TRC_SMPTEST2084:
+            return HB_COLR_TRA_SMPTEST2084;
         default:
             // ITU BT.601, BT.709, anything else
             return HB_COLR_TRA_BT709;
@@ -1824,6 +1828,10 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
             return HB_COLR_MAT_SMPTE170M;
         case AVCOL_SPC_SMPTE240M:
             return HB_COLR_MAT_SMPTE240M;
+        case AVCOL_SPC_BT2020_NCL:
+            return HB_COLR_MAT_BT2020_NCL;
+        case AVCOL_SPC_BT2020_CL:
+            return HB_COLR_MAT_BT2020_CL;
         default:
         {
             if ((geometry.width >= 1280 || geometry.height >= 720)||

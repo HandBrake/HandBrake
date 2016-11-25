@@ -369,12 +369,19 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
-    if( job->color_matrix_code == 4 )
+    if( job->color_matrix_code == 5 )
     {
         // Custom
         param.vui.i_colorprim = job->color_prim;
         param.vui.i_transfer  = job->color_transfer;
         param.vui.i_colmatrix = job->color_matrix;
+    }
+    else if( job->color_matrix_code == 4 )
+    {
+        // ITU BT.2020 UHD content
+        param.vui.i_colorprim = HB_COLR_PRI_BT2020;
+        param.vui.i_transfer  = HB_COLR_TRA_BT709;
+        param.vui.i_colmatrix = HB_COLR_MAT_BT2020_NCL;
     }
     else if( job->color_matrix_code == 3 )
     {
