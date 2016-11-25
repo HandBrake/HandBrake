@@ -692,11 +692,17 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // set and enable colorimetry (video signal information)
     switch (job->color_matrix_code)
     {
-        case 4:
+        case 5:
             // custom
             pv->param.videoSignalInfo.ColourPrimaries         = job->color_prim;
             pv->param.videoSignalInfo.TransferCharacteristics = job->color_transfer;
             pv->param.videoSignalInfo.MatrixCoefficients      = job->color_matrix;
+            break;
+        case 4:
+            // ITU BT.2020 UHD content
+            pv->param.videoSignalInfo.ColourPrimaries         = HB_COLR_PRI_BT2020;
+            pv->param.videoSignalInfo.TransferCharacteristics = HB_COLR_TRA_BT709;
+            pv->param.videoSignalInfo.MatrixCoefficients      = HB_COLR_MAT_BT2020_NCL;
             break;
         case 3:
             // ITU BT.709 HD content

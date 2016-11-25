@@ -501,15 +501,16 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->color_matrix_code && (job->vcodec == HB_VCODEC_X264_MASK))
+        if (job->color_matrix_code &&
+        	(job->vcodec == HB_VCODEC_X264_MASK) || (job->vcodec == HB_VCODEC_X265_MASK))
         {
             // color matrix is set:
-            // 1) at the stream    level (x264  only),
-            // 2) at the container level (mp4v2 only)
+            // 1) at the stream    level (x264, x265, qsv  only),
             hb_log("     + custom color matrix: %s",
                    job->color_matrix_code == 1 ? "ITU Bt.601 (NTSC)" :
                    job->color_matrix_code == 2 ? "ITU Bt.601 (PAL)"  :
-                   job->color_matrix_code == 3 ? "ITU Bt.709 (HD)"   : "Custom");
+                   job->color_matrix_code == 3 ? "ITU Bt.709 (HD)"   :
+                   job->color_matrix_code == 4 ? "ITU Bt.2020 (UHD)"   : "Custom");
         }
     }
 

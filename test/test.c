@@ -1530,6 +1530,7 @@ static void ShowHelp()
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
+"                               2020\n"
 "                               709\n"
 "                               601\n"
 "                               ntsc (same as 601)\n"
@@ -2721,6 +2722,8 @@ static int ParseOptions( int argc, char ** argv )
                         color_matrix_code = 2;
                     else if( !strcmp( optarg, "709" ) )
                         color_matrix_code = 3;
+                    else if( !strcmp( optarg, "2020" ) )
+                        color_matrix_code = 4;
                 } break;
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
