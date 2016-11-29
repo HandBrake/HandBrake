@@ -130,8 +130,8 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     window = GTK_WINDOW(GHB_WIDGET(ud->builder, "preview_window"));
     gtk_window_unmaximize(window);
     gtk_window_resize(window, width, height);
-    geo.min_aspect = (double)width / height;
-    geo.max_aspect = (double)width / height;
+    geo.min_aspect = (double)(width - 4) / height;
+    geo.max_aspect = (double)(width + 4) / height;
     geo.width_inc = geo.height_inc = 2;
     gtk_window_set_geometry_hints(window, NULL, &geo,
                                   GDK_HINT_ASPECT|GDK_HINT_RESIZE_INC);
@@ -901,11 +901,11 @@ GdkPixbuf * do_preview_scaling(signal_user_data_t *ud, GdkPixbuf *pix)
         }
         // Allow some slop in aspect ratio so that we fill the window
         int delta = ud->preview->render_width - width;
-        if (delta > 0 && delta <= 6)
+        if (delta > 0 && delta <= 16)
             width = ud->preview->render_width;
 
         delta = ud->preview->render_height - height;
-        if (delta > 0 && delta <= 6)
+        if (delta > 0 && delta <= 16)
             height = ud->preview->render_height;
 
         scaled_preview = gdk_pixbuf_scale_simple(pix, width, height,
