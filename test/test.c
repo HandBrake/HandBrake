@@ -3729,7 +3729,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (comb_detect_disable)
     {
-        hb_dict_set(preset, "PictureCombDetectFilter", hb_value_string("off"));
+        hb_dict_set(preset, "PictureCombDetectPreset", hb_value_string("off"));
     }
     if (comb_detect != NULL)
     {
