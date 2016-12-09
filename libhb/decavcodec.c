@@ -169,7 +169,8 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     if (pv->title->opaque_priv != NULL)
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
-        avcodec_copy_context(pv->context, ic->streams[w->audio->id]->codec);
+        avcodec_parameters_to_context(pv->context,
+                                      ic->streams[w->audio->id]->codecpar);
         // libav's eac3 parser toggles the codec_id in the context as
         // it reads eac3 data between AV_CODEC_ID_AC3 and AV_CODEC_ID_EAC3.
         // It detects an AC3 sync pattern sometimes in ac3_sync() which
@@ -503,11 +504,78 @@ static int decavcodecaInfo( hb_work_object_t *w, hb_work_info_t *info )
     return 0;
 }
 
+static int parse_adts_extradata( hb_audio_t * audio, AVCodecContext * context,
+                                 AVPacket * pkt )
+{
+    const AVBitStreamFilter * bsf;
+    AVBSFContext            * ctx = NULL;
+    int                       ret;
+
+    bsf = av_bsf_get_by_name("aac_adtstoasc");
+    ret = av_bsf_alloc(bsf, &ctx);
+    if (ret < 0)
+    {
+        hb_error("decavcodec: bitstream filter alloc failure");
+        return ret;
+    }
+    ctx->time_base_in.num = 1;
+    ctx->time_base_in.den = audio->config.out.samplerate;
+    avcodec_parameters_from_context(ctx->par_in, context);
+    ret = av_bsf_init(ctx);
+    if (ret < 0)
+    {
+        hb_error("decavcodec: bitstream filter init failure");
+        av_bsf_free(&ctx);
+        return ret;
+    }
+
+    ret = av_bsf_send_packet(ctx, pkt);
+    if (ret < 0)
+    {
+        hb_error("decavcodec: av_bsf_send_packet failure");
+        av_bsf_free(&ctx);
+        return ret;
+    }
+
+    ret = av_bsf_receive_packet(ctx, pkt);
+    av_bsf_free(&ctx);
+    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+    {
+        return 0;
+    }
+    else if (ret < 0)
+    {
+        if (ret != AVERROR_INVALIDDATA)
+        {
+            hb_error("decavcodec: av_bsf_receive_packet failure %x", -ret);
+        }
+        return ret;
+    }
+
+    if (audio->priv.config.extradata.length == 0)
+    {
+        const uint8_t * extradata;
+        int             size;
+
+        extradata = av_packet_get_side_data(pkt, AV_PKT_DATA_NEW_EXTRADATA,
+                                            &size);
+        if (extradata != NULL && size > 0)
+        {
+            int len;
+            len = MIN(size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, extradata, len);
+            audio->priv.config.extradata.length = len;
+        }
+    }
+
+    return 0;
+}
+
 static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                              hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
-    int ret = 0;
+    int result = 0, done = 0;
     hb_audio_t *audio = w->audio;
 
     memset( info, 0, sizeof(*info) );
@@ -533,7 +601,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     if (w->title && w->title->opaque_priv != NULL)
     {
         AVFormatContext *ic = (AVFormatContext*)w->title->opaque_priv;
-        avcodec_copy_context(context, ic->streams[audio->id]->codec);
+        avcodec_parameters_to_context(context,
+                                      ic->streams[audio->id]->codecpar);
         // libav's eac3 parser toggles the codec_id in the context as
         // it reads eac3 data between AV_CODEC_ID_AC3 and AV_CODEC_ID_EAC3.
         // It detects an AC3 sync pattern sometimes in ac3_sync() which
@@ -559,14 +628,14 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     }
     av_dict_free( &av_opts );
     unsigned char *parse_buffer;
-    int parse_pos, dec_pos, parse_buffer_size;
+    int parse_pos, parse_buffer_size;
 
-    while (buf != NULL && !ret)
+    while (buf != NULL && !done)
     {
         parse_pos = 0;
-        while (parse_pos < buf->size)
+        while (parse_pos < buf->size && !done)
         {
-            int parse_len, truehd_mono = 0;
+            int parse_len, truehd_mono = 0, ret;
 
             if (parser != NULL)
             {
@@ -579,6 +648,12 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             {
                 parse_buffer = buf->data + parse_pos;
                 parse_len = parse_buffer_size = buf->size - parse_pos;
+            }
+
+            if (parse_buffer_size == 0)
+            {
+                parse_pos += parse_len;
+                continue;
             }
 
             // libavcodec can't decode TrueHD Mono (bug #356)
@@ -594,24 +669,27 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 context->request_channel_layout = 0;
             }
 
-            dec_pos = 0;
-            while (dec_pos < parse_buffer_size)
-            {
-                int dec_len;
-                int got_frame;
-                AVFrame *frame = av_frame_alloc();
-                AVPacket avp;
-                av_init_packet(&avp);
-                avp.data = parse_buffer + dec_pos;
-                avp.size = parse_buffer_size - dec_pos;
+            AVPacket avp;
+            av_init_packet(&avp);
+            avp.data = parse_buffer;
+            avp.size = parse_buffer_size;
 
-                dec_len = avcodec_decode_audio4(context, frame, &got_frame, &avp);
-                if (dec_len < 0)
+            ret = avcodec_send_packet(context, &avp);
+            if (ret < 0 && ret != AVERROR_EOF)
+            {
+                parse_pos += parse_len;
+                continue;
+            }
+
+            AVFrame *frame = NULL;
+            do
+            {
+                if (frame == NULL)
                 {
-                    av_frame_free(&frame);
-                    break;
+                    frame = av_frame_alloc();
                 }
-                if (dec_len > 0 && got_frame)
+                ret = avcodec_receive_frame(context, frame);
+                if (ret >= 0)
                 {
                     // libavcoded doesn't consistently set frame->sample_rate
                     if (frame->sample_rate != 0)
@@ -688,35 +766,16 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         // Parse ADTS AAC streams for AudioSpecificConfig.
                         // This data is required in order to write
                         // proper headers in MP4 and MKV files.
-                        AVBitStreamFilterContext* aac_adtstoasc;
-                        aac_adtstoasc = av_bitstream_filter_init("aac_adtstoasc");
-                        if (aac_adtstoasc)
-                        {
-                            int ret, size;
-                            uint8_t *data;
-                            ret = av_bitstream_filter_filter(aac_adtstoasc, context,
-                                    NULL, &data, &size, avp.data, avp.size, 0);
-                            if (ret >= 0 &&
-                                context->extradata_size > 0 &&
-                                audio->priv.config.extradata.length == 0)
-                            {
-                                int len;
-                                len = MIN(context->extradata_size, HB_CONFIG_MAX_SIZE);
-                                memcpy(audio->priv.config.extradata.bytes,
-                                       context->extradata, len);
-                                audio->priv.config.extradata.length = len;
-                            }
-                            av_bitstream_filter_close(aac_adtstoasc);
-                        }
+                        parse_adts_extradata(audio, context, &avp);
                     }
 
-                    ret = 1;
-                    av_frame_free(&frame);
+                    result = 1;
+                    done = 1;
+                    av_frame_unref(frame);
                     break;
                 }
-                dec_pos += dec_len;
-                av_frame_free(&frame);
-            }
+            } while (ret >= 0);
+            av_frame_free(&frame);
             parse_pos += parse_len;
         }
         buf = buf->next;
@@ -731,7 +790,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     hb_avcodec_close( context );
     av_freep( &context->extradata );
     av_freep( &context );
-    return ret;
+    return result;
 }
 
 reordered_data_t *
@@ -811,9 +870,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     reordered_data_t * reordered = NULL;
     hb_buffer_t      * out = hb_video_buffer_init( w, h );
 
-    if (pv->frame->pkt_pts != AV_NOPTS_VALUE)
+    if (pv->frame->pts != AV_NOPTS_VALUE)
     {
-        reordered = reordered_hash_rem(pv, pv->frame->pkt_pts);
+        reordered = reordered_hash_rem(pv, pv->frame->pts);
     }
     if (reordered != NULL)
     {
@@ -998,7 +1057,7 @@ static int get_frame_type(int type)
 static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
 {
     hb_work_private_t *pv = w->private_data;
-    int got_picture, oldlevel = 0;
+    int got_picture = 0, oldlevel = 0, ret;
     AVPacket avp;
     reordered_data_t * reordered;
 
@@ -1025,7 +1084,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         }
         reordered_hash_add(pv, reordered);
 
-        // libav avcodec_decode_video2() needs AVPacket flagged with
+        // libav avcodec video decoder needs AVPacket flagged with
         // AV_PKT_FLAG_KEY for some codecs. For example, sequence of
         // PNG in a mov container.
         if (packet_info->frametype & HB_FRAME_MASK_KEY)
@@ -1050,9 +1109,10 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         hb_buffer_close(&pv->palette);
     }
 
-    if (avcodec_decode_video2(pv->context, pv->frame, &got_picture, &avp) < 0)
+    ret = avcodec_send_packet(pv->context, &avp);
+    if (ret < 0 && ret != AVERROR_EOF)
     {
-        ++pv->decode_errors;
+        return 0;
     }
 
 #ifdef USE_QSV
@@ -1061,17 +1121,24 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
     {
         // this is quite late, but we can't be certain that the QSV context is
-        // available until after we call avcodec_decode_video2() at least once
+        // available until after we call avcodec_send_packet() at least once
         pv->job->qsv.ctx = pv->context->priv_data;
     }
 #endif
 
-    if ( global_verbosity_level <= 1 )
+    do
     {
-        av_log_set_level( oldlevel );
-    }
-    if (got_picture)
-    {
+        ret = avcodec_receive_frame(pv->context, pv->frame);
+        if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+        {
+            ++pv->decode_errors;
+        }
+        if (ret < 0)
+        {
+            break;
+        }
+        got_picture = 1;
+
         uint16_t flags = 0;
 
         // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
@@ -1081,7 +1148,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         // intermediate packet of some frame which never has a pts). we hope
         // that when parse returns the frame to us the pts we originally
         // handed it will be in parser->pts. we put this pts into avp.pts so
-        // that when avcodec_decode_video finally gets around to allocating an
+        // that when avcodec_receive_frame finally gets around to allocating an
         // AVFrame to hold the decoded frame, avcodec_default_get_buffer can
         // stuff that pts into the it. if all of these relays worked at this
         // point frame.pts should hold the frame's pts from the original data
@@ -1199,6 +1266,11 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
 
         hb_buffer_list_append(&pv->list, out);
         ++pv->nframes;
+    } while (ret >= 0);
+
+    if ( global_verbosity_level <= 1 )
+    {
+        av_log_set_level( oldlevel );
     }
 
     return got_picture;
@@ -1393,7 +1465,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
 
         pv->context = avcodec_alloc_context3(codec);
-        avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
+        avcodec_parameters_to_context(pv->context,
+                                  ic->streams[pv->title->video_id]->codecpar);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
@@ -1865,132 +1938,117 @@ hb_work_object_t hb_decavcodecv =
 static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
 {
     AVCodecContext * context = pv->context;
-    int              loop_limit = 256;
-    int              pos = 0;
-    int64_t          pts = packet_info->pts;
+    AVPacket         avp;
+    int              ret;
 
-    while (pos < packet_info->size)
+    av_init_packet(&avp);
+    avp.data = packet_info->data;
+    avp.size = packet_info->size;
+    avp.pts  = packet_info->pts;
+    avp.dts  = AV_NOPTS_VALUE;
+
+    ret = avcodec_send_packet(context, &avp);
+    if (ret < 0 && ret != AVERROR_EOF)
     {
-        int got_frame;
-        AVPacket avp;
+        return;
+    }
 
-        av_init_packet(&avp);
-        avp.data = packet_info->data + pos;
-        avp.size = packet_info->size - pos;
-        avp.pts  = pts;
-        avp.dts  = AV_NOPTS_VALUE;
-
-        int len = avcodec_decode_audio4(context, pv->frame, &got_frame, &avp);
-        if (len < 0)
+    do
+    {
+        ret = avcodec_receive_frame(context, pv->frame);
+        if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
         {
-            if (pts != AV_NOPTS_VALUE)
-            {
-                // Update next_pts since subsequent packets may have no
-                // pts and depend on next_pts being up to date
-                pv->next_pts = pts + pv->duration;
-            }
             ++pv->decode_errors;
         }
-        if ((len < 0) || (!got_frame && !(loop_limit--)))
+        if (ret < 0)
         {
-            return;
+            break;
+        }
+
+        hb_buffer_t * out;
+        int           samplerate;
+
+        // libavcoded doesn't yet consistently set frame->sample_rate
+        if (pv->frame->sample_rate != 0)
+        {
+            samplerate = pv->frame->sample_rate;
         }
         else
         {
-            loop_limit = 256;
+            samplerate = context->sample_rate;
         }
+        pv->duration = (90000. * pv->frame->nb_samples / samplerate);
 
-        pos += len;
-
-        if (got_frame)
+        if (pv->audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
-            hb_buffer_t * out;
-            int           samplerate;
+            // Note that even though we are doing passthru, we had to decode
+            // so that we know the stop time and the pts of the next audio
+            // packet.
+            out = hb_buffer_init(avp.size);
+            memcpy(out->data, avp.data, avp.size);
+        }
+        else
+        {
+            AVFrameSideData *side_data;
+            if ((side_data =
+                 av_frame_get_side_data(pv->frame,
+                                AV_FRAME_DATA_DOWNMIX_INFO)) != NULL)
+            {
+                double          surround_mix_level, center_mix_level;
+                AVDownmixInfo * downmix_info;
 
-            // libavcoded doesn't yet consistently set frame->sample_rate
-            if (pv->frame->sample_rate != 0)
-            {
-                samplerate = pv->frame->sample_rate;
-            }
-            else
-            {
-                samplerate = context->sample_rate;
-            }
-            pv->duration = (90000. * pv->frame->nb_samples / samplerate);
-
-            if (pv->audio->config.out.codec & HB_ACODEC_PASS_FLAG)
-            {
-                // Note that even though we are doing passthru, we had to decode
-                // so that we know the stop time and the pts of the next audio
-                // packet.
-                out = hb_buffer_init(avp.size);
-                memcpy(out->data, avp.data, avp.size);
-            }
-            else
-            {
-                AVFrameSideData *side_data;
-                if ((side_data =
-                     av_frame_get_side_data(pv->frame,
-                                            AV_FRAME_DATA_DOWNMIX_INFO)) != NULL)
+                downmix_info = (AVDownmixInfo*)side_data->data;
+                if (pv->audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
+                    pv->audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII)
                 {
-                    double          surround_mix_level, center_mix_level;
-                    AVDownmixInfo * downmix_info;
-
-                    downmix_info = (AVDownmixInfo*)side_data->data;
-                    if (pv->audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
-                        pv->audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII)
-                    {
-                        surround_mix_level = downmix_info->surround_mix_level_ltrt;
-                        center_mix_level   = downmix_info->center_mix_level_ltrt;
-                    }
-                    else
-                    {
-                        surround_mix_level = downmix_info->surround_mix_level;
-                        center_mix_level   = downmix_info->center_mix_level;
-                    }
-                    hb_audio_resample_set_mix_levels(pv->resample,
-                                                     surround_mix_level,
-                                                     center_mix_level,
-                                                     downmix_info->lfe_mix_level);
-                }
-                hb_audio_resample_set_channel_layout(pv->resample,
-                                                     pv->frame->channel_layout);
-                hb_audio_resample_set_sample_fmt(pv->resample,
-                                                 pv->frame->format);
-                if (hb_audio_resample_update(pv->resample))
-                {
-                    hb_log("decavcodec: hb_audio_resample_update() failed");
-                    av_frame_unref(pv->frame);
-                    return;
-                }
-                out = hb_audio_resample(pv->resample, pv->frame->extended_data,
-                                        pv->frame->nb_samples);
-            }
-
-            if (out != NULL)
-            {
-                out->s.scr_sequence = packet_info->scr_sequence;
-                out->s.start        = pv->frame->pkt_pts;
-                out->s.duration     = pv->duration;
-                if (out->s.start == AV_NOPTS_VALUE)
-                {
-                    out->s.start = pv->next_pts;
+                    surround_mix_level = downmix_info->surround_mix_level_ltrt;
+                    center_mix_level   = downmix_info->center_mix_level_ltrt;
                 }
                 else
                 {
-                    pv->next_pts = out->s.start;
+                    surround_mix_level = downmix_info->surround_mix_level;
+                    center_mix_level   = downmix_info->center_mix_level;
                 }
-                if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
-                {
-                    pv->next_pts += pv->duration;
-                    out->s.stop  = pv->next_pts;
-                }
-                hb_buffer_list_append(&pv->list, out);
-
-                pts = AV_NOPTS_VALUE;
+                hb_audio_resample_set_mix_levels(pv->resample,
+                                                 surround_mix_level,
+                                                 center_mix_level,
+                                                 downmix_info->lfe_mix_level);
             }
-            av_frame_unref(pv->frame);
-            ++pv->nframes;
+            hb_audio_resample_set_channel_layout(pv->resample,
+                                                 pv->frame->channel_layout);
+            hb_audio_resample_set_sample_fmt(pv->resample,
+                                             pv->frame->format);
+            if (hb_audio_resample_update(pv->resample))
+            {
+                hb_log("decavcodec: hb_audio_resample_update() failed");
+                av_frame_unref(pv->frame);
+                return;
+            }
+            out = hb_audio_resample(pv->resample, pv->frame->extended_data,
+                                    pv->frame->nb_samples);
         }
-    }
+
+        if (out != NULL)
+        {
+            out->s.scr_sequence = packet_info->scr_sequence;
+            out->s.start        = pv->frame->pts;
+            out->s.duration     = pv->duration;
+            if (out->s.start == AV_NOPTS_VALUE)
+            {
+                out->s.start = pv->next_pts;
+            }
+            else
+            {
+                pv->next_pts = out->s.start;
+            }
+            if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
+            {
+                pv->next_pts += pv->duration;
+                out->s.stop  = pv->next_pts;
+            }
+            hb_buffer_list_append(&pv->list, out);
+        }
+        av_frame_unref(pv->frame);
+        ++pv->nframes;
+    } while (ret >= 0);
 }
