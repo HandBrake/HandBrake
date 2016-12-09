@@ -78,7 +78,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  Note: Compilation would require:
  *   - Intel MediaSDK headers, Full SDK is avaialble from the original web site:
  *                     http://software.intel.com/en-us/vcsource/tools/media-SDK
- *     Will be referenced as mfx/*.h (mfxdefs.h, mfxstructures.h, ... )
+ *     Will be referenced as mfx*.h (mfxdefs.h, mfxstructures.h, ... )
  *  and
  *  - Final application has to link against Intel MediaSDK dispatcher, available
  *     at MediaSDK as well
@@ -150,6 +150,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AV_QSV_DEBUG_ASSERT(x,y)               { if ((x)) { fprintf(stderr, "\nASSERT: %s\n", y); } }
 #endif
 
+#define AV_QSV_CHECK_RET(P, X, ERR)                {if ((X) > (P)) {AV_QSV_PRINT_RET_MSG(ERR); return;}}
 #define AV_QSV_CHECK_RESULT(P, X, ERR)             {if ((X) > (P)) {AV_QSV_PRINT_RET_MSG(ERR); return ERR;}}
 #define AV_QSV_CHECK_POINTER(P, ERR)               {if (!(P)) {AV_QSV_PRINT_RET_MSG(ERR); return ERR;}}
 #define AV_QSV_IGNORE_MFX_STS(P, X)                {if ((X) == (P)) {P = MFX_ERR_NONE;}}
