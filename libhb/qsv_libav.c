@@ -108,7 +108,7 @@ int av_qsv_get_free_surface(av_qsv_space * space, av_qsv_context * qsv,
 int ff_qsv_is_surface_in_pipe(mfxFrameSurface1 * p_surface, av_qsv_context * qsv)
 {
     int ret = 0;
-    int a, b,i;
+    int a, b;
     av_qsv_list *list = 0;
     av_qsv_stage *stage = 0;
 
@@ -599,7 +599,7 @@ void av_qsv_wait_on_sync(av_qsv_context *qsv, av_qsv_stage *stage)
                     av_qsv_sleep(10);
                     continue;
                 }
-                AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+                AV_QSV_CHECK_RET(sts, MFX_ERR_NONE, sts);
                 break;
             }
         }

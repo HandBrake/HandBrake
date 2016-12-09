@@ -740,7 +740,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
                 }
             }
             av_qsv_flush_stages(b->qsv_details.ctx->pipes,
-                                &b->qsv_details.qsv_atom);
+                                (av_qsv_list**)&b->qsv_details.qsv_atom);
         }
 #endif
 
