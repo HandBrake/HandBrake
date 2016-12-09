@@ -336,7 +336,7 @@ int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t 
                 break;
             }
 
-            sts = MFXVideoUSER_ProcessFrameAsync(qsv->mfx_session, &work_surface, 1, &qsv_vpp->p_surfaces[surface_idx] , 1, qsv_vpp->p_syncp[sync_idx]->p_sync);
+            sts = MFXVideoUSER_ProcessFrameAsync(qsv->mfx_session, (void * const*)&work_surface, 1, (void * const*)&qsv_vpp->p_surfaces[surface_idx] , 1, qsv_vpp->p_syncp[sync_idx]->p_sync);
 
             if (MFX_ERR_MORE_DATA == sts)
             {
@@ -504,7 +504,7 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
         if(pv->qsv_user && qsv->mfx_session){
 
             sts=MFXVideoUSER_Unregister(qsv->mfx_session,0);
-            AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+            AV_QSV_CHECK_RET(sts, MFX_ERR_NONE, sts);
 
             for(i=hb_list_count(pv->qsv_user);i>0;i--){
                 qsv_filter_t *plugin = hb_list_item(pv->qsv_user,i-1);
@@ -713,7 +713,6 @@ mfxStatus MFX_CDECL qsv_Execute(mfxHDL pthis, mfxThreadTask task, mfxU32 uid_p, 
     mfxStatus sts = MFX_ERR_NONE;
 
     qsv_filter_task_t *current_task = (qsv_filter_task_t *)task;
-    qsv_filter_t *plugin = pthis;
 
     sts = (current_task->processor.process)(current_task,0);
     AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
