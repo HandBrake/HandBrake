@@ -285,20 +285,6 @@ static void Finalize(hb_work_object_t *w)
 {
     hb_work_private_t *pv = w->private_data;
 
-    // Finalize with NULL input needed by FLAC to generate md5sum
-    // in context extradata
-
-    // Prepare output packet
-    AVPacket pkt;
-    int got_packet;
-    hb_buffer_t *buf = hb_buffer_init(pv->max_output_bytes);
-    av_init_packet(&pkt);
-    pkt.data = buf->data;
-    pkt.size = buf->alloc;
-
-    avcodec_encode_audio2(pv->context, &pkt, NULL, &got_packet);
-    hb_buffer_close(&buf);
-
     // Then we need to recopy the header since it was modified
     if (pv->context->extradata != NULL)
     {
@@ -317,7 +303,7 @@ static void encavcodecaClose(hb_work_object_t * w)
         if (pv->context != NULL)
         {
             Finalize(w);
-            hb_deep_log(2, "encavcodeca: closing libavcodec");
+            hb_deep_log(2, "encavcodecaudio: closing libavcodec");
             if (pv->context->codec != NULL)
                 avcodec_flush_buffers(pv->context);
             hb_avcodec_close(pv->context);
@@ -349,76 +335,35 @@ static void encavcodecaClose(hb_work_object_t * w)
     }
 }
 
-static hb_buffer_t* Encode(hb_work_object_t *w)
+static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
 {
-    hb_work_private_t *pv = w->private_data;
-    hb_audio_t *audio = w->audio;
-    uint64_t pts, pos;
+    hb_work_private_t * pv = w->private_data;
+    hb_audio_t        * audio = w->audio;
 
-    if (hb_list_bytes(pv->list) < pv->input_samples * sizeof(float))
+    while (1)
     {
-        return NULL;
-    }
+        // Prepare output packet
+        int           ret;
+        AVPacket      pkt;
+        hb_buffer_t * out;
 
-    hb_list_getbytes(pv->list, pv->input_buf, pv->input_samples * sizeof(float),
-                     &pts, &pos);
-
-    // Prepare input frame
-    int out_linesize;
-    int out_size = av_samples_get_buffer_size(&out_linesize,
-                                              pv->context->channels,
-                                              pv->samples_per_frame,
-                                              pv->context->sample_fmt, 1);
-    AVFrame frame = { .nb_samples = pv->samples_per_frame, };
-    avcodec_fill_audio_frame(&frame,
-                             pv->context->channels, pv->context->sample_fmt,
-                             pv->output_buf, out_size, 1);
-    if (pv->avresample != NULL)
-    {
-        int in_linesize;
-        av_samples_get_buffer_size(&in_linesize, pv->context->channels,
-                                   frame.nb_samples, AV_SAMPLE_FMT_FLT, 1);
-        int out_samples = avresample_convert(pv->avresample,
-                                             frame.extended_data, out_linesize,
-                                             frame.nb_samples,
-                                             &pv->input_buf,       in_linesize,
-                                             frame.nb_samples);
-        if (out_samples != pv->samples_per_frame)
+        av_init_packet(&pkt);
+        ret = avcodec_receive_packet(pv->context, &pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
         {
-            // we're not doing sample rate conversion, so this shouldn't happen
-            hb_log("encavcodecaWork: avresample_convert() failed");
-            return NULL;
+            break;
         }
-    }
+        if (ret < 0)
+        {
+            hb_log("encavcodecaudio: avcodec_receive_packet failed");
+            break;
+        }
 
-    // Libav requires that timebase of audio frames be in sample_rate units
-    frame.pts = pts + (90000 * pos / (sizeof(float) *
-                                      pv->out_discrete_channels *
-                                      audio->config.out.samplerate));
-    frame.pts = av_rescale(frame.pts, pv->context->sample_rate, 90000);
+        out = hb_buffer_init(pkt.size);
+        memcpy(out->data, pkt.data, out->size);
 
-    // Prepare output packet
-    AVPacket pkt;
-    int got_packet;
-    hb_buffer_t *out = hb_buffer_init(pv->max_output_bytes);
-    av_init_packet(&pkt);
-    pkt.data = out->data;
-    pkt.size = out->alloc;
-
-    // Encode
-    int ret = avcodec_encode_audio2(pv->context, &pkt, &frame, &got_packet);
-    if (ret < 0)
-    {
-        hb_log("encavcodeca: avcodec_encode_audio failed");
-        hb_buffer_close(&out);
-        return NULL;
-    }
-
-    if (got_packet && pkt.size)
-    {
-        out->size = pkt.size;
-        // The output pts from libav is in context->time_base. Convert it back
-        // to our timebase.
+        // The output pts from libav is in context->time_base. Convert it
+        // back to our timebase.
         out->s.start     = av_rescale_q(pkt.pts, pv->context->time_base,
                                         (AVRational){1, 90000});
         out->s.duration  = (double)90000 * pv->samples_per_frame /
@@ -426,31 +371,78 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
         out->s.stop      = out->s.start + out->s.duration;
         out->s.type      = AUDIO_BUF;
         out->s.frametype = HB_FRAME_AUDIO;
-    }
-    else
-    {
-        hb_buffer_close(&out);
-        return Encode(w);
-    }
 
-    return out;
+        hb_buffer_list_append(list, out);
+    }
 }
 
-static hb_buffer_t * Flush( hb_work_object_t * w )
+static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
 {
-    hb_buffer_list_t list;
-    hb_buffer_t *buf;
+    hb_work_private_t * pv = w->private_data;
+    hb_audio_t        * audio = w->audio;
+    uint64_t            pts, pos;
 
-    hb_buffer_list_clear(&list);
-    buf = Encode( w );
-    while (buf != NULL)
+    while (hb_list_bytes(pv->list) > pv->input_samples * sizeof(float))
     {
-        hb_buffer_list_append(&list, buf);
-        buf = Encode( w );
-    }
+        int ret;
 
-    hb_buffer_list_append(&list, hb_buffer_eof_init());
-    return hb_buffer_list_clear(&list);
+        hb_list_getbytes(pv->list, pv->input_buf,
+                         pv->input_samples * sizeof(float), &pts, &pos);
+
+        // Prepare input frame
+        int     out_linesize, out_size;
+        AVFrame frame = { .nb_samples = pv->samples_per_frame, };
+
+        out_size = av_samples_get_buffer_size(&out_linesize,
+                                              pv->context->channels,
+                                              pv->samples_per_frame,
+                                              pv->context->sample_fmt, 1);
+        avcodec_fill_audio_frame(&frame,
+                                 pv->context->channels, pv->context->sample_fmt,
+                                 pv->output_buf, out_size, 1);
+        if (pv->avresample != NULL)
+        {
+            int in_linesize, out_samples;
+
+            av_samples_get_buffer_size(&in_linesize, pv->context->channels,
+                                       frame.nb_samples, AV_SAMPLE_FMT_FLT, 1);
+            out_samples = avresample_convert(pv->avresample,
+                                            frame.extended_data, out_linesize,
+                                            frame.nb_samples, &pv->input_buf,
+                                            in_linesize, frame.nb_samples);
+            if (out_samples != pv->samples_per_frame)
+            {
+                // we're not doing sample rate conversion,
+                // so this shouldn't happen
+                hb_log("encavcodecaWork: avresample_convert() failed");
+                continue;
+            }
+        }
+
+        // Libav requires that timebase of audio frames be in sample_rate units
+        frame.pts = pts + (90000 * pos / (sizeof(float) *
+                                          pv->out_discrete_channels *
+                                          audio->config.out.samplerate));
+        frame.pts = av_rescale(frame.pts, pv->context->sample_rate, 90000);
+
+
+        // Encode
+        ret = avcodec_send_frame(pv->context, &frame);
+        if (ret < 0)
+        {
+            hb_log("encavcodecaudio: avcodec_send_frame failed");
+            return;
+        }
+        get_packets(w, list);
+    }
+}
+
+static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    avcodec_send_frame(pv->context, NULL);
+    get_packets(w, list);
 }
 
 /***********************************************************************
@@ -462,34 +454,31 @@ static int encavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * in = *buf_in, * buf;
-    hb_buffer_list_t list;
+    hb_buffer_t       * in = *buf_in;
+    hb_buffer_list_t    list;
 
-    if (in->s.flags & HB_BUF_FLAG_EOF)
+    if (pv->context == NULL || pv->context->codec == NULL)
     {
-        /* EOF on input - send it downstream & say we're done */
-        *buf_out = Flush( w );
+        hb_error("encavcodecaudio: codec context is uninitialized");
         return HB_WORK_DONE;
     }
 
-    if ( pv->context == NULL || pv->context->codec == NULL )
+    hb_buffer_list_clear(&list);
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        // No encoder context. Nothing we can do.
-        return HB_WORK_OK;
+        /* EOF on input - send it downstream & say we're done */
+        Flush(w, &list);
+        hb_buffer_list_append(&list, hb_buffer_eof_init());
+        *buf_out = hb_buffer_list_clear(&list);
+        return HB_WORK_DONE;
     }
 
     hb_list_add( pv->list, in );
     *buf_in = NULL;
 
-    hb_buffer_list_clear(&list);
-    buf = Encode( w );
-    while (buf != NULL)
-    {
-        hb_buffer_list_append(&list, buf);
-        buf = Encode( w );
-    }
-
+    Encode(w, &list);
     *buf_out = hb_buffer_list_clear(&list);
+
     return HB_WORK_OK;
 }
 
