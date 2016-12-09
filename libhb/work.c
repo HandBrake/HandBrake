@@ -1839,7 +1839,7 @@ static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
     // worker that delays frames has to propagate the chapter marks itself
     // and workers that move chapter marks to a different time should set
     // 'src' to NULL so that this code won't generate spurious duplicates.)
-    if( src && dst && src->s.start == dst->s.start)
+    if( src && dst && src->s.start == dst->s.start && src->s.new_chap != 0)
     {
         // restore log below to debug chapter mark propagation problems
         dst->s.new_chap = src->s.new_chap;
