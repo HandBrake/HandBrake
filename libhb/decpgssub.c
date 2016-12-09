@@ -441,8 +441,8 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                 uint8_t color;
 
                                 pixel = yy * rect->w + xx;
-                                color = rect->pict.data[0][pixel];
-                                argb = ((uint32_t*)rect->pict.data[1])[color];
+                                color = rect->data[0][pixel];
+                                argb = ((uint32_t*)rect->data[1])[color];
                                 yuv = hb_rgb2yuv(argb);
 
                                 lum[xx] = (yuv >> 16) & 0xff;
