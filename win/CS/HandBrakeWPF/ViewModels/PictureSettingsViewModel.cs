@@ -758,33 +758,29 @@ namespace HandBrakeWPF.ViewModels
                 {
                     // We have no instructions, so simply set it to the source.
                     this.Task.Width = this.GetModulusValue(this.sourceResolution.Width - this.CropLeft - this.CropRight);
+                    this.Task.Height = this.GetModulusValue(this.sourceResolution.Height - this.CropTop - this.CropBottom);
                     this.MaintainAspectRatio = true;
                 }
                 else
                 {
-                    // Set the Max Width / Height available to the user controls
+                    // Set the Max Width / Height available to the user controls.
+                    this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
                     if (this.sourceResolution.Width < this.MaxWidth)
                     {
                         this.MaxWidth = this.sourceResolution.Width;
                     }
-                    else if (this.sourceResolution.Width > this.MaxWidth)
-                    {
-                        this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
-                    }
 
+                    this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
                     if (this.sourceResolution.Height < this.MaxHeight)
                     {
                         this.MaxHeight = this.sourceResolution.Height;
-                    }
-                    else if (this.sourceResolution.Height > this.MaxHeight)
-                    {
-                        this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
                     }
 
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
                     if (this.SelectedAnamorphicMode == Anamorphic.None)
                     {
-                        this.Task.Width = preset.Task.Width ?? (this.MaxWidth - this.CropLeft - this.CropRight);
+                        this.Task.Width = preset.Task.Width ?? this.GetModulusValue(this.MaxWidth - this.CropLeft - this.CropRight);
+                        this.Task.Height = this.GetModulusValue(this.MaxHeight - this.CropTop - this.CropBottom);
                         // Note: This will be auto-corrected in the property if it's too large.
                     }
                     else
