@@ -618,7 +618,7 @@ The Activity log may have further information.</value>
     <value>Update Failed. You can try downloading the update from https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Storage: {0}x{1}, Display: {2}x{3}</value>
+    <value>Display Size: {0}x{1},  PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Add to Queue</value>

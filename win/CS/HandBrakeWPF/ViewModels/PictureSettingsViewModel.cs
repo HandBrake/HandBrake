@@ -146,7 +146,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
+                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose }; // , Anamorphic.Custom   TODO Re-enable one the UI is re-worked.
             }
         }
 
@@ -643,15 +643,20 @@ namespace HandBrakeWPF.ViewModels
                     }             
 
                     // Set the width, then check the height doesn't breach the max height and correct if necessary.
-                    int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth)); 
-                    this.Width = width;
-
-                    // If we have a max height, make sure we havn't breached it.
+                    int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth));
                     int height = this.GetModulusValue(this.GetRes((this.sourceResolution.Height - this.CropTop - this.CropBottom), preset.Task.MaxHeight));
-                    if (preset.Task.MaxHeight.HasValue && this.Height > preset.Task.MaxHeight.Value)
-                    {
-                        this.Height = height;
-                    }
+
+                    // Set the backing fields to avoid triggering recalulation until both are set.
+                    this.Task.Width = width;
+                    this.Task.Height = height;
+
+                    // Trigger a Recalc
+                    this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
+
+                    // Update the UI
+                    this.NotifyOfPropertyChange(() => this.Width);
+                    this.NotifyOfPropertyChange(() => this.Height);
+
                     break;
                 case PresetPictureSettingsMode.None:
                     // Do Nothing except reset the Max Width/Height
@@ -936,7 +941,7 @@ namespace HandBrakeWPF.ViewModels
             double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
             this.DisplaySize = this.sourceResolution == null || this.sourceResolution.IsEmpty
                            ? string.Empty
-                           : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, result.OutputWidth, result.OutputHeight, dispWidth, result.OutputHeight);
+                           : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, dispWidth, result.OutputHeight, this.ParWidth, this.ParHeight);
 
             // Step 4, Force an update on all the UI elements.
             this.NotifyOfPropertyChange(() => this.Width);
@@ -979,7 +984,7 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = false;
-                    this.ShowModulus = false;
+                    this.ShowModulus = true;
                     this.ShowKeepAR = false;
                     break;
 

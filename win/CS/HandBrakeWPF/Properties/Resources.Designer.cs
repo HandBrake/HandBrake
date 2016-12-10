@@ -1249,7 +1249,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage: {0}x{1}, Display: {2}x{3}.
+        ///   Looks up a localized string similar to Display Size: {0}x{1},  PAR {2}x{3}.
         /// </summary>
         public static string PictureSettingsViewModel_StorageDisplayLabel {
             get {
