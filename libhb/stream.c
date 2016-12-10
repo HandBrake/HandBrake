@@ -4848,9 +4848,9 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // to the old pcr.
             buf = generate_output_data(stream, curstream);
             hb_buffer_list_append(&list, buf);
-            ts_stream->pes_info_valid = 0;
-            ts_stream->packet_len = 0;
         }
+        ts_stream->pes_info_valid = 0;
+        ts_stream->packet_len = 0;
 
         // PES must begin with an mpeg start code
         const uint8_t *pes = pkt + adapt_len + 4;
