@@ -295,7 +295,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1"  IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="725"/>
                 <ColumnDefinition Width="Auto" />
@@ -307,7 +307,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Main Controls  -->
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
                 <!--  Source  -->
                 <StackPanel Margin="10,5,5,5"
                             HorizontalAlignment="Stretch"
@@ -381,7 +381,7 @@
             </StackPanel>
 
             <!--  Destination  -->
-            <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="1" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -416,7 +416,7 @@
             </StackPanel>
 
             <!--  Output Options  -->
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -455,7 +455,7 @@
             </StackPanel>
 
             <!--  Tab Control  -->
-            <TabControl Name="tabControl"
+            <TabControl Name="tabControl" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Grid.Row="3"
                         Margin="10,10,10,6"
                         HorizontalAlignment="Stretch"
@@ -504,6 +504,7 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,5,5"
+                      IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
                 <Grid>
