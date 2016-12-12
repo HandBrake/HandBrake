@@ -31,13 +31,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "hbffmpeg.h"
 #include "qsv_libav.h"
 
-int av_qsv_get_free_encode_task(av_qsv_list * tasks)
+int hb_qsv_get_free_encode_task(hb_qsv_list * tasks)
 {
     int ret = MFX_ERR_NOT_FOUND;
     int i = 0;
     if (tasks)
-        for (i = 0; i < av_qsv_list_count(tasks); i++) {
-            av_qsv_task *task = av_qsv_list_item(tasks, i);
+        for (i = 0; i < hb_qsv_list_count(tasks); i++) {
+            hb_qsv_task *task = hb_qsv_list_item(tasks, i);
             if (task->stage && task->stage->out.sync)
                 if (!(*task->stage->out.sync->p_sync)) {
                     ret = i;
@@ -47,7 +47,7 @@ int av_qsv_get_free_encode_task(av_qsv_list * tasks)
     return ret;
 }
 
-int av_qsv_get_free_sync(av_qsv_space * space, av_qsv_context * qsv)
+int hb_qsv_get_free_sync(hb_qsv_space * space, hb_qsv_context * qsv)
 {
     int ret = -1;
     int counter = 0;
@@ -62,17 +62,17 @@ int av_qsv_get_free_sync(av_qsv_space * space, av_qsv_context * qsv)
                 return i;
             }
         }
-        if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
+        if (++counter >= HB_QSV_REPEAT_NUM_DEFAULT) {
             hb_error("QSV: not enough to have %d sync point(s) allocated", space->sync_num);
             break;
         }
-        av_qsv_sleep(5);
+        hb_qsv_sleep(5);
     }
     return ret;
 }
 
-int av_qsv_get_free_surface(av_qsv_space * space, av_qsv_context * qsv,
-                     mfxFrameInfo * info, av_qsv_split part)
+int hb_qsv_get_free_surface(hb_qsv_space * space, hb_qsv_context * qsv,
+                     mfxFrameInfo * info, hb_qsv_split part)
 {
     int ret = -1;
     int from = 0;
@@ -96,31 +96,31 @@ int av_qsv_get_free_surface(av_qsv_space * space, av_qsv_context * qsv,
                 return i;
             }
         }
-        if (++counter >= AV_QSV_REPEAT_NUM_DEFAULT) {
+        if (++counter >= HB_QSV_REPEAT_NUM_DEFAULT) {
             hb_error("QSV: not enough to have %d surface(s) allocated", up);
             break;
         }
-        av_qsv_sleep(5);
+        hb_qsv_sleep(5);
     }
     return ret;
 }
 
-int ff_qsv_is_surface_in_pipe(mfxFrameSurface1 * p_surface, av_qsv_context * qsv)
+int ff_qsv_is_surface_in_pipe(mfxFrameSurface1 * p_surface, hb_qsv_context * qsv)
 {
     int ret = 0;
     int a, b;
-    av_qsv_list *list = 0;
-    av_qsv_stage *stage = 0;
+    hb_qsv_list *list = 0;
+    hb_qsv_stage *stage = 0;
 
     if (!p_surface)
         return ret;
     if (!qsv->pipes)
         return ret;
 
-    for (a = 0; a < av_qsv_list_count(qsv->pipes); a++) {
-        list = av_qsv_list_item(qsv->pipes, a);
-        for (b = 0; b < av_qsv_list_count(list); b++) {
-            stage = av_qsv_list_item(list, b);
+    for (a = 0; a < hb_qsv_list_count(qsv->pipes); a++) {
+        list = hb_qsv_list_item(qsv->pipes, a);
+        for (b = 0; b < hb_qsv_list_count(list); b++) {
+            stage = hb_qsv_list_item(list, b);
             if (p_surface == stage->out.p_surface)
                 return (stage->type << 16) | 2;
             if (p_surface == stage->in.p_surface)
@@ -130,22 +130,22 @@ int ff_qsv_is_surface_in_pipe(mfxFrameSurface1 * p_surface, av_qsv_context * qsv
     return ret;
 }
 
-int ff_qsv_is_sync_in_pipe(mfxSyncPoint * sync, av_qsv_context * qsv)
+int ff_qsv_is_sync_in_pipe(mfxSyncPoint * sync, hb_qsv_context * qsv)
 {
     int ret = 0;
     int a, b;
-    av_qsv_list *list = 0;
-    av_qsv_stage *stage = 0;
+    hb_qsv_list *list = 0;
+    hb_qsv_stage *stage = 0;
 
     if (!sync)
         return ret;
     if (!qsv->pipes)
         return ret;
 
-    for (a = 0; a < av_qsv_list_count(qsv->pipes); a++) {
-        list = av_qsv_list_item(qsv->pipes, a);
-        for (b = 0; b < av_qsv_list_count(list); b++) {
-            stage = av_qsv_list_item(list, b);
+    for (a = 0; a < hb_qsv_list_count(qsv->pipes); a++) {
+        list = hb_qsv_list_item(qsv->pipes, a);
+        for (b = 0; b < hb_qsv_list_count(list); b++) {
+            stage = hb_qsv_list_item(list, b);
             if (sync == stage->out.sync->p_sync) {
                 return 1;
             }
@@ -154,13 +154,13 @@ int ff_qsv_is_sync_in_pipe(mfxSyncPoint * sync, av_qsv_context * qsv)
     return ret;
 }
 
-av_qsv_stage *av_qsv_stage_init(void)
+hb_qsv_stage *hb_qsv_stage_init(void)
 {
-    av_qsv_stage *stage = av_mallocz(sizeof(av_qsv_stage));
+    hb_qsv_stage *stage = av_mallocz(sizeof(hb_qsv_stage));
     return stage;
 }
 
-void av_qsv_stage_clean(av_qsv_stage ** stage)
+void hb_qsv_stage_clean(hb_qsv_stage ** stage)
 {
     if ((*stage)->out.sync) {
         if ((*stage)->out.sync->p_sync)
@@ -180,7 +180,7 @@ void av_qsv_stage_clean(av_qsv_stage ** stage)
     av_freep(stage);
 }
 
-void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
+void hb_qsv_add_context_usage(hb_qsv_context * qsv, int is_threaded)
 {
     int is_active = 0;
     int mut_ret = 0;
@@ -188,9 +188,9 @@ void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
     is_active = ff_qsv_atomic_inc(&qsv->is_context_active);
     if (is_active == 1) {
         memset(&qsv->mfx_session, 0, sizeof(mfxSession));
-        av_qsv_pipe_list_create(&qsv->pipes, is_threaded);
+        hb_qsv_pipe_list_create(&qsv->pipes, is_threaded);
 
-        qsv->dts_seq = av_qsv_list_init(is_threaded);
+        qsv->dts_seq = hb_qsv_list_init(is_threaded);
 
         if (is_threaded) {
             qsv->qts_seq_mutex = av_mallocz(sizeof(pthread_mutex_t));
@@ -205,7 +205,7 @@ void av_qsv_add_context_usage(av_qsv_context * qsv, int is_threaded)
     }
 }
 
-int av_qsv_context_clean(av_qsv_context * qsv)
+int hb_qsv_context_clean(hb_qsv_context * qsv)
 {
     int is_active = 0;
     mfxStatus sts = MFX_ERR_NONE;
@@ -218,10 +218,10 @@ int av_qsv_context_clean(av_qsv_context * qsv)
     if (is_active == 0) {
 
         if (qsv->dts_seq) {
-            while (av_qsv_list_count(qsv->dts_seq))
-                av_qsv_dts_pop(qsv);
+            while (hb_qsv_list_count(qsv->dts_seq))
+                hb_qsv_dts_pop(qsv);
 
-            av_qsv_list_close(&qsv->dts_seq);
+            hb_qsv_list_close(&qsv->dts_seq);
         }
         if (qsv->qts_seq_mutex) {
             mut_ret = pthread_mutex_destroy(qsv->qts_seq_mutex);
@@ -231,101 +231,101 @@ int av_qsv_context_clean(av_qsv_context * qsv)
         }
 
         if (qsv->pipes)
-            av_qsv_pipe_list_clean(&qsv->pipes);
+            hb_qsv_pipe_list_clean(&qsv->pipes);
 
         if (qsv->mfx_session) {
             sts = MFXClose(qsv->mfx_session);
-            AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+            HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
             qsv->mfx_session = 0;
         }
     }
     return 0;
 }
 
-void av_qsv_pipe_list_create(av_qsv_list ** list, int is_threaded)
+void hb_qsv_pipe_list_create(hb_qsv_list ** list, int is_threaded)
 {
     if (!*list)
-        *list = av_qsv_list_init(is_threaded);
+        *list = hb_qsv_list_init(is_threaded);
 }
 
-void av_qsv_pipe_list_clean(av_qsv_list ** list)
+void hb_qsv_pipe_list_clean(hb_qsv_list ** list)
 {
-    av_qsv_list *stage;
+    hb_qsv_list *stage;
     int i = 0;
     if (*list) {
-        for (i = av_qsv_list_count(*list); i > 0; i--) {
-            stage = av_qsv_list_item(*list, i - 1);
-            av_qsv_flush_stages(*list, &stage);
+        for (i = hb_qsv_list_count(*list); i > 0; i--) {
+            stage = hb_qsv_list_item(*list, i - 1);
+            hb_qsv_flush_stages(*list, &stage);
         }
-        av_qsv_list_close(list);
+        hb_qsv_list_close(list);
     }
 }
 
-void av_qsv_add_stagee(av_qsv_list ** list, av_qsv_stage * stage, int is_threaded)
+void hb_qsv_add_stagee(hb_qsv_list ** list, hb_qsv_stage * stage, int is_threaded)
 {
     if (!*list)
-        *list = av_qsv_list_init(is_threaded);
-    av_qsv_list_add(*list, stage);
+        *list = hb_qsv_list_init(is_threaded);
+    hb_qsv_list_add(*list, stage);
 }
 
-av_qsv_stage *av_qsv_get_last_stage(av_qsv_list * list)
+hb_qsv_stage *hb_qsv_get_last_stage(hb_qsv_list * list)
 {
-    av_qsv_stage *stage = 0;
+    hb_qsv_stage *stage = 0;
     int size = 0;
 
-    av_qsv_list_lock(list);
-    size = av_qsv_list_count(list);
+    hb_qsv_list_lock(list);
+    size = hb_qsv_list_count(list);
     if (size > 0)
-        stage = av_qsv_list_item(list, size - 1);
-    av_qsv_list_unlock(list);
+        stage = hb_qsv_list_item(list, size - 1);
+    hb_qsv_list_unlock(list);
 
     return stage;
 }
 
-void av_qsv_flush_stages(av_qsv_list * list, av_qsv_list ** item)
+void hb_qsv_flush_stages(hb_qsv_list * list, hb_qsv_list ** item)
 {
     int i = 0;
     int x = 0;
-    av_qsv_stage *stage = 0;
-    av_qsv_list *to_remove_list = 0;
-    av_qsv_list *to_remove_atom_list = 0;
-    av_qsv_list *to_remove_atom = 0;
+    hb_qsv_stage *stage = 0;
+    hb_qsv_list *to_remove_list = 0;
+    hb_qsv_list *to_remove_atom_list = 0;
+    hb_qsv_list *to_remove_atom = 0;
 
-    for (i = 0; i < av_qsv_list_count(*item); i++) {
-        stage = av_qsv_list_item(*item, i);
+    for (i = 0; i < hb_qsv_list_count(*item); i++) {
+        stage = hb_qsv_list_item(*item, i);
         if(stage->pending){
             if(!to_remove_list)
-                to_remove_list = av_qsv_list_init(0);
-            av_qsv_list_add(to_remove_list, stage->pending);
+                to_remove_list = hb_qsv_list_init(0);
+            hb_qsv_list_add(to_remove_list, stage->pending);
         }
-        av_qsv_stage_clean(&stage);
+        hb_qsv_stage_clean(&stage);
         // should actually remove from the list but ok...
     }
-    av_qsv_list_rem(list, *item);
-    av_qsv_list_close(item);
+    hb_qsv_list_rem(list, *item);
+    hb_qsv_list_close(item);
 
     if(to_remove_list){
-        for (i = av_qsv_list_count(to_remove_list); i > 0; i--){
-            to_remove_atom_list = av_qsv_list_item(to_remove_list, i-1);
-            for (x = av_qsv_list_count(to_remove_atom_list); x > 0; x--){
-                to_remove_atom = av_qsv_list_item(to_remove_atom_list, x-1);
-                av_qsv_flush_stages(list,&to_remove_atom);
+        for (i = hb_qsv_list_count(to_remove_list); i > 0; i--){
+            to_remove_atom_list = hb_qsv_list_item(to_remove_list, i-1);
+            for (x = hb_qsv_list_count(to_remove_atom_list); x > 0; x--){
+                to_remove_atom = hb_qsv_list_item(to_remove_atom_list, x-1);
+                hb_qsv_flush_stages(list,&to_remove_atom);
             }
         }
-        av_qsv_list_close(&to_remove_list);
+        hb_qsv_list_close(&to_remove_list);
     }
 }
 
-av_qsv_list *av_qsv_pipe_by_stage(av_qsv_list * list, av_qsv_stage * stage)
+hb_qsv_list *hb_qsv_pipe_by_stage(hb_qsv_list * list, hb_qsv_stage * stage)
 {
-    av_qsv_list *item = 0;
-    av_qsv_stage *cur_stage = 0;
+    hb_qsv_list *item = 0;
+    hb_qsv_stage *cur_stage = 0;
     int i = 0;
     int a = 0;
-    for (i = 0; i < av_qsv_list_count(list); i++) {
-        item = av_qsv_list_item(list, i);
-        for (a = 0; a < av_qsv_list_count(item); a++) {
-            cur_stage = av_qsv_list_item(item, a);
+    for (i = 0; i < hb_qsv_list_count(list); i++) {
+        item = hb_qsv_list_item(list, i);
+        for (a = 0; a < hb_qsv_list_count(item); a++) {
+            cur_stage = hb_qsv_list_item(item, a);
             if (cur_stage == stage)
                 return item;
         }
@@ -334,11 +334,11 @@ av_qsv_list *av_qsv_pipe_by_stage(av_qsv_list * list, av_qsv_stage * stage)
 }
 
 // no duplicate of the same value, if end == 0 : working over full length
-void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
+void hb_qsv_dts_ordered_insert(hb_qsv_context * qsv, int start, int end,
                             int64_t dts, int iter)
 {
-    av_qsv_dts *cur_dts = 0;
-    av_qsv_dts *new_dts = 0;
+    hb_qsv_dts *cur_dts = 0;
+    hb_qsv_dts *new_dts = 0;
     int i = 0;
     int mut_ret = 0;
 
@@ -350,22 +350,22 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
     }
 
     if (end == 0)
-        end = av_qsv_list_count(qsv->dts_seq);
+        end = hb_qsv_list_count(qsv->dts_seq);
 
     if (end <= start) {
-        new_dts = av_mallocz(sizeof(av_qsv_dts));
+        new_dts = av_mallocz(sizeof(hb_qsv_dts));
         if( new_dts ) {
             new_dts->dts = dts;
-            av_qsv_list_add(qsv->dts_seq, new_dts);
+            hb_qsv_list_add(qsv->dts_seq, new_dts);
         }
     } else
         for (i = end; i > start; i--) {
-            cur_dts = av_qsv_list_item(qsv->dts_seq, i - 1);
+            cur_dts = hb_qsv_list_item(qsv->dts_seq, i - 1);
             if (cur_dts->dts < dts) {
-                new_dts = av_mallocz(sizeof(av_qsv_dts));
+                new_dts = av_mallocz(sizeof(hb_qsv_dts));
                 if( new_dts ) {
                     new_dts->dts = dts;
-                    av_qsv_list_insert(qsv->dts_seq, i, new_dts);
+                    hb_qsv_list_insert(qsv->dts_seq, i, new_dts);
                 }
                 break;
             } else if (cur_dts->dts == dts)
@@ -378,9 +378,9 @@ void av_qsv_dts_ordered_insert(av_qsv_context * qsv, int start, int end,
     }
 }
 
-void av_qsv_dts_pop(av_qsv_context * qsv)
+void hb_qsv_dts_pop(hb_qsv_context * qsv)
 {
-    av_qsv_dts *item = 0;
+    hb_qsv_dts *item = 0;
     int mut_ret = 0;
 
     if (qsv && qsv->qts_seq_mutex){
@@ -389,9 +389,9 @@ void av_qsv_dts_pop(av_qsv_context * qsv)
             hb_log("QSV: pthread_mutex_lock issue[%d] at %s", mut_ret, __FUNCTION__);
     }
 
-    if (av_qsv_list_count(qsv->dts_seq)) {
-        item = av_qsv_list_item(qsv->dts_seq, 0);
-        av_qsv_list_rem(qsv->dts_seq, item);
+    if (hb_qsv_list_count(qsv->dts_seq)) {
+        item = hb_qsv_list_item(qsv->dts_seq, 0);
+        hb_qsv_list_rem(qsv->dts_seq, item);
         av_free(item);
     }
     if (qsv && qsv->qts_seq_mutex){
@@ -402,18 +402,18 @@ void av_qsv_dts_pop(av_qsv_context * qsv)
 }
 
 
-av_qsv_list *av_qsv_list_init(int is_threaded)
+hb_qsv_list *hb_qsv_list_init(int is_threaded)
 {
-    av_qsv_list *l;
+    hb_qsv_list *l;
     int mut_ret;
 
-    l = av_mallocz(sizeof(av_qsv_list));
+    l = av_mallocz(sizeof(hb_qsv_list));
     if (!l)
         return 0;
-    l->items = av_mallocz(AV_QSV_JOB_SIZE_DEFAULT * sizeof(void *));
+    l->items = av_mallocz(HB_QSV_JOB_SIZE_DEFAULT * sizeof(void *));
     if (!l->items)
         return 0;
-    l->items_alloc = AV_QSV_JOB_SIZE_DEFAULT;
+    l->items_alloc = HB_QSV_JOB_SIZE_DEFAULT;
 
     if (is_threaded) {
         l->mutex = av_mallocz(sizeof(pthread_mutex_t));
@@ -433,17 +433,17 @@ av_qsv_list *av_qsv_list_init(int is_threaded)
     return l;
 }
 
-int av_qsv_list_count(av_qsv_list * l)
+int hb_qsv_list_count(hb_qsv_list * l)
 {
     int count;
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
     count = l->items_count;
-    av_qsv_list_unlock(l);
+    hb_qsv_list_unlock(l);
     return count;
 }
 
-int av_qsv_list_add(av_qsv_list * l, void *p)
+int hb_qsv_list_add(hb_qsv_list * l, void *p)
 {
     int pos = -1;
 
@@ -451,11 +451,11 @@ int av_qsv_list_add(av_qsv_list * l, void *p)
         return pos;
     }
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
 
     if (l->items_count == l->items_alloc) {
         /* We need a bigger boat */
-        l->items_alloc += AV_QSV_JOB_SIZE_DEFAULT;
+        l->items_alloc += HB_QSV_JOB_SIZE_DEFAULT;
         l->items = av_realloc(l->items, l->items_alloc * sizeof(void *));
     }
 
@@ -463,16 +463,16 @@ int av_qsv_list_add(av_qsv_list * l, void *p)
     pos = (l->items_count);
     l->items_count++;
 
-    av_qsv_list_unlock(l);
+    hb_qsv_list_unlock(l);
 
     return pos;
 }
 
-void av_qsv_list_rem(av_qsv_list * l, void *p)
+void hb_qsv_list_rem(hb_qsv_list * l, void *p)
 {
     int i;
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
 
     /* Find the item in the list */
     for (i = 0; i < l->items_count; i++) {
@@ -486,33 +486,33 @@ void av_qsv_list_rem(av_qsv_list * l, void *p)
         }
     }
 
-    av_qsv_list_unlock(l);
+    hb_qsv_list_unlock(l);
 }
 
-void *av_qsv_list_item(av_qsv_list * l, int i)
+void *hb_qsv_list_item(hb_qsv_list * l, int i)
 {
     void *ret = NULL;
 
     if (i < 0)
         return NULL;
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
     if( i < l->items_count)
         ret = l->items[i];
-    av_qsv_list_unlock(l);
+    hb_qsv_list_unlock(l);
     return ret;
 }
 
-void av_qsv_list_insert(av_qsv_list * l, int pos, void *p)
+void hb_qsv_list_insert(hb_qsv_list * l, int pos, void *p)
 {
 
     if (!p)
         return;
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
 
     if (l->items_count == l->items_alloc) {
-        l->items_alloc += AV_QSV_JOB_SIZE_DEFAULT;
+        l->items_alloc += HB_QSV_JOB_SIZE_DEFAULT;
         l->items = av_realloc(l->items, l->items_alloc * sizeof(void *));
     }
 
@@ -524,15 +524,15 @@ void av_qsv_list_insert(av_qsv_list * l, int pos, void *p)
     l->items[pos] = p;
     l->items_count--;
 
-    av_qsv_list_unlock(l);
+    hb_qsv_list_unlock(l);
 }
 
-void av_qsv_list_close(av_qsv_list ** _l)
+void hb_qsv_list_close(hb_qsv_list ** _l)
 {
-    av_qsv_list *l = *_l;
+    hb_qsv_list *l = *_l;
     int mut_ret;
 
-    av_qsv_list_lock(l);
+    hb_qsv_list_lock(l);
 
     av_free(l->items);
 
@@ -550,7 +550,7 @@ void av_qsv_list_close(av_qsv_list ** _l)
     av_freep(_l);
 }
 
-int av_qsv_list_lock(av_qsv_list *l){
+int hb_qsv_list_lock(hb_qsv_list *l){
     int ret = 0;
     if (l->mutex){
         ret = pthread_mutex_lock(l->mutex);
@@ -560,7 +560,7 @@ int av_qsv_list_lock(av_qsv_list *l){
     return ret;
 }
 
-int av_qsv_list_unlock(av_qsv_list *l){
+int hb_qsv_list_unlock(hb_qsv_list *l){
     int ret = 0;
     if (l->mutex){
         ret = pthread_mutex_unlock(l->mutex);
@@ -582,7 +582,7 @@ int av_is_qsv_available(mfxIMPL impl, mfxVersion * ver)
     return sts;
 }
 
-void av_qsv_wait_on_sync(av_qsv_context *qsv, av_qsv_stage *stage)
+void hb_qsv_wait_on_sync(hb_qsv_context *qsv, hb_qsv_stage *stage)
 {
     int iter = 0;
     mfxStatus sts = MFX_ERR_NONE;
@@ -590,16 +590,16 @@ void av_qsv_wait_on_sync(av_qsv_context *qsv, av_qsv_stage *stage)
         if(*stage->out.sync->p_sync){
             while(1){
                 iter++;
-                sts = MFXVideoCORE_SyncOperation(qsv->mfx_session,*stage->out.sync->p_sync, AV_QSV_SYNC_TIME_DEFAULT);
+                sts = MFXVideoCORE_SyncOperation(qsv->mfx_session,*stage->out.sync->p_sync, HB_QSV_SYNC_TIME_DEFAULT);
                 if(MFX_WRN_IN_EXECUTION == sts){
 
                     if(iter>20)
-                        AV_QSV_DEBUG_ASSERT(1, "Sync failed");
+                        HB_QSV_DEBUG_ASSERT(1, "Sync failed");
 
-                    av_qsv_sleep(10);
+                    hb_qsv_sleep(10);
                     continue;
                 }
-                AV_QSV_CHECK_RET(sts, MFX_ERR_NONE, sts);
+                HB_QSV_CHECK_RET(sts, MFX_ERR_NONE, sts);
                 break;
             }
         }

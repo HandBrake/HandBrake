@@ -625,7 +625,7 @@ struct hb_job_s
         int decode;
         int async_depth;
 #ifdef USE_QSV
-        av_qsv_context *ctx;
+        hb_qsv_context *ctx;
 #endif
         // shared encoding parameters
         // initialized by the QSV encoder, then used upstream (e.g. by filters)

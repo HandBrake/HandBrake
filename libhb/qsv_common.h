@@ -15,8 +15,8 @@
 #include "libavcodec/avcodec.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
-#define HB_QSV_MINVERSION_MAJOR AV_QSV_MSDK_VERSION_MAJOR
-#define HB_QSV_MINVERSION_MINOR AV_QSV_MSDK_VERSION_MINOR
+#define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
+#define HB_QSV_MINVERSION_MINOR HB_QSV_MSDK_VERSION_MINOR
 
 /*
  * Get & store all available Intel Quick Sync information:
