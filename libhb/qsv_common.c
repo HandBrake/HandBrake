@@ -196,7 +196,7 @@ static void init_video_param(mfxVideoParam *videoParam)
     videoParam->mfx.FrameInfo.Height        = 1088;
     videoParam->mfx.FrameInfo.CropH         = 1080;
     videoParam->mfx.FrameInfo.AspectRatioH  = 1;
-    videoParam->AsyncDepth                  = AV_QSV_ASYNC_DEPTH_DEFAULT;
+    videoParam->AsyncDepth                  = HB_QSV_ASYNC_DEPTH_DEFAULT;
     videoParam->IOPattern                   = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
 }
 
@@ -1895,7 +1895,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.GopPicSize   = 0; // use Media SDK default
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
         // introduced in API 1.1
-        param->videoParam->AsyncDepth = AV_QSV_ASYNC_DEPTH_DEFAULT;
+        param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
         // introduced in API 1.3
         param->videoParam->mfx.BRCParamMultiplier = 0; // no multiplier
 

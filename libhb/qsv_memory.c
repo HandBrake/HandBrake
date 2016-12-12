@@ -36,8 +36,8 @@ int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrame
     int ret = 0;
 
     int in_pitch        = src->Data.Pitch;
-    int w               = AV_QSV_ALIGN16(src->Info.Width);
-    int h               = (MFX_PICSTRUCT_PROGRESSIVE == src->Info.PicStruct) ? AV_QSV_ALIGN16(src->Info.Height) : AV_QSV_ALIGN32(src->Info.Height);
+    int w               = HB_QSV_ALIGN16(src->Info.Width);
+    int h               = (MFX_PICSTRUCT_PROGRESSIVE == src->Info.PicStruct) ? HB_QSV_ALIGN16(src->Info.Height) : HB_QSV_ALIGN32(src->Info.Height);
     uint8_t *in_luma    = 0;
     uint8_t *in_chroma  = 0;
     static int copyframe_in_use = 1;

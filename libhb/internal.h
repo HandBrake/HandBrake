@@ -142,7 +142,7 @@ struct hb_buffer_s
     {
         void           * qsv_atom;
         void           * filter_details;
-        av_qsv_context * ctx;
+        hb_qsv_context * ctx;
     } qsv_details;
 #endif
 

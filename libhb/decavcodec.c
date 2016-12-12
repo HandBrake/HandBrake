@@ -132,7 +132,7 @@ struct hb_work_private_s
     struct
     {
         int                decode;
-        av_qsv_config      config;
+        hb_qsv_config      config;
         const char       * codec_name;
     } qsv;
 #endif
