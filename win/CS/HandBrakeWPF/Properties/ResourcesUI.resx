@@ -688,7 +688,7 @@
     <value>Advanced Options</value>
   </data>
   <data name="Options_AdvancedTab" xml:space="preserve">
-    <value>Show Advanced Encoder Options Tab (Deprecated)</value>
+    <value>Allow use of 'Advanced' Tab for x264 options. (Deprecated)</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
     <value>Arguments:</value>

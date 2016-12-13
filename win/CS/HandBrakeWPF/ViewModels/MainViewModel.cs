@@ -161,8 +161,8 @@ namespace HandBrakeWPF.ViewModels
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
-            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
-            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
+            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
+            IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
         {
             this.scanService = scanService;
@@ -260,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AdvancedViewModel.
         /// </summary>
-        public IAdvancedViewModel AdvancedViewModel { get; set; }
+        public IX264ViewModel AdvancedViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets VideoViewModel.

@@ -282,6 +282,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Options = job.ExtraAdvancedArguments;
                 video.Preset = job.VideoPreset != null ? job.VideoPreset.ShortName : null;
                 video.Profile = job.VideoProfile != null ? job.VideoProfile.ShortName : null;
+
+                if (job.VideoTunes != null && job.VideoTunes.Count > 0)
+                {
+                    foreach (var item in job.VideoTunes)
+                    {
+                        video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
+                    }
+                }
             }
 
             if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality) video.Quality = job.Quality;
@@ -290,14 +298,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Bitrate = job.VideoBitrate;
                 video.TwoPass = job.TwoPass;
                 video.Turbo = job.TurboFirstPass;
-            }
-
-            if (job.VideoTunes != null && job.VideoTunes.Count > 0)
-            {
-                foreach (var item in job.VideoTunes)
-                {
-                    video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
-                }
             }
 
             video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;

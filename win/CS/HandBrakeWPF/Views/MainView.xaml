@@ -481,7 +481,7 @@
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:ResourcesUI.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
+                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding CurrentTask.ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
