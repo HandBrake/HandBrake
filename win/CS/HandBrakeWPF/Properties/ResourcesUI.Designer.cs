@@ -1015,7 +1015,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Advanced Encoder Options Tab.
+        ///   Looks up a localized string similar to Show Advanced Encoder Options Tab (Deprecated).
         /// </summary>
         public static string Options_AdvancedTab {
             get {
