@@ -1049,6 +1049,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
     {
         ++pv->decode_errors;
     }
+    av_free_packet(&avp);
 
 #ifdef USE_QSV
     if (pv->qsv.decode && pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
@@ -1466,7 +1467,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     // of space to make vc1 work then associate the codec with the context.
     if (pv->context->extradata == NULL)
     {
-        if (pv->parser == NULL || pv->parser == NULL ||
+        if (pv->parser == NULL || pv->parser->parser == NULL ||
             pv->parser->parser->split == NULL)
         {
             return 0;
@@ -1545,7 +1546,10 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_DONE;
         }
 
-        pv->context = avcodec_alloc_context3( codec );
+        if (pv->context == NULL)
+        {
+            pv->context = avcodec_alloc_context3( codec );
+        }
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;

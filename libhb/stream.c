@@ -1006,6 +1006,11 @@ void hb_stream_close( hb_stream_t ** _d )
 {
     hb_stream_t *stream = * _d;
 
+    if (stream == NULL)
+    {
+        return;
+    }
+
     if ( stream->hb_stream_type == ffmpeg )
     {
         ffmpeg_close( stream );
@@ -3974,6 +3979,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
             break;
 
         default:
+            free(w);
             return 0;
     }
     const char *profile_name;
@@ -3984,6 +3990,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
         strncpy(pes->codec_name, profile_name, 80);
         pes->codec_name[79] = 0;
     }
+    free(w);
     return 1;
 }
 
@@ -5026,6 +5033,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     // and the other for reading.
     if ( avformat_open_input( &info_ic, stream->path, NULL, &av_opts ) < 0 )
     {
+        av_dict_free( &av_opts );
         return 0;
     }
     // libav populates av_opts with the things it didn't recognize.
@@ -5079,6 +5087,8 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 
   fail:
     if ( info_ic ) avformat_close_input( &info_ic );
+    free(stream->ffmpeg_pkt);
+    stream->ffmpeg_pkt = NULL;
     return 0;
 }
 
