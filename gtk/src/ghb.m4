@@ -3041,13 +3041,11 @@ filter_output([
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">Choose decomb or deinterlace filter options.
+                                <property name="tooltip_text" translatable="yes">Choose decomb or deinterlace filter.
 
-The decomb filter selectively deinterlaces frames that appear to be interlaced.
-This will preserve quality in frames that are not interlaced.
-
-The classic deinterlace filter is applied to all frames.
-Frames that are not interlaced will suffer some quality degradation.</property>
+The decomb filter supports a variety of interpolation algorithms.
+The deinterlace filter is a classic YADIF deinterlacer.
+</property>
                                 <signal name="changed" handler="deint_filter_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3078,11 +3076,11 @@ Frames that are not interlaced will suffer some quality degradation.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes"> The decomb filter selectively deinterlaces frames that appear to be interlaced.
-This will preserve quality in frames that are not interlaced.
+                                <property name="tooltip_text" translatable="yes">Choose decomb or deinterlace filter options.
 
-The classic deinterlace filter is applied to all frames.
-Frames that are not interlaced will suffer some quality degradation.</property>
+The decomb filter supports a variety of interpolation algorithms.
+The deinterlace filter is a classic YADIF deinterlacer.
+</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3095,9 +3093,7 @@ Frames that are not interlaced will suffer some quality degradation.</property>
                             <child>
                               <object class="GtkEntry" id="PictureDeinterlaceCustom">
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Custom denoise filter string format
-
-SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
+                                <property name="tooltip_text" translatable="yes"></property>
                                 <property name="width_chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
@@ -4081,6 +4077,7 @@ Colon separated list of encoder options.</property>
                                         <property name="visible">True</property>
                                         <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
+                                        <property name="tooltip_text" translatable="yes">Choose which audio tracks of the source media are used.</property>
                                         <signal name="changed" handler="audio_def_widget_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
@@ -4136,6 +4133,8 @@ Colon separated list of encoder options.</property>
                                           <object class="GtkListBox" id="audio_selected_lang">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select audio for.
+Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4786,6 +4785,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                         <property name="visible">True</property>
                                         <property name="valign">GTK_ALIGN_CENTER</property>
                                         <property name="can_focus">False</property>
+                                        <property name="tooltip_text" translatable="yes">Choose which subtitle tracks of the source media are used.</property>
                                         <signal name="changed" handler="subtitle_def_widget_changed_cb" swapped="no"/>
                                       </object>
                                       <packing>
@@ -4842,6 +4842,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select subtitles for.
+Tracks matching these languages will be selected using the chosen Selection Behavior.
 
 The first language in this list is your "preferred" language and will be used
 for determining subtitle selection settings when there is foreign audio.</property>
