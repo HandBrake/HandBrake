@@ -7,7 +7,7 @@ endif
 $(eval $(call import.MODULE.defs,LIBVPX,libvpx,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
-LIBVPX.FETCH.url =  http://download.handbrake.fr/contrib/libvpx-1.5.0.tar.bz2
+LIBVPX.FETCH.url =  https://download.handbrake.fr/contrib/libvpx-1.5.0.tar.bz2
 LIBVPX.FETCH.url += http://downloads.webmproject.org/releases/webm/libvpx-1.5.0.tar.bz2
 LIBVPX.FETCH.md5 =  49e59dd184caa255886683facea56fca
 

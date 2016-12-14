@@ -2,7 +2,7 @@ __deps__ := YASM CMAKE
 $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url =  http://download.handbrake.fr/contrib/x265_2.1-1.tar.gz
+X265.FETCH.url =  https://download.handbrake.fr/contrib/x265_2.1-1.tar.gz
 X265.FETCH.url += https://bitbucket.org/multicoreware/x265/downloads/x265_2.1.tar.gz
 X265.FETCH.url += https://download.videolan.org/pub/videolan/x265/x265_2.1.tar.gz
 X265.FETCH.md5 =  2d9cb183d2675dfb325abdedd2424bfa

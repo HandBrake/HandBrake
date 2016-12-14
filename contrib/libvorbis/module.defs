@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBVORBIS,libvorbis,LIBOGG))
 $(eval $(call import.CONTRIB.defs,LIBVORBIS))
 
-LIBVORBIS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libvorbis-aotuv_b6.03.tar.bz2
+LIBVORBIS.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libvorbis-aotuv_b6.03.tar.bz2
 LIBVORBIS.FETCH.md5 = 586d2ac0fa13f32cba78be5db4a16330
 LIBVORBIS.EXTRACT.tarbase = aotuv-b6.03_20110424
 

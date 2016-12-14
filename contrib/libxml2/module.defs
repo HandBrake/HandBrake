@@ -2,7 +2,7 @@ __deps__ := LIBICONV
 $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
-LIBXML2.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libxml2-2.7.7.tar.gz
+LIBXML2.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libxml2-2.7.7.tar.gz
 LIBXML2.FETCH.url += ftp://xmlsoft.org/libxml2/libxml2-2.7.7.tar.gz
 LIBXML2.FETCH.md5 =  9abc9959823ca9ff904f1fbcf21df066
 LIBXML2.EXTRACT.tarbase = libxml2-2.7.7

@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.defs,LIBTOOL,libtool,AUTOCONF AUTOMAKE PKGCONFIG))
 $(eval $(call import.CONTRIB.defs,LIBTOOL))
 
-LIBTOOL.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libtool-2.4.2.tar.gz
-LIBTOOL.FETCH.url += http://ftp.gnu.org/gnu/libtool/libtool-2.4.2.tar.gz
+LIBTOOL.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libtool-2.4.2.tar.gz
+LIBTOOL.FETCH.url += https://ftp.gnu.org/gnu/libtool/libtool-2.4.2.tar.gz
 LIBTOOL.FETCH.md5 =  d2f3b7d4627e69e13514a40e72a24d50
 
 # TODO: libtool >= 2.4.6
-#LIBTOOL.FETCH.url = http://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz
+#LIBTOOL.FETCH.url = https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz
 #LIBTOOL.FETCH.md5 = addf44b646ddb4e3919805aa88fa7c5e

@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
-LIBICONV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libiconv-1.14.tar.gz
+LIBICONV.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libiconv-1.14.tar.gz
 LIBICONV.FETCH.url += https://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
 LIBICONV.FETCH.md5 = e34509b1623cec449dfeb73d7ce9c6c6
 

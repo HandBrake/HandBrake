@@ -2,7 +2,7 @@ __deps__ := FONTCONFIG FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-HARFBUZZ.FETCH.url = http://download.handbrake.fr/handbrake/contrib/harfbuzz-1.3.0.tar.bz2
+HARFBUZZ.FETCH.url = https://download.handbrake.fr/handbrake/contrib/harfbuzz-1.3.0.tar.bz2
 HARFBUZZ.FETCH.url += https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.0.tar.bz2
 HARFBUZZ.FETCH.md5 = a82d49ff67197bc3c96ea34b98880c52
 

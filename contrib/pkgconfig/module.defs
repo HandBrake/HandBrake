@@ -1,12 +1,12 @@
 $(eval $(call import.MODULE.defs,PKGCONFIG,pkgconfig))
 $(eval $(call import.CONTRIB.defs,PKGCONFIG))
 
-PKGCONFIG.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/pkg-config-0.28.tar.gz
-PKGCONFIG.FETCH.url += http://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
+PKGCONFIG.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/pkg-config-0.28.tar.gz
+PKGCONFIG.FETCH.url += https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
 PKGCONFIG.FETCH.md5 =  aa3c86e67551adc3ac865160e34a2a0d
 
 # TODO: pkg-config >= 0.29 (test this extensively)
-#PKGCONFIG.FETCH.url = http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.tar.gz
+#PKGCONFIG.FETCH.url = https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.tar.gz
 #PKGCONFIG.FETCH.md5 = 77f27dce7ef88d0634d0d6f90e03a77f
 
 PKGCONFIG.CONFIGURE.extra = --with-internal-glib --disable-host-tool

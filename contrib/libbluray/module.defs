@@ -1,8 +1,8 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,PKGCONFIG LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libbluray-0.9.3.tar.bz2
-LIBBLURAY.FETCH.url += http://download.videolan.org/pub/videolan/libbluray/0.9.3/libbluray-0.9.3.tar.bz2
+LIBBLURAY.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libbluray-0.9.3.tar.bz2
+LIBBLURAY.FETCH.url += https://download.videolan.org/pub/videolan/libbluray/0.9.3/libbluray-0.9.3.tar.bz2
 LIBBLURAY.FETCH.md5 =  c51fd34f933431559371be30b59cff51
 
 ifneq (max,$(LIBBLURAY.GCC.g))

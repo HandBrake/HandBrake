@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBTHEORA,libtheora,LIBOGG LIBVORBIS))
 $(eval $(call import.CONTRIB.defs,LIBTHEORA))
 
-LIBTHEORA.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/libtheora-1.1.0.tar.bz2
+LIBTHEORA.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libtheora-1.1.0.tar.bz2
 LIBTHEORA.FETCH.url += http://downloads.xiph.org/releases/theora/libtheora-1.1.0.tar.bz2
 LIBTHEORA.FETCH.md5 =  d0f83cf7f13e2b3bd068a858ca1398ad
 
