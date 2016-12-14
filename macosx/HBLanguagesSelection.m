@@ -166,25 +166,13 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
     return [super arrangeObjects:filteredObjects];
 }
 
-- (void) awakeFromNib
+- (void)awakeFromNib
 {
 	[self.tableView registerForDraggedTypes:@[kHBLanguagesDragRowsType]];
 	self.isDragginEnabled = YES;
 }
 
 #pragma mark - NSTableView Delegate
-
-- (NSString *)tableView:(NSTableView *)tableView typeSelectStringForTableColumn:(NSTableColumn *)tableColumn
-                    row:(NSInteger)row
-{
-    if ([[tableColumn identifier] isEqualToString:@"name"])
-    {
-        NSUInteger tableColumnIndex = [[tableView tableColumns] indexOfObject:tableColumn];
-        return [[tableView preparedCellAtColumn:tableColumnIndex
-                                            row:row] stringValue];
-    }
-    return nil;
-}
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
