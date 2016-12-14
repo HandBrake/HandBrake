@@ -276,6 +276,22 @@
     return [name copy];
 }
 
++ (NSString *)isoCodeForNativeLang:(NSString *)language
+{
+    const iso639_lang_t *lang = lang_get_next(NULL);
+    for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
+    {
+        NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
+
+        if ([language isEqualToString:nativeLanguage])
+        {
+            return @(lang->iso639_2);
+        }
+    }
+
+    return nil;
+}
+
 + (NSString *)iso6392CodeFor:(NSString *)aLanguage
 {
     iso639_lang_t *lang = lang_for_english(aLanguage.UTF8String);

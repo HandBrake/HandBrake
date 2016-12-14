@@ -172,22 +172,6 @@
     return fallbacks;
 }
 
-- (NSString *)isoCodeForNativeLang:(NSString *)language
-{
-    const iso639_lang_t *lang = lang_get_next(NULL);
-    for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
-    {
-        NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
-
-        if ([language isEqualToString:nativeLanguage])
-        {
-            return @(lang->iso639_2);
-        }
-    }
-
-    return nil;
-}
-
 #pragma mark - HBPresetCoding
 
 - (void)applyPreset:(HBPreset *)preset
@@ -211,30 +195,6 @@
         self.trackSelectionBehavior = HBAudioTrackSelectionBehaviorFirst;
     }
     self.trackSelectionLanguages = [NSMutableArray arrayWithArray:preset[@"AudioLanguageList"]];
-
-    // If the preset is one of the built in, set some additional options
-    if ([preset[@"Type"] intValue] == 0)
-    {
-        if (self.trackSelectionLanguages.count == 0 || [self.trackSelectionLanguages.firstObject isEqualToString:@"und"])
-        {
-            if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
-            {
-                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"]];
-                if (lang)
-                {
-                    [self.trackSelectionLanguages insertObject:lang atIndex:0];
-                }
-            }
-            if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
-            {
-                NSString *lang = [self isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
-                if (lang)
-                {
-                    [self.trackSelectionLanguages insertObject:lang atIndex:0];
-                }
-            }
-        }
-    }
 
     // Auto Passthru settings
     // first, disable all encoders
