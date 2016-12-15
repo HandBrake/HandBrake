@@ -1731,7 +1731,7 @@
                     "ChapterMarkers": true,
                     "ChildrenArray": [
                     ],
-                    "Default": true,
+                    "Default": false,
                     "FileFormat": "mp4",
                     "Folder": false,
                     "FolderOpen": false,
@@ -1830,7 +1830,7 @@
                     "ChapterMarkers": true,
                     "ChildrenArray": [
                     ],
-                    "Default": true,
+                    "Default": false,
                     "FileFormat": "mp4",
                     "Folder": false,
                     "FolderOpen": false,
@@ -1929,7 +1929,7 @@
                     "ChapterMarkers": true,
                     "ChildrenArray": [
                     ],
-                    "Default": true,
+                    "Default": false,
                     "FileFormat": "mp4",
                     "Folder": false,
                     "FolderOpen": false,
