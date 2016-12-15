@@ -678,6 +678,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             if (ret < 0 && ret != AVERROR_EOF)
             {
                 parse_pos += parse_len;
+                av_packet_unref(&avp);
                 continue;
             }
 
@@ -775,6 +776,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     break;
                 }
             } while (ret >= 0);
+            av_packet_unref(&avp);
             av_frame_free(&frame);
             parse_pos += parse_len;
         }
@@ -1110,11 +1112,11 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
     }
 
     ret = avcodec_send_packet(pv->context, &avp);
+    av_packet_unref(&avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
         return 0;
     }
-    av_free_packet(&avp);
 
 #ifdef USE_QSV
     if (pv->qsv.decode &&
@@ -1954,6 +1956,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
     ret = avcodec_send_packet(context, &avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
+        av_packet_unref(&avp);
         return;
     }
 
@@ -2026,6 +2029,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             {
                 hb_log("decavcodec: hb_audio_resample_update() failed");
                 av_frame_unref(pv->frame);
+                av_packet_unref(&avp);
                 return;
             }
             out = hb_audio_resample(pv->resample, pv->frame->extended_data,
@@ -2055,4 +2059,5 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         av_frame_unref(pv->frame);
         ++pv->nframes;
     } while (ret >= 0);
+    av_packet_unref(&avp);
 }
