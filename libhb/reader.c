@@ -473,6 +473,13 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_DONE;
         }
     }
+    else
+    {
+        // This should never happen
+        hb_error("Stream not initialized");
+        reader_send_eof(r);
+        return HB_WORK_DONE;
+    }
 
     (hb_demux[r->title->demuxer])(buf, &list, &r->demux);
 
