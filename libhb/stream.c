@@ -5321,6 +5321,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
                         "subtitle colors likely to be wrong" );
             break;
         case AV_CODEC_ID_TEXT:
+        case AV_CODEC_ID_SRT:
             subtitle->format = TEXTSUB;
             subtitle->source = UTF8SUB;
             subtitle->config.dest = PASSTHRUSUB;
