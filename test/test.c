@@ -1663,12 +1663,14 @@ static void ShowHelp()
 "                           the subtitle list specified with '--subtitle'\n"
 "                           or \"native\" to burn the subtitle track that may\n"
 "                           be added by the 'native-language' option.\n"
-"      --subtitle-default[=number]\n"
+"      --subtitle-default[=number or \"none\"]\n"
 "                           Flag the selected subtitle as the default\n"
 "                           subtitle to be displayed upon playback.  Setting\n"
 "                           no default means no subtitle will be displayed\n"
 "                           automatically. 'number' is an index into the\n"
 "                           subtitle list specified with '--subtitle'.\n"
+"                           \"none\" may be used to override an automatically\n"
+"                           selected default subtitle track.\n"
 "  -N, --native-language <string>\n"
 "                           Specifiy your language preference. When the first\n"
 "                           audio track does not match your native language\n"
@@ -2338,7 +2340,14 @@ static int ParseOptions( int argc, char ** argv )
             case SUB_DEFAULT:
                 if (optarg != NULL)
                 {
-                    subdefault = strtol(optarg, NULL, 0);
+                    if (!strcasecmp("none", optarg))
+                    {
+                        subdefault = -1;
+                    }
+                    else
+                    {
+                        subdefault = strtol(optarg, NULL, 0);
+                    }
                 }
                 else
                 {
@@ -4482,14 +4491,23 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     }
     else
     {
-        if (subdefault > 0)
+        if (subdefault || srtdefault > 0)
         {
             // "Default" flag can not be applied till after subtitles have
             // been selected.  Apply it here if subtitle selection was
             // made by the preset.
             hb_value_t *sub_dict = hb_dict_get(job_dict, "Subtitle");
             hb_value_t *sub_list = hb_dict_get(sub_dict, "SubtitleList");
-            if (hb_value_array_len(sub_list) >= subdefault)
+            int         ii;
+
+            // disable any currently set default flag
+            for (ii = 0; ii < hb_value_array_len(sub_list); ii++)
+            {
+                hb_value_t *sub = hb_value_array_get(sub_list, ii);
+                hb_dict_set(sub, "Default", hb_value_bool(0));
+            }
+
+            if (subdefault > 0 && hb_value_array_len(sub_list) >= subdefault)
             {
                 hb_value_t *sub = hb_value_array_get(sub_list, subdefault - 1);
                 hb_dict_set(sub, "Default", hb_value_bool(1));
