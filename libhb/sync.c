@@ -1735,7 +1735,7 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
                 common->scr[hash].scr_offset   = buf->s.start -
                                                  (last_scr_pts + last_duration);
                 hb_deep_log(4,
-                    "New SCR: type %8s id %x scr seq %d scr offset %ld "
+                    "New SCR: type %8s id %x scr seq %d scr offset %"PRId64" "
                     "start %"PRId64" last %f dur %f",
                     getStreamType(stream), getStreamId(stream),
                     buf->s.scr_sequence, common->scr[hash].scr_offset,
