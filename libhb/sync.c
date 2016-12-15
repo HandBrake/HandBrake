@@ -2587,17 +2587,21 @@ static hb_buffer_t * mergeSubtitles(sync_stream_t * stream)
 
     if (!sanitizer->merge)
     {
-        int limit = sanitizer->link ? 1 : 0;
-
         // Handle all but the last buffer
         // The last buffer may not have been "linked" yet
-        while (hb_buffer_list_count(&sanitizer->list_current) > limit)
+        while (hb_buffer_list_count(&sanitizer->list_current) > 0)
         {
-            buf = hb_buffer_list_rem_head(&sanitizer->list_current);
-            if (!(buf->s.flags & HB_BUF_FLAG_EOF))
+            buf = hb_buffer_list_head(&sanitizer->list_current);
+            if (!(buf->s.flags & HB_BUF_FLAG_EOF) &&
+                buf->s.stop != AV_NOPTS_VALUE)
             {
+                buf = hb_buffer_list_rem_head(&sanitizer->list_current);
                 buf = setSubDuration(stream, buf);
                 hb_buffer_list_append(&list, buf);
+            }
+            else
+            {
+                break;
             }
         }
         return hb_buffer_list_clear(&list);
