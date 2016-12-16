@@ -28,10 +28,12 @@
   - Assembly optimizations in NLMeans improve performance up to 10%
   - Assembly optimizations in x264 improve performance for faster presets by 5-10%
 - x265 quality improvements, especially when using tune grain
+- x264/5 10bit and x265 12bit support through external shared libraries
 
 #### Audio
 
 - Opus audio encoding/decoding via libopus
+- Enhanced Passhtru options. (E-AC3, TrueHD and Flac)
 
 #### Subtitles
 
@@ -44,13 +46,13 @@
   - FreeType 2.6.5 (subtitles)
   - Fontconfig 2.12.1 (subtitles)
   - FriBidi 0.19.7 (subtitles)
-  - Libav 11.3 (encoding/decoding/muxing)
+  - Libav 12 (encoding/decoding/muxing)
   - libass 0.13.2 (subtitles)
   - libbluray 0.9.3 (Blu-ray decoding)
   - libmfx v6.0.0 (Intel QuickSync Video encoding/decoding)
   - libvpx 1.5.0 (VP8/VP9 video encoding)
-  - x264 148 r2705 (H.264/AVC video encoding)
-  - x265 2.0 (H.265/HEVC video encoding)
+  - x264 148 r2708 (H.264/AVC video encoding)
+  - x265 2.1 (H.265/HEVC video encoding)
 - New libraries
   - HarfBuzz 1.3.0 (subtitles)
   - libopus 1.1.3 (Opus audio encoding)
@@ -95,8 +97,9 @@
 
 ### Linux
 
+- Add options for saving and loading queue files
 - Removed system tray icon due to UI performance issues on Ubuntu
-- Miscellaneous bug fixes and improvements
+- Miscellaneous bug fixes and User Interface Experience improvements
 
 ### Command line interface
 
