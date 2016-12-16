@@ -1006,6 +1006,11 @@ void hb_stream_close( hb_stream_t ** _d )
 {
     hb_stream_t *stream = * _d;
 
+    if (stream == NULL)
+    {
+        return;
+    }
+
     if ( stream->hb_stream_type == ffmpeg )
     {
         ffmpeg_close( stream );
@@ -1737,16 +1742,16 @@ int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
-
-    if ( stream->hb_stream_type != ffmpeg )
-    {
-        // currently meaningliess for transport and program streams
-        return 1;
-    }
     if ( !stream || !stream->title ||
          chapter_num > hb_list_count( stream->title->list_chapter ) )
     {
         return 0;
+    }
+    
+    if ( stream->hb_stream_type != ffmpeg )
+    {
+        // currently meaningless for transport and program streams
+        return 1;
     }
 
     // TODO: add chapter start time to hb_chapter_t
@@ -3974,6 +3979,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
             break;
 
         default:
+            free(w);
             return 0;
     }
     const char *profile_name;
@@ -3984,6 +3990,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
         strncpy(pes->codec_name, profile_name, 80);
         pes->codec_name[79] = 0;
     }
+    free(w);
     return 1;
 }
 
@@ -4795,11 +4802,15 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
              !ts_stream->skipbad &&
              (continuity != ( (ts_stream->continuity + 1) & 0xf ) ) )
         {
-            ts_err( stream, curstream, "continuity error: got %d expected %d",
-                    (int)continuity,
-                    (ts_stream->continuity + 1) & 0xf );
+            if (continuity == ts_stream->continuity)
+            {
+                // Duplicate packet as defined by ITU-T Rec. H.222
+                // Drop the packet.
+                return hb_buffer_list_clear(&list);
+            }
+            ts_warn( stream, "continuity error: got %d expected %d",
+                    (int)continuity, (ts_stream->continuity + 1) & 0xf );
             ts_stream->continuity = continuity;
-            return hb_buffer_list_clear(&list);
         }
         ts_stream->continuity = continuity;
 
@@ -4844,9 +4855,9 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // to the old pcr.
             buf = generate_output_data(stream, curstream);
             hb_buffer_list_append(&list, buf);
-            ts_stream->pes_info_valid = 0;
-            ts_stream->packet_len = 0;
         }
+        ts_stream->pes_info_valid = 0;
+        ts_stream->packet_len = 0;
 
         // PES must begin with an mpeg start code
         const uint8_t *pes = pkt + adapt_len + 4;
@@ -5022,6 +5033,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     // and the other for reading.
     if ( avformat_open_input( &info_ic, stream->path, NULL, &av_opts ) < 0 )
     {
+        av_dict_free( &av_opts );
         return 0;
     }
     // libav populates av_opts with the things it didn't recognize.
@@ -5075,6 +5087,8 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 
   fail:
     if ( info_ic ) avformat_close_input( &info_ic );
+    free(stream->ffmpeg_pkt);
+    stream->ffmpeg_pkt = NULL;
     return 0;
 }
 
@@ -5802,9 +5816,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
              * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
              * for some codecs. For example, sequence of PNG in a mov container.
              */
-            if ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY )
+            if (stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY)
             {
-                buf->s.frametype |= HB_FRAME_KEY;
+                buf->s.flags = HB_FLAG_FRAMETYPE_KEY;
+                buf->s.frametype = HB_FRAME_I;
             }
             break;
 

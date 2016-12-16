@@ -2,9 +2,12 @@ __deps__ := YASM CMAKE
 $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url =  http://download.handbrake.fr/contrib/x265_2.0.tar.gz
-X265.FETCH.url += https://download.videolan.org/pub/videolan/x265/x265_2.0.tar.gz
-X265.FETCH.md5 =  a4f16c0f054f002d6d8c9c6f7fb03026
+X265.FETCH.url     = https://download.handbrake.fr/contrib/x265_2.1-1.tar.gz
+X265.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2.1.tar.gz
+X265.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.1.tar.gz
+X265.FETCH.sha256  = 88fcb9af4ba52c0757ac9c0d8cd5ec79951a22905ae886897e06954353d6a643
+X265.FETCH.basename  = x265_2.1-1.tar.gz
+X265.EXTRACT.tarbase = x265_2.1
 
 X265.CONFIGURE.exe         = cmake
 X265.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265.CONFIGURE.prefix)"

@@ -59,6 +59,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Prepare the Preset window to create a Preset Object later.
         /// </summary>
+        /// <param name="presetToEdit">
+        /// The preset To Edit.
+        /// </param>
         public void Setup(Preset presetToEdit)
         {
             this.Preset = new Preset(presetToEdit); // Clone. We will not touch the existing object.

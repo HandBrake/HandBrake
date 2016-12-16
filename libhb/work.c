@@ -313,8 +313,9 @@ void hb_display_job_info(hb_job_t *job)
     }
     else if( job->frame_to_start || job->frame_to_stop )
     {
-        hb_log( "   + title %d, frames %d to %d", title->index,
-                job->frame_to_start, job->frame_to_start + job->frame_to_stop );
+        hb_log("   + title %d, frames %d to %d", title->index,
+               job->frame_to_start, job->frame_to_start +
+                                    job->frame_to_stop - 1);
     }
     else
     {

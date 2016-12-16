@@ -1,11 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChapterImporterTxt.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Imports chapter markers in the ChaptersDb.org TXT format
+//   More info: http://www.chapterdb.org/docs
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Utilities.Input
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.IO;
 
     using HandBrakeWPF.Helpers;
@@ -45,12 +52,12 @@ namespace HandBrakeWPF.Utilities.Input
                         break;
 
                     // Split the values on '=' and take the left side
-                    chapterName = chapterName.Split(new []{ '=' }, 2).LastOrDefault();
+                    chapterName = chapterName.Split(new[] { '=' }, 2).LastOrDefault();
                     chapterStartRaw = chapterStartRaw.Split(new[] { '=' }, 2).LastOrDefault();
 
                     // Parse the time
-                    if(!string.IsNullOrWhiteSpace(chapterStartRaw))
-                    { 
+                    if (!string.IsNullOrWhiteSpace(chapterStartRaw))
+                    {
                         var chapterStart = TimeSpanHelper.ParseChapterTimeStart(chapterStartRaw);
 
                         // If we're past the first chapter in the file then calculate the duration for the previous chapter

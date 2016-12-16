@@ -1,4 +1,4 @@
-Build Guide for HandBrake 20160130110114-6a00e46-master on Mac OS X
+Build Guide for HandBrake 20161005085545-3fe7f1d-master on Mac OS X
 *******************************************************************
 
 1 Introduction
@@ -69,12 +69,10 @@ recommended you use these versions or similar:
 
    * git - 2.4.3
    * python - Python 2.7.1
-   * curl - curl 7.21.4 (or wget)
-   * m4 - GNU M4 1.4.6
+   * m4 - GNU M4 1.4.17
    * make - GNU Make 3.81
    * patch - Patch 2.5.8
    * tar - GNU tar 1.26
-   * wget - GNU Wget 1.13.4 (or curl)
 
 3 QuickStart
 ************
@@ -625,7 +623,7 @@ Appendix A Project Repository Details
      url:    https://github.com/HandBrake/HandBrake.git
      branch: master
      tag:
-     rev:    6989
-     hash:   6a00e46d7888cd49b6a8671784788129d8139835
-     date:   2016-01-30 11:01:14
+     rev:    7542
+     hash:   3fe7f1de0362a38b36edae2a831cec450089d202
+     date:   2016-10-05 08:55:45
      type:   developer

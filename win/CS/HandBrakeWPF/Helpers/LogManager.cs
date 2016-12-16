@@ -43,10 +43,28 @@ namespace HandBrakeWPF.Helpers
             HandBrakeUtils.ErrorLogged += HandBrakeUtils_ErrorLogged;
         }
 
+        /// <summary>
+        /// Subscribe the ErrorLogged event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private static void HandBrakeUtils_ErrorLogged(object sender, HandBrake.ApplicationServices.Interop.EventArgs.MessageLoggedEventArgs e)
         {
         }
 
+        /// <summary>
+        ///  Subscribe the MessageLogged event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private static void HandBrakeUtils_MessageLogged(object sender, HandBrake.ApplicationServices.Interop.EventArgs.MessageLoggedEventArgs e)
         {
         }

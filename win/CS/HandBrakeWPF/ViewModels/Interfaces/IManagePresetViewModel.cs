@@ -19,6 +19,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Prepare the Preset window 
         /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
         void Setup(Preset preset);
 
         /// <summary>

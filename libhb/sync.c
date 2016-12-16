@@ -160,6 +160,8 @@ struct sync_common_s
     int             start_found;
     int64_t         start_pts;
     int64_t         stop_pts;
+    int             wait_for_frame;
+    int             wait_for_pts;
 
     // sync audio work objects
     hb_list_t     * list_work;
@@ -241,7 +243,9 @@ static int fillQueues( sync_common_t * common )
 
 static void signalBuffer( sync_stream_t * stream )
 {
-    if (hb_list_count(stream->in_queue) < stream->max_len)
+    if (hb_list_count(stream->in_queue) <= stream->max_len ||
+        stream->done || stream->common->job->done ||
+        *stream->common->job->die)
     {
         hb_cond_signal(stream->cond_full);
     }
@@ -293,17 +297,22 @@ static void shiftTS( sync_common_t * common, int64_t delta )
 static void computeInitialTS( sync_common_t * common,
                               sync_stream_t * first_stream )
 {
-    int           ii, count;
+    int           ii;
     hb_buffer_t * prev;
 
     // Process first_stream first since it has the initial PTS
     prev = NULL;
-    count = hb_list_count(first_stream->in_queue);
-    for (ii = 0; ii < count; ii++)
+    for (ii = 0; ii < hb_list_count(first_stream->in_queue);)
     {
         hb_buffer_t * buf = hb_list_item(first_stream->in_queue, ii);
-        if (UpdateSCR(first_stream, buf))
+
+        if (!UpdateSCR(first_stream, buf))
         {
+            hb_list_rem(first_stream->in_queue, buf);
+        }
+        else
+        {
+            ii++;
             if (first_stream->type == SYNC_TYPE_VIDEO && prev != NULL)
             {
                 double duration = buf->s.start - prev->s.start;
@@ -313,8 +322,8 @@ static void computeInitialTS( sync_common_t * common,
                     prev->s.stop = buf->s.start;
                 }
             }
+            prev = buf;
         }
-        prev = buf;
     }
     for (ii = 0; ii < common->stream_count; ii++)
     {
@@ -348,8 +357,8 @@ static void computeInitialTS( sync_common_t * common,
                         prev->s.stop = buf->s.start;
                     }
                 }
+                prev = buf;
             }
-            prev = buf;
         }
     }
 }
@@ -1324,8 +1333,7 @@ static void OutputBuffer( sync_common_t * common )
         {
             // pts_to_start or frame_to_start were specified.
             // Wait for the appropriate start point.
-            if (common->job->frame_to_start > 0 &&
-                out_stream->type == SYNC_TYPE_VIDEO)
+            if (common->wait_for_frame && out_stream->type == SYNC_TYPE_VIDEO)
             {
                 common->start_pts = buf->s.start + 1;
                 if (out_stream->frame_count >= common->job->frame_to_start)
@@ -1334,7 +1342,7 @@ static void OutputBuffer( sync_common_t * common )
                     out_stream->frame_count = 0;
                 }
             }
-            else if (common->job->pts_to_start > 0 &&
+            else if (common->wait_for_pts &&
                      out_stream->type != SYNC_TYPE_SUBTITLE)
             {
                 if (buf->s.start >= common->job->pts_to_start)
@@ -1392,7 +1400,7 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             signalBuffer(out_stream);
-            return;
+            continue;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
             common->job->frame_to_stop &&
@@ -1405,7 +1413,7 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             signalBuffer(out_stream);
-            return;
+            continue;
         }
 
         if (out_stream->type == SYNC_TYPE_VIDEO)
@@ -1531,6 +1539,19 @@ static void OutputBuffer( sync_common_t * common )
         restoreChap(out_stream, buf);
         fifo_push(out_stream->fifo_out, buf);
     } while (full);
+}
+
+static void FlushBuffer( sync_common_t * common )
+{
+    hb_lock(common->mutex);
+
+    if (!common->found_first_pts)
+    {
+        checkFirstPts(common);
+    }
+    OutputBuffer(common);
+
+    hb_unlock(common->mutex);
 }
 
 static void Synchronize( sync_stream_t * stream )
@@ -1714,7 +1735,7 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
                 common->scr[hash].scr_offset   = buf->s.start -
                                                  (last_scr_pts + last_duration);
                 hb_deep_log(4,
-                    "New SCR: type %8s id %x scr seq %d scr offset %ld "
+                    "New SCR: type %8s id %x scr seq %d scr offset %"PRId64" "
                     "start %"PRId64" last %f dur %f",
                     getStreamType(stream), getStreamId(stream),
                     buf->s.scr_sequence, common->scr[hash].scr_offset,
@@ -1866,7 +1887,7 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
 
     if (stream->common->found_first_pts)
     {
-        if (UpdateSCR(stream, buf))
+        if (UpdateSCR(stream, buf) > 0)
         {
             // Apply any stream slips.
             // Stream slips will only temporarily differ between
@@ -2218,6 +2239,8 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     {
         pv->common->start_found = 0;
         pv->common->start_pts = pv->common->job->pts_to_start;
+        pv->common->wait_for_frame = !!job->frame_to_start;
+        pv->common->wait_for_pts   = !!job->pts_to_start;
     }
     else
     {
@@ -2564,17 +2587,21 @@ static hb_buffer_t * mergeSubtitles(sync_stream_t * stream)
 
     if (!sanitizer->merge)
     {
-        int limit = sanitizer->link ? 1 : 0;
-
         // Handle all but the last buffer
         // The last buffer may not have been "linked" yet
-        while (hb_buffer_list_count(&sanitizer->list_current) > limit)
+        while (hb_buffer_list_count(&sanitizer->list_current) > 0)
         {
-            buf = hb_buffer_list_rem_head(&sanitizer->list_current);
-            if (!(buf->s.flags & HB_BUF_FLAG_EOF))
+            buf = hb_buffer_list_head(&sanitizer->list_current);
+            if (!(buf->s.flags & HB_BUF_FLAG_EOF) &&
+                buf->s.stop != AV_NOPTS_VALUE)
             {
+                buf = hb_buffer_list_rem_head(&sanitizer->list_current);
                 buf = setSubDuration(stream, buf);
                 hb_buffer_list_append(&list, buf);
+            }
+            else
+            {
+                break;
             }
         }
         return hb_buffer_list_clear(&list);
@@ -2688,6 +2715,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -2712,6 +2740,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -2778,6 +2807,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -2793,6 +2823,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;
@@ -3009,9 +3040,9 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     state.state = HB_STATE_SEARCHING;
 
 #define p state.param.working
-    if (job->frame_to_start)
+    if (common->wait_for_frame)
         p.progress  = (float)frame_count / job->frame_to_start;
-    else if (job->pts_to_start)
+    else if (common->wait_for_pts)
         p.progress  = (float) start / job->pts_to_start;
     else
         p.progress = 0;
@@ -3023,12 +3054,12 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     {
         int eta = 0;
 
-        if (job->frame_to_start)
+        if (common->wait_for_frame)
         {
             avg = 1000.0 * frame_count / (now - common->st_first);
             eta = (job->frame_to_start - frame_count ) / avg;
         }
-        else if (job->pts_to_start)
+        else if (common->wait_for_pts)
         {
             avg = 1000.0 * start / (now - common->st_first);
             eta = (job->pts_to_start - start) / avg;
@@ -3086,6 +3117,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     if (in->s.flags & HB_BUF_FLAG_EOF)
@@ -3110,6 +3142,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if (pv->stream->done)
     {
+        FlushBuffer(pv->stream->common);
         return HB_WORK_DONE;
     }
     return HB_WORK_OK;

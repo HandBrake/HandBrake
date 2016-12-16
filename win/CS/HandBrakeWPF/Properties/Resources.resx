@@ -465,7 +465,7 @@ Do you wish to proceed?</value>
     <value>You must first set the destination path for the output file before adding to the queue.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>The entered destination contained illegal characters. You must fix the path and filename before continuing.</value>
+    <value>The entered destination path contained illegal characters and will not be updated.</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
@@ -618,7 +618,7 @@ The Activity log may have further information.</value>
     <value>Update Failed. You can try downloading the update from https://handbrake.fr</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Storage: {0}x{1}, Display: {2}x{3}</value>
+    <value>Display Size: {0}x{1},  PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
     <value>Add to Queue</value>
@@ -729,7 +729,7 @@ If it fails, it will archive off the old file and create a new one.</value>
 Your old presets file was archived to:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value> with {0} errors detected.</value>
+    <value> with {0} errors or cancellations detected.</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
     <value>Low Disk Space</value>
@@ -809,7 +809,20 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
     <value>Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.</value>
   </data>
-  <data name="Main_NoPermissionsOnDirectory" xml:space="preserve">
-    <value>You do not have the appropriate folder permissions to write files into the directory you have chosen.</value>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>The output directory you have chosen either does not exist, or you do not have permissions to write files to it.</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>Create Folder?</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>Unable to launch destination directory.</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>Please check that you have a valid destination directory.</value>
   </data>
 </root>

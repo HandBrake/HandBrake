@@ -291,6 +291,7 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
         }
         sensitive = dep_check(ud, dep_name, &hide);
         gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
         if (!sensitive && hide)
         {
             gtk_widget_hide(GTK_WIDGET(dep_object));
@@ -1646,6 +1647,10 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("container_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
+    const char * mux = ghb_dict_get_string(ud->settings, "FileFormat");
+    GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
+    ghb_dict_set_string(dest_dict, "Mux", mux);
+
     ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
     update_acodec(ud);
@@ -1698,17 +1703,20 @@ update_aspect_info(signal_user_data_t *ud)
     gtk_label_set_text(GTK_LABEL(widget), text);
     switch (ghb_settings_combo_int(ud->settings, "PicturePAR"))
     {
-        case 0:
+        case HB_ANAMORPHIC_NONE:
             text = _("Off");
             break;
-        case 1:
+        case HB_ANAMORPHIC_STRICT:
             text = _("Strict");
             break;
-        case 2:
+        case HB_ANAMORPHIC_LOOSE:
             text = _("Loose");
             break;
-        case 3:
+        case HB_ANAMORPHIC_CUSTOM:
             text = _("Custom");
+            break;
+        case HB_ANAMORPHIC_AUTO:
+            text = _("Automatic");
             break;
         default:
             text = _("Unknown");
@@ -1877,7 +1885,10 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         gint pic_par;
         keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
         pic_par = ghb_settings_combo_int(settings, "PicturePAR");
-        if (!(keep_aspect || pic_par) || pic_par == 3)
+        if (!keep_aspect ||
+            pic_par == HB_ANAMORPHIC_NONE ||
+            pic_par == HB_ANAMORPHIC_AUTO ||
+            pic_par == HB_ANAMORPHIC_CUSTOM)
         {
             ghb_dict_set_int(settings, "scale_height",
                              title->geometry.height - title->crop[0] - title->crop[1]);
@@ -2164,6 +2175,18 @@ deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "PictureCombDetectPreset",
                       ghb_string_value("off"));
     }
+}
+
+G_MODULE_EXPORT void
+denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    ghb_update_ui_combo_box(ud, "PictureDenoisePreset", NULL, FALSE);
+    ghb_ui_update(ud, "PictureDenoisePreset",
+                  ghb_dict_get(ud->settings, "PictureDenoisePreset"));
 }
 
 G_MODULE_EXPORT void
@@ -2470,7 +2493,7 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start - 1);
-        ghb_dict_set_int(range, "End", end - 1 - start);
+        ghb_dict_set_int(range, "End", end - start + 1);
     }
 }
 
@@ -2534,7 +2557,7 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start - 1);
-        ghb_dict_set_int(range, "End", end - 1 - start);
+        ghb_dict_set_int(range, "End", end - start + 1);
     }
 }
 
@@ -3466,9 +3489,6 @@ ghb_backend_events(signal_user_data_t *ud)
         index = find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
         treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
         store = gtk_tree_view_get_model(treeview);
-        if (ud->cancel_encode == GHB_CANCEL_ALL ||
-            ud->cancel_encode == GHB_CANCEL_CURRENT)
-            status.queue.error = GHB_ERROR_CANCELED;
         switch( status.queue.error )
         {
             case GHB_ERROR_NONE:
@@ -3829,13 +3849,13 @@ browse_url(const gchar *url)
 
     argv[0] = "kfmclient";
     argv[1] = "exec";
-    argv[2] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+    argv[2] = (gchar*)url;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
     if (result) return;
 
     argv[0] = "firefox";
-    argv[1] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+    argv[1] = (gchar*)url;
     argv[2] = NULL;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
@@ -3871,10 +3891,12 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gtk_widget_show (widget);
 }
 
+#define HB_DOCS "https://handbrake.fr/docs/"
+
 G_MODULE_EXPORT void
 guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    browse_url("http://trac.handbrake.fr/wiki/HandBrakeGuide");
+    browse_url(HB_DOCS);
 }
 
 G_MODULE_EXPORT void
@@ -4425,13 +4447,13 @@ ghb_is_cd(GDrive *gd)
         return FALSE;
 
     udd = g_udev_client_query_by_device_file(udev_ctx, device);
-    g_free(device);
-
     if (udd == NULL)
     {
         g_message("udev: Failed to lookup device %s", device);
+        g_free(device);
         return FALSE;
     }
+    g_free(device);
 
     gint val;
     val = g_udev_device_get_property_as_int(udd, "ID_CDROM_DVD");

@@ -723,21 +723,6 @@ G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_da
 // below before setting CSS properties on them.
 const gchar *MyCSS =
 "                                   \n\
-GtkRadioButton .button {            \n\
-    border-width: 0px;              \n\
-    padding: 0px;                   \n\
-}                                   \n\
-GtkComboBox {                       \n\
-    padding: 0px;                   \n\
-}                                   \n\
-GtkComboBox .button {               \n\
-    padding: 2px;                   \n\
-    border-width: 0px;              \n\
-}                                   \n\
-GtkEntry {                          \n\
-    padding: 4px 4px;               \n\
-}                                   \n\
-                                    \n\
 @define-color black  #000000;       \n\
 @define-color gray18 #2e2e2e;       \n\
 @define-color gray22 #383838;       \n\
@@ -1216,6 +1201,11 @@ main(int argc, char *argv[])
     g_list_free(stack_switcher_children);
 
     gtk_window_resize(GTK_WINDOW(ghb_window), window_width, window_height);
+
+    ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
+                                  "detelecine", HB_FILTER_DETELECINE);
+    ghb_set_custom_filter_tooltip(ud, "PictureCombDetectCustom",
+                                  "interlace detection", HB_FILTER_DETELECINE);
 
     gtk_widget_show(ghb_window);
 

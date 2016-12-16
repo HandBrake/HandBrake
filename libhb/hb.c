@@ -55,9 +55,7 @@ struct hb_handle_s
 
     int            paused;
     hb_lock_t    * pause_lock;
-    /* For MacGui active queue
-       increments each time the scan thread completes*/
-    int            scanCount;
+
     volatile int   scan_die;
 
     /* Stash of persistent data between jobs, for stuff
@@ -206,10 +204,32 @@ static int handle_jpeg(enum AVPixelFormat *format)
     }
 }
 
+int hb_ff_get_colorspace(int color_matrix)
+{
+    int color_space = SWS_CS_DEFAULT;
+
+    switch (color_matrix)
+    {
+        case HB_COLR_MAT_SMPTE170M:
+            color_space = SWS_CS_ITU601;
+            break;
+        case HB_COLR_MAT_SMPTE240M:
+            color_space = SWS_CS_SMPTE240M;
+            break;
+        case HB_COLR_MAT_BT709:
+            color_space = SWS_CS_ITU709;
+            break;
+        default:
+            break;
+    }
+
+    return color_space;
+}
+
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
-                   int flags)
+                   int flags, int colorspace)
 {
     struct SwsContext * ctx;
 
@@ -220,9 +240,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
 
         srcRange = handle_jpeg(&srcFormat);
         dstRange = handle_jpeg(&dstFormat);
-        /* enable this when implemented in Libav
         flags |= SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
-         */
 
         av_opt_set_int(ctx, "srcw", srcW, 0);
         av_opt_set_int(ctx, "srch", srcH, 0);
@@ -235,9 +253,9 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
         av_opt_set_int(ctx, "sws_flags", flags, 0);
 
         sws_setColorspaceDetails( ctx,
-                      sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
+                      sws_getCoefficients( colorspace ), // src colorspace
                       srcRange, // src range 0 = MPG, 1 = JPG
-                      sws_getCoefficients( SWS_CS_DEFAULT ), // dst colorspace
+                      sws_getCoefficients( colorspace ), // dst colorspace
                       dstRange, // dst range 0 = MPG, 1 = JPG
                       0,         // brightness
                       1 << 16,   // contrast
@@ -806,11 +824,13 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                         geo->crop[0], geo->crop[2] );
     }
 
+    int colorspace = hb_ff_get_colorspace(title->color_matrix);
+
     // Get scaling context
     context = hb_sws_get_context(
                 title->geometry.width  - (geo->crop[2] + geo->crop[3]),
                 title->geometry.height - (geo->crop[0] + geo->crop[1]),
-                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags);
+                AV_PIX_FMT_YUV420P, width, height, AV_PIX_FMT_RGB32, swsflags, colorspace);
 
     if (context == NULL)
     {
@@ -1060,6 +1080,8 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     {
         case HB_ANAMORPHIC_NONE:
         {
+            /* "None" anamorphic, a.k.a. 1:1.
+             */
             double par, cropped_sar, dar;
             par = (double)src_geo->par.num / src_geo->par.den;
             cropped_sar = (double)cropped_width / cropped_height;
@@ -1124,7 +1146,6 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
             dst_par_num = dst_par_den = 1;
         } break;
 
-        default:
         case HB_ANAMORPHIC_STRICT:
         {
             /* "Strict" anamorphic.
@@ -1198,7 +1219,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
 
         case HB_ANAMORPHIC_CUSTOM:
         {
-            /* Anamorphic 3: Power User Jamboree
+            /* "Custom" anamorphic: Power User Jamboree
                - Set everything based on specified values */
 
             /* Time to get picture dimensions that divide cleanly.*/
@@ -1234,11 +1255,51 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                        src_par.den;
             }
         } break;
+
+        default:
+        case HB_ANAMORPHIC_AUTO:
+        {
+            /* "Automatic" anamorphic.
+             *  - Uses mod-compliant dimensions, set by user
+             *  - Allows users to set the either width *or* height
+             *  - Does *not* maintain original source PAR if one
+             *    or both dimensions is limited by maxWidth/maxHeight.
+             */
+            /* Anamorphic 3: Power User Jamboree
+               - Set everything based on specified values */
+
+            /* Time to get picture dimensions that divide cleanly.*/
+            width  = MULTIPLE_MOD_UP(geo->geometry.width, mod);
+            height = MULTIPLE_MOD_UP(geo->geometry.height, mod);
+
+            // Limit to min/max dimensions
+            if (width < HB_MIN_WIDTH)
+            {
+                width  = HB_MIN_WIDTH;
+            }
+            if (height < HB_MIN_HEIGHT)
+            {
+                height  = HB_MIN_HEIGHT;
+            }
+            if (width > maxWidth)
+            {
+                width = maxWidth;
+            }
+            if (height > maxHeight)
+            {
+                height = maxHeight;
+            }
+            /* Adjust the output PAR for new width/height
+             * See comment in HB_ANAMORPHIC_STRICT
+             */
+            dst_par_num = (int64_t)height * cropped_width  * src_par.num;
+            dst_par_den = (int64_t)width  * cropped_height * src_par.den;
+        } break;
     }
     if (width < HB_MIN_WIDTH || height < HB_MIN_HEIGHT ||
         width > maxWidth     || height > maxHeight)
     {
-        // All limits set above also attempted to keep PAR and DAR.
+        // Limits set above may have also attempted to keep PAR and DAR.
         // If we are still outside limits, enforce them and modify
         // PAR to keep DAR
         if (width < HB_MIN_WIDTH)
@@ -1699,7 +1760,8 @@ void hb_resume( hb_handle_t * h )
  */
 void hb_stop( hb_handle_t * h )
 {
-    h->work_die = 1;
+    h->work_error = HB_ERROR_CANCELED;
+    h->work_die   = 1;
     hb_resume( h );
 }
 
@@ -1924,11 +1986,8 @@ static void thread_func( void * _h )
                         hb_list_count( h->title_set.list_title ) );
             }
             hb_lock( h->state_lock );
-            h->state.state = HB_STATE_SCANDONE; //originally state.state
-			hb_unlock( h->state_lock );
-			/*we increment this sessions scan count by one for the MacGui
-			to trigger a new source being set */
-            h->scanCount++;
+            h->state.state = HB_STATE_SCANDONE;
+            hb_unlock( h->state_lock );
         }
 
         /* Check if the work thread is done */

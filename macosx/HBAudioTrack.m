@@ -315,7 +315,8 @@ NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
          audio_encoder != NULL;
          audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
     {
-        if (audio_encoder->muxers & self.container)
+        if (audio_encoder->muxers & self.container &&
+            audio_encoder->codec != HB_ACODEC_AUTO_PASS)
         {
             if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
             {

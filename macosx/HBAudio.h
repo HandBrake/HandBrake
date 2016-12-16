@@ -7,7 +7,6 @@
 #import <Foundation/Foundation.h>
 #import "HBPresetCoding.h"
 
-@class HBTitle;
 @class HBAudioTrack;
 @class HBAudioDefaults;
 
@@ -15,11 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *HBAudioChangedNotification;
 
-@interface HBAudio : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
+@interface HBAudio : NSObject <NSSecureCoding, NSCopying>
 
-- (instancetype)initWithTitle:(HBTitle *)title;
-
-@property (nonatomic, readonly) NSMutableArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBAudioTrack *> *tracks;
 
 @property (nonatomic, readwrite) HBAudioDefaults *defaults;
@@ -30,7 +27,6 @@ extern NSString *HBAudioChangedNotification;
 
 - (BOOL)anyCodecMatches:(int)codec;
 
-@property (nonatomic, readwrite) int container;
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
 @end

@@ -420,7 +420,7 @@ static void hb_vfr_close( hb_filter_object_t * filter )
 
     if ( pv->cfr )
     {
-        hb_log("render: %d frames output, %d dropped and %d duped for CFR/PFR",
+        hb_log("vfr: %d frames output, %d dropped and %d duped for CFR/PFR",
                pv->count_frames, pv->drops, pv->dups );
     }
 
@@ -435,15 +435,15 @@ static void hb_vfr_close( hb_filter_object_t * filter )
         interjob->total_time = pv->out_last_stop;
     }
 
-    hb_log("render: lost time: %"PRId64" (%i frames)",
+    hb_log("vfr: lost time: %"PRId64" (%i frames)",
            pv->total_lost_time, pv->dropped_frames);
-    hb_log("render: gained time: %"PRId64" (%i frames) (%"PRId64" not accounted for)",
+    hb_log("vfr: gained time: %"PRId64" (%i frames) (%"PRId64" not accounted for)",
            pv->total_gained_time, pv->extended_frames,
            pv->total_lost_time - pv->total_gained_time);
 
     if (pv->dropped_frames)
     {
-        hb_log("render: average dropped frame duration: %"PRId64,
+        hb_log("vfr: average dropped frame duration: %"PRId64,
                (pv->total_lost_time / pv->dropped_frames) );
     }
 

@@ -340,7 +340,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IEnumerable<HBMixdown> Mixdowns { get; set; }
 
-
         /// <summary>
         /// Gets or sets AudioBitrates.
         /// </summary>

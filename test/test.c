@@ -1168,6 +1168,7 @@ static void ShowHelp()
 "General Options --------------------------------------------------------------\n"
 "\n"
 "   -h, --help              Print help\n"
+"   --version               Print version\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
@@ -1503,8 +1504,10 @@ static void ShowHelp()
 "   -X, --maxWidth  <number>\n"
 "                           Set maximum width in pixels\n"
 "   --non-anamorphic        Set pixel aspect ratio to 1:1\n"
-"   --strict-anamorphic     Store pixel aspect ratio in video stream\n"
-"   --loose-anamorphic      Store pixel aspect ratio with specified display width\n"
+"   --auto-anamorphic       Store pixel aspect ratio that maximizes storage\n"
+"                           resolution\n"
+"   --loose-anamorphic      Store pixel aspect ratio that is as close as\n"
+"                           possible to the source video pixel aspect ratio\n"
 "   --custom-anamorphic     Store pixel aspect ratio in video stream and\n"
 "                           directly control all parameters.\n"
 "   --display-width <number>\n"
@@ -1524,7 +1527,6 @@ static void ShowHelp()
 "   --no-itu-par            Disable preset 'itu-par'\n"
 "   --modulus <number>      Set storage width and height modulus\n"
 "                           Dimensions will be made divisible by this number.\n"
-"                           Does not affect strict anamorphic mode (always mod 2)\n"
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
@@ -1661,12 +1663,14 @@ static void ShowHelp()
 "                           the subtitle list specified with '--subtitle'\n"
 "                           or \"native\" to burn the subtitle track that may\n"
 "                           be added by the 'native-language' option.\n"
-"      --subtitle-default[=number]\n"
+"      --subtitle-default[=number or \"none\"]\n"
 "                           Flag the selected subtitle as the default\n"
 "                           subtitle to be displayed upon playback.  Setting\n"
 "                           no default means no subtitle will be displayed\n"
 "                           automatically. 'number' is an index into the\n"
 "                           subtitle list specified with '--subtitle'.\n"
+"                           \"none\" may be used to override an automatically\n"
+"                           selected default subtitle track.\n"
 "  -N, --native-language <string>\n"
 "                           Specifiy your language preference. When the first\n"
 "                           audio track does not match your native language\n"
@@ -2031,10 +2035,10 @@ static int ParseOptions( int argc, char ** argv )
             { "grayscale",   no_argument,       NULL,        'g' },
             { "no-grayscale",no_argument,       &grayscale,    0 },
             { "rotate",      optional_argument, NULL,   ROTATE_FILTER },
-            { "non-anamorphic",  no_argument, &anamorphic_mode, 0 },
-            { "strict-anamorphic",  no_argument, &anamorphic_mode, 1 },
-            { "loose-anamorphic", no_argument, &anamorphic_mode, 2 },
-            { "custom-anamorphic", no_argument, &anamorphic_mode, 3 },
+            { "non-anamorphic",  no_argument, &anamorphic_mode, HB_ANAMORPHIC_NONE },
+            { "auto-anamorphic",  no_argument, &anamorphic_mode, HB_ANAMORPHIC_AUTO },
+            { "loose-anamorphic", no_argument, &anamorphic_mode, HB_ANAMORPHIC_LOOSE },
+            { "custom-anamorphic", no_argument, &anamorphic_mode, HB_ANAMORPHIC_CUSTOM },
             { "display-width", required_argument, NULL, DISPLAY_WIDTH },
             { "keep-display-aspect", optional_argument, NULL, KEEP_DISPLAY_ASPECT },
             { "no-keep-display-aspect", no_argument, &keep_display_aspect, 0 },
@@ -2112,8 +2116,8 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         "hv::uC:f:4i:Io:PUt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
-                         "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
+                         ":hv::C:f:i:Io:Pt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
+                         "2d::D:7::8::9::5::gOw:l:n:b:q:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2336,7 +2340,14 @@ static int ParseOptions( int argc, char ** argv )
             case SUB_DEFAULT:
                 if (optarg != NULL)
                 {
-                    subdefault = strtol(optarg, NULL, 0);
+                    if (!strcasecmp("none", optarg))
+                    {
+                        subdefault = -1;
+                    }
+                    else
+                    {
+                        subdefault = strtol(optarg, NULL, 0);
+                    }
                 }
                 else
                 {
@@ -2734,9 +2745,15 @@ static int ParseOptions( int argc, char ** argv )
                 hb_qsv_impl_set_preferred(optarg);
                 break;
 #endif
+            case ':':
+                fprintf( stderr, "missing parameter (%s)\n", argv[cur_optind] );
+                return -1;
+
             default:
+            case '?':
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
                 return -1;
+
         }
 
     }
@@ -3511,7 +3528,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioTrackName",
-                                    hb_value_string(acodecs[ii]));
+                                    hb_value_string(anames[ii]));
             }
         }
     }
@@ -3684,13 +3701,13 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (display_width > 0)
     {
         keep_display_aspect = 0;
-        anamorphic_mode = 3;
+        anamorphic_mode = HB_ANAMORPHIC_CUSTOM;
         hb_dict_set(preset, "PictureDARWidth", hb_value_int(display_width));
     }
     else if (par_width > 0 && par_height > 0)
     {
         keep_display_aspect = 0;
-        anamorphic_mode = 3;
+        anamorphic_mode = HB_ANAMORPHIC_CUSTOM;
         hb_dict_set(preset, "PicturePARWidth", hb_value_int(par_width));
         hb_dict_set(preset, "PicturePARHeight", hb_value_int(par_height));
     }
@@ -3721,7 +3738,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (comb_detect_disable)
     {
-        hb_dict_set(preset, "PictureCombDetectFilter", hb_value_string("off"));
+        hb_dict_set(preset, "PictureCombDetectPreset", hb_value_string("off"));
     }
     if (comb_detect != NULL)
     {
@@ -4474,14 +4491,23 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     }
     else
     {
-        if (subdefault > 0)
+        if (subdefault || srtdefault > 0)
         {
             // "Default" flag can not be applied till after subtitles have
             // been selected.  Apply it here if subtitle selection was
             // made by the preset.
             hb_value_t *sub_dict = hb_dict_get(job_dict, "Subtitle");
             hb_value_t *sub_list = hb_dict_get(sub_dict, "SubtitleList");
-            if (hb_value_array_len(sub_list) >= subdefault)
+            int         ii;
+
+            // disable any currently set default flag
+            for (ii = 0; ii < hb_value_array_len(sub_list); ii++)
+            {
+                hb_value_t *sub = hb_value_array_get(sub_list, ii);
+                hb_dict_set(sub, "Default", hb_value_bool(0));
+            }
+
+            if (subdefault > 0 && hb_value_array_len(sub_list) >= subdefault)
             {
                 hb_value_t *sub = hb_value_array_get(sub_list, subdefault - 1);
                 hb_dict_set(sub, "Default", hb_value_bool(1));

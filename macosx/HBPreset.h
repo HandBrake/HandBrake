@@ -79,6 +79,8 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
 - (nullable id)objectForKey:(NSString *)key;
 - (nullable id)objectForKeyedSubscript:(NSString *)key;
 
+@property (nonatomic, strong, nullable, readonly) NSMutableDictionary *content;
+
 @end
 
 NS_ASSUME_NONNULL_END

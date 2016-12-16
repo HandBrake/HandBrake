@@ -1015,7 +1015,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Advanced Encoder Options Tab.
+        ///   Looks up a localized string similar to Allow use of &apos;Advanced&apos; Tab for x264 options. (Deprecated).
         /// </summary>
         public static string Options_AdvancedTab {
             get {
@@ -2327,15 +2327,6 @@ namespace HandBrakeWPF.Properties {
         public static string VideoView_Quality {
             get {
                 return ResourceManager.GetString("VideoView_Quality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Same as source.
-        /// </summary>
-        public static string VideoView_SameAsSource {
-            get {
-                return ResourceManager.GetString("VideoView_SameAsSource", resourceCulture);
             }
         }
         

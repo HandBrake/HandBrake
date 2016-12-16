@@ -2,9 +2,9 @@ __deps__ := YASM FONTCONFIG FREETYPE FRIBIDI HARFBUZZ
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.13.2.tar.gz
-LIBASS.FETCH.url += https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.gz
-LIBASS.FETCH.md5 = b4d82616bb18e8e954b18746a105a3b8
+LIBASS.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libass-0.13.2.tar.gz
+LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.gz
+LIBASS.FETCH.sha256  = 8baccf663553b62977b1c017d18b3879835da0ef79dc4d3b708f2566762f1d5e
 
 # Tell configure where to find our versions of freetype and fontconfig
 LIBASS.CONFIGURE.extra = \

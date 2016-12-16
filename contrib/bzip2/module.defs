@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,BZIP2,bzip2))
 $(eval $(call import.CONTRIB.defs,BZIP2))
 
-BZIP2.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/bzip2-1.0.6-official.tar.gz
+BZIP2.FETCH.url  = https://download.handbrake.fr/handbrake/contrib/bzip2-1.0.6-official.tar.gz
 BZIP2.FETCH.url += http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
-BZIP2.FETCH.md5 =  00b516f4704d4a7cb50a1d97e6e8e15b
+BZIP2.FETCH.sha256    = a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd
 BZIP2.FETCH.basename  = bzip2-1.0.6-official.tar.gz
 BZIP2.EXTRACT.tarbase = bzip2-1.0.6
 

@@ -180,6 +180,7 @@ int          hb_preset_move(const hb_preset_index_t *src_path,
 hb_dict_t         * hb_presets_get_default(void);
 char              * hb_presets_get_default_json(void);
 hb_preset_index_t * hb_presets_get_default_index(void);
+void                hb_presets_clear_default();
 
 // Package the provided preset (wrap in dict and add version etc)
 // and write to json file

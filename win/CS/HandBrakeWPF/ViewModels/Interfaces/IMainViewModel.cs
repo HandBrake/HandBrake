@@ -25,6 +25,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         Preset SelectedPreset { set; }
 
+        /// <summary>
+        /// The preset select.
+        /// </summary>
+        /// <param name="tag">
+        /// The tag.
+        /// </param>
         void PresetSelect(object tag);
 
         /// <summary>

@@ -21,7 +21,7 @@
         case HB_STATE_SEARCHING:
         {
             [string appendFormat:
-             NSLocalizedString(@"Searching for start point… :  %.2f %%", nil),
+             NSLocalizedString(@"Searching for start point:  %.2f %%", nil),
              100.0 * p.progress];
 
             if (p.seconds > -1)

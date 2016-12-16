@@ -41,7 +41,7 @@ class Tool(hb_distfile.Tool):
         self.parser.usage = '%prog [OPTIONS] FILE'
         self.parser.description = 'Verify distfile data integrity.'
         self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit without error')
-        self.parser.add_option('--md5', default=None, action='store', metavar='HASH', help='verify MD5 HASH against data')
+        self.parser.add_option('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
         self._parse()
 
     def _load_config2(self, parser, data):
@@ -49,7 +49,7 @@ class Tool(hb_distfile.Tool):
 
     def _scan(self, filename):
         self.verbosef('scanning %s\n' % filename)
-        hasher = hashlib.md5()
+        hasher = hashlib.sha256()
         with open(filename, 'r') as o:
             data_total = 0
             while True:
@@ -60,14 +60,14 @@ class Tool(hb_distfile.Tool):
                 data_total += len(data)
         self.verbosef('scanned %d bytes\n' % data_total)
         r = Struct()
-        r.md5 = hasher.hexdigest()
+        r.sha256 = hasher.hexdigest()
         r.size = data_total
         return r
 
     def _verify(self, filename):
         r = Struct()
         r.scan = self._scan(filename)
-        r.status = self.options.md5 == r.scan.md5
+        r.status = self.options.sha256 == r.scan.sha256
         return r
 
     def _run(self, error):
@@ -77,14 +77,14 @@ class Tool(hb_distfile.Tool):
         if len(self.args) != 1:
             raise error('no file specified')
         filename = self.args[0]
-        if self.options.md5:
+        if self.options.sha256:
             error.op = 'verify'
             r = self._verify(filename)
-            self.infof('MD5 (%s) = %s (%s)\n', filename, r.scan.md5, 'pass' if r.status else 'fail; expecting %s' % self.options.md5)
+            self.infof('sha256 (%s) = %s (%s)\n', filename, r.scan.sha256, 'pass' if r.status else 'fail; expecting %s' % self.options.sha256)
         else:
             error.op = 'scan'
             r = self._scan(filename)
-            self.infof('MD5 (%s) = %s (%d bytes)\n', filename, r.md5, r.size)
+            self.infof('sha256 (%s) = %s (%d bytes)\n', filename, r.sha256, r.size)
 
     def run(self):
         error = hb_distfile.ToolError(self.name)

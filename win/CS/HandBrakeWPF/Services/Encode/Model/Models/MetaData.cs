@@ -9,16 +9,26 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
+    /// <summary>
+    /// The meta data.
+    /// </summary>
     public class MetaData
     {
         private string albumArtist;
 
-        /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaData"/> class. 
+        /// </summary>
         public MetaData()
         {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MetaData"/> class. 
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
         public MetaData(MetaData metadata)
         {
             if (metadata != null)

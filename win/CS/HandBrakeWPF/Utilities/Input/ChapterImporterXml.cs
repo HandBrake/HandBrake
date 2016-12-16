@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChapterImporterXml.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Imports chapter markers in the ChaptersDb.org XML format
+//   More info: http://www.chapterdb.org/docs
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Utilities.Input
 {
-    using System.Globalization;
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Xml;
     using System.Xml.Linq;
@@ -54,16 +59,18 @@ namespace HandBrakeWPF.Utilities.Input
                 }
 
                 var chapterStartRaw = chapter.XPathSelectElement("ChapterTimeStart")?.Value;
-                if(!string.IsNullOrWhiteSpace(chapterStartRaw))
+                if (!string.IsNullOrWhiteSpace(chapterStartRaw))
                 {
-                    //Format: 02:35:05 and 02:35:05.2957333
+                    // Format: 02:35:05 and 02:35:05.2957333
                     var chapterStart = TimeSpanHelper.ParseChapterTimeStart(chapterStartRaw);
 
                     // If we're past the first chapter in the file then calculate the duration for the previous chapter
                     if (chapterMapIdx > 1)
                     {
                         var old = chapterMap[chapterMapIdx - 1];
-                        chapterMap[chapterMapIdx-1] = new Tuple<string, TimeSpan>(old.Item1, chapterStart - prevChapterStart);
+                        chapterMap[chapterMapIdx - 1] = new Tuple<string, TimeSpan>(
+                                                            old.Item1,
+                                                            chapterStart - prevChapterStart);
                     }
 
                     prevChapterStart = chapterStart;

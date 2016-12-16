@@ -6,7 +6,7 @@
 
 #import "HBController.h"
 #import "HBFocusRingView.h"
-
+#import "HBToolbarBadgedItem.h"
 #import "HBQueueController.h"
 #import "HBTitleSelectionController.h"
 
@@ -82,7 +82,6 @@
 
     // Bottom
     IBOutlet NSTextField         * fStatusField;
-    IBOutlet NSTextField         * fQueueStatus;
     IBOutlet NSProgressIndicator * fRipIndicator;
     BOOL                           fRipIndicatorShown;
 
@@ -92,6 +91,8 @@
     
     IBOutlet NSDrawer            * fPresetDrawer;
 }
+
+@property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
 @property (unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
@@ -134,7 +135,14 @@
         fQueueController.controller = self;
 
         presetManager = manager;
-        _currentPreset = manager.defaultPreset;
+        if (manager.defaultPreset.isBuiltIn)
+        {
+            _currentPreset = [self presetByAddingDefaultLanguages:manager.defaultPreset];
+        }
+        else
+        {
+            _currentPreset = manager.defaultPreset;
+        }
 
         _scanSpecificTitleIdx = 1;
     }
@@ -901,9 +909,9 @@
 
 #pragma mark - Queue progress
 
-- (void)setQueueState:(NSString *)info
+- (void)setQueueState:(NSUInteger)count
 {
-    fQueueStatus.stringValue = info;
+    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
 }
 
 #define WINDOW_HEIGHT 591
@@ -1039,7 +1047,7 @@
 - (IBAction)rip:(id)sender
 {
     // Rip or Cancel ?
-    if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused)
+    if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused || fQueueController.core.state == HBStateSearching)
 	{
         // Displays an alert asking user if the want to cancel encoding of current job.
         [fQueueController cancelRip:self];
@@ -1251,6 +1259,43 @@
 
         _currentPreset = currentPreset;
     }
+
+    if (!(self.undoManager.isUndoing || self.undoManager.isRedoing))
+    {
+        // If the preset is one of the built in, set some additional options
+        if (_currentPreset.isBuiltIn)
+        {
+            _currentPreset = [self presetByAddingDefaultLanguages:_currentPreset];
+        }
+    }
+}
+
+- (HBPreset *)presetByAddingDefaultLanguages:(HBPreset *)preset
+{
+    HBMutablePreset *mutablePreset = [preset mutableCopy];
+    NSMutableArray<NSString *> *languages = [NSMutableArray array];
+
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
+    {
+        NSString *lang = [HBUtilities isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"]];
+        if (lang)
+        {
+            [languages insertObject:lang atIndex:0];
+        }
+    }
+
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
+    {
+        NSString *lang = [HBUtilities isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
+        if (lang)
+        {
+             [languages insertObject:lang atIndex:0];
+        }
+    }
+
+    mutablePreset[@"AudioLanguageList"] = languages;
+
+    return mutablePreset;
 }
 
 - (void)setEdited:(BOOL)edited
@@ -1278,7 +1323,7 @@
         [self removeJobObservers];
 
         // Apply the preset to the current job
-        [self.job applyPreset:preset];
+        [self.job applyPreset:self.currentPreset];
 
         // If Auto Naming is on, update the destination
         [self updateFileName];

@@ -78,6 +78,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         // Observer a bunch of HBVideo properties to update the UI.
         [self addObserver:self forKeyPath:@"video.encoder" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.frameRate" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
+        [self addObserver:self forKeyPath:@"video.quality" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
+        [self addObserver:self forKeyPath:@"video.preset" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.unparseOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.advancedOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
     }
@@ -124,6 +126,20 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             else
             {
                 [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", nil)];
+            }
+        }
+        else if ([keyPath isEqualToString:@"video.quality"])
+        {
+            if ([fVidQualitySlider respondsToSelector:@selector(setAccessibilityValueDescription:)])
+            {
+                fVidQualitySlider.accessibilityValueDescription = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];;
+            }
+        }
+        else if ([keyPath isEqualToString:@"video.preset"])
+        {
+            if ([fPresetsSlider respondsToSelector:@selector(setAccessibilityValueDescription:)])
+            {
+                fPresetsSlider.accessibilityValueDescription = self.video.preset;
             }
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])

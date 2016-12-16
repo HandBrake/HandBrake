@@ -119,6 +119,9 @@ namespace HandBrakeWPF.Helpers
         /// <param name="errorService">
         /// The error Service.
         /// </param>
+        /// <param name="silentRecovery">
+        /// The silent Recovery.
+        /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>

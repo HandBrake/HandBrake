@@ -219,7 +219,7 @@
 
 - (NSString *)tokenField:(NSTokenField *)tokenField displayStringForRepresentedObject:(id)representedObject
 {
-    if ([representedObject rangeOfString: @"{"].location == 0)
+    if ([representedObject rangeOfString: @"{"].location == 0 && [representedObject length] > 1)
     {
         return [(NSString *)representedObject substringWithRange:NSMakeRange(1, [(NSString*)representedObject length]-2)];
     }

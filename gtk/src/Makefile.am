@@ -3,8 +3,6 @@
 icons =	\
 	hb-icon.svg
 
-flatpak_icon = fr.handbrake.ghb.svg
-
 icons_dep =	\
 	hb-icon.svg \
 	hb-start.svg \
@@ -19,10 +17,14 @@ icons_dep =	\
 	hb-edit.svg \
 	hb-complete.svg
 
-hb_menu = ghb.desktop
-flatpak_menu = fr.handbrake.ghb.desktop
-
+if GHB_FLATPAK
+icons += fr.handbrake.ghb.svg
+hb_menu = fr.handbrake.ghb.desktop
 flatpak_appdata = fr.handbrake.ghb.appdata.xml
+else
+hb_menu = ghb.desktop
+endif
+
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
@@ -151,17 +153,8 @@ gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/
 
 uninstall-local:
 	for icon in $(icons); do \
-		SIZE=`echo $$icon | cut -d. -f2`; \
-		FILE=`echo $$icon | cut -d. -f1,3`; \
-		if [ "$$SIZE" = "svg" ]; then \
-			SIZE="scalable"; \
-			FILE="$$FILE.svg"; \
-		else \
-			SIZE="$${SIZE}x$${SIZE}"; \
-		fi; \
-		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
+		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$$icon; \
 	done
-	rm -f $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
@@ -169,24 +162,16 @@ uninstall-local:
 		echo "*** Icon cache not updated. After install, run this:"; \
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
-	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
-	rm -f $(DESTDIR)/$(datadir)/applications/$(flatpak_menu) \
-	rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)
+	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	@-if test -n "$(flatpak_appdata)"; then \
+		rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+	fi
 
 install-data-local:
 	for icon in $(icons); do \
-		SIZE=`echo $$icon | cut -d. -f2`; \
-		FILE=`echo $$icon | cut -d. -f1,3`; \
-		if [ "$$SIZE" = "svg" ]; then \
-			SIZE="scalable"; \
-			FILE="$$FILE.svg"; \
-		else \
-			SIZE="$${SIZE}x$${SIZE}"; \
-		fi; \
-		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
-		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
+		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/; \
+		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$$icon; \
 	done
-	$(INSTALL_DATA) $(srcdir)/$(flatpak_icon) $(DESTDIR)/$(datadir)/icons/hicolor/scalable/apps/$(flatpak_icon)
 	@-if test -z "$(DESTDIR)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
@@ -195,7 +180,8 @@ install-data-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
-	mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
-	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu); \
-	$(INSTALL_DATA) $(srcdir)/$(flatpak_menu) $(DESTDIR)/$(datadir)/applications/$(flatpak_menu); \
-	$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata)
+	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
+	@-if test -n "$(flatpak_appdata)"; then \
+		mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
+		$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+	fi

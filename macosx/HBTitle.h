@@ -9,6 +9,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HBChapter;
+@class HBPreset;
 
 /**
  * HBTitles is an interface to the low-level hb_title_t.

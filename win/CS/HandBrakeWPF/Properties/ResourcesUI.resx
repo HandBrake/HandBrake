@@ -630,9 +630,6 @@
   <data name="VideoView_Quality" xml:space="preserve">
     <value>Quality</value>
   </data>
-  <data name="VideoView_SameAsSource" xml:space="preserve">
-    <value>Same as source</value>
-  </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Turbo first pass</value>
   </data>
@@ -691,7 +688,7 @@
     <value>Advanced Options</value>
   </data>
   <data name="Options_AdvancedTab" xml:space="preserve">
-    <value>Show Advanced Encoder Options Tab</value>
+    <value>Allow use of 'Advanced' Tab for x264 options. (Deprecated)</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
     <value>Arguments:</value>

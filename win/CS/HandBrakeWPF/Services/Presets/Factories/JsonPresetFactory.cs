@@ -88,8 +88,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "loose":
                     preset.Task.Anamorphic = Anamorphic.Loose;
                     break;
-                case "strict":
-                    preset.Task.Anamorphic = Anamorphic.Strict;
+                case "auto":
+                    preset.Task.Anamorphic = Anamorphic.Automatic;
                     break;
                 default:
                     preset.Task.Anamorphic = Anamorphic.None;

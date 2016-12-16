@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="16A238m" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
@@ -132,6 +132,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Selected track"/>
                                                         <connections>
                                                             <binding destination="EZp-rc-7mo" name="selectedIndex" keyPath="objectValue.sourceTrackIdx" previousBinding="LeD-lR-MOf" id="zso-1b-OrL"/>
                                                             <binding destination="EZp-rc-7mo" name="content" keyPath="objectValue.sourceTracksArray" id="LeD-lR-MOf"/>
@@ -167,6 +168,7 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Forced subtitles only"/>
                                                         <connections>
                                                             <binding destination="zKg-by-KFV" name="value" keyPath="objectValue.forcedOnly" id="iFe-SC-lu3"/>
                                                             <binding destination="zKg-by-KFV" name="enabled" keyPath="objectValue.isForcedSupported" id="7Gt-UF-Lwy"/>
@@ -203,6 +205,7 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Burned In"/>
                                                         <connections>
                                                             <binding destination="gxH-yz-YRK" name="value" keyPath="objectValue.burnedIn" id="reR-Z6-yBf">
                                                                 <dictionary key="options">
@@ -243,6 +246,7 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                        <accessibility description="Default"/>
                                                         <connections>
                                                             <binding destination="mQ6-s6-Zm2" name="enabled" keyPath="objectValue.canPassthru" id="VIq-6A-MlG"/>
                                                             <binding destination="mQ6-s6-Zm2" name="value" keyPath="objectValue.def" id="6sg-s1-xTn"/>
@@ -290,6 +294,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Srt file language"/>
                                                         <connections>
                                                             <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isSrt" id="p69-lt-dgE"/>
                                                             <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
@@ -339,6 +344,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <accessibility description="Srt file char code"/>
                                                         <connections>
                                                             <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
                                                             <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
@@ -379,6 +385,7 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <accessibility description="Srt offset"/>
                                                         <connections>
                                                             <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isSrt" id="noe-Kh-7pa"/>
                                                             <binding destination="9tV-iL-oaF" name="value" keyPath="objectValue.offset" id="NlM-1C-Udf">
@@ -401,6 +408,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                 </tableColumns>
+                                <accessibility description="Subtitles tracks"/>
                                 <connections>
                                     <binding destination="ssY-jQ-Nev" name="content" keyPath="arrangedObjects" id="Oj3-29-oCf"/>
                                     <binding destination="-2" name="enabled" keyPath="self.subtitles" id="pmZ-qP-DnG">

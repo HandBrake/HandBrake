@@ -61,7 +61,6 @@
                 </Style>
 
                 <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
-                <Style BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" TargetType="{x:Type Menu}" />
             </ToolBar.Resources>
 
             <DockPanel Background="Transparent" HorizontalAlignment="Stretch">
@@ -97,7 +96,7 @@
                 </Button>
 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                    <Menu HorizontalAlignment="Right" Background="Transparent">
+                    <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent">
                         <MenuItem>
                             <MenuItem.Header>
                                 <StackPanel Height="32" Orientation="Horizontal">
@@ -152,7 +151,7 @@
                         </MenuItem>
                     </Menu>
 
-                    <Menu HorizontalAlignment="Right" Background="Transparent">
+                    <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center">
                         <MenuItem>
                             <MenuItem.Header>
                                 <StackPanel Height="32" Orientation="Horizontal">
@@ -176,7 +175,6 @@
                     </Menu>
 
                 </StackPanel>
-
 
             </DockPanel>
         </ToolBar>

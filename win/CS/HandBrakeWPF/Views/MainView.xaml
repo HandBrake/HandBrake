@@ -295,7 +295,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1"  IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="725"/>
                 <ColumnDefinition Width="Auto" />
@@ -307,7 +307,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Main Controls  -->
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
                 <!--  Source  -->
                 <StackPanel Margin="10,5,5,5"
                             HorizontalAlignment="Stretch"
@@ -381,7 +381,7 @@
             </StackPanel>
 
             <!--  Destination  -->
-            <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="1" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -416,7 +416,7 @@
             </StackPanel>
 
             <!--  Output Options  -->
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -455,7 +455,7 @@
             </StackPanel>
 
             <!--  Tab Control  -->
-            <TabControl Name="tabControl"
+            <TabControl Name="tabControl" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Grid.Row="3"
                         Margin="10,10,10,6"
                         HorizontalAlignment="Stretch"
@@ -481,7 +481,7 @@
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:ResourcesUI.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
+                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding CurrentTask.ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
@@ -504,6 +504,7 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,5,5"
+                      IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
                 <Grid>
@@ -599,63 +600,78 @@
                              Loaded="ToolBarLoaded"
                              KeyboardNavigation.TabNavigation="Continue"
                              >
-                        <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Width="20"
+
+                        <ToolBar.Resources>
+                            <Style TargetType="{x:Type ToolBarPanel}">
+                                <Setter Property="Orientation" Value="Vertical"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+
+                            <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
+                        </ToolBar.Resources>
+
+                        <ToolBarOverflowPanel>
+                            <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20"
                                            Height="20"
                                            Source="Images/add.png"
                                            />
-                                    <TextBlock Margin="2,0,0,0"
+                                        <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource textBlockOrangeStyle}"
                                                Text="{x:Static Properties:ResourcesUI.Generic_Add}"
                                                />
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Width="20"
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="20"
                                            Height="20"
                                            Source="Images/remove.png"
                                            SnapsToDevicePixels="True"
                                            />
-                                    <TextBlock Margin="2,0,0,0"
+                                        <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource textBlockOrangeStyle}"
                                                Text="{x:Static Properties:ResourcesUI.MainView_Remove}"
                                                />
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown">
-                            <MenuItem ToolBar.OverflowMode="Never">
-                                <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="20"
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown" MinHeight="22">
+                                <MenuItem ToolBar.OverflowMode="Never">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Width="20"
                                                Height="20"
                                                Source="Images/Advanced.png"
                                                 RenderOptions.BitmapScalingMode="HighQuality"
                                                />
-                                        <TextBlock Margin="2,0,0,0"
+                                            <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
                                                    Text="{x:Static Properties:ResourcesUI.MainView_Options}"
                                                    />
-                                    </StackPanel>
-                                </MenuItem.Header>
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
-                                <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
-                            </MenuItem>
-                        </Menu>
+                                        </StackPanel>
+                                    </MenuItem.Header>
+                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                    <Separator />
+                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                    <Separator />
+                                    <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                    <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                    <Separator />
+                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                </MenuItem>
+                            </Menu>
+                        </ToolBarOverflowPanel>
+
                     </ToolBar>
                 </Grid>
             </GroupBox>
@@ -705,10 +721,10 @@
                 <TextBlock Text="{Binding Path=ProgramStatusLabel}" TextTrimming="CharacterEllipsis" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_WhenDone}">
-                <Menu Background="Transparent">
+                <Menu Background="Transparent" >
                     <MenuItem>
                         <MenuItem.Header>
-                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" MinHeight="26">
                                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_WhenDone}" />
                                 <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding QueueViewModel.WhenDoneAction}" />
                                 <Path Height="5"

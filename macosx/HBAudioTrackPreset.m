@@ -13,6 +13,7 @@
 @interface HBAudioTrackPreset ()
 
 @property (nonatomic, readwrite) int container;
+@property (nonatomic, readwrite) int selectedEncoder;
 
 @end
 
@@ -25,6 +26,7 @@
     {
         // defaults settings
         _encoder = HB_ACODEC_CA_AAC;
+        _selectedEncoder = HB_ACODEC_INVALID;
         _container = HB_MUX_MKV;
         _sampleRate = 0;
         _bitRate = 160;
@@ -60,6 +62,34 @@
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
+        [self validateFallbackEncoder];
+    }
+}
+
+- (void)setFallbackEncoder:(int)fallbackEncoder
+{
+    if (fallbackEncoder != _fallbackEncoder)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFallbackEncoder:_fallbackEncoder];
+    }
+    _fallbackEncoder = fallbackEncoder;
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateFallbackEncoder];
+    }
+}
+
+- (void)setSelectedEncoder:(int)fallbackEncoder
+{
+    if (fallbackEncoder != _selectedEncoder)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setFallbackEncoder:_fallbackEncoder];
+    }
+    _selectedEncoder = fallbackEncoder;
+
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
         [self validateMixdown];
         [self validateSamplerate];
         [self validateBitrate];
@@ -68,6 +98,11 @@
 
 - (void)setMixdown:(int)mixdown
 {
+    if (mixdown == HB_AMIXDOWN_NONE)
+    {
+        mixdown = hb_mixdown_get_default(self.selectedEncoder, 0);
+    }
+
     if (mixdown != _mixdown)
     {
         [[self.undo prepareWithInvocationTarget:self] setMixdown:_mixdown];
@@ -107,43 +142,59 @@
 #pragma mark Validation
 
 /**
- *  Validates the mixdown property.
+ If the encoder is a passthru, return its fallback if available
+ to make possible to set the fallback settings.
  */
+- (void)validateFallbackEncoder
+{
+    if (_encoder & HB_ACODEC_PASS_FLAG)
+    {
+        int fallbackEncoder =  hb_audio_encoder_get_fallback_for_passthru(_encoder);
+        self.selectedEncoder = (fallbackEncoder != HB_ACODEC_INVALID) ? fallbackEncoder : self.fallbackEncoder;
+    }
+    else
+    {
+        self.selectedEncoder = self.encoder;
+    }
+}
+
 - (void)validateMixdown
 {
-    if (!hb_mixdown_has_codec_support(self.mixdown, self.encoder))
+    if (!hb_mixdown_has_codec_support(self.mixdown, self.selectedEncoder))
     {
-        self.mixdown = hb_mixdown_get_default(self.encoder, 0);
+        self.mixdown = hb_mixdown_get_default(self.selectedEncoder, 0);
     }
 }
 
 - (void)validateSamplerate
 {
-    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    if (self.selectedEncoder & HB_ACODEC_PASS_FLAG)
     {
         self.sampleRate = 0; // Auto (same as source)
     }
     else if (self.sampleRate)
     {
-        self.sampleRate = hb_audio_samplerate_find_closest(self.sampleRate, self.encoder);
+        self.sampleRate = hb_audio_samplerate_find_closest(self.sampleRate, self.selectedEncoder);
     }
 }
 
 - (void)validateBitrate
 {
-    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    if (self.selectedEncoder & HB_ACODEC_PASS_FLAG)
     {
         self.bitRate = -1;
     }
     else if (self.bitRate == -1) // switching from passthru
     {
-        self.bitRate = hb_audio_bitrate_get_default(self.encoder,
+        self.bitRate = hb_audio_bitrate_get_default(self.selectedEncoder,
                                                     self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE,
                                                     self.mixdown);
     }
     else
     {
-        self.bitRate = hb_audio_bitrate_get_best(self.encoder, self.bitRate, self.sampleRate, self.mixdown);
+        self.bitRate = hb_audio_bitrate_get_best(self.selectedEncoder, self.bitRate,
+                                                 self.sampleRate ? self.sampleRate : DEFAULT_SAMPLERATE,
+                                                 self.mixdown);
     }
 }
 
@@ -164,7 +215,7 @@
 {
     BOOL retval = YES;
 
-    int myCodecDefaultBitrate = hb_audio_bitrate_get_default(self.encoder, 0, 0);
+    int myCodecDefaultBitrate = hb_audio_bitrate_get_default(self.selectedEncoder, 0, 0);
     if (myCodecDefaultBitrate < 0)
     {
         retval = NO;
@@ -176,7 +227,7 @@
 {
     BOOL retval = YES;
 
-    if (self.encoder & HB_ACODEC_PASS_FLAG)
+    if (self.selectedEncoder & HB_ACODEC_PASS_FLAG)
     {
         retval = NO;
     }
@@ -244,7 +295,7 @@
          mixdown != NULL;
          mixdown  = hb_mixdown_get_next(mixdown))
     {
-        if (hb_mixdown_has_codec_support(mixdown->amixdown, self.encoder))
+        if (hb_mixdown_has_codec_support(mixdown->amixdown, self.selectedEncoder))
         {
             [mixdowns addObject:@(mixdown->name)];
         }
@@ -262,7 +313,7 @@
          audio_samplerate  = hb_audio_samplerate_get_next(audio_samplerate))
     {
         int rate = audio_samplerate->rate;
-        if (rate == hb_audio_samplerate_find_closest(rate, self.encoder))
+        if (rate == hb_audio_samplerate_find_closest(rate, self.selectedEncoder))
         {
             [sampleRates addObject:@(audio_samplerate->name)];
         }
@@ -275,7 +326,7 @@
     int minBitRate = 0;
     int maxBitRate = 0;
 
-    hb_audio_bitrate_get_limits(self.encoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
+    hb_audio_bitrate_get_limits(self.selectedEncoder, self.sampleRate, self.mixdown, &minBitRate, &maxBitRate);
 
     NSMutableArray<NSString *> *bitRates = [[NSMutableArray alloc] init];
     for (const hb_rate_t *audio_bitrate = hb_audio_bitrate_get_next(NULL);
@@ -300,19 +351,19 @@
         [key isEqualToString:@"passThruDisabled"] ||
         [key isEqualToString:@"mixdownEnabled"])
     {
-        retval = [NSSet setWithObjects:@"encoder", nil];
+        retval = [NSSet setWithObjects:@"selectedEncoder", @"encoder", @"fallbackEncoder", @"mixdown", @"sampleRate", nil];
     }
     else if ([key isEqualToString:@"mixdowns"])
     {
-        retval = [NSSet setWithObjects:@"encoder", nil];
+        retval = [NSSet setWithObjects:@"selectedEncoder", @"encoder", @"fallbackEncoder", nil];
     }
     else if ([key isEqualToString:@"sampleRates"])
     {
-        retval = [NSSet setWithObjects:@"encoder", @"mixdown", nil];
+        retval = [NSSet setWithObjects:@"selectedEncoder", @"encoder", @"fallbackEncoder", @"mixdown", nil];
     }
     else if ([key isEqualToString:@"bitRates"])
     {
-        retval = [NSSet setWithObjects:@"encoder", @"mixdown", @"sampleRate", nil];
+        retval = [NSSet setWithObjects:@"selectedEncoder", @"encoder", @"fallbackEncoder", @"mixdown", @"sampleRate", nil];
     }
     else
     {
@@ -339,6 +390,8 @@
     if (copy)
     {
         copy->_encoder = _encoder;
+        copy->_fallbackEncoder = _fallbackEncoder;
+        copy->_selectedEncoder = _selectedEncoder;
         copy->_mixdown = _mixdown;
         copy->_sampleRate = _sampleRate;
         copy->_bitRate = _bitRate;
@@ -364,6 +417,7 @@
     [coder encodeInt:1 forKey:@"HBAudioTrackPresetVersion"];
 
     encodeInt(_encoder);
+    encodeInt(_fallbackEncoder);
     encodeInt(_mixdown);
     encodeInt(_sampleRate);
     encodeInt(_bitRate);
@@ -379,6 +433,7 @@
     self = [super init];
 
     decodeInt(_encoder);
+    decodeInt(_fallbackEncoder);
     decodeInt(_mixdown);
     decodeInt(_sampleRate);
     decodeInt(_bitRate);
@@ -387,6 +442,8 @@
     decodeDouble(_drc);
 
     decodeInt(_container);
+
+    [self validateFallbackEncoder];
 
     return self;
 }

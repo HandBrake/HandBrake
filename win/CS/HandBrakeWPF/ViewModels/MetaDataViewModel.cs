@@ -17,14 +17,24 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    /// <summary>
+    /// The meta data view model.
+    /// </summary>
     public class MetaDataViewModel : ViewModelBase, IMetaDataViewModel
     {
         private EncodeTask task;
         private MetaData metaData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class. 
         /// </summary>
+        /// <param name="windowManager">
+        /// The window Manager.
+        /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
         public MetaDataViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.Task = new EncodeTask();
@@ -52,6 +62,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the meta data.
+        /// </summary>
         public MetaData MetaData
         {
             get

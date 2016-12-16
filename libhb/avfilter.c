@@ -393,7 +393,7 @@ static void fill_frame(hb_filter_private_t * pv,
     frame->linesize[2] = buf->plane[2].stride;
 
     frame->pts              = buf->s.start;
-    frame->reordered_opaque = buf->s.start;
+    frame->reordered_opaque = buf->s.duration;
     frame->width            = buf->f.width;
     frame->height           = buf->f.height;
     frame->format           = buf->f.fmt;
@@ -431,6 +431,7 @@ static hb_buffer_t* avframe_to_buffer(hb_filter_private_t * pv, AVFrame *frame)
     }
     buf->s.start = av_rescale_q(frame->pts, pv->out_time_base,
                                 (AVRational){1, 90000});
+    buf->s.duration = frame->reordered_opaque;
 
     if (frame->top_field_first)
     {
@@ -498,6 +499,11 @@ static int avfilter_work( hb_filter_object_t * filter,
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
+        hb_buffer_t * last = hb_buffer_list_tail(&pv->list);
+        if (last != NULL && last->s.start != AV_NOPTS_VALUE)
+        {
+            last->s.stop = last->s.start + last->s.duration;
+        }
         hb_buffer_list_append(&pv->list, in);
         *buf_out = hb_buffer_list_clear(&pv->list);
         *buf_in = NULL;

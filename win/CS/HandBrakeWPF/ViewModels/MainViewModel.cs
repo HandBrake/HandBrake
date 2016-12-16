@@ -161,8 +161,8 @@ namespace HandBrakeWPF.ViewModels
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
-            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
-            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
+            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
+            IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
         {
             this.scanService = scanService;
@@ -260,7 +260,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AdvancedViewModel.
         /// </summary>
-        public IAdvancedViewModel AdvancedViewModel { get; set; }
+        public IX264ViewModel AdvancedViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets VideoViewModel.
@@ -283,7 +283,7 @@ namespace HandBrakeWPF.ViewModels
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
 
         /// <summary>
-        /// The MetaData View Model
+        /// Gets or sets the The MetaData View Model
         /// </summary>
         public IMetaDataViewModel MetaDataViewModel { get; set; }
 
@@ -698,20 +698,24 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!Equals(this.CurrentTask.Destination, value))
                 {
-                    this.CurrentTask.Destination = value;
-                    this.NotifyOfPropertyChange(() => this.Destination);
-
-                    if (!string.IsNullOrEmpty(this.CurrentTask.Destination))
+                    if (!string.IsNullOrEmpty(value))
                     {
                         string ext = string.Empty;
                         try
                         {
-                            ext = Path.GetExtension(this.CurrentTask.Destination);
+                            ext = Path.GetExtension(value);
                         }
                         catch (ArgumentException)
                         {
-                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            this.errorService.ShowMessageBox(
+                                Resources.Main_InvalidDestination,
+                                Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
                         }
+
+                        this.CurrentTask.Destination = value;
+                        this.NotifyOfPropertyChange(() => this.Destination);
 
                         switch (ext)
                         {
@@ -725,6 +729,11 @@ namespace HandBrakeWPF.ViewModels
                                 this.SelectedOutputFormat = OutputFormat.Mp4;
                                 break;
                         }
+                    }
+                    else
+                    {
+                        this.CurrentTask.Destination = string.Empty;
+                        this.NotifyOfPropertyChange(() => this.Destination);
                     }
                 }
             }
@@ -1195,6 +1204,9 @@ namespace HandBrakeWPF.ViewModels
 
         #region Commands 
 
+        /// <summary>
+        /// Gets or sets the queue command.
+        /// </summary>
         public ICommand QueueCommand { get; set; }
 
         #endregion
@@ -1394,12 +1406,11 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination)))
+            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), true, this.errorService))
             {
-                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOnDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-
 
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
@@ -1678,7 +1689,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Pass on the "When Done" Action to the queue view model. 
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">action</param>
         public void WhenDone(string action)
         {
             this.QueueViewModel?.WhenDone(action);
@@ -1792,14 +1803,31 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.Destination))
             {
-                string directory = Path.GetDirectoryName(this.Destination);
-                if (!string.IsNullOrEmpty(directory))
+                try
                 {
-                    Process.Start(directory);
+                    string directory = Path.GetDirectoryName(this.Destination);
+                    if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
+                    {
+                        Process.Start(directory);
+                    }
+                    else
+                    {
+                        MessageBoxResult result =
+                            errorService.ShowMessageBox(
+                                string.Format(Resources.DirectoryUtils_CreateFolderMsg, directory),
+                                Resources.DirectoryUtils_CreateFolder,
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question);
+                        if (MessageBoxResult.Yes == result)
+                        {
+                            Directory.CreateDirectory(directory);
+                            Process.Start(directory);
+                        }
+                    }
                 }
-                else
+                catch (Exception exc)
                 {
-                    Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+                    this.errorService.ShowError(Resources.MainViewModel_UnableToLaunchDestDir, Resources.MainViewModel_UnableToLaunchDestDirSolution, exc);
                 }
             }
         }

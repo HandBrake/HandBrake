@@ -9,6 +9,9 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    /// <summary>
+    /// The MetaDataViewModel interface.
+    /// </summary>
     public interface IMetaDataViewModel : ITabInterface
     {
     }

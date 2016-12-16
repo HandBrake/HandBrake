@@ -29,7 +29,9 @@ const char* const* hb_av_preset_get_names(int encoder);
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode);
 void     hb_ff_set_sample_fmt(AVCodecContext *, AVCodec *, enum AVSampleFormat);
 
+int hb_ff_get_colorspace(int color_matrix);
+
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
-                   int flags);
+                   int flags, int colorspace);

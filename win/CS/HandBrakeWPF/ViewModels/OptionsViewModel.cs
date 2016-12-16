@@ -109,6 +109,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="aboutViewModel">
         /// The about View Model.
         /// </param>
+        /// <param name="errorService">
+        /// The error Service.
+        /// </param>
         public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
         {
             this.Title = "Options";

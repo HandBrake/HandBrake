@@ -413,7 +413,7 @@ namespace HandBrakeWPF.Controls
                     this.numberBox.Text = string.Empty;
                 }
 
-                this.numberBox.Foreground = new SolidColorBrush(Colors.Black);
+                this.numberBox.ClearValue(TextBox.ForegroundProperty);
             }
         }
 
@@ -557,14 +557,10 @@ namespace HandBrakeWPF.Controls
             if (this.AllowEmpty && this.Number == 0)
             {
                 this.numberBox.Text = this.hasFocus ? string.Empty : this.NoneCaption;
-
-                // this.numberBox.Foreground = new SolidColorBrush(Colors.Gray);
             }
             else
             {
                 this.numberBox.Text = this.Number.ToString(CultureInfo.InvariantCulture);
-
-                // this.numberBox.Foreground = new SolidColorBrush(Colors.Black);
             }
 
             this.RefreshNumberBoxColor();
@@ -575,7 +571,14 @@ namespace HandBrakeWPF.Controls
         /// </summary>
         private void RefreshNumberBoxColor()
         {
-            this.numberBox.Foreground = this.numberBox.Text == this.NoneCaption ? new SolidColorBrush(Colors.Gray) : new SolidColorBrush(Colors.Black);
+            if (this.numberBox.Text == this.NoneCaption)
+            {
+                this.numberBox.Foreground = new SolidColorBrush(Colors.Gray);
+            }
+            else 
+            {
+                this.numberBox.ClearValue(TextBox.ForegroundProperty);
+            }
         }
 
         /// <summary>

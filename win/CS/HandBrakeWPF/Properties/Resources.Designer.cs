@@ -594,6 +594,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Folder?.
+        /// </summary>
+        public static string DirectoryUtils_CreateFolder {
+            get {
+                return ResourceManager.GetString("DirectoryUtils_CreateFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
+        ///{0}.
+        /// </summary>
+        public static string DirectoryUtils_CreateFolderMsg {
+            get {
+                return ResourceManager.GetString("DirectoryUtils_CreateFolderMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -684,7 +703,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The entered destination contained illegal characters. You must fix the path and filename before continuing..
+        ///   Looks up a localized string similar to The entered destination path contained illegal characters and will not be updated..
         /// </summary>
         public static string Main_InvalidDestination {
             get {
@@ -729,11 +748,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have the appropriate folder permissions to write files into the directory you have chosen..
+        ///   Looks up a localized string similar to The output directory you have chosen either does not exist, or you do not have permissions to write files to it..
         /// </summary>
-        public static string Main_NoPermissionsOnDirectory {
+        public static string Main_NoPermissionsOrMissingDirectory {
             get {
-                return ResourceManager.GetString("Main_NoPermissionsOnDirectory", resourceCulture);
+                return ResourceManager.GetString("Main_NoPermissionsOrMissingDirectory", resourceCulture);
             }
         }
         
@@ -858,7 +877,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  with {0} errors detected..
+        ///   Looks up a localized string similar to  with {0} errors or cancellations detected..
         /// </summary>
         public static string Main_QueueFinishedErrors {
             get {
@@ -1107,6 +1126,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to launch destination directory..
+        /// </summary>
+        public static string MainViewModel_UnableToLaunchDestDir {
+            get {
+                return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check that you have a valid destination directory..
+        /// </summary>
+        public static string MainViewModel_UnableToLaunchDestDirSolution {
+            get {
+                return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDirSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
         public static string Notice {
@@ -1212,7 +1249,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage: {0}x{1}, Display: {2}x{3}.
+        ///   Looks up a localized string similar to Display Size: {0}x{1},  PAR {2}x{3}.
         /// </summary>
         public static string PictureSettingsViewModel_StorageDisplayLabel {
             get {

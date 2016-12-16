@@ -108,7 +108,7 @@
         HBAudioTrack *t1 = self.job.audio.tracks[idx];
         HBAudioTrack *t2 = self.modifiedJob.audio.tracks[idx];
 
-        XCTAssertEqualObjects(t1.track, t2.track);
+        XCTAssertEqual(t1.sourceTrackIdx, t2.sourceTrackIdx);
     }
 }
 

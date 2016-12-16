@@ -1,4 +1,4 @@
-Guide to Building HandBrake 20160902092339-aef9c01-master (2016090201) on Linux
+Guide to Building HandBrake 20161005085545-3fe7f1d-master (2016100901) on Linux
 *******************************************************************************
 
 1 Introduction
@@ -51,7 +51,7 @@ recommended you use these versions or similar:
 
    * git - 2.4.3
    * python - Python 2.7.1
-   * m4 - GNU M4 1.4.6
+   * m4 - GNU M4 1.4.17
    * make - GNU Make 3.81
    * patch - Patch 2.5.8
    * tar - GNU tar 1.26
@@ -79,6 +79,7 @@ Ubuntu 14.04, 16.04 packages:
    * libfribidi-dev (cli/gui)
    * libfreetype6-dev (cli/gui)
    * libfontconfig1-dev (cli/gui)
+   * libharfbuzz-dev (cli/gui)
    * libass-dev (cli/gui)
    * libmp3lame-dev (cli/gui)
    * libx264-dev (cli/gui)
@@ -137,6 +138,7 @@ Additional Fedora packages:
    * fribidi-devel (cli/gui)
    * freetype-devel (cli/gui)
    * fontconfig-devel (cli/gui)
+   * harfbuzz-devel (cli/gui)
    * libass-devel (cli/gui)
    * lame-devel (cli/gui)
    * x264-devel (cli/gui)
@@ -519,7 +521,7 @@ Appendix A Project Repository Details
      url:    https://github.com/HandBrake/HandBrake.git
      branch: master
      tag:
-     rev:    7475
-     hash:   aef9c01792bae5c656a6e026b31187cd4b9062d0
-     date:   2016-09-02 09:23:39
+     rev:    7542
+     hash:   3fe7f1de0362a38b36edae2a831cec450089d202
+     date:   2016-10-05 08:55:45
      type:   developer

@@ -48,8 +48,8 @@ namespace HandBrakeWPF.Converters.Queue
                 string resolution = string.Empty;
                 switch (task.Anamorphic)
                 {
-                    case Anamorphic.Strict:
-                        resolution = "Anamorphic: Strict";
+                    case Anamorphic.Automatic:
+                        resolution = "Anamorphic: Automatic";
                         break;
                     case Anamorphic.Loose:
                         resolution = "Anamorphic: Loose, Width: " + task.Width;

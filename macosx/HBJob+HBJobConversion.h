@@ -11,6 +11,12 @@
 @interface HBJob (HBJobConversion)
 
 /**
+ *  Returns a job settings dict by applying
+ *  the current preset to the job.
+ */
+@property (nonatomic, readonly) NSDictionary *jobDict;
+
+/**
  *  Converts the job to a hb_job_t struct.
  */
 @property (nonatomic, readonly) hb_job_t *hb_job;

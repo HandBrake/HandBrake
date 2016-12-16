@@ -129,6 +129,11 @@
     self.burnInBluraySubtitles = [preset[@"SubtitleBurnBDSub"] boolValue];
 }
 
+- (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings
+{
+    [self applyPreset:preset];
+}
+
 - (void)writeToPreset:(HBMutablePreset *)preset
 {
     if (self.trackSelectionBehavior == HBSubtitleTrackSelectionBehaviorFirst)
