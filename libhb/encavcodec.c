@@ -543,7 +543,7 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         out = process_delay_list(pv, out);
 
         hb_buffer_list_append(list, out);
-
+        av_packet_unref(&pkt);
     }
 }
 
