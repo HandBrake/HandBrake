@@ -6,6 +6,8 @@ LIBMFX.FETCH.sha256 = e07d1024e86998ac3992620f5db0f999af51cc700f7de90da2ebbe1e8a
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
 
+LIBMFX.CONFIGURE.extra = --without-libva_drm --without-libva_x11
+
 ## optional static libs need to be marked
 LIBMFX.OSL.libs  = mfx
 LIBMFX.OSL.files = $(foreach i,$(LIBMFX.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
