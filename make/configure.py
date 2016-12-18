@@ -833,7 +833,8 @@ class Project( Action ):
             self.vmajor = int(vmajor)
             self.vminor = int(vminor)
             self.vpoint = int(vpoint)
-            self.suffix = suffix
+            if suffix:
+                self.suffix = suffix
 
         if repo.type != 'release' or options.snapshot:
             self.version = repo.date.strftime("%Y%m%d%H%M%S")
