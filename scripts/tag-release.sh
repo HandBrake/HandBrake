@@ -22,6 +22,9 @@
 #   git push origin refs/tags/X.Y.Z
 #
 
+SELF="${BASH_SOURCE[0]}"
+SELF_NAME=$(basename "${SELF}")
+
 GIT_EXE='git'
 
 function validate_repo()
@@ -85,7 +88,9 @@ function tag_release()
     REF=${2}
 
     if [ "x${TAG}" == "x" ]; then
-        echo "Missing release tag (e.g. 0.10.0)"
+        echo "Missing release tag (e.g. 1.0.0)"
+        echo "Usage: ${SELF_NAME} tag [commit]"
+        return 1
     fi
 
     # bugfix branch name
