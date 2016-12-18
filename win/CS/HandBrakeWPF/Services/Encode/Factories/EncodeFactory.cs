@@ -36,6 +36,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
     using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using SystemInfo = HandBrake.ApplicationServices.Utilities.SystemInfo;
     using Validate = HandBrakeWPF.Helpers.Validate;
 
     /// <summary>
@@ -301,7 +302,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;
-            video.QSV.Decode = !configuration.DisableQuickSyncDecoding;
+
+            video.QSV.Decode = SystemInfo.IsQsvAvailable && !configuration.DisableQuickSyncDecoding;
 
             return video;
         }
