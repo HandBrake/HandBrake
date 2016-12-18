@@ -475,8 +475,6 @@
     <None Include="Installer\Installer64.nsi" />
     <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\MakeNightly64.nsi" />
-    <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
-    <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="public.key" />
   </ItemGroup>
