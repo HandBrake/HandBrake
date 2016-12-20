@@ -207,6 +207,8 @@
         CGContextFlush(context);
         CGContextRestoreGState(context);
 
+        [NSGraphicsContext restoreGraphicsState];
+
         [newImage addRepresentation:newRep];
     }
 
