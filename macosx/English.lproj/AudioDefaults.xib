@@ -20,7 +20,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="175" y="825" width="794" height="474"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="794" height="474"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -43,6 +43,13 @@
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiD-QI-wly">
                         <rect key="frame" x="151" y="433" width="256" height="22"/>
+                        <string key="toolTip">Track Selection Behavior.
+
+None will not select any audio tracks by default.
+
+First Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.
+
+All Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source.</string>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="cNR-3T-9di"/>
                         </constraints>
@@ -63,7 +70,7 @@
                             <outlet property="nextKeyView" destination="Of7-71-Ci6" id="jgQ-nK-YLu"/>
                         </connections>
                     </popUpButton>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QAt-5X-NBT">
+                    <button toolTip="Show all audio languages in the Languages list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QAt-5X-NBT">
                         <rect key="frame" x="154" y="263" width="71" height="23"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="71" id="Oxw-OO-Jaq"/>
@@ -166,7 +173,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <popUpButton toolTip="Set the audio codec to encode with when a suitable track can not be found for audio passthru." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LdN-Cx-ZJY">
+                    <popUpButton toolTip="Audio encoder to use when a track suitable for passthru is unavailable." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LdN-Cx-ZJY">
                         <rect key="frame" x="575" y="293" width="66" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="Ka4-YN-iLe"/>
@@ -212,10 +219,10 @@ DQ
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="otA-K4-TxM">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
-                                <segment toolTip="Add Preset Track" image="NSAddTemplate" width="24">
+                                <segment toolTip="Add Audio Track" image="NSAddTemplate" width="24">
                                     <nil key="label"/>
                                 </segment>
-                                <segment toolTip="Remove Selected Preset Track" image="NSRemoveTemplate" width="23" tag="1">
+                                <segment toolTip="Remove Selected Audio Track" image="NSRemoveTemplate" width="23" tag="1">
                                     <nil key="label"/>
                                 </segment>
                             </segments>
@@ -294,7 +301,7 @@ DQ
                                                     <rect key="frame" x="1" y="1" width="254" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6lx-af-rBL">
+                                                        <popUpButton toolTip="Audio encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6lx-af-rBL">
                                                             <rect key="frame" x="0.0" y="0.0" width="254" height="22"/>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="t8s-X1-tQV">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -339,6 +346,9 @@ DQ
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="igm-hS-rrD">
                                                             <rect key="frame" x="0.0" y="0.0" width="151" height="22"/>
+                                                            <string key="toolTip">Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.
+
+Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility.</string>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="2JY-Ie-KSg">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -381,7 +391,7 @@ DQ
                                                     <rect key="frame" x="412" y="1" width="111" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r80-yv-59n">
+                                                        <popUpButton toolTip="Audio sample rate in kilohertz (kHz). Auto is recommended." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r80-yv-59n">
                                                             <rect key="frame" x="0.0" y="0.0" width="111" height="22"/>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="pdm-QA-coL">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -428,6 +438,7 @@ DQ
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hHP-dw-nba">
                                                             <rect key="frame" x="0.0" y="0.0" width="96" height="22"/>
+                                                            <string key="toolTip">Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible.</string>
                                                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="U8n-oy-hkv">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -470,7 +481,7 @@ DQ
                                                     <rect key="frame" x="625" y="1" width="61" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xnA-03-Bul">
+                                                        <textField toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xnA-03-Bul">
                                                             <rect key="frame" x="31" y="7" width="29" height="14"/>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="OVr-Jm-VrK">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="xHc-m4-rcn"/>
@@ -484,7 +495,7 @@ DQ
                                                                 <binding destination="fhc-Nv-0Oh" name="enabled" keyPath="objectValue.passThruDisabled" id="NpX-pb-t52"/>
                                                             </connections>
                                                         </textField>
-                                                        <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DbI-6O-BzA">
+                                                        <slider toolTip="Audio gain in decibels (dB). Increases or decreases audio volume." horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DbI-6O-BzA">
                                                             <rect key="frame" x="3" y="3" width="22" height="22"/>
                                                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-5" maxValue="16" doubleValue="-0.79999999999999982" numberOfTickMarks="21" allowsTickMarkValuesOnly="YES" sliderType="circular" id="ea5-qc-etr"/>
                                                             <accessibility description="Gain"/>
@@ -523,6 +534,12 @@ DQ
                                                     <subviews>
                                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DGi-Dl-5nh">
                                                             <rect key="frame" x="3" y="3" width="22" height="22"/>
+                                                            <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding (passthru excluded).
+
+0: Disable DRC.
+1: Enable DRC according to the compression hints embedded in the source track.
+
+Values greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion.</string>
                                                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="MFS-fh-Kd1"/>
                                                             <accessibility description="DRC"/>
                                                             <connections>
@@ -532,6 +549,12 @@ DQ
                                                         </slider>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="BaY-Lo-8xn">
                                                             <rect key="frame" x="31" y="7" width="29" height="14"/>
+                                                            <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding (passthru excluded).
+
+0: Disable DRC.
+1: Enable DRC according to the compression hints embedded in the source track.
+
+Values greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion.</string>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="MiI-OV-waZ">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="FR6-Cx-d2s"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -582,7 +605,7 @@ DQ
                     </scrollView>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
                         <rect key="frame" x="80" y="52" width="246" height="18"/>
-                        <string key="toolTip">Only the primary audio track will be encoded with the full encoder list. All other secondary audio output tracks will be encoded with first encoder only.</string>
+                        <string key="toolTip">Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only.</string>
                         <buttonCell key="cell" type="check" title="Use only first encoder for secondary audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -604,7 +627,7 @@ Gw
                             <action selector="cancel:" target="-2" id="Vkr-zh-YAJ"/>
                         </connections>
                     </button>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
+                    <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
                         <rect key="frame" x="154" y="293" width="250" height="135"/>
                         <clipView key="contentView" id="TdE-Sh-NcS">
                             <rect key="frame" x="1" y="1" width="248" height="133"/>
