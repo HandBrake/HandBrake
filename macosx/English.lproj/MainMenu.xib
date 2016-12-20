@@ -415,12 +415,12 @@
                                     <action selector="openHomepage:" target="6lr-Yy-GMc" id="KTB-6B-jIe"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="HandBrake Documentation" keyEquivalent="?" id="1985">
+                            <menuItem title="Online Documentation" keyEquivalent="?" id="1985">
                                 <connections>
                                     <action selector="openUserGuide:" target="6lr-Yy-GMc" id="Fda-3E-7Ya"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="HandBrake Community Forums" id="1433">
+                            <menuItem title="Online Community Forums" id="1433">
                                 <connections>
                                     <action selector="openForums:" target="6lr-Yy-GMc" id="k9C-68-hJt"/>
                                 </connections>
