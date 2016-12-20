@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D12b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
@@ -47,6 +47,11 @@
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
                     <rect key="frame" x="613" y="280" width="90" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Cropping mode.
+
+Automatic detects and removes black borders from the video.
+
+Custom allows for manual settings.</string>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     <size key="cellSize" width="90" height="20"/>
                     <size key="intercellSpacing" width="2" height="3"/>
@@ -56,7 +61,7 @@
                     </buttonCell>
                     <cells>
                         <column>
-                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" toolTip="Automatically crop black borders around edges of the video." inset="2" id="b3y-yE-sYc">
+                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="b3y-yE-sYc">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
                             </buttonCell>
@@ -80,7 +85,7 @@
                         </binding>
                     </connections>
                 </matrix>
-                <textField verticalHuggingPriority="750" id="41c-48-2XJ">
+                <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" id="41c-48-2XJ">
                     <rect key="frame" x="691" y="254" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
@@ -112,7 +117,7 @@
                         </binding>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="1Z0-JT-vst">
+                <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" id="1Z0-JT-vst">
                     <rect key="frame" x="691" y="208" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
@@ -169,7 +174,7 @@
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="tYZ-2h-zIg"/>
                     </connections>
                 </stepper>
-                <textField verticalHuggingPriority="750" id="LTu-ic-Ty9">
+                <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" id="LTu-ic-Ty9">
                     <rect key="frame" x="636" y="231" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
@@ -238,7 +243,7 @@
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fkJ-hW-R19"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="wsq-TS-cC6">
+                <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" id="wsq-TS-cC6">
                     <rect key="frame" x="750" y="231" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
@@ -306,8 +311,7 @@
                 <popUpButton verticalHuggingPriority="750" id="DER-tS-cLx">
                     <rect key="frame" x="92" y="125" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">This filter removes 'combing' artifacts that are the result of telecining.
-Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</string>
+                    <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -329,9 +333,14 @@ Telecining is a process that adjusts film framerates that are 24fps to NTSC vide
                         <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
                     </connections>
                 </popUpButton>
-                <textField toolTip="Custom detelecine filter string format: JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity" verticalHuggingPriority="750" id="ipJ-z3-XnJ">
+                <textField verticalHuggingPriority="750" id="ipJ-z3-XnJ">
                     <rect key="frame" x="95" y="101" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Custom Detelecine parameters.
+
+Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
+
+Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Vb4-om-eIT">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -399,11 +408,9 @@ Telecining is a process that adjusts film framerates that are 24fps to NTSC vide
                         </binding>
                     </connections>
                 </textField>
-                <slider verticalHuggingPriority="750" id="VHj-6u-NVp">
+                <slider toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" id="VHj-6u-NVp">
                     <rect key="frame" x="751" y="127" width="104" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">The deblocking filter removes a common type of compression artifact.
-If your source exhibits 'blockiness', this filter may help clean it up.</string>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
                     <connections>
                         <accessibilityConnection property="title" destination="N8y-at-fwU" id="s2N-Mt-w93"/>
@@ -430,9 +437,11 @@ If your source exhibits 'blockiness', this filter may help clean it up.</string>
                 <popUpButton verticalHuggingPriority="750" id="ins-7X-kbN">
                     <rect key="frame" x="521" y="125" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Denoise filtering reduces or removes the appearance of noise and grain.
-Film grain and other types of high frequency noise are difficult to compress.
-Using this filter on such sources can result in smaller file sizes.</string>
+                    <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
+
+NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
+
+HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="a2c-wR-CQ6">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -471,7 +480,7 @@ Using this filter on such sources can result in smaller file sizes.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="P6z-nu-QHk"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="cTy-PO-BSd">
+                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" id="cTy-PO-BSd">
                     <rect key="frame" x="521" y="99" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
@@ -498,6 +507,21 @@ Using this filter on such sources can result in smaller file sizes.</string>
                 <popUpButton verticalHuggingPriority="750" id="1XQ-md-5cQ">
                     <rect key="frame" x="520" y="73" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <mutableString key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Film refines settings for use with most live action content.
+
+Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+
+High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+
+Animation is useful for cel animation such as anime and cartoons.
+
+Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+
+Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</mutableString>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="QNk-3W-T3X">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -534,9 +558,18 @@ Using this filter on such sources can result in smaller file sizes.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
                     </connections>
                 </textField>
-                <textField toolTip="Custom denoise filter string format: SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma" verticalHuggingPriority="750" id="ZR9-YG-pfn">
+                <textField verticalHuggingPriority="750" id="ZR9-YG-pfn">
                     <rect key="frame" x="524" y="76" width="107" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Custom Denoise parameters.
+
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="EhQ-sa-Xvv">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -568,7 +601,7 @@ Using this filter on such sources can result in smaller file sizes.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="GTk-Mv-iiv"/>
                     </connections>
                 </textField>
-                <button toolTip="If enabled, filter colour components out of video." id="Psx-nN-XiT">
+                <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." id="Psx-nN-XiT">
                     <rect key="frame" x="723" y="102" width="103" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
@@ -593,9 +626,10 @@ Using this filter on such sources can result in smaller file sizes.</string>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField toolTip="This is the display width. It is the result of scaling the storage dimensions by the pixel aspect." verticalHuggingPriority="750" id="LWv-Y9-b0S">
+                <textField verticalHuggingPriority="750" id="LWv-Y9-b0S">
                     <rect key="frame" x="375" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XYg-xi-ExT">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="jW5-N6-2cB"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -617,6 +651,7 @@ Using this filter on such sources can result in smaller file sizes.</string>
                 <textField verticalHuggingPriority="750" id="nQe-Vq-Og2">
                     <rect key="frame" x="457" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0ho-7Y-adD">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="gd7-JE-NQS"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -637,9 +672,7 @@ Using this filter on such sources can result in smaller file sizes.</string>
                 <textField verticalHuggingPriority="750" id="JC3-5O-BXA">
                     <rect key="frame" x="375" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</string>
+                    <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="ygx-uC-eb0"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -674,7 +707,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
                     <rect key="frame" x="151" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -691,9 +724,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <popUpButton verticalHuggingPriority="750" id="ns0-ar-I7c">
                     <rect key="frame" x="93" y="206" width="54" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Align storage dimensions to multiples of this value.
-This setting is only necessary for compatibility with some devices.
-You should use 2 unless you experience compatibility issues.</string>
+                    <string key="toolTip">Ensure storage dimensions are multiples of this value. Higher values are only necessary for compatibility with certain legacy devices. Set to 2 unless you have a specific compatibility concern.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="H0L-sP-ky8">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -719,8 +750,7 @@ You should use 2 unless you experience compatibility issues.</string>
                 <textField verticalHuggingPriority="750" id="9hH-As-JSa">
                     <rect key="frame" x="96" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">This is the width that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</string>
+                    <string key="toolTip">Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="6jd-2b-RPM"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -785,9 +815,15 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                 <popUpButton verticalHuggingPriority="750" id="w1f-3S-up0">
                     <rect key="frame" x="93" y="232" width="83" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">None  - Force pixel aspect ratio to 1:1.
-Loose - Align dimensions to chosen 'Alignment' value and pick pixel aspect ratio that preserves the original display aspect ratio.
-Automatic - Use a pixel aspect ratio that maximizes storage resolution while preserving the original display aspect ratio.</string>
+                    <string key="toolTip">Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+
+Off disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+
+Auto maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+
+Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+
+Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="vx1-8S-fyc">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -861,8 +897,7 @@ Automatic - Use a pixel aspect ratio that maximizes storage resolution while pre
                 <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
                     <rect key="frame" x="185" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">This is the height that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</string>
+                    <string key="toolTip">Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Ts7-R5-Oye"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -885,9 +920,10 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                         <outlet property="nextKeyView" destination="2s0-5k-fjU" id="D8H-ff-R52"/>
                     </connections>
                 </textField>
-                <button toolTip="If enabled, the original display aspect of the source will be maintained." id="6G0-MW-iVa">
+                <button id="6G0-MW-iVa">
                     <rect key="frame" x="93" y="258" width="145" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</string>
                     <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="hcF-CZ-p0E">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -909,9 +945,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                 <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
                     <rect key="frame" x="457" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</string>
+                    <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -929,7 +963,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                         <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="Bwn-Hk-CGG"/>
                     </connections>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ieR-o9-ztI">
+                <textField toolTip="Source dimensions in pixels." horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ieR-o9-ztI">
                     <rect key="frame" x="96" y="309" width="417" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="source size" id="mzN-4A-GZq">
@@ -944,7 +978,7 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
                     <rect key="frame" x="240" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -1014,9 +1048,11 @@ Players will scale the image in order to achieve the specified aspect.</string>
                 <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
                     <rect key="frame" x="311" y="125" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Choose decomb or deinterlace filter.
-The decomb filter supports a variety of interpolation algorithms.
-The deinterlace filter is a classic YADIF deinterlacer.</string>
+                    <string key="toolTip">Deinterlace removes comb artifacts from the picture.
+
+Yadif is a popular and fast deinterlacer.
+
+Decomb switches between multiple interpolation algorithms for speed and quality.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="CsF-zp-vt2">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -1037,9 +1073,18 @@ The deinterlace filter is a classic YADIF deinterlacer.</string>
                         <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceTypes" id="1XG-JZ-nFn"/>
                     </connections>
                 </popUpButton>
-                <textField toolTip="Custom deinterlace filter string format: YadifMode:YadifParity:McdintMode:McdeintQp" verticalHuggingPriority="750" id="r64-vI-ymx">
+                <textField verticalHuggingPriority="750" id="r64-vI-ymx">
                     <rect key="frame" x="314" y="76" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Custom Deinterlace parameters.
+
+Yadif syntax: mode=m:parity=p
+
+Yadif default: mode=3
+
+Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb default: mode=7</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OKz-qW-7ai">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1074,9 +1119,15 @@ The deinterlace filter is a classic YADIF deinterlacer.</string>
                 <popUpButton verticalHuggingPriority="750" id="6nG-zk-FMo">
                     <rect key="frame" x="312" y="99" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Choose decomb or deinterlace filter options.
-The decomb filter supports a variety of interpolation algorithms.
-The deinterlace filter is a classic YADIF deinterlacer.</string>
+                    <string key="toolTip">Deinterlace filter preset.
+
+Default is well balanced for speed and quality.
+
+Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+
+EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+
+Bob attempts to better preserve motion for a slight penalty to perceived resolution.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="at1-DR-WGs">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -1098,7 +1149,7 @@ The deinterlace filter is a classic YADIF deinterlacer.</string>
                         <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="LJa-RO-dzf"/>
                     </connections>
                 </popUpButton>
-                <popUpButton toolTip="Angle rotates clockwise." verticalHuggingPriority="750" id="dsH-ZQ-dBs">
+                <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" id="dsH-ZQ-dBs">
                     <rect key="frame" x="723" y="73" width="66" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eZj-V7-e0o" id="ee3-w2-XRX">
@@ -1123,7 +1174,7 @@ The deinterlace filter is a classic YADIF deinterlacer.</string>
                         <binding destination="-2" name="selectedTag" keyPath="self.filters.rotate" id="tcT-dR-5Fw"/>
                     </connections>
                 </popUpButton>
-                <button toolTip="Mirror flips the image on the x axis." id="IWV-25-FSC">
+                <button toolTip="Flips (mirrors) the picture on the horizontal axis." id="IWV-25-FSC">
                     <rect key="frame" x="791" y="75" width="58" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tvl-40-1Tc">
@@ -1168,11 +1219,9 @@ The deinterlace filter is a classic YADIF deinterlacer.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s78-d3-GZY"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="IQG-Nn-HTb">
+                <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" id="IQG-Nn-HTb">
                     <rect key="frame" x="311" y="47" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">This filter detects interlaced frames.
-If a deinterlace filter is enabled, only frames that this filter finds to be interlaced will be deinterlaced.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nfb-CJ-1J3">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -1194,9 +1243,14 @@ If a deinterlace filter is enabled, only frames that this filter finds to be int
                         <outlet property="nextKeyView" destination="rPg-F2-gtl" id="46r-ZD-dTe"/>
                     </connections>
                 </popUpButton>
-                <textField toolTip="Custom interlace detection settings." verticalHuggingPriority="750" id="rPg-F2-gtl">
+                <textField verticalHuggingPriority="750" id="rPg-F2-gtl">
                     <rect key="frame" x="314" y="23" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Custom Interlace Detection parameters.
+
+Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4YG-Q6-1tM">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
