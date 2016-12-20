@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -126,7 +126,7 @@
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="cpH-Kt-lRM"/>
                         </connections>
                     </textField>
-                    <popUpButton verticalHuggingPriority="750" id="5513">
+                    <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." verticalHuggingPriority="750" id="5513">
                         <rect key="frame" x="503" y="506" width="84" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
@@ -190,7 +190,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1554">
+                    <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" id="1554">
                         <rect key="frame" x="842" y="511" width="60" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
@@ -217,7 +217,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <popUpButton toolTip="Format to mux encoded tracks to." verticalHuggingPriority="750" id="1557">
+                    <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" id="1557">
                         <rect key="frame" x="76" y="398" width="177" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1559" id="4918">
@@ -244,7 +244,7 @@
                             <binding destination="-2" name="content" keyPath="self.job.containers" id="aNr-1N-DaN"/>
                         </connections>
                     </popUpButton>
-                    <button toolTip="Select the destination for your encode." verticalHuggingPriority="750" id="1562">
+                    <button toolTip="Browse to select a new destination path and file name for your encode." verticalHuggingPriority="750" id="1562">
                         <rect key="frame" x="815" y="450" width="90" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
@@ -265,7 +265,7 @@
                         <rect key="frame" x="98" y="490" width="802" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
-                    <textField verticalHuggingPriority="750" id="1539">
+                    <textField toolTip="Source file name." verticalHuggingPriority="750" id="1539">
                         <rect key="frame" x="70" y="540" width="310" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
@@ -277,7 +277,7 @@
                             <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
                         </connections>
                     </textField>
-                    <textField toolTip="Destination directory and filename for your encode." verticalHuggingPriority="750" id="1561">
+                    <textField toolTip="Destination path, including directory and file name. This is where your new video will be created, and what it will be named." verticalHuggingPriority="750" id="1561">
                         <rect key="frame" x="56" y="455" width="756" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
@@ -300,7 +300,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Set the first second to encode." verticalHuggingPriority="750" id="5491">
+                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" id="5491">
                         <rect key="frame" x="592" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
@@ -326,7 +326,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Set the first frame to encode." verticalHuggingPriority="750" id="5521">
+                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" id="5521">
                         <rect key="frame" x="649" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
@@ -337,7 +337,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
-                        <accessibility description="Start time in frame"/>
+                        <accessibility description="Start time in frames"/>
                         <connections>
                             <binding destination="-2" name="value" keyPath="self.job.range.frameStart" id="gMK-Oo-iNV">
                                 <dictionary key="options">
@@ -352,7 +352,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Set the last second to encode." verticalHuggingPriority="750" id="5493">
+                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" id="5493">
                         <rect key="frame" x="707" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
@@ -378,7 +378,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Set the last frame to encode." verticalHuggingPriority="750" id="5523">
+                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" id="5523">
                         <rect key="frame" x="769" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
@@ -404,10 +404,10 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1627">
-                        <rect key="frame" x="20" y="430" width="97" height="14"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="1627">
+                        <rect key="frame" x="20" y="430" width="45" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Output Settings:" id="4923">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -417,8 +417,8 @@
                         <rect key="frame" x="292" y="434" width="608" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
-                    <textField verticalHuggingPriority="750" id="1882">
-                        <rect key="frame" x="121" y="430" width="165" height="14"/>
+                    <textField toolTip="Selected preset name." verticalHuggingPriority="750" misplaced="YES" id="1882">
+                        <rect key="frame" x="69" y="430" width="217" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="4924">
                             <font key="font" metaFont="smallSystemBold"/>
@@ -452,7 +452,7 @@
                     <button id="4579">
                         <rect key="frame" x="269" y="401" width="102" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <string key="toolTip">Optimize the layout of the MP4 file for progressive download. This allows a player to initiate playback before downloading the entire file.</string>
+                        <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
                         <buttonCell key="cell" type="check" title="Web optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4927">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -466,9 +466,10 @@
                             </binding>
                         </connections>
                     </button>
-                    <button toolTip="This option adds an atom to the MP4 file which allows older iPods (5th Generation classic style) to play the file." id="4967">
+                    <button id="4967">
                         <rect key="frame" x="388" y="401" width="126" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
                         <buttonCell key="cell" type="check" title="iPod 5G support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4968">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -498,7 +499,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <popUpButton toolTip="Set the first chapter to encode." verticalHuggingPriority="750" id="1545">
+                    <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" id="1545">
                         <rect key="frame" x="589" y="506" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
@@ -521,7 +522,7 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Set the last chapter to encode." verticalHuggingPriority="750" id="1548">
+                    <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" id="1548">
                         <rect key="frame" x="704" y="506" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
@@ -544,7 +545,7 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="For multi-angle DVDs and BDs, select the desired angle to encode." verticalHuggingPriority="750" id="5181">
+                    <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" id="5181">
                         <rect key="frame" x="450" y="506" width="44" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
@@ -579,9 +580,12 @@ IA
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Set the title to encode. By default the longest title is chosen. This is often the feature title of a DVD or Blu-Ray." verticalHuggingPriority="750" id="1541">
+                    <popUpButton verticalHuggingPriority="750" id="1541">
                         <rect key="frame" x="53" y="506" width="319" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
+
+Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -606,7 +610,7 @@ IA
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
-                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Open Source" paletteLabel="Open Source" toolTip="Open source and scan the selected title" tag="-1" image="source" id="8r8-nZ-dYs">
+                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Open Source" paletteLabel="Open Source" toolTip="Open Source" tag="-1" image="source" id="8r8-nZ-dYs">
                         <connections>
                             <action selector="browseSources:" target="-2" id="zi1-Tk-0YL"/>
                         </connections>
@@ -621,14 +625,14 @@ IA
                             <action selector="pause:" target="-2" id="AN1-8V-lc1"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
+                    <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" toolTip="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
                         <size key="minSize" width="32" height="32"/>
                         <size key="maxSize" width="32" height="32"/>
                         <connections>
                             <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
+                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
                         <size key="minSize" width="40" height="32"/>
                         <size key="maxSize" width="40" height="32"/>
                         <connections>
@@ -645,7 +649,7 @@ IA
                             <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B774D9D7-AE89-4C1A-8685-D631473867F6" label="Toggle Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Preset Drawer" tag="-1" image="presets" id="9ll-Jg-YAB">
+                    <toolbarItem implicitItemIdentifier="B774D9D7-AE89-4C1A-8685-D631473867F6" label="Toggle Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Presets List" tag="-1" image="presets" id="9ll-Jg-YAB">
                         <connections>
                             <action selector="toggleDrawer:" target="-2" id="YN2-RM-4ss"/>
                         </connections>
@@ -684,7 +688,7 @@ IA
             <rect key="frame" x="0.0" y="0.0" width="227" height="38"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button id="DN4-48-aOI">
+                <button toolTip="Scan only the specified title instead of all titles." id="DN4-48-aOI">
                     <rect key="frame" x="28" y="9" width="114" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Scan only title:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eQA-t2-FcV">
@@ -695,7 +699,7 @@ IA
                         <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="3w9-Iu-3u2">
+                <textField toolTip="Title to scan." verticalHuggingPriority="750" id="3w9-Iu-3u2">
                     <rect key="frame" x="148" y="7" width="50" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="6E4-AG-PEh">
