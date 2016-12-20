@@ -289,7 +289,7 @@
         }
     }
 
-    return nil;
+    return @"und";
 }
 
 + (NSString *)iso6392CodeFor:(NSString *)aLanguage
