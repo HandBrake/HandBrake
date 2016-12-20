@@ -61,8 +61,22 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The deblocking filter removes a common type of compression artifact.
-        ///If your source exhibits &apos;blockiness&apos;, this filter may help clean it up..
+        ///   Looks up a localized string similar to Custom Denoise parameters.
+        /// 
+        ///NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c
+        ///
+        ///NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+        ///
+        ///HQDN [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string FilterView_CustomDenoiseParams {
+            get {
+                return ResourceManager.GetString("FilterView_CustomDenoiseParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deblock reduces blocky artifacts caused by low quality video compression..
         /// </summary>
         public static string FilterView_Deblock {
             get {
@@ -86,13 +100,91 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Denoise filtering reduces or removes the appearance of noise and grain.
-        ///Film grain and other types of high frequency noise are difficult to compress.
-        ///Using this filter on such sources can result in smaller file sizes..
+        ///   Looks up a localized string similar to Deinterlace removes comb artifacts from the picture.
+        ///
+        ///Yadif is a popular and fast deinterlacer.
+        ///
+        ///Decomb switches between multiple interpolation algorithms for speed and quality..
+        /// </summary>
+        public static string FilterView_Deinterlace {
+            get {
+                return ResourceManager.GetString("FilterView_Deinterlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Deinterlace parameters.
+        /// 
+        /// Yadif syntax: mode=m:parity=p
+        /// 
+        /// Yadif default: mode=3
+        /// 
+        /// Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+        /// 
+        /// Decomb default: mode=7.
+        /// </summary>
+        public static string FilterView_DeinterlaceCustom {
+            get {
+                return ResourceManager.GetString("FilterView_DeinterlaceCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deinterlace filter preset.
+        ///
+        ///Default is well balanced for speed and quality.
+        ///
+        ///Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+        ///
+        ///EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+        ///
+        ///Bob attempts to better preserve motion for a slight penalty to perceived resolution..
+        /// </summary>
+        public static string FilterView_DeinterlacePreset {
+            get {
+                return ResourceManager.GetString("FilterView_DeinterlacePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. 
+        ///Overly strong Denoise settings may damage picture quality by discarding detail.
+        ///         
+        ///NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
+        ///         
+        ///HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail..
         /// </summary>
         public static string FilterView_Denoise {
             get {
                 return ResourceManager.GetString("FilterView_Denoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise filter preset. Sets the strength of the filter..
+        /// </summary>
+        public static string FilterView_DenoisePreset {
+            get {
+                return ResourceManager.GetString("FilterView_DenoisePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+        /// 
+        ///- None uses the default preset settings.
+        /// 
+        ///- Film refines settings for use with most live action content.
+        /// 
+        ///- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+        ///
+        ///- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+        ///
+        ///- Animati [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string FilterView_DenoiseTune {
+            get {
+                return ResourceManager.GetString("FilterView_DenoiseTune", resourceCulture);
             }
         }
         
@@ -108,7 +200,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If enabled, filter colour components out of video..
+        ///   Looks up a localized string similar to Flips (mirrors) the picture on the horizontal axis..
+        /// </summary>
+        public static string FilterView_Flip {
+            get {
+                return ResourceManager.GetString("FilterView_Flip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grayscale removes the color component of the video. Often referred to as Black &amp;amp; White video..
         /// </summary>
         public static string FilterView_Grayscale {
             get {
@@ -117,7 +218,65 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the location and filename where your encoded file will be saved..
+        ///   Looks up a localized string similar to Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames..
+        /// </summary>
+        public static string FilterView_InterlaceDetection {
+            get {
+                return ResourceManager.GetString("FilterView_InterlaceDetection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Interlace Detection parameters.
+        /// 
+        /// Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+        /// 
+        /// Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16.
+        /// </summary>
+        public static string FilterView_InterlaceDetectionCustom {
+            get {
+                return ResourceManager.GetString("FilterView_InterlaceDetectionCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotate the picture clockwise in 90 degree increments..
+        /// </summary>
+        public static string FilterView_Rotate {
+            get {
+                return ResourceManager.GetString("FilterView_Rotate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a new preset..
+        /// </summary>
+        public static string MainView_AddPreset {
+            get {
+                return ResourceManager.GetString("MainView_AddPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video angle to encode. Only applicable to multi-angle DVD and Blu-ray..
+        /// </summary>
+        public static string MainView_Angle {
+            get {
+                return ResourceManager.GetString("MainView_Angle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse to select a new destination path and file name for your encode..
+        /// </summary>
+        public static string MainView_Browse {
+            get {
+                return ResourceManager.GetString("MainView_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Destination path, including directory and file name. This is where your new video will be created, and what it will be named..
         /// </summary>
         public static string MainView_Destination {
             get {
@@ -126,7 +285,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add iPod Atom needed by some older iPods..
+        ///   Looks up a localized string similar to Duration of the selected source range in Hours:Minutes:Seconds.
+        /// </summary>
+        public static string MainView_Duration {
+            get {
+                return ResourceManager.GetString("MainView_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility..
         /// </summary>
         public static string MainView_IpodAtom {
             get {
@@ -135,7 +303,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Format to mux encoded tracks to..
+        ///   Looks up a localized string similar to Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility..
         /// </summary>
         public static string MainView_Mux {
             get {
@@ -144,8 +312,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimise the layout of the MP4 file for progressive download.
-        ///This allows a player to initiate playback before downloading the entire file..
+        ///   Looks up a localized string similar to Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file..
         /// </summary>
         public static string MainView_Optimise {
             get {
@@ -154,7 +321,27 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a start and end point of the source title to encode. This can be in chapters, seconds or frames..
+        ///   Looks up a localized string similar to Additional Preset Options..
+        /// </summary>
+        public static string MainView_PresetAdditionalOptions {
+            get {
+                return ResourceManager.GetString("MainView_PresetAdditionalOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
+        /// 
+        /// Overrides all encode settings. Settings may be further adjusted after selecting a preset..
+        /// </summary>
+        public static string MainView_Presets {
+            get {
+                return ResourceManager.GetString("MainView_Presets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source range selection. By default, all chapters are selected and the entire source is encoded..
         /// </summary>
         public static string MainView_Range {
             get {
@@ -163,8 +350,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the title to encode.
-        ///By default, HandBrake will try and select the main title, or the longest if one isn&apos;t found..
+        ///   Looks up a localized string similar to Remove the selected preset..
+        /// </summary>
+        public static string MainView_RemovePreset {
+            get {
+                return ResourceManager.GetString("MainView_RemovePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title, or video clip, to encode.
+        ///Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.
         /// </summary>
         public static string MainView_Title {
             get {
@@ -182,11 +378,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to None          - Force pixel aspect ratio to 1:1.
-        ///Loose         - Use a pixel aspect ratio that is as close as possible to the source video pixel
-        ///                      aspect ratio while preserving the original display aspect ratio
-        ///Automatic - Use a pixel aspect ratio that maximizes storage resolution while preserving the 
-        ///                      original display aspect ratio..
+        ///   Looks up a localized string similar to Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
+        ///
+        ///Off disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
+        ///
+        ///Auto maximizes storage resolution while preserving the original display aspect ratio. Recommended.
+        ///
+        ///Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
+        ///
+        ///Cu [rest of string was truncated]&quot;;.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {
             get {
@@ -246,6 +446,15 @@ namespace HandBrakeWPF.Properties {
         public static string PictureSettingsView_Height {
             get {
                 return ResourceManager.GetString("PictureSettingsView_Height", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture..
+        /// </summary>
+        public static string PictureSettingsView_KeepAR {
+            get {
+                return ResourceManager.GetString("PictureSettingsView_KeepAR", resourceCulture);
             }
         }
         
@@ -315,6 +524,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_SendJobBack {
             get {
                 return ResourceManager.GetString("QueueView_SendJobBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan only the specified title instead of all titles..
+        /// </summary>
+        public static string SourceSelection_TitleSpecific {
+            get {
+                return ResourceManager.GetString("SourceSelection_TitleSpecific", resourceCulture);
             }
         }
         

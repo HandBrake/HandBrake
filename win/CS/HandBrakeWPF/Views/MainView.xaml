@@ -131,7 +131,7 @@
                 </MenuItem>
 
                 <MenuItem Header="_Help">
-                    <MenuItem Header="_HandBrake User Guide (HTTP)" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
+                    <MenuItem Header="_HandBrake Documentation (HTTP)" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
@@ -333,7 +333,7 @@
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding Angles}"
                                   SelectedItem="{Binding SelectedAngle}"
-                                  />
+                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" /> 
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="8,0,0,0"
@@ -373,8 +373,8 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" />
-                        <Label Margin="4,0,0,0" Content="{Binding Duration}" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                     </StackPanel>
                 </StackPanel>
@@ -410,6 +410,7 @@
                             Grid.Column="2"
                             Margin="8,0,0,0" FontWeight="Bold"
                             Content="Browse"
+                            ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Browse}"
                             cal:Message.Attach="[Event Click] = [Action BrowseDestination]"
                             />
                 </Grid>
@@ -513,7 +514,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <ListBox HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List"
+                    <ListBox HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
                              VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
                              BorderBrush="LightGray"
@@ -611,7 +612,7 @@
                         </ToolBar.Resources>
 
                         <ToolBarOverflowPanel>
-                            <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset">
+                            <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
@@ -627,7 +628,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset">
+                            <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_RemovePreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
@@ -644,7 +645,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown" MinHeight="22">
+                            <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetAdditionalOptions}">
                                 <MenuItem ToolBar.OverflowMode="Never">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">

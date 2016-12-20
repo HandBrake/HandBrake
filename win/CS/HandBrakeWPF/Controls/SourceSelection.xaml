@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties" x:Name="sourcePanel">
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties" x:Name="sourcePanel"
+       >
 
     <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">
 
@@ -39,7 +40,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseSpecificTitle}" />
 
-                    <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0"
+                    <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.SourceSelection_TitleSpecific}"
                                 Minimum="0" Maximum="5000" Number="{Binding TitleSpecificScan, Mode=TwoWay}" />
                 </StackPanel>
 

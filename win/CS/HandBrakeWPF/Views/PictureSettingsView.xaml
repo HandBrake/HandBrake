@@ -49,7 +49,7 @@
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                         ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"  />
                     <CheckBox Content="{x:Static Properties:ResourcesUI.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}"
-                          Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" 
+                          Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
                           VerticalAlignment="Center" Margin="5,0,0,0" />
                 </StackPanel>
 
