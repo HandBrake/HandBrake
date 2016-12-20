@@ -236,6 +236,9 @@
                 </textField>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsD-0N-H8k">
                     <rect key="frame" x="358" y="242" width="145" height="62"/>
+                    <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video. Recommended.
+
+Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video.</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="62" id="GpZ-ub-AIa"/>
                     </constraints>
@@ -308,13 +311,13 @@ Constant Framerate forces all frames to be exactly the same duration, set by Fra
                 </matrix>
                 <slider horizontalHuggingPriority="1000" verticalHuggingPriority="749" horizontalCompressionResistancePriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="GPu-Ht-bKg">
                     <rect key="frame" x="386" y="265" width="506" height="17"/>
-                    <mutableString key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
+                    <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
 
-Adjust the quality slider to the right to increase quality (lower number) or to the left to decrease quality (higher number), in small increments of plus or minus 1-2.
+Adjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.
 
 Recommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.
 
-x264 is lossless at RF 0.</mutableString>
+x264 is lossless at RF 0.</string>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
