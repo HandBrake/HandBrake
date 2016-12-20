@@ -554,27 +554,27 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
         </view>
         <menu id="hyy-qd-qpe">
             <items>
-                <menuItem title="Add All" id="HM0-a4-pm5">
+                <menuItem title="Add All Tracks" id="HM0-a4-pm5">
                     <attributedString key="attributedTitle"/>
                     <connections>
                         <action selector="addAllAudioTracks:" target="-2" id="V4d-pG-lsJ"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="fKl-2Z-8aX"/>
-                <menuItem title="Remove All" id="fqs-Q8-hNY">
+                <menuItem title="Remove All Tracks" id="fqs-Q8-hNY">
                     <connections>
                         <action selector="removeAll:" target="-2" id="E7c-dN-4dY"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="CjR-R1-IBg"/>
-                <menuItem title="Reload Defaults" id="sq7-Ux-T6D">
-                    <connections>
-                        <action selector="reloadDefaults:" target="-2" id="7JX-ub-E5y"/>
-                    </connections>
-                </menuItem>
                 <menuItem title="Configure Defaults…" id="TK6-fY-4Sk">
                     <connections>
                         <action selector="showSettingsSheet:" target="-2" id="Q8y-a8-pV6"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Reload Defaults" id="sq7-Ux-T6D">
+                    <connections>
+                        <action selector="reloadDefaults:" target="-2" id="7JX-ub-E5y"/>
                     </connections>
                 </menuItem>
             </items>
