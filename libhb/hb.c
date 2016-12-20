@@ -1698,6 +1698,8 @@ void hb_start( hb_handle_t * h )
     hb_lock( h->state_lock );
     h->state.state = HB_STATE_WORKING;
 #define p h->state.param.working
+    p.pass       = -1;
+    p.pass_count = -1;
     p.progress  = 0.0;
     p.rate_cur  = 0.0;
     p.rate_avg  = 0.0;
