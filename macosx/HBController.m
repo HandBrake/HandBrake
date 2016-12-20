@@ -361,7 +361,7 @@
             [toolbarItem setImage:[NSImage imageNamed:@"source"]];
             [toolbarItem setLabel:NSLocalizedString(@"Open Source", nil)];
             [toolbarItem setPaletteLabel:NSLocalizedString(@"Open Source", nil)];
-            [toolbarItem setToolTip:NSLocalizedString(@"Open source and scan the selected title", nil)];
+            [toolbarItem setToolTip:NSLocalizedString(@"Open Source", nil)];
             return YES;
         }
     }
