@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -348,7 +348,7 @@
                                     <action selector="exportPreset:" target="-1" id="koR-bb-R5s"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Reset Built-in Presets" tag="-1" id="1950">
+                            <menuItem title="Reset Official Presets" tag="-1" id="1950">
                                 <connections>
                                     <action selector="addFactoryPresets:" target="6lr-Yy-GMc" id="5Ga-rb-ORy"/>
                                 </connections>
@@ -410,17 +410,17 @@
                 <menuItem title="Help" id="1431">
                     <menu key="submenu" title="Help" id="1429">
                         <items>
-                            <menuItem title="HandBrake User Guide" keyEquivalent="?" id="1985">
-                                <connections>
-                                    <action selector="openUserGuide:" target="6lr-Yy-GMc" id="Fda-3E-7Ya"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="HandBrake Homepage" id="1432">
+                            <menuItem title="HandBrake Website" id="1432">
                                 <connections>
                                     <action selector="openHomepage:" target="6lr-Yy-GMc" id="KTB-6B-jIe"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="HandBrake Forums" id="1433">
+                            <menuItem title="HandBrake Documentation" keyEquivalent="?" id="1985">
+                                <connections>
+                                    <action selector="openUserGuide:" target="6lr-Yy-GMc" id="Fda-3E-7Ya"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="HandBrake Community Forums" id="1433">
                                 <connections>
                                     <action selector="openForums:" target="6lr-Yy-GMc" id="k9C-68-hJt"/>
                                 </connections>
