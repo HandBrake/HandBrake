@@ -97,7 +97,8 @@ static void hb_error_handler(const char *errmsg)
         _titles = @[];
 
         _stateFormatter = [[HBStateFormatter alloc] init];
-        _hb_state = malloc(sizeof(struct hb_state_s));
+        _hb_state = malloc(sizeof(hb_state_t));
+        bzero(_hb_state, sizeof(hb_state_t));
         _logLevel = level;
 
         _hb_handle = hb_init(level);
@@ -204,9 +205,6 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
-    // Start the timer to handle libhb state changes
-    [self startUpdateTimerWithInterval:0.2];
-
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
@@ -238,6 +236,9 @@ static void hb_error_handler(const char *errmsg)
     hb_scan(_hb_handle, path.fileSystemRepresentation,
             (int)index, (int)previewsNum,
             1, min_title_duration_ticks);
+
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimerWithInterval:0.2];
 
     // Set the state, so the UI can be update
     // to reflect the current state instead of
@@ -454,9 +455,6 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
-    // Start the timer to handle libhb state changes
-    [self startUpdateTimerWithInterval:0.5];
-
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
     hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
@@ -467,6 +465,9 @@ static void hb_error_handler(const char *errmsg)
 
     hb_system_sleep_prevent(_hb_handle);
     hb_start(_hb_handle);
+
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimerWithInterval:0.5];
 
     // Set the state, so the UI can be update
     // to reflect the current state instead of

@@ -41,7 +41,7 @@
                 [string appendString:@"\n"];
             }
 
-            if (self.showPassNumber)
+            if (self.showPassNumber && p.pass_count > -1)
             {
                 if (p.pass_id == HB_PASS_SUBTITLE)
                 {
@@ -77,6 +77,7 @@
 
             break;
         }
+#undef p
 
         case HB_STATE_MUXING:
         {
@@ -90,7 +91,6 @@
             break;
         }
 
-#undef p
         case HB_STATE_SCANNING:
         {
 #define p s.param.scanning
@@ -124,6 +124,7 @@
 
     switch (s.state)
     {
+        case HB_STATE_SEARCHING:
         case HB_STATE_WORKING:
         case HB_STATE_PAUSED:
 #define p s.param.working
