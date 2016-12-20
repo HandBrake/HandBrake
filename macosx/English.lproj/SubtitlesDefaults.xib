@@ -19,7 +19,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="283" y="305" width="427" height="422"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="427" height="422"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -50,6 +50,13 @@
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oiD-QI-wly">
                         <rect key="frame" x="159" y="381" width="251" height="22"/>
+                        <string key="toolTip">Track Selection Behavior.
+
+None will not select any audio tracks by default.
+
+First Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.
+
+All Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source.</string>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mvw-Hg-JFM" id="21e-KY-8TR">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -66,7 +73,7 @@
                             <binding destination="-2" name="selectedIndex" keyPath="self.settings.trackSelectionBehavior" id="sKn-Mr-Hce"/>
                         </connections>
                     </popUpButton>
-                    <button toolTip="Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)." translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
+                    <button toolTip="Add Closed Caption subtitles as a soft subtitle track (not burned-in)." translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
                         <rect key="frame" x="159" y="180" width="250" height="18"/>
                         <buttonCell key="cell" type="check" title="Add Closed Captions when available" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -76,9 +83,9 @@
                             <binding destination="-2" name="value" keyPath="self.settings.addCC" id="JNz-WE-LD3"/>
                         </connections>
                     </button>
-                    <button toolTip="This search pass finds short sequences of foreign audio and provides subtitles for them." translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
+                    <button toolTip="Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default." translatesAutoresizingMaskIntoConstraints="NO" id="OOC-GZ-OFA">
                         <rect key="frame" x="159" y="162" width="250" height="18"/>
-                        <buttonCell key="cell" type="check" title="Add &quot;Foreign Audio Search&quot;" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
+                        <buttonCell key="cell" type="check" title="Add Foreign Audio Search" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vNY-OC-hTJ">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -86,7 +93,7 @@
                             <binding destination="-2" name="value" keyPath="self.settings.addForeignAudioSearch" id="UZC-m0-Mco"/>
                         </connections>
                     </button>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
+                    <scrollView toolTip="Select the languages to use with the Track Selection Behavior setting." autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-39-h6S">
                         <rect key="frame" x="162" y="240" width="245" height="136"/>
                         <clipView key="contentView" id="TdE-Sh-NcS">
                             <rect key="frame" x="1" y="1" width="243" height="134"/>
@@ -176,8 +183,9 @@
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
+                        <accessibility description="Subtitles Track Languages"/>
                     </scrollView>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QAt-5X-NBT">
+                    <button toolTip="Show all subtitles languages in the Languages list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QAt-5X-NBT">
                         <rect key="frame" x="162" y="210" width="71" height="23"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="71" id="FFS-P3-FfD"/>
@@ -194,10 +202,9 @@
                     </button>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lsa-kB-2BP">
                         <rect key="frame" x="159" y="129" width="251" height="22"/>
-                        <string key="toolTip">Set the behavior of subtitle "Burn-in"
+                        <string key="toolTip">Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.
 
-Burned-In subtitles are part of the video and can not be disabled during playback.
-Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+Only one subtitles track can be burned in.</string>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ej8-4k-1vd" id="vJS-B5-ELJ">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -225,9 +232,9 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     </textField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="ceZ-On-t5S">
                         <rect key="frame" x="159" y="109" width="250" height="18"/>
-                        <string key="toolTip">Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your player software or device does not support DVD Subtitles.
+                        <string key="toolTip">Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.
 
-Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+Only one subtitles track can be burned in.</string>
                         <buttonCell key="cell" type="check" title="DVD Subtitles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="69Q-xB-Vyq">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -238,9 +245,9 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Px8-G6-NVX">
                         <rect key="frame" x="159" y="91" width="250" height="18"/>
-                        <string key="toolTip">Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your player software or device does not support Blu-ray Subtitles.
+                        <string key="toolTip">Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.
 
-Only one subtitle track can be burned. Since conflics can occur, the first chosen wins.</string>
+Only one subtitles track can be burned in.</string>
                         <buttonCell key="cell" type="check" title="Blu-ray Subtitles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="bfV-9D-6dh">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -251,7 +258,7 @@ Only one subtitle track can be burned. Since conflics can occur, the first chose
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="MlS-tB-pEv">
                         <rect key="frame" x="160" y="58" width="249" height="28"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one of the above subtitle burn options will be applied, starting with the top." id="N4s-K9-RwM">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Only one subtitles burn-in option will be applied, starting with the first (top)." id="N4s-K9-RwM">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
