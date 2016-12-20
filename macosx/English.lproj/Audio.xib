@@ -441,10 +441,10 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 <subviews>
                                                     <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o3M-fP-6Ps">
                                                         <rect key="frame" x="3" y="1" width="22" height="22"/>
-                                                        <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding (passthru excluded).
+                                                        <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.
 
-0: Disable DRC.
-1: Enable DRC according to the compression hints embedded in the source track.
+0: Do not apply DRC.
+1: Apply DRC according to the compression hints embedded in the source track.
 
 Values greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion.</string>
                                                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="4" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="circular" id="nII-CW-aWc">
@@ -469,10 +469,10 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                                                     </slider>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yPh-4R-HRQ">
                                                         <rect key="frame" x="31" y="5" width="29" height="14"/>
-                                                        <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding (passthru excluded).
+                                                        <string key="toolTip">Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.
 
-0: Disable DRC.
-1: Enable DRC according to the compression hints embedded in the source track.
+0: Do not apply DRC.
+1: Apply DRC according to the compression hints embedded in the source track.
 
 Values greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion.</string>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="Ifq-hI-oCs">
