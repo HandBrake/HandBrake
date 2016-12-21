@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D17a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
@@ -20,7 +20,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="175" y="825" width="794" height="474"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="794" height="474"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -657,7 +657,7 @@ Gw
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="F5N-kV-6cy">
-                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="18"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="19"/>
                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="NOa-yY-z7A">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -667,9 +667,8 @@ Gw
                                                                 <binding destination="haT-6q-XQu" name="toolTip" keyPath="objectValue.language" id="hyE-CO-x5w"/>
                                                             </connections>
                                                         </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qqA-7S-cT9">
-                                                            <rect key="frame" x="17" y="3" width="227" height="14"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qqA-7S-cT9">
+                                                            <rect key="frame" x="17" y="2" width="227" height="14"/>
                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="XKL-2e-Dlv">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -681,10 +680,12 @@ Gw
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="F5N-kV-6cy" firstAttribute="leading" secondItem="haT-6q-XQu" secondAttribute="leading" constant="3" id="IcV-Ph-vK6"/>
-                                                        <constraint firstAttribute="bottom" secondItem="F5N-kV-6cy" secondAttribute="bottom" constant="3" id="QL4-tT-aU6"/>
-                                                        <constraint firstItem="F5N-kV-6cy" firstAttribute="top" secondItem="haT-6q-XQu" secondAttribute="top" constant="2" id="Uu2-Tz-ONd"/>
-                                                        <constraint firstAttribute="trailing" secondItem="F5N-kV-6cy" secondAttribute="trailing" constant="225" id="awP-x4-2SN"/>
+                                                        <constraint firstAttribute="trailing" secondItem="qqA-7S-cT9" secondAttribute="trailing" constant="3" id="0VW-tG-QqT"/>
+                                                        <constraint firstItem="qqA-7S-cT9" firstAttribute="centerY" secondItem="haT-6q-XQu" secondAttribute="centerY" id="Pck-z1-IQ5"/>
+                                                        <constraint firstItem="qqA-7S-cT9" firstAttribute="leading" secondItem="F5N-kV-6cy" secondAttribute="trailing" constant="-1" id="ftC-wK-cXx"/>
+                                                        <constraint firstItem="F5N-kV-6cy" firstAttribute="top" secondItem="haT-6q-XQu" secondAttribute="top" constant="1" id="l7i-WR-pj7"/>
+                                                        <constraint firstItem="qqA-7S-cT9" firstAttribute="baseline" secondItem="F5N-kV-6cy" secondAttribute="baseline" id="wfS-Eh-IH4"/>
+                                                        <constraint firstItem="F5N-kV-6cy" firstAttribute="leading" secondItem="haT-6q-XQu" secondAttribute="leading" constant="3" id="zf1-cU-AmQ"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="qqA-7S-cT9" id="wHA-8l-Rbu"/>
@@ -790,7 +791,7 @@ Gw
             <connections>
                 <outlet property="initialFirstResponder" destination="oiD-QI-wly" id="Vxi-xi-P0d"/>
             </connections>
-            <point key="canvasLocation" x="126" y="225"/>
+            <point key="canvasLocation" x="119" y="-141"/>
         </window>
         <arrayController objectClassName="HBLang" id="ZBe-aP-wvq" userLabel="Languages Table Controller" customClass="HBLanguageArrayController">
             <declaredKeys>
