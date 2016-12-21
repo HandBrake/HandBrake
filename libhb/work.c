@@ -502,7 +502,8 @@ void hb_display_job_info(hb_job_t *job)
         }
 
         if (job->color_matrix_code &&
-        	(job->vcodec == HB_VCODEC_X264_MASK || job->vcodec == HB_VCODEC_X265_MASK))
+            ((job->vcodec & HB_VCODEC_X264_MASK) ||
+             (job->vcodec & HB_VCODEC_X265_MASK)))
         {
             // color matrix is set:
             // 1) at the stream    level (x264, x265, qsv  only),
