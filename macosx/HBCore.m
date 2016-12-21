@@ -351,6 +351,14 @@ static void hb_error_handler(const char *errmsg)
                                       0.1916769, 0.0865638, 0.9583847};
             return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
         }
+        case HB_COLR_PRI_BT2020:
+        {
+            // Rec. 2020
+            const CGFloat matrix[] = {0.6369580, 0.2627002, 0.0000000,
+                                      0.1446169, 0.6779981, 0.0280727,
+                                      0.1688810, 0.0593017, 1.0609851};
+            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
+        }
         case HB_COLR_PRI_BT709:
         default:
         {
