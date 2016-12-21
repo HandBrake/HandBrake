@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureHUDController">
@@ -24,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="460" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button toolTip="Encode And Play Back A Live Preview At Your Current Settings" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
+                <button toolTip="Encode and play a preview video using current settings." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
                     <rect key="frame" x="17" y="11" width="80" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Live Preview" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vkh-GY-5qx">
@@ -35,7 +35,7 @@
                         <action selector="createMoviePreview:" target="-2" id="rhf-gy-aMT"/>
                     </connections>
                 </button>
-                <button toolTip="Show Picture Settings Inspector" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
+                <button toolTip="Show picture settings." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
                     <rect key="frame" x="378" y="11" width="61" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Settings" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NWd-Lq-c1A">
@@ -46,7 +46,7 @@
                         <action selector="showPictureSettings:" target="-2" id="aDd-cp-S1k"/>
                     </connections>
                 </button>
-                <button toolTip="Scale Preview To Screen" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
+                <button toolTip="Scale preview to fill the display." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
                     <rect key="frame" x="276" y="11" width="96" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="push" title="Scale To Screen" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="STc-Po-p1X">
@@ -75,7 +75,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton toolTip="Select The Length Of Live Preview to Encode" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
+                <popUpButton toolTip="Duration to encode in seconds." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
                     <rect key="frame" x="158" y="12" width="53" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="XYh-Ls-slf" id="yDS-gf-Y4N">
@@ -92,7 +92,7 @@
                         <action selector="previewDurationPopUpChanged:" target="-2" id="JSm-Eo-Ijw"/>
                     </connections>
                 </popUpButton>
-                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wUk-SQ-GhS">
+                <slider toolTip="Starting point for the preview encode." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wUk-SQ-GhS">
                     <rect key="frame" x="18" y="39" width="420" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="9" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="dPk-jb-w9o">
