@@ -32,6 +32,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-network \
     --disable-hwaccels \
     --disable-vaapi \
+    --disable-vdpau \
     --disable-encoders \
     --enable-libmp3lame \
     --enable-encoder=aac \
