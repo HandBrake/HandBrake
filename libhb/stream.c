@@ -5835,6 +5835,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             break;
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ||
+         ffmpeg_pkt_codec == AV_CODEC_ID_SRT  ||
          ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt.duration;
         int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
