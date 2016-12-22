@@ -1,6 +1,6 @@
 ## This file is processed only when shunting build through xcodebuild
 
-.PHONY: macosx.build macosx.clean macosx.install
+.PHONY: macosx.build macosx.clean macosx.install macosx.install-strip macosx.uninstall
 
 macosx.build:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,build)
@@ -9,11 +9,26 @@ macosx.clean:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,clean)
 
 macosx.install:
-	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,install)
+	$(RM.exe) -rf $(XCODE.prefix/)HandBrake.app
+	$(CP.exe) -R $(MACOSX.xroot/)HandBrake.app $(XCODE.prefix/)
+	$(CP.exe) $(MACOSX.xroot/)HandBrakeCLI $(PREFIX/)bin/
+
+macosx.install-strip:
+	$(RM.exe) -rf $(XCODE.prefix/)HandBrake.app
+	$(CP.exe) -R $(MACOSX.xroot/)HandBrake.app $(XCODE.prefix/)
+	$(STRIP.exe) $(XCODE.prefix/)HandBrake.app/Contents/MacOS/HandBrake
+	$(CP.exe) $(MACOSX.xroot/)HandBrakeCLI $(PREFIX/)bin/
+	$(STRIP.exe) $(PREFIX/)bin/HandBrakeCLI
+
+macosx.uninstall:
+	$(RM.exe) -rf $(XCODE.prefix/)HandBrake.app
+	$(RM.exe) -f $(PREFIX/)bin/HandBrakeCLI
 
 build: macosx.build
 clean: macosx.clean
 install: macosx.install
+install-strip: macosx.install-strip
+uninstall: macosx.uninstall
 xclean: clean
 
 ###############################################################################

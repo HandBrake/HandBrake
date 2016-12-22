@@ -1,7 +1,35 @@
 $(eval $(call import.MODULE.rules,MACOSX))
 
+build: macosx.build
+install: macosx.install
+uninstall: macosx.uninstall
+clean: macosx.clean
+xclean: macosx.xclean
+
+########################################
+# sync with ../test/module.rules       #
+########################################
+test.install-strip: | $(dir $(TEST.install.exe))
+	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+	$(STRIP.exe) $(TEST.install.exe)
+
+test.install: | $(dir $(TEST.install.exe))
+	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+
+test.uninstall:
+	$(RM.exe) -f $(TEST.install.exe)
+
+test.clean:
+	$(RM.exe) -f $(TEST.out)
+
+test.xclean: test.clean
+########################################
+
 macosx.build: $(MACOSX.m4.out)
 macosx.build: $(MACOSX.osl.filelist)
+
+macosx.install: test.install
+macosx.uninstall: test.uninstall
 
 macosx.clean:
 	$(RM.exe) -f $(MACOSX.m4.out)
@@ -10,13 +38,6 @@ macosx.clean:
 macosx.xclean:
 	$(RM.exe) -rf $(MACOSX.build/)
 	$(RM.exe) -rf $(MACOSX.xroot/)
-
-test.clean:
-	$(RM.exe) -f $(MACOSX.xroot/)HandBrakeCLI
-	$(RM.exe) -rf $(MACOSX.xroot/)HandBrakeCLI.dSYM
-	$(RM.exe) -rf $(MACOSX.xroot/)HandBrakeCLI.build
-
-test.xclean: test.clean
 
 $(MACOSX.m4.out): $(BUILD/)project/handbrake.m4
 $(MACOSX.m4.out): | $(dir $(MACOSX.m4.out))
@@ -28,8 +49,3 @@ $(MACOSX.osl.filelist): $(BUILD/)GNUmakefile
 	@echo "creating $@"
 	@> $@
 	$(foreach i,$(foreach m,$(MODULES.NAMES),$($m.OSL.files)),$(call fn.PRINTLN,@echo $i >> $@))
-
-###############################################################################
-
-clean: macosx.clean
-build: macosx.build

@@ -1,29 +1,17 @@
 $(eval $(call import.MODULE.rules,TEST))
 
+build: test.build
+install: test.install
+install-strip: test.install-strip
+uninstall: test.uninstall
+clean: test.clean
+xclean: test.xclean
+
 test.build: $(TEST.exe)
 
-$(TEST.exe): | $(dir $(TEST.exe))
-$(TEST.exe): $(TEST.c.o)
-	$(call TEST.GCC.EXE++,$@,$^ $(TEST.libs))
-
-$(TEST.c.o): $(LIBHB.a)
-$(TEST.c.o): | $(dir $(TEST.c.o))
-$(TEST.c.o): $(BUILD/)%.o: $(SRC/)%.c
-	$(call TEST.GCC.C_O,$@,$<)
-
-test.clean:
-	$(RM.exe) -f $(TEST.out)
-
-###############################################################################
-
-build: test.build
-clean: test.clean
-
-###############################################################################
-
-## skip install/uninstall on darwin
-ifneq ($(BUILD.system),darwin)
-
+########################################
+# sync with ../macosx/module.rules     #
+########################################
 test.install-strip: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
 	$(STRIP.exe) $(TEST.install.exe)
@@ -34,8 +22,17 @@ test.install: | $(dir $(TEST.install.exe))
 test.uninstall:
 	$(RM.exe) -f $(TEST.install.exe)
 
-install-strip: test.install-strip
-install: test.install
-uninstall: test.uninstall
+test.clean:
+	$(RM.exe) -f $(TEST.out)
 
-endif
+test.xclean: test.clean
+########################################
+
+$(TEST.exe): | $(dir $(TEST.exe))
+$(TEST.exe): $(TEST.c.o)
+	$(call TEST.GCC.EXE++,$@,$^ $(TEST.libs))
+
+$(TEST.c.o): $(LIBHB.a)
+$(TEST.c.o): | $(dir $(TEST.c.o))
+$(TEST.c.o): $(BUILD/)%.o: $(SRC/)%.c
+	$(call TEST.GCC.C_O,$@,$<)
