@@ -1809,6 +1809,10 @@ static int get_color_transfer(int color_trc)
             return HB_COLR_TRA_SMPTE240M;
         case AVCOL_TRC_SMPTEST2084:
             return HB_COLR_TRA_SMPTEST2084;
+        case AVCOL_TRC_BT2020_10:
+            return HB_COLR_TRA_BT2020_10;
+        case AVCOL_TRC_BT2020_12:
+            return HB_COLR_TRA_BT2020_12;
         default:
             // ITU BT.601, BT.709, anything else
             return HB_COLR_TRA_BT709;

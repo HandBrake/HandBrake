@@ -557,6 +557,8 @@ struct hb_job_s
 #define HB_COLR_TRA_BT709        1 // also use for bt470m, bt470bg, smpte170m, bt2020_10 and bt2020_12
 #define HB_COLR_TRA_UNDEF        2
 #define HB_COLR_TRA_SMPTE240M    7
+#define HB_COLR_TRA_BT2020_10    14
+#define HB_COLR_TRA_BT2020_12    15
 #define HB_COLR_TRA_SMPTEST2084  16
 // 0, 3-6, 8-15, 17-65535: reserved/not implemented
 #define HB_COLR_MAT_BT709        1
