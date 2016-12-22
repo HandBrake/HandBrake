@@ -2339,16 +2339,30 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
-                        this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
+                        string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+                        if (e.PassId == -1)
+                        {
+                            this.ProgramStatusLabel = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
                                 e.Task,
                                 e.TaskCount,
                                 e.PercentComplete,
-                                e.CurrentFrameRate, 
-                                e.AverageFrameRate, 
-                                e.EstimatedTimeLeft, 
+                                e.EstimatedTimeLeft,
                                 e.ElapsedTime,
-                                this.queueProcessor.Count);
+                                jobsPending);
+                        }
+                        else
+                        {
+                            this.ProgramStatusLabel =
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
+                                e.Task,
+                                e.TaskCount,
+                                e.PercentComplete,
+                                e.CurrentFrameRate,
+                                e.AverageFrameRate,
+                                e.EstimatedTimeLeft,
+                                e.ElapsedTime,
+                                jobsPending);
+                        }
 
                         if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
                         {

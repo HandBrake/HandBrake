@@ -712,7 +712,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {7}.
+        ///   Looks up a localized string similar to    Pending Jobs {0}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -1090,11 +1090,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}.
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}.
         /// </summary>
         public static string MainViewModel_EncodeStatusChanged_StatusLabel {
             get {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4:d\:hh\:mm\:ss}.
+        /// </summary>
+        public static string MainViewModel_EncodeStatusChanged_SubScan_StatusLabel {
+            get {
+                return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_SubScan_StatusLabel", resourceCulture);
             }
         }
         
