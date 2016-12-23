@@ -1437,7 +1437,7 @@ void encqsvClose(hb_work_object_t *w)
             {
                 if (qsv_enc_space->is_init_done)
                 {
-                    for (i = hb_qsv_list_count(qsv_enc_space->tasks); i > 1; i--)
+                    for (i = hb_qsv_list_count(qsv_enc_space->tasks); i >= 1; i--)
                     {
                         hb_qsv_task *task = hb_qsv_list_item(qsv_enc_space->tasks,
                                                              i - 1);
