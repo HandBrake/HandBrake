@@ -299,6 +299,7 @@ extern NSString *keySubTrackSrtFileURL;
 
         track.burnedIn = [search[@"Burn"] boolValue];
         track.forcedOnly = [search[@"Forced"] boolValue];
+        track.def = [search[@"Default"] boolValue];
 
         [tracks addObject:track];
     }
