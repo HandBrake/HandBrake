@@ -1,0 +1,20 @@
+diff -u Makefile.am.orig Makefile.am
+--- fontconfig-2.12.1/Makefile.am.orig	2016-07-10 22:41:05.000000000 -0400
++++ fontconfig-2.12.1/Makefile.am	2016-12-24 12:16:04.000000000 -0500
+@@ -64,10 +64,12 @@
+ xmldir = $(XMLDIR)
+ xml_DATA = fonts.dtd
+ 
+-if CROSS_COMPILING
+-  RUN_FC_CACHE_TEST=false
+-else
+-  RUN_FC_CACHE_TEST=test -z "$(DESTDIR)"
++ifndef RUN_FC_CACHE_TEST
++    if CROSS_COMPILING
++      RUN_FC_CACHE_TEST=false
++    else
++      RUN_FC_CACHE_TEST=test -z "$(DESTDIR)"
++    endif
+ endif
+ 
+ # Creating ChangeLog from git log:
