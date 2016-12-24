@@ -91,7 +91,7 @@
     [self.window.contentView addSubview:self.playerHUD.view];
 
     // Relocate our hud origins.
-    CGPoint origin = CGPointMake(floor((MIN_WIDTH - _pictureHUD.view.bounds.size.width) / 2), MIN_HEIGHT / 10);
+    CGPoint origin = CGPointMake(floor((self.window.frame.size.width - _pictureHUD.view.bounds.size.width) / 2), MIN_HEIGHT / 10);
 
     [self.pictureHUD.view setFrameOrigin:origin];
     [self.encodingHUD.view setFrameOrigin:origin];
