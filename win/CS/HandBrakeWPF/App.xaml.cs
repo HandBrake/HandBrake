@@ -66,6 +66,12 @@ namespace HandBrakeWPF
                 StartupOptions.AutoRestartQueue = true;
             }
 
+            // Portable Mode
+            if (Portable.IsPortable())
+            {
+                Portable.Initialise();
+            }
+
             base.OnStartup(e);
 
             // If we have a file dropped on the icon, try scanning it.

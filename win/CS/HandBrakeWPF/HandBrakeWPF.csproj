@@ -254,6 +254,7 @@
     <Compile Include="Utilities\Input\ChapterImporterXml.cs" />
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
     <Compile Include="Utilities\Output\CsvHelper.cs" />
+    <Compile Include="Utilities\Portable.cs" />
     <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
@@ -477,6 +478,9 @@
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="public.key" />
+    <None Include="portable.ini.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AlertPanel.xaml">

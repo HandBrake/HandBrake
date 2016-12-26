@@ -34,12 +34,23 @@ namespace HandBrakeWPF.Utilities
         {
             if (isNightly)
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HandBrake", "Nightly");
+                return Path.Combine(GetStorageDirectory(), "HandBrake", "Nightly");
             }
             else
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "HandBrake");
+                return Path.Combine(GetStorageDirectory(), "HandBrake");
             }
+        }
+
+        /// <summary>
+        /// Get the app default log directory.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetLogDirectory()
+        {
+            return Path.Combine(GetStorageDirectory(), "HandBrake", "logs");
         }
 
         /// <summary>
@@ -74,6 +85,23 @@ namespace HandBrakeWPF.Utilities
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// The get storage directory.
+        /// </summary>
+        /// <returns>
+        /// The storage directory. Either AppData or portable location.
+        /// </returns>
+        private static string GetStorageDirectory()
+        {
+            string storagePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (Portable.IsPortable())
+            {
+                storagePath = Portable.GetStorageDirectory();
+            }
+
+            return storagePath;
         }
     }
 }
