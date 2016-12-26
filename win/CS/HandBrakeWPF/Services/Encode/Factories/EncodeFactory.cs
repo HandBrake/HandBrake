@@ -305,6 +305,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
             video.QSV.Decode = SystemInfo.IsQsvAvailable && !configuration.DisableQuickSyncDecoding;
 
+            // The use of the QSV decoder is configurable for non QSV encoders.
+            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265)
+            {
+                video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
+            }
+
             return video;
         }
 

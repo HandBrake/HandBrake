@@ -37,6 +37,7 @@ namespace HandBrakeWPF.Factories
                                          {
                                              IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav), 
                                              DisableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding), 
+                                             UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc),
                                              ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode), 
                                              PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount), 
                                              Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity), 

@@ -1303,6 +1303,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use QSV Decoding for non QSV encoders..
+        /// </summary>
+        public static string Options_QsvDecodeForNonFullPath {
+            get {
+                return ResourceManager.GetString("Options_QsvDecodeForNonFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove common punctuation.
         /// </summary>
         public static string Options_RemovePunctuation {
