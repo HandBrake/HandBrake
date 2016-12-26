@@ -40,6 +40,11 @@ namespace HandBrakeWPF
         public const string Any = "(Any)";
 
         /// <summary>
+        /// Undefined Language
+        /// </summary>
+        public const string Undefined = "und";
+
+        /// <summary>
         /// The chapters.
         /// </summary>
         public const string Chapters = "{chapters}";
