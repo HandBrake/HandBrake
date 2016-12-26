@@ -713,7 +713,7 @@ class RepoProbe( ShellProbe ):
         self.rev       = 0
         self.hash      = 'deadbeaf'
         self.shorthash = 'deadbea'
-        self.date      = datetime(1, 1, 1)
+        self.date      = None
         self.official  = 0
         self.type      = 'developer'
 
@@ -757,11 +757,10 @@ class RepoProbe( ShellProbe ):
                 self.shorthash = value[:7]
 
         # type-classification via repository URL
-        official_url = 'https://github.com/HandBrake/HandBrake.git' # HTTPS
-        if self.url == 'git@github.com:HandBrake/HandBrake.git':    # SSH
-            self.url = official_url
+        if self.url == project.url_repo_ssh:
+            self.url = project.url_repo  # official repo, SSH to HTTPS
 
-        if self.url == official_url:
+        if self.url == project.url_repo:
             self.official = 1
             if not options.snapshot and self.hash == self.tag_hash:
                 self.type = 'release'
@@ -809,6 +808,8 @@ class Project( Action ):
         self.acro_lower    = 'hb'
         self.acro_upper    = 'HB'
         self.url_website   = 'https://handbrake.fr'
+        self.url_repo      = 'https://github.com/HandBrake/HandBrake.git'
+        self.url_repo_ssh  = 'git@github.com:HandBrake/HandBrake.git'
         self.url_community = 'https://forum.handbrake.fr'
         self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
@@ -828,6 +829,10 @@ class Project( Action ):
             url_arch = '.%s' % (arch.mode.mode)
         else:
             url_arch = ''
+
+        if repo.date is None:
+            cfg.errln( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
+            sys.exit( 1 )
 
         if repo.tag != '':
             m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
