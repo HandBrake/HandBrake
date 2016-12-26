@@ -29,7 +29,7 @@ namespace HandBrakeWPF.Helpers
         public static void Init()
         {
             ILog log = LogService.GetLogger();
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string logDir = DirectoryUtilities.GetLogDirectory();
             string logFile = Path.Combine(logDir, string.Format("activity_log{0}.txt", GeneralUtilities.ProcessId));
             if (!Directory.Exists(Path.GetDirectoryName(logFile)))
             {
