@@ -384,11 +384,6 @@ namespace HandBrakeWPF.Services.Presets
 
                     preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
 
-                    if (preset.Name == "Normal")
-                    {
-                        preset.IsDefault = true;
-                    }
-
                     this.presets.Add(preset);
                 }
             }

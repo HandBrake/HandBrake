@@ -946,7 +946,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
-                this.UseAdvancedTab = (!string.IsNullOrEmpty(preset.Task.AdvancedEncoderOptions) && this.IsAdvancedTabOptionEnabled) || preset.Task.ShowAdvancedTab;
+                this.UseAdvancedTab = this.IsAdvancedTabOptionEnabled && preset.Task.ShowAdvancedTab;
             }
         }
 

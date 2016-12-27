@@ -471,7 +471,7 @@
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="{x:Static Properties:ResourcesUI.MainView_VideoTab}">
-                    <ContentControl x:Name="VideoViewModel" />
+                    <ContentControl x:Name="VideoViewModel" VerticalAlignment="Stretch" />
                 </TabItem>
                 <TabItem Name="audioTab" Header="{x:Static Properties:ResourcesUI.MainView_AudioTab}">
                     <ContentControl x:Name="AudioViewModel" />
