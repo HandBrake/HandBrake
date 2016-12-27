@@ -208,7 +208,7 @@ static void hb_error_handler(const char *errmsg)
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
-    if (detector.isVideoDVD || detector.isVideoBluRay)
+    if (detector.isVideoDVD)
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
