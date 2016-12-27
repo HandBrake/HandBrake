@@ -107,7 +107,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.Deinterlace = Deinterlace.Default;
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Decomb;
                     break;
-                case "deinterlace":
+                case "yadif":
                     preset.Task.Decomb = Decomb.Default;
                     preset.Task.Deinterlace = Deinterlace.Default;
                     preset.Task.DeinterlaceFilter = DeinterlaceFilter.Yadif;
@@ -121,7 +121,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
-                switch (importedPreset.PictureDeinterlaceFilter)
+                switch (importedPreset.PictureDeinterlacePreset)
                 {
                     case "custom":
                         preset.Task.Decomb = Decomb.Custom;
@@ -151,7 +151,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             if (preset.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                switch (importedPreset.PictureDeinterlaceFilter)
+                switch (importedPreset.PictureDeinterlacePreset)
                 {
                     case "custom":
                         preset.Task.Deinterlace = Deinterlace.Custom;
@@ -595,12 +595,19 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? "decomb"
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif" : "off";
+
+
             preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb)
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
+
             preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? export.Task.CustomDecomb
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? export.Task.CustomDeinterlace : string.Empty;
+
+            preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
+            preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
+
             preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
@@ -608,8 +615,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
-            preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
-            preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
+      
 
             // Video
             preset.VideoEncoder = EnumHelper<VideoEncoder>.GetShortName(export.Task.VideoEncoder);

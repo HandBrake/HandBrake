@@ -634,6 +634,8 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
                 }
 
+                this.SelectedCombDetectPreset = preset.Task.CombDetect;
+
                 this.Grayscale = preset.Task.Grayscale;
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
                 this.SelectedDenoisePreset = preset.Task.DenoisePreset;
