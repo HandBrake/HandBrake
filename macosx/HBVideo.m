@@ -552,7 +552,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         [string appendString:@"fastdecode"];
     }
 
-    return string;
+    return [string copy];
 }
 
 - (void)applyPreset:(HBPreset *)preset jobSettings:(NSDictionary *)settings

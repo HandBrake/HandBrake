@@ -83,7 +83,7 @@ extern NSString *keySubTrackSrtFileURL;
         NSDictionary *none = @{  keySubTrackName: NSLocalizedString(@"None", nil)};
         [sourceTracks insertObject:none atIndex:0];
 
-        NSDictionary *foreign = @{ keySubTrackName: foreignAudioSearchTrackName,
+        NSDictionary *foreign = @{ keySubTrackName: [foreignAudioSearchTrackName copy],
                                    keySubTrackType: @(foreignAudioType) };
         [sourceTracks insertObject:foreign atIndex:1];
 
@@ -446,8 +446,8 @@ extern NSString *keySubTrackSrtFileURL;
     self = [super init];
 
     decodeInt(_container);
-    decodeObject(_sourceTracks, NSMutableArray);
-    decodeObject(_tracks, NSMutableArray);
+    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects(_tracks, NSMutableArray, HBSubtitlesTrack);
 
     for (HBSubtitlesTrack *track in _tracks)
     {

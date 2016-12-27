@@ -471,7 +471,7 @@
     decodeInteger(_trackSelectionBehavior);
     decodeObject(_trackSelectionLanguages, NSMutableArray);
 
-    decodeObject(_tracksArray, NSMutableArray);
+    decodeCollectionOfObjects(_tracksArray, NSMutableArray, HBAudioTrackPreset);
 
     decodeBool(_allowAACPassthru);
     decodeBool(_allowAC3Passthru);

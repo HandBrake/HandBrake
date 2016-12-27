@@ -8,6 +8,8 @@
 #import <Cocoa/Cocoa.h>
 #import "HBHUD.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBPictureHUDControllerDelegate <NSObject>
 
 - (void)displayPreviewAtIndex:(NSUInteger)idx;
@@ -21,10 +23,12 @@
 
 @property (nonatomic, nullable, assign) id<HBPictureHUDControllerDelegate> delegate;
 
-@property (nonatomic, nonnull) NSString *info;
-@property (nonatomic, nonnull) NSString *scale;
+@property (nonatomic, copy) NSString *info;
+@property (nonatomic, copy) NSString *scale;
 
 @property (nonatomic) NSUInteger pictureCount;
 @property (nonatomic) NSUInteger selectedIndex;
 
 @end
+
+NS_ASSUME_NONNULL_END

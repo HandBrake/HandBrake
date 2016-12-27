@@ -42,4 +42,17 @@ static BOOL useSecureCoding;
     }
 }
 
++ (id)decodeObjectOfClasses:(NSSet *)classes forKey:(NSString *)key decoder:(NSCoder *)decoder
+{
+    if (useSecureCoding)
+    {
+        return [decoder decodeObjectOfClasses:classes forKey:key];
+    }
+    else
+    {
+        id obj = [decoder decodeObjectForKey:key];
+        return obj;
+    }
+}
+
 @end

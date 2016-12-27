@@ -285,8 +285,8 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     self = [super init];
 
     decodeInt(_container);
-    decodeObject(_sourceTracks, NSMutableArray);
-    decodeObject(_tracks, NSMutableArray);
+    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects(_tracks, NSMutableArray, HBAudioTrack);
 
     for (HBAudioTrack *track in _tracks)
     {

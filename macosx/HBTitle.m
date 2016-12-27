@@ -29,7 +29,7 @@ extern NSString *keySubTrackType;
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
-@property (nonatomic, readwrite, strong) NSString *name;
+@property (nonatomic, readwrite, copy) NSString *name;
 
 @property (nonatomic, readwrite) NSArray *audioTracks;
 @property (nonatomic, readwrite) NSArray *subtitlesTracks;
