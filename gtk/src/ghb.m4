@@ -1559,7 +1559,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -1604,7 +1604,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
