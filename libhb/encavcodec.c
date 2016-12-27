@@ -352,10 +352,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     if (job->pass_id == HB_PASS_ENCODE_1ST &&
-        pv->context->stats_out != NULL)
+        context->stats_out != NULL)
     {
         // Some encoders may write stats during init in avcodec_open
-        fprintf(pv->file, "%s", pv->context->stats_out);
+        fprintf(pv->file, "%s", context->stats_out);
     }
 
     // avcodec_open populates the opts dictionary with the
