@@ -2391,7 +2391,7 @@ the required multiple.</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="tooltip_text" translatable="yes">If enabled, select the 'optimal' storage resolution.
-    This will be the resolution that most closely matches the source resolution after cropping.</property>
+This will be the resolution that most closely matches the source resolution after cropping.</property>
                                             <property name="halign">start</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="scale_changed_cb" swapped="no"/>
