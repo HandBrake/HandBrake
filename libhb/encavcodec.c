@@ -610,6 +610,15 @@ static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
     hb_work_private_t * pv = w->private_data;
 
     avcodec_send_frame(pv->context, NULL);
+
+    // Write stats
+    // vpx only writes stats at final flush
+    if (pv->job->pass_id == HB_PASS_ENCODE_1ST &&
+        pv->context->stats_out != NULL)
+    {
+        fprintf( pv->file, "%s", pv->context->stats_out );
+    }
+
     get_packets(w, list);
 }
 
