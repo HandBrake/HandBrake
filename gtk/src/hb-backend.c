@@ -3337,6 +3337,7 @@ ghb_picture_settings_deps(signal_user_data_t *ud)
 
     pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
     enable_keep_aspect = (pic_par != HB_ANAMORPHIC_STRICT &&
+                          pic_par != HB_ANAMORPHIC_AUTO   &&
                           pic_par != HB_ANAMORPHIC_LOOSE);
     keep_aspect = ghb_dict_get_bool(ud->settings, "PictureKeepRatio");
     autoscale = ghb_dict_get_bool(ud->settings, "autoscale");
