@@ -297,7 +297,7 @@ NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
     }
     else if ([key isEqualToString: @"canPassthru"] || [key isEqualToString: @"isForcedSupported"] )
     {
-        retval = [NSSet setWithObjects: @"isEnabled", @"sourceTrackIdx", nil];
+        retval = [NSSet setWithObjects: @"isEnabled", @"sourceTrackIdx", @"container", nil];
     }
     else
     {
