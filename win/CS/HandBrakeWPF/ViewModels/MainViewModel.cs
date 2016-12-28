@@ -1531,8 +1531,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                ShowSourceSelection = false;
-
                 this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
             }
         }
@@ -1547,8 +1545,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                ShowSourceSelection = false;
-
                 this.StartScan(dialog.FileName, this.TitleSpecificScan);
             }
         }
@@ -2038,6 +2034,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(filename))
             {
+                ShowSourceSelection = false;
                 this.scanService.Scan(filename, title, null, HBConfigurationFactory.Create());
             }
         }
