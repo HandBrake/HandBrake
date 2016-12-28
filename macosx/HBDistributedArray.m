@@ -199,14 +199,18 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     NSMutableArray *jobsArray = nil;
     @try
     {
-        NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
-        if ([unarchiver respondsToSelector:@selector(requiresSecureCoding)])
+        if ([NSKeyedUnarchiver instancesRespondToSelector:@selector(requiresSecureCoding)])
         {
+            NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
             unarchiver.requiresSecureCoding = YES;
+            jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
+            [unarchiver finishDecoding];
         }
-        jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
-        [unarchiver finishDecoding];
+        else
+        {
+            jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
+        }
     }
     @catch (NSException *exception)
     {
