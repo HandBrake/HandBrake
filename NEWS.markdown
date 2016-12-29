@@ -9,6 +9,10 @@
 - Fixed a potential crash when using the VP8 or VP9 video encoders
 - Fixed a potential crash when using 2-pass ABR
 
+#### Command line interface
+
+- Fixed importing chapter names from a file
+
 ### Linux
 
 - Fixed Keep Aspect Ratio control (disabled) when anamorphic mode is Auto
