@@ -4540,38 +4540,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 
     /* Really shouldn't ignore the passed out track, but there is currently no
      * way to handle duplicates or out-of-order track numbers. */
+    audio->config.out = audiocfg->out;
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
-    int codec = audiocfg->out.codec;
-    if(!(codec & HB_ACODEC_PASS_FLAG) ||
-       ((codec & HB_ACODEC_PASS_FLAG) &&
-        !(codec & audio->config.in.codec) &&
-        hb_audio_encoder_is_enabled(codec & ~HB_ACODEC_PASS_FLAG)))
-    {
-        audio->config.out.codec = codec & ~HB_ACODEC_PASS_FLAG;
-        audio->config.out.samplerate = audiocfg->out.samplerate;
-        audio->config.out.bitrate = audiocfg->out.bitrate;
-        audio->config.out.compression_level = audiocfg->out.compression_level;
-        audio->config.out.quality = audiocfg->out.quality;
-        audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
-        audio->config.out.mixdown = audiocfg->out.mixdown;
-        audio->config.out.gain = audiocfg->out.gain;
-        audio->config.out.normalize_mix_level = audiocfg->out.normalize_mix_level;
-        audio->config.out.dither_method = audiocfg->out.dither_method;
-    }
-    else
-    {
-        /* Pass-through, copy from input. */
-        audio->config.out.codec = codec;
-        audio->config.out.samplerate = audio->config.in.samplerate;
-        audio->config.out.bitrate = audio->config.in.bitrate;
-        audio->config.out.mixdown = HB_AMIXDOWN_NONE;
-        audio->config.out.dynamic_range_compression = 0;
-        audio->config.out.gain = 0;
-        audio->config.out.normalize_mix_level = 0;
-        audio->config.out.compression_level = -1;
-        audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
-        audio->config.out.dither_method = hb_audio_dither_get_default();
-    }
     if (audiocfg->out.name && *audiocfg->out.name)
     {
         audio->config.out.name = strdup(audiocfg->out.name);
