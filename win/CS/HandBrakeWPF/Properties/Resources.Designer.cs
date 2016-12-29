@@ -667,7 +667,9 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn&apos;t support! Tracks are reset with every new source / title selected..
+        ///   Looks up a localized string similar to Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
+        ///    
+        ///    Do you wish to continue?.
         /// </summary>
         public static string Main_AutoAdd_AudioAndSubWarning {
             get {
