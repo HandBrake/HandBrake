@@ -1,5 +1,33 @@
 # HandBrake News
 
+## HandBrake 1.0.1
+
+### All platforms
+
+#### Video
+
+- Fixed a potential crash when using the VP8 or VP9 video encoders
+- Fixed a potential crash when using 2-pass ABR
+
+### Linux
+
+- Fixed Keep Aspect Ratio control (disabled) when anamorphic mode is Auto
+- Widened presets list to accommodate longer preset names
+- Miscellaneous bug fixes
+
+### Mac
+
+- Fixed a potential crash when using the subtitles burn feature on macOS versions earlier than 10.12 Sierra
+- Fixed certain controls not updating when saving or loading a preset
+- Miscellaneous bug fixes
+
+### Windows
+
+- Fixed certain controls not updating when saving or loading a preset
+- Disabled QSV decoding by default when non-QSV encoder selected (configurable)
+- Miscellaneous bug fixes
+
+
 ## HandBrake 1.0.0
 
 ### All platforms
