@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Forms;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -50,13 +51,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
-    using Microsoft.Win32;
-
     using Ookii.Dialogs.Wpf;
 
     using Action = System.Action;
+    using Application = System.Windows.Application;
+    using DataFormats = System.Windows.DataFormats;
+    using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
     using LogManager = HandBrakeWPF.Helpers.LogManager;
+    using MessageBox = System.Windows.MessageBox;
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -1472,7 +1477,19 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_AutoAdd_AudioAndSubWarning, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Error);
+                if (this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
+                {
+                    System.Windows.MessageBoxResult result = this.errorService.ShowMessageBox(
+                        Resources.Main_AutoAdd_AudioAndSubWarning,
+                        Resources.Warning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
             }
 
             foreach (Title title in this.ScannedSource.Titles)
