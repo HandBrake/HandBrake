@@ -3989,12 +3989,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         return NULL;
     }
 
-    if (hb_value_get_bool(hb_dict_get(job_dict, "ChapterMarkers")))
+    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
+    if (hb_value_get_bool(hb_dict_get(dest_dict, "ChapterMarkers")))
     {
         write_chapter_names(job_dict, marker_file);
     }
 
-    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
     hb_dict_set(dest_dict, "File", hb_value_string(output));
 
     // Now that the job is initialized, we need to find out
