@@ -37,7 +37,16 @@
 {
     if (self.isHidden)
         return;
-    
+
+    NSFont *font;
+    if ([[NSFont class] respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)]) {
+        // On macOS 10.11+ the monospaced digit system is available.
+        font = [NSFont monospacedDigitSystemFontOfSize:DOCK_TEXTFIELD_FONTSIZE weight:NSFontWeightBold];
+    } else {
+        // macOS 10.10- use the default system font.
+        font = [NSFont boldSystemFontOfSize:DOCK_TEXTFIELD_FONTSIZE];
+    }
+
     NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, [self bounds].size.width, [self bounds].size.height-1.0);
     double radius = self.bounds.size.height / 2;
 
@@ -46,7 +55,7 @@
     
     NSMutableDictionary *drawStringAttributes = [[NSMutableDictionary alloc] init];
 	[drawStringAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
-    [drawStringAttributes setValue:[NSFont boldSystemFontOfSize:DOCK_TEXTFIELD_FONTSIZE] forKey:NSFontAttributeName];
+    [drawStringAttributes setValue:font forKey:NSFontAttributeName];
 	NSShadow *stringShadow = [[NSShadow alloc] init];
 	[stringShadow setShadowColor:[NSColor blackColor]];
 	NSSize shadowSize;
