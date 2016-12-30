@@ -8,10 +8,10 @@
 
 @interface DockTextField : NSTextField
 
-@property (nonatomic,strong) NSString *textToDisplay;
-@property (nonatomic,strong) NSColor *startColor;
-@property (nonatomic,strong) NSColor *endColor;
+@property (nonatomic, copy) NSString *textToDisplay;
+@property (nonatomic, copy) NSColor *startColor;
+@property (nonatomic, copy) NSColor *endColor;
 
-- (void)changeGradientColors:(NSColor*)startColor endColor:(NSColor*)endColor;
+- (void)changeGradientColors:(NSColor *)startColor endColor:(NSColor *)endColor;
 
 @end
