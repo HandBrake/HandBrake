@@ -83,17 +83,17 @@ static void hb_error_handler(const char *errmsg)
 
 - (instancetype)init
 {
-    return [self initWithLogLevel:0];
+    return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];
 }
 
-- (instancetype)initWithLogLevel:(int)level
+- (instancetype)initWithLogLevel:(int)level queue:(dispatch_queue_t)queue
 {
     self = [super init];
     if (self)
     {
         _name = @"HBCore";
         _state = HBStateIdle;
-        _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
+        _updateTimerQueue = queue;
         _titles = @[];
 
         _stateFormatter = [[HBStateFormatter alloc] init];
@@ -113,7 +113,7 @@ static void hb_error_handler(const char *errmsg)
 
 - (instancetype)initWithLogLevel:(int)level name:(NSString *)name
 {
-    self = [self initWithLogLevel:level];
+    self = [self initWithLogLevel:level queue:dispatch_get_main_queue()];
     if (self)
     {
         _name = [name copy];
@@ -127,8 +127,6 @@ static void hb_error_handler(const char *errmsg)
 - (void)dealloc
 {
     [self stopUpdateTimer];
-
-    dispatch_release(_updateTimerQueue);
 
     hb_close(&_hb_handle);
     _hb_handle = NULL;
@@ -547,7 +545,7 @@ static void hb_error_handler(const char *errmsg)
 {
     if (!self.updateTimer)
     {
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _updateTimerQueue);
         if (timer)
         {
             dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), (uint64_t)(seconds * NSEC_PER_SEC), (uint64_t)(seconds * NSEC_PER_SEC / 10));

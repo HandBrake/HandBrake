@@ -82,8 +82,9 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  * functions HBCore are used.
  *
  * @param level         the desired libhb logging level.
+ * @param queue         the queue on which the callbacks will be called.
  */
-- (instancetype)initWithLogLevel:(int)level NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithLogLevel:(int)level queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Opens low level HandBrake library. This should be called once before other
@@ -98,7 +99,6 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  Log level.
  */
 @property (nonatomic, readwrite) int logLevel;
-
 
 /**
  *  State formatter.
