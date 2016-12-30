@@ -3701,7 +3701,7 @@ int hb_preset_move(const hb_preset_index_t *src_path,
     int         src_index, dst_index;
 
     src_index = src_path->index[src_path->depth-1];
-    dst_index = dst_path->index[src_path->depth-1];
+    dst_index = dst_path->index[dst_path->depth-1];
     dict      = hb_value_array_get(src_folder, src_index);
     hb_value_incref(dict);
     hb_value_array_remove(src_folder, src_index);
