@@ -65,7 +65,8 @@ namespace HandBrakeWPF.ViewModels
         private bool displayTuneControls;
         private bool displayLevelControl;
         private bool displayProfileControl;
-
+        private Dictionary<string, string> encoderOptions = new Dictionary<string, string>();
+        
         #endregion
 
         #region Constructors and Destructors
@@ -497,9 +498,15 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                this.Task.VideoEncoder = value;
-                this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
-                HandleEncoderChange(this.Task.VideoEncoder);
+                if (!object.Equals(value, this.Task.VideoEncoder))
+                {
+                    // Cache the current extra args. We can set them back later if the user switches back
+                    this.encoderOptions[EnumHelper<VideoEncoder>.GetShortName(this.Task.VideoEncoder)] = this.ExtraArguments;
+
+                    this.Task.VideoEncoder = value;
+                    this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
+                    HandleEncoderChange(this.Task.VideoEncoder);
+                }
             }
         }
 
@@ -1315,6 +1322,11 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => SelectedFramerate);
                 this.UseAdvancedTab = false;
             }
+
+            // Cleanup Extra Arguments
+            // Load the cached arguments. Saves the user from resetting when switching encoders.
+            string result;
+            this.ExtraArguments = this.encoderOptions.TryGetValue(EnumHelper<VideoEncoder>.GetShortName(selectedEncoder), out result) ? result : string.Empty;
         }
     }
 }
