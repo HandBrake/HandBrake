@@ -961,6 +961,66 @@
 #pragma mark - Job Handling
 
 /**
+ Check if the job destination if a valid one,
+ if so, call the didEndSelector
+ Note: rework this to use a block in the future
+
+ @param job the job
+ @param didEndSelector the selector to call if the check is successful
+ */
+- (void)runDestinationAlerts:(HBJob *)job didEndSelector:(SEL)didEndSelector
+{
+    NSString *destinationDirectory = job.destURL.path.stringByDeletingLastPathComponent;
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0)
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
+        [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"")];
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
+    }
+    else if ([job.fileURL isEqual:job.destURL])
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
+        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"")];
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
+    }
+    else if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path])
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.destURL.path]];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
+    }
+    else if ([fQueueController jobExistAtURL:job.destURL])
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.destURL.path]];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
+    }
+    else
+    {
+        NSInteger returnCode = NSAlertSecondButtonReturn;
+        NSMethodSignature *methodSignature = [self methodSignatureForSelector:didEndSelector];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+        [invocation setTarget:self];
+        [invocation setSelector:didEndSelector];
+        [invocation setArgument:&returnCode atIndex:3];
+        [invocation invoke];
+    }
+}
+
+/**
  *  Actually adds a job to the queue
  */
 - (void)doAddToQueue
@@ -973,46 +1033,8 @@
  */
 - (IBAction)addToQueue:(id)sender
 {
-	// We get the destination directory from the destination field here
-	NSString *destinationDirectory = self.job.destURL.path.stringByDeletingLastPathComponent;
-	// We check for a valid destination here
-	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
-	{
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
-        [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"")];
-        [alert runModal];
-        return;
-	}
-
-	if ([[NSFileManager defaultManager] fileExistsAtPath:self.job.destURL.path])
-    {
-        // File exist, warn user
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"File already exists.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), self.job.destURL.path]];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-
-        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddToQueueAlertDone:returnCode:contextInfo:) contextInfo:NULL];
-    }
-    else if ([fQueueController jobExistAtURL:self.job.destURL])
-    {
-        // File exist in queue, warn user
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), self.job.destURL.path]];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-
-        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddToQueueAlertDone:returnCode:contextInfo:) contextInfo:NULL];
-    }
-    else
-    {
-        [self doAddToQueue];
-    }
+    [self runDestinationAlerts:self.job
+                didEndSelector:@selector(overwriteAddToQueueAlertDone:returnCode:contextInfo:)];
 }
 
 /**
@@ -1051,43 +1073,16 @@
 	{
         // Displays an alert asking user if the want to cancel encoding of current job.
         [fQueueController cancelRip:self];
-        return;
     }
-
     // If there are pending jobs in the queue, then this is a rip the queue
-    if (fQueueController.pendingItemsCount > 0)
+    else if (fQueueController.pendingItemsCount > 0)
     {
         [fQueueController rip:self];
-        return;
-    }
-
-    // Before adding jobs to the queue, check for a valid destination.
-    NSString *destinationDirectory = self.job.destURL.path.stringByDeletingLastPathComponent;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Invalid destination.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"The current destination folder is not a valid.", @"")];
-        [alert runModal];
-        return;
-    }
-
-    // We check for duplicate name here
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.job.destURL.path])
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), self.job.destURL.path]];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-
-        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overWriteAlertDone:returnCode:contextInfo:) contextInfo:NULL];
-        // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
     }
     else
     {
-        [self doRip];
+        [self runDestinationAlerts:self.job
+                    didEndSelector:@selector(overWriteAlertDone:returnCode:contextInfo:)];
     }
 }
 
@@ -1138,6 +1133,7 @@
 {
     NSMutableArray<HBJob *> *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
+    BOOL fileOverwritesSource = NO;
 
     // Get the preset from the loaded job.
     HBPreset *preset = [self createPresetFromCurrentSettings];
@@ -1173,7 +1169,22 @@
         }
     }
 
-    if (fileExists)
+    for (HBJob *job in jobs)
+    {
+        if ([job.fileURL isEqual:job.destURL]) {
+            fileOverwritesSource = YES;
+            break;
+        }
+    }
+
+    if (fileOverwritesSource)
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
+        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"")];
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(overwriteAddTitlesToQueueAlertDone:returnCode:contextInfo:) contextInfo:NULL];
+    }
+    else if (fileExists)
     {
         // File exist, warn user
         NSAlert *alert = [[NSAlert alloc] init];
