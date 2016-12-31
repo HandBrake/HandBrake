@@ -94,6 +94,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)setEncoder:(int)encoder
 {
+    int previousEncoder = _encoder;
+
     if (encoder != _encoder)
     {
         [[self.undo prepareWithInvocationTarget:self] setEncoder:_encoder];
@@ -105,6 +107,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     {
         [self validatePresetsSettings];
         [self validateAdvancedOptions];
+        [self validateVideoOptionExtra:previousEncoder];
     }
 
     [self postChangedNotification];
@@ -307,6 +310,17 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     if (self.encoder != HB_VCODEC_H264_MASK)
     {
         self.advancedOptions = NO;
+    }
+}
+
+- (void)validateVideoOptionExtra:(int)previousEncoder
+{
+    if (!((previousEncoder & HB_VCODEC_X264_MASK &&
+        self.encoder & HB_VCODEC_X264_MASK) ||
+        (previousEncoder & HB_VCODEC_X265_MASK &&
+         self.encoder & HB_VCODEC_X265_MASK)))
+    {
+        self.videoOptionExtra = @"";
     }
 }
 
