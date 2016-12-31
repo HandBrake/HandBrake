@@ -1,37 +1,35 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
-# Translators:
-# Kevin López Brante <kelopez.cl@gmail.com>, 2014
-# Soleil Rojas <s-rojas01@hotmail.com>, 2014
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: HandBrake-0.10\n"
+"Project-Id-Version: HandBrake-1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-03 13:01+0300\n"
-"PO-Revision-Date: 2014-11-28 14:44+0000\n"
-"Last-Translator: VictorR2007 <victorr2007@yandex.ru>\n"
+"PO-Revision-Date: 2016-12-28 16:22+0100\n"
+"Last-Translator: Toni Estevez <toni.estevez@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/handbrake/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 msgid "Quality: "
-msgstr "Calidad:"
+msgstr "Calidad: "
 
 #, c-format
 msgid "Bitrate: %dkbps"
-msgstr "Tasa de bits: %dkbps"
+msgstr "Tasa de bits: %d kbps"
 
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr "Tasa de bits: %.4gkbps"
+msgstr "Tasa de bits: %.4g kbps"
 
 msgid "<small>Passthrough</small>"
-msgstr "<small>Pasar a través</small>"
+msgstr "<small>Copia directa</small>"
 
 #, c-format
 msgid ""
@@ -39,14 +37,3043 @@ msgid ""
 "Gain: %s\n"
 "DRC: %s\n"
 "Track Name: %s"
-msgstr "%s\nGanancia: %s\nCompresión: %s\nNombre de la pista: %s"
+msgstr ""
+"%s\n"
+"Ganancia: %s\n"
+"Compresión de rango dinámico: %s\n"
+"Nombre de la pista: %s"
 
 #, c-format
 msgid ""
 "%s\n"
 "Gain: %s\n"
 "DRC: %s"
-msgstr "%s\nGanancia: %s\nCompresión: %s"
+msgstr ""
+"%s\n"
+"Ganancia: %s\n"
+"Compresión de rango dinámico: %s"
+
+msgid "Add"
+msgstr "Añadir"
+
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr "Añade un ajuste de codificación de audio."
+
+msgid "Set the audio codec to encode this track with."
+msgstr "Selecciona un códec para la codificación de audio."
+
+msgid "Set the bitrate to encode this track with."
+msgstr "Selecciona la tasa de bits para codificar las pistas de audio."
+
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr "Selecciona la calidad de audio para los codificadores que lo admiten."
+
+msgid "Set the mixdown of the output audio track."
+msgstr "Selecciona el tipo de mezcla para codificar las pistas de audio."
+
+msgid "Set the sample rate of the output audio track."
+msgstr "Selecciona la tasa de muestreo para codificar las pistas de audio."
+
+msgid ""
+"<b>Audio Gain:</b>\n"
+"Adjust the amplification or attenuation of the output audio track."
+msgstr "Selecciona la amplificación o atenuación para codificar las pistas de audio."
+
+msgid "0dB"
+msgstr "0 dB"
+
+msgid "%ddB"
+msgstr "%d dB"
+
+msgid "%.4gkHz"
+msgstr "%.4g kHz"
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4g kHz)</small>"
+
+msgid ""
+"<b>Dynamic Range Compression:</b>\n"
+"Adjust the dynamic range of the output audio track.\n"
+"For source audio that has a wide dynamic range,\n"
+"very loud and very soft sequences, DRC allows you\n"
+"to 'compress' the range by making loud sounds\n"
+"softer and soft sounds louder.\n"
+msgstr ""
+"Selecciona la compresión de rango dinámico (DRC) para codificar las pistas de audio.\n"
+"\n"
+"Para fuentes de audio con un rango dinámico amplio, con secuencias muy fuertes y\n"
+"muy débiles, la compresión dinámica permite comprimir el rango del volumen,\n"
+"bajando los sonidos muy fuertes y elevando los sonidos muy débiles.\n"
+
+msgid "Remove this audio encoder"
+msgstr "Elimina este ajuste de codificación de audio."
+
+msgid "Closing HandBrake will terminate encoding.\n"
+msgstr "Al cerrar HandBrake se cancelará la codificación.\n"
+
+msgid "No Title Found"
+msgstr "Título no encontrado"
+
+msgid "none"
+msgstr "ninguno"
+
+msgid "Not Selected"
+msgstr "No seleccionado"
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
+msgstr ""
+"Se ha seleccionado el ajuste de latencia cero del codificador\n"
+"x264, se fuerza una tasa de fotogramas constante."
+
+msgid "Scanning ..."
+msgstr "Exploración..."
+
+msgid "Stop Scan"
+msgstr "Detener exploración"
+
+msgid "On"
+msgstr "activar"
+
+msgid "Strict"
+msgstr "estricto"
+
+msgid "Loose"
+msgstr "libre"
+
+msgid "Custom"
+msgstr "personalizar"
+
+msgid "Unknown"
+msgstr "desconocido"
+
+msgid "auto"
+msgstr "automático"
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"%s in %d seconds ..."
+msgstr ""
+"%s\n"
+"\n"
+"%s en %d segundos..."
+
+#, c-format
+msgid "%sYour movie will be lost if you don't continue encoding."
+msgstr "%sLa película se perderá si no continúa la codificación."
+
+msgid "Cancel Current and Stop"
+msgstr "Cancelar la actual y detener"
+
+msgid "Cancel Current, Start Next"
+msgstr "Cancelar la actual e iniciar la siguiente"
+
+msgid "Finish Current, then Stop"
+msgstr "Finalizar la actual y después detener"
+
+msgid "Continue Encoding"
+msgstr "Continuar la codificación"
+
+msgid "Custom "
+msgstr "personalizado"
+
+msgid "Modified "
+msgstr "modificado"
+
+#, c-format
+msgid "Handbrake Version: %s (%d)\n"
+msgstr "Versión de Handbrake: %s (%d)\n"
+
+#, c-format
+msgid "%d encode(s) pending"
+msgstr "%d codificación(es) pendiente(s)"
+
+#, c-format
+msgid "job %d of %d, "
+msgstr "trabajo %d de %d, "
+
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr "pasada %d (búsqueda de subtítulos) de %d. "
+
+#, c-format
+msgid "pass %d of %d, "
+msgstr "pasada %d de %d. "
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr "Codificación: %s%s%.2f %% (%.2f fps, de promedio %.2f fps, tiempo restante: %02d h %02d m %02d s)."
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Codificación: %s%s%.2f %% (tiempo restante: %02d h %02d m %02d s)."
+
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Codificación: %s%s%.2f %%."
+
+msgid "Searching for start time, "
+msgstr "búsqueda del instante de inicio, "
+
+msgid "Scanning..."
+msgstr "Exploración..."
+
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr "Exploración del título %d de %d..."
+
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr "Exploración del título %d de %d, vista previa %d..."
+
+msgid "Source"
+msgstr "Fuente"
+
+msgid "Choose Video Source"
+msgstr "Selecciona la fuente de vídeo."
+
+msgid "Paused"
+msgstr "Codificación en pausa."
+
+msgid "Encode Done!"
+msgstr "¡Codificación finalizada!"
+
+msgid "Encode Canceled."
+msgstr "Codificacón cancelada."
+
+msgid "Encode Failed."
+msgstr "Codificación fallida."
+
+msgid "Muxing: This may take a while..."
+msgstr "Multiplexado: puede tomar un tiempo..."
+
+msgid "Scan this DVD source"
+msgstr "Explora este DVD."
+
+msgid "AutoScan"
+msgstr "Exploración automática"
+
+msgid "Suspend"
+msgstr "Suspender"
+
+#, c-format
+msgid "Suspend failed: %s"
+msgstr "Suspensión fallida: %s"
+
+msgid "Suspend failed"
+msgstr "Suspensión fallida"
+
+msgid "Shutdown"
+msgstr "Apagar"
+
+#, c-format
+msgid "Shutdown failed: %s"
+msgstr "Apagado fallido: %s"
+
+msgid "Shutdown failed"
+msgstr "Apagado fallido"
+
+msgid "Encoding"
+msgstr "Codificación"
+
+#, c-format
+msgid "press %d %d"
+msgstr "Presione %d %d"
+
+#, c-format
+msgid ""
+"Invalid Settings:\n"
+"%s"
+msgstr ""
+"Ajustes inválidos:\n"
+"%s"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+#, c-format
+msgid "%s: %.4g (Warning: lossless)"
+msgstr "%s: %.4g (advertencia: sin pérdida)"
+
+#, c-format
+msgid "HandBrake %s/%s is now available (you have %s/%d)."
+msgstr "HandBrake %s/%s ya está disponible (versión actual: %s/%d)."
+
+msgid "Encode Complete"
+msgstr "Codificación terminada"
+
+msgid "Put down that cocktail, Your HandBrake queue is done!"
+msgstr "Deje ese cóctel, ¡la cola de codificación de HandBrake ha finalizado!"
+
+msgid "Your encode is complete."
+msgstr "La codificación ha finalizado."
+
+msgid "Shutting down the computer"
+msgstr "Apagar el equipo"
+
+msgid "Putting computer to sleep"
+msgstr "Poner el equipo en reposo"
+
+msgid "Quiting Handbrake"
+msgstr "Salir de HandBrake"
+
+msgid "Bottom"
+msgstr "Inferior"
+
+#, c-format
+msgid "open failed: %s\n"
+msgstr "No se puede abrir: %s\n"
+
+msgid "No key for dictionary item"
+msgstr "No hay clave para la entrada del diccionario."
+
+msgid "Invalid container type. This shouldn't happen"
+msgstr "Tipo de contenedor inválido."
+
+#, c-format
+msgid "%s:missing a requried attribute"
+msgstr "%s: falta un atributo requerido."
+
+#, c-format
+msgid ""
+"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Summary:\n"
+"    Creates a resource plist from a resource list\n"
+"Options:\n"
+"    I - Include path to search for files\n"
+"    <in resource list>    Input resources file\n"
+"    <out resource plist>  Output resources plist file\n"
+msgstr ""
+"Uso: %s [-I <ruta de búsqueda>] <lista de recursos de entrada> <recurso de salida plist>\n"
+"Resumen:\n"
+"    Crea un recurso plist a partir de una lista de recursos\n"
+"Opciones:\n"
+"    I - Incluir la ruta de búsqueda de los archivos\n"
+"    <lista de recursos de entrada>  Archivo de recursos de entrada\n"
+"    <recurso de salida plist>  Archivo de recursos de salida plist\n"
+
+msgid "language"
+msgstr "idioma"
+
+msgid "Language"
+msgstr "Idioma de los subtítulos"
+
+msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
+msgstr ""
+"Código ISO del idioma del texto. Definir este parámetro puede ayudar\n"
+"en la representación del texto. Si no entiende la utilidad de este\n"
+"parámetro, probablemente no necesita configurarlo."
+
+msgid "The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string"
+msgstr ""
+"El lugar preferido para colocar los puntos suspensivos en la\n"
+"cadena de texto cuando no hay suficiente espacio para\n"
+"mostrar la cadena completa."
+
+msgid "How to break the string into multiple lines, if the cell renderer does not have enough room to display the entire string"
+msgstr ""
+"Cómo dividir la cadena de texto en múltiples líneas cuando no\n"
+"hay suficiente espacio para mostrar la cadena completa."
+
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Incrusta los subtítulos en el vídeo.\n"
+"\n"
+"Los subtítulos incrustados forman parte del vídeo y no se pueden desactivar."
+
+msgid "<b>Burned In</b>"
+msgstr "<b>Incrustados</b>"
+
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is useful for creating a \"forced\" track\n"
+"in your output."
+msgstr ""
+"Define la pista de subtítulos seleccionada como predeterminada.\n"
+"\n"
+"La mayoría de reproductores mostrarán la pista de subtítulos\n"
+"por defecto automáticamente.\n"
+"\n"
+"Este ajuste es útil para crear una pista de subtítulos forzados en\n"
+"el archivo codificado."
+
+msgid "<b>Default</b>"
+msgstr "<b>por defecto</b>"
+
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language."
+msgstr ""
+"Selecciona solo los subtítulos que se hayan marcado como\n"
+"forzados en la pista original.\n"
+"\n"
+"Los subtítulos forzados se muestran habitualmente en\n"
+"escenas donde alguien habla en un idioma extranjero."
+
+msgid "<b>Forced Only</b>"
+msgstr "<b>Solo forzados</b>"
+
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr ""
+"Suma (o resta) una compensación (en milisegundos)\n"
+"al inicio de la pista de subtítulos SRT.\n"
+"\n"
+"A menudo el inicio de los subtítulos de un archivo \n"
+"externo no coincide con el inicio del vídeo. Este\n"
+"ajuste permite sincronizar ambos archivos."
+
+msgid "<b>SRT Offset</b>"
+msgstr "<b>Compensación de los subtítulos SRT</b>"
+
+msgid "Off"
+msgstr "desactivar"
+
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Search\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr ""
+"La pista de subtítulos original.\n"
+"\n"
+"Puede elegir cualquier pista de subtítulos reconocida en el archivo original.\n"
+"\n"
+"Además hay una opción especial para la búsqueda de audio extranjero.\n"
+"Esta opción añade una pasada adicional a la codificación para buscar los\n"
+"subtítulos de escenas en idiomas extranjeros. Esta opción ofrece un\n"
+"resultado mejor si se utiliza conjuntamente con la opción de subtítulos\n"
+"forzados."
+
+msgid "<b>Track</b>"
+msgstr "<b>Pista</b>"
+
+msgid "About HandBrake"
+msgstr "Acerca de HandBrake"
+
+msgid ""
+"Copyright © 2008 - 2016 John Stebbins\n"
+"Copyright © 2004 - 2016, HandBrake Devs"
+msgstr ""
+"Copyright © 2008 - 2016, John Stebbins\n"
+"Copyright © 2004 - 2016, los desarrolladores de HandBrake"
+
+msgid "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
+msgstr "HandBrake es un transcodificador de vídeo multiplataforma y multiproceso con licencia GPL"
+
+msgid "http://handbrake.fr"
+msgstr "http://handbrake.fr"
+
+msgid ""
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+"HandBrake es software libre; usted puede redistribuirlo o modificarlo según los términos de la Licencia Pública General de GNU publicada por la Fundación para el Software Libre; ya sea la versión 2 de la licencia o (a su elección) cualquier versión posterior.\n"
+"\n"
+"Handbrake se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; ni siquiera la garantía implícita de COMERCIALIZACIÓN o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia Pública General de GNU para más detalles.\n"
+"\n"
+"Debería haber recibido una copia de la Licencia Pública General de GNU junto con Glade; si no es así, escriba a «Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA»."
+
+msgid "_Minimize/Maximize"
+msgstr "_Minimizar/maximizar"
+
+msgid "_Pause Queue"
+msgstr "_Pausar la cola"
+
+msgid "_Quit"
+msgstr "_Salir"
+
+msgid "_About"
+msgstr "_Acerca de"
+
+msgid "HandBrake"
+msgstr "HandBrake"
+
+msgid "_File"
+msgstr "_Archivo"
+
+msgid "_Source"
+msgstr "_Seleccionar fuente de vídeo"
+
+msgid "Single _Title"
+msgstr "Seleccionar un solo _título"
+
+msgid "_Destination"
+msgstr "Seleccionar _carpeta de destino"
+
+msgid "_Preferences"
+msgstr "_Preferencias"
+
+msgid "_Queue"
+msgstr "_Cola de codificación"
+
+msgid "_Add"
+msgstr "_Añadir un título"
+
+msgid "Add _Multiple"
+msgstr "Añadir _múltiples títulos"
+
+msgid "_Start"
+msgstr "_Iniciar"
+
+msgid "_Pause"
+msgstr "_Pausar"
+
+msgid "_View"
+msgstr "_Ver"
+
+msgid "HandBrake For _Dumbies"
+msgstr "HandBrake para _novatos"
+
+msgid "_Show Presets"
+msgstr "_Preajustes"
+
+msgid "_Preview"
+msgstr "_Vista previa"
+
+msgid "_Activity Window"
+msgstr "Ventana de _actividad"
+
+msgid "Show _Queue"
+msgstr "_Cola de codificación"
+
+msgid "_Presets"
+msgstr "_Preajustes"
+
+msgid "_Save"
+msgstr "_Guardar"
+
+msgid "_Delete"
+msgstr "_Eliminar"
+
+msgid "_Make Default"
+msgstr "_Usar por defecto"
+
+msgid "_New Folder"
+msgstr "Carpeta _nueva"
+
+msgid "_Export"
+msgstr "_Exportar"
+
+msgid "_Import"
+msgstr "_Importar"
+
+msgid "_Update Built-in Presets"
+msgstr "_Actualizar"
+
+msgid "_Help"
+msgstr "A_yuda"
+
+msgid "_Guide"
+msgstr "_Guía"
+
+msgid "Start Encoding"
+msgstr "Inicia la codificación."
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "Pause Encoding"
+msgstr "Pausa la codificación."
+
+msgid "Pause"
+msgstr "Pausar"
+
+msgid "Add to Queue"
+msgstr "Añade el título actual a la cola de codificación."
+
+msgid "Enqueue"
+msgstr "A la cola"
+
+msgid "Show Queue"
+msgstr "Muestra la cola de codificación."
+
+msgid "Queue"
+msgstr "Cola"
+
+msgid ""
+"Open Picture Settings and Preview window.\n"
+"Here you can adjust cropping, resolution, aspect ratio, and filters."
+msgstr "Abre la ventana de vista previa del vídeo."
+
+msgid "Preview"
+msgstr "Vista previa"
+
+msgid "Show Activity Window"
+msgstr "Abre la ventana de actividad."
+
+msgid "Activity"
+msgstr "Actividad"
+
+msgid "<b>Source:</b>"
+msgstr "<b>Fuente:</b>"
+
+msgid "None"
+msgstr "desactivar"
+
+msgid "Title:"
+msgstr "Título:"
+
+msgid ""
+"Set the title to encode.\n"
+"By default the longest title is chosen.\n"
+"This is often the feature title of a DVD."
+msgstr ""
+"Selecciona el título para codificar.\n"
+"\n"
+"Por defecto se selecciona el título más largo.\n"
+"Habitualmente es la película del DVD."
+
+msgid "Angle:"
+msgstr "Ángulo:"
+
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "Selecciona el ángulo para codificar en los DVD con múltiples ángulos."
+
+msgid "Reset All Titles"
+msgstr "Reajustar todos los títulos"
+
+msgid "Apply current settings to all titles"
+msgstr "Aplica los ajustes actuales a la codificación de todos los títulos."
+
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr "Selecciona capítulos, segundos o fotogramas para codificar."
+
+msgid "Set the first chapter to encode."
+msgstr "Selecciona el inicio del intervalo."
+
+msgid "Set the last chapter to encode."
+msgstr "Selecciona el final del intervalo."
+
+msgid "Duration:"
+msgstr "Duración:"
+
+msgid "<b>Destination</b>"
+msgstr "<b>Destino</b>"
+
+msgid "File:"
+msgstr "Archivo: "
+
+msgid "Destination filename for your encode."
+msgstr "Archivo de destino de la codificación."
+
+msgid "Destination directory for your encode."
+msgstr "Carpeta de destino de la codificación."
+
+msgid "Destination Directory"
+msgstr "Carpeta de destino"
+
+msgid "Format:"
+msgstr "Formato contenedor:"
+
+msgid "Format to mux encoded tracks to."
+msgstr "Selecciona el formato contenedor de las pistas codificadas."
+
+msgid "iPod 5G Support"
+msgstr "Compatibilidad con iPod 5G"
+
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Añade el iPod Atom requerido por algunos iPod antiguos."
+
+msgid "Web optimized"
+msgstr "Optimizar para la web"
+
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.\n"
+"This allows a player to initiate playback before downloading the entire file."
+msgstr ""
+"Optimiza el diseño del archivo MP4 para la descarga progresiva.\n"
+"\n"
+"Permite iniciar la reproducción del archivo antes de concluir la descarga."
+
+msgid "Large file (>4GB)"
+msgstr "Archivo grande (> 4 GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr ""
+"Permite archivos MP4 de 64 bits mayores de 4 GB.\n"
+"\n"
+"<b>Precaución:</b> Esta opción puede no ser compatible con algunos dispositivos."
+
+msgid "<b>Presets List</b>"
+msgstr "<b>Lista de preajustes</b>"
+
+msgid "Source Codec:"
+msgstr "Códec:"
+
+msgid "Dimensions:"
+msgstr "Tamaño de la imagen:"
+
+msgid "Aspect: "
+msgstr "Relación de aspecto:"
+
+msgid "Frame Rate:"
+msgstr "Tasa de fotogramas:"
+
+msgid "<b>Source Picture Parameters</b>"
+msgstr "<b>Parámetros del vídeo original</b>"
+
+msgid "Autocrop:"
+msgstr "Recorte automático:"
+
+msgid "Crop:"
+msgstr "Recorte:"
+
+msgid "Crop Dimensions:"
+msgstr "Tamaño de la imagen recortada:"
+
+msgid "<b>Cropping</b>"
+msgstr "<b>Recorte de la imagen</b>"
+
+msgid "Scale Dimensions:"
+msgstr "Tamaño de la imagen redimensionada:"
+
+msgid "Optimal for Source:"
+msgstr "Tamaño óptimo para la imagen original:"
+
+msgid "Anamorphic:"
+msgstr "Modo anamórfico:"
+
+msgid "<b>Scaling</b>"
+msgstr "<b>Cambio de tamaño de la imagen</b>"
+
+msgid "Presentation Dimensions:"
+msgstr "Tamaño de la imagen en pantalla:"
+
+msgid "Summary"
+msgstr "Resumen"
+
+msgid "Left Crop"
+msgstr "Recorte izquierdo en píxeles."
+
+msgid "Top Crop"
+msgstr "Recorte superior en píxeles."
+
+msgid "Bottom Crop"
+msgstr "Recorte inferior en píxeles."
+
+msgid "Right Crop"
+msgstr "Recorte derecho en píxeles."
+
+msgid "Auto Crop"
+msgstr "Recorte automático"
+
+msgid "Automatically crop black borders around edges of the video."
+msgstr "Recorta automáticamente los bordes negros de la imagen."
+
+msgid "Loose Crop"
+msgstr "Recorte redondeado"
+
+msgid ""
+"When picture settings require that the image\n"
+"dimensions be rounded to some multiple number\n"
+"of pixels, this setting will crop a few extra pixels\n"
+"instead of doing exact cropping and then scaling to\n"
+"the required multiple."
+msgstr ""
+"Redondea el recorte de la imagen.\n"
+"\n"
+"Cuando los ajustes de imagen requieren el redondeo de las\n"
+"dimensiones, este ajuste recortará unos pocos píxeles extra\n"
+"en vez de recortar primero la imagen y luego ampliarla."
+
+msgid "width:"
+msgstr "Anchura:"
+
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Anchura en píxeles que se almacena en el archivo de vídeo.\n"
+"\n"
+"El tamaño en pantalla puede diferir si la relación de\n"
+"aspecto de los píxeles no es 1:1."
+
+msgid "height:"
+msgstr "Altura:"
+
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Altura en píxeles que se almacena en el archivo de vídeo.\n"
+"\n"
+"El tamaño en pantalla puede diferir si la relación de\n"
+"aspecto de los píxeles no es 1:1."
+
+msgid "Optimal for source"
+msgstr "Tamaño óptimo"
+
+msgid ""
+"If enabled, select the 'optimal' storage resolution.\n"
+"This will be the resolution that most closely matches the source resolution after cropping."
+msgstr ""
+"Selecciona el tamaño óptimo de almacenamiento.\n"
+"\n"
+"El tamaño óptimo es el más cercano al tamaño\n"
+"original después del recorte."
+
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr ""
+"Selecciona el modo anamórfico.\n"
+"\n"
+"Desactivar: fuerza una relación de aspecto de los píxeles de 1:1.\n"
+"\n"
+"Libre: redondea las dimensiones de la imagen y selecciona una\n"
+"relación de aspecto de los píxeles que preserva la relación de\n"
+"aspecto en pantalla de la imagen original.\n"
+"\n"
+"Estricto: mantiene las dimensiones de la imagen y la relación de\n"
+"aspecto de los píxeles de la imagen original."
+
+msgid "Alignment:"
+msgstr "Redondeo:"
+
+msgid ""
+"Align storage dimensions to multiples of this value.\n"
+"\n"
+"This setting is only necessary for compatibility with some devices.\n"
+"You should use 2 unless you experience compatibility issues."
+msgstr ""
+"Redondea las dimensiones de almacenamiento a un múltiplo de este valor. \n"
+"\n"
+"Este ajuste solo es necesario para la compatibilidad con algunos dispositivos. \n"
+"Se ha de seleccionar 2, a menos que experimente problemas de compatibilidad."
+
+msgid "<b>Storage Geometry</b>"
+msgstr "<b>Dimensiones de almacenamiento</b>"
+
+msgid "This is the display width. It is the result of scaling the storage dimensions by the pixel aspect."
+msgstr ""
+"Anchura en píxeles que se muestra en pantalla.\n"
+"\n"
+"Es el resultado de multiplicar la anchura almacenada\n"
+"por la relación de aspecto de los píxeles."
+
+msgid "Pixel Aspect:"
+msgstr "Relación de aspecto de los píxeles:"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"La relación de aspecto de los píxeles define la forma de los píxeles.\n"
+"\n"
+"Una proporción de 1:1 define píxeles cuadrados. Otros valores\n"
+"definen formas rectangulares. Los reproductores de vídeo ajustan\n"
+"la imagen para obtener la relación especificada."
+
+msgid ":"
+msgstr ":"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Selecciona la relación de aspecto de los píxeles.\n"
+"\n"
+"Esta relación define la forma de los píxeles. Una relación 1:1 define píxeles\n"
+"cuadrados. Otros valores definen formas rectangulares. Los reproductores\n"
+"de vídeo ajustan la imagen para mostrar la relación especificada."
+
+msgid "Keep Aspect"
+msgstr "Mantener la relación de aspecto"
+
+msgid "If enabled, the original display aspect of the source will be maintained."
+msgstr "Mantiene la relación de aspecto en pantalla de la imagen original."
+
+msgid "Display Aspect:"
+msgstr "Relación de aspecto en pantalla:"
+
+msgid "<b>Display Geometry</b>"
+msgstr "<b>Dimensiones en pantalla</b>"
+
+msgid "Grayscale"
+msgstr "Escala de grises"
+
+msgid "If enabled, filter colour components out of video."
+msgstr "Elimina los componentes de color de la imagen."
+
+msgid "Deblock:"
+msgstr "Desbloqueo:"
+
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Elimina un tipo común de artefacto de compresión, los artefactos\n"
+"de efecto bloque.\n"
+"\n"
+"Si la fuente de vídeo exhibe estructuras en forma de bloques, este\n"
+"filtro las puede corregir."
+
+msgid "Denoise Filter:"
+msgstr "Atenuación de ruido:"
+
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Reduce o elimina la aparición de ruido y el grano.\n"
+"\n"
+"El grano de la película y otros tipos de ruido de alta frecuencia son\n"
+"difíciles de comprimir. El uso de este filtro puede producir archivos\n"
+"más pequeños."
+
+msgid "Denoise Preset:"
+msgstr "Preajuste antiruido:"
+
+msgid "Denoise Tune:"
+msgstr "Ajuste fino antiruido:"
+
+msgid ""
+"Custom denoise filter string format\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr ""
+"Formato de la cadena personalizada del filtro de atenuación de ruido.\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+msgid "Detelecine:"
+msgstr "Destelecinado:"
+
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining.\n"
+"\n"
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
+msgstr ""
+"Elimina los artefactos de efecto peine que puede producir el telecinado.\n"
+"\n"
+"El telecinado es un proceso que ajusta la tasa de fotogramas de 24 fps\n"
+"(filme NTSC) a 30 fps (TV NTSC)."
+
+msgid ""
+"Custom detelecine filter string format\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr ""
+"Formato de la cadena personalizada del filtro de destelecinado.\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+msgid "Decomb"
+msgstr "Despeinado"
+
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced.\n"
+"\n"
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Selecciona las opciones de los filtros de despeinado o desentrelazado. \n"
+"\n"
+"El filtro de despeinado desentrelaza selectivamente los fotogramas que parecen estar\n"
+"entrelazados. Preserva la calidad de imagen de los fotogramas no entrelazados.\n"
+"\n"
+"El filtro de desentrelazado clásico se aplica a todos los fotogramas. Los fotogramas\n"
+"no entrelazados sufrirán cierta degradación de la calidad de imagen."
+
+msgid "Deinterlace"
+msgstr "Desentrelazado"
+
+msgid "Decomb:"
+msgstr "Despeinado:"
+
+msgid ""
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced."
+msgstr ""
+"Desentrelaza selectivamente los fotogramas que parecen estar entrelazados.\n"
+"\n"
+"Preserva la calidad de imagen de los fotogramas no entrelazados."
+
+msgid ""
+"Custom decomb filter string format\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+msgstr ""
+"Formato de la cadena personalizada del filtro de despeinado.\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+
+msgid "Deinterlace:"
+msgstr "Desentrelazado:"
+
+msgid ""
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Desentrelaza todos los fotogramas.\n"
+"\n"
+"Los fotogramas no entrelazados sufrirán cierta degradación de la calidad."
+
+msgid ""
+"Custom deinterlace filter string format\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+msgstr ""
+"Formato de la cadena personalizada del filtro de desentrelazado.\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+
+msgid "<b>Filters</b>"
+msgstr "<b>Filtros</b>"
+
+msgid "Picture"
+msgstr "Imagen"
+
+msgid "Video Encoder:"
+msgstr "Codificador de video:"
+
+msgid "Available video encoders."
+msgstr "Selecciona el decodificador de vídeo."
+
+msgid "Framerate:"
+msgstr "Tasa de fotogramas:"
+
+msgid ""
+"Output framerate.\n"
+"\n"
+"'Same as source' is recommended. If your source video has\n"
+"a variable framerate, 'Same as source' will preserve it."
+msgstr ""
+"Selecciona la tasa de fotogramas del vídeo codificado.\n"
+"\n"
+"La opción recomendada es mantener la original. Si el\n"
+"vídeo original tiene una tasa de fotogramas variable,\n"
+"la opción recomendada la preserva."
+
+msgid "Constant Framerate"
+msgstr "Tasa de fotogramas constante"
+
+msgid "Same as source"
+msgstr "igual que la original"
+
+msgid "kbps"
+msgstr "kbps"
+
+msgid "(variable)"
+msgstr "(variable)"
+
+msgid "(constant)"
+msgstr "(constante)"
+
+msgid "Enables constant framerate output."
+msgstr "Selecciona una tasa de fotogramas constante."
+
+msgid "Peak Framerate (VFR)"
+msgstr "Pico de la tasa de fotogramas"
+
+msgid ""
+"Enables variable framerate output with a peak\n"
+"rate determined by the framerate setting.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Selecciona una tasa de fotogramas variable con un pico definido\n"
+"por el ajuste de la tasa de fotogramas. \n"
+"\n"
+"No es compatible con algunos reproductores."
+
+msgid "Variable Framerate"
+msgstr "Tasa de fotogramas variable"
+
+msgid ""
+"Enables variable framerate output.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Selecciona una tasa de fotogramas variable.\n"
+"\n"
+"No es compatible con algunos reproductores."
+
+msgid ""
+"Set the desired quality factor.\n"
+"The encoder targets a certain quality.\n"
+"The scale used by each video encoder is different.\n"
+"\n"
+"x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"So small decreases in value will result in progressively larger increases\n"
+"in the resulting file size.  A value of 0 means lossless and will result\n"
+"in a file size that is larger than the original source, unless the source\n"
+"was also lossless.\n"
+"\n"
+"FFMpeg's and Theora's scale is more linear.\n"
+"These encoders do not have a lossless mode."
+msgstr ""
+"Selecciona el factor de calidad de la codificación. El codificador toma como\n"
+"objetivo una cierta calidad. La escala utilizada por cada codificador es diferente.\n"
+"\n"
+"La escala del codificador x264 es logarítmica y los valores más bajos producen\n"
+"vídeo de más calidad. Si se reduce un poco el factor de calidad se incrementa\n"
+"mucho el tamaño del archivo codificado. El factor 0 selecciona la compresión sin\n"
+"pérdida y produce un archivo de mayor tamaño que el original, excepto si el\n"
+"vídeo original se ha comprimido sin pérdida.\n"
+"\n"
+"La escala de los codificadores FFMpeg y Theora es más lineal. Estos\n"
+"codificadores no tienen un modo de compresión sin pérdida."
+
+msgid "Constant Quality:"
+msgstr "Calidad constante:"
+
+msgid "Bitrate (kbps):    "
+msgstr "Tasa de bits (kbps):    "
+
+msgid ""
+"Set the average bitrate.\n"
+"\n"
+"The instantaneous bitrate can be much higher or lower at any point in time.\n"
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
+msgstr ""
+"Selecciona la tasa de bits media.\n"
+"\n"
+"La tasa de bits instantánea puede ser mucho mayor o menor en cualquier momento,\n"
+"pero el promedio durante un período prolongado será el valor definido. Si necesita\n"
+"limitar la tasa de bits instantánea, consulte los ajustes VBV-bufsize y VBV-maxrate\n"
+"del codificador x264."
+
+msgid "2-Pass Encoding"
+msgstr "Codificación en 2 pasadas"
+
+msgid ""
+"Perform 2 Pass Encoding.\n"
+"\n"
+"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
+"the video are collected.  Then in the second pass, those statistics are used\n"
+"to make bitrate allocation decisions."
+msgstr ""
+"Selecciona la codificación en dos pasadas.\n"
+"\n"
+"Previamente hay que seleccionar la tasa de bits. En la primera pasada se\n"
+"recogen estadísticas sobre el vídeo. En la segunda pasada esas estadísticas\n"
+"se utilizan para decidir la asignación de la tasa de bits."
+
+msgid "Turbo First Pass"
+msgstr "Primera pasada rápida"
+
+msgid "During the 1st pass of a 2 pass encode, use settings that speed things along."
+msgstr "Aplica ajustes que aceleran la primara pasada de la codificación en dos pasadas."
+
+msgid "Use Advanced Options"
+msgstr "Usar la opciones de vídeo avanzado"
+
+msgid ""
+"Use advanced options Tab for x264 settings.\n"
+"\n"
+"Use at your own risk!"
+msgstr ""
+"Activa la pestaña de vídeo avanzado para configurar el codificador x264.\n"
+"\n"
+"¡Hágalo bajo su propio riesgo!"
+
+msgid "Preset:"
+msgstr "Preajuste:"
+
+msgid ""
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
+"\n"
+"This establishes your default encoder settings.\n"
+"Tunes, profiles, levels and advanced option string will be applied to this.\n"
+"You should generally set this option to the slowest you can bear since slower\n"
+"settings will result in better quality or smaller files."
+msgstr ""
+"Selecciona la velocidad de codificación a costa de la eficiencia de la compresión.\n"
+"\n"
+"Esta selección define los ajustes por defecto de la codificación. El ajuste fino, el\n"
+"perfil, el nivel y la cadena de opciones avanzadas se aplican a continuación.\n"
+"\n"
+"Se recomienda elegir la velocidad de codificación más lenta que pueda soportar\n"
+"porque proporciona una mejor calidad o produce un archivo más pequeño."
+
+msgid "Tune:"
+msgstr "Ajuste fino:"
+
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"This can improve effeciency for particular source characteristics or set\n"
+"characteristics of the output file.  Changes will be applied after the\n"
+"preset but before all other parameters."
+msgstr ""
+"Selecciona los ajustes óptimos para los escenarios más comunes.\n"
+"\n"
+"Estos ajustes pueden mejorar la eficiencia de la codificación para fuentes\n"
+"de vídeo con características particulares o definir las características del\n"
+"archivo codificado. La configuración se aplica después del preajuste, pero\n"
+"antes que los demás parámetros."
+
+msgid "Fast Decode"
+msgstr "Decodificación rápida"
+
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"Set this if your device is struggling to play the output (dropped frames)."
+msgstr ""
+"Reduce el uso del procesador para la decodificación.\n"
+"\n"
+"Aplique este ajuste si el dispositivo tiene problemas para reproducir el\n"
+"archivo codificado (salto de fotogramas)."
+
+msgid "Zero Latency"
+msgstr "Latencia cero"
+
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"This is useful for broadcast of live streams.\n"
+"\n"
+"Since HandBrake is not suitable for live stream broadcast purposes,\n"
+"this setting is of little value here."
+msgstr ""
+"Minimiza la latencia entre la entrada al codificador y la salida del decodificador.\n"
+"\n"
+"Este ajuste es útil para la difusión de transmisiones continuas (streaming),\n"
+"aunque Handbrake no está diseñado para este propósito."
+
+msgid "Profile:"
+msgstr "Perfil:"
+
+msgid ""
+"Sets and ensures compliance with the specified profile.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Selecciona el cumplimiento del perfil especificado.\n"
+"\n"
+"Reemplaza todos los demás ajustes."
+
+msgid "Level:"
+msgstr "Nivel:"
+
+msgid ""
+"Sets and ensures compliance with the specified level.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Selecciona el cumplimiento del nivel especificado.\n"
+"\n"
+"Reemplaza todos los demás ajustes."
+
+msgid "More Settings:"
+msgstr "Más ajustes:"
+
+msgid ""
+"Additional encoder settings.\n"
+"\n"
+"Colon separated list of encoder options."
+msgstr "Ajustes adicionales del codificador: lista de opciones del codificador separadas por dos puntos."
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid "Selection Behavior:"
+msgstr "Modo de selección:"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Available Languages"
+msgstr "Idiomas disponibles"
+
+msgid "Selected Languages"
+msgstr "Idiomas seleccionados"
+
+msgid "Use only first encoder for secondary audio"
+msgstr "Usar solo el primer ajuste para las pistas de audio secundario"
+
+msgid ""
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"All other secondary audio output tracks will be encoded with first encoder only."
+msgstr ""
+"Solo la primera pista de audio se codificará con todos los\n"
+"codificadores de la lista.\n"
+"\n"
+"Las demás pistas de audio se codificarán únicamente con\n"
+"el primer codificador de la lista."
+
+msgid "Auto Passthru:"
+msgstr "Copia directa automática:"
+
+msgid "MP3"
+msgstr "MP3"
+
+msgid ""
+"Enable this if your playback device supports MP3.\n"
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio MP3 cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato MP3."
+
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio AAC cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato AAC."
+
+msgid ""
+"Enable this if your playback device supports AC-3.\n"
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio AC-3 cuando se selecciona\n"
+"como codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato AC-3."
+
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio DTS cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato DTS."
+
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio DTS-HD cuando se selecciona\n"
+"como codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato\n"
+"DTS-HD."
+
+msgid "Passthru Fallback:"
+msgstr "Codificador alternativo a la copia directa:"
+
+msgid "Set the audio codec to encode with when a suitable track can not be found for audio passthru."
+msgstr ""
+"Selecciona el codificador por defecto si no se encuentra\n"
+"una pista adecuada para la copia directa."
+
+msgid "<b>Audio Encoder Settings:</b>"
+msgstr "<b>Ajustes para la codificación de audio</b>"
+
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Ajustes por defecto para codificar las pistas de audio seleccionadas."
+
+msgid "Encoder"
+msgstr "Codificador"
+
+msgid "Bitrate/Quality"
+msgstr "Tasa de bits / calidad"
+
+msgid "Mixdown"
+msgstr "Mezcla"
+
+msgid "Samplerate"
+msgstr "Tasa de muestreo"
+
+msgid "Gain"
+msgstr "Ganancia"
+
+msgid "Audio Defaults"
+msgstr "Audio"
+
+msgid "Add new audio settings to the list"
+msgstr "Añade a la lista una pista de audio."
+
+msgid "Add All"
+msgstr "Añadir todas"
+
+msgid "Add all audio tracks to the list"
+msgstr "Añade a la lista todas las pistas de audio disponibles."
+
+msgid "Reload Defaults"
+msgstr "Recargar las pistas por defecto"
+
+msgid "Reload all audio settings from defaults"
+msgstr "Recarga las pistas de audio por defecto."
+
+msgid "Audio List"
+msgstr "Pistas de audio"
+
+msgid "Preferred Language: None"
+msgstr "Idioma preferido: ninguno"
+
+msgid "Add Foreign Audio Search Pass"
+msgstr "Añadir subtítulos para las secuencias de audio extranjero"
+
+msgid ""
+"Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them."
+msgstr ""
+"Busca secuencias cortas de audio extranjero y añade una pista de subtítulos forzados\n"
+"si la pista de audio por defecto es del idioma preferido."
+
+msgid "Add subtitle track if default audio is foreign"
+msgstr ""
+"Añade una pista de subtítulos si la pista de audio por defecto\n"
+"no es del idioma preferido."
+
+msgid "When the default audio track is not your preferred language, add a subtitle track."
+msgstr "Añade una pista de subtítulos si el audio por defecto no es del idioma preferido."
+
+msgid "Add Closed Captions when available"
+msgstr "Añadir subtítulos para sordos (CC) si están disponibles"
+
+msgid "Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)"
+msgstr ""
+"Los subtítulos para personas sordas se pueden añadir a cualquier contenedor\n"
+"como una pista adicional que se puede activar opcionalmente."
+
+msgid "Subtitle Defaults"
+msgstr "Subtitulado"
+
+msgid "Add new subtitle settings to the list"
+msgstr "Añade a la lista una pista de subtítulos."
+
+msgid "Add all subtitle tracks to the list"
+msgstr "Añade a la lista todas las pistas de subtítulos disponibles."
+
+msgid "Reload all subtitle settings from defaults"
+msgstr "Recarga las pistas de subtítulos por defecto."
+
+msgid "Subtitle List"
+msgstr "Pistas de subtítulos"
+
+msgid "<small>Reference Frames:</small>"
+msgstr "<small>Fotogramas de referencia:</small>"
+
+msgid ""
+"Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
+"Cel animation tends to benefit from more reference frames a lot more than film content.\n"
+"\n"
+"Note that many hardware devices have limitations on the number of supported reference\n"
+"frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
+"you're absolutely sure you know what you're doing!"
+msgstr ""
+"Selecciona el número máximo de fotogramas de referencia. Los valores razonables van de 1 a 6, por defecto 3.\n"
+"\n"
+"Cuanto mayor sea este valor, mejor será la compresión, pero más lenta la codificación. La animación tradicional se beneficia más de un número mayor de fotogramas de referencia que las películas de imagen real.\n"
+"\n"
+"Tenga en cuenta que muchos dispositivos tienen limitaciones en cuanto al número de fotogramas de referencia admitidos. Para el caso de una consola portátil o de un reproductor independiente, no modifique este ajuste a menos que esté absolutamente seguro de que sabe lo que hace."
+
+msgid "<small>Maximum B-Frames:</small>"
+msgstr "<small>Fotogramas B consecutivos:</small>"
+
+msgid ""
+"Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
+"\n"
+"Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.\n"
+"Cel-animated source material and B-pyramid also significantly increase the usefulness of larger\n"
+"values.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
+msgstr ""
+"Selecciona el número máximo de fotogramas B consecutivos que el codificador puede utilizar. Los valores razonables van de 2 a 5, por defecto 3.\n"
+"\n"
+"En general, valores elevados no mejoran significativamente la codificación, a menos que se seleccione el modo de decisión óptimo para fotogramas B adaptables. La animación tradicional y el uso de fotogramas B como referencia aumentan también la utilidad de valores elevados.\n"
+"\n"
+"El perfil básico, obligatorio para los iPods y otros dispositivos similares, requiere un valor 0."
+
+msgid "<small>Pyramidal B-Frames:</small>"
+msgstr "<small>Fotogramas B como referencia:</small>"
+
+msgid ""
+"B-pyramid improves compression by creating a pyramidal structure (hence the name)\n"
+"of B-frames, allowing B-frames to reference each other to improve compression.\n"
+"\n"
+"Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
+msgstr ""
+"Permite usar fotogramas B como referencia para otros fotogramas B. El valor por defecto es el modo normal.\n"
+"\n"
+"Requiere un número máximo de fotogramas B mayor que 1. Es altamente recomendable seleccionar el modo de decisión óptimo para los fotogramas B adaptables para una mejora completa de la compresión."
+
+msgid "<small>Weighted P-Frames:</small>"
+msgstr "<small>Predicción ponderada para fotogramas P:</small>"
+
+msgid ""
+"Performs extra analysis to decide upon weighting parameters for each frame.\n"
+"\n"
+"This improves overall compression slightly and improves the quality of fades greatly.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires weighted P-frame\n"
+"prediction to be disabled.  Note that some devices and players, even those that support\n"
+"Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
+"completely incompatible with it, for example."
+msgstr ""
+"Activa la predicción ponderada para mejorar la compresión de los fotogramas P. El valor por defecto es el modo inteligente, que mejora mucho la calidad de los fundidos.\n"
+"\n"
+"El perfil básico, obligatorio para iPods y dispositivos similares, requiere que se desactive este ajuste. Algunos dispositivos que admiten el perfil principal pueden tener problemas con este ajuste: Apple TV es totalmente incompatible, por ejemplo."
+
+msgid "8x8 Transform"
+msgstr "Transformación 8x8"
+
+msgid ""
+"The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
+"\n"
+"It improves compression by at least 5% at a very small speed cost and may\n"
+"provide an unusually high visual quality benefit compared to its compression\n"
+"gain.  However, it requires High Profile, which many devices may not support."
+msgstr ""
+"Activa la transformación 8x8 adaptable. Es la opción por defecto.\n"
+"\n"
+"Es la característica del codificador x264 que tiene la mejor relación entre velocidad y calidad. Mejora la compresión en al menos un 5%, con una reducción muy pequeña de la velocidad de codificación, y puede proporcionar una gran mejora de la calidad visual.\n"
+"\n"
+"Requiere el perfil alto del codificador, que muchos dispositivos no admiten."
+
+msgid "CABAC Entropy Encoding"
+msgstr "Codificación de entropía CABAC"
+
+msgid ""
+"After the encoder has done its work, it has a bunch of data that\n"
+"needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides\n"
+"two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but\n"
+"compresses significantly better (10-30%), especially at lower bitrates.\n"
+"\n"
+"If you're looking to minimize CPU requirements for video playback, disable this option.\n"
+"Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
+msgstr ""
+"Activa el algoritmo de compresión sin pérdida CABAC. Es la opción por defecto. Si se desactiva CABAC, se activa el algoritmo CAVLC.\n"
+"\n"
+"CABAC es más lento en la decodificación, pero comprime significativamente mejor (un 10-30% más), especialmente a tasas de bits bajas. Si quiere minimizar el uso del procesador en la reproducción del vídeo, desactive esta opción.\n"
+"\n"
+"Para cumplir el perfil básico, obligatorio para iPods y otros dispositivos similares, hay que desactivar esta opción."
+
+msgid "<small><b>Encoding Features</b></small>"
+msgstr "<b>Características de la codificación</b>"
+
+msgid "<small>Motion Est. Method:</small>"
+msgstr "<small>Estimación de movimiento:</small>"
+
+msgid ""
+"Controls the motion estimation method.\n"
+"\n"
+"Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.\n"
+"A better motion search method improves compression at the cost of speed.\n"
+"\n"
+"Diamond: performs an extremely fast and simple search using a diamond pattern.\n"
+"Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.\n"
+"Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
+"Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
+"Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
+msgstr ""
+"Selecciona el método de estimación de movimiento. El método de estimación de movimiento es el algoritmo que utiliza el codificador para calcular como se ha movido cada bloque de píxeles de un fotograma al siguiente.\n"
+"\n"
+"Seleccionar un método mejor mejora la compresión a costa de aumentar el tiempo de codificación. Hay cinco métodos:\n"
+"\n"
+"Búsqueda de diamante: búsqueda extremadamente rápida y sencilla. Utiliza un patrón con forma de diamante.\n"
+"Búsqueda hexagonal: búsqueda algo más eficaz, pero ligeramente más lenta. Utiliza un patrón hexagonal. Es el método por defecto.\n"
+"Búsqueda multihexágonal desigual: búsqueda muy amplia. Utiliza una variedad de patrones. Captura con más precisión el movimiento complejo.\n"
+"Búsqueda exhaustiva: búsqueda píxel a píxel en un área amplia. Es significativamente más lenta y solo mejora ligeramente la compresión.\n"
+"Búsqueda exhaustiva de Hadamard: búsqueda similar a la anterior, pero más precisa. Es aún más lenta y solo proporciona una pequeña mejora de la compresión."
+
+msgid "<small>Subpel ME &amp; Mode:</small>"
+msgstr "<small>Estimación de movimiento de subpíxel:</small>"
+
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr ""
+"Selecciona el nivel de precisión de la estimación de movimiento de subpíxel y el método de determinación del modo de codificación de cada bloque de píxeles del fotograma.\n"
+"\n"
+"Cuanto mayor sea la precisión de la estimación de movimiento de subpíxel, mejores son los resultados de la compresión. El método de determinación más rápido es SAD, seguido por SATD, RD, RD mejorado y QPRD.\n"
+"\n"
+"El nivel 7 es el valor por defecto. La optimización psicovisual requiere el nivel 6 o superior.\n"
+"Los niveles 10 y 11 requieren activar la cuantificación de enrejado en la codificación y en el análisis (trellis=2), y también la cuantificación adaptable (aq-mode > 0)."
+
+msgid "<small>Motion Est. Range:</small>"
+msgstr "<small>Rango de búsqueda de movimiento:</small>"
+
+msgid ""
+"This is the distance x264 searches from its initial guess at the\n"
+"motion of a block in order to try to find its actual motion.\n"
+"\n"
+"The default is fine for most content, but extremely high motion video,\n"
+"especially at HD resolutions, may benefit from higher ranges, albeit at\n"
+"a high speed cost."
+msgstr ""
+"Selecciona el rango máximo de la búsqueda de movimiento en píxeles. El valor por defecto es 16. Un valor más elevado resulta en un análisis más preciso, pero también ralentiza la velocidad de codificación de manera significativa.\n"
+"\n"
+"El valor por defecto es adecuado para la mayoría de los contenidos, pero los vídeos con mucho movimiento, especialmente en alta definición, se benefician de valores más elevados."
+
+msgid "<small>Adaptive Direct Mode:</small>"
+msgstr "<small>Modo directo adaptable:</small>"
+
+msgid ""
+"H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
+"\n"
+"Spatial, the default, is almost always better, but temporal is sometimes useful too.\n"
+"x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
+"adaptively select which is better for each particular frame."
+msgstr ""
+"Selecciona el modo de predicción para los vectores de movimiento directos de los fotogramas B.\n"
+"\n"
+"El modo espacial es el valor predeterminado. El modo temporal es mejor con tasas de bits bajas. El modo automático permite al codificador seleccionar el modo mejor para cada fotograma particular (es más eficiente en la codificación en dos pasadas)."
+
+msgid "<small>Adaptive B-Frames:</small>"
+msgstr "<small>Fotogramas B adaptables:</small>"
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr ""
+"Selecciona el método para decidir el número de fotogramas B consecutivos.\n"
+"\n"
+"El modo rápido utiliza, por lo general, un número muy bajo de fotogramas B, incluso si se ha especificado un límite muy alto. Es el valor por defecto.\n"
+"\n"
+"El modo óptimo se vuelve más lento cuanto más alto es el número máximo de fotogramas B especificado, pero es más preciso, especialmente cuando se usan fotogramas B como referencia."
+
+msgid "<small>Partitions:</small>"
+msgstr "<small>Particiones:</small>"
+
+msgid ""
+"Mode decision picks from a variety of options to make its decision:\n"
+"this option chooses what options those are.\n"
+"\n"
+"Fewer partitions to check means faster encoding, at the cost of worse\n"
+"decisions, since the best option might have been one that was turned off."
+msgstr ""
+"Durante la compresión, el codificador divide los fotogramas en bloques de 16x16 píxeles para descartar los datos redundantes. Este ajuste activa la subdivisión de los bloques en particiones más pequeñas.\n"
+"\n"
+"Cuantas más particiones se activan, es más precisa la estimación de movimiento, aunque también aumenta el tiempo de codificación."
+
+msgid "<small>Trellis:</small>"
+msgstr "<small>Cuantificación de enrejado:</small>"
+
+msgid ""
+"Trellis fine-tunes the rounding of transform coefficients to\n"
+"squeeze out 3-5% more compression at the cost of some speed.\n"
+"\n"
+"\"Always\" uses trellis not only during the main encoding process, but also\n"
+"during analysis, which improves compression even more, albeit at great speed cost.\n"
+"\n"
+"Trellis costs more speed at higher bitrates and requires CABAC."
+msgstr ""
+"Activa la cuantificación de enrejado. La cuantificación de enrejado mejora la eficiencia de la compresión a costa de reducir la velocidad de codificación.\n"
+"\n"
+"El modo por defecto activa la cuantificación de enrejado solo durante la codificación principal. Si se activa siempre, mejora más la compresión, aunque se reduce mucho más la velocidad.\n"
+"\n"
+"La cuantificación de enrejado reduce más la velocidad a mayores tasas de bits y requiere la activación de la codificación de entropía CABAC."
+
+msgid "<small><b>Analysis</b></small>"
+msgstr "<b>Análisis</b>"
+
+msgid "<small>Adaptive Quantization Strength:</small>"
+msgstr "<small>Cuantificación adaptable:</small>"
+
+msgid ""
+"Adaptive quantization controls how the encoder distributes bits across the frame.\n"
+"\n"
+"Higher values take more bits away from edges and complex areas to improve areas with finer detail."
+msgstr ""
+"Selecciona la intensidad de la cuantificación adaptable. La cuantificación adaptable controla cómo el codificador asigna los bits para codificar las diferentes áreas de los fotogramas.\n"
+"\n"
+"Los valores más altos utilizan más bits para codificar las áreas con detalles más finos para mejorar la calidad de la imagen. El valor por defecto es 1.0."
+
+msgid "<small>Psychovisual Rate Distortion:</small>"
+msgstr "<small>Tasa de distorsión psicovisual: </small>"
+
+msgid ""
+"Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
+"vision to dramatically improve apparent detail and sharpness.\n"
+"The effect can be made weaker or stronger by adjusting the strength.\n"
+"Being an RD algorithm, it requires mode decision to be at least \"6\"."
+msgstr ""
+"Selecciona la intensidad de optimización de la tasa de distorsión psicovisual. La optimización de la tasa de distorsión psicovisual se aprovecha de las características de la visión humana para mejorar significativamente el detalle y la nitidez de la imagen.\n"
+"\n"
+"Requiere el modo 6 o superior del método de estimación de movimiento de subpíxel. El valor por defecto es 1.0."
+
+msgid "<small>Psychovisual Trellis:</small>"
+msgstr "<small>Enrejado psicovisual:</small>"
+
+msgid ""
+"Psychovisual trellis is an experimental algorithm to further\n"
+"improve sharpness and detail retention beyond what Psychovisual RD does.\n"
+"\n"
+"Recommended values are around 0.2, though higher values may help for very\n"
+"grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
+"and other sharp-edged graphics."
+msgstr ""
+"Selecciona la intensidad del enrejado psicovisual. El enrejado psicovisual es un algoritmo experimental que mejora aún más el detalle y la nitidez de la imagen. Requiere la activación de la cuantificación de enrejado.\n"
+"\n"
+"El valor por defecto es 0.0. El valor recomendado es 0.2, aunque valores más altos pueden ser útiles para vídeo muy granulado o codificaciones con tasas de bits bajas. No se recomienda para la animación tradicional ni para otros gráficos de bordes marcados."
+
+msgid "Deblocking: "
+msgstr "Desbloqueo: "
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
+msgstr ""
+"Selecciona la intensidad y el umbral del filtro de desbloqueo del estándar H.264. Este filtro suaviza los artefactos de bloque después de decodificar cada fotograma. No solo mejora la calidad visual, también ayuda en la compresión.\n"
+"\n"
+"La intensidad del filtro controla cuánto se suavizará el vídeo. El valor por defecto es 0. Valores positivos intensifican el efecto del filtro, pero dan como resultado un vídeo más borroso. Valores negativos producen un vídeo más nítido, pero aumentan el riesgo de que haya artefactos visibles.\n"
+"\n"
+"El umbral del filtro controla el umbral de detección de bloques. El valor por defecto es 0. Valores positivos capturan más artefactos, pero eliminan más detalles. Valores negativos preservan más detalles del vídeo, pero pasan por alto más artefactos, especialmente en las áreas planas."
+
+msgid "No DCT Decimate"
+msgstr "Desactivar el diezmado de la DCT"
+
+msgid ""
+"x264 normally zeroes out nearly-empty data blocks to save bits to\n"
+"be better used for some other purpose in the video.  However, this can\n"
+"sometimes have slight negative effects on retention of subtle grain and\n"
+"dither.\n"
+"\n"
+"Don't touch this unless you're having banding issues or other such cases\n"
+"where you are having trouble keeping fine noise."
+msgstr ""
+"Desactiva el diezmado de la DCT. Por defecto el codificador x264 descarta los bloques de datos casi vacíos para aumentar la eficiencia de la codificación. Sin embargo, esto a veces puede tener ligeros efectos negativos sobre la retención del grano fino y de las texturas.\n"
+"\n"
+"No desactive el diezmado de la DCT a menos que tenga problemas de bandas de color o para mantener el ruido fino."
+
+msgid "<small><b>Psychovisual</b></small>"
+msgstr "<b>Optimización psicovisual</b>"
+
+msgid ""
+"Your selected options will appear here.\n"
+"You can edit these and add additional options.\n"
+"\n"
+"Default values will not be shown. The defaults are:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
+"b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
+"subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
+"deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
+"no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+msgstr ""
+"Las opciones seleccionadas aparecen aquí. Puede editarlas y añadir otras.\n"
+"\n"
+"Los valores por defecto no se muestran. Son los siguientes:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:b-pyramid=normal:weightp=2:me=hex:\n"
+"merange=16:subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:deblock=0,0:trellis=1:\n"
+"psy-rd=1,0:aq-strength=1.0:no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+
+msgid "<small><b>Current x264 Advanced Option String</b></small>"
+msgstr "<b>Cadena de opciones avanzadas para el codificador x264</b>"
+
+msgid "Advanced Video"
+msgstr "Vídeo avanzado"
+
+msgid "Chapter Markers"
+msgstr "Marcadores de capítulos"
+
+msgid "Add chapter markers to output file."
+msgstr "Añade marcadores de capítulos al archivo codificado."
+
+msgid "Chapters"
+msgstr "Capítulos"
+
+msgid "Actors:"
+msgstr "Actores:"
+
+msgid "Director:"
+msgstr "Dirección:"
+
+msgid "Release Date:"
+msgstr "Fecha de lanzamiento:"
+
+msgid "Comment:"
+msgstr "Comentario:"
+
+msgid "Genre:"
+msgstr "Género:"
+
+msgid "Description:"
+msgstr "Descripción:"
+
+msgid "Plot:"
+msgstr "Argumento:"
+
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Reload"
+msgstr "Recargar"
+
+msgid ""
+"Mark selected queue entry as pending.\n"
+"Resets the queue job to pending and ready to run again."
+msgstr "Marca la codificación seleccionada como lista para ejecutar de nuevo."
+
+msgid "Reload All"
+msgstr "Recargar todo"
+
+msgid ""
+"Mark all queue entries as pending.\n"
+"Resets all queue jobs to pending and ready to run again."
+msgstr "Marca todas las codificaciones como listas para ejecutar de nuevo."
+
+msgid "OK"
+msgstr "De acuerdo"
+
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+msgid "Mark all titles for adding to the queue"
+msgstr "Marca todos los títulos."
+
+msgid "Clear All"
+msgstr "Deseleccionar todo"
+
+msgid "Unmark all titles"
+msgstr "Desmarca todos los títulos."
+
+msgid "Destination files OK.  No duplicates detected."
+msgstr "Se han verificado los archivos de destino. No se han detectado archivos duplicados."
+
+msgid "Select this title for adding to the queue.\n"
+msgstr "Selecciona este título para añadir a la cola.\n"
+
+msgid "Preferences"
+msgstr "Preferencias"
+
+msgid "Automatically check for updates"
+msgstr "Comprobar automáticamente si hay actualizaciones"
+
+msgid "When all encodes are complete"
+msgstr "Cuando finalizan todas las codificaciones"
+
+msgid "Use automatic naming (uses modified source name)"
+msgstr "Asignar el nombre de archivo automáticamente (nombre original modificado)"
+
+msgid "Auto-Name Template"
+msgstr "Plantilla para la asignación automática"
+
+msgid "Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+msgstr "Opciones disponibles: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr "Usar la extensión de archivo adecuada para iPod/iTunes (.m4v) para MP4"
+
+msgid "Number of previews"
+msgstr "Número de vistas previas"
+
+msgid "Filter short titles (seconds)"
+msgstr "Filtrar los títulos cortos (segundos)"
+
+msgid "Show system tray icon"
+msgstr "Mostrar el icono en el área de nofiticación"
+
+msgid "General"
+msgstr "General"
+
+msgid "Constant Quality fractional granularity"
+msgstr "Nivel de detalle en la escala de calidad constante"
+
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Usar la biblioteca dvdnav (en lugar de la biblioteca libdvdread)"
+
+msgid "Put individual encode logs in same location as movie"
+msgstr "Guardar los registros de codificación en la misma ubicación que los vídeos codificados"
+
+msgid "Activity Log Verbosity Level"
+msgstr "Nivel de detalle de los registros de actividad"
+
+msgid "Activity Log Longevity"
+msgstr "Caducidad de los registros de actividad"
+
+msgid "Scale down High Definition previews"
+msgstr "Reducir las vistas previas de alta difinición"
+
+msgid "Automatically Scan DVD when loaded"
+msgstr "Explorar automáticamente los DVD"
+
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Explora automáticamente los DVD cuando se insertan en el reproductor."
+
+msgid "Hide Advanced Video Options Tab"
+msgstr "Ocultar la pestaña de vídeo avanzado"
+
+msgid ""
+"Use advanced video options at your own risk.\n"
+"We recommend that you use the controls available\n"
+"on the Video tab instead."
+msgstr ""
+"Utilice las opciones de vídeo avanzado bajo su propio riesgo.\n"
+"Es mejor que utilice en su lugar los controles disponibles en\n"
+"la pestaña de vídeo."
+
+msgid "Delete completed jobs from queue"
+msgstr "Eliminar las codificaciones finalizadas de la cola"
+
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"Por defecto, las codificaciones completadas permanecen en la\n"
+"cola y se marcan como finalizadas."
+
+msgid "Allow Tweaks"
+msgstr "Permitir retoques"
+
+msgid "Allow HandBrake For Dummies"
+msgstr "Permitir HandBrake para principiantes"
+
+msgid "Advanced"
+msgstr "Avanzadas"
+
+msgid "Folder Name:"
+msgstr "Nombre de la carpeta:"
+
+msgid "<b>Description</b>"
+msgstr "<b>Descripción</b>"
+
+msgid "Preset Name:"
+msgstr "Nombre del preajuste:"
+
+msgid "<b>Custom Picture Dimensions</b>"
+msgstr "<b>Dimensiones personalizadas de la imagen</b>"
+
+msgid "Maximum Width:"
+msgstr "Anchura máxima:"
+
+msgid "Enable maximum width limit."
+msgstr "Activa la anchura máxima."
+
+msgid ""
+"This is the maximum width that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
+"Setting this to 0 means there is no maximum width."
+msgstr ""
+"Selecciona la anchura máxima de almacenamiento del vídeo.\n"
+"\n"
+"Este ajuste se aplica al cargar una nueva fuente de vídeo si\n"
+"la anchura del vídeo es mayor. Si se selecciona 0, se desactiva\n"
+"la anchura máxima."
+
+msgid "Maximum Height:"
+msgstr "Altura máxima:"
+
+msgid "Enable maximum height limit."
+msgstr "Activa la altura máxima."
+
+msgid ""
+"This is the maximum height that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
+"Setting this to 0 means there is no maximum height."
+msgstr ""
+"Selecciona la altura máxima de almacenamiento del vídeo.\n"
+"\n"
+"Este ajuste se aplica al cargar una nueva fuente de vídeo si\n"
+"la altura del vídeo es mayor. Si se selecciona 0, se desactiva\n"
+"la altura máxima."
+
+msgid "Select preview frames."
+msgstr "Selecciona el fotograma de la vista previa."
+
+msgid "Encode and play a short sequence of video starting from the current preview position."
+msgstr "Codifica y reproduce una secuencia corta de vídeo desde la posición actual de la vista previa."
+
+msgid "<b>Duration:</b>"
+msgstr "<b>Duración:</b>"
+
+msgid "Set the duration of the live preview in seconds."
+msgstr "Selecciona la duración de la vista previa en segundos."
+
+msgid "Show Crop"
+msgstr "Mostrar el recorte"
+
+msgid "Show Cropped area of the preview"
+msgstr "Muestra el área recortada de la vista previa."
+
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+msgid "View Fullscreen Preview"
+msgstr "Previsualiza a pantalla completa."
+
+msgid "Title Number:"
+msgstr "Número del título:"
+
+msgid "Detected DVD devices:"
+msgstr "Dispositivo de DVD:"
+
+msgid "Setting:"
+msgstr "Ajuste:"
+
+msgid "Import SRT"
+msgstr "Importar una pista SRT"
+
+msgid "Enable settings to import an SRT subtitle file"
+msgstr "Importa una archivo de subtítulos SRT."
+
+msgid "Embedded Subtitle List"
+msgstr "Seleccionar una pista de la lista"
+
+msgid "Enable settings to select embedded subtitles"
+msgstr "Selecciona una de las pistas de subtítulos incluidas."
+
+msgid "Character Code"
+msgstr "Codificación de caracteres"
+
+msgid "Offset (ms)"
+msgstr "Compensación (ms)"
+
+msgid ""
+"Set the language of this subtitle.\n"
+"This value will be used by players in subtitle menus."
+msgstr ""
+"Selecciona el idioma de los subtítulos.\n"
+"\n"
+"Este valor lo utilizan los reproductores en los menús de subtítulos."
+
+msgid ""
+"Set the character code used by the SRT file you are importing.\n"
+"\n"
+"SRTs come in all flavours of character sets.\n"
+"We translate the character set to UTF-8.\n"
+"The source's character code is needed in order to perform this translation."
+msgstr ""
+"Selecciona la codificación de caracteres del archivo SRT para importar.\n"
+"\n"
+"La codificación de caracteres del archivo SRT se traduce a la codificación\n"
+"UTF-8. Para realizar esta traducción hay que conocer la codificación de\n"
+"caracteres del archivo SRT original."
+
+msgid "Select the SRT file to import."
+msgstr "Selecciona el archivo SRT para importar."
+
+msgid "Srt File"
+msgstr "Archivo SRT"
+
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr ""
+"Selecciona el desplazamiento en milisegundos entre las marcas de\n"
+"tiempo del vídeo y del archivo SRT."
+
+msgid "Track"
+msgstr "Pista original"
+
+msgid "List of subtitle tracks available from your source."
+msgstr "Lista de las pistas de subtítulos disponibles en la fuente de vídeo."
+
+msgid "Forced Subtitles Only"
+msgstr "Solo subtítulos forzados"
+
+msgid "Burn into video"
+msgstr "Incrustar en el vídeo"
+
+msgid ""
+"Render the subtitle over the video.\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Incrusta los subtítulos en el vídeo.\n"
+"Los subtítulos incrustados forman parte del vídeo y no se pueden desactivar."
+
+msgid "Set Default Track"
+msgstr "Pista por defecto"
+
+msgid "Source Track"
+msgstr "Pista original"
+
+msgid "List of audio tracks available from your source."
+msgstr "Lista de las pistas de audio disponibles en la fuente de vídeo."
+
+msgid "Track Name:"
+msgstr "Nombre de la pista:"
+
+msgid ""
+"Set the audio track name.\n"
+"\n"
+"Players may use this in the audio selection list."
+msgstr ""
+"Define el nombre de la pista de audio.\n"
+"\n"
+"Los reproductores pueden usar el nombre\n"
+"de la pista en la lista de selección de audio."
+
+msgid "Mix"
+msgstr "Mezcla"
+
+msgid "Sample Rate"
+msgstr "Tasa de muestreo"
+
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr ""
+"Selecciona la compresión de rango dinámico (DRC) para codificar las pistas de audio.\n"
+"\n"
+"Para fuentes de audio con un rango dinámico amplio, con secuencias muy fuertes y\n"
+"muy débiles, la compresión dinámica permite comprimir el rango del volumen,\n"
+"bajando los sonidos muy fuertes y elevando los sonidos muy débiles."
+
+msgid "Enable bitrate setting"
+msgstr "Activa la selección de la tasa de bits."
+
+msgid "Enable quality setting"
+msgstr "Activa la selección de la calidad."
+
+msgid "<b>Quality:</b> For output codec's that support it, adjust the quality of the output."
+msgstr "Selecciona la calidad para codificar las pistas de audio."
+
+msgid "00.0"
+msgstr "00.0"
+
+msgid "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output audio track."
+msgstr "Selecciona la amplificación o atenuación para codificar las pistas de audio."
+
+msgid "Skip This Version"
+msgstr "Omitir esta versión"
+
+msgid "Remind Me Later"
+msgstr "Recordar más tarde"
+
+msgid "<b>A new version of HandBrake is available!</b>"
+msgstr "<b>¡Hay disponible una versión nueva de HandBrake!</b>"
+
+msgid "HandBrake xxx is now available (you have yyy)."
+msgstr "HandBrake xxx está disponible ahora (esta versión es yyy)."
+
+msgid "<b>Release Notes</b>"
+msgstr "<b>Notas de la versión</b>"
+
+msgid "First Track Matching Selected Languages"
+msgstr "primera pista que coincida con los idiomas seleccionados"
+
+msgid "All Tracks Matching Selected Languages"
+msgstr "todas las pistas que coincidan con los idiomas seleccionados"
+
+msgid "Chapters:"
+msgstr "Capítulos:"
+
+msgid "Seconds:"
+msgstr "Segundos:"
+
+msgid "Frames:"
+msgstr "Fotogramas:"
+
+msgid "Do Nothing"
+msgstr "No hacer nada"
+
+msgid "Show Notification"
+msgstr "Mostrar una notificación"
+
+msgid "Quit Handbrake"
+msgstr "Salir de HandBrake"
+
+msgid "Put Computer To Sleep"
+msgstr "Poner el equipo en reposo"
+
+msgid "Shutdown Computer"
+msgstr "Apagar el equipo"
+
+msgid "Week"
+msgstr "Una semana"
+
+msgid "Month"
+msgstr "Un mes"
+
+msgid "Year"
+msgstr "Un año"
+
+msgid "Immortal"
+msgstr "Nunca"
+
+msgid "Never"
+msgstr "Nunca"
+
+msgid "Daily"
+msgstr "Diario"
+
+msgid "Weekly"
+msgstr "Semanal"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Default"
+msgstr "por defecto"
+
+msgid "Fast"
+msgstr "rápido"
+
+msgid "Slow"
+msgstr "lento"
+
+msgid "Slower"
+msgstr "más lento"
+
+msgid "Ultralight"
+msgstr "ultraligero"
+
+msgid "Light"
+msgstr "ligero"
+
+msgid "Medium"
+msgstr "medio"
+
+msgid "Strong"
+msgstr "fuerte"
+
+msgid "Film"
+msgstr "filme"
+
+msgid "Grain"
+msgstr "grano"
+
+msgid "High Motion"
+msgstr "mucho movimiento"
+
+msgid "Animation"
+msgstr "animación"
+
+msgid "Spatial"
+msgstr "espacial"
+
+msgid "Temporal"
+msgstr "temporal"
+
+msgid "Automatic"
+msgstr "automático"
+
+msgid "Optimal"
+msgstr "óptimo"
+
+msgid "Normal"
+msgstr "normal"
+
+msgid "Simple"
+msgstr "simple"
+
+msgid "Smart"
+msgstr "inteligente"
+
+msgid "Diamond"
+msgstr "búsqueda de diamante"
+
+msgid "Hexagon"
+msgstr "búsqueda hexagonal"
+
+msgid "Uneven Multi-Hexagon"
+msgstr "búsqueda multihexagonal desigual"
+
+msgid "Exhaustive"
+msgstr "búsqueda exhaustiva"
+
+msgid "Hadamard Exhaustive"
+msgstr "búsqueda exhaustiva de Hadamard"
+
+msgid "Most"
+msgstr "por defecto"
+
+msgid "Some"
+msgstr "algunas"
+
+msgid "All"
+msgstr "todas"
+
+msgid "Encode only"
+msgstr "solo al codificar"
+
+msgid "Always"
+msgstr "siempre"
+
+msgid "(NTSC Film)"
+msgstr "(filme NTSC)"
+
+msgid "(PAL Film/Video)"
+msgstr "(filme/TV PAL)"
+
+msgid "(NTSC Video)"
+msgstr "(TV NTSC)"
+
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr "%d - %02d h %02d m %02d s - %s"
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr "%d (%05d.MPLS) - %02d h %02d m %02d s"
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr "%d (%05d.MPLS) - Duración desconocida"
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr "%d - %02d h %02d m %02d s"
+
+msgid "%d - Unknown Length"
+msgstr "%d - Duración desconocida"
+
+msgid "No Titles"
+msgstr "No hay títulos"
+
+msgid "No Audio"
+msgstr "No hay audio"
+
+msgid "Foreign Audio Search"
+msgstr "Búsqueda de audio extranjero"
+
+#, c-format
+msgid "Chapter %2d"
+msgstr "Capítulo %2d"
+
+#, c-format
+msgid "N/A"
+msgstr "N/D"
+
+#, c-format
+msgid ""
+"Invalid Deinterlace Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de desentrelazado no válidos:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Detelecine Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de destelecinado no válidos:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Decomb Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de despeinado no válidos:\n"
+"\n"
+"%s\n"
+
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+"El códec Theora no es compatible con el formato contenedor MP4.\n"
+"\n"
+"Debe elegir un códec de vídeo o un formato contenedor diferente.\n"
+"Si continúa, se seleccionará el códec FFmpeg automáticamente."
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "No title found.\n"
+msgstr "No se ha encontrado ningún título.\n"
+
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"Solo se puede incrustar una pista de subtítulos en el vídeo.\n"
+"\n"
+"Cambie la selección de subtítulos.\n"
+"Si continúa, se perderá alguna pista de subtítulos."
+
+msgid ""
+"Srt file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+"El archivo SRT no existe o no es válido.\n"
+"\n"
+"Debe elegir un archivo válido.\n"
+"Si continúa, esta pista de subtítulos será ignorada."
+
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"La fuente de a audio no soporta la copia directa.\n"
+"\n"
+"Debe elegir un códec de audio diferente.\n"
+"Si continúa, se seleccionará uno automáticamente."
+
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"El códec %s no es compatible con el formato contenedor %s.\n"
+"\n"
+"Debe elegir un códec de audio diferente.\n"
+"Si continúa, se seleccionará uno automáticamente."
+
+#, c-format
+msgid ""
+"The source audio does not support %s mixdown.\n"
+"\n"
+"You should choose a different mixdown.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"La fuente de audio no admite la mezcla %s.\n"
+"\n"
+"Debe elegir una mezcla diferente.\n"
+"Si continúa, se seleccionará una automáticamente."
+
+#, c-format
+msgid ""
+"<b><big>Unable to create %s.</big></b>\n"
+"\n"
+"Internal error. Could not parse UI description.\n"
+"%s"
+msgstr ""
+"<b><big>No se puede crear %s.</big></b>\n"
+"\n"
+"Se ha producido un error interno.\n"
+"No se ha podido analizar la descripción de la interfaz de usuario.\n"
+"%s"
+
+msgid "Index"
+msgstr "Índice"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Job Information"
+msgstr "Información del trabajo"
+
+msgid "Track Information"
+msgstr "Información de la pista"
+
+msgid "Preset Name"
+msgstr "Nombre del preajuste"
+
+msgid "The device or file to encode"
+msgstr "El dispositivo o archivo para la codificación"
+
+msgid "The preset values to use for encoding"
+msgstr "Los ajustes predeterminados que se usan para codificar"
+
+msgid "Spam a lot"
+msgstr "Enviar muchos mensajes irrelevantes"
+
+msgid "- Transcode media formats"
+msgstr "- Transcodificar formatos multimedia"
+
+msgid "Globals"
+msgstr "Globales"
+
+msgid "Presets"
+msgstr "Preajustes"
+
+msgid "Folder"
+msgstr "Carpeta"
+
+#, c-format
+msgid "%s path: (%s)"
+msgstr "%s ubicación: (%s)"
+
+#, c-format
+msgid "%s indices: len %d"
+msgstr "%s índices: duración %d"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Failed to find parent folder when adding child."
+msgstr "No se ha podido encontrar la carpeta principal al añadir la subcarpeta."
+
+msgid "Failed to find parent folder while adding child."
+msgstr "No se ha podido encontrar la carpeta principal al añadir la subcarpeta."
+
+#, c-format
+msgid "Can't map language value: (%s)"
+msgstr "No se puede asignar valor de idioma: (%s)"
+
+#, c-format
+msgid "Can't map value: (%s)"
+msgstr "No se puede asignar el valor: (%s)"
+
+msgid "Subtitles"
+msgstr "Subtítulos"
+
+msgid ""
+"%s: Folder already exists.\n"
+"You can not replace it with a preset."
+msgstr ""
+"%s: La carpeta ya existe.\n"
+"\n"
+"La carpeta no se puede reemplazar con un preajuste."
+
+msgid ""
+"%s: Preset already exists.\n"
+"You can not replace it with a folder."
+msgstr ""
+"%s: El preajuste ya existe.\n"
+"\n"
+"El preajuste no se puede reemplazar con una carpeta."
+
+msgid "Import Preset"
+msgstr "Importar preajustes"
+
+msgid "All (*)"
+msgstr "Todos los archivos (*)"
+
+msgid "Presets (*.plist)"
+msgstr "Preajustes (*.plist)"
+
+msgid "Export Preset"
+msgstr "Exportar preajustes"
+
+msgid ""
+"Confirm deletion of %s:\n"
+"\n"
+"%s"
+msgstr ""
+"¿Seguro que quiere borrar %s siguiente?\n"
+"\n"
+"%s"
+
+msgid "folder"
+msgstr "la carpeta"
+
+msgid "preset"
+msgstr "el preajuste"
+
+msgid "No selection???  Perhaps unselected."
+msgstr "¿No se ha seleccionado nada? Tal vez no se ha marcado nada."
+
+#, c-format
+msgid "Gstreamer Error: %s"
+msgstr "Error de GStreamer: %s"
+
+#, c-format
+msgid ""
+"Missing GStreamer plugin\n"
+"Audio or Video may not play as expected\n"
+"\n"
+"%s"
+msgstr ""
+"Falta el complemento de GStreamer.\n"
+"No se puede reproducir el audio o el vídeo como se esperaba.\n"
+"\n"
+"%s"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid "Windowed"
+msgstr "Ventana"
+
+msgid "Seconds"
+msgstr "Segundos"
+
+msgid "Frames"
+msgstr "Fotogramas"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Título %d - %s %d a %d - 2 pasadas de vídeo) --> %s</small>"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Título %d - %s %d a %d) --> %s</small>"
+
+#, c-format
+msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
+msgstr "<b>Preajuste modificado a partir de:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Preset:</b> <small>%s</small>\n"
+msgstr "<b>Preajuste:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Format:</b> <small>%s Container</small>\n"
+msgstr "<b>Formato contenedor:</b> <small>%s</small>\n"
+
+msgid "<b>Container Options:</b><small>"
+msgstr "<b>Opciones del contenedor:</b><small>"
+
+#, c-format
+msgid "%sChapter Markers"
+msgstr "%sMarcadores de capítulo"
+
+#, c-format
+msgid "%siPod 5G Support"
+msgstr "%sCompatibilidad con iPod 5G"
+
+#, c-format
+msgid "%sWeb Optimized"
+msgstr "%sOptimizado para la web"
+
+#, c-format
+msgid "%sLarge File Size (>4GB)"
+msgstr "%sArchivo de gran tamaño (>4GB)"
+
+#, c-format
+msgid "<b>Destination:</b> <small>%s</small>\n"
+msgstr "<b>Archivo de destino:</b> <small>%s</small>\n"
+
+msgid "(Aspect Preserved)"
+msgstr "(aspecto preservado)"
+
+msgid "(Aspect Lost)"
+msgstr "(aspecto perdido)"
+
+msgid "(Anamorphic)"
+msgstr "(modo anamórfico)"
+
+msgid "(Custom Anamorphic)"
+msgstr "(modo anamórfico personalizado)"
+
+msgid "<b>Picture:</b> <small>"
+msgstr "<b>Tamaño de imagen:</b> <small>"
+
+#, c-format
+msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
+msgstr "Fuente: %d x %d - Destino: %d x %d %s - Recorte: %d:%d:%d:%d"
+
+#, c-format
+msgid ", Display %d x %d"
+msgstr " - Visualización: %d x %d"
+
+msgid "<b>Filters:</b><small>"
+msgstr "<b>Filtros de imagen:</b><small>"
+
+#, c-format
+msgid "%sDetelecine"
+msgstr "%sDestelecinado"
+
+#, c-format
+msgid "%sDecomb"
+msgstr "%sDespeinado"
+
+#, c-format
+msgid "%sDeinterlace"
+msgstr "%sDesentrelazado"
+
+#, c-format
+msgid "%sDenoise Filter %s:"
+msgstr "%sAtenuación de ruido %s:"
+
+#, c-format
+msgid "%sDeblock: %d"
+msgstr "%sDesbloqueo: %d"
+
+#, c-format
+msgid "%sGrayscale"
+msgstr "%sEscala de grises"
+
+#, c-format
+msgid "<b>Video:</b> <small>%s"
+msgstr "<b>Pista de vídeo:</b> <small>%s"
+
+#, c-format
+msgid ", Framerate: %s %s"
+msgstr " - Tasa de fotogramas: %s %s"
+
+#, c-format
+msgid ", Framerate: Peak %s (may be lower)"
+msgstr " - Tasa de fotogramas: %s (pico de la tasa, puede ser más baja)"
+
+#, c-format
+msgid ", Framerate: %s (constant frame rate)"
+msgstr " - Tasa de fotogramas: %s (tasa constante)"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Bitrate:"
+msgstr "Tasa de bits:"
+
+msgid "Bitrate"
+msgstr "Tasa de bits"
+
+msgid "Quality"
+msgstr "Calidad"
+
+msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
+msgstr "<b>Primera pasada rápida:</b> <small>activar</small>\n"
+
+#, c-format
+msgid "<b>Video Options:</b> <small>Preset: %s</small>"
+msgstr "<b>Opciones de vídeo:</b> <small>Preajuste: %s</small>"
+
+msgid "<small> - Tune: "
+msgstr "<small> - Ajuste fino: "
+
+#, c-format
+msgid "<small> - Profile: %s</small>"
+msgstr "<small> - Perfil: %s</small>"
+
+#, c-format
+msgid "<small> - Level: %s</small>"
+msgstr "<small> - Nivel: %s</small>"
+
+#, c-format
+msgid "<b>Advanced Options:</b> <small>%s</small>\n"
+msgstr "<b>Opciones de vídeo avanzadas:</b> <small>%s</small>\n"
+
+msgid "<b>Audio:</b> <small>"
+msgstr "<b>Pista de audio:</b> <small>"
+
+#, c-format
+msgid "<b>Audio Tracks: %d</b><small>"
+msgstr "<b>Pistas de audio: %d</b><small>"
+
+#, c-format
+msgid "Bitrate: %d"
+msgstr "Tasa de bits: %d"
+
+#, c-format
+msgid "%s --> Encoder: %s"
+msgstr "%s --> Codificador: %s"
+
+#, c-format
+msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
+msgstr "%s --> Codificador: %s - Mezcla: %s - Tasa de muestreo: %s - %s"
+
+msgid "<b>Subtitle:</b> "
+msgstr "<b>Pista de subtítulos:</b> "
+
+#, c-format
+msgid "<b>Subtitle Tracks: %d</b>\n"
+msgstr "<b>Pistas de subtítulos: %d</b>\n"
+
+msgid " (Force)"
+msgstr " (forzar)"
+
+msgid " (Burn)"
+msgstr " (incrustar)"
+
+msgid " (Default)"
+msgstr " (por defecto)"
+
+#, c-format
+msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
+msgstr "<small> %s (%s) - %s - Compensación: %d ms %s</small>\n"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Destino: %s\n"
+"\n"
+"Otra codificación de la cola ha especificado el mismo destino.\n"
+"¿Quiere sobrescribirlo?"
+
+msgid "Overwrite"
+msgstr "Sobrescribir"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"This is not a valid directory."
+msgstr ""
+"Destino: %s\n"
+"\n"
+"Esta carpeta no es válida."
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Can not read or write the directory."
+msgstr ""
+"Destino: %s\n"
+"\n"
+"No se puede leer o escribir en la carpeta."
+
+#, c-format
+msgid ""
+"Destination filesystem is almost full: %uM free\n"
+"\n"
+"Encode may be incomplete if you proceed.\n"
+msgstr ""
+"El sistema de archivos de destino está casi lleno: %u MB libres.\n"
+"\n"
+"La codificación puede quedar incompleta si continúa.\n"
+
+msgid "Proceed"
+msgstr "Ejecutar"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"File already exists.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Destino: %s\n"
+"\n"
+"El archivo ya existe. ¿Quiere sobrescribirlo?"
+
+msgid ""
+"<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
+"Duplicates will not be added to the queue.</span>"
+msgstr ""
+"<span foreground='red' weight='bold'>Se han detectado archivos de destino duplicados.\n"
+"Los archivos duplicados no se añadirán a la cola.</span>"
+
+msgid "No Title"
+msgstr "No hay título"
+
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+"Hay otro título con el mismo nombre de archivo de destino.\n"
+"\n"
+"Este título no se añadirá a la cola a menos que cambie el\n"
+"nombre del archivo de destino.\n"
+
+msgid "Stop"
+msgstr "Detener"
+
+msgid "Stop Encoding"
+msgstr "Detiene la codificación."
+
+msgid "Resume"
+msgstr "Reanudar"
+
+msgid "Resume Encoding"
+msgstr "Reanuda la codificación."
+
+msgid "S_top Queue"
+msgstr "_Detener la cola"
+
+msgid "_Start Queue"
+msgstr "_Iniciar la cola"
+
+msgid "_Resume Queue"
+msgstr "_Reanudar la cola"
+
+msgid "Resume Queue"
+msgstr "Reanuda la cola."
+
+msgid ""
+"You are currently encoding.  What would you like to do?\n"
+"\n"
+msgstr ""
+"En este momento se está codificando.\n"
+"\n"
+" ¿Qué quiere hacer?\n"
+
+#, c-format
+msgid ""
+"You have %d unfinished job(s) in a saved queue.\n"
+"\n"
+"Would you like to reload them?"
+msgstr ""
+"Hay %d codificación(es) pendientes en una cola guardada.\n"
+"\n"
+"¿Quiere volver a cargaras?"
+
+msgid "No"
+msgstr "no"
+
+msgid "Yes"
+msgstr "sí"
+
+#, c-format
+msgid "Usage: %s infile [outfile]\n"
+msgstr "Uso: %s archivo_de_entrada [archivo_de_salida]\n"
+
+#, c-format
+msgid "Offset: %dms"
+msgstr "Compensación: %d ms"
+
+msgid "Burned Into Video"
+msgstr "Incrustar en el vídeo"
+
+msgid "Passthrough"
+msgstr "Copia directa"
+
+msgid "through"
+msgstr "a"
+
+msgid "(Forced Subtitles Only)"
+msgstr "(solo subtítulos forzados)"
+
+msgid "(Default)"
+msgstr "(por defecto)"
+
+msgid "Error!"
+msgstr "¡Error!"
+
+#, c-format
+msgid "Preferred Language: %s"
+msgstr "Idioma preferido: %s"
+
+#, c-format
+msgid "Add %s subtitle track if default audio is not %s"
+msgstr "Añadir subtítulos en '%s' si el audio por defecto no es '%s'"
+
+#, c-format
+msgid "Type %s"
+msgstr "Tipo %s"
+
+#, c-format
+msgid "Type %s value %s"
+msgstr "Tipo %s valor %s"
+
+#, c-format
+msgid "Type %s value %d"
+msgstr "Tipo %s valor %d"
+
+#, c-format
+msgid "Type %s value %<PRId64>"
+msgstr "Tipo %s valor %<PRId64>"
+
+#, c-format
+msgid "Type %s value %f"
+msgstr "Tipo %s valor %f"
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"Expanded Options:\n"
+"\"%s\""
+msgstr ""
+"%s\n"
+"\n"
+"Opciones expandidas:\n"
+"\"%s\""
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"Expanded Options:\n"
+"\"\""
+msgstr ""
+"%s\n"
+"\n"
+"Opciones expandidas:\n"
+"\"\""
+
+msgid "Any"
+msgstr "ninguno"
+
+msgid "0: SAD, no subpel"
+msgstr "0: SAD, sin subpíxel"
+
+msgid "4: SATD, qpel on all"
+msgstr "4: SATD, un cuarto de píxel en todo"
+
+msgid "5: SATD, multi-qpel on all"
+msgstr "5: SATD, múltiples cuartos de píxel en todo"
+
+msgid "6: RD in I/P-frames"
+msgstr "6: RD en los fotogramas I/P"
+
+msgid "7: RD in all frames"
+msgstr "7: RD en todos los fotogramas"
+
+msgid "8: RD refine in I/P-frames"
+msgstr "8: RD mejorado en los fotogramas I/P"
+
+msgid "9: RD refine in all frames"
+msgstr "9: RD mejorado en todos los fotogramas"
+
+msgid "10: QPRD in all frames"
+msgstr "10: QPRD en todos los fotogramas"
+
+msgid "11: No early terminations in analysis"
+msgstr "11: Desactivar terminaciones tempranas en los análisis"
+
+msgid "Your names"
+msgstr "Toni Estévez"
+
+msgid "Your emails"
+msgstr "toni.estevez@gmail.com"
+
 
 msgid "Add"
 msgstr "Agregar"
@@ -2572,16 +5599,3021 @@ msgid "Type %s value %s"
 msgstr ""
 
 #, c-format
-msgid "Type %s value %d"
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
 msgstr ""
+"Project-Id-Version: HandBrake-0.10\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-03 13:01+0300\n"
+"PO-Revision-Date: 2016-12-28 16:22+0100\n"
+"Last-Translator: Toni Estevez <toni.estevez@gmail.com>\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/handbrake/language/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+msgid "Quality: "
+msgstr "Calidad: "
+
+#, c-format
+msgid "Bitrate: %dkbps"
+msgstr "Tasa de bits: %d kbps"
+
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr "Tasa de bits: %.4g kbps"
+
+msgid "<small>Passthrough</small>"
+msgstr "<small>Copia directa</small>"
+
+#, c-format
+msgid ""
+"%s\n"
+"Gain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
+msgstr ""
+"%s\n"
+"Ganancia: %s\n"
+"Compresión de rango dinámico: %s\n"
+"Nombre de la pista: %s"
+
+#, c-format
+msgid ""
+"%s\n"
+"Gain: %s\n"
+"DRC: %s"
+msgstr ""
+"%s\n"
+"Ganancia: %s\n"
+"Compresión de rango dinámico: %s"
+
+msgid "Add"
+msgstr "Añadir"
+
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr "Añade un ajuste de codificación de audio."
+
+msgid "Set the audio codec to encode this track with."
+msgstr "Selecciona un códec para la codificación de audio."
+
+msgid "Set the bitrate to encode this track with."
+msgstr "Selecciona la tasa de bits para codificar las pistas de audio."
+
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr "Selecciona la calidad de audio para los codificadores que lo admiten."
+
+msgid "Set the mixdown of the output audio track."
+msgstr "Selecciona el tipo de mezcla para codificar las pistas de audio."
+
+msgid "Set the sample rate of the output audio track."
+msgstr "Selecciona la tasa de muestreo para codificar las pistas de audio."
+
+msgid ""
+"<b>Audio Gain:</b>\n"
+"Adjust the amplification or attenuation of the output audio track."
+msgstr "Selecciona la amplificación o atenuación para codificar las pistas de audio."
+
+msgid "0dB"
+msgstr "0 dB"
+
+msgid "%ddB"
+msgstr "%d dB"
+
+msgid "%.4gkHz"
+msgstr "%.4g kHz"
+
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr "<small>%d - %s (%.4g kHz)</small>"
+
+msgid ""
+"<b>Dynamic Range Compression:</b>\n"
+"Adjust the dynamic range of the output audio track.\n"
+"For source audio that has a wide dynamic range,\n"
+"very loud and very soft sequences, DRC allows you\n"
+"to 'compress' the range by making loud sounds\n"
+"softer and soft sounds louder.\n"
+msgstr ""
+"Selecciona la compresión de rango dinámico (DRC) para codificar las pistas de audio.\n"
+"\n"
+"Para fuentes de audio con un rango dinámico amplio, con secuencias muy fuertes y\n"
+"muy débiles, la compresión dinámica permite comprimir el rango del volumen,\n"
+"bajando los sonidos muy fuertes y elevando los sonidos muy débiles.\n"
+
+msgid "Remove this audio encoder"
+msgstr "Elimina este ajuste de codificación de audio."
+
+msgid "Closing HandBrake will terminate encoding.\n"
+msgstr "Al cerrar HandBrake se cancelará la codificación.\n"
+
+msgid "No Title Found"
+msgstr "Título no encontrado"
+
+msgid "none"
+msgstr "ninguno"
+
+msgid "Not Selected"
+msgstr "No seleccionado"
+
+msgid "zerolatency x264 tune selected, forcing constant framerate"
+msgstr ""
+"Se ha seleccionado el ajuste de latencia cero del codificador\n"
+"x264, se fuerza una tasa de fotogramas constante."
+
+msgid "Scanning ..."
+msgstr "Exploración..."
+
+msgid "Stop Scan"
+msgstr "Detener exploración"
+
+msgid "On"
+msgstr "activar"
+
+msgid "Strict"
+msgstr "estricto"
+
+msgid "Loose"
+msgstr "libre"
+
+msgid "Custom"
+msgstr "personalizar"
+
+msgid "Unknown"
+msgstr "desconocido"
+
+msgid "auto"
+msgstr "automático"
+
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"%s in %d seconds ..."
+msgstr ""
+"%s\n"
+"\n"
+"%s en %d segundos..."
+
+#, c-format
+msgid "%sYour movie will be lost if you don't continue encoding."
+msgstr "%sLa película se perderá si no continúa la codificación."
+
+msgid "Cancel Current and Stop"
+msgstr "Cancelar la actual y detener"
+
+msgid "Cancel Current, Start Next"
+msgstr "Cancelar la actual e iniciar la siguiente"
+
+msgid "Finish Current, then Stop"
+msgstr "Finalizar la actual y después detener"
+
+msgid "Continue Encoding"
+msgstr "Continuar la codificación"
+
+msgid "Custom "
+msgstr "personalizado"
+
+msgid "Modified "
+msgstr "modificado"
+
+#, c-format
+msgid "Handbrake Version: %s (%d)\n"
+msgstr "Versión de Handbrake: %s (%d)\n"
+
+#, c-format
+msgid "%d encode(s) pending"
+msgstr "%d codificación(es) pendiente(s)"
+
+#, c-format
+msgid "job %d of %d, "
+msgstr "trabajo %d de %d, "
+
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr "pasada %d (búsqueda de subtítulos) de %d. "
+
+#, c-format
+msgid "pass %d of %d, "
+msgstr "pasada %d de %d. "
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr "Codificación: %s%s%.2f %% (%.2f fps, de promedio %.2f fps, tiempo restante: %02d h %02d m %02d s)."
+
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Codificación: %s%s%.2f %% (tiempo restante: %02d h %02d m %02d s)."
+
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr "Codificación: %s%s%.2f %%."
+
+msgid "Searching for start time, "
+msgstr "búsqueda del instante de inicio, "
+
+msgid "Scanning..."
+msgstr "Exploración..."
+
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr "Exploración del título %d de %d..."
+
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr "Exploración del título %d de %d, vista previa %d..."
+
+msgid "Source"
+msgstr "Fuente"
+
+msgid "Choose Video Source"
+msgstr "Selecciona la fuente de vídeo."
+
+msgid "Paused"
+msgstr "Codificación en pausa."
+
+msgid "Encode Done!"
+msgstr "¡Codificación finalizada!"
+
+msgid "Encode Canceled."
+msgstr "Codificacón cancelada."
+
+msgid "Encode Failed."
+msgstr "Codificación fallida."
+
+msgid "Muxing: This may take a while..."
+msgstr "Multiplexado: puede tomar un tiempo..."
+
+msgid "Scan this DVD source"
+msgstr "Explora este DVD."
+
+msgid "AutoScan"
+msgstr "Exploración automática"
+
+msgid "Suspend"
+msgstr "Suspender"
+
+#, c-format
+msgid "Suspend failed: %s"
+msgstr "Suspensión fallida: %s"
+
+msgid "Suspend failed"
+msgstr "Suspensión fallida"
+
+msgid "Shutdown"
+msgstr "Apagar"
+
+#, c-format
+msgid "Shutdown failed: %s"
+msgstr "Apagado fallido: %s"
+
+msgid "Shutdown failed"
+msgstr "Apagado fallido"
+
+msgid "Encoding"
+msgstr "Codificación"
+
+#, c-format
+msgid "press %d %d"
+msgstr "Presione %d %d"
+
+#, c-format
+msgid ""
+"Invalid Settings:\n"
+"%s"
+msgstr ""
+"Ajustes inválidos:\n"
+"%s"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+#, c-format
+msgid "%s: %.4g (Warning: lossless)"
+msgstr "%s: %.4g (advertencia: sin pérdida)"
+
+#, c-format
+msgid "HandBrake %s/%s is now available (you have %s/%d)."
+msgstr "HandBrake %s/%s ya está disponible (versión actual: %s/%d)."
+
+msgid "Encode Complete"
+msgstr "Codificación terminada"
+
+msgid "Put down that cocktail, Your HandBrake queue is done!"
+msgstr "Deje ese cóctel, ¡la cola de codificación de HandBrake ha finalizado!"
+
+msgid "Your encode is complete."
+msgstr "La codificación ha finalizado."
+
+msgid "Shutting down the computer"
+msgstr "Apagar el equipo"
+
+msgid "Putting computer to sleep"
+msgstr "Poner el equipo en reposo"
+
+msgid "Quiting Handbrake"
+msgstr "Salir de HandBrake"
+
+msgid "Bottom"
+msgstr "Inferior"
+
+#, c-format
+msgid "open failed: %s\n"
+msgstr "No se puede abrir: %s\n"
+
+msgid "No key for dictionary item"
+msgstr "No hay clave para la entrada del diccionario."
+
+msgid "Invalid container type. This shouldn't happen"
+msgstr "Tipo de contenedor inválido."
+
+#, c-format
+msgid "%s:missing a requried attribute"
+msgstr "%s: falta un atributo requerido."
+
+#, c-format
+msgid ""
+"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Summary:\n"
+"    Creates a resource plist from a resource list\n"
+"Options:\n"
+"    I - Include path to search for files\n"
+"    <in resource list>    Input resources file\n"
+"    <out resource plist>  Output resources plist file\n"
+msgstr ""
+"Uso: %s [-I <ruta de búsqueda>] <lista de recursos de entrada> <recurso de salida plist>\n"
+"Resumen:\n"
+"    Crea un recurso plist a partir de una lista de recursos\n"
+"Opciones:\n"
+"    I - Incluir la ruta de búsqueda de los archivos\n"
+"    <lista de recursos de entrada>  Archivo de recursos de entrada\n"
+"    <recurso de salida plist>  Archivo de recursos de salida plist\n"
+
+msgid "language"
+msgstr "idioma"
+
+msgid "Language"
+msgstr "Idioma de los subtítulos"
+
+msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
+msgstr ""
+"Código ISO del idioma del texto. Definir este parámetro puede ayudar\n"
+"en la representación del texto. Si no entiende la utilidad de este\n"
+"parámetro, probablemente no necesita configurarlo."
+
+msgid "The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string"
+msgstr ""
+"El lugar preferido para colocar los puntos suspensivos en la\n"
+"cadena de texto cuando no hay suficiente espacio para\n"
+"mostrar la cadena completa."
+
+msgid "How to break the string into multiple lines, if the cell renderer does not have enough room to display the entire string"
+msgstr ""
+"Cómo dividir la cadena de texto en múltiples líneas cuando no\n"
+"hay suficiente espacio para mostrar la cadena completa."
+
+msgid ""
+"Render the subtitle over the video.\n"
+"\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Incrusta los subtítulos en el vídeo.\n"
+"\n"
+"Los subtítulos incrustados forman parte del vídeo y no se pueden desactivar."
+
+msgid "<b>Burned In</b>"
+msgstr "<b>Incrustados</b>"
+
+msgid ""
+"Set the default output subtitle track.\n"
+"\n"
+"Most players will automatically display this\n"
+"subtitle track whenever the video is played.\n"
+"\n"
+"This is useful for creating a \"forced\" track\n"
+"in your output."
+msgstr ""
+"Define la pista de subtítulos seleccionada como predeterminada.\n"
+"\n"
+"La mayoría de reproductores mostrarán la pista de subtítulos\n"
+"por defecto automáticamente.\n"
+"\n"
+"Este ajuste es útil para crear una pista de subtítulos forzados en\n"
+"el archivo codificado."
+
+msgid "<b>Default</b>"
+msgstr "<b>por defecto</b>"
+
+msgid ""
+"Use only subtitles that have been flagged\n"
+"as forced in the source subtitle track\n"
+"\n"
+"\"Forced\" subtitles are usually used to show\n"
+"subtitles during scenes where someone is speaking\n"
+"a foreign language."
+msgstr ""
+"Selecciona solo los subtítulos que se hayan marcado como\n"
+"forzados en la pista original.\n"
+"\n"
+"Los subtítulos forzados se muestran habitualmente en\n"
+"escenas donde alguien habla en un idioma extranjero."
+
+msgid "<b>Forced Only</b>"
+msgstr "<b>Solo forzados</b>"
+
+msgid ""
+"Add (or subtract) an offset (in milliseconds)\n"
+"to the start of the SRT subtitle track.\n"
+"\n"
+"Often, the start of an external SRT file\n"
+"does not coincide with the start of the video.\n"
+"This setting allows you to synchronize the files."
+msgstr ""
+"Suma (o resta) una compensación (en milisegundos)\n"
+"al inicio de la pista de subtítulos SRT.\n"
+"\n"
+"A menudo el inicio de los subtítulos de un archivo \n"
+"externo no coincide con el inicio del vídeo. Este\n"
+"ajuste permite sincronizar ambos archivos."
+
+msgid "<b>SRT Offset</b>"
+msgstr "<b>Compensación de los subtítulos SRT</b>"
+
+msgid "Off"
+msgstr "desactivar"
+
+msgid ""
+"The source subtitle track\n"
+"\n"
+"You can choose any of the subtitles\n"
+"recognized in your source file.\n"
+"\n"
+"In addition, there is a special track option\n"
+"\"Foreign Audio Search\".  This option will add\n"
+"an extra pass to the encode that searches for\n"
+"subtitles that may correspond to a foreign\n"
+"language scene.  This option is best used in\n"
+"conjunction with the \"Forced\" option."
+msgstr ""
+"La pista de subtítulos original.\n"
+"\n"
+"Puede elegir cualquier pista de subtítulos reconocida en el archivo original.\n"
+"\n"
+"Además hay una opción especial para la búsqueda de audio extranjero.\n"
+"Esta opción añade una pasada adicional a la codificación para buscar los\n"
+"subtítulos de escenas en idiomas extranjeros. Esta opción ofrece un\n"
+"resultado mejor si se utiliza conjuntamente con la opción de subtítulos\n"
+"forzados."
+
+msgid "<b>Track</b>"
+msgstr "<b>Pista</b>"
+
+msgid "About HandBrake"
+msgstr "Acerca de HandBrake"
+
+msgid ""
+"Copyright © 2008 - 2016 John Stebbins\n"
+"Copyright © 2004 - 2016, HandBrake Devs"
+msgstr ""
+"Copyright © 2008 - 2016, John Stebbins\n"
+"Copyright © 2004 - 2016, los desarrolladores de HandBrake"
+
+msgid "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
+msgstr "HandBrake es un transcodificador de vídeo multiplataforma y multiproceso con licencia GPL"
+
+msgid "http://handbrake.fr"
+msgstr "http://handbrake.fr"
+
+msgid ""
+"HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
+"\n"
+"HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+"HandBrake es software libre; usted puede redistribuirlo o modificarlo según los términos de la Licencia Pública General de GNU publicada por la Fundación para el Software Libre; ya sea la versión 2 de la licencia o (a su elección) cualquier versión posterior.\n"
+"\n"
+"Handbrake se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; ni siquiera la garantía implícita de COMERCIALIZACIÓN o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia Pública General de GNU para más detalles.\n"
+"\n"
+"Debería haber recibido una copia de la Licencia Pública General de GNU junto con Glade; si no es así, escriba a «Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA»."
+
+msgid "_Minimize/Maximize"
+msgstr "_Minimizar/maximizar"
+
+msgid "_Pause Queue"
+msgstr "_Pausar la cola"
+
+msgid "_Quit"
+msgstr "_Salir"
+
+msgid "_About"
+msgstr "_Acerca de"
+
+msgid "HandBrake"
+msgstr "HandBrake"
+
+msgid "_File"
+msgstr "_Archivo"
+
+msgid "_Source"
+msgstr "_Seleccionar fuente de vídeo"
+
+msgid "Single _Title"
+msgstr "Seleccionar un solo _título"
+
+msgid "_Destination"
+msgstr "Seleccionar _carpeta de destino"
+
+msgid "_Preferences"
+msgstr "_Preferencias"
+
+msgid "_Queue"
+msgstr "_Cola de codificación"
+
+msgid "_Add"
+msgstr "_Añadir un título"
+
+msgid "Add _Multiple"
+msgstr "Añadir _múltiples títulos"
+
+msgid "_Start"
+msgstr "_Iniciar"
+
+msgid "_Pause"
+msgstr "_Pausar"
+
+msgid "_View"
+msgstr "_Ver"
+
+msgid "HandBrake For _Dumbies"
+msgstr "HandBrake para _novatos"
+
+msgid "_Show Presets"
+msgstr "_Preajustes"
+
+msgid "_Preview"
+msgstr "_Vista previa"
+
+msgid "_Activity Window"
+msgstr "Ventana de _actividad"
+
+msgid "Show _Queue"
+msgstr "_Cola de codificación"
+
+msgid "_Presets"
+msgstr "_Preajustes"
+
+msgid "_Save"
+msgstr "_Guardar"
+
+msgid "_Delete"
+msgstr "_Eliminar"
+
+msgid "_Make Default"
+msgstr "_Usar por defecto"
+
+msgid "_New Folder"
+msgstr "Carpeta _nueva"
+
+msgid "_Export"
+msgstr "_Exportar"
+
+msgid "_Import"
+msgstr "_Importar"
+
+msgid "_Update Built-in Presets"
+msgstr "_Actualizar"
+
+msgid "_Help"
+msgstr "A_yuda"
+
+msgid "_Guide"
+msgstr "_Guía"
+
+msgid "Start Encoding"
+msgstr "Inicia la codificación."
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "Pause Encoding"
+msgstr "Pausa la codificación."
+
+msgid "Pause"
+msgstr "Pausar"
+
+msgid "Add to Queue"
+msgstr "Añade el título actual a la cola de codificación."
+
+msgid "Enqueue"
+msgstr "A la cola"
+
+msgid "Show Queue"
+msgstr "Muestra la cola de codificación."
+
+msgid "Queue"
+msgstr "Cola"
+
+msgid ""
+"Open Picture Settings and Preview window.\n"
+"Here you can adjust cropping, resolution, aspect ratio, and filters."
+msgstr "Abre la ventana de vista previa del vídeo."
+
+msgid "Preview"
+msgstr "Vista previa"
+
+msgid "Show Activity Window"
+msgstr "Abre la ventana de actividad."
+
+msgid "Activity"
+msgstr "Actividad"
+
+msgid "<b>Source:</b>"
+msgstr "<b>Fuente:</b>"
+
+msgid "None"
+msgstr "desactivar"
+
+msgid "Title:"
+msgstr "Título:"
+
+msgid ""
+"Set the title to encode.\n"
+"By default the longest title is chosen.\n"
+"This is often the feature title of a DVD."
+msgstr ""
+"Selecciona el título para codificar.\n"
+"\n"
+"Por defecto se selecciona el título más largo.\n"
+"Habitualmente es la película del DVD."
+
+msgid "Angle:"
+msgstr "Ángulo:"
+
+msgid "For multi-angle DVD's, select the desired angle to encode."
+msgstr "Selecciona el ángulo para codificar en los DVD con múltiples ángulos."
+
+msgid "Reset All Titles"
+msgstr "Reajustar todos los títulos"
+
+msgid "Apply current settings to all titles"
+msgstr "Aplica los ajustes actuales a la codificación de todos los títulos."
+
+msgid "Range of title to encode. Can be chapters, seconds, or frames."
+msgstr "Selecciona capítulos, segundos o fotogramas para codificar."
+
+msgid "Set the first chapter to encode."
+msgstr "Selecciona el inicio del intervalo."
+
+msgid "Set the last chapter to encode."
+msgstr "Selecciona el final del intervalo."
+
+msgid "Duration:"
+msgstr "Duración:"
+
+msgid "<b>Destination</b>"
+msgstr "<b>Destino</b>"
+
+msgid "File:"
+msgstr "Archivo: "
+
+msgid "Destination filename for your encode."
+msgstr "Archivo de destino de la codificación."
+
+msgid "Destination directory for your encode."
+msgstr "Carpeta de destino de la codificación."
+
+msgid "Destination Directory"
+msgstr "Carpeta de destino"
+
+msgid "Format:"
+msgstr "Formato contenedor:"
+
+msgid "Format to mux encoded tracks to."
+msgstr "Selecciona el formato contenedor de las pistas codificadas."
+
+msgid "iPod 5G Support"
+msgstr "Compatibilidad con iPod 5G"
+
+msgid "Add iPod Atom needed by some older iPods."
+msgstr "Añade el iPod Atom requerido por algunos iPod antiguos."
+
+msgid "Web optimized"
+msgstr "Optimizar para la web"
+
+msgid ""
+"Optimize the layout of the MP4 file for progressive download.\n"
+"This allows a player to initiate playback before downloading the entire file."
+msgstr ""
+"Optimiza el diseño del archivo MP4 para la descarga progresiva.\n"
+"\n"
+"Permite iniciar la reproducción del archivo antes de concluir la descarga."
+
+msgid "Large file (>4GB)"
+msgstr "Archivo grande (> 4 GB)"
+
+msgid ""
+"Allow 64 bit MP4 file which can be over 4GB.\n"
+"\n"
+"<b>Caution:</b> This option may break device compatibility."
+msgstr ""
+"Permite archivos MP4 de 64 bits mayores de 4 GB.\n"
+"\n"
+"<b>Precaución:</b> Esta opción puede no ser compatible con algunos dispositivos."
+
+msgid "<b>Presets List</b>"
+msgstr "<b>Lista de preajustes</b>"
+
+msgid "Source Codec:"
+msgstr "Códec:"
+
+msgid "Dimensions:"
+msgstr "Tamaño de la imagen:"
+
+msgid "Aspect: "
+msgstr "Relación de aspecto:"
+
+msgid "Frame Rate:"
+msgstr "Tasa de fotogramas:"
+
+msgid "<b>Source Picture Parameters</b>"
+msgstr "<b>Parámetros del vídeo original</b>"
+
+msgid "Autocrop:"
+msgstr "Recorte automático:"
+
+msgid "Crop:"
+msgstr "Recorte:"
+
+msgid "Crop Dimensions:"
+msgstr "Tamaño de la imagen recortada:"
+
+msgid "<b>Cropping</b>"
+msgstr "<b>Recorte de la imagen</b>"
+
+msgid "Scale Dimensions:"
+msgstr "Tamaño de la imagen redimensionada:"
+
+msgid "Optimal for Source:"
+msgstr "Tamaño óptimo para la imagen original:"
+
+msgid "Anamorphic:"
+msgstr "Modo anamórfico:"
+
+msgid "<b>Scaling</b>"
+msgstr "<b>Cambio de tamaño de la imagen</b>"
+
+msgid "Presentation Dimensions:"
+msgstr "Tamaño de la imagen en pantalla:"
+
+msgid "Summary"
+msgstr "Resumen"
+
+msgid "Left Crop"
+msgstr "Recorte izquierdo en píxeles."
+
+msgid "Top Crop"
+msgstr "Recorte superior en píxeles."
+
+msgid "Bottom Crop"
+msgstr "Recorte inferior en píxeles."
+
+msgid "Right Crop"
+msgstr "Recorte derecho en píxeles."
+
+msgid "Auto Crop"
+msgstr "Recorte automático"
+
+msgid "Automatically crop black borders around edges of the video."
+msgstr "Recorta automáticamente los bordes negros de la imagen."
+
+msgid "Loose Crop"
+msgstr "Recorte redondeado"
+
+msgid ""
+"When picture settings require that the image\n"
+"dimensions be rounded to some multiple number\n"
+"of pixels, this setting will crop a few extra pixels\n"
+"instead of doing exact cropping and then scaling to\n"
+"the required multiple."
+msgstr ""
+"Redondea el recorte de la imagen.\n"
+"\n"
+"Cuando los ajustes de imagen requieren el redondeo de las\n"
+"dimensiones, este ajuste recortará unos pocos píxeles extra\n"
+"en vez de recortar primero la imagen y luego ampliarla."
+
+msgid "width:"
+msgstr "Anchura:"
+
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Anchura en píxeles que se almacena en el archivo de vídeo.\n"
+"\n"
+"El tamaño en pantalla puede diferir si la relación de\n"
+"aspecto de los píxeles no es 1:1."
+
+msgid "height:"
+msgstr "Altura:"
+
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+"Altura en píxeles que se almacena en el archivo de vídeo.\n"
+"\n"
+"El tamaño en pantalla puede diferir si la relación de\n"
+"aspecto de los píxeles no es 1:1."
+
+msgid "Optimal for source"
+msgstr "Tamaño óptimo"
+
+msgid ""
+"If enabled, select the 'optimal' storage resolution.\n"
+"This will be the resolution that most closely matches the source resolution after cropping."
+msgstr ""
+"Selecciona el tamaño óptimo de almacenamiento.\n"
+"\n"
+"El tamaño óptimo es el más cercano al tamaño\n"
+"original después del recorte."
+
+msgid ""
+"<b>Anamorphic Modes:</b>\n"
+"<small><tt>\n"
+"None   - Force pixel aspect ratio to 1:1.\n"
+"Loose  - Align dimensions to chosen 'Alignment' value\n"
+"     and pick pixel aspect ratio that preserves the\n"
+"     original display aspect ratio\n"
+"Strict - Keep original source dimensions and pixel\n"
+"     aspect ratio</tt></small>"
+msgstr ""
+"Selecciona el modo anamórfico.\n"
+"\n"
+"Desactivar: fuerza una relación de aspecto de los píxeles de 1:1.\n"
+"\n"
+"Libre: redondea las dimensiones de la imagen y selecciona una\n"
+"relación de aspecto de los píxeles que preserva la relación de\n"
+"aspecto en pantalla de la imagen original.\n"
+"\n"
+"Estricto: mantiene las dimensiones de la imagen y la relación de\n"
+"aspecto de los píxeles de la imagen original."
+
+msgid "Alignment:"
+msgstr "Redondeo:"
+
+msgid ""
+"Align storage dimensions to multiples of this value.\n"
+"\n"
+"This setting is only necessary for compatibility with some devices.\n"
+"You should use 2 unless you experience compatibility issues."
+msgstr ""
+"Redondea las dimensiones de almacenamiento a un múltiplo de este valor. \n"
+"\n"
+"Este ajuste solo es necesario para la compatibilidad con algunos dispositivos. \n"
+"Se ha de seleccionar 2, a menos que experimente problemas de compatibilidad."
+
+msgid "<b>Storage Geometry</b>"
+msgstr "<b>Dimensiones de almacenamiento</b>"
+
+msgid "This is the display width. It is the result of scaling the storage dimensions by the pixel aspect."
+msgstr ""
+"Anchura en píxeles que se muestra en pantalla.\n"
+"\n"
+"Es el resultado de multiplicar la anchura almacenada\n"
+"por la relación de aspecto de los píxeles."
+
+msgid "Pixel Aspect:"
+msgstr "Relación de aspecto de los píxeles:"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"La relación de aspecto de los píxeles define la forma de los píxeles.\n"
+"\n"
+"Una proporción de 1:1 define píxeles cuadrados. Otros valores\n"
+"definen formas rectangulares. Los reproductores de vídeo ajustan\n"
+"la imagen para obtener la relación especificada."
+
+msgid ":"
+msgstr ":"
+
+msgid ""
+"Pixel aspect defines the shape of the pixels.\n"
+"A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
+"Players will scale the image in order to achieve the specified aspect."
+msgstr ""
+"Selecciona la relación de aspecto de los píxeles.\n"
+"\n"
+"Esta relación define la forma de los píxeles. Una relación 1:1 define píxeles\n"
+"cuadrados. Otros valores definen formas rectangulares. Los reproductores\n"
+"de vídeo ajustan la imagen para mostrar la relación especificada."
+
+msgid "Keep Aspect"
+msgstr "Mantener la relación de aspecto"
+
+msgid "If enabled, the original display aspect of the source will be maintained."
+msgstr "Mantiene la relación de aspecto en pantalla de la imagen original."
+
+msgid "Display Aspect:"
+msgstr "Relación de aspecto en pantalla:"
+
+msgid "<b>Display Geometry</b>"
+msgstr "<b>Dimensiones en pantalla</b>"
+
+msgid "Grayscale"
+msgstr "Escala de grises"
+
+msgid "If enabled, filter colour components out of video."
+msgstr "Elimina los componentes de color de la imagen."
+
+msgid "Deblock:"
+msgstr "Desbloqueo:"
+
+msgid ""
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
+msgstr ""
+"Elimina un tipo común de artefacto de compresión, los artefactos\n"
+"de efecto bloque.\n"
+"\n"
+"Si la fuente de vídeo exhibe estructuras en forma de bloques, este\n"
+"filtro las puede corregir."
+
+msgid "Denoise Filter:"
+msgstr "Atenuación de ruido:"
+
+msgid ""
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
+msgstr ""
+"Reduce o elimina la aparición de ruido y el grano.\n"
+"\n"
+"El grano de la película y otros tipos de ruido de alta frecuencia son\n"
+"difíciles de comprimir. El uso de este filtro puede producir archivos\n"
+"más pequeños."
+
+msgid "Denoise Preset:"
+msgstr "Preajuste antiruido:"
+
+msgid "Denoise Tune:"
+msgstr "Ajuste fino antiruido:"
+
+msgid ""
+"Custom denoise filter string format\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+msgstr ""
+"Formato de la cadena personalizada del filtro de atenuación de ruido.\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
+
+msgid "Detelecine:"
+msgstr "Destelecinado:"
+
+msgid ""
+"This filter removes 'combing' artifacts that are the result of telecining.\n"
+"\n"
+"Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
+msgstr ""
+"Elimina los artefactos de efecto peine que puede producir el telecinado.\n"
+"\n"
+"El telecinado es un proceso que ajusta la tasa de fotogramas de 24 fps\n"
+"(filme NTSC) a 30 fps (TV NTSC)."
+
+msgid ""
+"Custom detelecine filter string format\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+msgstr ""
+"Formato de la cadena personalizada del filtro de destelecinado.\n"
+"\n"
+"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+
+msgid "Decomb"
+msgstr "Despeinado"
+
+msgid ""
+"Choose decomb or deinterlace filter options.\n"
+"\n"
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced.\n"
+"\n"
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Selecciona las opciones de los filtros de despeinado o desentrelazado. \n"
+"\n"
+"El filtro de despeinado desentrelaza selectivamente los fotogramas que parecen estar\n"
+"entrelazados. Preserva la calidad de imagen de los fotogramas no entrelazados.\n"
+"\n"
+"El filtro de desentrelazado clásico se aplica a todos los fotogramas. Los fotogramas\n"
+"no entrelazados sufrirán cierta degradación de la calidad de imagen."
+
+msgid "Deinterlace"
+msgstr "Desentrelazado"
+
+msgid "Decomb:"
+msgstr "Despeinado:"
+
+msgid ""
+"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
+"This will preserve quality in frames that are not interlaced."
+msgstr ""
+"Desentrelaza selectivamente los fotogramas que parecen estar entrelazados.\n"
+"\n"
+"Preserva la calidad de imagen de los fotogramas no entrelazados."
+
+msgid ""
+"Custom decomb filter string format\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+msgstr ""
+"Formato de la cadena personalizada del filtro de despeinado.\n"
+"\n"
+"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
+"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
+"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+
+msgid "Deinterlace:"
+msgstr "Desentrelazado:"
+
+msgid ""
+"The classic deinterlace filter is applied to all frames.\n"
+"Frames that are not interlaced will suffer some quality degradation."
+msgstr ""
+"Desentrelaza todos los fotogramas.\n"
+"\n"
+"Los fotogramas no entrelazados sufrirán cierta degradación de la calidad."
+
+msgid ""
+"Custom deinterlace filter string format\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+msgstr ""
+"Formato de la cadena personalizada del filtro de desentrelazado.\n"
+"\n"
+"YadifMode:YadifParity:McdintMode:McdeintQp"
+
+msgid "<b>Filters</b>"
+msgstr "<b>Filtros</b>"
+
+msgid "Picture"
+msgstr "Imagen"
+
+msgid "Video Encoder:"
+msgstr "Codificador de video:"
+
+msgid "Available video encoders."
+msgstr "Selecciona el decodificador de vídeo."
+
+msgid "Framerate:"
+msgstr "Tasa de fotogramas:"
+
+msgid ""
+"Output framerate.\n"
+"\n"
+"'Same as source' is recommended. If your source video has\n"
+"a variable framerate, 'Same as source' will preserve it."
+msgstr ""
+"Selecciona la tasa de fotogramas del vídeo codificado.\n"
+"\n"
+"La opción recomendada es mantener la original. Si el\n"
+"vídeo original tiene una tasa de fotogramas variable,\n"
+"la opción recomendada la preserva."
+
+msgid "Constant Framerate"
+msgstr "Tasa de fotogramas constante"
+
+msgid "Same as source"
+msgstr "igual que la original"
+
+msgid "kbps"
+msgstr "kbps"
+
+msgid "(variable)"
+msgstr "(variable)"
+
+msgid "(constant)"
+msgstr "(constante)"
+
+msgid "Enables constant framerate output."
+msgstr "Selecciona una tasa de fotogramas constante."
+
+msgid "Peak Framerate (VFR)"
+msgstr "Pico de la tasa de fotogramas"
+
+msgid ""
+"Enables variable framerate output with a peak\n"
+"rate determined by the framerate setting.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Selecciona una tasa de fotogramas variable con un pico definido\n"
+"por el ajuste de la tasa de fotogramas. \n"
+"\n"
+"No es compatible con algunos reproductores."
+
+msgid "Variable Framerate"
+msgstr "Tasa de fotogramas variable"
+
+msgid ""
+"Enables variable framerate output.\n"
+"\n"
+"VFR is not compatible with some players."
+msgstr ""
+"Selecciona una tasa de fotogramas variable.\n"
+"\n"
+"No es compatible con algunos reproductores."
+
+msgid ""
+"Set the desired quality factor.\n"
+"The encoder targets a certain quality.\n"
+"The scale used by each video encoder is different.\n"
+"\n"
+"x264's scale is logarithmic and lower values correspond to higher quality.\n"
+"So small decreases in value will result in progressively larger increases\n"
+"in the resulting file size.  A value of 0 means lossless and will result\n"
+"in a file size that is larger than the original source, unless the source\n"
+"was also lossless.\n"
+"\n"
+"FFMpeg's and Theora's scale is more linear.\n"
+"These encoders do not have a lossless mode."
+msgstr ""
+"Selecciona el factor de calidad de la codificación. El codificador toma como\n"
+"objetivo una cierta calidad. La escala utilizada por cada codificador es diferente.\n"
+"\n"
+"La escala del codificador x264 es logarítmica y los valores más bajos producen\n"
+"vídeo de más calidad. Si se reduce un poco el factor de calidad se incrementa\n"
+"mucho el tamaño del archivo codificado. El factor 0 selecciona la compresión sin\n"
+"pérdida y produce un archivo de mayor tamaño que el original, excepto si el\n"
+"vídeo original se ha comprimido sin pérdida.\n"
+"\n"
+"La escala de los codificadores FFMpeg y Theora es más lineal. Estos\n"
+"codificadores no tienen un modo de compresión sin pérdida."
+
+msgid "Constant Quality:"
+msgstr "Calidad constante:"
+
+msgid "Bitrate (kbps):    "
+msgstr "Tasa de bits (kbps):    "
+
+msgid ""
+"Set the average bitrate.\n"
+"\n"
+"The instantaneous bitrate can be much higher or lower at any point in time.\n"
+"But the average over a long duration will be the value set here.  If you need\n"
+"to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
+msgstr ""
+"Selecciona la tasa de bits media.\n"
+"\n"
+"La tasa de bits instantánea puede ser mucho mayor o menor en cualquier momento,\n"
+"pero el promedio durante un período prolongado será el valor definido. Si necesita\n"
+"limitar la tasa de bits instantánea, consulte los ajustes VBV-bufsize y VBV-maxrate\n"
+"del codificador x264."
+
+msgid "2-Pass Encoding"
+msgstr "Codificación en 2 pasadas"
+
+msgid ""
+"Perform 2 Pass Encoding.\n"
+"\n"
+"The 'Bitrate' option is prerequisite. During the 1st pass, statistics about\n"
+"the video are collected.  Then in the second pass, those statistics are used\n"
+"to make bitrate allocation decisions."
+msgstr ""
+"Selecciona la codificación en dos pasadas.\n"
+"\n"
+"Previamente hay que seleccionar la tasa de bits. En la primera pasada se\n"
+"recogen estadísticas sobre el vídeo. En la segunda pasada esas estadísticas\n"
+"se utilizan para decidir la asignación de la tasa de bits."
+
+msgid "Turbo First Pass"
+msgstr "Primera pasada rápida"
+
+msgid "During the 1st pass of a 2 pass encode, use settings that speed things along."
+msgstr "Aplica ajustes que aceleran la primara pasada de la codificación en dos pasadas."
+
+msgid "Use Advanced Options"
+msgstr "Usar la opciones de vídeo avanzado"
+
+msgid ""
+"Use advanced options Tab for x264 settings.\n"
+"\n"
+"Use at your own risk!"
+msgstr ""
+"Activa la pestaña de vídeo avanzado para configurar el codificador x264.\n"
+"\n"
+"¡Hágalo bajo su propio riesgo!"
+
+msgid "Preset:"
+msgstr "Preajuste:"
+
+msgid ""
+"Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
+"\n"
+"This establishes your default encoder settings.\n"
+"Tunes, profiles, levels and advanced option string will be applied to this.\n"
+"You should generally set this option to the slowest you can bear since slower\n"
+"settings will result in better quality or smaller files."
+msgstr ""
+"Selecciona la velocidad de codificación a costa de la eficiencia de la compresión.\n"
+"\n"
+"Esta selección define los ajustes por defecto de la codificación. El ajuste fino, el\n"
+"perfil, el nivel y la cadena de opciones avanzadas se aplican a continuación.\n"
+"\n"
+"Se recomienda elegir la velocidad de codificación más lenta que pueda soportar\n"
+"porque proporciona una mejor calidad o produce un archivo más pequeño."
+
+msgid "Tune:"
+msgstr "Ajuste fino:"
+
+msgid ""
+"Tune settings to optimize for common scenarios.\n"
+"\n"
+"This can improve effeciency for particular source characteristics or set\n"
+"characteristics of the output file.  Changes will be applied after the\n"
+"preset but before all other parameters."
+msgstr ""
+"Selecciona los ajustes óptimos para los escenarios más comunes.\n"
+"\n"
+"Estos ajustes pueden mejorar la eficiencia de la codificación para fuentes\n"
+"de vídeo con características particulares o definir las características del\n"
+"archivo codificado. La configuración se aplica después del preajuste, pero\n"
+"antes que los demás parámetros."
+
+msgid "Fast Decode"
+msgstr "Decodificación rápida"
+
+msgid ""
+"Reduce decoder CPU usage.\n"
+"\n"
+"Set this if your device is struggling to play the output (dropped frames)."
+msgstr ""
+"Reduce el uso del procesador para la decodificación.\n"
+"\n"
+"Aplique este ajuste si el dispositivo tiene problemas para reproducir el\n"
+"archivo codificado (salto de fotogramas)."
+
+msgid "Zero Latency"
+msgstr "Latencia cero"
+
+msgid ""
+"Minimize latency between input to encoder and output of decoder.\n"
+"\n"
+"This is useful for broadcast of live streams.\n"
+"\n"
+"Since HandBrake is not suitable for live stream broadcast purposes,\n"
+"this setting is of little value here."
+msgstr ""
+"Minimiza la latencia entre la entrada al codificador y la salida del decodificador.\n"
+"\n"
+"Este ajuste es útil para la difusión de transmisiones continuas (streaming),\n"
+"aunque Handbrake no está diseñado para este propósito."
+
+msgid "Profile:"
+msgstr "Perfil:"
+
+msgid ""
+"Sets and ensures compliance with the specified profile.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Selecciona el cumplimiento del perfil especificado.\n"
+"\n"
+"Reemplaza todos los demás ajustes."
+
+msgid "Level:"
+msgstr "Nivel:"
+
+msgid ""
+"Sets and ensures compliance with the specified level.\n"
+"\n"
+"Overrides all other settings."
+msgstr ""
+"Selecciona el cumplimiento del nivel especificado.\n"
+"\n"
+"Reemplaza todos los demás ajustes."
+
+msgid "More Settings:"
+msgstr "Más ajustes:"
+
+msgid ""
+"Additional encoder settings.\n"
+"\n"
+"Colon separated list of encoder options."
+msgstr "Ajustes adicionales del codificador: lista de opciones del codificador separadas por dos puntos."
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid "Selection Behavior:"
+msgstr "Modo de selección:"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Available Languages"
+msgstr "Idiomas disponibles"
+
+msgid "Selected Languages"
+msgstr "Idiomas seleccionados"
+
+msgid "Use only first encoder for secondary audio"
+msgstr "Usar solo el primer ajuste para las pistas de audio secundario"
+
+msgid ""
+"Only the primary audio track will be encoded with the full encoder list.\n"
+"All other secondary audio output tracks will be encoded with first encoder only."
+msgstr ""
+"Solo la primera pista de audio se codificará con todos los\n"
+"codificadores de la lista.\n"
+"\n"
+"Las demás pistas de audio se codificarán únicamente con\n"
+"el primer codificador de la lista."
+
+msgid "Auto Passthru:"
+msgstr "Copia directa automática:"
+
+msgid "MP3"
+msgstr "MP3"
+
+msgid ""
+"Enable this if your playback device supports MP3.\n"
+"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio MP3 cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato MP3."
+
+msgid ""
+"Enable this if your playback device supports AAC.\n"
+"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio AAC cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato AAC."
+
+msgid ""
+"Enable this if your playback device supports AC-3.\n"
+"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio AC-3 cuando se selecciona\n"
+"como codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato AC-3."
+
+msgid ""
+"Enable this if your playback device supports DTS.\n"
+"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio DTS cuando se selecciona como\n"
+"codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato DTS."
+
+msgid ""
+"Enable this if your playback device supports DTS-HD.\n"
+"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+msgstr ""
+"Permite seleccionar la copia directa de la pista de audio DTS-HD cuando se selecciona\n"
+"como codificador la copia directa automática ('Auto Passthru').\n"
+"\n"
+"Active esta opción si el dispositivo de reproducción es compatible con el formato\n"
+"DTS-HD."
+
+msgid "Passthru Fallback:"
+msgstr "Codificador alternativo a la copia directa:"
+
+msgid "Set the audio codec to encode with when a suitable track can not be found for audio passthru."
+msgstr ""
+"Selecciona el codificador por defecto si no se encuentra\n"
+"una pista adecuada para la copia directa."
+
+msgid "<b>Audio Encoder Settings:</b>"
+msgstr "<b>Ajustes para la codificación de audio</b>"
+
+msgid "Each selected source track will be encoded with all selected encoders"
+msgstr "Ajustes por defecto para codificar las pistas de audio seleccionadas."
+
+msgid "Encoder"
+msgstr "Codificador"
+
+msgid "Bitrate/Quality"
+msgstr "Tasa de bits / calidad"
+
+msgid "Mixdown"
+msgstr "Mezcla"
+
+msgid "Samplerate"
+msgstr "Tasa de muestreo"
+
+msgid "Gain"
+msgstr "Ganancia"
+
+msgid "Audio Defaults"
+msgstr "Audio"
+
+msgid "Add new audio settings to the list"
+msgstr "Añade a la lista una pista de audio."
+
+msgid "Add All"
+msgstr "Añadir todas"
+
+msgid "Add all audio tracks to the list"
+msgstr "Añade a la lista todas las pistas de audio disponibles."
+
+msgid "Reload Defaults"
+msgstr "Recargar las pistas por defecto"
+
+msgid "Reload all audio settings from defaults"
+msgstr "Recarga las pistas de audio por defecto."
+
+msgid "Audio List"
+msgstr "Pistas de audio"
+
+msgid "Preferred Language: None"
+msgstr "Idioma preferido: ninguno"
+
+msgid "Add Foreign Audio Search Pass"
+msgstr "Añadir subtítulos para las secuencias de audio extranjero"
+
+msgid ""
+"Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
+"This search pass finds short sequences of foreign audio and provides subtitles for them."
+msgstr ""
+"Busca secuencias cortas de audio extranjero y añade una pista de subtítulos forzados\n"
+"si la pista de audio por defecto es del idioma preferido."
+
+msgid "Add subtitle track if default audio is foreign"
+msgstr ""
+"Añade una pista de subtítulos si la pista de audio por defecto\n"
+"no es del idioma preferido."
+
+msgid "When the default audio track is not your preferred language, add a subtitle track."
+msgstr "Añade una pista de subtítulos si el audio por defecto no es del idioma preferido."
+
+msgid "Add Closed Captions when available"
+msgstr "Añadir subtítulos para sordos (CC) si están disponibles"
+
+msgid "Closed captions are text subtitles that can be added to any container as a soft subtitle track (not burned)"
+msgstr ""
+"Los subtítulos para personas sordas se pueden añadir a cualquier contenedor\n"
+"como una pista adicional que se puede activar opcionalmente."
+
+msgid "Subtitle Defaults"
+msgstr "Subtitulado"
+
+msgid "Add new subtitle settings to the list"
+msgstr "Añade a la lista una pista de subtítulos."
+
+msgid "Add all subtitle tracks to the list"
+msgstr "Añade a la lista todas las pistas de subtítulos disponibles."
+
+msgid "Reload all subtitle settings from defaults"
+msgstr "Recarga las pistas de subtítulos por defecto."
+
+msgid "Subtitle List"
+msgstr "Pistas de subtítulos"
+
+msgid "<small>Reference Frames:</small>"
+msgstr "<small>Fotogramas de referencia:</small>"
+
+msgid ""
+"Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
+"Cel animation tends to benefit from more reference frames a lot more than film content.\n"
+"\n"
+"Note that many hardware devices have limitations on the number of supported reference\n"
+"frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
+"you're absolutely sure you know what you're doing!"
+msgstr ""
+"Selecciona el número máximo de fotogramas de referencia. Los valores razonables van de 1 a 6, por defecto 3.\n"
+"\n"
+"Cuanto mayor sea este valor, mejor será la compresión, pero más lenta la codificación. La animación tradicional se beneficia más de un número mayor de fotogramas de referencia que las películas de imagen real.\n"
+"\n"
+"Tenga en cuenta que muchos dispositivos tienen limitaciones en cuanto al número de fotogramas de referencia admitidos. Para el caso de una consola portátil o de un reproductor independiente, no modifique este ajuste a menos que esté absolutamente seguro de que sabe lo que hace."
+
+msgid "<small>Maximum B-Frames:</small>"
+msgstr "<small>Fotogramas B consecutivos:</small>"
+
+msgid ""
+"Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
+"\n"
+"Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.\n"
+"Cel-animated source material and B-pyramid also significantly increase the usefulness of larger\n"
+"values.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
+msgstr ""
+"Selecciona el número máximo de fotogramas B consecutivos que el codificador puede utilizar. Los valores razonables van de 2 a 5, por defecto 3.\n"
+"\n"
+"En general, valores elevados no mejoran significativamente la codificación, a menos que se seleccione el modo de decisión óptimo para fotogramas B adaptables. La animación tradicional y el uso de fotogramas B como referencia aumentan también la utilidad de valores elevados.\n"
+"\n"
+"El perfil básico, obligatorio para los iPods y otros dispositivos similares, requiere un valor 0."
+
+msgid "<small>Pyramidal B-Frames:</small>"
+msgstr "<small>Fotogramas B como referencia:</small>"
+
+msgid ""
+"B-pyramid improves compression by creating a pyramidal structure (hence the name)\n"
+"of B-frames, allowing B-frames to reference each other to improve compression.\n"
+"\n"
+"Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
+msgstr ""
+"Permite usar fotogramas B como referencia para otros fotogramas B. El valor por defecto es el modo normal.\n"
+"\n"
+"Requiere un número máximo de fotogramas B mayor que 1. Es altamente recomendable seleccionar el modo de decisión óptimo para los fotogramas B adaptables para una mejora completa de la compresión."
+
+msgid "<small>Weighted P-Frames:</small>"
+msgstr "<small>Predicción ponderada para fotogramas P:</small>"
+
+msgid ""
+"Performs extra analysis to decide upon weighting parameters for each frame.\n"
+"\n"
+"This improves overall compression slightly and improves the quality of fades greatly.\n"
+"\n"
+"Baseline profile, as required for iPods and similar devices, requires weighted P-frame\n"
+"prediction to be disabled.  Note that some devices and players, even those that support\n"
+"Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
+"completely incompatible with it, for example."
+msgstr ""
+"Activa la predicción ponderada para mejorar la compresión de los fotogramas P. El valor por defecto es el modo inteligente, que mejora mucho la calidad de los fundidos.\n"
+"\n"
+"El perfil básico, obligatorio para iPods y dispositivos similares, requiere que se desactive este ajuste. Algunos dispositivos que admiten el perfil principal pueden tener problemas con este ajuste: Apple TV es totalmente incompatible, por ejemplo."
+
+msgid "8x8 Transform"
+msgstr "Transformación 8x8"
+
+msgid ""
+"The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
+"\n"
+"It improves compression by at least 5% at a very small speed cost and may\n"
+"provide an unusually high visual quality benefit compared to its compression\n"
+"gain.  However, it requires High Profile, which many devices may not support."
+msgstr ""
+"Activa la transformación 8x8 adaptable. Es la opción por defecto.\n"
+"\n"
+"Es la característica del codificador x264 que tiene la mejor relación entre velocidad y calidad. Mejora la compresión en al menos un 5%, con una reducción muy pequeña de la velocidad de codificación, y puede proporcionar una gran mejora de la calidad visual.\n"
+"\n"
+"Requiere el perfil alto del codificador, que muchos dispositivos no admiten."
+
+msgid "CABAC Entropy Encoding"
+msgstr "Codificación de entropía CABAC"
+
+msgid ""
+"After the encoder has done its work, it has a bunch of data that\n"
+"needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides\n"
+"two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but\n"
+"compresses significantly better (10-30%), especially at lower bitrates.\n"
+"\n"
+"If you're looking to minimize CPU requirements for video playback, disable this option.\n"
+"Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
+msgstr ""
+"Activa el algoritmo de compresión sin pérdida CABAC. Es la opción por defecto. Si se desactiva CABAC, se activa el algoritmo CAVLC.\n"
+"\n"
+"CABAC es más lento en la decodificación, pero comprime significativamente mejor (un 10-30% más), especialmente a tasas de bits bajas. Si quiere minimizar el uso del procesador en la reproducción del vídeo, desactive esta opción.\n"
+"\n"
+"Para cumplir el perfil básico, obligatorio para iPods y otros dispositivos similares, hay que desactivar esta opción."
+
+msgid "<small><b>Encoding Features</b></small>"
+msgstr "<b>Características de la codificación</b>"
+
+msgid "<small>Motion Est. Method:</small>"
+msgstr "<small>Estimación de movimiento:</small>"
+
+msgid ""
+"Controls the motion estimation method.\n"
+"\n"
+"Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.\n"
+"A better motion search method improves compression at the cost of speed.\n"
+"\n"
+"Diamond: performs an extremely fast and simple search using a diamond pattern.\n"
+"Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.\n"
+"Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.\n"
+"Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
+"Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
+msgstr ""
+"Selecciona el método de estimación de movimiento. El método de estimación de movimiento es el algoritmo que utiliza el codificador para calcular como se ha movido cada bloque de píxeles de un fotograma al siguiente.\n"
+"\n"
+"Seleccionar un método mejor mejora la compresión a costa de aumentar el tiempo de codificación. Hay cinco métodos:\n"
+"\n"
+"Búsqueda de diamante: búsqueda extremadamente rápida y sencilla. Utiliza un patrón con forma de diamante.\n"
+"Búsqueda hexagonal: búsqueda algo más eficaz, pero ligeramente más lenta. Utiliza un patrón hexagonal. Es el método por defecto.\n"
+"Búsqueda multihexágonal desigual: búsqueda muy amplia. Utiliza una variedad de patrones. Captura con más precisión el movimiento complejo.\n"
+"Búsqueda exhaustiva: búsqueda píxel a píxel en un área amplia. Es significativamente más lenta y solo mejora ligeramente la compresión.\n"
+"Búsqueda exhaustiva de Hadamard: búsqueda similar a la anterior, pero más precisa. Es aún más lenta y solo proporciona una pequeña mejora de la compresión."
+
+msgid "<small>Subpel ME &amp; Mode:</small>"
+msgstr "<small>Estimación de movimiento de subpíxel:</small>"
+
+msgid ""
+"This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
+"\n"
+"Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n"
+"Mode decision is the method used to choose how to encode each block of the frame: a very important decision.\n"
+"SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n"
+"6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n"
+"11 disables all early terminations in analysis.\n"
+"10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
+msgstr ""
+"Selecciona el nivel de precisión de la estimación de movimiento de subpíxel y el método de determinación del modo de codificación de cada bloque de píxeles del fotograma.\n"
+"\n"
+"Cuanto mayor sea la precisión de la estimación de movimiento de subpíxel, mejores son los resultados de la compresión. El método de determinación más rápido es SAD, seguido por SATD, RD, RD mejorado y QPRD.\n"
+"\n"
+"El nivel 7 es el valor por defecto. La optimización psicovisual requiere el nivel 6 o superior.\n"
+"Los niveles 10 y 11 requieren activar la cuantificación de enrejado en la codificación y en el análisis (trellis=2), y también la cuantificación adaptable (aq-mode > 0)."
+
+msgid "<small>Motion Est. Range:</small>"
+msgstr "<small>Rango de búsqueda de movimiento:</small>"
+
+msgid ""
+"This is the distance x264 searches from its initial guess at the\n"
+"motion of a block in order to try to find its actual motion.\n"
+"\n"
+"The default is fine for most content, but extremely high motion video,\n"
+"especially at HD resolutions, may benefit from higher ranges, albeit at\n"
+"a high speed cost."
+msgstr ""
+"Selecciona el rango máximo de la búsqueda de movimiento en píxeles. El valor por defecto es 16. Un valor más elevado resulta en un análisis más preciso, pero también ralentiza la velocidad de codificación de manera significativa.\n"
+"\n"
+"El valor por defecto es adecuado para la mayoría de los contenidos, pero los vídeos con mucho movimiento, especialmente en alta definición, se benefician de valores más elevados."
+
+msgid "<small>Adaptive Direct Mode:</small>"
+msgstr "<small>Modo directo adaptable:</small>"
+
+msgid ""
+"H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
+"\n"
+"Spatial, the default, is almost always better, but temporal is sometimes useful too.\n"
+"x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
+"adaptively select which is better for each particular frame."
+msgstr ""
+"Selecciona el modo de predicción para los vectores de movimiento directos de los fotogramas B.\n"
+"\n"
+"El modo espacial es el valor predeterminado. El modo temporal es mejor con tasas de bits bajas. El modo automático permite al codificador seleccionar el modo mejor para cada fotograma particular (es más eficiente en la codificación en dos pasadas)."
+
+msgid "<small>Adaptive B-Frames:</small>"
+msgstr "<small>Fotogramas B adaptables:</small>"
+
+msgid ""
+"x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
+"\n"
+"Fast mode takes roughly the same amount of time no matter how many B-frames you specify.\n"
+"However, while fast, its decisions are often suboptimal.\n"
+"\n"
+"Optimal mode gets slower as the maximum number of B-Frames increases,\n"
+"but makes much more accurate decisions, especially when used with B-pyramid."
+msgstr ""
+"Selecciona el método para decidir el número de fotogramas B consecutivos.\n"
+"\n"
+"El modo rápido utiliza, por lo general, un número muy bajo de fotogramas B, incluso si se ha especificado un límite muy alto. Es el valor por defecto.\n"
+"\n"
+"El modo óptimo se vuelve más lento cuanto más alto es el número máximo de fotogramas B especificado, pero es más preciso, especialmente cuando se usan fotogramas B como referencia."
+
+msgid "<small>Partitions:</small>"
+msgstr "<small>Particiones:</small>"
+
+msgid ""
+"Mode decision picks from a variety of options to make its decision:\n"
+"this option chooses what options those are.\n"
+"\n"
+"Fewer partitions to check means faster encoding, at the cost of worse\n"
+"decisions, since the best option might have been one that was turned off."
+msgstr ""
+"Durante la compresión, el codificador divide los fotogramas en bloques de 16x16 píxeles para descartar los datos redundantes. Este ajuste activa la subdivisión de los bloques en particiones más pequeñas.\n"
+"\n"
+"Cuantas más particiones se activan, es más precisa la estimación de movimiento, aunque también aumenta el tiempo de codificación."
+
+msgid "<small>Trellis:</small>"
+msgstr "<small>Cuantificación de enrejado:</small>"
+
+msgid ""
+"Trellis fine-tunes the rounding of transform coefficients to\n"
+"squeeze out 3-5% more compression at the cost of some speed.\n"
+"\n"
+"\"Always\" uses trellis not only during the main encoding process, but also\n"
+"during analysis, which improves compression even more, albeit at great speed cost.\n"
+"\n"
+"Trellis costs more speed at higher bitrates and requires CABAC."
+msgstr ""
+"Activa la cuantificación de enrejado. La cuantificación de enrejado mejora la eficiencia de la compresión a costa de reducir la velocidad de codificación.\n"
+"\n"
+"El modo por defecto activa la cuantificación de enrejado solo durante la codificación principal. Si se activa siempre, mejora más la compresión, aunque se reduce mucho más la velocidad.\n"
+"\n"
+"La cuantificación de enrejado reduce más la velocidad a mayores tasas de bits y requiere la activación de la codificación de entropía CABAC."
+
+msgid "<small><b>Analysis</b></small>"
+msgstr "<b>Análisis</b>"
+
+msgid "<small>Adaptive Quantization Strength:</small>"
+msgstr "<small>Cuantificación adaptable:</small>"
+
+msgid ""
+"Adaptive quantization controls how the encoder distributes bits across the frame.\n"
+"\n"
+"Higher values take more bits away from edges and complex areas to improve areas with finer detail."
+msgstr ""
+"Selecciona la intensidad de la cuantificación adaptable. La cuantificación adaptable controla cómo el codificador asigna los bits para codificar las diferentes áreas de los fotogramas.\n"
+"\n"
+"Los valores más altos utilizan más bits para codificar las áreas con detalles más finos para mejorar la calidad de la imagen. El valor por defecto es 1.0."
+
+msgid "<small>Psychovisual Rate Distortion:</small>"
+msgstr "<small>Tasa de distorsión psicovisual: </small>"
+
+msgid ""
+"Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
+"vision to dramatically improve apparent detail and sharpness.\n"
+"The effect can be made weaker or stronger by adjusting the strength.\n"
+"Being an RD algorithm, it requires mode decision to be at least \"6\"."
+msgstr ""
+"Selecciona la intensidad de optimización de la tasa de distorsión psicovisual. La optimización de la tasa de distorsión psicovisual se aprovecha de las características de la visión humana para mejorar significativamente el detalle y la nitidez de la imagen.\n"
+"\n"
+"Requiere el modo 6 o superior del método de estimación de movimiento de subpíxel. El valor por defecto es 1.0."
+
+msgid "<small>Psychovisual Trellis:</small>"
+msgstr "<small>Enrejado psicovisual:</small>"
+
+msgid ""
+"Psychovisual trellis is an experimental algorithm to further\n"
+"improve sharpness and detail retention beyond what Psychovisual RD does.\n"
+"\n"
+"Recommended values are around 0.2, though higher values may help for very\n"
+"grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
+"and other sharp-edged graphics."
+msgstr ""
+"Selecciona la intensidad del enrejado psicovisual. El enrejado psicovisual es un algoritmo experimental que mejora aún más el detalle y la nitidez de la imagen. Requiere la activación de la cuantificación de enrejado.\n"
+"\n"
+"El valor por defecto es 0.0. El valor recomendado es 0.2, aunque valores más altos pueden ser útiles para vídeo muy granulado o codificaciones con tasas de bits bajas. No se recomienda para la animación tradicional ni para otros gráficos de bordes marcados."
+
+msgid "Deblocking: "
+msgstr "Desbloqueo: "
+
+msgid ""
+"H.264 deblocking filter.\n"
+"\n"
+"h.264 has a built-in deblocking filter that smooths out blocking artifacts\n"
+"after decoding each frame.  This not only improves visual quality, but also\n"
+"helps compression significantly. The deblocking filter takes a lot of CPU power,\n"
+"so if you're looking to minimize CPU requirements for video playback, disable it.\n"
+"\n"
+"The deblocking filter has two adjustable parameters, \"strength\" (Alpha) and \"threshold\" (Beta).\n"
+"The former controls how strong (or weak) the deblocker is, while the latter controls how many\n"
+"(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
+"The default is 0 (normal strength) for both parameters."
+msgstr ""
+"Selecciona la intensidad y el umbral del filtro de desbloqueo del estándar H.264. Este filtro suaviza los artefactos de bloque después de decodificar cada fotograma. No solo mejora la calidad visual, también ayuda en la compresión.\n"
+"\n"
+"La intensidad del filtro controla cuánto se suavizará el vídeo. El valor por defecto es 0. Valores positivos intensifican el efecto del filtro, pero dan como resultado un vídeo más borroso. Valores negativos producen un vídeo más nítido, pero aumentan el riesgo de que haya artefactos visibles.\n"
+"\n"
+"El umbral del filtro controla el umbral de detección de bloques. El valor por defecto es 0. Valores positivos capturan más artefactos, pero eliminan más detalles. Valores negativos preservan más detalles del vídeo, pero pasan por alto más artefactos, especialmente en las áreas planas."
+
+msgid "No DCT Decimate"
+msgstr "Desactivar el diezmado de la DCT"
+
+msgid ""
+"x264 normally zeroes out nearly-empty data blocks to save bits to\n"
+"be better used for some other purpose in the video.  However, this can\n"
+"sometimes have slight negative effects on retention of subtle grain and\n"
+"dither.\n"
+"\n"
+"Don't touch this unless you're having banding issues or other such cases\n"
+"where you are having trouble keeping fine noise."
+msgstr ""
+"Desactiva el diezmado de la DCT. Por defecto el codificador x264 descarta los bloques de datos casi vacíos para aumentar la eficiencia de la codificación. Sin embargo, esto a veces puede tener ligeros efectos negativos sobre la retención del grano fino y de las texturas.\n"
+"\n"
+"No desactive el diezmado de la DCT a menos que tenga problemas de bandas de color o para mantener el ruido fino."
+
+msgid "<small><b>Psychovisual</b></small>"
+msgstr "<b>Optimización psicovisual</b>"
+
+msgid ""
+"Your selected options will appear here.\n"
+"You can edit these and add additional options.\n"
+"\n"
+"Default values will not be shown. The defaults are:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
+"b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
+"subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
+"deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
+"no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+msgstr ""
+"Las opciones seleccionadas aparecen aquí. Puede editarlas y añadir otras.\n"
+"\n"
+"Los valores por defecto no se muestran. Son los siguientes:\n"
+"ref=3:bframes=3:b-adapt=fast:direct=spatial:b-pyramid=normal:weightp=2:me=hex:\n"
+"merange=16:subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:deblock=0,0:trellis=1:\n"
+"psy-rd=1,0:aq-strength=1.0:no-fast-pskip=0:no-dct-decimate=0:cabac=1"
+
+msgid "<small><b>Current x264 Advanced Option String</b></small>"
+msgstr "<b>Cadena de opciones avanzadas para el codificador x264</b>"
+
+msgid "Advanced Video"
+msgstr "Vídeo avanzado"
+
+msgid "Chapter Markers"
+msgstr "Marcadores de capítulos"
+
+msgid "Add chapter markers to output file."
+msgstr "Añade marcadores de capítulos al archivo codificado."
+
+msgid "Chapters"
+msgstr "Capítulos"
+
+msgid "Actors:"
+msgstr "Actores:"
+
+msgid "Director:"
+msgstr "Dirección:"
+
+msgid "Release Date:"
+msgstr "Fecha de lanzamiento:"
+
+msgid "Comment:"
+msgstr "Comentario:"
+
+msgid "Genre:"
+msgstr "Género:"
+
+msgid "Description:"
+msgstr "Descripción:"
+
+msgid "Plot:"
+msgstr "Argumento:"
+
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Reload"
+msgstr "Recargar"
+
+msgid ""
+"Mark selected queue entry as pending.\n"
+"Resets the queue job to pending and ready to run again."
+msgstr "Marca la codificación seleccionada como lista para ejecutar de nuevo."
+
+msgid "Reload All"
+msgstr "Recargar todo"
+
+msgid ""
+"Mark all queue entries as pending.\n"
+"Resets all queue jobs to pending and ready to run again."
+msgstr "Marca todas las codificaciones como listas para ejecutar de nuevo."
+
+msgid "OK"
+msgstr "De acuerdo"
+
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+msgid "Mark all titles for adding to the queue"
+msgstr "Marca todos los títulos."
+
+msgid "Clear All"
+msgstr "Deseleccionar todo"
+
+msgid "Unmark all titles"
+msgstr "Desmarca todos los títulos."
+
+msgid "Destination files OK.  No duplicates detected."
+msgstr "Se han verificado los archivos de destino. No se han detectado archivos duplicados."
+
+msgid "Select this title for adding to the queue.\n"
+msgstr "Selecciona este título para añadir a la cola.\n"
+
+msgid "Preferences"
+msgstr "Preferencias"
+
+msgid "Automatically check for updates"
+msgstr "Comprobar automáticamente si hay actualizaciones"
+
+msgid "When all encodes are complete"
+msgstr "Cuando finalizan todas las codificaciones"
+
+msgid "Use automatic naming (uses modified source name)"
+msgstr "Asignar el nombre de archivo automáticamente (nombre original modificado)"
+
+msgid "Auto-Name Template"
+msgstr "Plantilla para la asignación automática"
+
+msgid "Available Options: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+msgstr "Opciones disponibles: {source} {title} {chapters} {date} {time} {quality} {bitrate}"
+
+msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
+msgstr "Usar la extensión de archivo adecuada para iPod/iTunes (.m4v) para MP4"
+
+msgid "Number of previews"
+msgstr "Número de vistas previas"
+
+msgid "Filter short titles (seconds)"
+msgstr "Filtrar los títulos cortos (segundos)"
+
+msgid "Show system tray icon"
+msgstr "Mostrar el icono en el área de nofiticación"
+
+msgid "General"
+msgstr "General"
+
+msgid "Constant Quality fractional granularity"
+msgstr "Nivel de detalle en la escala de calidad constante"
+
+msgid "Use dvdnav (instead of libdvdread)"
+msgstr "Usar la biblioteca dvdnav (en lugar de la biblioteca libdvdread)"
+
+msgid "Put individual encode logs in same location as movie"
+msgstr "Guardar los registros de codificación en la misma ubicación que los vídeos codificados"
+
+msgid "Activity Log Verbosity Level"
+msgstr "Nivel de detalle de los registros de actividad"
+
+msgid "Activity Log Longevity"
+msgstr "Caducidad de los registros de actividad"
+
+msgid "Scale down High Definition previews"
+msgstr "Reducir las vistas previas de alta difinición"
+
+msgid "Automatically Scan DVD when loaded"
+msgstr "Explorar automáticamente los DVD"
+
+msgid "Scans the DVD whenever a new disc is loaded"
+msgstr "Explora automáticamente los DVD cuando se insertan en el reproductor."
+
+msgid "Hide Advanced Video Options Tab"
+msgstr "Ocultar la pestaña de vídeo avanzado"
+
+msgid ""
+"Use advanced video options at your own risk.\n"
+"We recommend that you use the controls available\n"
+"on the Video tab instead."
+msgstr ""
+"Utilice las opciones de vídeo avanzado bajo su propio riesgo.\n"
+"Es mejor que utilice en su lugar los controles disponibles en\n"
+"la pestaña de vídeo."
+
+msgid "Delete completed jobs from queue"
+msgstr "Eliminar las codificaciones finalizadas de la cola"
+
+msgid ""
+"By default, completed jobs remain in the queue and are marked as complete.\n"
+"Check this if you want the queue to clean itself up by deleting completed jobs."
+msgstr ""
+"Por defecto, las codificaciones completadas permanecen en la\n"
+"cola y se marcan como finalizadas."
+
+msgid "Allow Tweaks"
+msgstr "Permitir retoques"
+
+msgid "Allow HandBrake For Dummies"
+msgstr "Permitir HandBrake para principiantes"
+
+msgid "Advanced"
+msgstr "Avanzadas"
+
+msgid "Folder Name:"
+msgstr "Nombre de la carpeta:"
+
+msgid "<b>Description</b>"
+msgstr "<b>Descripción</b>"
+
+msgid "Preset Name:"
+msgstr "Nombre del preajuste:"
+
+msgid "<b>Custom Picture Dimensions</b>"
+msgstr "<b>Dimensiones personalizadas de la imagen</b>"
+
+msgid "Maximum Width:"
+msgstr "Anchura máxima:"
+
+msgid "Enable maximum width limit."
+msgstr "Activa la anchura máxima."
+
+msgid ""
+"This is the maximum width that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
+"Setting this to 0 means there is no maximum width."
+msgstr ""
+"Selecciona la anchura máxima de almacenamiento del vídeo.\n"
+"\n"
+"Este ajuste se aplica al cargar una nueva fuente de vídeo si\n"
+"la anchura del vídeo es mayor. Si se selecciona 0, se desactiva\n"
+"la anchura máxima."
+
+msgid "Maximum Height:"
+msgstr "Altura máxima:"
+
+msgid "Enable maximum height limit."
+msgstr "Activa la altura máxima."
+
+msgid ""
+"This is the maximum height that the video will be stored at.\n"
+"\n"
+"Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
+"Setting this to 0 means there is no maximum height."
+msgstr ""
+"Selecciona la altura máxima de almacenamiento del vídeo.\n"
+"\n"
+"Este ajuste se aplica al cargar una nueva fuente de vídeo si\n"
+"la altura del vídeo es mayor. Si se selecciona 0, se desactiva\n"
+"la altura máxima."
+
+msgid "Select preview frames."
+msgstr "Selecciona el fotograma de la vista previa."
+
+msgid "Encode and play a short sequence of video starting from the current preview position."
+msgstr "Codifica y reproduce una secuencia corta de vídeo desde la posición actual de la vista previa."
+
+msgid "<b>Duration:</b>"
+msgstr "<b>Duración:</b>"
+
+msgid "Set the duration of the live preview in seconds."
+msgstr "Selecciona la duración de la vista previa en segundos."
+
+msgid "Show Crop"
+msgstr "Mostrar el recorte"
+
+msgid "Show Cropped area of the preview"
+msgstr "Muestra el área recortada de la vista previa."
+
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+msgid "View Fullscreen Preview"
+msgstr "Previsualiza a pantalla completa."
+
+msgid "Title Number:"
+msgstr "Número del título:"
+
+msgid "Detected DVD devices:"
+msgstr "Dispositivo de DVD:"
+
+msgid "Setting:"
+msgstr "Ajuste:"
+
+msgid "Import SRT"
+msgstr "Importar una pista SRT"
+
+msgid "Enable settings to import an SRT subtitle file"
+msgstr "Importa una archivo de subtítulos SRT."
+
+msgid "Embedded Subtitle List"
+msgstr "Seleccionar una pista de la lista"
+
+msgid "Enable settings to select embedded subtitles"
+msgstr "Selecciona una de las pistas de subtítulos incluidas."
+
+msgid "Character Code"
+msgstr "Codificación de caracteres"
+
+msgid "Offset (ms)"
+msgstr "Compensación (ms)"
+
+msgid ""
+"Set the language of this subtitle.\n"
+"This value will be used by players in subtitle menus."
+msgstr ""
+"Selecciona el idioma de los subtítulos.\n"
+"\n"
+"Este valor lo utilizan los reproductores en los menús de subtítulos."
+
+msgid ""
+"Set the character code used by the SRT file you are importing.\n"
+"\n"
+"SRTs come in all flavours of character sets.\n"
+"We translate the character set to UTF-8.\n"
+"The source's character code is needed in order to perform this translation."
+msgstr ""
+"Selecciona la codificación de caracteres del archivo SRT para importar.\n"
+"\n"
+"La codificación de caracteres del archivo SRT se traduce a la codificación\n"
+"UTF-8. Para realizar esta traducción hay que conocer la codificación de\n"
+"caracteres del archivo SRT original."
+
+msgid "Select the SRT file to import."
+msgstr "Selecciona el archivo SRT para importar."
+
+msgid "Srt File"
+msgstr "Archivo SRT"
+
+msgid "Adjust the offset in milliseconds between video and SRT timestamps"
+msgstr ""
+"Selecciona el desplazamiento en milisegundos entre las marcas de\n"
+"tiempo del vídeo y del archivo SRT."
+
+msgid "Track"
+msgstr "Pista original"
+
+msgid "List of subtitle tracks available from your source."
+msgstr "Lista de las pistas de subtítulos disponibles en la fuente de vídeo."
+
+msgid "Forced Subtitles Only"
+msgstr "Solo subtítulos forzados"
+
+msgid "Burn into video"
+msgstr "Incrustar en el vídeo"
+
+msgid ""
+"Render the subtitle over the video.\n"
+"The subtitle will be part of the video and can not be disabled."
+msgstr ""
+"Incrusta los subtítulos en el vídeo.\n"
+"Los subtítulos incrustados forman parte del vídeo y no se pueden desactivar."
+
+msgid "Set Default Track"
+msgstr "Pista por defecto"
+
+msgid "Source Track"
+msgstr "Pista original"
+
+msgid "List of audio tracks available from your source."
+msgstr "Lista de las pistas de audio disponibles en la fuente de vídeo."
+
+msgid "Track Name:"
+msgstr "Nombre de la pista:"
+
+msgid ""
+"Set the audio track name.\n"
+"\n"
+"Players may use this in the audio selection list."
+msgstr ""
+"Define el nombre de la pista de audio.\n"
+"\n"
+"Los reproductores pueden usar el nombre\n"
+"de la pista en la lista de selección de audio."
+
+msgid "Mix"
+msgstr "Mezcla"
+
+msgid "Sample Rate"
+msgstr "Tasa de muestreo"
+
+msgid ""
+"<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
+"\n"
+"For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
+"DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
+msgstr ""
+"Selecciona la compresión de rango dinámico (DRC) para codificar las pistas de audio.\n"
+"\n"
+"Para fuentes de audio con un rango dinámico amplio, con secuencias muy fuertes y\n"
+"muy débiles, la compresión dinámica permite comprimir el rango del volumen,\n"
+"bajando los sonidos muy fuertes y elevando los sonidos muy débiles."
+
+msgid "Enable bitrate setting"
+msgstr "Activa la selección de la tasa de bits."
+
+msgid "Enable quality setting"
+msgstr "Activa la selección de la calidad."
+
+msgid "<b>Quality:</b> For output codec's that support it, adjust the quality of the output."
+msgstr "Selecciona la calidad para codificar las pistas de audio."
+
+msgid "00.0"
+msgstr "00.0"
+
+msgid "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output audio track."
+msgstr "Selecciona la amplificación o atenuación para codificar las pistas de audio."
+
+msgid "Skip This Version"
+msgstr "Omitir esta versión"
+
+msgid "Remind Me Later"
+msgstr "Recordar más tarde"
+
+msgid "<b>A new version of HandBrake is available!</b>"
+msgstr "<b>¡Hay disponible una versión nueva de HandBrake!</b>"
+
+msgid "HandBrake xxx is now available (you have yyy)."
+msgstr "HandBrake xxx está disponible ahora (esta versión es yyy)."
+
+msgid "<b>Release Notes</b>"
+msgstr "<b>Notas de la versión</b>"
+
+msgid "First Track Matching Selected Languages"
+msgstr "primera pista que coincida con los idiomas seleccionados"
+
+msgid "All Tracks Matching Selected Languages"
+msgstr "todas las pistas que coincidan con los idiomas seleccionados"
+
+msgid "Chapters:"
+msgstr "Capítulos:"
+
+msgid "Seconds:"
+msgstr "Segundos:"
+
+msgid "Frames:"
+msgstr "Fotogramas:"
+
+msgid "Do Nothing"
+msgstr "No hacer nada"
+
+msgid "Show Notification"
+msgstr "Mostrar una notificación"
+
+msgid "Quit Handbrake"
+msgstr "Salir de HandBrake"
+
+msgid "Put Computer To Sleep"
+msgstr "Poner el equipo en reposo"
+
+msgid "Shutdown Computer"
+msgstr "Apagar el equipo"
+
+msgid "Week"
+msgstr "Una semana"
+
+msgid "Month"
+msgstr "Un mes"
+
+msgid "Year"
+msgstr "Un año"
+
+msgid "Immortal"
+msgstr "Nunca"
+
+msgid "Never"
+msgstr "Nunca"
+
+msgid "Daily"
+msgstr "Diario"
+
+msgid "Weekly"
+msgstr "Semanal"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Default"
+msgstr "por defecto"
+
+msgid "Fast"
+msgstr "rápido"
+
+msgid "Slow"
+msgstr "lento"
+
+msgid "Slower"
+msgstr "más lento"
+
+msgid "Ultralight"
+msgstr "ultraligero"
+
+msgid "Light"
+msgstr "ligero"
+
+msgid "Medium"
+msgstr "medio"
+
+msgid "Strong"
+msgstr "fuerte"
+
+msgid "Film"
+msgstr "filme"
+
+msgid "Grain"
+msgstr "grano"
+
+msgid "High Motion"
+msgstr "mucho movimiento"
+
+msgid "Animation"
+msgstr "animación"
+
+msgid "Spatial"
+msgstr "espacial"
+
+msgid "Temporal"
+msgstr "temporal"
+
+msgid "Automatic"
+msgstr "automático"
+
+msgid "Optimal"
+msgstr "óptimo"
+
+msgid "Normal"
+msgstr "normal"
+
+msgid "Simple"
+msgstr "simple"
+
+msgid "Smart"
+msgstr "inteligente"
+
+msgid "Diamond"
+msgstr "búsqueda de diamante"
+
+msgid "Hexagon"
+msgstr "búsqueda hexagonal"
+
+msgid "Uneven Multi-Hexagon"
+msgstr "búsqueda multihexagonal desigual"
+
+msgid "Exhaustive"
+msgstr "búsqueda exhaustiva"
+
+msgid "Hadamard Exhaustive"
+msgstr "búsqueda exhaustiva de Hadamard"
+
+msgid "Most"
+msgstr "por defecto"
+
+msgid "Some"
+msgstr "algunas"
+
+msgid "All"
+msgstr "todas"
+
+msgid "Encode only"
+msgstr "solo al codificar"
+
+msgid "Always"
+msgstr "siempre"
+
+msgid "(NTSC Film)"
+msgstr "(filme NTSC)"
+
+msgid "(PAL Film/Video)"
+msgstr "(filme/TV PAL)"
+
+msgid "(NTSC Video)"
+msgstr "(TV NTSC)"
+
+msgid "%d - %02dh%02dm%02ds - %s"
+msgstr "%d - %02d h %02d m %02d s - %s"
+
+msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
+msgstr "%d (%05d.MPLS) - %02d h %02d m %02d s"
+
+msgid "%d (%05d.MPLS) - Unknown Length"
+msgstr "%d (%05d.MPLS) - Duración desconocida"
+
+msgid "%d - %02dh%02dm%02ds"
+msgstr "%d - %02d h %02d m %02d s"
+
+msgid "%d - Unknown Length"
+msgstr "%d - Duración desconocida"
+
+msgid "No Titles"
+msgstr "No hay títulos"
+
+msgid "No Audio"
+msgstr "No hay audio"
+
+msgid "Foreign Audio Search"
+msgstr "Búsqueda de audio extranjero"
+
+#, c-format
+msgid "Chapter %2d"
+msgstr "Capítulo %2d"
+
+#, c-format
+msgid "N/A"
+msgstr "N/D"
+
+#, c-format
+msgid ""
+"Invalid Deinterlace Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de desentrelazado no válidos:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Detelecine Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de destelecinado no válidos:\n"
+"\n"
+"%s\n"
+
+#, c-format
+msgid ""
+"Invalid Decomb Settings:\n"
+"\n"
+"%s\n"
+msgstr ""
+"Ajustes de despeinado no válidos:\n"
+"\n"
+"%s\n"
+
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+"El códec Theora no es compatible con el formato contenedor MP4.\n"
+"\n"
+"Debe elegir un códec de vídeo o un formato contenedor diferente.\n"
+"Si continúa, se seleccionará el códec FFmpeg automáticamente."
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "No title found.\n"
+msgstr "No se ha encontrado ningún título.\n"
+
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+"Solo se puede incrustar una pista de subtítulos en el vídeo.\n"
+"\n"
+"Cambie la selección de subtítulos.\n"
+"Si continúa, se perderá alguna pista de subtítulos."
+
+msgid ""
+"Srt file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+"El archivo SRT no existe o no es válido.\n"
+"\n"
+"Debe elegir un archivo válido.\n"
+"Si continúa, esta pista de subtítulos será ignorada."
+
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"La fuente de a audio no soporta la copia directa.\n"
+"\n"
+"Debe elegir un códec de audio diferente.\n"
+"Si continúa, se seleccionará uno automáticamente."
+
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"El códec %s no es compatible con el formato contenedor %s.\n"
+"\n"
+"Debe elegir un códec de audio diferente.\n"
+"Si continúa, se seleccionará uno automáticamente."
+
+#, c-format
+msgid ""
+"The source audio does not support %s mixdown.\n"
+"\n"
+"You should choose a different mixdown.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+"La fuente de audio no admite la mezcla %s.\n"
+"\n"
+"Debe elegir una mezcla diferente.\n"
+"Si continúa, se seleccionará una automáticamente."
+
+#, c-format
+msgid ""
+"<b><big>Unable to create %s.</big></b>\n"
+"\n"
+"Internal error. Could not parse UI description.\n"
+"%s"
+msgstr ""
+"<b><big>No se puede crear %s.</big></b>\n"
+"\n"
+"Se ha producido un error interno.\n"
+"No se ha podido analizar la descripción de la interfaz de usuario.\n"
+"%s"
+
+msgid "Index"
+msgstr "Índice"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Job Information"
+msgstr "Información del trabajo"
+
+msgid "Track Information"
+msgstr "Información de la pista"
+
+msgid "Preset Name"
+msgstr "Nombre del preajuste"
+
+msgid "The device or file to encode"
+msgstr "El dispositivo o archivo para la codificación"
+
+msgid "The preset values to use for encoding"
+msgstr "Los ajustes predeterminados que se usan para codificar"
+
+msgid "Spam a lot"
+msgstr "Enviar muchos mensajes irrelevantes"
+
+msgid "- Transcode media formats"
+msgstr "- Transcodificar formatos multimedia"
+
+msgid "Globals"
+msgstr "Globales"
+
+msgid "Presets"
+msgstr "Preajustes"
+
+msgid "Folder"
+msgstr "Carpeta"
+
+#, c-format
+msgid "%s path: (%s)"
+msgstr "%s ubicación: (%s)"
+
+#, c-format
+msgid "%s indices: len %d"
+msgstr "%s índices: duración %d"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Failed to find parent folder when adding child."
+msgstr "No se ha podido encontrar la carpeta principal al añadir la subcarpeta."
+
+msgid "Failed to find parent folder while adding child."
+msgstr "No se ha podido encontrar la carpeta principal al añadir la subcarpeta."
+
+#, c-format
+msgid "Can't map language value: (%s)"
+msgstr "No se puede asignar valor de idioma: (%s)"
+
+#, c-format
+msgid "Can't map value: (%s)"
+msgstr "No se puede asignar el valor: (%s)"
+
+msgid "Subtitles"
+msgstr "Subtítulos"
+
+msgid ""
+"%s: Folder already exists.\n"
+"You can not replace it with a preset."
+msgstr ""
+"%s: La carpeta ya existe.\n"
+"\n"
+"La carpeta no se puede reemplazar con un preajuste."
+
+msgid ""
+"%s: Preset already exists.\n"
+"You can not replace it with a folder."
+msgstr ""
+"%s: El preajuste ya existe.\n"
+"\n"
+"El preajuste no se puede reemplazar con una carpeta."
+
+msgid "Import Preset"
+msgstr "Importar preajustes"
+
+msgid "All (*)"
+msgstr "Todos los archivos (*)"
+
+msgid "Presets (*.plist)"
+msgstr "Preajustes (*.plist)"
+
+msgid "Export Preset"
+msgstr "Exportar preajustes"
+
+msgid ""
+"Confirm deletion of %s:\n"
+"\n"
+"%s"
+msgstr ""
+"¿Seguro que quiere borrar %s siguiente?\n"
+"\n"
+"%s"
+
+msgid "folder"
+msgstr "la carpeta"
+
+msgid "preset"
+msgstr "el preajuste"
+
+msgid "No selection???  Perhaps unselected."
+msgstr "¿No se ha seleccionado nada? Tal vez no se ha marcado nada."
+
+#, c-format
+msgid "Gstreamer Error: %s"
+msgstr "Error de GStreamer: %s"
+
+#, c-format
+msgid ""
+"Missing GStreamer plugin\n"
+"Audio or Video may not play as expected\n"
+"\n"
+"%s"
+msgstr ""
+"Falta el complemento de GStreamer.\n"
+"No se puede reproducir el audio o el vídeo como se esperaba.\n"
+"\n"
+"%s"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid "Windowed"
+msgstr "Ventana"
+
+msgid "Seconds"
+msgstr "Segundos"
+
+msgid "Frames"
+msgstr "Fotogramas"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Título %d - %s %d a %d - 2 pasadas de vídeo) --> %s</small>"
+
+#, c-format
+msgid "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
+msgstr "<big><b>%s</b></big> <small>(Título %d - %s %d a %d) --> %s</small>"
+
+#, c-format
+msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
+msgstr "<b>Preajuste modificado a partir de:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Preset:</b> <small>%s</small>\n"
+msgstr "<b>Preajuste:</b> <small>%s</small>\n"
+
+#, c-format
+msgid "<b>Format:</b> <small>%s Container</small>\n"
+msgstr "<b>Formato contenedor:</b> <small>%s</small>\n"
+
+msgid "<b>Container Options:</b><small>"
+msgstr "<b>Opciones del contenedor:</b><small>"
+
+#, c-format
+msgid "%sChapter Markers"
+msgstr "%sMarcadores de capítulo"
+
+#, c-format
+msgid "%siPod 5G Support"
+msgstr "%sCompatibilidad con iPod 5G"
+
+#, c-format
+msgid "%sWeb Optimized"
+msgstr "%sOptimizado para la web"
+
+#, c-format
+msgid "%sLarge File Size (>4GB)"
+msgstr "%sArchivo de gran tamaño (>4GB)"
+
+#, c-format
+msgid "<b>Destination:</b> <small>%s</small>\n"
+msgstr "<b>Archivo de destino:</b> <small>%s</small>\n"
+
+msgid "(Aspect Preserved)"
+msgstr "(aspecto preservado)"
+
+msgid "(Aspect Lost)"
+msgstr "(aspecto perdido)"
+
+msgid "(Anamorphic)"
+msgstr "(modo anamórfico)"
+
+msgid "(Custom Anamorphic)"
+msgstr "(modo anamórfico personalizado)"
+
+msgid "<b>Picture:</b> <small>"
+msgstr "<b>Tamaño de imagen:</b> <small>"
+
+#, c-format
+msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
+msgstr "Fuente: %d x %d - Destino: %d x %d %s - Recorte: %d:%d:%d:%d"
+
+#, c-format
+msgid ", Display %d x %d"
+msgstr " - Visualización: %d x %d"
+
+msgid "<b>Filters:</b><small>"
+msgstr "<b>Filtros de imagen:</b><small>"
+
+#, c-format
+msgid "%sDetelecine"
+msgstr "%sDestelecinado"
+
+#, c-format
+msgid "%sDecomb"
+msgstr "%sDespeinado"
+
+#, c-format
+msgid "%sDeinterlace"
+msgstr "%sDesentrelazado"
+
+#, c-format
+msgid "%sDenoise Filter %s:"
+msgstr "%sAtenuación de ruido %s:"
+
+#, c-format
+msgid "%sDeblock: %d"
+msgstr "%sDesbloqueo: %d"
+
+#, c-format
+msgid "%sGrayscale"
+msgstr "%sEscala de grises"
+
+#, c-format
+msgid "<b>Video:</b> <small>%s"
+msgstr "<b>Pista de vídeo:</b> <small>%s"
+
+#, c-format
+msgid ", Framerate: %s %s"
+msgstr " - Tasa de fotogramas: %s %s"
+
+#, c-format
+msgid ", Framerate: Peak %s (may be lower)"
+msgstr " - Tasa de fotogramas: %s (pico de la tasa, puede ser más baja)"
+
+#, c-format
+msgid ", Framerate: %s (constant frame rate)"
+msgstr " - Tasa de fotogramas: %s (tasa constante)"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Bitrate:"
+msgstr "Tasa de bits:"
+
+msgid "Bitrate"
+msgstr "Tasa de bits"
+
+msgid "Quality"
+msgstr "Calidad"
+
+msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
+msgstr "<b>Primera pasada rápida:</b> <small>activar</small>\n"
+
+#, c-format
+msgid "<b>Video Options:</b> <small>Preset: %s</small>"
+msgstr "<b>Opciones de vídeo:</b> <small>Preajuste: %s</small>"
+
+msgid "<small> - Tune: "
+msgstr "<small> - Ajuste fino: "
+
+#, c-format
+msgid "<small> - Profile: %s</small>"
+msgstr "<small> - Perfil: %s</small>"
+
+#, c-format
+msgid "<small> - Level: %s</small>"
+msgstr "<small> - Nivel: %s</small>"
+
+#, c-format
+msgid "<b>Advanced Options:</b> <small>%s</small>\n"
+msgstr "<b>Opciones de vídeo avanzadas:</b> <small>%s</small>\n"
+
+msgid "<b>Audio:</b> <small>"
+msgstr "<b>Pista de audio:</b> <small>"
+
+#, c-format
+msgid "<b>Audio Tracks: %d</b><small>"
+msgstr "<b>Pistas de audio: %d</b><small>"
+
+#, c-format
+msgid "Bitrate: %d"
+msgstr "Tasa de bits: %d"
+
+#, c-format
+msgid "%s --> Encoder: %s"
+msgstr "%s --> Codificador: %s"
+
+#, c-format
+msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
+msgstr "%s --> Codificador: %s - Mezcla: %s - Tasa de muestreo: %s - %s"
+
+msgid "<b>Subtitle:</b> "
+msgstr "<b>Pista de subtítulos:</b> "
+
+#, c-format
+msgid "<b>Subtitle Tracks: %d</b>\n"
+msgstr "<b>Pistas de subtítulos: %d</b>\n"
+
+msgid " (Force)"
+msgstr " (forzar)"
+
+msgid " (Burn)"
+msgstr " (incrustar)"
+
+msgid " (Default)"
+msgstr " (por defecto)"
+
+#, c-format
+msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
+msgstr "<small> %s (%s) - %s - Compensación: %d ms %s</small>\n"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Another queued job has specified the same destination.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Destino: %s\n"
+"\n"
+"Otra codificación de la cola ha especificado el mismo destino.\n"
+"¿Quiere sobrescribirlo?"
+
+msgid "Overwrite"
+msgstr "Sobrescribir"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"This is not a valid directory."
+msgstr ""
+"Destino: %s\n"
+"\n"
+"Esta carpeta no es válida."
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"Can not read or write the directory."
+msgstr ""
+"Destino: %s\n"
+"\n"
+"No se puede leer o escribir en la carpeta."
+
+#, c-format
+msgid ""
+"Destination filesystem is almost full: %uM free\n"
+"\n"
+"Encode may be incomplete if you proceed.\n"
+msgstr ""
+"El sistema de archivos de destino está casi lleno: %u MB libres.\n"
+"\n"
+"La codificación puede quedar incompleta si continúa.\n"
+
+msgid "Proceed"
+msgstr "Ejecutar"
+
+#, c-format
+msgid ""
+"Destination: %s\n"
+"\n"
+"File already exists.\n"
+"Do you want to overwrite?"
+msgstr ""
+"Destino: %s\n"
+"\n"
+"El archivo ya existe. ¿Quiere sobrescribirlo?"
+
+msgid ""
+"<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
+"Duplicates will not be added to the queue.</span>"
+msgstr ""
+"<span foreground='red' weight='bold'>Se han detectado archivos de destino duplicados.\n"
+"Los archivos duplicados no se añadirán a la cola.</span>"
+
+msgid "No Title"
+msgstr "No hay título"
+
+msgid ""
+"There is another title with the same destination file name.\n"
+"This title will not be added to the queue unless you change\n"
+"the output file name.\n"
+msgstr ""
+"Hay otro título con el mismo nombre de archivo de destino.\n"
+"\n"
+"Este título no se añadirá a la cola a menos que cambie el\n"
+"nombre del archivo de destino.\n"
+
+msgid "Stop"
+msgstr "Detener"
+
+msgid "Stop Encoding"
+msgstr "Detiene la codificación."
+
+msgid "Resume"
+msgstr "Reanudar"
+
+msgid "Resume Encoding"
+msgstr "Reanuda la codificación."
+
+msgid "S_top Queue"
+msgstr "_Detener la cola"
+
+msgid "_Start Queue"
+msgstr "_Iniciar la cola"
+
+msgid "_Resume Queue"
+msgstr "_Reanudar la cola"
+
+msgid "Resume Queue"
+msgstr "Reanuda la cola."
+
+msgid ""
+"You are currently encoding.  What would you like to do?\n"
+"\n"
+msgstr ""
+"En este momento se está codificando.\n"
+"\n"
+" ¿Qué quiere hacer?\n"
+
+#, c-format
+msgid ""
+"You have %d unfinished job(s) in a saved queue.\n"
+"\n"
+"Would you like to reload them?"
+msgstr ""
+"Hay %d codificación(es) pendientes en una cola guardada.\n"
+"\n"
+"¿Quiere volver a cargaras?"
+
+msgid "No"
+msgstr "no"
+
+msgid "Yes"
+msgstr "sí"
+
+#, c-format
+msgid "Usage: %s infile [outfile]\n"
+msgstr "Uso: %s archivo_de_entrada [archivo_de_salida]\n"
+
+#, c-format
+msgid "Offset: %dms"
+msgstr "Compensación: %d ms"
+
+msgid "Burned Into Video"
+msgstr "Incrustar en el vídeo"
+
+msgid "Passthrough"
+msgstr "Copia directa"
+
+msgid "through"
+msgstr "a"
+
+msgid "(Forced Subtitles Only)"
+msgstr "(solo subtítulos forzados)"
+
+msgid "(Default)"
+msgstr "(por defecto)"
+
+msgid "Error!"
+msgstr "¡Error!"
+
+#, c-format
+msgid "Preferred Language: %s"
+msgstr "Idioma preferido: %s"
+
+#, c-format
+msgid "Add %s subtitle track if default audio is not %s"
+msgstr "Añadir subtítulos en '%s' si el audio por defecto no es '%s'"
+
+#, c-format
+msgid "Type %s"
+msgstr "Tipo %s"
+
+#, c-format
+msgid "Type %s value %s"
+msgstr "Tipo %s valor %s"
+
+#, c-format
+msgid "Type %s value %d"
+msgstr "Tipo %s valor %d"
 
 #, c-format
 msgid "Type %s value %<PRId64>"
-msgstr ""
+msgstr "Tipo %s valor %<PRId64>"
 
 #, c-format
 msgid "Type %s value %f"
-msgstr ""
+msgstr "Tipo %s valor %f"
 
 #, c-format
 msgid ""
@@ -2590,6 +8622,10 @@ msgid ""
 "Expanded Options:\n"
 "\"%s\""
 msgstr ""
+"%s\n"
+"\n"
+"Opciones expandidas:\n"
+"\"%s\""
 
 #, c-format
 msgid ""
@@ -2598,39 +8634,43 @@ msgid ""
 "Expanded Options:\n"
 "\"\""
 msgstr ""
+"%s\n"
+"\n"
+"Opciones expandidas:\n"
+"\"\""
 
 msgid "Any"
-msgstr ""
+msgstr "ninguno"
 
 msgid "0: SAD, no subpel"
-msgstr ""
+msgstr "0: SAD, sin subpíxel"
 
 msgid "4: SATD, qpel on all"
-msgstr ""
+msgstr "4: SATD, un cuarto de píxel en todo"
 
 msgid "5: SATD, multi-qpel on all"
-msgstr ""
+msgstr "5: SATD, múltiples cuartos de píxel en todo"
 
 msgid "6: RD in I/P-frames"
-msgstr ""
+msgstr "6: RD en los fotogramas I/P"
 
 msgid "7: RD in all frames"
-msgstr ""
+msgstr "7: RD en todos los fotogramas"
 
 msgid "8: RD refine in I/P-frames"
-msgstr ""
+msgstr "8: RD mejorado en los fotogramas I/P"
 
 msgid "9: RD refine in all frames"
-msgstr ""
+msgstr "9: RD mejorado en todos los fotogramas"
 
 msgid "10: QPRD in all frames"
-msgstr ""
+msgstr "10: QPRD en todos los fotogramas"
 
 msgid "11: No early terminations in analysis"
-msgstr ""
+msgstr "11: Desactivar terminaciones tempranas en los análisis"
 
 msgid "Your names"
-msgstr ""
+msgstr "Toni Estévez"
 
 msgid "Your emails"
-msgstr ""
+msgstr "toni.estevez@gmail.com"
