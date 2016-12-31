@@ -347,7 +347,14 @@ namespace HandBrakeWPF.ViewModels
                 switch (this.SubtitleBehaviours.SelectedBurnInBehaviour)
                 {
                     case SubtitleBurnInBehaviourModes.None:
-                        // Do Nothing. Only tracks where the container requires it will be burned in.
+                        foreach (var track in this.Task.SubtitleTracks)
+                        {
+                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                            {
+                                track.Forced = true;
+                                break;
+                            }
+                        }
                         break;
                     case SubtitleBurnInBehaviourModes.ForeignAudio:
                         foreach (var track in this.Task.SubtitleTracks)
@@ -356,6 +363,7 @@ namespace HandBrakeWPF.ViewModels
                             if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
                             {
                                 track.Burned = true;
+                                track.Forced = true;
                                 this.SetBurnedToFalseForAllExcept(track);
                                 break;
                             }
@@ -364,8 +372,13 @@ namespace HandBrakeWPF.ViewModels
                     case SubtitleBurnInBehaviourModes.FirstTrack:                    
                         foreach (var track in this.Task.SubtitleTracks)
                         {
-                            // Set the first track.
-                            if (!burnInSet && track.SourceTrack.SubtitleType != SubtitleType.ForeignAudioSearch)
+                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch) // Foreign Audio Search is always first in the list.
+                            {
+                                track.Forced = true;
+                                continue;
+                            }
+
+                            if (!burnInSet)
                             {
                                 burnInSet = true;
                                 track.Burned = true;
@@ -388,6 +401,7 @@ namespace HandBrakeWPF.ViewModels
                             if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
                             {
                                 track.Burned = true;
+                                track.Forced = true;
                                 this.SetBurnedToFalseForAllExcept(track);
                                 break;
                             }
