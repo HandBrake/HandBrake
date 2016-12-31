@@ -188,6 +188,7 @@
     [panel setAllowsMultipleSelection:NO];
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:NO];
+    [panel setAllowedFileTypes:@[@"app"]];
 
     NSString *sendToAppDirectory;
 	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"])
