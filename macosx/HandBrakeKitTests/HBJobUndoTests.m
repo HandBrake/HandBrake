@@ -6,7 +6,8 @@
 
 #import <XCTest/XCTest.h>
 
-#import "HBMockTitle.h"
+#import "HBCore.h"
+#import "HBTitle.h"
 #import "HBJob.h"
 #import "HBChapter.h"
 #import "HBAudioTrack.h"
@@ -18,8 +19,11 @@
 @interface HBJobUndoTests : XCTestCase
 
 @property (nonatomic, readonly) HBPresetsManager *manager;
-
 @property (nonatomic, readwrite) HBPreset *preset;
+
+@property (nonatomic, readwrite) dispatch_queue_t queue;
+@property (nonatomic, readwrite) HBCore *core;
+
 @property (nonatomic, readwrite) HBTitle *title;
 @property (nonatomic, readwrite) HBJob *job;
 @property (nonatomic, readwrite) HBJob *modifiedJob;
@@ -37,7 +41,21 @@
 
     self.preset = self.manager.defaultPreset;
 
-    self.title = [[HBMockTitle alloc] init];
+    NSURL *sampleURL = [NSURL fileURLWithPath:@"test.mp4"];
+
+    self.queue = dispatch_queue_create("fr.handbrake.testQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+
+    self.core = [[HBCore alloc] initWithLogLevel:1 queue:self.queue];
+    [self.core scanURL:sampleURL titleIndex:0 previews:1 minDuration:0 progressHandler:^(HBState state, HBProgress progress, NSString * _Nonnull info) {
+
+    } completionHandler:^(HBCoreResult result) {
+        dispatch_semaphore_signal(sem);
+    }];
+
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+
+    self.title = self.core.titles.firstObject;
 
     self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
     self.job.destURL = [NSURL fileURLWithPath:@"/Dest.mp4"];
@@ -46,6 +64,7 @@
     undoManager.groupsByEvent = NO;
 
     self.modifiedJob = [self.job copy];
+    self.modifiedJob.title = self.job.title;
     self.modifiedJob.undo = undoManager;
 
     [self.manager.root enumerateObjectsUsingBlock:^(HBPreset * _Nonnull obj, NSIndexPath * _Nonnull idx, BOOL * _Nonnull stop)
