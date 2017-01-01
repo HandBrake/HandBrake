@@ -481,7 +481,7 @@ static void hb_error_handler(const char *errmsg)
     self.state = HBStateWorking;
 
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
-    [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName];
+    [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];
 }
 
 - (HBCoreResult)workDone
