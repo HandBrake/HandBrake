@@ -137,7 +137,7 @@ Section "HandBrake" SEC01
   ; Install Files
   File "*.exe"
   CreateDirectory "$SMPROGRAMS\HandBrake Nightly"
-  CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
+  CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
   CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
   File "*.dll"
   File "*.config"
@@ -197,7 +197,7 @@ Section Uninstall
   RMDIR  "$INSTDIR\fonts"
   Delete "$SMPROGRAMS\HandBrake Nightly\Uninstall.lnk"
   Delete "$DESKTOP\HandBrake Nightly.lnk"
-  Delete "$SMPROGRAMS\HandBrake Nightly\HandBrake.lnk"
+  Delete "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk"
   RMDir  "$SMPROGRAMS\HandBrake Nightly"
   RMDir  "$INSTDIR"
 
