@@ -786,19 +786,8 @@
     {
          if (result == NSFileHandlingPanelOKButton)
          {
-             // Check if we selected a folder or not
-             id outValue = nil;
-             [panel.URL getResourceValue:&outValue forKey:NSURLIsDirectoryKey error:NULL];
-
-             // we set the last searched source directory in the prefs here
-             if ([outValue boolValue])
-             {
-                 [[NSUserDefaults standardUserDefaults] setURL:panel.URL forKey:@"HBLastSourceDirectoryURL"];
-             }
-             else
-             {
-                 [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
-             }
+             // Set the last searched source directory in the prefs here
+            [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
 
              NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
              [self openURL:panel.URL titleIndex:titleIdx];
