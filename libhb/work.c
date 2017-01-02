@@ -92,6 +92,8 @@ static void work_func( void * _work )
 
     while( !*work->die && ( job = hb_list_item( work->jobs, 0 ) ) )
     {
+        hb_handle_t * h = job->h;
+
         hb_list_rem( work->jobs, job );
         hb_list_t * passes = hb_list_init();
 
@@ -143,6 +145,10 @@ static void work_func( void * _work )
             hb_job_close(&job);
         }
         hb_list_close(&passes);
+
+        // Force rescan of next source processed by this hb_handle_t
+        // TODO: Fix this ugly hack!
+        hb_force_rescan(h);
     }
 
     free( work );
