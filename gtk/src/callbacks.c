@@ -1827,7 +1827,7 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
 {
     GhbValue *metadata = ghb_get_job_metadata_settings(settings);
 
-    if (val == NULL || val[0] == 0)
+    if (val == NULL)
         ghb_dict_remove(metadata, name);
     else
         ghb_dict_set_string(metadata, name, val);

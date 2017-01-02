@@ -1007,41 +1007,104 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
-    if (meta_name != NULL && meta_name[0] != 0)
+    if (meta_name != NULL)
     {
-        hb_metadata_set_name(job->metadata, meta_name);
+        if (meta_name[0] != 0)
+        {
+            hb_metadata_set_name(job->metadata, meta_name);
+        }
+        else
+        {
+            hb_metadata_set_name(job->metadata, NULL);
+        }
     }
-    if (meta_artist != NULL && meta_artist[0] != 0)
+    if (meta_artist != NULL)
     {
-        hb_metadata_set_artist(job->metadata, meta_artist);
+        if (meta_artist[0] != 0)
+        {
+            hb_metadata_set_artist(job->metadata, meta_artist);
+        }
+        else
+        {
+            hb_metadata_set_artist(job->metadata, NULL);
+        }
     }
-    if (meta_composer != NULL && meta_composer[0] != 0)
+    if (meta_composer != NULL)
     {
-        hb_metadata_set_composer(job->metadata, meta_composer);
+        if (meta_composer[0] != 0)
+        {
+            hb_metadata_set_composer(job->metadata, meta_composer);
+        }
+        else
+        {
+            hb_metadata_set_composer(job->metadata, NULL);
+        }
     }
-    if (meta_album_artist != NULL && meta_album_artist[0] != 0)
+    if (meta_album_artist != NULL)
     {
-        hb_metadata_set_album_artist(job->metadata, meta_album_artist);
+        if (meta_album_artist[0] != 0)
+        {
+            hb_metadata_set_album_artist(job->metadata, meta_album_artist);
+        }
+        else
+        {
+            hb_metadata_set_album_artist(job->metadata, NULL);
+        }
     }
-    if (meta_release != NULL && meta_release[0] != 0)
+    if (meta_release != NULL)
     {
-        hb_metadata_set_release_date(job->metadata, meta_release);
+        if (meta_release[0] != 0)
+        {
+            hb_metadata_set_release_date(job->metadata, meta_release);
+        }
+        else
+        {
+            hb_metadata_set_release_date(job->metadata, NULL);
+        }
     }
-    if (meta_comment != NULL && meta_comment[0] != 0)
+    if (meta_comment != NULL)
     {
-        hb_metadata_set_comment(job->metadata, meta_comment);
+        if (meta_comment[0] != 0)
+        {
+            hb_metadata_set_comment(job->metadata, meta_comment);
+        }
+        else
+        {
+            hb_metadata_set_comment(job->metadata, NULL);
+        }
     }
-    if (meta_genre != NULL && meta_genre[0] != 0)
+    if (meta_genre != NULL)
     {
-        hb_metadata_set_genre(job->metadata, meta_genre);
+        if (meta_genre[0] != 0)
+        {
+            hb_metadata_set_genre(job->metadata, meta_genre);
+        }
+        else
+        {
+            hb_metadata_set_genre(job->metadata, NULL);
+        }
     }
-    if (meta_desc != NULL && meta_desc[0] != 0)
+    if (meta_desc != NULL)
     {
-        hb_metadata_set_description(job->metadata, meta_desc);
+        if (meta_desc[0] != 0)
+        {
+            hb_metadata_set_description(job->metadata, meta_desc);
+        }
+        else
+        {
+            hb_metadata_set_description(job->metadata, NULL);
+        }
     }
-    if (meta_long_desc != NULL && meta_long_desc[0] != 0)
+    if (meta_long_desc != NULL)
     {
-        hb_metadata_set_long_description(job->metadata, meta_long_desc);
+        if (meta_long_desc[0] != 0)
+        {
+            hb_metadata_set_long_description(job->metadata, meta_long_desc);
+        }
+        else
+        {
+            hb_metadata_set_long_description(job->metadata, NULL);
+        }
     }
 
     // process chapter list
