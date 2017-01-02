@@ -218,7 +218,7 @@ hb_work_object_t hb_decvobsub =
  * header), the width and height of the subpicture and the colors and
  * alphas used in it
  **********************************************************************/
-static void ParseControls( hb_work_object_t * w )
+static int ParseControls( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     uint8_t * buf = pv->buf->data;
@@ -238,11 +238,20 @@ static void ParseControls( hb_work_object_t * w )
 
     for( i = pv->size_rle; ; )
     {
+        if ( i + 1 >= pv->buf->size )
+        {
+            return 1;
+        }
+
         date = ( buf[i] << 8 ) | buf[i+1]; i += 2;
         next = ( buf[i] << 8 ) | buf[i+1]; i += 2;
 
         for( ;; )
         {
+            if ( i >= pv->buf->size )
+            {
+                return 1;
+            }
             command = buf[i++];
 
             /*
@@ -292,6 +301,11 @@ static void ParseControls( hb_work_object_t * w )
                     int colors[4];
                     int j;
 
+                    if ( i + 1 >= pv->buf->size )
+                    {
+                        return 1;
+                    }
+
                     colors[0] = (buf[i+0]>>4)&0x0f;
                     colors[1] = (buf[i+0])&0x0f;
                     colors[2] = (buf[i+1]>>4)&0x0f;
@@ -335,6 +349,11 @@ static void ParseControls( hb_work_object_t * w )
                      */
                     uint8_t    alpha[4];
 
+                    if ( i + 1 >= pv->buf->size )
+                    {
+                        return 1;
+                    }
+
                     alpha[3] = ((buf[i+0] >> 4) & 0x0f) << 4;
                     alpha[2] = ((buf[i+0]     ) & 0x0f) << 4;
                     alpha[1] = ((buf[i+1] >> 4) & 0x0f) << 4;
@@ -365,6 +384,11 @@ static void ParseControls( hb_work_object_t * w )
                 }
                 case 0x05: // 0x05 - SET_DAREA - defines the display area
                 {
+                    if ( i + 4 >= pv->buf->size )
+                    {
+                        return 1;
+                    }
+
                     pv->x     = (buf[i+0]<<4) | ((buf[i+1]>>4)&0x0f);
                     pv->width = (((buf[i+1]&0x0f)<<8)| buf[i+2]) - pv->x + 1;
                     pv->y     = (buf[i+3]<<4)| ((buf[i+4]>>4)&0x0f);
@@ -396,6 +420,8 @@ static void ParseControls( hb_work_object_t * w )
         pv->pts_start    = pv->pts;
         pv->scr_sequence = pv->current_scr_sequence;
     }
+
+    return 0;
 }
 
 /***********************************************************************
@@ -603,7 +629,16 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_job_t * job = pv->job;
 
     /* Get infos about the subtitle */
-    ParseControls( w );
+    if ( ParseControls( w ) )
+    {
+        /*
+         * Coudln't parse the info
+         */
+        hb_deep_log( 2, "decvobsub: Could not parse info!" );
+
+        hb_buffer_close( &pv->buf );
+        return NULL;
+    }
 
     if( job->indepth_scan || ( w->subtitle->config.force && pv->pts_forced == 0 ) )
     {
