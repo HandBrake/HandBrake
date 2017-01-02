@@ -357,7 +357,7 @@ static void closePrivData( hb_work_private_t ** ppv )
              * libavcodec, but encoding using libhb, without us requesting any
              * form of communication between the two libmfx sessions).
              */
-            if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
+            //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
 #endif
             {
                 hb_avcodec_close(pv->context);
