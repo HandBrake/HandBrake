@@ -172,6 +172,7 @@ static int      use_opencl         = -1;
 static int      qsv_async_depth    = -1;
 static int      qsv_decode         = -1;
 #endif
+static int		robot_mode         = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -183,11 +184,14 @@ static void SigHandler( int );
 static void ShowHelp();
 static void ShowCommands()
 {
-    fprintf(stdout, "\nCommands:\n");
-    fprintf(stdout, " [h]elp    Show this message\n");
-    fprintf(stdout, " [q]uit    Exit HandBrakeCLI\n");
-    fprintf(stdout, " [p]ause   Pause encoding\n");
-    fprintf(stdout, " [r]esume  Resume encoding\n");
+	if (!robot_mode)
+	{
+		fprintf(stdout, "\nCommands:\n");
+		fprintf(stdout, " [h]elp    Show this message\n");
+		fprintf(stdout, " [q]uit    Exit HandBrakeCLI\n");
+		fprintf(stdout, " [p]ause   Pause encoding\n");
+		fprintf(stdout, " [r]esume  Resume encoding\n");
+	}
 }
 
 static int         ParseOptions( int argc, char ** argv );
@@ -218,7 +222,14 @@ static int show_mux_warning = 1;
  ****************************************************************************/
 static void hb_cli_error_handler ( const char *errmsg )
 {
-    fprintf( stderr, "ERROR: %s\n", errmsg );
+	if (!robot_mode)
+	{
+		fprintf( stderr, "ERROR: %s\n", errmsg );
+	}
+	else
+	{
+		fprintf( stdout, "ERRORMSG \"%s\"\n", errmsg);
+	}
 }
 
 static int get_argv_utf8(int *argc_ptr, char ***argv_ptr)
@@ -271,88 +282,91 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
     work_done = 0;
     while (!die && !work_done)
     {
+		if (!robot_mode)
+		{
 #if defined( __MINGW32__ )
-        if( _kbhit() ) {
-            switch( _getch() )
-            {
-                case 0x03: /* ctrl-c */
-                case 'q':
-                    fprintf( stdout, "\nEncoding Quit by user command\n" );
-                    done_error = HB_ERROR_CANCELED;
-                    die = 1;
-                    break;
-                case 'p':
-                    fprintf(stdout,
-                            "\nEncoding Paused by user command, 'r' to resume\n");
-                    hb_pause(h);
-                    hb_system_sleep_allow(h);
-                    break;
-                case 'r':
-                    hb_system_sleep_prevent(h);
-                    hb_resume(h);
-                    break;
-                case 'h':
-                    ShowCommands();
-                    break;
-            }
-        }
-        hb_snooze( 200 );
+			if( _kbhit() ) {
+				switch( _getch() )
+				{
+					case 0x03: /* ctrl-c */
+					case 'q':
+						fprintf( stdout, "\nEncoding Quit by user command\n" );
+						done_error = HB_ERROR_CANCELED;
+						die = 1;
+						break;
+					case 'p':
+						fprintf(stdout,
+								"\nEncoding Paused by user command, 'r' to resume\n");
+						hb_pause(h);
+						hb_system_sleep_allow(h);
+						break;
+					case 'r':
+						hb_system_sleep_prevent(h);
+						hb_resume(h);
+						break;
+					case 'h':
+						ShowCommands();
+						break;
+				}
+			}
+			hb_snooze( 200 );
 #elif !defined(SYS_BEOS)
-        fd_set         fds;
-        struct timeval tv;
-        int            ret;
-        char           buf[257];
+			fd_set         fds;
+			struct timeval tv;
+			int            ret;
+			char           buf[257];
 
-        tv.tv_sec  = 0;
-        tv.tv_usec = 100000;
+			tv.tv_sec  = 0;
+			tv.tv_usec = 100000;
 
-        FD_ZERO( &fds );
-        FD_SET( STDIN_FILENO, &fds );
-        ret = select( STDIN_FILENO + 1, &fds, NULL, NULL, &tv );
+			FD_ZERO( &fds );
+			FD_SET( STDIN_FILENO, &fds );
+			ret = select( STDIN_FILENO + 1, &fds, NULL, NULL, &tv );
 
-        if( ret > 0 )
-        {
-            int size = 0;
+			if( ret > 0 )
+			{
+				int size = 0;
 
-            while( size < 256 &&
-                   read( STDIN_FILENO, &buf[size], 1 ) > 0 )
-            {
-                if( buf[size] == '\n' )
-                {
-                    break;
-                }
-                size++;
-            }
+				while( size < 256 &&
+					   read( STDIN_FILENO, &buf[size], 1 ) > 0 )
+				{
+					if( buf[size] == '\n' )
+					{
+						break;
+					}
+					size++;
+				}
 
-            if( size >= 256 || buf[size] == '\n' )
-            {
-                switch( buf[0] )
-                {
-                    case 'q':
-                        fprintf( stdout, "\nEncoding Quit by user command\n" );
-                        done_error = HB_ERROR_CANCELED;
-                        die = 1;
-                        break;
-                    case 'p':
-                        fprintf(stdout,
-                                "\nEncoding Paused by user command, 'r' to resume\n");
-                        hb_pause(h);
-                        hb_system_sleep_allow(h);
-                        break;
-                    case 'r':
-                        hb_system_sleep_prevent(h);
-                        hb_resume(h);
-                        break;
-                    case 'h':
-                        ShowCommands();
-                        break;
-                }
-            }
-        }
-        hb_snooze( 200 );
+				if( size >= 256 || buf[size] == '\n' )
+				{
+					switch( buf[0] )
+					{
+						case 'q':
+							fprintf( stdout, "\nEncoding Quit by user command\n" );
+							done_error = HB_ERROR_CANCELED;
+							die = 1;
+							break;
+						case 'p':
+							fprintf(stdout,
+									"\nEncoding Paused by user command, 'r' to resume\n");
+							hb_pause(h);
+							hb_system_sleep_allow(h);
+							break;
+						case 'r':
+							hb_system_sleep_prevent(h);
+							hb_resume(h);
+							break;
+						case 'h':
+							ShowCommands();
+							break;
+					}
+				}
+			}
+			hb_snooze( 200 );
 #else
-        hb_snooze( 200 );
+			hb_snooze( 200 );
 #endif
+		}
 
         HandleEvents( h, preset_dict );
     }
@@ -371,7 +385,14 @@ int RunQueueJob(hb_handle_t *h, hb_dict_t *job_dict)
     hb_value_free(&job_dict);
     if (json_job == NULL)
     {
-        fprintf(stderr, "Error in setting up job! Aborting.\n");
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Error in setting up job! Aborting.\n");
+		}
+		else
+		{
+			fprintf(stdout, "ERRORMSG \"Error in setting up job! Aborting.\"\n");
+		}
         return -1;
     }
 
@@ -415,7 +436,14 @@ int RunQueue(hb_handle_t *h, const char *queue_import_name)
     }
     else
     {
-        fprintf(stderr, "Error: Invalid queue file %s\n", queue_import_name);
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Error: Invalid queue file %s\n", queue_import_name);
+		}
+		else
+		{
+			fprintf(stdout, "ERRORMSG \"Invalid queue file %s\"\n", queue_import_name);
+		}
         return -1;
     }
     return 0;
@@ -450,12 +478,26 @@ int main( int argc, char ** argv )
     hb_dvd_set_dvdnav( dvdnav );
 
     /* Show version */
-    fprintf( stderr, "%s - %s - %s\n",
+	if (!robot_mode)
+	{
+		fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+	}
+	else
+	{
+		fprintf(stdout, "HBVER \"%s\" \"%s\" \"%s\"\n", HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+	}
 
     /* Geeky */
-    fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
+	if (!robot_mode)
+	{
+		fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
              hb_get_cpu_count() > 1 ? "s" : "" );
+	}
+	else
+	{
+		fprintf( stdout, "NUMCPU %d\n", hb_get_cpu_count());
+	}
 
     /* Exit ASAP on Ctrl-C */
     signal( SIGINT, SigHandler );
@@ -495,7 +537,15 @@ int main( int argc, char ** argv )
             {
                 char *json;
                 json = hb_presets_package_json(preset_dict);
+				if (robot_mode)
+				{
+					fprintf(stdout, "JSONBEGIN\n");
+				}
                 fprintf(stdout, "%s\n", json);
+				if (robot_mode)
+				{
+					fprintf(stdout, "JSONEND\n");
+				}
             }
             // If the user requested to export a preset, but not to
             // transcode or scan a file, exit here.
@@ -508,7 +558,14 @@ int main( int argc, char ** argv )
         }
 
         /* Feed libhb with a DVD to scan */
-        fprintf( stderr, "Opening %s...\n", input );
+		if (!robot_mode)
+		{
+			fprintf( stderr, "Opening %s...\n", input );
+		}
+		else
+		{
+			fprintf( stdout, "DVDOPEN \"%s\"\n", input );
+		}
 
         if (main_feature) {
             /*
@@ -569,8 +626,15 @@ int main( int argc, char ** argv )
 
     // write a carriage return to stdout
     // avoids overlap / line wrapping when stderr is redirected
-    fprintf(stdout, "\n");
-    fprintf(stderr, "HandBrake has exited.\n");
+	if (!robot_mode)
+	{
+		fprintf(stdout, "\n");
+		fprintf(stderr, "HandBrake has exited.\n");
+	}
+	else
+	{
+		fprintf(stdout, "EXIT\n");
+	}
 
     return done_error;
 }
@@ -579,7 +643,7 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
 {
     int i;
 
-    fprintf( stderr, "+ title %d:\n", title->index );
+	fprintf( stderr, "+ title %d:\n", title->index );
     if ( title->index == feature )
     {
         fprintf( stderr, "  + Main Feature\n" );
@@ -665,6 +729,94 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
 
 }
 
+static void PrintTitleInfoRobot( hb_title_t * title, int feature )
+{
+	int i;
+
+	fprintf( stdout, "BEGINTITLE %d\n", title->index );
+	if ( title->index == feature )
+	{
+		fprintf( stdout, "MAINFEATURE" );
+	}
+	if ( title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE )
+	{
+		fprintf( stdout, "STREAM %s\n", title->path );
+	}
+	else if ( title->type == HB_DVD_TYPE )
+	{
+		fprintf( stdout, "DVDINFO %d %d %d %d %"PRIu64"\n",
+				title->vts, title->ttn, title->cell_start, title->cell_end,
+				title->block_count );
+	}
+	else if( title->type == HB_BD_TYPE )
+	{
+		fprintf( stdout, "PLAYLIST %05d\n", title->playlist );
+	}
+	if (title->angle_count > 1)
+		fprintf( stdout, "ANGLES %d\n", title->angle_count );
+	fprintf( stdout, "DURATIONHUMAN %02d:%02d:%02d\n",
+			 title->hours, title->minutes, title->seconds );
+	fprintf (stdout, "DURATION %d\n", (title->hours*60*60) + (title->minutes*60) + title->seconds );
+	fprintf( stdout, "VIDEOINFO %d %d %d %d %.2f %.3f\n",
+			 title->geometry.width, title->geometry.height,
+			 title->geometry.par.num, title->geometry.par.den,
+			 (float)title->dar.num / title->dar.den,
+			 (float)title->vrate.num / title->vrate.den );
+	fprintf( stdout, "AUTOCROP %d %d %d %d\n", title->crop[0],
+			 title->crop[1], title->crop[2], title->crop[3] );
+
+	fprintf(stdout, "OPENCLSUPPORT %s\n", title->opencl_support ? "yes" : "no");
+
+	for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
+	{
+		hb_chapter_t  * chapter;
+		chapter = hb_list_item( title->list_chapter, i );
+		fprintf( stdout, "CHAPTER %d %d %d %"PRIu64" %d \"%02d:%02d:%02d\"\n", chapter->index,
+				 chapter->cell_start, chapter->cell_end,
+				 chapter->block_count,
+				 (chapter->hours*60*60) + (chapter->minutes*60) + chapter->seconds,
+				 chapter->hours, chapter->minutes, chapter->seconds );
+	}
+	for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+	{
+		hb_audio_config_t *audio;
+		audio = hb_list_audio_config_item( title->list_audio, i );
+		if( ( audio->in.codec == HB_ACODEC_AC3 ) || ( audio->in.codec == HB_ACODEC_DCA) )
+		{
+			fprintf( stdout, "AUDIOLONG %d \"%s\" \"%s\" %d %d\n",
+					 i + 1,
+					 audio->lang.description,
+					 audio->lang.iso639_2,
+					 audio->in.samplerate,
+					 audio->in.bitrate );
+		}
+		else
+		{
+			fprintf( stdout, "AUDIO %d \"%s\" \"%s\")\n",
+					 i + 1,
+					 audio->lang.description,
+					 audio->lang.iso639_2 );
+		}
+	}
+	for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+	{
+		hb_subtitle_t *subtitle;
+		subtitle = hb_list_item( title->list_subtitle, i );
+		fprintf( stdout, "SUBTITLE %d \"%s\" \"%s\" \"%s\" \"%s\"\n",
+				 i + 1, subtitle->lang,
+				 subtitle->iso639_2,
+				 (subtitle->format == TEXTSUB) ? "Text" : "Bitmap",
+				 hb_subsource_name(subtitle->source));
+	}
+
+	if(title->detected_interlacing)
+	{
+		/* Interlacing was found in half or more of the preview frames */
+		fprintf( stdout, "ISINTERLACED\n");
+	}
+	fprintf( stdout, "ENDTITLE %d\n", title->index );
+}
+
 static void PrintTitleSetInfo( hb_title_set_t * title_set )
 {
     int i;
@@ -673,7 +825,15 @@ static void PrintTitleSetInfo( hb_title_set_t * title_set )
     for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
     {
         title = hb_list_item( title_set->list_title, i );
-        PrintTitleInfo( title, title_set->feature );
+		if (!robot_mode)
+		{
+			PrintTitleInfo( title, title_set->feature );
+		}
+		else
+		{
+			PrintTitleInfoRobot( title, title_set->feature );
+		}
+
     }
 }
 
@@ -707,10 +867,24 @@ void write_chapter_names(hb_dict_t *job_dict, const char *marker_file)
 
     if (file == NULL)
     {
-        fprintf(stderr, "Cannot open chapter marker file, using defaults\n");
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Cannot open chapter marker file, using defaults\n");
+		}
+		else
+		{
+			fprintf(stdout, "WARNINGMSG \"Cannot open chapter marker file, using defaults\"\n");
+		}
         return;
     }
-    fprintf(stderr, "Reading chapter markers from file %s\n", marker_file);
+	if (!robot_mode)
+	{
+		fprintf(stderr, "Reading chapter markers from file %s\n", marker_file);
+	}
+	else
+	{
+		fprintf(stdout, "STATUSMSG \"Reading chapter markers from file %s\"\n", marker_file);
+	}
 
     hb_value_array_t *chapter_array;
     chapter_array = hb_dict_get(hb_dict_get(job_dict, "Destination"),
@@ -772,13 +946,27 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             /* Show what title is currently being scanned */
             if (p.preview_cur)
             {
-                fprintf(stderr, "\rScanning title %d of %d, preview %d, %.2f %%",
+				if (!robot_mode)
+				{
+					fprintf(stderr, "\rScanning title %d of %d, preview %d, %.2f %%",
                         p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
+				}
+				else
+				{
+					fprintf(stdout, "PREVIEW %d %d %d %.2f\n", p.title_cur, p.title_count, p.preview_cur, p.progress);
+				}
             }
             else
             {
-                fprintf(stderr, "\rScanning title %d of %d, %.2f %%",
+				if (!robot_mode)
+				{
+					fprintf(stderr, "\rScanning title %d of %d, %.2f %%",
                         p.title_cur, p.title_count, 100 * p.progress);
+				}
+				else
+				{
+					fprintf(stdout, "SCANNING %d %d %.2f\n", p.title_cur, p.title_count, p.progress);
+				}
             }
             fflush(stderr);
             break;
@@ -798,7 +986,14 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             if( !title_set || !hb_list_count( title_set->list_title ) )
             {
                 /* No valid title, stop right there */
-                fprintf( stderr, "No title found.\n" );
+				if (!robot_mode)
+				{
+					fprintf( stderr, "No title found.\n" );
+				}
+				else
+				{
+					fprintf(stdout, "ERRORMSG \"No title found\"\n");
+				}
                 done_error = HB_ERROR_WRONG_INPUT;
                 die = 1;
                 break;
@@ -811,14 +1006,28 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 int main_feature_time=0;
                 int title_time;
 
-                fprintf( stderr, "Searching for main feature title...\n" );
+				if (!robot_mode)
+				{
+					fprintf( stderr, "Searching for main feature title...\n" );
+				}
+				else
+				{
+					fprintf(stdout, "STATUSMSG \"Searching for main feature title...\"\n");
+				}
 
                 for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
                 {
                     title = hb_list_item( title_set->list_title, i );
                     title_time = (title->hours*60*60 ) + (title->minutes *60) + (title->seconds);
-                    fprintf( stderr, " + Title (%d) index %d has length %dsec\n",
+					if (!robot_mode)
+					{
+						fprintf( stderr, " + Title (%d) index %d has length %dsec\n",
                              i, title->index, title_time );
+					}
+					else
+					{
+						fprintf(stdout, "TITLEINFO %d %d %d\n", i, title->index, title_time);
+					}
                     if( main_feature_time < title_time )
                     {
                         main_feature_time = title_time;
@@ -834,14 +1043,28 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 }
                 if( main_feature_pos == -1 )
                 {
-                    fprintf( stderr, "No main feature title found.\n" );
+					if (!robot_mode)
+					{
+						fprintf( stderr, "No main feature title found.\n" );
+					}
+					else
+					{
+						fprintf(stdout, "ERRORMSG \"No main feature title found\"\n");
+					}
                     done_error = HB_ERROR_WRONG_INPUT;
                     die = 1;
                     break;
                 }
                 titleindex = main_feature_idx;
-                fprintf(stderr, "Found main feature title %d\n",
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Found main feature title %d\n",
                         main_feature_idx);
+				}
+				else
+				{
+					fprintf(stdout, "STATUSMSG \"Found main feature title %d\"\n", main_feature_idx);
+				}
 
                 title = hb_list_item(title_set->list_title, main_feature_pos);
             } else {
@@ -856,8 +1079,15 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
                 break;
             }
 
-            fprintf( stderr, "+ Using preset: %s\n",
-                hb_value_get_string(hb_dict_get(preset_dict, "PresetName")));
+			if (!robot_mode)
+			{
+				fprintf( stderr, "+ Using preset: %s\n",
+					hb_value_get_string(hb_dict_get(preset_dict, "PresetName")));
+			}
+			else
+			{
+				fprintf(stdout, "USEPRESET \"%s\"\n",hb_value_get_string(hb_dict_get(preset_dict, "PresetName")));
+			}
 
             PrintTitleInfo(title, title_set->feature);
 
@@ -876,7 +1106,15 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             hb_value_free(&job_dict);
             if (json_job == NULL)
             {
-                fprintf(stderr, "Error in setting up job! Aborting.\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Error in setting up job! Aborting.\n");
+				}
+				else
+				{
+					fprintf(stdout, "ERRORMSG \"Error in setting up job! Aborting\"\n");
+				}
+
                 die = 1;
                 return -1;
             }
@@ -891,25 +1129,57 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 
 #define p s.param.working
         case HB_STATE_SEARCHING:
-            fprintf( stdout, "\rEncoding: task %d of %d, Searching for start time, %.2f %%",
-                     p.pass, p.pass_count, 100.0 * p.progress );
-            if( p.seconds > -1 )
-            {
-                fprintf( stdout, " (ETA %02dh%02dm%02ds)",
-                         p.hours, p.minutes, p.seconds );
-            }
+			if (!robot_mode)
+			{
+				fprintf( stdout, "\rEncoding: task %d of %d, Searching for start time, %.2f %%",
+						 p.pass, p.pass_count, 100.0 * p.progress );
+				if( p.seconds > -1 )
+				{
+					fprintf( stdout, " (ETA %02dh%02dm%02ds)",
+							 p.hours, p.minutes, p.seconds );
+				}
+			}
+			else
+			{
+				if (p.seconds <= -1)
+				{
+				fprintf( stdout, "ENCODINGSEARCHSTART %d %d %.2f\n",
+						 p.pass, p.pass_count, p.progress );
+				}
+				else
+				{
+					fprintf( stdout, "ENCODINGSEARCHSTARTETA %d %d %.2f %d\n",
+							 p.pass, p.pass_count, p.progress, (p.hours*60*60) + (p.minutes*60) + p.seconds );
+				}
+			}
             fflush(stdout);
             break;
 
         case HB_STATE_WORKING:
-            fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
-                     p.pass, p.pass_count, 100.0 * p.progress );
-            if( p.seconds > -1 )
-            {
-                fprintf( stdout, " (%.2f fps, avg %.2f fps, ETA "
-                         "%02dh%02dm%02ds)", p.rate_cur, p.rate_avg,
-                         p.hours, p.minutes, p.seconds );
-            }
+			if (!robot_mode)
+			{
+				fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
+						 p.pass, p.pass_count, 100.0 * p.progress );
+				if( p.seconds > -1 )
+				{
+					fprintf( stdout, " (%.2f fps, avg %.2f fps, ETA "
+							 "%02dh%02dm%02ds)", p.rate_cur, p.rate_avg,
+							 p.hours, p.minutes, p.seconds );
+				}
+			}
+			else
+			{
+				if( p.seconds <= -1 )
+				{
+					fprintf( stdout, "ENCODING %d %d %.2f\n",
+							 p.pass, p.pass_count, p.progress );
+				}
+				else
+				{
+					fprintf( stdout, "ENCODINGETA %d %d %.2f %d\n",
+							 p.pass, p.pass_count, p.progress, (p.hours*60*60) + (p.minutes*60) + p.seconds );
+				}
+			}
             fflush(stdout);
             break;
 #undef p
@@ -919,7 +1189,14 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
         {
             if (show_mux_warning)
             {
-                fprintf( stdout, "\rMuxing: this may take awhile..." );
+				if (!robot_mode)
+				{
+					fprintf( stdout, "\rMuxing: this may take awhile..." );
+				}
+				else
+				{
+					fprintf(stdout, "MUXING\n");
+				}
                 fflush(stdout);
                 show_mux_warning = 0;
             }
@@ -933,14 +1210,35 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             switch( p.error )
             {
                 case HB_ERROR_NONE:
-                    fprintf( stderr, "\nEncode done!\n" );
+					if (!robot_mode)
+					{
+						fprintf( stderr, "\nEncode done!\n" );
+					}
+					else
+					{
+						fprintf(stdout, "ENCODEDONE\n");
+					}
                     break;
                 case HB_ERROR_CANCELED:
-                    fprintf( stderr, "\nEncode canceled.\n" );
+					if (!robot_mode)
+					{
+						fprintf( stderr, "\nEncode canceled.\n" );
+					}
+					else
+					{
+						fprintf(stdout, "ENCODECANCELED\n");
+					}
                     break;
                 default:
-                    fprintf( stderr, "\nEncode failed (error %x).\n",
-                             p.error );
+					if (!robot_mode)
+					{
+						fprintf( stderr, "\nEncode failed (error %x).\n",
+								 p.error );
+					}
+					else
+					{
+						fprintf(stdout, "ENCODEFAILED %x\n", p.error);
+					}
             }
             done_error = p.error;
             work_done = 1;
@@ -962,12 +1260,27 @@ void SigHandler( int i_signal )
     {
         die = 1;
         i_die_date = hb_get_date();
-        fprintf( stderr, "Signal %d received, terminating - do it "
+		if (!robot_mode)
+		{
+			fprintf( stderr, "Signal %d received, terminating - do it "
                  "again in case it gets stuck\n", i_signal );
+		}
+		else
+		{
+			fprintf(stdout, "WARNINGMSG \"Signal %d received., terminating - do it "
+					"again in case it gets stuck\"\n", i_signal);
+		}
     }
     else if( i_die_date + 500 < hb_get_date() )
     {
-        fprintf( stderr, "Dying badly, files might remain in your /tmp\n" );
+		if (!robot_mode)
+		{
+			fprintf( stderr, "Dying badly, files might remain in your /tmp\n" );
+		}
+		else
+		{
+			fprintf(stdout, "ERRORMSG \"Dying badly, files might remain in your /tmp\"\n");
+		}
         exit( done_error );
     }
 }
@@ -995,14 +1308,24 @@ static void showFilterPresets(FILE* const out, int filter_id)
     {
         return;
     }
-    fprintf(out, "                           Presets:\n");
+	if (!robot_mode)
+	{
+		fprintf(out, "                           Presets:\n");
+	}
     for (ii = 0; names[ii] != NULL; ii++)
     {
         if (!strcasecmp(names[ii], "custom") || // skip custom
             !strcasecmp(names[ii], "off")    || // skip off
             !strcasecmp(names[ii], "default"))  // skip default
             continue;
-        fprintf(out, "                               %s\n", names[ii]);
+		if (!robot_mode)
+		{
+			fprintf(out, "                               %s\n", names[ii]);
+		}
+		else
+		{
+			fprintf(out, "PRESETNAME \"%s\"\n", names[ii]);
+		}
     }
 
     hb_str_vfree(names);
@@ -1029,7 +1352,10 @@ static void showFilterTunes(FILE* const out, int filter_id)
     {
         return;
     }
-    fprintf(out, "                           Tunes:\n");
+	if (!robot_mode)
+	{
+		fprintf(out, "                           Tunes:\n");
+	}
     for (ii = 0; tunes[ii] != NULL; ii++)
     {
         /*
@@ -1038,7 +1364,14 @@ static void showFilterTunes(FILE* const out, int filter_id)
             !strcasecmp(tunes[ii], "default"))  // skip default
             continue;
         */
-        fprintf(out, "                               %s\n", tunes[ii]);
+		if (!robot_mode)
+		{
+			fprintf(out, "                               %s\n", tunes[ii]);
+		}
+		else
+		{
+			fprintf(out, "TUNE: \"%s\"\n", tunes[ii]);
+		}
     }
 
     hb_str_vfree(tunes);
@@ -1046,11 +1379,15 @@ static void showFilterTunes(FILE* const out, int filter_id)
 
 static void showFilterKeys(FILE* const out, int filter_id)
 {
+	if (robot_mode)
+	{
+		return;
+	}
     char ** keys = hb_filter_get_keys(filter_id);
     char  * colon = "", * newline;
     int     ii, linelen = 0;
 
-    fprintf(out, "                           Custom Format:\n"
+	fprintf(out, "                           Custom Format:\n"
                  "                               ");
     for (ii = 0; keys[ii] != NULL; ii++)
     {
@@ -1075,6 +1412,10 @@ static void showFilterKeys(FILE* const out, int filter_id)
 
 static void showFilterDefault(FILE* const out, int filter_id)
 {
+	if (robot_mode)
+	{
+		return;
+	}
     const char * preset = "default";
 
     fprintf(out, "                           Default:\n"
@@ -1154,6 +1495,10 @@ static void showFilterDefault(FILE* const out, int filter_id)
 
 static void ShowHelp()
 {
+	if (robot_mode)
+	{
+		return;
+	}
     int i, clock_min, clock_max, clock;
     const hb_rate_t *rate;
     const hb_dither_t *dither;
@@ -1195,6 +1540,7 @@ static void ShowHelp()
 "                           Import an encode queue file created by the GUI\n"
 "       --no-dvdnav         Do not use dvdnav for reading DVDs\n"
 "       --no-opencl         Disable use of OpenCL\n"
+"   --robot                 Enable robot mode for use in scripts\n"
 "\n"
 "\n"
 "Source Options ---------------------------------------------------------------\n"
@@ -1831,6 +2177,10 @@ static void Indent(FILE *f, char *whitespace, int indent)
 
 static void ShowPresets(hb_value_array_t *presets, int indent, int descriptions)
 {
+	if (robot_mode)
+	{
+		return;
+	}
     if (presets == NULL)
         presets = hb_presets_get();
 
@@ -1963,6 +2313,7 @@ static int ParseOptions( int argc, char ** argv )
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
             { "no-opencl",   no_argument,       &use_opencl, 0 },
+			{ "robot",		 no_argument,       &robot_mode, 1 },
 
 #ifdef USE_QSV
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
@@ -3087,9 +3438,16 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         preset = hb_preset_search(preset_name, 1 /*recurse*/);
         if (preset == NULL)
         {
-            fprintf(stderr, "Invalid preset %s\n"
-                            "Valid presets are:\n", preset_name);
-            ShowPresets(NULL, 1, 1);
+			if (!robot_mode)
+			{
+				fprintf(stderr, "Invalid preset %s\n"
+								"Valid presets are:\n", preset_name);
+				ShowPresets(NULL, 1, 1);
+			}
+			else
+			{
+				fprintf(stdout, "ERRORMSG: \"Invalid Preset\"\n");
+			}
             return NULL;
         }
     }
@@ -3099,7 +3457,14 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (preset == NULL)
     {
-        fprintf(stderr, "Error loading presets! Aborting.\n");
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Error loading presets! Aborting.\n");
+		}
+		else
+		{
+			fprintf(stdout, "ERRORMSG \"Error loading presets! Aborting.\"\n");
+		}
         return NULL;
     }
     preset = hb_value_dup(preset);
@@ -3143,8 +3508,15 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             }
             else
             {
-                fprintf(stderr, "Warning: Invalid subtitle language (%s)\n",
-                        subtitle_lang_list[ii]);
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Warning: Invalid subtitle language (%s)\n",
+							subtitle_lang_list[ii]);
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Invalid subtitle language %s\"\n", subtitle_lang_list[ii]);
+				}
                 return NULL;
             }
         }
@@ -3890,8 +4262,15 @@ static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out
     subtitle = hb_list_item(title->list_subtitle, track);
     if (subtitle == NULL)
     {
-        fprintf(stderr, "Warning: Could not find subtitle track %d, skipped\n",
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Warning: Could not find subtitle track %d, skipped\n",
                 track + 1);
+		}
+		else
+		{
+			fprintf(stdout, "WARNINGMSG: \"Count not find subtitle track %d, skipped\"\n", track + 1);
+		}
         return -1;
     }
 
@@ -3907,7 +4286,14 @@ static int add_sub(hb_value_array_t *list, hb_title_t *title, int track, int out
         // Only allow one subtitle to be burned into video
         if (*one_burned)
         {
-            fprintf(stderr, "Warning: Skipping subtitle track %d, can't have more than one track burnt in\n", track + 1);
+			if (!robot_mode)
+			{
+				fprintf(stderr, "Warning: Skipping subtitle track %d, can't have more than one track burnt in\n", track + 1);
+			}
+			else
+			{
+				fprintf(stderr, "WARNINGMSG \"Skipping subtitle track %d, can't have more than one track burnt in\"\n", track + 1);
+			}
             return -1;
         }
         *one_burned = 1;
@@ -3944,8 +4330,15 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
         }
         else
         {
-            fprintf(stderr, "Warning: Invalid SRT language (%s)\n",
-                    srtlang[track]);
+			if (!robot_mode)
+			{
+				fprintf(stderr, "Warning: Invalid SRT language (%s)\n",
+						srtlang[track]);
+			}
+			else
+			{
+				fprintf(stdout, "WARNINGMSG \"Invalid SRT language (%s)\"\n", srtlang[track]);
+			}
         }
     }
 
@@ -3967,8 +4360,15 @@ static int add_audio(hb_value_array_t *list, hb_title_t *title, int track)
     // Check that the track exists
     if (hb_list_item(title->list_audio, track-1) == NULL)
     {
-        fprintf(stderr, "Warning: Could not find audio track %d, skipped\n",
-                track);
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Warning: Could not find audio track %d, skipped\n",
+					track);
+		}
+		else
+		{
+			fprintf(stdout, "WARNINGMSG \"Could not find audio track %d, skipped\"\n", track);
+		}
         return -1;
     }
     hb_dict_t *audio_dict = hb_dict_init();
@@ -3985,7 +4385,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     job_dict = hb_preset_job_init(h, title->index, preset_dict);
     if (job_dict == NULL)
     {
-        fprintf(stderr, "Failed to initialize job\n");
+		if (!robot_mode)
+		{
+			fprintf(stderr, "Failed to initialize job\n");
+		}
+		else
+		{
+			fprintf(stdout, "ERRORMSG \"Failed to initialize job\"\n");
+		}
         return NULL;
     }
 
@@ -4092,7 +4499,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 }
                 else
                 {
-                    fprintf(stderr, "ERROR: unable to parse audio input \"%s\", skipping\n", atracks[ii]);
+					if (!robot_mode)
+					{
+						fprintf(stderr, "ERROR: unable to parse audio input \"%s\", skipping\n", atracks[ii]);
+					}
+					else
+					{
+						fprintf(stdout, "ERRORMSG \"unable to parse audio input '%s', skipping\"\n", atracks[ii]);
+					}
                 }
             }
         }
@@ -4128,16 +4542,32 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 acodec = hb_audio_encoder_get_from_name(acodecs[ii]);
                 if (acodec <= 0)
                 {
-                    fprintf(stderr,
-                        "Invalid codec %s, using default for container.\n",
-                        acodecs[ii]);
+					if (!robot_mode)
+					{
+						fprintf(stderr,
+							"Invalid codec %s, using default for container.\n",
+							acodecs[ii]);
+					}
+					else
+					{
+						fprintf(stdout,
+							"WARNINGMSG \"Invalid codec %s, using default for container.\"\n",
+							acodecs[ii]);
+					}
                     acodec = hb_audio_encoder_get_default(mux);
                 }
                 hb_dict_set(audio_dict, "Encoder", hb_value_int(acodec));
             }
             if (acodecs[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio encoders\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio encoders\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio encoders\"\n");
+				}
             }
         }
         if (ii != 1)
@@ -4171,8 +4601,16 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 }
                 if (arate <= 0)
                 {
-                    fprintf(stderr, "Invalid sample rate %s, using input rate\n",
+					if (!robot_mode)
+					{
+						fprintf(stderr, "Invalid sample rate %s, using input rate\n",
                             arates[ii]);
+					}
+					else
+					{
+						fprintf(stdout, "WARNINGMSG \"Invalid sample rate %s, using input rate\"\n",
+							arates[ii]);
+					}
                     arate = 0;
                 }
                 audio_dict = hb_value_array_get(audio_array, ii);
@@ -4180,7 +4618,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (arates[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio sample rates\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio sample rates\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio sample rates\"\n");
+				}
             }
         }
         // If exactly one samplerate was specified, apply it to the reset
@@ -4207,7 +4652,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (mixdowns[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio mixdowns\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio mixdowns\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio mixdowns\"\n");
+				}
             }
         }
         // If exactly one mix was specified, apply it to the reset
@@ -4234,7 +4686,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (abitrates[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio bitrates\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio bitrates\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio bitrates\"\n");
+				}
             }
         }
         // If exactly one bitrate was specified, apply it to the reset
@@ -4263,7 +4722,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (aqualities[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio qualities\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio qualities\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio qualities\"\n");
+				}
             }
         }
         // If exactly one quality was specified, apply it to the reset
@@ -4296,8 +4762,15 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (acompressions[ii] != NULL)
             {
-                fprintf(stderr,
+				if (!robot_mode)
+				{
+					fprintf(stderr,
                         "Dropping excess audio compression levels\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio compression levels\"\n");
+				}
             }
         }
         // Compression levels are codec specific values.  So don't
@@ -4317,7 +4790,15 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (drcs[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio dynamic range controls\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio dynamic range controls\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio dynamic range controls\"\n");
+				}
+
             }
         }
         // If exactly one DRC was specified, apply it to the reset
@@ -4341,7 +4822,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (audio_gain[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio gains\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio gains\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio gains\"\n");
+				}
             }
         }
         // If exactly one gain was specified, apply it to the reset
@@ -4369,7 +4857,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (audio_dither[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio dither methods\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio dither methods\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio dither methods\"\n");
+				}
             }
         }
         // If exactly one dither was specified, apply it to the reset
@@ -4401,8 +4896,16 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (nmls[ii] != NULL)
             {
-                fprintf(stderr,
-                        "Dropping excess audio mixdown normalizations\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr,
+							"Dropping excess audio mixdown normalizations\n");
+				}
+				else
+				{
+					fprintf(stdout,
+							"WARNINGMSG \"Dropping excess audio mixdown normalizations\"\n");
+				}
             }
         }
         // If exactly one norm was specified, apply it to the reset
@@ -4428,7 +4931,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             if (anames[ii] != NULL)
             {
-                fprintf(stderr, "Dropping excess audio track names\n");
+				if (!robot_mode)
+				{
+					fprintf(stderr, "Dropping excess audio track names\n");
+				}
+				else
+				{
+					fprintf(stdout, "WARNINGMSG \"Dropping excess audio track names\"\n");
+				}
             }
         }
         // If exactly one name was specified, apply it to the reset
@@ -4488,7 +4998,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             }
             else
             {
-                fprintf(stderr, "ERROR: unable to parse subtitle input \"%s\", skipping\n", subtracks[ii]);
+				if (!robot_mode)
+				{
+					fprintf(stderr, "ERROR: unable to parse subtitle input \"%s\", skipping\n", subtracks[ii]);
+				}
+				else
+				{
+					fprintf(stdout, "ERRORMSG \"unable to parse subtitle input '%s', skipping\"\n", subtracks[ii]);
+				}
             }
         }
     }
