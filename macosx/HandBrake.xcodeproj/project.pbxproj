@@ -223,7 +223,6 @@
 		A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC6C54196F0517002AE6B4 /* Subtitles.xib */; };
 		A9DF49271C884C4E008AC14A /* HBJobTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49221C884C4E008AC14A /* HBJobTests.m */; };
 		A9DF49281C884C4E008AC14A /* HBJobUndoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */; };
-		A9DF49291C884C4E008AC14A /* HBMockTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49251C884C4E008AC14A /* HBMockTitle.m */; };
 		A9DF492A1C884C4E008AC14A /* HBPresetsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49261C884C4E008AC14A /* HBPresetsTests.m */; };
 		A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */; };
 		A9E1468016BC2AD800C307BC /* NextTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467C16BC2AD800C307BC /* NextTemplate.pdf */; };
@@ -546,8 +545,6 @@
 		A9DEC87E1A23DF6F00C79B48 /* HBJob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJob.m; sourceTree = "<group>"; };
 		A9DF49221C884C4E008AC14A /* HBJobTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobTests.m; sourceTree = "<group>"; };
 		A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobUndoTests.m; sourceTree = "<group>"; };
-		A9DF49241C884C4E008AC14A /* HBMockTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBMockTitle.h; sourceTree = "<group>"; };
-		A9DF49251C884C4E008AC14A /* HBMockTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBMockTitle.m; sourceTree = "<group>"; };
 		A9DF49261C884C4E008AC14A /* HBPresetsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresetsTests.m; sourceTree = "<group>"; };
 		A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		A9E1467C16BC2AD800C307BC /* NextTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = NextTemplate.pdf; sourceTree = "<group>"; };
@@ -1065,8 +1062,6 @@
 			children = (
 				A9DF49221C884C4E008AC14A /* HBJobTests.m */,
 				A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */,
-				A9DF49241C884C4E008AC14A /* HBMockTitle.h */,
-				A9DF49251C884C4E008AC14A /* HBMockTitle.m */,
 				A9DF49261C884C4E008AC14A /* HBPresetsTests.m */,
 				A94A98F41C858EFB004BA9BA /* HBDictTests.m */,
 				A9736F141C7DA5FE008F1D18 /* Info.plist */,
@@ -1573,7 +1568,6 @@
 			files = (
 				A94A98F51C858EFB004BA9BA /* HBDictTests.m in Sources */,
 				A9DF49271C884C4E008AC14A /* HBJobTests.m in Sources */,
-				A9DF49291C884C4E008AC14A /* HBMockTitle.m in Sources */,
 				A9DF49281C884C4E008AC14A /* HBJobUndoTests.m in Sources */,
 				A9DF492A1C884C4E008AC14A /* HBPresetsTests.m in Sources */,
 			);

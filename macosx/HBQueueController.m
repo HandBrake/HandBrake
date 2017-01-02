@@ -72,7 +72,7 @@
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
 
         // Load the queue from disk.
-        _jobs = [[HBDistributedArray alloc] initWithURL:queueURL];
+        _jobs = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBJob class]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_jobs];
     }
 
@@ -1114,7 +1114,7 @@
 - (IBAction)rip:(id)sender
 {
     // Rip or Cancel ?
-    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
+    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused || self.core.state == HBStateSearching)
     {
         [self cancelRip:sender];
     }

@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * presets.c
- * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2017 <stebbins@stebbins>
  *
  * presets.c is free software.
  *
@@ -2487,6 +2487,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             ghb_load_post_settings(ud);
         }
         gtk_widget_set_sensitive(widget, TRUE);
+        free(path);
     }
     else
     {

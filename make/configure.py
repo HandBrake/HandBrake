@@ -99,10 +99,14 @@ class Configure( object ):
         self.build_final  = os.curdir
         self.src_final    = self._final_dir( self.build_dir, self.src_dir )
         self.prefix_final = self._final_dir( self.build_dir, self.prefix_dir )
+        if host.match( '*-*-darwin*' ):
+            self.xcode_prefix_final = self._final_dir( self.build_dir, self.xcode_prefix_dir )
 
         self.infof( 'compute: makevar SRC/    = %s\n', self.src_final )
         self.infof( 'compute: makevar BUILD/  = %s\n', self.build_final )
         self.infof( 'compute: makevar PREFIX/ = %s\n', self.prefix_final )
+        if host.match( '*-*-darwin*' ):
+            self.infof( 'compute: makevar XCODE.prefix/ = %s\n', self.xcode_prefix_final )
 
     ## perform chdir and enable log recording
     def chdir( self ):
@@ -198,6 +202,8 @@ class Configure( object ):
         self.src_dir    = os.path.normpath( options.src )
         self.build_dir  = os.path.normpath( options.build )
         self.prefix_dir = os.path.normpath( options.prefix )
+        if host.match( '*-*-darwin*' ):
+            self.xcode_prefix_dir = os.path.normpath( options.xcode_prefix )
         if options.sysroot != None:
                 self.sysroot_dir = os.path.normpath( options.sysroot )
         else:
@@ -707,7 +713,7 @@ class RepoProbe( ShellProbe ):
         self.rev       = 0
         self.hash      = 'deadbeaf'
         self.shorthash = 'deadbea'
-        self.date      = datetime(1, 1, 1)
+        self.date      = None
         self.official  = 0
         self.type      = 'developer'
 
@@ -751,11 +757,10 @@ class RepoProbe( ShellProbe ):
                 self.shorthash = value[:7]
 
         # type-classification via repository URL
-        official_url = 'https://github.com/HandBrake/HandBrake.git' # HTTPS
-        if self.url == 'git@github.com:HandBrake/HandBrake.git':    # SSH
-            self.url = official_url
+        if self.url == project.url_repo_ssh:
+            self.url = project.url_repo  # official repo, SSH to HTTPS
 
-        if self.url == official_url:
+        if self.url == project.url_repo:
             self.official = 1
             if not options.snapshot and self.hash == self.tag_hash:
                 self.type = 'release'
@@ -803,6 +808,8 @@ class Project( Action ):
         self.acro_lower    = 'hb'
         self.acro_upper    = 'HB'
         self.url_website   = 'https://handbrake.fr'
+        self.url_repo      = 'https://github.com/HandBrake/HandBrake.git'
+        self.url_repo_ssh  = 'git@github.com:HandBrake/HandBrake.git'
         self.url_community = 'https://forum.handbrake.fr'
         self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
@@ -823,7 +830,10 @@ class Project( Action ):
         else:
             url_arch = ''
 
-        suffix = ''
+        if repo.date is None:
+            cfg.errln( '%s is missing version information it needs to build properly.\nClone the official git repository at %s\nor download an official source archive from %s\n', self.name, self.url_repo, self.url_website )
+            sys.exit( 1 )
+
         if repo.tag != '':
             m = re.match( '^([0-9]+)\.([0-9]+)\.([0-9]+)-?(.+)?$', repo.tag )
             if not m:
@@ -833,7 +843,8 @@ class Project( Action ):
             self.vmajor = int(vmajor)
             self.vminor = int(vminor)
             self.vpoint = int(vpoint)
-            self.suffix = suffix
+            if suffix:
+                self.suffix = suffix
 
         if repo.type != 'release' or options.snapshot:
             self.version = repo.date.strftime("%Y%m%d%H%M%S")
@@ -851,7 +862,7 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d', now) + '01'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         else:
-            m = re.match('^([a-zA-Z]+)\.([0-9]+)$', suffix)
+            m = re.match('^([a-zA-Z]+)\.([0-9]+)$', self.suffix)
             if not m:
                 # Regular release
                 self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
@@ -1356,6 +1367,8 @@ def createCLI():
         grp = OptionGroup( cli, 'Xcode Options' )
         grp.add_option( '--disable-xcode', default=False, action='store_true',
             help='disable Xcode' )
+        grp.add_option( '--xcode-prefix', default=cfg.xcode_prefix_dir, action='store', metavar='DIR',
+            help='specify install dir for Xcode products [%s]' % (cfg.xcode_prefix_dir) )
         grp.add_option( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
             help='specify root of the directory hierarchy that contains product files and intermediate build files' )
         xcconfigMode.cli_add_option( grp, '--xcode-config' )
@@ -1493,7 +1506,9 @@ try:
     cfg   = Configure( verbose )
     host  = HostTupleProbe(); host.run()
 
-    cfg.prefix_dir = ForHost( '/usr/local', ['/Applications','*-*-darwin*'] ).value
+    cfg.prefix_dir = '/usr/local'
+    if host.match( '*-*-darwin*' ):
+        cfg.xcode_prefix_dir = '/Applications'
 
     build = BuildAction()
     arch  = ArchAction(); arch.run()
@@ -1856,6 +1871,8 @@ int main()
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()
+        doc.add( 'XCODE.prefix',  cfg.xcode_prefix_final )
+        doc.add( 'XCODE.prefix/', cfg.xcode_prefix_final + os.sep )
         doc.add( 'XCODE.driver', options.xcode_driver )
         if os.path.isabs(options.xcode_symroot):
             doc.add( 'XCODE.symroot', options.xcode_symroot )

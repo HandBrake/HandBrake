@@ -1,6 +1,6 @@
 /*
  * icons.c
- * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2017 <stebbins@stebbins>
  *
  * icons.c is free software.
  *

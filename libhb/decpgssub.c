@@ -1,6 +1,6 @@
 /* decpgssub.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -441,8 +441,8 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                 uint8_t color;
 
                                 pixel = yy * rect->w + xx;
-                                color = rect->pict.data[0][pixel];
-                                argb = ((uint32_t*)rect->pict.data[1])[color];
+                                color = rect->data[0][pixel];
+                                argb = ((uint32_t*)rect->data[1])[color];
                                 yuv = hb_rgb2yuv(argb);
 
                                 lum[xx] = (yuv >> 16) & 0xff;

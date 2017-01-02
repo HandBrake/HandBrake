@@ -224,6 +224,7 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,10,0,0">
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_QsvDecode}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding DisableQuickSyncDecoding}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_QsvDecodeForNonFullPath}" IsEnabled="{Binding IsUseQsvDecAvailable}" IsChecked="{Binding UseQSVDecodeForNonQSVEnc}" />
                             <TextBlock Text="{x:Static Properties:Resources.Video_QuickSyncNotAvailable}" Margin="17,2,0,0" TextWrapping="Wrap"
                                         Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         </StackPanel>

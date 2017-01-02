@@ -1,6 +1,6 @@
 /* muxavformat.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -33,7 +33,7 @@ struct hb_mux_data_s
     int64_t  prev_chapter_tc;
     int16_t  current_chapter;
 
-    AVBitStreamFilterContext* bitstream_filter;
+    AVBSFContext             * bitstream_context;
 };
 
 struct hb_mux_object_s
@@ -204,11 +204,9 @@ static int avformatInit( hb_mux_object_t * m )
         hb_error("Could not initialize video stream");
         goto error;
     }
-    track->st->time_base = m->time_base;
-    avcodec_get_context_defaults3(track->st->codec, NULL);
 
-    track->st->codec->codec_type = AVMEDIA_TYPE_VIDEO;
-    track->st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    track->st->codecpar->codec_type = AVMEDIA_TYPE_VIDEO;
+    track->st->time_base            = m->time_base;
 
     uint8_t *priv_data = NULL;
     int priv_size = 0;
@@ -217,7 +215,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
-            track->st->codec->codec_id = AV_CODEC_ID_H264;
+            track->st->codecpar->codec_id = AV_CODEC_ID_H264;
 
             /* Taken from x264 muxers.c */
             priv_size = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 +
@@ -253,7 +251,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_MPEG4:
-            track->st->codec->codec_id = AV_CODEC_ID_MPEG4;
+            track->st->codecpar->codec_id = AV_CODEC_ID_MPEG4;
 
             if (job->config.mpeg4.length != 0)
             {
@@ -269,7 +267,7 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:
-            track->st->codec->codec_id = AV_CODEC_ID_MPEG2VIDEO;
+            track->st->codecpar->codec_id = AV_CODEC_ID_MPEG2VIDEO;
 
             if (job->config.mpeg4.length != 0)
             {
@@ -285,20 +283,20 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_VP8:
-            track->st->codec->codec_id = AV_CODEC_ID_VP8;
+            track->st->codecpar->codec_id = AV_CODEC_ID_VP8;
             priv_data                  = NULL;
             priv_size                  = 0;
             break;
 
         case HB_VCODEC_FFMPEG_VP9:
-            track->st->codec->codec_id = AV_CODEC_ID_VP9;
+            track->st->codecpar->codec_id = AV_CODEC_ID_VP9;
             priv_data                  = NULL;
             priv_size                  = 0;
             break;
 
         case HB_VCODEC_THEORA:
         {
-            track->st->codec->codec_id = AV_CODEC_ID_THEORA;
+            track->st->codecpar->codec_id = AV_CODEC_ID_THEORA;
 
             int size = 0;
             ogg_packet *ogg_headers[3];
@@ -333,7 +331,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
-            track->st->codec->codec_id = AV_CODEC_ID_HEVC;
+            track->st->codecpar->codec_id = AV_CODEC_ID_HEVC;
 
             if (job->config.h265.headers_length > 0)
             {
@@ -352,15 +350,15 @@ static int avformatInit( hb_mux_object_t * m )
             hb_error("muxavformat: Unknown video codec: %x", job->vcodec);
             goto error;
     }
-    track->st->codec->extradata = priv_data;
-    track->st->codec->extradata_size = priv_size;
+    track->st->codecpar->extradata = priv_data;
+    track->st->codecpar->extradata_size = priv_size;
 
     track->st->sample_aspect_ratio.num        = job->par.num;
     track->st->sample_aspect_ratio.den        = job->par.den;
-    track->st->codec->sample_aspect_ratio.num = job->par.num;
-    track->st->codec->sample_aspect_ratio.den = job->par.den;
-    track->st->codec->width                   = job->width;
-    track->st->codec->height                  = job->height;
+    track->st->codecpar->sample_aspect_ratio.num = job->par.num;
+    track->st->codecpar->sample_aspect_ratio.den = job->par.den;
+    track->st->codecpar->width                   = job->width;
+    track->st->codecpar->height                  = job->height;
     track->st->disposition |= AV_DISPOSITION_DEFAULT;
 
     hb_rational_t vrate = job->vrate;
@@ -384,20 +382,6 @@ static int avformatInit( hb_mux_object_t * m )
         }
     }
     hb_reduce(&vrate.num, &vrate.den, vrate.num, vrate.den);
-    if (job->mux == HB_MUX_AV_MP4)
-    {
-        // libavformat mp4 muxer requires that the codec time_base have the
-        // same denominator as the stream time_base, it uses it for the
-        // mdhd timescale.
-        double scale = (double)track->st->time_base.den / vrate.num;
-        track->st->codec->time_base.den = track->st->time_base.den;
-        track->st->codec->time_base.num = vrate.den * scale;
-    }
-    else
-    {
-        track->st->codec->time_base.num = vrate.den;
-        track->st->codec->time_base.den = vrate.num;
-    }
     track->st->avg_frame_rate.num = vrate.num;
     track->st->avg_frame_rate.den = vrate.den;
 
@@ -416,20 +400,15 @@ static int avformatInit( hb_mux_object_t * m )
             hb_error("Could not initialize audio stream");
             goto error;
         }
-        avcodec_get_context_defaults3(track->st->codec, NULL);
 
-        track->st->codec->codec_type = AVMEDIA_TYPE_AUDIO;
-        track->st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        track->st->codecpar->codec_type = AVMEDIA_TYPE_AUDIO;
         if (job->mux == HB_MUX_AV_MP4)
         {
-            track->st->codec->time_base.num = audio->config.out.samples_per_frame;
-            track->st->codec->time_base.den = audio->config.out.samplerate;
             track->st->time_base.num = 1;
             track->st->time_base.den = audio->config.out.samplerate;
         }
         else
         {
-            track->st->codec->time_base = m->time_base;
             track->st->time_base = m->time_base;
         }
 
@@ -439,24 +418,24 @@ static int avformatInit( hb_mux_object_t * m )
         {
             case HB_ACODEC_DCA:
             case HB_ACODEC_DCA_HD:
-                track->st->codec->codec_id = AV_CODEC_ID_DTS;
+                track->st->codecpar->codec_id = AV_CODEC_ID_DTS;
                 break;
             case HB_ACODEC_AC3:
-                track->st->codec->codec_id = AV_CODEC_ID_AC3;
+                track->st->codecpar->codec_id = AV_CODEC_ID_AC3;
                 break;
             case HB_ACODEC_FFEAC3:
-                track->st->codec->codec_id = AV_CODEC_ID_EAC3;
+                track->st->codecpar->codec_id = AV_CODEC_ID_EAC3;
                 break;
             case HB_ACODEC_FFTRUEHD:
-                track->st->codec->codec_id = AV_CODEC_ID_TRUEHD;
+                track->st->codecpar->codec_id = AV_CODEC_ID_TRUEHD;
                 break;
             case HB_ACODEC_LAME:
             case HB_ACODEC_MP3:
-                track->st->codec->codec_id = AV_CODEC_ID_MP3;
+                track->st->codecpar->codec_id = AV_CODEC_ID_MP3;
                 break;
             case HB_ACODEC_VORBIS:
             {
-                track->st->codec->codec_id = AV_CODEC_ID_VORBIS;
+                track->st->codecpar->codec_id = AV_CODEC_ID_VORBIS;
 
                 int jj, size = 0;
                 ogg_packet *ogg_headers[3];
@@ -486,7 +465,7 @@ static int avformatInit( hb_mux_object_t * m )
                 }
             } break;
             case HB_ACODEC_OPUS:
-                track->st->codec->codec_id = AV_CODEC_ID_OPUS;
+                track->st->codecpar->codec_id = AV_CODEC_ID_OPUS;
 
                 if (audio->priv.config.extradata.length)
                 {
@@ -504,7 +483,7 @@ static int avformatInit( hb_mux_object_t * m )
                 break;
             case HB_ACODEC_FFFLAC:
             case HB_ACODEC_FFFLAC24:
-                track->st->codec->codec_id = AV_CODEC_ID_FLAC;
+                track->st->codecpar->codec_id = AV_CODEC_ID_FLAC;
 
                 if (audio->priv.config.extradata.length)
                 {
@@ -525,7 +504,7 @@ static int avformatInit( hb_mux_object_t * m )
             case HB_ACODEC_CA_HAAC:
             case HB_ACODEC_FDK_AAC:
             case HB_ACODEC_FDK_HAAC:
-                track->st->codec->codec_id = AV_CODEC_ID_AAC;
+                track->st->codecpar->codec_id = AV_CODEC_ID_AAC;
 
                 // libav mkv muxer expects there to be extradata for
                 // AAC and will crash if it is NULL.
@@ -551,7 +530,20 @@ static int avformatInit( hb_mux_object_t * m )
                 // The filter does nothing for non-ADTS bitstream.
                 if (audio->config.out.codec == HB_ACODEC_AAC_PASS)
                 {
-                    track->bitstream_filter = av_bitstream_filter_init("aac_adtstoasc");
+                    const AVBitStreamFilter  * bsf;
+                    AVBSFContext             * ctx;
+                    int                        ret;
+
+                    bsf = av_bsf_get_by_name("aac_adtstoasc");
+                    ret = av_bsf_alloc(bsf, &ctx);
+                    if (ret < 0)
+                    {
+                        hb_error("AAC bistream filter: alloc failure");
+                        goto error;
+                    }
+                    ctx->time_base_in.num = 1;
+                    ctx->time_base_in.den = audio->config.out.samplerate;
+                    track->bitstream_context = ctx;
                 }
                 break;
             default:
@@ -559,8 +551,21 @@ static int avformatInit( hb_mux_object_t * m )
                          audio->config.out.codec);
                 goto error;
         }
-        track->st->codec->extradata = priv_data;
-        track->st->codec->extradata_size = priv_size;
+        track->st->codecpar->extradata = priv_data;
+        track->st->codecpar->extradata_size = priv_size;
+        if (track->bitstream_context != NULL)
+        {
+            int ret;
+
+            avcodec_parameters_copy(track->bitstream_context->par_in,
+                                    track->st->codecpar);
+            ret = av_bsf_init(track->bitstream_context);
+            if (ret < 0)
+            {
+                hb_error("bistream filter: init failure");
+                goto error;
+            }
+        }
 
         if( default_track_flag )
         {
@@ -573,22 +578,22 @@ static int avformatInit( hb_mux_object_t * m )
         {
             av_dict_set(&track->st->metadata, "language", lang, 0);
         }
-        track->st->codec->sample_rate = audio->config.out.samplerate;
+        track->st->codecpar->sample_rate = audio->config.out.samplerate;
         if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
-            track->st->codec->channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
-            track->st->codec->channel_layout = audio->config.in.channel_layout;
+            track->st->codecpar->channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
+            track->st->codecpar->channel_layout = audio->config.in.channel_layout;
         }
         else
         {
-            track->st->codec->channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
-            track->st->codec->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+            track->st->codecpar->channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
+            track->st->codecpar->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
         }
 
         char *name;
         if (audio->config.out.name == NULL)
         {
-            switch (track->st->codec->channels)
+            switch (track->st->codecpar->channels)
             {
                 case 1:
                     name = "Mono";
@@ -724,14 +729,11 @@ static int avformatInit( hb_mux_object_t * m )
             hb_error("Could not initialize subtitle stream");
             goto error;
         }
-        avcodec_get_context_defaults3(track->st->codec, NULL);
 
-        track->st->codec->codec_type = AVMEDIA_TYPE_SUBTITLE;
-        track->st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        track->st->codecpar->codec_type = AVMEDIA_TYPE_SUBTITLE;
         track->st->time_base = m->time_base;
-        track->st->codec->time_base = m->time_base;
-        track->st->codec->width = subtitle->width;
-        track->st->codec->height = subtitle->height;
+        track->st->codecpar->width = subtitle->width;
+        track->st->codecpar->height = subtitle->height;
 
         priv_data = NULL;
         priv_size = 0;
@@ -740,7 +742,7 @@ static int avformatInit( hb_mux_object_t * m )
             case VOBSUB:
             {
                 int jj;
-                track->st->codec->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
+                track->st->codecpar->codec_id = AV_CODEC_ID_DVD_SUBTITLE;
 
                 for (jj = 0; jj < 16; jj++)
                     rgb[jj] = hb_yuv2rgb(subtitle->palette[jj]);
@@ -764,7 +766,7 @@ static int avformatInit( hb_mux_object_t * m )
 
             case PGSSUB:
             {
-                track->st->codec->codec_id = AV_CODEC_ID_HDMV_PGS_SUBTITLE;
+                track->st->codecpar->codec_id = AV_CODEC_ID_HDMV_PGS_SUBTITLE;
             } break;
 
             case CC608SUB:
@@ -776,11 +778,11 @@ static int avformatInit( hb_mux_object_t * m )
             {
                 if (job->mux == HB_MUX_AV_MP4)
                 {
-                    track->st->codec->codec_id = AV_CODEC_ID_MOV_TEXT;
+                    track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
                 }
                 else
                 {
-                    track->st->codec->codec_id = AV_CODEC_ID_SSA;
+                    track->st->codecpar->codec_id = AV_CODEC_ID_SSA;
                     need_fonts = 1;
 
                     if (subtitle->extradata_size)
@@ -800,7 +802,7 @@ static int avformatInit( hb_mux_object_t * m )
             default:
                 continue;
         }
-        if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT)
+        if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
         {
             // Build codec extradata for tx3g.
             // If we were using a libav codec to generate this data
@@ -828,8 +830,8 @@ static int avformatInit( hb_mux_object_t * m )
 
             int width, height = 60;
             width = job->width * job->par.num / job->par.den;
-            track->st->codec->width = width;
-            track->st->codec->height = height;
+            track->st->codecpar->width = width;
+            track->st->codecpar->height = height;
             properties[14] = height >> 8;
             properties[15] = height & 0xff;
             properties[16] = width >> 8;
@@ -844,8 +846,8 @@ static int avformatInit( hb_mux_object_t * m )
             }
             memcpy(priv_data, properties, priv_size);
         }
-        track->st->codec->extradata = priv_data;
-        track->st->codec->extradata_size = priv_size;
+        track->st->codecpar->extradata = priv_data;
+        track->st->codecpar->extradata_size = priv_size;
 
         if (ii == subtitle_default)
         {
@@ -880,16 +882,15 @@ static int avformatInit( hb_mux_object_t * m )
                     hb_error("Could not initialize attachment stream");
                     goto error;
                 }
-                avcodec_get_context_defaults3(st->codec, NULL);
 
-                st->codec->codec_type = AVMEDIA_TYPE_ATTACHMENT;
+                st->codecpar->codec_type = AVMEDIA_TYPE_ATTACHMENT;
                 if (attachment->type == FONT_TTF_ATTACH)
                 {
-                    st->codec->codec_id = AV_CODEC_ID_TTF;
+                    st->codecpar->codec_id = AV_CODEC_ID_TTF;
                 }
                 else if (attachment->type == FONT_OTF_ATTACH)
                 {
-                    st->codec->codec_id = MKBETAG( 0 ,'O','T','F');
+                    st->codecpar->codec_id = MKBETAG( 0 ,'O','T','F');
                     av_dict_set(&st->metadata, "mimetype", "application/vnd.ms-opentype", 0);
                 }
 
@@ -902,8 +903,8 @@ static int avformatInit( hb_mux_object_t * m )
                 }
                 memcpy(priv_data, attachment->data, priv_size);
 
-                st->codec->extradata = priv_data;
-                st->codec->extradata_size = priv_size;
+                st->codecpar->extradata = priv_data;
+                st->codecpar->extradata_size = priv_size;
 
                 av_dict_set(&st->metadata, "filename", attachment->name, 0);
             }
@@ -1090,7 +1091,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 empty_pkt.dts = track->duration;
                 empty_pkt.pts = track->duration;
                 empty_pkt.duration = 90;
-                empty_pkt.convergence_duration = empty_pkt.duration;
                 empty_pkt.stream_index = track->st->index;
                 av_interleaved_write_frame(m->oc, &empty_pkt);
             }
@@ -1147,7 +1147,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         // 10 seconds in this case. Unless they are PGS subs which should
         // have zero duration.
         if (track->type == MUX_TYPE_SUBTITLE &&
-            track->st->codec->codec_id != AV_CODEC_ID_HDMV_PGS_SUBTITLE)
+            track->st->codecpar->codec_id != AV_CODEC_ID_HDMV_PGS_SUBTITLE)
             duration = av_rescale_q(10, (AVRational){1,1},
                                     track->st->time_base);
         else
@@ -1231,7 +1231,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     empty_pkt.dts = track->duration;
                     empty_pkt.pts = track->duration;
                     empty_pkt.duration = pts - track->duration;
-                    empty_pkt.convergence_duration = empty_pkt.duration;
                     empty_pkt.stream_index = track->st->index;
                     int ret = av_interleaved_write_frame(m->oc, &empty_pkt);
                     if (ret < 0)
@@ -1245,7 +1244,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                         return -1;
                     }
                 }
-                if (track->st->codec->codec_id == AV_CODEC_ID_MOV_TEXT)
+                if (track->st->codecpar->codec_id == AV_CODEC_ID_MOV_TEXT)
                 {
                     uint8_t  * styleatom;
                     uint16_t   stylesize = 0;
@@ -1280,7 +1279,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     free(styleatom);
                 }
             }
-            if (track->st->codec->codec_id == AV_CODEC_ID_SSA &&
+            if (track->st->codecpar->codec_id == AV_CODEC_ID_SSA &&
                 job->mux == HB_MUX_AV_MKV)
             {
                 // avformat requires the this additional information
@@ -1323,7 +1322,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                 *job->die = 1;
                 return -1;
             }
-            pkt.convergence_duration = pkt.duration;
         } break;
         case MUX_TYPE_AUDIO:
         default:
@@ -1331,9 +1329,27 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     track->duration = pts + pkt.duration;
 
-    if (track->bitstream_filter)
+    if (track->bitstream_context)
     {
-        av_bitstream_filter_filter(track->bitstream_filter, track->st->codec, NULL, &pkt.data, &pkt.size, pkt.data, pkt.size, 0);
+        int ret;
+        ret = av_bsf_send_packet(track->bitstream_context, &pkt);
+        if (ret < 0)
+        {
+            hb_error("avformatMux: track %d av_bsf_send_packet failed",
+                     track->st->index);
+            return ret;
+        }
+        ret = av_bsf_receive_packet(track->bitstream_context, &pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+        {
+            return 0;
+        }
+        else if (ret < 0)
+        {
+            hb_error("avformatMux: track %d av_bsf_receive_packet failed",
+                     track->st->index);
+            return ret;
+        }
     }
 
     pkt.stream_index = track->st->index;
@@ -1379,9 +1395,9 @@ static int avformatEnd(hb_mux_object_t *m)
     {
         avformatMux(m, m->tracks[ii], NULL);
 
-        if (m->tracks[ii]->bitstream_filter)
+        if (m->tracks[ii]->bitstream_context)
         {
-            av_bitstream_filter_close(m->tracks[ii]->bitstream_filter);
+            av_bsf_free(&m->tracks[ii]->bitstream_context);
         }
     }
 
@@ -1428,7 +1444,7 @@ static int avformatEnd(hb_mux_object_t *m)
                     int priv_size;
 
                     priv_size = audio->priv.config.extradata.length;
-                    priv_data = av_realloc(st->codec->extradata, priv_size +
+                    priv_data = av_realloc(st->codecpar->extradata, priv_size +
                                            FF_INPUT_BUFFER_PADDING_SIZE);
                     if (priv_data == NULL)
                     {
@@ -1437,8 +1453,8 @@ static int avformatEnd(hb_mux_object_t *m)
                     memcpy(priv_data,
                            audio->priv.config.extradata.bytes,
                            audio->priv.config.extradata.length);
-                    st->codec->extradata = priv_data;
-                    st->codec->extradata_size = priv_size;
+                    st->codecpar->extradata = priv_data;
+                    st->codecpar->extradata_size = priv_size;
                 }
                 break;
             default:

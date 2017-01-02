@@ -58,7 +58,7 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-                string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
+              //  string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
 
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
@@ -94,13 +94,12 @@ namespace HandBrakeWPF.Helpers
                 {
                     destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                     destinationFilename =
-                        destinationFilename
-                            .Replace("{source}", sourceName)
+                        destinationFilename.Replace("{source}", sourceName)
                             .Replace(Constants.Title, dvdTitle)
                             .Replace(Constants.Chapters, combinedChapterTag)
                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                            .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"))
-                            .Replace(Constants.Preset, sanitisedPresetName);
+                            .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"));
+                           // .Replace(Constants.Preset, sanitisedPresetName);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                     {

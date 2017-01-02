@@ -1,6 +1,6 @@
 /* reader.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -472,6 +472,13 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             reader_send_eof(r);
             return HB_WORK_DONE;
         }
+    }
+    else
+    {
+        // This should never happen
+        hb_error("Stream not initialized");
+        reader_send_eof(r);
+        return HB_WORK_DONE;
     }
 
     (hb_demux[r->title->demuxer])(buf, &list, &r->demux);

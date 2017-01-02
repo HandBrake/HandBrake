@@ -59,6 +59,8 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 @property (nonatomic, readonly) NSURL *fileURL;
 @property (nonatomic, readwrite) NSTimeInterval modifiedTime;
 
+@property (nonatomic, readonly) NSSet *objectClasses;
+
 @property (nonatomic, readonly) sem_t *mutex;
 @property (nonatomic, readwrite) uint32_t mutexCount;
 
@@ -66,13 +68,14 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 @implementation HBDistributedArray
 
-- (instancetype)initWithURL:(NSURL *)fileURL
+- (instancetype)initWithURL:(NSURL *)fileURL class:(Class)objectClass
 {
     self = [super init];
     if (self)
     {
         _fileURL = [fileURL copy];
         _array = [[NSMutableArray alloc] init];
+        _objectClasses = [NSSet setWithObjects:[NSMutableArray class], objectClass, nil];
 
         NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]];
         const char *name = [NSString stringWithFormat:@"/%@.hblock", _fileURL.lastPathComponent].UTF8String;
@@ -196,7 +199,18 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     NSMutableArray *jobsArray = nil;
     @try
     {
-        jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
+        if ([NSKeyedUnarchiver instancesRespondToSelector:@selector(requiresSecureCoding)])
+        {
+            NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
+            unarchiver.requiresSecureCoding = YES;
+            jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
+            [unarchiver finishDecoding];
+        }
+        else
+        {
+            jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
+        }
     }
     @catch (NSException *exception)
     {

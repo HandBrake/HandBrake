@@ -59,5 +59,16 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
         /// </summary>
         [DataMember]
         public TimeSpan ElapsedTime { get; set; }
+
+        /// <summary>
+        ///  Gets or sets PassId.
+        /// </summary>
+        /// <remarks>
+        /// -1: Subtitle scan
+        ///  0: Encode
+        ///  1: Encode first pass
+        ///  2: Encode second pass
+        /// </remarks>
+        public int PassId { get; set; }
     }
 }

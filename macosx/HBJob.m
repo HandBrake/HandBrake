@@ -242,7 +242,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBJobVersion"];
+    [coder encodeInt:2 forKey:@"HBJobVersion"];
 
     encodeInt(_state);
     encodeObject(_name);
@@ -274,7 +274,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
-    if (version == 1 && (self = [super init]))
+    if (version == 2 && (self = [super init]))
     {
         decodeInt(_state);
         decodeObject(_name, NSString);
@@ -304,7 +304,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _video.job = self;
 
         decodeBool(_chaptersEnabled);
-        decodeObject(_chapterTitles, NSArray);
+        decodeCollectionOfObjects(_chapterTitles, NSArray, HBChapter);
 
         return self;
     }

@@ -1,6 +1,6 @@
 /* fifo.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,7 +10,7 @@
 #include "hb.h"
 #include "openclwrapper.h"
 #ifdef USE_QSV
-#include "libavcodec/qsv.h"
+#include "qsv_libav.h"
 #endif
 
 #ifndef SYS_DARWIN
@@ -726,10 +726,10 @@ void hb_buffer_close( hb_buffer_t ** _b )
         // when decoding without QSV, the QSV atom will be NULL.
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
         {
-            av_qsv_stage *stage = av_qsv_get_last_stage(b->qsv_details.qsv_atom);
+            hb_qsv_stage *stage = hb_qsv_get_last_stage(b->qsv_details.qsv_atom);
             if (stage != NULL)
             {
-                av_qsv_wait_on_sync(b->qsv_details.ctx, stage);
+                hb_qsv_wait_on_sync(b->qsv_details.ctx, stage);
                 if (stage->out.sync->in_use > 0)
                 {
                     ff_qsv_atomic_dec(&stage->out.sync->in_use);
@@ -739,8 +739,8 @@ void hb_buffer_close( hb_buffer_t ** _b )
                     ff_qsv_atomic_dec(&stage->out.p_surface->Data.Locked);
                 }
             }
-            av_qsv_flush_stages(b->qsv_details.ctx->pipes,
-                                &b->qsv_details.qsv_atom);
+            hb_qsv_flush_stages(b->qsv_details.ctx->pipes,
+                                (hb_qsv_list**)&b->qsv_details.qsv_atom);
         }
 #endif
 

@@ -1,81 +1,127 @@
 # HandBrake News
 
+## HandBrake 1.0.1
+
+### All platforms
+
+#### Video
+
+- Fixed a potential crash when using the VP8 or VP9 video encoders
+- Fixed a potential crash when using 2-pass ABR
+
+#### Command line interface
+
+- Fixed importing chapter names from a file
+
+### Linux
+
+- Fixed Keep Aspect Ratio control (disabled) when anamorphic mode is Auto
+- Widened presets list to accommodate longer preset names
+- Miscellaneous bug fixes
+
+### Mac
+
+- Fixed a potential crash when using the subtitles burn feature on macOS versions earlier than 10.12 Sierra
+- Fixed certain controls not updating when saving or loading a preset
+- Miscellaneous bug fixes
+
+### Windows
+
+- Fixed certain controls not updating when saving or loading a preset
+- Disabled QSV decoding by default when non-QSV encoder selected (configurable)
+- Miscellaneous bug fixes
+
+
 ## HandBrake 1.0.0
 
-### Core
+### All platforms
 
 #### General
 
-- Improvements to audio/video sync engine to better handle difficult sources
+- New online documentation at https://handbrake.fr/docs
 - Completely overhauled the official presets
   - New general use presets for broad compatibility
   - New device presets, now more up-to-date for common devices
-  - Added Matroska (MKV) presets, including VP9 video with Opus audio
+  - New web presets
+  - New Matroska (MKV) presets, including VP9 video with Opus audio
   - Official presets from HandBrake 0.10.x are still available under `Legacy`
 - New JSON-based preset system including command line support
 - New JSON-based API for interacting with libhb
-- Many miscellaneous bug fixes and improvements (over 1600 code commits!)
+- Improvements to audio/video sync engine to better handle difficult sources
+- Many miscellaneous bug fixes and improvements (over 1700 code commits!)
 
 #### Video
 
 - VP9 video encoding via libvpx
 - Intel QuickSync Video H.265/HEVC encoder
   - Requires Intel Skylake or newer CPU
-- Rotate filter now available in all graphical user interfaces
+- Ultra HD / 4K color pass through (support for BT.2020)
+- Additional standard frame rate selections in the graphical interfaces
+- New Auto anamorphic mode maximizes storage resolution, replaces Strict anamorphic mode
 - New Pad filter (command line only for now)
-- Additional standard frame rate selections in the graphical user interfaces
-- Performance improvements
-  - Assembly optimizations in NLMeans improve performance up to 10%
-  - Assembly optimizations in x264 improve performance for faster presets by 5-10%
-- x265 quality improvements, especially when using tune grain
+- New Decomb/Deinterlace filter settings and improved defaults
+- Rotate filter now available in all graphical interfaces
+- New NLMeans filter tunes Tape and Sprite for analog tape recordings and vintage video games, respectively
+- Assembly optimizations NLMeans filter improve performance up to 10%
+- Assembly optimizations in x264 encoder improve performance for faster presets by 5-10%
+- x265 encoder quality improvements, especially when using tune grain
+- High bit depth encoding support via external shared libraries (video pipeline is still 8-bit 4:2:0)
+  - x264 10-bit
+  - x265 10-bit and 12-bit
 
 #### Audio
 
 - Opus audio encoding/decoding via libopus
+- Passthru now supports E-AC-3, FLAC, and TrueHD audio formats
 
 #### Subtitles
 
-- Better subtitles rendering for some languages via HarfBuzz
+- Improved subtitles rendering for some languages via HarfBuzz
+- Miscellaneous subtitles improvements
+
+#### Command line interface
+
+- Presets can now be imported and exported from the command line and are compatible with the graphical interfaces
+- Queue exported from the graphical interfaces can now be imported by the command line interface (Linux and Windows only for now)
+
+#### Build system
+
+- Add scripts to manually build and install Mac and MinGW-w64 (compile for Windows on Linux) toolchains
+- Add support for multiple source URLs for third-party downloads
+- Add SHA256 hash verification for third-party downloads
+- Add configure parameter to disable or filter allowed third-party downloads (see configure --help)
+- Use HTTPS everywhere; the few cases where a third-party does not provide packages over https, handbrake.fr does
+- New targets on Mac to install and uninstall after building
+- Add flatpak packaging support (experimental)
 
 #### Third-party libraries
 
-- Build system now supports multiple source URLs and hash verification for third-party downloads
 - Updated libraries
   - FreeType 2.6.5 (subtitles)
   - Fontconfig 2.12.1 (subtitles)
   - FriBidi 0.19.7 (subtitles)
-  - Libav 11.3 (encoding/decoding/muxing)
+  - Libav 12 (encoding/decoding/muxing)
   - libass 0.13.2 (subtitles)
   - libbluray 0.9.3 (Blu-ray decoding)
   - libmfx v6.0.0 (Intel QuickSync Video encoding/decoding)
   - libvpx 1.5.0 (VP8/VP9 video encoding)
-  - x264 148 r2705 (H.264/AVC video encoding)
-  - x265 2.0 (H.265/HEVC video encoding)
+  - x264 148 r2708 (H.264/AVC video encoding)
+  - x265 2.1 (H.265/HEVC video encoding)
 - New libraries
   - HarfBuzz 1.3.0 (subtitles)
   - libopus 1.1.3 (Opus audio encoding)
 
-### Windows
+### Linux
 
-- Graphical user interface now uses libhb directly, instead of sending commands to the command line version
-  - Encoding can now be paused and resumed
-  - Stopping encoding will finalize the partial file to be playable
-- Reduced installer and install size
-  - The command line version is no longer included in the graphical user interface installer
-- Update checker now verifies the signature of the update file for improved security
-- Added support for quality-based audio encoding
-- Added ability to import tab-separated (.tsv), XML (.xml), and plain text (.txt) chapter markers
-- Improved the "configure default" options for audio and subtitles
-  - Default audio track behavior is now configurable
-  - Subtitles burn-in behavior is now configurable
-- Removed DirectX Video Acceleration (DXVA) hardware-accelerated video decoding
-  - Was causing many issues without providing sufficient improvement to decoding efficiency
-  - May be added again at a later date if performance and stability improves
-- Numerous usability enhancements
+- Add options for saving and loading queue files
+- Removed system tray icon due to performance issues on Ubuntu
+- Usability improvements
+- Miscellaneous bug fixes
 
 ### Mac
 
-- Added undo/redo support to the graphical user interface
+- Updated all tooltips
+- Added undo/redo support to the graphical interface
 - Improved drag and drop support
 - Added Open Recent to the File menu
 - Added Add Titles to Queue… to the File menu (batch queueing)
@@ -91,18 +137,27 @@
 - XQuartz is no longer required for subtitle burn-in
 - Updated Sparkle software update library
   - Enabled DSA signature checking for improved security
-- Miscellaneous bug fixes and improvements
+- Usability improvements
+- Miscellaneous bug fixes
 
-### Linux
+### Windows
 
-- Removed system tray icon due to UI performance issues on Ubuntu
-- Miscellaneous bug fixes and improvements
-
-### Command line interface
-
-- Presets can now be imported and exported from the command line
-  - Import/export is compatible with the graphical user interfaces
-- Queue exported from the GUIs can now be imported by the command line interface (Linux and Windows only for now)
+- Graphical interface now uses libhb directly, instead of sending commands to the command line interface
+  - Encoding can now be paused and resumed
+  - Stopping encoding will finalize the partial file to be playable
+- Reduced installer and install size
+  - The command line interface is no longer included in the graphical interface installer
+- Update checker now verifies the signature of the update file for improved security
+- Added support for quality-based audio encoding
+- Added ability to import tab-separated (.tsv), XML (.xml), and plain text (.txt) chapter markers
+- Improved the "configure default" options for audio and subtitles
+  - Default audio track behavior is now configurable
+  - Subtitles burn-in behavior is now configurable
+- Removed DirectX Video Acceleration (DXVA) hardware-accelerated video decoding
+  - Was causing many issues without providing sufficient improvement to decoding efficiency
+  - May be added again at a later date if performance and stability improves
+- Usability improvements
+- Miscellaneous bug fixes
 
 
 ## HandBrake 0.10.5

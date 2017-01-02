@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
@@ -39,9 +39,8 @@
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pD7-5v-U6l"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
+                <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
                     <rect key="frame" x="511" y="241" width="78" height="19"/>
-                    <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
                     </constraints>
@@ -93,9 +92,8 @@
                         <binding destination="-2" name="value" keyPath="self.video.quality" id="tMZ-Xb-TuF"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
+                <popUpButton toolTip="Framerate (Frames Per Second). Number of pictures displayed during each second of video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
                     <rect key="frame" x="114" y="258" width="149" height="22"/>
-                    <string key="toolTip">Output framerate. 'Same as source' variable framerate is recommended. Peak framerate is 'same as source' VFR with a peak rate. VFR is incompatible with some players.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -123,7 +121,7 @@
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bnV-aE-FVh">
                     <rect key="frame" x="383" y="220" width="124" height="18"/>
-                    <string key="toolTip">Perform 2-pass encoding. 'Bitrate' rate control is a prerequisite. During the 1st pass, statistics about the video are collected. Then in the second pass, those statistics are used to make bitrate allocation decisions.</string>
+                    <string key="toolTip">2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
                     <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -146,7 +144,7 @@
                         <binding destination="-2" name="value" keyPath="self.video.twoPass" id="mOJ-b3-YKx"/>
                     </connections>
                 </button>
-                <button toolTip="During the 1st pass of a 2-pass encode, use settings that speed things along." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
+                <button toolTip="Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
                     <rect key="frame" x="508" y="220" width="104" height="18"/>
                     <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -184,7 +182,7 @@
                         </binding>
                     </connections>
                 </button>
-                <popUpButton toolTip="Available video encoders." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
+                <popUpButton toolTip="Video encoder. Determines video type and settings used during encoding." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
                     <rect key="frame" x="114" y="284" width="149" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="8aS-6C-FvY"/>
@@ -238,6 +236,9 @@
                 </textField>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsD-0N-H8k">
                     <rect key="frame" x="358" y="242" width="145" height="62"/>
+                    <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video. Recommended.
+
+Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video.</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="62" id="GpZ-ub-AIa"/>
                     </constraints>
@@ -253,12 +254,10 @@
                             <buttonCell type="radio" title="Constant Quality" imagePosition="left" alignment="left" controlSize="small" state="on" tag="1" inset="2" id="au3-pU-KX6">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
-                                <string key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</string>
                             </buttonCell>
                             <buttonCell type="radio" title="Average Bitrate (kbps):" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6tI-Qz-3bJ">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
-                                <string key="toolTip">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time. But the average over a long duration will be the value set here. If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</string>
                             </buttonCell>
                         </column>
                     </cells>
@@ -273,6 +272,11 @@
                 </matrix>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xe2-d5-nEH">
                     <rect key="frame" x="117" y="215" width="143" height="38"/>
+                    <string key="toolTip">Variable Framerate allows each frame to have its own duration, matching the source.
+
+Peak Framerate is the same as Variable Framerate and limited to the maximum set by Framerate (FPS). Useful for ensuring frame rate compatibility, regardless of the source.
+
+Constant Framerate forces all frames to be exactly the same duration, set by Framerate (FPS).</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="38" id="9tE-25-ADr"/>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="OIn-JQ-Mi8"/>
@@ -307,7 +311,13 @@
                 </matrix>
                 <slider horizontalHuggingPriority="1000" verticalHuggingPriority="749" horizontalCompressionResistancePriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="GPu-Ht-bKg">
                     <rect key="frame" x="386" y="265" width="506" height="17"/>
-                    <string key="toolTip">Set the desired quality factor. The encoder targets a certain quality. The scale used by each video encoder is different. x264's scale is logarithmic and lower values coorespond to higher quality. So small decreases in value will result in progressively larger increases in the resulting file size. A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless. FFmpeg and Theora's scales are more linear. These encoders do not have a lossless mode.</string>
+                    <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
+
+Adjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.
+
+Recommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.
+
+x264 is lossless at RF 0.</string>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
@@ -439,11 +449,8 @@
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="0LN-xF-Kg6"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A7d-wM-Xmp">
+                <popUpButton toolTip="Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A7d-wM-Xmp">
                     <rect key="frame" x="103" y="127" width="130" height="22"/>
-                    <string key="toolTip">Tune settings to optimize for common scenarios.
-
-This can improve efficiency for particular source characteristics or set characteristics of the output file. Changes will be applied after the preset but before all other parameters.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dy8-w4-ycN">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -462,8 +469,7 @@ This can improve efficiency for particular source characteristics or set charact
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CPP-lh-FbN">
                     <rect key="frame" x="103" y="101" width="130" height="22"/>
-                    <string key="toolTip">Sets and ensures compliance with the specified profile.
-Overrides all other settings.</string>
+                    <string key="toolTip">Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="oOm-hC-AoS">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -480,8 +486,9 @@ Overrides all other settings.</string>
                         <binding destination="-2" name="content" keyPath="self.video.profiles" id="Njf-bs-Nub"/>
                     </connections>
                 </popUpButton>
-                <popUpButton toolTip="Sets and ensures compliance with the specified level. Overrides all other settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P7c-Zk-G99">
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P7c-Zk-G99">
                     <rect key="frame" x="103" y="75" width="130" height="22"/>
+                    <string key="toolTip">Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="PhX-Wa-Vhs">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -500,8 +507,7 @@ Overrides all other settings.</string>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="z7F-H2-Vfr">
                     <rect key="frame" x="248" y="129" width="88" height="18"/>
-                    <string key="toolTip">Reduce decoder CPU usage.
-Set this if your device is struggling to play the output (dropped frames).</string>
+                    <string key="toolTip">Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.</string>
                     <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5De-nU-l3h">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -529,6 +535,9 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="oJk-ur-wgc">
                     <rect key="frame" x="358" y="77" width="542" height="42"/>
+                    <string key="toolTip">Additional video encoder options. For advanced use only.
+
+Syntax: option-1=foo:opt2=bar,baz</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="42" id="V7i-4l-jh0"/>
                     </constraints>
@@ -558,8 +567,11 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
                     </connections>
                 </textField>
-                <button toolTip="Use Advanced Options tab for x264 settings. Use at your own risk!" translatesAutoresizingMaskIntoConstraints="NO" id="Zs7-1Y-50A">
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="Zs7-1Y-50A">
                     <rect key="frame" x="116" y="178" width="174" height="18"/>
+                    <string key="toolTip">Use the Advanced Options Panel for x264 settings.
+
+This setting is no longer supported and may be removed in a future version. Use at your own risk!</string>
                     <buttonCell key="cell" type="check" title="Use Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="sa6-r3-eVr">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -573,7 +585,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                         <binding destination="-2" name="value" keyPath="self.video.advancedOptions" id="sQg-ab-NdN"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="wk1-2U-z4i">
+                <textField toolTip="Displays all internal video encoder options." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="wk1-2U-z4i">
                     <rect key="frame" x="18" y="12" width="884" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="D6L-pe-byu"/>
@@ -603,10 +615,7 @@ Set this if your device is struggling to play the output (dropped frames).</stri
                 </box>
                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Biw-5K-pPD">
                     <rect key="frame" x="106" y="155" width="124" height="18"/>
-                    <string key="toolTip">Adjust encoder settings to trade off compression efficiency against encoding speed.
-
-This estabilishes your default encoder settings. Tunes, profiles, levels and advances option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</string>
+                    <string key="toolTip">Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.</string>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="124" id="oM4-tJ-0DZ"/>
                     </constraints>
@@ -668,6 +677,9 @@ You should generally set this option to the slowest you can bear since slower se
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="mL3-yC-hUj">
                     <rect key="frame" x="120" y="2" width="545" height="32"/>
+                    <string key="toolTip">Additional video encoder options. For advanced use only.
+
+Syntax: option-1=foo:opt2=bar</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="TBn-Xh-NDz"/>
                         <constraint firstAttribute="width" constant="545" id="yk5-Lp-IGe"/>

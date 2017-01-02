@@ -2,9 +2,14 @@ __deps__ := FREETYPE LIBXML2 LIBICONV
 $(eval $(call import.MODULE.defs,FONTCONFIG,fontconfig,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FONTCONFIG))
 
-FONTCONFIG.FETCH.url =  http://download.handbrake.fr/handbrake/contrib/fontconfig-2.12.1.tar.bz2
-FONTCONFIG.FETCH.url += https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.bz2
-FONTCONFIG.FETCH.md5 =  b5af5a423ee3b5cfc34846838963c058
+FONTCONFIG.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/fontconfig-2.12.1.tar.bz2
+FONTCONFIG.FETCH.url    += https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.1.tar.bz2
+FONTCONFIG.FETCH.sha256  = b449a3e10c47e1d1c7a6ec6e2016cca73d3bd68fbbd4f0ae5cc6b573f7d6c7f3
+
+ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+    FONTCONFIG.CONFIGURE.env += ac_cv_func_mkostemp="no"
+    FONTCONFIG.BUILD.env += ac_cv_func_mkostemp="no"
+endif
 
 #
 # Under MinGW:
@@ -89,7 +94,7 @@ FONTCONFIG.CONFIGURE.extra += \
     --with-fcpath=/usr/X11/lib/X11/fontconfig \
     --with-cache-dir=~/Library/Caches/fontconfig \
     --with-default-fonts=/Library/Fonts \
-    --with-add-fonts=/System/Library/Fonts,~/Library/Fonts
+    --with-add-fonts=/System/Library/Fonts,/Library/Fonts,~/Library/Fonts
 else ifeq (linux,$(BUILD.system))
 FONTCONFIG.CONFIGURE.extra += \
     --with-fcpath=/etc/fonts \

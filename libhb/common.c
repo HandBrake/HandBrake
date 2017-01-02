@@ -1,6 +1,6 @@
 /* common.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -2889,7 +2889,7 @@ hb_buffer_t* hb_buffer_list_rem_tail(hb_buffer_list_t *list)
     else if (list->tail != NULL)
     {
         hb_buffer_t *end = list->head;
-        while (end != NULL && end->next != list->tail)
+        while (end->next != list->tail)
         {
             end = end->next;
         }
@@ -3648,7 +3648,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
 
 #ifdef USE_QSV
     job->qsv.enc_info.is_init_done = 0;
-    job->qsv.async_depth           = AV_QSV_ASYNC_DEPTH_DEFAULT;
+    job->qsv.async_depth           = HB_QSV_ASYNC_DEPTH_DEFAULT;
     job->qsv.decode                = !!(title->video_decode_support &
                                         HB_DECODE_SUPPORT_QSV);
 #endif
@@ -4540,38 +4540,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 
     /* Really shouldn't ignore the passed out track, but there is currently no
      * way to handle duplicates or out-of-order track numbers. */
+    audio->config.out = audiocfg->out;
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
-    int codec = audiocfg->out.codec;
-    if(!(codec & HB_ACODEC_PASS_FLAG) ||
-       ((codec & HB_ACODEC_PASS_FLAG) &&
-        !(codec & audio->config.in.codec) &&
-        hb_audio_encoder_is_enabled(codec & ~HB_ACODEC_PASS_FLAG)))
-    {
-        audio->config.out.codec = codec & ~HB_ACODEC_PASS_FLAG;
-        audio->config.out.samplerate = audiocfg->out.samplerate;
-        audio->config.out.bitrate = audiocfg->out.bitrate;
-        audio->config.out.compression_level = audiocfg->out.compression_level;
-        audio->config.out.quality = audiocfg->out.quality;
-        audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
-        audio->config.out.mixdown = audiocfg->out.mixdown;
-        audio->config.out.gain = audiocfg->out.gain;
-        audio->config.out.normalize_mix_level = audiocfg->out.normalize_mix_level;
-        audio->config.out.dither_method = audiocfg->out.dither_method;
-    }
-    else
-    {
-        /* Pass-through, copy from input. */
-        audio->config.out.codec = codec;
-        audio->config.out.samplerate = audio->config.in.samplerate;
-        audio->config.out.bitrate = audio->config.in.bitrate;
-        audio->config.out.mixdown = HB_AMIXDOWN_NONE;
-        audio->config.out.dynamic_range_compression = 0;
-        audio->config.out.gain = 0;
-        audio->config.out.normalize_mix_level = 0;
-        audio->config.out.compression_level = -1;
-        audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
-        audio->config.out.dither_method = hb_audio_dither_get_default();
-    }
     if (audiocfg->out.name && *audiocfg->out.name)
     {
         audio->config.out.name = strdup(audiocfg->out.name);

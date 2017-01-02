@@ -25,6 +25,11 @@ namespace HandBrake.ApplicationServices.Model
         public bool DisableQuickSyncDecoding { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether use qsv decode for non qsv enc.
+        /// </summary>
+        public bool UseQSVDecodeForNonQSVEnc { get; set; }
+
+        /// <summary>
         /// Gets or sets the scaling mode.
         /// </summary>
         public VideoScaler ScalingMode { get; set; }

@@ -30,9 +30,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "libavcodec/qsv.h"
 #include "qsv_filter_pp.h"
 #include "qsv_filter.h"
+#include "qsv_libav.h"
 #include "qsv_memory.h"
 
 
@@ -78,29 +78,29 @@ hb_filter_object_t hb_filter_qsv_post =
 };
 
 
-static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
+static int filter_pre_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
     mfxStatus sts = MFX_ERR_NONE;
     int i=0;
 
     if(!qsv) return 3;
 
-    av_qsv_space *prev_vpp = 0;
+    hb_qsv_space *prev_vpp = 0;
 
     if(!qsv->vpp_space){
-        qsv->vpp_space = av_qsv_list_init(HAVE_THREADS);
+        qsv->vpp_space = hb_qsv_list_init(HAVE_THREADS);
         // note some change as : when no size changes -> no VPP used
         // impact on : prev_vpp
     }
 
     if(!pv->vpp_space){
-        for(i=0; i<av_qsv_list_count(qsv->vpp_space);i++){
-            av_qsv_space *qsv_vpp = av_qsv_list_item( qsv->vpp_space, i );
-            if(qsv_vpp->type == AV_QSV_VPP_USER){
+        for(i=0; i<hb_qsv_list_count(qsv->vpp_space);i++){
+            hb_qsv_space *qsv_vpp = hb_qsv_list_item( qsv->vpp_space, i );
+            if(qsv_vpp->type == HB_QSV_VPP_USER){
                 pv->vpp_space = qsv_vpp;
                 break;
             }
             else
-            if(qsv_vpp->type == AV_QSV_VPP_DEFAULT){
+            if(qsv_vpp->type == HB_QSV_VPP_DEFAULT){
                 prev_vpp = qsv_vpp;
             }
 
@@ -108,19 +108,19 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
     }
 
     if(!pv->vpp_space){
-        pv->vpp_space = calloc( 1, sizeof( av_qsv_space ));
-        pv->vpp_space->type = AV_QSV_VPP_USER;
-        av_qsv_list_add( qsv->vpp_space, pv->vpp_space );
-        av_qsv_add_context_usage(qsv,HAVE_THREADS);
+        pv->vpp_space = calloc( 1, sizeof( hb_qsv_space ));
+        pv->vpp_space->type = HB_QSV_VPP_USER;
+        hb_qsv_list_add( qsv->vpp_space, pv->vpp_space );
+        hb_qsv_add_context_usage(qsv,HAVE_THREADS);
     }
     else
         if(pv->vpp_space->is_init_done ) return 1;
 
     if(!qsv->dec_space || !qsv->dec_space->is_init_done) return 2;
 
-    av_qsv_space *qsv_vpp = pv->vpp_space;
+    hb_qsv_space *qsv_vpp = pv->vpp_space;
 
-    AV_QSV_ZERO_MEMORY(qsv_vpp->m_mfxVideoParam);
+    HB_QSV_ZERO_MEMORY(qsv_vpp->m_mfxVideoParam);
 
 
     if (prev_vpp)
@@ -129,7 +129,7 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
     }
     else
     {
-        AV_QSV_ZERO_MEMORY(qsv_vpp->m_mfxVideoParam);
+        HB_QSV_ZERO_MEMORY(qsv_vpp->m_mfxVideoParam);
 
         // FrameRate is important for VPP to start with
         if( qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtN == 0 &&
@@ -149,9 +149,9 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         qsv_vpp->m_mfxVideoParam.vpp.In.FrameRateExtD   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.In.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
-        qsv_vpp->m_mfxVideoParam.vpp.In.Width           = AV_QSV_ALIGN16(pv->job->title->geometry.width);
+        qsv_vpp->m_mfxVideoParam.vpp.In.Width           = HB_QSV_ALIGN16(pv->job->title->geometry.width);
         qsv_vpp->m_mfxVideoParam.vpp.In.Height          = (MFX_PICSTRUCT_PROGRESSIVE == qsv_vpp->m_mfxVideoParam.vpp.In.PicStruct)?
-                                                            AV_QSV_ALIGN16(pv->job->title->geometry.height) : AV_QSV_ALIGN32(pv->job->title->geometry.height);
+                                                            HB_QSV_ALIGN16(pv->job->title->geometry.height) : HB_QSV_ALIGN32(pv->job->title->geometry.height);
 
         qsv_vpp->m_mfxVideoParam.vpp.Out.FourCC          = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FourCC;
         qsv_vpp->m_mfxVideoParam.vpp.Out.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
@@ -164,36 +164,36 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
         qsv_vpp->m_mfxVideoParam.vpp.Out.FrameRateExtD   = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FrameRateExtD;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioW    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioW;
         qsv_vpp->m_mfxVideoParam.vpp.Out.AspectRatioH    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.AspectRatioH;
-        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = AV_QSV_ALIGN16(pv->job->title->geometry.width);
+        qsv_vpp->m_mfxVideoParam.vpp.Out.Width           = HB_QSV_ALIGN16(pv->job->title->geometry.width);
         qsv_vpp->m_mfxVideoParam.vpp.Out.Height          = (MFX_PICSTRUCT_PROGRESSIVE == qsv_vpp->m_mfxVideoParam.vpp.In.PicStruct)?
-                                                            AV_QSV_ALIGN16(pv->job->title->geometry.height) : AV_QSV_ALIGN32(pv->job->title->geometry.height);
+                                                            HB_QSV_ALIGN16(pv->job->title->geometry.height) : HB_QSV_ALIGN32(pv->job->title->geometry.height);
 
         memset(&qsv_vpp->request, 0, sizeof(mfxFrameAllocRequest)*2);
     }
 
     qsv_vpp->m_mfxVideoParam.IOPattern = MFX_IOPATTERN_IN_OPAQUE_MEMORY | MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
 
-    qsv_vpp->surface_num = FFMIN(prev_vpp ? prev_vpp->surface_num : qsv->dec_space->surface_num/2, AV_QSV_SURFACE_NUM);
+    qsv_vpp->surface_num = FFMIN(prev_vpp ? prev_vpp->surface_num : qsv->dec_space->surface_num/2, HB_QSV_SURFACE_NUM);
 
     for(i = 0; i < qsv_vpp->surface_num; i++){
         qsv_vpp->p_surfaces[i] = av_mallocz( sizeof(mfxFrameSurface1) );
-        AV_QSV_CHECK_POINTER(qsv_vpp->p_surfaces[i], MFX_ERR_MEMORY_ALLOC);
+        HB_QSV_CHECK_POINTER(qsv_vpp->p_surfaces[i], MFX_ERR_MEMORY_ALLOC);
         memcpy(&(qsv_vpp->p_surfaces[i]->Info), &(qsv_vpp->m_mfxVideoParam.vpp.Out), sizeof(mfxFrameInfo));
     }
 
-    qsv_vpp->sync_num = FFMIN(prev_vpp ? prev_vpp->sync_num : qsv->dec_space->sync_num, AV_QSV_SYNC_NUM);
+    qsv_vpp->sync_num = FFMIN(prev_vpp ? prev_vpp->sync_num : qsv->dec_space->sync_num, HB_QSV_SYNC_NUM);
     for (i = 0; i < qsv_vpp->sync_num; i++){
-        qsv_vpp->p_syncp[i] = av_mallocz(sizeof(av_qsv_sync));
-        AV_QSV_CHECK_POINTER(qsv_vpp->p_syncp[i], MFX_ERR_MEMORY_ALLOC);
+        qsv_vpp->p_syncp[i] = av_mallocz(sizeof(hb_qsv_sync));
+        HB_QSV_CHECK_POINTER(qsv_vpp->p_syncp[i], MFX_ERR_MEMORY_ALLOC);
         qsv_vpp->p_syncp[i]->p_sync = av_mallocz(sizeof(mfxSyncPoint));
-        AV_QSV_CHECK_POINTER(qsv_vpp->p_syncp[i]->p_sync, MFX_ERR_MEMORY_ALLOC);
+        HB_QSV_CHECK_POINTER(qsv_vpp->p_syncp[i]->p_sync, MFX_ERR_MEMORY_ALLOC);
     }
 
     memset(&qsv_vpp->ext_opaque_alloc, 0, sizeof(mfxExtOpaqueSurfaceAlloc));
     qsv_vpp->m_mfxVideoParam.NumExtParam        = qsv_vpp->p_ext_param_num = 1;
 
     qsv_vpp->p_ext_params = av_mallocz(sizeof(mfxExtBuffer *)*qsv_vpp->p_ext_param_num);
-    AV_QSV_CHECK_POINTER(qsv_vpp->p_ext_params, MFX_ERR_MEMORY_ALLOC);
+    HB_QSV_CHECK_POINTER(qsv_vpp->p_ext_params, MFX_ERR_MEMORY_ALLOC);
 
     qsv_vpp->m_mfxVideoParam.ExtParam           = qsv_vpp->p_ext_params;
 
@@ -231,7 +231,7 @@ static int filter_pre_init( av_qsv_context* qsv, hb_filter_private_t * pv ){
     hb_list_add(pv->qsv_user,plugin);
 
     sts=MFXVideoUSER_Register(qsv->mfx_session,0,&plugin->plug);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
     plugin_init(plugin,&qsv_vpp->m_mfxVideoParam);
 
@@ -297,26 +297,26 @@ static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,
         SWS_LANCZOS|SWS_ACCURATE_RND, SWS_CS_DEFAULT);
     return 0;
 }
-int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t * pv ){
+int pre_process_frame(hb_buffer_t *in, hb_qsv_context* qsv, hb_filter_private_t * pv ){
 
     // 1 if have results , 0 otherwise
     int ret = 1;
 
-    av_qsv_list* received_item = in->qsv_details.qsv_atom;
+    hb_qsv_list* received_item = in->qsv_details.qsv_atom;
 
     mfxStatus sts = MFX_ERR_NONE;
     mfxFrameSurface1 *work_surface = NULL;
-    av_qsv_stage* stage = 0;
+    hb_qsv_stage* stage = 0;
 
-    av_qsv_space *qsv_vpp = pv->vpp_space;
+    hb_qsv_space *qsv_vpp = pv->vpp_space;
 
     if (received_item)
     {
-        stage = av_qsv_get_last_stage( received_item );
+        stage = hb_qsv_get_last_stage( received_item );
         work_surface = stage->out.p_surface;
     }
 
-    int sync_idx = av_qsv_get_free_sync(qsv_vpp, qsv);
+    int sync_idx = hb_qsv_get_free_sync(qsv_vpp, qsv);
     int surface_idx = -1;
 
     for (;;)
@@ -329,24 +329,24 @@ int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t 
             }
 
             if (sts == MFX_ERR_MORE_SURFACE || sts == MFX_ERR_NONE)
-               surface_idx = av_qsv_get_free_surface(qsv_vpp, qsv,  &(qsv_vpp->m_mfxVideoParam.vpp.Out), QSV_PART_ANY);
+               surface_idx = hb_qsv_get_free_surface(qsv_vpp, qsv,  &(qsv_vpp->m_mfxVideoParam.vpp.Out), QSV_PART_ANY);
             if (surface_idx == -1) {
                 hb_error("qsv: Not enough resources allocated for the preprocessing filter");
                 ret = 0;
                 break;
             }
 
-            sts = MFXVideoUSER_ProcessFrameAsync(qsv->mfx_session, &work_surface, 1, &qsv_vpp->p_surfaces[surface_idx] , 1, qsv_vpp->p_syncp[sync_idx]->p_sync);
+            sts = MFXVideoUSER_ProcessFrameAsync(qsv->mfx_session, (void * const*)&work_surface, 1, (void * const*)&qsv_vpp->p_surfaces[surface_idx] , 1, qsv_vpp->p_syncp[sync_idx]->p_sync);
 
             if (MFX_ERR_MORE_DATA == sts)
             {
                 if (!qsv_vpp->pending)
                 {
-                    qsv_vpp->pending = av_qsv_list_init(0);
+                    qsv_vpp->pending = hb_qsv_list_init(0);
                 }
 
                 // if we have no results, we should not miss resource(s)
-                av_qsv_list_add( qsv_vpp->pending, received_item);
+                hb_qsv_list_add( qsv_vpp->pending, received_item);
 
                 ff_qsv_atomic_dec(&qsv_vpp->p_syncp[sync_idx]->in_use);
 
@@ -362,7 +362,7 @@ int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t 
                    ff_qsv_atomic_inc(&qsv_vpp->p_surfaces[surface_idx]->Data.Locked);
             }
 
-            AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+            HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
             if (MFX_ERR_NONE <= sts ) // repeat the call if warning and no output
             {
@@ -395,26 +395,26 @@ int pre_process_frame(hb_buffer_t *in, av_qsv_context* qsv, hb_filter_private_t 
 
                 // inserting for the future, will be locked until very ready
                 if(stage){
-                        av_qsv_stage* new_stage = av_qsv_stage_init();
+                        hb_qsv_stage* new_stage = hb_qsv_stage_init();
 
-                        new_stage->type = AV_QSV_VPP_USER;
+                        new_stage->type = HB_QSV_VPP_USER;
                         new_stage->in.p_surface  =  work_surface;
                         new_stage->out.p_surface = qsv_vpp->p_surfaces[surface_idx];
                         new_stage->out.sync = qsv_vpp->p_syncp[sync_idx];
-                        av_qsv_add_stagee( &received_item, new_stage,HAVE_THREADS );
+                        hb_qsv_add_stagee( &received_item, new_stage,HAVE_THREADS );
 
                         // add pending resources for the proper reclaim later
                         if( qsv_vpp->pending ){
-                            if( av_qsv_list_count(qsv_vpp->pending)>0 ){
+                            if( hb_qsv_list_count(qsv_vpp->pending)>0 ){
                                 new_stage->pending = qsv_vpp->pending;
                 }
                             qsv_vpp->pending = 0;
 
                             // making free via decrement for all pending
                             int i = 0;
-                            for (i = av_qsv_list_count(new_stage->pending); i > 0; i--){
-                                av_qsv_list *atom_list = av_qsv_list_item(new_stage->pending, i-1);
-                                av_qsv_stage *stage = av_qsv_get_last_stage( atom_list );
+                            for (i = hb_qsv_list_count(new_stage->pending); i > 0; i--){
+                                hb_qsv_list *atom_list = hb_qsv_list_item(new_stage->pending, i-1);
+                                hb_qsv_stage *stage = hb_qsv_get_last_stage( atom_list );
                                 mfxFrameSurface1 *work_surface = stage->out.p_surface;
                                 if (work_surface)
                                    ff_qsv_atomic_dec(&work_surface->Data.Locked);
@@ -444,7 +444,7 @@ static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
     hb_buffer_t * out = *buf_out;
     int sts = 0;
 
-    av_qsv_context* qsv = pv->job->qsv.ctx;
+    hb_qsv_context* qsv = pv->job->qsv.ctx;
 
     if(!in->qsv_details.filter_details)
         in->qsv_details.filter_details = pv;
@@ -459,7 +459,7 @@ static int hb_qsv_filter_pre_work( hb_filter_object_t * filter,
     while(1){
         int ret = filter_pre_init(qsv,pv);
         if(ret >= 2)
-            av_qsv_sleep(1);
+            hb_qsv_sleep(1);
         else
             break;
     }
@@ -499,12 +499,12 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
     sws_freeContext(pv->sws_context_to_nv12);
     sws_freeContext(pv->sws_context_from_nv12);
 
-    av_qsv_context* qsv = pv->job->qsv.ctx;
-    if(qsv && qsv->vpp_space && av_qsv_list_count(qsv->vpp_space) > 0 ){
+    hb_qsv_context* qsv = pv->job->qsv.ctx;
+    if(qsv && qsv->vpp_space && hb_qsv_list_count(qsv->vpp_space) > 0 ){
         if(pv->qsv_user && qsv->mfx_session){
 
             sts=MFXVideoUSER_Unregister(qsv->mfx_session,0);
-            AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+            HB_QSV_CHECK_RET(sts, MFX_ERR_NONE, sts);
 
             for(i=hb_list_count(pv->qsv_user);i>0;i--){
                 qsv_filter_t *plugin = hb_list_item(pv->qsv_user,i-1);
@@ -515,10 +515,10 @@ static void hb_qsv_filter_pre_close( hb_filter_object_t * filter ){
         }
 
         // closing local stuff
-        qsv_filter_close(qsv,AV_QSV_VPP_USER);
+        qsv_filter_close(qsv,HB_QSV_VPP_USER);
 
         // closing the commong stuff
-        av_qsv_context_clean(qsv);
+        hb_qsv_context_clean(qsv);
     }
     hb_cond_close(&pv->pre.frame_completed);
     hb_lock_close(&pv->pre.frame_completed_lock);
@@ -576,7 +576,7 @@ static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    av_qsv_context* qsv = pv->job->qsv.ctx;
+    hb_qsv_context* qsv = pv->job->qsv.ctx;
     pv = in->qsv_details.filter_details;
 
     if (!pv)
@@ -589,7 +589,7 @@ static int hb_qsv_filter_post_work( hb_filter_object_t * filter,
     while(1){
         int ret = filter_pre_init(qsv,pv);
         if(ret >= 2)
-            av_qsv_sleep(1);
+            hb_qsv_sleep(1);
         else
             break;
     }
@@ -680,10 +680,10 @@ mfxStatus MFX_CDECL qsv_Submit(mfxHDL pthis, const mfxHDL *in, mfxU32 in_num, co
     mfxFrameSurface1 *real_surface_out = surface_out;
 
     sts = plugin->core->GetRealSurface(plugin->core->pthis, surface_in, &real_surface_in);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, MFX_ERR_MEMORY_ALLOC);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, MFX_ERR_MEMORY_ALLOC);
 
     sts = plugin->core->GetRealSurface(plugin->core->pthis, surface_out, &real_surface_out);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, MFX_ERR_MEMORY_ALLOC);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, MFX_ERR_MEMORY_ALLOC);
 
     int task_idx = get_free_task(plugin->tasks);
 
@@ -713,10 +713,9 @@ mfxStatus MFX_CDECL qsv_Execute(mfxHDL pthis, mfxThreadTask task, mfxU32 uid_p, 
     mfxStatus sts = MFX_ERR_NONE;
 
     qsv_filter_task_t *current_task = (qsv_filter_task_t *)task;
-    qsv_filter_t *plugin = pthis;
 
     sts = (current_task->processor.process)(current_task,0);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
     sts =  MFX_TASK_DONE;
     return sts;
@@ -756,12 +755,12 @@ mfxStatus plugin_init(qsv_filter_t* plugin, mfxVideoParam *param){
 
     sts = plugin->core->MapOpaqueSurface(plugin->core->pthis, plugin_opaque_alloc->In.NumSurface,
             plugin_opaque_alloc->In.Type, plugin_opaque_alloc->In.Surfaces);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
 
     sts = plugin->core->MapOpaqueSurface(plugin->core->pthis, plugin_opaque_alloc->Out.NumSurface,
             plugin_opaque_alloc->Out.Type, plugin_opaque_alloc->Out.Surfaces);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
 
     plugin->tasks = hb_list_init();
@@ -794,12 +793,12 @@ mfxStatus plugin_close(qsv_filter_t* plugin){
 
     sts = plugin->core->UnmapOpaqueSurface(plugin->core->pthis, plugin_opaque_alloc->In.NumSurface,
             plugin_opaque_alloc->In.Type, plugin_opaque_alloc->In.Surfaces);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
 
     sts = plugin->core->UnmapOpaqueSurface(plugin->core->pthis, plugin_opaque_alloc->Out.NumSurface,
             plugin_opaque_alloc->Out.Type, plugin_opaque_alloc->Out.Surfaces);
-    AV_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+    HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
 
     if(plugin->tasks){
         for(i=hb_list_count(plugin->tasks);i>0;i--){

@@ -28,11 +28,9 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static string GetVersion()
         {
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
-
             IHandBrakeInstance instance = HandBrakeInstanceManager.GetScanInstance(1);
        
-            return IsNightly() ? string.Format("Nightly {0} ({1})", instance.Version, instance.Build) : string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+            return IsNightly() ? string.Format("Nightly {0} ({1})", instance.Version, instance.Build) : string.Format("{0} ({1})", instance.Version, instance.Build);
         }
 
         /// <summary>
@@ -43,10 +41,10 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static bool IsNightly()
         {
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            IHandBrakeInstance instance = HandBrakeInstanceManager.GetScanInstance(1);
 
-            // The MSBuild.xml script sets 0.0.0 for nightly builds.
-            return version.Major == 0 && version.Minor == 0 && version.Build == 0;
+            // 01 = Unofficial Builds.  00 = Official Tagged Releases.
+            return instance.Build.ToString().EndsWith("01");
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static string GetPlatformBitnessVersion()
         {
-            return System.Environment.Is64BitProcess ? "64bit Version" : "32bit Version";
+            return System.Environment.Is64BitProcess ? "64bit" : "32bit";
         }
 
         /// <summary>

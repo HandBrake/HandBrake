@@ -1015,7 +1015,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Advanced Encoder Options Tab.
+        ///   Looks up a localized string similar to Allow use of &apos;Advanced&apos; Tab for x264 options. (Deprecated).
         /// </summary>
         public static string Options_AdvancedTab {
             get {
@@ -1299,6 +1299,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_QsvDecode {
             get {
                 return ResourceManager.GetString("Options_QsvDecode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use QSV Decoding for non QSV encoders..
+        /// </summary>
+        public static string Options_QsvDecodeForNonFullPath {
+            get {
+                return ResourceManager.GetString("Options_QsvDecodeForNonFullPath", resourceCulture);
             }
         }
         

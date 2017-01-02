@@ -82,7 +82,7 @@ typedef struct hb_filter_private_s
     hb_qsv_sync_t       post;
     hb_qsv_sync_t       post_busy;
 
-    av_qsv_space        *vpp_space;
+    hb_qsv_space        *vpp_space;
     hb_list_t           *qsv_user;
 
     struct SwsContext* sws_context_to_nv12;

@@ -29,7 +29,7 @@ extern NSString *keySubTrackType;
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
-@property (nonatomic, readwrite, strong) NSString *name;
+@property (nonatomic, readwrite, copy) NSString *name;
 
 @property (nonatomic, readwrite) NSArray *audioTracks;
 @property (nonatomic, readwrite) NSArray *subtitlesTracks;
@@ -62,6 +62,13 @@ extern NSString *keySubTrackType;
     if (!_name)
     {
         _name = @(self.hb_title->name);
+
+        // Use the bundle name for eyetv
+        NSURL *parentURL = self.url.URLByDeletingLastPathComponent;
+        if ([parentURL.pathExtension caseInsensitiveCompare:@"eyetv"] == NSOrderedSame)
+        {
+            _name = parentURL.URLByDeletingPathExtension.lastPathComponent;
+        }
 
         // If the name is empty use file/directory name
         if (_name.length == 0)

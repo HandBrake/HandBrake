@@ -1,4 +1,0 @@
-@macro COMMAND-checkout{}
-git clone @value{HB-repo-url} @value{HB-acro-lower}-@value{HB-repo-branch}
-cd @value{HB-acro-lower}-@value{HB-repo-branch}
-@end macro

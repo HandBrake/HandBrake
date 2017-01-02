@@ -1,6 +1,6 @@
 /* qsv_common.c
  *
- * Copyright (c) 2003-2016 HandBrake Team
+ * Copyright (c) 2003-2017 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -196,7 +196,7 @@ static void init_video_param(mfxVideoParam *videoParam)
     videoParam->mfx.FrameInfo.Height        = 1088;
     videoParam->mfx.FrameInfo.CropH         = 1080;
     videoParam->mfx.FrameInfo.AspectRatioH  = 1;
-    videoParam->AsyncDepth                  = AV_QSV_ASYNC_DEPTH_DEFAULT;
+    videoParam->AsyncDepth                  = HB_QSV_ASYNC_DEPTH_DEFAULT;
     videoParam->IOPattern                   = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
 }
 
@@ -905,6 +905,12 @@ const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
         case AV_CODEC_ID_H264:
             return "h264_qsv";
 
+        case AV_CODEC_ID_HEVC:
+            return "hevc_qsv";
+
+        case AV_CODEC_ID_MPEG2VIDEO:
+            return "mpeg2_qsv";
+
         default:
             return NULL;
     }
@@ -912,8 +918,7 @@ const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 
 int hb_qsv_decode_is_enabled(hb_job_t *job)
 {
-    return ((job != NULL && job->qsv.decode)                        &&
-            (job->vcodec                      & HB_VCODEC_QSV_MASK) &&
+    return ((job != NULL && job->qsv.decode) &&
             (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
 }
 
@@ -1890,7 +1895,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.GopPicSize   = 0; // use Media SDK default
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
         // introduced in API 1.1
-        param->videoParam->AsyncDepth = AV_QSV_ASYNC_DEPTH_DEFAULT;
+        param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
         // introduced in API 1.3
         param->videoParam->mfx.BRCParamMultiplier = 0; // no multiplier
 

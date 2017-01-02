@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright (C) 2003-2016 The HandBrake Team
+        ///   Looks up a localized string similar to Copyright (C) 2003-2017 The HandBrake Team
         ///
         ///This program is free software; you can redistribute it and/or
         ///modify it under the terms of the GNU General Public License
@@ -594,6 +594,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Folder?.
+        /// </summary>
+        public static string DirectoryUtils_CreateFolder {
+            get {
+                return ResourceManager.GetString("DirectoryUtils_CreateFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder you are trying to write to does not exist. Would you like HandBrake to create the following folder?
+        ///{0}.
+        /// </summary>
+        public static string DirectoryUtils_CreateFolderMsg {
+            get {
+                return ResourceManager.GetString("DirectoryUtils_CreateFolderMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -648,7 +667,9 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warning: It is not currently possible to use this feature if you require specific subtitle or audio tracks that the automatic selection feature (see options) doesn&apos;t support! Tracks are reset with every new source / title selected..
+        ///   Looks up a localized string similar to Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
+        ///    
+        ///    Do you wish to continue?.
         /// </summary>
         public static string Main_AutoAdd_AudioAndSubWarning {
             get {
@@ -684,7 +705,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The entered destination contained illegal characters. You must fix the path and filename before continuing..
+        ///   Looks up a localized string similar to The entered destination path contained illegal characters and will not be updated..
         /// </summary>
         public static string Main_InvalidDestination {
             get {
@@ -693,7 +714,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Pending Jobs {7}.
+        ///   Looks up a localized string similar to    Pending Jobs {0}.
         /// </summary>
         public static string Main_JobsPending_addon {
             get {
@@ -729,11 +750,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have the appropriate folder permissions to write files into the directory you have chosen..
+        ///   Looks up a localized string similar to The output directory you have chosen either does not exist, or you do not have permissions to write files to it..
         /// </summary>
-        public static string Main_NoPermissionsOnDirectory {
+        public static string Main_NoPermissionsOrMissingDirectory {
             get {
-                return ResourceManager.GetString("Main_NoPermissionsOnDirectory", resourceCulture);
+                return ResourceManager.GetString("Main_NoPermissionsOrMissingDirectory", resourceCulture);
             }
         }
         
@@ -1071,11 +1092,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}.
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}.
         /// </summary>
         public static string MainViewModel_EncodeStatusChanged_StatusLabel {
             get {
                 return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4:d\:hh\:mm\:ss}.
+        /// </summary>
+        public static string MainViewModel_EncodeStatusChanged_SubScan_StatusLabel {
+            get {
+                return ResourceManager.GetString("MainViewModel_EncodeStatusChanged_SubScan_StatusLabel", resourceCulture);
             }
         }
         
@@ -1107,6 +1137,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to launch destination directory..
+        /// </summary>
+        public static string MainViewModel_UnableToLaunchDestDir {
+            get {
+                return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please check that you have a valid destination directory..
+        /// </summary>
+        public static string MainViewModel_UnableToLaunchDestDirSolution {
+            get {
+                return ResourceManager.GetString("MainViewModel_UnableToLaunchDestDirSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
         public static string Notice {
@@ -1119,7 +1167,7 @@ namespace HandBrakeWPF.Properties {
         ///   Looks up a localized string similar to The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
         ///
         ///Live Update Options: {source} {title} {chapters} 
-        ///Non-Live Options: {date} {time} {quality} {bitrate} {preset} (These only change if you scan a new source, change title or chapters).
+        ///Non-Live Options: {date} {time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
         /// </summary>
         public static string Options_AdditionalFormatOptions {
             get {
@@ -1212,7 +1260,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storage: {0}x{1}, Display: {2}x{3}.
+        ///   Looks up a localized string similar to Display Size: {0}x{1},  PAR {2}x{3}.
         /// </summary>
         public static string PictureSettingsViewModel_StorageDisplayLabel {
             get {

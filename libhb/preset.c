@@ -1,6 +1,6 @@
 /* preset.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1673,10 +1673,9 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     hb_title_t *title = hb_find_title_by_index(h, title_index);
     if (title == NULL)
         return -1;
-
-    int chapters;
-    chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
-    if (title != NULL && hb_list_count(title->list_chapter) <= 1)
+   
+    int chapters = hb_value_get_bool(hb_dict_get(preset, "ChapterMarkers"));
+    if (hb_list_count(title->list_chapter) <= 1)
         chapters = 0;
 
     // Set "Destination" settings in job
@@ -3702,7 +3701,7 @@ int hb_preset_move(const hb_preset_index_t *src_path,
     int         src_index, dst_index;
 
     src_index = src_path->index[src_path->depth-1];
-    dst_index = dst_path->index[src_path->depth-1];
+    dst_index = dst_path->index[dst_path->depth-1];
     dict      = hb_value_array_get(src_folder, src_index);
     hb_value_incref(dict);
     hb_value_array_remove(src_folder, src_index);

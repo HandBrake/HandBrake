@@ -147,3 +147,8 @@ Bradley Sepos (BradleyS)
 - NLMeans denoiser
 - Presets and device testing
 - Miscellaneous improvements and bug fixes
+
+Maxym Dm (maxim_d33)
+
+- Hardware acceleration / Intel QSV
+- Miscellaneous fixes and enhancements

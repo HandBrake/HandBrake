@@ -83,7 +83,7 @@ extern NSString *keySubTrackSrtFileURL;
         NSDictionary *none = @{  keySubTrackName: NSLocalizedString(@"None", nil)};
         [sourceTracks insertObject:none atIndex:0];
 
-        NSDictionary *foreign = @{ keySubTrackName: foreignAudioSearchTrackName,
+        NSDictionary *foreign = @{ keySubTrackName: [foreignAudioSearchTrackName copy],
                                    keySubTrackType: @(foreignAudioType) };
         [sourceTracks insertObject:foreign atIndex:1];
 
@@ -299,6 +299,7 @@ extern NSString *keySubTrackSrtFileURL;
 
         track.burnedIn = [search[@"Burn"] boolValue];
         track.forcedOnly = [search[@"Forced"] boolValue];
+        track.def = [search[@"Default"] boolValue];
 
         [tracks addObject:track];
     }
@@ -404,16 +405,18 @@ extern NSString *keySubTrackSrtFileURL;
     if (copy)
     {
         copy->_container = _container;
-        copy->_sourceTracks = [_sourceTracks mutableCopy];
+        copy->_sourceTracks = [_sourceTracks copy];
 
         copy->_tracks = [[NSMutableArray alloc] init];
-        [_tracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if (idx < _tracks.count)
-            {
-                id trackCopy = [obj copy];
-                [copy->_tracks addObject:trackCopy];
-            }
-        }];
+
+        for (HBSubtitlesTrack *track in _tracks)
+        {
+            HBSubtitlesTrack *trackCopy = [track copy];
+            [copy->_tracks addObject:trackCopy];
+
+            trackCopy.dataSource = copy;
+            trackCopy.delegate = copy;
+        }
 
         copy->_defaults = [_defaults copy];
     }
@@ -443,8 +446,8 @@ extern NSString *keySubTrackSrtFileURL;
     self = [super init];
 
     decodeInt(_container);
-    decodeObject(_sourceTracks, NSMutableArray);
-    decodeObject(_tracks, NSMutableArray);
+    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects(_tracks, NSMutableArray, HBSubtitlesTrack);
 
     for (HBSubtitlesTrack *track in _tracks)
     {

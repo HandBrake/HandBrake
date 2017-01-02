@@ -1,6 +1,6 @@
 /* scan.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -200,7 +200,7 @@ static void ScanFunc( void * _data )
         {
             hb_title_close( &title );
             hb_log( "scan: unrecognized file type" );
-            return;
+            goto finish;
         }
     }
 
@@ -571,6 +571,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_error("No video decoder set!");
         free(info_list);
         crop_record_free(crops);
+        hb_stream_close(&stream);
         return 0;
     }
     hb_work_object_t *vid_decoder = hb_get_work(data->h, title->video_codec);
@@ -582,6 +583,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         hb_error("Decoder init failed!");
         free(info_list);
         crop_record_free(crops);
+        free( vid_decoder );
+        hb_stream_close(&stream);
         return 0;
     }
 
@@ -595,6 +598,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         {
             free( info_list );
             crop_record_free( crops );
+            vid_decoder->close( vid_decoder );
+            free( vid_decoder );
+            hb_stream_close(&stream);
             return 0;
         }
         if (data->bd)

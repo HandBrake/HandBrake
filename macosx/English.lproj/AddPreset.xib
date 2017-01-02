@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16C32e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
@@ -23,7 +23,7 @@
         <window title="New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="dbZ-Wo-9nG" userLabel="AddPresetPanel">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <rect key="contentRect" x="421" y="536" width="480" height="229"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="AcO-9f-fnb">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="229"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -96,7 +96,7 @@ Gw
                     </button>
                     <textField horizontalHuggingPriority="249" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8kl-Sh-Gh7">
                         <rect key="frame" x="99" y="144" width="361" height="38"/>
-                        <string key="toolTip">Enter a description for the preset. The description will be shown when hovering the mouse over the preset name in the preset drawer.</string>
+                        <string key="toolTip">Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list.</string>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="2sm-hv-l5W"/>
                         </constraints>
@@ -109,7 +109,7 @@ Gw
                             <accessibilityConnection property="title" destination="zDq-QP-LAu" id="meT-EW-QiO"/>
                         </connections>
                     </textField>
-                    <button toolTip="The Audio Defaults of a preset control which audio track to use and with which encoder." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
+                    <button toolTip="Audio Defaults control which audio track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
                         <rect key="frame" x="94" y="68" width="102" height="28"/>
                         <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -119,7 +119,7 @@ Gw
                             <action selector="showAudioSettingsSheet:" target="-2" id="Rrt-QI-5hD"/>
                         </connections>
                     </button>
-                    <textField toolTip="Enter a name for the preset (will be displayed in the preset drawer)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
+                    <textField toolTip="Enter a name for the new preset. This name will be displayed in the presets list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
                         <rect key="frame" x="99" y="190" width="361" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
                             <font key="font" metaFont="smallSystem"/>
@@ -136,9 +136,8 @@ Gw
                             <rect key="frame" x="0.0" y="0.0" width="300" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
+                                <textField toolTip="Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
                                     <rect key="frame" x="5" y="4" width="52" height="19"/>
-                                    <string key="toolTip">Select the maximum width allowed by the preset (has no effect if the preset specifies Strict anamorphic). 0 means no limit is placed on the width.</string>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="T8n-Ik-Oc2"/>
                                     </constraints>
@@ -161,9 +160,8 @@ Gw
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
+                                <textField toolTip="Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
                                     <rect key="frame" x="86" y="4" width="52" height="19"/>
-                                    <string key="toolTip">Select the maximum height allowed by the preset (has no effect if the preset specifies Strict anamorphic).  0 means no limit is placed on the height.</string>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="4os-w4-V7L"/>
                                     </constraints>
@@ -184,7 +182,7 @@ Gw
                             </constraints>
                         </view>
                     </box>
-                    <button toolTip="The Subtitles Defaults of a preset control which subtitles track to use." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
+                    <button toolTip="Subtitles Defaults control which subtitles track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
                         <rect key="frame" x="94" y="40" width="102" height="28"/>
                         <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -196,9 +194,13 @@ Gw
                     </button>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z6B-ig-ouq">
                         <rect key="frame" x="96" y="99" width="34" height="22"/>
-                        <mutableString key="toolTip">Select which picture settings to use when loading a preset (resolution, anamorphic mode, cropping). 'None': do not alter the current picture settings (for a new source scan, same effect as 'Source maximum').
-'Custom': choose the maximum width and height allowed by the preset.
-'Source maximum': use the source dimensions.</mutableString>
+                        <string key="toolTip">Picture Size controls how video dimensions are applied when selecting the preset.
+
+None uses the currently set dimensions.
+
+Custom allows you to set a maximum width and/or height.
+
+Source maximum uses the full dimensions of each source.</string>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Mi7-V1-sSf">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>

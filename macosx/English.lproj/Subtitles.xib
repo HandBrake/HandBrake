@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSubtitlesController">
@@ -22,13 +22,13 @@
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="82" id="LnC-EY-WyR"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="push" title="Track" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
+                    <popUpButtonCell key="cell" type="push" title="Tracks" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="8ZD-D6-TLA">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="Fr7-eG-NuL">
                             <items>
-                                <menuItem title="Track" state="on" hidden="YES" id="TJO-RZ-jgb"/>
-                                <menuItem title="Add All" id="4PX-In-DpF">
+                                <menuItem title="Tracks" state="on" hidden="YES" id="TJO-RZ-jgb"/>
+                                <menuItem title="Add All Tracks" id="4PX-In-DpF">
                                     <connections>
                                         <action selector="addAll:" target="-2" id="tuS-uF-dje"/>
                                     </connections>
@@ -39,7 +39,7 @@
                                     </connections>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="2hO-bG-5qB"/>
-                                <menuItem title="Remove All" id="mVi-zH-KUq">
+                                <menuItem title="Remove All Tracks" id="mVi-zH-KUq">
                                     <connections>
                                         <action selector="removeAll:" target="-2" id="QsA-lb-0rD"/>
                                     </connections>
@@ -55,7 +55,7 @@
                         </binding>
                     </connections>
                 </popUpButton>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QsM-28-Pya">
+                <button toolTip="Configure subtitles track selection default settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QsM-28-Pya">
                     <rect key="frame" x="110" y="288" width="134" height="28"/>
                     <buttonCell key="cell" type="push" title="Configure Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -70,7 +70,7 @@
                         </binding>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxx-gk-9kY">
+                <button toolTip="Reload subtitles track selection using the configured defaults." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxx-gk-9kY">
                     <rect key="frame" x="242" y="288" width="109" height="28"/>
                     <buttonCell key="cell" type="push" title="Reload Defaults" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -87,6 +87,7 @@
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Syo-rH-vof">
                     <rect key="frame" x="20" y="20" width="886" height="264"/>
+                    <string key="toolTip">Subtitles tracks list. Default track selection and settings are loaded from the selected preset, and may be configured using the Configure Defaults dialog.</string>
                     <clipView key="contentView" id="ljc-nW-Cnc">
                         <rect key="frame" x="1" y="0.0" width="884" height="263"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -98,7 +99,7 @@
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
+                                    <tableColumn identifier="track" editable="NO" width="320" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -116,10 +117,10 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="EZp-rc-7mo">
-                                                <rect key="frame" x="1" y="1" width="322" height="25"/>
+                                                <rect key="frame" x="1" y="1" width="320" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-cP-TGw">
+                                                    <popUpButton toolTip="Subtitles language and type." verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-cP-TGw">
                                                         <rect key="frame" x="0.0" y="1" width="322" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="JWk-Ab-hdY">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -159,10 +160,10 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="zKg-by-KFV">
-                                                <rect key="frame" x="326" y="1" width="76" height="25"/>
+                                                <rect key="frame" x="324" y="1" width="76" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
+                                                    <button toolTip="Forced Only. Use only subtitles marked as “forced” in the selected source track." translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
                                                         <rect key="frame" x="26" y="3" width="23" height="20"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPR-9q-XBK">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -196,10 +197,10 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="gxH-yz-YRK">
-                                                <rect key="frame" x="405" y="1" width="64" height="25"/>
+                                                <rect key="frame" x="403" y="1" width="64" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
+                                                    <button toolTip="Burned In. Make the selected subtitles permanent by overlaying them onto the video track." translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
                                                         <rect key="frame" x="20" y="3" width="23" height="20"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s2E-1o-mGs">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -237,10 +238,10 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="mQ6-s6-Zm2">
-                                                <rect key="frame" x="472" y="1" width="51" height="25"/>
+                                                <rect key="frame" x="470" y="1" width="51" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="mdO-Qu-3Pb">
+                                                    <button toolTip="Default flag. Mark the selected subtitles track as the default to be displayed on playback." translatesAutoresizingMaskIntoConstraints="NO" id="mdO-Qu-3Pb">
                                                         <rect key="frame" x="14" y="4" width="22" height="18"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="kwl-qH-Dgo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -261,7 +262,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                     <tableColumn identifier="srt_lang" width="173" minWidth="10" maxWidth="3.4028229999999999e+38" id="9ka-9O-WDj">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Language">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Language">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -278,10 +279,10 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="4bh-my-GeM">
-                                                <rect key="frame" x="526" y="1" width="173" height="25"/>
+                                                <rect key="frame" x="524" y="1" width="173" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
+                                                    <popUpButton toolTip="SRT Language. Language of the selected SRT format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
                                                         <rect key="frame" x="0.0" y="0.0" width="173" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="zIn-sc-xak">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -294,7 +295,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <accessibility description="Srt file language"/>
+                                                        <accessibility description="SRT Language"/>
                                                         <connections>
                                                             <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isSrt" id="p69-lt-dgE"/>
                                                             <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
@@ -315,7 +316,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                     <tableColumn identifier="srt_charcode" width="113" minWidth="10" maxWidth="3.4028229999999999e+38" id="1Qg-We-ltR">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Char Code">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Encoding">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -328,10 +329,10 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="ZBK-cc-m0z">
-                                                <rect key="frame" x="702" y="1" width="113" height="25"/>
+                                                <rect key="frame" x="700" y="1" width="113" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
+                                                    <popUpButton toolTip="SRT Encoding. Character encoding/codeset of the selected SRT format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
                                                         <rect key="frame" x="0.0" y="0.0" width="113" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jFr-2c-3Vv">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -344,7 +345,7 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <accessibility description="Srt file char code"/>
+                                                        <accessibility description="SRT Character Encoding"/>
                                                         <connections>
                                                             <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
                                                             <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
@@ -360,8 +361,8 @@
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
-                                    <tableColumn identifier="srt_offset" width="64" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Srt Offset">
+                                    <tableColumn identifier="srt_offset" width="66" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Offset">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -374,18 +375,19 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="9tV-iL-oaF">
-                                                <rect key="frame" x="818" y="1" width="64" height="17"/>
+                                                <rect key="frame" x="816" y="1" width="66" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
-                                                        <rect key="frame" x="0.0" y="-3" width="64" height="14"/>
+                                                        <rect key="frame" x="0.0" y="-3" width="66" height="14"/>
+                                                        <string key="toolTip">SRT Offset. Positive or negative offset in milliseconds (ms) for the selected SRT format source track. Not applicable to other formats.</string>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="hhH-c3-gD0">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Jui-oB-oVO"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <accessibility description="Srt offset"/>
+                                                        <accessibility description="SRT Offset"/>
                                                         <connections>
                                                             <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isSrt" id="noe-Kh-7pa"/>
                                                             <binding destination="9tV-iL-oaF" name="value" keyPath="objectValue.offset" id="NlM-1C-Udf">
@@ -455,7 +457,7 @@
         </arrayController>
         <menu id="KgC-dn-Hq2">
             <items>
-                <menuItem title="Add All" id="S2I-Jd-Lyg">
+                <menuItem title="Add All Tracks" id="S2I-Jd-Lyg">
                     <attributedString key="attributedTitle"/>
                     <connections>
                         <action selector="addAll:" target="-2" id="ojh-vi-2gX"/>
@@ -467,20 +469,20 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="Pr7-iM-rgd"/>
-                <menuItem title="Remove All" id="R8a-qg-ASg">
+                <menuItem title="Remove All Tracks" id="R8a-qg-ASg">
                     <connections>
                         <action selector="removeAll:" target="-2" id="8yF-Gu-7bi"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="eER-z8-aB9"/>
-                <menuItem title="Reload Defaults" id="jcM-HL-QJ6">
-                    <connections>
-                        <action selector="addTracksFromDefaults:" target="-2" id="IQq-bX-u1t"/>
-                    </connections>
-                </menuItem>
                 <menuItem title="Configure Defaults…" id="pwm-PV-1x4">
                     <connections>
                         <action selector="showSettingsSheet:" target="-2" id="aQq-Fi-0Ro"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Reload Defaults" id="jcM-HL-QJ6">
+                    <connections>
+                        <action selector="addTracksFromDefaults:" target="-2" id="IQq-bX-u1t"/>
                     </connections>
                 </menuItem>
             </items>

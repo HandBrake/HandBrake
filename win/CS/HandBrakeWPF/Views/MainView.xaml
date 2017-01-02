@@ -131,7 +131,7 @@
                 </MenuItem>
 
                 <MenuItem Header="_Help">
-                    <MenuItem Header="_HandBrake User Guide (HTTP)" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
+                    <MenuItem Header="_HandBrake Documentation (HTTP)" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
@@ -295,7 +295,7 @@
         </StackPanel>
 
         <!--  Main Body  -->
-        <Grid Grid.Row="1"  IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="725"/>
                 <ColumnDefinition Width="Auto" />
@@ -307,7 +307,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Main Controls  -->
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
                 <!--  Source  -->
                 <StackPanel Margin="10,5,5,5"
                             HorizontalAlignment="Stretch"
@@ -333,7 +333,7 @@
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding Angles}"
                                   SelectedItem="{Binding SelectedAngle}"
-                                  />
+                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" /> 
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="8,0,0,0"
@@ -373,15 +373,15 @@
                                                        ConverterParameter=false}"
                                                 />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" />
-                        <Label Margin="4,0,0,0" Content="{Binding Duration}" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
 
             <!--  Destination  -->
-            <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="1" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -410,13 +410,14 @@
                             Grid.Column="2"
                             Margin="8,0,0,0" FontWeight="Bold"
                             Content="Browse"
+                            ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Browse}"
                             cal:Message.Attach="[Event Click] = [Action BrowseDestination]"
                             />
                 </Grid>
             </StackPanel>
 
             <!--  Output Options  -->
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -455,7 +456,7 @@
             </StackPanel>
 
             <!--  Tab Control  -->
-            <TabControl Name="tabControl"
+            <TabControl Name="tabControl" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Grid.Row="3"
                         Margin="10,10,10,6"
                         HorizontalAlignment="Stretch"
@@ -470,7 +471,7 @@
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="{x:Static Properties:ResourcesUI.MainView_VideoTab}">
-                    <ContentControl x:Name="VideoViewModel" />
+                    <ContentControl x:Name="VideoViewModel" VerticalAlignment="Stretch" />
                 </TabItem>
                 <TabItem Name="audioTab" Header="{x:Static Properties:ResourcesUI.MainView_AudioTab}">
                     <ContentControl x:Name="AudioViewModel" />
@@ -481,7 +482,7 @@
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:ResourcesUI.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
+                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding CurrentTask.ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
@@ -504,6 +505,7 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,5,5"
+                      IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
                 <Grid>
@@ -512,7 +514,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <ListBox HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List"
+                    <ListBox HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
                              VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
                              BorderBrush="LightGray"
@@ -610,7 +612,7 @@
                         </ToolBar.Resources>
 
                         <ToolBarOverflowPanel>
-                            <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset">
+                            <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
@@ -626,7 +628,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset">
+                            <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_RemovePreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
@@ -643,7 +645,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown" MinHeight="22">
+                            <Menu Background="Transparent" AutomationProperties.Name="Preset Options Dropdown" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetAdditionalOptions}">
                                 <MenuItem ToolBar.OverflowMode="Never">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">

@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * subtitlehandler.c
- * Copyright (C) John Stebbins 2008-2016 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2017 <stebbins@stebbins>
  *
  * subtitlehandler.c is free software.
  *
@@ -860,6 +860,14 @@ srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
             subtitle_list_refresh_selected(ud, subsettings);
             ghb_live_reset(ud);
         }
+        else
+        {
+            ghb_value_free(&val);
+        }
+    }
+    else
+    {
+        ghb_value_free(&val);
     }
 }
 

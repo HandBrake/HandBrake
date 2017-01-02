@@ -34,11 +34,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrameSurface1* src, mfxCoreInterface *core){
     int ret = 0;
-    int i,j;
 
     int in_pitch        = src->Data.Pitch;
-    int w               = AV_QSV_ALIGN16(src->Info.Width);
-    int h               = (MFX_PICSTRUCT_PROGRESSIVE == src->Info.PicStruct) ? AV_QSV_ALIGN16(src->Info.Height) : AV_QSV_ALIGN32(src->Info.Height);
+    int w               = HB_QSV_ALIGN16(src->Info.Width);
+    int h               = (MFX_PICSTRUCT_PROGRESSIVE == src->Info.PicStruct) ? HB_QSV_ALIGN16(src->Info.Height) : HB_QSV_ALIGN32(src->Info.Height);
     uint8_t *in_luma    = 0;
     uint8_t *in_chroma  = 0;
     static int copyframe_in_use = 1;
@@ -89,7 +88,8 @@ int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrame
     uint8_t *dsts[]   = { dst->plane[0].data, dst->plane[1].data, dst->plane[2].data };
     int dsts_stride[] = { dst->plane[0].stride, dst->plane[1].stride, dst->plane[2].stride };
 
-    ret = sws_scale(sws_context, srcs, srcs_stride, 0, h, dsts, dsts_stride );
+    ret = sws_scale(sws_context, (const uint8_t* const *)srcs, srcs_stride,
+                    0, h, dsts, dsts_stride );
 
     if (copyframe_in_use)
     {
@@ -103,7 +103,6 @@ int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrame
 int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_buffer_t* src){
     int ret = 0;
 
-    int w = src->plane[0].width;
     int h = src->plane[0].height;
 
     int out_pitch       = dst->Data.Pitch;
@@ -116,7 +115,8 @@ int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_
     uint8_t *dsts[]     = { out_luma, out_chroma };
     int dsts_stride[]   = { out_pitch, out_pitch };
 
-    ret = sws_scale(sws_context, srcs, srcs_stride, 0, h, dsts, dsts_stride );
+    ret = sws_scale(sws_context, (const uint8_t* const *)srcs, srcs_stride,
+                    0, h, dsts, dsts_stride );
 
     return ret;
 }

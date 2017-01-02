@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A278b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBOutputPanelController">
@@ -28,42 +28,34 @@
                         <rect key="frame" x="-1" y="-1" width="380" height="441"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="mnc-sf-Cwe">
-                            <rect key="frame" x="1" y="1" width="378" height="439"/>
+                            <rect key="frame" x="1" y="1" width="363" height="439"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="bar" incrementalSearchingEnabled="YES" verticallyResizable="YES" id="20">
+                                <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="bar" incrementalSearchingEnabled="YES" id="20">
                                     <rect key="frame" x="0.0" y="0.0" width="378" height="439"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="378" height="439"/>
+                                    <size key="minSize" width="363" height="439"/>
                                     <size key="maxSize" width="743" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="378" height="439"/>
-                                    <size key="maxSize" width="743" height="10000000"/>
                                     <connections>
                                         <outlet property="delegate" destination="-2" id="21"/>
                                         <outlet property="menu" destination="11" id="22"/>
                                     </connections>
                                 </textView>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
-                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="40">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="39">
-                            <rect key="frame" x="363" y="1" width="16" height="439"/>
+                            <rect key="frame" x="364" y="1" width="15" height="439"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                     </scrollView>
                 </subviews>
-                <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="17"/>
@@ -85,12 +77,12 @@
                 <menuItem isSeparatorItem="YES" id="37">
                     <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                 </menuItem>
-                <menuItem title="Open Log File For This Session" id="33">
+                <menuItem title="Open Activity Log For This Session In Default Application" id="33">
                     <connections>
                         <action selector="openActivityLogFile:" target="-2" id="34"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Clear Log File For This Session" id="35">
+                <menuItem title="Clear Activity Log For This Session" id="35">
                     <connections>
                         <action selector="clearActivityLogFile:" target="-2" id="36"/>
                     </connections>
@@ -98,7 +90,7 @@
                 <menuItem isSeparatorItem="YES" id="42">
                     <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                 </menuItem>
-                <menuItem title="Open Individual Log File Directory" id="43">
+                <menuItem title="Open Activity Logs Directory In Finder" id="43">
                     <connections>
                         <action selector="openEncodeLogDirectory:" target="-2" id="44"/>
                     </connections>

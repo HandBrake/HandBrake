@@ -1,6 +1,6 @@
 /* work.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -501,15 +501,17 @@ void hb_display_job_info(hb_job_t *job)
             }
         }
 
-        if (job->color_matrix_code && (job->vcodec == HB_VCODEC_X264_MASK))
+        if (job->color_matrix_code &&
+            ((job->vcodec & HB_VCODEC_X264_MASK) ||
+             (job->vcodec & HB_VCODEC_X265_MASK)))
         {
             // color matrix is set:
-            // 1) at the stream    level (x264  only),
-            // 2) at the container level (mp4v2 only)
+            // 1) at the stream    level (x264, x265, qsv  only),
             hb_log("     + custom color matrix: %s",
                    job->color_matrix_code == 1 ? "ITU Bt.601 (NTSC)" :
                    job->color_matrix_code == 2 ? "ITU Bt.601 (PAL)"  :
-                   job->color_matrix_code == 3 ? "ITU Bt.709 (HD)"   : "Custom");
+                   job->color_matrix_code == 3 ? "ITU Bt.709 (HD)"   :
+                   job->color_matrix_code == 4 ? "ITU Bt.2020 (UHD)"   : "Custom");
         }
     }
 
@@ -1125,6 +1127,7 @@ static int sanitize_audio(hb_job_t *job)
 static int sanitize_qsv( hb_job_t * job )
 {
 #ifdef USE_QSV
+#if 0 // TODO: re-implement QSV VPP filtering and QSV zerocopy path
     int i;
 
     /*
@@ -1178,10 +1181,10 @@ static int sanitize_qsv( hb_job_t * job )
     }
 
     /*
-     * When QSV is used for decoding, not all CPU-based filters are supported,
-     * so we need to do a little extra setup here.
+     * When QSV's VPP is used for filtering, not all CPU filters
+     * are supported, so we need to do a little extra setup here.
      */
-    if (hb_qsv_decode_is_enabled(job))
+    if (job->vcodec & HB_VCODEC_QSV_MASK)
     {
         int vpp_settings[7];
         int num_cpu_filters = 0;
@@ -1292,7 +1295,8 @@ static int sanitize_qsv( hb_job_t * job )
             }
         }
     }
-#endif
+#endif // QSV VPP filtering and QSV zerocopy path
+#endif // USE_QSV
 
     return 0;
 }
@@ -1482,7 +1486,8 @@ static void do_job(hb_job_t *job)
                job->vrate.num,  job->vrate.den);
 
 #ifdef USE_QSV
-    if (hb_qsv_decode_is_enabled(job))
+#if 0 // TODO: re-implement QSV zerocopy path
+    if (hb_qsv_decode_is_enabled(job) && (job->vcodec & HB_VCODEC_QSV_MASK))
     {
         job->fifo_mpeg2  = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
         job->fifo_raw    = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
@@ -1495,6 +1500,7 @@ static void do_job(hb_job_t *job)
         }
     }
     else
+#endif // QSV zerocopy path
 #endif
     {
         job->fifo_mpeg2  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
@@ -1730,6 +1736,9 @@ static void do_job(hb_job_t *job)
     }
 
     // Wait for the thread of the last work object to complete
+    // Note that other threads may still be running even though the
+    // last thread has exited. So we must be careful with the sequence
+    // of closing threads below.
     w = hb_list_item(job->list_work, hb_list_count(job->list_work) - 1);
     w->die = job->die;
     hb_thread_close(&w->thread);
@@ -1758,14 +1767,20 @@ cleanup:
         }
     }
 
-    /* Close work objects */
-    while ((w = hb_list_item(job->list_work, 0)))
+    // Close work objects
+    // A work thread can use data created by another work thread's init.
+    // So close all work threads before closing thread data.
+    for (i = 0; i < hb_list_count(job->list_work); i++)
     {
-        hb_list_rem(job->list_work, w);
+        w = hb_list_item(job->list_work, i);
         if (w->thread != NULL)
         {
             hb_thread_close(&w->thread);
         }
+    }
+    while ((w = hb_list_item(job->list_work, 0)))
+    {
+        hb_list_rem(job->list_work, w);
         w->close(w);
         free(w);
     }
@@ -1826,7 +1841,7 @@ static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
     // worker that delays frames has to propagate the chapter marks itself
     // and workers that move chapter marks to a different time should set
     // 'src' to NULL so that this code won't generate spurious duplicates.)
-    if( src && dst && src->s.start == dst->s.start)
+    if( src && dst && src->s.start == dst->s.start && src->s.new_chap != 0)
     {
         // restore log below to debug chapter mark propagation problems
         dst->s.new_chap = src->s.new_chap;

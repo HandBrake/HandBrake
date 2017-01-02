@@ -83,21 +83,22 @@ static void hb_error_handler(const char *errmsg)
 
 - (instancetype)init
 {
-    return [self initWithLogLevel:0];
+    return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];
 }
 
-- (instancetype)initWithLogLevel:(int)level
+- (instancetype)initWithLogLevel:(int)level queue:(dispatch_queue_t)queue
 {
     self = [super init];
     if (self)
     {
         _name = @"HBCore";
         _state = HBStateIdle;
-        _updateTimerQueue = dispatch_queue_create("fr.handbrake.coreQueue", DISPATCH_QUEUE_SERIAL);
+        _updateTimerQueue = queue;
         _titles = @[];
 
         _stateFormatter = [[HBStateFormatter alloc] init];
-        _hb_state = malloc(sizeof(struct hb_state_s));
+        _hb_state = malloc(sizeof(hb_state_t));
+        bzero(_hb_state, sizeof(hb_state_t));
         _logLevel = level;
 
         _hb_handle = hb_init(level);
@@ -112,7 +113,7 @@ static void hb_error_handler(const char *errmsg)
 
 - (instancetype)initWithLogLevel:(int)level name:(NSString *)name
 {
-    self = [self initWithLogLevel:level];
+    self = [self initWithLogLevel:level queue:dispatch_get_main_queue()];
     if (self)
     {
         _name = [name copy];
@@ -126,8 +127,6 @@ static void hb_error_handler(const char *errmsg)
 - (void)dealloc
 {
     [self stopUpdateTimer];
-
-    dispatch_release(_updateTimerQueue);
 
     hb_close(&_hb_handle);
     _hb_handle = NULL;
@@ -204,13 +203,10 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
-    // Start the timer to handle libhb state changes
-    [self startUpdateTimerWithInterval:0.2];
-
     NSString *path = url.path;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
 
-    if (detector.isVideoDVD || detector.isVideoBluRay)
+    if (detector.isVideoDVD)
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
@@ -238,6 +234,9 @@ static void hb_error_handler(const char *errmsg)
     hb_scan(_hb_handle, path.fileSystemRepresentation,
             (int)index, (int)previewsNum,
             1, min_title_duration_ticks);
+
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimerWithInterval:0.2];
 
     // Set the state, so the UI can be update
     // to reflect the current state instead of
@@ -350,6 +349,14 @@ static void hb_error_handler(const char *errmsg)
                                       0.1916769, 0.0865638, 0.9583847};
             return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
         }
+        case HB_COLR_PRI_BT2020:
+        {
+            // Rec. 2020
+            const CGFloat matrix[] = {0.6369580, 0.2627002, 0.0000000,
+                                      0.1446169, 0.6779981, 0.0280727,
+                                      0.1688810, 0.0593017, 1.0609851};
+            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
+        }
         case HB_COLR_PRI_BT709:
         default:
         {
@@ -454,9 +461,6 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
-    // Start the timer to handle libhb state changes
-    [self startUpdateTimerWithInterval:0.5];
-
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
     hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
@@ -468,12 +472,16 @@ static void hb_error_handler(const char *errmsg)
     hb_system_sleep_prevent(_hb_handle);
     hb_start(_hb_handle);
 
+    // Start the timer to handle libhb state changes
+    [self startUpdateTimerWithInterval:0.5];
+
     // Set the state, so the UI can be update
     // to reflect the current state instead of
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
 
     [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
+    [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];
 }
 
 - (HBCoreResult)workDone
@@ -537,7 +545,7 @@ static void hb_error_handler(const char *errmsg)
 {
     if (!self.updateTimer)
     {
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _updateTimerQueue);
         if (timer)
         {
             dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), (uint64_t)(seconds * NSEC_PER_SEC), (uint64_t)(seconds * NSEC_PER_SEC / 10));

@@ -46,6 +46,8 @@ namespace HandBrakeWPF.Model.Subtitles
             this.SelectedBehaviour = behaviours.selectedBehaviour;
             this.SelectedBurnInBehaviour = behaviours.selectedBurnInBehaviour;
             this.SelectedLangauges = new BindingList<string>(behaviours.SelectedLangauges.ToList());
+            this.AddClosedCaptions = behaviours.AddClosedCaptions;
+            this.AddForeignAudioScanTrack = behaviours.AddForeignAudioScanTrack;
         }
 
         /// <summary>

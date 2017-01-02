@@ -425,8 +425,8 @@ msgid "About HandBrake"
 msgstr "Info su HandBrake"
 
 msgid ""
-"Copyright © 2008 - 2016 John Stebbins\n"
-"Copyright © 2004 - 2016, HandBrake Devs"
+"Copyright © 2008 - 2017 John Stebbins\n"
+"Copyright © 2004 - 2017, HandBrake Devs"
 msgstr ""
 
 msgid ""

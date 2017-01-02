@@ -26,11 +26,11 @@
 
   <!-- Dependencies -->
   <PropertyGroup>
-    <NightlyDependsOn>NightlyPreBuild;BuildRelease;NightlyPostBuild</NightlyDependsOn>
+    <NightlyDependsOn>BuildRelease;NightlyPostBuild</NightlyDependsOn>
   </PropertyGroup>
 
   <PropertyGroup>
-    <InstallDependsOn>PreBuild;BuildRelease;ReleasePostBuild</InstallDependsOn>
+    <InstallDependsOn>BuildRelease;ReleasePostBuild</InstallDependsOn>
   </PropertyGroup>
 
   <!-- Builds /t: -->
@@ -45,21 +45,6 @@
       <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
-
-  <!-- Pre Build Events. You must do a full checkout as it takes the svn from the main directory.  $(MSBuildProjectDirectory)\. is not used. -->
-    <Target Name="NightlyPreBuild">
-    <!--<Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Properties\AssemblyInfo.cs.Nightly.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Properties\AssemblyInfo.cs" />
-    <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
-    <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
-    <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrake.ApplicationServices\Properties\AssemblyInfo.cs.Nightly.tmpl $(MSBuildProjectDirectory)\HandBrake.ApplicationServices\Properties\AssemblyInfo.cs" />-->
-    </Target>
-
-    <Target Name="PreBuild">
-      <!-- <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Properties\AssemblyInfo.cs.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Properties\AssemblyInfo.cs" />
-      <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
-      <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(MSBuildProjectDirectory)\HandBrakeWPF\Installer\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
-      <Exec Command="subwcrev.exe ../../ $(MSBuildProjectDirectory)\HandBrake.ApplicationServices\Properties\AssemblyInfo.cs.tmpl $(MSBuildProjectDirectory)\HandBrake.ApplicationServices\Properties\AssemblyInfo.cs" />-->
-    </Target>
 
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuild">

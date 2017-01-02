@@ -57,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
                              bitrate:(int)bitrate
                           videoCodec:(uint32_t)codec;
 
++ (NSString *)isoCodeForNativeLang:(NSString *)language;
 + (NSString *)iso6392CodeFor:(NSString *)language;
 + (NSString *)languageCodeForIso6392Code:(NSString *)language;
 

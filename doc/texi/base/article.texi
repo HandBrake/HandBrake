@@ -1,6 +1,0 @@
-@ifhtml
-@exampleindent 0
-@end ifhtml
-
-@include base/handbrake.texi
-@include base/glossary.texi

@@ -154,12 +154,20 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         newPreset.name = self.name.stringValue;
         newPreset.presetDescription = self.desc.stringValue;
 
-        // Get the picture size
-        newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
-        newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
+        if (self.picSettingsPopUp.selectedTag == HBAddPresetControllerModeSourceMaximum)
+        {
+            newPreset[@"PictureWidth"] = @0;
+            newPreset[@"PictureHeight"] = @0;
+        }
+        else
+        {
+            // Get the user set picture size
+            newPreset[@"PictureWidth"] = @(self.picWidth.integerValue);
+            newPreset[@"PictureHeight"] = @(self.picHeight.integerValue);
+        }
 
         //Get the whether or not to apply pic Size and Cropping (includes Anamorphic)
-        newPreset[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedItem.tag);
+        newPreset[@"UsesPictureSettings"] = @(self.picSettingsPopUp.selectedTag);
 
         // Always use Picture Filter settings for the preset
         newPreset[@"UsesPictureFilters"] = @YES;

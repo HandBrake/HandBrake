@@ -16,6 +16,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     using HandBrake.ApplicationServices.Services.Logging.EventArgs;
@@ -64,7 +65,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
             {
                 lock (this.lockObject)
                 {
-                    return this.logMessages;
+                    return this.logMessages.ToList();
                 }
             }
         }

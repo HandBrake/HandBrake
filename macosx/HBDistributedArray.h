@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, HBDistributedArrayContent) {
  */
 @interface HBDistributedArray<ObjectType> : NSMutableArray
 
-- (instancetype)initWithURL:(NSURL *)fileURL;
+- (instancetype)initWithURL:(NSURL *)fileURL class:(Class)objectClass;
 
 /**
  *  Begins a transaction on the array

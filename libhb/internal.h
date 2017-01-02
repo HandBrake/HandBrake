@@ -1,6 +1,6 @@
 /* internal.h
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -10,7 +10,7 @@
 #include "hbffmpeg.h"
 #include "extras/cl.h"
 #ifdef USE_QSV
-#include "libavcodec/qsv.h"
+#include "qsv_libav.h"
 #endif
 
 /***********************************************************************
@@ -142,7 +142,7 @@ struct hb_buffer_s
     {
         void           * qsv_atom;
         void           * filter_details;
-        av_qsv_context * ctx;
+        hb_qsv_context * ctx;
     } qsv_details;
 #endif
 

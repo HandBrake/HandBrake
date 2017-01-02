@@ -1,6 +1,6 @@
 /* encavcodec.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -16,8 +16,8 @@
  * to avcodec_encode_video. Since frames are uniquely identified by their
  * frame number, we use this as an index.
  *
- * The size of the array is chosen so that two frames can't use the same 
- * slot during the encoder's max frame delay (set by the standard as 16 
+ * The size of the array is chosen so that two frames can't use the same
+ * slot during the encoder's max frame delay (set by the standard as 16
  * frames) and so that, up to some minimum frame rate, frames are guaranteed
  * to map to * different slots.
  */
@@ -119,14 +119,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context = avcodec_alloc_context3( codec );
 
-    // Set things in context that we will allow the user to 
+    // Set things in context that we will allow the user to
     // override with advanced settings.
     fps.den = job->vrate.den;
     fps.num = job->vrate.num;
 
     // If the fps.num is the internal clock rate, there's a good chance
     // this is a standard rate that we have in our hb_video_rates table.
-    // Because of rounding errors and approximations made while 
+    // Because of rounding errors and approximations made while
     // measuring framerate, the actual value may not be exact.  So
     // we look for rates that are "close" and make an adjustment
     // to fps.den.
@@ -152,7 +152,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         supported_fps = codec->supported_framerates[av_find_nearest_q_idx(fps, codec->supported_framerates)];
         if (supported_fps.num != fps.num || supported_fps.den != fps.den)
         {
-            hb_log( "encavcodec: framerate %d / %d is not supported. Using %d / %d.", 
+            hb_log( "encavcodec: framerate %d / %d is not supported. Using %d / %d.",
                     fps.num, fps.den, supported_fps.num, supported_fps.den );
             fps = supported_fps;
         }
@@ -162,7 +162,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // This may only be required for mpeg4 video. But since
         // our only supported options are mpeg2 and mpeg4, there is
         // no need to check codec type.
-        hb_log( "encavcodec: truncating framerate %d / %d", 
+        hb_log( "encavcodec: truncating framerate %d / %d",
                 fps.num, fps.den );
         while ((fps.num & ~0xFFFF) || (fps.den & ~0xFFFF))
         {
@@ -350,6 +350,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
     }
+
+    if (job->pass_id == HB_PASS_ENCODE_1ST &&
+        context->stats_out != NULL)
+    {
+        // Some encoders may write stats during init in avcodec_open
+        fprintf(pv->file, "%s", context->stats_out);
+    }
+
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
     AVDictionaryEntry *t = NULL;
@@ -441,45 +449,10 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
     }
 }
 
-static uint8_t convert_pict_type( int pict_type, char pkt_flag_key, uint16_t* sflags )
-{
-    uint16_t flags = 0;
-    uint8_t retval = 0;
-    switch (pict_type)
-    {
-        case AV_PICTURE_TYPE_B:
-            retval = HB_FRAME_B;
-            break;
-
-        case AV_PICTURE_TYPE_S:
-        case AV_PICTURE_TYPE_P:
-        case AV_PICTURE_TYPE_SP:
-            retval = HB_FRAME_P;
-            break;
-
-
-        case AV_PICTURE_TYPE_BI:
-        case AV_PICTURE_TYPE_SI:
-        case AV_PICTURE_TYPE_I:
-        default:
-        {
-            flags |= HB_FLAG_FRAMETYPE_REF;
-            retval = HB_FRAME_I;
-        } break;
-    }
-    if (pkt_flag_key)
-    {
-        flags |= HB_FLAG_FRAMETYPE_REF;
-        flags |= HB_FLAG_FRAMETYPE_KEY;
-    }
-    *sflags = flags;
-    return retval;
-}
-
 // Generate DTS by rearranging PTS in this sequence:
 // pts0 - delay, pts1 - delay, pts2 - delay, pts1, pts2, pts3...
 //
-// Where pts0 - ptsN are in decoded monotonically increasing presentation 
+// Where pts0 - ptsN are in decoded monotonically increasing presentation
 // order and delay == pts1 (1 being the number of frames the decoder must
 // delay before it has suffecient information to decode). The number of
 // frames to delay is set by job->areBframes, so it is configurable.
@@ -530,6 +503,125 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
     return NULL;
 }
 
+static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    while (1)
+    {
+        int           ret;
+        AVPacket      pkt;
+        hb_buffer_t * out;
+
+        av_init_packet(&pkt);
+        ret = avcodec_receive_packet(pv->context, &pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+        {
+            break;
+        }
+        if (ret < 0)
+        {
+            hb_log("encavcodec: avcodec_receive_packet failed");
+        }
+        out = hb_buffer_init(pkt.size);
+        memcpy(out->data, pkt.data, out->size);
+
+        int64_t frameno = pkt.pts;
+        out->size       = pkt.size;
+        out->s.start    = get_frame_start(pv, frameno);
+        out->s.duration = get_frame_duration(pv, frameno);
+        out->s.stop     = out->s.stop + out->s.duration;
+        // libav 12 deprecated context->coded_frame, so we can't determine
+        // the exact frame type any more.  Luckily for us, we really don't
+        // require it.
+        out->s.frametype = 0;
+        if (pkt.flags & AV_PKT_FLAG_KEY)
+        {
+            out->s.flags = HB_FLAG_FRAMETYPE_REF | HB_FLAG_FRAMETYPE_KEY;
+            hb_chapter_dequeue(pv->chapter_queue, out);
+        }
+        out = process_delay_list(pv, out);
+
+        hb_buffer_list_append(list, out);
+        av_packet_unref(&pkt);
+    }
+}
+
+static void Encode( hb_work_object_t *w, hb_buffer_t *in,
+                    hb_buffer_list_t *list )
+{
+    hb_work_private_t * pv = w->private_data;
+    AVFrame             frame = {0};
+    int                 ret;
+
+    frame.data[0]     = in->plane[0].data;
+    frame.data[1]     = in->plane[1].data;
+    frame.data[2]     = in->plane[2].data;
+    frame.linesize[0] = in->plane[0].stride;
+    frame.linesize[1] = in->plane[1].stride;
+    frame.linesize[2] = in->plane[2].stride;
+
+    if (in->s.new_chap > 0 && pv->job->chapter_markers)
+    {
+        /* chapters have to start with an IDR frame so request that this
+           frame be coded as IDR. Since there may be multiple frames
+           currently buffered in the encoder remember the timestamp so
+           when this frame finally pops out of the encoder we'll mark
+           its buffer as the start of a chapter. */
+        frame.pict_type = AV_PICTURE_TYPE_I;
+        hb_chapter_enqueue(pv->chapter_queue, in);
+    }
+
+    // For constant quality, setting the quality in AVCodecContext
+    // doesn't do the trick.  It must be set in the AVFrame.
+    frame.quality = pv->context->global_quality;
+
+    // Remember info about this frame that we need to pass across
+    // the avcodec_encode_video call (since it reorders frames).
+    save_frame_info(pv, in);
+    compute_dts_offset(pv, in);
+
+    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
+    // set to a frame number.  Setting it to an actual pts causes
+    // jerky video.
+    // frame->pts = in->s.start;
+    frame.pts = pv->frameno_in++;
+
+    // Encode
+    ret = avcodec_send_frame(pv->context, &frame);
+    if (ret < 0)
+    {
+        hb_log("encavcodec: avcodec_send_frame failed");
+        return;
+    }
+
+    // Write stats
+    if (pv->job->pass_id == HB_PASS_ENCODE_1ST &&
+        pv->context->stats_out != NULL)
+    {
+        fprintf( pv->file, "%s", pv->context->stats_out );
+    }
+
+    get_packets(w, list);
+}
+
+static void Flush( hb_work_object_t * w, hb_buffer_list_t * list )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    avcodec_send_frame(pv->context, NULL);
+
+    // Write stats
+    // vpx only writes stats at final flush
+    if (pv->job->pass_id == HB_PASS_ENCODE_1ST &&
+        pv->context->stats_out != NULL)
+    {
+        fprintf( pv->file, "%s", pv->context->stats_out );
+    }
+
+    get_packets(w, list);
+}
+
 /***********************************************************************
  * Work
  ***********************************************************************
@@ -539,116 +631,28 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_job_t * job = pv->job;
-    AVFrame  * frame;
-    hb_buffer_t * in = *buf_in, * buf;
-    hb_buffer_list_t list;
-    char final_flushing_call = !!(in->s.flags & HB_BUF_FLAG_EOF);
+    hb_buffer_t       * in = *buf_in;
+    hb_buffer_list_t    list;
+
+    if (pv->context == NULL || pv->context->codec == NULL)
+    {
+        hb_error("encavcodec: codec context is uninitialized");
+        return HB_WORK_DONE;
+    }
 
     hb_buffer_list_clear(&list);
-    if (final_flushing_call)
+    if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        /* EOF on input - send it downstream & say we're done */
-        // make a flushing call to encode for codecs that can encode
-        // out of order
-        frame = NULL;
-    }
-    else
-    {
-        frame              = av_frame_alloc();
-        frame->data[0]     = in->plane[0].data;
-        frame->data[1]     = in->plane[1].data;
-        frame->data[2]     = in->plane[2].data;
-        frame->linesize[0] = in->plane[0].stride;
-        frame->linesize[1] = in->plane[1].stride;
-        frame->linesize[2] = in->plane[2].stride;
-
-        if (in->s.new_chap > 0 && job->chapter_markers)
-        {
-            /* chapters have to start with an IDR frame so request that this
-               frame be coded as IDR. Since there may be multiple frames
-               currently buffered in the encoder remember the timestamp so
-               when this frame finally pops out of the encoder we'll mark
-               its buffer as the start of a chapter. */
-            frame->pict_type = AV_PICTURE_TYPE_I;
-            hb_chapter_enqueue(pv->chapter_queue, in);
-        }
-
-        // For constant quality, setting the quality in AVCodecContext 
-        // doesn't do the trick.  It must be set in the AVFrame.
-        frame->quality = pv->context->global_quality;
-
-        // Remember info about this frame that we need to pass across
-        // the avcodec_encode_video call (since it reorders frames).
-        save_frame_info( pv, in );
-        compute_dts_offset( pv, in );
-
-        // Bizarro ffmpeg appears to require the input AVFrame.pts to be
-        // set to a frame number.  Setting it to an actual pts causes
-        // jerky video.
-        // frame->pts = in->s.start;
-        frame->pts = pv->frameno_in++;
+        Flush(w, &list);
+        hb_buffer_list_append(&list, hb_buffer_eof_init());
+        *buf_out = hb_buffer_list_clear(&list);
+        return HB_WORK_DONE;
     }
 
-    if ( pv->context->codec )
-    {
-        int ret;
-        AVPacket pkt;
-        int got_packet;
-        char still_flushing = final_flushing_call;
-        do
-        {
-            av_init_packet(&pkt);
-            /* Should be way too large */
-            buf = hb_video_buffer_init(job->width, job->height);
-            pkt.data = buf->data;
-            pkt.size = buf->alloc;
-
-            ret = avcodec_encode_video2( pv->context, &pkt, frame, &got_packet );
-            if ( ret < 0 || pkt.size <= 0 || !got_packet )
-            {
-                hb_buffer_close( &buf );
-                still_flushing = 0;
-            }
-            else
-            {
-                int64_t frameno = pkt.pts;
-                buf->size       = pkt.size;
-                buf->s.start    = get_frame_start( pv, frameno );
-                buf->s.duration = get_frame_duration( pv, frameno );
-                buf->s.stop     = buf->s.stop + buf->s.duration;
-                buf->s.frametype = convert_pict_type( pv->context->coded_frame->pict_type, pkt.flags & AV_PKT_FLAG_KEY, &buf->s.flags );
-                if (buf->s.flags & HB_FLAG_FRAMETYPE_KEY)
-                {
-                    hb_chapter_dequeue(pv->chapter_queue, buf);
-                }
-                buf = process_delay_list( pv, buf );
-
-                hb_buffer_list_append(&list, buf);
-            }
-            /* Write stats */
-            if (job->pass_id == HB_PASS_ENCODE_1ST &&
-                pv->context->stats_out != NULL)
-            {
-                fprintf( pv->file, "%s", pv->context->stats_out );
-            }
-        } while (still_flushing);
-
-        if (final_flushing_call)
-        {
-            *buf_in = NULL;
-            hb_buffer_list_append(&list, in);
-        }
-    }
-    else
-    {
-        hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
-    }
-
-    av_frame_free( &frame );
-
+    Encode(w, in, &list);
     *buf_out = hb_buffer_list_clear(&list);
-    return final_flushing_call? HB_WORK_DONE : HB_WORK_OK;
+
+    return HB_WORK_OK;
 }
 
 static int apply_vpx_preset(AVDictionary ** av_opts, const char * preset)

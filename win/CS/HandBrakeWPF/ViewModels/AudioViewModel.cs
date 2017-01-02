@@ -418,7 +418,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddFirstForSelectedLanguages()
         {
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(false))
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
@@ -448,7 +448,7 @@ namespace HandBrakeWPF.ViewModels
         public void AddAllRemainingForSelectedLanguages()
         {
             // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks(false))
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
                 // Step 2: Check if the track list already contrains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
@@ -486,19 +486,16 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets a list of source tracks for the users selected languages.
         /// </summary>
-        /// <param name="includeAny">
-        /// The include Any.
-        /// </param>
         /// <returns>
         /// A list of source audio tracks.
         /// </returns>
-        private IEnumerable<Audio> GetSelectedLanguagesTracks(bool includeAny)
+        private IEnumerable<Audio> GetSelectedLanguagesTracks()
         {
             List<Audio> trackList = new List<Audio>();
 
             List<string> isoCodes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
 
-            if (includeAny)
+            if (isoCodes.Contains(Constants.Undefined))
             {
                 isoCodes = LanguageUtilities.GetIsoCodes();
             }

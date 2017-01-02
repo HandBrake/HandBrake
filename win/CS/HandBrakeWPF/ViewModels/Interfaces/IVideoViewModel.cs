@@ -18,10 +18,5 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>
         void RefreshTask();
-
-        /// <summary>
-        /// Clear the advanced x264 options.
-        /// </summary>
-        void ClearAdvancedSettings();
     }
 }

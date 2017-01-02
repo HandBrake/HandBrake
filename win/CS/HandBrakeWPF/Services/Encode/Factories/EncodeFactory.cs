@@ -36,6 +36,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
     using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using SystemInfo = HandBrake.ApplicationServices.Utilities.SystemInfo;
     using Validate = HandBrakeWPF.Helpers.Validate;
 
     /// <summary>
@@ -282,6 +283,14 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Options = job.ExtraAdvancedArguments;
                 video.Preset = job.VideoPreset != null ? job.VideoPreset.ShortName : null;
                 video.Profile = job.VideoProfile != null ? job.VideoProfile.ShortName : null;
+
+                if (job.VideoTunes != null && job.VideoTunes.Count > 0)
+                {
+                    foreach (var item in job.VideoTunes)
+                    {
+                        video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
+                    }
+                }
             }
 
             if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality) video.Quality = job.Quality;
@@ -292,16 +301,15 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Turbo = job.TurboFirstPass;
             }
 
-            if (job.VideoTunes != null && job.VideoTunes.Count > 0)
-            {
-                foreach (var item in job.VideoTunes)
-                {
-                    video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
-                }
-            }
-
             video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;
-            video.QSV.Decode = !configuration.DisableQuickSyncDecoding;
+
+            video.QSV.Decode = SystemInfo.IsQsvAvailable && !configuration.DisableQuickSyncDecoding;
+
+            // The use of the QSV decoder is configurable for non QSV encoders.
+            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265)
+            {
+                video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
+            }
 
             return video;
         }

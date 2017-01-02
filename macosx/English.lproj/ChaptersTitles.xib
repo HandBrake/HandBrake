@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11535.1" systemVersion="16B2553a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11535.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBChapterTitlesController">
@@ -18,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button toolTip="Add chapter markers to output file." translatesAutoresizingMaskIntoConstraints="NO" id="7Xf-c0-jsr">
+                <button toolTip="Add a chapter markers track to the video." translatesAutoresizingMaskIntoConstraints="NO" id="7Xf-c0-jsr">
                     <rect key="frame" x="17" y="294" width="146" height="18"/>
                     <buttonCell key="cell" type="check" title="Create chapter markers" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="lJL-wX-DVP">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -33,7 +33,7 @@
                         <binding destination="-2" name="value" keyPath="self.job.chaptersEnabled" id="7wG-le-s1k"/>
                     </connections>
                 </button>
-                <button toolTip="Import a list of chapter names from a file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-3B-rYg">
+                <button toolTip="Import a list of chapter names from a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-3B-rYg">
                     <rect key="frame" x="671" y="288" width="121" height="28"/>
                     <buttonCell key="cell" type="push" title="Import Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PM3-Ue-0kW">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -48,7 +48,7 @@
                         </binding>
                     </connections>
                 </button>
-                <button toolTip="Export the list of chapter names to a file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3SP-6e-RPS">
+                <button toolTip="Export the list of chapter names to a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3SP-6e-RPS">
                     <rect key="frame" x="790" y="288" width="121" height="28"/>
                     <buttonCell key="cell" type="push" title="Export Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h0O-zg-OF9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

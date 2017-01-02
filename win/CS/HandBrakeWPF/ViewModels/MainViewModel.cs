@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Forms;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -50,13 +51,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
-    using Microsoft.Win32;
-
     using Ookii.Dialogs.Wpf;
 
     using Action = System.Action;
+    using Application = System.Windows.Application;
+    using DataFormats = System.Windows.DataFormats;
+    using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
     using LogManager = HandBrakeWPF.Helpers.LogManager;
+    using MessageBox = System.Windows.MessageBox;
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -161,8 +166,8 @@ namespace HandBrakeWPF.ViewModels
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
-            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel, 
-            IAdvancedViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
+            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
+            IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
         {
             this.scanService = scanService;
@@ -260,7 +265,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets AdvancedViewModel.
         /// </summary>
-        public IAdvancedViewModel AdvancedViewModel { get; set; }
+        public IX264ViewModel AdvancedViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets VideoViewModel.
@@ -698,20 +703,24 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!Equals(this.CurrentTask.Destination, value))
                 {
-                    this.CurrentTask.Destination = value;
-                    this.NotifyOfPropertyChange(() => this.Destination);
-
-                    if (!string.IsNullOrEmpty(this.CurrentTask.Destination))
+                    if (!string.IsNullOrEmpty(value))
                     {
                         string ext = string.Empty;
                         try
                         {
-                            ext = Path.GetExtension(this.CurrentTask.Destination);
+                            ext = Path.GetExtension(value);
                         }
                         catch (ArgumentException)
                         {
-                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            this.errorService.ShowMessageBox(
+                                Resources.Main_InvalidDestination,
+                                Resources.Error,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
                         }
+
+                        this.CurrentTask.Destination = value;
+                        this.NotifyOfPropertyChange(() => this.Destination);
 
                         switch (ext)
                         {
@@ -725,6 +734,11 @@ namespace HandBrakeWPF.ViewModels
                                 this.SelectedOutputFormat = OutputFormat.Mp4;
                                 break;
                         }
+                    }
+                    else
+                    {
+                        this.CurrentTask.Destination = string.Empty;
+                        this.NotifyOfPropertyChange(() => this.Destination);
                     }
                 }
             }
@@ -1397,9 +1411,9 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination)))
+            if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), true, this.errorService))
             {
-                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOnDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
 
@@ -1463,7 +1477,19 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_AutoAdd_AudioAndSubWarning, Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Error);
+                if (this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
+                {
+                    System.Windows.MessageBoxResult result = this.errorService.ShowMessageBox(
+                        Resources.Main_AutoAdd_AudioAndSubWarning,
+                        Resources.Warning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
             }
 
             foreach (Title title in this.ScannedSource.Titles)
@@ -1522,8 +1548,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                ShowSourceSelection = false;
-
                 this.StartScan(dialog.SelectedPath, this.TitleSpecificScan);
             }
         }
@@ -1538,8 +1562,6 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialogResult.HasValue && dialogResult.Value)
             {
-                ShowSourceSelection = false;
-
                 this.StartScan(dialog.FileName, this.TitleSpecificScan);
             }
         }
@@ -1794,14 +1816,31 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.Destination))
             {
-                string directory = Path.GetDirectoryName(this.Destination);
-                if (!string.IsNullOrEmpty(directory))
+                try
                 {
-                    Process.Start(directory);
+                    string directory = Path.GetDirectoryName(this.Destination);
+                    if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
+                    {
+                        Process.Start(directory);
+                    }
+                    else
+                    {
+                        MessageBoxResult result =
+                            errorService.ShowMessageBox(
+                                string.Format(Resources.DirectoryUtils_CreateFolderMsg, directory),
+                                Resources.DirectoryUtils_CreateFolder,
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question);
+                        if (MessageBoxResult.Yes == result)
+                        {
+                            Directory.CreateDirectory(directory);
+                            Process.Start(directory);
+                        }
+                    }
                 }
-                else
+                catch (Exception exc)
                 {
-                    Process.Start(AppDomain.CurrentDomain.BaseDirectory);
+                    this.errorService.ShowError(Resources.MainViewModel_UnableToLaunchDestDir, Resources.MainViewModel_UnableToLaunchDestDirSolution, exc);
                 }
             }
         }
@@ -2012,6 +2051,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!string.IsNullOrEmpty(filename))
             {
+                ShowSourceSelection = false;
                 this.scanService.Scan(filename, title, null, HBConfigurationFactory.Create());
             }
         }
@@ -2313,16 +2353,30 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
-                        this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel + Resources.Main_JobsPending_addon,
+                        string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+                        if (e.PassId == -1)
+                        {
+                            this.ProgramStatusLabel = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
                                 e.Task,
                                 e.TaskCount,
                                 e.PercentComplete,
-                                e.CurrentFrameRate, 
-                                e.AverageFrameRate, 
-                                e.EstimatedTimeLeft, 
+                                e.EstimatedTimeLeft,
                                 e.ElapsedTime,
-                                this.queueProcessor.Count);
+                                jobsPending);
+                        }
+                        else
+                        {
+                            this.ProgramStatusLabel =
+                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
+                                e.Task,
+                                e.TaskCount,
+                                e.PercentComplete,
+                                e.CurrentFrameRate,
+                                e.AverageFrameRate,
+                                e.EstimatedTimeLeft,
+                                e.ElapsedTime,
+                                jobsPending);
+                        }
 
                         if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
                         {

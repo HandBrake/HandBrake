@@ -244,16 +244,18 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     if (copy)
     {
         copy->_container = _container;
-        copy->_sourceTracks = [_sourceTracks mutableCopy];
+        copy->_sourceTracks = [_sourceTracks copy];
 
         copy->_tracks = [[NSMutableArray alloc] init];
-        [_tracks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if (idx < _tracks.count)
-            {
-                id trackCopy = [obj copy];
-                [copy->_tracks addObject:trackCopy];
-            }
-        }];
+
+        for (HBAudioTrack *track in _tracks)
+        {
+            HBAudioTrack *trackCopy = [track copy];
+            [copy->_tracks addObject:trackCopy];
+
+            trackCopy.dataSource = copy;
+            trackCopy.delegate = copy;
+        }
 
         copy->_defaults = [_defaults copy];
     }
@@ -283,8 +285,8 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
     self = [super init];
 
     decodeInt(_container);
-    decodeObject(_sourceTracks, NSMutableArray);
-    decodeObject(_tracks, NSMutableArray);
+    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects(_tracks, NSMutableArray, HBAudioTrack);
 
     for (HBAudioTrack *track in _tracks)
     {

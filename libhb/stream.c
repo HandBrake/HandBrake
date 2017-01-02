@@ -1,6 +1,6 @@
 /* stream.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -214,7 +214,7 @@ struct hb_stream_s
     hb_title_t *title;
 
     AVFormatContext *ffmpeg_ic;
-    AVPacket *ffmpeg_pkt;
+    AVPacket ffmpeg_pkt;
     uint8_t ffmpeg_video_id;
 
     uint32_t reg_desc;          // 4 byte registration code that identifies
@@ -1006,6 +1006,11 @@ void hb_stream_close( hb_stream_t ** _d )
 {
     hb_stream_t *stream = * _d;
 
+    if (stream == NULL)
+    {
+        return;
+    }
+
     if ( stream->hb_stream_type == ffmpeg )
     {
         ffmpeg_close( stream );
@@ -1737,16 +1742,16 @@ int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
-
-    if ( stream->hb_stream_type != ffmpeg )
-    {
-        // currently meaningliess for transport and program streams
-        return 1;
-    }
     if ( !stream || !stream->title ||
          chapter_num > hb_list_count( stream->title->list_chapter ) )
     {
         return 0;
+    }
+    
+    if ( stream->hb_stream_type != ffmpeg )
+    {
+        // currently meaningless for transport and program streams
+        return 1;
     }
 
     // TODO: add chapter start time to hb_chapter_t
@@ -3974,6 +3979,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
             break;
 
         default:
+            free(w);
             return 0;
     }
     const char *profile_name;
@@ -3984,6 +3990,7 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
         strncpy(pes->codec_name, profile_name, 80);
         pes->codec_name[79] = 0;
     }
+    free(w);
     return 1;
 }
 
@@ -4795,11 +4802,15 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
              !ts_stream->skipbad &&
              (continuity != ( (ts_stream->continuity + 1) & 0xf ) ) )
         {
-            ts_err( stream, curstream, "continuity error: got %d expected %d",
-                    (int)continuity,
-                    (ts_stream->continuity + 1) & 0xf );
+            if (continuity == ts_stream->continuity)
+            {
+                // Duplicate packet as defined by ITU-T Rec. H.222
+                // Drop the packet.
+                return hb_buffer_list_clear(&list);
+            }
+            ts_warn( stream, "continuity error: got %d expected %d",
+                    (int)continuity, (ts_stream->continuity + 1) & 0xf );
             ts_stream->continuity = continuity;
-            return hb_buffer_list_clear(&list);
         }
         ts_stream->continuity = continuity;
 
@@ -4844,9 +4855,9 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt,
             // to the old pcr.
             buf = generate_output_data(stream, curstream);
             hb_buffer_list_append(&list, buf);
-            ts_stream->pes_info_valid = 0;
-            ts_stream->packet_len = 0;
         }
+        ts_stream->pes_info_valid = 0;
+        ts_stream->packet_len = 0;
 
         // PES must begin with an mpeg start code
         const uint8_t *pes = pkt + adapt_len + 4;
@@ -5022,6 +5033,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     // and the other for reading.
     if ( avformat_open_input( &info_ic, stream->path, NULL, &av_opts ) < 0 )
     {
+        av_dict_free( &av_opts );
         return 0;
     }
     // libav populates av_opts with the things it didn't recognize.
@@ -5038,8 +5050,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     title->opaque_priv = (void*)info_ic;
     stream->ffmpeg_ic = info_ic;
     stream->hb_stream_type = ffmpeg;
-    stream->ffmpeg_pkt = malloc(sizeof(*stream->ffmpeg_pkt));
-    av_init_packet( stream->ffmpeg_pkt );
+    av_init_packet(&stream->ffmpeg_pkt);
     stream->chapter_end = INT64_MAX;
 
     if ( !scan )
@@ -5063,7 +5074,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
         int i;
         for (i = 0; i < info_ic->nb_streams; ++i )
         {
-            if ( info_ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
+            if (info_ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
             {
                 break;
             }
@@ -5081,34 +5092,30 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 static void ffmpeg_close( hb_stream_t *d )
 {
     avformat_close_input( &d->ffmpeg_ic );
-    if ( d->ffmpeg_pkt != NULL )
-    {
-        free( d->ffmpeg_pkt );
-        d->ffmpeg_pkt = NULL;
-    }
+    av_packet_unref(&d->ffmpeg_pkt);
 }
 
 static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
-    AVStream *st           = stream->ffmpeg_ic->streams[id];
-    AVCodecContext *codec  = st->codec;
-    AVDictionaryEntry *tag = av_dict_get(st->metadata, "language", NULL, 0);
+    AVStream *st                = stream->ffmpeg_ic->streams[id];
+    AVCodecParameters *codecpar = st->codecpar;
+    AVDictionaryEntry *tag      = av_dict_get(st->metadata, "language", NULL, 0);
 
     hb_audio_t *audio            = calloc(1, sizeof(*audio));
     audio->id                    = id;
     audio->config.in.track       = id;
     audio->config.in.codec       = HB_ACODEC_FFMPEG;
-    audio->config.in.codec_param = codec->codec_id;
+    audio->config.in.codec_param = codecpar->codec_id;
     // set the bitrate to 0; decavcodecaBSInfo will be called and fill the rest
     audio->config.in.bitrate     = 0;
 
     // set the input codec and extradata for Passthru
-    switch (codec->codec_id)
+    switch (codecpar->codec_id)
     {
         case AV_CODEC_ID_AAC:
         {
-            int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, codec->extradata, len);
+            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
             audio->priv.config.extradata.length = len;
             audio->config.in.codec              = HB_ACODEC_FFAAC;
         } break;
@@ -5127,7 +5134,7 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_DTS:
         {
-            switch (codec->profile)
+            switch (codecpar->profile)
             {
                 case FF_PROFILE_DTS:
                 case FF_PROFILE_DTS_ES:
@@ -5147,8 +5154,8 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 
         case AV_CODEC_ID_FLAC:
         {
-            int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
-            memcpy(audio->priv.config.extradata.bytes, codec->extradata, len);
+            int len = MIN(codecpar->extradata_size, HB_CONFIG_MAX_SIZE);
+            memcpy(audio->priv.config.extradata.bytes, codecpar->extradata, len);
             audio->priv.config.extradata.length = len;
             audio->config.in.codec              = HB_ACODEC_FFFLAC;
         } break;
@@ -5179,14 +5186,15 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
  * More information on the format at:
  *   http://www.matroska.org/technical/specs/subtitles/images.html
  */
-static int ffmpeg_parse_vobsub_extradata_mkv( AVCodecContext *codec, hb_subtitle_t *subtitle )
+static int ffmpeg_parse_vobsub_extradata_mkv( AVCodecParameters *codecpar,
+                                              hb_subtitle_t *subtitle )
 {
-    // lines = (string) codec->extradata;
-    char *lines = malloc( codec->extradata_size + 1 );
+    // lines = (string) codecpar->extradata;
+    char *lines = malloc( codecpar->extradata_size + 1 );
     if ( lines == NULL )
         return 1;
-    memcpy( lines, codec->extradata, codec->extradata_size );
-    lines[codec->extradata_size] = '\0';
+    memcpy( lines, codecpar->extradata, codecpar->extradata_size );
+    lines[codecpar->extradata_size] = '\0';
 
     uint32_t rgb[16];
     int gotPalette = 0;
@@ -5251,29 +5259,30 @@ static int ffmpeg_parse_vobsub_extradata_mkv( AVCodecContext *codec, hb_subtitle
 /*
  * Format: 8-bit {0,Y,Cb,Cr} x 16
  */
-static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecContext *codec, hb_subtitle_t *subtitle )
+static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecParameters *codecpar,
+                                              hb_subtitle_t *subtitle )
 {
-    if ( codec->extradata_size != 4*16 )
+    if ( codecpar->extradata_size != 4*16 )
         return 1;
 
     int i, j;
     for ( i=0, j=0; i<16; i++, j+=4 )
     {
         subtitle->palette[i] =
-            codec->extradata[j+1] << 16 |   // Y
-            codec->extradata[j+2] << 8  |   // Cb
-            codec->extradata[j+3] << 0;     // Cr
+            codecpar->extradata[j+1] << 16 |   // Y
+            codecpar->extradata[j+2] << 8  |   // Cb
+            codecpar->extradata[j+3] << 0;     // Cr
         subtitle->palette_set = 1;
     }
-    if (codec->width <= 0 || codec->height <= 0)
+    if (codecpar->width <= 0 || codecpar->height <= 0)
     {
         subtitle->width = 720;
         subtitle->height = 480;
     }
     else
     {
-        subtitle->width = codec->width;
-        subtitle->height = codec->height;
+        subtitle->width = codecpar->width;
+        subtitle->height = codecpar->height;
     }
     return 0;
 }
@@ -5282,35 +5291,37 @@ static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecContext *codec, hb_subtitle
  * Parses the 'subtitle->palette' information from the specific VOB subtitle track's private data.
  * Returns 0 if successful or 1 if parsing failed or was incomplete.
  */
-static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *subtitle )
+static int ffmpeg_parse_vobsub_extradata( AVCodecParameters *codecpar,
+                                          hb_subtitle_t *subtitle )
 {
     // XXX: Better if we actually chose the correct parser based on the input container
     return
-        ffmpeg_parse_vobsub_extradata_mkv( codec, subtitle ) &&
-        ffmpeg_parse_vobsub_extradata_mp4( codec, subtitle );
+        ffmpeg_parse_vobsub_extradata_mkv(codecpar, subtitle) &&
+        ffmpeg_parse_vobsub_extradata_mp4(codecpar, subtitle);
 }
 
 static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_ic->streams[id];
-    AVCodecContext *codec = st->codec;
+    AVStream          * st       = stream->ffmpeg_ic->streams[id];
+    AVCodecParameters * codecpar = st->codecpar;
 
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
 
     subtitle->id = id;
 
-    switch ( codec->codec_id )
+    switch ( codecpar->codec_id )
     {
         case AV_CODEC_ID_DVD_SUBTITLE:
             subtitle->format = PICTURESUB;
             subtitle->source = VOBSUB;
             subtitle->config.dest = RENDERSUB;  // By default render (burn-in) the VOBSUB.
             subtitle->codec = WORK_DECVOBSUB;
-            if ( ffmpeg_parse_vobsub_extradata( codec, subtitle ) )
+            if (ffmpeg_parse_vobsub_extradata(codecpar, subtitle))
                 hb_log( "add_ffmpeg_subtitle: malformed extradata for VOB subtitle track; "
                         "subtitle colors likely to be wrong" );
             break;
         case AV_CODEC_ID_TEXT:
+        case AV_CODEC_ID_SRT:
             subtitle->format = TEXTSUB;
             subtitle->source = UTF8SUB;
             subtitle->config.dest = PASSTHRUSUB;
@@ -5335,7 +5346,8 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->codec = WORK_DECPGSSUB;
             break;
         default:
-            hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id );
+            hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x",
+                    (int) codecpar->codec_id );
             free(subtitle);
             return;
     }
@@ -5349,11 +5361,12 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     strncpy( subtitle->iso639_2, language->iso639_2, 4 );
 
     // Copy the extradata for the subtitle track
-    if (codec->extradata != NULL)
+    if (codecpar->extradata != NULL)
     {
-        subtitle->extradata = malloc( codec->extradata_size );
-        memcpy( subtitle->extradata, codec->extradata, codec->extradata_size );
-        subtitle->extradata_size = codec->extradata_size;
+        subtitle->extradata = malloc(codecpar->extradata_size);
+        memcpy(subtitle->extradata,
+               codecpar->extradata, codecpar->extradata_size);
+        subtitle->extradata_size = codecpar->extradata_size;
     }
 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
@@ -5382,11 +5395,11 @@ static char *get_ffmpeg_metadata_value( AVDictionary *m, char *key )
 static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int id )
 {
     AVStream *st = stream->ffmpeg_ic->streams[id];
-    AVCodecContext *codec = st->codec;
+    AVCodecParameters *codecpar = st->codecpar;
 
     enum attachtype type;
     const char *name = get_ffmpeg_metadata_value( st->metadata, "filename" );
-    switch ( codec->codec_id )
+    switch ( codecpar->codec_id )
     {
         case AV_CODEC_ID_TTF:
             // Libav sets codec ID based on mime type of the attachment
@@ -5421,9 +5434,9 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     // Copy the attachment name and data
     attachment->type = type;
     attachment->name = strdup( name );
-    attachment->data = malloc( codec->extradata_size );
-    memcpy( attachment->data, codec->extradata, codec->extradata_size );
-    attachment->size = codec->extradata_size;
+    attachment->data = malloc( codecpar->extradata_size );
+    memcpy( attachment->data, codecpar->extradata, codecpar->extradata_size );
+    attachment->size = codecpar->extradata_size;
 
     hb_list_add(title->list_attachment, attachment);
 }
@@ -5514,14 +5527,14 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     int i;
     for (i = 0; i < ic->nb_streams; ++i )
     {
-        if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
+        if ( ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
            !(ic->streams[i]->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
-             avcodec_find_decoder( ic->streams[i]->codec->codec_id ) &&
+             avcodec_find_decoder( ic->streams[i]->codecpar->codec_id ) &&
              title->video_codec == 0 )
         {
-            AVCodecContext *context = ic->streams[i]->codec;
-            if ( context->pix_fmt != AV_PIX_FMT_YUV420P &&
-                 !sws_isSupportedInput( context->pix_fmt ) )
+            AVCodecParameters *codecpar = ic->streams[i]->codecpar;
+            if ( codecpar->format != AV_PIX_FMT_YUV420P &&
+                 !sws_isSupportedInput( codecpar->format ) )
             {
                 hb_log( "ffmpeg_title_scan: Unsupported color space" );
                 continue;
@@ -5536,18 +5549,18 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             }
 
             title->video_codec = WORK_DECAVCODECV;
-            title->video_codec_param = context->codec_id;
+            title->video_codec_param = codecpar->codec_id;
         }
-        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO &&
-                  avcodec_find_decoder( ic->streams[i]->codec->codec_id ) )
+        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO &&
+                 avcodec_find_decoder( ic->streams[i]->codecpar->codec_id))
         {
             add_ffmpeg_audio( title, stream, i );
         }
-        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_SUBTITLE )
+        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
         {
             add_ffmpeg_subtitle( title, stream, i );
         }
-        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_ATTACHMENT )
+        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
         {
             add_ffmpeg_attachment( title, stream, i );
         }
@@ -5634,13 +5647,13 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
 {
     uint8_t *pkt;
 
-    switch ( stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
+    switch (stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codecpar->codec_id)
     {
         case AV_CODEC_ID_VC1:
             // XXX the VC1 codec doesn't mark key frames so to get previews
             // we do it ourselves here. The decoder gets messed up if it
             // doesn't get a SEQ header first so we consider that to be a key frame.
-            pkt = stream->ffmpeg_pkt->data;
+            pkt = stream->ffmpeg_pkt.data;
             if ( !pkt[0] && !pkt[1] && pkt[2] == 1 && pkt[3] == 0x0f )
                 return 1;
 
@@ -5655,8 +5668,8 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
             // depending on whether it's main or advanced profile then whether
             // there are bframes or not so we have to look at the sequence
             // header to get that.
-            pkt = stream->ffmpeg_pkt->data;
-            uint8_t *seqhdr = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
+            pkt = stream->ffmpeg_pkt.data;
+            uint8_t *seqhdr = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codecpar->extradata;
             int pshift = 2;
             if ( ( seqhdr[3] & 0x02 ) == 0 )
                 // no FINTERPFLAG
@@ -5673,7 +5686,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
         default:
             break;
     }
-    return ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY );
+    return ( stream->ffmpeg_pkt.flags & AV_PKT_FLAG_KEY );
 }
 
 hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
@@ -5682,7 +5695,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     hb_buffer_t * buf;
 
   again:
-    if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
+    if ( ( err = av_read_frame( stream->ffmpeg_ic, &stream->ffmpeg_pkt )) < 0 )
     {
         // av_read_frame can return EAGAIN.  In this case, it expects
         // to be called again to get more data.
@@ -5693,7 +5706,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         // XXX the following conditional is to handle avi files that
         // use M$ 'packed b-frames' and occasionally have negative
         // sizes for the null frames these require.
-        if ( err != AVERROR(ENOMEM) || stream->ffmpeg_pkt->size >= 0 )
+        if ( err != AVERROR(ENOMEM) || stream->ffmpeg_pkt.size >= 0 )
         {
             // error or eof
             if (err != AVERROR_EOF)
@@ -5706,7 +5719,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             return NULL;
         }
     }
-    if ( stream->ffmpeg_pkt->stream_index == stream->ffmpeg_video_id )
+    if ( stream->ffmpeg_pkt.stream_index == stream->ffmpeg_video_id )
     {
         if ( stream->need_keyframe )
         {
@@ -5716,14 +5729,14 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             // or we've looked through 50 video frames without finding one.
             if ( ! ffmpeg_is_keyframe( stream ) && ++stream->need_keyframe < 50 )
             {
-                av_free_packet( stream->ffmpeg_pkt );
+                av_packet_unref(&stream->ffmpeg_pkt);
                 goto again;
             }
             stream->need_keyframe = 0;
         }
         ++stream->frames;
     }
-    if ( stream->ffmpeg_pkt->size <= 0 )
+    if ( stream->ffmpeg_pkt.size <= 0 )
     {
         // M$ "invalid and inefficient" packed b-frames require 'null frames'
         // following them to preserve the timing (since the packing puts two
@@ -5736,18 +5749,18 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     else
     {
         // sometimes we get absurd sizes from ffmpeg
-        if ( stream->ffmpeg_pkt->size >= (1 << 25) )
+        if ( stream->ffmpeg_pkt.size >= (1 << 25) )
         {
-            hb_log( "ffmpeg_read: pkt too big: %d bytes", stream->ffmpeg_pkt->size );
-            av_free_packet( stream->ffmpeg_pkt );
+            hb_log( "ffmpeg_read: pkt too big: %d bytes", stream->ffmpeg_pkt.size );
+            av_packet_unref(&stream->ffmpeg_pkt);
             return hb_ffmpeg_read( stream );
         }
-        buf = hb_buffer_init( stream->ffmpeg_pkt->size );
-        memcpy( buf->data, stream->ffmpeg_pkt->data, stream->ffmpeg_pkt->size );
+        buf = hb_buffer_init( stream->ffmpeg_pkt.size );
+        memcpy( buf->data, stream->ffmpeg_pkt.data, stream->ffmpeg_pkt.size );
 
         const uint8_t *palette;
         int size;
-        palette = av_packet_get_side_data(stream->ffmpeg_pkt,
+        palette = av_packet_get_side_data(&stream->ffmpeg_pkt,
                                           AV_PKT_DATA_PALETTE, &size);
         if (palette != NULL)
         {
@@ -5755,16 +5768,16 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             memcpy( buf->palette->data, palette, size );
         }
     }
-    buf->s.id = stream->ffmpeg_pkt->stream_index;
+    buf->s.id = stream->ffmpeg_pkt.stream_index;
 
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
-    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
+    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index];
     double tsconv = (double)90000. * s->time_base.num / s->time_base.den;
     int64_t offset = 90000LL * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
 
-    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt->pts, tsconv, offset);
-    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt->dts, tsconv, offset);
+    buf->s.start = av_to_hb_pts(stream->ffmpeg_pkt.pts, tsconv, offset);
+    buf->s.renderOffset = av_to_hb_pts(stream->ffmpeg_pkt.dts, tsconv, offset);
     if ( buf->s.renderOffset >= 0 && buf->s.start == AV_NOPTS_VALUE )
     {
         buf->s.start = buf->s.renderOffset;
@@ -5792,8 +5805,8 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
      */
     enum AVCodecID ffmpeg_pkt_codec;
     enum AVMediaType codec_type;
-    ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
-    codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
+    ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index]->codecpar->codec_id;
+    codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index]->codecpar->codec_type;
     switch ( codec_type )
     {
         case AVMEDIA_TYPE_VIDEO:
@@ -5802,7 +5815,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
              * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
              * for some codecs. For example, sequence of PNG in a mov container.
              */
-            if (stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY)
+            if (stream->ffmpeg_pkt.flags & AV_PKT_FLAG_KEY)
             {
                 buf->s.flags = HB_FLAG_FRAMETYPE_KEY;
                 buf->s.frametype = HB_FRAME_I;
@@ -5821,13 +5834,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             buf->s.type = OTHER_BUF;
             break;
     }
-    if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ) {
-        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->convergence_duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
-        buf->s.stop = buf->s.start + buf_duration;
-    }
-    if ( ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
-        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->duration;
+    if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ||
+         ffmpeg_pkt_codec == AV_CODEC_ID_SRT  ||
+         ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
+        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt.duration;
         int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
         buf->s.stop = buf->s.start + buf_duration;
     }
@@ -5840,7 +5850,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
      * (roughly 3 million years at our 90KHz clock rate) so the test
      * below handles both the chapters & no chapters case.
      */
-    if ( stream->ffmpeg_pkt->stream_index == stream->ffmpeg_video_id &&
+    if ( stream->ffmpeg_pkt.stream_index == stream->ffmpeg_video_id &&
          buf->s.start >= stream->chapter_end )
     {
         hb_chapter_t *chapter = hb_list_item( stream->title->list_chapter,
@@ -5864,7 +5874,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     } else {
         buf->s.new_chap = 0;
     }
-    av_free_packet( stream->ffmpeg_pkt );
+    av_packet_unref(&stream->ffmpeg_pkt);
     return buf;
 }
 

@@ -1,6 +1,6 @@
 /* test.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1530,6 +1530,7 @@ static void ShowHelp()
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
+"                               2020\n"
 "                               709\n"
 "                               601\n"
 "                               ntsc (same as 601)\n"
@@ -1663,12 +1664,14 @@ static void ShowHelp()
 "                           the subtitle list specified with '--subtitle'\n"
 "                           or \"native\" to burn the subtitle track that may\n"
 "                           be added by the 'native-language' option.\n"
-"      --subtitle-default[=number]\n"
+"      --subtitle-default[=number or \"none\"]\n"
 "                           Flag the selected subtitle as the default\n"
 "                           subtitle to be displayed upon playback.  Setting\n"
 "                           no default means no subtitle will be displayed\n"
 "                           automatically. 'number' is an index into the\n"
 "                           subtitle list specified with '--subtitle'.\n"
+"                           \"none\" may be used to override an automatically\n"
+"                           selected default subtitle track.\n"
 "  -N, --native-language <string>\n"
 "                           Specifiy your language preference. When the first\n"
 "                           audio track does not match your native language\n"
@@ -2338,7 +2341,14 @@ static int ParseOptions( int argc, char ** argv )
             case SUB_DEFAULT:
                 if (optarg != NULL)
                 {
-                    subdefault = strtol(optarg, NULL, 0);
+                    if (!strcasecmp("none", optarg))
+                    {
+                        subdefault = -1;
+                    }
+                    else
+                    {
+                        subdefault = strtol(optarg, NULL, 0);
+                    }
                 }
                 else
                 {
@@ -2721,6 +2731,8 @@ static int ParseOptions( int argc, char ** argv )
                         color_matrix_code = 2;
                     else if( !strcmp( optarg, "709" ) )
                         color_matrix_code = 3;
+                    else if( !strcmp( optarg, "2020" ) )
+                        color_matrix_code = 4;
                 } break;
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
@@ -3519,7 +3531,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioTrackName",
-                                    hb_value_string(acodecs[ii]));
+                                    hb_value_string(anames[ii]));
             }
         }
     }
@@ -3729,7 +3741,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (comb_detect_disable)
     {
-        hb_dict_set(preset, "PictureCombDetectFilter", hb_value_string("off"));
+        hb_dict_set(preset, "PictureCombDetectPreset", hb_value_string("off"));
     }
     if (comb_detect != NULL)
     {
@@ -3977,12 +3989,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         return NULL;
     }
 
-    if (hb_value_get_bool(hb_dict_get(job_dict, "ChapterMarkers")))
+    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
+    if (hb_value_get_bool(hb_dict_get(dest_dict, "ChapterMarkers")))
     {
         write_chapter_names(job_dict, marker_file);
     }
 
-    hb_dict_t *dest_dict = hb_dict_get(job_dict, "Destination");
     hb_dict_set(dest_dict, "File", hb_value_string(output));
 
     // Now that the job is initialized, we need to find out
@@ -4482,14 +4494,23 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     }
     else
     {
-        if (subdefault > 0)
+        if (subdefault || srtdefault > 0)
         {
             // "Default" flag can not be applied till after subtitles have
             // been selected.  Apply it here if subtitle selection was
             // made by the preset.
             hb_value_t *sub_dict = hb_dict_get(job_dict, "Subtitle");
             hb_value_t *sub_list = hb_dict_get(sub_dict, "SubtitleList");
-            if (hb_value_array_len(sub_list) >= subdefault)
+            int         ii;
+
+            // disable any currently set default flag
+            for (ii = 0; ii < hb_value_array_len(sub_list); ii++)
+            {
+                hb_value_t *sub = hb_value_array_get(sub_list, ii);
+                hb_dict_set(sub, "Default", hb_value_bool(0));
+            }
+
+            if (subdefault > 0 && hb_value_array_len(sub_list) >= subdefault)
             {
                 hb_value_t *sub = hb_value_array_get(sub_list, subdefault - 1);
                 hb_dict_set(sub, "Default", hb_value_bool(1));

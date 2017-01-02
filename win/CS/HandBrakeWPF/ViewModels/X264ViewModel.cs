@@ -16,7 +16,6 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Presets.Model;
@@ -30,11 +29,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class X264ViewModel : ViewModelBase, IX264ViewModel
     {
-        /// <summary>
-        /// The advanced encoder options command.
-        /// </summary>
-        private readonly IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand;
-
         #region Constants and Fields
 
         /// <summary>
@@ -164,12 +158,8 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="X264ViewModel"/> class.
         /// </summary>
-        /// <param name="advancedEncoderOptionsCommand">
-        /// The advanced Encoder Options Command.
-        /// </param>
-        public X264ViewModel(IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand)
+        public X264ViewModel()
         {
-            this.advancedEncoderOptionsCommand = advancedEncoderOptionsCommand;
             this.Task = new EncodeTask();
             this.UpdateUIFromAdvancedOptions();
         }
@@ -190,6 +180,11 @@ namespace HandBrakeWPF.ViewModels
                 ShowX264AdvancedOptions = this.Task.ShowAdvancedTab;
                 this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
                 this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
+
+                if (ShowX264AdvancedOptions)
+                {
+                    this.UpdateUIFromAdvancedOptions();
+                }
             }
         }
 
@@ -253,12 +248,6 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.AdvancedEncoderOptions = value;
                 this.UpdateUIFromAdvancedOptions();
                 this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
-
-                // Reset the video tab if the user is using this tab.
-                if (!string.IsNullOrEmpty(this.Task.AdvancedEncoderOptions))
-                {
-                    this.advancedEncoderOptionsCommand.ExecuteClearVideo();
-                }
             }
         }
 
@@ -1154,12 +1143,6 @@ namespace HandBrakeWPF.ViewModels
 
             this.Task.AdvancedEncoderOptions = string.Join(":", newOptions);
             this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
-
-            // Reset the video tab if the user is using this tab.
-            if (!string.IsNullOrEmpty(this.Task.AdvancedEncoderOptions))
-            {
-                this.advancedEncoderOptionsCommand.ExecuteClearVideo();
-            }
         }
 
         #endregion

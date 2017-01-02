@@ -162,7 +162,7 @@
         NSPoint indent = NSMakePoint(10 * scaleFactor, 2 * scaleFactor);
         CGFloat radius = (textBounds.size.height + indent.y) * 0.5f;
 
-        NSRect badgeRect = NSMakeRect(size.width - textBounds.size.width - indent.x, size.height - textBounds.size.height - indent.y,
+        NSRect badgeRect = NSMakeRect(0, 0,
                                       textBounds.size.width + indent.x, textBounds.size.height + indent.y);
         badgeRect = NSIntegralRect(badgeRect);
 
@@ -189,16 +189,17 @@
         CGContextDrawPath(context, kCGPathFill);
 
         // Draw the text
-        badgeRect.origin.x = CGRectGetMidX(badgeRect) - (textBounds.size.width * 0.5f);
-        badgeRect.origin.x -= (textBounds.size.width - textBounds.size.width) * 0.5f;
+        badgeRect.origin.x = CGRectGetMidX(badgeRect);
+        badgeRect.origin.x -= textBounds.origin.x / 2;
+        badgeRect.origin.x -= ((textBounds.size.width - textBounds.origin.x) * 0.5f);
         badgeRect.origin.y = CGRectGetMidY(badgeRect);
         badgeRect.origin.y -= textBounds.origin.y / 2;
         badgeRect.origin.y -= ((textBounds.size.height - textBounds.origin.y) * 0.5f);
 
+        badgeRect.origin.x = floor(badgeRect.origin.x);
         badgeRect.origin.y = floor(badgeRect.origin.y);
-        badgeRect.origin.x = ceil(badgeRect.origin.x);
-        badgeRect.size.height = textBounds.size.height;
         badgeRect.size.width = textBounds.size.width;
+        badgeRect.size.height = textBounds.size.height;
 
         [badgeString drawInRect:badgeRect withAttributes:attr];
 
@@ -206,6 +207,8 @@
 
         CGContextFlush(context);
         CGContextRestoreGState(context);
+
+        [NSGraphicsContext restoreGraphicsState];
 
         [newImage addRepresentation:newRep];
     }

@@ -1,6 +1,6 @@
 /* encx265.c
 
-   Copyright (c) 2003-2016 HandBrake Team
+   Copyright (c) 2003-2017 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -174,7 +174,12 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
             strcpy(transfer,    "bt709");
             strcpy(colormatrix, "bt709");
             break;
-        case 4: // custom
+        case 4: // ITU BT.2020 UHD content
+            strcpy(colorprim,   "bt2020");
+            strcpy(transfer,    "bt709");
+            strcpy(colormatrix, "bt2020nc");
+            break;
+        case 5: // custom
             snprintf(colorprim,   sizeof(colorprim),   "%d", job->color_prim);
             snprintf(transfer,    sizeof(transfer),    "%d", job->color_transfer);
             snprintf(colormatrix, sizeof(colormatrix), "%d", job->color_matrix);
