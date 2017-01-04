@@ -327,22 +327,25 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
         preview_set_size(ud, width, height);
         if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
         {
-            GdkScreen *ss;
+            GdkWindow *window;
             gint s_w, s_h;
 
-            ss = gdk_screen_get_default();
-            s_w = gdk_screen_get_width(ss);
-            s_h = gdk_screen_get_height(ss);
+            window = gtk_widget_get_window(
+                        GHB_WIDGET(ud->builder, "preview_window"));
+            ghb_monitor_get_size(window, &s_w, &s_h);
 
-            if (width > s_w * 80 / 100)
+            if (s_w > 0 && s_h > 0)
             {
-                width = s_w * 80 / 100;
-                height = gst_util_uint64_scale_int(width, den, num);
-            }
-            if (height > s_h * 80 / 100)
-            {
-                height = s_h * 80 / 100;
-                width = gst_util_uint64_scale_int(height, num, den);
+                if (width > s_w * 80 / 100)
+                {
+                    width = s_w * 80 / 100;
+                    height = gst_util_uint64_scale_int(width, den, num);
+                }
+                if (height > s_h * 80 / 100)
+                {
+                    height = s_h * 80 / 100;
+                    width = gst_util_uint64_scale_int(height, num, den);
+                }
             }
         }
     }
