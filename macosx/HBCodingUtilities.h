@@ -21,6 +21,8 @@
 
 #define decodeCollectionOfObjects(x, cl, objectcl) x = [HBCodingUtilities decodeObjectOfClasses:[NSSet setWithObjects:[cl class], [objectcl class], nil] forKey:OBJC_STRINGIFY(x) decoder:decoder];
 
+#define decodeCollectionOfObjects2(x, cl, objectcl, objectcl2) x = [HBCodingUtilities decodeObjectOfClasses:[NSSet setWithObjects:[cl class], [objectcl class], [objectcl2 class], nil] forKey:OBJC_STRINGIFY(x) decoder:decoder];
+
 #define decodeObjectOrFail(x, class) x = [HBCodingUtilities decodeObjectOfClass:class forKey:OBJC_STRINGIFY(x) decoder:decoder]; if (x == nil) {NSLog(@"Failed to decode: %@", OBJC_STRINGIFY(x)); goto fail;}
 
 NS_ASSUME_NONNULL_BEGIN

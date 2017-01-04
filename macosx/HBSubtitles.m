@@ -446,7 +446,7 @@ extern NSString *keySubTrackSrtFileURL;
     self = [super init];
 
     decodeInt(_container);
-    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects2(_sourceTracks, NSArray, NSDictionary, NSURL);
     decodeCollectionOfObjects(_tracks, NSMutableArray, HBSubtitlesTrack);
 
     for (HBSubtitlesTrack *track in _tracks)
