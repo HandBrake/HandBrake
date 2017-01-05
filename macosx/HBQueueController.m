@@ -70,6 +70,7 @@
 
         // Init a separate instance of libhb for the queue
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
+        _core.automaticallyPreventSleep = NO;
 
         // Load the queue from disk.
         _jobs = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBJob class]];
@@ -573,7 +574,10 @@
     // since we have completed an encode, we go to the next
     if (self.stop)
     {
+        [HBUtilities writeToActivityLog:"Queue manually stopped"];
+
         self.stop = NO;
+        [self.core allowSleep];
     }
     else
     {
@@ -617,6 +621,8 @@
             // Since there are no more items to encode, go to queueCompletedAlerts
             // for user specified alerts after queue completed
             [self queueCompletedAlerts];
+
+            [self.core allowSleep];
         }
     }
     [self.jobs commit];
@@ -1125,6 +1131,7 @@
         // or shut down when encoding is finished
         [self remindUserOfSleepOrShutdown];
 
+        [self.core preventSleep];
         [self encodeNextQueueItem];
     }
 }
@@ -1201,10 +1208,12 @@
     if (s == HBStatePaused)
     {
         [self.core resume];
+        [self.core preventSleep];
     }
     else if (s == HBStateWorking || s == HBStateMuxing)
     {
         [self.core pause];
+        [self.core allowSleep];
     }
 }
 
