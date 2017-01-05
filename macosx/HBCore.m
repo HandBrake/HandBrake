@@ -139,6 +139,34 @@ static void hb_error_handler(const char *errmsg)
     hb_log_level_set(_hb_handle, logLevel);
 }
 
+- (void)preventSleep
+{
+    NSAssert(!self.automaticallyPreventSleep, @"[HBCore preventSleep:] called with automaticallyPreventSleep enabled.");
+    hb_system_sleep_prevent(_hb_handle);
+}
+
+- (void)allowSleep
+{
+    NSAssert(!self.automaticallyPreventSleep, @"[HBCore allowSleep:] called with automaticallyPreventSleep enabled.");
+    hb_system_sleep_allow(_hb_handle);
+}
+
+- (void)preventAutoSleep
+{
+    if (self.automaticallyPreventSleep)
+    {
+        hb_system_sleep_prevent(_hb_handle);
+    }
+}
+
+- (void)allowAutoSleep
+{
+    if (self.automaticallyPreventSleep)
+    {
+        hb_system_sleep_allow(_hb_handle);
+    }
+}
+
 #pragma mark - Scan
 
 - (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
@@ -229,7 +257,7 @@ static void hb_error_handler(const char *errmsg)
         [HBUtilities writeToActivityLog:"%s scanning titles with a duration of %d seconds or more", self.name.UTF8String, seconds];
     }
 
-    hb_system_sleep_prevent(_hb_handle);
+    [self preventAutoSleep];
 
     hb_scan(_hb_handle, path.fileSystemRepresentation,
             (int)index, (int)previewsNum,
@@ -469,7 +497,8 @@ static void hb_error_handler(const char *errmsg)
     // Free the job
     hb_job_close(&hb_job);
 
-    hb_system_sleep_prevent(_hb_handle);
+    [self preventAutoSleep];
+
     hb_start(_hb_handle);
 
     // Start the timer to handle libhb state changes
@@ -523,15 +552,15 @@ static void hb_error_handler(const char *errmsg)
 - (void)pause
 {
     hb_pause(_hb_handle);
-    hb_system_sleep_allow(_hb_handle);
     self.state = HBStatePaused;
+    [self allowAutoSleep];
 }
 
 - (void)resume
 {
     hb_resume(_hb_handle);
-    hb_system_sleep_prevent(_hb_handle);
     self.state = HBStateWorking;
+    [self preventAutoSleep];
 }
 
 #pragma mark - State updates
@@ -637,8 +666,9 @@ static void hb_error_handler(const char *errmsg)
 
     // Set the state to idle, because the update timer won't fire again.
     self.state = HBStateIdle;
+
     // Reallow system sleep.
-    hb_system_sleep_allow(_hb_handle);
+    [self allowAutoSleep];
 
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
