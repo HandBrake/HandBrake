@@ -769,21 +769,23 @@ void hb_qsv_info_print()
     hb_log("Intel Quick Sync Video support: %s",
            hb_qsv_available() ? "yes": "no");
 
-    // also print the details
-    if (qsv_hardware_version.Version)
-    {
-        hb_log(" - Intel Media SDK hardware: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
-               qsv_hardware_version.Major, qsv_hardware_version.Minor,
-               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
-    }
-    if (qsv_software_version.Version)
-    {
-        hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
-               qsv_software_version.Major, qsv_software_version.Minor,
-               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
-    }
     if (hb_qsv_available())
     {
+        // also print the details
+        if (qsv_hardware_version.Version)
+        {
+            hb_log(" - Intel Media SDK hardware: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+                   qsv_hardware_version.Major, qsv_hardware_version.Minor,
+                   HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+        }
+        
+        if (qsv_software_version.Version)
+        {
+            hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+                   qsv_software_version.Major, qsv_software_version.Minor,
+                   HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+        }
+    
         if (hb_qsv_info_avc != NULL && hb_qsv_info_avc->available)
         {
             hb_log(" - H.264 encoder: yes");
