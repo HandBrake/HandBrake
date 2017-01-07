@@ -65,6 +65,8 @@ struct hb_handle_s
 
     // power management opaque pointer
     void         * system_sleep_opaque;
+
+    int            enable_opencl;
 };
 
 hb_work_object_t * hb_objects = NULL;
@@ -139,6 +141,11 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
 
     ret = avcodec_open2(avctx, codec, av_opts);
     return ret;
+}
+
+int hb_get_opencl_enabled (hb_handle_t * h)
+{
+    return h->enable_opencl;
 }
 
 int hb_avcodec_close(AVCodecContext *avctx)
@@ -409,13 +416,19 @@ void hb_log_level_set(hb_handle_t *h, int level)
     global_verbosity_level = level;
 }
 
+
+hb_handle_t * hb_init( int verbose )
+{
+    return (hb_handle_t *) hb_init_cl(verbose, 0); // Default OpenCL to OFF.
+}
+
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
- * @param update_check signals libhb to check for updated version from HandBrake website.
+ * @param Enable OpenCL detection and support.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init( int verbose )
+hb_handle_t * hb_init_cl( int verbose, int enable_opencl )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
 
@@ -427,7 +440,7 @@ hb_handle_t * hb_init( int verbose )
     /* Initialize opaque for PowerManagement purposes */
     h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
-	h->title_set.list_title = hb_list_init();
+    h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
     h->state_lock  = hb_lock_init();
@@ -436,6 +449,8 @@ hb_handle_t * hb_init( int verbose )
     h->pause_lock = hb_lock_init();
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
+    
+    h->enable_opencl = enable_opencl;
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
