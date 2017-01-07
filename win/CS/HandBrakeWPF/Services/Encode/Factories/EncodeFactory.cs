@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.HbLib;
@@ -360,7 +361,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     Mixdown = mixdown != null ? mixdown.Id : -1,
                     NormalizeMixLevel = false,
                     Samplerate = sampleRate != null ? sampleRate.Rate : 0,
-                    Name = item.TrackName,
+                    Name = !string.IsNullOrEmpty(item.TrackName) ? item.TrackName : null,
                 };
 
                 if (!item.IsPassthru)
