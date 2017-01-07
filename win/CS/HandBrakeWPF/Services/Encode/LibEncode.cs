@@ -75,6 +75,8 @@ namespace HandBrakeWPF.Services.Encode
                 // Setup the HandBrake Instance
                 this.log.Reset(); // Reset so we have a clean log for the start of the encode.
                 this.ServiceLogMessage("Starting Encode ...");
+
+                HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
                 this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
