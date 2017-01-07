@@ -644,7 +644,10 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
     /* Print OpenCL info here so that it's in all scan and encode logs */
-    hb_opencl_info_print();
+    if (h->enable_opencl)
+    {
+        hb_opencl_info_print();
+    }
 
 #ifdef USE_QSV
     /* Print QSV info here so that it's in all scan and encode logs */
