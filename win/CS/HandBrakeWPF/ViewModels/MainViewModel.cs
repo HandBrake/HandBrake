@@ -1330,6 +1330,14 @@ namespace HandBrakeWPF.ViewModels
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline))
             {
                 this.IsQueueShowingInLine = !this.IsQueueShowingInLine;
+                if (this.IsQueueShowingInLine)
+                {
+                    this.QueueViewModel.Activate();
+                }
+                else
+                {
+                    this.QueueViewModel.Deactivate();
+                }
                 this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
             }
             else

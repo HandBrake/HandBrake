@@ -46,5 +46,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The remove selected jobs.
         /// </summary>
         void RemoveSelectedJobs();
+
+        /// <summary>
+        /// Activate this panel
+        /// </summary>
+        void Activate();
+
+        /// <summary>
+        /// Deactivate this panel
+        /// </summary>
+        void Deactivate();
     }
 }

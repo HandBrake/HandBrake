@@ -1845,7 +1845,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pause.
+        ///   Looks up a localized string similar to Pause Queue.
         /// </summary>
         public static string QueueView_Pause {
             get {
@@ -1890,7 +1890,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start.
+        ///   Looks up a localized string similar to Start Queue.
         /// </summary>
         public static string QueueView_Start {
             get {
