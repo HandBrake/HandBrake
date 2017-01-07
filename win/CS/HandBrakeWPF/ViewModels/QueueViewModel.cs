@@ -46,6 +46,8 @@ namespace HandBrakeWPF.ViewModels
         private string jobsPending;
         private string whenDoneAction;
 
+        private bool isQueueRunning;
+
         #endregion
 
         #region Constructors and Destructors
@@ -72,7 +74,8 @@ namespace HandBrakeWPF.ViewModels
             this.JobStatus = Resources.QueueViewModel_NoJobsPending;
             this.SelectedItems = new BindingList<QueueTask>();
             this.DisplayName = "Queue";
-
+            this.IsQueueRunning = false;
+            
             this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
         }
 
@@ -81,19 +84,19 @@ namespace HandBrakeWPF.ViewModels
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether IsEncoding.
+        /// Gets or sets a value indicating whether the Queue is paused or not..
         /// </summary>
-        public bool IsEncoding
+        public bool IsQueueRunning
         {
             get
             {
-                return this.isEncoding;
+                return this.isQueueRunning;
             }
-
             set
             {
-                this.isEncoding = value;
-                this.NotifyOfPropertyChange(() => IsEncoding);
+                if (value == this.isQueueRunning) return;
+                this.isQueueRunning = value;
+                this.NotifyOfPropertyChange(() => this.IsQueueRunning);
             }
         }
 
@@ -214,25 +217,48 @@ namespace HandBrakeWPF.ViewModels
         public override void OnLoad()
         {
             // Setup the window to the correct state.
-            this.IsEncoding = this.queueProcessor.EncodeService.IsEncoding;
+            this.IsQueueRunning = this.queueProcessor.EncodeService.IsEncoding;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
 
             base.OnLoad();
         }
 
         /// <summary>
-        /// Pause Encode
+        /// Can Pause the Queue.
+        /// Used by Caliburn Micro to enable/disable the context menu item.
         /// </summary>
-        public void PauseEncode()
+        /// <returns>
+        /// True when we can pause the queue.
+        /// </returns>
+        public bool CanPauseQueue()
+        {
+            return this.IsQueueRunning;
+        }
+
+        /// <summary>
+        /// Pause the Queue
+        /// </summary>
+        public void PauseQueue()
         {
             this.queueProcessor.Pause();
 
             this.JobStatus = Resources.QueueViewModel_QueuePending;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsEncoding = false;
+            this.IsQueueRunning = false;
 
             MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue, 
                 MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
+        /// Pause the Queue
+        /// </summary>
+        /// <remarks>
+        /// Prevents evaluation of CanPauseQueue
+        /// </remarks>
+        public void PauseQueueToolbar()
+        {
+            this.PauseQueue();
         }
 
         /// <summary>
@@ -308,9 +334,21 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Can Start Encoding.
+        /// Used by Caliburn Micro to enable/disable the context menu item.
+        /// </summary>
+        /// <returns>
+        /// True when we can start encoding.
+        /// </returns>
+        public bool CanStartQueue()
+        {
+            return !this.IsQueueRunning;
+        }
+
+        /// <summary>
         /// Start Encode
         /// </summary>
-        public void StartEncode()
+        public void StartQueue()
         {
             if (this.queueProcessor.Count == 0)
             {
@@ -321,7 +359,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.JobStatus = Resources.QueueViewModel_QueueStarted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsEncoding = true;
+            this.IsQueueRunning = true;
 
             this.queueProcessor.Start(userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
         }
@@ -394,6 +432,21 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Methods
+
+        public void Activate()
+        {
+            this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
+            this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
+            this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
+
+        }
+
+        public void Deactivate()
+        {
+            this.queueProcessor.QueueCompleted -= this.queueProcessor_QueueCompleted;
+            this.queueProcessor.QueueChanged -= this.QueueManager_QueueChanged;
+            this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
+        }
 
         /// <summary>
         /// Override the OnActive to run the Screen Loading code in the view model base.
@@ -472,7 +525,7 @@ namespace HandBrakeWPF.ViewModels
                     this.queueProcessor.Pause();
                     this.JobStatus = Resources.QueueViewModel_QueuePending;
                     this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-                    this.IsEncoding = false;
+                    this.IsQueueRunning = false;
 
                     this.errorService.ShowMessageBox(
                         Resources.MainViewModel_LowDiskSpaceWarning,
@@ -498,6 +551,7 @@ namespace HandBrakeWPF.ViewModels
             if (!queueProcessor.IsProcessing)
             {
                 this.JobStatus = Resources.QueueViewModel_QueueNotRunning;
+                this.IsQueueRunning = false;
             }
         }
 
@@ -514,7 +568,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobStatus = Resources.QueueViewModel_QueueCompleted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsEncoding = false;
+            this.IsQueueRunning = false;
         }
 
         /// <summary>
@@ -547,7 +601,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobStatus = Resources.QueueViewModel_QueueStarted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsEncoding = true;
+            this.IsQueueRunning = true; 
         }
 
         #endregion
