@@ -178,8 +178,29 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void WhenDone(string action)
         {
+            this.WhenDone(action, true);
+        }
+
+        /// <summary>
+        /// Update the When Done Setting
+        /// </summary>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        /// <param name="saveChange">
+        /// Save the change to the setting. Use false when updating UI.
+        /// </param>
+        public void WhenDone(string action, bool saveChange)
+        {
             this.WhenDoneAction = action;
-            this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, action);
+
+            if (saveChange)
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, action);
+            }
+
+            IOptionsViewModel ovm = IoC.Get<IOptionsViewModel>();
+            ovm.UpdateSettings();
         }
 
         /// <summary>

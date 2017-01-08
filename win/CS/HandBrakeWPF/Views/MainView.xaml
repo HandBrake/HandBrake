@@ -737,39 +737,25 @@
 
                         <MenuItem x:Name="doNothing"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
-                        <MenuItem x:Name="shutdown"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}" />
+                        <MenuItem x:Name="shutdownSystem"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(shutdownSystem.Header)]"
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}" />
                         <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"/>
                         <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}" />
                         <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}" />
                         <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"/>
                         <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"
-                                  IsCheckable="True"
-                                  attachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}" />
                     </MenuItem>
                 </Menu>
             </StatusBarItem>
