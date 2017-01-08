@@ -150,12 +150,14 @@ class Configure( object ):
             return
         self._record = False
         self.verbose = Configure.OUT_QUIET
-        with self.open( 'log/config.info.txt', 'w' ) as out_file:
-            for line in self._log_info:
-                out_file.write( line )
-        with self.open( 'log/config.verbose.txt', 'w' ) as out_file:
-            for line in self._log_verbose:
-                out_file.write( line )
+        file = self.open( 'log/config.info.txt', 'w' )
+        for line in self._log_info:
+            file.write( line )
+        file.close()
+        file = self.open( 'log/config.verbose.txt', 'w' )
+        for line in self._log_verbose:
+            file.write( line )
+        file.close()
 
     ## Find executable by searching path.
     ## On success, returns full pathname of executable.
