@@ -695,6 +695,8 @@
                               Message="Please wait ..."
                               SubMessage="{Binding StatusLabel}"
                               ActionText="Cancel"
+                              SecondaryActionText="Open Log Window"
+                              SecondaryAction="{Binding OpenLogWindowAction}"
                               CancelAction="{Binding CancelAction}"
                               />
 
