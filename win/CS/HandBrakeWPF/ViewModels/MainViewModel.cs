@@ -1088,6 +1088,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Action for the status window.
+        /// </summary>
+        public Action OpenLogWindowAction
+        {
+            get
+            {
+                return this.OpenLogWindow;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether show alert window.
         /// </summary>
         public bool ShowAlertWindow
