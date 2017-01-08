@@ -150,14 +150,14 @@ class Configure( object ):
             return
         self._record = False
         self.verbose = Configure.OUT_QUIET
-        file = self.open( 'log/config.info.txt', 'w' )
+        log_info_file = self.open( 'log/config.info.txt', 'w' )
         for line in self._log_info:
-            file.write( line )
-        file.close()
-        file = self.open( 'log/config.verbose.txt', 'w' )
+            log_info_file.write( line )
+        log_info_file.close()
+        log_verbose_file = self.open( 'log/config.verbose.txt', 'w' )
         for line in self._log_verbose:
-            file.write( line )
-        file.close()
+            log_verbose_file.write( line )
+        log_verbose_file.close()
 
     ## Find executable by searching path.
     ## On success, returns full pathname of executable.
@@ -168,11 +168,7 @@ class Configure( object ):
                 return name
             return None
 
-        if not os.environ.has_key( 'PATH' ) or os.environ[ 'PATH' ] == '':
-            path = os.defpath
-        else:
-            path = os.environ['PATH']
-
+        path = os.getenv( 'PATH' ) or os.defpath
         for dir in path.split( os.pathsep ):
             f = os.path.join( dir, name )
             if os.access( f, os.X_OK ):
@@ -340,9 +336,8 @@ class CCProbe( Action ):
 
     def _action( self ):
         ## write program file
-        file = open( 'conftest.c', 'w' )
-        file.write( self.test_file )
-        file.close()
+        with open( 'conftest.c', 'w' ) as out_file:
+            out_file.write( self.test_file )
         ## pipe and redirect stderr to stdout; effects communicate result
         pipe = subprocess.Popen( '%s -c -o conftest.o conftest.c' % self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
 
@@ -382,9 +377,8 @@ class LDProbe( Action ):
 
     def _action( self ):
         ## write program file
-        file = open( 'conftest.c', 'w' )
-        file.write( self.test_file )
-        file.close()
+        with open( 'conftest.c', 'w' ) as out_file:
+            out_file.write( self.test_file )
         ## pipe and redirect stderr to stdout; effects communicate result
         pipe = subprocess.Popen( '%s -o conftest conftest.c %s' % (self.command, self.lib), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
 
@@ -429,10 +423,7 @@ class HostTupleProbe( ShellProbe, list ):
         super( HostTupleProbe, self ).__init__( 'host tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
 
     def _parseSession( self ):
-        if len(self.session):
-            self.spec = self.session[0]
-        else:
-            self.spec = ''
+        self.spec = self.session[0] if self.session else ''
 
         ## grok GNU host tuples
         m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
@@ -780,9 +771,8 @@ class RepoProbe( ShellProbe ):
         try:
             hvp = os.path.join( cfg.src_dir, 'version.txt' )
             if os.path.isfile( hvp ) and os.path.getsize( hvp ) > 0:
-                file = open( hvp, 'r' )
-                self.session = file.readlines()
-                file.close()
+                with open( hvp, 'r' ) as in_file:
+                    self.session = in_file.readlines()
                 if self.session:
                     self._parseSession()
             if self.rev != 0:
@@ -974,12 +964,7 @@ class VersionProbe( Action ):
         ## read data into memory buffers
         data = pipe.communicate()
         self.fail = pipe.returncode != 0
-
-        if data[0]:
-            self.session = data[0].splitlines()
-        else:
-            self.session = []
-
+        self.session = data[0].splitlines() if data[0] else []
         self.svers = '0.0.0'
         self.ivers = [0,0,0]
 
@@ -1096,22 +1081,22 @@ class ConfigDocument:
     def __init__( self ):
         self._elements = []
 
-    def _outputMake( self, file, namelen, name, value, append ):
+    def _outputMake( self, out_file, namelen, name, value, append ):
         if append:
             if value == None or len(str(value)) == 0:
-                file.write( '%-*s +=\n' % (namelen, name) )
+                out_file.write( '%-*s +=\n' % (namelen, name) )
             else:
-                file.write( '%-*s += %s\n' % (namelen, name, value) )
+                out_file.write( '%-*s += %s\n' % (namelen, name, value) )
         else:
             if value == None or len(str(value)) == 0:
-                file.write( '%-*s  =\n' % (namelen, name) )
+                out_file.write( '%-*s  =\n' % (namelen, name) )
             else:
-                file.write( '%-*s  = %s\n' % (namelen, name, value) )
+                out_file.write( '%-*s  = %s\n' % (namelen, name, value) )
 
-    def _outputM4( self, file, namelen, name, value ):
+    def _outputM4( self, out_file, namelen, name, value ):
         namelen += 7
         name = '<<__%s>>,' % name.replace( '.', '_' )
-        file.write( 'define(%-*s  <<%s>>)dnl\n' % (namelen, name, value ))
+        out_file.write( 'define(%-*s  <<%s>>)dnl\n' % (namelen, name, value ))
 
     def add( self, name, value, append=False ):
         self._elements.append( [name,value,append] )
@@ -1129,7 +1114,7 @@ class ConfigDocument:
     def addM4( self, line ):
         self._elements.append( ('?m4',line) )
 
-    def output( self, file, type ):
+    def output( self, out_file, type ):
         namelen = 0
         for item in self._elements:
             if item == None or item[0].find( '?' ) == 0:
@@ -1139,19 +1124,19 @@ class ConfigDocument:
         for item in self._elements:
             if item == None:
                 if type == 'm4':
-                    file.write( 'dnl\n' )
+                    out_file.write( 'dnl\n' )
                 else:
-                    file.write( '\n' )
+                    out_file.write( '\n' )
                 continue
             if item[0].find( '?' ) == 0:
                 if item[0].find( type, 1 ) == 1:
-                    file.write( '%s\n' % (item[1]) )
+                    out_file.write( '%s\n' % (item[1]) )
                 continue
 
             if type == 'm4':
-                self._outputM4( file, namelen, item[0], item[1] )
+                self._outputM4( out_file, namelen, item[0], item[1] )
             else:
-                self._outputMake( file, namelen, item[0], item[1], item[2] )
+                self._outputMake( out_file, namelen, item[0], item[1], item[2] )
 
     def update( self, name, value ):
         for item in self._elements:
@@ -1173,11 +1158,11 @@ class ConfigDocument:
         ftmp = cfg.mktmpname(fname)
         try:
             try:
-                file = cfg.open( ftmp, 'w' )
-                self.output( file, type )
+                out_file = cfg.open( ftmp, 'w' )
+                self.output( out_file, type )
             finally:
                 try:
-                    file.close()
+                    out_file.close()
                 except:
                     pass
         except Exception, x:
@@ -1207,12 +1192,12 @@ def encodeDistfileConfig():
     }
     try:
         try:
-            file = cfg.open( ftmp, 'w' )
-            json.dump(data, file)
-            file.write('\n')
+            out_file = cfg.open( ftmp, 'w' )
+            json.dump(data, out_file)
+            out_file.write('\n')
         finally:
             try:
-                file.close()
+                out_file.close()
             except:
                 pass
     except Exception, x:
