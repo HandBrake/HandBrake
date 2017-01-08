@@ -150,14 +150,12 @@ class Configure( object ):
             return
         self._record = False
         self.verbose = Configure.OUT_QUIET
-        file = self.open( 'log/config.info.txt', 'w' )
-        for line in self._log_info:
-            file.write( line )
-        file.close()
-        file = self.open( 'log/config.verbose.txt', 'w' )
-        for line in self._log_verbose:
-            file.write( line )
-        file.close()
+        with self.open( 'log/config.info.txt', 'w' ) as out_file:
+            for line in self._log_info:
+                out_file.write( line )
+        with self.open( 'log/config.verbose.txt', 'w' ) as out_file:
+            for line in self._log_verbose:
+                out_file.write( line )
 
     ## Find executable by searching path.
     ## On success, returns full pathname of executable.
@@ -168,11 +166,7 @@ class Configure( object ):
                 return name
             return None
 
-        if not os.environ.has_key( 'PATH' ) or os.environ[ 'PATH' ] == '':
-            path = os.defpath
-        else:
-            path = os.environ['PATH']
-
+        path = os.getenv( 'PATH' ) or os.defpath
         for dir in path.split( os.pathsep ):
             f = os.path.join( dir, name )
             if os.access( f, os.X_OK ):
@@ -340,9 +334,8 @@ class CCProbe( Action ):
 
     def _action( self ):
         ## write program file
-        file = open( 'conftest.c', 'w' )
-        file.write( self.test_file )
-        file.close()
+        with open( 'conftest.c', 'w' ) as out_file:
+            out_file.write( self.test_file )
         ## pipe and redirect stderr to stdout; effects communicate result
         pipe = subprocess.Popen( '%s -c -o conftest.o conftest.c' % self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
 
@@ -382,9 +375,8 @@ class LDProbe( Action ):
 
     def _action( self ):
         ## write program file
-        file = open( 'conftest.c', 'w' )
-        file.write( self.test_file )
-        file.close()
+        with open( 'conftest.c', 'w' ) as out_file:
+            out_file.write( self.test_file )
         ## pipe and redirect stderr to stdout; effects communicate result
         pipe = subprocess.Popen( '%s -o conftest conftest.c %s' % (self.command, self.lib), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
 
@@ -429,10 +421,7 @@ class HostTupleProbe( ShellProbe, list ):
         super( HostTupleProbe, self ).__init__( 'host tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
 
     def _parseSession( self ):
-        if len(self.session):
-            self.spec = self.session[0]
-        else:
-            self.spec = ''
+        self.spec = self.session[0] if self.session else ''
 
         ## grok GNU host tuples
         m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
@@ -780,15 +769,11 @@ class RepoProbe( ShellProbe ):
         try:
             hvp = os.path.join( cfg.src_dir, 'version.txt' )
             if os.path.isfile( hvp ) and os.path.getsize( hvp ) > 0:
-                file = open( hvp, 'r' )
-                self.session = file.readlines()
-                file.close()
+                with open( hvp, 'r' ) as in_file:
+                    self.session = in_file.readlines()
                 if self.session:
                     self._parseSession()
-            if self.rev != 0:
-                cfg.infof( '(pass)\n' )
-            else:
-                cfg.infof( '(fail)\n' )
+            cfg.infof( '(fail)\n' if self.rev else '(pass)\n' )
 
         except:
             cfg.infof( '(fail)\n' )
@@ -974,12 +959,7 @@ class VersionProbe( Action ):
         ## read data into memory buffers
         data = pipe.communicate()
         self.fail = pipe.returncode != 0
-
-        if data[0]:
-            self.session = data[0].splitlines()
-        else:
-            self.session = []
-
+        self.session = data[0].splitlines() if data[0] else []
         self.svers = '0.0.0'
         self.ivers = [0,0,0]
 
@@ -1138,10 +1118,7 @@ class ConfigDocument:
                 namelen = len(item[0])
         for item in self._elements:
             if item == None:
-                if type == 'm4':
-                    file.write( 'dnl\n' )
-                else:
-                    file.write( '\n' )
+                file.write( 'dnl\n' if type == 'm4' else '\n' )
                 continue
             if item[0].find( '?' ) == 0:
                 if item[0].find( type, 1 ) == 1:
