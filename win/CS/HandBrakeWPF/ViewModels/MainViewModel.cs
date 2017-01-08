@@ -1713,7 +1713,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="action">action</param>
         public void WhenDone(string action)
         {
-            this.QueueViewModel?.WhenDone(action);
+            this.QueueViewModel?.WhenDone(action, true);
         }
 
         #endregion
@@ -2517,10 +2517,17 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            switch (e.Key)
             {
-                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+                case UserSettingConstants.ShowAdvancedTab:
+                    this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+                    break;
+
+                case UserSettingConstants.WhenCompleteAction:
+                    this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
+                    break;
             }
+
         }
 
         /// <summary>

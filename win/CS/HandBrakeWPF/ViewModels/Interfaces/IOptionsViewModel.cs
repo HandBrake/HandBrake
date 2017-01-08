@@ -23,5 +23,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The tab.
         /// </param>
         void GotoTab(OptionsTab tab);
+
+        /// <summary>
+        /// Refresh certain UI controls that can be updated outside preferences.
+        /// </summary>
+        void UpdateSettings();
     }
 }
