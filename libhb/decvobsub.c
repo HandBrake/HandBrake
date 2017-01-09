@@ -196,7 +196,7 @@ void decsubClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
-    if ( pv->buf )
+    if ( pv && pv->buf )
         hb_buffer_close( &pv->buf );
     free( w->private_data );
 }
