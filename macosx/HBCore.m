@@ -92,6 +92,7 @@ static void hb_error_handler(const char *errmsg)
     if (self)
     {
         _name = @"HBCore";
+        _automaticallyPreventSleep = YES;
         _state = HBStateIdle;
         _updateTimerQueue = queue;
         _titles = @[];
