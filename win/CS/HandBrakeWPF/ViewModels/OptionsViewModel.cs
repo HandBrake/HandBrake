@@ -1194,7 +1194,6 @@ namespace HandBrakeWPF.ViewModels
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
             {
                 this.WhenDone = "Do nothing";
-                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
             }
 
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
