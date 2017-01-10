@@ -11,6 +11,7 @@
 #include "hb.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
+#include qsv_common.h
 
 /**
  * Convert an hb_state_t to a jansson dict
@@ -887,7 +888,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
             "OpenCL",               unpack_b(&job->use_opencl),
             "QSV",
-                "Decode",           unpack_b(&job->qsv.decode),
+                "Decode",           hb_qsv_available() && unpack_b(&job->qsv.decode),
                 "AsyncDepth",       unpack_i(&job->qsv.async_depth),
         "Audio",
             "CopyMask",             unpack_o(&acodec_copy_mask),
