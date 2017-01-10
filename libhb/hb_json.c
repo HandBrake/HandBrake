@@ -11,7 +11,7 @@
 #include "hb.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
-#include qsv_common.h
+#include "qsv_common.h"
 
 /**
  * Convert an hb_state_t to a jansson dict
