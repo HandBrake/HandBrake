@@ -11,6 +11,7 @@
 #include "hb.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
+#include "qsv_common.h"
 
 /**
  * Convert an hb_state_t to a jansson dict
@@ -918,6 +919,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
     }
+    
+    // Make sure QSV Decode is only True if the hardware is available.
+    job->qsv.decode = job->qsv.decode && hb_qsv_available(); 
 
     // Lookup mux id
     if (hb_value_type(mux) == HB_VALUE_TYPE_STRING)
