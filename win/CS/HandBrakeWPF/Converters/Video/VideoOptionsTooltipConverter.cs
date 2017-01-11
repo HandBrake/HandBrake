@@ -51,7 +51,13 @@ namespace HandBrakeWPF.Converters.Video
                 string rfqp = task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X264_10 || task.VideoEncoder == VideoEncoder.X265 
                     || task.VideoEncoder == VideoEncoder.X265_10 || task.VideoEncoder == VideoEncoder.X265_12 ? "RF" : "QP";
                 string quality = task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality ? task.Quality + rfqp : task.VideoBitrate + " kbps";
-                string twoPass = task.TwoPass ? task.TurboFirstPass ? " (2-Pass with Turbo)" : " (2-Pass)" : string.Empty;
+                string twoPass = null;
+
+                if (task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
+                {
+                    twoPass = task.TwoPass ? task.TurboFirstPass ? " (2-Pass with Turbo)" : " (2-Pass)" : string.Empty;
+                }
+
                 return string.Format("{0} - {1}{2}", EnumHelper<VideoEncoder>.GetDisplay(task.VideoEncoder), quality, twoPass); 
             }
 
