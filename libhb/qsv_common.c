@@ -109,6 +109,7 @@ enum
     QSV_G3, // Haswell or equivalent
     QSV_G4, // Broadwell or equivalent
     QSV_G5, // Skylake or equivalent
+    QSV_G6, // Kaby Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 static int qsv_hardware_generation(int cpu_platform)
@@ -129,6 +130,8 @@ static int qsv_hardware_generation(int cpu_platform)
             return QSV_G4;
         case HB_CPU_PLATFORM_INTEL_SKL:
             return QSV_G5;
+        case HB_CPU_PLATFORM_INTEL_KBL:
+            return QSV_G6;
         default:
             return QSV_FU;
     }

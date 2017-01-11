@@ -274,7 +274,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Skylake";
         case HB_CPU_PLATFORM_INTEL_CHT:
             return "Intel microarchitecture Airmont";
-
+        case HB_CPU_PLATFORM_INTEL_KBL:
+            return "Intel microarchitecture Kaby Lake";
         default:
             return NULL;
     }
@@ -360,6 +361,10 @@ static void init_cpu_info()
                     case 0x4E:
                     case 0x5E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_SKL;
+                        break;
+                    case 0x8E:
+                    case 0x9E:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_KBL;
                         break;
                     default:
                         break;
