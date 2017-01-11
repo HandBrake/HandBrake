@@ -468,19 +468,38 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "End",        hb_value_int(job->pts_to_stop),
             "SeekPoints", hb_value_int(job->seek_points));
     }
-    else if (job->pts_to_start != 0)
+    else if (job->pts_to_start != 0 || job->pts_to_stop != 0)
     {
         range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
             "Type",  hb_value_string("time"),
             "Start", hb_value_int(job->pts_to_start),
             "End",   hb_value_int(job->pts_to_stop));
+        range_dict = hb_dict_init();
+        hb_dict_set(source_dict, "Type", hb_value_string("time"));
+        if (job->pts_to_start > 0)
+        {
+            hb_dict_set(source_dict, "Start", hb_value_int(job->pts_to_start));
+        }
+        if (job->pts_to_stop > 0)
+        {
+            hb_dict_set(source_dict, "End",
+                        hb_value_int(job->pts_to_start + job->pts_to_stop));
+        }
     }
-    else if (job->frame_to_start != 0)
+    else if (job->frame_to_start != 0 || job->frame_to_stop != 0)
     {
-        range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
-            "Type",  hb_value_string("frame"),
-            "Start", hb_value_int(job->frame_to_start),
-            "End",   hb_value_int(job->frame_to_stop));
+        range_dict = hb_dict_init();
+        hb_dict_set(source_dict, "Type", hb_value_string("frame"));
+        if (job->frame_to_start > 0)
+        {
+            hb_dict_set(source_dict, "Start",
+                        hb_value_int(job->frame_to_start + 1));
+        }
+        if (job->frame_to_stop > 0)
+        {
+            hb_dict_set(source_dict, "End",
+                        hb_value_int(job->frame_to_start + job->frame_to_stop));
+        }
     }
     else
     {
@@ -970,14 +989,14 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (range_start >= 0)
                 job->pts_to_start = range_start;
             if (range_end >= 0)
-                job->pts_to_stop = range_end;
+                job->pts_to_stop = range_end - job->pts_to_start;
         }
         else if (!strcasecmp(range_type, "frame"))
         {
-            if (range_start >= 0)
-                job->frame_to_start = range_start;
-            if (range_end >= 0)
-                job->frame_to_stop = range_end;
+            if (range_start > 0)
+                job->frame_to_start = range_start - 1;
+            if (range_end > 0)
+                job->frame_to_stop = range_end - job->frame_to_start;
         }
     }
 
