@@ -4026,13 +4026,20 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     {
         range_type = "time";
         range_start = start_at_pts;
-        range_end = stop_at_pts;
+        if (stop_at_pts > 0)
+            range_end = start_at_pts + stop_at_pts;
     }
     else if (start_at_frame || stop_at_frame)
     {
         range_type = "frame";
         range_start = start_at_frame;
-        range_end = stop_at_frame;
+        if (stop_at_frame > 0)
+        {
+            if (start_at_frame > 0)
+                range_end = start_at_frame + stop_at_frame - 1;
+            else
+                range_end = stop_at_frame;
+        }
     }
     if (range_start || range_end)
     {
