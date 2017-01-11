@@ -101,7 +101,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 case PointToPointMode.Seconds:
                     range.Type = "time";
                     range.Start = job.StartPoint * 90000;
-                    range.End = (job.EndPoint - job.StartPoint) * 90000;
+                    range.End = job.EndPoint * 90000;
                     break;
                 case PointToPointMode.Frames:
                     range.Type = "frame";
