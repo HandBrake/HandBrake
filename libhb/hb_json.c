@@ -888,7 +888,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
             "OpenCL",               unpack_b(&job->use_opencl),
             "QSV",
-                "Decode",           hb_qsv_available() && unpack_b(&job->qsv.decode),
+                "Decode",           unpack_b(&job->qsv.decode),
                 "AsyncDepth",       unpack_i(&job->qsv.async_depth),
         "Audio",
             "CopyMask",             unpack_o(&acodec_copy_mask),
@@ -919,6 +919,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
     }
+    
+    // Make sure QSV Decode is only True if the hardware is available.
+    job->qsv.decode = job->qsv.decode && hb_qsv_available(); 
 
     // Lookup mux id
     if (hb_value_type(mux) == HB_VALUE_TYPE_STRING)
