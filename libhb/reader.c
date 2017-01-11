@@ -541,6 +541,10 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             buf->s.start += r->scr_offset;
         }
+        if (buf->s.stop != AV_NOPTS_VALUE)
+        {
+            buf->s.stop += r->scr_offset;
+        }
         if (buf->s.renderOffset != AV_NOPTS_VALUE)
         {
             buf->s.renderOffset += r->scr_offset;
