@@ -10,6 +10,10 @@
 #ifndef HB_QSV_COMMON_H
 #define HB_QSV_COMMON_H
 
+int            hb_qsv_available();
+
+#ifdef USE_QSV
+
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
@@ -64,7 +68,6 @@ typedef struct hb_qsv_info_s
 } hb_qsv_info_t;
 
 /* Intel Quick Sync Video utilities */
-int            hb_qsv_available();
 int            hb_qsv_video_encoder_is_enabled(int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();
@@ -188,4 +191,5 @@ const char* hb_qsv_impl_get_name(int impl);
 
 void hb_qsv_force_workarounds(); // for developers only
 
-#endif
+#endif // USE_QSV
+#endif // HB_QSV_COMMON_H

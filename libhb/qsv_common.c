@@ -2150,4 +2150,11 @@ void hb_qsv_force_workarounds()
 #undef FORCE_WORKAROUNDS
 }
 
+#else
+
+int hb_qsv_available()
+{
+    return 0;
+}
+
 #endif // USE_QSV
