@@ -1155,6 +1155,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Additional Information.
+        /// </summary>
+        public static string NoAdditionalInformation {
+            get {
+                return ResourceManager.GetString("NoAdditionalInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
         public static string Notice {
