@@ -249,7 +249,7 @@ extern NSString *keySubTrackType;
                 NSString *title;
                 if (chapter->title != NULL)
                 {
-                    title = [NSString stringWithFormat:@"%s", chapter->title];
+                    title = @(chapter->title);
                 }
                 else
                 {
