@@ -713,8 +713,8 @@ namespace HandBrakeWPF.ViewModels
                 HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(this.SelectedVideoEncoder));
                 if (encoder != null)
                 {
-                    string preset = encoder.Presets[value];
-                    this.VideoPreset = new VideoPreset(preset, preset);
+                    string preset = value >= 0 ? encoder.Presets[value] : null;
+                    this.VideoPreset = preset != null ?new VideoPreset(preset, preset) : this.VideoPresets.FirstOrDefault();
                 }
 
                 this.NotifyOfPropertyChange(() => this.VideoPresetValue);
