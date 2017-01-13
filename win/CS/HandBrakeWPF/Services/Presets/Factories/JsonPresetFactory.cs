@@ -309,7 +309,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.VideoTunes.Add(new VideoTune(item, item));
                 }
             }
-            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
+            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || importedPreset.VideoFramerate == "Same as source" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
                                  ? (double?)null
                                  : double.Parse(importedPreset.VideoFramerate, CultureInfo.InvariantCulture);
             string parsedValue = importedPreset.VideoFramerateMode;
@@ -403,7 +403,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
-                    track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
+                    track.SampleRate = string.IsNullOrEmpty(audioTrack.AudioSamplerate) || audioTrack.AudioSamplerate.ToLower() == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
 
                     track.EncoderRateType = audioTrack.AudioTrackQualityEnable ? AudioEncoderRateType.Quality : AudioEncoderRateType.Bitrate;
                     track.Quality = audioTrack.AudioTrackQuality;

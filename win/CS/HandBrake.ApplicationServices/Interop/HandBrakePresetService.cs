@@ -66,7 +66,14 @@ namespace HandBrake.ApplicationServices.Interop
 
             if (!string.IsNullOrEmpty(presetJson))
             {
+                // Check to see if we have a list of presets.
+                if (presetJson.StartsWith("["))
+                {
+                    presetJson = "{ \"PresetList\":" + presetJson + " } ";
+                }
+
                 PresetTransportContainer preset = JsonConvert.DeserializeObject<PresetTransportContainer>(presetJson);
+
                 return preset;
             }
 
