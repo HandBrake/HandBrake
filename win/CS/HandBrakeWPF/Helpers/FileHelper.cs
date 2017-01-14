@@ -36,9 +36,17 @@ namespace HandBrakeWPF.Helpers
                     string file = Path.GetFileNameWithoutExtension(path);
                     string directory = Path.GetDirectoryName(path);
 
-                    // TODO this may not be necessary.
-                    if ((!string.IsNullOrEmpty(directory) && directory.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidPathChars()) != -1) ||
-                        file.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                    if (path.Split(':').Length - 1 > 1)
+                    {
+                        return true;
+                    }
+
+                    if (!string.IsNullOrEmpty(file) && file.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidPathChars()) != -1)
+                    {
+                        return true;
+                    }
+
+                    if (!string.IsNullOrEmpty(directory) && directory.Replace("\"", string.Empty).IndexOfAny(Path.GetInvalidPathChars()) != -1)
                     {
                         return true;
                     }
