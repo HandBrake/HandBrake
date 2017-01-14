@@ -429,7 +429,7 @@ void hb_opencl_status_set(hb_handle_t *h, int enable_opencl)
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init_cl( int verbose )
+hb_handle_t * hb_init( int verbose )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
 
