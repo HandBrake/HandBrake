@@ -31,8 +31,8 @@ extern "C" {
 void          hb_register( hb_work_object_t * );
 void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose );
-hb_handle_t * hb_init_cl( int verbose, int enable_opencl );
 void          hb_log_level_set(hb_handle_t *h, int level);
+void          hb_opencl_status_set(hb_handle_t *h, int enable_opencl);
 
 /* hb_get_version() */
 const char  * hb_get_full_description();
