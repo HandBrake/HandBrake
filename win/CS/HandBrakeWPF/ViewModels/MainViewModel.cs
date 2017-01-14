@@ -709,14 +709,16 @@ namespace HandBrakeWPF.ViewModels
                         try
                         {
                             ext = Path.GetExtension(value);
+                            if (FileHelper.FilePathHasInvalidChars(value) || string.IsNullOrEmpty(ext))
+                            {
+                                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
                         }
                         catch (ArgumentException)
                         {
-                            this.errorService.ShowMessageBox(
-                                Resources.Main_InvalidDestination,
-                                Resources.Error,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
                         }
 
                         this.CurrentTask.Destination = value;
