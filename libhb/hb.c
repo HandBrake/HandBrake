@@ -143,7 +143,7 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
     return ret;
 }
 
-int hb_get_opencl_enabled (hb_handle_t * h)
+int hb_get_opencl_enabled(hb_handle_t * h)
 {
     return h->enable_opencl;
 }
