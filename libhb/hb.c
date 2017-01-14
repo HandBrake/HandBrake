@@ -416,19 +416,20 @@ void hb_log_level_set(hb_handle_t *h, int level)
     global_verbosity_level = level;
 }
 
-
-hb_handle_t * hb_init( int verbose )
+/*
+ * Enable or disable support for OpenCL detection.
+ */
+void hb_opencl_status_set(hb_handle_t *h, int enable_opencl)
 {
-    return (hb_handle_t *) hb_init_cl(verbose, 0); // Default OpenCL to OFF.
+    h->enable_opencl = enable_opencl;
 }
 
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
- * @param Enable OpenCL detection and support.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init_cl( int verbose, int enable_opencl )
+hb_handle_t * hb_init_cl( int verbose )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
 
@@ -449,8 +450,6 @@ hb_handle_t * hb_init_cl( int verbose, int enable_opencl )
     h->pause_lock = hb_lock_init();
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
-    
-    h->enable_opencl = enable_opencl;
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
