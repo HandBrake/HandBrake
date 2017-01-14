@@ -1022,7 +1022,7 @@ skip_preview:
 
         // TODO: check video dimensions
         hb_handle_t * hb_handle = (hb_handle_t *)data->h;
-        if (hb_opencl_set_enable(hb_handle)
+        if (hb_get_opencl_enabled(hb_handle)
         {
              title->opencl_support = !!hb_opencl_available();
         }
