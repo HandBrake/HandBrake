@@ -49,7 +49,7 @@ int           hb_check_update( hb_handle_t * h, char ** version );
 char *        hb_dvd_name( char * path );
 void          hb_dvd_set_dvdnav( int enable );
 
-int           hb_opencl_set_enable(hb_handle_t *h);
+int           hb_opencl_set_enable(hb_handle_t *h, int enable_opencl);
 
 /* hb_scan()
    Scan the specified path. Can be a DVD device, a VIDEO_TS folder or
