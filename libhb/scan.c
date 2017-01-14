@@ -1021,7 +1021,7 @@ skip_preview:
         title->video_decode_support = vid_info.video_decode_support;
 
         // TODO: check video dimensions
-        hb_handle_t * hb_handle = (hb_handle_t *)data->h;
+        hb_handle_t *hb_handle = (hb_handle_t *)data->h;
         if (hb_get_opencl_enabled(hb_handle))
         {
              title->opencl_support = !!hb_opencl_available();
