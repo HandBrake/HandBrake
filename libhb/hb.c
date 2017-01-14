@@ -419,7 +419,7 @@ void hb_log_level_set(hb_handle_t *h, int level)
 /*
  * Enable or disable support for OpenCL detection.
  */
-void hb_opencl_status_set(hb_handle_t *h, int enable_opencl)
+void hb_opencl_set_enable(hb_handle_t *h, int enable_opencl)
 {
     h->enable_opencl = enable_opencl;
 }
@@ -441,7 +441,7 @@ hb_handle_t * hb_init( int verbose )
     /* Initialize opaque for PowerManagement purposes */
     h->system_sleep_opaque = hb_system_sleep_opaque_init();
 
-    h->title_set.list_title = hb_list_init();
+	h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
     h->state_lock  = hb_lock_init();
@@ -643,7 +643,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
     /* Print OpenCL info here so that it's in all scan and encode logs */
-    if (h->enable_opencl)
+    if (hb_get_opencl_enabled(h))
     {
         hb_opencl_info_print();
     }
