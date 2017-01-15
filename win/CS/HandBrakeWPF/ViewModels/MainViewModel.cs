@@ -709,7 +709,7 @@ namespace HandBrakeWPF.ViewModels
                         try
                         {
                             ext = Path.GetExtension(value);
-                            if (FileHelper.FilePathHasInvalidChars(value) || string.IsNullOrEmpty(ext))
+                            if (FileHelper.FilePathHasInvalidChars(value))
                             {
                                 this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
