@@ -448,6 +448,11 @@ int main( int argc, char ** argv )
     hb_register_error_handler(&hb_cli_error_handler);
 
     hb_dvd_set_dvdnav( dvdnav );
+    
+    if (use_opencl == 1)
+    {
+        hb_opencl_set_enable(h, use_opencl);
+    }
 
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
