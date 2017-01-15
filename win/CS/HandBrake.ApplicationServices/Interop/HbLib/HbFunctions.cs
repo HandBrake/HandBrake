@@ -71,6 +71,9 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb.dll", EntryPoint = "hb_dvd_set_dvdnav", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_dvd_set_dvdnav(int enable);
 
+        // void hb_opencl_set_enable(hb_handle_t* h, int enable_opencl);
+        [DllImport("hb.dll", EntryPoint = "hb_dvd_set_dvdnav", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void hb_opencl_set_enable(IntPtr hbHandle, int enable);
 
         /// Return Type: void
         ///param0: hb_handle_t*
