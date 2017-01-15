@@ -217,11 +217,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, bool clEnabled = false)
         {
             this.previewCount = previewCount;
 
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
+            HBFunctions.hb_opencl_set_enable(this.hbHandle, clEnabled ? 1 : 0);
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
@@ -388,6 +389,7 @@ namespace HandBrake.ApplicationServices.Interop
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
+            HBFunctions.hb_opencl_set_enable(this.hbHandle, encodeObject.Video.OpenCL ? 1 : 0);
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
             HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);
