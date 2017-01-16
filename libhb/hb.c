@@ -659,6 +659,11 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
                                    store_previews, min_duration );
 }
 
+void hb_force_rescan( hb_handle_t * h )
+{
+    h->title_set.path[0] = 0;
+}
+
 /**
  * Returns the list of titles found.
  * @param h Handle to hb_handle_t
