@@ -15,9 +15,13 @@ TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
         ass avresample avformat avcodec avfilter avutil mp3lame dvdnav \
-        dvdread fontconfig fribidi \
+        dvdread fribidi \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
         bluray freetype xml2 bz2 z jansson harfbuzz opus
+
+ifneq ($(BUILD.system),darwin)
+    TEST.GCC.l += fontconfig
+endif
 
 ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
@@ -51,7 +55,7 @@ BUILD.out += $(TEST.install.exe)
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += IOKit CoreServices AudioToolbox Foundation
+    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox Foundation
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
