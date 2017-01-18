@@ -51,7 +51,6 @@
 		27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72C14B102DA00B785E4 /* libbluray.a */; };
 		27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72E14B102DA00B785E4 /* libdvdnav.a */; };
 		27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72F14B102DA00B785E4 /* libdvdread.a */; };
-		27D6C75614B102DA00B785E4 /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73114B102DA00B785E4 /* libfontconfig.a */; };
 		27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73214B102DA00B785E4 /* libfreetype.a */; };
 		27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73314B102DA00B785E4 /* libfribidi.a */; };
 		27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73614B102DA00B785E4 /* libmp3lame.a */; };
@@ -121,7 +120,6 @@
 		A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72C14B102DA00B785E4 /* libbluray.a */; };
 		A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72E14B102DA00B785E4 /* libdvdnav.a */; };
 		A91CE2BB1C7DABBC0068F46F /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72F14B102DA00B785E4 /* libdvdread.a */; };
-		A91CE2BC1C7DABBC0068F46F /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73114B102DA00B785E4 /* libfontconfig.a */; };
 		A91CE2BD1C7DABBC0068F46F /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73214B102DA00B785E4 /* libfreetype.a */; };
 		A91CE2BE1C7DABBC0068F46F /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73314B102DA00B785E4 /* libfribidi.a */; };
 		A91CE2BF1C7DABBC0068F46F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
@@ -210,6 +208,10 @@
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A99F40D31B624EA500750170 /* HBPictureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A99F40D11B624EA500750170 /* HBPictureViewController.xib */; };
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
+		A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
+		A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
+		A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
+		A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
 		A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
 		A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C0DB83197E7B0000DF55B3 /* SubtitlesDefaults.xib */; };
@@ -509,6 +511,8 @@
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AA447C1970726500D7DEFC /* HBQueueController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
+		A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
 		A9BB0F2519A0ECE40079F1C1 /* HBHUDButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUDButtonCell.h; sourceTree = "<group>"; };
 		A9BB0F2619A0ECE40079F1C1 /* HBHUDButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBHUDButtonCell.m; sourceTree = "<group>"; };
@@ -577,6 +581,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */,
+				A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */,
 				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
@@ -594,7 +600,6 @@
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
-				27D6C75614B102DA00B785E4 /* libfontconfig.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
@@ -630,6 +635,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */,
+				A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */,
 				A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */,
 				A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */,
 				A9736F1F1C7DA667008F1D18 /* Foundation.framework in Frameworks */,
@@ -649,7 +656,6 @@
 				A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */,
 				A91CE2BB1C7DABBC0068F46F /* libdvdread.a in Frameworks */,
 				1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */,
-				A91CE2BC1C7DABBC0068F46F /* libfontconfig.a in Frameworks */,
 				A91CE2BD1C7DABBC0068F46F /* libfreetype.a in Frameworks */,
 				A91CE2BE1C7DABBC0068F46F /* libfribidi.a in Frameworks */,
 				A91CE2BF1C7DABBC0068F46F /* libjansson.a in Frameworks */,
@@ -761,6 +767,8 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */,
+				A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */,
 				A91CE2D31C7DABE40068F46F /* libiconv.tbd */,
 				A91CE2D11C7DABDA0068F46F /* libz.tbd */,
 				A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */,
