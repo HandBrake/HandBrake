@@ -304,7 +304,10 @@
 
 - (void)reloadQueueItemsAtIndexes:(NSIndexSet *)indexes
 {
-    [self.outlineView reloadDataForRowIndexes:indexes columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+    NSMutableIndexSet *outlineIndexes = [NSMutableIndexSet indexSet];
+    [outlineIndexes addIndex:0];
+    [outlineIndexes addIndex:2];
+    [self.outlineView reloadDataForRowIndexes:indexes columnIndexes:outlineIndexes];
     [self updateQueueStats];
 }
 
