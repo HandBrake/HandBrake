@@ -12,6 +12,7 @@
 #import "HBQueueOutlineView.h"
 
 #import "NSArray+HBAdditions.h"
+#import "HBUtilities.h"
 
 #import "HBDockTile.h"
 
@@ -223,7 +224,7 @@
 
     for (HBJob *item in self.jobs)
     {
-        if ([item.destURL isEqualTo:url])
+        if ([item.completeOutputURL isEqualTo:url])
         {
             return YES;
         }
@@ -587,7 +588,7 @@
         // Check to see if there are any more pending items in the queue
         HBJob *nextJob = [self getNextPendingQueueItem];
 
-        if (nextJob && [self _isDiskSpaceLowAtURL:nextJob.destURL])
+        if (nextJob && [self _isDiskSpaceLowAtURL:nextJob.outputURL])
         {
             // Disk space is low, show an alert
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
@@ -648,7 +649,7 @@
     if (result != HBCoreResultCancelled)
     {
         // Send to tagger
-        [self sendToExternalApp:job.destURL];
+        [self sendToExternalApp:job];
     }
 
     // Mark the encode just finished
@@ -744,7 +745,7 @@
     job.title = self.core.titles[0];
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
-    formatter.title = job.destURL.lastPathComponent;
+    formatter.title = job.outputFileName;
     self.core.stateFormatter = formatter;
 
     // Progress handler
@@ -862,19 +863,23 @@
  *  Sends the URL to the external app
  *  selected in the preferences.
  *
- *  @param fileURL the URL of the file to send
+ *  @param job the job of the file to send
  */
-- (void)sendToExternalApp:(NSURL *)fileURL
+- (void)sendToExternalApp:(HBJob *)job
 {
     // This end of encode action is called as each encode rolls off of the queue
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBSendToAppEnabled"] == YES)
     {
+#ifdef __SANDBOX_ENABLED__
+        BOOL accessingSecurityScopedResource = [job.outputURL startAccessingSecurityScopedResource];
+#endif
+
         NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
         NSString *app = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"HBSendToApp"]];
 
         if (app)
         {
-            if (![workspace openFile:fileURL.path withApplication:app])
+            if (![workspace openFile:job.completeOutputURL.path withApplication:app])
             {
                 [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
             }
@@ -883,6 +888,13 @@
         {
             [HBUtilities writeToActivityLog:"Send file to: app not found"];
         }
+
+#ifdef __SANDBOX_ENABLED__
+        if (accessingSecurityScopedResource)
+        {
+            [job.outputURL stopAccessingSecurityScopedResource];
+        }
+#endif
     }
 }
 
@@ -907,19 +919,19 @@
         {
             title = NSLocalizedString(@"Put down that cocktail…", nil);
             description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil),
-                                     job.destURL.lastPathComponent];
+                                     job.outputFileName];
 
         }
         else
         {
             title = NSLocalizedString(@"Encode failed", nil);
             description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ couldn't be completed.", nil),
-                           job.destURL.lastPathComponent];
+                           job.outputFileName];
         }
 
         [self showNotificationWithTitle:title
                             description:description
-                                    url:job.destURL];
+                                    url:job.completeOutputURL];
     }
 }
 
@@ -1069,7 +1081,7 @@
 
     NSUInteger currentIndex = [targetedRows firstIndex];
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.jobs objectAtIndex:currentIndex] destURL];
+        NSURL *url = [[self.jobs objectAtIndex:currentIndex] completeOutputURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }

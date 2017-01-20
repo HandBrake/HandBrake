@@ -167,7 +167,7 @@ static NSDictionary            *shortHeightAttr;
         [finalString appendString:[NSString stringWithFormat:@"%@", self.description] withAttributes:titleAttr];
 
         // lets add the output file name to the title string here
-        NSString *outputFilenameString = self.destURL.lastPathComponent;
+        NSString *outputFilenameString = self.outputFileName;
 
         summaryInfo = [NSString stringWithFormat: @" (%@, %@, %@) -> %@", titleString, startStopString, passesString, outputFilenameString];
 
@@ -249,7 +249,7 @@ static NSDictionary            *shortHeightAttr;
 
         // Fourth Line (Destination Path)
         [finalString appendString: @"Destination: " withAttributes:detailBoldAttr];
-        [finalString appendString: self.destURL.path withAttributes:detailAttr];
+        [finalString appendString: self.completeOutputURL.path withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
 
 

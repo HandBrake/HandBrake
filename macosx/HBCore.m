@@ -27,6 +27,8 @@ static void hb_error_handler(const char *errmsg)
     }
 }
 
+typedef void (^HBCoreCleanupHandler)();
+
 /**
  * Private methods of HBCore.
  */
@@ -53,6 +55,9 @@ static void hb_error_handler(const char *errmsg)
 
 /// Completion handler.
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
+
+/// Cleanup handle, used for internal HBCore cleanup.
+@property (nonatomic, readwrite, copy) HBCoreCleanupHandler cleanupHandler;
 
 @end
 
@@ -173,6 +178,11 @@ static void hb_error_handler(const char *errmsg)
 - (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
 {
     NSAssert(url, @"[HBCore canScan:] called with nil url.");
+
+#ifdef __SANDBOX_ENABLED__
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
+#endif
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         if (error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
@@ -217,6 +227,13 @@ static void hb_error_handler(const char *errmsg)
         }
     }
 
+#ifdef __SANDBOX_ENABLED__
+    if (accessingSecurityScopedResource)
+    {
+        [url stopAccessingSecurityScopedResource];
+    }
+#endif
+
     return YES;
 }
 
@@ -225,22 +242,22 @@ static void hb_error_handler(const char *errmsg)
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
 
+#ifdef __SANDBOX_ENABLED__
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
+    self.cleanupHandler = ^{
+        if (accessingSecurityScopedResource)
+        {
+            [url stopAccessingSecurityScopedResource];
+        }
+    };
+#endif
+
     // Reset the titles array
     self.titles = @[];
 
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
-
-    NSString *path = url.path;
-    HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-
-    if (detector.isVideoDVD)
-    {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
-        path = detector.devicePath;
-    }
 
     // convert minTitleDuration from seconds to the internal HB time
     uint64_t min_title_duration_ticks = 90000LL * seconds;
@@ -260,7 +277,7 @@ static void hb_error_handler(const char *errmsg)
 
     [self preventAutoSleep];
 
-    hb_scan(_hb_handle, path.fileSystemRepresentation,
+    hb_scan(_hb_handle, url.path.fileSystemRepresentation,
             (int)index, (int)previewsNum,
             1, min_title_duration_ticks);
 
@@ -490,9 +507,15 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
+#ifdef __SANDBOX_ENABLED__
+    HBJob *jobCopy = [job copy];
+    [jobCopy startAccessingSecurityScopedResource];
+    self.cleanupHandler = ^{ [jobCopy stopAccessingSecurityScopedResource]; };
+#endif
+
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
-    hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
+    hb_job_set_file(hb_job, job.completeOutputURL.path.fileSystemRepresentation);
     hb_add(_hb_handle, hb_job);
 
     // Free the job
@@ -510,7 +533,7 @@ static void hb_error_handler(const char *errmsg)
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
 
-    [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
+    [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.outputFileName.UTF8String];
     [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];
 }
 
@@ -673,6 +696,11 @@ static void hb_error_handler(const char *errmsg)
 
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
+
+#ifdef __SANDBOX_ENABLED__
+    self.cleanupHandler();
+    self.cleanupHandler = nil;
+#endif
 
     HBCoreResult result = (_hb_state->state == HB_STATE_WORKDONE) ? [self workDone] : [self scanDone];
     [self runCompletionBlockAndCleanUpWithResult:result];

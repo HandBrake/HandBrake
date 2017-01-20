@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D30a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
@@ -162,10 +162,10 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1552">
-                        <rect key="frame" x="5" y="454" width="47" height="17"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="1552">
+                        <rect key="frame" x="17" y="458" width="48" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="File:" id="4913">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Save as:" id="4913">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -244,23 +244,6 @@
                             <binding destination="-2" name="content" keyPath="self.job.containers" id="aNr-1N-DaN"/>
                         </connections>
                     </popUpButton>
-                    <button toolTip="Browse to select a new destination path and file name for your encode." verticalHuggingPriority="750" id="1562">
-                        <rect key="frame" x="815" y="450" width="90" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <accessibility description="Browse Destination"/>
-                        <connections>
-                            <action selector="browseDestination:" target="-2" id="FqS-ZD-MaJ"/>
-                            <binding destination="-2" name="enabled" keyPath="self.job" id="uGd-Ul-eBq">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSIsNotNil</string>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </button>
                     <box verticalHuggingPriority="750" boxType="separator" id="1623">
                         <rect key="frame" x="98" y="490" width="802" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -277,8 +260,8 @@
                             <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
                         </connections>
                     </textField>
-                    <textField toolTip="Destination path, including directory and file name. This is where your new video will be created, and what it will be named." verticalHuggingPriority="750" id="1561">
-                        <rect key="frame" x="56" y="455" width="756" height="19"/>
+                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" misplaced="YES" id="1561">
+                        <rect key="frame" x="71" y="455" width="395" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
@@ -292,10 +275,9 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.destURL" id="5zX-7b-Y0f">
+                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="cct-2d-Ycx">
                                 <dictionary key="options">
                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                    <string key="NSValueTransformerName">HBURLTransformer</string>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -604,6 +586,46 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </binding>
                         </connections>
                     </popUpButton>
+                    <pathControl verticalHuggingPriority="750" misplaced="YES" allowsExpansionToolTips="YES" id="PJi-21-hie">
+                        <rect key="frame" x="523" y="455" width="311" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <pathCell key="cell" controlSize="small" selectable="YES" alignment="left" id="5Bk-66-HFW">
+                            <font key="font" metaFont="smallSystem"/>
+                            <url key="url" string="file://localhost/Applications/"/>
+                        </pathCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.job.outputURL" id="FQU-UV-RCI"/>
+                        </connections>
+                    </pathControl>
+                    <button toolTip="Browse to select a new destination path and file name for your encode." verticalHuggingPriority="750" misplaced="YES" id="1562">
+                        <rect key="frame" x="831" y="450" width="74" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <accessibility description="Browse Destination"/>
+                        <connections>
+                            <action selector="browseDestination:" target="-2" id="FqS-ZD-MaJ"/>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="uGd-Ul-eBq">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="gfs-4j-YSE">
+                        <rect key="frame" x="477" y="458" width="40" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="textColor" keyPath="self.labelColor" id="dvP-fr-nOv"/>
+                        </connections>
+                    </textField>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">

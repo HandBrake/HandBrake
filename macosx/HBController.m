@@ -106,6 +106,9 @@
 /// The current selected preset.
 @property (nonatomic, strong) HBPreset *currentPreset;
 
+/// The current destination.
+@property (nonatomic, strong) NSURL *currentDestination;
+
 /// Whether the job has been edited after a preset was applied.
 @property (nonatomic) BOOL edited;
 
@@ -145,6 +148,27 @@
         }
 
         _scanSpecificTitleIdx = 1;
+
+        // Check to see if the last destination has been set, use if so, if not, use Movies
+#ifdef __SANDBOX_ENABLED__
+        NSData *bookmark = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBLastDestinationDirectoryBookmark"];
+        if (bookmark)
+        {
+            _currentDestination = [HBUtilities URLFromBookmark:bookmark];
+        }
+#else
+        _currentDestination = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectoryURL"];
+#endif
+
+        if (!_currentDestination)
+        {
+            _currentDestination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
+                                             isDirectory:YES];
+        }
+
+#ifdef __SANDBOX_ENABLED__
+        [_currentDestination startAccessingSecurityScopedResource];
+#endif
     }
 
     return self;
@@ -532,6 +556,8 @@
 
     self.job = nil;
     [fSrcTitlePopUp removeAllItems];
+    self.window.representedURL = nil;
+    self.window.title = NSLocalizedString(@"HandBrake", nil);
 
     NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
     NSString *displayName = [HBUtilities displayNameForURL:fileURL];
@@ -587,11 +613,14 @@
              {
                  for (HBTitle *title in self.core.titles)
                  {
-                     // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
-                     fSrcDVD2Field.stringValue = displayName;
-
                      [fSrcTitlePopUp addItemWithTitle:title.description];
                  }
+
+                 // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
+                 fSrcDVD2Field.stringValue = displayName;
+
+                 self.window.representedURL = mediaURL;
+                 self.window.title = mediaURL.lastPathComponent;
 
                  completionHandler(self.core.titles);
              }
@@ -662,7 +691,8 @@
     }
 
     HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
-    job.destURL = [HBUtilities destURLForJob:job];
+    job.outputURL = self.currentDestination;
+    job.outputFileName = [HBUtilities defaultNameForJob:job];
 
     return job;
 }
@@ -771,7 +801,8 @@
 	}
 	else
 	{
-		sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+        sourceDirectory = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject]
+                                                       isDirectory:YES];
 	}
 
     [panel setDirectoryURL:sourceDirectory];
@@ -800,23 +831,29 @@
 - (IBAction)browseDestination:(id)sender
 {
     // Open a panel to let the user choose and update the text field
-    NSSavePanel *panel = [NSSavePanel savePanel];
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseFiles = NO;
+    panel.canChooseDirectories = YES;
+    panel.prompt = NSLocalizedString(@"Choose", nil);
 
-    if (self.job.destURL)
+    if (self.job.outputURL)
     {
-        panel.directoryURL = self.job.destURL.URLByDeletingLastPathComponent;
-        panel.nameFieldStringValue = self.job.destURL.lastPathComponent;
+        panel.directoryURL = self.job.outputURL;
     }
 
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
      {
          if (result == NSFileHandlingPanelOKButton)
          {
-             self.job.destURL = panel.URL;
+             self.job.outputURL = panel.URL;
+             self.currentDestination = panel.URL;
 
              // Save this path to the prefs so that on next browse destination window it opens there
-             [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent
-                                                    forKey:@"HBLastDestinationDirectory"];
+             [[NSUserDefaults standardUserDefaults] setObject:[HBUtilities bookmarkFromURL:panel.URL]
+                                                       forKey:@"HBLastDestinationDirectoryBookmark"];
+             [[NSUserDefaults standardUserDefaults] setURL:panel.URL
+                                                    forKey:@"HBLastDestinationDirectoryURL"];
+
          }
      }];
 }
@@ -856,8 +893,7 @@
         NSString *fileName = [HBUtilities automaticNameForJob:self.job];
 
         // Swap the old one with the new one
-        self.job.destURL = [[self.job.destURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
-                            [NSString stringWithFormat:@"%@.%@", fileName, self.job.destURL.pathExtension]];
+        self.job.outputFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.outputFileName.pathExtension];
     }
 }
 
@@ -866,9 +902,9 @@
     if (self.job)
     {
         NSString *extension = [HBUtilities automaticExtForJob:self.job];
-        if (![extension isEqualTo:self.job.destURL.pathExtension])
+        if (![extension isEqualTo:self.job.outputFileName.pathExtension])
         {
-            self.job.destURL = [[self.job.destURL URLByDeletingPathExtension] URLByAppendingPathExtension:extension];
+            self.job.outputFileName = [[self.job.outputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
         }
     }
 }
@@ -959,38 +995,36 @@
  */
 - (void)runDestinationAlerts:(HBJob *)job didEndSelector:(SEL)didEndSelector
 {
-    NSString *destinationDirectory = job.destURL.path.stringByDeletingLastPathComponent;
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0)
+    if ([[NSFileManager defaultManager] fileExistsAtPath:job.outputURL.path] == 0)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
         [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"")];
         [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
     }
-    else if ([job.fileURL isEqual:job.destURL])
+    else if ([job.fileURL isEqual:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
         [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"")];
         [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
     }
-    else if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path])
+    else if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.destURL.path]];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:didEndSelector contextInfo:NULL];
     }
-    else if ([fQueueController jobExistAtURL:job.destURL])
+    else if ([fQueueController jobExistAtURL:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.destURL.path]];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
         [alert setAlertStyle:NSCriticalAlertStyle];
@@ -1132,7 +1166,8 @@
         if ([indexes containsIndex:title.index])
         {
             HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
-            job.destURL = [HBUtilities destURLForJob:job];
+            job.outputURL = self.currentDestination;
+            job.outputFileName = [HBUtilities defaultNameForJob:job];
             job.title = nil;
             [jobs addObject:job];
         }
@@ -1141,17 +1176,17 @@
     NSMutableSet<NSURL *> *destinations = [[NSMutableSet alloc] init];
     for (HBJob *job in jobs)
     {
-        if ([destinations containsObject:job.destURL])
+        if ([destinations containsObject:job.completeOutputURL])
         {
             fileExists = YES;
             break;
         }
         else
         {
-            [destinations addObject:job.destURL];
+            [destinations addObject:job.completeOutputURL];
         }
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:job.destURL.path] || [fQueueController jobExistAtURL:job.destURL])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path] || [fQueueController jobExistAtURL:job.completeOutputURL])
         {
             fileExists = YES;
             break;
@@ -1160,7 +1195,7 @@
 
     for (HBJob *job in jobs)
     {
-        if ([job.fileURL isEqual:job.destURL]) {
+        if ([job.fileURL isEqual:job.completeOutputURL]) {
             fileOverwritesSource = YES;
             break;
         }

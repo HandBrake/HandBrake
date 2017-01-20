@@ -288,7 +288,7 @@
     NSSavePanel *panel = [NSSavePanel savePanel];
     panel.allowedFileTypes = @[@"csv"];
     panel.directoryURL = destinationDirectory;
-    panel.nameFieldStringValue = self.job.destURL.lastPathComponent.stringByDeletingPathExtension;
+    panel.nameFieldStringValue = self.job.outputFileName.stringByDeletingPathExtension;
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {

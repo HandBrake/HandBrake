@@ -58,7 +58,13 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) NSURL *fileURL;
 
 /// The file URL at which the new file will be created.
-@property (nonatomic, readwrite, copy, nullable) NSURL *destURL;
+@property (nonatomic, readwrite, copy, nullable) NSURL *outputURL;
+
+/// The name of the new file that will be created.
+@property (nonatomic, readwrite, copy, nullable) NSString *outputFileName;
+
+/// The URL at which the new file will be created.
+@property (nonatomic, readonly, nullable) NSURL *completeOutputURL;
 
 // Job settings
 @property (nonatomic, readwrite) int container;
@@ -79,6 +85,14 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapterTitles;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
+
+/*  Given a HBJob created by NSSecureCoding, make the resource referenced by the job accessible to the process.
+ */
+- (BOOL)startAccessingSecurityScopedResource;
+
+/*  Revokes the access granted to the url by a prior successful call to startAccessingSecurityScopedResource.
+ */
+- (void)stopAccessingSecurityScopedResource;
 
 @end
 

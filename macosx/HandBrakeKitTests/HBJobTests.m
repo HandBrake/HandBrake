@@ -57,7 +57,8 @@
     self.title = self.core.titles.firstObject;
 
     self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
-    self.job.destURL = [NSURL fileURLWithPath:@"/Dest.mp4"];
+    self.job.outputURL = [NSURL fileURLWithPath:@"/"];
+    self.job.outputFileName = @"Dest.mp4";
 }
 
 - (void)tearDown
@@ -82,7 +83,8 @@
 
     XCTAssertNotNil(self.job);
 
-    job.destURL = [NSURL fileURLWithPath:@"/Dest.mp4"];
+    self.job.outputURL = [NSURL fileURLWithPath:@"/"];
+    self.job.outputFileName = @"Dest.mp4";
     [job applyPreset:preset];
 }
 

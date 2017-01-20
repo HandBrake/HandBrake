@@ -8,12 +8,17 @@
 #import "HBJob.h"
 #import "HBUtilities.h"
 
+@interface HBJobOutputFileWriter ()
+
+@property (nonatomic, readonly) NSURL *outputFolderURL;
+@property (nonatomic, readwrite) BOOL accessingSecurityScopedFile;
+
+@end
+
 @implementation HBJobOutputFileWriter
 
 - (nullable instancetype)initWithJob:(HBJob *)job
 {
-    NSURL *outputURL= job.destURL;
-
     // Establish the log file location to write to.
     // We need to get the current time in YY-MM-DD HH-MM-SS format to put at the beginning of the name of the log file
     time_t _now = time(NULL);
@@ -26,13 +31,21 @@
 
     // Assemble the new log file name as YY-MM-DD HH-MM-SS mymoviename.txt
     NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",
-                                    outputURL.lastPathComponent.stringByDeletingPathExtension,
+                                    job.outputFileName.stringByDeletingPathExtension,
                                     dateForLogTitle];
+
+    NSURL *outputURL = nil;
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"EncodeLogLocation"])
     {
         // if we are putting it in the same directory with the movie
-        outputURL = [outputURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:outputDateFileName];
+        outputURL = [job.outputURL URLByAppendingPathComponent:outputDateFileName];
+
+#ifdef __SANDBOX_ENABLED__
+        _outputFolderURL = job.outputURL;
+        _accessingSecurityScopedFile = [_outputFolderURL startAccessingSecurityScopedResource];
+#endif
+
     }
     else
     {
@@ -45,13 +58,23 @@
     if (self)
     {
         // Additional header info.
-        [self write:job.destURL.lastPathComponent];
+        [self write:job.outputFileName];
         [self write:@"\nPreset: "];
         [self write:job.presetName];
         [self write:@"\n"];
     }
 
     return self;
+}
+
+- (void)dealloc
+{
+#ifdef __SANDBOX_ENABLED__
+    if (_accessingSecurityScopedFile)
+    {
+        [_outputFolderURL.URLByDeletingLastPathComponent stopAccessingSecurityScopedResource];
+    }
+#endif
 }
 
 @end
