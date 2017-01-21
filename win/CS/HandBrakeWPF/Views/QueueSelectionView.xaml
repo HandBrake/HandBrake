@@ -9,6 +9,7 @@
         Title="{Binding Title}"
         Width="550"
         Height="475"
+        MinHeight="475"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
