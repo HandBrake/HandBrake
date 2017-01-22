@@ -24,7 +24,7 @@
 ### Mac
  - Fixed issue where video encoder options were not reset when changing encoders.
  - Fixed issue that could cause incomplete encodes where the chapter count differs on queued items.
- - Fixed and issue where "Preset Sleep" would not work.
+ - Fixed issue where "Prevent Sleep" would not work.
  - Added additional checks to prevent source file overwriting. 
  - Miscellaneous bug fixes
 
