@@ -37,6 +37,7 @@
 - Fixed video encoder options not reset when changing encoders
 - Fixed subtitles defaults behaviors to improve how tracks are added
 - Fixed issues related to source maximum and custom picture setting modes
+- Fixed point to point settings when editing a queued job
 - Fixed When Done controls not updating correctly on various screens
 - Fixed split buttons not working correctly on audio and subtitles tabs
 - Fixed destination path and file name error checking
