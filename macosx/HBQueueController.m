@@ -539,13 +539,13 @@
 #pragma mark -
 #pragma mark Queue Job Processing
 
-#define ALMOST_5GB 5000000000
+#define MIN_DISK_SPACE 2000000000
 
 - (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
 {
     NSDictionary *dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:url.URLByDeletingLastPathComponent.path error:NULL];
     long long freeSpace = [dict[NSFileSystemFreeSize] longLongValue];
-    if (freeSpace < ALMOST_5GB) {
+    if (freeSpace < MIN_DISK_SPACE) {
         return YES;
     }
     return NO;
