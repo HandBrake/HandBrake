@@ -1,5 +1,53 @@
 # HandBrake News
 
+## HandBrake 1.0.2
+
+### All platforms
+
+#### Video
+
+- Fixed point to point encoding end point when using frames as the unit
+- Improve error handling for libdvdread and libavcodec decoders
+
+#### Audio
+
+- Fixed an issue where fallback encoder bitrate was not set properly
+
+#### Subtitles
+
+- Fixed incorrect duration for UTF-8 subtitles
+- Fixed an issue causing extra blank lines for UTF-8 subtitles in MKV
+
+### Linux
+
+- Fixed an issue sometimes preventing dragging and dropping of presets between folders
+- Miscellaneous bug fixes
+
+### Mac
+
+- Fixed video encoder options not reset when changing encoders
+- Fixed incomplete encodes where the chapter count differs on queued items
+- Fixed sleep prevention not working in certain scenarios
+- Fixed automatic naming for EyeTV bundles
+- Added additional checks to prevent source file overwriting
+- Miscellaneous bug fixes
+
+### Windows
+
+- Fixed video encoder options not reset when changing encoders
+- Fixed subtitles defaults behaviors to improve how tracks are added
+- Fixed issues related to source maximum and custom picture setting modes
+- Fixed point to point settings when editing a queued job
+- Fixed When Done controls not updating correctly on various screens
+- Fixed split buttons not working correctly on audio and subtitles tabs
+- Fixed destination path and file name error checking
+- Fixed potential crash by disabling OpenCL detection when the scaler is not set to OpenCL Bicubic (workaround for broken system drivers)
+- Fixed a potential crash when QSV is supported but disabled at the BIOS level
+- Fixed memory leaks in the QSV encoder
+- Added QSV detection for Intel Kaby Lake CPUs
+- Miscellaneous bug fixes
+
+
 ## HandBrake 1.0.1
 
 ### All platforms
