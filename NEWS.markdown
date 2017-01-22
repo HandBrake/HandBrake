@@ -6,40 +6,45 @@
 
 #### Video 
 
-- Fixed EndPoint for "frames". It's not the end point, not the count.
-- Fixed error handling with libdvdread and libavcodec to better detect when problems occur.
+- Fixed point to point encoding end point when using frames as the unit
+- Improve error handling for libdvdread and libavcodec decoders
+
+#### Audio
+
+- Fixed an issue where fallback encoder bitrate was not set properly
 
 #### Subtitles
 
-- Fixed various issues around subtitles including UTF-8 Subtitle duration and line handling
-
-#### Command line interface
-
- - Miscellaneous bug fixes
+- Fixed incorrect duration for UTF-8 subtitles
+- Fixed an issue causing extra blank lines for UTF-8 subtitles in MKV
 
 ### Linux
 
- - Miscellaneous bug fixes
+- Fixed an issue sometimes preventing dragging and dropping of presets between folders
+- Miscellaneous bug fixes
 
 ### Mac
- - Fixed issue where video encoder options were not reset when changing encoders.
- - Fixed issue that could cause incomplete encodes where the chapter count differs on queued items.
- - Fixed issue where "Prevent Sleep" would not work.
- - Added additional checks to prevent source file overwriting. 
- - Miscellaneous bug fixes
 
+- Fixed video encoder options not reset when changing encoders
+- Fixed incomplete encodes where the chapter count differs on queued items
+- Fixed sleep prevention not working in certain scenarios
+- Fixed automatic naming for EyeTV bundles
+- Added additional checks to prevent source file overwriting
+- Miscellaneous bug fixes
 
 ### Windows
- - Fixed Subtitle Default behaviours. Tracks were not always added correctly.
- - Fixed issue where video encoder options were not reset when changing encoders.
- - Fixed Preset Picture Setting Mode options.
- - Fixed "When Done" dropdowns not updating correctly on various screens.
- - Fixed Split buttons on Audio and Subtitle tabs.
- - Fixed bad behaviour with destination path error checking. 
- - Fixed Some memory leaks in the QSV encoder.
- - Added QSV detection for Kaby Lake
- - Change OpenCL Detection is now disabled when the scaler is not set to OpenCL Bicubic.  This works around a crash a number of people were having due to broken OpenCL drivers on their system.
- - Miscellaneous bug fixes
+
+- Fixed video encoder options not reset when changing encoders
+- Fixed subtitles defaults behaviors to improve how tracks are added
+- Fixed issues related to source maximum and custom picture setting modes
+- Fixed When Done controls not updating correctly on various screens
+- Fixed split buttons not working correctly on audio and subtitles tabs
+- Fixed destination path and file name error checking
+- Fixed potential crash by disabling OpenCL detection when the scaler is not set to OpenCL Bicubic (workaround for broken system drivers)
+- Fixed a potential crash when QSV is supported but disabled at the BIOS level
+- Fixed memory leaks in the QSV encoder
+- Added QSV detection for Intel Kaby Lake CPUs
+- Miscellaneous bug fixes
 
 
 ## HandBrake 1.0.1
