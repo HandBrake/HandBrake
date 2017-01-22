@@ -18,7 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Forms;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -2105,13 +2104,15 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask = new EncodeTask(queueEditTask);
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
                 this.HasSource = true;
-
+             
                 // Update the Main Window
                 this.NotifyOfPropertyChange(() => this.Destination);
-                this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
-                this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
-                this.NotifyOfPropertyChange(() => this.SelectedAngle);
-                this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
+                this.SelectedAngle = this.CurrentTask.Angle;
+                int start = this.CurrentTask.StartPoint;
+                int end = this.CurrentTask.EndPoint;
+                this.SelectedPointToPoint = this.CurrentTask.PointToPointMode; // Force reset.
+                this.SelectedStartPoint = start;
+                this.SelectedEndPoint = end;
                 this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
 
