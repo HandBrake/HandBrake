@@ -1266,6 +1266,12 @@ namespace HandBrakeWPF.ViewModels
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
+            // Reset WhenDone if necessary.
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
+            {
+                this.WhenDone("Do nothing");
+            }
+
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
