@@ -1665,8 +1665,12 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             av_dict_free( &av_opts );
             hb_log( "decavcodecvWork: avcodec_open failed" );
-            *buf_out = hb_buffer_eof_init();
-            return HB_WORK_DONE;
+            // avcodec_open can fail due to incorrectly parsed extradata
+            // so try again when this fails
+            av_freep( &pv->context->extradata );
+            pv->context->extradata_size = 0;
+            hb_buffer_close( &in );
+            return HB_WORK_OK;
         }
         av_dict_free( &av_opts );
         pv->video_codec_opened = 1;
