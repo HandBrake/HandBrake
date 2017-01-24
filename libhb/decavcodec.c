@@ -1860,7 +1860,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 
     memset( info, 0, sizeof(*info) );
 
-    if (pv->context == NULL)
+    if (pv->context == NULL || pv->context->codec == NULL)
         return 0;
 
     info->bitrate = pv->context->bit_rate;
