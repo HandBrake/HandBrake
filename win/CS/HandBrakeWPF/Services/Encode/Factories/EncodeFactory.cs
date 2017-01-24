@@ -239,7 +239,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                             {
                                 Filename = item.SrtPath,
                                 Codeset = item.SrtCharCode,
-                                Language = item.SrtLang
+                                Language = item.SrtLangCode
                             }
                     };
 
