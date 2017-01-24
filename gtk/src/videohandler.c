@@ -84,6 +84,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_ui_update(ud, "VideoTune", ghb_int_value(0));
     ghb_ui_update(ud, "VideoProfile", ghb_int_value(0));
     ghb_ui_update(ud, "VideoLevel", ghb_int_value(0));
+    ghb_ui_update(ud, "VideoOptionExtra", ghb_string_value(""));
 
     // Set the range of the preset slider
     int encoder = ghb_get_video_encoder(ud->settings);
