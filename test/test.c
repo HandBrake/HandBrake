@@ -792,7 +792,7 @@ static void PrintTitleInfoRobot( hb_title_t * title, int feature )
 		}
 		else
 		{
-			fprintf( stdout, "AUDIO %d \"%s\" \"%s\")\n",
+			fprintf( stdout, "AUDIO %d \"%s\" \"%s\"\n",
 					 i + 1,
 					 audio->lang.description,
 					 audio->lang.iso639_2 );
@@ -1176,8 +1176,8 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 				}
 				else
 				{
-					fprintf( stdout, "ENCODINGETA %d %d %.2f %d\n",
-							 p.pass, p.pass_count, p.progress, (p.hours*60*60) + (p.minutes*60) + p.seconds );
+					fprintf( stdout, "ENCODINGETA %d %d %.2f %d %.2f %.2f\n",
+							 p.pass, p.pass_count, p.progress, (p.hours*60*60) + (p.minutes*60) + p.seconds, p.rate_cur, p.rate_avg );
 				}
 			}
             fflush(stdout);
