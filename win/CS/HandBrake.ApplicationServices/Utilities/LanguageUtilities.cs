@@ -284,5 +284,30 @@ namespace HandBrake.ApplicationServices.Utilities
         {
            return MapLanguages().Values.ToList();
         }
+
+        /// <summary>
+        /// The get language code.
+        /// </summary>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetLanguageCode(string language)
+        {
+            if (string.IsNullOrEmpty(language))
+            {
+                return null;
+            }
+
+            string isoCode;
+            if (MapLanguages().TryGetValue(language, out isoCode))
+            {
+                return isoCode;
+            }
+
+            return null;
+        }
     }
 }
