@@ -46,6 +46,7 @@ struct hb_work_private_s
 
     AudioConverterRef converter;
     unsigned long isamples, isamplesiz, omaxpacket, nchannels;
+    int64_t first_pts;
     uint64_t samples, ibytes;
     Float64 osamplerate;
 
@@ -146,6 +147,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
 
     w->private_data = pv;
     pv->job = job;
+    pv->first_pts = AV_NOPTS_VALUE;
 
     // pass the number of channels used into the private work data
     pv->nchannels =
@@ -441,9 +443,9 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     }
 
     obuf->size        = odesc.mDataByteSize;
-    obuf->s.start     = 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.start     = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
     pv->samples      += pv->isamples;
-    obuf->s.stop      = 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.stop      = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
     obuf->s.duration  = (double)90000 * pv->isamples / pv->osamplerate;
     obuf->s.type      = AUDIO_BUF;
     obuf->s.frametype = HB_FRAME_AUDIO;
@@ -515,6 +517,10 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
         return HB_WORK_DONE;
     }
 
+    if (pv->first_pts == AV_NOPTS_VALUE)
+    {
+        pv->first_pts = in->s.start;
+    }
     hb_list_add(pv->list, in);
 
     *buf_out = buf = Encode(w);
