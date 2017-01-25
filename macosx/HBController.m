@@ -644,7 +644,23 @@
     {
         [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
         {
-            job.title = titles.firstObject;
+            // If the scan was cached, reselect
+            // the original title
+            for (HBTitle *title in titles)
+            {
+                if (title.index == job.titleIdx)
+                {
+                    job.title = title;
+                    break;
+                }
+            }
+
+            // Else just one title or a title specific rescan
+            // select the first title
+            if (!job.title)
+            {
+                job.title = titles.firstObject;
+            }
             self.job = job;
         }];
 
