@@ -169,6 +169,8 @@
 		A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CF25F21990D64E0023F727 /* HBPreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D488A31996270300E9B1BA /* HBTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */ = {isa = PBXBuildFile; fileRef = A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */; };
+		A91D54881E378ABD006D0997 /* HBSecurityAccessToken.m in Sources */ = {isa = PBXBuildFile; fileRef = A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */; };
 		A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */; };
 		A91F97361D7B2A4E00D82DCE /* HBAudioTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */; };
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
@@ -418,6 +420,8 @@
 		A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		A91CE2D11C7DABDA0068F46F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A91CE2D31C7DABE40068F46F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSecurityAccessToken.h; sourceTree = "<group>"; };
+		A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSecurityAccessToken.m; sourceTree = "<group>"; };
 		A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTransformers.h; sourceTree = "<group>"; };
 		A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTransformers.m; sourceTree = "<group>"; };
 		A92268761A6E555500A8D5C5 /* HBAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAppDelegate.h; sourceTree = "<group>"; };
@@ -966,6 +970,8 @@
 				A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */,
 				A98F38041C7DCA7E00E469C8 /* HBStateFormatter+Private.h */,
 				A98F38051C7DCA7E00E469C8 /* HBStateFormatter+Private.m */,
+				A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */,
+				A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -1247,6 +1253,7 @@
 			files = (
 				A9736F051C7DA5FE008F1D18 /* HandBrakeKit.h in Headers */,
 				A91CE2D71C7DAEEE0068F46F /* HBCore.h in Headers */,
+				A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */,
 				A91CE2D81C7DAEEE0068F46F /* HBTitle.h in Headers */,
 				A91CE2D91C7DAEEE0068F46F /* HBJob.h in Headers */,
 				A91CE2DA1C7DAEEE0068F46F /* HBRange.h in Headers */,
@@ -1581,6 +1588,7 @@
 				A91CE2A01C7DA7320068F46F /* HBRange+UIAdditions.m in Sources */,
 				A91CE2A21C7DA7320068F46F /* HBVideo+UIAdditions.m in Sources */,
 				A91CE2A41C7DA7320068F46F /* HBPicture+UIAdditions.m in Sources */,
+				A91D54881E378ABD006D0997 /* HBSecurityAccessToken.m in Sources */,
 				A91119A61C7DD64A001C463C /* HBDistributedArray.m in Sources */,
 				A91CE2A61C7DA7320068F46F /* HBFilters+UIAdditions.m in Sources */,
 				A91CE2A81C7DA7320068F46F /* HBDVDDetector.m in Sources */,

@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable NSURL *)URLFromBookmark:(NSData *)bookmark;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url;
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
 
 + (NSString *)displayNameForURL:(NSURL *)URL;
 + (NSURL *)mediaURLFromURL:(NSURL *)URL;

@@ -86,14 +86,6 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
-/*  Given a HBJob created by NSSecureCoding, make the resource referenced by the job accessible to the process.
- */
-- (BOOL)startAccessingSecurityScopedResource;
-
-/*  Revokes the access granted to the url by a prior successful call to startAccessingSecurityScopedResource.
- */
-- (void)stopAccessingSecurityScopedResource;
-
 @end
 
 NS_ASSUME_NONNULL_END

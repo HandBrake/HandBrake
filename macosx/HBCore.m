@@ -12,6 +12,7 @@
 
 #import "HBStateFormatter+Private.h"
 #import "HBTitle+Private.h"
+#import "HBJob+Private.h"
 
 #include <dlfcn.h>
 
@@ -243,13 +244,8 @@ typedef void (^HBCoreCleanupHandler)();
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
 
 #ifdef __SANDBOX_ENABLED__
-    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
-    self.cleanupHandler = ^{
-        if (accessingSecurityScopedResource)
-        {
-            [url stopAccessingSecurityScopedResource];
-        }
-    };
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
+    self.cleanupHandler = ^{ token = nil; };
 #endif
 
     // Reset the titles array
@@ -509,8 +505,8 @@ typedef void (^HBCoreCleanupHandler)();
 
 #ifdef __SANDBOX_ENABLED__
     HBJob *jobCopy = [job copy];
-    [jobCopy startAccessingSecurityScopedResource];
-    self.cleanupHandler = ^{ [jobCopy stopAccessingSecurityScopedResource]; };
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:jobCopy];
+    self.cleanupHandler = ^{ token = nil; };
 #endif
 
     // Add the job to libhb

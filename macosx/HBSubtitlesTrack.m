@@ -19,6 +19,7 @@ NSString *keySubTrackName = @"keySubTrackName";
 NSString *keySubTrackLanguageIsoCode = @"keySubTrackLanguageIsoCode";
 NSString *keySubTrackType = @"keySubTrackType";
 NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
+NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 @interface HBSubtitlesTrack ()
 @property (nonatomic, readwrite) BOOL validating;

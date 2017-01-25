@@ -7,6 +7,10 @@
 //
 
 #import <HandBrakeKit/HandBrakeKit.h>
+#import "HBSecurityAccessToken.h"
+
+@interface HBJob (Private) <HBSecurityScope>
+@end
 
 @interface HBVideo (Private)
 
@@ -44,7 +48,7 @@
 
 @end
 
-@interface HBSubtitles (Private)
+@interface HBSubtitles (Private) <HBSecurityScope>
 
 - (instancetype)initWithJob:(HBJob *)job;
 

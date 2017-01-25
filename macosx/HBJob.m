@@ -10,9 +10,11 @@
 
 #import "HBAudioDefaults.h"
 #import "HBSubtitlesDefaults.h"
+#import "HBMutablePreset.h"
 
 #import "HBCodingUtilities.h"
-#import "HBMutablePreset.h"
+#import "HBUtilities.h"
+#import "HBSecurityAccessToken.h"
 
 #include "hb.h"
 
@@ -31,12 +33,12 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 @property (nonatomic, readwrite) NSData *outputURLFolderBookmark;
 
 /**
- Keep track of startAccessingSecurityScopedResource return value
- to avoid calling stopAccessingSecurityScopedResource when unnecessary
- and stopping another instance from accessing the url.
+ Keep track of security scoped resources status.
  */
-@property (nonatomic, readwrite) BOOL accessingSecurityScopedFileURL;
-@property (nonatomic, readwrite) BOOL accessingSecurityScopedOutputURL;
+@property (nonatomic, readwrite) HBSecurityAccessToken *fileURLToken;
+@property (nonatomic, readwrite) HBSecurityAccessToken *outputURLToken;
+@property (nonatomic, readwrite) HBSecurityAccessToken *subtitlesToken;
+@property (nonatomic, readwrite) NSInteger *accessCount;
 
 @end
 
@@ -230,16 +232,14 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 - (BOOL)startAccessingSecurityScopedResource
 {
 #ifdef __SANDBOX_ENABLED__
-    if (!self.accessingSecurityScopedFileURL)
+    if (self.accessCount == 0)
     {
-        self.accessingSecurityScopedFileURL = [self.fileURL startAccessingSecurityScopedResource];
+        self.fileURLToken = [HBSecurityAccessToken tokenWithObject:self.fileURL];
+        self.outputURLToken = [HBSecurityAccessToken tokenWithObject:self.outputURL];
+        self.subtitlesToken = [HBSecurityAccessToken tokenWithObject:self.subtitles];
     }
-    if (!self.accessingSecurityScopedOutputURL)
-    {
-        self.accessingSecurityScopedOutputURL = [self.outputURL startAccessingSecurityScopedResource];
-    }
-
-    return self.accessingSecurityScopedFileURL || self.accessingSecurityScopedOutputURL;
+    self.accessCount += 1;
+    return YES;
 #else
     return NO;
 #endif
@@ -248,13 +248,13 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 - (void)stopAccessingSecurityScopedResource
 {
 #ifdef __SANDBOX_ENABLED__
-    if (self.accessingSecurityScopedFileURL)
+    self.accessCount -= 1;
+    NSAssert(self.accessCount >= 0, @"[HBJob stopAccessingSecurityScopedResource:] unbalanced call");
+    if (self.accessCount == 0)
     {
-        [self.fileURL stopAccessingSecurityScopedResource];
-    }
-    if (self.accessingSecurityScopedOutputURL)
-    {
-        [self.outputURL stopAccessingSecurityScopedResource];
+        self.fileURLToken = nil;
+        self.outputURLToken = nil;
+        self.subtitlesToken = nil;
     }
 #endif
 }
@@ -322,41 +322,20 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     encodeObject(_uuid);
 
 #ifdef __SANDBOX_ENABLED__
-    NSError *error = nil;
-
     if (!_fileURLBookmark)
     {
-        _fileURLBookmark = [_fileURL bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope|NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess
-                                 includingResourceValuesForKeys:nil
-                                                  relativeToURL:nil
-                                                          error:&error];
-
-        if (error)
-        {
-            NSLog(@"Error creating bookmark for URL (%@): %@", _fileURL, error);
-        }
+        _fileURLBookmark = [HBUtilities bookmarkFromURL:_fileURL
+                                                options:NSURLBookmarkCreationWithSecurityScope |
+                                                        NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess];
     }
 
     encodeObject(_fileURLBookmark);
 
     if (!_outputURLFolderBookmark)
     {
-        BOOL accessed = [_outputURL startAccessingSecurityScopedResource];
-
-        _outputURLFolderBookmark = [_outputURL bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
-                                                 includingResourceValuesForKeys:nil
-                                                                  relativeToURL:nil
-                                                                          error:&error];
-
-
-        if (error)
-        {
-            NSLog(@"Error creating bookmark for URL (%@): %@", _outputURL, error);
-        }
-        if (accessed)
-        {
-            [_outputURL stopAccessingSecurityScopedResource];
-        }
+        __attribute__((unused)) HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:_outputURL];
+        _outputURLFolderBookmark = [HBUtilities bookmarkFromURL:_outputURL];
+        token = nil;
     }
 
     encodeObject(_outputURLFolderBookmark);
@@ -397,22 +376,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObject(_uuid, NSString);
 
 #ifdef __SANDBOX_ENABLED__
-        NSError *error;
-
         _fileURLBookmark = [HBCodingUtilities decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark" decoder:decoder];
 
         if (_fileURLBookmark)
         {
-            BOOL bookmarkDataIsStale;
-            _fileURL = [NSURL URLByResolvingBookmarkData:_fileURLBookmark
-                                                 options:NSURLBookmarkResolutionWithSecurityScope
-                                           relativeToURL:nil
-                                     bookmarkDataIsStale:&bookmarkDataIsStale
-                                                   error:&error];
-            if (error)
-            {
-                NSLog(@"Error creating URL from bookmark (%@): %@", _outputURL, error);
-            }
+            _fileURL = [HBUtilities URLFromBookmark:_fileURLBookmark];
         }
         else
         {
@@ -423,16 +391,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         if (_outputURLFolderBookmark)
         {
-            BOOL bookmarkDataIsStale;
-            _outputURL = [NSURL URLByResolvingBookmarkData:_outputURLFolderBookmark
-                                                             options:NSURLBookmarkResolutionWithSecurityScope
-                                                       relativeToURL:nil
-                                                 bookmarkDataIsStale:&bookmarkDataIsStale
-                                                               error:&error];
-            if (error)
-            {
-                NSLog(@"Error creating URL from bookmark (%@): %@", _outputURL, error);
-            }
+            _outputURL = [HBUtilities URLFromBookmark:_outputURLFolderBookmark];
         }
         else
         {

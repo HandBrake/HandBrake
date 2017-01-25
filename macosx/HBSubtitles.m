@@ -13,7 +13,9 @@
 #import "HBJob+HBJobConversion.h"
 #import "HBTitle.h"
 #import "HBCodingUtilities.h"
+#import "HBUtilities.h"
 #import "HBJob+Private.h"
+#import "HBSecurityAccessToken.h"
 
 #include "common.h"
 
@@ -22,6 +24,7 @@ extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
 
 extern NSString *keySubTrackSrtFileURL;
+extern NSString *keySubTrackSrtFileURLBookmark;
 
 #define NONE_TRACK_INDEX        0
 #define FOREIGN_TRACK_INDEX     1
@@ -29,6 +32,9 @@ extern NSString *keySubTrackSrtFileURL;
 @interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
 
 @property (nonatomic, readwrite) NSArray<NSDictionary *> *sourceTracks;
+
+@property (nonatomic, readonly) NSMutableArray<HBSecurityAccessToken *> *tokens;
+@property (nonatomic, readwrite) NSInteger *accessCount;
 
 @property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readwrite) int container;
@@ -50,6 +56,7 @@ extern NSString *keySubTrackSrtFileURL;
 
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBSubtitlesDefaults alloc] init];
+        _tokens = [NSMutableArray array];
 
         NSMutableArray *sourceTracks = [job.title.subtitlesTracks mutableCopy];
 
@@ -215,12 +222,26 @@ extern NSString *keySubTrackSrtFileURL;
 
 - (void)addSrtTrackFromURL:(NSURL *)srtURL
 {
+#ifdef __SANDBOX_ENABLED__
+    // Create the security scoped bookmark
+    NSData *bookmark = [HBUtilities bookmarkFromURL:srtURL
+                                    options:NSURLBookmarkCreationWithSecurityScope |
+                                            NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess];
+#endif
+
     // Create a new entry for the subtitle source array so it shows up in our subtitle source list
     NSMutableArray *sourceTrack = [self.sourceTracks mutableCopy];
+#ifdef __SANDBOX_ENABLED__
     [sourceTrack addObject:@{keySubTrackName: srtURL.lastPathComponent,
-                                   keySubTrackType: @(SRTSUB),
-                                   keySubTrackSrtFileURL: srtURL}];
-    self.sourceTracks = sourceTrack;
+                             keySubTrackType: @(SRTSUB),
+                             keySubTrackSrtFileURL: srtURL,
+                             keySubTrackSrtFileURLBookmark: bookmark}];
+#else
+    [sourceTrack addObject:@{keySubTrackName: srtURL.lastPathComponent,
+                             keySubTrackType: @(SRTSUB),
+                             keySubTrackSrtFileURL: srtURL}];
+#endif
+    self.sourceTracks = [sourceTrack copy];
     HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:self.sourceTracksArray.count - 1];
     [self insertObject:track inTracksAtIndex:[self countOfTracks] - 1];
 }
@@ -396,6 +417,38 @@ extern NSString *keySubTrackSrtFileURL;
     }];
 }
 
+- (BOOL)startAccessingSecurityScopedResource
+{
+#ifdef __SANDBOX_ENABLED__
+    if (self.accessCount == 0)
+    {
+        for (NSDictionary *sourceTrack in self.sourceTracks)
+        {
+            if (sourceTrack[keySubTrackSrtFileURLBookmark])
+            {
+                [self.tokens addObject:[HBSecurityAccessToken tokenWithObject:sourceTrack[keySubTrackSrtFileURL]]];
+            }
+        }
+    }
+    self.accessCount += 1;
+    return YES;
+#else
+    return NO;
+#endif
+}
+
+- (void)stopAccessingSecurityScopedResource
+{
+#ifdef __SANDBOX_ENABLED__
+    self.accessCount -= 1;
+    NSAssert(self.accessCount >= 0, @"[HBSubtitles stopAccessingSecurityScopedResource:] unbalanced call");
+    if (self.accessCount == 0)
+    {
+        [self.tokens removeAllObjects];
+    }
+#endif
+}
+
 #pragma mark - NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone
@@ -419,6 +472,7 @@ extern NSString *keySubTrackSrtFileURL;
         }
 
         copy->_defaults = [_defaults copy];
+        copy->_tokens = [NSMutableArray array];
     }
 
     return copy;
@@ -445,8 +499,33 @@ extern NSString *keySubTrackSrtFileURL;
 {
     self = [super init];
 
+    _tokens = [NSMutableArray array];
+
     decodeInt(_container);
-    decodeCollectionOfObjects2(_sourceTracks, NSArray, NSDictionary, NSURL);
+    decodeCollectionOfObjects3(_sourceTracks, NSArray, NSDictionary, NSURL, NSData);
+
+#ifdef __SANDBOX_ENABLED__
+    NSMutableArray *sourceTracks = [_sourceTracks mutableCopy];
+    for (NSDictionary *sourceTrack in _sourceTracks)
+    {
+        if (sourceTrack[keySubTrackSrtFileURLBookmark])
+        {
+            NSMutableDictionary<NSString *, id> *copy =  [sourceTrack mutableCopy];
+            NSURL *srtURL = [HBUtilities URLFromBookmark:sourceTrack[keySubTrackSrtFileURLBookmark]];
+            if (srtURL)
+            {
+                copy[keySubTrackSrtFileURL] = srtURL;
+            }
+            [sourceTracks addObject:copy];
+        }
+        else
+        {
+            [sourceTracks addObject:sourceTrack];
+        }
+    }
+    _sourceTracks = [sourceTracks copy];
+#endif
+
     decodeCollectionOfObjects(_tracks, NSMutableArray, HBSubtitlesTrack);
 
     for (HBSubtitlesTrack *track in _tracks)

@@ -7,7 +7,7 @@
 #import "HBAudio.h"
 
 #import "HBJob.h"
-#import "HBJob+HBJobConversion.m"
+#import "HBJob+HBJobConversion.h"
 #import "HBTitle.h"
 #import "HBAudioTrack.h"
 #import "HBAudioTrackPreset.h"

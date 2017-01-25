@@ -71,13 +71,13 @@
     return isStale ? nil : url;
 }
 
-+ (nullable NSData *)bookmarkFromURL:(NSURL *)url
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options
 {
     NSParameterAssert(url);
 
     NSError *error;
 
-    NSData *bookmark = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope includingResourceValuesForKeys:nil relativeToURL:nil error:&error];
+    NSData *bookmark = [url bookmarkDataWithOptions:options includingResourceValuesForKeys:nil relativeToURL:nil error:&error];
 
     if (error)
     {
@@ -86,6 +86,11 @@
     }
 
     return bookmark;
+}
+
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url
+{
+    return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
 }
 
 + (NSString *)displayNameForURL:(NSURL *)URL
