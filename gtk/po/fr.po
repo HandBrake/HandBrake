@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Quality: "
-msgstr "Qualité: "
+msgstr "Qualité : "
 
 #, c-format
 msgid "Bitrate: %dkbps"
