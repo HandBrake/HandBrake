@@ -31,6 +31,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
@@ -201,7 +202,7 @@ namespace HandBrakeWPF.Services.Scan
                                                    PixelAspectY = job.PixelAspectY
                                                };
 
-                bitmapImage = this.instance.GetPreview(settings, preview);
+                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview));
             }
             catch (AccessViolationException e)
             {
