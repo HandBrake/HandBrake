@@ -19,7 +19,6 @@ namespace HandBrake.ApplicationServices.Interop
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Timers;
-    using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Factories;
@@ -269,7 +268,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public BitmapImage GetPreview(PreviewSettings settings, int previewNumber)
+        public Bitmap GetPreview(PreviewSettings settings, int previewNumber)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -338,29 +337,9 @@ namespace HandBrake.ApplicationServices.Interop
             IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
             Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStuct);
             HBFunctions.hb_image_close(nativeJobPtrPtr);
-            Marshal.FreeHGlobal(nativeJobPtrPtr);                
+            Marshal.FreeHGlobal(nativeJobPtrPtr);
 
-            // Create a Bitmap Image for display.
-            using (var memoryStream = new MemoryStream())
-            {
-                try
-                {
-                    bitmap.Save(memoryStream, ImageFormat.Bmp);
-                }
-                finally
-                {
-                    bitmap.Dispose();
-                }
-
-                var wpfBitmap = new BitmapImage();
-                wpfBitmap.BeginInit();
-                wpfBitmap.CacheOption = BitmapCacheOption.OnLoad;
-                wpfBitmap.StreamSource = memoryStream;
-                wpfBitmap.EndInit();
-                wpfBitmap.Freeze();
-
-                return wpfBitmap;
-            }
+            return bitmap;
         }
 
         /// <summary>
