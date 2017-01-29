@@ -615,13 +615,13 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
     hb_value_array_t * encoder_list = hb_dict_get(preset, "AudioList");
     int count = hb_value_array_len(encoder_list);
     int track = find_audio_track(title, lang, 0, behavior);
-    int current_mode = 0;
     while (track >= 0)
     {
+        int track_count = hb_value_array_len(list);
         char key[8];
         snprintf(key, sizeof(key), "%d", track);
 
-        count = current_mode ? 1 : count;
+        count = mode && track_count ? 1 : count;
         int ii;
         for (ii = 0; ii < count; ii++)
         {
