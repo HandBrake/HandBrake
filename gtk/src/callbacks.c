@@ -250,6 +250,7 @@ ghb_check_dependency(
         }
         sensitive = dep_check(ud, dep_name, &hide);
         gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
         if (!sensitive && hide)
         {
             if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
