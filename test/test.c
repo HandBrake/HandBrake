@@ -439,7 +439,8 @@ int main( int argc, char ** argv )
     if( ParseOptions( argc, argv ) ||
         CheckOptions( argc, argv ) )
     {
-        return 1;
+        hb_log_level_set(h, debug);
+        goto cleanup;
     }
 
     hb_log_level_set(h, debug);
@@ -480,7 +481,8 @@ int main( int argc, char ** argv )
         {
             // An appropriate error message should have already
             // been spilled by PreparePreset.
-            return 1;
+            done_error = HB_ERROR_WRONG_INPUT;
+            goto cleanup;
         }
 
         if (preset_export_name != NULL)
@@ -508,7 +510,7 @@ int main( int argc, char ** argv )
                 (!titlescan && titleindex != 0 && output == NULL))
             {
                 hb_value_free(&preset_dict);
-                return 0;
+                goto cleanup;
             }
         }
 
@@ -532,6 +534,7 @@ int main( int argc, char ** argv )
         hb_value_free(&preset_dict);
     }
 
+cleanup:
     /* Clean up */
     hb_close(&h);
     hb_global_close();
@@ -2133,13 +2136,13 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'h':
                 ShowHelp();
-                exit( 0 );
+                return 1;
             case VERSION:
                 printf("HandBrake %s\n", hb_get_version(NULL));
-                exit(0);
+                return 1;
             case DESCRIBE:
                 printf("%s\n", hb_get_full_description());
-                exit(0);
+                return 1;
             case 'v':
                 if( optarg != NULL )
                 {
@@ -2155,7 +2158,7 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'z':
                 ShowPresets(NULL, 0, 1);
-                exit ( 0 );
+                return 1;
             case PRESET_EXPORT:
                 preset_export_name = strdup(optarg);
                 break;
@@ -2623,28 +2626,28 @@ static int ParseOptions( int argc, char ** argv )
                 print_string_list(stderr,
                                   hb_video_encoder_get_presets(hb_video_encoder_get_from_name(optarg)),
                                   "    ");
-                exit(0);
+                return 1;
             case ENCODER_TUNE_LIST:
                 fprintf(stderr, "Available --encoder-tune values for '%s' encoder:\n",
                         hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
                 print_string_list(stderr,
                                   hb_video_encoder_get_tunes(hb_video_encoder_get_from_name(optarg)),
                                   "    ");
-                exit(0);
+                return 1;
             case ENCODER_PROFILE_LIST:
                 fprintf(stderr, "Available --encoder-profile values for '%s' encoder:\n",
                         hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
                 print_string_list(stderr,
                                   hb_video_encoder_get_profiles(hb_video_encoder_get_from_name(optarg)),
                                   "    ");
-                exit(0);
+                return 1;
             case ENCODER_LEVEL_LIST:
                 fprintf(stderr, "Available --encoder-level values for '%s' encoder:\n",
                         hb_video_encoder_get_short_name(hb_video_encoder_get_from_name(optarg)));
                 print_string_list(stderr,
                                   hb_video_encoder_get_levels(hb_video_encoder_get_from_name(optarg)),
                                   "    ");
-                exit(0);
+                return 1;
             case 'T':
                 fastfirstpass = 1;
                 break;
