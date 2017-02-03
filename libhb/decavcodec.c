@@ -1495,6 +1495,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
         }
 
+#ifdef USE_QSV
+        if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
+        {
+            av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+        }
+#endif
+
         if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )
         {
             av_dict_free( &av_opts );
@@ -1900,6 +1907,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     {
         switch (pv->context->codec_id)
         {
+            case AV_CODEC_ID_HEVC:
             case AV_CODEC_ID_H264:
                 if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P ||
                     pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P)
