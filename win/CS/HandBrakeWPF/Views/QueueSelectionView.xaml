@@ -66,6 +66,7 @@
                     <Separator />
                     <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" cal:Message.Attach="[Event Click] = [Action OrderByTitle]" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" cal:Message.Attach="[Event Click] = [Action OrderByDuration]" />
+                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" cal:Message.Attach="[Event Click] = [Action OrderByName]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
