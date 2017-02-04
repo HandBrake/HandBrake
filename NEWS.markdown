@@ -1,5 +1,25 @@
 # HandBrake News
 
+## HandBrake 1.0.3
+
+### All platforms
+
+#### Video 
+- Fixed a couple of potential crashes whilst attempting to read source files.
+
+### Linux
+- Fixed an issue with HQND3d Denoise filter custom text entry box rejecting values
+
+### Mac
+- Fixed an issue with Core AAC audio encoder not starting at the correct start point
+- Fixed an crash when attempting to edit a queued job
+
+### Windows
+- Fixed an issue that could cause error -17 when encoding with Intel QuikcSync
+- Fixed an issue with the SRT language code not being set correctly
+- Fixed missing 'Tape' and 'Sprite' Denoise Tunes
+
+
 ## HandBrake 1.0.2
 
 ### All platforms
