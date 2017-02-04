@@ -850,6 +850,7 @@
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.canChooseFiles = NO;
     panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
     panel.prompt = NSLocalizedString(@"Choose", nil);
 
     if (self.job.outputURL)
