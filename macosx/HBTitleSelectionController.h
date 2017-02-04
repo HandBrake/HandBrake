@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBTitleSelectionDelegate <NSObject>
 
-- (void)didSelectIndexes:(NSIndexSet *)indexes;
+- (void)didSelectTitles:(NSArray<HBTitle *> *)titles;
 
 @end
 

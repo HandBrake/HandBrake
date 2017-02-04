@@ -1161,15 +1161,15 @@
           contextInfo:NULL];
 }
 
-- (void)didSelectIndexes:(NSIndexSet *)indexes
+- (void)didSelectTitles:(NSArray<HBTitle *> *)titles
 {
     [self.titlesSelectionController.window orderOut:nil];
     [NSApp endSheet:self.titlesSelectionController.window];
 
-    [self doAddTitlesAtIndexesToQueue:indexes];
+    [self doAddTitlesToQueue:titles];
 }
 
-- (void)doAddTitlesAtIndexesToQueue:(NSIndexSet *)indexes;
+- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles;
 {
     NSMutableArray<HBJob *> *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
@@ -1178,16 +1178,13 @@
     // Get the preset from the loaded job.
     HBPreset *preset = [self createPresetFromCurrentSettings];
 
-    for (HBTitle *title in self.core.titles)
+    for (HBTitle *title in titles)
     {
-        if ([indexes containsIndex:title.index])
-        {
-            HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
-            job.outputURL = self.currentDestination;
-            job.outputFileName = [HBUtilities defaultNameForJob:job];
-            job.title = nil;
-            [jobs addObject:job];
-        }
+        HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
+        job.outputURL = self.currentDestination;
+        job.outputFileName = [HBUtilities defaultNameForJob:job];
+        job.title = nil;
+        [jobs addObject:job];
     }
 
     NSMutableSet<NSURL *> *destinations = [[NSMutableSet alloc] init];
@@ -1256,12 +1253,7 @@
 
 - (IBAction)addAllTitlesToQueue:(id)sender
 {
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    for (HBTitle *title in self.core.titles)
-    {
-        [indexes addIndex:title.index];
-    }
-    [self doAddTitlesAtIndexesToQueue:indexes];
+    [self doAddTitlesToQueue:self.core.titles];
 }
 
 #pragma mark - Picture
