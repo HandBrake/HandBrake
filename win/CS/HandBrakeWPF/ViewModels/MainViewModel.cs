@@ -2518,7 +2518,7 @@ namespace HandBrakeWPF.ViewModels
                     DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
                     if (driveInfo != null)
                     {
-                        this.StartScan(driveInfo.RootDirectory, 0);
+                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
                     }
 
                     this.ShowSourceSelection = false;
