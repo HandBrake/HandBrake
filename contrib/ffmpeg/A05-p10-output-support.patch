@@ -1,6 +1,6 @@
-diff -Naur ./libav-12.org/libswscale/output.c ./libav-12/libswscale/output.c
---- ./libav-12.org/libswscale/output.c	2016-10-16 23:10:02.000000000 +0200
-+++ ./libav-12/libswscale/output.c	2017-02-07 23:37:28.150180400 +0100
+diff -Naur ../libav-12.org/libswscale/output.c ./libswscale/output.c
+--- ../libav-12.org/libswscale/output.c	2016-10-16 23:10:02.000000000 +0200
++++ ./libswscale/output.c	2017-02-07 23:37:28.150180400 +0100
 @@ -295,6 +295,98 @@
          }
  }
@@ -113,9 +113,9 @@ diff -Naur ./libav-12.org/libswscale/output.c ./libav-12/libswscale/output.c
          *yuv2planeX = isBE(dstFormat) ? yuv2planeX_16BE_c  : yuv2planeX_16LE_c;
          *yuv2plane1 = isBE(dstFormat) ? yuv2plane1_16BE_c  : yuv2plane1_16LE_c;
      } else if (is9_OR_10BPS(dstFormat)) {
-diff -Naur ./libav-12.org/libswscale/utils.c ./libav-12/libswscale/utils.c
---- ./libav-12.org/libswscale/utils.c	2016-10-16 23:10:02.000000000 +0200
-+++ ./libav-12/libswscale/utils.c	2017-02-07 23:20:09.617945500 +0100
+diff -Naur ../libav-12.org/libswscale/utils.c ./libswscale/utils.c
+--- ../libav-12.org/libswscale/utils.c	2016-10-16 23:10:02.000000000 +0200
++++ ./libswscale/utils.c	2017-02-07 23:20:09.617945500 +0100
 @@ -185,8 +185,8 @@
      [AV_PIX_FMT_GBRAP16BE]   = { 1, 0 },
      [AV_PIX_FMT_XYZ12BE]     = { 0, 0, 1 },
@@ -127,9 +127,9 @@ diff -Naur ./libav-12.org/libswscale/utils.c ./libav-12/libswscale/utils.c
  };
  
  int sws_isSupportedInput(enum AVPixelFormat pix_fmt)
-diff -Naur ./libav-12.org/libswscale/x86/swscale.c ./libav-12/libswscale/x86/swscale.c
---- ./libav-12.org/libswscale/x86/swscale.c	2016-10-16 23:10:02.000000000 +0200
-+++ ./libav-12/libswscale/x86/swscale.c	2017-02-07 23:15:14.000000000 +0100
+diff -Naur ../libav-12.org/libswscale/x86/swscale.c ./libswscale/x86/swscale.c
+--- ../libav-12.org/libswscale/x86/swscale.c	2016-10-16 23:10:02.000000000 +0200
++++ ./libswscale/x86/swscale.c	2017-02-07 23:15:14.000000000 +0100
 @@ -338,14 +338,14 @@
  #define ASSIGN_VSCALEX_FUNC(vscalefn, opt, do_16_case, condition_8bit) \
  switch(c->dstBpc){ \
