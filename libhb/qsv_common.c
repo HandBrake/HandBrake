@@ -148,7 +148,7 @@ static int qsv_implementation_is_hardware(mfxIMPL implementation)
 int hb_qsv_available()
 {
     return ((hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
-            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0)); 
+            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0));
 }
 
 int hb_qsv_video_encoder_is_enabled(int encoder)
@@ -781,14 +781,14 @@ void hb_qsv_info_print()
                    qsv_hardware_version.Major, qsv_hardware_version.Minor,
                    HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
         }
-        
+
         if (qsv_software_version.Version)
         {
             hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
                    qsv_software_version.Major, qsv_software_version.Minor,
                    HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
         }
-    
+
         if (hb_qsv_info_avc != NULL && hb_qsv_info_avc->available)
         {
             hb_log(" - H.264 encoder: yes");
@@ -1542,6 +1542,15 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
 
             case MFX_CODEC_HEVC:
                 profile = hb_triplet4key(hb_qsv_h265_profiles, profile_key);
+
+                /* HEVC10 supported starting from KBL/G6 */
+                if (profile->value == MFX_PROFILE_HEVC_MAIN10 &&
+                    qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G6)
+                {
+                    hb_log("HEVC Main10 is not supported on this platform");
+                    profile = NULL;
+                }
+
                 break;
 
             default:

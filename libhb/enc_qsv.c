@@ -302,8 +302,14 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
         ret = -1;
         goto end;
     }
+
+    /* need more space for 10bits */
+    if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010)
+    {
+         hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
+    }
     bitstream.Data      = bitstream_buf->data;
-    bitstream.MaxLength = bitstream_buf->size;
+    bitstream.MaxLength = bitstream_buf->alloc;
 
     /* We only need to encode one frame, so we only need one surface */
     mfxU16 Height            = pv->param.videoParam->mfx.FrameInfo.Height;
@@ -521,13 +527,26 @@ int qsv_enc_init(hb_work_private_t *pv)
     }
     else
     {
-        pv->sws_context_to_nv12 = hb_sws_get_context(
-                                    job->width, job->height,
-                                    AV_PIX_FMT_YUV420P,
-                                    job->width, job->height,
-                                    AV_PIX_FMT_NV12,
-                                    SWS_LANCZOS|SWS_ACCURATE_RND,
-                                    SWS_CS_DEFAULT);
+        if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+        {
+            pv->sws_context_to_nv12 = hb_sws_get_context(
+                                        job->width, job->height,
+                                        AV_PIX_FMT_YUV420P,
+                                        job->width, job->height,
+                                        AV_PIX_FMT_P010LE,
+                                        SWS_LANCZOS|SWS_ACCURATE_RND,
+                                        SWS_CS_DEFAULT);
+        }
+        else
+        {
+            pv->sws_context_to_nv12 = hb_sws_get_context(
+                                        job->width, job->height,
+                                        AV_PIX_FMT_YUV420P,
+                                        job->width, job->height,
+                                        AV_PIX_FMT_NV12,
+                                        SWS_LANCZOS|SWS_ACCURATE_RND,
+                                        SWS_CS_DEFAULT);
+        }
     }
 
     // allocate tasks
@@ -589,14 +608,17 @@ int qsv_enc_init(hb_work_private_t *pv)
         {
             qsv_encode->surface_num = HB_QSV_SURFACE_NUM;
         }
+
+        /* should have 15bpp/AV_PIX_FMT_YUV420P10LE (almost x2) instead of 12bpp/AV_PIX_FMT_NV12 */
+        int bpp12 = (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10) ? 6 : 3;
         for (i = 0; i < qsv_encode->surface_num; i++)
         {
             mfxFrameSurface1 *surface = av_mallocz(sizeof(mfxFrameSurface1));
             mfxFrameInfo info         = pv->param.videoParam->mfx.FrameInfo;
             surface->Info             = info;
-            surface->Data.Pitch       = info.Width;
-            surface->Data.Y           = av_mallocz(info.Width * info.Height * 3 / 2);
-            surface->Data.VU          = surface->Data.Y + info.Width * info.Height;
+            surface->Data.Pitch       = info.Width * (bpp12 == 6 ? 2 : 1);
+            surface->Data.Y           = av_mallocz(info.Width * info.Height * (bpp12 / 2.0));
+            surface->Data.VU          = surface->Data.Y + info.Width * info.Height * (bpp12 == 6 ? 2 : 1);
             qsv_encode->p_surfaces[i] = surface;
         }
     }
@@ -847,10 +869,19 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encqsvInit: bad profile %s", job->encoder_profile);
         return -1;
     }
+
     if (hb_qsv_level_parse(&pv->param, pv->qsv_info, job->encoder_level))
     {
         hb_error("encqsvInit: bad level %s", job->encoder_level);
         return -1;
+    }
+
+    if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+    {
+        pv->param.videoParam->mfx.FrameInfo.FourCC         = MFX_FOURCC_P010;
+        pv->param.videoParam->mfx.FrameInfo.BitDepthLuma   = 10;
+        pv->param.videoParam->mfx.FrameInfo.BitDepthChroma = 10;
+        pv->param.videoParam->mfx.FrameInfo.Shift          = 0;
     }
 
     // interlaced encoding is not always possible
