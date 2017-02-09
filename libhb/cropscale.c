@@ -142,6 +142,10 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
         {
             HB_OCL_BUF_FREE(hb_ocl, pv->os->bicubic_x_weights);
             HB_OCL_BUF_FREE(hb_ocl, pv->os->bicubic_y_weights);
+            if (pv->os->initialized == 1)
+            {
+                hb_ocl->clReleaseKernel(pv->os->m_kernel);
+            }
         }
         free(pv->os);
     }
