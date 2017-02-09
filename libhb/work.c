@@ -1363,10 +1363,6 @@ static void do_job(hb_job_t *job)
         memset(interjob, 0, sizeof(*interjob));
         interjob->sequence_id = job->sequence_id;
     }
-    else if (job->pass_id == HB_PASS_ENCODE_2ND)
-    {
-        correct_framerate(interjob, job);
-    }
 
     job->list_work = hb_list_init();
     w = hb_get_work(job->h, WORK_READER);
@@ -1482,6 +1478,11 @@ static void do_job(hb_job_t *job)
         memset(job->crop, 0, sizeof(int[4]));
         job->vrate = title->vrate;
         job->cfr = 0;
+    }
+
+    if (job->pass_id == HB_PASS_ENCODE_2ND)
+    {
+        correct_framerate(interjob, job);
     }
 
     /*
