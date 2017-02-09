@@ -1831,6 +1831,12 @@ cleanup:
     }
 
     hb_buffer_pool_free();
+
+    if (job->use_opencl)
+    {
+        hb_release_opencl_run_env();
+    }
+
     hb_job_close(&job);
 }
 
