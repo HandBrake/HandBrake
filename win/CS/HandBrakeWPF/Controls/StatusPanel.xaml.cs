@@ -27,35 +27,26 @@ namespace HandBrakeWPF.Controls
             this.Message = "Message";
         }
 
-        /// <summary>
-        /// Dependancy Property for the IsLoading Property
-        /// </summary>
         public static readonly DependencyProperty IsLoadingProperty =
           DependencyProperty.Register("IsLoading", typeof(bool), typeof(StatusPanel), new UIPropertyMetadata(false));
 
-        /// <summary>
-        /// Dependancy Property for the Message Property
-        /// </summary>
         public static readonly DependencyProperty MessageProperty =
             DependencyProperty.Register("Message", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Loading..."));
 
-        /// <summary>
-        /// Dependancy Property for the submessage propery
-        /// </summary>
         public static readonly DependencyProperty SubMessageProperty =
             DependencyProperty.Register("SubMessage", typeof(string), typeof(StatusPanel), new FrameworkPropertyMetadata("Please Wait", FrameworkPropertyMetadataOptions.AffectsRender));
 
-        /// <summary>
-        /// Dependancy Property for the submessage propery
-        /// </summary>
         public static readonly DependencyProperty ActionProperty =
             DependencyProperty.Register("CancelAction", typeof(Action), typeof(StatusPanel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, OnCancelActionSet));
 
-        /// <summary>
-        /// Dependancy Property for the submessage propery
-        /// </summary>
+        public static readonly DependencyProperty SecondaryActionProperty =
+            DependencyProperty.Register("SecondaryAction", typeof(Action), typeof(StatusPanel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, OnSecondaryActionSet));
+
         public static readonly DependencyProperty ActionTextProperty =
             DependencyProperty.Register("ActionText", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Cancel"));
+
+        public static readonly DependencyProperty SecondaryActionTextProperty =
+            DependencyProperty.Register("SecondaryActionText", typeof(string), typeof(StatusPanel), new UIPropertyMetadata("Open Log Window"));
 
         /// <summary>
         /// Gets or sets a value indicating whether IsLoading.
@@ -90,7 +81,25 @@ namespace HandBrakeWPF.Controls
         public Action CancelAction
         {
             get { return (Action)GetValue(ActionProperty); }
-            set { SetValue(SubMessageProperty, value); }
+            set { SetValue(ActionProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the cancel action.
+        /// </summary>
+        public Action SecondaryAction
+        {
+            get { return (Action)GetValue(SecondaryActionProperty); }
+            set { SetValue(SecondaryActionProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets SecondaryActionText.
+        /// </summary>
+        public string SecondaryActionText
+        {
+            get { return (string)GetValue(SecondaryActionTextProperty); }
+            set { SetValue(SecondaryActionTextProperty, value); }
         }
 
         /// <summary>
@@ -103,6 +112,19 @@ namespace HandBrakeWPF.Controls
         /// The e.
         /// </param>
         private static void OnCancelActionSet(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The on Secondary Action Set.
+        /// </summary>
+        /// <param name="d">
+        /// The d.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void OnSecondaryActionSet(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
         }
 
@@ -127,6 +149,17 @@ namespace HandBrakeWPF.Controls
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsActionButton2Visibile
+        {
+            get
+            {
+                return true; //SecondaryAction != null;
+            }
+        }
+
+        /// <summary>
         /// The status action button_ on click.
         /// </summary>
         /// <param name="sender">
@@ -140,6 +173,14 @@ namespace HandBrakeWPF.Controls
             if (this.CancelAction != null)
             {
                 this.CancelAction();
+            }
+        }
+
+        private void PerformSecondaryAction(object sender, RoutedEventArgs e)
+        {
+            if (this.SecondaryAction != null)
+            {
+                this.SecondaryAction();
             }
         }
     }

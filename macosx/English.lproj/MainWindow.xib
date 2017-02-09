@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12100" systemVersion="16E144f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12100"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -162,10 +162,10 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1552">
-                        <rect key="frame" x="5" y="454" width="47" height="17"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="1552">
+                        <rect key="frame" x="17" y="458" width="48" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="File:" id="4913">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Save as:" id="4913">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -244,23 +244,6 @@
                             <binding destination="-2" name="content" keyPath="self.job.containers" id="aNr-1N-DaN"/>
                         </connections>
                     </popUpButton>
-                    <button toolTip="Browse to select a new destination path and file name for your encode." verticalHuggingPriority="750" id="1562">
-                        <rect key="frame" x="815" y="450" width="90" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <accessibility description="Browse Destination"/>
-                        <connections>
-                            <action selector="browseDestination:" target="-2" id="FqS-ZD-MaJ"/>
-                            <binding destination="-2" name="enabled" keyPath="self.job" id="uGd-Ul-eBq">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSIsNotNil</string>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </button>
                     <box verticalHuggingPriority="750" boxType="separator" id="1623">
                         <rect key="frame" x="98" y="490" width="802" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -277,8 +260,8 @@
                             <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
                         </connections>
                     </textField>
-                    <textField toolTip="Destination path, including directory and file name. This is where your new video will be created, and what it will be named." verticalHuggingPriority="750" id="1561">
-                        <rect key="frame" x="56" y="455" width="756" height="19"/>
+                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" misplaced="YES" id="1561">
+                        <rect key="frame" x="71" y="455" width="374" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
@@ -292,10 +275,9 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.destURL" id="5zX-7b-Y0f">
+                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="cct-2d-Ycx">
                                 <dictionary key="options">
                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                    <string key="NSValueTransformerName">HBURLTransformer</string>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -604,6 +586,46 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </binding>
                         </connections>
                     </popUpButton>
+                    <pathControl verticalHuggingPriority="750" misplaced="YES" allowsExpansionToolTips="YES" id="PJi-21-hie">
+                        <rect key="frame" x="506" y="455" width="328" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <pathCell key="cell" controlSize="small" selectable="YES" alignment="left" id="5Bk-66-HFW">
+                            <font key="font" metaFont="smallSystem"/>
+                            <url key="url" string="file://localhost/Applications/"/>
+                        </pathCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.job.outputURL" id="FQU-UV-RCI"/>
+                        </connections>
+                    </pathControl>
+                    <button toolTip="Browse to select a new destination path and file name for your encode." verticalHuggingPriority="750" misplaced="YES" id="1562">
+                        <rect key="frame" x="831" y="450" width="74" height="28"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <accessibility description="Browse Destination"/>
+                        <connections>
+                            <action selector="browseDestination:" target="-2" id="FqS-ZD-MaJ"/>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="uGd-Ul-eBq">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" misplaced="YES" id="gfs-4j-YSE">
+                        <rect key="frame" x="458" y="458" width="40" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="textColor" keyPath="self.labelColor" id="dvP-fr-nOv"/>
+                        </connections>
+                    </textField>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
@@ -633,8 +655,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
-                        <size key="minSize" width="40" height="32"/>
-                        <size key="maxSize" width="40" height="32"/>
+                        <size key="minSize" width="32" height="32"/>
+                        <size key="maxSize" width="32" height="32"/>
                         <connections>
                             <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
                         </connections>
@@ -654,6 +676,40 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <action selector="toggleDrawer:" target="-2" id="YN2-RM-4ss"/>
                         </connections>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="BC981D6D-0945-4001-BCB0-F9A1BBBD2C04" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="58" height="25"/>
+                        <size key="maxSize" width="58" height="32"/>
+                        <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
+                            <rect key="frame" x="28" y="14" width="58" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="QCi-1O-Msg">
+                                    <items>
+                                        <menuItem state="on" image="addqueue" hidden="YES" id="MCy-je-2nL"/>
+                                        <menuItem title="Add Title To Queue" id="L8z-c6-E1u">
+                                            <connections>
+                                                <action selector="addToQueue:" target="-2" id="0SF-Rk-zUS"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="skM-c5-4GF"/>
+                                        <menuItem title="Add Titles To Queue…" id="046-kc-MnL">
+                                            <connections>
+                                                <action selector="addTitlesToQueue:" target="-2" id="xaX-YI-n9f"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Add All Titles To Queue" id="INL-y9-Gwp">
+                                            <connections>
+                                                <action selector="addAllTitlesToQueue:" target="-2" id="su3-wU-Lps"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
@@ -672,7 +728,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="1485" y="20"/>
+            <point key="canvasLocation" x="1565" y="36"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
@@ -726,13 +782,13 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </customView>
     </objects>
     <resources>
-        <image name="activity" width="24" height="24"/>
-        <image name="addqueue" width="12" height="12"/>
-        <image name="encode" width="24" height="24"/>
-        <image name="pauseencode" width="24" height="24"/>
-        <image name="presets" width="24" height="24"/>
-        <image name="preview" width="24" height="24"/>
+        <image name="activity" width="32" height="32"/>
+        <image name="addqueue" width="32" height="32"/>
+        <image name="encode" width="32" height="32"/>
+        <image name="pauseencode" width="32" height="32"/>
+        <image name="presets" width="32" height="32"/>
+        <image name="preview" width="32" height="32"/>
         <image name="showqueue" width="32" height="32"/>
-        <image name="source" width="24" height="24"/>
+        <image name="source" width="32" height="32"/>
     </resources>
 </document>

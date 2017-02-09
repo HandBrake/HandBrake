@@ -109,6 +109,7 @@ enum
     QSV_G3, // Haswell or equivalent
     QSV_G4, // Broadwell or equivalent
     QSV_G5, // Skylake or equivalent
+    QSV_G6, // Kaby Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 static int qsv_hardware_generation(int cpu_platform)
@@ -129,6 +130,8 @@ static int qsv_hardware_generation(int cpu_platform)
             return QSV_G4;
         case HB_CPU_PLATFORM_INTEL_SKL:
             return QSV_G5;
+        case HB_CPU_PLATFORM_INTEL_KBL:
+            return QSV_G6;
         default:
             return QSV_FU;
     }
@@ -769,21 +772,23 @@ void hb_qsv_info_print()
     hb_log("Intel Quick Sync Video support: %s",
            hb_qsv_available() ? "yes": "no");
 
-    // also print the details
-    if (qsv_hardware_version.Version)
-    {
-        hb_log(" - Intel Media SDK hardware: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
-               qsv_hardware_version.Major, qsv_hardware_version.Minor,
-               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
-    }
-    if (qsv_software_version.Version)
-    {
-        hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
-               qsv_software_version.Major, qsv_software_version.Minor,
-               HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
-    }
     if (hb_qsv_available())
     {
+        // also print the details
+        if (qsv_hardware_version.Version)
+        {
+            hb_log(" - Intel Media SDK hardware: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+                   qsv_hardware_version.Major, qsv_hardware_version.Minor,
+                   HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+        }
+        
+        if (qsv_software_version.Version)
+        {
+            hb_log(" - Intel Media SDK software: API %"PRIu16".%"PRIu16" (minimum: %"PRIu16".%"PRIu16")",
+                   qsv_software_version.Major, qsv_software_version.Minor,
+                   HB_QSV_MINVERSION_MAJOR,    HB_QSV_MINVERSION_MINOR);
+        }
+    
         if (hb_qsv_info_avc != NULL && hb_qsv_info_avc->available)
         {
             hb_log(" - H.264 encoder: yes");
@@ -2143,6 +2148,13 @@ void hb_qsv_force_workarounds()
     qsv_software_info_hevc.capabilities &= FORCE_WORKAROUNDS;
     qsv_hardware_info_hevc.capabilities &= FORCE_WORKAROUNDS;
 #undef FORCE_WORKAROUNDS
+}
+
+#else
+
+int hb_qsv_available()
+{
+    return 0;
 }
 
 #endif // USE_QSV

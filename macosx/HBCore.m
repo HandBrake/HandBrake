@@ -12,6 +12,7 @@
 
 #import "HBStateFormatter+Private.h"
 #import "HBTitle+Private.h"
+#import "HBJob+Private.h"
 
 #include <dlfcn.h>
 
@@ -26,6 +27,8 @@ static void hb_error_handler(const char *errmsg)
         errorHandler(error);
     }
 }
+
+typedef void (^HBCoreCleanupHandler)();
 
 /**
  * Private methods of HBCore.
@@ -53,6 +56,9 @@ static void hb_error_handler(const char *errmsg)
 
 /// Completion handler.
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
+
+/// Cleanup handle, used for internal HBCore cleanup.
+@property (nonatomic, readwrite, copy) HBCoreCleanupHandler cleanupHandler;
 
 @end
 
@@ -92,6 +98,7 @@ static void hb_error_handler(const char *errmsg)
     if (self)
     {
         _name = @"HBCore";
+        _automaticallyPreventSleep = YES;
         _state = HBStateIdle;
         _updateTimerQueue = queue;
         _titles = @[];
@@ -139,11 +146,44 @@ static void hb_error_handler(const char *errmsg)
     hb_log_level_set(_hb_handle, logLevel);
 }
 
+- (void)preventSleep
+{
+    NSAssert(!self.automaticallyPreventSleep, @"[HBCore preventSleep:] called with automaticallyPreventSleep enabled.");
+    hb_system_sleep_prevent(_hb_handle);
+}
+
+- (void)allowSleep
+{
+    NSAssert(!self.automaticallyPreventSleep, @"[HBCore allowSleep:] called with automaticallyPreventSleep enabled.");
+    hb_system_sleep_allow(_hb_handle);
+}
+
+- (void)preventAutoSleep
+{
+    if (self.automaticallyPreventSleep)
+    {
+        hb_system_sleep_prevent(_hb_handle);
+    }
+}
+
+- (void)allowAutoSleep
+{
+    if (self.automaticallyPreventSleep)
+    {
+        hb_system_sleep_allow(_hb_handle);
+    }
+}
+
 #pragma mark - Scan
 
 - (BOOL)canScan:(NSURL *)url error:(NSError * __autoreleasing *)error
 {
     NSAssert(url, @"[HBCore canScan:] called with nil url.");
+
+#ifdef __SANDBOX_ENABLED__
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
+#endif
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
         if (error) {
             *error = [NSError errorWithDomain:@"HBErrorDomain"
@@ -188,6 +228,13 @@ static void hb_error_handler(const char *errmsg)
         }
     }
 
+#ifdef __SANDBOX_ENABLED__
+    if (accessingSecurityScopedResource)
+    {
+        [url stopAccessingSecurityScopedResource];
+    }
+#endif
+
     return YES;
 }
 
@@ -196,22 +243,17 @@ static void hb_error_handler(const char *errmsg)
     NSAssert(self.state == HBStateIdle, @"[HBCore scanURL:] called while another scan or encode already in progress");
     NSAssert(url, @"[HBCore scanURL:] called with nil url.");
 
+#ifdef __SANDBOX_ENABLED__
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
+    self.cleanupHandler = ^{ token = nil; };
+#endif
+
     // Reset the titles array
     self.titles = @[];
 
     // Copy the progress/completion blocks
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
-
-    NSString *path = url.path;
-    HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-
-    if (detector.isVideoDVD)
-    {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
-        path = detector.devicePath;
-    }
 
     // convert minTitleDuration from seconds to the internal HB time
     uint64_t min_title_duration_ticks = 90000LL * seconds;
@@ -229,9 +271,9 @@ static void hb_error_handler(const char *errmsg)
         [HBUtilities writeToActivityLog:"%s scanning titles with a duration of %d seconds or more", self.name.UTF8String, seconds];
     }
 
-    hb_system_sleep_prevent(_hb_handle);
+    [self preventAutoSleep];
 
-    hb_scan(_hb_handle, path.fileSystemRepresentation,
+    hb_scan(_hb_handle, url.path.fileSystemRepresentation,
             (int)index, (int)previewsNum,
             1, min_title_duration_ticks);
 
@@ -461,15 +503,22 @@ static void hb_error_handler(const char *errmsg)
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;
 
+#ifdef __SANDBOX_ENABLED__
+    HBJob *jobCopy = [job copy];
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:jobCopy];
+    self.cleanupHandler = ^{ token = nil; };
+#endif
+
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
-    hb_job_set_file(hb_job, job.destURL.path.fileSystemRepresentation);
+    hb_job_set_file(hb_job, job.completeOutputURL.path.fileSystemRepresentation);
     hb_add(_hb_handle, hb_job);
 
     // Free the job
     hb_job_close(&hb_job);
 
-    hb_system_sleep_prevent(_hb_handle);
+    [self preventAutoSleep];
+
     hb_start(_hb_handle);
 
     // Start the timer to handle libhb state changes
@@ -480,7 +529,7 @@ static void hb_error_handler(const char *errmsg)
     // waiting for libhb to set it in a background thread.
     self.state = HBStateWorking;
 
-    [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.destURL.lastPathComponent.UTF8String];
+    [HBUtilities writeToActivityLog:"%s started encoding %s", self.name.UTF8String, job.outputFileName.UTF8String];
     [HBUtilities writeToActivityLog:"%s with preset %s", self.name.UTF8String, job.presetName.UTF8String];
 }
 
@@ -523,15 +572,15 @@ static void hb_error_handler(const char *errmsg)
 - (void)pause
 {
     hb_pause(_hb_handle);
-    hb_system_sleep_allow(_hb_handle);
     self.state = HBStatePaused;
+    [self allowAutoSleep];
 }
 
 - (void)resume
 {
     hb_resume(_hb_handle);
-    hb_system_sleep_prevent(_hb_handle);
     self.state = HBStateWorking;
+    [self preventAutoSleep];
 }
 
 #pragma mark - State updates
@@ -637,11 +686,17 @@ static void hb_error_handler(const char *errmsg)
 
     // Set the state to idle, because the update timer won't fire again.
     self.state = HBStateIdle;
+
     // Reallow system sleep.
-    hb_system_sleep_allow(_hb_handle);
+    [self allowAutoSleep];
 
     // Call the completion block and clean ups the handlers
     self.progressHandler = nil;
+
+#ifdef __SANDBOX_ENABLED__
+    self.cleanupHandler();
+    self.cleanupHandler = nil;
+#endif
 
     HBCoreResult result = (_hb_state->state == HB_STATE_WORKDONE) ? [self workDone] : [self scanDone];
     [self runCompletionBlockAndCleanUpWithResult:result];

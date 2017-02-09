@@ -19,7 +19,6 @@ namespace HandBrake.ApplicationServices.Interop
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
     using System.Timers;
-    using System.Windows.Media.Imaging;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Factories;
@@ -217,11 +216,12 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+        public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, bool clEnabled = false)
         {
             this.previewCount = previewCount;
 
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
+            HBFunctions.hb_opencl_set_enable(this.hbHandle, clEnabled ? 1 : 0);
             HBFunctions.hb_scan(this.hbHandle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
@@ -268,7 +268,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public BitmapImage GetPreview(PreviewSettings settings, int previewNumber)
+        public Bitmap GetPreview(PreviewSettings settings, int previewNumber)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -337,29 +337,9 @@ namespace HandBrake.ApplicationServices.Interop
             IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
             Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStuct);
             HBFunctions.hb_image_close(nativeJobPtrPtr);
-            Marshal.FreeHGlobal(nativeJobPtrPtr);                
+            Marshal.FreeHGlobal(nativeJobPtrPtr);
 
-            // Create a Bitmap Image for display.
-            using (var memoryStream = new MemoryStream())
-            {
-                try
-                {
-                    bitmap.Save(memoryStream, ImageFormat.Bmp);
-                }
-                finally
-                {
-                    bitmap.Dispose();
-                }
-
-                var wpfBitmap = new BitmapImage();
-                wpfBitmap.BeginInit();
-                wpfBitmap.CacheOption = BitmapCacheOption.OnLoad;
-                wpfBitmap.StreamSource = memoryStream;
-                wpfBitmap.EndInit();
-                wpfBitmap.Freeze();
-
-                return wpfBitmap;
-            }
+            return bitmap;
         }
 
         /// <summary>
@@ -388,6 +368,7 @@ namespace HandBrake.ApplicationServices.Interop
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
+            HBFunctions.hb_opencl_set_enable(this.hbHandle, encodeObject.Video.OpenCL ? 1 : 0);
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
             HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
             HBFunctions.hb_start(this.hbHandle);

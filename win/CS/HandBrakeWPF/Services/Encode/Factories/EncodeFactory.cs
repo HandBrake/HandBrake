@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Runtime.InteropServices.ComTypes;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.HbLib;
@@ -100,7 +101,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 case PointToPointMode.Seconds:
                     range.Type = "time";
                     range.Start = job.StartPoint * 90000;
-                    range.End = (job.EndPoint - job.StartPoint) * 90000;
+                    range.End = job.EndPoint * 90000;
                     break;
                 case PointToPointMode.Frames:
                     range.Type = "frame";
@@ -238,7 +239,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                             {
                                 Filename = item.SrtPath,
                                 Codeset = item.SrtCharCode,
-                                Language = item.SrtLang
+                                Language = item.SrtLangCode
                             }
                     };
 
@@ -360,7 +361,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     Mixdown = mixdown != null ? mixdown.Id : -1,
                     NormalizeMixLevel = false,
                     Samplerate = sampleRate != null ? sampleRate.Rate : 0,
-                    Name = item.TrackName,
+                    Name = !string.IsNullOrEmpty(item.TrackName) ? item.TrackName : null,
                 };
 
                 if (!item.IsPassthru)

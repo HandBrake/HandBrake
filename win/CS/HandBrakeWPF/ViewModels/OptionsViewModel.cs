@@ -15,7 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -1195,7 +1194,6 @@ namespace HandBrakeWPF.ViewModels
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
             {
                 this.WhenDone = "Do nothing";
-                this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, "Do nothing");
             }
 
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
@@ -1317,6 +1315,15 @@ namespace HandBrakeWPF.ViewModels
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
+
+        }
+
+        /// <summary>
+        /// Some settings can be changed outside of this window. This will refresh their UI controls.
+        /// </summary>
+        public void UpdateSettings()
+        {
+            this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
         }
 
         /// <summary>

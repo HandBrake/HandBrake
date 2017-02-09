@@ -180,7 +180,7 @@ void hb_srt_to_ssa(hb_buffer_t *sub_in, int line)
             ssa = (char*)sub_in->data;
             if (srt[ii] == '\r')
             {
-                if (srt[ii] == '\n')
+                if (srt[ii + 1] == '\n')
                 {
                     ii++;
                 }

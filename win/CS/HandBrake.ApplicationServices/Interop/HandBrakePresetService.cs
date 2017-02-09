@@ -62,12 +62,22 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr presetStringPointer = HBFunctions.hb_presets_read_file_json(InteropUtilities.ToUtf8PtrFromString(filename));
             string presetJson = Marshal.PtrToStringAnsi(presetStringPointer);
-
             log.LogMessage(presetJson, LogMessageType.API, LogLevel.Debug);
 
-            PresetTransportContainer preset = JsonConvert.DeserializeObject<PresetTransportContainer>(presetJson);
+            if (!string.IsNullOrEmpty(presetJson))
+            {
+                // Check to see if we have a list of presets.
+                if (presetJson.StartsWith("["))
+                {
+                    presetJson = "{ \"PresetList\":" + presetJson + " } ";
+                }
 
-            return preset;
+                PresetTransportContainer preset = JsonConvert.DeserializeObject<PresetTransportContainer>(presetJson);
+
+                return preset;
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -11,6 +11,7 @@
 #include "hb.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
+#include "qsv_common.h"
 
 /**
  * Convert an hb_state_t to a jansson dict
@@ -467,19 +468,38 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "End",        hb_value_int(job->pts_to_stop),
             "SeekPoints", hb_value_int(job->seek_points));
     }
-    else if (job->pts_to_start != 0)
+    else if (job->pts_to_start != 0 || job->pts_to_stop != 0)
     {
         range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
             "Type",  hb_value_string("time"),
             "Start", hb_value_int(job->pts_to_start),
             "End",   hb_value_int(job->pts_to_stop));
+        range_dict = hb_dict_init();
+        hb_dict_set(source_dict, "Type", hb_value_string("time"));
+        if (job->pts_to_start > 0)
+        {
+            hb_dict_set(source_dict, "Start", hb_value_int(job->pts_to_start));
+        }
+        if (job->pts_to_stop > 0)
+        {
+            hb_dict_set(source_dict, "End",
+                        hb_value_int(job->pts_to_start + job->pts_to_stop));
+        }
     }
-    else if (job->frame_to_start != 0)
+    else if (job->frame_to_start != 0 || job->frame_to_stop != 0)
     {
-        range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
-            "Type",  hb_value_string("frame"),
-            "Start", hb_value_int(job->frame_to_start),
-            "End",   hb_value_int(job->frame_to_stop));
+        range_dict = hb_dict_init();
+        hb_dict_set(source_dict, "Type", hb_value_string("frame"));
+        if (job->frame_to_start > 0)
+        {
+            hb_dict_set(source_dict, "Start",
+                        hb_value_int(job->frame_to_start + 1));
+        }
+        if (job->frame_to_stop > 0)
+        {
+            hb_dict_set(source_dict, "End",
+                        hb_value_int(job->frame_to_start + job->frame_to_stop));
+        }
     }
     else
     {
@@ -718,7 +738,7 @@ static double*      unpack_f(double *f)     { return f; }
 static int*         unpack_i(int *i)        { return i; }
 static json_int_t*  unpack_I(json_int_t *i) { return i; }
 static int *        unpack_b(int *b)        { return b; }
-static char**       unpack_s(char **s)      { return s; }
+static const char** unpack_s(const char **s){ return s; }
 static json_t**     unpack_o(json_t** o)    { return o; }
 
 void hb_json_job_scan( hb_handle_t * h, const char * json_job )
@@ -730,7 +750,7 @@ void hb_json_job_scan( hb_handle_t * h, const char * json_job )
     dict = hb_value_json(json_job);
 
     int title_index;
-    char *path = NULL;
+    const char *path = NULL;
 
     result = json_unpack_ex(dict, &error, 0, "{s:{s:s, s:i}}",
                             "Source",
@@ -812,17 +832,17 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     hb_value_array_t * filter_list = NULL;
     hb_value_t       * mux = NULL, * vcodec = NULL;
     hb_value_t       * acodec_copy_mask = NULL, * acodec_fallback = NULL;
-    char             * destfile = NULL;
-    char             * range_type = NULL;
-    char             * video_preset = NULL, * video_tune = NULL;
-    char             * video_profile = NULL, * video_level = NULL;
-    char             * video_options = NULL;
+    const char       * destfile = NULL;
+    const char       * range_type = NULL;
+    const char       * video_preset = NULL, * video_tune = NULL;
+    const char       * video_profile = NULL, * video_level = NULL;
+    const char       * video_options = NULL;
     int                subtitle_search_burn = 0;
-    char             * meta_name = NULL, * meta_artist = NULL;
-    char             * meta_album_artist = NULL, * meta_release = NULL;
-    char             * meta_comment = NULL, * meta_genre = NULL;
-    char             * meta_composer = NULL, * meta_desc = NULL;
-    char             * meta_long_desc = NULL;
+    const char       * meta_name = NULL, * meta_artist = NULL;
+    const char       * meta_album_artist = NULL, * meta_release = NULL;
+    const char       * meta_comment = NULL, * meta_genre = NULL;
+    const char       * meta_composer = NULL, * meta_desc = NULL;
+    const char       * meta_long_desc = NULL;
     json_int_t         range_start = -1, range_end = -1, range_seek_points = -1;
     int                vbitrate = -1;
     double             vquality = HB_INVALID_VIDEO_QUALITY;
@@ -918,6 +938,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         hb_error("hb_dict_to_job: failed to parse dict: %s", error.text);
         goto fail;
     }
+    
+    // Make sure QSV Decode is only True if the hardware is available.
+    job->qsv.decode = job->qsv.decode && hb_qsv_available(); 
 
     // Lookup mux id
     if (hb_value_type(mux) == HB_VALUE_TYPE_STRING)
@@ -966,14 +989,14 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             if (range_start >= 0)
                 job->pts_to_start = range_start;
             if (range_end >= 0)
-                job->pts_to_stop = range_end;
+                job->pts_to_stop = range_end - job->pts_to_start;
         }
         else if (!strcasecmp(range_type, "frame"))
         {
-            if (range_start >= 0)
-                job->frame_to_start = range_start;
-            if (range_end >= 0)
-                job->frame_to_stop = range_end;
+            if (range_start > 0)
+                job->frame_to_start = range_start - 1;
+            if (range_end > 0)
+                job->frame_to_stop = range_end - job->frame_to_start;
         }
     }
 
@@ -1007,41 +1030,104 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
 
     job->select_subtitle_config.dest = subtitle_search_burn ?
                                             RENDERSUB : PASSTHRUSUB;
-    if (meta_name != NULL && meta_name[0] != 0)
+    if (meta_name != NULL)
     {
-        hb_metadata_set_name(job->metadata, meta_name);
+        if (meta_name[0] != 0)
+        {
+            hb_metadata_set_name(job->metadata, meta_name);
+        }
+        else
+        {
+            hb_metadata_set_name(job->metadata, NULL);
+        }
     }
-    if (meta_artist != NULL && meta_artist[0] != 0)
+    if (meta_artist != NULL)
     {
-        hb_metadata_set_artist(job->metadata, meta_artist);
+        if (meta_artist[0] != 0)
+        {
+            hb_metadata_set_artist(job->metadata, meta_artist);
+        }
+        else
+        {
+            hb_metadata_set_artist(job->metadata, NULL);
+        }
     }
-    if (meta_composer != NULL && meta_composer[0] != 0)
+    if (meta_composer != NULL)
     {
-        hb_metadata_set_composer(job->metadata, meta_composer);
+        if (meta_composer[0] != 0)
+        {
+            hb_metadata_set_composer(job->metadata, meta_composer);
+        }
+        else
+        {
+            hb_metadata_set_composer(job->metadata, NULL);
+        }
     }
-    if (meta_album_artist != NULL && meta_album_artist[0] != 0)
+    if (meta_album_artist != NULL)
     {
-        hb_metadata_set_album_artist(job->metadata, meta_album_artist);
+        if (meta_album_artist[0] != 0)
+        {
+            hb_metadata_set_album_artist(job->metadata, meta_album_artist);
+        }
+        else
+        {
+            hb_metadata_set_album_artist(job->metadata, NULL);
+        }
     }
-    if (meta_release != NULL && meta_release[0] != 0)
+    if (meta_release != NULL)
     {
-        hb_metadata_set_release_date(job->metadata, meta_release);
+        if (meta_release[0] != 0)
+        {
+            hb_metadata_set_release_date(job->metadata, meta_release);
+        }
+        else
+        {
+            hb_metadata_set_release_date(job->metadata, NULL);
+        }
     }
-    if (meta_comment != NULL && meta_comment[0] != 0)
+    if (meta_comment != NULL)
     {
-        hb_metadata_set_comment(job->metadata, meta_comment);
+        if (meta_comment[0] != 0)
+        {
+            hb_metadata_set_comment(job->metadata, meta_comment);
+        }
+        else
+        {
+            hb_metadata_set_comment(job->metadata, NULL);
+        }
     }
-    if (meta_genre != NULL && meta_genre[0] != 0)
+    if (meta_genre != NULL)
     {
-        hb_metadata_set_genre(job->metadata, meta_genre);
+        if (meta_genre[0] != 0)
+        {
+            hb_metadata_set_genre(job->metadata, meta_genre);
+        }
+        else
+        {
+            hb_metadata_set_genre(job->metadata, NULL);
+        }
     }
-    if (meta_desc != NULL && meta_desc[0] != 0)
+    if (meta_desc != NULL)
     {
-        hb_metadata_set_description(job->metadata, meta_desc);
+        if (meta_desc[0] != 0)
+        {
+            hb_metadata_set_description(job->metadata, meta_desc);
+        }
+        else
+        {
+            hb_metadata_set_description(job->metadata, NULL);
+        }
     }
-    if (meta_long_desc != NULL && meta_long_desc[0] != 0)
+    if (meta_long_desc != NULL)
     {
-        hb_metadata_set_long_description(job->metadata, meta_long_desc);
+        if (meta_long_desc[0] != 0)
+        {
+            hb_metadata_set_long_description(job->metadata, meta_long_desc);
+        }
+        else
+        {
+            hb_metadata_set_long_description(job->metadata, NULL);
+        }
     }
 
     // process chapter list
@@ -1054,7 +1140,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         for (ii = 0; ii < count; ii++)
         {
             chapter_dict = hb_value_array_get(chapter_list, ii);
-            char *name = NULL;
+            const char *name = NULL;
             result = json_unpack_ex(chapter_dict, &error, 0,
                                     "{s:s}", "Name", unpack_s(&name));
             if (result < 0)
@@ -1172,12 +1258,13 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_audio_config_t audio;
             hb_value_t *acodec = NULL, *samplerate = NULL, *mixdown = NULL;
             hb_value_t *dither = NULL;
+            const char *name = NULL;
 
             hb_audio_config_init(&audio);
             result = json_unpack_ex(audio_dict, &error, 0,
                 "{s:i, s?s, s?o, s?F, s?F, s?o, s?b, s?o, s?o, s?i, s?F, s?F}",
                 "Track",                unpack_i(&audio.in.track),
-                "Name",                 unpack_s(&audio.out.name),
+                "Name",                 unpack_s(&name),
                 "Encoder",              unpack_o(&acodec),
                 "Gain",                 unpack_f(&audio.out.gain),
                 "DRC",                  unpack_f(&audio.out.dynamic_range_compression),
@@ -1244,6 +1331,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     audio.out.dither_method = hb_value_get_int(dither);
                 }
             }
+            if (name != NULL && name[0] != 0)
+            {
+                audio.out.name = strdup(name);
+            }
             if (audio.in.track >= 0)
             {
                 audio.out.track = ii;
@@ -1278,7 +1369,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_subtitle_config_t sub_config;
             int track = -1;
             int burn = 0;
-            char *srtfile = NULL;
+            const char *srtfile = NULL;
             json_int_t offset = 0;
 
             result = json_unpack_ex(subtitle_dict, &error, 0,
@@ -1322,8 +1413,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 strncpy(sub_config.src_filename, srtfile, 255);
                 sub_config.src_filename[255] = 0;
 
-                char *srtlang = "und";
-                char *srtcodeset = "UTF-8";
+                const char *srtlang = "und";
+                const char *srtcodeset = "UTF-8";
                 result = json_unpack_ex(subtitle_dict, &error, 0,
                     "{s?b, s?b, s?I, "      // Common
                     "s?{s?s, s?s, s?s}}",   // SRT
@@ -1689,7 +1780,7 @@ hb_image_t* hb_json_to_image(char *json_image)
         for (ii = 0; ii < count; ii++)
         {
             plane_dict = hb_value_array_get(planes, ii);
-            char *data = NULL;
+            const char *data = NULL;
             int size;
             json_result = json_unpack_ex(plane_dict, &error, 0,
                                          "{s:i, s:s}",

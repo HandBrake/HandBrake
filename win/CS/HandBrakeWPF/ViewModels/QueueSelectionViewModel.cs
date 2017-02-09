@@ -30,6 +30,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IUserSettingService userSettingService;
         private bool orderedByDuration;
         private bool orderedByTitle;
+        private bool orderedByName;
         private Action<IEnumerable<SelectionTitle>> addToQueue;
 
         private string currentPreset;
@@ -117,6 +118,23 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether ordered by name.
+        /// </summary>
+        public bool OrderedByName
+        {
+            get
+            {
+                return this.orderedByName;
+            }
+
+            set
+            {
+                this.orderedByName = value;
+                this.NotifyOfPropertyChange(() => OrderedByName);
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether is auto naming enabled.
         /// </summary>
         public bool IsAutoNamingEnabled
@@ -136,6 +154,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => TitleList);
             this.OrderedByTitle = true;
             this.OrderedByDuration = false;
+            this.OrderedByName = false;
         }
 
         /// <summary>
@@ -147,6 +166,19 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => TitleList);
             this.OrderedByTitle = false;
             this.OrderedByDuration = true;
+            this.OrderedByName = false;
+        }
+
+        /// <summary>
+        /// The order by name.
+        /// </summary>
+        public void OrderByName()
+        {
+            TitleList = new BindingList<SelectionTitle>(TitleList.OrderBy(o => o.Title.SourceName).ToList());
+            this.NotifyOfPropertyChange(() => TitleList);
+            this.OrderedByTitle = false;
+            this.OrderedByDuration = false;
+            this.OrderedByName = true;
         }
 
         /// <summary>

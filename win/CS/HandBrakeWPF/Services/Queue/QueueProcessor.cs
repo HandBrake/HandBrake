@@ -649,7 +649,7 @@ namespace HandBrakeWPF.Services.Queue
                 if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace))
                 {
                     string drive = Path.GetPathRoot(job.Task.Destination);
-                    if (drive != null)
+                    if (!string.IsNullOrEmpty(drive) && !drive.StartsWith("\\"))
                     {
                         DriveInfo c = new DriveInfo(drive);
                         if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))

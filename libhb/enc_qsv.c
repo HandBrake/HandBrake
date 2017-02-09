@@ -309,8 +309,8 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     mfxU16 Height            = pv->param.videoParam->mfx.FrameInfo.Height;
     mfxU16 Width             = pv->param.videoParam->mfx.FrameInfo.Width;
     frameSurface1.Info       = pv->param.videoParam->mfx.FrameInfo;
-    frameSurface1.Data.VU    = av_mallocz(Width * Height / 2);
-    frameSurface1.Data.Y     = av_mallocz(Width * Height);
+    frameSurface1.Data.Y     = av_mallocz(Width * Height * 3 / 2);
+    frameSurface1.Data.VU    = frameSurface1.Data.Y + Width * Height;
     frameSurface1.Data.Pitch = Width;
 
     /* Encode a single blank frame */
@@ -437,7 +437,6 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
 
 end:
     hb_buffer_close(&bitstream_buf);
-    av_free(frameSurface1.Data.VU);
     av_free(frameSurface1.Data.Y);
     return ret;
 }
@@ -596,8 +595,8 @@ int qsv_enc_init(hb_work_private_t *pv)
             mfxFrameInfo info         = pv->param.videoParam->mfx.FrameInfo;
             surface->Info             = info;
             surface->Data.Pitch       = info.Width;
-            surface->Data.Y           = av_mallocz(info.Width * info.Height);
-            surface->Data.VU          = av_mallocz(info.Width * info.Height / 2);
+            surface->Data.Y           = av_mallocz(info.Width * info.Height * 3 / 2);
+            surface->Data.VU          = surface->Data.Y + info.Width * info.Height;
             qsv_encode->p_surfaces[i] = surface;
         }
     }
@@ -1458,7 +1457,6 @@ void encqsvClose(hb_work_object_t *w)
                     {
                         if (pv->is_sys_mem)
                         {
-                            av_freep(&qsv_enc_space->p_surfaces[i]->Data.VU);
                             av_freep(&qsv_enc_space->p_surfaces[i]->Data.Y);
                         }
                         av_freep(&qsv_enc_space->p_surfaces[i]);

@@ -31,6 +31,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
@@ -201,7 +202,7 @@ namespace HandBrakeWPF.Services.Scan
                                                    PixelAspectY = job.PixelAspectY
                                                };
 
-                bitmapImage = this.instance.GetPreview(settings, preview);
+                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview));
             }
             catch (AccessViolationException e)
             {
@@ -245,7 +246,7 @@ namespace HandBrakeWPF.Services.Scan
                 HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
+                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0, configuraiton.ScalingMode == VideoScaler.BicubicCl);
 
                 if (this.ScanStarted != null)
                     this.ScanStarted(this, System.EventArgs.Empty);

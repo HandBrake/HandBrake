@@ -53,6 +53,46 @@
     va_end(args);
 }
 
++ (nullable NSURL *)URLFromBookmark:(NSData *)bookmark
+{
+    NSParameterAssert(bookmark);
+
+    NSError *error;
+    BOOL isStale;
+
+    NSURL *url = [NSURL URLByResolvingBookmarkData:bookmark options:NSURLBookmarkResolutionWithSecurityScope relativeToURL:nil bookmarkDataIsStale:&isStale error:&error];
+
+    if (error)
+    {
+        NSString *error_message = [NSString stringWithFormat:@"Failed to resolved bookmark: %@", error];
+        [HBUtilities writeToActivityLog:"%s", error_message.UTF8String];
+    }
+
+    return isStale ? nil : url;
+}
+
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options
+{
+    NSParameterAssert(url);
+
+    NSError *error;
+
+    NSData *bookmark = [url bookmarkDataWithOptions:options includingResourceValuesForKeys:nil relativeToURL:nil error:&error];
+
+    if (error)
+    {
+        NSString *error_message = [NSString stringWithFormat:@"Failed to create bookmark: %@", error];
+        [HBUtilities writeToActivityLog:"%s", error_message.UTF8String];
+    }
+
+    return bookmark;
+}
+
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url
+{
+    return [HBUtilities bookmarkFromURL:url options:NSURLBookmarkCreationWithSecurityScope];
+}
+
 + (NSString *)displayNameForURL:(NSURL *)URL
 {
     NSString *displayName = URL.lastPathComponent;
@@ -107,6 +147,7 @@
             [HBUtilities writeToActivityLog:"not a known to package"];
         }
     }
+#ifndef __SANDBOX_ENABLED__
     else
     {
         // path is not a package, so we call perform scan directly on our file
@@ -121,6 +162,7 @@
             [HBUtilities writeToActivityLog:"trying to open a folder or file"];
         }
     }
+#endif
 
     return mediaURL;
 }
@@ -161,16 +203,8 @@
     return extension;
 }
 
-+ (NSURL *)destURLForJob:(HBJob *)job
++ (NSString *)defaultNameForJob:(HBJob *)job
 {
-    // Check to see if the last destination has been set,use if so, if not, use Desktop
-    NSURL *destURL = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
-    if (!destURL || ![[NSFileManager defaultManager] fileExistsAtPath:destURL.path])
-    {
-        destURL = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject]
-                             isDirectory:YES];
-    }
-
     // Generate a new file name
     NSString *fileName = job.title.name;
 
@@ -180,12 +214,11 @@
         fileName = [self automaticNameForJob:job];
     }
 
-    destURL = [destURL URLByAppendingPathComponent:fileName];
     // use the correct extension based on the container
     NSString *ext = [self automaticExtForJob:job];
-    destURL = [destURL URLByAppendingPathExtension:ext];
+    fileName = [fileName stringByAppendingPathExtension:ext];
     
-    return destURL;
+    return fileName;
 }
 
 + (NSString *)automaticNameForSource:(NSString *)sourceName

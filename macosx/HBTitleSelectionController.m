@@ -38,6 +38,7 @@
 
 @interface HBTitleSelectionController () <NSTableViewDataSource, NSTableViewDelegate>
 
+@property (nonatomic, strong) IBOutlet NSArrayController *arrayController;
 @property (nonatomic, readwrite) NSArray<HBTitleSelection *> *titles;
 @property (nonatomic, readonly, assign) id<HBTitleSelectionDelegate> delegate;
 @property (nonatomic, readonly) NSString *message;
@@ -75,20 +76,19 @@
 
 - (IBAction)add:(id)sender
 {
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-
-    [self.titles enumerateObjectsUsingBlock:^(HBTitleSelection *obj, NSUInteger idx, BOOL *stop) {
+    NSMutableArray<HBTitle *> *titles = [NSMutableArray array];
+    [self.arrayController.arrangedObjects enumerateObjectsUsingBlock:^(HBTitleSelection *obj, NSUInteger idx, BOOL *stop) {
         if (obj.selected)
         {
-            [indexes addIndex:obj.title.index];
+            [titles addObject:obj.title];
         }
     }];
-    [self.delegate didSelectIndexes:indexes];
+    [self.delegate didSelectTitles:titles];
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.delegate didSelectIndexes:[NSIndexSet indexSet]];
+    [self.delegate didSelectTitles:@[]];
 }
 
 @end

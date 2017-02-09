@@ -309,7 +309,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.VideoTunes.Add(new VideoTune(item, item));
                 }
             }
-            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
+            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || importedPreset.VideoFramerate == "Same as source" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
                                  ? (double?)null
                                  : double.Parse(importedPreset.VideoFramerate, CultureInfo.InvariantCulture);
             string parsedValue = importedPreset.VideoFramerateMode;
@@ -403,7 +403,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
-                    track.SampleRate = audioTrack.AudioSamplerate == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
+                    track.SampleRate = string.IsNullOrEmpty(audioTrack.AudioSamplerate) || audioTrack.AudioSamplerate.ToLower() == "auto" ? 0 : double.Parse(audioTrack.AudioSamplerate);
 
                     track.EncoderRateType = audioTrack.AudioTrackQualityEnable ? AudioEncoderRateType.Quality : AudioEncoderRateType.Bitrate;
                     track.Quality = audioTrack.AudioTrackQuality;
@@ -622,10 +622,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoFramerate = export.Task.Framerate.ToString();
             preset.VideoFramerateMode = EnumHelper<FramerateMode>.GetShortName(export.Task.FramerateMode);
             preset.VideoGrayScale = export.Task.Grayscale;
-            preset.VideoLevel = export.Task.VideoLevel.ShortName;
+            preset.VideoLevel = export.Task.VideoLevel != null ? export.Task.VideoLevel.ShortName : null;
             preset.VideoOptionExtra = export.Task.ExtraAdvancedArguments;
-            preset.VideoPreset = export.Task.VideoPreset.ShortName;
-            preset.VideoProfile = export.Task.VideoProfile.ShortName;
+            preset.VideoPreset = export.Task.VideoPreset != null ? export.Task.VideoPreset.ShortName : null;
+            preset.VideoProfile = export.Task.VideoProfile != null ?  export.Task.VideoProfile.ShortName : null;
             preset.VideoQSVAsyncDepth = 4; // Defaulted to 4 for now.
             preset.VideoQSVDecode = !config.DisableQuickSyncDecoding;
             preset.VideoQualitySlider = export.Task.Quality.HasValue ? export.Task.Quality.Value : 0;

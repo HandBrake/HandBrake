@@ -18,7 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Forms;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -709,14 +708,16 @@ namespace HandBrakeWPF.ViewModels
                         try
                         {
                             ext = Path.GetExtension(value);
+                            if (FileHelper.FilePathHasInvalidChars(value))
+                            {
+                                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
                         }
                         catch (ArgumentException)
                         {
-                            this.errorService.ShowMessageBox(
-                                Resources.Main_InvalidDestination,
-                                Resources.Error,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
                         }
 
                         this.CurrentTask.Destination = value;
@@ -1088,6 +1089,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Action for the status window.
+        /// </summary>
+        public Action OpenLogWindowAction
+        {
+            get
+            {
+                return this.OpenLogWindow;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether show alert window.
         /// </summary>
         public bool ShowAlertWindow
@@ -1254,6 +1266,12 @@ namespace HandBrakeWPF.ViewModels
 
             this.SelectedPreset = this.presetService.DefaultPreset;
 
+            // Reset WhenDone if necessary.
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
+            {
+                this.WhenDone("Do nothing");
+            }
+
             // Log Cleaning
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
@@ -1330,6 +1348,14 @@ namespace HandBrakeWPF.ViewModels
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline))
             {
                 this.IsQueueShowingInLine = !this.IsQueueShowingInLine;
+                if (this.IsQueueShowingInLine)
+                {
+                    this.QueueViewModel.Activate();
+                }
+                else
+                {
+                    this.QueueViewModel.Deactivate();
+                }
                 this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
             }
             else
@@ -1705,7 +1731,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="action">action</param>
         public void WhenDone(string action)
         {
-            this.QueueViewModel?.WhenDone(action);
+            this.QueueViewModel?.WhenDone(action, true);
         }
 
         #endregion
@@ -2084,13 +2110,15 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask = new EncodeTask(queueEditTask);
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
                 this.HasSource = true;
-
+             
                 // Update the Main Window
                 this.NotifyOfPropertyChange(() => this.Destination);
-                this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
-                this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
-                this.NotifyOfPropertyChange(() => this.SelectedAngle);
-                this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
+                this.SelectedAngle = this.CurrentTask.Angle;
+                int start = this.CurrentTask.StartPoint;
+                int end = this.CurrentTask.EndPoint;
+                this.SelectedPointToPoint = this.CurrentTask.PointToPointMode; // Force reset.
+                this.SelectedStartPoint = start;
+                this.SelectedEndPoint = end;
                 this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
 
@@ -2490,7 +2518,7 @@ namespace HandBrakeWPF.ViewModels
                     DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
                     if (driveInfo != null)
                     {
-                        this.StartScan(driveInfo.RootDirectory, 0);
+                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
                     }
 
                     this.ShowSourceSelection = false;
@@ -2509,10 +2537,17 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            switch (e.Key)
             {
-                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+                case UserSettingConstants.ShowAdvancedTab:
+                    this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+                    break;
+
+                case UserSettingConstants.WhenCompleteAction:
+                    this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
+                    break;
             }
+
         }
 
         /// <summary>

@@ -830,4 +830,7 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
     <value>Processing Pass {0} of {1}, (Subtitle Scan)  {2:00.00}%, Scan Time Remaining: {3},  Elapsed: {4:d\:hh\:mm\:ss}</value>
   </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>No Additional Information</value>
+  </data>
 </root>

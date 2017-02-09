@@ -194,7 +194,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </summary>
         protected void OpenButtonMenu()
         {
-            if ((this.ItemSource.Count < 0) && (this.contextMenu != null))
+            if ((this.ItemSource.Count > 0) && (this.contextMenu != null))
             {
                 this.contextMenu.HorizontalOffset = 0;
                 this.contextMenu.VerticalOffset = 0;

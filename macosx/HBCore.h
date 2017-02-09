@@ -101,6 +101,22 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 @property (nonatomic, readwrite) int logLevel;
 
 /**
+ * Set whether system sleep will be disable or not during a scan/encode
+ * Enabled by default.
+ */
+@property (nonatomic, readwrite) BOOL automaticallyPreventSleep;
+
+/**
+ * Manually prevent system sleep if automaticallyPreventSleep is set to NO.
+ */
+- (void)preventSleep;
+
+/**
+ * Manually allow system sleep if automaticallyPreventSleep is set to NO.
+ */
+- (void)allowSleep;
+
+/**
  *  State formatter.
  */
 @property (nonatomic, readwrite, strong) HBStateFormatter *stateFormatter;

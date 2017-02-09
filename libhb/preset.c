@@ -381,7 +381,7 @@ static hb_dict_t * source_audio_track_used(hb_dict_t *track_dict, int track)
 
 // Find a source audio track matching given language
 static int find_audio_track(const hb_title_t *title,
-                            const char *lang, int start)
+                            const char *lang, int start, int behavior)
 {
     hb_audio_config_t * audio;
     int ii, count;
@@ -390,8 +390,13 @@ static int find_audio_track(const hb_title_t *title,
     for (ii = start; ii < count; ii++)
     {
         audio = hb_list_audio_config_item(title->list_audio, ii);
-        // Ignore secondary audio types
-        if ((audio->lang.type == HB_AUDIO_TYPE_NONE ||
+        // When behavior is "first" matching track,
+        // ignore secondary audio types
+        //
+        // When behavior is "all" matching tracks,
+        // allow any audio track type
+        if ((behavior == 2 ||
+             audio->lang.type == HB_AUDIO_TYPE_NONE ||
              audio->lang.type == HB_AUDIO_TYPE_NORMAL) &&
             (!strcmp(lang, audio->lang.iso639_2) || !strcmp(lang, "und")))
         {
@@ -609,14 +614,14 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
 {
     hb_value_array_t * encoder_list = hb_dict_get(preset, "AudioList");
     int count = hb_value_array_len(encoder_list);
-    int track = find_audio_track(title, lang, 0);
-    int current_mode = 0;
+    int track = find_audio_track(title, lang, 0, behavior);
     while (track >= 0)
     {
+        int track_count = hb_value_array_len(list);
         char key[8];
         snprintf(key, sizeof(key), "%d", track);
 
-        count = current_mode ? 1 : count;
+        count = mode && track_count ? 1 : count;
         int ii;
         for (ii = 0; ii < count; ii++)
         {
@@ -718,7 +723,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             hb_value_array_append(list, audio_dict);
         }
         if (behavior == 2)
-            track = find_audio_track(title, lang, track + 1);
+            track = find_audio_track(title, lang, track + 1, behavior);
         else
             break;
     }

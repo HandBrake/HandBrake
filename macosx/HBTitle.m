@@ -63,6 +63,13 @@ extern NSString *keySubTrackType;
     {
         _name = @(self.hb_title->name);
 
+        // Use the bundle name for eyetv
+        NSURL *parentURL = self.url.URLByDeletingLastPathComponent;
+        if ([parentURL.pathExtension caseInsensitiveCompare:@"eyetv"] == NSOrderedSame)
+        {
+            _name = parentURL.URLByDeletingPathExtension.lastPathComponent;
+        }
+
         // If the name is empty use file/directory name
         if (_name.length == 0)
         {
@@ -242,7 +249,7 @@ extern NSString *keySubTrackType;
                 NSString *title;
                 if (chapter->title != NULL)
                 {
-                    title = [NSString stringWithFormat:@"%s", chapter->title];
+                    title = @(chapter->title);
                 }
                 else
                 {

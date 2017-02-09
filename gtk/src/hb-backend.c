@@ -4406,15 +4406,16 @@ ghb_get_preview_image(
     {
         gint factor = 80;
 
-        GdkScreen *ss;
+        GdkWindow *window;
         gint s_w, s_h;
 
-        ss = gdk_screen_get_default();
-        s_w = gdk_screen_get_width(ss);
-        s_h = gdk_screen_get_height(ss);
+        window = gtk_widget_get_window(
+                    GHB_WIDGET(ud->builder, "hb_window"));
+        ghb_monitor_get_size(window, &s_w, &s_h);
 
-        if (previewWidth > s_w * factor / 100 ||
-            previewHeight > s_h * factor / 100)
+        if (s_w > 0 && s_h > 0 &&
+            (previewWidth  > s_w * factor / 100 ||
+             previewHeight > s_h * factor / 100))
         {
             GdkPixbuf *scaled_preview;
             int orig_w = previewWidth;

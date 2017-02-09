@@ -20,7 +20,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="action">
         /// The action.
         /// </param>
-        void WhenDone(string action);
+        /// <param name="saveChange">
+        /// Save the change to the setting. Use false when updating UI.
+        /// </param>
+        void WhenDone(string action, bool saveChange);
 
         /// <summary>
         /// The import.
@@ -46,5 +49,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The remove selected jobs.
         /// </summary>
         void RemoveSelectedJobs();
+
+        /// <summary>
+        /// Activate this panel
+        /// </summary>
+        void Activate();
+
+        /// <summary>
+        /// Deactivate this panel
+        /// </summary>
+        void Deactivate();
     }
 }

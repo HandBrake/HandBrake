@@ -250,6 +250,7 @@ ghb_check_dependency(
         }
         sensitive = dep_check(ud, dep_name, &hide);
         gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+        gtk_widget_set_can_focus(GTK_WIDGET(dep_object), sensitive);
         if (!sensitive && hide)
         {
             if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
@@ -1827,7 +1828,7 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
 {
     GhbValue *metadata = ghb_get_job_metadata_settings(settings);
 
-    if (val == NULL || val[0] == 0)
+    if (val == NULL)
         ghb_dict_remove(metadata, name);
     else
         ghb_dict_set_string(metadata, name, val);
@@ -2478,7 +2479,7 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start * 90000);
-        ghb_dict_set_int(range, "End", (end - start) * 90000);
+        ghb_dict_set_int(range, "End", end * 90000);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
@@ -2492,8 +2493,8 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_check_dependency(ud, widget, NULL);
         update_title_duration(ud);
 
-        ghb_dict_set_int(range, "Start", start - 1);
-        ghb_dict_set_int(range, "End", end - start + 1);
+        ghb_dict_set_int(range, "Start", start);
+        ghb_dict_set_int(range, "End", end);
     }
 }
 
@@ -2542,7 +2543,7 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         update_title_duration(ud);
 
         ghb_dict_set_int(range, "Start", start * 90000);
-        ghb_dict_set_int(range, "End", (end - start) * 90000);
+        ghb_dict_set_int(range, "End", end * 90000);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
@@ -2556,8 +2557,8 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_check_dependency(ud, widget, NULL);
         update_title_duration(ud);
 
-        ghb_dict_set_int(range, "Start", start - 1);
-        ghb_dict_set_int(range, "End", end - start + 1);
+        ghb_dict_set_int(range, "Start", start);
+        ghb_dict_set_int(range, "End", end);
     }
 }
 

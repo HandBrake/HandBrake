@@ -77,8 +77,9 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         _array = [[NSMutableArray alloc] init];
         _objectClasses = [NSSet setWithObjects:[NSMutableArray class], objectClass, nil];
 
-        NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]];
-        const char *name = [NSString stringWithFormat:@"/%@.hblock", _fileURL.lastPathComponent].UTF8String;
+        NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
+        NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:identifier];
+        const char *name = [NSString stringWithFormat:@"%@/%@", identifier, _fileURL.lastPathComponent.stringByDeletingPathExtension].UTF8String;
 
         // Unlink the semaphore if we are the only
         // instance running, this fixes the case where
@@ -94,7 +95,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         _mutex = sem_open(name, O_CREAT, 0777, 1);
         if (_mutex == SEM_FAILED)
         {
-            [HBUtilities writeToActivityLog:"%s: %d\n", "Error in creating semaphore: ", errno];
+            [HBUtilities writeToActivityLog:"%s: %d", "Error in creating semaphore: ", errno];
         }
 
         [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:HBDistributedArraWrittenToDisk object:nil];
@@ -182,12 +183,9 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 {
     if (!([notification.object integerValue] == getpid()))
     {
-        if ([notification.userInfo[@"path"] isEqualToString:self.fileURL.path])
-        {
-            [self lock];
-            [self reload];
-            [self unlock];
-        }
+        [self lock];
+        [self reload];
+        [self unlock];
     }
 }
 
@@ -273,7 +271,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     // Send a distributed notification.
     [[NSDistributedNotificationCenter defaultCenter] postNotificationName:HBDistributedArraWrittenToDisk
                                                                    object:[NSString stringWithFormat:@"%d", getpid()]
-                                                                 userInfo:@{@"path": self.fileURL.path}
+                                                                 userInfo:nil
                                                        deliverImmediately:YES];
 
     // Update the time, so we can avoid reloaded the file from disk later.

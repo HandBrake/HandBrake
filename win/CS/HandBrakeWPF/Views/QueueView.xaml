@@ -66,8 +66,8 @@
             <DockPanel Background="Transparent" HorizontalAlignment="Stretch">
 
                 <Button Name="Start" DockPanel.Dock="Left" AutomationProperties.Name="Start Queue"
-                        cal:Message.Attach="[Event Click] = [Action StartEncode]"
-                        Visibility="{Binding IsEncoding,
+                        cal:Message.Attach="[Event Click] = [Action StartQueue]"
+                        Visibility="{Binding IsQueueRunning,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=true}">
                     <StackPanel Orientation="Horizontal">
@@ -81,8 +81,8 @@
                 </Button>
 
                 <Button Name="Pause" DockPanel.Dock="Left" AutomationProperties.Name="Pause Queue"
-                        cal:Message.Attach="[Event Click] = [Action PauseEncode]"
-                        Visibility="{Binding IsEncoding,
+                        cal:Message.Attach="[Event Click] = [Action PauseQueueToolbar]"
+                        Visibility="{Binding IsQueueRunning,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=false}">
                     <StackPanel Orientation="Horizontal">
@@ -115,39 +115,25 @@
 
                             <MenuItem x:Name="doNothing"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}" />
                             <MenuItem x:Name="shutdown"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}" />
                             <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}" />
                             <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}"/>
                             <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}" />
                             <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"/>
                             <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"
-                                  IsCheckable="True"
-                                  AttachedProperties:MenuItemExtensions.GroupName="whenDone" />
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"/>
                         </MenuItem>
                     </Menu>
 
@@ -184,7 +170,7 @@
             <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
         </StackPanel>
 
-        <ListBox Grid.Row="2"
+        <ListBox Grid.Row="2" Tag="{Binding}"
                  Margin="10,20,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
@@ -203,7 +189,10 @@
             </i:Interaction.Triggers>
 
             <ListBox.ContextMenu>
-                <ContextMenu>
+                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
+                    <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />                 

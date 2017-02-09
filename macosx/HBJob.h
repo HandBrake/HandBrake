@@ -58,7 +58,13 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readonly) NSURL *fileURL;
 
 /// The file URL at which the new file will be created.
-@property (nonatomic, readwrite, copy, nullable) NSURL *destURL;
+@property (nonatomic, readwrite, copy, nullable) NSURL *outputURL;
+
+/// The name of the new file that will be created.
+@property (nonatomic, readwrite, copy, nullable) NSString *outputFileName;
+
+/// The URL at which the new file will be created.
+@property (nonatomic, readonly, nullable) NSURL *completeOutputURL;
 
 // Job settings
 @property (nonatomic, readwrite) int container;

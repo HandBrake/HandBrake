@@ -526,7 +526,7 @@
     <value>Options</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Pause</value>
+    <value>Pause Queue</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
     <value>Picture Settings:</value>
@@ -541,7 +541,7 @@
     <value>Source: </value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Start Queue</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
     <value>Subtitles:</value>

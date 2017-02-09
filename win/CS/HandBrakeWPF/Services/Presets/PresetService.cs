@@ -142,11 +142,20 @@ namespace HandBrakeWPF.Services.Presets
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                PresetTransportContainer container = HandBrakePresetService.GetPresetFromFile(filename);
+                PresetTransportContainer container = null;
+                try
+                {
+                    container = HandBrakePresetService.GetPresetFromFile(filename);
+                }
+                catch (Exception exc)
+                {
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
+                    return;
+                }
 
                 if (container?.PresetList == null || container.PresetList.Count == 0)
                 {
-                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
+                    this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, Resources.NoAdditionalInformation);
                     return;
                 }
 

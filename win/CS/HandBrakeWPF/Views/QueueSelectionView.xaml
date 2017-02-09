@@ -9,6 +9,7 @@
         Title="{Binding Title}"
         Width="550"
         Height="475"
+        MinHeight="475"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
@@ -65,6 +66,7 @@
                     <Separator />
                     <MenuItem Header="Order by Title" IsChecked="{Binding OrderedByTitle}" cal:Message.Attach="[Event Click] = [Action OrderByTitle]" />
                     <MenuItem Header="Order by Duration" IsChecked="{Binding OrderedByDuration}" cal:Message.Attach="[Event Click] = [Action OrderByDuration]" />
+                    <MenuItem Header="Order by Name" IsChecked="{Binding OrderedByName}" cal:Message.Attach="[Event Click] = [Action OrderByName]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 

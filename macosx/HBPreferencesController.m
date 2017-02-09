@@ -208,9 +208,10 @@
             NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
             [[NSUserDefaults standardUserDefaults] setObject:[sendToAppDirectoryURL path] forKey:@"LastSendToAppDirectory"];
 
+            // We set the name of the app to send to in the display field
             NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
-            /* we set the name of the app to send to in the display field */
             [fSendEncodeToAppField setStringValue:sendToAppName];
+
             [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"HBSendToApp"];
         }
     }];

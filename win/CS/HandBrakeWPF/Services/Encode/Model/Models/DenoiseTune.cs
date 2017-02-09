@@ -37,5 +37,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [Display(Name = "Animation")]
         [ShortName("animation")]
         Animation,
+
+        [Display(Name = "Tape")]
+        [ShortName("tape")]
+        Tape,
+
+        [Display(Name = "Sprite")]
+        [ShortName("sprite")]
+        Sprite,
     }
 }

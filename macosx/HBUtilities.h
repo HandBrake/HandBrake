@@ -30,12 +30,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)writeToActivityLog:(const char *)format, ...;
 
++ (nullable NSURL *)URLFromBookmark:(NSData *)bookmark;
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url;
++ (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
+
 + (NSString *)displayNameForURL:(NSURL *)URL;
 + (NSURL *)mediaURLFromURL:(NSURL *)URL;
 
 + (NSString *)automaticNameForJob:(HBJob *)job;
 + (NSString *)automaticExtForJob:(HBJob *)job;
-+ (NSURL *)destURLForJob:(HBJob *)job;
++ (NSString *)defaultNameForJob:(HBJob *)job;
 
 /**
  *  Generates a file name automatically based on the inputs,

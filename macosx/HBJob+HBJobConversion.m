@@ -34,12 +34,12 @@
 - (hb_job_t *)hb_job
 {
     NSAssert(self.title, @"HBJob: calling hb_job without a valid title loaded");
-    NSAssert(self.destURL, @"HBJob: calling hb_job without a valid destination");
+    NSAssert(self.completeOutputURL, @"HBJob: calling hb_job without a valid destination");
 
     hb_title_t *title = self.title.hb_title;
     hb_job_t *job = hb_job_init(title);
 
-    hb_job_set_file(job, self.destURL.path.fileSystemRepresentation);
+    hb_job_set_file(job, self.completeOutputURL.path.fileSystemRepresentation);
 
     // Title Angle for dvdnav
     job->angle = self.angle;

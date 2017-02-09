@@ -10,7 +10,7 @@
 namespace HandBrake.ApplicationServices.Interop.Interfaces
 {
     using System;
-    using System.Windows.Media.Imaging;
+    using System.Drawing;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
@@ -100,7 +100,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        BitmapImage GetPreview(PreviewSettings job, int previewNumber);
+        Bitmap GetPreview(PreviewSettings job, int previewNumber);
 
         /// <summary>
         /// Pauses the current encode.
@@ -135,7 +135,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
+        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, bool clEnabled = false);
 
         /// <summary>
         /// Stops the current encode.

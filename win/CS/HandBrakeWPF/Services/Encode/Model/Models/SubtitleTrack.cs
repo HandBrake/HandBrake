@@ -11,6 +11,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
@@ -45,6 +47,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// Backing field for Forced Subs
         /// </summary>
         private bool forced;
+
+        private string srtLang;
 
         #endregion
 
@@ -198,7 +202,24 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         ///   Gets or sets the SRT Language
         /// </summary>
-        public string SrtLang { get; set; }
+        public string SrtLang
+        {
+            get
+            {
+                return this.srtLang;
+            }
+            set
+            {
+                this.srtLang = value;
+                string iso639 = LanguageUtilities.GetLanguageCode(this.srtLang);
+                this.SrtLangCode = iso639;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the srt lang code.
+        /// </summary>
+        public string SrtLangCode { get; set; }
 
         /// <summary>
         ///   Gets or sets the SRT Offset
