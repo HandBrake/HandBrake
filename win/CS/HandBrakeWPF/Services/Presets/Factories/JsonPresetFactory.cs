@@ -265,8 +265,14 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 case "grain":
                     preset.Task.DenoiseTune = DenoiseTune.Grain;
                     break;
-                case "highnotion":
+                case "highmotion":
                     preset.Task.DenoiseTune = DenoiseTune.HighMotion;
+                    break;
+                case "tape":
+                    preset.Task.DenoiseTune = DenoiseTune.Tape;
+                    break;
+                case "sprite":
+                    preset.Task.DenoiseTune = DenoiseTune.Sprite;
                     break;
 
                 default:
