@@ -1,0 +1,14 @@
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 2810960..71c37c2 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -2321,6 +2321,9 @@ static void mov_build_index(MOVContext *mov, AVStream *st)
+         if (sc->time_offset < 0)
+             sc->time_offset = av_rescale(sc->time_offset, sc->time_scale, mov->time_scale);
+         current_dts = -sc->time_offset;
++        if (sc->ctts_data && sc->ctts_count) {
++            current_dts -= sc->ctts_data[0].duration;
++        }
+     }
+ 
+     /* only use old uncompressed audio chunk demuxing when stts specifies it */
