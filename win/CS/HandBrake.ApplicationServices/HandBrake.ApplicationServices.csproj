@@ -192,8 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\AssemblyInfo.cs.Nightly.tmpl" />
-    <None Include="Properties\AssemblyInfo.cs.tmpl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
