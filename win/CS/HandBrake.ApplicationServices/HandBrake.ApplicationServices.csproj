@@ -37,6 +37,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\HandBrake.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>AnyCPU</PlatformTarget>
