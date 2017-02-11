@@ -198,7 +198,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The add first for selected languages.
         /// </summary>
-        private void AddFirstForSelectedLanguages()
+        public void AddFirstForSelectedLanguages()
         {
             foreach (Subtitle sourceTrack in this.GetSelectedLanguagesTracks())
             {
@@ -372,7 +372,8 @@ namespace HandBrakeWPF.ViewModels
                     case SubtitleBurnInBehaviourModes.FirstTrack:                    
                         foreach (var track in this.Task.SubtitleTracks)
                         {
-                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch) // Foreign Audio Search is always first in the list.
+                            // Foreign Audio Search is always first in the list.
+                            if (track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch) 
                             {
                                 track.Forced = true;
                                 continue;

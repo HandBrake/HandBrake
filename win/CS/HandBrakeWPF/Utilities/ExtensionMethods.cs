@@ -37,7 +37,9 @@ namespace HandBrakeWPF.Utilities
                 memberExpression = (MemberExpression)unaryExpression.Operand;
             }
             else
+            {
                 memberExpression = (MemberExpression)lambda.Body;
+            }
 
             return memberExpression.Member;
         }

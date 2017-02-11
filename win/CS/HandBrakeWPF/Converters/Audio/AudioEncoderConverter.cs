@@ -118,7 +118,7 @@ namespace HandBrakeWPF.Converters.Audio
             string name = value as string;
             if (!string.IsNullOrEmpty(name))
             {
-                return new object[] { EnumHelper<AudioEncoder>.GetValue(name)};
+                return new object[] { EnumHelper<AudioEncoder>.GetValue(name) };
             }
 
             return null;

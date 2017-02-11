@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.AttachedProperties
 {
-    using System;
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
@@ -28,12 +27,12 @@ namespace HandBrakeWPF.AttachedProperties
             "GroupName", 
             typeof(string), 
             typeof(MenuItemExtensions), 
-            new PropertyMetadata(String.Empty, OnGroupNameChanged));
+            new PropertyMetadata(string.Empty, OnGroupNameChanged));
 
         /// <summary>
         /// The element to group names.
         /// </summary>
-        public static Dictionary<MenuItem, String> ElementToGroupNames = new Dictionary<MenuItem, String>();
+        public static Dictionary<MenuItem, string> ElementToGroupNames = new Dictionary<MenuItem, string>();
 
         #endregion
 

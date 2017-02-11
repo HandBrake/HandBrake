@@ -9,9 +9,9 @@
 
 namespace HandBrakeWPF.Converters
 {
+    using System;
     using System.Globalization;
     using System.Windows.Data;
-    using System;
 
     /// <summary>
     /// Boolean to Visibility Converter
@@ -41,7 +41,7 @@ namespace HandBrakeWPF.Converters
             // Paramater is a boolean which inverts the output.
             var param = System.Convert.ToBoolean(parameter, CultureInfo.InvariantCulture);
 
-            if (value is Boolean)
+            if (value is bool)
             {
                 return param ? !(bool)value : value;
             }

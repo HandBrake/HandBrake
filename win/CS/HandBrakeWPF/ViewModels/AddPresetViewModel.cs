@@ -86,7 +86,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.windowManager = windowManager;
             this.Title = "Add Preset";
-            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName};
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
             this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
         }
 

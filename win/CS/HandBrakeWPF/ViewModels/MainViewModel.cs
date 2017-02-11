@@ -1857,7 +1857,7 @@ namespace HandBrakeWPF.ViewModels
                                 Resources.DirectoryUtils_CreateFolder,
                                 MessageBoxButton.YesNo,
                                 MessageBoxImage.Question);
-                        if (MessageBoxResult.Yes == result)
+                        if (result == MessageBoxResult.Yes)
                         {
                             Directory.CreateDirectory(directory);
                             Process.Start(directory);
@@ -2437,7 +2437,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
+        private void QueueProcessorJobProcessingStarted(object sender, QueueProgressEventArgs e)
         {
             Execute.OnUIThread(
                () =>
@@ -2547,7 +2547,6 @@ namespace HandBrakeWPF.ViewModels
                     this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
                     break;
             }
-
         }
 
         /// <summary>

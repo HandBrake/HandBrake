@@ -337,7 +337,7 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.X265_10:
                     case VideoEncoder.X265_12:
                         double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
-                        double rfValue = 51.0 - value * cqStep;
+                        double rfValue = 51.0 - (value * cqStep);
                         rfValue = Math.Round(rfValue, 2);
                         this.Task.Quality = rfValue;
                         break;           
@@ -714,7 +714,7 @@ namespace HandBrakeWPF.ViewModels
                 if (encoder != null)
                 {
                     string preset = value >= 0 ? encoder.Presets[value] : null;
-                    this.VideoPreset = preset != null ?new VideoPreset(preset, preset) : this.VideoPresets.FirstOrDefault();
+                    this.VideoPreset = preset != null ? new VideoPreset(preset, preset) : this.VideoPresets.FirstOrDefault();
                 }
 
                 this.NotifyOfPropertyChange(() => this.VideoPresetValue);
@@ -1061,7 +1061,6 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
         }
-
 
         /// <summary>
         /// The get actualx 264 query.

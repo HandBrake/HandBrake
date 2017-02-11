@@ -24,7 +24,7 @@ namespace HandBrakeWPF.Services.Presets.Model
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/89
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/96
     /// </remarks>
-    public class Preset : PropertyChangedBase  // Delibery not 
+    public class Preset : PropertyChangedBase // Delibery not 
     {
         #region Constants and Fields
 

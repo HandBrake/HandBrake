@@ -459,7 +459,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueManager_QueueChanged;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
-
         }
 
         public void Deactivate()

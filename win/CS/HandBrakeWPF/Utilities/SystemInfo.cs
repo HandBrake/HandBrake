@@ -80,12 +80,12 @@ namespace HandBrakeWPF.Utilities
                     {
                         string gpu = string.Empty, version = string.Empty;
 
-                        foreach (PropertyData PC in share.Properties)
+                        foreach (PropertyData pc in share.Properties)
                         {
-                            if (!string.IsNullOrEmpty(PC.Name) && PC.Value != null)
+                            if (!string.IsNullOrEmpty(pc.Name) && pc.Value != null)
                             {
-                                if (PC.Name.Equals("DriverVersion")) version = PC.Value.ToString();
-                                if (PC.Name.Equals("Name")) gpu = PC.Value.ToString();
+                                if (pc.Name.Equals("DriverVersion")) version = pc.Value.ToString();
+                                if (pc.Name.Equals("Name")) gpu = pc.Value.ToString();
                             }
                         }
 

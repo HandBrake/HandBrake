@@ -11,8 +11,8 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Windows;
-    using Interfaces;
     using Caliburn.Micro;
+    using Interfaces;
     using ViewModels.Interfaces;
 
     /// <summary>

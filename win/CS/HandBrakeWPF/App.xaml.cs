@@ -46,8 +46,8 @@ namespace HandBrakeWPF
         /// </param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            OperatingSystem OS = Environment.OSVersion;
-            if ((OS.Platform == PlatformID.Win32NT) && (OS.Version.Major == 5 && OS.Version.Minor <= 1))
+            OperatingSystem os = Environment.OSVersion;
+            if ((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 5 && os.Version.Minor <= 1))
             {
                 MessageBox.Show("Windows XP and earlier are no longer supported. Version 0.9.9 was the last version to support these versions. ", "Notice", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();

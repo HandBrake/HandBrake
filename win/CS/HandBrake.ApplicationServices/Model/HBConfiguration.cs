@@ -57,7 +57,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets a value indicating whether save log with video.
         /// </summary>
-        public bool SaveLogWithVideo{ get; set; }
+        public bool SaveLogWithVideo { get; set; }
 
         /// <summary>
         /// Gets or sets the save log copy directory.

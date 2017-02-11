@@ -45,7 +45,7 @@ namespace HandBrakeWPF.Converters
             {
                 if (groupedMenu.ContainsKey(item.Category))
                 {
-                    MenuItem newMeuItem = new MenuItem { Header = item.Name, Tag = item, Command = new PresetMenuSelectCommand(item)};
+                    MenuItem newMeuItem = new MenuItem { Header = item.Name, Tag = item, Command = new PresetMenuSelectCommand(item) };
                     if (item.IsDefault)
                     {
                         newMeuItem.FontStyle = FontStyles.Italic;

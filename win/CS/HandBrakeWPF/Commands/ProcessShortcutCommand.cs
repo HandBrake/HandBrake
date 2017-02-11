@@ -91,7 +91,7 @@ namespace HandBrakeWPF.Commands
                 }
 
                 // Scan a Folder (Ctrl+Shift+O)
-                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)  && gesture.Key == Key.O)
+                if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.O)
                 {
                     mainViewModel.FolderScan();
                 }

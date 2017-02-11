@@ -15,15 +15,11 @@ namespace HandBrakeWPF.Services
     using System.Net;
     using System.Reflection;
     using System.Security.Cryptography;
-    using System.Text;
     using System.Threading;
-
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop;
-
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
-
     using AppcastReader = HandBrakeWPF.Utilities.AppcastReader;
 
     /// <summary>
@@ -110,7 +106,7 @@ namespace HandBrakeWPF.Services
                         var currentBuild = HandBrakeUtils.Build;
 
                         // Fetch the Appcast from our server.
-                        HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                         request.AllowAutoRedirect = false; // We will never do this.
                         WebResponse response = request.GetResponse();
 
@@ -196,7 +192,7 @@ namespace HandBrakeWPF.Services
                        while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                        {
                            localStream.Write(downBuffer, 0, bytesSize);
-                           progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize});
+                           progress(new DownloadStatus { BytesRead = localStream.Length, TotalBytes = fileSize });
                        }
 
                        responceStream.Close();

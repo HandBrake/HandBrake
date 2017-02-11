@@ -788,8 +788,9 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Height = this.GetModulusValue(this.sourceResolution.Height - this.CropTop - this.CropBottom);
                     this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
                 }
-                else // Custom
+                else 
                 {
+                    // Custom
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
                     this.Task.Width = this.GetModulusValue(this.MaxWidth - this.CropLeft - this.CropRight);
 
@@ -1063,7 +1064,7 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The changed picture field.
     /// </summary>
-    enum ChangedPictureField
+    public enum ChangedPictureField
     {
         Width,
         Height,
