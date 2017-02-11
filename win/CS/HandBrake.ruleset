@@ -17,5 +17,17 @@
     <Rule Id="SA1516" Action="None" />
     <Rule Id="SA1300" Action="None" />
     <Rule Id="SA1307" Action="None" />
+    <Rule Id="SA1602" Action="None" />
+    <Rule Id="SA1201" Action="None" />
+    <Rule Id="SA1401" Action="None" />
+    <Rule Id="SA1130" Action="None" />
+    <Rule Id="SA1311" Action="None" />
+    <Rule Id="SA1204" Action="None" />
+    <Rule Id="SA1624" Action="None" />
+    <Rule Id="SA1600" Action="None" />
+    <Rule Id="SA1310" Action="None" />
+    <Rule Id="SA1129" Action="None" />
+    <Rule Id="SA1643" Action="None" />
+    <Rule Id="SA1642" Action="None" />
   </Rules>
 </RuleSet>
