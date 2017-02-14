@@ -44,7 +44,6 @@ struct hb_mux_object_s
 
     AVFormatContext   * oc;
     AVRational          time_base;
-    int64_t             delay;
 
     int                 ntracks;
     hb_mux_data_t    ** tracks;
@@ -108,25 +107,6 @@ static char* lookup_lang_code(int mux, char *iso639_2)
     return out;
 }
 
-static int64_t compute_delay(hb_job_t * job)
-{
-    int64_t delay = 0;
-
-    if (job->config.init_delay > delay)
-        delay = job->config.init_delay;
-
-    int ii, count;
-    count = hb_list_count(job->list_audio);
-    for (ii = 0; ii < count; ii++)
-    {
-        hb_audio_t * audio = hb_list_item(job->list_audio, ii);
-        if (audio->priv.config.init_delay > delay)
-            delay = audio->priv.config.init_delay;
-    }
-
-    return delay;
-}
-
 /**********************************************************************
  * avformatInit
  **********************************************************************
@@ -149,8 +129,6 @@ static int avformatInit( hb_mux_object_t * m )
     uint8_t         default_track_flag = 1;
     uint8_t         need_fonts = 0;
     char *lang;
-
-    m->delay = AV_NOPTS_VALUE;
 
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
@@ -1085,10 +1063,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     hb_job_t * job     = m->job;
     uint8_t  * sub_out = NULL;
 
-    if (m->delay == AV_NOPTS_VALUE)
-    {
-        m->delay = compute_delay(m->job);
-    }
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MP4))
     {
         // compute dts duration for MP4 files
@@ -1123,15 +1097,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         return 0;
     }
 
-    buf->s.start += m->delay;
-    if (buf->s.renderOffset != AV_NOPTS_VALUE)
-    {
-        buf->s.renderOffset += m->delay;
-    }
-    if (buf->s.stop != AV_NOPTS_VALUE)
-    {
-        buf->s.stop += m->delay;
-    }
     if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV) &&
         buf->s.renderOffset < 0)
     {
