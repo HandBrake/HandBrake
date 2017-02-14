@@ -373,8 +373,12 @@ void hb_stream_set_need_keyframe( hb_stream_t *stream, int need_keyframe );
  * Work objects
  **********************************************************************/
 #define HB_CONFIG_MAX_SIZE (2*8192)
-union hb_esconfig_u
+struct hb_esconfig_s
 {
+    int init_delay;
+
+    union
+    {
 
     struct
     {
@@ -388,7 +392,6 @@ union hb_esconfig_u
 	    int       sps_length;
 	    uint8_t  pps[HB_CONFIG_MAX_SIZE];
 	    int       pps_length;
-        int      init_delay;
 	} h264;
 
     struct
@@ -413,6 +416,7 @@ union hb_esconfig_u
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
         char *language;
     } vorbis;
+    };
 };
 
 enum

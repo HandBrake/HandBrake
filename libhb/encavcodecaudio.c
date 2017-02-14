@@ -200,6 +200,9 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
+    w->config->init_delay = av_rescale_q(context->delay, context->time_base,
+                                         (AVRational){1, 90000});
+
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
     AVDictionaryEntry *t = NULL;
@@ -267,9 +270,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                context->extradata_size);
         w->config->extradata.length = context->extradata_size;
     }
-
-    audio->config.out.delay = av_rescale_q(context->delay, context->time_base,
-                                           (AVRational){1, 90000});
 
     return 0;
 }
@@ -425,7 +425,6 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
                                           pv->out_discrete_channels *
                                           audio->config.out.samplerate));
         frame.pts = av_rescale(frame.pts, pv->context->sample_rate, 90000);
-
 
         // Encode
         ret = avcodec_send_frame(pv->context, &frame);

@@ -749,7 +749,6 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         char *   name; /* Output track name */
-        int      delay;
     } out;
 
     /* Input */

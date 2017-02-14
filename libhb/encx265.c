@@ -414,9 +414,9 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     buf->s.stop         = pic_out->pts + buf->s.duration;
     buf->s.start        = pic_out->pts;
     buf->s.renderOffset = pic_out->dts;
-    if (w->config->h264.init_delay == 0 && pic_out->dts < 0)
+    if (w->config->init_delay == 0 && pic_out->dts < 0)
     {
-        w->config->h264.init_delay -= pic_out->dts;
+        w->config->init_delay -= pic_out->dts;
     }
 
     switch (pic_out->sliceType)
