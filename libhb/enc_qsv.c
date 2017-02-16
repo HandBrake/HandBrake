@@ -1221,7 +1221,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         {
             case MFX_CODEC_AVC:
             case MFX_CODEC_HEVC:
-                pv->init_delay = &w->config->h264.init_delay;
+                pv->init_delay = &w->config->init_delay;
                 break;
             default: // unreachable
                 break;
