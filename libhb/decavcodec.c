@@ -471,7 +471,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             decodeAudio(pv, &pv->packet_info);
 
             // There could have been an unfinished packet when we entered
-            // decodeVideo that is now finished.  The next packet is associated
+            // decodeAudio that is now finished.  The next packet is associated
             // with the input buffer, so set it's chapter and scr info.
             pv->packet_info.scr_sequence = in->s.scr_sequence;
             pv->unfinished               = 0;
