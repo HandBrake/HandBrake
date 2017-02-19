@@ -1733,7 +1733,7 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     if (hb_value_type(ana_mode_value) == HB_VALUE_TYPE_STRING)
     {
         const char *s = hb_value_get_string(ana_mode_value);
-        if (!strcasecmp(s, "none"))
+        if (!strcasecmp(s, "off"))
             geo.mode = HB_ANAMORPHIC_NONE;
         else if (!strcasecmp(s, "strict"))
             geo.mode = HB_ANAMORPHIC_STRICT;
