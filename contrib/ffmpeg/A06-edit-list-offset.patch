@@ -1,76 +1,106 @@
+From eeb38d760d0748b14c4faed1bfd04efad9ed0806 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Sun, 19 Feb 2017 14:45:44 -0700
+Subject: [PATCH] mov: fix edit list issue that can cause A/V desync
+
+Only the first entry in the edit list was factored into the time_offset
+of the first sample in a track.  But when there is a delay (empty edit
+entry) the mediatime from the second entry must also be factored into
+the time_offset.
+---
+ libavformat/isom.h |  2 ++
+ libavformat/mov.c  | 30 ++++++++++++++++++++++--------
+ 2 files changed, 24 insertions(+), 8 deletions(-)
+
 diff --git a/libavformat/isom.h b/libavformat/isom.h
-index 8cc5ab7..0050d3a 100644
+index 8cc5ab7..7c345e9 100644
 --- a/libavformat/isom.h
 +++ b/libavformat/isom.h
 @@ -125,6 +125,8 @@ typedef struct MOVStreamContext {
      int *keyframes;
      int time_scale;
      int64_t time_offset;  ///< time offset of the first edit list entry
-+    int64_t delay;  ///< time delay of the first edit list entry
-+    int64_t skip;  ///< time to skip of the first or second edit list entry
++    int64_t time_offset_delay;
++    int64_t time_offset_skip;
      int current_sample;
      unsigned int bytes_per_frame;
      unsigned int samples_per_frame;
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 5c9f85c..c749b46 100644
+index 5c9f85c..1657647 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
-@@ -2323,9 +2323,9 @@ static void mov_build_index(MOVContext *mov, AVStream *st)
+@@ -2323,10 +2323,10 @@ static void mov_build_index(MOVContext *mov, AVStream *st)
      uint64_t stream_size = 0;
  
      /* adjust first dts according to edit list */
 -    if (sc->time_offset && mov->time_scale > 0) {
 -        if (sc->time_offset < 0)
 -            sc->time_offset = av_rescale(sc->time_offset, sc->time_scale, mov->time_scale);
+-        current_dts = -sc->time_offset;
 +    if (mov->time_scale > 0) {
-+        sc->time_offset = sc->skip -
-+                        av_rescale(sc->delay, sc->time_scale, mov->time_scale);
-         current_dts = -sc->time_offset;
++        sc->time_offset = av_rescale(sc->time_offset_delay, sc->time_scale,
++                                     mov->time_scale) - sc->time_offset_skip;
++        current_dts = sc->time_offset;
      }
  
-@@ -2986,6 +2986,10 @@ static int mov_read_trun(MOVContext *c, AVIOContext *pb, MOVAtom atom)
-     unsigned entries, first_sample_flags = frag->flags;
-     int flags, distance, i, err;
- 
+     /* only use old uncompressed audio chunk demuxing when stts specifies it */
+@@ -2999,6 +2999,10 @@ static int mov_read_trun(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     sc = st->priv_data;
+     if (sc->pseudo_stream_id+1 != frag->stsd_id)
+         return 0;
 +    if (c->time_scale > 0) {
-+        sc->time_offset = sc->skip -
-+                        av_rescale(sc->delay, sc->time_scale, c->time_scale);
++        sc->time_offset = av_rescale(sc->time_offset_delay, sc->time_scale,
++                                     c->time_scale) - sc->time_offset_skip;
 +    }
-     for (i = 0; i < c->fc->nb_streams; i++) {
-         if (c->fc->streams[i]->id == frag->track_id) {
-             st = c->fc->streams[i];
+     avio_r8(pb); /* version */
+     flags = avio_rb24(pb);
+     entries = avio_rb32(pb);
+@@ -3029,7 +3033,7 @@ static int mov_read_trun(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     }
+     if (flags & MOV_TRUN_DATA_OFFSET)        data_offset        = avio_rb32(pb);
+     if (flags & MOV_TRUN_FIRST_SAMPLE_FLAGS) first_sample_flags = avio_rb32(pb);
+-    dts    = sc->track_end - sc->time_offset;
++    dts    = sc->track_end + sc->time_offset;
+     offset = frag->base_data_offset + data_offset;
+     distance = 0;
+     av_log(c->fc, AV_LOG_TRACE, "first sample flags 0x%x\n", first_sample_flags);
+@@ -3069,7 +3073,7 @@ static int mov_read_trun(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+         return AVERROR_EOF;
+ 
+     frag->implicit_offset = offset;
+-    st->duration = sc->track_end = dts + sc->time_offset;
++    st->duration = sc->track_end = dts - sc->time_offset;
+     return 0;
+ }
+ 
 @@ -3152,6 +3156,7 @@ static int mov_read_elst(MOVContext *c, AVIOContext *pb, MOVAtom atom)
  {
      MOVStreamContext *sc;
      int i, edit_count, version;
-+    int found_delay = 0;
++    int time_offset_done = 0;
  
      if (c->fc->nb_streams < 1)
          return 0;
-@@ -3164,7 +3169,7 @@ static int mov_read_elst(MOVContext *c, AVIOContext *pb, MOVAtom atom)
-     if ((uint64_t)edit_count*12+8 > atom.size)
-         return AVERROR_INVALIDDATA;
- 
--    for (i=0; i<edit_count; i++){
-+    for (i=0; i < edit_count; i++){
-         int64_t time;
-         int64_t duration;
-         if (version == 1) {
-@@ -3175,8 +3180,15 @@ static int mov_read_elst(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+@@ -3175,8 +3180,17 @@ static int mov_read_elst(MOVContext *c, AVIOContext *pb, MOVAtom atom)
              time     = (int32_t)avio_rb32(pb); /* media time */
          }
          avio_rb32(pb); /* Media rate */
 -        if (i == 0 && time >= -1) {
 -            sc->time_offset = time != -1 ? time : -duration;
-+        if (i == 0 && time == -1) {
-+            sc->delay = duration;
-+            found_delay = 1;
-+        }
-+        else if (i == 0 && time >= 0) {
-+            sc->skip = time;
-+        }
-+        else if (i == 1 && found_delay && time >= 0) {
-+            sc->skip = time;
++        if (!time_offset_done) {
++            if (time == -1) {
++                /* delay is in movie timescale */
++                sc->time_offset_delay += duration;
++            } else if (time >= 0) {
++                /* samples to skip is in track timescale */
++                sc->time_offset_skip = time;
++                time_offset_done = 1;
++            }
++            /* timescales may not be known yet, so we can not compute
++             * a single combined time_offset yet */
          }
      }
  
+-- 
+2.9.3
+
