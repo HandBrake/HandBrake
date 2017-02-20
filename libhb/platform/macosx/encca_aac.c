@@ -47,6 +47,7 @@ struct hb_work_private_s
     AudioConverterRef converter;
     unsigned long isamples, isamplesiz, omaxpacket, nchannels;
     int64_t first_pts;
+    int64_t delay;
     uint64_t samples, ibytes;
     Float64 osamplerate;
 
@@ -320,6 +321,16 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     memmove(w->config->extradata.bytes, buffer, w->config->extradata.length);
     free(buffer);
 
+    AudioConverterPrimeInfo primeInfo;
+    UInt32 piSize = sizeof(primeInfo);
+    bzero(&primeInfo, piSize);
+    AudioConverterGetProperty(pv->converter,
+                              kAudioConverterPrimeInfo,
+                              &piSize, &primeInfo);
+
+    pv->delay = primeInfo.leadingFrames * 90000LL / pv->osamplerate;
+    w->config->init_delay = pv->delay;
+
     pv->list = hb_list_init();
     pv->buf = NULL;
 
@@ -443,9 +454,11 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     }
 
     obuf->size        = odesc.mDataByteSize;
-    obuf->s.start     = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.start     = pv->first_pts - pv->delay +
+                        90000LL * pv->samples / pv->osamplerate;
     pv->samples      += pv->isamples;
-    obuf->s.stop      = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.stop      = pv->first_pts - pv->delay +
+                        90000LL * pv->samples / pv->osamplerate;
     obuf->s.duration  = (double)90000 * pv->isamples / pv->osamplerate;
     obuf->s.type      = AUDIO_BUF;
     obuf->s.frametype = HB_FRAME_AUDIO;
