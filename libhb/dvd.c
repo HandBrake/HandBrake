@@ -242,22 +242,22 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
             break;
     }
 
-    strcat(subtitle->lang, " [");
     switch (style)
     {
         case HB_VOBSUB_STYLE_4_3:
-            strcat(subtitle->lang, "4:3, ");
+            strcat(subtitle->lang, ", 4:3");
             break;
         case HB_VOBSUB_STYLE_WIDE:
-            strcat(subtitle->lang, "Wide Screen, ");
+            strcat(subtitle->lang, ", Wide Screen");
             break;
         case HB_VOBSUB_STYLE_LETTERBOX:
-            strcat(subtitle->lang, "Letterbox, ");
+            strcat(subtitle->lang, ", Letterbox");
             break;
         case HB_VOBSUB_STYLE_PANSCAN:
-            strcat(subtitle->lang, "Pan & Scan, ");
+            strcat(subtitle->lang, ", Pan & Scan");
             break;
     }
+    strcat(subtitle->lang, " [");
     strcat(subtitle->lang, hb_subsource_name(subtitle->source));
     strcat(subtitle->lang, "]");
 
