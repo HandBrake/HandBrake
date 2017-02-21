@@ -1,4 +1,4 @@
-From 2cd88516eee1a7588383dcff21f1b8e04a4b05d9 Mon Sep 17 00:00:00 2001
+From c6f8a1affd650c917576b4019a9003717cb4ff22 Mon Sep 17 00:00:00 2001
 From: John Stebbins <stebbins@jetheaddev.com>
 Date: Sun, 19 Feb 2017 14:02:24 -0700
 Subject: [PATCH] movenc: factor initial_padding into edit lists
@@ -8,25 +8,25 @@ initial negative dts.  But in cases where the audio is delayed,
 all or part of initial_padding would be unaccounted for.  This patch
 makes initial_padding explicit.
 ---
- libavformat/movenc.c | 53 +++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 38 insertions(+), 15 deletions(-)
+ libavformat/movenc.c | 58 +++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 42 insertions(+), 16 deletions(-)
 
 diff --git a/libavformat/movenc.c b/libavformat/movenc.c
-index 689291d..b2c0c92 100644
+index 689291d..b9e4f6e 100644
 --- a/libavformat/movenc.c
 +++ b/libavformat/movenc.c
-@@ -1698,9 +1698,28 @@ static int mov_write_edts_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -1698,9 +1698,31 @@ static int mov_write_edts_tag(AVIOContext *pb, MOVMuxContext *mov,
                                        track->timescale, AV_ROUND_UP);
      int version = duration < INT32_MAX ? 0 : 1;
      int entry_size, entry_count, size;
 -    int64_t delay, start_ct = track->start_cts;
 -    delay = av_rescale_rnd(track->start_dts + start_ct, MOV_TIMESCALE,
+-                           track->timescale, AV_ROUND_DOWN);
 +    int64_t delay;
 +    int64_t mediatime;
 +    int64_t skip = 0;
 +
-+    delay = av_rescale_rnd(track->start_dts + track->start_cts, MOV_TIMESCALE,
-                            track->timescale, AV_ROUND_DOWN);
++    delay = track->start_dts + track->start_cts;
 +
 +    if (track->par->codec_type == AVMEDIA_TYPE_AUDIO &&
 +        track->par->initial_padding > 0) {
@@ -37,16 +37,20 @@ index 689291d..b2c0c92 100644
 +         * initial_padding in order to know where the actual media
 +         * timeline begins. A player should drop samples until MediaTime
 +         * is reached */
-+        delay += av_rescale_rnd(track->par->initial_padding, MOV_TIMESCALE,
-+                                track->par->sample_rate, AV_ROUND_DOWN);
++        delay += av_rescale_rnd(track->par->initial_padding, track->timescale,
++                                track->par->sample_rate, AV_ROUND_UP);
 +        skip = av_rescale_rnd(track->par->initial_padding,
 +                              track->timescale,
 +                              track->par->sample_rate, AV_ROUND_DOWN);
 +    }
++    /* rescale delay, this was not done earlier to minimize rounding errors */
++    delay = av_rescale_rnd(delay, MOV_TIMESCALE,
++                       track->timescale, AV_ROUND_NEAR_INF);
++
      version |= delay < INT32_MAX ? 0 : 1;
  
      entry_size = (version == 1) ? 20 : 12;
-@@ -1731,33 +1750,37 @@ static int mov_write_edts_tag(AVIOContext *pb, MOVMuxContext *mov,
+@@ -1731,33 +1753,37 @@ static int mov_write_edts_tag(AVIOContext *pb, MOVMuxContext *mov,
          }
          avio_wb32(pb, 0x00010000);
      } else {
