@@ -5101,13 +5101,14 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
     AVCodecParameters *codecpar = st->codecpar;
     AVDictionaryEntry *tag      = av_dict_get(st->metadata, "language", NULL, 0);
 
-    hb_audio_t *audio            = calloc(1, sizeof(*audio));
-    audio->id                    = id;
-    audio->config.in.track       = id;
-    audio->config.in.codec       = HB_ACODEC_FFMPEG;
-    audio->config.in.codec_param = codecpar->codec_id;
+    hb_audio_t *audio              = calloc(1, sizeof(*audio));
+    audio->id                      = id;
+    audio->config.in.track         = id;
+    audio->config.in.codec         = HB_ACODEC_FFMPEG;
+    audio->config.in.codec_param   = codecpar->codec_id;
     // set the bitrate to 0; decavcodecaBSInfo will be called and fill the rest
-    audio->config.in.bitrate     = 0;
+    audio->config.in.bitrate       = 0;
+    audio->config.in.encoder_delay = codecpar->initial_padding;
 
     // set the input codec and extradata for Passthru
     switch (codecpar->codec_id)
