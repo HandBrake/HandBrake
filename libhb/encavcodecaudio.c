@@ -383,7 +383,7 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
     hb_audio_t        * audio = w->audio;
     uint64_t            pts, pos;
 
-    while (hb_list_bytes(pv->list) > pv->input_samples * sizeof(float))
+    while (hb_list_bytes(pv->list) >= pv->input_samples * sizeof(float))
     {
         int ret;
 
