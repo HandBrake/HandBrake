@@ -166,6 +166,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     context->channel_layout      = channel_layout;
     context->channels            = pv->out_discrete_channels;
     context->sample_rate         = audio->config.out.samplerate;
+    context->time_base           = (AVRational){1, 90000};
 
     if (audio->config.out.bitrate > 0)
     {
@@ -200,8 +201,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
-    w->config->init_delay = av_rescale_q(context->delay, context->time_base,
-                                         (AVRational){1, 90000});
+    w->config->init_delay = av_rescale(context->initial_padding,
+                                       90000, context->sample_rate);
 
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
@@ -364,8 +365,8 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
 
         // The output pts from libav is in context->time_base. Convert it
         // back to our timebase.
-        out->s.start     = av_rescale_q(pkt.pts, pv->context->time_base,
-                                        (AVRational){1, 90000});
+        out->s.start = av_rescale_q(pkt.pts, pv->context->time_base,
+                                    (AVRational){1, 90000});
         out->s.duration  = (double)90000 * pv->samples_per_frame /
                                            audio->config.out.samplerate;
         out->s.stop      = out->s.start + out->s.duration;
@@ -420,11 +421,12 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
             }
         }
 
-        // Libav requires that timebase of audio frames be in sample_rate units
-        frame.pts = pts + (90000 * pos / (sizeof(float) *
+        frame.pts = pts + (90000LL * pos / (sizeof(float) *
                                           pv->out_discrete_channels *
                                           audio->config.out.samplerate));
-        frame.pts = av_rescale(frame.pts, pv->context->sample_rate, 90000);
+
+        frame.pts = av_rescale_q(frame.pts, (AVRational){1, 90000},
+                                 pv->context->time_base);
 
         // Encode
         ret = avcodec_send_frame(pv->context, &frame);
