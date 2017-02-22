@@ -381,7 +381,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
             strcat(subtitle->lang, ", Director's Commentary, Large Type");
             break;
         case 15:
-            strcat(subtitle->lang, " (Director's Commentary, Children");
+            strcat(subtitle->lang, ", Director's Commentary, Children");
         default:
             break;
     }
