@@ -143,9 +143,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Some HandBrake-specific defaults; users can override them
      * using the encoder_options string.
      */
-    hb_reduce(&vrate.num, &vrate.den, job->vrate.num, job->vrate.den);
-    param->fpsNum      = vrate.num;
-    param->fpsDenom    = vrate.den;
+    param->fpsNum      = job->orig_vrate.num;
+    param->fpsDenom    = job->orig_vrate.den;
     param->keyframeMin = (double)job->orig_vrate.num / job->orig_vrate.den +
                                  0.5;
     param->keyframeMax = param->keyframeMin * 10;
