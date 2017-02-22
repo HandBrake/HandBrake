@@ -87,7 +87,6 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 {
     hb_work_private_t  *pv = calloc(1, sizeof(hb_work_private_t));
     int                 ret, depth;
-    hb_rational_t       vrate;
     x265_nal           *nal;
     uint32_t            nnal;
     const char * const *profile_names;
