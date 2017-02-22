@@ -708,7 +708,17 @@
 
     HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
     job.outputURL = self.currentDestination;
-    job.outputFileName = [HBUtilities defaultNameForJob:job];
+
+    // If the source is not a stream, and autonaming is disabled,
+    // keep the existing file name.
+    if (self.job.outputFileName.length == 0 || title.isStream || [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    {
+        job.outputFileName = [HBUtilities defaultNameForJob:job];
+    }
+    else
+    {
+        job.outputFileName = self.job.outputFileName;
+    }
 
     return job;
 }
