@@ -75,6 +75,26 @@ fail:
     return NULL;
 }
 
+static int is_mono(uint64_t layout)
+{
+    int ii, channel_count;
+    int64_t mask;
+
+    if (layout == AV_CH_LAYOUT_NATIVE)
+    {
+        return 0;
+    }
+    for (ii = 0, channel_count = 0, mask = 1;
+         ii < 64 && channel_count < 2; ii++, mask <<= 1)
+    {
+        if (layout & mask)
+        {
+            channel_count++;
+        }
+    }
+    return channel_count == 1;
+}
+
 void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
                                           uint64_t channel_layout)
 {
@@ -84,6 +104,11 @@ void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
         {
             // Dolby Surround is Stereo when it comes to remixing
             channel_layout = AV_CH_LAYOUT_STEREO;
+        }
+        if (resample->out.channel_layout == AV_CH_LAYOUT_MONO &&
+            is_mono(channel_layout))
+        {
+            resample->out.channel_layout = channel_layout;
         }
         resample->in.channel_layout = channel_layout;
     }
