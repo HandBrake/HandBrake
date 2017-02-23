@@ -105,10 +105,12 @@ void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
             // Dolby Surround is Stereo when it comes to remixing
             channel_layout = AV_CH_LAYOUT_STEREO;
         }
+        // avresample can't remap a single-channel layouts to another
+        // single-channel layout
         if (resample->out.channel_layout == AV_CH_LAYOUT_MONO &&
             is_mono(channel_layout))
         {
-            resample->out.channel_layout = channel_layout;
+            channel_layout = AV_CH_LAYOUT_MONO;
         }
         resample->in.channel_layout = channel_layout;
     }
