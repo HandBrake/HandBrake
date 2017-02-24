@@ -481,32 +481,14 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     return obuf;
 }
 
-static hb_buffer_t* Flush(hb_work_object_t *w, hb_buffer_t *bufin)
+static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
 {
-    hb_buffer_t *bufout = NULL, *buf = NULL, *b = NULL;
-    while ((b = Encode(w)))
+    hb_buffer_t *buf = Encode(w);
+    while (buf)
     {
-        if (bufout == NULL)
-        {
-            bufout = b;
-        }
-        else
-        {
-            buf->next = b;
-        }
-        buf = b;
+        hb_buffer_list_append(list, buf);
+        buf = Encode(w);
     }
-
-    // add the eof marker to the end of our buf chain
-    if (buf != NULL)
-    {
-        buf->next = bufin;
-    }
-    else
-    {
-        bufout = bufin;
-    }
-    return bufout;
 }
 
 /***********************************************************************
@@ -518,16 +500,18 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
                      hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_buffer_t * in = *buf_in;
-    hb_buffer_t *buf;
+    hb_buffer_t      * in = *buf_in;
+    hb_buffer_t      * buf;
+    hb_buffer_list_t   list;
 
-    *buf_in = NULL;
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        // EOF on input. Finish encoding what we have buffered then send
-        // it & the eof downstream.
+        /* EOF on input - send it downstream & say we're done */
         pv->input_done = 1;
-        *buf_out = Flush(w, in);
+        Flush(w, &list);
+        hb_buffer_list_append(&list, hb_buffer_eof_init());
+        *buf_out = hb_buffer_list_clear(&list);
         return HB_WORK_DONE;
     }
 
@@ -535,15 +519,17 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         pv->first_pts = in->s.start;
     }
+
     hb_list_add(pv->list, in);
+    *buf_in = NULL;
 
-    *buf_out = buf = Encode(w);
-
-    while (buf != NULL)
+    buf = Encode(w);
+    while (buf)
     {
-        buf->next = Encode(w);
-        buf       = buf->next;
+        hb_buffer_list_append(&list, buf);
+        buf = Encode(w);
     }
 
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }
