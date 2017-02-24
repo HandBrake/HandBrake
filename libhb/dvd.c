@@ -213,31 +213,31 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     switch (lang_extension)
     {
         case 2:
-            strcat(subtitle->lang, ", Large Type");
+            strcat(subtitle->lang, " Large Type");
             break;
         case 3:
-            strcat(subtitle->lang, ", Children");
+            strcat(subtitle->lang, " Children");
             break;
         case 5:
-            strcat(subtitle->lang, ", Closed Caption");
+            strcat(subtitle->lang, " Closed Caption");
             break;
         case 6:
-            strcat(subtitle->lang, ", Closed Caption, Large Type");
+            strcat(subtitle->lang, " Closed Caption, Large Type");
             break;
         case 7:
-            strcat(subtitle->lang, ", Closed Caption, Children");
+            strcat(subtitle->lang, " Closed Caption, Children");
             break;
         case 9:
-            strcat(subtitle->lang, ", Forced");
+            strcat(subtitle->lang, " Forced");
             break;
         case 13:
-            strcat(subtitle->lang, ", Director's Commentary");
+            strcat(subtitle->lang, " Director's Commentary");
             break;
         case 14:
-            strcat(subtitle->lang, ", Director's Commentary, Large Type");
+            strcat(subtitle->lang, " Director's Commentary, Large Type");
             break;
         case 15:
-            strcat(subtitle->lang, ", Director's Commentary, Children");
+            strcat(subtitle->lang, " Director's Commentary, Children");
         default:
             break;
     }
@@ -245,16 +245,16 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     switch (style)
     {
         case HB_VOBSUB_STYLE_4_3:
-            strcat(subtitle->lang, ", 4:3");
+            strcat(subtitle->lang, " (4:3)");
             break;
         case HB_VOBSUB_STYLE_WIDE:
-            strcat(subtitle->lang, ", Wide Screen");
+            strcat(subtitle->lang, " (Wide Screen)");
             break;
         case HB_VOBSUB_STYLE_LETTERBOX:
-            strcat(subtitle->lang, ", Letterbox");
+            strcat(subtitle->lang, " (Letterbox)");
             break;
         case HB_VOBSUB_STYLE_PANSCAN:
-            strcat(subtitle->lang, ", Pan & Scan");
+            strcat(subtitle->lang, " (Pan & Scan)");
             break;
     }
     strcat(subtitle->lang, " [");
