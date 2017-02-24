@@ -483,18 +483,6 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
 
 static hb_buffer_t* Flush(hb_work_object_t *w, hb_buffer_t *bufin)
 {
-    hb_work_private_t *pv = w->private_data;
-
-    // pad whatever data we have out to four input frames.
-    int nbytes = hb_list_bytes(pv->list);
-    int pad = pv->isamples * pv->isamplesiz - nbytes;
-    if (pad > 0)
-    {
-        hb_buffer_t *tmp = hb_buffer_init(pad);
-        memset(tmp->data, 0, pad);
-        hb_list_add(pv->list, tmp);
-    }
-
     hb_buffer_t *bufout = NULL, *buf = NULL, *b = NULL;
     while ((b = Encode(w)))
     {
