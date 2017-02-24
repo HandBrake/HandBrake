@@ -66,6 +66,12 @@
     return self;
 }
 
+- (void)windowDidLoad
+{
+    NSSortDescriptor *mySortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title.index" ascending:YES];
+    self.arrayController.sortDescriptors = [NSArray arrayWithObject:mySortDescriptor];
+}
+
 - (IBAction)deselectAll:(id)sender
 {
     for (HBTitleSelection *title in self.titles)
