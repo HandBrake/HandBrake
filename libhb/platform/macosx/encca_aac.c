@@ -465,6 +465,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     // only drop the output buffer if it's actually empty
     if (!npackets || odesc.mDataByteSize <= 0)
     {
+        hb_buffer_close(&obuf);
         return NULL;
     }
 
