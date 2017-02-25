@@ -4,25 +4,40 @@
 
 ### All platforms
 
-#### Video 
-- Fixed various crashes in libav whilst attempting to scan and process source files. (Including various WMV issues)
-- Fixed x265 2-pass framerate error.
-- Fixed MKV with subtitles seeking crash.
-- Fixed several memory leaks in the OpenCL code.
-- Improved A/V Sync with MP4 source files.
+#### Video
+
+- Fixed H.264 decoding using Libav where the initial GOP was dropped
+- Fixed 2-pass x265 encoding where the source header incorrectly specifies frame rate
+- Fixed 2-pass encoding with bob deinterlace and constant frame rate
+- Fixed a seek issue in Libav while reading MKV sources with embedded subtitles
+- Fixed multiple issues preventing Libav from opening WMV sources properly
+- Fixed miscellaneous issues in Libav
+- Fixed memory leaks in OpenCL
+- Improved sync for streams delayed by a large amount
+
+#### Audio
+
+- Fixed a Libav crash encoding AAC at very high bitrates
+- Fixed a potential hang in Libav while decoding AAC
+- Improved Libav audio sync with MP4 sources containing edit lists
+- Improved mapping of single channel layouts to single channel layouts
 
 ### Linux
-- Fixed an issue with HQND3d Denoise filter custom text entry box rejecting values
+
+- Fixed a potential crash when selecting video encoders
+- Fixed various controls not applying values properly
 
 ### Mac
-- Fixed an issue with Core AAC audio encoder not starting at the correct start point
-- Fixed an crash when attempting to edit a queued job
+
+- Fixed a crash when attempting to edit a queued job
+- Improved audio start point to use edit lists when encoding using CoreAudio AAC
 
 ### Windows
-- Fixed an issue that could cause error -17 when encoding with Intel QuikcSync
-- Fixed an issue with the SRT language code not being set correctly
-- Fixed missing 'Tape' and 'Sprite' denoise tunes
-- Fixed "Title Specific Scan" for DVD/BluRay
+
+- Fixed Title Specific Scan for DVD/Blu-ray
+- Fixed broken/missing NLMeans denoise tunes
+- Fixed an issue that could cause error -17 when encoding using Intel QuickSync Video
+- Fixed an issue where the SRT language code was not being set correctly
 
 
 ## HandBrake 1.0.2
