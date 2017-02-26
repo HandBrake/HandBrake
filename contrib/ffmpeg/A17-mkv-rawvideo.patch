@@ -1,0 +1,44 @@
+From 000203fcadd61329bdf6cb3b25e2b87bd32f7d22 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Sun, 26 Feb 2017 16:35:31 -0700
+Subject: [PATCH] matroskadec: fix format of AVCodecParameters codec_tag
+
+It was byte swapped.
+This fixes decode of rawvideo in matroska.
+---
+ libavformat/matroskadec.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libavformat/matroskadec.c b/libavformat/matroskadec.c
+index 4e121b6..edd1749 100644
+--- a/libavformat/matroskadec.c
++++ b/libavformat/matroskadec.c
+@@ -123,6 +123,7 @@ typedef struct MatroskaTrackVideo {
+     uint64_t pixel_width;
+     uint64_t pixel_height;
+     uint64_t fourcc;
++    EbmlBin  color_space;
+     uint64_t interlaced;
+     uint64_t field_order;
+     uint64_t stereo_mode;
+@@ -315,7 +316,7 @@ static EbmlSyntax matroska_track_video[] = {
+     { MATROSKA_ID_VIDEODISPLAYHEIGHT,  EBML_UINT,  0, offsetof(MatroskaTrackVideo, display_height) },
+     { MATROSKA_ID_VIDEOPIXELWIDTH,     EBML_UINT,  0, offsetof(MatroskaTrackVideo, pixel_width) },
+     { MATROSKA_ID_VIDEOPIXELHEIGHT,    EBML_UINT,  0, offsetof(MatroskaTrackVideo, pixel_height) },
+-    { MATROSKA_ID_VIDEOCOLORSPACE,     EBML_UINT,  0, offsetof(MatroskaTrackVideo, fourcc) },
++    { MATROSKA_ID_VIDEOCOLORSPACE,     EBML_BIN,   0, offsetof(MatroskaTrackVideo, color_space) },
+     { MATROSKA_ID_VIDEOPIXELCROPB,     EBML_NONE },
+     { MATROSKA_ID_VIDEOPIXELCROPT,     EBML_NONE },
+     { MATROSKA_ID_VIDEOPIXELCROPL,     EBML_NONE },
+@@ -1612,6 +1613,8 @@ static int matroska_parse_tracks(AVFormatContext *s)
+                 track->video.display_width = track->video.pixel_width;
+             if (!track->video.display_height)
+                 track->video.display_height = track->video.pixel_height;
++            if (track->video.color_space.size == 4)
++                track->video.fourcc = AV_RL32(track->video.color_space.data);
+         } else if (track->type == MATROSKA_TRACK_TYPE_AUDIO) {
+             if (!track->audio.out_samplerate)
+                 track->audio.out_samplerate = track->audio.samplerate;
+-- 
+2.9.3
+
