@@ -349,9 +349,8 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
     hb_dict_extract_int(&pv->cfr, filter->settings, "mode");
     hb_dict_extract_rational(&pv->vrate, filter->settings, "rate");
 
-    // By default, we need at least 4 delay frames in order to smooth
-    // timestamp values
-    pv->frame_analysis_depth = 1;
+    // frame-drop analysis always looks at at least 2 buffers
+    pv->frame_analysis_depth = 2;
 
     // Calculate the number of frames we need to keep in order to
     // detect "best" candidate frames to drop.
