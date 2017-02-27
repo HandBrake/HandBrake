@@ -8,8 +8,8 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "HandBrake"
-!define PRODUCT_VERSION "1.0.3"
-!define PRODUCT_VERSION_NUMBER "1.0.3"
+!define PRODUCT_VERSION "1.0.4"
+!define PRODUCT_VERSION_NUMBER "1.0.4"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
