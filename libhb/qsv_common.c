@@ -148,7 +148,8 @@ static int qsv_implementation_is_hardware(mfxIMPL implementation)
 int hb_qsv_available()
 {
     return ((hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
-            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0));
+            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
+            (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265_10BIT) ? HB_VCODEC_QSV_H265_10BIT : 0));
 }
 
 int hb_qsv_video_encoder_is_enabled(int encoder)
@@ -157,6 +158,9 @@ int hb_qsv_video_encoder_is_enabled(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_qsv_info_avc != NULL && hb_qsv_info_avc->available;
+        case HB_VCODEC_QSV_H265_10BIT:
+            if (qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G6)
+                return 0;
         case HB_VCODEC_QSV_H265:
             return hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available;
         default:
@@ -811,7 +815,7 @@ void hb_qsv_info_print()
         }
         if (hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available)
         {
-            hb_log(" - H.265 encoder: yes");
+            hb_log(" - H.265 encoder: yes (8bit: yes, 10bit: %s)", (qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G6) ? "no" : "yes" );
             hb_log("    - preferred implementation: %s",
                    hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation));
             if (qsv_hardware_info_hevc.available)
@@ -838,6 +842,7 @@ hb_qsv_info_t* hb_qsv_info_get(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_qsv_info_avc;
+        case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_H265:
             return hb_qsv_info_hevc;
         default:
@@ -1547,7 +1552,7 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
                 if (profile->value == MFX_PROFILE_HEVC_MAIN10 &&
                     qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G6)
                 {
-                    hb_log("HEVC Main10 is not supported on this platform");
+                    hb_log("qsv: HEVC Main10 is not supported on this platform");
                     profile = NULL;
                 }
 
@@ -1625,8 +1630,10 @@ const char* const* hb_qsv_profile_get_names(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_h264_profile_names_8bit;
-        case HB_VCODEC_QSV_H265:
+        case HB_VCODEC_QSV_H265_8BIT:
             return hb_h265_profile_names_8bit;
+        case HB_VCODEC_QSV_H265_10BIT:
+            return hb_h265_profile_names_10bit;
         default:
             return NULL;
     }
@@ -1638,6 +1645,7 @@ const char* const* hb_qsv_level_get_names(int encoder)
     {
         case HB_VCODEC_QSV_H264:
             return hb_h264_level_names;
+        case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_H265:
             return hb_h265_level_names;
         default:
@@ -1654,6 +1662,7 @@ const char* hb_qsv_video_quality_get_name(uint32_t codec)
             if (hb_qsv_info_avc != NULL) caps = hb_qsv_info_avc->capabilities;
             break;
 
+        case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_H265:
             if (hb_qsv_info_hevc != NULL) caps = hb_qsv_info_hevc->capabilities;
             break;
@@ -1670,6 +1679,7 @@ void hb_qsv_video_quality_get_limits(uint32_t codec, float *low, float *high,
     uint64_t caps = 0;
     switch (codec)
     {
+        case HB_VCODEC_QSV_H265_10BIT:
         case HB_VCODEC_QSV_H265:
             if (hb_qsv_info_hevc != NULL) caps = hb_qsv_info_hevc->capabilities;
             *direction   = 1;

@@ -231,6 +231,7 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
             break;
         case HB_VCODEC_QSV_H264:
         case HB_VCODEC_QSV_H265:
+        case HB_VCODEC_QSV_H265_10BIT:
             w = hb_get_work(h, WORK_ENCQSV);
             break;
         case HB_VCODEC_THEORA:
@@ -466,6 +467,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X265_16BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
+                case HB_VCODEC_QSV_H265_10BIT:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -479,6 +481,7 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_X264_10BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
+                case HB_VCODEC_QSV_H265_10BIT:
                     hb_log("     + level:   %s", job->encoder_level);
                 default:
                     break;
