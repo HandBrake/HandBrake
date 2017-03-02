@@ -1270,16 +1270,23 @@
 
     NSInteger index = [self.jobs indexOfObject:job];
 
-    // Cancel the encode if it's the current item
-    if (job == self.currentJob)
+    if (job != self.currentJob)
     {
-        [self cancelCurrentJobAndContinue];
-    }
-
-    if ([self.controller openJob:job])
-    {
-        // Now that source is loaded and settings applied, delete the queue item from the queue
-        [self removeQueueItemAtIndex:index];
+        job.state = HBJobStateWorking;
+        [self.controller openJob:job completionHandler:^(BOOL result) {
+            [self.jobs beginTransaction];
+            if (result)
+            {
+                // Now that source is loaded and settings applied, delete the queue item from the queue
+                [self removeQueueItemAtIndex:index];
+            }
+            else
+            {
+                job.state = HBJobStateFailed;
+                NSBeep();
+            }
+            [self.jobs commit];
+        }];
     }
     else
     {

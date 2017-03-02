@@ -17,8 +17,8 @@
 
 - (void)launchAction;
 
-- (BOOL)openURL:(NSURL *)fileURL;
-- (BOOL)openJob:(HBJob *)job;
+- (void)openURL:(NSURL *)fileURL;
+- (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler;
 
 - (IBAction)browseSources:(id)sender;
 

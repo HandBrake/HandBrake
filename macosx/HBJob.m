@@ -382,7 +382,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         {
             _fileURL = [HBUtilities URLFromBookmark:_fileURLBookmark];
         }
-        else
+
+        if (!_fileURL)
         {
             decodeObject(_fileURL, NSURL);
         }

@@ -621,16 +621,20 @@
 
                  self.window.representedURL = mediaURL;
                  self.window.title = mediaURL.lastPathComponent;
-
-                 completionHandler(self.core.titles);
              }
              else
              {
                  // We display a message if a valid source was not chosen
                  fSrcDVD2Field.stringValue = NSLocalizedString(@"No Valid Source Found", @"");
              }
+
+             completionHandler(self.core.titles);
              [self.window.toolbar validateVisibleItems];
          }];
+    }
+    else
+    {
+        completionHandler(@[]);
     }
 }
 
@@ -638,64 +642,72 @@
 {
     [self scanURL:fileURL titleIndex:index completionHandler:^(NSArray<HBTitle *> *titles)
     {
-        [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
-
-        HBTitle *featuredTitle = titles.firstObject;
-        for (HBTitle *title in titles)
+        if (titles.count)
         {
-            if (title.isFeatured)
-            {
-                featuredTitle = title;
-            }
-        }
+            [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:fileURL];
 
-        HBJob *job = [self jobFromTitle:featuredTitle];
-        self.job = job;
+            HBTitle *featuredTitle = titles.firstObject;
+            for (HBTitle *title in titles)
+            {
+                if (title.isFeatured)
+                {
+                    featuredTitle = title;
+                }
+            }
+
+            HBJob *job = [self jobFromTitle:featuredTitle];
+            self.job = job;
+        }
     }];
 }
 
-- (BOOL)openURL:(NSURL *)fileURL
+- (void)openURL:(NSURL *)fileURL
 {
     if (self.core.state != HBStateScanning)
     {
         [self openURL:fileURL titleIndex:0];
-        return YES;
     }
-    return NO;
 }
 
 /**
  * Rescans the a job back into the main window
  */
-- (BOOL)openJob:(HBJob *)job
+- (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler
 {
     if (self.core.state != HBStateScanning)
     {
         [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
         {
-            // If the scan was cached, reselect
-            // the original title
-            for (HBTitle *title in titles)
+            if (titles.count)
             {
-                if (title.index == job.titleIdx)
+                // If the scan was cached, reselect
+                // the original title
+                for (HBTitle *title in titles)
                 {
-                    job.title = title;
-                    break;
+                    if (title.index == job.titleIdx)
+                    {
+                        job.title = title;
+                        break;
+                    }
                 }
-            }
 
-            // Else just one title or a title specific rescan
-            // select the first title
-            if (!job.title)
-            {
-                job.title = titles.firstObject;
+                // Else just one title or a title specific rescan
+                // select the first title
+                if (!job.title)
+                {
+                    job.title = titles.firstObject;
+                }
+                self.job = job;
+
+                handler(YES);
             }
-            self.job = job;
+            handler(NO);
         }];
-
-        return YES;
     }
-    return NO;
+    else
+    {
+        handler(NO);
+    }
 }
 
 - (HBJob *)jobFromTitle:(HBTitle *)title
