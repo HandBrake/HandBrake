@@ -701,7 +701,10 @@
 
                 handler(YES);
             }
-            handler(NO);
+            else
+            {
+                handler(NO);
+            }
         }];
     }
     else
