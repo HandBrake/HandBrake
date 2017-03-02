@@ -503,7 +503,7 @@ class BuildAction( Action, list ):
             if self.match( '*mingw*' ):
                 self.systemf = 'MinGW'
             elif self.systemf:
-                self.systemf[0] = self.systemf[0].upper()
+                self.systemf = self.systemf.capitalize()
             self.title = '%s %s' % (build.systemf,self.machine)
         else:
             self.title = '%s %s' % (build.systemf,arch.mode.mode)
