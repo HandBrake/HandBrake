@@ -554,6 +554,11 @@ static void dejitterVideo( sync_stream_t * stream )
     if (ABS(duration - frame_duration) < 1.1)
     {
         // Ignore small jitter
+        buf->s.start = stream->next_pts + frame_duration;
+        buf = hb_list_item(stream->in_queue, 0);
+        buf->s.start = stream->next_pts;
+        buf->s.duration = frame_duration;
+        buf->s.stop = stream->next_pts + frame_duration;
         return;
     }
 
