@@ -1355,17 +1355,12 @@ static void do_job(hb_job_t *job)
     title = job->title;
 
     interjob = hb_interjob_get(job->h);
-    job->orig_vrate = job->vrate;
     if (job->sequence_id != interjob->sequence_id)
     {
         // New job sequence, clear interjob
         hb_subtitle_close(&interjob->select_subtitle);
         memset(interjob, 0, sizeof(*interjob));
         interjob->sequence_id = job->sequence_id;
-    }
-    else if (job->pass_id == HB_PASS_ENCODE_2ND)
-    {
-        correct_framerate(interjob, job);
     }
 
     job->list_work = hb_list_init();
@@ -1484,10 +1479,18 @@ static void do_job(hb_job_t *job)
         job->cfr = 0;
     }
 
+    job->orig_vrate = job->vrate;
+    if (job->pass_id == HB_PASS_ENCODE_2ND)
+    {
+        correct_framerate(interjob, job);
+    }
+
     /*
      * The frame rate may affect the bitstream's time base, lose superfluous
      * factors for consistency (some encoders reduce fractions, some don't).
      */
+    hb_reduce(&job->orig_vrate.num, &job->orig_vrate.den,
+               job->orig_vrate.num,  job->orig_vrate.den);
     hb_reduce(&job->vrate.num, &job->vrate.den,
                job->vrate.num,  job->vrate.den);
 
@@ -1837,6 +1840,12 @@ cleanup:
     }
 
     hb_buffer_pool_free();
+
+    if (job->use_opencl)
+    {
+        hb_release_opencl_run_env();
+    }
+
     hb_job_close(&job);
 }
 

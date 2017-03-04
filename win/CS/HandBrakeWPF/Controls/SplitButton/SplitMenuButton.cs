@@ -179,7 +179,7 @@ namespace HandBrakeWPF.Controls.SplitButton
                 throw new ArgumentNullException("e");
             }
 
-            if (Key.Down == e.Key || Key.Up == e.Key)
+            if (e.Key == Key.Down || e.Key == Key.Up)
             {
                 this.Dispatcher.BeginInvoke((Action)this.OpenButtonMenu);
             }
@@ -286,7 +286,7 @@ namespace HandBrakeWPF.Controls.SplitButton
 
             this.contextMenu.HorizontalOffset = desiredOffset.X - currentOffset.X;
             this.contextMenu.VerticalOffset = desiredOffset.Y - currentOffset.Y;
-            if (FlowDirection.RightToLeft == this.FlowDirection)
+            if (this.FlowDirection == FlowDirection.RightToLeft)
             {
                 this.contextMenu.HorizontalOffset *= -1;
             }

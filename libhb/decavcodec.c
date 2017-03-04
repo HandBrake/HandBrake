@@ -126,6 +126,7 @@ struct hb_work_private_s
 
     hb_audio_t           * audio;
     hb_audio_resample_t  * resample;
+    int                    drop_samples;
 
 #ifdef USE_QSV
     // QSV-specific settings
@@ -154,13 +155,14 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
-    pv->job       = job;
-    pv->audio     = w->audio;
-    pv->next_pts  = (int64_t)AV_NOPTS_VALUE;
+    pv->job          = job;
+    pv->audio        = w->audio;
+    pv->drop_samples = w->audio->config.in.encoder_delay;
+    pv->next_pts     = (int64_t)AV_NOPTS_VALUE;
     if (job)
-        pv->title = job->title;
+        pv->title    = job->title;
     else
-        pv->title = w->title;
+        pv->title    = w->title;
     hb_buffer_list_clear(&pv->list);
 
     codec       = avcodec_find_decoder(w->codec_param);
@@ -413,8 +415,10 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
-        *buf_out = in;
+        decodeAudio(pv, NULL);
+        hb_buffer_list_append(&pv->list, in);
         *buf_in = NULL;
+        *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_WORK_DONE;
     }
 
@@ -471,7 +475,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             decodeAudio(pv, &pv->packet_info);
 
             // There could have been an unfinished packet when we entered
-            // decodeVideo that is now finished.  The next packet is associated
+            // decodeAudio that is now finished.  The next packet is associated
             // with the input buffer, so set it's chapter and scr info.
             pv->packet_info.scr_sequence = in->s.scr_sequence;
             pv->unfinished               = 0;
@@ -1491,6 +1495,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
         }
 
+#ifdef USE_QSV
+        if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
+        {
+            av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+        }
+#endif
+
         if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )
         {
             av_dict_free( &av_opts );
@@ -1896,6 +1907,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     {
         switch (pv->context->codec_id)
         {
+            case AV_CODEC_ID_HEVC:
             case AV_CODEC_ID_H264:
                 if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P ||
                     pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P)
@@ -1964,10 +1976,18 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
     int              ret;
 
     av_init_packet(&avp);
-    avp.data = packet_info->data;
-    avp.size = packet_info->size;
-    avp.pts  = packet_info->pts;
-    avp.dts  = AV_NOPTS_VALUE;
+    if (packet_info != NULL)
+    {
+        avp.data = packet_info->data;
+        avp.size = packet_info->size;
+        avp.pts  = packet_info->pts;
+        avp.dts  = AV_NOPTS_VALUE;
+    }
+    else
+    {
+        avp.data = NULL;
+        avp.size = 0;
+    }
 
     ret = avcodec_send_packet(context, &avp);
     if (ret < 0 && ret != AVERROR_EOF)
@@ -2001,6 +2021,9 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             samplerate = context->sample_rate;
         }
         pv->duration = (90000. * pv->frame->nb_samples / samplerate);
+
+        int64_t pts = pv->frame->pts;
+        double  duration = pv->duration;
 
         if (pv->audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
@@ -2050,13 +2073,37 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             }
             out = hb_audio_resample(pv->resample, pv->frame->extended_data,
                                     pv->frame->nb_samples);
+            if (out != NULL && pv->drop_samples > 0)
+            {
+                /* drop audio samples that are part of the encoder delay */
+                int channels = hb_mixdown_get_discrete_channel_count(
+                                                pv->audio->config.out.mixdown);
+                int sample_size = channels * sizeof(float);
+                int samples = out->size / sample_size;
+                if (samples <= pv->drop_samples)
+                {
+                    hb_buffer_close(&out);
+                    pv->drop_samples -= samples;
+                }
+                else
+                {
+                    int size = pv->drop_samples * sample_size;
+                    double drop_duration = pv->drop_samples * 90000L /
+                                           pv->audio->config.out.samplerate;
+                    memmove(out->data, out->data + size, out->size - size);
+                    out->size -= size;
+                    pts += drop_duration;
+                    duration -= drop_duration;
+                    pv->drop_samples = 0;
+                }
+            }
         }
 
         if (out != NULL)
         {
             out->s.scr_sequence = packet_info->scr_sequence;
-            out->s.start        = pv->frame->pts;
-            out->s.duration     = pv->duration;
+            out->s.start        = pts;
+            out->s.duration     = duration;
             if (out->s.start == AV_NOPTS_VALUE)
             {
                 out->s.start = pv->next_pts;

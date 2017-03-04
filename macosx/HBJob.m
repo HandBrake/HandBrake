@@ -145,7 +145,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     _outputURL = [outputURL copy];
 
 #ifdef __SANDBOX_ENABLED__
-    // Clear we bookmark to regenerate it
+    // Clear the bookmark to regenerate it later
     self.outputURLFolderBookmark = nil;
 #endif
 }
@@ -382,7 +382,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         {
             _fileURL = [HBUtilities URLFromBookmark:_fileURLBookmark];
         }
-        else
+
+        if (!_fileURL)
         {
             decodeObject(_fileURL, NSURL);
         }

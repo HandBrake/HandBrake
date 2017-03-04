@@ -1126,6 +1126,11 @@ int hb_cl_free_mapped_buffer(cl_mem mem, unsigned char *addr)
         hb_ocl->clWaitForEvents(1, &event);
     else
         hb_log("hb_free_mapped_buffer: error %d", status);
+
+    status = hb_ocl->clReleaseMemObject(mem);
+    if (status != CL_SUCCESS)
+        hb_log("hb_free_mapped_buffer: release error %d",status);
+
     return (status == CL_SUCCESS) ? 1 : 0;
 }
 

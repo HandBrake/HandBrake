@@ -33,7 +33,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
         // Make this class Thread Safe.
         private static ILog loggerInstance;
         private readonly object lockObject = new object();
-        private readonly object FileWriterLock = new object();
+        private readonly object fileWriterLock = new object();
         private readonly StringBuilder logBuilder = new StringBuilder();
  
         private LogLevel currentLogLevel = LogLevel.Error;
@@ -198,7 +198,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
                 this.isDiskLoggingEnabled = true;
                 this.deleteLogFirst = deleteCurrentLogFirst;
 
-                lock (this.FileWriterLock)
+                lock (this.fileWriterLock)
                 {
                     this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
                 }
@@ -209,7 +209,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
 
                 if (this.fileWriter != null)
                 {
-                    lock (this.FileWriterLock)
+                    lock (this.fileWriterLock)
                     {
                         this.fileWriter.Flush();
                         this.fileWriter.Close();
@@ -252,7 +252,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
                
                 try
                 {
-                    lock (this.FileWriterLock)
+                    lock (this.fileWriterLock)
                     {
                         if (this.fileWriter != null)
                         {
@@ -299,7 +299,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
 
             try
             {
-                lock (this.FileWriterLock)
+                lock (this.fileWriterLock)
                 {
                     if (this.fileWriter != null && this.fileWriter.BaseStream.CanWrite)
                     {
@@ -335,7 +335,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
         {
             try
             {
-                lock (this.FileWriterLock)
+                lock (this.fileWriterLock)
                 {
                     if (this.fileWriter != null)
                     {

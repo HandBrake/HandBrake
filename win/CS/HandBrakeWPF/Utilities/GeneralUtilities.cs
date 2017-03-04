@@ -107,15 +107,15 @@ namespace HandBrakeWPF.Utilities
                 gpuBuilder.Append("GPU Information is unavailable");
             }
 
-            logHeader.AppendLine(String.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
-            logHeader.AppendLine(String.Format("OS: {0} - {1}", Environment.OSVersion, Environment.Is64BitOperatingSystem ? "64bit" : "32bit"));
-            logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
-            logHeader.AppendLine(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
-            logHeader.AppendLine(String.Format("GPU Information:{0}{1}", Environment.NewLine, gpuBuilder.ToString().TrimEnd()));
-            logHeader.AppendLine(String.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
-            logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
-            logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
-            logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));
+            logHeader.AppendLine(string.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
+            logHeader.AppendLine(string.Format("OS: {0} - {1}", Environment.OSVersion, Environment.Is64BitOperatingSystem ? "64bit" : "32bit"));
+            logHeader.AppendLine(string.Format("CPU: {0}", SystemInfo.GetCpuCount));
+            logHeader.AppendLine(string.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
+            logHeader.AppendLine(string.Format("GPU Information:{0}{1}", Environment.NewLine, gpuBuilder.ToString().TrimEnd()));
+            logHeader.AppendLine(string.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+            logHeader.AppendLine(string.Format("Temp Dir: {0}", Path.GetTempPath()));
+            logHeader.AppendLine(string.Format("Install Dir: {0}", Application.StartupPath));
+            logHeader.AppendLine(string.Format("Data Dir: {0}\n", Application.UserAppDataPath));
 
             logHeader.AppendLine("-------------------------------------------");
 

@@ -23,7 +23,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// Gets a Collection of presets.
         /// </summary>
-        ObservableCollection<Preset> Presets { get; }
+        ObservableCollection<IPresetObject> Presets { get; }
 
         /// <summary>
         /// Gets DefaultPreset.
@@ -34,6 +34,16 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The load.
         /// </summary>
         void Load();
+
+        /// <summary>
+        /// Save the state of the Preset Treview
+        /// </summary>
+        void SaveCategoryStates();
+
+        /// <summary>
+        /// Load the state of the Preset Treeview.
+        /// </summary>
+        void LoadCategoryStates();
 
         /// <summary>
         /// Add a new preset to the system
@@ -83,7 +93,10 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <param name="preset">
         /// The Preset to remove
         /// </param>
-        void Remove(Preset preset);
+        /// <returns>
+        /// True if it was removed successfully, false otherwise.
+        /// </returns>
+        bool Remove(Preset preset);
 
         /// <summary>
         /// Remove a group of presets by category
@@ -155,5 +168,11 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// The replacement.
         /// </param>
         void Replace(Preset existing, Preset replacement);
+
+        /// <summary>
+        /// Set the selected preset
+        /// </summary>
+        /// <param name="selectedPreset">The preset we want to select.</param>
+        void SetSelected(Preset selectedPreset);
     }
 }

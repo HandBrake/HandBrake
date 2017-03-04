@@ -444,7 +444,7 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
         if ( ( pv->frameno_in ) == pv->job->areBframes )
         {
             pv->dts_delay = buf->s.start;
-            pv->job->config.h264.init_delay = pv->dts_delay;
+            pv->job->config.init_delay = pv->dts_delay;
         }
     }
 }

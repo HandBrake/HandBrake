@@ -9,10 +9,10 @@
 
 namespace HandBrakeWPF.Converters
 {
+    using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
-    using System;
 
     /// <summary>
     /// Boolean to Visibility Converter
@@ -47,7 +47,7 @@ namespace HandBrakeWPF.Converters
                 return Visibility.Collapsed;
             }
 
-            if (value is Boolean)
+            if (value is bool)
             {
                 if (param)
                 {

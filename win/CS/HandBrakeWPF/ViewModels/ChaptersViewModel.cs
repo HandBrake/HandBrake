@@ -12,9 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel.DataAnnotations;
     using System.IO;
-    using System.Text;
     using System.Linq;
     using System.Windows;
     using System.Windows.Forms;
@@ -32,7 +30,6 @@ namespace HandBrakeWPF.ViewModels
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
-    using MessageBox = System.Windows.Forms.MessageBox;
 
     /// <summary>
     /// The Chapters View Model
@@ -73,6 +70,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Public Properties
+
         /// <summary>
         /// Gets or sets Task.
         /// </summary>
@@ -209,9 +207,11 @@ namespace HandBrakeWPF.ViewModels
             if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
             {
                 if (!string.IsNullOrEmpty(validationErrorMessage))
+                {
                     throw new GeneralApplicationException(
                               Resources.ChaptersViewModel_ValidationFailedWarning,
                               validationErrorMessage);
+                }
 
                 // The user has cancelled the import, so exit
                 return;
@@ -232,55 +232,6 @@ namespace HandBrakeWPF.ViewModels
                 // Assign the chapter name unless the name is not set or only whitespace charaters
                 item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
             }
-        }
-
-        /// <summary>
-        /// Validates any imported chapter information against the currently detected chapter information in the 
-        /// source media. If validation fails then an error message is returned via the out parameter <see cref="validationErrorMessage"/>
-        /// </summary>
-        /// <param name="importedChapters">The list of imported chapter information</param>
-        /// <param name="validationErrorMessage">In case of a validation error this variable will hold 
-        ///                                      a detailed message that can be presented to the user</param>
-        /// <returns>True if there are no errors with imported chapters, false otherwise</returns>
-        private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage)
-        {
-            validationErrorMessage = null;
-
-            // If the number of chapters don't match, prompt for confirmation
-            if (importedChapters.Count != this.Task.ChapterNames.Count)
-            {
-                if (MessageBoxResult.Yes !=
-                    this.errorService.ShowMessageBox(
-                        string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Task.ChapterNames.Count, importedChapters.Count),
-                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question))
-                {
-                    return false;
-                }
-            }
-
-            // If the average discrepancy in timings between chapters is either:
-            //   a) more than 15 sec for more than 2 chapters
-            //      (I chose 15sec based on empirical evidence from testing a few DVDs and comparing to chapter-marker files I downloaded)
-            //      => This check will not be performed for the first and last chapter as they're very likely to differ significantly due to language and region
-            //         differences (e.g. longer title sequences and different distributor credits)
-            var diffs = importedChapters.Zip(this.Task.ChapterNames, (import, source) => source.Duration - import.Value.Item2);
-            if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
-            {
-                if (MessageBoxResult.Yes !=
-                    this.errorService.ShowMessageBox(
-                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
-                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question))
-                {
-                    return false;
-                }
-            }
-
-            // All is well, we should import chapters
-            return true;
         }
 
         /// <summary>
@@ -376,6 +327,59 @@ namespace HandBrakeWPF.ViewModels
 
                 counter += 1;
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Validates any imported chapter information against the currently detected chapter information in the 
+        /// source media. If validation fails then an error message is returned via the out parameter <see cref="validationErrorMessage"/>
+        /// </summary>
+        /// <param name="importedChapters">The list of imported chapter information</param>
+        /// <param name="validationErrorMessage">In case of a validation error this variable will hold 
+        ///                                      a detailed message that can be presented to the user</param>
+        /// <returns>True if there are no errors with imported chapters, false otherwise</returns>
+        private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage)
+        {
+            validationErrorMessage = null;
+
+            // If the number of chapters don't match, prompt for confirmation
+            if (importedChapters.Count != this.Task.ChapterNames.Count)
+            {
+                if (this.errorService.ShowMessageBox(
+                        string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Task.ChapterNames.Count, importedChapters.Count),
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) !=
+                    MessageBoxResult.Yes)
+                {
+                    return false;
+                }
+            }
+
+            // If the average discrepancy in timings between chapters is either:
+            //   a) more than 15 sec for more than 2 chapters
+            //      (I chose 15sec based on empirical evidence from testing a few DVDs and comparing to chapter-marker files I downloaded)
+            //      => This check will not be performed for the first and last chapter as they're very likely to differ significantly due to language and region
+            //         differences (e.g. longer title sequences and different distributor credits)
+            var diffs = importedChapters.Zip(this.Task.ChapterNames, (import, source) => source.Duration - import.Value.Item2);
+            if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
+            {
+                if (this.errorService.ShowMessageBox(
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
+                        Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) !=
+                    MessageBoxResult.Yes)
+                {
+                    return false;
+                }
+            }
+
+            // All is well, we should import chapters
+            return true;
         }
 
         #endregion

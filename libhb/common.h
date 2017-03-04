@@ -749,7 +749,6 @@ struct hb_audio_config_s
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
         char *   name; /* Output track name */
-        int      delay;
     } out;
 
     /* Input */
@@ -771,6 +770,9 @@ struct hb_audio_config_s
         PRIVATE int matrix_encoding; /* Source matrix encoding mode, set by the audio decoder */
         PRIVATE uint64_t channel_layout; /* Source channel layout, set by the audio decoder */
         PRIVATE hb_chan_map_t * channel_map; /* Source channel map, set by the audio decoder */
+        PRIVATE int encoder_delay; /* Encoder delay in samples.
+                                    * These samples should be dropped
+                                    * when decoding */
     } in;
 
     struct

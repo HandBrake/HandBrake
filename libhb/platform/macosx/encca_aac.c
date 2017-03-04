@@ -47,8 +47,11 @@ struct hb_work_private_s
     AudioConverterRef converter;
     unsigned long isamples, isamplesiz, omaxpacket, nchannels;
     int64_t first_pts;
+    int64_t delay;
     uint64_t samples, ibytes;
     Float64 osamplerate;
+
+    int input_done;
 
     hb_audio_remap_t *remap;
 };
@@ -320,6 +323,16 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     memmove(w->config->extradata.bytes, buffer, w->config->extradata.length);
     free(buffer);
 
+    AudioConverterPrimeInfo primeInfo;
+    UInt32 piSize = sizeof(primeInfo);
+    bzero(&primeInfo, piSize);
+    AudioConverterGetProperty(pv->converter,
+                              kAudioConverterPrimeInfo,
+                              &piSize, &primeInfo);
+
+    pv->delay = primeInfo.leadingFrames * 90000LL / pv->osamplerate;
+    w->config->init_delay = pv->delay;
+
     pv->list = hb_list_init();
     pv->buf = NULL;
 
@@ -366,7 +379,17 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
     if (!pv->ibytes)
     {
         *npackets = 0;
-        return 1;
+        if (pv->input_done)
+        {
+            // EOF on input
+            buffers->mBuffers[0].mDataByteSize = 0;
+            return noErr;
+        }
+        else
+        {
+            // Not enough data available
+            return 1;
+        }
     }
 
     if (pv->buf != NULL)
@@ -409,8 +432,12 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     hb_work_private_t *pv = w->private_data;
     UInt32 npackets = 1;
 
-    /* check if we need more data */
-    if ((pv->ibytes = hb_list_bytes(pv->list)) < pv->isamples * pv->isamplesiz)
+    /* check if we need more data or we have already got to EOF
+       if so, we need to call the audio converter again even
+       without data to get out the remaining packets.
+     */
+    if (pv->input_done != 1 &&
+        (pv->ibytes = hb_list_bytes(pv->list)) < pv->isamples * pv->isamplesiz)
     {
         return NULL;
     }
@@ -438,14 +465,16 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     // only drop the output buffer if it's actually empty
     if (!npackets || odesc.mDataByteSize <= 0)
     {
-        hb_log("encCoreAudio: 0 packets returned");
+        hb_buffer_close(&obuf);
         return NULL;
     }
 
     obuf->size        = odesc.mDataByteSize;
-    obuf->s.start     = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.start     = pv->first_pts - pv->delay +
+                        90000LL * pv->samples / pv->osamplerate;
     pv->samples      += pv->isamples;
-    obuf->s.stop      = pv->first_pts + 90000LL * pv->samples / pv->osamplerate;
+    obuf->s.stop      = pv->first_pts - pv->delay +
+                        90000LL * pv->samples / pv->osamplerate;
     obuf->s.duration  = (double)90000 * pv->isamples / pv->osamplerate;
     obuf->s.type      = AUDIO_BUF;
     obuf->s.frametype = HB_FRAME_AUDIO;
@@ -453,47 +482,14 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     return obuf;
 }
 
-static hb_buffer_t* Flush(hb_work_object_t *w, hb_buffer_t *bufin)
+static void Flush(hb_work_object_t *w, hb_buffer_list_t * list)
 {
-    hb_work_private_t *pv = w->private_data;
-
-    // pad whatever data we have out to four input frames.
-    int nbytes = hb_list_bytes(pv->list);
-    int pad = pv->isamples * pv->isamplesiz - nbytes;
-    if (pad > 0)
+    hb_buffer_t *buf = Encode(w);
+    while (buf)
     {
-        hb_buffer_t *tmp = hb_buffer_init(pad);
-        memset(tmp->data, 0, pad);
-        hb_list_add(pv->list, tmp);
+        hb_buffer_list_append(list, buf);
+        buf = Encode(w);
     }
-
-    hb_buffer_t *bufout = NULL, *buf = NULL;
-    while (hb_list_bytes(pv->list) >= pv->isamples * pv->isamplesiz)
-    {
-        hb_buffer_t *b = Encode(w);
-        if (b != NULL)
-        {
-            if (bufout == NULL)
-            {
-                bufout = b;
-            }
-            else
-            {
-                buf->next = b;
-            }
-            buf = b;
-        }
-    }
-    // add the eof marker to the end of our buf chain
-    if (buf != NULL)
-    {
-        buf->next = bufin;
-    }
-    else
-    {
-        bufout = bufin;
-    }
-    return bufout;
 }
 
 /***********************************************************************
@@ -505,15 +501,18 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
                      hb_buffer_t **buf_out)
 {
     hb_work_private_t *pv = w->private_data;
-    hb_buffer_t * in = *buf_in;
-    hb_buffer_t *buf;
+    hb_buffer_t      * in = *buf_in;
+    hb_buffer_t      * buf;
+    hb_buffer_list_t   list;
 
-    *buf_in = NULL;
+    hb_buffer_list_clear(&list);
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        // EOF on input. Finish encoding what we have buffered then send
-        // it & the eof downstream.
-        *buf_out = Flush(w, in);
+        /* EOF on input - send it downstream & say we're done */
+        pv->input_done = 1;
+        Flush(w, &list);
+        hb_buffer_list_append(&list, hb_buffer_eof_init());
+        *buf_out = hb_buffer_list_clear(&list);
         return HB_WORK_DONE;
     }
 
@@ -521,15 +520,17 @@ int encCoreAudioWork(hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         pv->first_pts = in->s.start;
     }
+
     hb_list_add(pv->list, in);
+    *buf_in = NULL;
 
-    *buf_out = buf = Encode(w);
-
-    while (buf != NULL)
+    buf = Encode(w);
+    while (buf)
     {
-        buf->next = Encode(w);
-        buf       = buf->next;
+        hb_buffer_list_append(&list, buf);
+        buf = Encode(w);
     }
 
+    *buf_out = hb_buffer_list_clear(&list);
     return HB_WORK_OK;
 }

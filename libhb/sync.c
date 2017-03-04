@@ -554,6 +554,11 @@ static void dejitterVideo( sync_stream_t * stream )
     if (ABS(duration - frame_duration) < 1.1)
     {
         // Ignore small jitter
+        buf->s.start = stream->next_pts + frame_duration;
+        buf = hb_list_item(stream->in_queue, 0);
+        buf->s.start = stream->next_pts;
+        buf->s.duration = frame_duration;
+        buf->s.stop = stream->next_pts + frame_duration;
         return;
     }
 
@@ -1761,12 +1766,12 @@ static int UpdateSCR( sync_stream_t * stream, hb_buffer_t * buf )
     {
         // This should happen extremely rarely if ever.
         // But if we get here, this is the first buffer received for
-        // this stream.  Normally, some buffers will be queued for
+        // this stream. Normally, some buffers will be queued for
         // every stream before we ever call UpdateSCR.
-        // We don't really know what it's timestamp should be,
-        // but 0 is a good guess.
-        buf->s.start = 0;
-        last_scr_pts = buf->s.start;
+        // We don't really know what it's timestamp should be.
+        // So drop the buffer.
+        hb_buffer_close(&buf);
+        return 0;
     }
     if (buf->s.stop != AV_NOPTS_VALUE)
     {

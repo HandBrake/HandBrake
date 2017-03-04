@@ -494,6 +494,7 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Preview
+
         /// <summary>
         /// Gets or sets VLCPath.
         /// </summary>
@@ -510,6 +511,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("VLCPath");
             }
         }
+
         #endregion
 
         #region System and Logging
@@ -1315,7 +1317,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
-
         }
 
         /// <summary>
@@ -1324,6 +1325,17 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateSettings()
         {
             this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
+        }
+
+        /// <summary>
+        /// The goto tab.
+        /// </summary>
+        /// <param name="tab">
+        /// The tab.
+        /// </param>
+        public void GotoTab(OptionsTab tab)
+        {
+            this.SelectedTab = tab;
         }
 
         /// <summary>
@@ -1449,17 +1461,6 @@ namespace HandBrakeWPF.ViewModels
                 Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
                 Execute.OnUIThread(() => Application.Current.Shutdown());
             }
-        }
-
-        /// <summary>
-        /// The goto tab.
-        /// </summary>
-        /// <param name="tab">
-        /// The tab.
-        /// </param>
-        public void GotoTab(OptionsTab tab)
-        {
-            this.SelectedTab = tab;
         }
 
         /// <summary>

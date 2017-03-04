@@ -18,7 +18,7 @@ namespace HandBrake.ApplicationServices.Interop
     /// <summary>
     /// Contains utilities for converting language codes.
     /// </summary>
-    public static class Languages
+    public static class HandBrakeLanguagesHelper
     {
         /// <summary>
         /// The list of all languages.

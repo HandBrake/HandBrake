@@ -14,6 +14,11 @@
 #include "dvdread/ifo_read.h"
 #include "dvdread/nav_read.h"
 
+#define HB_VOBSUB_STYLE_4_3        0
+#define HB_VOBSUB_STYLE_WIDE       1
+#define HB_VOBSUB_STYLE_LETTERBOX  2
+#define HB_VOBSUB_STYLE_PANSCAN    3
+
 struct hb_dvdread_s
 {
     char         * path;

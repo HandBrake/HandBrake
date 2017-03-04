@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.Views
 {
-    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -85,6 +84,34 @@ namespace HandBrakeWPF.Views
 
             // Otherwise assume it's a main area click and add to queue.
             ((IMainViewModel)this.DataContext).AddToQueue();
+        }
+
+        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
+        {
+            if (e.Source.GetType() == typeof(TreeViewItem))
+            {
+                TreeViewItem item = e.Source as TreeViewItem;
+                if (item != null) item.IsSelected = false;
+            }
+        }
+
+        private void PresetListTree_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                treeViewItem.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+                source = VisualTreeHelper.GetParent(source);
+
+            return source as TreeViewItem;
         }
     }
 }

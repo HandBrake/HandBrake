@@ -7,8 +7,9 @@
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:attachedProperties="clr-namespace:HandBrakeWPF.AttachedProperties"
              xmlns:menu="clr-namespace:HandBrakeWPF.Commands.Menu"
+             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+             xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              AllowDrop="True"
         FontSize="11"
         cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -21,9 +22,7 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
 
-
         <Style TargetType="Button">
-
             <Setter Property="Padding" Value="8,2" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -33,24 +32,6 @@
         <Style x:Key="textBlockOrangeStyle" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,5" />
-        </Style>
-
-        <CollectionViewSource x:Key="presetsCvs" Source="{Binding Presets}">
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Category" />
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
-
-        <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Expander Header="{Binding Name}" IsExpanded="True">
-                            <ItemsPresenter />
-                        </Expander>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -507,53 +488,68 @@
                       Margin="0,0,5,5"
                       IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
+                
 
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    
+                    <Grid.Resources>
 
-                    <ListBox HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
-                             VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
-                             SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
-                             BorderBrush="LightGray"
-                            >
-                        <ListBox.Resources>
-
-                            <Style TargetType="ToolTip">
-                                <Style.Resources>
-                                    <Style TargetType="ContentPresenter">
-                                        <Style.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                            </Style>
-                                        </Style.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type loc:Preset}">
+                            <StackPanel Orientation="Horizontal" >
+                                <StackPanel.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDefault}" Value="True" >
+                                                <Setter Property="FontStyle" Value="Italic" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsDefault}" Value="False" >
+                                                <Setter Property="FontStyle" Value="Normal" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
                                     </Style>
-                                </Style.Resources>
-                                <Setter Property="MaxWidth" Value="300" />
-                            </Style>
+                                </StackPanel.Resources>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
 
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="0,2,0,2" />
+                        <HierarchicalDataTemplate DataType="{x:Type loc:PresetDisplayCategory}" ItemsSource="{Binding Presets}">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding Category}" FontSize="14" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </Grid.Resources>
+                        
+                        <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
+                                  VerticalAlignment="Stretch" BorderThickness="0,0,0,1" BorderBrush="LightGray"
+                                  ItemsSource="{Binding Presets}"
+                                  helpers:TreeViewHelper.TreeViewSelectedItem="{Binding Path=SelectedPreset, Mode=TwoWay}"
+                                  PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
+
+                        <TreeView.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
+                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="4" />
                                 <Setter Property="ToolTip" Value="{Binding Description}" />
                                 <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollasped" />
                                 <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                        <Setter Property="Background" Value="Transparent"/>
+                                    <Trigger Property="HasItems" Value="True">
+                                        <Setter Property="Focusable" Value="false" />
                                     </Trigger>
-                                    <DataTrigger Binding="{Binding IsDefault}" Value="True" >
-                                        <Setter Property="FontStyle" Value="Italic" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsDefault}" Value="False" >
-                                        <Setter Property="FontStyle" Value="Normal" />
-                                    </DataTrigger>
+                                
                                 </Style.Triggers>
                             </Style>
-                        </ListBox.Resources>
+                        </TreeView.ItemContainerStyle>
                         
-                        <ListBox.ContextMenu>
+                        <TreeView.ContextMenu>
                             <ContextMenu AutomationProperties.Name="Presets List Context Menu">
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
@@ -566,8 +562,8 @@
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </ContextMenu>
 
-                        </ListBox.ContextMenu>
-                        
+                        </TreeView.ContextMenu>
+                   
                         <i:Interaction.Triggers>
                             <commands:InputBindingTrigger>
                                 <commands:InputBindingTrigger.InputBinding>
@@ -577,17 +573,7 @@
                             </commands:InputBindingTrigger>
                         </i:Interaction.Triggers>
 
-                        <ListBox.GroupStyle>
-                            <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
-                        </ListBox.GroupStyle>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" Margin="24,0,0,0" Padding="8,1" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-
-                    </ListBox>
+                    </TreeView>
 
                     <ToolBar Name="presetsToolBar"
                              Grid.Row="1"
@@ -599,8 +585,7 @@
                              Background="Transparent"
                              ToolBarTray.IsLocked="True"
                              Loaded="ToolBarLoaded"
-                             KeyboardNavigation.TabNavigation="Continue"
-                             >
+                             KeyboardNavigation.TabNavigation="Continue" >
 
                         <ToolBar.Resources>
                             <Style TargetType="{x:Type ToolBarPanel}">
@@ -764,3 +749,4 @@
         </StatusBar>
     </Grid>
 </UserControl>
+

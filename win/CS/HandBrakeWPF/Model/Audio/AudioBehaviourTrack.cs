@@ -12,15 +12,12 @@ namespace HandBrakeWPF.Model.Audio
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-
+    using Newtonsoft.Json;
     using Services.Encode.Model.Models;
     using Utilities;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Model of a HandBrake Audio Track and it's associated behaviours.

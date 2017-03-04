@@ -208,7 +208,8 @@
     // Generate a new file name
     NSString *fileName = job.title.name;
 
-    // If Auto Naming is on. We create an output filename of dvd name - title number
+    // If Auto Naming is on. We create an output filename by using the
+    // format set int he preferences.
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
     {
         fileName = [self automaticNameForJob:job];

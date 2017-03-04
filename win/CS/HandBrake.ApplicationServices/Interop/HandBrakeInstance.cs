@@ -216,6 +216,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="titleIndex">
         /// The title index to scan (1-based, 0 for all titles).
         /// </param>
+        /// <param name="clEnabled">
+        /// OpenCL enabled. 
+        /// </param>
         public void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, bool clEnabled = false)
         {
             this.previewCount = previewCount;
@@ -513,9 +516,6 @@ namespace HandBrake.ApplicationServices.Interop
             }
         }
 
-        /// <summary>
-        /// Checks the status of the ongoing encode.
-        /// </summary>
         /// <summary>
         /// Checks the status of the ongoing encode.
         /// </summary>

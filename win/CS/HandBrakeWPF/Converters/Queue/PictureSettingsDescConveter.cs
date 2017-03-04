@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PictureSettingsDescConveter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
@@ -9,12 +9,10 @@
 
 namespace HandBrakeWPF.Converters.Queue
 {
+    using System;
     using System.Globalization;
     using System.Windows.Data;
-    using System;
-
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-
     using HandBrakeWPF.Services.Encode.Model;
 
     /// <summary>
@@ -62,7 +60,7 @@ namespace HandBrakeWPF.Converters.Queue
                         break;
                 }
 
-                return resolution + Environment.NewLine + "Crop Top: " + task.Cropping.Top + ", Botton: " + task.Cropping.Bottom + ", Left: "
+                return resolution + Environment.NewLine + "Crop Top: " + task.Cropping.Top + ", Bottom: " + task.Cropping.Bottom + ", Left: "
                        + task.Cropping.Left + ", Right: " + task.Cropping.Right;
             }
 

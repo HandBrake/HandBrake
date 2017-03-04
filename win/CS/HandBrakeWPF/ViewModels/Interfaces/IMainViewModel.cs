@@ -11,8 +11,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using System.Windows;
 
-    using HandBrakeWPF.Services.Presets.Model;
-
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
@@ -20,11 +18,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IMainViewModel
     {
-        /// <summary>
-        /// Sets SelectedPreset.
-        /// </summary>
-        Preset SelectedPreset { set; }
-
         /// <summary>
         /// The preset select.
         /// </summary>

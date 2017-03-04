@@ -9,10 +9,10 @@
 
 namespace HandBrakeWPF.Controls
 {
-    using System.Windows.Threading;
     using System;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Threading;
 
     /// <summary>
     /// Interaction logic for Loading.xaml

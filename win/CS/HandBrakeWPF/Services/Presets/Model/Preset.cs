@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Presets.Model
 {
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -24,7 +25,7 @@ namespace HandBrakeWPF.Services.Presets.Model
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/89
     /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/96
     /// </remarks>
-    public class Preset : PropertyChangedBase  // Delibery not 
+    public class Preset : PropertyChangedBase, IPresetObject // Delibery not 
     {
         #region Constants and Fields
 
@@ -32,6 +33,8 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// The is default.
         /// </summary>
         private bool isDefault;
+
+        private bool isSelected;
 
         #endregion
 
@@ -71,6 +74,24 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// Gets or sets the Description for the preset
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Reflects the visual state of this preset.
+        /// </summary>
+        public bool IsExpanded { get; set; }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return this.isSelected;
+            }
+            set
+            {
+                this.isSelected = value;
+                this.NotifyOfPropertyChange(() => this.IsSelected);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is a built in preset

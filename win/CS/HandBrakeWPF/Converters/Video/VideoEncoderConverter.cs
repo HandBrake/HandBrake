@@ -16,7 +16,6 @@ namespace HandBrakeWPF.Converters.Video
     using System.Windows.Data;
 
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Utilities;
@@ -121,7 +120,7 @@ namespace HandBrakeWPF.Converters.Video
             string name = value as string;
             if (!string.IsNullOrEmpty(name))
             {
-                return new object[] { EnumHelper<VideoEncoder>.GetValue(name)};
+                return new object[] { EnumHelper<VideoEncoder>.GetValue(name) };
             }
 
             return null;

@@ -9,8 +9,8 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using System.Globalization;
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// Helper functions for handling <see cref="TimeSpan"/> structures

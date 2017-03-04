@@ -87,7 +87,6 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
 {
     hb_work_private_t  *pv = calloc(1, sizeof(hb_work_private_t));
     int                 ret, depth;
-    hb_rational_t       vrate;
     x265_nal           *nal;
     uint32_t            nnal;
     const char * const *profile_names;
@@ -143,9 +142,8 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Some HandBrake-specific defaults; users can override them
      * using the encoder_options string.
      */
-    hb_reduce(&vrate.num, &vrate.den, job->vrate.num, job->vrate.den);
-    param->fpsNum      = vrate.num;
-    param->fpsDenom    = vrate.den;
+    param->fpsNum      = job->orig_vrate.num;
+    param->fpsDenom    = job->orig_vrate.den;
     param->keyframeMin = (double)job->orig_vrate.num / job->orig_vrate.den +
                                  0.5;
     param->keyframeMax = param->keyframeMin * 10;
@@ -414,9 +412,9 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
     buf->s.stop         = pic_out->pts + buf->s.duration;
     buf->s.start        = pic_out->pts;
     buf->s.renderOffset = pic_out->dts;
-    if (w->config->h264.init_delay == 0 && pic_out->dts < 0)
+    if (w->config->init_delay == 0 && pic_out->dts < 0)
     {
-        w->config->h264.init_delay -= pic_out->dts;
+        w->config->init_delay -= pic_out->dts;
     }
 
     switch (pic_out->sliceType)

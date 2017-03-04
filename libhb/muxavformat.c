@@ -130,7 +130,6 @@ static int avformatInit( hb_mux_object_t * m )
     uint8_t         need_fonts = 0;
     char *lang;
 
-
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
 
@@ -402,6 +401,8 @@ static int avformatInit( hb_mux_object_t * m )
         }
 
         track->st->codecpar->codec_type = AVMEDIA_TYPE_AUDIO;
+        track->st->codecpar->initial_padding = audio->priv.config.init_delay *
+                                        audio->config.out.samplerate / 90000;
         if (job->mux == HB_MUX_AV_MP4)
         {
             track->st->time_base.num = 1;

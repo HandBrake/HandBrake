@@ -71,7 +71,7 @@ namespace HandBrakeWPF.Utilities
                 if (!Directory.Exists(dirPath))
                 {
                     MessageBoxResult result = errorService.ShowMessageBox(string.Format(Resources.DirectoryUtils_CreateFolderMsg, dirPath), Resources.DirectoryUtils_CreateFolder, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (MessageBoxResult.Yes == result)
+                    if (result == MessageBoxResult.Yes)
                     {
                         Directory.CreateDirectory(dirPath);
                     }

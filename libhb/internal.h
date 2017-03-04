@@ -309,7 +309,8 @@ typedef struct hb_batch_s hb_batch_t;
 hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path );
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
-hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
+hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t,
+                                   uint64_t min_duration );
 
 /***********************************************************************
  * dvd.c
@@ -373,8 +374,12 @@ void hb_stream_set_need_keyframe( hb_stream_t *stream, int need_keyframe );
  * Work objects
  **********************************************************************/
 #define HB_CONFIG_MAX_SIZE (2*8192)
-union hb_esconfig_u
+struct hb_esconfig_s
 {
+    int init_delay;
+
+    union
+    {
 
     struct
     {
@@ -388,7 +393,6 @@ union hb_esconfig_u
 	    int       sps_length;
 	    uint8_t  pps[HB_CONFIG_MAX_SIZE];
 	    int       pps_length;
-        int      init_delay;
 	} h264;
 
     struct
@@ -413,6 +417,7 @@ union hb_esconfig_u
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
         char *language;
     } vorbis;
+    };
 };
 
 enum

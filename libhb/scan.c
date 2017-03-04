@@ -156,7 +156,7 @@ static void ScanFunc( void * _data )
         if( data->title_index )
         {
             /* Scan this title only */
-            title = hb_batch_title_scan(data->batch, data->title_index);
+            title = hb_batch_title_scan(data->batch, data->title_index, 0);
             if ( title )
             {
                 hb_list_add( data->title_set->list_title, title );
@@ -170,7 +170,8 @@ static void ScanFunc( void * _data )
                 hb_title_t * title;
 
                 UpdateState1(data, i + 1);
-                title = hb_batch_title_scan(data->batch, i + 1);
+                title = hb_batch_title_scan(data->batch, i + 1,
+                                            data->min_title_duration);
                 if ( title != NULL )
                 {
                     hb_list_add( data->title_set->list_title, title );

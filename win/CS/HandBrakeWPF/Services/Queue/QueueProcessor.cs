@@ -266,7 +266,7 @@ namespace HandBrakeWPF.Services.Queue
         {
             foreach (QueueTask job in this.queue)
             {
-                if (String.Equals(
+                if (string.Equals(
                     job.Task.Destination,
                     destination.Replace("\\\\", "\\"),
                     StringComparison.OrdinalIgnoreCase)

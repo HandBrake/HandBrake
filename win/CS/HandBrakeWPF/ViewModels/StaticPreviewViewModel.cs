@@ -591,7 +591,7 @@ namespace HandBrakeWPF.ViewModels
                             // Attempt to find VLC if it doesn't exist in the default set location.
                             string vlcPath;
 
-                            if (IntPtr.Size == 8 || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+                            if (IntPtr.Size == 8 || (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
                                 vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
                             else
                                 vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");

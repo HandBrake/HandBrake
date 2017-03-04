@@ -58,7 +58,7 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-              //  string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
+                // string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
 
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
@@ -99,7 +99,7 @@ namespace HandBrakeWPF.Helpers
                             .Replace(Constants.Chapters, combinedChapterTag)
                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
                             .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"));
-                           // .Replace(Constants.Preset, sanitisedPresetName);
+                    // .Replace(Constants.Preset, sanitisedPresetName);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                     {
@@ -108,12 +108,16 @@ namespace HandBrakeWPF.Helpers
                     }
                     else
                     {
-                        destinationFilename = destinationFilename.Replace(Constants.Bitrate, task.VideoBitrate.ToString());
+                        destinationFilename = destinationFilename.Replace(
+                            Constants.Bitrate,
+                            task.VideoBitrate.ToString());
                         destinationFilename = destinationFilename.Replace(Constants.Quality, string.Empty);
                     }
                 }
                 else
+                {
                     destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
+                }
 
                 /*
                  * File Extension
@@ -134,7 +138,9 @@ namespace HandBrakeWPF.Helpers
                     }
                 }
                 else if (task.OutputFormat == OutputFormat.Mkv)
+                {
                     destinationFilename += ".mkv";
+                }
 
                 /*
                  * File Destination Path
@@ -177,11 +183,15 @@ namespace HandBrakeWPF.Helpers
                     {
                         autoNamePath = Path.Combine(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath), destinationFilename);
                     }
-                    else // ...otherwise, output to the source directory
+                    else 
+                    {
+                        // ...otherwise, output to the source directory
                         autoNamePath = null;
+                    }
                 }
-                else // Otherwise, use the path that is already there.
+                else
                 {
+                    // Otherwise, use the path that is already there.
                     // Use the path and change the file extension to match the previous destination
                     autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination), destinationFilename);
                 }

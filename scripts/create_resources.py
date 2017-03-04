@@ -4,31 +4,28 @@
 import types
 import os
 import sys
-import time
-import datetime
 import json
 import plistlib
-import getopt
+import argparse
 from xml.parsers import expat
+from xml.parsers.expat import ExpatError
 
 resources = dict()
 stack = list()
+inc_list = list()
+
 stack.append(resources)
 
-def top(ss):
-    return ss[len(ss)-1]
 
 def end_element_handler(tag):
-    global stack
-
     if tag == "section":
         stack.pop()
 
-def start_element_handler(tag, attr):
-    global resources, stack
 
-    current = top(stack)
-    key = val = None
+def start_element_handler(tag, attr):
+    current = stack[-1]
+    key = None
+    val = None
     if tag == "section":
         key = attr["name"]
         val = dict()
@@ -40,76 +37,69 @@ def start_element_handler(tag, attr):
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             try:
-                fp = open(fname)
+                with open(fname) as fp:
+                    val = json.load(fp)
             except Exception, err:
-                print >> sys.stderr, ( "Error: %s" % str(err) )
-            val = json.load(fp)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such json file %s" % fbase )
+                print >> sys.stderr, ("Error: %s" % str(err))
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such json file %s" % fbase)
             sys.exit(1)
     elif tag == "plist":
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             val = plistlib.readPlist(fname)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such plist file %s" % fbase )
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such plist file %s" % fbase)
             sys.exit(1)
     elif tag == "text":
         fbase = attr["file"]
         fname = find_file(fbase)
         key = attr["name"]
-        if fname != None and key != None:
+        if fname is not None and key is not None:
             try:
-                fp = open(fname)
-                val = fp.read()
+                with open(fname) as fp:
+                    val = fp.read()
             except Exception, err:
-                print >> sys.stderr, ( "Error: %s"  % str(err) )
+                print >> sys.stderr, ("Error: %s" % str(err))
                 sys.exit(1)
-        elif fname == None:
-            print >> sys.stderr, ( "Error: No such string file %s" % fbase )
+        elif fname is None:
+            print >> sys.stderr, ("Error: No such string file %s" % fbase)
             sys.exit(1)
     elif tag == "string":
         key = attr["name"]
         val = attr["value"]
 
-    if val != None:
-        if type(current) == types.DictType:
+    if val is not None:
+        if isinstance(current, types.DictType):
             current[key] = val
-        elif type(current) == types.TupleType:
+        elif isinstance(current, types.TupleType):
             current.append(val)
 
 
-def cdata_handler(str):
+def cdata_handler(s):
     return
+
 
 def resource_parse_file(infile):
     parser = expat.ParserCreate()
     parser.StartElementHandler = start_element_handler
     parser.EndElementHandler = end_element_handler
     parser.CharacterDataHandler = cdata_handler
-    parser.ParseFile(infile)
 
-def usage():
-    print >> sys.stderr, (
-        "Usage: %s [-I <inc path>] <resource list> [resource json]\n"
-        "Summary:\n"
-        "    Creates a resource json from a resource list\n\n"
-        "Options:\n"
-        "    I - Include path to search for files\n"
-        "    <resource list>    Input resources file\n"
-        "    <resource json>    Output resources json file\n"
-        % sys.argv[0]
-    )
+    try:
+        parser.ParseFile(infile)
+    except ExpatError, err:
+        print >> sys.stderr, ("Error: %s" % str(err))
+        return None
 
-inc_list = list()
+    return resources
+
 
 def find_file(name):
-    global inc_list
-
     for inc_dir in inc_list:
         inc = "%s/%s" % (inc_dir, name)
         if os.path.isfile(inc):
@@ -120,45 +110,21 @@ def find_file(name):
 
     return None
 
+
 def main():
-    global inc_list
+    parser = argparse.ArgumentParser(description='Creates a resource json from a resource list')
+    parser.add_argument('-I', metavar='<inc path>', help='Include path to search for files')
+    parser.add_argument('infile', metavar='<resource list>', type=argparse.FileType('r'), help='Input resources file')
+    parser.add_argument('outfile', metavar='<resource json>', type=argparse.FileType('w'), nargs='?',
+                        default=sys.stdout, help='Output resources json file [stdout]')
+    args = parser.parse_args()
 
-    OPTS = "I:"
-    try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], OPTS)
-    except getopt.GetoptError, err:
-        print >> sys.stderr, str(err)
-        usage()
-        sys.exit(2)
+    if args.I:
+        inc_list.append(args.I)
 
-    for o, a in opts:
-        if o == "-I":
-            # add to include list
-            inc_list.append(a)
-        else:
-            assert False, "unhandled option"
+    parsed_res = resource_parse_file(args.infile)
+    if parsed_res:
+        json.dump(parsed_res, args.outfile, indent=4, sort_keys=True)
 
-    if len(args) > 2 or len(args) < 1:
-        usage()
-        sys.exit(2)
-
-    try:
-        infile = open(args[0])
-    except Exception, err:
-        print >> sys.stderr, ( "Error: %s"  % str(err) )
-        sys.exit(1)
-
-    if len(args) > 1:
-        try:
-            outfile = open(args[1], "w")
-        except Exception, err:
-            print >> sys.stderr, ( "Error: %s"  % str(err))
-            sys.exit(1)
-    else:
-        outfile = sys.stdout
-
-    resource_parse_file(infile)
-    json.dump(resources, outfile, indent=4, sort_keys=True)
 
 main()
-
