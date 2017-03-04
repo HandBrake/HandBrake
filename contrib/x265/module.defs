@@ -22,7 +22,7 @@ endif
 
 ifeq (1,$(BUILD.cross))
     ifeq (mingw,$(BUILD.system))
-        X265.CONFIGURE.extra += -DWIN32=ON -DWINXP_SUPPORT=ON
+        X265.CONFIGURE.extra += -DWIN32=ON
     endif
     X265.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265.CONFIGURE.host)"
     X265.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265.CONFIGURE.build)"
