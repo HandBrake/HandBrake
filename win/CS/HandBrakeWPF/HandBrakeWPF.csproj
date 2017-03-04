@@ -171,6 +171,7 @@
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="Helpers\LogManager.cs" />
     <Compile Include="Helpers\MP4Helper.cs" />
     <Compile Include="Helpers\TimeSpanHelper.cs" />
@@ -224,6 +225,8 @@
     <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
+    <Compile Include="Services\Presets\Interfaces\IPresetObject.cs" />
+    <Compile Include="Services\Presets\Model\PresetDisplayCategory.cs" />
     <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />

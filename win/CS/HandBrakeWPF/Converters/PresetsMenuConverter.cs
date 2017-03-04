@@ -11,13 +11,13 @@ namespace HandBrakeWPF.Converters
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Globalization;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
-
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
     /// <summary>
@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Converters
         /// <param name="culture">The culture to use in the converter.</param>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IEnumerable<Preset> presets = value as IEnumerable<Preset>;
+            IEnumerable<IPresetObject> presets = value as IEnumerable<IPresetObject>;
 
             if (presets == null)
             {
@@ -41,31 +41,19 @@ namespace HandBrakeWPF.Converters
             }
             
             Dictionary<string, MenuItem> groupedMenu = new Dictionary<string, MenuItem>();
-            foreach (Preset item in presets)
+            foreach (IPresetObject item in presets)
             {
-                if (groupedMenu.ContainsKey(item.Category))
+                PresetDisplayCategory category = item as PresetDisplayCategory;
+                if (category != null)
                 {
-                    MenuItem newMeuItem = new MenuItem { Header = item.Name, Tag = item, Command = new PresetMenuSelectCommand(item) };
-                    if (item.IsDefault)
-                    {
-                        newMeuItem.FontStyle = FontStyles.Italic;
-                    }
-
-                    groupedMenu[item.Category].Items.Add(newMeuItem);
+                    ProcessCategory(groupedMenu, category);
+                    continue;
                 }
-                else
+
+                Preset preset = item as Preset;
+                if (preset != null)
                 {
-                    MenuItem group = new MenuItem();
-                    group.Header = item.Category;
-
-                    MenuItem newMeuItem = new MenuItem { Header = item.Name, Tag = item, Command = new PresetMenuSelectCommand(item) };
-                    if (item.IsDefault)
-                    {
-                        newMeuItem.FontStyle = FontStyles.Italic;
-                    }
-
-                    group.Items.Add(newMeuItem);
-                    groupedMenu[item.Category] = group;
+                    ProcessPreset(groupedMenu, preset);
                 }
             }
 
@@ -81,6 +69,42 @@ namespace HandBrakeWPF.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        private void ProcessPreset(Dictionary<string, MenuItem> groupedMenu, Preset preset)
+        {
+            if (groupedMenu.ContainsKey(preset.Category))
+            {
+                MenuItem newMeuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset) };
+                if (preset.IsDefault)
+                {
+                    newMeuItem.FontStyle = FontStyles.Italic;
+                }
+
+                groupedMenu[preset.Category].Items.Add(newMeuItem);
+            }
+            else
+            {
+                MenuItem group = new MenuItem();
+                group.Header = preset.Category;
+
+                MenuItem newMeuItem = new MenuItem { Header = preset.Name, Tag = preset, Command = new PresetMenuSelectCommand(preset) };
+                if (preset.IsDefault)
+                {
+                    newMeuItem.FontStyle = FontStyles.Italic;
+                }
+
+                group.Items.Add(newMeuItem);
+                groupedMenu[preset.Category] = group;
+            }
+        }
+
+        private void ProcessCategory(Dictionary<string, MenuItem> groupedMenu, PresetDisplayCategory category)
+        {
+            foreach (Preset preset in category.Presets)
+            {
+                this.ProcessPreset(groupedMenu, preset);
+            }
         }
     }
 }

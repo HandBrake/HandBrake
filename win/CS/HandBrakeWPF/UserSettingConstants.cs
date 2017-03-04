@@ -226,6 +226,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ForcePresetReset = "ForcePresetReset";
 
+        /// <summary>
+        /// Setting to record the expansion state of preset categories. 
+        /// </summary>
+        public const string PresetExpandedStateList = "PresetExpandedStateList";
+
         #endregion
     }
 }
