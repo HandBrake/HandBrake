@@ -41,10 +41,6 @@ ifneq ($(HAS.bz2),1)
 endif
 endif
 
-ifneq (,$(filter $(BUILD.system),cygwin mingw))
-    MODULES += contrib/fontconfig
-endif
-
 ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
