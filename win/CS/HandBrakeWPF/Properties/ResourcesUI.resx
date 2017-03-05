@@ -890,4 +890,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
     <value>Use QSV Decoding for non QSV encoders.</value>
   </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>Low diskspace warning level (GB):</value>
+  </data>
 </root>

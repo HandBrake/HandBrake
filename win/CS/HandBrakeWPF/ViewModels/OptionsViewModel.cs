@@ -91,8 +91,8 @@ namespace HandBrakeWPF.ViewModels
         private bool isClScaling;
         private bool showQueueInline;
         private bool pauseOnLowDiskspace;
-
-        private bool useQsvDecodeForNonQsvEnc;
+        private long pauseOnLowDiskspaceLevel;
+        private bool useQsvDecodeForNonQsvEnc;  
 
         #endregion
 
@@ -616,7 +616,24 @@ namespace HandBrakeWPF.ViewModels
                 this.pauseOnLowDiskspace = value;
                 this.NotifyOfPropertyChange(() => this.PauseOnLowDiskspace);
             }
-        }  
+        }
+
+        /// <summary>
+        /// Get or sets the value that HB warns about low disk space.
+        /// </summary>
+        public long PauseOnLowDiskspaceLevel
+        {
+            get
+            {
+                return this.pauseOnLowDiskspaceLevel;
+            }
+
+            set
+            {
+                this.pauseOnLowDiskspaceLevel = value;
+                this.NotifyOfPropertyChange(() => this.pauseOnLowDiskspaceLevel);
+            }
+        }
 
         /// <summary>
         /// Gets or sets PriorityLevelOptions.
@@ -1264,7 +1281,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
             this.PauseOnLowDiskspace = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
-            
+            this.PauseOnLowDiskspaceLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel);
+
             // Log Verbosity Level
             this.logVerbosityOptions.Clear();
             this.logVerbosityOptions.Add(0);
@@ -1374,6 +1392,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
             userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
+            userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
             userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);

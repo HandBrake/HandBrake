@@ -159,6 +159,7 @@
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
+    <Compile Include="Converters\Options\FileSizeConverter.cs" />
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
     <Compile Include="Converters\PresetsMenuConverter.cs" />
     <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />

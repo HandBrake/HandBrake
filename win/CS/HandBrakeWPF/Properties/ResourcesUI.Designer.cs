@@ -1195,6 +1195,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low diskspace warning level (GB):.
+        /// </summary>
+        public static string Options_LowDiskspaceSize {
+            get {
+                return ResourceManager.GetString("Options_LowDiskspaceSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimize to system tray (Requires Restart).
         /// </summary>
         public static string Options_MinimiseTray {

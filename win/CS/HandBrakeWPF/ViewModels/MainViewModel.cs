@@ -1819,21 +1819,6 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Destination = saveFileDialog.FileName;
 
-                // Disk Space Check
-                string drive = Path.GetPathRoot(this.Destination);             
-                if (drive != null && !drive.StartsWith(@"\\"))
-                {
-                    DriveInfo c = new DriveInfo(drive);
-                    if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
-                    {
-                        this.errorService.ShowMessageBox(
-                            Resources.MainViewModel_LowDiskSpaceWarning,
-                            Resources.MainViewModel_LowDiskSpace,
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning);
-                    }
-                }
-
                 // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
                 if (!string.IsNullOrEmpty(saveFileDialog.FileName))
                 {
