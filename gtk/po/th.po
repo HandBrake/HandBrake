@@ -302,7 +302,7 @@ msgstr "กำลังปิดเครื่องคอมพิวเตอ
 msgid "Putting computer to sleep"
 msgstr "กำลังทำให้คอมพิวเตอร์สลีป"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "กำลังออกจาก Handbrake"
 
 msgid "Bottom"

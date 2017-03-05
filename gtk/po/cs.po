@@ -305,7 +305,7 @@ msgstr "Vypíná se počítač"
 msgid "Putting computer to sleep"
 msgstr "Uspává se počítač"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Ukončuje se Handbrake"
 
 msgid "Bottom"

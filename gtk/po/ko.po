@@ -301,7 +301,7 @@ msgstr "컴퓨터 종료 중"
 msgid "Putting computer to sleep"
 msgstr "컴퓨터 잠가지 진입 중"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Handbrake 종료 중"
 
 msgid "Bottom"

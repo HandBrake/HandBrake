@@ -301,7 +301,7 @@ msgstr "Desligando o computador"
 msgid "Putting computer to sleep"
 msgstr "Colocando o computador em suspensão"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Saindo Handbrake"
 
 msgid "Bottom"

@@ -5498,7 +5498,7 @@ ghb_notify_done(signal_user_data_t *ud)
     {
         ghb_countdown_dialog(GTK_MESSAGE_WARNING,
                             _("Your encode is complete."),
-                            _("Quiting Handbrake"),
+                            _("Quitting Handbrake"),
                             _("Cancel"), (GSourceFunc)quit_cb, ud, 60);
     }
 }
