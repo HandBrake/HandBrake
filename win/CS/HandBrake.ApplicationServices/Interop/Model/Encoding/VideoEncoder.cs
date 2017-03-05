@@ -30,10 +30,6 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [ShortName("qsv_h264")]
         QuickSync,
 
-        [Display(Name = "H.265 (Intel QSV)")]
-        [ShortName("qsv_h265")]
-        QuickSyncH265,
-
         [Display(Name = "MPEG-4")]
         [ShortName("mpeg4")]
         FFMpeg,
@@ -57,6 +53,14 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
         [Display(Name = "H.265 10-bit (x265)")]
         [ShortName("x265_10bit")]
         X265_10,
+
+        [Display(Name = "H.265 (Intel QSV)")]
+        [ShortName("qsv_h265")]
+        QuickSyncH265,
+
+        [Display(Name = "H.265 10-bit (Intel QSV)")]
+        [ShortName("qsv_h265_10bit")]
+        QuickSyncH26510b,
 
         [Display(Name = "VP8")]
         [ShortName("VP8")]

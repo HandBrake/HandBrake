@@ -74,5 +74,21 @@ namespace HandBrake.ApplicationServices.Utilities
                 }
             }
         }
+
+        public static bool IsQsvAvailableH26510bit
+        {
+            get
+            {
+                try
+                {
+                    return (HBFunctions.hb_qsv_available() & NativeConstants.HB_VCODEC_QSV_H265_10BIT) != 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
     }
 }

@@ -84,6 +84,11 @@ namespace HandBrakeWPF.Converters.Video
                 if (!SystemInfo.IsQsvAvailableH265)
                 {
                     encoders.Remove(VideoEncoder.QuickSyncH265);
+                    encoders.Remove(VideoEncoder.QuickSyncH26510b);
+                }
+                else if (!SystemInfo.IsQsvAvailableH26510bit)
+                {
+                    encoders.Remove(VideoEncoder.QuickSyncH26510b);
                 }
 
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);

@@ -48,6 +48,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         // VideoEncoders
         public const uint HB_VCODEC_QSV_H264 = 0x0000100;
         public const uint HB_VCODEC_QSV_H265 = 0x0000200;
+        public const uint HB_VCODEC_QSV_H265_10BIT = 0x0000400;
         public const uint HB_VCODEC_QSV_MASK = 0x0000F00;
 
         // Encode state
