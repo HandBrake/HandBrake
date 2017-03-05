@@ -1269,7 +1269,7 @@ static void ShowHelp()
 "                           specified video encoder\n"
 "       --encoder-tune <string>\n"
 "                           Adjust video encoding settings for a particular\n"
-"                           type of souce or situation (encoder-specific)\n"
+"                           type of source or situation (encoder-specific)\n"
 "   --encoder-tune-list <string>\n"
 "                           List supported --encoder-tune values for the\n"
 "                           specified video encoder\n"
