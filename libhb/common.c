@@ -4765,7 +4765,7 @@ int hb_subtitle_can_pass( int source, int mux )
 
         default:
             // Internal error. Should never get here.
-            hb_error("internel error.  Bad mux %d\n", mux);
+            hb_error("internal error.  Bad mux %d\n", mux);
             return 0;
     }
 }
