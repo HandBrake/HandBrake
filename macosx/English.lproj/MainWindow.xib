@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12100" systemVersion="16E144f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12113" systemVersion="16E175b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12100"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12113"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -45,7 +45,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="920" height="568"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" id="1123">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1123">
                         <rect key="frame" x="18" y="2" width="711" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="4846">
@@ -105,7 +105,7 @@
                             <outlet property="dropDelegate" destination="-2" id="PXr-K3-L2R"/>
                         </connections>
                     </tabView>
-                    <textField verticalHuggingPriority="750" id="1538">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1538">
                         <rect key="frame" x="20" y="540" width="54" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Source:" id="4905">
@@ -114,7 +114,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1540">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1540">
                         <rect key="frame" x="17" y="511" width="35" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
@@ -145,7 +145,7 @@
                             <binding destination="-2" name="content" keyPath="self.job.range.types" id="jpv-yJ-Fca"/>
                         </connections>
                     </popUpButton>
-                    <textField verticalHuggingPriority="750" id="5180">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5180">
                         <rect key="frame" x="401" y="511" width="46" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
@@ -162,7 +162,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" misplaced="YES" id="1552">
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1552">
                         <rect key="frame" x="17" y="458" width="48" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Save as:" id="4913">
@@ -174,7 +174,7 @@
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="cNL-U3-HcC"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1553">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1553">
                         <rect key="frame" x="780" y="511" width="65" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
@@ -190,7 +190,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" id="1554">
+                    <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1554">
                         <rect key="frame" x="842" y="511" width="60" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
@@ -208,7 +208,7 @@
                             <binding destination="-2" name="value" keyPath="self.job.range.duration" id="I4g-Nz-YXQ"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1555">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1555">
                         <rect key="frame" x="20" y="486" width="70" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Destination" id="4916">
@@ -248,7 +248,7 @@
                         <rect key="frame" x="98" y="490" width="802" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
-                    <textField toolTip="Source file name." verticalHuggingPriority="750" id="1539">
+                    <textField toolTip="Source file name." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1539">
                         <rect key="frame" x="70" y="540" width="310" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
@@ -260,7 +260,7 @@
                             <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
                         </connections>
                     </textField>
-                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" misplaced="YES" id="1561">
+                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1561">
                         <rect key="frame" x="71" y="455" width="374" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
@@ -282,7 +282,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" id="5491">
+                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5491">
                         <rect key="frame" x="592" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
@@ -308,7 +308,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" id="5521">
+                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5521">
                         <rect key="frame" x="649" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
@@ -334,7 +334,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" id="5493">
+                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5493">
                         <rect key="frame" x="707" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
@@ -360,7 +360,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" id="5523">
+                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5523">
                         <rect key="frame" x="769" y="492" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
@@ -386,7 +386,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" misplaced="YES" id="1627">
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1627">
                         <rect key="frame" x="20" y="430" width="45" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
@@ -399,7 +399,7 @@
                         <rect key="frame" x="292" y="434" width="608" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
-                    <textField toolTip="Selected preset name." verticalHuggingPriority="750" misplaced="YES" id="1882">
+                    <textField toolTip="Selected preset name." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1882">
                         <rect key="frame" x="69" y="430" width="217" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="4924">
@@ -411,7 +411,7 @@
                             <binding destination="-2" name="value" keyPath="self.job.presetName" id="W9D-4K-e1F"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="1556">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1556">
                         <rect key="frame" x="21" y="403" width="53" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="4917">
@@ -465,7 +465,7 @@
                             </binding>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="5505">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5505">
                         <rect key="frame" x="648" y="510" width="56" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="through" id="5506">
@@ -614,7 +614,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </binding>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" misplaced="YES" id="gfs-4j-YSE">
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="gfs-4j-YSE">
                         <rect key="frame" x="458" y="458" width="40" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
@@ -678,12 +678,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="BC981D6D-0945-4001-BCB0-F9A1BBBD2C04" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="58" height="25"/>
+                        <size key="minSize" width="58" height="32"/>
                         <size key="maxSize" width="58" height="32"/>
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -755,7 +755,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
                     </connections>
                 </button>
-                <textField toolTip="Title to scan." verticalHuggingPriority="750" id="3w9-Iu-3u2">
+                <textField toolTip="Title to scan." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="3w9-Iu-3u2">
                     <rect key="frame" x="148" y="7" width="50" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="6E4-AG-PEh">
