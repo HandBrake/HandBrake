@@ -130,12 +130,14 @@ int hb_convert_to_string( const char *filename, char **source, GPUEnv *gpu_info,
         *source = (char*)malloc( sizeof(char) * file_size + 1 );
         if( *source == (char*)NULL )
         {
+            fclose( file );
             return(0);
         }
         result = fread( *source, 1, file_size, file );
         if( result != file_size )
         {
             free( *source );
+            fclose( file );
             return(0);
         }
         (*source)[file_size] = '\0';
