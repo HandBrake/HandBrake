@@ -115,6 +115,35 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 char *video_option_tooltip = NULL;
 
+G_MODULE_EXPORT void
+video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+
+    int presetIndex = ghb_dict_get_int(ud->settings, "VideoPresetSlider");
+    const char * const *video_presets;
+    const char *preset = "medium";
+    int count;
+
+    int encoder = ghb_get_video_encoder(ud->settings);
+    video_presets = hb_video_encoder_get_presets(encoder);
+    if (video_presets != NULL)
+    {
+        for (count = 0; video_presets[count]; count++);
+        if (presetIndex < count)
+        {
+            preset = video_presets[presetIndex];
+        }
+    }
+
+    ghb_set_video_preset(ud->settings, encoder, preset);
+    GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
+    ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
+
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+}
+
 void
 ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
 {
@@ -127,35 +156,6 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
 
     int encoder = ghb_get_video_encoder(ud->settings);
-    const char * const * video_presets;
-
-    video_presets = hb_video_encoder_get_presets(encoder);
-    if (video_presets != NULL)
-    {
-        const char *preset;
-
-        // Try to set same preset value
-        preset  = ghb_dict_get_string(ud->settings, "VideoPreset");
-        if (!ghb_set_video_preset(ud->settings, encoder, preset))
-        {
-            int presetIndex, count = 0;
-
-            // Try to set same preset index
-            presetIndex = ghb_dict_get_int(ud->settings, "VideoPresetSlider");
-            while (video_presets[count]) count++;
-            if (presetIndex < count)
-            {
-                preset = video_presets[presetIndex];
-                ghb_dict_set_string(ud->settings, "VideoPreset", preset);
-            }
-            else
-            {
-                // Try to set same preset "medium" preset
-                ghb_set_video_preset(ud->settings, encoder, "medium");
-            }
-        }
-    }
-
     if (!ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions") &&
         (encoder & HB_VCODEC_X264_MASK))
     {

@@ -3790,7 +3790,7 @@ settings will result in better quality or smaller files.</property>
                                     <property name="value_pos">right</property>
                                     <property name="hexpand">True</property>
                                     <signal name="format-value" handler="format_video_preset_cb" swapped="no"/>
-                                    <signal name="value-changed" handler="video_setting_changed_cb" swapped="no"/>
+                                    <signal name="value-changed" handler="video_preset_slider_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="top_attach">0</property>
