@@ -1,9 +1,5 @@
 __deps__ := FREETYPE
 
-ifneq ($(BUILD.system),darwin)
-    __deps__ += FONTCONFIG
-endif
-
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
@@ -17,14 +13,10 @@ HARFBUZZ.CONFIGURE.extra = \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
 
-ifneq ($(BUILD.system),darwin)
-	# Tell configure where to find our version of fontconfig
-	HARFBUZZ.CONFIGURE.extra += \
-	    --with-fontconfig=yes \
-	    FONTCONFIG_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfontconfig" \
-	    FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
-else
-    HARFBUZZ.CONFIGURE.extra += --with-coretext=yes --with-fontconfig=no --with-glib=no
+HARFBUZZ.CONFIGURE.extra += --with-fontconfig=no
+
+ifeq ($(BUILD.system),darwin)
+    HARFBUZZ.CONFIGURE.extra += --with-coretext=yes --with-glib=no
 endif
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
