@@ -246,13 +246,14 @@ int hb_write_binary_to_file( const char* fileName, const char* birary, size_t nu
  */
 int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_name )
 {
-    int i = 0;
-    cl_int status;
-    cl_uint numDevices;
-    size_t *binarySizes;
-    cl_device_id *devices;
-    char **binaries;
-    char *str = NULL;
+    int         i               = 0;
+    cl_int      status          = CL_SUCCESS;
+    cl_uint     numDevices      = 0;
+    size_t      *binarySizes    = NULL;
+    cl_device_id *devices       = NULL;
+    char        **binaries      = NULL;
+    char        *str            = NULL;
+    int         ret_value       = 1;
 
     if (hb_ocl == NULL)
     {
@@ -272,7 +273,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     if( devices == NULL )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: no device found");
-        return 0;
+        ret_value = 0;
+        goto to_exit;
     }
 
     /* grab the handles to all of the devices in the program. */
@@ -282,7 +284,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_DEVICES failed");
-        return 0;
+        ret_value = 0;
+        goto to_exit;
     }
 
     /* figure out the sizes of each of the binaries. */
@@ -294,7 +297,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARY_SIZES failed");
-        return 0;
+        ret_value = 0;
+        goto to_exit;
     }
 
     /* copy over all of the generated binaries. */
@@ -302,7 +306,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     if( binaries == NULL )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: malloc for binaries failed");
-        return 0;
+        ret_value = 0;
+        goto to_exit;
     }
 
     for( i = 0; i < numDevices; i++ )
@@ -313,7 +318,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
             if( binaries[i] == NULL )
             {
                 hb_log("OpenCL: hb_generat_bin_from_kernel_source: malloc for binaries[%d] failed", i);
-                return 0;
+                ret_value = 0;
+                goto to_exit;
             }
         }
         else
@@ -328,7 +334,8 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     if( status != CL_SUCCESS )
     {
         hb_log("OpenCL: hb_generat_bin_from_kernel_source: clGetProgramInfo for CL_PROGRAM_BINARIES failed");
-        return 0;
+        ret_value = 0;
+        goto to_exit;
     }
 
     /* dump out each binary into its own separate file. */
@@ -351,11 +358,13 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
             if (!hb_write_binary_to_file(fileName, binaries[i], binarySizes[i]))
             {
                 hb_log("OpenCL: hb_generat_bin_from_kernel_source: unable to write kernel, writing to temporary directory instead.");
-                return 0;
+                ret_value = 0;
+                goto to_exit;
             }
         }
     }
 
+to_exit:
     // Release all resouces and memory
     for( i = 0; i < numDevices; i++ )
     {
@@ -383,7 +392,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
         free( devices );
         devices = NULL;
     }
-    return 1;
+    return ret_value;
 }
 
 
