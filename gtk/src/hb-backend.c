@@ -2352,8 +2352,7 @@ subtitle_track_opts_set(signal_user_data_t *ud, const gchar *name,
         char idx[4];
 
         subtitle = hb_list_item(title->list_subtitle, ii);
-        opt = g_strdup_printf("%d - %s (%s)", ii+1, subtitle->lang,
-                              hb_subsource_name(subtitle->source));
+        opt = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
         snprintf(idx, 4, "%d", ii);
 
         gtk_list_store_append(store, &iter);

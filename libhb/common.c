@@ -4686,10 +4686,10 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
 
 int hb_srt_add( const hb_job_t * job,
                 const hb_subtitle_config_t * subtitlecfg,
-                const char *lang )
+                const char *lang_code )
 {
     hb_subtitle_t *subtitle;
-    iso639_lang_t *language = NULL;
+    iso639_lang_t *lang = NULL;
 
     subtitle = calloc( 1, sizeof( *subtitle ) );
     if (subtitle == NULL)
@@ -4703,14 +4703,16 @@ int hb_srt_add( const hb_job_t * job,
     subtitle->source = SRTSUB;
     subtitle->codec = WORK_DECSRTSUB;
 
-    language = lang_for_code2(lang);
-    if (language == NULL)
+    lang = lang_for_code2(lang_code);
+    if (lang == NULL)
     {
-        hb_log("hb_srt_add: unknown language code (%s)", lang);
-        language = lang_for_code2("und");
+        hb_log("hb_srt_add: unknown language code (%s)", lang_code);
+        lang = lang_for_code2("und");
     }
-    strcpy(subtitle->lang, language->eng_name);
-    strcpy(subtitle->iso639_2, language->iso639_2);
+    snprintf(subtitle->lang, sizeof(subtitle->lang), "%s [%s]",
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+             hb_subsource_name(subtitle->source));
+    strcpy(subtitle->iso639_2, lang->iso639_2);
 
     subtitle->config = *subtitlecfg;
     hb_list_add(job->list_subtitle, subtitle);

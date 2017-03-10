@@ -134,7 +134,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? "Foreign Audio Scan" : string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.TypeString);
+            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? "Foreign Audio Scan" : string.Format("{0} {1}", this.TrackNumber, this.Language);
         }
 
         /// <summary>

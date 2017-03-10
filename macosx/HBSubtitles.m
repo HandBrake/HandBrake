@@ -60,31 +60,10 @@ extern NSString *keySubTrackSrtFileURLBookmark;
 
         NSMutableArray *sourceTracks = [job.title.subtitlesTracks mutableCopy];
 
-        NSMutableSet<NSString *> *forcedSourceNamesArray = [NSMutableSet set];
         int foreignAudioType = VOBSUB;
-        for (NSDictionary *dict in _sourceTracks)
-        {
-            enum subsource source = [dict[keySubTrackType] intValue];
-            NSString *name = @(hb_subsource_name(source));
-            // if the subtitle track can be forced, add its source name to the array
-            if (hb_subtitle_can_force(source) && name.length)
-            {
-                [forcedSourceNamesArray addObject:name];
-            }
-        }
 
         // now set the name of the Foreign Audio Search track
-        NSMutableString *foreignAudioSearchTrackName = [@"Foreign Audio Search (Bitmap)" mutableCopy];
-        if (forcedSourceNamesArray.count)
-        {
-            [foreignAudioSearchTrackName appendFormat:@" ("];
-            for (NSString *name in forcedSourceNamesArray)
-            {
-                [foreignAudioSearchTrackName appendFormat:@"%@, ", name];
-            }
-            [foreignAudioSearchTrackName deleteCharactersInRange:NSMakeRange(foreignAudioSearchTrackName.length - 2, 2)];
-            [foreignAudioSearchTrackName appendFormat:@")"];
-        }
+        NSMutableString *foreignAudioSearchTrackName = [@"Foreign Audio Search" mutableCopy];
 
         // Add the none and foreign track to the source array
         NSDictionary *none = @{  keySubTrackName: NSLocalizedString(@"None", nil)};

@@ -1964,11 +1964,6 @@ static void pes_add_subtitle_to_title(
 
     subtitle->track = idx;
     subtitle->id = id;
-    lang = lang_for_code( pes->lang_code );
-    snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
-              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
-    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
-              lang->iso639_2);
 
     switch ( pes->codec )
     {
@@ -1988,6 +1983,12 @@ static void pes_add_subtitle_to_title(
             free( subtitle );
             return;
     }
+    lang = lang_for_code( pes->lang_code );
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+             hb_subsource_name(subtitle->source));
+    snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+             lang->iso639_2);
     subtitle->reg_desc = stream->reg_desc;
     subtitle->stream_type = pes->stream_type;
     subtitle->substream_type = pes->stream_id_ext;
@@ -5354,12 +5355,14 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     }
 
     AVDictionaryEntry *tag;
-    iso639_lang_t *language;
+    iso639_lang_t *lang;
 
     tag = av_dict_get( st->metadata, "language", NULL, 0 );
-    language = lang_for_code2( tag ? tag->value : "und" );
-    strcpy( subtitle->lang, language->eng_name );
-    strncpy( subtitle->iso639_2, language->iso639_2, 4 );
+    lang = lang_for_code2( tag ? tag->value : "und" );
+    snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+             hb_subsource_name(subtitle->source));
+    strncpy(subtitle->iso639_2, lang->iso639_2, 4);
 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
@@ -5375,7 +5378,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
         subtitle->config.default_track = 1;
     }
 
-    subtitle->track = id;
+    subtitle->track = hb_list_count(title->list_subtitle);
     hb_list_add(title->list_subtitle, subtitle);
 }
 

@@ -40,6 +40,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "lang.h"
 #include "audio_resample.h"
 
 #ifdef USE_QSV
@@ -1226,29 +1227,37 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
                 }
                 if (subtitle == NULL)
                 {
-                    subtitle = calloc(sizeof( hb_subtitle_t ), 1);
+                    iso639_lang_t * lang;
+                    hb_audio_t    * audio;
+
+                    subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
                     subtitle->track = hb_list_count(pv->title->list_subtitle);
-                    subtitle->id = 0;
-                    subtitle->format = TEXTSUB;
-                    subtitle->source = CC608SUB;
+                    subtitle->id          = 0;
+                    subtitle->format      = TEXTSUB;
+                    subtitle->source      = CC608SUB;
                     subtitle->config.dest = PASSTHRUSUB;
-                    subtitle->codec = WORK_DECCC608;
-                    subtitle->type = 5;
-                    snprintf(subtitle->lang, sizeof( subtitle->lang ),
-                             "Closed Captions");
+                    subtitle->codec       = WORK_DECCC608;
+                    subtitle->type        = 5;
+
                     /*
                      * The language of the subtitles will be the same as the
                      * first audio track, i.e. the same as the video.
                      */
-                    hb_audio_t *audio = hb_list_item(pv->title->list_audio, 0);
+                    audio = hb_list_item(pv->title->list_audio, 0);
                     if (audio != NULL)
                     {
-                        snprintf(subtitle->iso639_2, sizeof(subtitle->iso639_2),
-                                 "%s", audio->config.lang.iso639_2);
+                        lang = lang_for_code2( audio->config.lang.iso639_2 );
                     } else {
-                        snprintf(subtitle->iso639_2, sizeof(subtitle->iso639_2),
-                                 "und");
+                        lang = lang_for_code2( "und" );
                     }
+                    snprintf(subtitle->lang, sizeof(subtitle->lang),
+                             "%s, Closed Caption [%s]",
+                             strlen(lang->native_name) ? lang->native_name :
+                                                         lang->eng_name,
+                             hb_subsource_name(subtitle->source));
+                    snprintf(subtitle->iso639_2, sizeof(subtitle->iso639_2),
+                             "%s", lang->iso639_2);
+
                     hb_list_add(pv->title->list_subtitle, subtitle);
                 }
             }

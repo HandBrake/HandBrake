@@ -655,11 +655,7 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
     {
         hb_subtitle_t *subtitle;
         subtitle = hb_list_item( title->list_subtitle, i );
-        fprintf( stderr, "    + %d, %s (iso639-2: %s) (%s)(%s)\n",
-                 i + 1, subtitle->lang,
-                 subtitle->iso639_2,
-                 (subtitle->format == TEXTSUB) ? "Text" : "Bitmap",
-                 hb_subsource_name(subtitle->source));
+        fprintf(stderr, "    + %d, %s\n", i + 1, subtitle->lang);
     }
 
     if(title->detected_interlacing)

@@ -386,9 +386,7 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
             subtitle = ghb_get_subtitle_info(title, track);
             if (subtitle != NULL)
             {
-                desc = g_strdup_printf("%d - %s (%s)", track + 1,
-                                       subtitle->lang,
-                                       hb_subsource_name(subtitle->source));
+                desc = g_strdup_printf("%d - %s", track + 1, subtitle->lang);
             }
         }
     }
