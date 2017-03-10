@@ -303,7 +303,7 @@ msgstr "Выключение компьютера"
 msgid "Putting computer to sleep"
 msgstr "Переход в спящий режим"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Очередь"
 
 msgid "Bottom"

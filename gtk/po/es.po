@@ -302,7 +302,7 @@ msgstr "Apagando la computadora"
 msgid "Putting computer to sleep"
 msgstr "Poniendo la computadora a dormir"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Saliendo de HandBrake"
 
 msgid "Bottom"

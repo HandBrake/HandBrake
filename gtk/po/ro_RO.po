@@ -301,7 +301,7 @@ msgstr "Închide computerul"
 msgid "Putting computer to sleep"
 msgstr "Pune computerul în adormire"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Termină Handbrake"
 
 msgid "Bottom"

@@ -302,7 +302,7 @@ msgstr "Der Computer wird heruntergefahren"
 msgid "Putting computer to sleep"
 msgstr "Computer wird in den Ruhezustand versetzt"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Handbrake wird beendet"
 
 msgid "Bottom"

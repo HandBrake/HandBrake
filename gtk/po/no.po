@@ -301,7 +301,7 @@ msgstr "Slår av datamaskinen"
 msgid "Putting computer to sleep"
 msgstr "Setter datamaskinen i dvale"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Avslutter Handbrake"
 
 msgid "Bottom"

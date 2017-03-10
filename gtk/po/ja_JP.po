@@ -300,7 +300,7 @@ msgstr "コンピューターをシャットダウンしています"
 msgid "Putting computer to sleep"
 msgstr "コンピューターをスリープしています"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "HandBrake を終了しています"
 
 msgid "Bottom"

@@ -324,7 +324,7 @@ msgstr "关闭计算机"
 msgid "Putting computer to sleep"
 msgstr "将计算机转入休眠"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "退出 HandBrake"
 
 msgid "Bottom"

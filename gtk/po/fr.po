@@ -306,7 +306,7 @@ msgstr "Eteindre l'ordinateur"
 msgid "Putting computer to sleep"
 msgstr "Mettre l'ordinateur en veille"
 
-msgid "Quiting Handbrake"
+msgid "Quitting Handbrake"
 msgstr "Quitter Handbrake"
 
 msgid "Bottom"
