@@ -1,0 +1,11 @@
+diff -ur libvpx-1.6.1.orig/vp8/common/threading.h libvpx-1.6.1/vp8/common/threading.h
+--- libvpx-1.6.1.orig/vp8/common/threading.h	2017-01-12 13:27:27.000000000 -0700
++++ libvpx-1.6.1/vp8/common/threading.h	2017-03-11 13:27:10.173664615 -0700
+@@ -73,6 +73,7 @@
+ #include <unistd.h>
+ 
+ #else
++#include <sys/types.h>
+ #include <semaphore.h>
+ #endif
+ 
