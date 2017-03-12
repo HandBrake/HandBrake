@@ -94,7 +94,7 @@ define import.CONTRIB.defs
 
     $(1).CONFIGURE.args.dir    = cd $$(1);
     $(1).CONFIGURE.args.host   = --host=$$(1)
-    $(1).CONFIGURE.args.build  = --build=x86_64-unknown-linux-gnu
+    $(1).CONFIGURE.args.build  = --build=$$(1)
     $(1).CONFIGURE.args.prefix = --prefix=$$(1)
 
     $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @build @prefix !deps !shared !static !extra

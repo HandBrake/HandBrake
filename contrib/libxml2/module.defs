@@ -15,3 +15,7 @@ LIBXML2.EXTRACT.tarbase = libxml2-2.7.7
 # in the MinGW environment.
 LIBXML2.CONFIGURE.extra = \
     --without-python --without-threads
+
+ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+    LIBXML2.CONFIGURE.args.build = --build=x86_64-unknown-linux-gnu
+endif
