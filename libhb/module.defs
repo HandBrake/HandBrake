@@ -1,7 +1,11 @@
-__deps__ := A52DEC BZIP2 LIBVPX FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
+__deps__ := A52DEC BZIP2 LIBVPX FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS
+
+ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
+    __deps__ += FONTCONFIG
+endif
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
@@ -122,7 +126,7 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avcodec avformat avfilter avutil avresample dvdnav dvdread fontconfig \
+        ass avcodec avformat avfilter avutil avresample dvdnav dvdread \
         freetype mp3lame samplerate swscale vpx theora vorbis vorbisenc ogg \
         x264 xml2 bluray jansson harfbuzz opus, \
         $(CONTRIB.build/)lib/lib$(n).a )

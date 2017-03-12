@@ -19,7 +19,7 @@ TEST.GCC.l = \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
         bluray freetype xml2 bz2 z jansson harfbuzz opus
 
-ifneq ($(BUILD.system),darwin)
+ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
     TEST.GCC.l += fontconfig
 endif
 

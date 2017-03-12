@@ -1,6 +1,6 @@
 __deps__ := YASM FREETYPE FRIBIDI HARFBUZZ
 
-ifneq ($(BUILD.system),darwin)
+ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
 endif
 
@@ -17,7 +17,7 @@ LIBASS.CONFIGURE.extra = \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
 
-ifneq ($(BUILD.system),darwin)
+ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
     # Tell configure where to find our version of fontconfig
     LIBASS.CONFIGURE.extra += \
         --enable-fontconfig \
@@ -38,8 +38,4 @@ ifneq (1,$(BUILD.cross))
         LIBASS.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
         LIBASS.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
     endif
-endif
-
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    LIBASS.CONFIGURE.extra += --disable-directwrite
 endif
