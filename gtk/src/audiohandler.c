@@ -1155,8 +1155,9 @@ audio_passthru_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting(ud->settings, widget);
     copy_mask = ghb_create_copy_mask(ud->settings);
+    ghb_dict_set(ud->settings, "AudioCopyMask", copy_mask);
     audio = ghb_get_job_audio_settings(ud->settings);
-    ghb_dict_set(audio, "CopyMask", copy_mask);
+    ghb_dict_set(audio, "CopyMask", ghb_value_dup(copy_mask));
     ghb_clear_presets_selection(ud);
 }
 
