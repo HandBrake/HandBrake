@@ -12,6 +12,11 @@ ifeq (1,$(BUILD.cross))
     endif
 
     ifeq (msys,$(HOST.system))
-        LIBICONV.CONFIGURE.args.build = --build=x86_64-unknown-linux-gnu
+        ifeq (x86_64,$(BUILD.machine))
+            LIBICONV.CONFIGURE.args.build = --build=x86_64-unknown-linux-gnu
+        endif
+        ifeq (i686,$(BUILD.machine))
+            LIBICONV.CONFIGURE.args.build = --build=i686-unknown-linux-gnu
+        endif
     endif
 endif
