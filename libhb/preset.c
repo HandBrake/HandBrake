@@ -500,7 +500,7 @@ static int sanitize_audio_codec(int in_codec, int out_codec,
     const hb_encoder_t *encoder = NULL;
     while ((encoder = hb_audio_encoder_get_next(encoder)) != NULL)
     {
-        if (encoder->codec == codec &&
+        if (encoder->codec == codec && codec != HB_ACODEC_NONE &&
             !(encoder->muxers & mux))
         {
             codec = hb_audio_encoder_get_default(mux);
@@ -630,7 +630,6 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             hb_dict_t *used = source_audio_track_used(track_dict, ii);
             if (hb_value_get_bool(hb_dict_get(used, key)))
                 continue;
-            hb_dict_set(used, key, hb_value_bool(1));
 
             // Create new audio output track settings
             hb_dict_t *audio_dict = hb_dict_init();
@@ -657,6 +656,11 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             aconfig = hb_list_audio_config_item(title->list_audio, track);
             out_codec = sanitize_audio_codec(aconfig->in.codec, out_codec,
                                              copy_mask, fallback, mux);
+            if (out_codec == HB_ACODEC_NONE || HB_ACODEC_INVALID)
+            {
+                hb_value_free(&audio_dict);
+                continue;
+            }
             hb_dict_set(audio_dict, "Track", hb_value_int(track));
             hb_dict_set(audio_dict, "Encoder", hb_value_string(
                         hb_audio_encoder_get_short_name(out_codec)));
@@ -730,6 +734,7 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             hb_sanitize_audio_settings(title,  audio_dict);
 
             hb_value_array_append(list, audio_dict);
+            hb_dict_set(used, key, hb_value_bool(1));
         }
         if (behavior == 2)
             track = find_audio_track(title, lang, track + 1, behavior);

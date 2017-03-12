@@ -1689,6 +1689,31 @@ ghb_audio_encoder_opts_set_with_mask(
     }
 }
 
+void
+ghb_audio_encoder_opts_add_none(GtkComboBox *combo)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+
+    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+                       0, "<small>None</small>",
+                       1, TRUE,
+                       2, "none",
+                       3, (gdouble)HB_ACODEC_INVALID,
+                       -1);
+}
+
+static void
+audio_encoder_opts_add_none(
+    GtkBuilder *builder,
+    const gchar *name)
+{
+    GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+    ghb_audio_encoder_opts_add_none(combo);
+}
+
 const hb_encoder_t*
 ghb_lookup_audio_encoder(const char *name)
 {
@@ -1787,6 +1812,7 @@ acodec_fallback_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)data; // Silence "unused variable" warning
 
     audio_encoder_opts_set_with_mask(ud->builder, name, ~0, HB_ACODEC_PASS_FLAG);
+    audio_encoder_opts_add_none(ud->builder, name);
 }
 
 void

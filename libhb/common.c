@@ -309,6 +309,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "AAC",                "aac",        NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC",             "haac",       NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC_HE,     },
     // actual encoders
+    { { "None",               "none",       "None",                        HB_ACODEC_NONE,        0,                               }, NULL, 1, HB_GID_NONE,              },
     { { "AAC (CoreAudio)",    "ca_aac",     "AAC (Apple AudioToolbox)",    HB_ACODEC_CA_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    "HE-AAC (Apple AudioToolbox)", HB_ACODEC_CA_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC (FDK)",          "fdk_aac",    "AAC (libfdk_aac)",            HB_ACODEC_FDK_AAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
@@ -372,6 +373,7 @@ static int hb_audio_encoder_is_enabled(int encoder)
         // the following encoders are always enabled
         case HB_ACODEC_LAME:
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_NONE:
             return 1;
 
         default:
@@ -2291,7 +2293,7 @@ fail:
 
 const char* hb_audio_encoder_get_short_name(int encoder)
 {
-    if (!(encoder & HB_ACODEC_ANY))
+    if (!(encoder & HB_ACODEC_ANY) && encoder != HB_ACODEC_NONE)
         goto fail;
 
     const hb_encoder_t *audio_encoder = NULL;
@@ -2522,7 +2524,7 @@ int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
         else if (audio_encoder->codec == fallback)
         {
             i++;
-            if (!(audio_encoder->muxers & muxer))
+            if (!(audio_encoder->muxers & muxer) && fallback != HB_ACODEC_NONE)
                 fallback = hb_audio_encoder_get_default(muxer);
         }
         if (i > 1)
