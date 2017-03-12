@@ -3,34 +3,34 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# fri <pavelfric@seznam.cz>, 2016
+# Dušan Kazik <prescott66@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-28 17:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: fri <pavelfric@seznam.cz>, 2016\n"
-"Language-Team: Czech (https://www.transifex.com/victorr2007/teams/8026/cs/)\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>, 2016\n"
+"Language-Team: Slovak (https://www.transifex.com/victorr2007/teams/8026/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
+"Language: sk\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 msgid "Quality: "
-msgstr "Jakost:"
+msgstr "Kvalita:"
 
 #, c-format
 msgid "Bitrate: %dkbps"
-msgstr "Datový tok: %dkb/s"
+msgstr "Bitový tok: %dkbps"
 
 #, c-format
 msgid "Bitrate: %.4gkbps"
-msgstr "Datový tok: %.4gkb/s"
+msgstr "Bitový tok: %.4gkbps"
 
 msgid "<small>Passthrough</small>"
-msgstr "<small>Průchod</small>"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -39,10 +39,6 @@ msgid ""
 "DRC: %s\n"
 "Track Name: %s"
 msgstr ""
-"%s\n"
-"Zesílení: %s\n"
-"DRC: %s\n"
-"Název stopy: %s"
 
 #, c-format
 msgid ""
@@ -50,48 +46,43 @@ msgid ""
 "Gain: %s\n"
 "DRC: %s"
 msgstr ""
-"%s\n"
-"Zesílení: %s\n"
-"DRC: %s"
 
 msgid "Add"
-msgstr "Přidat"
+msgstr "Pridať"
 
 msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
-"Přidat kodér zvuku.\n"
-"Každá vybraná zdrojová stopa bude zakódována pomocí všech vybraných kodérů."
+"Pridať dekóder zvuku.\n"
+"Každá vybraná zdrojová stopa bude dekódovaná všetkými vybranými dekódermi."
 
 msgid "Set the audio codec to encode this track with."
-msgstr "Nastavit zvukový kodek, kterým se má tato stopa zakódovat."
+msgstr "Nastaviť zvukový kodek, ktorým sa má dekódovať táto stopa."
 
 msgid "Set the bitrate to encode this track with."
-msgstr "Nastavit datový tok, ve kterém se má tato stopa zakódovat."
+msgstr "Nastaviť bitový tok, ktorým sa má dekódovať táto stopa."
 
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
 msgstr ""
 "<b>Kvalita zvuku:</b>\n"
-"U výstupních kodeků, jež to podporují upravit jakost výstupu."
+"Upravte kvalitu výstupu, pre podporované dekódery."
 
 msgid "Set the mixdown of the output audio track."
-msgstr "Nastavit finální mixáž výstupní zvukové stopy."
+msgstr ""
 
 msgid "Set the sample rate of the output audio track."
-msgstr "Nastavit vzorkovací kmitočet výstupní zvukové stopy."
+msgstr ""
 
 msgid ""
 "<b>Audio Gain:</b>\n"
 "Adjust the amplification or attenuation of the output audio track."
 msgstr ""
-"<b>Zesílení zvuku:</b>\n"
-"Upravit zesílení nebo zeslabení výstupní zvukové stopy."
 
 msgid "0dB"
-msgstr "0 dB"
+msgstr "0dB"
 
 msgid "%ddB"
 msgstr "%ddB"
@@ -110,35 +101,27 @@ msgid ""
 "to 'compress' the range by making loud sounds\n"
 "softer and soft sounds louder.\n"
 msgstr ""
-"<b>Komprese dynamického rozsahu:</b>\n"
-"Upravit dynamický rozsah výstupní zvukové stopy.\n"
-"U zdrojového zvuku, který má široký dynamický rozsah\n"
-"(velmi hlasité a velmi slabé sekvence), vám komprese\n"
-"dynamického rozsahu (DRC - Dynamic Range Compression)\n"
-"'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé\n"
-"oblasti hlasitějšími.\n"
 
 msgid "Remove this audio encoder"
-msgstr "Odstranit tento kodér zvuku"
+msgstr "Odstrániť tento dekóder zvuku"
 
 msgid "Closing HandBrake will terminate encoding.\n"
-msgstr "Zavření programu HandBrake povede k ukončení kódování.\n"
+msgstr "Zatvorením programu HandBrake sa preruší dekódovanie.\n"
 
 msgid "No Title Found"
-msgstr "Nenalezen žádný název"
+msgstr "Nenašiel sa žiadny titul"
 
 msgid "none"
-msgstr "Žádný"
+msgstr ""
 
 msgid "Not Selected"
-msgstr "Nevybráno"
+msgstr "Nevybrané"
 
 msgid "zerolatency x264 tune selected, forcing constant framerate"
 msgstr ""
-"vybráno x264 s nulovou prodlevou, vynucuje se stálá rychlost snímkování"
 
 msgid "Scanning ..."
-msgstr "Prohledává se..."
+msgstr "Prehľadáva sa..."
 
 msgid ""
 "Stop\n"
@@ -146,25 +129,25 @@ msgid ""
 msgstr ""
 
 msgid "Stop Scan"
-msgstr "Zastavit prohledávání"
+msgstr "Zastaviť prehľadávanie"
 
 msgid "On"
-msgstr "Zapnuto"
+msgstr "Zapnuté"
 
 msgid "Strict"
-msgstr "Přísný"
+msgstr ""
 
 msgid "Loose"
-msgstr "Volně"
+msgstr ""
 
 msgid "Custom"
-msgstr "Vlastní"
+msgstr ""
 
 msgid "Unknown"
-msgstr "Neznámý"
+msgstr ""
 
 msgid "auto"
-msgstr "Automaticky"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -174,180 +157,180 @@ msgid ""
 msgstr ""
 "%s\n"
 "\n"
-"%s za %d sekund..."
+"%s o %d sekúnd..."
 
 #, c-format
 msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%s Váš film bude ztracen, pokud nebudete pokračovat v kódování."
+msgstr "%sAk nebudete pokračovať v dekódovaní, váš film bude stratený."
 
 msgid "Cancel Current and Stop"
-msgstr "Zrušit nynější a zastavit"
+msgstr "Zrušiť aktuálne a zastaviť"
 
 msgid "Cancel Current, Start Next"
-msgstr "Zrušit nynější, začít další"
+msgstr "Zrušiť aktuálne a spustiť ďalšie"
 
 msgid "Finish Current, then Stop"
-msgstr "Dokončit nynější, potom zastavit"
+msgstr "Dokončiť aktuálne a zastaviť"
 
 msgid "Continue Encoding"
-msgstr "Pokračovat v kódování"
+msgstr "Pokračovať v dekódovaní"
 
 msgid "Custom "
-msgstr "Vlastní"
+msgstr ""
 
 msgid "Modified "
-msgstr "Změněno "
+msgstr ""
 
 #, c-format
 msgid "Handbrake Version: %s (%d)\n"
-msgstr "Verze Handbrake: %s (%d)\n"
+msgstr "Verzia programu Handbrake: %s (%d)\n"
 
 #, c-format
 msgid "%d encode(s) pending"
-msgstr "%d kódování čeká na vyřízení"
+msgstr "Čakajúce dekódovania: %d"
 
 #, c-format
 msgid "job %d of %d, "
-msgstr "Úkol %d z %d, "
+msgstr "úloha %d z %d, "
 
 #, c-format
 msgid "pass %d (subtitle scan) of %d, "
-msgstr "Průchod %d (hledání titulků) z %d, "
+msgstr ""
 
 #, c-format
 msgid "pass %d of %d, "
-msgstr "Průchod %d z %d, "
+msgstr "prechod %d z %d, "
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr "Kódování: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr ""
+"Dekóduje sa: %s%s%.2f %% (%.2f sn./s, priemer %.2f sn./s, zostáva "
+"%02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr "Kódování: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Dekóduje sa: %s%s%.2f %% (Zostáva %02dh%02dm%02ds)"
 
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr "Kódování: %s%s%.2f %%"
+msgstr "Dekóduje sa: %s%s%.2f %%"
 
 msgid "Searching for start time, "
-msgstr "Hledá se čas začátku, "
+msgstr ""
 
 msgid "Scanning..."
-msgstr "Prohledává se..."
+msgstr "Prehľadáva sa..."
 
 #, c-format
 msgid "Scanning title %d of %d..."
-msgstr "Prohledává se název %d z %d..."
+msgstr "Prehľadáva sa titul %d z %d..."
 
 #, c-format
 msgid "Scanning title %d of %d preview %d..."
-msgstr "Prohledává se název %d z %d náhled  %d..."
+msgstr ""
 
 msgid "Source"
 msgstr "Zdroj"
 
 msgid "Choose Video Source"
-msgstr "Vybrat zdroj obrazu"
+msgstr ""
 
 msgid "Paused"
-msgstr "Pozastaveno"
+msgstr "Pozastavené"
 
 msgid "Encode Done!"
-msgstr "Kódování hotovo!"
+msgstr "Dekódovanie dokončené!"
 
 msgid "Encode Canceled."
-msgstr "Kódování zrušeno."
+msgstr "Dekódovanie zrušené."
 
 msgid "Encode Failed."
-msgstr "Kódování selhalo"
+msgstr "Dekódovanie zlyhalo."
 
 msgid "Muxing: This may take a while..."
-msgstr "Muxing: Může to chvíli trvat..."
+msgstr ""
 
 msgid "Scan this DVD source"
-msgstr "Prohledat tento DVD zdroj"
+msgstr ""
 
 msgid "AutoScan"
-msgstr "Automatické prohledání"
+msgstr ""
 
 msgid "Suspend"
-msgstr "Odložit"
+msgstr "Uspať"
 
 #, c-format
 msgid "Suspend failed: %s"
-msgstr "Nepodařilo se odložit: %s"
+msgstr "Uspanie zlyhalo: %s"
 
 msgid "Suspend failed"
-msgstr "Nepodařilo se odložit"
+msgstr "Uspanie zlyhalo"
 
 msgid "Shutdown"
-msgstr "Vypnout"
+msgstr "Vypnúť"
 
 #, c-format
 msgid "Shutdown failed: %s"
-msgstr "Nepodařilo se vypnout: %s"
+msgstr "Vypnutie zlyhalo: %s"
 
 msgid "Shutdown failed"
-msgstr "Nepodařilo se vypnout"
+msgstr "Vypnutie zlyhalo"
 
 msgid "Encoding"
-msgstr "Kódování"
+msgstr "Dekóduje sa"
 
 #, c-format
 msgid "press %d %d"
-msgstr "Stisknutí %d %d"
+msgstr ""
 
 #, c-format
 msgid ""
 "Invalid Settings:\n"
 "%s"
-msgstr ""
-"Neplatné nastavení:\n"
-"%s"
+msgstr "Neplatné nastavenia: %s"
 
 #, c-format
 msgid "%s: %.4g (Warning: lossless)"
-msgstr "%s: %.4g (Varování: bezztrátové"
+msgstr "%s: %.4g (Upozornenie: bezstratové)"
 
 #, c-format
 msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr "HandBrake %s/%s je nyní dostupný (máte %s/%d)."
+msgstr "Je dostupný program HandBrake %s/%s (vaša verzia je %s/%d)."
 
 msgid "Encode Complete"
-msgstr "Kódování dokončeno"
+msgstr "Dekódovanie dokončené"
 
 msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr "Dejte si koktejl. Vaše řada HandBrake je hotová!"
+msgstr ""
 
 msgid "Your encode is complete."
-msgstr "Kódování je dokončeno."
+msgstr "Vaše dekódovanie je dokončené."
 
 msgid "Shutting down the computer"
-msgstr "Vypíná se počítač"
+msgstr "Vypína sa počítač"
 
 msgid "Putting computer to sleep"
-msgstr "Uspává se počítač"
+msgstr "Uspáva sa počítač"
 
 msgid "Quiting Handbrake"
-msgstr "Ukončuje se Handbrake"
+msgstr "Ukončuje sa program Handbrake"
 
 msgid "Bottom"
-msgstr "Dole"
+msgstr ""
 
 #, c-format
 msgid "open failed: %s\n"
-msgstr "Nepodařilo se otevřít: %s\n"
+msgstr "Otvorenie zlyhalo: %s\n"
 
 msgid "No key for dictionary item"
-msgstr "Žádná klávesa pro slovníkovou položku"
+msgstr ""
 
 msgid "Invalid container type. This shouldn't happen"
-msgstr "Neplatný typ kontejneru. To by se nemělo stát"
+msgstr ""
 
 #, c-format
 msgid "%s:missing a requried attribute"
-msgstr "%s: Chybí požadovaná vlastnost"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -359,16 +342,9 @@ msgid ""
 "    <in resource list>    Input resources file\n"
 "    <out resource plist>  Output resources plist file\n"
 msgstr ""
-"Použití: %s [-I <inc path>] <in resource list> <out resource plist>\n"
-"Přehled:\n"
-"    Vytvoří zdrojový plist ze zdrojového seznamu\n"
-"Volby:\n"
-"    I - zahrnout cestu pro hledání souborů\n"
-"    <in resource list>    Vstupní soubor se zdroji\n"
-"    <out resource plist>  Výstupní soubor se zdroji plist\n"
 
 msgid "language"
-msgstr "Jazyk"
+msgstr "jazyk"
 
 msgid "Language"
 msgstr "Jazyk"
@@ -378,35 +354,25 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
-"Jazyk, v němž je tento text, jako kód ISO. Pango jej může použít při "
-"vykreslování textu jako nápovědu. Pokud tomuto parametru nerozumíte, "
-"pravděpodobně jej nepotřebujete."
 
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"Upřednostňované místo pro výpustku (tři tečky) v řetězci, pokud vykreslovač "
-"buňky nemá dostatek místa pro zobrazení celého řetězce."
 
 msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
-"Jak řetězec zalomit do více řádků, pokud vykreslovač buňky nemá dostatek "
-"místa pro zobrazení celého řetězce."
 
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Vložit titulky do videa.\n"
-"\n"
-"Titulky budou součástí obrazového záznamu a nepůjde je zakázat."
 
 msgid "<b>Burned In</b>"
-msgstr "<b>Vloženo</b>"
+msgstr ""
 
 msgid ""
 "Set the default output subtitle track.\n"
@@ -417,16 +383,9 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
-"Nastavit výchozí výstupní stopu titulků.\n"
-"\n"
-"Většina přehrávačů automaticky zobrazí tuto\n"
-"stopu titulků vždycky, když je obraz přehráván.\n"
-"\n"
-"Toto je užitečné při vytváření \"vynucené\" stopy\n"
-"ve vašem výstupu."
 
 msgid "<b>Default</b>"
-msgstr "<b>Výchozí</b>"
+msgstr ""
 
 msgid ""
 "Use only subtitles that have been flagged\n"
@@ -436,15 +395,9 @@ msgid ""
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
 msgstr ""
-"Použít pouze titulky označené příznakem\n"
-"jako vynucené ve zdrojové stopě titulků\n"
-"\n"
-"\"Vynucené\" titulky se obvykle používají na zobrazení\n"
-"titulků během scén, kde někdo mluví cizím\n"
-"jazykem."
 
 msgid "<b>Forced Only</b>"
-msgstr "<b>Vynuceno pouze</b>"
+msgstr "<b>Iba nútené</b>"
 
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
@@ -454,18 +407,12 @@ msgid ""
 "does not coincide with the start of the video.\n"
 "This setting allows you to synchronize the files."
 msgstr ""
-"Přidat (nebo odečíst) posun (v milisekundách)\n"
-"na začátek stopy titulku SRT.\n"
-"\n"
-"Často se začátek vnějšího souboru SRT\n"
-"časově neshoduje se začátkem obrazu.\n"
-"Toto nastavení umožňuje soubory srovnat."
 
 msgid "<b>SRT Offset</b>"
 msgstr "<b>Posun SRT</b>"
 
 msgid "Off"
-msgstr "Vypnuto"
+msgstr "Vypnuté"
 
 msgid ""
 "The source subtitle track\n"
@@ -480,35 +427,23 @@ msgid ""
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
 msgstr ""
-"Stopa titulků zdroje\n"
-"\n"
-"Můžete vybrat kterékoli z titulků\n"
-"rozpoznaných ve vašem zdrojovém souboru.\n"
-"\n"
-"Navíc je tu ještě zvláštní volba pro stopu, kterou\n"
-"je hledání zvuku v cizím jazyce.  Tato volba přidá\n"
-"do zakódování další průchod, jenž vyhledá\n"
-"titulky, jež odpovídají výstupu v cizím\n"
-"jazyce.  Tuto volbu je nejlepší použít\n"
-"ve spojení s volbou \"Vynuceno\"."
 
 msgid "<b>Track</b>"
 msgstr "<b>Stopa</b>"
 
 msgid "About HandBrake"
-msgstr "O programu HandBrake"
+msgstr "O programe HandBrake"
 
 msgid ""
 "Copyright © 2008 - 2015 John Stebbins\n"
 "Copyright © 2004 - 2015, HandBrake Devs"
 msgstr ""
-"Autorské právo © 2008 - 2015 John Stebbins\n"
-"Autorské právo © 2004 - 2015, HandBrake Devs"
+"Autorské práva © 2008 - 2015 John Stebbins\n"
+"Autorské práva © 2004 - 2015, HandBrake Devs"
 
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"HandBrake je GPL licencovaný, multiplatformní, vícevláknový převaděč obrazu."
 
 msgid "http://handbrake.fr"
 msgstr "http://handbrake.fr"
@@ -520,29 +455,24 @@ msgid ""
 "\n"
 "You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake je svobodným programem; můžete jej rozdávat a/nebo upravovat za podmínek GNU General Public License (GPL), jak jsou zveřejněny Free Software Foundation; buď ve verzi 2 licence, nebo (podle své volby) v kterékoli pozdější verzi.\n"
-"\n"
-"HandBrake je šířen v naději, že bude užitečný, ale BEZ JAKÉKOLI ZÁRUKY; také bez předpokládané záruky PRODEJNOSTI nebo POUŽITELNOSTI PRO NĚJAKÝ URČITÝ ÚČEL: Více podrobností naleznete v GNU General Public License.\n"
-"\n"
-"Kopii GNU General Public License byste měl obdržet společně s Glade; a pokud ne, napište Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA."
 
 msgid "_Minimize/Maximize"
-msgstr "Zvě_tšit/Zmenšit"
+msgstr "_Minimalizovať/Maximalizovať"
 
 msgid "_Pause Queue"
-msgstr "P_ozastavit řadu"
+msgstr "_Pozastaviť frontu"
 
 msgid "_Quit"
-msgstr "_Ukončit"
+msgstr "_Ukončiť"
 
 msgid "_About"
-msgstr "O _programu"
+msgstr "_O programe"
 
 msgid "HandBrake"
 msgstr "HandBrake"
 
 msgid "_File"
-msgstr "_Soubor"
+msgstr "_Súbor"
 
 msgid "_Source"
 msgstr "_Zdroj"
@@ -551,132 +481,132 @@ msgid "Single _Title"
 msgstr "Jeden _titul"
 
 msgid "_Destination"
-msgstr "_Cíl"
+msgstr "_Cieľ"
 
 msgid "_Preferences"
-msgstr "_Nastavení"
+msgstr "_Nastavenia"
 
 msgid "_Queue"
-msgstr "Ř_ada"
+msgstr "_Fronta"
 
 msgid "_Add"
-msgstr "_Přidat"
+msgstr "_Pridať"
 
 msgid "Add _Multiple"
-msgstr "Přidat _více"
+msgstr ""
 
 msgid "_Start"
-msgstr "_Spustit"
+msgstr "_Spustiť"
 
 msgid "_Pause"
-msgstr "_Pozastavit"
+msgstr "_Pozastaviť"
 
 msgid "_View"
-msgstr "_Pohled"
+msgstr "_Zobraziť"
 
 msgid "HandBrake For _Dumbies"
-msgstr "HandBrake pro natvrdlé"
+msgstr ""
 
 msgid "_Show Presets"
-msgstr "_Ukázat přednastavení"
+msgstr "_Zobraziť predvoľby"
 
 msgid "_Preview"
-msgstr "_Náhled"
+msgstr "_Náhľad"
 
 msgid "_Activity Window"
-msgstr "Č_innost"
+msgstr "O_kno aktivity"
 
 msgid "Show _Queue"
-msgstr "Ukázat ř_adu"
+msgstr "Zobraziť _frontu"
 
 msgid "_Presets"
-msgstr "_Přednastavení"
+msgstr "_Predvoľby"
 
 msgid "_Save"
-msgstr "_Uložit"
+msgstr "_Uložiť"
 
 msgid "_Delete"
-msgstr "_Smazat"
+msgstr "O_dstrániť"
 
 msgid "_Make Default"
-msgstr "_Udělat výchozím"
+msgstr "Na_staviť ako predvolené"
 
 msgid "_New Folder"
-msgstr "_Nová složka"
+msgstr "_Nový priečinok"
 
 msgid "_Export"
-msgstr "_Vyvést"
+msgstr "_Exportovať"
 
 msgid "_Import"
-msgstr "_Zavést"
+msgstr "_Importovať"
 
 msgid "_Reload Built-in Presets"
-msgstr "_Nahrát vestavěná přednastavení znovu"
+msgstr ""
 
 msgid "_Update Built-in Presets"
-msgstr "_Obnovit vestavěná přednastavení"
+msgstr "_Aktualizovať vstavané predvoľby"
 
 msgid "_Help"
-msgstr "_Nápověda"
+msgstr "_Pomocník"
 
 msgid "_Guide"
-msgstr "Pří_ručka"
+msgstr "_Príručka"
 
 msgid "Start Encoding"
-msgstr "Spustit kódování"
+msgstr "Spustiť dekódovanie"
 
 msgid "Start"
-msgstr "Spustit"
+msgstr "Spustiť"
 
 msgid "Pause Encoding"
-msgstr "Pozastavit kódování"
+msgstr "Pozastaviť dekódovanie"
 
 msgid "Pause"
-msgstr "Pozastavit"
+msgstr "Pozastaviť"
 
 msgid "Add to Queue"
-msgstr "Přidat do řady"
+msgstr "Pridať do fronty"
 
 msgid "Enqueue"
-msgstr "Zařadit"
+msgstr "Zaradiť do fronty"
 
 msgid "Show Queue"
-msgstr "Ukázat řadu"
+msgstr "Zobraziť frontu"
 
 msgid "Queue"
-msgstr "Řada"
+msgstr "Fronta"
 
 msgid "Failed to find widget"
-msgstr "Nepodařilo se najít doplněk"
+msgstr ""
 
 msgid "Choose Destination"
-msgstr "Vybrat cíl"
+msgstr ""
 
 #, c-format
 msgid "%s%sPreset: %s"
-msgstr "%s%sPřednastavení: %s"
+msgstr ""
 
 #, c-format
 msgid "Queue (%d)"
-msgstr "Řada (%d)"
+msgstr ""
 
 msgid "Updating preview\n"
-msgstr "Aktualizuje se náhled\n"
+msgstr ""
 
 msgid "Update Check"
-msgstr "Kontrola aktualizace"
+msgstr ""
 
 msgid "Error while reading activity from pipe"
-msgstr "Chyba při čtení činnosti z roury (přenos dat)"
+msgstr ""
 
 msgid "Updating chapter row ui"
-msgstr "Aktualizuje se rozhraní řádku s kapitolou"
+msgstr ""
 
 msgid "Delete All"
-msgstr "Smazat vše"
+msgstr ""
 
 msgid "Delete all items in the queue."
-msgstr "Smazat všechny položky v řadě."
+msgstr ""
 
 msgid ""
 "<b>Anamorphic Modes:</b>\n"
@@ -688,66 +618,53 @@ msgid ""
 "Strict - Keep original source dimensions and pixel\n"
 "         aspect ratio</tt></small>"
 msgstr ""
-"<b>Pokřivené režimy:</b>\n"
-"<small><tt>\n"
-"Žádný   - Vynutit poměr stran obrazového bodu (pixelu) 1:1.\n"
-"Loose  - Zarovnat rozměry na zvolenou hodnotu zarovnání\n"
-"a zvolit poměr stran obrazového bodu, jenž zachovává\n"
-"původní poměr stran zobrazení\n"
-"Přísný - Zachovat původní rozměry zdroje a poměr \n"
-"         stran obrazového bodu</tt></small>"
 
 msgid ""
 "Open Picture Settings and Preview window.\n"
 "Here you can adjust cropping, resolution, aspect ratio, and filters."
 msgstr ""
-"Otevřít nastavení obrázku a okno s náhledem.\n"
-"Zde můžete upravit ořez, rozlišení, poměr stran a filtry."
 
 msgid "Preview"
-msgstr "Náhled"
+msgstr "Náhľad"
 
 msgid "Show Activity Window"
-msgstr "Zobrazit okno činností"
+msgstr "Zobraziť okno aktivity"
 
 msgid "Activity"
-msgstr "Činnost"
+msgstr "Aktivita"
 
 msgid "<b>Source:</b>"
 msgstr "<b>Zdroj:</b>"
 
 msgid "None"
-msgstr "Žádný"
+msgstr ""
 
 msgid "Foreign Audio Subtitle Track"
-msgstr "Stopa titulků k cizímu zvuku"
+msgstr ""
 
 msgid "First Selected Track"
-msgstr "První vybraná stopa"
+msgstr ""
 
 msgid "Foreign Audio, then First Selected Track"
-msgstr "Cizí zvuk, potom první vybraná stopa"
+msgstr ""
 
 msgid "Title:"
-msgstr "Název:"
+msgstr "Titul:"
 
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
 msgstr ""
-"Nastavit titul k zakódování.\n"
-"Ve výchozím nastavení je vybrán nejdelší titul.\n"
-"To je často hlavní titul DVD."
 
 msgid "Angle:"
-msgstr "Úhel:"
+msgstr "Uhol:"
 
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr "Pro víceúhlová DVD, vyberte požadovaný úhel k zakódování."
+msgstr ""
 
 msgid "Interlace Detection:"
-msgstr "Zjištění prokládání:"
+msgstr ""
 
 msgid ""
 "This filter detects interlaced frames.\n"
@@ -755,24 +672,18 @@ msgid ""
 "If a deinterlace filter is enabled, only frames that this filter finds\n"
 "to be interlaced will be deinterlaced."
 msgstr ""
-"Tento filtr zjišťuje prokládané snímky.\n"
-"\n"
-"Pokud je povolen filtr na odstranění prokládání,\n"
-"je prokládání odstraněno jen u snímků k proložení\n"
-"nalezených tímto filtrem."
 
 msgid "Rotate Filter:"
-msgstr "Filtr otočení:"
+msgstr ""
 
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "Otáčet obraz po směru hodinových ručiček v 90° krocích."
+msgstr ""
 
 msgid "Choose which audio tracks of the source media are used."
-msgstr "Vyberte, které zvukové stopy ze zdrojového nosiče záznamu se použijí."
+msgstr ""
 
 msgid "Choose which subtitle tracks of the source media are used."
 msgstr ""
-"Vyberte, které titulkové stopy ze zdrojového nosiče záznamu se použijí."
 
 msgid ""
 "Choose decomb or deinterlace filter.\n"
@@ -780,10 +691,6 @@ msgid ""
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
-"Vyberte filtr na odstranění hřebenu nebo filtr na odstranění prokládání.\n"
-"\n"
-"Filtr na odstranění hřebenu podporuje celou řadu interpolačních algoritmů.\n"
-"Filtr na odstranění prokládání je klasický odstraňovač prokládání YADIF.\n"
 
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
@@ -791,150 +698,140 @@ msgid ""
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
-"Vyberte volby pro filtr na odstranění hřebenu nebo filtr na odstranění prokládání.\n"
-"\n"
-"Filtr na odstranění hřebenu podporuje celou řadu interpolačních algoritmů.\n"
-"Filtr na odstranění prokládání je klasický odstraňovač prokládání YADIF.\n"
 
 msgid "Reset All Titles"
-msgstr "Nastavit všechny názvy znovu"
+msgstr "Obnoviť všetky tituly"
 
 msgid "Apply current settings to all titles"
-msgstr "Použít nynější nastavení na všechny názvy"
+msgstr ""
 
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr ""
-"Rozsah titulu k zakódování. Můžou to být kapitoly, sekundy nebo snímky."
 
 msgid "Set the first chapter to encode."
-msgstr "Nastavit první kapitolu k zakódování."
+msgstr ""
 
 msgid "Set the last chapter to encode."
-msgstr "Nastavit poslední kapitolu k zakódování."
+msgstr ""
 
 msgid "Duration:"
-msgstr "Doba trvání:"
+msgstr "Dĺžka:"
 
 msgid "hh:mm:ss"
-msgstr "hh:mm:ss"
+msgstr ""
 
 msgid "<b>Destination</b>"
-msgstr "<b>Cíl</b>"
+msgstr "<b>Cieľ</b>"
 
 msgid "File:"
-msgstr "Soubor:"
+msgstr "Súbor:"
 
 msgid "Destination filename for your encode."
-msgstr "Cílový souborový název pro zakódovaný soubor."
+msgstr ""
 
 msgid "Destination directory for your encode."
-msgstr "Cílový adresář pro zakódovaný soubor."
+msgstr ""
 
 msgid "Destination Directory"
-msgstr "Cílový adresář"
+msgstr ""
 
 msgid "Format:"
 msgstr "Formát:"
 
 msgid "Format to mux encoded tracks to."
-msgstr "Formátovat do mux zakódovaných stop."
+msgstr ""
 
 msgid "iPod 5G Support"
-msgstr "Podpora pro iPod 5G"
+msgstr "Podpora pre iPod 5G"
 
 msgid "Add iPod Atom needed by some older iPods."
-msgstr "Přidat iPod Atom, jenž je potřeba některými staršími zařízeními iPod."
+msgstr ""
 
 msgid "Web optimized"
-msgstr "Vyladěno pro internet"
+msgstr "Optimalizácia pre web"
 
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
-"Přizpůsobit uspořádání souboru MP4 pro postupné stahování.\n"
-"To přehrávači umožní začít přehrávat před dokončením stahování celého souboru."
 
 msgid "Large file (>4GB)"
-msgstr "Velký soubor (>4GB)"
+msgstr "Veľký súbor (>4GB)"
 
 msgid ""
 "Allow 64 bit MP4 file which can be over 4GB.\n"
 "\n"
 "<b>Caution:</b> This option may break device compatibility."
 msgstr ""
-"Povolit 64 bitový soubor MP4, který může mít víc než 4 GB.\n"
-"\n"
-"    <b>Výstraha:</b> Tato volba může vést k porušení kompatibility zařízení."
 
 msgid "<b>Presets List</b>"
-msgstr "<b>Seznam přednastavení</b>"
+msgstr "<b>Zoznam predvolieb</b>"
 
 msgid "Source Codec:"
-msgstr "Kodek zdroje:"
+msgstr "Zdrojový kodek:"
 
 msgid "Dimensions:"
-msgstr "Rozměry:"
+msgstr "Rozmery:"
 
 msgid "Aspect: "
-msgstr "Poměr:"
+msgstr "Pomer strán:"
 
 msgid "Frame Rate:"
-msgstr "Snímková rychlost:"
+msgstr "Frekvencia snímok:"
 
 msgid "<b>Source Picture Parameters</b>"
-msgstr "<b>Parametry zdrojového obrázku</b>"
+msgstr "<b>Parametre zdrojového obrazu</b>"
 
 msgid "Autocrop:"
-msgstr "Automatické oříznutí:"
+msgstr "Automatické orezanie:"
 
 msgid "Crop:"
-msgstr "Ořez:"
+msgstr "Orezanie:"
 
 msgid "Crop Dimensions:"
-msgstr "Rozměry pro ořezání:"
+msgstr "Rozmery orezania:"
 
 msgid "<b>Cropping</b>"
-msgstr "<b>Ořezání</b>"
+msgstr "<b>Orezanie</b>"
 
 msgid "Scale Dimensions:"
-msgstr "Rozměry pro změnu velikosti:"
+msgstr "Rozmery mierky:"
 
 msgid "Optimal for Source:"
-msgstr "Nejlepší pro zdroj:"
+msgstr "Optimálna pre zdroj:"
 
 msgid "Anamorphic:"
-msgstr "Pokřivené:"
+msgstr "Anamorfné:"
 
 msgid "<b>Scaling</b>"
-msgstr "<b>Změna velikosti</b>"
+msgstr "<b>Zmena mierky</b>"
 
 msgid "Presentation Dimensions:"
-msgstr "Rozměry při promítání:"
+msgstr "Rozmery prezentácie:"
 
 msgid "Summary"
-msgstr "Shrnutí"
+msgstr "Súhrn"
 
 msgid "Left Crop"
-msgstr "Ořezání vlevo"
+msgstr "Ľavé orezanie"
 
 msgid "Top Crop"
-msgstr "Ořezání nahoře"
+msgstr "Vrchné orezanie"
 
 msgid "Bottom Crop"
-msgstr "Ořezání dole"
+msgstr "Spodné orezanie"
 
 msgid "Right Crop"
-msgstr "Oříznout vpravo"
+msgstr "Pravé orezanie"
 
 msgid "Auto Crop"
-msgstr "Automaticky oříznout"
+msgstr "Automatické orezanie"
 
 msgid "Automatically crop black borders around edges of the video."
-msgstr "Automaticky oříznout černý lem okolo okrajů obrazu."
+msgstr "Automaticky orezať čierne pruhy po okrajoch videa."
 
 msgid "Loose Crop"
-msgstr "Volné ořezání"
+msgstr ""
 
 msgid ""
 "When picture settings require that the image\n"
@@ -943,21 +840,14 @@ msgid ""
 "instead of doing exact cropping and then scaling to\n"
 "the required multiple."
 msgstr ""
-"Když nastavení obrázku vyžaduje, aby byly\n"
-"rozměry obrázku zaokrouhleny na určitý násobek\n"
-"pixelů Toto nastavení ořeže několik pixelů navíc,\n"
-"místo toho, aby se udělalo přesné ořezání, a potom\n"
-"se provedla změna velikosti na požadovaný násobek."
 
 msgid "width:"
-msgstr "Šířka:"
+msgstr "Šírka:"
 
 msgid ""
 "This is the width that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
-"Toto je šířka, se kterou bude obraz uložen.\n"
-"Skutečné rozměry zobrazení se budou lišit, pokud poměr strany pixelu není 1:1."
 
 msgid "height:"
 msgstr "Výška:"
@@ -966,18 +856,14 @@ msgid ""
 "This is the height that the video will be stored at.\n"
 "The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
 msgstr ""
-"Toto je výška, se kterou bude obraz uložen.\n"
-"Skutečné rozměry zobrazení se budou lišit, pokud poměr strany pixelu není 1:1."
 
 msgid "Optimal for source"
-msgstr "Nejlepší pro zdroj"
+msgstr "Optimálne pre zdroj"
 
 msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
 "This will be the resolution that most closely matches the source resolution after cropping."
 msgstr ""
-"Je-li povoleno, vybrat nejlepší rozlišení pro ukládání.\n"
-"Toto bude rozlišení, které nejvíce odpovídá rozlišení zdroje po ořezání."
 
 msgid ""
 "<b>Anamorphic Modes:</b>\n"
@@ -989,17 +875,9 @@ msgid ""
 "Strict - Keep original source dimensions and pixel\n"
 "     aspect ratio</tt></small>"
 msgstr ""
-"<b>Pokřivené režimy:</b>\n"
-"<small><tt>\n"
-"Žádný   - Vynutit poměr stran pixelu 1:1.\n"
-"Loose  - Zarovnat rozměry na zvolenou hodnotu zarovnání \n"
-"         a zvolit poměr stran pixelu, jenž zachovává\n"
-"         původní poměr stran zobrazení\n"
-"Přísný - Zachovat původní rozměry zdroje a poměr \n"
-"         stran pixelu</tt></small>"
 
 msgid "Alignment:"
-msgstr "Zarovnání:"
+msgstr "Zarovnanie:"
 
 msgid ""
 "Align storage dimensions to multiples of this value.\n"
@@ -1007,23 +885,17 @@ msgid ""
 "This setting is only necessary for compatibility with some devices.\n"
 "You should use 2 unless you experience compatibility issues."
 msgstr ""
-"Zarovnat rozměry ukládání na násobky této hodnoty.\n"
-"\n"
-"Toto nastavení je nezbytné jen pro snášenlivost s některými zařízeními.\n"
-"Měl byste použít 2, dokud se nesetkáte s potížemi se snášenlivostí."
 
 msgid "<b>Storage Geometry</b>"
-msgstr "<b>Uspořádání úložiště</b>"
+msgstr ""
 
 msgid ""
 "This is the display width. It is the result of scaling the storage "
 "dimensions by the pixel aspect."
 msgstr ""
-"Toto je šířka zobrazení. Je to výsledek změny velikosti rozměrů pro ukládání"
-" pomocí stránky pixelu."
 
 msgid "Pixel Aspect:"
-msgstr "Strana pixelu:"
+msgstr "Pomer pixelov:"
 
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
@@ -1031,10 +903,10 @@ msgid ""
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
-"Strana pixelu určuje tvar pixelů.\n"
+"Pomer pixelov určuje tvar pixelov.\n"
 "\n"
-"Poměr 1:1 stanovuje čtvercový pixel. Jiné hodnoty stanovují obdélníkové tvary.\n"
-"Přehrávače změní velikost obrázku tak, aby dosáhly stanovené stránky."
+"Pomer 1:1 určuje štvorcové pixely. Ostatné hodnoty určujú obdĺžnikové tvary.\n"
+"Prehrávače zmenia mierku obrazu tak, aby dosiahli určený pomer."
 
 msgid ":"
 msgstr ":"
@@ -1044,89 +916,72 @@ msgid ""
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
-"Strana pixelu určuje tvar pixelů.\n"
-"Poměr 1:1 stanovuje čtvercový pixel. Jiné hodnoty stanovují obdélníkové tvary.\n"
-"Přehrávače změní velikost obrázku tak, aby dosáhly stanovené stránky."
 
 msgid "Keep Aspect"
-msgstr "Zachovat poměr"
+msgstr "Zachovať pomer strán"
 
 msgid ""
 "If enabled, the original display aspect of the source will be maintained."
-msgstr "Je-li povoleno, bude zachován původní vzhled zobrazení zdroje."
+msgstr ""
 
 msgid "Display Aspect:"
-msgstr "Zobrazit poměr stran:"
+msgstr ""
 
 msgid "<b>Display Geometry</b>"
-msgstr "<b>Uspořádání zobrazení</b>"
+msgstr "<b>Geometria zobrazenia</b>"
 
 msgid "Grayscale"
-msgstr "Odstíny šedi"
+msgstr "Odtiene šedej"
 
 msgid "If enabled, filter colour components out of video."
-msgstr "Je-li povoleno, filtrovat složky barvy mimo obraz."
+msgstr ""
 
 msgid "Deblock:"
-msgstr "Odstranit bloky:"
+msgstr ""
 
 msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Filtr na odstranění bloků odstraňuje běžný typ kompresního artefaktu.\n"
-"Pokud se u vašeho zdroje projevuje blokovitost, tento filtr může pomoci s jejím odstraněním."
 
 msgid "Denoise Filter:"
-msgstr "Filtr pro odstranění šumu:"
+msgstr ""
 
 msgid ""
 "Denoise filtering reduces or removes the appearance of noise and grain.\n"
 "Film grain and other types of high frequency noise are difficult to compress.\n"
 "Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"Filtr na odstranění šumu je nízkopásmový filtr, který zmenšuje nebo odstraňuje šum a zrnitost.\n"
-"Zrnitost filmu a jiné typy vysokokmitočtového šumu je obtížné zkomprimovat.\n"
-"Použití tohoto filtru na tyto zdroje může vést k menším velikostem souborů."
 
 msgid "Denoise Preset:"
-msgstr "Přednastavení pro odstranění šumu:"
+msgstr ""
 
 msgid "Denoise Tune:"
-msgstr "Vyladění odstranění šumu:"
+msgstr ""
 
 msgid ""
 "Custom denoise filter string format\n"
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
-"Vlastní formát řetězce filtru na odstranění šumu\n"
-"    \n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
 msgid "Detelecine:"
-msgstr "Odstranit filmové snímání:"
+msgstr ""
 
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
 "Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Filtr odstraňuje 'česací' artefakty, které jsou výsledkem filmového snímání.\n"
-"\n"
-"Filmové snímání je proces, který upravuje rychlosti snímkování filmu, které jsou 24 snímků za sekundu (SZS) na rychlosti snímkování obrazu NTSC, které jsou 30 SZS."
 
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 msgstr ""
-"Vlastní formát řetězce filtru na odstranění filmového snímače\n"
-"    \n"
-"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 
 msgid "Decomb"
-msgstr "Odstranění hřebenu"
+msgstr ""
 
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
@@ -1137,25 +992,17 @@ msgid ""
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
 msgstr ""
-"Vyberte volby pro filtr na odstranění hřebenu nebo odstranění prokládání.\n"
-"\n"
-"Filtr na odstranění hřebenu výběrově odstraňuje prokládání snímků, jež se jeví být prokládané.  To uchová kvalitu snímků, které nejsou prokládány.\n"
-"\n"
-"Klasický filtr na odstranění prokládání je použit na všechny snímky.\n"
-"Snímky, které nejsou prokládány, utrpí určitým poklesem jakosti."
 
 msgid "Deinterlace"
-msgstr "Odstranit prokládání"
+msgstr ""
 
 msgid "Decomb:"
-msgstr "Odstranit hřeben:"
+msgstr ""
 
 msgid ""
 "The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
 "This will preserve quality in frames that are not interlaced."
 msgstr ""
-"Filtr na odstranění hřebenu výběrově odstraňuje prokládání snímků, jež se jeví být prokládané.\n"
-"To uchová kvalitu snímků, které nejsou prokládány."
 
 msgid ""
 "Custom decomb filter string format\n"
@@ -1164,44 +1011,35 @@ msgid ""
 "BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
 "ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
 msgstr ""
-"Vlastní formát řetězce filtru na odstranění hřebenu\n"
-"    Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
-"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
-"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
 
 msgid "Deinterlace:"
-msgstr "Odstranit prokládání:"
+msgstr ""
 
 msgid ""
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
 msgstr ""
-"Klasický filtr pro odstranění prokládání se používá na všechny snímky.\n"
-"Snímky, jež nejsou prokládané, zakouší určité zhoršení jakosti."
 
 msgid ""
 "Custom deinterlace filter string format\n"
 "\n"
 "YadifMode:YadifParity:McdintMode:McdeintQp"
 msgstr ""
-"Vlastní formát řetězce filtru pro odstranění prokládání.\n"
-"\n"
-"YadifMode:YadifParity:McdintMode:McdeintQp"
 
 msgid "<b>Filters</b>"
-msgstr "<b>Filtry</b>"
+msgstr "<b>Filtre</b>"
 
 msgid "Picture"
-msgstr "Obrázek"
+msgstr "Obraz"
 
 msgid "Video Encoder:"
-msgstr "Kodér obrazu:"
+msgstr "Dekóder videa:"
 
 msgid "Available video encoders."
-msgstr "Dostupné kodéry obrazu."
+msgstr "Dostupné dekódery videa."
 
 msgid "Framerate:"
-msgstr "Rychlost snímkování:"
+msgstr "Frekvencia snímok:"
 
 msgid ""
 "Output framerate.\n"
@@ -1209,31 +1047,27 @@ msgid ""
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
 msgstr ""
-"Výstupní rychlost snímkování.\n"
-"\n"
-"Doporučena je stejná, jakou má zdroj. Pokud má zdroj obrazu\n"
-"proměnlivou rychlost snímkování, volba Stejné jako zdroj ji zachová."
 
 msgid "Constant Framerate"
-msgstr "Stálá rychlost snímkování"
+msgstr ""
 
 msgid "Same as source"
-msgstr "Stejné jako zdroj"
+msgstr ""
 
 msgid "kbps"
-msgstr "kb/s"
+msgstr "kbps"
 
 msgid "(variable)"
-msgstr "(proměnná)"
+msgstr ""
 
 msgid "(constant)"
-msgstr "(stálá)"
+msgstr ""
 
 msgid "Enables constant framerate output."
-msgstr "Povolí výstup se stálou rychlostí snímkování."
+msgstr ""
 
 msgid "Peak Framerate (VFR)"
-msgstr "Nejvyšší rychlost snímkování (PromRS)"
+msgstr ""
 
 msgid ""
 "Enables variable framerate output with a peak\n"
@@ -1241,20 +1075,15 @@ msgid ""
 "\n"
 "VFR is not compatible with some players."
 msgstr ""
-"Povolí výstup s proměnlivou rychlostí snímkování s nejvyšší\n"
-"rychlostí určenou nastavením rychlosti snímkování.\n"
-"Proměnlivá rychlost snímkování (PromRS) se neslučuje s některými přehrávači."
 
 msgid "Variable Framerate"
-msgstr "Proměnlivá rychlost snímkování"
+msgstr "Premenlivá frekvencia snímok"
 
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
 "VFR is not compatible with some players."
 msgstr ""
-"Povolí výstup s proměnlivou rychlostí snímkování.\n"
-"Proměnlivá rychlost snímkování (PromRS) se neslučuje s některými přehrávači."
 
 msgid ""
 "Set the desired quality factor.\n"
@@ -1270,24 +1099,12 @@ msgid ""
 "FFMpeg's and Theora's scale is more linear.\n"
 "These encoders do not have a lossless mode."
 msgstr ""
-"Nastavit požadovaný koeficient kvality.\n"
-"Kodér cílí na určitou jakost.\n"
-"Měřítko používané každým kodérem obrazu je jiné. \n"
-"\n"
-"Měřítko x264 je logaritmické a nižší hodnoty odpovídají vyšší kvalitě.\n"
-"Malý pokles hodnoty tedy povede k progresivně většímu růstu velikosti\n"
-"výsledného souboru. Hodnota 0 znamená, že kvalita je bezztrátová,\n"
-"a výsledkem je velikost souboru větší, než jakou měl původní soubor,\n"
-"ledaže by byl zdroj rovněž bezztrátový.\n"
-"\n"
-"Měřítko u FFMpeg a Theory je více lineární.\n"
-"Tyto kodéry nemají bezztrátový režim."
 
 msgid "Constant Quality:"
-msgstr "Stálá jakost:"
+msgstr "Konštantná kvalita:"
 
 msgid "Bitrate (kbps):    "
-msgstr "Datový tok (kb/s):  "
+msgstr "Bitový tok (kbps):    "
 
 msgid ""
 "Set the average bitrate.\n"
@@ -1296,14 +1113,9 @@ msgid ""
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
-"Nastavit průměrný datový tok.\n"
-"\n"
-"Okamžitý datový tok může být vyšší nebo nižší v kterémkoli časovém bodě.\n"
-"Ale průměr pro dlouhou dobu trvání bude hodnota nastavená zde.\n"
-"Pokud okamžitý datový tok  potřebujete omezit, podívejte se na nastavení x264 vbv-bufsize a vbv-maxrate."
 
 msgid "2-Pass Encoding"
-msgstr "Dvouprůchodové kódování"
+msgstr ""
 
 msgid ""
 "Perform 2 Pass Encoding.\n"
@@ -1312,36 +1124,26 @@ msgid ""
 "the video are collected.  Then in the second pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"Provést dvouprůchodové kódování.\n"
-"\n"
-"Předpokladem je volba Datový tok. Během prvního průchodu jsou\n"
-"shromažďovány statistiky o obrazu. Při druhém průchodu jsou tyto\n"
-"statistiky použity při rozhodování o rozvržení datového toku."
 
 msgid "Turbo First Pass"
-msgstr "Rychlý první průchod"
+msgstr ""
 
 msgid ""
 "During the 1st pass of a 2 pass encode, use settings that speed things "
 "along."
 msgstr ""
-"Během prvního průchodu dvouprůchodového kódování použít nastavení, která "
-"věci dál urychlí."
 
 msgid "Use Advanced Options"
-msgstr "Použít rozšířené volby"
+msgstr "Použiť pokročilé voľby"
 
 msgid ""
 "Use advanced options Tab for x264 settings.\n"
 "\n"
 "Use at your own risk!"
 msgstr ""
-"Použít kartu s pokročilými volbami k nastavení x264.\n"
-"\n"
-"Použijte na vlastní nebezpečí!"
 
 msgid "Preset:"
-msgstr "Přednastavení:"
+msgstr "Predvoľba:"
 
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
@@ -1351,16 +1153,9 @@ msgid ""
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Upraví nastavení kodéru pro vzdání se účinnosti komprese oproti rychlosti kódování.\n"
-"\n"
-"Tímto se zřídí vaše výchozí nastavení kodéru.\n"
-"Seřízení, profily, úrovně a rozšířené volby budou použity na toto.\n"
-"\n"
-"Obecně byste tuto volbu měl nastavit na nejpomalejší, kterou snesete,\n"
-"protože pomalejší nastavení dávají ve výsledku lepší kvalitu nebo menší soubory."
 
 msgid "Tune:"
-msgstr "Naladění:"
+msgstr ""
 
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
@@ -1369,26 +1164,18 @@ msgid ""
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
 msgstr ""
-"Přizpůsobit nastavení, aby byla vyladěna pro běžné scénáře.\n"
-"\n"
-"Toto může zlepšit účinnost pro vlastnosti určitého zdroje nebo nastavit\n"
-"vlastnosti výstupního souboru. Změny se použijí po přednastavení\n"
-"ale přede všemi ostatními parametry."
 
 msgid "Fast Decode"
-msgstr "Rychlé dekódování"
+msgstr "Rýchle dekódovanie"
 
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
 msgstr ""
-"Omezit využití CPU dekodérem.\n"
-"\n"
-"Nastavte, pokud se vaše zařízení potýká s přehráváním výstupu (zahozené snímky)."
 
 msgid "Zero Latency"
-msgstr "Nulová prodleva"
+msgstr "Bez oneskorenia"
 
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
@@ -1398,12 +1185,6 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
-"Zmenšit prodlevu mezi vstupem do kodéru a výstupem dekodéru.\n"
-"\n"
-"Toto je užitečné pro přenos živých proudů.\n"
-"\n"
-"Protože HandBrake není vhodný pro přenos živých proudů,\n"
-"má toto nastavení zde malý význam."
 
 msgid "Profile:"
 msgstr "Profil:"
@@ -1413,9 +1194,6 @@ msgid ""
 "\n"
 "Overrides all other settings."
 msgstr ""
-"Nastaví a zajistí shodu se zadaným profilem.\n"
-"\n"
-"Potlačí všechna ostatní nastavení."
 
 msgid "Level:"
 msgstr "Úroveň:"
@@ -1425,30 +1203,27 @@ msgid ""
 "\n"
 "Overrides all other settings."
 msgstr ""
-"Nastaví a zajistí shodu se zadanou úrovní .\n"
-"\n"
-"Potlačí všechna ostatní nastavení."
 
 msgid "More Settings:"
-msgstr "Další nastavení:"
+msgstr "Viac nastavení:"
 
 msgid ""
 "Additional encoder settings.\n"
 "\n"
 "Colon separated list of encoder options."
 msgstr ""
-"Dodatečné nastavení kodéru.\n"
+"Dodatočné nastavenia dekóderu.\n"
 "\n"
-"Dvojtečkou oddělený seznam voleb pro kodér."
+"Dvojbodkami oddelený zoznam volieb dekódera."
 
 msgid "Video"
-msgstr "Obraz"
+msgstr "Video"
 
 msgid "Selection Behavior:"
-msgstr "Chování výběru"
+msgstr "Správanie výberu:"
 
 msgid "Remove"
-msgstr "Odstranit"
+msgstr "Odstrániť"
 
 msgid "Available Languages"
 msgstr "Dostupné jazyky"
@@ -1457,17 +1232,15 @@ msgid "Selected Languages"
 msgstr "Vybrané jazyky"
 
 msgid "Use only first encoder for secondary audio"
-msgstr "Použít pouze první kodér pro doplňkový zvuk"
+msgstr ""
 
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Pouze hlavní zvuková stopa bude zakódována pomocí celého seznamu pro kodér.\n"
-"Všechny vedlejší zvukové výstupní stopy budou zakódovány pouze pomocí prvního kodéru."
 
 msgid "Auto Passthru:"
-msgstr "Automatický průchod:"
+msgstr ""
 
 msgid "MP3"
 msgstr "MP3"
@@ -1476,134 +1249,115 @@ msgid ""
 "Enable this if your playback device supports MP3.\n"
 "This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje MP3.\n"
-"Toto dovolí, aby byl vybrán průchod MP3 passthru, když je povolen automatický výběr průchodu."
 
 msgid "AAC"
-msgstr "AAC"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje AAC.\n"
-"Toto dovolí, aby byl vybrán průchod AAC, když je povolen automatický výběr průchodu."
 
 msgid "AC-3"
-msgstr "AC-3"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje AC-3.\n"
-"Toto dovolí, aby bylo vybráno AC-3 passthru, když je povolen automatický výběr passthru."
 
 msgid "DTS"
-msgstr "DTS"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje DTS.\n"
-"Toto dovolí, aby bylo vybráno DTS passthru, když je povolen automatický výběr passthru."
 
 msgid "DTS-HD"
-msgstr "DTS-HD"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje DTS-HD.\n"
-"Toto dovolí, aby bylo vybráno DTS-HD passthru, když je povolen automatický výběr passthru."
 
 msgid "EAC-3"
-msgstr "EAC-3"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje EAC-3.\n"
-"Toto dovolí, aby bylo vybrán průchod EAC-3, když je povolen automatický výběr průchodu."
 
 msgid "TrueHD"
-msgstr "TrueHD"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje TrueHD.\n"
-"Toto dovolí, aby bylo vybrán průchod TrueHD, když je povolen automatický výběr průchodu."
 
 msgid "FLAC"
-msgstr "FLAC"
+msgstr ""
 
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Toto povolit, pokud vaše zařízení pro přehrávání podporuje FLAC.\n"
-"Toto dovolí, aby byl vybrán průchod FLAC, když je povolen automatický výběr průchodu."
 
 msgid "Passthru Fallback:"
-msgstr "Nouzový passthru:"
+msgstr ""
 
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr ""
-"Nastavit zvukový kodek, který se má použít při kódování, když nelze najít "
-"vhodnou stopu pro \"audio passthru\"."
 
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>Nastavení kódování zvuku:</b>"
+msgstr "<b>Nastavenia dekóderu zvuku:</b>"
 
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
-"Každá vybraná zdrojová stopa bude zakódována pomocí všech vybraných kodérů."
 
 msgid "Encoder"
-msgstr "Kodér"
+msgstr "Dekóder"
 
 msgid "Bitrate/Quality"
-msgstr "Datový tok/Jakost"
+msgstr "Bitová rýchlosť/Kvalita"
 
 msgid "Mixdown"
-msgstr "Závěrečné smíchání"
+msgstr ""
 
 msgid "Samplerate"
-msgstr "Vzorkovací kmitočet"
+msgstr "Vzorkovacia rýchlosť"
 
 msgid "Gain"
-msgstr "Zesílení"
+msgstr ""
 
 msgid "DRC"
-msgstr "DRC"
+msgstr ""
 
 msgid "Audio Defaults"
-msgstr "Výchozí nastavení zvuku"
+msgstr "Predvolený zvuk"
 
 msgid "Add new audio settings to the list"
-msgstr "Přidat nové nastavení zvuku do seznamu"
+msgstr "Pridať nové nastavenia zvuku do zoznamu"
 
 msgid "Add All"
-msgstr "Přidat vše"
+msgstr "Pridať všetko"
 
 msgid "Add all audio tracks to the list"
-msgstr "Přidat všechny zvukové stopy do seznamu"
+msgstr "Pridať všetky zvukové stopy do zoznamu"
 
 msgid "Reload Defaults"
-msgstr "Nahrát výchozí hodnoty znovu"
+msgstr "Znovu načítať predvolené"
 
 msgid "Reload all audio settings from defaults"
-msgstr "Nahrát znovu všechna nastavení zvuku z výchozích hodnot"
+msgstr "Znovu načítať všetky nastavenia zvuku z predvolených"
 
 msgid "Audio List"
-msgstr "Seznam zvukových stop"
+msgstr "Zoznam zvuku"
 
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
@@ -1611,40 +1365,31 @@ msgid ""
 "The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
-"Vytvořte seznam jazyků, pro než chcete vybrat titulky.\n"
-"\n"
-"První jazyk v tomto seznamu je vámi upřednostňovaný jazyk\n"
-"a použije se\n"
-"k určení nastavení výběru titulků, když je přítomna zvuková stopa v cizím jazyce."
 
 msgid "Preferred Language: None"
-msgstr "Upřednostňovaný jazyk: Žádný"
+msgstr "Prednostný jazyk: žiadny"
 
 msgid "Add Foreign Audio Search Pass"
-msgstr "Přidat cestu pro hledání zvuku v cizím jazyce"
+msgstr ""
 
 msgid "Add subtitle track if default audio is foreign"
-msgstr "Přidat stopu titulků, pokud je výchozí zvuk v cizím jazyce"
+msgstr ""
 
 msgid ""
 "When the default audio track is not your preferred language, add a subtitle "
 "track."
 msgstr ""
-"Přidat stopu titulků, pokud výchozí zvuk není ve vámi upřednostňované "
-"jazyce."
 
 msgid "Add Closed Captions when available"
-msgstr "Přidat skryté titulky, když jsou dostupné"
+msgstr ""
 
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
 msgstr ""
-"Skryté titulky jsou textové titulky, které lze přidat do kteréhokoli "
-"kontejneru jako měkkou titulkovou stopu"
 
 msgid "Burn-In Behavior:"
-msgstr "Chování zahořování:"
+msgstr ""
 
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
@@ -1652,16 +1397,12 @@ msgid ""
 "Burned-In subtitles are part of the video and can not be disabled during playback.\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Nastavit způsob \"vypálení\" titulků do obrazu.\n"
-"\n"
-"Vypálené titulky jsou součástí obrazu a při přehrávání už nemohou být vypnuty.\n"
-"Do obrazu může být vypálena jen jedna titulková stopa. Aby nedošlo ke konfliktu, nejdříve vybraná stopa vyhrává."
 
 msgid "Burn-In for deficient players:"
-msgstr "Zahořování pro nedostatečné přehrávače:"
+msgstr ""
 
 msgid "DVD Subtitles"
-msgstr "Titulky DVD"
+msgstr "DVD titulky"
 
 msgid ""
 "Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
@@ -1669,12 +1410,9 @@ msgid ""
 "\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Vypálit do obrazu nejdříve vybranou DVD titulkovou stopu. Všechny ostatní titulkové stopy budou zahozeny. Tuto volbu použijte v případě že váš přehrávací software nebo zařízení nepodporují DVD titulky.\n"
-"\n"
-"Do obrazu může být vypálena jen jedna titulková stopa. Aby nedošlo ke konfliktu, nejdříve vybraná stopa vyhrává."
 
 msgid "Blu-ray Subtitles"
-msgstr "Titulky Blu-ray"
+msgstr ""
 
 msgid ""
 "Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
@@ -1682,41 +1420,34 @@ msgid ""
 "\n"
 "Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Vypálit do obrazu nejdříve vybranou Blu-ray titulkovou stopu. Všechny ostatní titulkové stopy budou zahozeny. Tuto volbu použijte v případě že váš přehrávací software nebo zařízení nepodporují Blu-ray titulky.\n"
-"\n"
-"Do obrazu může být vypálena jen jedna titulková stopa. Aby nedošlo ke konfliktu, nejdříve vybraná stopa vyhrává."
 
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
 msgstr ""
-"<small>* Pouze jedna z voleb pro vypálení titulků výše se použije, počínaje "
-"tou, co je nahoře.</small>"
 
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
 msgstr ""
-"Do obrazu může být vypálena jen jedna titulková stopa! Aby nedošlo ke "
-"konfliktu, nejdříve vybraná stopa vyhrává."
 
 msgid "Subtitle Defaults"
-msgstr "Výchozí nastavení titulků"
+msgstr ""
 
 msgid "Add new subtitle settings to the list"
-msgstr "Přidat nastavení pro nové titulky do seznamu"
+msgstr ""
 
 msgid "Add all subtitle tracks to the list"
-msgstr "Přidat všechny titulkové stopy do seznamu"
+msgstr ""
 
 msgid "Reload all subtitle settings from defaults"
-msgstr "Nahrát znovu všechna nastavení titulků z výchozích hodnot"
+msgstr ""
 
 msgid "Subtitle List"
-msgstr "Seznam titulků"
+msgstr "Zoznam tituliek"
 
 msgid "<small>Reference Frames:</small>"
-msgstr "<small>Referenční snímky:</small>"
+msgstr ""
 
 msgid ""
 "Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
@@ -1726,14 +1457,9 @@ msgid ""
 "frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
 "you're absolutely sure you know what you're doing!"
 msgstr ""
-"Rozumné hodnoty jsou ~1-6.  Čím více přidáte, tím lepší komprese, ale pomalejší kódování.\n"
-"Animace má sklon mít užitek z více referenčních snímků mnohem více než obsah filmu.\n"
-"Všimněte si, že mnohá zařízení mají omezení na počet referenčních snímků,\n"
-"takže pokud provádíte zakódování pro počítač do ruky nebo samostatný přehrávač,\n"
-"nešahejte na to, pokud si nejste naprosto jistí, co děláte!"
 
 msgid "<small>Maximum B-Frames:</small>"
-msgstr "<small>Maximum B-snímky:</small>"
+msgstr ""
 
 msgid ""
 "Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
@@ -1744,14 +1470,9 @@ msgid ""
 "\n"
 "Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
 msgstr ""
-"Rozumné hodnoty jsou ~2-5.  Toto udává největší počet sekvenčních B-snímků, které může kodér použít.\n"
-"Velké počty obecně moc nepomáhají, dokud nejsou přizpůsobivé B-snímky nastaveny na nejvýhodnější.\n"
-"Cel-animovaný zdrojový materiál a B-jehlan také podstatně zvětšují prospěšnost větších hodnot.\n"
-"\n"
-"Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby byly B-snímky nastaveny na 0 (vypnuto)."
 
 msgid "<small>Pyramidal B-Frames:</small>"
-msgstr "<small>Jehlanovité B-snímky:</small>"
+msgstr ""
 
 msgid ""
 "B-pyramid improves compression by creating a pyramidal structure (hence the name)\n"
@@ -1759,14 +1480,9 @@ msgid ""
 "\n"
 "Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
 msgstr ""
-"B-jehlan zlepšuje kompresi vytvořením jehlanovité stavby (odtud název) z\n"
-"B-snímků, dovoluje B-snímkům, aby jeden na druhý odkazovaly kvůli zlepšení\n"
-"komprese.\n"
-"\n"
-"Vyžaduje Max B-snímky větší než 1; nejvýhodnější přizpůsobivé B-snímky se doporučují kvůli plnému užitku z komprese."
 
 msgid "<small>Weighted P-Frames:</small>"
-msgstr "<small>Vážené P-snímky:</small>"
+msgstr ""
 
 msgid ""
 "Performs extra analysis to decide upon weighting parameters for each frame.\n"
@@ -1778,16 +1494,9 @@ msgid ""
 "Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
 "completely incompatible with it, for example."
 msgstr ""
-"Provede další rozbor kvůli rozhodnutí o zvážení parametrů pro každý snímek.\n"
-"\n"
-"To lehce zlepší celkovou kompresi a značně vylepší kvalitu prolínání.\n"
-"Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby bylo\n"
-"vážené předvídání P-snímku zakázáno. Všimněte si, že některá zařízení a přehrávače,\n"
-"dokonce ty, které podporují hlavní profil, mohou mít s předvídáním váženého\n"
-"P-snímku potíže: například Apple TV se s ním naprosto neslučuje."
 
 msgid "8x8 Transform"
-msgstr "Transformace 8x8"
+msgstr ""
 
 msgid ""
 "The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
@@ -1796,15 +1505,9 @@ msgid ""
 "provide an unusually high visual quality benefit compared to its compression\n"
 "gain.  However, it requires High Profile, which many devices may not support."
 msgstr ""
-"Transformace 8x8 je jedna z nejužitečnějších vlastností x264 pokud jde o rychlost komprese.\n"
-"\n"
-"Zlepšuje kompresi alespoň o 5% za velmi malou cenu, pokud jde o rychlost,\n"
-"a může poskytnout neobyčejně velký zisk, pokud jde o obrazovou kvalitu,\n"
-"ve srovnání s kompresním ziskem.  Nicméně vyžaduje nejvyšší kvalitu, což mnohá\n"
-"zařízení nemusí podporovat."
 
 msgid "CABAC Entropy Encoding"
-msgstr "Kódování CABAC Entropy"
+msgstr ""
 
 msgid ""
 "After the encoder has done its work, it has a bunch of data that\n"
@@ -1815,19 +1518,12 @@ msgid ""
 "If you're looking to minimize CPU requirements for video playback, disable this option.\n"
 "Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
 msgstr ""
-"Když kodér udělal svoji práci, má hromadu dat, která je potřeba bezztrátově\n"
-"zkomprimovat, což je podobné ZIP nebo RAR.  H.264 pro to poskytuje dvě volby:\n"
-"CAVLC a CABAC.  CABAC dekóduje o hodně pomaleji ale komprimuje podstatně lépe\n"
-"(10-30%), obzvláště při nižších datových tocích.\n"
-"\n"
-"Pokud hledáte něco, co zmenší nároky CPU na přehrávání obrazu, tuto volbu zakažte.\n"
-"Základní profil, požadovaný iPody a podobnými zařízeními, vyžaduje, aby byl CABAC zakázán."
 
 msgid "<small><b>Encoding Features</b></small>"
-msgstr "<small><b>Volby pro kódování</b></small>"
+msgstr ""
 
 msgid "<small>Motion Est. Method:</small>"
-msgstr "<small>Způsob odhadování pohybu:</small>"
+msgstr ""
 
 msgid ""
 "Controls the motion estimation method.\n"
@@ -1841,20 +1537,9 @@ msgid ""
 "Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
 "Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
 msgstr ""
-"Ovládá způsob odhadování pohybu.\n"
-"\n"
-"Odhad pohybu je to, jak kodér odhaduje, jak se každý blok pixelů pohnul.\n"
-"Lepší způsob hledání pohybu zlepšuje kompresi za cenu rychlosti.\n"
-"\n"
-"Diamant: provádí nesmírně rychlé a jednoduché hledání pomocí diamantového vzoru.\n"
-"Šestiúhelník: provádí poněkud účinnější ale lehce pomalejší hledání pomocí šestiúhelníkového vzoru.\n"
-"\n"
-"Nerovnoměrný Multi-Hex: provádí velice široké hledání pomocí různých druhů vzorů, přesnější zachycení složitého pohybu.\n"
-"Důkladné: provádí vyčerpávající hledání každého pixelu v široké oblasti.  Podstatně pomalejší, přitom kompresní zisk je malý.\n"
-"Transformované důkladné: podobá se důkladnému, ale dělá ještě přesnější rozhodnutí. Podle toho je poněkud pomalé, a zlepšení je jen malé."
 
 msgid "<small>Subpel ME &amp; Mode:</small>"
-msgstr "<small>Subpixel ME &amp; režim:</small>"
+msgstr ""
 
 msgid ""
 "This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
@@ -1866,22 +1551,9 @@ msgid ""
 "11 disables all early terminations in analysis.\n"
 "10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
 msgstr ""
-"Toto nastavení ovládá jak způsob odhadování pohybu o subpixelové přesnosti, tak způsob rozhodování režimu.\n"
-"\n"
-"        Subpixelové odhadování pohybu se používá na zjemňování odhadování pohybu jdoucí za pouhou pixelovou přesnost při současném zlepšení komprese.\n"
-"\n"
-"        Rozhodování režimu je postup používaný pro výběr toho, jak zakódovat každý blok snímku: velice důležité rozhodnutí.\n"
-"\n"
-"        SAD je nejrychlejší způsob, následuje jej SATD, RD, RD zjemňování, a nejpomalejší je QPRD.\n"
-"\n"
-"        6 nebo vyšší se důrazně doporučuje: Psy-RD, velice výkonná psy optimalizace, která napomáhá uchování podrobností, vyžaduje RD.\n"
-"\n"
-"        11 zakazuje všechna brzká ukončení rozboru.\n"
-"\n"
-"        10 a 11, nejvýkonnější a nejpomalejší volby, vyžadují přizpůsobivou kvantizaci (aq-mode > 0) a mříž 2 (vždy)."
 
 msgid "<small>Motion Est. Range:</small>"
-msgstr "<small>Rozsah odhadování pohybu:</small>"
+msgstr ""
 
 msgid ""
 "This is the distance x264 searches from its initial guess at the\n"
@@ -1891,14 +1563,9 @@ msgid ""
 "especially at HD resolutions, may benefit from higher ranges, albeit at\n"
 "a high speed cost."
 msgstr ""
-"Toto je vzdálenost hledání x264 od svého počátečního odhadu pohybu bloku,\n"
-"aby se pokusil najít jeho skutečný pohyb.\n"
-"\n"
-"Pro většinu obsahu je výchozí dobrá, ale obraz s mimořádně velkým pohybem,\n"
-"obzvláště při rozlišení HD, může mít užitek z větších rozsahů, třebaže za cenu rychlosti."
 
 msgid "<small>Adaptive Direct Mode:</small>"
-msgstr "<small>Přizpůsobivý přímý režim:</small>"
+msgstr ""
 
 msgid ""
 "H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
@@ -1907,14 +1574,9 @@ msgid ""
 "x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
 "adaptively select which is better for each particular frame."
 msgstr ""
-"H.264 umožňuje v B-snímcích dva odlišné režimy předpovídání, prostorový a časový.\n"
-"\n"
-"Prostorový, který je výchozím režimem, je skoro vždy lepší, ale časový je někdy také užitečný.\n"
-"x264 může, za cenu malé ztráty na rychlosti (a podle toho za malý zisk na kompresi), podle\n"
-"okolností vybrat, který je lepší, pro každý jednotlivý snímek."
 
 msgid "<small>Adaptive B-Frames:</small>"
-msgstr "<small>Přizpůsobivé B-snímky:</small>"
+msgstr ""
 
 msgid ""
 "x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
@@ -1925,14 +1587,9 @@ msgid ""
 "Optimal mode gets slower as the maximum number of B-Frames increases,\n"
 "but makes much more accurate decisions, especially when used with B-pyramid."
 msgstr ""
-"x264 má různé druhy algoritmů na rozhodnutí, kdy použít B-snímky, a kolik jich použít.\n"
-"\n"
-"        Rychlý režim zabere zhruba stejně tolik času bez ohledu na to, kolik B-snímků určíte.  Nicméně však, i když je rychlý, jeho rozhodnutí jsou často méně než vhodná.\n"
-"\n"
-"        Nejvhodnější režim zpomaluje, jak se zvyšuje největší počet B-snímků, ale dělá mnohem přesnější rozhodnutí, obzvláště když se použije s B-jehlanem."
 
 msgid "<small>Partitions:</small>"
-msgstr "<small>Úseky:</small>"
+msgstr ""
 
 msgid ""
 "Mode decision picks from a variety of options to make its decision:\n"
@@ -1941,13 +1598,9 @@ msgid ""
 "Fewer partitions to check means faster encoding, at the cost of worse\n"
 "decisions, since the best option might have been one that was turned off."
 msgstr ""
-"Režimové rozhodnutí volí z mnoha druhů voleb, aby učinilo své rozhodnutí:\n"
-"Tato volba vybírá, které volby to jsou.\n"
-"Menší počet částí ke kontrole znamená rychlejší kódování za cenu\n"
-"horších rozhodnutí, protože ta nejlepší volba mohla být tou, jež byla vypnuta."
 
 msgid "<small>Trellis:</small>"
-msgstr "<small>Mříž:</small>"
+msgstr ""
 
 msgid ""
 "Trellis fine-tunes the rounding of transform coefficients to\n"
@@ -1958,31 +1611,21 @@ msgid ""
 "\n"
 "Trellis costs more speed at higher bitrates and requires CABAC."
 msgstr ""
-"Mříž jemně naladí zaokrouhlení transformačních koeficientů, aby\n"
-"vymačkala o 3-5 % větší kompresi za cenu nějaké rychlosti.\n"
-"\n"
-"\"Vždy\" používá mříž nejen během hlavního procesu kódování, ale i během\n"
-"rozboru, což zlepšuje kompresi ještě víc, i když za velkou cenu na rychlosti.\n"
-"\n"
-"Mříž stojí více rychlosti při vyšších datových tocích a vyžaduje CABAC."
 
 msgid "<small><b>Analysis</b></small>"
-msgstr "<small><b>Rozbor</b></small>"
+msgstr ""
 
 msgid "<small>Adaptive Quantization Strength:</small>"
-msgstr "<small>Přizpůsobivá síla kvantizace:</small>"
+msgstr ""
 
 msgid ""
 "Adaptive quantization controls how the encoder distributes bits across the frame.\n"
 "\n"
 "Higher values take more bits away from edges and complex areas to improve areas with finer detail."
 msgstr ""
-"Přizpůsobivá kvantizace řídí to, jak kodér rozmísťuje bity napříč snímkem.\n"
-"\n"
-"Vyšší hodnoty odvádějí více bitů z okrajů a složitých oblastí kvůli zlepšení oblastí s jemnější podrobností."
 
 msgid "<small>Psychovisual Rate Distortion:</small>"
-msgstr "<small>Psychozrakové zkreslení rychlosti:</small>"
+msgstr ""
 
 msgid ""
 "Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
@@ -1990,13 +1633,9 @@ msgid ""
 "The effect can be made weaker or stronger by adjusting the strength.\n"
 "Being an RD algorithm, it requires mode decision to be at least \"6\"."
 msgstr ""
-"Přizpůsobení psychozrakového zkreslení rychlosti těží z vlastnosti lidského\n"
-"zraku na dramatické zlepšení zjevných podrobností a ostrosti.\n"
-"Účinek může být udělán slabší nebo silnější upravením jeho síly.\n"
-" Algoritmus vyžaduje, aby rozhodnutí režimu bylo alespoň \"6\"."
 
 msgid "<small>Psychovisual Trellis:</small>"
-msgstr "<small>Psychozraková mříž:</small>"
+msgstr ""
 
 msgid ""
 "Psychovisual trellis is an experimental algorithm to further\n"
@@ -2006,16 +1645,9 @@ msgid ""
 "grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
 "and other sharp-edged graphics."
 msgstr ""
-"Psychozraková mříž je pokusný algoritmus pro další zlepšení ostrosti\n"
-"a uchování podrobnosti, které jde dál, než k tomu, co dělá Psychozrakové zkreslení rychlosti.\n"
-"\n"
-"Doporučené hodnoty se pohybují okolo 0.2, ačkoliv vyšší hodnoty mohou\n"
-"pomoci v případě velmi for very zrnitého obrazu nebo při kódování s nižším\n"
-"datovým tokem.  Nedoporučuje se použít na cel animace a jinou grafiku\n"
-"s ostrými okraji."
 
 msgid "Deblocking: "
-msgstr "Odstranění bloků:"
+msgstr ""
 
 msgid ""
 "H.264 deblocking filter.\n"
@@ -2030,14 +1662,9 @@ msgid ""
 "(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
 "The default is 0 (normal strength) for both parameters."
 msgstr ""
-"Filtr na odstranění bloků H.264.\n"
-"\n"
-"H.264 má vestavěný filtr na odstranění bloků, který vyhlazuje blokující artefakty po dekódování každého snímku.  Toto nejen že zlepšuje pohledovou kvalitu, ale také podstatně pomáhá kompresi. Filtr na odstranění bloků si bere hodně z výkonu procesoru, takže pokud se staráte o požadavky procesoru na přehrávání obrazového záznamu, zakažte jej.\n"
-"\n"
-"        Filtr na odstranění bloků má dva nastavitelné parametry, \"sílu\" (Alpha) a \"práh\" (Beta). První ovládá to, jak silný (nebo slabý) rušitel bloků je, zatímco druhý ovládá to, na jak mnoho (nebo málo) okrajů se použije. Nižší hodnoty znamenají méně odstraněných bloků, vyšší hodnoty znamenají více odstraněných bloků. Výchozí je 0 (normální síla) pro oba parametry."
 
 msgid "No DCT Decimate"
-msgstr "Žádné ničení DCT"
+msgstr ""
 
 msgid ""
 "x264 normally zeroes out nearly-empty data blocks to save bits to\n"
@@ -2048,15 +1675,9 @@ msgid ""
 "Don't touch this unless you're having banding issues or other such cases\n"
 "where you are having trouble keeping fine noise."
 msgstr ""
-"x264 normálně nuluje téměř prázdné datové bloky, aby ušetřil bity, které tak\n"
-"mohou být v obrazu využity pro nějaký jiný účel.  Toto však může mít někdy\n"
-"záporný účinek na uchování jemné zrnitosti a roztřesení.\n"
-"\n"
-"Nešahejte na to, pokud nemáte potíže s odstupňováním nebo s jinými\n"
-"takovými případy, kde máte potíže se zachováním jemného šumu."
 
 msgid "<small><b>Psychovisual</b></small>"
-msgstr "<small><b>Psychozrakový</b></small>"
+msgstr ""
 
 msgid ""
 "Your selected options will appear here.\n"
@@ -2069,27 +1690,18 @@ msgid ""
 "deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
 "no-fast-pskip=0:no-dct-decimate=0:cabac=1"
 msgstr ""
-"Vámi vybrané volby se objeví zde. \n"
-"        Můžete je upravovat a přidávat dodatečné volby.  \n"
-"\n"
-"        Výchozí hodnoty nebudou zobrazeny. Výchozí jsou:\n"
-"        ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
-"        b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
-"        subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
-"        deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
-"        no-fast-pskip=0:no-dct-decimate=0:cabac=1"
 
 msgid "<small><b>Current x264 Advanced Option String</b></small>"
-msgstr "<small><b>Rozšířené volby pro x264</b></small>"
+msgstr ""
 
 msgid "Advanced Video"
-msgstr "Pokročilý obraz"
+msgstr ""
 
 msgid "Chapter Markers"
-msgstr "Značky kapitol"
+msgstr ""
 
 msgid "Add chapter markers to output file."
-msgstr "Přidat značky kapitol do výstupního souboru."
+msgstr ""
 
 msgid "Chapters"
 msgstr "Kapitoly"
@@ -2101,199 +1713,185 @@ msgid "Director:"
 msgstr "Režisér:"
 
 msgid "Release Date:"
-msgstr "Datum vydání:"
+msgstr "Dátum vydania:"
 
 msgid "Comment:"
-msgstr "Poznámka:"
+msgstr "Komentár:"
 
 msgid "Genre:"
-msgstr "Žánr:"
+msgstr "Žáner:"
 
 msgid "Description:"
 msgstr "Popis:"
 
 msgid "Plot:"
-msgstr "Zápletka:"
+msgstr ""
 
 msgid "Tags"
 msgstr "Značky"
 
 msgid "Settings"
-msgstr "Nastavení"
+msgstr "Nastavenia"
 
 msgid "Edit"
-msgstr "Upravit"
+msgstr "Upraviť"
 
 msgid "Reload"
-msgstr "Nahrát znovu"
+msgstr "Znovu načítať"
 
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
-"Označit vybraný záznam řady jako čekající na vyřízení.\n"
-"Nastaví znovu zařazený úkol jako čekající na vyřízení a připravený k opětovnému spuštění."
 
 msgid "Reload All"
-msgstr "Nahrát vše znovu"
+msgstr ""
 
 msgid ""
 "Mark all queue entries as pending.\n"
 "Resets all queue jobs to pending and ready to run again."
 msgstr ""
-"Označit všechny záznamy v řadě jako čekající na vyřízení.\n"
-"Nastaví znovu všechny zařazené úkoly jako čekající na vyřízení a připravené k opětovnému spuštění."
 
 msgid "Save Queue"
-msgstr "Uložit Frontu"
+msgstr "Uložiť frontu"
 
 msgid ""
 "Save the current queue of encode jobs to a file.\n"
 "This file may be reloaded at a later time to edit your jobs and re-encode."
 msgstr ""
-"Uložit aktuální Frontu úkolů do souboru.\n"
-"Tento soubor může být později znovu načten, úkoly upraveny a komprese znovu spuštěna."
 
 msgid "Load Queue File"
-msgstr "Načíst soubor Fronty"
+msgstr ""
 
 msgid "Load a previously saved queue file."
-msgstr "Načíst dříve uložený soubor Fronty."
+msgstr "Načítať súbor s predošle uloženou frontou."
 
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "Zrušiť"
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Select All"
-msgstr "Vybrat vše"
+msgstr "Vybrať všetko"
 
 msgid "Mark all titles for adding to the queue"
-msgstr "Označit všechny názvy pro přidání do řady"
+msgstr "Označiť všetky tituly na pridanie do fronty"
 
 msgid "Clear All"
-msgstr "Vyprázdnit vše"
+msgstr "Vymazať všetko"
 
 msgid "Unmark all titles"
-msgstr "Odznačit všechny názvy"
+msgstr "Odznačiť všetky tituly"
 
 msgid "Destination files OK.  No duplicates detected."
-msgstr ""
-"Cílové soubory jsou v pořádku. Nebylo zjištěno, že by byly některé soubory "
-"dvakrát."
+msgstr "Cieľové súbory sú v poriadku. Neboli zistené žiadne duplikáty."
 
 msgid "Select this title for adding to the queue.\n"
-msgstr "Vybrat tento název pro přidání do řady.\n"
+msgstr "Vybrať tento titul na pridanie do fronty.\n"
 
 msgid "Preferences"
-msgstr "Nastavení"
+msgstr "Nastavenia"
 
 msgid "Automatically check for updates"
-msgstr "Automaticky ověřit dostupnost aktualizací"
+msgstr "Automaticky kontrolovať aktualizácie"
 
 msgid "When all encodes are complete"
-msgstr "Když byla všechna kódování dokončena"
+msgstr "po dokončení všetkých dekódovaní"
 
 msgid "Use automatic naming (uses modified source name)"
-msgstr "Použít automatické pojmenovávání (používá změněný název zdroje)"
+msgstr ""
 
 msgid "Auto-Name Template"
-msgstr "Pojmenovat předlohu automaticky"
+msgstr ""
 
 msgid ""
 "Available Options: {source} {title} {chapters} {date} {time} {quality} "
 "{bitrate}"
 msgstr ""
-"Dostupné volby: {source} {title} {chapters} {date} {time} {quality} "
-"{bitrate}"
 
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
-msgstr "Použít souborovou příponu iPod/iTunes friendly (.m4v) pro MP4"
+msgstr ""
 
 msgid "Number of previews"
-msgstr "Počet náhledů"
+msgstr "Počet náhľadov"
 
 msgid "Filter short titles (seconds)"
-msgstr "Filtrovat krátké tituly (sekundy)"
+msgstr ""
 
 msgid "Show system tray icon"
-msgstr "Ukázat ikonu v oznamovací oblasti panelu"
+msgstr "Zobraziť ikonu v  systémovej lište"
 
 msgid "General"
-msgstr "Obecné"
+msgstr "Všeobecné"
 
 msgid "Constant Quality fractional granularity"
-msgstr "Nepatrná zrnitost při stálé kvalitě"
+msgstr ""
 
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr "Použít dvdnav (namísto libdvdread)"
+msgstr ""
 
 msgid "Put individual encode logs in same location as movie"
-msgstr "Dát jednotlivé záznamy o kódování do stejného umístění, kde je film"
+msgstr ""
 
 msgid "Activity Log Verbosity Level"
-msgstr "Úroveň podrobnosti zápisu o činnosti"
+msgstr ""
 
 msgid "Activity Log Longevity"
-msgstr "Délka života zápisu o činnosti"
+msgstr ""
 
 msgid "Scale down High Definition previews"
-msgstr "Zmenšit rozlišení náhledů ve vysokém rozlišení"
+msgstr ""
 
 msgid "Automatically Scan DVD when loaded"
-msgstr "Automaticky prohledat DVD při nahrání"
+msgstr "Automaticky prehľadať DVD po načítaní"
 
 msgid "Scans the DVD whenever a new disc is loaded"
-msgstr "Při nahrání disku prohlédne DVD"
+msgstr ""
 
 msgid "Hide Advanced Video Options Tab"
-msgstr "Skrýt kartu s pokročilými volbami pro obraz"
+msgstr ""
 
 msgid ""
 "Use advanced video options at your own risk.\n"
 "We recommend that you use the controls available\n"
 "on the Video tab instead."
 msgstr ""
-"Použít pokročilé volby pro obraz na vlastní nebezpečí.\n"
-"Doporučuje se namísto toho použít ovladače dostupné na kartě Obraz."
 
 msgid "Delete completed jobs from queue"
-msgstr "Odmazat dokončené úkoly z řady"
+msgstr ""
 
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"Ve výchozím nastavení zůstávají dokončené úkoly v řadě a jsou označeny jako hotové.\n"
-"Zaškrtněte, pokud chcete řadu uklidit sami, tím že smažete hotové úkoly."
 
 msgid "Allow Tweaks"
-msgstr "Povolit vyladění"
+msgstr ""
 
 msgid "Allow HandBrake For Dummies"
-msgstr "Povolit HandBrake pro natvrdlé"
+msgstr ""
 
 msgid "Advanced"
 msgstr "Pokročilé"
 
 msgid "Folder Name:"
-msgstr "Název složky:"
+msgstr "Názov priečinka:"
 
 msgid "<b>Description</b>"
 msgstr "<b>Popis</b>"
 
 msgid "Preset Name:"
-msgstr "Název přednastavení:"
+msgstr "Názov predvoľby:"
 
 msgid "<b>Custom Picture Dimensions</b>"
-msgstr "<b>Vlastní rozměry obrázku</b>"
+msgstr "<b>Vlastné rozmery obrazu</b>"
 
 msgid "Maximum Width:"
-msgstr "Největší šířka:"
+msgstr "Maximálna šírka:"
 
 msgid "Enable maximum width limit."
-msgstr "Povolit nejzazší mez pro šířku."
+msgstr "Povoliť obmedzenie maximálnej šírky."
 
 msgid ""
 "This is the maximum width that the video will be stored at.\n"
@@ -2301,15 +1899,12 @@ msgid ""
 "Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
 "Setting this to 0 means there is no maximum width."
 msgstr ""
-"Toto je největší šířka, se kterou bude obraz ukládán.\n"
-"\n"
-"Vždy když je nahrán nový zdroj, použije se tato hodnota, pokud je šířka zdroje větší. Nastavení této hodnoty na 0 znamená, že není žádná největší šířka."
 
 msgid "Maximum Height:"
-msgstr "Největší výška:"
+msgstr "Maximálne výška:"
 
 msgid "Enable maximum height limit."
-msgstr "Povolit nejzazší mez pro výšku."
+msgstr "Povoliť obmedzenie maximálnej výšky."
 
 msgid ""
 "This is the maximum height that the video will be stored at.\n"
@@ -2317,60 +1912,56 @@ msgid ""
 "Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
 "Setting this to 0 means there is no maximum height."
 msgstr ""
-"Toto je největší výška, se kterou bude obraz ukládán.\n"
-"Vždy když je nahrán nový zdroj, použije se tato hodnota, pokud je šířka zdroje větší.\n"
-"Nastavení této hodnoty na 0 znamená, že není žádná největší výška."
 
 msgid "Select preview frames."
-msgstr "Vybrat náhledové snímky."
+msgstr ""
 
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr ""
-"Zakódovat a přehrát krátký úryvek obrazu počínaje nynějším místem náhledu."
 
 msgid "<b>Duration:</b>"
-msgstr "<b>Doba trvání</b>"
+msgstr "<b>Dĺžka:</b>"
 
 msgid "Set the duration of the live preview in seconds."
-msgstr "Nastavit dobu trvání živého náhledu v sekundách."
+msgstr ""
 
 msgid "Show Crop"
-msgstr "Ukázat oříznutí"
+msgstr ""
 
 msgid "Show Cropped area of the preview"
-msgstr "Ukázat oříznutou oblast v náhledu"
+msgstr ""
 
 msgid "Fullscreen"
-msgstr "Celá obrazovka"
+msgstr "Na celú obrazovku"
 
 msgid "View Fullscreen Preview"
-msgstr "Zobrazit náhled celé obrazovky"
+msgstr "Zobraziť náhľad v režime na celú obrazovku"
 
 msgid "Title Number:"
-msgstr "Název titulu:"
+msgstr "Číslo titulu:"
 
 msgid "Detected DVD devices:"
-msgstr "Zjištěná zařízení DVD:"
+msgstr "Zistené zariadenia DVD:"
 
 msgid "Setting:"
-msgstr "Nastavení:"
+msgstr "Nastavenie:"
 
 msgid "Import SRT"
-msgstr "Zavést SRT"
+msgstr "Importovať SRT"
 
 msgid "Enable settings to import an SRT subtitle file"
-msgstr "Povolit nastavení pro zavedení souboru s titulky SRT"
+msgstr ""
 
 msgid "Embedded Subtitle List"
-msgstr "Vložený seznam titulků"
+msgstr ""
 
 msgid "Enable settings to select embedded subtitles"
-msgstr "Povolit nastavení pro vybrání vložených titulků"
+msgstr ""
 
 msgid "Character Code"
-msgstr "Kód znaku"
+msgstr ""
 
 msgid "Offset (ms)"
 msgstr "Posun (ms)"
@@ -2379,8 +1970,6 @@ msgid ""
 "Set the language of this subtitle.\n"
 "This value will be used by players in subtitle menus."
 msgstr ""
-"Nastavit jazyk těchto titulků.\n"
-"Tato hodnota bude používána přehrávači v nabídkách s titulky."
 
 msgid ""
 "Set the character code used by the SRT file you are importing.\n"
@@ -2389,68 +1978,56 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Nastavit znakový kód používaný souborem SRT, který zavádíte.\n"
-"\n"
-"Soubory SRTs přichází ve všech druzích znakových sad.\n"
-"Znakovou sadu překládáme do UTF-8.\n"
-"Znakový kód zdroje je potřeba za účelem provedení tohoto překódování znaků."
 
 msgid "Select the SRT file to import."
-msgstr "Vybrat soubor titulků SRT k zavedení."
+msgstr ""
 
 msgid "Srt File"
-msgstr "Soubor SRT"
+msgstr "Súbor SRT"
 
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
-"Upravit posun v milisekundách mezi časovými razítky obrazu a souborem "
-"titulků SRT"
 
 msgid "Track"
 msgstr "Stopa"
 
 msgid "List of subtitle tracks available from your source."
-msgstr "Seznam stop s titulky dostupných ze zdroje."
+msgstr "Zoznam dostupných stôp s titulkami z vášho zdroja."
 
 msgid "Forced Subtitles Only"
-msgstr "Pouze vynuceno titulky"
+msgstr "Iba nútené titulky"
 
 msgid "Burn into video"
-msgstr "Vypálit do obrazu"
+msgstr ""
 
 msgid ""
 "Render the subtitle over the video.\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Vložit titulky do obrazu.\n"
-"Titulky budou součástí obrazu a nepůjde je zakázat."
 
 msgid "Set Default Track"
-msgstr "Nastavit výchozí stopu"
+msgstr ""
 
 msgid "Source Track"
 msgstr "Zdrojová stopa"
 
 msgid "List of audio tracks available from your source."
-msgstr "Seznam zvukových stop dostupných ze zdroje."
+msgstr "Zoznam dostupných zvukových stôp z vášho zdroja."
 
 msgid "Track Name:"
-msgstr "Název stopy:"
+msgstr "Názov stopy:"
 
 msgid ""
 "Set the audio track name.\n"
 "\n"
 "Players may use this in the audio selection list."
 msgstr ""
-"Nastavit název zvukové stopy.\n"
-"\n"
-"Tento mohou použít přehrávače v seznamu pro výběr zvuku."
 
 msgid "Mix"
-msgstr "Smíchání"
+msgstr ""
 
 msgid "Sample Rate"
-msgstr "Vzorkovací kmitočet"
+msgstr "Vzorkovacia frekvencia"
 
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
@@ -2458,70 +2035,58 @@ msgid ""
 "For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
 "DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Komprese dynamického rozsahu:</b>\n"
-"Upravit dynamický rozsah výstupní zvukové stopy.\n"
-"\n"
-"U zdrojového zvuku, který má široký dynamický rozsah\n"
-"(velmi hlasité a velmi slabé sekvence), vám komprese\n"
-"dynamického rozsahu (DRC - Dynamic Range Compression)\n"
-"'stlačit' rozsah tím, že udělá hlasité oblasti slabšími a slabé\n"
-"oblasti hlasitějšími."
 
 msgid "Enable bitrate setting"
-msgstr "Povolit nastavení datového toku"
+msgstr "Povoliť nastavenie bitového toku"
 
 msgid "Enable quality setting"
-msgstr "Povolit nastavení jakosti"
+msgstr "Povoliť nastavenie kvality"
 
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
 msgstr ""
-"<b>Kvalita:</b> Upravit jakost výstupu u výstupních kodeků, jež to "
-"podporují."
 
 msgid "00.0"
-msgstr "00.0"
+msgstr ""
 
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
 msgstr ""
-"<b>Zesílení zvuku:</b>\n"
-"Upravit zesílení nebo zeslabení výstupní zvukové stopy."
 
 msgid "Skip This Version"
-msgstr "Přeskočit tuto verzi"
+msgstr "Preskočiť túto verziu"
 
 msgid "Remind Me Later"
-msgstr "Připomenout později"
+msgstr "Pripomenúť neskôr"
 
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Je dostupná nová verze HandBrake!</b>"
+msgstr "<b>Je dostupná nová verzia programu HandBrake!</b>"
 
 msgid "HandBrake xxx is now available (you have yyy)."
-msgstr "HandBrake xxx je nyní dostupný (máte yyy)."
+msgstr "Je dostupný program HandBrake xxx (vaša verzia je yyy)."
 
 msgid "<b>Release Notes</b>"
-msgstr "<b>Poznámky k vydání</b>"
+msgstr "<b>Poznámky k vydaniu</b>"
 
 msgid "Burn-In Behavior*:"
-msgstr "Chování zahořování*:"
+msgstr ""
 
 msgid "Burn-In for deficient players*:"
-msgstr "Zahořování pro nedostatečné přehrávače*:"
+msgstr ""
 
 msgid "_Cancel"
-msgstr "_Zrušit"
+msgstr "_Zrušiť"
 
 msgid "_Open"
-msgstr "_Otevřít"
+msgstr "_Otvoriť"
 
 msgid "First Track Matching Selected Languages"
-msgstr "První stopa odpovídá vybraným jazykům"
+msgstr "Prvá stopa vyhovujúca vybraným jazykom"
 
 msgid "All Tracks Matching Selected Languages"
-msgstr "Všechny stopy odpovídají vybraným jazykům"
+msgstr "Všetky stopy vyhovujúce vybraným jazykom"
 
 msgid "Chapters:"
 msgstr "Kapitoly:"
@@ -2533,127 +2098,127 @@ msgid "Frames:"
 msgstr "Snímky:"
 
 msgid "Do Nothing"
-msgstr "Nedělat nic"
+msgstr "Nerobiť nič"
 
 msgid "Show Notification"
-msgstr "Ukázat oznámení"
+msgstr "Zobraziť oznámenie"
 
 msgid "Quit Handbrake"
-msgstr "Ukončit Handbrake"
+msgstr "Ukončiť program Handbrake"
 
 msgid "Put Computer To Sleep"
-msgstr "Uspat počítač"
+msgstr "Uspať počítač"
 
 msgid "Shutdown Computer"
-msgstr "Vypnout počítač"
+msgstr "Vypnúť počítač"
 
 msgid "Week"
-msgstr "Týden"
+msgstr "Týždeň"
 
 msgid "Month"
-msgstr "Měsíc"
+msgstr "Mesiac"
 
 msgid "Year"
 msgstr "Rok"
 
 msgid "Immortal"
-msgstr "Už nikdy"
+msgstr ""
 
 msgid "Never"
 msgstr "Nikdy"
 
 msgid "Daily"
-msgstr "Denně"
+msgstr "Denne"
 
 msgid "Weekly"
-msgstr "Týdně"
+msgstr "Týždene"
 
 msgid "Monthly"
-msgstr "Měsíčně"
+msgstr "Mesačne"
 
 msgid "Default"
-msgstr "Výchozí"
+msgstr ""
 
 msgid "Fast"
-msgstr "Rychlý"
+msgstr ""
 
 msgid "Slow"
-msgstr "Pomalý"
+msgstr ""
 
 msgid "Slower"
-msgstr "Pomalejší"
+msgstr ""
 
 msgid "Ultralight"
-msgstr "Ultralehký"
+msgstr ""
 
 msgid "Light"
-msgstr "Lehký"
+msgstr ""
 
 msgid "Medium"
-msgstr "Střední"
+msgstr ""
 
 msgid "Strong"
-msgstr "Silný"
+msgstr ""
 
 msgid "Film"
-msgstr "Film"
+msgstr ""
 
 msgid "Grain"
-msgstr "Zrnitost"
+msgstr ""
 
 msgid "High Motion"
-msgstr "Záznam s hodně rychlou změnou snímků"
+msgstr ""
 
 msgid "Animation"
-msgstr "Animace"
+msgstr ""
 
 msgid "Spatial"
-msgstr "Prostorový"
+msgstr ""
 
 msgid "Temporal"
-msgstr "Časový"
+msgstr ""
 
 msgid "Automatic"
-msgstr "Automaticky"
+msgstr ""
 
 msgid "Optimal"
-msgstr "Nejlepší"
+msgstr ""
 
 msgid "Normal"
-msgstr "Normální"
+msgstr ""
 
 msgid "Simple"
-msgstr "Jednoduchý"
+msgstr ""
 
 msgid "Smart"
-msgstr "Chytrý"
+msgstr ""
 
 msgid "Diamond"
-msgstr "Kosočtverec"
+msgstr ""
 
 msgid "Hexagon"
-msgstr "Šestiúhelník"
+msgstr ""
 
 msgid "Uneven Multi-Hexagon"
-msgstr "Nestejnoměrný více-šestiúhelník"
+msgstr ""
 
 msgid "Exhaustive"
-msgstr "Vyčerpávající"
+msgstr ""
 
 msgid "Hadamard Exhaustive"
-msgstr "Vyčerpávající Hadamard"
+msgstr ""
 
 msgid "Most"
-msgstr "Nejvíce"
+msgstr ""
 
 msgid "Some"
-msgstr "Některý"
+msgstr ""
 
 msgid "All"
-msgstr "Vše"
+msgstr "Všetko"
 
 msgid "Encode only"
-msgstr "Pouze zakódovat"
+msgstr "Iba dekódovať"
 
 msgid "Always"
 msgstr "Vždy"
@@ -2674,31 +2239,28 @@ msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
 msgstr "%d (%05d.MPLS) - %02dh%02dm%02ds"
 
 msgid "%d (%05d.MPLS) - Unknown Length"
-msgstr "%d (%05d.MPLS) - Neznámá délka"
+msgstr "%d (%05d.MPLS) - Neznáma dĺžka"
 
 msgid "%d - %02dh%02dm%02ds"
 msgstr "%d - %02dh%02dm%02ds"
 
 msgid "%d - Unknown Length"
-msgstr "%d - Neznámá délka"
+msgstr "%d - Neznáma dĺžka"
 
 msgid "No Titles"
-msgstr "Žádné názvy"
+msgstr "Žiadne tituly"
 
 msgid "No Audio"
-msgstr "Žádný zvuk"
+msgstr "Žiadny zvuk"
 
 msgid "Foreign Audio Search"
-msgstr "Hledání zvuku v cizím jazyce"
+msgstr ""
 
 msgid ""
 "Add an extra pass to the encode which searches\n"
 "for subtitle candidates that provide subtitles for\n"
 "segments of the audio that are in a foreign language."
 msgstr ""
-"Přidat jeden průchod navíc do kódování, jež\n"
-"hledá kandidáty na titulky, kteří poskytují titulky\n"
-"pro ty části zvuku, které jsou v cizím jazyce."
 
 #, c-format
 msgid "Chapter %2d"
@@ -2714,9 +2276,6 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"Neplatné nastavení prokládání:\n"
-"\n"
-"%s\n"
 
 #, c-format
 msgid ""
@@ -2724,9 +2283,6 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"Neplatné nastavení odstranění filmového snímání:\n"
-"\n"
-"%s\n"
 
 #, c-format
 msgid ""
@@ -2734,9 +2290,6 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"Neplatné nastavení odstranění hřebenu:\n"
-"\n"
-"%s\n"
 
 msgid ""
 "Theora is not supported in the MP4 container.\n"
@@ -2744,16 +2297,12 @@ msgid ""
 "You should choose a different video codec or container.\n"
 "If you continue, FFMPEG will be chosen for you."
 msgstr ""
-"Theora není v kontejneru MP4 podporována.\n"
-"\n"
-"Měl byste zvolit jiný obrazový kodek nebo kontejner.\n"
-"Pokud budete pokračovat, bude vybrán FFMPEG."
 
 msgid "Continue"
-msgstr "Pokračovat"
+msgstr "Pokračovať"
 
 msgid "No title found.\n"
-msgstr "Nenalezen žádný název.\n"
+msgstr "Nenašiel sa žiadny titul.\n"
 
 msgid ""
 "Only one subtitle may be burned into the video.\n"
@@ -2761,10 +2310,6 @@ msgid ""
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
 msgstr ""
-"Do obrazu můžou být vypáleny pouze jedny titulky.\n"
-"\n"
-"Měl byste změnit výběr titulků.\n"
-"Pokud budete pokračovat, budou některé titulky ztraceny."
 
 msgid ""
 "Srt file does not exist or not a regular file.\n"
@@ -2772,10 +2317,6 @@ msgid ""
 "You should choose a valid file.\n"
 "If you continue, this subtitle will be ignored."
 msgstr ""
-"Soubor SRT neexistuje, anebo není pravidelným souborem.\n"
-"\n"
-"Měl byste vybrat platný soubor.\n"
-"Pokud budete pokračovat, budou tyto titulky přehlíženy."
 
 msgid ""
 "The source does not support Pass-Thru.\n"
@@ -2783,10 +2324,6 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"Zdroj nepodporuje průchod (Pass-Thru).\n"
-"\n"
-"Měl byste zvolit jiný zvukový kodek.\n"
-"Pokud budete pokračovat, bude pro vás jeden vybrán."
 
 #, c-format
 msgid ""
@@ -2795,10 +2332,6 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"%s není podporován v kontejneru %s.\n"
-"\n"
-"Měl byste zvolit jiný zvukový kodek.\n"
-"Pokud budete pokračovat, bude pro vás jeden vybrán."
 
 #, c-format
 msgid ""
@@ -2807,10 +2340,6 @@ msgid ""
 "You should choose a different mixdown.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"Zdrojový zvuk nepodporuje %s smíchání.\n"
-"\n"
-"Měl byste zvolit jiné smíchání (finální mixáž).\n"
-"Pokud budete pokračovat, bude pro vás jedno vybráno."
 
 #, c-format
 msgid ""
@@ -2819,49 +2348,45 @@ msgid ""
 "Internal error. Could not parse UI description.\n"
 "%s"
 msgstr ""
-"<b><big>Nelze vytvořit %s.</big></b>\n"
-"\n"
-"Vnitřní chyba. Nepodařilo se zpracovat popis UI.\n"
-"%s"
 
 msgid "Index"
-msgstr "Rejstřík"
+msgstr "Číslo"
 
 msgid "Duration"
-msgstr "Trvání"
+msgstr "Dĺžka"
 
 msgid "Title"
-msgstr "Název"
+msgstr "Titul"
 
 msgid "Job Information"
-msgstr "Informace o úkolu"
+msgstr "Informácie o úlohe"
 
 msgid "Track Information"
-msgstr "Informace o stopě"
+msgstr "Informácie o stope"
 
 msgid "Preset Name"
-msgstr "Název přednastavení"
+msgstr "Názov predvoľby"
 
 msgid "The device or file to encode"
-msgstr "Zařízení nebo soubor k zakódování"
+msgstr "Zariadenie alebo súbor na dekódovanie"
 
 msgid "The preset values to use for encoding"
-msgstr "Hodnoty přednastavení, které se mají použít k zakódování"
+msgstr "Hodnoty predvolieb, ktoré použiť pre dekódovanie"
 
 msgid "Spam a lot"
-msgstr "Spousta nevyžádané pošty"
+msgstr ""
 
 msgid "- Transcode media formats"
-msgstr "- Překódovat multimediální formáty"
+msgstr "- Prekódovať formáty médií"
 
 msgid "Globals"
-msgstr "Celková nastavení"
+msgstr "Globálne"
 
 msgid "Presets"
-msgstr "Přednastavení"
+msgstr "Predvoľby"
 
 msgid "Folder"
-msgstr "Složka"
+msgstr "Priečinok"
 
 #, c-format
 msgid "%s path: (%s)"
@@ -2869,24 +2394,24 @@ msgstr "%s cesta: (%s)"
 
 #, c-format
 msgid "%s indices: len %d"
-msgstr "%s rejstříky: len %d"
+msgstr ""
 
 msgid "Type"
 msgstr "Typ"
 
 msgid "Failed to find parent folder when adding child."
-msgstr "Při přidávání potomka se nepodařilo najít rodičovskou složku."
+msgstr ""
 
 msgid "Failed to find parent folder while adding child."
-msgstr "Při přidávání potomka se nepodařilo najít rodičovskou složku."
+msgstr ""
 
 #, c-format
 msgid "Can't map language value: (%s)"
-msgstr "Nelze přiřadit hodnotu jazyka: (%s)"
+msgstr ""
 
 #, c-format
 msgid "Can't map value: (%s)"
-msgstr "Nelze přiřadit hodnotu: (%s)"
+msgstr ""
 
 msgid "Subtitles"
 msgstr "Titulky"
@@ -2895,49 +2420,49 @@ msgid ""
 "%s: Folder already exists.\n"
 "You can not replace it with a preset."
 msgstr ""
-"%s: Složka již existuje.\n"
-"Nemůžete ji nahradit přednastavením."
+"%s: Priečinok už existuje.\n"
+"Nemôžete ho nahradiť predvoľbou."
 
 msgid ""
 "%s: Preset already exists.\n"
 "You can not replace it with a folder."
 msgstr ""
-"%s: Přednastavení již existuje.\n"
-"Nemůžete ji nahradit složkou."
+"%s: Predvoľba už existuje.\n"
+"Nemôžete ju nahradiť priečinkom."
 
 msgid "Import Preset"
-msgstr "Zavést přednastavení"
+msgstr "Import predvoľby"
 
 msgid "All (*)"
-msgstr "Vše (*)"
+msgstr "Všetko (*)"
 
 msgid "Presets (*.plist)"
-msgstr "Přednastavení (*.plist)"
+msgstr "Predvoľby (*.plist)"
 
 msgid "Export Preset"
-msgstr "Vyvést přednastavení"
+msgstr "Export predvoľby"
 
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
 msgstr ""
-"Potvrdit smazání %s:\n"
+"Potvrdenie odstránenia %s:\n"
 "\n"
 "%s"
 
 msgid "folder"
-msgstr "Složka"
+msgstr "priečinku"
 
 msgid "preset"
-msgstr "Přednastavení"
+msgstr "predvoľby"
 
 msgid "No selection???  Perhaps unselected."
-msgstr "Žádný výběr? Patrně není vybráno."
+msgstr ""
 
 #, c-format
 msgid "Gstreamer Error: %s"
-msgstr "Chyba Gstreameru: %s"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -2946,16 +2471,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Chybí přídavný modul GStreameru\n"
-"Zvuk nebo obraz nemusí být přehrávány tak, jak je očekáváno\n"
-"\n"
-"%s"
 
 msgid "Done"
 msgstr "Hotovo"
 
 msgid "Windowed"
-msgstr "Okenní"
+msgstr "V okne"
 
 msgid "Seconds"
 msgstr "Sekundy"
@@ -2968,136 +2489,134 @@ msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) -->"
 " %s</small>"
 msgstr ""
-"<big><b>%s</b></big> <small>(Název %d, %s %d skrz %d, 2 průchody obrazu) -->"
-" %s</small>"
 
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
-msgstr "<big><b>%s</b></big> <small>(název %d, %s %d skrz %d) --> %s</small>"
+msgstr ""
 
 #, c-format
 msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
-msgstr "<b>Změněné přednastavení založené na:</b> <small>%s</small>\n"
+msgstr "<b>Upravená predvoľba založená na:</b> <small>%s</small>\n"
 
 #, c-format
 msgid "<b>Preset:</b> <small>%s</small>\n"
-msgstr "<b>Přednastavení:</b> <small>%s</small>\n"
+msgstr "<b>Predvoľba:</b> <small>%s</small>\n"
 
 #, c-format
 msgid "<b>Format:</b> <small>%s Container</small>\n"
-msgstr "<b>Formát:</b> <small>%s Kontejner</small>\n"
+msgstr "<b>Formát:</b> <small>%s Kontajner</small>\n"
 
 msgid "<b>Container Options:</b><small>"
-msgstr "<b>Volby pro kontejner:</b><small>"
+msgstr "<b>Voľby kontajneru:</b><small>"
 
 #, c-format
 msgid "%sChapter Markers"
-msgstr "%s Značky kapitol"
+msgstr ""
 
 #, c-format
 msgid "%siPod 5G Support"
-msgstr "%s Podpora pro iPod 5G"
+msgstr "%sPodpora pre iPod 5G"
 
 #, c-format
 msgid "%sWeb Optimized"
-msgstr "%s Vyladěno pro internet"
+msgstr "%sOptimalizácia pre web"
 
 #, c-format
 msgid "%sLarge File Size (>4GB)"
-msgstr "%s Velikost velkých souborů (> 4GB)"
+msgstr "%sVeľký súbor (>4GB)"
 
 #, c-format
 msgid "<b>Destination:</b> <small>%s</small>\n"
-msgstr "<b>Cíl:</b> <small>%s</small>\n"
+msgstr "<b>Cieľ:</b> <small>%s</small>\n"
 
 msgid "(Aspect Preserved)"
-msgstr "(Poměr stran zachován)"
+msgstr ""
 
 msgid "(Aspect Lost)"
-msgstr "(Poměr stran ztracen)"
+msgstr ""
 
 msgid "(Anamorphic)"
-msgstr "(Pokřivené)"
+msgstr ""
 
 msgid "(Custom Anamorphic)"
-msgstr "(Vlastní anamorfický)"
+msgstr ""
 
 msgid "<b>Picture:</b> <small>"
-msgstr "<b>Obrázek:</b> <small>"
+msgstr "<b>Obraz:</b> <small>"
 
 #, c-format
 msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
-msgstr "Zdroj: %d x %d, Výstup %d x %d %s, Ořez %d:%d:%d:%d"
+msgstr "Zdroj: %d x %d, výstup %d x %d %s, orezanie %d:%d:%d:%d"
 
 #, c-format
 msgid ", Display %d x %d"
-msgstr ", Zobrazení %d x %d"
+msgstr ""
 
 msgid "<b>Filters:</b><small>"
-msgstr "<b>Filtry:</b><small>"
+msgstr "<b>Filtre:</b><small>"
 
 #, c-format
 msgid "%sDetelecine"
-msgstr "%s Odstranit filmové snímání"
+msgstr ""
 
 #, c-format
 msgid "%sDecomb"
-msgstr "%s Odstranění hřebenu"
+msgstr ""
 
 #, c-format
 msgid "%sDeinterlace"
-msgstr "%s Odstranit prokládání"
+msgstr ""
 
 #, c-format
 msgid "%sDenoise Filter %s:"
-msgstr "%s Filtr pro odstranění šumu %s:"
+msgstr ""
 
 #, c-format
 msgid "%sDeblock: %d"
-msgstr "%s Odstranit bloky: %d"
+msgstr ""
 
 #, c-format
 msgid "%sGrayscale"
-msgstr "%s Odstíny šedi"
+msgstr "%sOdtiene šedej"
 
 #, c-format
 msgid "<b>Video:</b> <small>%s"
-msgstr "<b>Obraz:</b> <small>%s"
+msgstr "<b>Video:</b> <small>%s"
 
 #, c-format
 msgid ", Framerate: %s %s"
-msgstr ", Rychlost snímkování: %s %s"
+msgstr ""
 
 #, c-format
 msgid ", Framerate: Peak %s (may be lower)"
-msgstr ", Rychlost snímkování: Vrchol %s (může být nižší)"
+msgstr ""
 
 #, c-format
 msgid ", Framerate: %s (constant frame rate)"
-msgstr ", Rychlost snímkování: %s (stálý datový tok)"
+msgstr ""
 
 msgid "Error"
 msgstr "Chyba"
 
 msgid "Bitrate:"
-msgstr "Datový tok:"
+msgstr "Bitový tok:"
 
 msgid "Bitrate"
-msgstr "Datový tok"
+msgstr "Bitový tok"
 
 msgid "Quality"
-msgstr "Jakost"
+msgstr "Kvalita"
 
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
-msgstr "<b>Turbo 1 průchod:</b> <small>Zapnuto</small>\n"
+msgstr ""
 
 #, c-format
 msgid "<b>Video Options:</b> <small>Preset: %s</small>"
-msgstr "<b>Volby pro obraz:</b> <small>Přednastavení: %s</small>"
+msgstr ""
 
 msgid "<small> - Tune: "
-msgstr "<small> - Naladění: "
+msgstr ""
 
 #, c-format
 msgid "<small> - Profile: %s</small>"
@@ -3109,7 +2628,7 @@ msgstr "<small> - Úroveň: %s</small>"
 
 #, c-format
 msgid "<b>Advanced Options:</b> <small>%s</small>\n"
-msgstr "<b>Pokročilé volby:</b> <small>%s</small>\n"
+msgstr "<b>Pokročilé voľby:</b> <small>%s</small>\n"
 
 msgid "<b>Audio:</b> <small>"
 msgstr "<b>Zvuk:</b> <small>"
@@ -3120,35 +2639,35 @@ msgstr "<b>Zvukové stopy: %d</b><small>"
 
 #, c-format
 msgid "Bitrate: %d"
-msgstr "Datový tok: %d"
+msgstr "Bitový tok: %d"
 
 #, c-format
 msgid "%s --> Encoder: %s"
-msgstr "%s --> Kodér: %s"
+msgstr ""
 
 #, c-format
 msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
-msgstr "%s --> Kodér: %s, Finální mixáž: %s, Vzorkovací kmitočet: %s, %s"
+msgstr ""
 
 msgid "<b>Subtitle:</b> "
 msgstr "<b>Titulky:</b> "
 
 #, c-format
 msgid "<b>Subtitle Tracks: %d</b>\n"
-msgstr "<b>Titulkové stopy: %d</b>\n"
+msgstr "<b>Stopy s titulkami: %d</b>\n"
 
 msgid " (Force)"
-msgstr " (Vynutit)"
+msgstr ""
 
 msgid " (Burn)"
-msgstr " (Vypálit)"
+msgstr ""
 
 msgid " (Default)"
-msgstr " (Výchozí)"
+msgstr ""
 
 #, c-format
 msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
-msgstr "<small> %s (%s), %s, Posun (ms) %d%s</small>\n"
+msgstr "<small> %s (%s), %s, posun (ms) %d%s</small>\n"
 
 #, c-format
 msgid ""
@@ -3157,13 +2676,13 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
-"Cíl: %s\n"
+"Cieľ: %s\n"
 "\n"
-"Jiná zařazená úloha má stanoven stejný cíl.\n"
-"Chcete jej přepsat?"
+"Iná úloha vo fronte má určený rovnaký cieľ.\n"
+"Chcete ho prepísať?"
 
 msgid "Overwrite"
-msgstr "Přepsat"
+msgstr "Prepísať"
 
 #, c-format
 msgid ""
@@ -3171,9 +2690,9 @@ msgid ""
 "\n"
 "This is not a valid directory."
 msgstr ""
-"Cíl: %s\n"
+"Cieľ: %s\n"
 "\n"
-"Toto není platný adresář."
+"Toto nie je platný adresár."
 
 #, c-format
 msgid ""
@@ -3181,9 +2700,9 @@ msgid ""
 "\n"
 "Can not read or write the directory."
 msgstr ""
-"Cíl: %s\n"
+"Cieľ: %s\n"
 "\n"
-"Nelze přečíst nebo zapisovat do adresáře."
+"Nedá sa čítať alebo zapisovať adresár."
 
 #, c-format
 msgid ""
@@ -3191,12 +2710,12 @@ msgid ""
 "\n"
 "Encode may be incomplete if you proceed.\n"
 msgstr ""
-"Cílový souborový systém je skoro plný: %uM volné\n"
+"Cieľový systém súborov je takmer plný: %uM voľných\n"
 "\n"
-"pokud budete pokračovat, zakódování může být nedokončeno.\n"
+"Dekódovanie nemusí byť dokončené, ak budete pokračovať.\n"
 
 msgid "Proceed"
-msgstr "Pokračovat"
+msgstr "Pokračovať"
 
 #, c-format
 msgid ""
@@ -3205,65 +2724,60 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
-"Cíl: %s\n"
+"Cieľ: %s\n"
 "\n"
-"Soubor  již existuje.\n"
-"Přejete si jej přepsat?"
+"Súbor už existuje.\n"
+"Chcete ho prepísať?"
 
 msgid ""
 "<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
 "Duplicates will not be added to the queue.</span>"
 msgstr ""
-"<span foreground='red' weight='bold'>Bylo zjištěno, že některé cílové soubory jsou dvakrát.\n"
-"Soubory, které jsou dvakrát, do řady přidány nebudou.</span>"
 
 msgid "No Title"
-msgstr "Žádný název"
+msgstr "Žiadny titul"
 
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
-"Je tu další název se stejným cílovým souborovým názvem.\n"
-"Tento název do řady přidán nebude, dokud název\n"
-"výstupního souboru nezměníte.\n"
 
 msgid "Stop"
-msgstr "Zastavit"
+msgstr "Zastaviť"
 
 msgid "Stop Encoding"
-msgstr "Zastavit kódování"
+msgstr "Zastaviť dekódovanie"
 
 msgid "S_top Encoding"
-msgstr "_Zastavit kódování"
+msgstr "Zas_taviť dekódovanie"
 
 msgid "Resume"
-msgstr "Pokračovat"
+msgstr "Pokračovať"
 
 msgid "Resume Encoding"
-msgstr "Pokračovat v kódování"
+msgstr "Pokračovať v dekódovaní"
 
 msgid "_Resume Encoding"
-msgstr "_Pokračovat v kódování"
+msgstr "_Pokračovať v dekódovaní"
 
 msgid "S_top Queue"
-msgstr "Z_astavit řadu"
+msgstr "Zas_taviť frontu"
 
 msgid "_Start Queue"
-msgstr "_Spustit řadu"
+msgstr "_Spustiť frontu"
 
 msgid "_Resume Queue"
-msgstr "Po_kračovat v řadě"
+msgstr "_Pokračovať vo fronte"
 
 msgid "Resume Queue"
-msgstr "Pokračovat v řadě"
+msgstr "Pokračovať vo fronte"
 
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
 msgstr ""
-"Nyní provádíte zakódování. Co chcete dělat?\n"
+"Momentálne sa dekóduje. Čo by ste chceli vykonať?\n"
 "\n"
 
 #, c-format
@@ -3272,69 +2786,66 @@ msgid ""
 "\n"
 "Would you like to reload them?"
 msgstr ""
-"Máte %d nezařazených úloh v uložené řadě.\n"
-"\n"
-"Chcete je nahrát znovu?"
 
 msgid "No"
-msgstr "Ne"
+msgstr "Nie"
 
 msgid "Yes"
-msgstr "Ano"
+msgstr "Áno"
 
 #, c-format
 msgid "Usage: %s infile [outfile]\n"
-msgstr "Použití: %s infile [outfile]\n"
+msgstr ""
 
 #, c-format
 msgid "Offset: %dms"
 msgstr "Posun: %dms"
 
 msgid "Burned Into Video"
-msgstr "Vypáleno do obrazu"
+msgstr ""
 
 msgid "Passthrough"
-msgstr "Průchod"
+msgstr ""
 
 msgid "through"
-msgstr "až"
+msgstr ""
 
 msgid "(Forced Subtitles Only)"
-msgstr "(Pouze vynucené titulky)"
+msgstr "(Iba nútené titulky)"
 
 msgid "(Default)"
-msgstr "(Výchozí)"
+msgstr "(Predvolené)"
 
 msgid "Error!"
 msgstr "Chyba!"
 
 #, c-format
 msgid "Preferred Language: %s"
-msgstr "Upřednostňovaný jazyk: %s"
+msgstr "Prednostný jazyk: %s"
 
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Přidat %s stopu titulků, pokud výchozí zvuk není %s"
+msgstr ""
 
 #, c-format
 msgid "Type %s"
-msgstr "Typ %s"
+msgstr ""
 
 #, c-format
 msgid "Type %s value %s"
-msgstr "Typ %s hodnota %s"
+msgstr ""
 
 #, c-format
 msgid "Type %s value %d"
-msgstr "Typ %s hodnota %d"
+msgstr ""
 
 #, c-format
 msgid "Type %s value %<PRId64>"
-msgstr "Typ %s hodnota %<PRId64>"
+msgstr ""
 
 #, c-format
 msgid "Type %s value %f"
-msgstr "Typ %s hodnota %f"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -3343,10 +2854,6 @@ msgid ""
 "Expanded Options:\n"
 "\"%s\""
 msgstr ""
-"%s\n"
-"\n"
-"Rozšířené volby:\n"
-"\"%s\""
 
 #, c-format
 msgid ""
@@ -3355,40 +2862,36 @@ msgid ""
 "Expanded Options:\n"
 "\"\""
 msgstr ""
-"%s\n"
-"\n"
-"Rozšířené volby:\n"
-"\"\""
 
 msgid "Any"
-msgstr "Jakýkoli"
+msgstr ""
 
 msgid "0: SAD, no subpel"
-msgstr "0: SAD, žádný subpel"
+msgstr ""
 
 msgid "4: SATD, qpel on all"
-msgstr "4: SATD, qpel na vše"
+msgstr ""
 
 msgid "5: SATD, multi-qpel on all"
-msgstr "5: SATD, více-qpel  na vše"
+msgstr ""
 
 msgid "6: RD in I/P-frames"
-msgstr "6: RD v I/P-snímcích"
+msgstr ""
 
 msgid "7: RD in all frames"
-msgstr "7: RD ve všech snímcích"
+msgstr ""
 
 msgid "8: RD refine in I/P-frames"
-msgstr "8: RD vylepšit I/P-snímcích"
+msgstr ""
 
 msgid "9: RD refine in all frames"
-msgstr "9: RD vylepšit ve všech snímcích"
+msgstr ""
 
 msgid "10: QPRD in all frames"
-msgstr "10: QPRD ve všech snímcích"
+msgstr ""
 
 msgid "11: No early terminations in analysis"
-msgstr "11: Žádná brzká ukončení rozborů"
+msgstr ""
 
 msgid ""
 "Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
@@ -3396,121 +2899,114 @@ msgid ""
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Přidat hledání zvuku v cizím jazyce, když výchozí zvuková stopa je ve vámi upřednostňovaném jazyce.\n"
-"Toto hledání nalezne krátké úryvky zvuku v cizím jazyce a poskytne pro ně titulky.\n"
-"\n"
-"Tato volba vyžaduje, aby byl v seznamu vybraných jazyků nastaven jazyk."
 
 msgid ""
 "When the default audio track is not your preferred language, add a subtitle track.\n"
 "\n"
 "This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Když výchozí zvuková stopa není ve vámi upřednostňovaném jazyku, přidat stopu titulků.\n"
-"\n"
-"Tato volba vyžaduje, aby byl v seznamu vybraných jazyků nastaven jazyk."
 
 msgid "_Pause Encoding"
-msgstr "_Pozastavit kódování"
+msgstr "_Pozastaviť dekódovanie"
 
 msgid "_Start Encoding"
-msgstr "_Spustit kódování"
+msgstr "_Spustiť dekódovanie"
 
 msgid ""
 "Open\n"
 "Source"
 msgstr ""
-"Otevřít\n"
+"Otvoriť\n"
 "zdroj"
 
 msgid ""
 "Add To\n"
 "Queue"
 msgstr ""
-"Přidat\n"
-"do řady"
+"Pridať do\n"
+"fronty"
 
 msgid ""
 "Start\n"
 "Encoding"
 msgstr ""
-"Spustit\n"
-"kódování"
+"Spustiť\n"
+"dekódovanie"
 
 msgid ""
 "Stop\n"
 "Encoding"
 msgstr ""
-"Zastavit\n"
-"kódování"
+"Zastaviť\n"
+"dekódovanie"
 
 msgid ""
 "Pause\n"
 "Encoding"
 msgstr ""
-"Pozastavit\n"
-"kódování"
+"Pozastaviť\n"
+"dekódovanie"
 
 msgid ""
 "Resume\n"
 "Encoding"
 msgstr ""
-"Pokračovat\n"
-"v kódování"
+"Pokračovať\n"
+"v dekódovaní"
 
 msgid ""
 "Show\n"
 "Queue"
 msgstr ""
-"Ukázat\n"
-"řadu"
+"Zobraziť\n"
+"frontu"
 
 msgid ""
 "Hide\n"
 "Queue"
 msgstr ""
-"Skrýt\n"
-"řadu"
+"Skryť\n"
+"frontu"
 
 msgid "Show Preview Window"
-msgstr "Ukázat náhledové okno"
+msgstr "Zobraziť okno s náhľadom"
 
 msgid ""
 "Show\n"
 "Preview"
 msgstr ""
-"Ukázat\n"
-"náhled"
+"Zobraziť\n"
+"náhľad"
 
 msgid ""
 "Hide\n"
 "Preview"
 msgstr ""
-"Skrýt\n"
-"náhled"
+"Skryť\n"
+"náhľad"
 
 msgid ""
 "Show\n"
 "Activity"
 msgstr ""
-"Ukázat\n"
-"činnost"
+"Zobraziť\n"
+"aktivitu"
 
 msgid ""
 "Hide\n"
 "Activity"
 msgstr ""
-"Skrýt\n"
-"činnost"
+"Skryť\n"
+"aktivitu"
 
 msgid "Dimensions"
-msgstr "Rozměry"
+msgstr "Rozmery"
 
 msgid "Deinterlace Filter:"
-msgstr "Filtr prokládání:"
+msgstr ""
 
 msgid "Deinterlace Preset:"
-msgstr "Přednastavení prokládání:"
+msgstr ""
 
 msgid ""
 " The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
@@ -3519,60 +3015,54 @@ msgid ""
 "The classic deinterlace filter is applied to all frames.\n"
 "Frames that are not interlaced will suffer some quality degradation."
 msgstr ""
-"Filtr na odstranění hřebenu výběrově odstraňuje prokládání snímků, jež se jeví být prokládané.  To uchová kvalitu snímků, které nejsou prokládány.\n"
-"\n"
-"Klasický filtr na odstranění prokládání je použit na všechny snímky.\n"
-"Snímky, které nejsou prokládány, utrpí určitým poklesem jakosti."
 
 msgid "Filters"
-msgstr "Filtry"
+msgstr "Filtre"
 
 msgid "Add subtitle track if default audio is not your preferred language"
 msgstr ""
-"Přidat stopu titulků, pokud výchozí zvuk není ve vámi upřednostňovaném "
-"jazyku"
 
 msgid "Open _Source"
-msgstr "Otevřít _zdroj"
+msgstr "Otvoriť _zdroj"
 
 msgid "Open Single _Title"
-msgstr "Otevřít jeden _titul"
+msgstr "Otvoriť jeden _titul"
 
 msgid "Set _Destination"
-msgstr "Nastavit _cíl"
+msgstr "Nastaviť _cieľ"
 
 msgid "Your names"
-msgstr "Pavel Fric"
+msgstr ""
 
 msgid "Your emails"
-msgstr "fripohled.blogspot.com"
+msgstr ""
 
 msgid "Name"
-msgstr "Název"
+msgstr ""
 
 msgid "Audio"
 msgstr "Zvuk"
 
 msgid "Failed to find audio widget %s"
-msgstr "Nepodařilo se najít zvukový doplněk %s"
+msgstr ""
 
 msgid "Failed to find dependent widget %s"
-msgstr "Nepodařilo se najít závislý doplněk %s"
+msgstr ""
 
 msgid "%dkbps"
-msgstr "%dkb/s"
+msgstr "%dkbps"
 
 msgid "Job"
-msgstr "Práce"
+msgstr "Úloha"
 
 msgid "Artist"
-msgstr "Umělec"
+msgstr "Interpret"
 
 msgid "off"
-msgstr "z"
+msgstr ""
 
 msgid "End"
-msgstr "Konec"
+msgstr ""
 
 msgid "text (%s)"
 msgstr "text (%s)"
@@ -3581,67 +3071,67 @@ msgid "Text"
 msgstr "Text"
 
 msgid "Markup"
-msgstr "Značení"
+msgstr ""
 
 msgid "Attributes"
-msgstr "Vlastnosti"
+msgstr ""
 
 msgid "Font"
-msgstr "Písmo"
+msgstr ""
 
 msgid "Font family"
-msgstr "Rodina písma"
+msgstr "Rodina písiem"
 
 msgid "Font style"
-msgstr "Styl písma"
+msgstr "Štýl písma"
 
 msgid "Font weight"
-msgstr "Váha písma"
+msgstr ""
 
 msgid "Font size"
-msgstr "Velikost písma"
+msgstr "Veľkosť písma"
 
 msgid "Font scale"
-msgstr "Velikost písma"
+msgstr "Mierka písma"
 
 msgid "Strikethrough"
-msgstr "Přeškrtnutí"
+msgstr "Prečiarknuté"
 
 msgid "Underline"
-msgstr "Podtržení"
+msgstr "Podčiarknuté"
 
 msgid "Font style set"
-msgstr "Nastavení stylu písma"
+msgstr ""
 
 msgid "Rise set"
-msgstr "Nastavení stoupání"
+msgstr ""
 
 msgid "Language set"
-msgstr "Nastavení jazyka"
+msgstr ""
 
 msgid "Align set"
-msgstr "Nastavení zarovnání"
+msgstr ""
 
 msgid "90 Degrees"
-msgstr "90 stupňů"
+msgstr "90 stupňov"
 
 msgid "180 Degrees"
-msgstr "180 stupňů"
+msgstr "180 stupňov"
 
 msgid "270 Degrees"
-msgstr "270 stupňů"
+msgstr "270 stupňov"
 
 msgid "1: SAD, qpel"
-msgstr "1: SAD, qpel"
+msgstr ""
 
 msgid "2: SATD, qpel"
-msgstr "2: SATD, qpel"
+msgstr ""
 
 msgid "3: SATD: multi-qpel"
-msgstr "3: SATD: více-qpel"
+msgstr ""
 
 msgid "Num"
-msgstr "Čís."
+msgstr ""
 
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -3650,11 +3140,6 @@ msgid ""
 "Preset: %s\n"
 "Custom: %s\n"
 msgstr ""
-"Neplatné nastavení odstranění prokládání:\n"
-"\n"
-"Filtr: %s\n"
-"Přednastavení: %s\n"
-"Vlastní: %s\n"
 
 msgid ""
 "Invalid Deinterlace Settings:\n"
@@ -3662,10 +3147,6 @@ msgid ""
 "Filter: %s\n"
 "Preset: %s\n"
 msgstr ""
-"Neplatné nastavení odstranění prokládání:\n"
-"\n"
-"Filtr: s\n"
-"Přednastavení: %s\n"
 
 msgid ""
 "Invalid Detelecine Settings:\n"
@@ -3673,10 +3154,6 @@ msgid ""
 "Preset: %s\n"
 "Custom: %s\n"
 msgstr ""
-"Neplatné nastavení odstranění prokládání:\n"
-"\n"
-"Přednastavení: %s\n"
-"Vlastní: %s\n"
 
 msgid ""
 "Invalid Denoise Settings:\n"
@@ -3686,53 +3163,48 @@ msgid ""
 "Tune:   %s\n"
 "Custom: %s\n"
 msgstr ""
-"Neplatné nastavení odstranění šumu:\n"
-"\n"
-"Filtr: %s\n"
-"Přednastavení: %s\n"
-"Vlastní: %s\n"
 
 msgid "SRT"
 msgstr "SRT"
 
 msgid "Burn"
-msgstr "Vypálit"
+msgstr ""
 
 msgid "Filename"
-msgstr "Název souboru"
+msgstr "Názov súboru"
 
 msgid "Done\n"
 msgstr "Hotovo\n"
 
 msgid "DATA"
-msgstr "DATA"
+msgstr ""
 
 msgid "Navy"
-msgstr "Loďstvo"
+msgstr ""
 
 msgid "Presets (*.json)"
-msgstr "Přednastavení (*.json)"
+msgstr "Predvoľby (*.json)"
 
 msgid "Ok"
-msgstr "OK"
+msgstr "Ok"
 
 msgid "allocate %d x %d"
-msgstr "přidělit %d x %d"
+msgstr ""
 
 msgid "Codeset"
-msgstr "Kódová stránka"
+msgstr "Sada znakov"
 
 msgid "Auto"
-msgstr "Automaticky"
+msgstr ""
 
 msgid "Search"
-msgstr "Hledat"
+msgstr "Vyhľadať"
 
 msgid "Enable"
-msgstr "Povolit"
+msgstr "Povoliť"
 
 msgid "Forced"
-msgstr "Vynucený"
+msgstr "Nútené"
 
 msgid "<small>%s%s%s%s</small>\n"
 msgstr "<small>%s%s%s%s</small>\n"
@@ -3741,4 +3213,4 @@ msgid "Offset"
 msgstr "Posun"
 
 msgid "No subtitle list!"
-msgstr "Žádný seznam titulků!"
+msgstr "Žiadny zoznam tituliek!"
