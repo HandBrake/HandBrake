@@ -492,7 +492,7 @@ static int sanitize_audio_codec(int in_codec, int out_codec,
              !(in_codec & out_codec & HB_ACODEC_PASS_MASK))
     {
         codec = hb_audio_encoder_get_fallback_for_passthru(out_codec);
-        if (codec == 0)
+        if (codec == HB_ACODEC_INVALID)
             codec = fallback;
     }
 
@@ -507,7 +507,7 @@ static int sanitize_audio_codec(int in_codec, int out_codec,
             break;
         }
     }
-    if (codec == 0)
+    if (codec == HB_ACODEC_INVALID)
         codec = hb_audio_encoder_get_default(mux);
     return codec;
 }
