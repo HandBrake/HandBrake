@@ -20,10 +20,5 @@ ifneq (none,$(FFMPEG.GCC.g))
 endif
 
 ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
-    ifeq (x86_64,$(BUILD.machine))
-        LAME.CONFIGURE.args.build = --build=x86_64-unknown-linux-gnu
-    endif
-    ifeq (i686,$(BUILD.machine))
-        LAME.CONFIGURE.args.build = --build=i686-unknown-linux-gnu
-    endif
+    LAME.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
 endif
