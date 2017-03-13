@@ -2293,7 +2293,7 @@ fail:
 
 const char* hb_audio_encoder_get_short_name(int encoder)
 {
-    if (!(encoder & HB_ACODEC_ANY) && encoder != HB_ACODEC_NONE)
+    if (!(encoder & HB_ACODEC_ANY))
         goto fail;
 
     const hb_encoder_t *audio_encoder = NULL;
