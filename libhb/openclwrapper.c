@@ -912,7 +912,7 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     gpu_info->file_count += 1;
 
 to_exit:
-    if (source_str)
+    if (source_str != NULL)
     {
         free(source_str);
         source_str = NULL;
@@ -920,25 +920,25 @@ to_exit:
         source = NULL;
     }
 
-    if (devices)
+    if (devices != NULL)
     {
         free(devices);
         devices = NULL;
     }
 
-    if (binary)
+    if (binary != NULL)
     {
         free(binary);
         binary = NULL;
     }
 
-    if (buildLog)
+    if (buildLog != NULL)
     {
         free(buildLog);
         buildLog = NULL;
     }
 
-    if (fd)
+    if (fd != NULL)
     {
         fclose(fd);
         fd = NULL;
