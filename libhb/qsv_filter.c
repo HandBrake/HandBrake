@@ -408,6 +408,7 @@ static hb_filter_info_t * hb_qsv_filter_info( hb_filter_object_t * filter )
 
 void qsv_filter_close( hb_qsv_context* qsv, HB_QSV_STAGE_TYPE vpp_type ){
     int i = 0;
+    int x = 0;
     hb_qsv_space* vpp_space = 0;
 
     if(qsv && qsv->is_context_active && qsv->vpp_space)
@@ -418,8 +419,8 @@ void qsv_filter_close( hb_qsv_context* qsv, HB_QSV_STAGE_TYPE vpp_type ){
 
             hb_log( "qsv_filter[%s] done: max_surfaces: %u/%u , max_syncs: %u/%u", ((vpp_type == HB_QSV_VPP_DEFAULT)?"Default": "User") ,vpp_space->surface_num_max_used, vpp_space->surface_num, vpp_space->sync_num_max_used, vpp_space->sync_num );
 
-            for (i = 0; i < vpp_space->surface_num; i++){
-                av_freep(&vpp_space->p_surfaces[i]);
+            for (x = 0; x < vpp_space->surface_num; x++){
+                av_freep(&vpp_space->p_surfaces[x]);
             }
             vpp_space->surface_num = 0;
 
@@ -427,9 +428,9 @@ void qsv_filter_close( hb_qsv_context* qsv, HB_QSV_STAGE_TYPE vpp_type ){
                 av_freep(&vpp_space->p_ext_params);
             vpp_space->p_ext_param_num = 0;
 
-            for (i = 0; i < vpp_space->sync_num; i++){
-                av_freep(&vpp_space->p_syncp[i]->p_sync);
-                av_freep(&vpp_space->p_syncp[i]);
+            for (x = 0; x < vpp_space->sync_num; x++){
+                av_freep(&vpp_space->p_syncp[x]->p_sync);
+                av_freep(&vpp_space->p_syncp[x]);
             }
             vpp_space->sync_num = 0;
 
