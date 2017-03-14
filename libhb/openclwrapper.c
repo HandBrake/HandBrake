@@ -724,40 +724,35 @@ int hb_cached_of_kerner_prg( const GPUEnv *gpu_env, const char * cl_file_name )
 int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                             int indx, const char *build_option )
 {
-    cl_int status;
-    size_t length;
-    char *source_str;
-    const char *source;
-    size_t source_size[1];
-    char *buildLog = NULL;
-    int b_error, binary_status, binaryExisted;
-    char * binary;
-    cl_uint numDevices;
-    cl_device_id *devices;
-    FILE * fd;
-    FILE * fd1;
-    int idx;
+    cl_int      status;
+    size_t      length;
+    char        *source_str = NULL;
+    const char  *source;
+    size_t      source_size[1];
+    char        *buildLog   = NULL;
+    int         b_error, binary_status, binaryExisted;
+    char        *binary;
+    cl_uint     numDevices;
+    cl_device_id *devices   = NULL;
+    FILE        *fd         = NULL;
+    FILE        *fd1        = NULL;
+    int         idx;
+    int         ret_value   = 1;
 
-    if( hb_cached_of_kerner_prg( gpu_info, filename ) == 1 )
-        return (1);
+    if (hb_cached_of_kerner_prg(gpu_info, filename) == 1)
+        return 1;
 
     idx = gpu_info->file_count;
 
 #ifdef USE_EXTERNAL_KERNEL
-    status = hb_convert_to_string( filename, &source_str, gpu_info, idx );
-    if( status == 0 )
-        return(0);
+    status = hb_convert_to_string(filename, &source_str, gpu_info, idx);
+    if (status == 0)
+        return 0;
 #else
     int kernel_src_size = strlen(kernel_src_scale) + strlen(kernel_src_yadif_filter);
 
-//    char *scale_src;
-//    status = hb_convert_to_string("./scale_kernels.cl", &scale_src, gpu_info, idx);
-//    if (status != 0)
-//        kernel_src_size += strlen(scale_src);
-
     source_str = (char*)malloc( kernel_src_size + 2 );
     strcpy( source_str, kernel_src_scale );
-//    strcat( source_str, scale_src );    //
     strcat( source_str, kernel_src_yadif_filter );
 #endif
 
@@ -766,8 +761,9 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
     if (hb_ocl == NULL)
     {
-        hb_error("hb_compile_kernel_file: OpenCL support not available");
-        return 0;
+        hb_error("OpenCL: Support is not available");
+        ret_value = 0;
+        goto to_exit;
     }
 
     if ((binaryExisted = hb_binary_generated(gpu_info->context, filename, &fd)) == 1)
@@ -777,12 +773,16 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         if (status != CL_SUCCESS)
         {
             hb_log("OpenCL: Unable to get the number of devices in context.");
-            return 0;
+            ret_value = 0;
+            goto to_exit;
         }
 
         devices = (cl_device_id*)malloc(sizeof(cl_device_id) * numDevices);
         if (devices == NULL)
-            return 0;
+        {
+            ret_value = 0;
+            goto to_exit;
+        }
 
         length   = 0;
         b_error  = 0;
@@ -790,20 +790,25 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         b_error |= (length = ftell(fd))   <= 0;
         b_error |= fseek(fd, 0, SEEK_SET) <  0;
         if (b_error)
-            return 0;
+        {
+            ret_value = 0;
+            goto to_exit;
+        }
 
         binary = (char*)calloc(length + 2, sizeof(char));
         if (binary == NULL)
-            return 0;
+        {
+            ret_value = 0;
+            goto to_exit;
+        }
 
         b_error |= fread(binary, 1, length, fd) != length;
-#if 0   // this doesn't work under OS X and/or with some non-AMD GPUs
-        if (binary[length-1] != '\n')
-            binary[length++]  = '\n';
-#endif
 
         if (b_error)
-            return 0;
+        {
+            ret_value = 0;
+            goto to_exit;
+        }
 
         /* grab the handles to all of the devices in the context. */
         status = hb_ocl->clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
@@ -818,10 +823,6 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                                                     &binary_status,
                                                                     &status);
 
-        fclose(fd);
-        free(devices);
-        fd      = NULL;
-        devices = NULL;
     }
     else
     {
@@ -831,13 +832,15 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                                                     &status);
     }
 
-    if((gpu_info->programs[idx] == (cl_program)NULL) || (status != CL_SUCCESS)){
+    if ((gpu_info->programs[idx] == (cl_program)NULL) || (status != CL_SUCCESS))
+    {
         hb_log( "OpenCL: Unable to get list of devices in context." );
-        return(0);
+        ret_value = 0;
+        goto to_exit;
     }
 
     /* create a cl program executable for all the devices specified */
-    if( !gpu_info->isUserCreated ) 
+    if (!gpu_info->isUserCreated) 
     {
         status = hb_ocl->clBuildProgram(gpu_info->programs[idx], 1, gpu_info->devices,
                                         build_option, NULL, NULL);
@@ -848,9 +851,9 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                         build_option, NULL, NULL);
     }
 
-    if( status != CL_SUCCESS )
+    if (status != CL_SUCCESS)
     {
-        if( !gpu_info->isUserCreated ) 
+        if (!gpu_info->isUserCreated) 
         {
             status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
                                                    gpu_info->devices[0],
@@ -865,19 +868,21 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                                    0, NULL, &length);
         }
 
-        if( status != CL_SUCCESS )
+        if (status != CL_SUCCESS)
         {
             hb_log( "OpenCL: Unable to get GPU build information." );
-            return(0);
+            ret_value = 0;
+            goto to_exit;
         }
 
-        buildLog = (char*)malloc( length );
-        if( buildLog == (char*)NULL )
+        buildLog = (char*)malloc(length);
+        if (buildLog == (char*)NULL)
         {
-            return(0);
+            ret_value = 0;
+            goto to_exit;
         }
 
-        if( !gpu_info->isUserCreated )
+        if (!gpu_info->isUserCreated)
         {
             status = hb_ocl->clGetProgramBuildInfo(gpu_info->programs[idx],
                                                    gpu_info->devices[0],
@@ -892,26 +897,54 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                                    length, buildLog, &length);
         }
 
-        fd1 = fopen( "kernel-build.log", "w+" );
-        if( fd1 != NULL ) {
-            fwrite( buildLog, sizeof(char), length, fd1 );
-            fclose( fd1 );
+        fd1 = fopen("kernel-build.log", "w+");
+        if (fd1 != NULL) {
+            fwrite(buildLog, sizeof(char), length, fd1);
+            fclose(fd1);
         }
 
-        free( buildLog );
-        return(0);
+        ret_value = 0;
+        goto to_exit;
     }
 
-    strcpy( gpu_env.kernelSrcFile[idx], filename );
-
-    if (binaryExisted != 1)
-    {
-        //hb_generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
-    }
+    strcpy(gpu_env.kernelSrcFile[idx], filename);
 
     gpu_info->file_count += 1;
 
-    return(1);
+to_exit:
+    if (source_str)
+    {
+        free(source_str);
+        source_str = NULL;
+        // only used as pointer to source_str
+        source = NULL;
+    }
+
+    if (devices)
+    {
+        free(devices);
+        devices = NULL;
+    }
+
+    if (binary)
+    {
+        free(binary);
+        binary = NULL;
+    }
+
+    if (buildLog)
+    {
+        free(buildLog);
+        buildLog = NULL;
+    }
+
+    if (fd)
+    {
+        fclose(fd);
+        fd = NULL;
+    }
+
+    return ret_value;
 }
 
 
