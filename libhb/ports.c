@@ -1267,12 +1267,6 @@ void hb_net_close( hb_net_t ** _n )
 * OS Sleep Allow / Prevent
 ***********************************************************************/
 
-#ifdef __APPLE__
-// 128 chars limit for IOPMAssertionCreateWithName
-static CFStringRef reasonForActivity =
-    CFSTR("HandBrake is currently scanning and/or encoding");
-#endif
-
 void* hb_system_sleep_opaque_init()
 {
     void *opaque = NULL;
@@ -1350,6 +1344,10 @@ void hb_system_sleep_private_disable(void *opaque)
         // nothing to do
         return;
     }
+
+    // 128 chars limit for IOPMAssertionCreateWithName
+    CFStringRef reasonForActivity =
+    CFSTR("HandBrake is currently scanning and/or encoding");
 
     IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
                                                    kIOPMAssertionLevelOn,
