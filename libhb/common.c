@@ -2188,7 +2188,7 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
             break;
 
         default:
-            gid = HB_GID_NONE; // will never match an enabled encoder
+            return HB_ACODEC_INVALID;
             break;
     }
     while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
