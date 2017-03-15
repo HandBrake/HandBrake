@@ -1268,8 +1268,6 @@
     NSParameterAssert(job);
     [self.jobs beginTransaction];
 
-    NSInteger index = [self.jobs indexOfObject:job];
-
     if (job != self.currentJob)
     {
         job.state = HBJobStateWorking;
@@ -1278,6 +1276,7 @@
             if (result)
             {
                 // Now that source is loaded and settings applied, delete the queue item from the queue
+                NSInteger index = [self.jobs indexOfObject:job];
                 [self removeQueueItemAtIndex:index];
             }
             else
