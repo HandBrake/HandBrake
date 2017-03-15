@@ -214,14 +214,8 @@ extern NSString *keySubTrackType;
         {
             hb_subtitle_t *subtitle = hb_list_item(self.hb_title->list_subtitle, i);
 
-            // Human-readable representation of subtitle->source
-            NSString *bitmapOrText  = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
-            NSString *subSourceName = @(hb_subsource_name(subtitle->source));
-
-            NSString *lang = @(subtitle->lang);
-
-            /* create a dictionary of source subtitle information to store in our array */
-            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@", i, lang],
+            // create a dictionary of source subtitle information to store in our array
+            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@", i, @(subtitle->lang)],
                                               keySubTrackType: @(subtitle->source),
                                               keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
         }
