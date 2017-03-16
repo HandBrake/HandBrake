@@ -45,13 +45,18 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
 
+
+
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             bool minimiseToTray = userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
 
             if (minimiseToTray)
             {
+
+                INotifyIconService notifyIconService = IoC.Get<INotifyIconService>();
                 this.notifyIcon = new NotifyIcon();
                 this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick), new MenuItem("Mini Status Display", ShowMiniStatusDisplay) });
+                notifyIconService.RegisterNotifyIcon(this.notifyIcon);
 
                 StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));
                 if (streamResourceInfo != null)
@@ -132,9 +137,7 @@ namespace HandBrakeWPF.Views
                 if (this.WindowState == WindowState.Minimized)
                 {
                     this.ShowInTaskbar = false;
-                    notifyIcon.Visible = true;
-
-                    // notifyIcon.ShowBalloonTip(5000, "HandBrake", "Application Minimised", ToolTipIcon.Info);          
+                    notifyIcon.Visible = true;      
                 }
                 else if (this.WindowState == WindowState.Normal)
                 {

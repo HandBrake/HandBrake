@@ -1483,6 +1483,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show the encode status in the application title bar..
+        /// </summary>
+        public static string OptionsView_ShowStatusInTitleBar {
+            get {
+                return ResourceManager.GetString("OptionsView_ShowStatusInTitleBar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic:.
         /// </summary>
         public static string PictureSettingsView_Anamorphic {

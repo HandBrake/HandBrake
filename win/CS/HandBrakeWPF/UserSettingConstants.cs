@@ -231,6 +231,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string PresetExpandedStateList = "PresetExpandedStateList";
 
+        /// <summary>
+        /// Setting to turn on/off the ability to show status in the title bar.
+        /// </summary>
+        public const string ShowStatusInTitleBar = "ShowStatusInTitleBar";
+
         #endregion
     }
 }

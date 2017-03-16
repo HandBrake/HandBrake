@@ -893,4 +893,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Low diskspace warning level (GB):</value>
   </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>Show the encode status in the application title bar.</value>
+  </data>
 </root>

@@ -5,7 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cal="http://www.caliburnproject.org"
-        Title="{Data:Binding Path=WindowTitle}"
+        Title="{Data:Binding Path=MainViewModel.WindowTitle}"
         Width="1015"
         Height="675"
         MinWidth="750"

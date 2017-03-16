@@ -160,6 +160,7 @@
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AdvancedTab}" IsChecked="{Binding ShowAdvancedTab}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

@@ -833,4 +833,11 @@ Your preset file will be archived and new one created. You will need to re-creat
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>No Additional Information</value>
   </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, Pass {2} of {3})</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{1}%, Pass {2} of {3}
+Remaining Time: {4}</value>
+  </data>
 </root>

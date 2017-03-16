@@ -92,7 +92,9 @@ namespace HandBrakeWPF.ViewModels
         private bool showQueueInline;
         private bool pauseOnLowDiskspace;
         private long pauseOnLowDiskspaceLevel;
-        private bool useQsvDecodeForNonQsvEnc;  
+        private bool useQsvDecodeForNonQsvEnc;
+
+        private bool showStatusInTitleBar;
 
         #endregion
 
@@ -348,6 +350,24 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show encode status in the tile bar.
+        /// </summary>
+        public bool ShowStatusInTitleBar
+        {
+            get
+            {
+                return this.showStatusInTitleBar;
+            }
+            set
+            {
+                if (value == this.showStatusInTitleBar) return;
+                this.showStatusInTitleBar = value;
+                this.NotifyOfPropertyChange(() => this.ShowStatusInTitleBar);
+            }
+        }
+        
         #endregion
 
         #region Output Files
@@ -1221,6 +1241,7 @@ namespace HandBrakeWPF.ViewModels
             this.Arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs) ?? string.Empty;
             this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
             this.ShowQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
+            this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
 
             // #############################
             // Output Settings
@@ -1370,6 +1391,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

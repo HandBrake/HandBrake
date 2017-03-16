@@ -75,6 +75,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
         private readonly IUpdateService updateService;
         private readonly IWindowManager windowManager;
+        private readonly INotifyIconService notifyIconService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
         private readonly IEncode encodeService;
@@ -163,12 +164,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="metaDataViewModel">
         /// The Meta Data View Model
         /// </param>
+        /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
-            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
+            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -176,6 +178,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.updateService = updateService;
             this.windowManager = windowManager;
+            this.notifyIconService = notifyIconService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
@@ -311,6 +314,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!Equals(this.windowName, value))
                 {
                     this.windowName = value;
+                    this.NotifyOfPropertyChange(() => this.WindowTitle);
                 }
             }
         }
@@ -2419,11 +2423,19 @@ namespace HandBrakeWPF.ViewModels
                         lastEncodePercentage = percent;
                         this.ProgressPercentage = percent;
                         this.NotifyOfPropertyChange(() => ProgressPercentage);
+
+                        if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar))
+                        {
+                            this.WindowTitle = string.Format(Resources.WindowTitleStatus, Resources.HandBrake_Title, this.ProgressPercentage, e.Task, e.TaskCount);
+                            this.notifyIconService.SetTooltip(string.Format(Resources.TaskTrayStatusTitle, Resources.HandBrake_Title, this.ProgressPercentage, e.Task, e.TaskCount, e.EstimatedTimeLeft));
+                        }
                     }
                     else
                     {
                         this.ProgramStatusLabel = Resources.Main_QueueFinished;
                         this.IsEncoding = false;
+                        this.WindowTitle = Resources.HandBrake_Title;
+                        this.notifyIconService.SetTooltip(this.WindowTitle);
 
                         if (this.windowsSeven.IsWindowsSeven)
                         {

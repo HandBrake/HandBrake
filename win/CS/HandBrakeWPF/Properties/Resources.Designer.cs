@@ -1732,6 +1732,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {1}%, Pass {2} of {3}
+        ///Remaining Time: {4}.
+        /// </summary>
+        public static string TaskTrayStatusTitle {
+            get {
+                return ResourceManager.GetString("TaskTrayStatusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown Error.
         /// </summary>
         public static string UnknownError {
@@ -1904,6 +1914,15 @@ namespace HandBrakeWPF.Properties {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - ({1}%, Pass {2} of {3}).
+        /// </summary>
+        public static string WindowTitleStatus {
+            get {
+                return ResourceManager.GetString("WindowTitleStatus", resourceCulture);
             }
         }
     }
