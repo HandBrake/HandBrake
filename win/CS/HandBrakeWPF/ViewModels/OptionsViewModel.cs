@@ -28,6 +28,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using Microsoft.Win32;
+
     using Ookii.Dialogs.Wpf;
 
     using Execute = Caliburn.Micro.Execute;
@@ -73,7 +75,7 @@ namespace HandBrakeWPF.ViewModels
         private int selectedVerbosity;
         private bool sendFileAfterEncode;
         private string sendFileTo;
-        private string sendFileToPath;
+        private string sendFileToPath;       
         private string vlcPath;
         private string whenDone;
         private BindingList<string> whenDoneOptions = new BindingList<string>();
@@ -93,8 +95,11 @@ namespace HandBrakeWPF.ViewModels
         private bool pauseOnLowDiskspace;
         private long pauseOnLowDiskspaceLevel;
         private bool useQsvDecodeForNonQsvEnc;
-
         private bool showStatusInTitleBar;
+
+        private string whenDoneAudioFile;
+
+        private bool playSoundWhenDone;
 
         #endregion
 
@@ -350,7 +355,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether to show encode status in the tile bar.
         /// </summary>
@@ -367,7 +371,46 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowStatusInTitleBar);
             }
         }
-        
+
+        /// <summary>
+        /// When Done Audio File
+        /// </summary>
+        public string WhenDoneAudioFile
+        {
+            get
+            {
+                return this.whenDoneAudioFile;
+            }
+            set
+            {
+                if (value == this.whenDoneAudioFile) return;
+                this.whenDoneAudioFile = value;
+                this.NotifyOfPropertyChange(() => this.WhenDoneAudioFile);
+            }
+        }
+
+        /// <summary>
+        /// When Done Audio File - File Path
+        /// </summary>
+        public string WhenDoneAudioFileFullPath { get; set; }
+
+        /// <summary>
+        /// Play a sound when an encode or queue finishes.
+        /// </summary>
+        public bool PlaySoundWhenDone
+        {
+            get
+            {
+                return this.playSoundWhenDone;
+            }
+            set
+            {
+                if (value == this.playSoundWhenDone) return;
+                this.playSoundWhenDone = value;
+                this.NotifyOfPropertyChange(() => this.PlaySoundWhenDone);
+            }
+        }
+
         #endregion
 
         #region Output Files
@@ -1196,6 +1239,20 @@ namespace HandBrakeWPF.ViewModels
             this.updateService.CheckForUpdates(this.UpdateCheckComplete);
         }
 
+        /// <summary>
+        /// Browse - Send File To
+        /// </summary>
+        public void BrowseWhenDoneAudioFile()
+        {
+            OpenFileDialog dialog = new  OpenFileDialog() { Filter = "All Files|*.wav;*.mp3", FileName = this.WhenDoneAudioFileFullPath };
+            bool? dialogResult = dialog.ShowDialog();
+            if (dialogResult.HasValue && dialogResult.Value)
+            {
+                this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(dialog.FileName);
+                this.WhenDoneAudioFileFullPath = dialog.FileName;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -1242,6 +1299,9 @@ namespace HandBrakeWPF.ViewModels
             this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
             this.ShowQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
             this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
+            this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile)) ?? string.Empty;
+            this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
+            this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
 
             // #############################
             // Output Settings
@@ -1392,6 +1452,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

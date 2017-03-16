@@ -131,6 +131,18 @@
                                 <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" />
                             </StackPanel>
 
+                            <StackPanel Orientation="Vertical" Margin="0,7,0,0">
+                                <CheckBox Content="{x:Static Properties:ResourcesUI.OptionsView_PlaySoundWhenDone}"  
+                                          VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="{Binding PlaySoundWhenDone}" Margin="0,1,0,0" />
+                                
+                                <StackPanel Orientation="Horizontal" Margin="25,2,0,0">
+                                    <TextBlock Text="{Binding WhenDoneAudioFile}" VerticalAlignment="Center" Margin="5,0,5,0"  />
+                                    <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseWhenDoneAudioFile]" />
+                                </StackPanel>
+                
+                            </StackPanel>
+
+
                         </StackPanel>
                     </StackPanel>
 

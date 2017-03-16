@@ -896,4 +896,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Show the encode status in the application title bar.</value>
   </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>Play a sound when the queue or single encode completes:</value>
+  </data>
 </root>

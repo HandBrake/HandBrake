@@ -1483,6 +1483,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Play a sound when the queue or single encode completes:.
+        /// </summary>
+        public static string OptionsView_PlaySoundWhenDone {
+            get {
+                return ResourceManager.GetString("OptionsView_PlaySoundWhenDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show the encode status in the application title bar..
         /// </summary>
         public static string OptionsView_ShowStatusInTitleBar {

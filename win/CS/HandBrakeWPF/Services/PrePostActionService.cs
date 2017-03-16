@@ -11,7 +11,9 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Windows.Forms;
+    using System.Windows.Media;
 
     using Caliburn.Micro;
 
@@ -127,6 +129,18 @@ namespace HandBrakeWPF.Services
             if (e.WasManuallyStopped)
             {
                 return;
+            }
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone))
+            {
+                string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
+                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+                {
+                    var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
+                    var player = new MediaPlayer();
+                    player.Open(uri);
+                    player.Play();
+                }
             }
 
             if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction) == "Do nothing")
