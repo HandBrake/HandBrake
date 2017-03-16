@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12113" systemVersion="16E175b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12117" systemVersion="16E189a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBController">
@@ -275,11 +275,7 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="cct-2d-Ycx">
-                                <dictionary key="options">
-                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                </dictionary>
-                            </binding>
+                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="NAL-fw-AF5"/>
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5491">
@@ -632,58 +628,36 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="ZEH-cS-zXY"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="wjB-Tl-5qq"/>
-                    <toolbarItem implicitItemIdentifier="B3BAB305-77BF-4967-B8E6-D11F40EF822B" label="Open Source" paletteLabel="Open Source" toolTip="Open Source" tag="-1" image="source" id="8r8-nZ-dYs">
+                    <toolbarItem implicitItemIdentifier="DE791733-5430-4B2F-B91D-ACAA95BAF7F0" label="Open Source" paletteLabel="Open Source" toolTip="Open Source" tag="-1" image="source" id="8r8-nZ-dYs">
                         <connections>
                             <action selector="browseSources:" target="-2" id="zi1-Tk-0YL"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="4CAB4280-DF01-4BDC-B23B-98BD6E6190F4" label="Start" paletteLabel="Start Encoding" toolTip="Start Encoding" tag="-1" image="encode" id="byg-kj-sEM">
+                    <toolbarItem implicitItemIdentifier="10063EA1-C821-4363-8F59-7840853EB568" label="Start" paletteLabel="Start Encoding" toolTip="Start Encoding" tag="-1" image="encode" id="byg-kj-sEM">
                         <connections>
                             <action selector="rip:" target="-2" id="f6w-0B-Qvn"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="E4C5E251-DD8D-4288-AC80-AF8E654B7A32" label="Pause" paletteLabel="Pause Encoding" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="wTQ-KF-5KW">
+                    <toolbarItem implicitItemIdentifier="B4A5CE50-6CD5-4CD0-B639-E1516E1C85C1" label="Pause" paletteLabel="Pause Encoding" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="wTQ-KF-5KW">
                         <connections>
                             <action selector="pause:" target="-2" id="AN1-8V-lc1"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="69E83092-D0D1-48A5-BF46-99EFB3EC630A" label="Add To Queue" paletteLabel="Add To Queue" toolTip="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
+                    <toolbarItem implicitItemIdentifier="3B6A53EE-F973-41A7-A0DF-AEBD73DAC28E" label="Add To Queue" paletteLabel="Add To Queue" toolTip="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">
                         <size key="minSize" width="32" height="32"/>
                         <size key="maxSize" width="32" height="32"/>
                         <connections>
                             <action selector="addToQueue:" target="-2" id="TRB-HE-1GW"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="6EFCA879-A80D-45D7-A846-EAD85261F864" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
-                        <size key="minSize" width="32" height="32"/>
-                        <size key="maxSize" width="32" height="32"/>
-                        <connections>
-                            <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="DAAC2346-2B39-4A35-A62B-C12826F6AB42" label="Preview" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
-                        <connections>
-                            <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D9753B5B-F09B-451E-9FD8-E8DD979FBFA2" label="Activity Log" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
-                        <connections>
-                            <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B774D9D7-AE89-4C1A-8685-D631473867F6" label="Toggle Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Presets List" tag="-1" image="presets" id="9ll-Jg-YAB">
-                        <connections>
-                            <action selector="toggleDrawer:" target="-2" id="YN2-RM-4ss"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="BC981D6D-0945-4001-BCB0-F9A1BBBD2C04" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
+                    <toolbarItem implicitItemIdentifier="A5F62853-5047-43C2-AD64-73654B0E34B2" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
                         <nil key="toolTip"/>
                         <size key="minSize" width="58" height="32"/>
                         <size key="maxSize" width="58" height="32"/>
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -709,6 +683,28 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </menu>
                             </popUpButtonCell>
                         </popUpButton>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="29BB9965-48E8-4B07-97B2-3C3706F3D150" label="Queue" paletteLabel="Show Queue Window" toolTip="Show Queue Window" tag="-1" image="showqueue" id="HCx-ku-nF7" customClass="HBToolbarBadgedItem">
+                        <size key="minSize" width="32" height="32"/>
+                        <size key="maxSize" width="32" height="32"/>
+                        <connections>
+                            <action selector="showQueueWindow:" target="-1" id="vZB-dY-DbD"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="90131A42-4120-458B-A63F-04A8D7486202" label="Preview" paletteLabel="Show Preview Window" toolTip="Show Preview Window" tag="-1" image="preview" id="dK4-jt-v4K">
+                        <connections>
+                            <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="AC64166E-55C9-431A-8085-74C960AAF1D5" label="Activity Log" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
+                        <connections>
+                            <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="44A85DDE-F1ED-47FD-9A02-6B6DDF515FD8" label="Toggle Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Presets List" tag="-1" image="presets" id="9ll-Jg-YAB">
+                        <connections>
+                            <action selector="toggleDrawer:" target="-2" id="YN2-RM-4ss"/>
+                        </connections>
                     </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>

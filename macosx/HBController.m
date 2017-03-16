@@ -9,6 +9,7 @@
 #import "HBToolbarBadgedItem.h"
 #import "HBQueueController.h"
 #import "HBTitleSelectionController.h"
+#import "NSWindow+HBAdditions.h"
 
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
@@ -1090,6 +1091,7 @@
  */
 - (void)doAddToQueue
 {
+    [self.window HB_endEditing];
     [fQueueController addJob:[self.job copy]];
 }
 
@@ -1175,6 +1177,8 @@
 
 - (IBAction)addTitlesToQueue:(id)sender
 {
+    [self.window HB_endEditing];
+
     self.titlesSelectionController = [[HBTitleSelectionController alloc] initWithTitles:self.core.titles
                                                                              presetName:self.job.presetName
                                                                                delegate:self];
@@ -1403,6 +1407,8 @@
 
 - (IBAction)showAddPresetPanel:(id)sender
 {
+    [self.window HB_endEditing];
+
     BOOL defaultToCustom = ((self.job.picture.width + self.job.picture.cropRight + self.job.picture.cropLeft) < self.job.picture.sourceWidth) ||
                            ((self.job.picture.height + self.job.picture.cropTop + self.job.picture.cropBottom) < self.job.picture.sourceHeight);
 

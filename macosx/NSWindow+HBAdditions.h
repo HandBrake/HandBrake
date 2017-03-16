@@ -1,10 +1,8 @@
-//
-//  NSWindow+HBAdditions.h
-//  HandBrake
-//
-//  Created by Damiano Galassi on 25/04/16.
-//
-//
+/*  NSWindow+HBAdditions.h
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
 
@@ -15,11 +13,23 @@
  */
 - (void)HB_resizeToBestSizeForViewSize:(NSSize)viewSize center:(NSPoint)center animate:(BOOL)performAnimation;
 
-
 /**
  *  Calculates and returns the center point of the window
  */
 - (NSPoint)HB_centerPoint;
+
+/**
+ End editing on the field editor
+ and keep the current first responder.
+
+ @return success
+ */
+- (BOOL)HB_endEditing;
+
+/**
+ Force end editing.
+ */
+- (void)HB_forceEndEditing;
 
 
 @end

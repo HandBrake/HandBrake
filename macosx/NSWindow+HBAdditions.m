@@ -1,10 +1,8 @@
-//
-//  NSWindow+HBAdditions.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 25/04/16.
-//
-//
+/*  NSWindow+HBAdditions.m
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "NSWindow+HBAdditions.h"
 
@@ -74,6 +72,35 @@
                                  floor(self.frame.origin.y + self.frame.size.height / 2));
     return center;
 }
+
+- (BOOL)HB_endEditing;
+{
+    BOOL success;
+    id responder = self.firstResponder;
+
+    // If we're dealing with the field editor, the real first responder is
+    // its delegate.
+    if ((responder != nil) && [responder isKindOfClass:[NSTextView class]] && [(NSTextView*)responder isFieldEditor])
+    {
+        responder = ([[responder delegate] isKindOfClass:[NSResponder class]]) ? [responder delegate] : nil;
+    }
+
+    success = [self makeFirstResponder:nil];
+
+    // Return first responder status.
+    if (success && responder != nil)
+    {
+        [self makeFirstResponder:responder];
+    }
+
+    return success;
+}
+
+- (void)HB_forceEndEditing;
+{
+    [self endEditingFor:nil];
+}
+
 
 
 @end
