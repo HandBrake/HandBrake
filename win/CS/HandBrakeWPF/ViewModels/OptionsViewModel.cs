@@ -1148,7 +1148,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseSendFileTo()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*", FileName = this.sendFileToPath };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*", FileName = this.sendFileToPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1175,7 +1175,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseVlcPath()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.exe)|*.exe", FileName = this.VLCPath };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.exe)|*.exe", FileName = this.VLCPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
