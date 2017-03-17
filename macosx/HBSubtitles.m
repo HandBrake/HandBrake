@@ -484,7 +484,7 @@ extern NSString *keySubTrackSrtFileURLBookmark;
     decodeCollectionOfObjects3(_sourceTracks, NSArray, NSDictionary, NSURL, NSData);
 
 #ifdef __SANDBOX_ENABLED__
-    NSMutableArray *sourceTracks = [_sourceTracks mutableCopy];
+    NSMutableArray *sourceTracks = [NSMutableArray array];
     for (NSDictionary *sourceTrack in _sourceTracks)
     {
         if (sourceTrack[keySubTrackSrtFileURLBookmark])
