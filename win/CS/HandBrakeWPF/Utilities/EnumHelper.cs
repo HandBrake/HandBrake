@@ -13,7 +13,6 @@ namespace HandBrakeWPF.Utilities
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
@@ -54,7 +53,7 @@ namespace HandBrakeWPF.Utilities
         public static string GetDisplay(T value)
         {
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            DisplayAttribute[] attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
+            ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
 
             return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
         }

@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System.ComponentModel.DataAnnotations;
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// The audio encoder rate type.
@@ -19,13 +19,13 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         /// The bitrate.
         /// </summary>
-        [Display(Name = "Bitrate: ")]
+        [DisplayName("Bitrate: ")]
         Bitrate, 
 
         /// <summary>
         /// The quality.
         /// </summary>
-        [Display(Name = "Quality: ")]
+        [DisplayName("Quality: ")]
         Quality, 
     }
 }

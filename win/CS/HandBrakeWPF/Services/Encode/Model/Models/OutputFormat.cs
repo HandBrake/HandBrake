@@ -9,23 +9,18 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
-
+    
     /// <summary>
     /// The Output format.
     /// </summary>
     public enum OutputFormat
     {
-        [Description("MP4")]
-        [Display(Name = "MP4")]
+        [DisplayName("MP4")]
         [ShortName("av_mp4")]
         Mp4 = 0,
 
-        [Description("MKV")]
-        [Display(Name = "MKV")]
+        [DisplayName("MKV")]
         [ShortName("av_mkv")]
         Mkv,
     }

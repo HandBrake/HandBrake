@@ -9,31 +9,23 @@
 
 namespace HandBrakeWPF.Services.Queue.Model
 {
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-
-    using HandBrake.ApplicationServices.Converters;
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// Queue Item Status
     /// </summary>
-    [TypeConverter(typeof(EnumToDescConverter))]
     public enum QueueItemStatus
     {
-        [Description("Waiting")]
-        [Display(Name = "Waiting")]
+        [DisplayName("Waiting")]
         Waiting = 0,
 
-        [Description("In Progress")]
-        [Display(Name = "In Progress")]
+        [DisplayName("In Progress")]
         InProgress,
 
-        [Description("Completed")]
-        [Display(Name = "Completed")]
+        [DisplayName("Completed")]
         Completed,
 
-        [Description("Error")]
-        [Display(Name = "Error")]
+        [DisplayName("Error")]
         Error,
     }
 }

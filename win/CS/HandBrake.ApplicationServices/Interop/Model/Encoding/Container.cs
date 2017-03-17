@@ -10,7 +10,8 @@
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
+
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// The container.
@@ -20,9 +21,9 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     {
         None = 0x0,
 
-        [Display(Name = "MP4")]
+        [DisplayName("MP4")]
         MP4,
-        [Display(Name = "MKV")]
+        [DisplayName("MKV")]
         MKV
     }
 }

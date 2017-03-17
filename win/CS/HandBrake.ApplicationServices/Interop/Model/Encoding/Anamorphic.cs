@@ -9,8 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
@@ -18,16 +16,16 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// </summary>
     public enum Anamorphic
     {
-        [Display(Name = "None")]
+        [DisplayName("None")]
         [ShortName("none")]
         None = 0,
-        [Display(Name = "Automatic")]
+        [DisplayName("Automatic")]
         [ShortName("auto")]
         Automatic = 4,
-        [Display(Name = "Loose")]
+        [DisplayName("Loose")]
         [ShortName("loose")]
         Loose = 2,
-        [Display(Name = "Custom")]
+        [DisplayName("Custom")]
         [ShortName("custom")]
         Custom = 3
     }

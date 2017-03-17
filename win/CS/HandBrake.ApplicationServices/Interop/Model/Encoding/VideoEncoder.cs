@@ -9,8 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Interop.Model.Encoding
 {
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
@@ -18,55 +16,55 @@ namespace HandBrake.ApplicationServices.Interop.Model.Encoding
     /// </summary>
     public enum VideoEncoder
     {
-        [Display(Name = "H.264 (x264)")]
+        [DisplayName("H.264 (x264)")]
         [ShortName("x264")]
         X264 = 0,
 
-        [Display(Name = "H.264 10-bit (x264)")]
+        [DisplayName("H.264 10-bit (x264)")]
         [ShortName("x264_10bit")]
         X264_10,
 
-        [Display(Name = "H.264 (Intel QSV)")]
+        [DisplayName("H.264 (Intel QSV)")]
         [ShortName("qsv_h264")]
         QuickSync,
 
-        [Display(Name = "MPEG-4")]
+        [DisplayName("MPEG-4")]
         [ShortName("mpeg4")]
         FFMpeg,
 
-        [Display(Name = "MPEG-2")]
+        [DisplayName("MPEG-2")]
         [ShortName("mpeg2")]
         FFMpeg2,
 
-        [Display(Name = "Theora")]
+        [DisplayName("Theora")]
         [ShortName("theora")]
         Theora,
 
-        [Display(Name = "H.265 (x265)")]
+        [DisplayName("H.265 (x265)")]
         [ShortName("x265")]
         X265,
 
-        [Display(Name = "H.265 12-bit (x265)")]
+        [DisplayName("H.265 12-bit (x265)")]
         [ShortName("x265_12bit")]
         X265_12,
 
-        [Display(Name = "H.265 10-bit (x265)")]
+        [DisplayName("H.265 10-bit (x265)")]
         [ShortName("x265_10bit")]
         X265_10,
 
-        [Display(Name = "H.265 (Intel QSV)")]
+        [DisplayName("H.265 (Intel QSV)")]
         [ShortName("qsv_h265")]
         QuickSyncH265,
 
-        [Display(Name = "H.265 10-bit (Intel QSV)")]
+        [DisplayName("H.265 10-bit (Intel QSV)")]
         [ShortName("qsv_h265_10bit")]
         QuickSyncH26510b,
 
-        [Display(Name = "VP8")]
+        [DisplayName("VP8")]
         [ShortName("VP8")]
         VP8,
 
-        [Display(Name = "VP9")]
+        [DisplayName("VP9")]
         [ShortName("VP9")]
         VP9
     }

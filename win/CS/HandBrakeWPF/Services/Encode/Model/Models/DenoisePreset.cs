@@ -18,27 +18,27 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     /// </summary>
     public enum DenoisePreset
     {
-        [Display(Name = "Weak")]
+        [DisplayName("Weak")]
         [ShortName("weak")]
         Weak = 0,
 
-        [Display(Name = "Medium")]
+        [DisplayName("Medium")]
         [ShortName("medium")]
         Medium,
 
-        [Display(Name = "Strong")]
+        [DisplayName("Strong")]
         [ShortName("strong")]
         Strong,
 
-        [Display(Name = "Custom")]
+        [DisplayName("Custom")]
         [ShortName("custom")]
         Custom,
 
-        [Display(Name = "Ultralight")] // NLMeans only
+        [DisplayName("Ultralight")] // NLMeans only
         [ShortName("ultralight")]
         Ultralight,
 
-        [Display(Name = "Light")] // NLMeans only
+        [DisplayName("Light")] // NLMeans only
         [ShortName("light")]
         Light,
     }

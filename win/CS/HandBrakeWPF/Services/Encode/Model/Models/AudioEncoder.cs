@@ -18,75 +18,75 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     /// </summary>
     public enum AudioEncoder
     {
-        [Display(Name = "AAC (avcodec)")]
+        [DisplayName("AAC (avcodec)")]
         [ShortName("av_aac")]
         ffaac,
 
-        [Display(Name = "AAC (FDK)")]
+        [DisplayName("AAC (FDK)")]
         [ShortName("fdk_aac")]
         fdkaac,
 
-        [Display(Name = "HE-AAC (FDK)")]
+        [DisplayName("HE-AAC (FDK)")]
         [ShortName("fdk_haac")]
         fdkheaac,
 
-        [Display(Name = "MP3")]
+        [DisplayName("MP3")]
         [ShortName("mp3")]
         Lame,
 
-        [Display(Name = "AC3")]
+        [DisplayName("AC3")]
         [ShortName("ac3")]
         Ac3,
 
-        [Display(Name = "Auto Passthru")]
+        [DisplayName("Auto Passthru")]
         [ShortName("copy")]
         Passthrough,
 
-        [Display(Name = "AC3 Passthru")]
+        [DisplayName("AC3 Passthru")]
         [ShortName("copy:ac3")]
         Ac3Passthrough,
 
-        [Display(Name = "E-AC3 Passthru")]
+        [DisplayName("E-AC3 Passthru")]
         [ShortName("copy:eac3")]
         EAc3Passthrough,
 
-        [Display(Name = "DTS Passthru")]
+        [DisplayName("DTS Passthru")]
         [ShortName("copy:dts")]
         DtsPassthrough,
 
-        [Display(Name = "DTS-HD Passthru")]
+        [DisplayName("DTS-HD Passthru")]
         [ShortName("copy:dtshd")]
         DtsHDPassthrough,
 
-        [Display(Name = "TrueHD Passthru")]
+        [DisplayName("TrueHD Passthru")]
         [ShortName("copy:truehd")]
         TrueHDPassthrough,
 
-        [Display(Name = "AAC Passthru")]
+        [DisplayName("AAC Passthru")]
         [ShortName("copy:aac")]
         AacPassthru,
 
-        [Display(Name = "MP3 Passthru")]
+        [DisplayName("MP3 Passthru")]
         [ShortName("copy:mp3")]
         Mp3Passthru,
 
-        [Display(Name = "Vorbis")]
+        [DisplayName("Vorbis")]
         [ShortName("vorbis")]
         Vorbis,
 
-        [Display(Name = "FLAC 16-bit")]
+        [DisplayName("FLAC 16-bit")]
         [ShortName("flac16")]
         ffflac,
 
-        [Display(Name = "FLAC 24-bit")]
+        [DisplayName("FLAC 24-bit")]
         [ShortName("flac24")]
         ffflac24,
 
-        [Display(Name = "FLAC Passthru")]
+        [DisplayName("FLAC Passthru")]
         [ShortName("copy:flac")]
         FlacPassthru,
 
-        [Display(Name = "Opus (libopus)")]
+        [DisplayName("Opus (libopus)")]
         [ShortName("opus")]
         Opus,
     }

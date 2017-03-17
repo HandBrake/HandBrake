@@ -18,31 +18,31 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     /// </summary>
     public enum DenoiseTune
     {
-        [Display(Name = "None")]
+        [DisplayName("None")]
         [ShortName("none")]
         None = 0,
 
-        [Display(Name = "Film")]
+        [DisplayName("Film")]
         [ShortName("film")]
         Film,
 
-        [Display(Name = "Grain")]
+        [DisplayName("Grain")]
         [ShortName("grain")]
         Grain,
 
-        [Display(Name = "High Motion")]
+        [DisplayName("High Motion")]
         [ShortName("highmotion")]
         HighMotion,
 
-        [Display(Name = "Animation")]
+        [DisplayName("Animation")]
         [ShortName("animation")]
         Animation,
 
-        [Display(Name = "Tape")]
+        [DisplayName("Tape")]
         [ShortName("tape")]
         Tape,
 
-        [Display(Name = "Sprite")]
+        [DisplayName("Sprite")]
         [ShortName("sprite")]
         Sprite,
     }

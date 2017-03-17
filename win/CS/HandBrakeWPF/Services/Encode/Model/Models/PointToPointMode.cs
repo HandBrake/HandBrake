@@ -9,23 +9,23 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System.ComponentModel.DataAnnotations;
+    using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
     /// Point to Point Mode
     /// </summary>
     public enum PointToPointMode
     {
-        [Display(Name = "Chapters")]
+        [DisplayName("Chapters")]
         Chapters = 0,
 
-        [Display(Name = "Seconds")]
+        [DisplayName("Seconds")]
         Seconds,
 
-        [Display(Name = "Frames")]
+        [DisplayName("Frames")]
         Frames,
 
-        [Display(Name = "Preview")]
+        [DisplayName("Preview")]
         Preview,
     }
 }

@@ -9,8 +9,6 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
@@ -18,11 +16,11 @@ namespace HandBrake.ApplicationServices.Model
     /// </summary>
     public enum VideoScaler
     {
-        [Display(Name = "Lanczos (default)")]
+        [DisplayName("Lanczos (default)")]
         [ShortName("swscale")]
         Lanczos = 0,
 
-        [Display(Name = "Bicubic (OpenCL)")]
+        [DisplayName("Bicubic (OpenCL)")]
         [ShortName("opencl")]
         BicubicCl,
     }
