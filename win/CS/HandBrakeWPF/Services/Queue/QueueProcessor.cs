@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Services.Encode.Factories;
@@ -215,11 +216,10 @@ namespace HandBrakeWPF.Services.Queue
         /// </param>
         public void BackupQueue(string exportPath)
         {
-            string appDataPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             string tempPath = !string.IsNullOrEmpty(exportPath)
                                   ? exportPath
-                                  : appDataPath + string.Format(this.queueFile, string.Empty);
+                                  : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
 
             using (var strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
             {
@@ -416,8 +416,7 @@ namespace HandBrakeWPF.Services.Queue
         /// </param>
         public void RestoreQueue(string importPath)
         {
-            string appDataPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             string tempPath = !string.IsNullOrEmpty(importPath)
                                   ? importPath
                                   : (appDataPath + string.Format(this.queueFile, string.Empty));

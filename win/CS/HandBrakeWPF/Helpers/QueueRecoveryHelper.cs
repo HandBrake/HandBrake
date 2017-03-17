@@ -45,7 +45,7 @@ namespace HandBrakeWPF.Helpers
         {
             try
             {
-                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+                string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
                 List<string> queueFiles = new List<string>();
                 DirectoryInfo info = new DirectoryInfo(tempPath);
                 IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
@@ -127,7 +127,7 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             List<string> queueFiles = CheckQueueRecovery();
             MessageBoxResult result = MessageBoxResult.None;
             if (!silentRecovery)
@@ -173,7 +173,7 @@ namespace HandBrakeWPF.Helpers
                     }
 
                     // Recover the Queue
-                    encodeQueue.RestoreQueue(appDataPath + file);
+                    encodeQueue.RestoreQueue(Path.Combine(appDataPath, file));
                     isRecovered = true;
 
                     // Cleanup

@@ -1201,7 +1201,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ViewLogDirectory()
         {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string logDir = DirectoryUtilities.GetLogDirectory();
             string windir = Environment.GetEnvironmentVariable("WINDIR");
             Process prc = new Process { StartInfo = { FileName = windir + @"\explorer.exe", Arguments = logDir } };
             prc.Start();

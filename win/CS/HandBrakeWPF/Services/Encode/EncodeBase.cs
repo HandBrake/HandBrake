@@ -18,6 +18,8 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Services.Logging.Interfaces;
 
+    using HandBrakeWPF.Utilities;
+
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeCompletedStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeCompletedStatus;
     using EncodeProgessStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeProgessStatus;
@@ -133,7 +135,7 @@ namespace HandBrakeWPF.Services.Encode
         {
             try
             {
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = DirectoryUtilities.GetLogDirectory();
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
                 string encodeLogFile = destinationFile + " " + DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";

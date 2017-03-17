@@ -14,6 +14,8 @@ namespace HandBrakeWPF.Utilities
     using System.IO;
     using System.Linq;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     /// <summary>
     /// A general Helper class for HandBrake GUI
     /// </summary>
@@ -24,16 +26,15 @@ namespace HandBrakeWPF.Utilities
         /// </summary>
         public static void ResetToDefaults()
         {
-            DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml");
-            DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml");
-            DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\settings.xml");
+            string appDataFolder = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            DeleteFile(Path.Combine(appDataFolder, "presets.json"));
+            DeleteFile(Path.Combine(appDataFolder, "settings.xml"));
 
-            string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
-            DirectoryInfo info = new DirectoryInfo(tempPath);
+            DirectoryInfo info = new DirectoryInfo(appDataFolder);
             IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
             foreach (FileInfo file in logFiles)
             {
-                DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\" + file.Name);
+                DeleteFile(Path.Combine(appDataFolder, file.Name));
             }
         }
 

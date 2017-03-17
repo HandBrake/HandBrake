@@ -14,12 +14,11 @@ namespace HandBrakeWPF.ViewModels
     using System.Text;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Services.Logging.EventArgs;
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using ILog = HandBrake.ApplicationServices.Services.Logging.Interfaces.ILog;
@@ -67,7 +66,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenLogDirectory()
         {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string logDir = DirectoryUtilities.GetLogDirectory();
             string windir = Environment.GetEnvironmentVariable("WINDIR");
             Process prc = new Process { StartInfo = { FileName = windir + @"\explorer.exe", Arguments = logDir } };
             prc.Start();
@@ -103,7 +102,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.OnLogMessageReceived(null);
-            this.NotifyOfPropertyChange("ActivityLog");
+            this.NotifyOfPropertyChange(() => this.ActivityLog);
 
             base.OnActivate();
         }
@@ -147,7 +146,7 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            this.NotifyOfPropertyChange("ActivityLog");
+            this.NotifyOfPropertyChange(() => this.ActivityLog);
             this.OnLogMessageReceived(null);
         }
 
@@ -164,13 +163,12 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.lastReadIndex < e.Log.MessageIndex)
             {
-                Execute.OnUIThreadAsync(
-                    () =>
+                Execute.OnUIThreadAsync(() =>
                         {
                             this.lastReadIndex = e.Log.MessageIndex;
                             this.log.AppendLine(e.Log.Content);
                             this.OnLogMessageReceived(e);
-                            this.NotifyOfPropertyChange("ActivityLog");
+                            this.NotifyOfPropertyChange(() => this.ActivityLog);
                         });
             }
         }

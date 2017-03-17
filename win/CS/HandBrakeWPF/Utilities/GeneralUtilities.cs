@@ -29,7 +29,7 @@ namespace HandBrakeWPF.Utilities
         /// <summary>
         /// The Default Log Directory
         /// </summary>
-        private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+        private static readonly string LogDir = DirectoryUtilities.GetLogDirectory();
 
         #endregion
 
