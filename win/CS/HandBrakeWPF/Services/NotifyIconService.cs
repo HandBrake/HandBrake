@@ -19,7 +19,10 @@ namespace HandBrakeWPF.Services
 
         public void SetTooltip(string text)
         {
-            this.notifyIcon.Text = text;
+            if (this.notifyIcon != null)
+            {
+                this.notifyIcon.Text = text;
+            }
         }
     }
 }
