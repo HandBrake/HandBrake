@@ -48,11 +48,6 @@
 @property (nonatomic, readonly) NSArray *denoisePresets;
 @property (nonatomic, readonly) NSArray *denoiseTunes;
 
-/**
- *  A textual summary of the filters settings.
- */
-@property (nonatomic, readonly) NSString *summary;
-
 @end
 
 /**
