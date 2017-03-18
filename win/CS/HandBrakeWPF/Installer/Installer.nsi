@@ -140,6 +140,7 @@ Section "HandBrake" SEC01
   CreateShortCut "$SMPROGRAMS\HandBrake\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
   CreateShortCut "$DESKTOP\HandBrake.lnk" "$INSTDIR\HandBrake.exe"
   File "*.dll"
+  File "*.template"
   File "*.config"
   File "*.pdb"
 

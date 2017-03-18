@@ -139,6 +139,7 @@ Section "HandBrake" SEC01
   CreateShortCut "$SMPROGRAMS\HandBrake Nightly\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
   CreateShortCut "$DESKTOP\HandBrake Nightly.lnk" "$INSTDIR\HandBrake.exe"
   File "*.dll"
+  File "*.template"
   File "*.config"
   File "HandBrake*.pdb"
 
