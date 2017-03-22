@@ -348,6 +348,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(item.Encoder));
                 Validate.NotNull(encoder, "Unrecognized audio encoder:" + item.Encoder);
 
+                if (item.IsPassthru && (item.ScannedTrack.Codec & encoder.Id) == 0)
+                {
+                    // We have an unsupported passthru. Rather than let libhb drop the track, switch it to the fallback.
+                    encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
+                }
+
                 HBMixdown mixdown = HandBrakeEncoderHelpers.GetMixdown(item.MixDown);
 
                 HBRate sampleRate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(s => s.Name == item.SampleRate.ToString(CultureInfo.InvariantCulture));

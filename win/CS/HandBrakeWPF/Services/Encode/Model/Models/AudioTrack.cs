@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Security;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model;
@@ -102,14 +103,27 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <param name="track">
         /// The Behavior track
         /// </param>
-        public AudioTrack(AudioBehaviourTrack track)
-        {     
+        /// <param name="sourceTrack">
+        /// The source track we are dealing with.
+        /// </param>
+        /// <param name="fallback">
+        /// An encoder to fall back to.
+        /// </param>
+        public AudioTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
+        {
+            AudioEncoder chosenEncoder = track.Encoder;
+            HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
+            if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
+            {
+                chosenEncoder = fallback;
+            }
+
+            this.scannedTrack = sourceTrack;
             this.drc = track.DRC;
-            this.encoder = track.Encoder;
+            this.encoder = chosenEncoder;
             this.gain = track.Gain;
             this.mixDown = track.MixDown != null ? track.MixDown.ShortName : "dpl2";
             this.sampleRate = track.SampleRate;
-            this.scannedTrack = new Audio();
             this.encoderRateType = track.EncoderRateType;
             this.quality = track.Quality;
             this.bitrate = track.Bitrate;
