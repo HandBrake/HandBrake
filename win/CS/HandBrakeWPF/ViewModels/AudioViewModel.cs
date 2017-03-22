@@ -338,12 +338,12 @@ namespace HandBrakeWPF.ViewModels
                             break;
                         case AudioTrackDefaultsMode.FirstTrack:
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
-                            this.Task.AudioTracks.Add(template != null ? new AudioTrack(template) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
+                            this.Task.AudioTracks.Add(template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
                             break;
                         case AudioTrackDefaultsMode.AllTracks:
                             foreach (AudioBehaviourTrack tmpl in this.AudioBehaviours.BehaviourTracks)
                             {
-                                this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl) { ScannedTrack = track } : new AudioTrack { ScannedTrack = track });
+                                this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
                             }
 
                             break;
@@ -395,7 +395,7 @@ namespace HandBrakeWPF.ViewModels
             // Step 3, Setup the tracks from the preset
             foreach (AudioBehaviourTrack track in this.AudioBehaviours.BehaviourTracks)
             {
-                this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = this.GetPreferredAudioTrack() });
+                this.Task.AudioTracks.Add(new AudioTrack(track, this.GetPreferredAudioTrack(), this.Task.AllowedPassthruOptions.AudioEncoderFallback));
             }
            
             // Step 4, Handle the default selection behaviour.

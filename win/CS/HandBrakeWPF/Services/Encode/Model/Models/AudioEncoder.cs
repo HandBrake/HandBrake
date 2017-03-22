@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
