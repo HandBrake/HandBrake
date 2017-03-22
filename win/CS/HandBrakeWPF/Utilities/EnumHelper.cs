@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Utilities
         public static string GetDisplay(T value)
         {
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
+            DisplayName[] attributes = (DisplayName[])fieldInfo.GetCustomAttributes(typeof(DisplayName), false);
 
             return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
         }
