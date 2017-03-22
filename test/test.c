@@ -113,8 +113,8 @@ static char ** subtitle_lang_list        = NULL;
 static char ** subtracks                 = NULL;
 static char ** subforce                  = NULL;
 static int     subtitle_all              = -1;
-static int     subburn                   = 0;
-static int     subburn_native            = 0;
+static int     subburn                   = -1;
+static int     subburn_native            = -1;
 static int     subdefault                = 0;
 static char ** srtfile                   = NULL;
 static char ** srtcodeset                = NULL;
@@ -3171,31 +3171,34 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         // Add foreign audio search
         hb_dict_set(preset, "SubtitleAddForeignAudioSearch", hb_value_bool(1));
     }
-    // Subtitle burn behavior
-    const char *burn = "none";
-    if (subtitle_track_count == 0)
+    if (subburn_native >= 0 || subburn >= 0)
     {
-        if (subburn_native && subburn == 1)
+        // Subtitle burn behavior
+        const char *burn = "none";
+        if (subtitle_track_count == 0)
         {
-            burn = "foreign_first";
+            if (subburn_native == 1 && subburn == 1)
+            {
+                burn = "foreign_first";
+            }
+            else if (subburn_native == 1)
+            {
+                burn = "foreign";
+            }
+            else if (subburn == 1)
+            {
+                burn = "first";
+            }
         }
-        else if (subburn_native)
+        else
         {
-            burn = "foreign";
+            if (subburn_native == 1)
+            {
+                burn = "foreign";
+            }
         }
-        else if (subburn == 1)
-        {
-            burn = "first";
-        }
+        hb_dict_set(preset, "SubtitleBurnBehavior", hb_value_string(burn));
     }
-    else
-    {
-        if (subburn_native)
-        {
-            burn = "foreign";
-        }
-    }
-    hb_dict_set(preset, "SubtitleBurnBehavior", hb_value_string(burn));
     const char *selection = NULL;
     if (subtitle_track_count == 0 && subtitle_all != -1)
     {
