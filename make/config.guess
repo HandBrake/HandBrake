@@ -975,6 +975,12 @@ EOF
     ppc:Linux:*:*)
 	echo powerpc-unknown-linux-gnu
 	exit ;;
+    ppc64le:Linux:*:*)
+	echo powerpc64le-unknown-linux-${LIBC}
+	exit ;;
+    ppcle:Linux:*:*)
+	echo powerpcle-unknown-linux-${LIBC}
+	exit ;;
     s390:Linux:*:* | s390x:Linux:*:*)
 	echo ${UNAME_MACHINE}-ibm-linux
 	exit ;;
