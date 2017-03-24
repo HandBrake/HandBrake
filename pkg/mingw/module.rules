@@ -11,13 +11,11 @@ $(PKG.libhb.zip): | $(STAGE.out.libhb/)
 $(STAGE.out.cli/):
 	-$(MKDIR.exe) -p $@
 	$(CP.exe) HandBrakeCLI.exe $(STAGE.out.cli/)
-	$(CP.exe) -R contrib/etc/fonts $(STAGE.out.cli/)/fonts/
 	$(call STAGE.doc,$(STAGE.out.cli/))
 
 $(STAGE.out.libhb/):
 	-$(MKDIR.exe) -p $@
 	$(CP.exe) libhb/hb.dll $(STAGE.out.libhb/)
-	$(CP.exe) -R contrib/etc/fonts $(STAGE.out.libhb/)/fonts/
 	$(call STAGE.doc,$(STAGE.out.libhb/))
 
 
