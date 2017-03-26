@@ -2091,6 +2091,33 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// The process drive.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        public void ProcessDrive(object item)
+        {
+            if (item != null)
+            {
+                if (item.GetType() == typeof(DriveInformation))
+                {
+                    this.StartScan(((DriveInformation)item).RootDirectory, 0);
+                }
+                else if (item.GetType() == typeof(SourceMenuItem))
+                {
+                    DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
+                    if (driveInfo != null)
+                    {
+                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
+                    }
+
+                    this.ShowSourceSelection = false;
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -2514,33 +2541,6 @@ namespace HandBrakeWPF.ViewModels
                   this.NotifyOfPropertyChange(() => this.QueueLabel);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
               });
-        }
-
-        /// <summary>
-        /// The process drive.
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        public void ProcessDrive(object item)
-        {
-            if (item != null)
-            {
-                if (item.GetType() == typeof(DriveInformation))
-                {
-                    this.StartScan(((DriveInformation)item).RootDirectory, 0);
-                }
-                else if (item.GetType() == typeof(SourceMenuItem))
-                {
-                    DriveInformation driveInfo = ((SourceMenuItem)item).Tag as DriveInformation;
-                    if (driveInfo != null)
-                    {
-                        this.StartScan(driveInfo.RootDirectory, this.TitleSpecificScan);
-                    }
-
-                    this.ShowSourceSelection = false;
-                }
-            }
         }
 
         /// <summary>

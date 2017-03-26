@@ -36,7 +36,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// <summary>
         /// The is mouse over split element.
         /// </summary>
-        private bool IsMouseOverSplitElement;
+        private bool isMouseOverSplitElement;
 
         /// <summary>
         /// The context menu.
@@ -156,7 +156,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </summary>
         protected override void OnClick()
         {
-            if (this.IsMouseOverSplitElement)
+            if (this.isMouseOverSplitElement)
             {
                 this.OpenButtonMenu();
             }
@@ -259,7 +259,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </param>
         private void SplitElement_MouseEnter(object sender, MouseEventArgs e)
         {
-            this.IsMouseOverSplitElement = true;
+            this.isMouseOverSplitElement = true;
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace HandBrakeWPF.Controls.SplitButton
         /// </param>
         private void SplitElement_MouseLeave(object sender, MouseEventArgs e)
         {
-            this.IsMouseOverSplitElement = false;
+            this.isMouseOverSplitElement = false;
         }
 
         /// <summary>

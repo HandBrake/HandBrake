@@ -85,19 +85,6 @@ namespace HandBrakeWPF.Utilities
         }
 
         /// <summary>
-        /// Raises the <see cref="E:PropertyChanged"/> event directly.
-        /// </summary>
-        /// <param name="e">The <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler changedEventHandler = this.PropertyChanged;
-            if (changedEventHandler == null)
-                return;
-            changedEventHandler((object)this, e);
-        }
-
-        /// <summary>
         /// Called when the object is deserialized.
         /// </summary>
         /// <param name="c">The streaming context.</param>
@@ -116,6 +103,19 @@ namespace HandBrakeWPF.Utilities
         public virtual bool ShouldSerializeIsNotifying()
         {
             return false;
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:PropertyChanged"/> event directly.
+        /// </summary>
+        /// <param name="e">The <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler changedEventHandler = this.PropertyChanged;
+            if (changedEventHandler == null)
+                return;
+            changedEventHandler((object)this, e);
         }
     }
 }

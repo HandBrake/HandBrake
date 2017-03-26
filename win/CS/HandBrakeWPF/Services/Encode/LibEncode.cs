@@ -152,6 +152,15 @@ namespace HandBrakeWPF.Services.Encode
         #region HandBrakeInstance Event Handlers.
 
         /// <summary>
+        /// Service Log Message.
+        /// </summary>
+        /// <param name="message">Log message content</param>
+        protected void ServiceLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+        }
+
+        /// <summary>
         /// Encode Progress Event Handler
         /// </summary>
         /// <param name="sender">
@@ -199,15 +208,6 @@ namespace HandBrakeWPF.Services.Encode
                 e.Error
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination));
-        }
-
-        /// <summary>
-        /// Service Log Message.
-        /// </summary>
-        /// <param name="message">Log message content</param>
-        protected void ServiceLogMessage(string message)
-        {
-            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
         #endregion
     }

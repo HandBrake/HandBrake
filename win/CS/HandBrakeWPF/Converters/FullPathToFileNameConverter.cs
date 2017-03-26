@@ -9,10 +9,10 @@
 
 namespace HandBrakeWPF.Converters
 {
+    using System;
     using System.Globalization;
     using System.IO;
     using System.Windows.Data;
-    using System;
 
     /// <summary>
     /// Converts a Full Path to Filename only.

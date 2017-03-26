@@ -67,20 +67,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Video
         /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        protected bool Equals(VideoProfile other)
-        {
-            return string.Equals(this.DisplayName, other.DisplayName) && string.Equals(this.ShortName, other.ShortName);
-        }
-
-        /// <summary>
-        /// The equals.
-        /// </summary>
         /// <param name="obj">
         /// The obj.
         /// </param>
@@ -116,6 +102,20 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Video
             {
                 return ((this.DisplayName != null ? this.DisplayName.GetHashCode() : 0) * 397) ^ (this.ShortName != null ? this.ShortName.GetHashCode() : 0);
             }
+        }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool Equals(VideoProfile other)
+        {
+            return string.Equals(this.DisplayName, other.DisplayName) && string.Equals(this.ShortName, other.ShortName);
         }
     }
 }

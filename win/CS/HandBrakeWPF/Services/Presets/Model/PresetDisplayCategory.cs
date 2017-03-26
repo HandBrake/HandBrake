@@ -57,11 +57,6 @@ namespace HandBrakeWPF.Services.Presets.Model
             }
         }
 
-        protected bool Equals(PresetDisplayCategory other)
-        {
-            return string.Equals(this.Category, other.Category);
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -73,6 +68,11 @@ namespace HandBrakeWPF.Services.Presets.Model
         public override int GetHashCode()
         {
             return (this.Category != null ? this.Category.GetHashCode() : 0);
+        }
+
+        protected bool Equals(PresetDisplayCategory other)
+        {
+            return string.Equals(this.Category, other.Category);
         }
     }
 }

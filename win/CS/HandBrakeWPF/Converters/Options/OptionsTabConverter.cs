@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Converters.Options
     /// <summary>
     /// The Options Tab Converter. Controls which tab is dispalyed.
     /// </summary>
-    class OptionsTabConverter : IValueConverter
+    public class OptionsTabConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value. 

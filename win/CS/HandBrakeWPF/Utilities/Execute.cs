@@ -73,18 +73,6 @@ namespace HandBrakeWPF.Utilities
         }
 
         /// <summary>
-        /// The validate dispatcher.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// Not initialized with dispatcher.
-        /// </exception>
-        private static void ValidateDispatcher()
-        {
-            if (Execute.dispatcher == null)
-                throw new InvalidOperationException("Not initialized with dispatcher.");
-        }
-
-        /// <summary>
         /// Executes the action on the UI thread asynchronously.
         /// </summary>
         /// <param name="action">The action to execute.</param>
@@ -124,6 +112,20 @@ namespace HandBrakeWPF.Utilities
         }
 
         /// <summary>
+        /// Executes the action on the UI thread.
+        /// </summary>
+        /// <param name="action">The action to execute.</param>
+        public static void OnUIThread(this System.Action action)
+        {
+            if (Execute.executor != null)
+                Execute.executor(action);
+            else if (Execute.CheckAccess())
+                action();
+            else
+                Execute.OnUIThreadAsync(action).Wait();
+        }
+
+        /// <summary>
         /// The check access.
         /// </summary>
         /// <returns>
@@ -137,17 +139,15 @@ namespace HandBrakeWPF.Utilities
         }
 
         /// <summary>
-        /// Executes the action on the UI thread.
+        /// The validate dispatcher.
         /// </summary>
-        /// <param name="action">The action to execute.</param>
-        public static void OnUIThread(this System.Action action)
+        /// <exception cref="InvalidOperationException">
+        /// Not initialized with dispatcher.
+        /// </exception>
+        private static void ValidateDispatcher()
         {
-            if (Execute.executor != null)
-                Execute.executor(action);
-            else if (Execute.CheckAccess())
-                action();
-            else
-                Execute.OnUIThreadAsync(action).Wait();
+            if (Execute.dispatcher == null)
+                throw new InvalidOperationException("Not initialized with dispatcher.");
         }
     }
 }

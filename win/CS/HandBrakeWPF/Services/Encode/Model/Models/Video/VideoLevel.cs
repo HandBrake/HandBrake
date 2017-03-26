@@ -67,20 +67,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Video
         /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        protected bool Equals(VideoLevel other)
-        {
-            return string.Equals(this.ShortName, other.ShortName);
-        }
-
-        /// <summary>
-        /// The equals.
-        /// </summary>
         /// <param name="obj">
         /// The obj.
         /// </param>
@@ -113,6 +99,20 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Video
         public override int GetHashCode()
         {
             return (this.ShortName != null ? this.ShortName.GetHashCode() : 0);
+        }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool Equals(VideoLevel other)
+        {
+            return string.Equals(this.ShortName, other.ShortName);
         }
     }
 }

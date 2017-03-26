@@ -45,14 +45,11 @@ namespace HandBrakeWPF.Views
         {
             this.InitializeComponent();
 
-
-
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             bool minimiseToTray = userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
 
             if (minimiseToTray)
             {
-
                 INotifyIconService notifyIconService = IoC.Get<INotifyIconService>();
                 this.notifyIcon = new NotifyIcon();
                 this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick), new MenuItem("Mini Status Display", ShowMiniStatusDisplay) });
@@ -84,6 +81,33 @@ namespace HandBrakeWPF.Views
             {
                 this.TaskbarItemInfo = Win7.WindowsTaskbar;
             }
+        }
+
+        /// <summary>
+        /// Check with the user before closing.
+        /// </summary>
+        /// <param name="e">
+        /// The CancelEventArgs.
+        /// </param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            IShellViewModel shellViewModel = this.DataContext as IShellViewModel;
+
+            if (shellViewModel != null)
+            {
+                bool canClose = shellViewModel.CanClose();
+                if (!canClose)
+                {
+                    e.Cancel = true;
+                }
+            }
+
+            if (this.notifyIcon != null)
+            {
+                this.notifyIcon.Visible = false;
+            }
+
+            base.OnClosing(e);
         }
 
         /// <summary>
@@ -145,33 +169,6 @@ namespace HandBrakeWPF.Views
                     this.ShowInTaskbar = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Check with the user before closing.
-        /// </summary>
-        /// <param name="e">
-        /// The CancelEventArgs.
-        /// </param>
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            IShellViewModel shellViewModel = this.DataContext as IShellViewModel;
-
-            if (shellViewModel != null)
-            {
-                bool canClose = shellViewModel.CanClose();
-                if (!canClose)
-                {
-                    e.Cancel = true;
-                }
-            }
-
-            if (this.notifyIcon != null)
-            {
-                this.notifyIcon.Visible = false;
-            }
-
-            base.OnClosing(e);
         }
     }
 }

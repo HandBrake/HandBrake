@@ -217,6 +217,17 @@ namespace HandBrakeWPF.Services.Scan
         #region Private Methods
 
         /// <summary>
+        /// The service log message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        protected void ServiceLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("{0} # {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+        }
+
+        /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
         /// <param name="sourcePath">
@@ -263,6 +274,7 @@ namespace HandBrakeWPF.Services.Scan
         #endregion
 
         #region HandBrakeInstance Event Handlers
+        
         /// <summary>
         /// Scan Completed Event Handler
         /// </summary>
@@ -347,7 +359,7 @@ namespace HandBrakeWPF.Services.Scan
         /// <returns>
         /// The convert titles.
         /// </returns>
-        internal static List<Title> ConvertTitles(JsonScanObject titles)
+        private static List<Title> ConvertTitles(JsonScanObject titles)
         {
             List<Title> titleList = new List<Title>();
             foreach (SourceTitle title in titles.TitleList)
@@ -433,17 +445,6 @@ namespace HandBrakeWPF.Services.Scan
             }
 
             return titleList;
-        }
-
-        /// <summary>
-        /// The service log message.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
-        /// </param>
-        protected void ServiceLogMessage(string message)
-        {
-            this.log.LogMessage(string.Format("{0} # {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
         #endregion
     }

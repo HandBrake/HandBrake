@@ -41,7 +41,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region Constants and Fields
 
-        private readonly Subtitle ForeignAudioSearchTrack;
+        private readonly Subtitle foreignAudioSearchTrack;
         private IList<Subtitle> sourceTracks;
 
         #endregion
@@ -63,8 +63,8 @@ namespace HandBrakeWPF.ViewModels
             this.Langauges = LanguageUtilities.MapLanguages().Keys;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
 
-            this.ForeignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = "Foreign Audio Search" };
-            this.SourceTracks = new List<Subtitle> { this.ForeignAudioSearchTrack };
+            this.foreignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = "Foreign Audio Search" };
+            this.SourceTracks = new List<Subtitle> { this.foreignAudioSearchTrack };
         }
 
         #endregion
@@ -326,7 +326,7 @@ namespace HandBrakeWPF.ViewModels
             // Add Foreign Audio Scan
             if (this.SubtitleBehaviours.AddForeignAudioScanTrack)
             {
-                this.Add(ForeignAudioSearchTrack);
+                this.Add(foreignAudioSearchTrack);
             }
 
             // Add Track Behaviours
@@ -496,7 +496,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.SourceTracks.Clear();
-            this.SourceTracks.Add(ForeignAudioSearchTrack);
+            this.SourceTracks.Add(foreignAudioSearchTrack);
             foreach (Subtitle subtitle in title.Subtitles)
             {
                 this.SourceTracks.Add(subtitle);
@@ -534,7 +534,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (source == null)
             {
-                source = ForeignAudioSearchTrack;
+                source = foreignAudioSearchTrack;
             }
 
             SubtitleTrack track = new SubtitleTrack

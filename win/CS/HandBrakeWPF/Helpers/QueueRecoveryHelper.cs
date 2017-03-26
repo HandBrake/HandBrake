@@ -56,14 +56,14 @@ namespace HandBrakeWPF.Helpers
                 }
 
                 List<string> removeFiles = new List<string>();
-                XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
+                XmlSerializer ser = new XmlSerializer(typeof(List<QueueTask>));
                 foreach (FileInfo file in logFiles)
                 {
                     try
                     {
                         using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                         {
-                            List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
+                            List<QueueTask> list = ser.Deserialize(strm) as List<QueueTask>;
                             if (list != null && list.Count == 0)
                             {
                                 removeFiles.Add(file.FullName);

@@ -96,20 +96,6 @@ namespace HandBrakeWPF.Services.Queue.Model
         /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        protected bool Equals(QueueTask other)
-        {
-            return Equals(this.ScannedSourcePath, other.ScannedSourcePath) && Equals(this.Task, other.Task) && this.status == other.status;
-        }
-
-        /// <summary>
-        /// The equals.
-        /// </summary>
         /// <param name="obj">
         /// The obj.
         /// </param>
@@ -151,6 +137,20 @@ namespace HandBrakeWPF.Services.Queue.Model
                 hashCode = (hashCode * 397) ^ (int)this.status;
                 return hashCode;
             }
+        }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool Equals(QueueTask other)
+        {
+            return Equals(this.ScannedSourcePath, other.ScannedSourcePath) && Equals(this.Task, other.Task) && this.status == other.status;
         }
     }
 }

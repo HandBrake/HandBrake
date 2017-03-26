@@ -188,20 +188,6 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// <summary>
         /// The equals.
         /// </summary>
-        /// <param name="other">
-        /// The other.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        protected bool Equals(Preset other)
-        {
-            return string.Equals(this.Name, other.Name);
-        }
-
-        /// <summary>
-        /// The equals.
-        /// </summary>
         /// <param name="obj">
         /// The obj.
         /// </param>
@@ -234,6 +220,20 @@ namespace HandBrakeWPF.Services.Presets.Model
         public override int GetHashCode()
         {
             return (this.Name != null ? this.Name.GetHashCode() : 0);
+        }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool Equals(Preset other)
+        {
+            return string.Equals(this.Name, other.Name);
         }
     }
 }

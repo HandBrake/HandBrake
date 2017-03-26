@@ -9,11 +9,10 @@
 
 namespace HandBrakeWPF.Converters
 {
+    using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
-    using System;
-
     using HandBrakeWPF.Services.Queue.Model;
 
     /// <summary>

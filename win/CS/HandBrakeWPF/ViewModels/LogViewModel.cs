@@ -108,6 +108,21 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Trigger a faster / smoother way of updating the log window.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected virtual void OnLogMessageReceived(LogEventArgs e)
+        {
+            var onLogMessageReceived = this.LogMessageReceived;
+            if (onLogMessageReceived != null)
+            {
+                onLogMessageReceived.Invoke(this, e);
+            }
+        }
+
+        /// <summary>
         /// Handle the OnDeactivate Caliburn Event
         /// </summary>
         /// <param name="close">
@@ -170,21 +185,6 @@ namespace HandBrakeWPF.ViewModels
                             this.OnLogMessageReceived(e);
                             this.NotifyOfPropertyChange(() => this.ActivityLog);
                         });
-            }
-        }
-
-        /// <summary>
-        /// Trigger a faster / smoother way of updating the log window.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected virtual void OnLogMessageReceived(LogEventArgs e)
-        {
-            var onLogMessageReceived = this.LogMessageReceived;
-            if (onLogMessageReceived != null)
-            {
-                onLogMessageReceived.Invoke(this, e);
             }
         }
     }

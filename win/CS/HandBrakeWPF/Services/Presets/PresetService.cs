@@ -816,8 +816,10 @@ namespace HandBrakeWPF.Services.Presets
 
                 // Orgamise the Presets list into Json Equivilent objects.
                 Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
-                List<HBPreset> uncategorisedPresets = new List<HBPreset>();      
-                foreach (Preset item in this.flatPresetList.Values.OrderBy(o => o.IsBuildIn)) // Handle User Presets first.
+                List<HBPreset> uncategorisedPresets = new List<HBPreset>();
+
+                // Handle User Presets first.
+                foreach (Preset item in this.flatPresetList.Values.OrderBy(o => o.IsBuildIn))
                 {
                     if (string.IsNullOrEmpty(item.Category))
                     {

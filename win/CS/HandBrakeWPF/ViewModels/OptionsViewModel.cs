@@ -1124,15 +1124,6 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Load / Update the user settings.
-        /// </summary>
-        protected override void OnActivate()
-        {
-            this.OnLoad();
-            base.OnActivate();
-        }
-
-        /// <summary>
         /// Close this window.
         /// </summary>
         public void Close()
@@ -1244,7 +1235,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseWhenDoneAudioFile()
         {
-            OpenFileDialog dialog = new  OpenFileDialog() { Filter = "All Files|*.wav;*.mp3", FileName = this.WhenDoneAudioFileFullPath };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = "All Files|*.wav;*.mp3", FileName = this.WhenDoneAudioFileFullPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1435,6 +1426,15 @@ namespace HandBrakeWPF.ViewModels
         public void GotoTab(OptionsTab tab)
         {
             this.SelectedTab = tab;
+        }
+
+        /// <summary>
+        /// Load / Update the user settings.
+        /// </summary>
+        protected override void OnActivate()
+        {
+            this.OnLoad();
+            base.OnActivate();
         }
 
         /// <summary>

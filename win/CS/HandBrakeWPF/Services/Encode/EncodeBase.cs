@@ -170,30 +170,6 @@ namespace HandBrakeWPF.Services.Encode
         }
 
         /// <summary>
-        /// The write file.
-        /// </summary>
-        /// <param name="content">
-        /// The content.
-        /// </param>
-        /// <param name="fileName">
-        /// The file name.
-        /// </param>
-        private void WriteFile(string content, string fileName)
-        {
-            try
-            {
-                using (StreamWriter fileWriter = new StreamWriter(fileName) { AutoFlush = true })
-                {
-                    fileWriter.Write(content);
-                }
-            }
-            catch (Exception exc)
-            {
-                Debug.WriteLine(exc);
-            }
-        }
-
-        /// <summary>
         /// Verify the Encode Destination path exists and if not, create it.
         /// </summary>
         /// <param name="task">
@@ -217,6 +193,30 @@ namespace HandBrakeWPF.Services.Encode
             {
                 throw new GeneralApplicationException(
                     "Unable to create directory for the encoded output.", "Please verify that you have a valid path.", exc);
+            }
+        }
+
+        /// <summary>
+        /// The write file.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        private void WriteFile(string content, string fileName)
+        {
+            try
+            {
+                using (StreamWriter fileWriter = new StreamWriter(fileName) { AutoFlush = true })
+                {
+                    fileWriter.Write(content);
+                }
+            }
+            catch (Exception exc)
+            {
+                Debug.WriteLine(exc);
             }
         }
 

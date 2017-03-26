@@ -520,6 +520,31 @@ namespace HandBrakeWPF.Services.Queue
         #region Methods
 
         /// <summary>
+        /// The on queue completed.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected virtual void OnQueueCompleted(QueueCompletedEventArgs e)
+        {
+            QueueCompletedEventDelegate handler = this.QueueCompleted;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+
+            this.IsProcessing = false;
+        }
+
+        /// <summary>
+        /// The on low diskspace detected.
+        /// </summary>
+        protected virtual void OnLowDiskspaceDetected()
+        {
+            this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
         /// After an encode is complete, move onto the next job.
         /// </summary>
         /// <param name="sender">
@@ -610,31 +635,6 @@ namespace HandBrakeWPF.Services.Queue
             {
                 handler(this, e);
             }
-        }
-
-        /// <summary>
-        /// The on queue completed.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected virtual void OnQueueCompleted(QueueCompletedEventArgs e)
-        {
-            QueueCompletedEventDelegate handler = this.QueueCompleted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-
-            this.IsProcessing = false;
-        }
-
-        /// <summary>
-        /// The on low diskspace detected.
-        /// </summary>
-        protected virtual void OnLowDiskspaceDetected()
-        {
-            this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
         }
         
         /// <summary>

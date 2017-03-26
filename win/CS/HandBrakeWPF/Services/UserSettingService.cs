@@ -37,7 +37,7 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// The XML Serializer 
         /// </summary>
-        readonly XmlSerializer serializer = new XmlSerializer(typeof(Collections.SerializableDictionary<string, object>));
+        private readonly XmlSerializer serializer = new XmlSerializer(typeof(Collections.SerializableDictionary<string, object>));
 
         /// <summary>
         /// The User Settings

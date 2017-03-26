@@ -305,6 +305,24 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
+        /// <summary>
+        /// Add all remaining for selected languages.
+        /// </summary>
+        public void AddAllRemainingForSelectedLanguages()
+        {
+            // Add them if they are not already added.
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            {
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
+                if (!found)
+                {
+                    // If it doesn't, add it.
+                    this.Add(sourceTrack, true);
+                }
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -436,24 +454,6 @@ namespace HandBrakeWPF.ViewModels
                         continue;
                     }
 
-                    // If it doesn't, add it.
-                    this.Add(sourceTrack, true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add all remaining for selected languages.
-        /// </summary>
-        public void AddAllRemainingForSelectedLanguages()
-        {
-            // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
-            {
-                // Step 2: Check if the track list already contrains this track
-                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
-                if (!found)
-                {
                     // If it doesn't, add it.
                     this.Add(sourceTrack, true);
                 }
