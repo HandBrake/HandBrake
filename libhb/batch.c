@@ -139,7 +139,7 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t, uint64_t min_duration )
 
     title = hb_stream_title_scan( stream, title );
     hb_stream_close( &stream );
-    if( title->duration < min_duration )
+    if( title != NULL && title->duration < min_duration )
     {
         hb_log( "batch: ignoring title (too short)" );
         hb_title_close(&title);
