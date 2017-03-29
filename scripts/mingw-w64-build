@@ -97,7 +97,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     CONFIG_VER="ddd7f33"
     BINUTILS_VER="2.26"
     MINGW_W64_VER="5.0.0"
-    GMP_VER="6.1.0"
+    GMP_VER="6.1.2"
     MPFR_VER="3.1.4"
     MPC_VER="1.0.3"
     ISL_VER="0.14"
@@ -130,7 +130,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="2.3.0"
+    VERSION="2.3.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
