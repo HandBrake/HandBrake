@@ -873,10 +873,10 @@ G_MODULE_EXPORT void
 srt_offset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
-    ghb_check_dependency(ud, widget, NULL);
+    GhbValue *val = ghb_widget_value(widget);
+    subtitle_update_setting(ghb_value_xform(val, GHB_INT), "Offset", ud);
 
-    int64_t offset = ghb_dict_get_int(ud->settings, "SrtOffset");
-    srt_setting_update(ghb_int_value_new(offset), "Offset", ud);
+    ghb_check_dependency(ud, widget, NULL);
 }
 
 G_MODULE_EXPORT void
