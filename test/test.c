@@ -220,6 +220,10 @@ static int is_whole_media_service( io_service_t service );
 /* Only print the "Muxing..." message once */
 static int show_mux_warning = 1;
 
+/* Terminal detection */
+static char * stdout_sep = NULL;
+static char * stderr_sep = NULL;
+
 /****************************************************************************
  * hb_error_handler
  *
@@ -441,6 +445,24 @@ int main( int argc, char ** argv )
 
     /* Init libhb */
     h = hb_init(4);  // Show all logging until debug level is parsed
+
+    /* Terminal detection */
+    if (isatty(1) == 1)
+    {
+        stdout_sep = strdup("\r");
+    }
+    else
+    {
+        stdout_sep = strdup("\n");
+    }
+    if (isatty(2) == 1)
+    {
+        stderr_sep = strdup("\r");
+    }
+    else
+    {
+        stderr_sep = strdup("\n");
+    }
 
     // Get utf8 command line if windows
     get_argv_utf8(&argc, &argv);
@@ -790,13 +812,13 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             /* Show what title is currently being scanned */
             if (p.preview_cur)
             {
-                fprintf(stderr, "\rScanning title %d of %d, preview %d, %.2f %%",
-                        p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
+                fprintf(stderr, "%sScanning title %d of %d, preview %d, %.2f %%",
+                        stderr_sep, p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
             }
             else
             {
-                fprintf(stderr, "\rScanning title %d of %d, %.2f %%",
-                        p.title_cur, p.title_count, 100 * p.progress);
+                fprintf(stderr, "%sScanning title %d of %d, %.2f %%",
+                        stderr_sep, p.title_cur, p.title_count, 100 * p.progress);
             }
             fflush(stderr);
             break;
@@ -909,8 +931,8 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 
 #define p s.param.working
         case HB_STATE_SEARCHING:
-            fprintf( stdout, "\rEncoding: task %d of %d, Searching for start time, %.2f %%",
-                     p.pass, p.pass_count, 100.0 * p.progress );
+            fprintf( stdout, "%sEncoding: task %d of %d, Searching for start time, %.2f %%",
+                     stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
             {
                 fprintf( stdout, " (ETA %02dh%02dm%02ds)",
@@ -920,8 +942,8 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             break;
 
         case HB_STATE_WORKING:
-            fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
-                     p.pass, p.pass_count, 100.0 * p.progress );
+            fprintf( stdout, "%sEncoding: task %d of %d, %.2f %%",
+                     stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
             {
                 fprintf( stdout, " (%.2f fps, avg %.2f fps, ETA "
@@ -937,7 +959,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
         {
             if (show_mux_warning)
             {
-                fprintf( stdout, "\rMuxing: this may take awhile..." );
+                fprintf( stdout, "%sMuxing: this may take awhile...", stdout_sep );
                 fflush(stdout);
                 show_mux_warning = 0;
             }
