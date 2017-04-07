@@ -881,7 +881,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->param.videoParam->mfx.FrameInfo.FourCC         = MFX_FOURCC_P010;
         pv->param.videoParam->mfx.FrameInfo.BitDepthLuma   = 10;
         pv->param.videoParam->mfx.FrameInfo.BitDepthChroma = 10;
-        pv->param.videoParam->mfx.FrameInfo.Shift          = 0;
+        pv->param.videoParam->mfx.FrameInfo.Shift          = 1;
     }
 
     // interlaced encoding is not always possible
