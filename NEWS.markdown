@@ -1,6 +1,6 @@
 # HandBrake News
 
-## HandBrake 1.0.6
+## HandBrake 1.0.7
 
 ### All platforms
 
@@ -40,6 +40,11 @@
 ### Windows
 
 - Fixed When Done option not updating/resetting correctly
+
+
+## HandBrake 1.0.6
+
+Superseded by HandBrake 1.0.7.
 
 
 ## HandBrake 1.0.5
