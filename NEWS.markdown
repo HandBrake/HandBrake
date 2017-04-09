@@ -1,6 +1,6 @@
 # HandBrake News
 
-## HandBrake 1.0.4
+## HandBrake 1.0.5
 
 ### All platforms
 
@@ -19,7 +19,7 @@
 
 #### Subtitles
 
-- Fixed fontconfig base configuration path during configure
+- Removed fontconfig dependency on Mac and Windows; libass now uses CoreText/DirectWrite
 - Improved subtitle font selection when burning in SRT/SSA subtitles
 
 #### Command line interface
