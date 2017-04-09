@@ -1,5 +1,47 @@
 # HandBrake News
 
+## HandBrake 1.0.4
+
+### All platforms
+
+#### Video
+
+- Fixed decoding of raw video in Matroska/MKV
+- Fixed time stamp handling for raw video
+- Fixed memory leaks in OpenCL
+- Fixed x265 2-pass encoding where video frame rate is altered by filters
+- Improved handling of very small amounts of sync jitter (~1 tick)
+- Improved handling of AVI files with broken indices
+
+#### Audio
+
+- Further refined fix for Libav crash encoding AAC at very high bitrates
+
+#### Subtitles
+
+- Fixed fontconfig base configuration path during configure
+- Improved subtitle font selection when burning in SRT/SSA subtitles
+
+#### Command line interface
+
+- Fixed preset subtitle burn defaults override
+
+#### Build system
+
+- Updated MinGW-w64 build script for improved compatibility with hardened GCC
+
+### Linux
+
+- Fixed video preset control not updating
+- Fixed audio passthru masks not updating until preset save
+- Fixed application of SRT subtitles offset
+- Updated translations: af, cs, ja_JP, ru, sk, sv
+
+### Windows
+
+- Fixed When Done option not updating/resetting correctly
+
+
 ## HandBrake 1.0.3
 
 ### All platforms
