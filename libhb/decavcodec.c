@@ -1412,6 +1412,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = job->title;
     else
         pv->title = w->title;
+    if (pv->title->flags & HBTF_RAW_VIDEO)
+        pv->next_pts = 0;
     hb_buffer_list_clear(&pv->list);
 
 #ifdef USE_QSV
