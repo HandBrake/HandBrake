@@ -1016,6 +1016,7 @@ struct hb_title_s
                 // set if video stream doesn't have IDR frames
 #define         HBTF_NO_IDR (1 << 0)
 #define         HBTF_SCAN_COMPLETE (1 << 1)
+#define         HBTF_RAW_VIDEO (1 << 2)
 
     // whether OpenCL scaling is supported for this source
     int             opencl_support;

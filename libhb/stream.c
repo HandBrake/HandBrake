@@ -5554,6 +5554,10 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 
             title->video_codec = WORK_DECAVCODECV;
             title->video_codec_param = codecpar->codec_id;
+            if (ic->iformat->raw_codec_id != AV_CODEC_ID_NONE)
+            {
+                title->flags |= HBTF_RAW_VIDEO;
+            }
         }
         else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO &&
                  avcodec_find_decoder( ic->streams[i]->codecpar->codec_id))
