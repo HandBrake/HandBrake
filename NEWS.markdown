@@ -1,13 +1,13 @@
 # HandBrake News
 
-## HandBrake 1.0.5
+## HandBrake 1.0.6
 
 ### All platforms
 
 #### Video
 
 - Fixed decoding of raw video in Matroska/MKV
-- Fixed time stamp handling for raw video
+- Fixed time stamp handling for containerless raw video
 - Fixed memory leaks in OpenCL
 - Fixed x265 2-pass encoding where video frame rate is altered by filters
 - Improved handling of very small amounts of sync jitter (~1 tick)
@@ -40,6 +40,16 @@
 ### Windows
 
 - Fixed When Done option not updating/resetting correctly
+
+
+## HandBrake 1.0.5
+
+Superseded by HandBrake 1.0.6.
+
+
+## HandBrake 1.0.4
+
+Superseded by HandBrake 1.0.5.
 
 
 ## HandBrake 1.0.3
