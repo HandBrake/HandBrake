@@ -123,6 +123,17 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.encoder = chosenEncoder;
             this.gain = track.Gain;
             this.mixDown = track.MixDown != null ? track.MixDown.ShortName : "dpl2";
+
+            // If the mixdown isn't supported, downgrade it.
+            if (!HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, encoderInfo, sourceTrack.ChannelLayout))
+            {
+                HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(encoderInfo, (ulong)sourceTrack.ChannelLayout);
+                if (changedMixdown != null)
+                {
+                    this.mixDown = changedMixdown.ShortName;
+                }
+            }
+                
             this.sampleRate = track.SampleRate;
             this.encoderRateType = track.EncoderRateType;
             this.quality = track.Quality;
