@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Model.Audio
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
     using HandBrake.ApplicationServices.Interop;
@@ -35,6 +36,7 @@ namespace HandBrakeWPF.Model.Audio
         private IEnumerable<double> encoderQualityValues;
         private AudioEncoderRateType encoderRateType;
         private double? quality;
+        private IEnumerable<HBMixdown> mixdowns;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioBehaviourTrack"/> class. 
@@ -48,6 +50,7 @@ namespace HandBrakeWPF.Model.Audio
             this.Bitrate = 160;
             this.DRC = 0;
             this.EncoderRateType = AudioEncoderRateType.Bitrate;
+
             this.SetupLimits();
         }
 
@@ -68,6 +71,7 @@ namespace HandBrakeWPF.Model.Audio
             this.sampleRate = track.SampleRate;
             this.Quality = track.Quality;
             this.encoderRateType = track.EncoderRateType;
+
             this.SetupLimits();
         }
 
@@ -354,6 +358,15 @@ namespace HandBrakeWPF.Model.Audio
             }
         }
 
+        [JsonIgnore]
+        public IEnumerable<HBMixdown> Mixdowns
+        {
+            get
+            {
+                return this.mixdowns;
+            }
+        }
+
         /// <summary>
         /// Gets the quality compression values.
         /// </summary>
@@ -466,6 +479,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             this.SetupBitrateLimits();
             this.SetupQualityCompressionLimits();
+            this.SetupMixdowns();
         }
 
         /// <summary>
@@ -563,6 +577,34 @@ namespace HandBrakeWPF.Model.Audio
             }
 
             this.NotifyOfPropertyChange(() => this.EncoderQualityValues);
+        }
+
+        /// <summary>
+        /// Restrict the available mixdowns to those that the enocder actually supports.
+        /// </summary>
+        private void SetupMixdowns()
+        {
+            this.mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns.ToList());
+
+            HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
+
+            BindingList<HBMixdown> mixdownList = new BindingList<HBMixdown>();
+            foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
+            {
+                if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder))
+                {
+                    mixdownList.Add(mixdown);
+                }
+            }
+
+            this.mixdowns = new BindingList<HBMixdown>(mixdownList);
+            this.NotifyOfPropertyChange(() => this.Mixdowns);
+
+            // If the mixdown isn't supported, downgrade it to the best available. 
+            if (!this.Mixdowns.Contains(this.MixDown))
+            {
+                this.MixDown = this.Mixdowns.LastOrDefault();
+            }
         }
 
         /// <summary>
