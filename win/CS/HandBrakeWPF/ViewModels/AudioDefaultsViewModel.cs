@@ -28,6 +28,11 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Audio View Model
     /// </summary>
+    /// <remarks>
+    /// TODO:
+    /// - Support setting fallback encoder options for Passthru tracks.
+    /// - Mixdown Dropdown should only show mixdowns for the set encoder. Not all.
+    /// </remarks>
     public class AudioDefaultsViewModel : ViewModelBase, IAudioDefaultsViewModel
     {
         private BindingList<string> availableLanguages;
@@ -49,7 +54,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLangaugesToMove = new BindingList<string>();
             this.AvailableLanguages = new BindingList<string>();
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
-            this.Mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns);
+            this.Mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns.Where(m => m.ShortName != "none").ToList());
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
@@ -339,11 +344,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets AudioEncoders.
         /// </summary>
         public IEnumerable<HBMixdown> Mixdowns { get; set; }
-
-        /// <summary>
-        /// Gets or sets AudioBitrates.
-        /// </summary>
-        public IEnumerable<int> AudioBitrates { get; set; }
 
         /// <summary>
         /// Gets or sets SampleRates.
