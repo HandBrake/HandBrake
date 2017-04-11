@@ -222,6 +222,10 @@ static void ScanFunc( void * _data )
         npreviews = DecodePreviews( data, title, 1 );
         if (npreviews < 2)
         {
+            // Try harder to get some valid frames
+            // Allow libav to return "corrupt" frames
+            hb_log("scan: Too few previews (%d), trying harder", npreviews);
+            title->flags |= HBTF_NO_IDR;
             npreviews = DecodePreviews( data, title, 0 );
         }
         if (npreviews == 0)
