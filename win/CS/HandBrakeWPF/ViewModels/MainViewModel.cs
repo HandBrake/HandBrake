@@ -1619,6 +1619,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CancelScan()
         {
+            this.ShowStatusWindow = false;
             this.scanService.Cancel();
         }
 
@@ -2346,6 +2347,8 @@ namespace HandBrakeWPF.ViewModels
 
             Execute.OnUIThread(() =>
             {
+                this.ShowStatusWindow = false;
+
                 if (e.Successful)
                 {
                     this.NotifyOfPropertyChange(() => this.ScannedSource);
@@ -2358,7 +2361,6 @@ namespace HandBrakeWPF.ViewModels
                     this.OpenAlertWindow(Resources.Main_ScanNoTitlesFound, Resources.Main_ScanNoTitlesFoundMessage);
                 }
 
-                this.ShowStatusWindow = false;
                 if (e.Successful)
                 {
                     this.SourceLabel = this.SourceName;

@@ -25,7 +25,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.ApplicationServices.Services.Logging.Interfaces;
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.EventArgs;
@@ -122,6 +121,8 @@ namespace HandBrakeWPF.Services.Scan
                 }
             }
 
+            this.isCancelled = false;
+
             // Handle the post scan operation.
             this.postScanOperation = postAction;
 
@@ -141,15 +142,18 @@ namespace HandBrakeWPF.Services.Scan
         {
             try
             {
-                this.ServiceLogMessage("Stopping Scan.");
+                this.ServiceLogMessage("Stopping Scan ...");
                 this.IsScanning = false;
                 this.instance.StopScan();
+                this.ServiceLogMessage("Scan Stopped ...");
             }
             catch (Exception exc)
             {
-                this.isCancelled = false;
-                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(false, exc, Resources.ScanService_ScanStopFailed, null));
-                // Do Nothing.
+                this.ServiceLogMessage(exc.ToString());
+            }
+            finally
+            {
+                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(this.isCancelled, null, null, null));
             }
         }
 
@@ -206,7 +210,7 @@ namespace HandBrakeWPF.Services.Scan
             }
             catch (AccessViolationException e)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(e);
             }
 
             return bitmapImage;
@@ -266,8 +270,6 @@ namespace HandBrakeWPF.Services.Scan
             {
                 this.ServiceLogMessage("Scan Failed ..." + Environment.NewLine + exc);
                 this.Stop();
-
-                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()", null));
             }
         }
 
@@ -286,7 +288,7 @@ namespace HandBrakeWPF.Services.Scan
         /// </param>
         private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
-            this.ServiceLogMessage("Scan Finished ...");
+            this.ServiceLogMessage("Processing Scan Information ...");
             bool cancelled = this.isCancelled;
             this.isCancelled = false;
 
@@ -318,10 +320,12 @@ namespace HandBrakeWPF.Services.Scan
                 }
 
                 this.postScanOperation = null; // Reset
+                this.ServiceLogMessage("Scan Finished for Queue Edit ...");
             }
             else
             {
                 this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(cancelled, null, string.Empty, sourceData));
+                this.ServiceLogMessage("Scan Finished ...");
             }
         }
 
