@@ -694,8 +694,13 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 }
                 if (hb_dict_get(encoder_dict, "AudioSamplerate") != NULL)
                 {
-                    hb_dict_set(audio_dict, "Samplerate", hb_value_dup(
-                        hb_dict_get(encoder_dict, "AudioSamplerate")));
+                    const char * sr_name;
+                    int          sr;
+
+                    sr_name = hb_dict_get_string(encoder_dict,
+                                                 "AudioSamplerate");
+                    sr      = hb_audio_samplerate_get_from_name(sr_name);
+                    hb_dict_set(audio_dict, "Samplerate", hb_value_int(sr));
                 }
                 if (hb_dict_get(encoder_dict, "AudioCompressionLevel") != NULL)
                 {
