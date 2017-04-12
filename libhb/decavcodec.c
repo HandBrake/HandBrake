@@ -1375,6 +1375,7 @@ static void decodeVideo( hb_work_object_t *w, hb_buffer_t * in)
             pv->packet_info.dts          = parser_dts;
 
             decodeFrame(w, &pv->packet_info);
+            w->frame_count++;
 
             // There could have been an unfinished packet when we entered
             // decodeVideo that is now finished.  The next packet is associated

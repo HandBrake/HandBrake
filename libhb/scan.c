@@ -31,7 +31,7 @@ typedef struct
     uint64_t       min_title_duration;
 } hb_scan_t;
 
-#define PREVIEW_READ_THRESH (1024 * 1024 * 300)
+#define PREVIEW_READ_THRESH (200)
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title, int flush );
@@ -676,8 +676,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
 
         hb_buffer_t * vid_buf = NULL;
 
-        int total_read = 0, packets = 0;
-        while (total_read < PREVIEW_READ_THRESH ||
+        int packets = 0;
+        vid_decoder->frame_count = 0;
+        while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
               (!AllAudioOK(title) && packets < 10000))
         {
             if (data->bd)
@@ -741,7 +742,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 abort = 1;
                 goto skip_preview;
             }
-            total_read += buf->size;
             packets++;
 
             (hb_demux[title->demuxer])(buf, &list_es, 0 );

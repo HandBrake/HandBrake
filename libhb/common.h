@@ -1151,6 +1151,7 @@ struct hb_work_object_s
     volatile int      * done;
     volatile int      * die;
     int                 status;
+    int                 frame_count;
     int                 codec_param;
     hb_title_t        * title;
 
