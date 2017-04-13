@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrakeWPF.Utilities;
+    using Caliburn.Micro;
 
     /// <summary>
     /// Audio Behaviours

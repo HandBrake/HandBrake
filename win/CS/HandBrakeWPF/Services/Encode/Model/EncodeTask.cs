@@ -12,11 +12,12 @@ namespace HandBrakeWPF.Services.Encode.Model
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
 
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;

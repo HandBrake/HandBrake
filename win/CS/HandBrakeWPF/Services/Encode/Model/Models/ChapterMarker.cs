@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System;
 
-    using HandBrakeWPF.Utilities;
+    using Caliburn.Micro;
 
     /// <summary>
     /// A Movie Chapter

@@ -9,9 +9,9 @@
 
 namespace HandBrakeWPF.Services.Queue.Model
 {
-    using HandBrake.ApplicationServices.Model;
+    using Caliburn.Micro;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.ApplicationServices.Model;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 

@@ -9,10 +9,11 @@
 
 namespace HandBrakeWPF.Services.Presets.Model
 {
+    using Caliburn.Micro;
+
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Utilities;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
@@ -20,11 +21,6 @@ namespace HandBrakeWPF.Services.Presets.Model
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
-    /// <remarks>
-    /// Using App Services PropertyChangedBase because Caliburn Micro has [DataContract] on their base class which causes json.net not to serialise properties without [DataContract]
-    /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/89
-    /// https://github.com/Caliburn-Micro/Caliburn.Micro/issues/96
-    /// </remarks>
     public class Preset : PropertyChangedBase, IPresetObject // Delibery not 
     {
         #region Constants and Fields

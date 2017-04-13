@@ -14,6 +14,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Text;
     using System.Windows;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Services.Logging.EventArgs;
     using HandBrake.ApplicationServices.Services.Logging.Model;

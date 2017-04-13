@@ -13,6 +13,9 @@ namespace HandBrakeWPF.Model.Audio
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;

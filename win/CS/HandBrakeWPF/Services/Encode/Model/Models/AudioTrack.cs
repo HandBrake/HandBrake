@@ -14,12 +14,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
-    using System.Security;
+
+    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Scan.Model;

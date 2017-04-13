@@ -255,7 +255,6 @@
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\DriveUtilities.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
-    <Compile Include="Utilities\Execute.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\HandBrakeApp.cs" />
@@ -265,7 +264,6 @@
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
     <Compile Include="Utilities\Output\CsvHelper.cs" />
     <Compile Include="Utilities\Portable.cs" />
-    <Compile Include="Utilities\PropertyChangedBase.cs" />
     <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\Win32.cs" />

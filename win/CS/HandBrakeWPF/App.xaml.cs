@@ -94,15 +94,17 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
-            {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", (Exception)e.ExceptionObject);
-                this.ShowError(exception);
-            }
-            else
-            {
-                this.ShowError(e.ExceptionObject);
-            }
+            Caliburn.Micro.Execute.OnUIThreadAsync(() => {
+                if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+                {
+                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", (Exception)e.ExceptionObject);
+                    this.ShowError(exception);
+                }
+                else
+                {
+                    this.ShowError(e.ExceptionObject);
+                }
+            });
         }
 
         /// <summary>
