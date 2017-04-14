@@ -700,6 +700,10 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                     sr_name = hb_dict_get_string(encoder_dict,
                                                  "AudioSamplerate");
                     sr      = hb_audio_samplerate_get_from_name(sr_name);
+                    if (sr < 0)
+                    {
+                        sr = 0;
+                    }
                     hb_dict_set(audio_dict, "Samplerate", hb_value_int(sr));
                 }
                 if (hb_dict_get(encoder_dict, "AudioCompressionLevel") != NULL)
