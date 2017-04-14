@@ -40,7 +40,7 @@
 
     self.preset = self.manager.defaultPreset;
 
-    NSURL *sampleURL = [NSURL fileURLWithPath:@"test.mp4"];
+    NSURL *sampleURL = [NSURL fileURLWithPath:@"/test.mp4"];
 
     self.queue = dispatch_queue_create("fr.handbrake.testQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);

@@ -41,7 +41,7 @@
 
     self.preset = self.manager.defaultPreset;
 
-    NSURL *sampleURL = [NSURL fileURLWithPath:@"test.mp4"];
+    NSURL *sampleURL = [NSURL fileURLWithPath:@"/test.mp4"];
 
     self.queue = dispatch_queue_create("fr.handbrake.testQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
@@ -58,7 +58,8 @@
     self.title = self.core.titles.firstObject;
 
     self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
-    self.job.destURL = [NSURL fileURLWithPath:@"/Dest.mp4"];
+    self.job.outputURL = [NSURL fileURLWithPath:@"/"];
+    self.job.outputFileName = @"Dest.mp4";
 
     NSUndoManager *undoManager = [[NSUndoManager alloc] init];
     undoManager.groupsByEvent = NO;
