@@ -774,6 +774,7 @@ void hb_avfilter_combine( hb_list_t * list )
             {
                 hb_list_rem(list, filter);
                 hb_filter_close(&filter);
+                hb_value_free(&settings);
                 continue;
             }
             if (avfilter == NULL)
