@@ -601,85 +601,100 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
 static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 {
-    int retval = 1;
     hb_work_private_t * pv;
     int i;
     hb_chapter_t * chapter;
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
-    if( pv )
+    if (pv == NULL)
     {
-        w->private_data = pv;
+        goto fail;
+    }
 
-        pv->job = job;
-        pv->current_state = k_state_potential_new_entry;
-        pv->number_of_entries = 0;
-        pv->last_entry_number = 0;
-        pv->current_time = 0;
-        pv->subtitle = w->subtitle;
+    w->private_data = pv;
 
-        /*
-         * Figure out the start and stop times from teh chapters being
-         * encoded - drop subtitle not in this range.
-         */
-        pv->start_time = 0;
-        for( i = 1; i < job->chapter_start; ++i )
+    pv->job = job;
+    pv->current_state = k_state_potential_new_entry;
+    pv->number_of_entries = 0;
+    pv->last_entry_number = 0;
+    pv->current_time = 0;
+    pv->subtitle = w->subtitle;
+
+    /*
+     * Figure out the start and stop times from teh chapters being
+     * encoded - drop subtitle not in this range.
+     */
+    pv->start_time = 0;
+    for( i = 1; i < job->chapter_start; ++i )
+    {
+        chapter = hb_list_item( job->list_chapter, i - 1 );
+        if( chapter )
         {
-            chapter = hb_list_item( job->list_chapter, i - 1 );
-            if( chapter )
-            {
-                pv->start_time += chapter->duration;
-            } else {
-                hb_error( "Could not locate chapter %d for SRT start time", i );
-                retval = 0;
-            }
-        }
-        pv->stop_time = pv->start_time;
-        for( i = job->chapter_start; i <= job->chapter_end; ++i )
-        {
-            chapter = hb_list_item( job->list_chapter, i - 1 );
-            if( chapter )
-            {
-                pv->stop_time += chapter->duration;
-            } else {
-                hb_error( "Could not locate chapter %d for SRT start time", i );
-                retval = 0;
-            }
-        }
-
-        hb_deep_log( 3, "SRT Start time %"PRId64", stop time %"PRId64, pv->start_time, pv->stop_time);
-
-        pv->iconv_context = iconv_open( "utf-8", pv->subtitle->config.src_codeset );
-
-
-        if( pv->iconv_context == (iconv_t) -1 )
-        {
-            hb_error("Could not open the iconv library with those file formats\n");
-
+            pv->start_time += chapter->duration;
         } else {
-            memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
-
-            pv->file = hb_fopen(w->subtitle->config.src_filename, "r");
-
-            if( !pv->file )
-            {
-                hb_error("Could not open the SRT subtitle file '%s'\n",
-                         w->subtitle->config.src_filename);
-            } else {
-                retval = 0;
-            }
+            hb_error( "Could not locate chapter %d for SRT start time", i );
         }
     }
-    if (!retval)
+    pv->stop_time = pv->start_time;
+    for( i = job->chapter_start; i <= job->chapter_end; ++i )
     {
-        // Generate generic SSA Script Info.
-        int height = job->title->geometry.height - job->crop[0] - job->crop[1];
-        int width = job->title->geometry.width - job->crop[2] - job->crop[3];
-        hb_subtitle_add_ssa_header(w->subtitle, HB_FONT_SANS,
-                                   .066 * job->title->geometry.height,
-                                   width, height);
+        chapter = hb_list_item( job->list_chapter, i - 1 );
+        if( chapter )
+        {
+            pv->stop_time += chapter->duration;
+        } else {
+            hb_error( "Could not locate chapter %d for SRT start time", i );
+        }
     }
-    return retval;
+
+    hb_deep_log(3, "SRT Start time %"PRId64", stop time %"PRId64,
+                pv->start_time, pv->stop_time);
+
+    if (job->pts_to_start != 0)
+    {
+        pv->start_time = AV_NOPTS_VALUE;
+    }
+
+    pv->iconv_context = iconv_open( "utf-8", pv->subtitle->config.src_codeset );
+    if( pv->iconv_context == (iconv_t) -1 )
+    {
+        hb_error("Could not open the iconv library with those file formats\n");
+        goto fail;
+    } else {
+        memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
+
+        pv->file = hb_fopen(w->subtitle->config.src_filename, "r");
+
+        if( !pv->file )
+        {
+            hb_error("Could not open the SRT subtitle file '%s'\n",
+                     w->subtitle->config.src_filename);
+            goto fail;
+        }
+    }
+
+    // Generate generic SSA Script Info.
+    int height = job->title->geometry.height - job->crop[0] - job->crop[1];
+    int width = job->title->geometry.width - job->crop[2] - job->crop[3];
+    hb_subtitle_add_ssa_header(w->subtitle, HB_FONT_SANS,
+                               .066 * job->title->geometry.height,
+                               width, height);
+    return 0;
+
+fail:
+    if (pv != NULL)
+    {
+        if (pv->iconv_context != (iconv_t) -1)
+        {
+            iconv_close(pv->iconv_context);
+        }
+        if (pv->file != NULL)
+        {
+            fclose(pv->file);
+        }
+        free(pv);
+    }
+    return 1;
 }
 
 static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
@@ -688,6 +703,21 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * out = NULL;
 
+    if (pv->job->reader_pts_offset == AV_NOPTS_VALUE)
+    {
+        // We need to wait for reader to initialize it's pts offset so that
+        // we know where to start reading SRTs.
+        *buf_out = NULL;
+        return HB_WORK_OK;
+    }
+    if (pv->start_time == AV_NOPTS_VALUE)
+    {
+        pv->start_time = pv->job->reader_pts_offset;
+        if (pv->job->pts_to_stop > 0)
+        {
+            pv->stop_time = pv->job->pts_to_start + pv->job->pts_to_stop;
+        }
+    }
     out = srt_read( pv );
     if (out != NULL)
     {

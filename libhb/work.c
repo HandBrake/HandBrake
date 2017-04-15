@@ -1927,6 +1927,13 @@ void hb_work_loop( void * _w )
                 }
             }
         }
+        else if (w->fifo_in == NULL)
+        {
+            // If this work object is a generator (no input fifo) and it
+            // generated no output, it may be waiting for status from
+            // another thread. Yield so that we don't spin doing nothing.
+            hb_yield();
+        }
     }
     if ( buf_out )
     {

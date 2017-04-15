@@ -158,6 +158,7 @@ struct sync_common_s
 
     // point-to-point support
     int             start_found;
+    int64_t         pts_to_start;
     int64_t         start_pts;
     int64_t         stop_pts;
     int             wait_for_frame;
@@ -1350,7 +1351,7 @@ static void OutputBuffer( sync_common_t * common )
             else if (common->wait_for_pts &&
                      out_stream->type != SYNC_TYPE_SUBTITLE)
             {
-                if (buf->s.start >= common->job->pts_to_start)
+                if (buf->s.start >= common->pts_to_start)
                 {
                     common->start_found = 1;
                     common->streams[0].frame_count = 0;
@@ -1881,6 +1882,20 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
         }
     }
 
+    // Reader can change job->reader_pts_offset after initialization
+    // and before we receive the first buffer here.  Calculate
+    // common->pts_to_start here since this is the first opportunity where
+    // all the necessary information exists.
+    if (stream->common->pts_to_start == AV_NOPTS_VALUE)
+    {
+        hb_job_t * job = stream->common->job;
+        if (job->pts_to_start > 0)
+        {
+            stream->common->pts_to_start =
+                MAX(0, job->pts_to_start - job->reader_pts_offset);
+        }
+    }
+
     // Render offset is only useful for decoders, which are all
     // upstream of sync.  Squash it.
     buf->s.renderOffset = AV_NOPTS_VALUE;
@@ -2242,10 +2257,14 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
 
     if (job->frame_to_start || job->pts_to_start)
     {
-        pv->common->start_found = 0;
-        pv->common->start_pts = pv->common->job->pts_to_start;
+        pv->common->start_found    = 0;
+        pv->common->start_pts      = job->pts_to_start;
         pv->common->wait_for_frame = !!job->frame_to_start;
         pv->common->wait_for_pts   = !!job->pts_to_start;
+        if (job->pts_to_start)
+        {
+            pv->common->pts_to_start = AV_NOPTS_VALUE;
+        }
     }
     else
     {
@@ -3048,7 +3067,7 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     if (common->wait_for_frame)
         p.progress  = (float)frame_count / job->frame_to_start;
     else if (common->wait_for_pts)
-        p.progress  = (float) start / job->pts_to_start;
+        p.progress  = (float) start / common->pts_to_start;
     else
         p.progress = 0;
     if (p.progress > 1.0)
@@ -3067,7 +3086,7 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
         else if (common->wait_for_pts)
         {
             avg = 1000.0 * start / (now - common->st_first);
-            eta = (job->pts_to_start - start) / avg;
+            eta = (common->pts_to_start - start) / avg;
         }
         p.hours   = eta / 3600;
         p.minutes = (eta % 3600) / 60;

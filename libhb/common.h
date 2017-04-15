@@ -671,6 +671,10 @@ struct hb_job_s
     hb_esconfig_t config;
 
     hb_mux_data_t * mux_data;
+
+    int64_t         reader_pts_offset; // Reader can discard some video.
+                                       // Other pipeline stages need to know
+                                       // this.  E.g. sync and decsrtsub
 #endif
 };
 
