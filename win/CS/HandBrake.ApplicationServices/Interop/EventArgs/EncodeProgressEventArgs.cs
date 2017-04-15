@@ -40,7 +40,13 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         /// <param name="passCount">
         /// The pass count.
         /// </param>
-        public EncodeProgressEventArgs(double fractionComplete, double currentFrameRate, double averageFrameRate, TimeSpan estimatedTimeLeft, int passId, int pass, int passCount)
+        /// <param name="isMuxing">
+        /// A flag to indicate we are muxing.
+        /// </param>
+        /// <param name="isSearching">
+        /// Gets a value indicating that we are in the searching process.
+        /// </param>
+        public EncodeProgressEventArgs(double fractionComplete, double currentFrameRate, double averageFrameRate, TimeSpan estimatedTimeLeft, int passId, int pass, int passCount, bool isMuxing, bool isSearching)
         {
             this.FractionComplete = fractionComplete;
             this.CurrentFrameRate = currentFrameRate;
@@ -49,6 +55,8 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
             this.PassId = passId;
             this.Pass = pass;
             this.PassCount = passCount;
+            this.IsMuxing = isMuxing;
+            this.IsSearching = isSearching;
         }
 
         /// <summary>
@@ -91,5 +99,31 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         /// Gets the pass count.
         /// </summary>
         public int PassCount { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating that we are in the muxing process.
+        /// </summary>
+        public bool IsMuxing { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating that we are in the searching process.
+        /// </summary>
+        public bool IsSearching { get; }
+
+        /// <summary>
+        /// Gets a value indicating that we are doing a subtitle scan pass.
+        /// </summary>
+        public bool IsSubtitleScan
+        {
+            get
+            {
+                if (this.PassId == -1)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }

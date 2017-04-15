@@ -180,7 +180,9 @@ namespace HandBrakeWPF.Services.Encode
                 Task = e.Pass, 
                 TaskCount = e.PassCount,
                 ElapsedTime = DateTime.Now - this.startTime, 
-                PassId = e.PassId
+                PassId = e.PassId,
+                IsMuxing = e.IsMuxing,
+                IsSearching = e.IsSearching
             };
 
             this.InvokeEncodeStatusChanged(args);

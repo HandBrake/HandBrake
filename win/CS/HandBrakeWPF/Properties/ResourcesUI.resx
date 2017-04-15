@@ -899,4 +899,13 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
     <value>Play a sound when the queue or single encode completes:</value>
   </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>Muxing: This may take a while...</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>Searching for start time</value>
+  </data>
 </root>

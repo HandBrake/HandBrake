@@ -492,7 +492,7 @@ namespace HandBrake.ApplicationServices.Interop
             this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state != null && state.State == NativeConstants.HB_STATE_SCANNING)
+            if (state != null && (state.State == NativeConstants.HB_STATE_SCANNING || state.State == NativeConstants.HB_STATE_SEARCHING))
             {
                 if (this.ScanProgress != null)
                 {
@@ -529,12 +529,12 @@ namespace HandBrake.ApplicationServices.Interop
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state != null && state.State == NativeConstants.HB_STATE_WORKING)
+            if (state != null && (state.State == NativeConstants.HB_STATE_WORKING || state.State == NativeConstants.HB_STATE_MUXING || state.State == NativeConstants.HB_STATE_SEARCHING))
             {
                 if (this.EncodeProgress != null)
                 {
                     var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
-                        state.Working.PassID, state.Working.Pass, state.Working.PassCount);
+                        state.Working.PassID, state.Working.Pass, state.Working.PassCount, state.State == NativeConstants.HB_STATE_MUXING, state.State == NativeConstants.HB_STATE_SEARCHING);
 
                     this.EncodeProgress(this, progressEventArgs);
                 }

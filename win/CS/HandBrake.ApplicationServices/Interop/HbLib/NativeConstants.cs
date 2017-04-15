@@ -59,6 +59,7 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public const int HB_STATE_PAUSED = 16;
         public const int HB_STATE_WORKDONE = 32;
         public const int HB_STATE_MUXING = 64;
+        public const int HB_STATE_SEARCHING = 128;
 
         // Keep aspect ratio values
         public const int HB_KEEP_WIDTH = 0x01;

@@ -519,16 +519,38 @@ namespace HandBrakeWPF.ViewModels
         {
             Execute.OnUIThread(() =>
             {
-                this.JobStatus =
-                    string.Format(
-                        Resources.QueueViewModel_QueueStatusDisplay, 
-                        e.Task, 
-                        e.TaskCount, 
-                        e.PercentComplete, 
-                        e.CurrentFrameRate, 
-                        e.AverageFrameRate, 
-                        e.EstimatedTimeLeft, 
-                        e.ElapsedTime);
+                string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+                if (e.IsSubtitleScan)
+                {
+                    this.JobStatus = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
+                        e.Task,
+                        e.TaskCount,
+                        e.PercentComplete,
+                        e.EstimatedTimeLeft,
+                        e.ElapsedTime,
+                        jobsPending);
+                }
+                else if (e.IsMuxing)
+                {
+                    this.JobStatus = ResourcesUI.MainView_Muxing;
+                }
+                else if (e.IsSearching)
+                {
+                    this.JobStatus = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
+                }
+                else
+                {
+                    this.JobStatus =
+                        string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
+                            e.Task,
+                            e.TaskCount,
+                            e.PercentComplete,
+                            e.CurrentFrameRate,
+                            e.AverageFrameRate,
+                            e.EstimatedTimeLeft,
+                            e.ElapsedTime,
+                            jobsPending);
+                }
             });
         }
 

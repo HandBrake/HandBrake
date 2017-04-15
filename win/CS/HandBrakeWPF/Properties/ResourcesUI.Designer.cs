@@ -754,6 +754,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Muxing: This may take a while....
+        /// </summary>
+        public static string MainView_Muxing {
+            get {
+                return ResourceManager.GetString("MainView_Muxing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string MainView_Options {
@@ -817,6 +826,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoding: {0}, {1:00.00}%, Time Remaining: {2}, {3}.
+        /// </summary>
+        public static string MainView_ProgressStatusWithTask {
+            get {
+                return ResourceManager.GetString("MainView_ProgressStatusWithTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string MainView_Remove {
@@ -831,6 +849,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_ResetBuiltInPresets {
             get {
                 return ResourceManager.GetString("MainView_ResetBuiltInPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching for start time.
+        /// </summary>
+        public static string MainView_Searching {
+            get {
+                return ResourceManager.GetString("MainView_Searching", resourceCulture);
             }
         }
         

@@ -2420,7 +2420,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
                         string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
-                        if (e.PassId == -1)
+                        if (e.IsSubtitleScan)
                         {
                             this.ProgramStatusLabel = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
                                 e.Task,
@@ -2429,6 +2429,14 @@ namespace HandBrakeWPF.ViewModels
                                 e.EstimatedTimeLeft,
                                 e.ElapsedTime,
                                 jobsPending);
+                        }
+                        else if (e.IsMuxing)
+                        {
+                            this.ProgramStatusLabel = ResourcesUI.MainView_Muxing;
+                        }
+                        else if (e.IsSearching)
+                        {
+                            this.ProgramStatusLabel = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
                         }
                         else
                         {
