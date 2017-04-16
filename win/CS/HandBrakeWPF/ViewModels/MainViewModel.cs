@@ -2299,8 +2299,12 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            if (e.ScannedSource != null)
+            if (e.ScannedSource != null && !e.Cancelled)
             {
+                if (this.ScannedSource == null)
+                {
+                    this.ScannedSource = new Source();
+                }
                 e.ScannedSource.CopyTo(this.ScannedSource);
             }
             else
