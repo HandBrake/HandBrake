@@ -1,7 +1,5 @@
 # List of source files containing translatable strings.
-[type: gettext/glade] src/ghb.ui
-[type: gettext/glade] src/ghb-3.12.ui
-[type: gettext/glade] src/ghb-3.14.ui
+[type: gettext/glade] src/ghb.m4
 src/main.c
 src/audiohandler.c
 src/callbacks.c
