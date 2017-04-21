@@ -72,7 +72,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         _chapterTitles = [title.chapters copy];
 
-        _uuid = [[NSUUID UUID] UUIDString];
+        CFUUIDRef theUUID = CFUUIDCreate(NULL);
+        CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+        CFRelease(theUUID);
+        _uuid = CFBridgingRelease(string);
 
         [self applyPreset:preset];
     }
@@ -271,7 +274,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_name = [_name copy];
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
-        copy->_uuid = [[NSUUID UUID] UUIDString];
+
+        CFUUIDRef theUUID = CFUUIDCreate(NULL);
+        CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+        CFRelease(theUUID);
+        copy->_uuid = CFBridgingRelease(string);
 
         copy->_fileURLBookmark = [_fileURLBookmark copy];
         copy->_outputURLFolderBookmark = [_outputURLFolderBookmark copy];
