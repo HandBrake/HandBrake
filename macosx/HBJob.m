@@ -377,10 +377,10 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     if (version == 3 && (self = [super init]))
     {
         decodeInt(_state);
-        decodeObject(_name, NSString);
-        decodeObject(_presetName, NSString);
+        decodeObjectOrFail(_name, NSString);
+        decodeObjectOrFail(_presetName, NSString);
         decodeInt(_titleIdx);
-        decodeObject(_uuid, NSString);
+        decodeObjectOrFail(_uuid, NSString);
 
 #ifdef __SANDBOX_ENABLED__
         _fileURLBookmark = [HBCodingUtilities decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark" decoder:decoder];
@@ -417,15 +417,15 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeBool(_mp4HttpOptimize);
         decodeBool(_mp4iPodCompatible);
 
-        decodeObject(_range, HBRange);
-        decodeObject(_video, HBVideo);
-        decodeObject(_picture, HBPicture);
-        decodeObject(_filters, HBFilters);
+        decodeObjectOrFail(_range, HBRange);
+        decodeObjectOrFail(_video, HBVideo);
+        decodeObjectOrFail(_picture, HBPicture);
+        decodeObjectOrFail(_filters, HBFilters);
 
         _video.job = self;
 
-        decodeObject(_audio, HBAudio);
-        decodeObject(_subtitles, HBSubtitles);
+        decodeObjectOrFail(_audio, HBAudio);
+        decodeObjectOrFail(_subtitles, HBSubtitles);
 
         _audio.job = self;
         _video.job = self;
@@ -436,6 +436,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         return self;
     }
 
+fail:
     return nil;
 }
 

@@ -469,7 +469,7 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
-    decodeObject(_trackSelectionLanguages, NSMutableArray);
+    decodeObjectOrFail(_trackSelectionLanguages, NSMutableArray);
 
     decodeCollectionOfObjects(_tracksArray, NSMutableArray, HBAudioTrackPreset);
 
@@ -487,6 +487,9 @@
     decodeBool(_secondaryEncoderMode);
 
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark KVC

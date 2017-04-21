@@ -513,9 +513,12 @@ extern NSString *keySubTrackSrtFileURLBookmark;
         track.delegate = self;
     }
 
-    decodeObject(_defaults, HBSubtitlesDefaults);
+    decodeObjectOrFail(_defaults, HBSubtitlesDefaults);
 
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark - Presets

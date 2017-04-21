@@ -426,20 +426,20 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 {
     self = [super init];
 
-    decodeObject(_detelecine, NSString);
-    decodeObject(_detelecineCustomString, NSString);
+    decodeObjectOrFail(_detelecine, NSString);
+    decodeObjectOrFail(_detelecineCustomString, NSString);
 
-    decodeObject(_combDetection, NSString);
-    decodeObject(_combDetectionCustomString, NSString);
+    decodeObjectOrFail(_combDetection, NSString);
+    decodeObjectOrFail(_combDetectionCustomString, NSString);
 
-    decodeObject(_deinterlace, NSString);
-    decodeObject(_deinterlacePreset, NSString)
-    decodeObject(_deinterlaceCustomString, NSString);
+    decodeObjectOrFail(_deinterlace, NSString);
+    decodeObjectOrFail(_deinterlacePreset, NSString)
+    decodeObjectOrFail(_deinterlaceCustomString, NSString);
 
-    decodeObject(_denoise, NSString);
-    decodeObject(_denoisePreset, NSString);
-    decodeObject(_denoiseTune, NSString);
-    decodeObject(_denoiseCustomString, NSString);
+    decodeObjectOrFail(_denoise, NSString);
+    decodeObjectOrFail(_denoisePreset, NSString);
+    decodeObjectOrFail(_denoiseTune, NSString);
+    decodeObjectOrFail(_denoiseCustomString, NSString);
 
     decodeInt(_deblock);
     decodeBool(_grayscale);
@@ -449,6 +449,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     _notificationsEnabled = YES;
 
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark - Presets and queue

@@ -286,9 +286,12 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
         track.delegate = self;
     }
 
-    decodeObject(_defaults, HBAudioDefaults);
+    decodeObjectOrFail(_defaults, HBAudioDefaults);
 
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark - Presets

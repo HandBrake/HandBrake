@@ -516,18 +516,21 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeBool(_turboTwoPass);
 
     decodeBool(_advancedOptions);
-    decodeObject(_preset, NSString);
-    decodeObject(_tune, NSString);
-    decodeObject(_profile, NSString);
-    decodeObject(_level, NSString);
+    decodeObjectOrFail(_preset, NSString);
+    decodeObjectOrFail(_tune, NSString);
+    decodeObjectOrFail(_profile, NSString);
+    decodeObjectOrFail(_level, NSString);
 
-    decodeObject(_videoOptionExtra, NSString);
+    decodeObjectOrFail(_videoOptionExtra, NSString);
 
     decodeBool(_fastDecode);
 
     _notificationsEnabled = YES;
 
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark - Various conversion methods from dict/preset/queue/etc

@@ -84,13 +84,14 @@
 
     if (version == 1 && (self = [self init]))
     {
-        decodeObject(_title, NSString);
-        decodeObject(_duration, NSString);
+        decodeObjectOrFail(_title, NSString);
+        decodeObjectOrFail(_duration, NSString);
         decodeInteger(_index);
 
         return self;
     }
-    
+
+fail:
     return nil;
 }
 

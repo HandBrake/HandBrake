@@ -226,7 +226,7 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
-    decodeObject(_trackSelectionLanguages, NSMutableArray);
+    decodeObjectOrFail(_trackSelectionLanguages, NSMutableArray);
 
     decodeBool(_addForeignAudioSearch);
     decodeBool(_addForeignAudioSubtitle);
@@ -237,6 +237,9 @@
     decodeBool(_burnInBluraySubtitles);
 
     return self;
+
+fail:
+    return nil;
 }
 
 
