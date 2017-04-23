@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.Model.Audio
 {
+    using System.ComponentModel.DataAnnotations;
+
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
