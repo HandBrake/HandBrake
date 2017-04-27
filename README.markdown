@@ -13,7 +13,7 @@ For information on downloading, building/installing, and using HandBrake, see th
 
 Visit the [HandBrake Community Forums](https://forum.handbrake.fr/).
 
-Chat on \#handbrake on [Freenode IRC](http://freenode.net/irc_servers.shtml) (irc://irc.freenode.net/#handbrake).
+Chat on [#handbrake on Freenode IRC](https://webchat.freenode.net/?channels=handbrake) (irc://irc.freenode.net/#handbrake).
 
 For information on HandBrake's community support channels, please see [Community Support](https://handbrake.fr/docs/en/latest/help/community-support.html).
 
