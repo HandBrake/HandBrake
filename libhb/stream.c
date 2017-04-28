@@ -5582,11 +5582,26 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         for( i = 0; i < ic->nb_chapters; i++ )
             if( ( m = ic->chapters[i] ) != NULL )
             {
-                AVDictionaryEntry *tag;
-                hb_chapter_t * chapter;
-                chapter = calloc( sizeof( hb_chapter_t ), 1 );
-                chapter->index    = i+1;
-                chapter->duration = ( m->end / ( (double) m->time_base.num * m->time_base.den ) ) * 90000  - duration_sum;
+                AVDictionaryEntry * tag;
+                hb_chapter_t      * chapter;
+                int64_t             end;
+
+                chapter = calloc(sizeof(hb_chapter_t), 1);
+                chapter->index    = i + 1;
+
+                /* AVChapter.end is not guaranteed to be set.
+                 * Calculate chapter durations based on AVChapter.start.
+                 */
+                if (i + 1 < ic->nb_chapters)
+                {
+                    end = ic->chapters[i + 1]->start * 90000 *
+                          m->time_base.num / m->time_base.den;
+                }
+                else
+                {
+                    end = ic->duration * 90000 / AV_TIME_BASE;
+                }
+                chapter->duration = end - duration_sum;
                 duration_sum     += chapter->duration;
 
                 int seconds      = ( chapter->duration + 45000 ) / 90000;
