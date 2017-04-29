@@ -714,9 +714,9 @@ namespace HandBrakeWPF.ViewModels
                                 return;
                             }
                         }
-                        catch (ArgumentException)
+                        catch (Exception exc)
                         {
-                            this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                            this.errorService.ShowError(Resources.Main_InvalidDestination, string.Empty, value + Environment.NewLine + exc);
                             return;
                         }
 
