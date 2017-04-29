@@ -269,8 +269,7 @@ namespace HandBrakeWPF.Services.Queue
                 if (String.Equals(
                     job.Task.Destination,
                     destination.Replace("\\\\", "\\"),
-                    StringComparison.OrdinalIgnoreCase)
-                    && job.Status == QueueItemStatus.Waiting)
+                    StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
