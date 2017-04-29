@@ -144,8 +144,7 @@ namespace HandBrakeWPF.Services.Scan
             {
                 this.ServiceLogMessage("Stopping Scan ...");
                 this.IsScanning = false;
-                this.instance.StopScan();
-                this.ServiceLogMessage("Scan Stopped ...");
+                this.instance.StopScan();              
             }
             catch (Exception exc)
             {
@@ -154,6 +153,7 @@ namespace HandBrakeWPF.Services.Scan
             finally
             {
                 this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(this.isCancelled, null, null, null));
+                this.ServiceLogMessage("Scan Stopped ...");
             }
         }
 
