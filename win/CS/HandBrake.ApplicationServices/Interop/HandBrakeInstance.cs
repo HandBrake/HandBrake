@@ -489,24 +489,40 @@ namespace HandBrake.ApplicationServices.Interop
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
             this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
-            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+            JsonState state = null;
+            if (!string.IsNullOrEmpty(statusJson))
+            {
+                state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+            }
 
             if (state != null && (state.State == NativeConstants.HB_STATE_SCANNING || state.State == NativeConstants.HB_STATE_SEARCHING))
             {
-                if (this.ScanProgress != null)
+                if (this.ScanProgress != null && state.Scanning != null)
                 {
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
             else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
             {
+                this.log.LogMessage("Scan: HB_STATE_SCANDONE", LogMessageType.API, LogLevel.Info);
+                this.scanPollTimer.Stop();
+
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Trace);
-                this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
-                this.featureTitle = this.titles.MainFeature;
+                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Info);
 
-                this.scanPollTimer.Stop();
+                if (string.IsNullOrEmpty(scanJson))
+                {
+                    this.log.LogMessage("Scan Error: No Scan Data Returned.", LogMessageType.API, LogLevel.Error);
+                }
+                else
+                {
+                    this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
+                    if (this.titles != null)
+                    {
+                        this.featureTitle = this.titles.MainFeature;
+                    }
+                }
 
                 if (this.ScanCompleted != null)
                 {

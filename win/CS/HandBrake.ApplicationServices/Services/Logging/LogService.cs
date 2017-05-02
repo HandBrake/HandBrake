@@ -103,7 +103,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
                 return;
             }
 
-            if (level >= this.currentLogLevel)
+            if (level > this.currentLogLevel)
             {
                 return;
             }

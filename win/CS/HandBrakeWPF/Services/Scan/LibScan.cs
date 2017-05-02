@@ -142,7 +142,7 @@ namespace HandBrakeWPF.Services.Scan
         {
             try
             {
-                this.ServiceLogMessage("Stopping Scan ...");
+                this.ServiceLogMessage("Manually Stopping Scan ...");
                 this.IsScanning = false;
                 this.instance.StopScan();              
             }
