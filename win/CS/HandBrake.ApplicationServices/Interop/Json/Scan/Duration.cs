@@ -32,6 +32,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the ticks.
         /// </summary>
-        public int Ticks { get; set; }
+        public long Ticks { get; set; }
     }
 }
