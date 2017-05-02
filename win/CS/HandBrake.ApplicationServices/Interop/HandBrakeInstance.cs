@@ -14,6 +14,7 @@ namespace HandBrake.ApplicationServices.Interop
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
+    using System.IO;
     using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
@@ -240,6 +241,7 @@ namespace HandBrake.ApplicationServices.Interop
                 catch (Exception exc)
                 {
                     Debug.WriteLine(exc);
+                    this.log.LogMessage(exc.ToString(), LogMessageType.API, LogLevel.Error);
                 }
             };
             this.scanPollTimer.Start();
@@ -504,12 +506,11 @@ namespace HandBrake.ApplicationServices.Interop
             }
             else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
             {
-                this.log.LogMessage("Scan: HB_STATE_SCANDONE", LogMessageType.API, LogLevel.Info);
                 this.scanPollTimer.Stop();
 
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Info);
+                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Trace);
 
                 if (string.IsNullOrEmpty(scanJson))
                 {
