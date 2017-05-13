@@ -194,7 +194,7 @@ if test "x$use_fdk_aac" = "xyes" ; then
 fi
 
 if test "x$use_x265" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lx265"
+    HB_LIBS="$HB_LIBS -lx265 -lnuma"
 fi
 
 if test "x$use_qsv" = "xyes" ; then

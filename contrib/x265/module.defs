@@ -36,5 +36,5 @@ endif
 X265.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(X265.EXTRACT.dir/)source/)"
 
 ## optional static libs need to be marked
-X265.OSL.libs  = x265
+X265.OSL.libs  = x265 numa
 X265.OSL.files = $(foreach i,$(X265.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
