@@ -250,7 +250,7 @@ static void show_clip_list( BLURAY_TITLE_INFO * ti )
         mm = (duration / (90000 * 60)) % 60;
         ss = (duration / 90000) % 60;
         hb_log("bd:\t\t%s.M2TS -- Duration: %02d:%02d:%02d",
-               ti->clips[ii].clip_id, hh, mm, ss);
+               ii, hh, mm, ss);
     }
 }
 
