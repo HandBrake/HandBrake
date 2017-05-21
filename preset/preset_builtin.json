@@ -816,7 +816,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -929,7 +929,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1042,7 +1042,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1155,7 +1155,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1268,7 +1268,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1381,7 +1381,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1494,7 +1494,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
@@ -1607,7 +1607,7 @@
                             "AudioTrackDRCSlider": 0.0
                         },
                         {
-                            "AudioBitrate": 224,
+                            "AudioBitrate": 640,
                             "AudioCompressionLevel": -1.0,
                             "AudioDitherMethod": "auto",
                             "AudioEncoder": "copy:ac3",
