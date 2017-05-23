@@ -1371,6 +1371,52 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // Sharpen filter
+    const char *sharpen_filter, *sharpen_preset, *sharpen_tune, *sharpen_custom;
+    sharpen_filter = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureSharpenFilter"));
+    sharpen_preset = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureSharpenPreset"));
+    sharpen_tune   = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureSharpenTune"));
+    sharpen_custom = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureSharpenCustom"));
+    if (sharpen_filter != NULL && sharpen_preset != NULL &&
+        strcasecmp(sharpen_filter, "off"))
+    {
+        int filter_id;
+        if (!strcasecmp(sharpen_filter, "unsharp"))
+        {
+            filter_id = HB_FILTER_UNSHARP;
+        }
+        else
+        {
+            hb_error("Invalid sharpen filter (%s)", sharpen_filter);
+            return -1;
+        }
+        filter_settings = hb_generate_filter_settings(filter_id,
+                            sharpen_preset, sharpen_tune, sharpen_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid sharpen filter settings (%s%s%s)",
+                     sharpen_preset,
+                     sharpen_tune ? "," : "",
+                     sharpen_tune ? sharpen_tune : "");
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+
     // Deblock filter
     char *deblock = hb_value_get_string_xform(
                         hb_dict_get(preset, "PictureDeblock"));

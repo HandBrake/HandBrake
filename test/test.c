@@ -46,6 +46,7 @@
 #include <IOKit/storage/IODVDMedia.h>
 #endif
 
+#define UNSHARP_DEFAULT_PRESET      "medium"
 #define NLMEANS_DEFAULT_PRESET      "medium"
 #define DEINTERLACE_DEFAULT_PRESET  "default"
 #define DECOMB_DEFAULT_PRESET       "default"
@@ -81,6 +82,10 @@ static int     nlmeans_disable     = 0;
 static int     nlmeans_custom      = 0;
 static char *  nlmeans             = NULL;
 static char *  nlmeans_tune        = NULL;
+static int     unsharp_disable     = 0;
+static int     unsharp_custom      = 0;
+static char *  unsharp             = NULL;
+static char *  unsharp_tune        = NULL;
 static int     detelecine_disable  = 0;
 static int     detelecine_custom   = 0;
 static char *  detelecine          = NULL;
@@ -571,6 +576,8 @@ cleanup:
     free(hqdn3d);
     free(nlmeans);
     free(nlmeans_tune);
+    free(unsharp);
+    free(unsharp_tune);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1085,6 +1092,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
                  "                               ");
     switch (filter_id)
     {
+        case HB_FILTER_UNSHARP:
+            preset = UNSHARP_DEFAULT_PRESET;
+            break;
         case HB_FILTER_NLMEANS:
             preset = NLMEANS_DEFAULT_PRESET;
             break;
@@ -1110,6 +1120,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
     {
         case HB_FILTER_DEINTERLACE:
         case HB_FILTER_NLMEANS:
+        case HB_FILTER_UNSHARP:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
@@ -1601,6 +1612,18 @@ static void ShowHelp()
     fprintf( out,
 "                           Applies to NLMeans presets only (does not affect\n"
 "                           custom settings)\n"
+"   --unsharp[=string]      Sharpen video with unsharp filter\n");
+    showFilterPresets(out, HB_FILTER_UNSHARP);
+    showFilterKeys(out, HB_FILTER_UNSHARP);
+    showFilterDefault(out, HB_FILTER_UNSHARP);
+    fprintf( out,
+
+"   --no-unsharp            Disable preset unsharp filter\n"
+"   --unsharp-tune <string> Tune unsharp filter\n");
+    showFilterTunes(out, HB_FILTER_UNSHARP);
+    fprintf( out,
+"                           Applies to unsharp presets only (does not affect\n"
+"                           custom settings)\n"
 "   -7, --deblock[=string]  Deblock video with pp7 filter\n");
     showFilterKeys(out, HB_FILTER_DEBLOCK);
     showFilterDefault(out, HB_FILTER_DEBLOCK);
@@ -1956,6 +1979,8 @@ static int ParseOptions( int argc, char ** argv )
     #define PAD                  309
     #define FILTER_COMB_DETECT   310
     #define QUEUE_IMPORT         311
+    #define FILTER_UNSHARP       312
+    #define FILTER_UNSHARP_TUNE  313
 
     for( ;; )
     {
@@ -2031,6 +2056,9 @@ static int ParseOptions( int argc, char ** argv )
             { "nlmeans",     optional_argument, NULL,    FILTER_NLMEANS },
             { "no-nlmeans",  no_argument,       &nlmeans_disable,     1 },
             { "nlmeans-tune",required_argument, NULL,    FILTER_NLMEANS_TUNE },
+            { "unsharp",     optional_argument, NULL,    FILTER_UNSHARP },
+            { "no-unsharp",  no_argument,       &unsharp_disable,     1 },
+            { "unsharp-tune",required_argument, NULL,    FILTER_UNSHARP_TUNE },
             { "detelecine",  optional_argument, NULL,    '9' },
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
             { "no-comb-detect", no_argument,    &comb_detect_disable, 1 },
@@ -2457,6 +2485,21 @@ static int ParseOptions( int argc, char ** argv )
             case FILTER_NLMEANS_TUNE:
                 free(nlmeans_tune);
                 nlmeans_tune = strdup(optarg);
+                break;
+            case FILTER_UNSHARP:
+                free(unsharp);
+                if (optarg != NULL)
+                {
+                    unsharp = strdup(optarg);
+                }
+                else
+                {
+                    unsharp = strdup(UNSHARP_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_UNSHARP_TUNE:
+                free(unsharp_tune);
+                unsharp_tune = strdup(optarg);
                 break;
             case '9':
                 free(detelecine);
@@ -2945,6 +2988,32 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid nlmeans option %s\n", nlmeans);
+            return -1;
+        }
+    }
+
+    if (unsharp != NULL)
+    {
+        if (unsharp_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --unsharp and --no-unsharp\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_UNSHARP, unsharp,
+                                       unsharp_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_UNSHARP, unsharp))
+        {
+            unsharp_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid unsharp option %s\n", unsharp);
             return -1;
         }
     }
@@ -3862,6 +3931,31 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDenoiseCustom",
                         hb_value_string(nlmeans));
+        }
+    }
+    if (unsharp_disable && !strcasecmp(s, "unsharp"))
+    {
+        hb_dict_set(preset, "PictureSharpenFilter", hb_value_string("off"));
+    }
+    if (unsharp != NULL)
+    {
+        hb_dict_set(preset, "PictureSharpenFilter", hb_value_string("unsharp"));
+        if (!unsharp_custom)
+        {
+            hb_dict_set(preset, "PictureSharpenPreset",
+                        hb_value_string(unsharp));
+            if (unsharp_tune != NULL)
+            {
+                hb_dict_set(preset, "PictureSharpenTune",
+                            hb_value_string(unsharp_tune));
+            }
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureSharpenPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureSharpenCustom",
+                        hb_value_string(unsharp));
         }
     }
     if (deblock_disable)
