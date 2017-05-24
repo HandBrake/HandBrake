@@ -351,9 +351,6 @@ namespace HandBrakeWPF.ViewModels
 
                     switch (this.AudioBehaviours.SelectedTrackDefaultBehaviour)
                     {
-                        case AudioTrackDefaultsMode.None:
-                            this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
-                            break;
                         case AudioTrackDefaultsMode.FirstTrack:
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
                             this.Task.AudioTracks.Add(template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });

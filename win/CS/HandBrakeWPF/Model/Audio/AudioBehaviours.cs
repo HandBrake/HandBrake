@@ -29,7 +29,7 @@ namespace HandBrakeWPF.Model.Audio
         public AudioBehaviours()
         {
             this.SelectedBehaviour = AudioBehaviourModes.None;
-            this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.None;
+            this.SelectedTrackDefaultBehaviour = AudioTrackDefaultsMode.FirstTrack;
             this.SelectedLangauges = new BindingList<string>();
             this.BehaviourTracks = new BindingList<AudioBehaviourTrack>();
         }
