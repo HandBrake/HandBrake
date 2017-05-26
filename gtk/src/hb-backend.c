@@ -220,6 +220,18 @@ combo_opts_t denoise_opts =
     d_denoise_opts
 };
 
+static options_map_t d_sharpen_opts[] =
+{
+    {N_("Off"),      "off",      HB_FILTER_INVALID},
+    {N_("Unsharp"),  "unsharp",  HB_FILTER_UNSHARP},
+    {N_("Lapsharp"), "lapsharp", HB_FILTER_LAPSHARP },
+};
+combo_opts_t sharpen_opts =
+{
+    sizeof(d_sharpen_opts)/sizeof(options_map_t),
+    d_sharpen_opts
+};
+
 static options_map_t d_rotate_opts[] =
 {
     {N_("Off"),         "disable=1",   0},
@@ -367,6 +379,18 @@ static filter_opts_t nlmeans_tune_opts =
     .preset    = FALSE
 };
 
+static filter_opts_t sharpen_preset_opts =
+{
+    .filter_id = HB_FILTER_UNSHARP,
+    .preset    = TRUE
+};
+
+static filter_opts_t sharpen_tune_opts =
+{
+    .filter_id = HB_FILTER_UNSHARP,
+    .preset    = FALSE
+};
+
 #if 0
 static filter_opts_t hqdn3d_preset_opts =
 {
@@ -438,6 +462,8 @@ static void filter_opts_set(signal_user_data_t *ud, const gchar *name,
 static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
                            void *vopts, const void* data);
 static void denoise_opts_set(signal_user_data_t *ud, const gchar *name,
+                             void *vopts, const void* data);
+static void sharpen_opts_set(signal_user_data_t *ud, const gchar *name,
                              void *vopts, const void* data);
 
 static GhbValue * generic_opt_get(const char *name, const void *opts,
@@ -553,6 +579,24 @@ combo_name_map_t combo_name_map[] =
         "PictureDenoiseTune",
         &nlmeans_tune_opts,
         filter_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureSharpenFilter",
+        &sharpen_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
+        "PictureSharpenPreset",
+        &sharpen_preset_opts,
+        sharpen_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureSharpenTune",
+        &sharpen_tune_opts,
+        sharpen_opts_set,
         filter_opt_get
     },
     {
@@ -2573,6 +2617,21 @@ denoise_opts_set(signal_user_data_t *ud, const gchar *name,
 
     ghb_set_custom_filter_tooltip(ud, "PictureDenoiseCustom",
                                   "denoise", opts->filter_id);
+}
+
+static void
+sharpen_opts_set(signal_user_data_t *ud, const gchar *name,
+               void *vopts, const void* data)
+{
+    (void)data;  // Silence "unused variable" warning
+
+    filter_opts_t *opts = (filter_opts_t*)vopts;
+    opts->filter_id = ghb_settings_combo_int(ud->settings,
+                                             "PictureSharpenFilter");
+    filter_opts_set2(ud, name, opts->filter_id, opts->preset);
+
+    ghb_set_custom_filter_tooltip(ud, "PictureSharpenCustom",
+                                  "sharpen", opts->filter_id);
 }
 
 combo_name_map_t*

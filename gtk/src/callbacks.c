@@ -2191,6 +2191,20 @@ denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+sharpen_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+    ghb_update_ui_combo_box(ud, "PictureSharpenPreset", NULL, FALSE);
+    ghb_update_ui_combo_box(ud, "PictureSharpenTune", NULL, FALSE);
+    ghb_ui_update(ud, "PictureSharpenPreset",
+                  ghb_dict_get(ud->settings, "PictureSharpenPreset"));
+    ghb_ui_update(ud, "PictureSharpenTune", ghb_string_value("none"));
+}
+
+G_MODULE_EXPORT void
 title_angle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
