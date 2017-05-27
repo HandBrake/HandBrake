@@ -1385,7 +1385,11 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         strcasecmp(sharpen_filter, "off"))
     {
         int filter_id;
-        if (!strcasecmp(sharpen_filter, "unsharp"))
+        if (!strcasecmp(sharpen_filter, "lapsharp"))
+        {
+            filter_id = HB_FILTER_LAPSHARP;
+        }
+        else if (!strcasecmp(sharpen_filter, "unsharp"))
         {
             filter_id = HB_FILTER_UNSHARP;
         }

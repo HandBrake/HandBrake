@@ -3959,6 +3959,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_crop_scale;
             break;
 
+        case HB_FILTER_LAPSHARP:
+            filter = &hb_filter_lapsharp;
+            break;
+
         case HB_FILTER_UNSHARP:
             filter = &hb_filter_unsharp;
             break;

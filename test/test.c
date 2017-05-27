@@ -46,6 +46,7 @@
 #include <IOKit/storage/IODVDMedia.h>
 #endif
 
+#define LAPSHARP_DEFAULT_PRESET     "medium"
 #define UNSHARP_DEFAULT_PRESET      "medium"
 #define NLMEANS_DEFAULT_PRESET      "medium"
 #define DEINTERLACE_DEFAULT_PRESET  "default"
@@ -86,6 +87,10 @@ static int     unsharp_disable     = 0;
 static int     unsharp_custom      = 0;
 static char *  unsharp             = NULL;
 static char *  unsharp_tune        = NULL;
+static int     lapsharp_disable    = 0;
+static int     lapsharp_custom     = 0;
+static char *  lapsharp            = NULL;
+static char *  lapsharp_tune       = NULL;
 static int     detelecine_disable  = 0;
 static int     detelecine_custom   = 0;
 static char *  detelecine          = NULL;
@@ -578,6 +583,8 @@ cleanup:
     free(nlmeans_tune);
     free(unsharp);
     free(unsharp_tune);
+    free(lapsharp);
+    free(lapsharp_tune);
     free(preset_export_name);
     free(preset_export_desc);
     free(preset_export_file);
@@ -1095,6 +1102,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_UNSHARP:
             preset = UNSHARP_DEFAULT_PRESET;
             break;
+        case HB_FILTER_LAPSHARP:
+            preset = LAPSHARP_DEFAULT_PRESET;
+            break;
         case HB_FILTER_NLMEANS:
             preset = NLMEANS_DEFAULT_PRESET;
             break;
@@ -1121,6 +1131,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_DEINTERLACE:
         case HB_FILTER_NLMEANS:
         case HB_FILTER_UNSHARP:
+        case HB_FILTER_LAPSHARP:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
@@ -1624,6 +1635,19 @@ static void ShowHelp()
     fprintf( out,
 "                           Applies to unsharp presets only (does not affect\n"
 "                           custom settings)\n"
+"   --lapsharp[=string]     Sharpen video with lapsharp filter\n");
+    showFilterPresets(out, HB_FILTER_LAPSHARP);
+    showFilterKeys(out, HB_FILTER_LAPSHARP);
+    showFilterDefault(out, HB_FILTER_LAPSHARP);
+    fprintf( out,
+
+"   --no-lapsharp           Disable preset lapsharp filter\n"
+"   --lapsharp-tune <string>\n"
+"                           Tune lapsharp filter\n");
+    showFilterTunes(out, HB_FILTER_LAPSHARP);
+    fprintf( out,
+"                           Applies to lapsharp presets only (does not affect\n"
+"                           custom settings)\n"
 "   -7, --deblock[=string]  Deblock video with pp7 filter\n");
     showFilterKeys(out, HB_FILTER_DEBLOCK);
     showFilterDefault(out, HB_FILTER_DEBLOCK);
@@ -1981,6 +2005,8 @@ static int ParseOptions( int argc, char ** argv )
     #define QUEUE_IMPORT         311
     #define FILTER_UNSHARP       312
     #define FILTER_UNSHARP_TUNE  313
+    #define FILTER_LAPSHARP      314
+    #define FILTER_LAPSHARP_TUNE 315
 
     for( ;; )
     {
@@ -2059,6 +2085,9 @@ static int ParseOptions( int argc, char ** argv )
             { "unsharp",     optional_argument, NULL,    FILTER_UNSHARP },
             { "no-unsharp",  no_argument,       &unsharp_disable,     1 },
             { "unsharp-tune",required_argument, NULL,    FILTER_UNSHARP_TUNE },
+            { "lapsharp",    optional_argument, NULL,    FILTER_LAPSHARP },
+            { "no-lapsharp", no_argument,       &lapsharp_disable,     1 },
+            { "lapsharp-tune", required_argument, NULL,  FILTER_LAPSHARP_TUNE },
             { "detelecine",  optional_argument, NULL,    '9' },
             { "no-detelecine", no_argument,     &detelecine_disable,  1 },
             { "no-comb-detect", no_argument,    &comb_detect_disable, 1 },
@@ -2500,6 +2529,21 @@ static int ParseOptions( int argc, char ** argv )
             case FILTER_UNSHARP_TUNE:
                 free(unsharp_tune);
                 unsharp_tune = strdup(optarg);
+                break;
+            case FILTER_LAPSHARP:
+                free(lapsharp);
+                if (optarg != NULL)
+                {
+                    lapsharp = strdup(optarg);
+                }
+                else
+                {
+                    lapsharp = strdup(LAPSHARP_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_LAPSHARP_TUNE:
+                free(lapsharp_tune);
+                lapsharp_tune = strdup(optarg);
                 break;
             case '9':
                 free(detelecine);
@@ -3014,6 +3058,32 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid unsharp option %s\n", unsharp);
+            return -1;
+        }
+    }
+
+    if (lapsharp != NULL)
+    {
+        if (lapsharp_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --lapsharp and --no-lapsharp\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_LAPSHARP, lapsharp,
+                                       lapsharp_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_LAPSHARP, lapsharp))
+        {
+            lapsharp_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid lapsharp option %s\n", lapsharp);
             return -1;
         }
     }
@@ -3956,6 +4026,31 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureSharpenCustom",
                         hb_value_string(unsharp));
+        }
+    }
+    if (lapsharp_disable && !strcasecmp(s, "lapsharp"))
+    {
+        hb_dict_set(preset, "PictureSharpenFilter", hb_value_string("off"));
+    }
+    if (lapsharp != NULL)
+    {
+        hb_dict_set(preset, "PictureSharpenFilter", hb_value_string("lapsharp"));
+        if (!lapsharp_custom)
+        {
+            hb_dict_set(preset, "PictureSharpenPreset",
+                        hb_value_string(lapsharp));
+            if (lapsharp_tune != NULL)
+            {
+                hb_dict_set(preset, "PictureSharpenTune",
+                            hb_value_string(lapsharp_tune));
+            }
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureSharpenPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureSharpenCustom",
+                        hb_value_string(lapsharp));
         }
     }
     if (deblock_disable)
