@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
 
     using HandBrakeWPF.Services.Queue.Model;
 
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using IEncode = Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The Queue Processor
@@ -43,12 +43,6 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         event EventHandler QueuePaused;
-
-        /// <summary>
-        /// Low Diskspace has been detected.
-        /// Checked before each job starts.
-        /// </summary>
-        event EventHandler LowDiskspaceDetected;
 
         #endregion
 

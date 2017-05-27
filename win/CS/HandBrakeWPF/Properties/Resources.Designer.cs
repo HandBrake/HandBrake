@@ -897,6 +897,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queue Paused.
+        /// </summary>
+        public static string Main_QueuePaused {
+            get {
+                return ResourceManager.GetString("Main_QueuePaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scan Cancelled..
         /// </summary>
         public static string Main_ScanCancelled {
@@ -1260,6 +1269,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queue Paused.  Warning, the drive you are encoding to is low on disk space. Please free up some space and press start to continue. You can also adjust the minimum space level in preferences..
+        /// </summary>
+        public static string PauseOnLowDiskspace {
+            get {
+                return ResourceManager.GetString("PauseOnLowDiskspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Output: {0}.
         /// </summary>
         public static string PictureSettings_OutputResolution {
@@ -1543,6 +1561,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_QueueNotRunning {
             get {
                 return ResourceManager.GetString("QueueViewModel_QueueNotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Paused.
+        /// </summary>
+        public static string QueueViewModel_QueuePaused {
+            get {
+                return ResourceManager.GetString("QueueViewModel_QueuePaused", resourceCulture);
             }
         }
         

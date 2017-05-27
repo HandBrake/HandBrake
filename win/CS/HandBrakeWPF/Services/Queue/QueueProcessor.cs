@@ -17,9 +17,12 @@ namespace HandBrakeWPF.Services.Queue
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Logging;
+    using HandBrake.ApplicationServices.Services.Logging.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Factories;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
@@ -129,11 +132,6 @@ namespace HandBrakeWPF.Services.Queue
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         public event EventHandler QueuePaused;
-
-        /// <summary>
-        /// The low diskspace detected.
-        /// </summary>
-        public event EventHandler LowDiskspaceDetected;
 
         #endregion
 
@@ -478,8 +476,8 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         public void Pause()
         {
-            this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
+            this.InvokeQueuePaused(EventArgs.Empty);     
         }
 
         /// <summary>
@@ -501,17 +499,16 @@ namespace HandBrakeWPF.Services.Queue
             this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.EncodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
 
-            if (this.EncodeService.IsEncoding)
+            if (this.EncodeService.IsPasued)
             {
                 this.EncodeService.Resume();
+                this.IsProcessing = true;
             }
 
             if (!this.EncodeService.IsEncoding)
             {
                 this.ProcessNextJob();
             }
-
-            this.IsProcessing = true;
         }
 
         #endregion
@@ -533,14 +530,6 @@ namespace HandBrakeWPF.Services.Queue
             }
 
             this.IsProcessing = false;
-        }
-
-        /// <summary>
-        /// The on low diskspace detected.
-        /// </summary>
-        protected virtual void OnLowDiskspaceDetected()
-        {
-            this.LowDiskspaceDetected?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -644,22 +633,15 @@ namespace HandBrakeWPF.Services.Queue
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace))
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(job.Task.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
                 {
-                    string drive = Path.GetPathRoot(job.Task.Destination);
-                    if (!string.IsNullOrEmpty(drive) && !drive.StartsWith("\\"))
-                    {
-                        DriveInfo c = new DriveInfo(drive);
-                        if (c.AvailableFreeSpace < this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel))
-                        {
-                            job.Status = QueueItemStatus.Waiting;
-                            this.InvokeQueueChanged(EventArgs.Empty);
-                            this.OnLowDiskspaceDetected();
-                            return; // Don't start the next job.
-                        }
-                    }
+                    LogService.GetLogger().LogMessage(Resources.PauseOnLowDiskspace, LogMessageType.ScanOrEncode, LogLevel.Info);
+                    job.Status = QueueItemStatus.Waiting;
+                    this.Pause();
+                    return; // Don't start the next job.
                 }
 
+                this.IsProcessing = true;
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.EncodeService.Start(job.Task, job.Configuration);
             }
