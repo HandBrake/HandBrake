@@ -392,22 +392,15 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog dialog = new SaveFileDialog
                 {
-                    Filter = "Legacy Queue Files (*.hbq)|*.hbq|Json for CLI (*.json)|*.json", 
+                    Filter = "Json (*.json)|*.json", 
                     OverwritePrompt = true, 
-                    DefaultExt = ".hbq", 
+                    DefaultExt = ".json", 
                     AddExtension = true
                 };
 
             if (dialog.ShowDialog() == true)
             {
-                if (Path.GetExtension(dialog.FileName).ToLower().Trim() == ".json")
-                {
-                    this.queueProcessor.ExportJson(dialog.FileName);
-                }
-                else
-                {
-                    this.queueProcessor.BackupQueue(dialog.FileName);
-                }
+                this.queueProcessor.ExportJson(dialog.FileName);
             }
         }
 
@@ -416,7 +409,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "Legacy Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
+            OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
                 this.queueProcessor.RestoreQueue(dialog.FileName);

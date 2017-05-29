@@ -508,7 +508,7 @@
     <value>Do nothing</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Export Queue</value>
+    <value>Export Queue for CLI</value>
   </data>
   <data name="QueueView_Hibernate" xml:space="preserve">
     <value>Hibernate</value>

@@ -1845,7 +1845,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Queue.
+        ///   Looks up a localized string similar to Export Queue for CLI.
         /// </summary>
         public static string QueueView_Export {
             get {
