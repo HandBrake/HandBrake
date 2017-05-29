@@ -723,6 +723,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your destination directory is low on diskspace. Please free up some disk space on your destination drive. Alternatively you can change the level at which this alert triggers in Options. .
+        /// </summary>
+        public static string Main_LowDiskspace {
+            get {
+                return ResourceManager.GetString("Main_LowDiskspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file..
         /// </summary>
         public static string Main_MatchingFileOverwriteWarning {

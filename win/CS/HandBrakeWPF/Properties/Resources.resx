@@ -849,4 +849,7 @@ Remaining Time: {4}</value>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
     <value>Queue Paused</value>
   </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>Your destination directory is low on diskspace. Please free up some disk space on your destination drive. Alternatively you can change the level at which this alert triggers in Options. </value>
+  </data>
 </root>

@@ -1661,6 +1661,14 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            if (!DriveUtilities.HasMinimumDiskSpace(
+                this.Destination,
+                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
+            {
+                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
                 this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
