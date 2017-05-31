@@ -205,7 +205,6 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanCompleted += this.ScanCompleted;
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
-            this.queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
@@ -1319,7 +1318,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
-            this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
         }
@@ -2538,21 +2536,6 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
-
-                    if (this.windowsSeven.IsWindowsSeven)
-                    {
-                        this.windowsSeven.SetTaskBarProgressToNoProgress();
-                    }
-                });
-        }
-
-        private void QueueProcessor_QueuePaused(object sender, EventArgs e)
-        {
-            Execute.OnUIThread(
-                () =>
-                {
-                    this.ProgramStatusLabel = Resources.Main_QueuePaused;
-                    this.IsEncoding = false;
 
                     if (this.windowsSeven.IsWindowsSeven)
                     {
