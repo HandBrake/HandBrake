@@ -353,18 +353,38 @@ namespace HandBrakeWPF.ViewModels
                     {
                         case AudioTrackDefaultsMode.FirstTrack:
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
-                            this.Task.AudioTracks.Add(template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                            if (this.CanAddTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
+                            {
+                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                            }
                             break;
                         case AudioTrackDefaultsMode.AllTracks:
                             foreach (AudioBehaviourTrack tmpl in this.AudioBehaviours.BehaviourTracks)
                             {
-                                this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                                if (this.CanAddTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
+                                {
+                                    this.Task.AudioTracks.Add(tmpl != null ? new AudioTrack(tmpl, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                                }
                             }
 
                             break;
                     }
                 }
             }
+        }
+
+        private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
+        {
+            if (fallback == AudioEncoder.None)
+            {
+                HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
+                if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -410,7 +430,11 @@ namespace HandBrakeWPF.ViewModels
             // Step 3, Setup the tracks from the preset
             foreach (AudioBehaviourTrack track in this.AudioBehaviours.BehaviourTracks)
             {
-                this.Task.AudioTracks.Add(new AudioTrack(track, this.GetPreferredAudioTrack(), this.Task.AllowedPassthruOptions.AudioEncoderFallback));
+                Audio sourceTrack = this.GetPreferredAudioTrack();
+                if (this.CanAddTrack(track, sourceTrack, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
+                {
+                    this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.Task.AllowedPassthruOptions.AudioEncoderFallback));
+                }
             }
            
             // Step 4, Handle the default selection behaviour.

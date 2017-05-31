@@ -16,6 +16,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     /// </summary>
     public enum AudioEncoder
     {
+        [DisplayName("None")]
+        [ShortName("none")]
+        None,
+
         [DisplayName("AAC (avcodec)")]
         [ShortName("av_aac")]
         ffaac,

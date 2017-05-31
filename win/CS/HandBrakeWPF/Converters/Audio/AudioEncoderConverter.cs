@@ -56,6 +56,8 @@ namespace HandBrakeWPF.Converters.Audio
                 List<AudioEncoder> encoders = EnumHelper<AudioEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
 
+                encoders.Remove(AudioEncoder.None); // Assume we never want to show this.
+
                 if (!HandBrakeEncoderHelpers.AudioEncoders.Any(a => a.ShortName.Contains("fdk")))
                 {
                     encoders.Remove(AudioEncoder.fdkaac);
@@ -71,6 +73,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Opus);
                 }
 
+                // Hide the Passthru options and show the "None" option
                 if (parameter != null && parameter.ToString() == "True")
                 {
                     encoders.Remove(AudioEncoder.DtsHDPassthrough);
@@ -82,6 +85,8 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Passthrough);
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
                     encoders.Remove(AudioEncoder.FlacPassthru);
+
+                    encoders.Add(AudioEncoder.None);
                 }
 
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);
