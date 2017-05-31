@@ -540,15 +540,32 @@
 #pragma mark -
 #pragma mark Queue Job Processing
 
-#define ALMOST_5GB 5000000000
+#define ALMOST_2GB 2000000000
 
 - (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
 {
-    NSDictionary *dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:url.URLByDeletingLastPathComponent.path error:NULL];
-    long long freeSpace = [dict[NSFileSystemFreeSize] longLongValue];
-    if (freeSpace < ALMOST_5GB) {
-        return YES;
+    NSURL *volumeURL = nil;
+    NSDictionary<NSURLResourceKey, id> *attrs = [url resourceValuesForKeys:@[NSURLIsVolumeKey, NSURLVolumeURLKey] error:NULL];
+
+    volumeURL = [attrs[NSURLIsVolumeKey] boolValue] ? url : attrs[NSURLVolumeURLKey];
+
+    if (volumeURL)
+    {
+        if ([volumeURL respondsToSelector:@selector(removeCachedResourceValueForKey:)])
+        {
+            [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
+        }
+        attrs = [volumeURL resourceValuesForKeys:@[NSURLVolumeAvailableCapacityKey] error:NULL];
+
+        if (attrs[NSURLVolumeAvailableCapacityKey])
+        {
+            if ([attrs[NSURLVolumeAvailableCapacityKey] longLongValue] < ALMOST_2GB)
+            {
+                return YES;
+            }
+        }
     }
+
     return NO;
 }
 
