@@ -392,7 +392,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         if (!_fileURL)
         {
-            decodeObject(_fileURL, NSURL);
+            decodeObjectOrFail(_fileURL, NSURL);
         }
 
         _outputURLFolderBookmark = [HBCodingUtilities decodeObjectOfClass:[NSData class] forKey:@"_outputURLFolderBookmark" decoder:decoder];
@@ -406,7 +406,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
             decodeObject(_outputURL, NSURL);
         }
 #else
-        decodeObject(_fileURL, NSURL);
+        decodeObjectOrFail(_fileURL, NSURL);
         decodeObject(_outputURL, NSURL);
 #endif
 
