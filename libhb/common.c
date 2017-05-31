@@ -3861,6 +3861,7 @@ hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
     memcpy( filter_copy, filter, sizeof( hb_filter_object_t ) );
     if( filter->settings )
         filter_copy->settings = hb_value_dup(filter->settings);
+    filter_copy->sub_filter = hb_filter_copy(filter->sub_filter);
     return filter_copy;
 }
 
@@ -3997,6 +3998,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             break;
 #endif
 
+        case HB_FILTER_MT_FRAME:
+            filter = &hb_filter_mt_frame;
+            break;
+
         default:
             filter = NULL;
             break;
@@ -4006,7 +4011,23 @@ hb_filter_object_t * hb_filter_get( int filter_id )
 
 hb_filter_object_t * hb_filter_init( int filter_id )
 {
-    return hb_filter_copy(hb_filter_get(filter_id));
+    switch (filter_id)
+    {
+        case HB_FILTER_UNSHARP:
+        case HB_FILTER_LAPSHARP:
+        {
+            hb_filter_object_t * wrapper;
+
+            wrapper = hb_filter_copy(hb_filter_get(HB_FILTER_MT_FRAME));
+            wrapper->sub_filter = hb_filter_copy(hb_filter_get(filter_id));
+            wrapper->id = filter_id;
+            wrapper->name = wrapper->sub_filter->name;
+            return wrapper;
+        } break;
+
+        default:
+            return hb_filter_copy(hb_filter_get(filter_id));
+    }
 }
 
 /**********************************************************************
@@ -4018,6 +4039,11 @@ void hb_filter_close( hb_filter_object_t ** _f )
 {
     hb_filter_object_t * f = *_f;
 
+    if (f == NULL)
+    {
+        return;
+    }
+    hb_filter_close(&f->sub_filter);
     hb_value_free(&f->settings);
 
     free( f );
