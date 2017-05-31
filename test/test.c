@@ -2661,14 +2661,17 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'n':
             {
-                int    i;
-                char * tmp = optarg;
-                for( i = 0; i < 4; i++ )
+                if( optarg != NULL )
                 {
-                    if( !*tmp )
-                        break;
-                    crop[i] = strtol( tmp, &tmp, 0 );
-                    tmp++;
+                    int    i;
+                    char * tmp = optarg;
+                    for( i = 0; i < 4; i++ )
+                    {
+                        if( !*tmp )
+                            break;
+                        crop[i] = strtol( tmp, &tmp, 0 );
+                        tmp++;
+                    }
                 }
                 break;
             }
