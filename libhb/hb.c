@@ -1441,6 +1441,10 @@ void hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
         settings = hb_value_dup(settings_in);
     }
     filter->settings = settings;
+    if (filter->sub_filter)
+    {
+        filter->sub_filter->settings = hb_value_dup(settings);
+    }
     if( filter->enforce_order )
     {
         // Find the position in the filter chain this filter belongs in

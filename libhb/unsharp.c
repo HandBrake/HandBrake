@@ -19,6 +19,8 @@
 
 typedef struct
 {
+    int        pix_fmt;   // source pixel format
+    int        width;     // source video width
     double     strength;  // strength
     int        size;      // pixel context region width (must be odd)
 
@@ -26,24 +28,37 @@ typedef struct
     int        amount;
     int        scalebits;
     int32_t    halfscale;
-    uint32_t * SC[UNSHARP_SIZE_MAX - 1];
 } unsharp_plane_context_t;
+
+typedef struct
+{
+    uint32_t * SC[UNSHARP_SIZE_MAX - 1];
+} unsharp_thread_context_t;
+
+typedef unsharp_thread_context_t unsharp_thread_context3_t[3];
 
 struct hb_filter_private_s
 {
-    unsharp_plane_context_t  plane_ctx[3];
+    unsharp_plane_context_t     plane_ctx[3];
+    unsharp_thread_context3_t * thread_ctx;
+    int                         threads;
 };
 
-static int hb_unsharp_init(hb_filter_object_t *filter,
-                           hb_filter_init_t   *init);
+static int unsharp_init(hb_filter_object_t *filter,
+                        hb_filter_init_t   *init);
 
-static int hb_unsharp_work(hb_filter_object_t *filter,
-                           hb_buffer_t ** buf_in,
-                           hb_buffer_t ** buf_out);
+static int unsharp_init_thread(hb_filter_object_t *filter, int threads);
 
-static void hb_unsharp_close(hb_filter_object_t *filter);
+static int unsharp_work(hb_filter_object_t *filter,
+                        hb_buffer_t ** buf_in,
+                        hb_buffer_t ** buf_out);
+static int unsharp_work_thread(hb_filter_object_t *filter,
+                               hb_buffer_t ** buf_in,
+                               hb_buffer_t ** buf_out, int thread);
 
-static const char hb_unsharp_template[] =
+static void unsharp_close(hb_filter_object_t *filter);
+
+static const char unsharp_template[] =
     "y-strength=^"HB_FLOAT_REG"$:y-size=^"HB_INT_REG"$:"
     "cb-strength=^"HB_FLOAT_REG"$:cb-size=^"HB_INT_REG"$:"
     "cr-strength=^"HB_FLOAT_REG"$:cr-size=^"HB_INT_REG"$";
@@ -54,20 +69,23 @@ hb_filter_object_t hb_filter_unsharp =
     .enforce_order     = 1,
     .name              = "Sharpen (unsharp)",
     .settings          = NULL,
-    .init              = hb_unsharp_init,
-    .work              = hb_unsharp_work,
-    .close             = hb_unsharp_close,
-    .settings_template = hb_unsharp_template,
+    .init              = unsharp_init,
+    .init_thread       = unsharp_init_thread,
+    .work              = unsharp_work,
+    .work_thread       = unsharp_work_thread,
+    .close             = unsharp_close,
+    .settings_template = unsharp_template,
 };
 
-static void hb_unsharp(const uint8_t *src,
-                             uint8_t *dst,
-                       const int width,
-                       const int height,
-                       const int stride,
-                       unsharp_plane_context_t * ctx)
+static void unsharp(const uint8_t *src,
+                          uint8_t *dst,
+                    const int width,
+                    const int height,
+                    const int stride,
+                    unsharp_plane_context_t * ctx,
+                    unsharp_thread_context_t * tctx)
 {
-    uint32_t **SC = ctx->SC;
+    uint32_t **SC = tctx->SC;
     uint32_t SR[UNSHARP_SIZE_MAX - 1],
              Tmp1,
              Tmp2;
@@ -138,10 +156,15 @@ static void hb_unsharp(const uint8_t *src,
     }
 }
 
-static int hb_unsharp_init(hb_filter_object_t *filter,
-                           hb_filter_init_t   *init)
+static int unsharp_init(hb_filter_object_t *filter,
+                        hb_filter_init_t   *init)
 {
     filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
+    if (filter->private_data == NULL)
+    {
+        hb_error("Unsharp calloc failed");
+        return -1;
+    }
     hb_filter_private_t * pv = filter->private_data;
 
     // Mark parameters unset
@@ -179,7 +202,8 @@ static int hb_unsharp_init(hb_filter_object_t *filter,
     for (int c = 0; c < 3; c++)
     {
         unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
-        int w = hb_image_width(init->pix_fmt, init->geometry.width, c);
+
+        ctx->width = init->geometry.width;
 
         // Replace unset values with defaults
         if (ctx->strength == -1)
@@ -204,18 +228,69 @@ static int hb_unsharp_init(hb_filter_object_t *filter,
         ctx->steps     = ctx->size / 2;
         ctx->scalebits = ctx->steps * 4;
         ctx->halfscale = 1 << (ctx->scalebits - 1);
+    }
 
-        int z;
-        for (z = 0; z < 2 * ctx->steps; z++)
-        {
-            ctx->SC[z] = malloc(sizeof(*(ctx->SC[z])) * (w + 2 * ctx->steps));
-        }
+    if (unsharp_init_thread(filter, 1) < 0)
+    {
+        unsharp_close(filter);
+        return -1;
     }
 
     return 0;
 }
 
-static void hb_unsharp_close(hb_filter_object_t * filter)
+static void unsharp_thread_close(hb_filter_private_t *pv)
+{
+    int c, z;
+    for (c = 0; c < 3; c++)
+    {
+        unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
+        for (int t = 0; t < pv->threads; t++)
+        {
+            unsharp_thread_context_t * tctx = &pv->thread_ctx[t][c];
+            for (z = 0; z < 2 * ctx->steps; z++)
+            {
+                free(tctx->SC[z]);
+                tctx->SC[z] = NULL;
+            }
+        }
+    }
+    free(pv->thread_ctx);
+}
+
+static int unsharp_init_thread(hb_filter_object_t *filter, int threads)
+{
+    hb_filter_private_t * pv = filter->private_data;
+
+    unsharp_thread_close(pv);
+    pv->thread_ctx = calloc(threads, sizeof(unsharp_thread_context3_t));
+    pv->threads = threads;
+    for (int c = 0; c < 3; c++)
+    {
+        unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
+        int w = hb_image_width(ctx->pix_fmt, ctx->width, c);
+
+        for (int t = 0; t < threads; t++)
+        {
+            unsharp_thread_context_t * tctx = &pv->thread_ctx[t][c];
+            int z;
+            for (z = 0; z < 2 * ctx->steps; z++)
+            {
+                tctx->SC[z] = malloc(sizeof(*(tctx->SC[z])) *
+                                     (w + 2 * ctx->steps));
+                if (tctx->SC[z] == NULL)
+                {
+                    hb_error("Unsharp calloc failed");
+                    unsharp_close(filter);
+                    return -1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+static void unsharp_close(hb_filter_object_t * filter)
 {
     hb_filter_private_t *pv = filter->private_data;
 
@@ -224,24 +299,14 @@ static void hb_unsharp_close(hb_filter_object_t * filter)
         return;
     }
 
-    int c, z;
-    for (c = 0; c < 3; c++)
-    {
-        unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
-        for (z = 0; z < ctx->steps; z++)
-        {
-            free(ctx->SC[z]);
-            ctx->SC[z] = NULL;
-        }
-    }
-
+    unsharp_thread_close(pv);
     free(pv);
     filter->private_data = NULL;
 }
 
-static int hb_unsharp_work(hb_filter_object_t *filter,
-                           hb_buffer_t ** buf_in,
-                           hb_buffer_t ** buf_out)
+static int unsharp_work_thread(hb_filter_object_t *filter,
+                               hb_buffer_t ** buf_in,
+                               hb_buffer_t ** buf_out, int thread)
 {
     hb_filter_private_t *pv = filter->private_data;
     hb_buffer_t *in = *buf_in, *out;
@@ -258,17 +323,25 @@ static int hb_unsharp_work(hb_filter_object_t *filter,
     int c;
     for (c = 0; c < 3; c++)
     {
-        unsharp_plane_context_t * ctx = &pv->plane_ctx[c];
-        hb_unsharp(in->plane[c].data,
-                   out->plane[c].data,
-                   in->plane[c].width,
-                   in->plane[c].height,
-                   in->plane[c].stride,
-                   ctx);
+        unsharp_plane_context_t  * ctx  = &pv->plane_ctx[c];
+        unsharp_thread_context_t * tctx = &pv->thread_ctx[thread][c];
+        unsharp(in->plane[c].data,
+                out->plane[c].data,
+                in->plane[c].width,
+                in->plane[c].height,
+                in->plane[c].stride,
+                ctx, tctx);
     }
 
     out->s = in->s;
     *buf_out = out;
 
     return HB_FILTER_OK;
+}
+
+static int unsharp_work(hb_filter_object_t *filter,
+                        hb_buffer_t ** buf_in,
+                        hb_buffer_t ** buf_out)
+{
+    return unsharp_work_thread(filter, buf_in, buf_out, 0);
 }
