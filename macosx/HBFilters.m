@@ -318,7 +318,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 - (void)validateSharpenPreset
 {
     int filter_id = HB_FILTER_UNSHARP;
-    if ([self.deinterlace isEqualToString:@"lapsharp"])
+    if ([self.sharpen isEqualToString:@"lapsharp"])
     {
         filter_id = HB_FILTER_LAPSHARP;
     }
