@@ -290,6 +290,11 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpen = @"off";
     }
 
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateSharpenPreset];
+        [self validateSharpenTune];
+    }
     [self postChangedNotification];
 }
 
@@ -308,10 +313,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpenPreset = @"medium";
     }
 
-    if (!(self.undo.isUndoing || self.undo.isRedoing))
-    {
-        [self validateSharpenPreset];
-    }
     [self postChangedNotification];
 }
 
@@ -325,7 +326,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     if (hb_validate_filter_preset(filter_id, self.sharpenPreset.UTF8String, NULL, NULL))
     {
-        _sharpenPreset = @"default";
+        _sharpenPreset = @"medium";
     }
 }
 
@@ -344,11 +345,21 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpenTune = @"none";
     }
 
-    if (!(self.undo.isUndoing || self.undo.isRedoing))
-    {
-        [self validateSharpenPreset];
-    }
     [self postChangedNotification];
+}
+
+- (void)validateSharpenTune
+{
+    int filter_id = HB_FILTER_UNSHARP;
+    if ([self.sharpen isEqualToString:@"lapsharp"])
+    {
+        filter_id = HB_FILTER_LAPSHARP;
+    }
+
+    if (hb_validate_filter_preset(filter_id, self.sharpenPreset.UTF8String, self.sharpenTune.UTF8String, NULL))
+    {
+        _sharpenTune = @"none";
+    }
 }
 
 - (void)setSharpenCustomString:(NSString *)sharpenCustomString

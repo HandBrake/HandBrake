@@ -319,7 +319,7 @@ static NSDictionary *sharpenTypesDict = nil;
 {
     if (!sharpenPresetDict)
     {
-        sharpenPresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_NLMEANS);
+        sharpenPresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_UNSHARP);
     }
     return sharpenPresetDict;
 }
@@ -412,7 +412,7 @@ static NSDictionary *sharpenTypesDict = nil;
     }
     else
     {
-        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_LAPSHARP);
+        return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_LAPSHARP);
     }
 }
 

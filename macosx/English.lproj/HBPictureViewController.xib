@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G12b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
@@ -1338,9 +1338,9 @@ Lapsharp sharpens by using convolution kernels approximating Laplacian edge filt
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenPreset" previousBinding="qjE-eq-WoY" id="haB-U9-EYX">
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenPreset" previousBinding="qjE-eq-WoY" id="gt1-8l-ojQ">
                             <dictionary key="options">
-                                <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
+                                <string key="NSValueTransformerName">HBSharpenPresetTransformer</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="qjE-eq-WoY"/>
@@ -1350,7 +1350,7 @@ Lapsharp sharpens by using convolution kernels approximating Laplacian edge filt
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="6he-FC-h6S">
                     <rect key="frame" x="520" y="18" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <mutableString key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+                    <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
 
@@ -1362,7 +1362,7 @@ Lapsharp's Grain tune is similar to Film, but uses a slightly larger Laplacian o
 
 Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</mutableString>
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9Yn-5b-Kgd">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
