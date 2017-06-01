@@ -155,6 +155,42 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
+@implementation HBSharpenPresetTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters sharpenPresetDict];
+
+    return self;
+}
+
+@end
+
+@implementation HBSharpenTuneTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters sharpenTunesDict];
+
+    return self;
+}
+
+@end
+
+@implementation HBSharpenTransformer
+
+- (instancetype)init
+{
+    if (self = [super init])
+        self.dict = [HBFilters sharpenTypesDict];
+
+    return self;
+}
+
+@end
+
 @implementation HBCustomFilterTransformer
 
 + (Class)transformedValueClass
@@ -188,6 +224,10 @@ static NSDictionary *deinterlacePresetsDict = nil;
 static NSDictionary *denoisePresetDict = nil;
 static NSDictionary *nlmeansTunesDict = nil;
 static NSDictionary *denoiseTypesDict = nil;
+
+static NSDictionary *sharpenPresetDict = nil;
+static NSDictionary *sharpenTunesDict = nil;
+static NSDictionary *sharpenTypesDict = nil;
 
 @implementation HBFilters (UIAdditions)
 
@@ -275,6 +315,41 @@ static NSDictionary *denoiseTypesDict = nil;
     return denoiseTypesDict;
 }
 
++ (NSDictionary *)sharpenPresetDict
+{
+    if (!sharpenPresetDict)
+    {
+        sharpenPresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_UNSHARP);
+    }
+    return sharpenPresetDict;
+}
+
++ (NSDictionary *)sharpenTunesDict
+{
+    if (!sharpenTunesDict)
+    {
+        NSDictionary *unsharpenTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
+        NSDictionary *lapsharpTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_LAPSHARP);
+
+        sharpenTunesDict = [NSMutableDictionary dictionary];
+        [sharpenTunesDict setValuesForKeysWithDictionary:unsharpenTunesDict];
+        [sharpenTunesDict setValuesForKeysWithDictionary:lapsharpTunesDict];
+
+    }
+    return sharpenTunesDict;
+}
+
++ (NSDictionary *)sharpenTypesDict
+{
+    if (!sharpenTypesDict)
+    {
+        sharpenTypesDict = @{NSLocalizedString(@"Off", nil):      @"off",
+                             NSLocalizedString(@"Unsharp", nil):  @"unsharp",
+                             NSLocalizedString(@"Lapsharp", nil): @"lapsharp"};;
+    }
+    return sharpenTypesDict;
+}
+
 - (NSArray *)detelecineSettings
 {
     return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
@@ -312,6 +387,35 @@ static NSDictionary *denoiseTypesDict = nil;
     return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_NLMEANS);
 }
 
+- (NSArray *)sharpenTypes
+{
+    return @[@"Off", @"Unsharp", @"Lapsharp"];
+}
+
+- (NSArray *)sharpenPresets
+{
+    if ([self.sharpen isEqualToString:@"unsharp"])
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_UNSHARP);
+    }
+    else
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_LAPSHARP);
+    }
+}
+
+- (NSArray *)sharpenTunes
+{
+    if ([self.sharpen isEqualToString:@"unsharp"])
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
+    }
+    else
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_LAPSHARP);
+    }
+}
+
 - (BOOL)customDetelecineSelected
 {
     return [self.detelecine isEqualToString:@"custom"] ? YES : NO;
@@ -332,6 +436,11 @@ static NSDictionary *denoiseTypesDict = nil;
     return ![self.denoise isEqualToString:@"off"];
 }
 
+- (BOOL)sharpenEnabled
+{
+    return ![self.sharpen isEqualToString:@"off"];
+}
+
 - (BOOL)deinterlaceEnabled
 {
     return ![self.deinterlace isEqualToString:@"off"];
@@ -345,6 +454,16 @@ static NSDictionary *denoiseTypesDict = nil;
 - (BOOL)denoiseTunesAvailable
 {
     return [self.denoise isEqualToString:@"nlmeans"] && ![self.denoisePreset isEqualToString:@"custom"];
+}
+
+- (BOOL)customSharpenSelected
+{
+    return [self.sharpenPreset isEqualToString:@"custom"] && [self sharpenEnabled];
+}
+
+- (BOOL)sharpenTunesAvailable
+{
+    return ([self.sharpen isEqualToString:@"unsharp"] || [self.sharpen isEqualToString:@"lapsharp"]) && ![self.sharpenPreset isEqualToString:@"custom"];
 }
 
 - (NSString *)deblockSummary

@@ -316,6 +316,32 @@ static NSDictionary            *shortHeightAttr;
 
     }
 
+    // Sharpen
+    if (![filters.sharpen isEqualToString:@"off"])
+    {
+        [summary appendFormat:@", Sharpen (%@", [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject]];
+        if (![filters.sharpenPreset isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@", %@", [[[HBFilters sharpenPresetDict] allKeysForObject:filters.sharpenPreset] firstObject]];
+
+            if ([filters.sharpen isEqualToString:@"unsharp"])
+            {
+                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
+            }
+            else if ([filters.sharpen isEqualToString:@"lapsharp"])
+            {
+                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
+            }
+        }
+        else
+        {
+            [summary appendFormat:@", %@", filters.sharpenCustomString];
+        }
+
+        [summary appendString:@")"];
+
+    }
+
     // Grayscale
     if (filters.grayscale)
     {

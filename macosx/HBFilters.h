@@ -31,6 +31,11 @@ extern NSString * const HBFiltersChangedNotification;
 @property (nonatomic, readwrite, copy) NSString *denoiseTune;
 @property (nonatomic, readwrite, copy) NSString *denoiseCustomString;
 
+@property (nonatomic, readwrite, copy) NSString *sharpen;
+@property (nonatomic, readwrite, copy) NSString *sharpenPreset;
+@property (nonatomic, readwrite, copy) NSString *sharpenTune;
+@property (nonatomic, readwrite, copy) NSString *sharpenCustomString;
+
 @property (nonatomic, readwrite) int deblock;
 
 @property (nonatomic, readwrite) BOOL grayscale;

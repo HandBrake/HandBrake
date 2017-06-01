@@ -24,6 +24,10 @@
 + (NSDictionary *)nlmeansTunesDict;
 + (NSDictionary *)denoiseTypesDict;
 
++ (NSDictionary *)sharpenPresetDict;
++ (NSDictionary *)sharpenTunesDict;
++ (NSDictionary *)sharpenTypesDict;
+
 - (BOOL)customDetelecineSelected;
 
 @property (nonatomic, readonly) BOOL customCombDetectionSelected;
@@ -31,9 +35,9 @@
 - (BOOL)deinterlaceEnabled;
 - (BOOL)customDeinterlaceSelected;
 
-- (BOOL)denoiseEnabled;
-- (BOOL)customDenoiseSelected;
-- (BOOL)denoiseTunesAvailable;
+- (BOOL)sharpenEnabled;
+- (BOOL)customSharpenSelected;
+- (BOOL)sharpenTunesAvailable;
 
 - (NSString *)deblockSummary;
 
@@ -44,9 +48,9 @@
 @property (nonatomic, readonly) NSArray *deinterlaceTypes;
 @property (nonatomic, readonly) NSArray *deinterlacePresets;
 
-@property (nonatomic, readonly) NSArray *denoiseTypes;
-@property (nonatomic, readonly) NSArray *denoisePresets;
-@property (nonatomic, readonly) NSArray *denoiseTunes;
+@property (nonatomic, readonly) NSArray *sharpenTypes;
+@property (nonatomic, readonly) NSArray *sharpenPresets;
+@property (nonatomic, readonly) NSArray *sharpenTunes;
 
 @end
 
@@ -78,6 +82,15 @@
 @end
 
 @interface HBDenoiseTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBSharpenPresetTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBSharpenTuneTransformer : HBGenericDictionaryTransformer
+@end
+
+@interface HBSharpenTransformer : HBGenericDictionaryTransformer
 @end
 
 @interface HBCustomFilterTransformer : NSValueTransformer
