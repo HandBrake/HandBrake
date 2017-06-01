@@ -308,7 +308,25 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpenPreset = @"medium";
     }
 
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateSharpenPreset];
+    }
     [self postChangedNotification];
+}
+
+- (void)validateSharpenPreset
+{
+    int filter_id = HB_FILTER_UNSHARP;
+    if ([self.deinterlace isEqualToString:@"lapsharp"])
+    {
+        filter_id = HB_FILTER_LAPSHARP;
+    }
+
+    if (hb_validate_filter_preset(filter_id, self.sharpenPreset.UTF8String, NULL, NULL))
+    {
+        _sharpenPreset = @"default";
+    }
 }
 
 - (void)setSharpenTune:(NSString *)sharpenTune
@@ -326,6 +344,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpenTune = @"none";
     }
 
+    if (!(self.undo.isUndoing || self.undo.isRedoing))
+    {
+        [self validateSharpenPreset];
+    }
     [self postChangedNotification];
 }
 
