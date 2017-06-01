@@ -653,7 +653,7 @@ static hb_dict_t * generate_lapsharp_settings(const char *preset,
         else if (!strcasecmp(tune, "grain"))
         {
             strength[0]      = 0.2; strength[1] = 0.1;
-            kernel_string[0] = kernel_string[1] = "log";
+            kernel_string[0] = kernel_string[1] = "isolog";
             if (!strcasecmp(preset, "ultralight"))
             {
                 strength[0] = 0.05; strength[1] = 0.025;

@@ -12,7 +12,7 @@
 #define LAPSHARP_STRENGTH_LUMA_DEFAULT   0.2
 #define LAPSHARP_STRENGTH_CHROMA_DEFAULT 0.2
 
-#define LAPSHARP_KERNELS 3
+#define LAPSHARP_KERNELS 4
 #define LAPSHARP_KERNEL_LUMA_DEFAULT   2
 #define LAPSHARP_KERNEL_CHROMA_DEFAULT 2
 
@@ -28,7 +28,7 @@ typedef struct {
     const int    size;
 } lapsharp_kernel_t;
 
-// 4-neighbor laplacian kernel (lap)
+// 4-neighbor Laplacian kernel (lap)
 // Sharpens vertical and horizontal edges, less effective on diagonals
 static const int lapsharp_kernel_lap[] =
 {
@@ -37,7 +37,7 @@ static const int lapsharp_kernel_lap[] =
  0, -1,  0
 };
 
-// Isotropic laplacian kernel (isolap)
+// Isotropic Laplacian kernel (isolap)
 // Minimial directionality, sharpens all edges similarly
 static const int lapsharp_kernel_isolap[] =
 {
@@ -46,8 +46,9 @@ static const int lapsharp_kernel_isolap[] =
 -1, -4, -1
 };
 
-// Laplacian of gaussian kernel (log)
-// Slightly better at noise rejection
+// Laplacian of Gaussian kernel (log)
+// Slight noise and grain rejection
+// σ ~= 1
 static const int lapsharp_kernel_log[] =
 {
  0,  0, -1,  0,  0,
@@ -57,11 +58,24 @@ static const int lapsharp_kernel_log[] =
  0,  0, -1,  0,  0
 };
 
+// Isotropic Laplacian of Gaussian kernel (isolog)
+// Minimial directionality, plus noise and grain rejection
+// σ ~= 1.2
+static const int lapsharp_kernel_isolog[] =
+{
+ 0, -1, -1, -1,  0,
+-1, -3, -4, -3, -1,
+-1, -4, 55, -4, -1,
+-1, -3, -4, -3, -1,
+ 0, -1, -1, -1,  0
+};
+
 static lapsharp_kernel_t lapsharp_kernels[] =
 {
-    { lapsharp_kernel_lap,    (1.0 / 1), 3 },
-    { lapsharp_kernel_isolap, (1.0 / 5), 3 },
-    { lapsharp_kernel_log,    (1.0 / 5), 5 }
+    { lapsharp_kernel_lap,    (1.0 /  1), 3 },
+    { lapsharp_kernel_isolap, (1.0 /  5), 3 },
+    { lapsharp_kernel_log,    (1.0 /  5), 5 },
+    { lapsharp_kernel_isolog, (1.0 / 15), 5 }
 };
 
 struct hb_filter_private_s
@@ -190,6 +204,10 @@ static int hb_lapsharp_init(hb_filter_object_t *filter,
         else if (!strcasecmp(kernel_string[c], "log"))
         {
             ctx->kernel = 2;
+        }
+        else if (!strcasecmp(kernel_string[c], "isolog"))
+        {
+            ctx->kernel = 3;
         }
 
         free(kernel_string[c]);
