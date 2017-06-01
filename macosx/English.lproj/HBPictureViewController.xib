@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G12b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
@@ -1280,11 +1280,11 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="pYa-Af-F47">
                     <rect key="frame" x="521" y="70" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
+                    <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality and by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
-NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
+Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
 
-HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</string>
+Lapsharp sharpens by using convolution kernels approximating Laplacian edge filters, often producing higher quality results than unsharp masking.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="UuB-JC-pxu">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -1292,7 +1292,6 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="ZIa-hr-ytV" id="ucB-7Q-SmV"/>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="c8Z-hP-01t"/>
                         <binding destination="-2" name="enabled" keyPath="self.filters" id="Bii-87-QbP">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -1303,6 +1302,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                                 <string key="NSValueTransformerName">HBSharpenTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="c8Z-hP-01t"/>
                         <outlet property="nextKeyView" destination="bac-vC-bD4" id="p3H-6p-M53"/>
                     </connections>
                 </popUpButton>
@@ -1323,7 +1323,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="qe8-x6-CEb"/>
                     </connections>
                 </textField>
-                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" misplaced="YES" id="bac-vC-bD4">
+                <popUpButton toolTip="Sharpen filter preset. Sets the strength of the filter." verticalHuggingPriority="750" misplaced="YES" id="bac-vC-bD4">
                     <rect key="frame" x="521" y="44" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="lvS-Ow-PNp">
@@ -1333,7 +1333,6 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="cJD-9a-3Xh" id="RW3-7N-KNC"/>
-                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="qjE-eq-WoY"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="dOr-yZ-hN1">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1344,42 +1343,41 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                                 <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
                             </dictionary>
                         </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="qjE-eq-WoY"/>
                         <outlet property="nextKeyView" destination="6he-FC-h6S" id="Dvr-fO-esu"/>
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="6he-FC-h6S">
                     <rect key="frame" x="520" y="18" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+                    <mutableString key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
 
-Film refines settings for use with most live action content.
+Unsharp can be tuned for Fine, Medium, or Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
 
-Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
 
-High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+Lapsharp's Grain tune is similar to Film, but uses a slightly larger Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune. 
 
-Animation is useful for cel animation such as anime and cartoons.
+Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
 
-Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
-
-Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</string>
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</mutableString>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9Yn-5b-Kgd">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="jmH-62-gce"/>
                     </popUpButtonCell>
                     <connections>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="mHO-CG-hm4" id="Y2Z-ao-i8S">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTunes" id="mHO-CG-hm4"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="bfb-Ea-slY">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="mHO-CG-hm4" id="Y2Z-ao-i8S">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
                             </dictionary>
                         </binding>
                     </connections>
@@ -1404,15 +1402,15 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Hht-Rt-VA0">
                     <rect key="frame" x="524" y="21" width="107" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Custom Denoise parameters.
+                    <string key="toolTip">Custom Sharpen parameters.
 
-NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c
+Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</string>
+Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OJK-BX-8c3">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
