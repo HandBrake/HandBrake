@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G12b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -85,7 +85,7 @@ Custom allows for manual settings.</string>
                         </binding>
                     </connections>
                 </matrix>
-                <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" id="41c-48-2XJ">
+                <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="41c-48-2XJ">
                     <rect key="frame" x="691" y="254" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
@@ -117,7 +117,7 @@ Custom allows for manual settings.</string>
                         </binding>
                     </connections>
                 </textField>
-                <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" id="1Z0-JT-vst">
+                <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1Z0-JT-vst">
                     <rect key="frame" x="691" y="208" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
@@ -174,7 +174,7 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="tYZ-2h-zIg"/>
                     </connections>
                 </stepper>
-                <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" id="LTu-ic-Ty9">
+                <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="LTu-ic-Ty9">
                     <rect key="frame" x="636" y="231" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
@@ -231,7 +231,7 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="I1t-eF-byM"/>
                     </connections>
                 </stepper>
-                <textField verticalHuggingPriority="750" id="Bmd-c8-9hp">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="Bmd-c8-9hp">
                     <rect key="frame" x="552" y="307" width="59" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="haC-cO-jDm">
@@ -243,7 +243,7 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fkJ-hW-R19"/>
                     </connections>
                 </textField>
-                <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" id="wsq-TS-cC6">
+                <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="wsq-TS-cC6">
                     <rect key="frame" x="750" y="231" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
@@ -275,12 +275,12 @@ Custom allows for manual settings.</string>
                         </binding>
                     </connections>
                 </textField>
-                <box verticalHuggingPriority="750" boxType="separator" id="BpX-Ee-wct">
-                    <rect key="frame" x="66" y="163" width="789" height="5"/>
+                <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="BpX-Ee-wct">
+                    <rect key="frame" x="66" y="190" width="789" height="5"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                 </box>
-                <textField verticalHuggingPriority="750" id="1a5-Yb-uwn">
-                    <rect key="frame" x="18" y="130" width="71" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1a5-Yb-uwn">
+                    <rect key="frame" x="18" y="159" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
                         <font key="font" metaFont="smallSystem"/>
@@ -291,8 +291,8 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="M2A-q7-iOs"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="Mwp-XS-2tc">
-                    <rect key="frame" x="18" y="104" width="71" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Mwp-XS-2tc">
+                    <rect key="frame" x="18" y="133" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
                         <font key="font" metaFont="smallSystem"/>
@@ -308,8 +308,8 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lK9-eT-tUn"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="DER-tS-cLx">
-                    <rect key="frame" x="92" y="125" width="114" height="22"/>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="DER-tS-cLx">
+                    <rect key="frame" x="92" y="154" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
@@ -333,8 +333,8 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="ipJ-z3-XnJ">
-                    <rect key="frame" x="95" y="101" width="108" height="19"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="ipJ-z3-XnJ">
+                    <rect key="frame" x="95" y="130" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Detelecine parameters.
 
@@ -356,8 +356,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="value" keyPath="self.filters.detelecineCustomString" id="jgA-bj-Qfl"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="N8y-at-fwU">
-                    <rect key="frame" x="656" y="130" width="64" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="N8y-at-fwU">
+                    <rect key="frame" x="656" y="159" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
                         <font key="font" metaFont="smallSystem"/>
@@ -368,8 +368,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="m7I-VM-1ct"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="ns7-Ww-hmX">
-                    <rect key="frame" x="656" y="104" width="64" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="ns7-Ww-hmX">
+                    <rect key="frame" x="656" y="133" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color:" id="uDH-ts-vs5">
                         <font key="font" metaFont="smallSystem"/>
@@ -380,8 +380,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pzU-oe-yEE"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="xGD-5W-CDB">
-                    <rect key="frame" x="656" y="78" width="64" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="xGD-5W-CDB">
+                    <rect key="frame" x="656" y="75" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Rotate:" id="1nr-nE-3a6">
                         <font key="font" metaFont="smallSystem"/>
@@ -392,8 +392,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="IrA-1f-C6F"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="peM-dW-Ef8">
-                    <rect key="frame" x="719" y="130" width="31" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="peM-dW-Ef8">
+                    <rect key="frame" x="719" y="159" width="31" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Off" id="CIX-Cq-deK">
                         <font key="font" metaFont="smallSystem"/>
@@ -408,8 +408,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         </binding>
                     </connections>
                 </textField>
-                <slider toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" id="VHj-6u-NVp">
-                    <rect key="frame" x="751" y="127" width="104" height="20"/>
+                <slider toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" misplaced="YES" id="VHj-6u-NVp">
+                    <rect key="frame" x="751" y="156" width="104" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
                     <connections>
@@ -422,8 +422,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="value" keyPath="self.filters.deblock" id="n8X-FW-Dvy"/>
                     </connections>
                 </slider>
-                <textField verticalHuggingPriority="750" id="9hM-c1-7hB">
-                    <rect key="frame" x="457" y="130" width="61" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9hM-c1-7hB">
+                    <rect key="frame" x="457" y="159" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
                         <font key="font" metaFont="smallSystem"/>
@@ -434,8 +434,8 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="tH6-cB-0O3"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="ins-7X-kbN">
-                    <rect key="frame" x="521" y="125" width="113" height="22"/>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="ins-7X-kbN">
+                    <rect key="frame" x="521" y="154" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
 
@@ -463,8 +463,8 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                         <outlet property="nextKeyView" destination="cTy-PO-BSd" id="rNc-zg-awd"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="k1h-3F-Xh0">
-                    <rect key="frame" x="457" y="104" width="61" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="k1h-3F-Xh0">
+                    <rect key="frame" x="457" y="133" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
                         <font key="font" metaFont="smallSystem"/>
@@ -480,8 +480,8 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="P6z-nu-QHk"/>
                     </connections>
                 </textField>
-                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" id="cTy-PO-BSd">
-                    <rect key="frame" x="521" y="99" width="113" height="22"/>
+                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" misplaced="YES" id="cTy-PO-BSd">
+                    <rect key="frame" x="521" y="128" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -504,10 +504,10 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                         <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="MZj-WA-YC4"/>
                     </connections>
                 </popUpButton>
-                <popUpButton verticalHuggingPriority="750" id="1XQ-md-5cQ">
-                    <rect key="frame" x="520" y="73" width="113" height="22"/>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="1XQ-md-5cQ">
+                    <rect key="frame" x="520" y="102" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <mutableString key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+                    <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
 
 None uses the default preset settings.
 
@@ -521,7 +521,7 @@ Animation is useful for cel animation such as anime and cartoons.
 
 Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
 
-Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</mutableString>
+Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="QNk-3W-T3X">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -541,8 +541,8 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                         </binding>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="O3I-G6-dfv">
-                    <rect key="frame" x="457" y="78" width="61" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="O3I-G6-dfv">
+                    <rect key="frame" x="457" y="105" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
                         <font key="font" metaFont="smallSystem"/>
@@ -558,8 +558,8 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="ZR9-YG-pfn">
-                    <rect key="frame" x="524" y="76" width="107" height="19"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="ZR9-YG-pfn">
+                    <rect key="frame" x="524" y="105" width="107" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Denoise parameters.
 
@@ -584,8 +584,8 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <binding destination="-2" name="value" keyPath="self.filters.denoiseCustomString" id="MUd-3J-rBA"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="A6i-ft-02b">
-                    <rect key="frame" x="484" y="78" width="34" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="A6i-ft-02b">
+                    <rect key="frame" x="484" y="105" width="34" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
                         <font key="font" metaFont="smallSystem"/>
@@ -601,8 +601,8 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="GTk-Mv-iiv"/>
                     </connections>
                 </textField>
-                <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." id="Psx-nN-XiT">
-                    <rect key="frame" x="723" y="102" width="103" height="18"/>
+                <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." misplaced="YES" id="Psx-nN-XiT">
+                    <rect key="frame" x="723" y="131" width="103" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -617,8 +617,8 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <binding destination="-2" name="value" keyPath="self.filters.grayscale" id="iuG-9X-7Dc"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="hM5-HQ-Scu">
-                    <rect key="frame" x="18" y="158" width="42" height="14"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="hM5-HQ-Scu">
+                    <rect key="frame" x="18" y="185" width="42" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters" id="wQL-qX-JeA">
                         <font key="font" metaFont="smallSystem"/>
@@ -626,7 +626,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="LWv-Y9-b0S">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="LWv-Y9-b0S">
                     <rect key="frame" x="375" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
@@ -648,7 +648,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <outlet property="nextKeyView" destination="JC3-5O-BXA" id="oN1-b9-dyt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="nQe-Vq-Og2">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="nQe-Vq-Og2">
                     <rect key="frame" x="457" y="283" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
@@ -669,7 +669,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <outlet property="nextKeyView" destination="JC3-5O-BXA" id="Ly3-4t-fIs"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="JC3-5O-BXA">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="JC3-5O-BXA">
                     <rect key="frame" x="375" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
@@ -692,7 +692,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <outlet property="nextKeyView" destination="rFi-0b-3BX" id="IBQ-5n-k0g"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="vOY-Ix-eha">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="vOY-Ix-eha">
                     <rect key="frame" x="291" y="258" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
@@ -707,7 +707,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
                     <rect key="frame" x="151" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -747,7 +747,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <binding destination="-2" name="selectedValue" keyPath="self.picture.modulus" id="lCQ-i3-hQ0"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="9hH-As-JSa">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="9hH-As-JSa">
                     <rect key="frame" x="96" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings.</string>
@@ -773,7 +773,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="JBo-0E-AsU">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="JBo-0E-AsU">
                     <rect key="frame" x="18" y="237" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
@@ -785,7 +785,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="MVb-7T-IbY"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="uqQ-uA-3xF">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="uqQ-uA-3xF">
                     <rect key="frame" x="171" y="286" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
@@ -794,7 +794,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="IVk-ye-fOe">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="IVk-ye-fOe">
                     <rect key="frame" x="438" y="286" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="uuL-JR-73C">
@@ -803,7 +803,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="sKT-h2-mAF">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="sKT-h2-mAF">
                     <rect key="frame" x="438" y="260" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="cNr-IZ-H9j">
@@ -846,7 +846,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="selectedTag" keyPath="self.picture.anamorphicMode" id="ugL-AX-WF2"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="tHY-g2-oWj">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="tHY-g2-oWj">
                     <rect key="frame" x="18" y="211" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
@@ -858,7 +858,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fh5-vf-5Tr"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="9oG-zm-Y0W">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="9oG-zm-Y0W">
                     <rect key="frame" x="18" y="285" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
@@ -870,7 +870,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Epa-CR-f64"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="hei-Cd-vcN">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="hei-Cd-vcN">
                     <rect key="frame" x="291" y="286" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
@@ -882,7 +882,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="7ds-FA-XrD">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="7ds-FA-XrD">
                     <rect key="frame" x="18" y="309" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source:" id="nrd-lP-SHD">
@@ -894,7 +894,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eOt-6I-k6x"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="Hkl-7Z-J2e">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="Hkl-7Z-J2e">
                     <rect key="frame" x="185" y="283" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings.</string>
@@ -942,7 +942,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="enabled" keyPath="self.picture.keepDisplayAspectEditable" id="6Hg-VH-mTD"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="rFi-0b-3BX">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="rFi-0b-3BX">
                     <rect key="frame" x="457" y="256" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
@@ -963,7 +963,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="Bwn-Hk-CGG"/>
                     </connections>
                 </textField>
-                <textField toolTip="Source dimensions in pixels." horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ieR-o9-ztI">
+                <textField toolTip="Source dimensions in pixels." horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="ieR-o9-ztI">
                     <rect key="frame" x="96" y="309" width="417" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="source size" id="mzN-4A-GZq">
@@ -978,7 +978,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
                     <rect key="frame" x="240" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -1016,8 +1016,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="HGA-OB-h94"/>
                     </connections>
                 </stepper>
-                <textField verticalHuggingPriority="750" id="xKf-yr-nCk">
-                    <rect key="frame" x="240" y="130" width="68" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="xKf-yr-nCk">
+                    <rect key="frame" x="240" y="159" width="68" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
                         <font key="font" metaFont="smallSystem"/>
@@ -1028,8 +1028,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="PYk-vE-y5t"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="C83-aJ-v3x">
-                    <rect key="frame" x="259" y="79" width="49" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="C83-aJ-v3x">
+                    <rect key="frame" x="259" y="108" width="49" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
                         <font key="font" metaFont="smallSystem"/>
@@ -1045,8 +1045,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="OOp-ec-hRZ"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="xct-UB-bKm">
-                    <rect key="frame" x="311" y="125" width="114" height="22"/>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="xct-UB-bKm">
+                    <rect key="frame" x="311" y="154" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Deinterlace removes comb artifacts from the picture.
 
@@ -1073,8 +1073,8 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                         <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceTypes" id="1XG-JZ-nFn"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="r64-vI-ymx">
-                    <rect key="frame" x="314" y="76" width="108" height="19"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="r64-vI-ymx">
+                    <rect key="frame" x="314" y="105" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
@@ -1099,8 +1099,8 @@ Decomb default: mode=7</string>
                         <binding destination="-2" name="value" keyPath="self.filters.deinterlaceCustomString" id="ej3-7F-ZV8"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="9Uz-PL-igg">
-                    <rect key="frame" x="248" y="104" width="61" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9Uz-PL-igg">
+                    <rect key="frame" x="248" y="133" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="zvZ-ZX-yKE">
                         <font key="font" metaFont="smallSystem"/>
@@ -1116,8 +1116,8 @@ Decomb default: mode=7</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="58H-r8-xBi"/>
                     </connections>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" id="6nG-zk-FMo">
-                    <rect key="frame" x="312" y="99" width="113" height="22"/>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="6nG-zk-FMo">
+                    <rect key="frame" x="312" y="128" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Deinterlace filter preset.
 
@@ -1149,8 +1149,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <outlet property="nextKeyView" destination="1XQ-md-5cQ" id="LJa-RO-dzf"/>
                     </connections>
                 </popUpButton>
-                <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" id="dsH-ZQ-dBs">
-                    <rect key="frame" x="723" y="73" width="66" height="22"/>
+                <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" misplaced="YES" id="dsH-ZQ-dBs">
+                    <rect key="frame" x="723" y="70" width="66" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eZj-V7-e0o" id="ee3-w2-XRX">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1174,8 +1174,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <binding destination="-2" name="selectedTag" keyPath="self.filters.rotate" id="tcT-dR-5Fw"/>
                     </connections>
                 </popUpButton>
-                <button toolTip="Flips (mirrors) the picture on the horizontal axis." id="IWV-25-FSC">
-                    <rect key="frame" x="791" y="75" width="58" height="20"/>
+                <button toolTip="Flips (mirrors) the picture on the horizontal axis." misplaced="YES" id="IWV-25-FSC">
+                    <rect key="frame" x="791" y="72" width="58" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tvl-40-1Tc">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1190,8 +1190,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <binding destination="-2" name="value" keyPath="self.filters.flip" id="xdh-96-5s5"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="Mg1-Yq-F9S">
-                    <rect key="frame" x="200" y="52" width="108" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Mg1-Yq-F9S">
+                    <rect key="frame" x="200" y="77" width="108" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Interlace Detection:" id="xHD-vC-ePQ">
                         <font key="font" metaFont="smallSystem"/>
@@ -1202,8 +1202,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eKb-Bh-OkE"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" id="RZE-gp-SB7">
-                    <rect key="frame" x="237" y="26" width="71" height="14"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="RZE-gp-SB7">
+                    <rect key="frame" x="237" y="51" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="Da7-pY-5vu">
                         <font key="font" metaFont="smallSystem"/>
@@ -1219,8 +1219,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s78-d3-GZY"/>
                     </connections>
                 </textField>
-                <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" id="IQG-Nn-HTb">
-                    <rect key="frame" x="311" y="47" width="114" height="22"/>
+                <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" misplaced="YES" id="IQG-Nn-HTb">
+                    <rect key="frame" x="311" y="72" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nfb-CJ-1J3">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1243,8 +1243,8 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <outlet property="nextKeyView" destination="rPg-F2-gtl" id="46r-ZD-dTe"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" id="rPg-F2-gtl">
-                    <rect key="frame" x="314" y="23" width="108" height="19"/>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="rPg-F2-gtl">
+                    <rect key="frame" x="314" y="48" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Interlace Detection parameters.
 
@@ -1263,6 +1263,185 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="ZIa-hr-ytV">
+                    <rect key="frame" x="457" y="75" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="Gg8-cE-gaL">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pLq-0j-Ina"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="pYa-Af-F47">
+                    <rect key="frame" x="521" y="70" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
+
+NLMeans is a high quality denoise filter with a cost to speed. Use where quality is more important than speed.
+
+HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at preserving fine detail.</string>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="UuB-JC-pxu">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="tAS-YR-VfA"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="ZIa-hr-ytV" id="ucB-7Q-SmV"/>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTypes" id="c8Z-hP-01t"/>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="Bii-87-QbP">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpen" previousBinding="c8Z-hP-01t" id="H6J-Ca-bvq">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBSharpenTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <outlet property="nextKeyView" destination="bac-vC-bD4" id="p3H-6p-M53"/>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="cJD-9a-3Xh">
+                    <rect key="frame" x="457" y="49" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="1zF-s5-Lic">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="o70-EQ-5wv">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="qe8-x6-CEb"/>
+                    </connections>
+                </textField>
+                <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" misplaced="YES" id="bac-vC-bD4">
+                    <rect key="frame" x="521" y="44" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="lvS-Ow-PNp">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="9su-F2-NUw"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <accessibilityConnection property="title" destination="cJD-9a-3Xh" id="RW3-7N-KNC"/>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenPresets" id="qjE-eq-WoY"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="dOr-yZ-hN1">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenPreset" previousBinding="qjE-eq-WoY" id="haB-U9-EYX">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDenoisePresetTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <outlet property="nextKeyView" destination="6he-FC-h6S" id="Dvr-fO-esu"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="6he-FC-h6S">
+                    <rect key="frame" x="520" y="18" width="113" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Film refines settings for use with most live action content.
+
+Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+
+High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+
+Animation is useful for cel animation such as anime and cartoons.
+
+Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+
+Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</string>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="9Yn-5b-Kgd">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="jmH-62-gce"/>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.sharpenTunes" id="mHO-CG-hm4"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="bfb-Ea-slY">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="mHO-CG-hm4" id="Y2Z-ao-i8S">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBSharpenTuneTransformer</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="8RO-OY-HTu">
+                    <rect key="frame" x="457" y="23" width="61" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="oqh-kd-lEw">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customSharpenSelected" id="OwI-Pa-gez">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="C4H-qZ-HMZ"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Hht-Rt-VA0">
+                    <rect key="frame" x="524" y="21" width="107" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <string key="toolTip">Custom Denoise parameters.
+
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</string>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OJK-BX-8c3">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customSharpenSelected" id="jmC-qQ-YlP">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.sharpenCustomString" id="CiV-Uc-cZZ"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="JrA-qB-1JA">
+                    <rect key="frame" x="484" y="23" width="34" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="N6B-kA-kMA">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.sharpenTunesAvailable" id="UX7-0O-ojb">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="hko-9Q-TYZ"/>
                     </connections>
                 </textField>
             </subviews>

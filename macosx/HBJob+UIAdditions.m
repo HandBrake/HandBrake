@@ -326,11 +326,11 @@ static NSDictionary            *shortHeightAttr;
 
             if ([filters.sharpen isEqualToString:@"unsharp"])
             {
-                [summary appendFormat:@", %@", [[[HBFilters unsharpTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
+                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
             }
             else if ([filters.sharpen isEqualToString:@"lapsharp"])
             {
-                [summary appendFormat:@", %@", [[[HBFilters lapsharpTunesDict] allKeysForObject:filters.lapsharpTune] firstObject]];
+                [summary appendFormat:@", %@", [[[HBFilters sharpenTunesDict] allKeysForObject:filters.sharpenTune] firstObject]];
             }
         }
         else

@@ -172,7 +172,7 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 - (instancetype)init
 {
     if (self = [super init])
-        self.dict = [HBFilters unsharpTunesDict];
+        self.dict = [HBFilters sharpenTunesDict];
 
     return self;
 }
@@ -226,8 +226,7 @@ static NSDictionary *nlmeansTunesDict = nil;
 static NSDictionary *denoiseTypesDict = nil;
 
 static NSDictionary *sharpenPresetDict = nil;
-static NSDictionary *unsharpTunesDict = nil;
-static NSDictionary *lapsharpTunesDict = nil;
+static NSDictionary *sharpenTunesDict = nil;
 static NSDictionary *sharpenTypesDict = nil;
 
 @implementation HBFilters (UIAdditions)
@@ -325,22 +324,19 @@ static NSDictionary *sharpenTypesDict = nil;
     return sharpenPresetDict;
 }
 
-+ (NSDictionary *)unsharpTunesDict
++ (NSDictionary *)sharpenTunesDict
 {
-    if (!unsharpTunesDict)
+    if (!sharpenTunesDict)
     {
-        unsharpTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
-    }
-    return unsharpTunesDict;
-}
+        NSDictionary *unsharpenTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
+        NSDictionary *lapsharpTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_LAPSHARP);
 
-+ (NSDictionary *)lapsharpTunesDict
-{
-    if (!lapsharpTunesDict)
-    {
-        lapsharpTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_LAPSHARP);
+        sharpenTunesDict = [NSMutableDictionary dictionary];
+        [sharpenTunesDict setValuesForKeysWithDictionary:unsharpenTunesDict];
+        [sharpenTunesDict setValuesForKeysWithDictionary:lapsharpTunesDict];
+
     }
-    return lapsharpTunesDict;
+    return sharpenTunesDict;
 }
 
 + (NSDictionary *)sharpenTypesDict
@@ -398,12 +394,26 @@ static NSDictionary *sharpenTypesDict = nil;
 
 - (NSArray *)sharpenPresets
 {
-    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_UNSHARP);
+    if ([self.sharpen isEqualToString:@"unsharp"])
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_UNSHARP);
+    }
+    else
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_LAPSHARP);
+    }
 }
 
 - (NSArray *)sharpenTunes
 {
-    return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
+    if ([self.sharpen isEqualToString:@"unsharp"])
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_UNSHARP);
+    }
+    else
+    {
+        return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_LAPSHARP);
+    }
 }
 
 - (BOOL)customDetelecineSelected

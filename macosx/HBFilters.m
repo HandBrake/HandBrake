@@ -417,7 +417,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         retval = [NSSet setWithObjects:@"sharpen", @"sharpenPreset", nil];
     }
-    else if ([key isEqualToString:@"sharpenEnabled"])
+    else if ([key isEqualToString:@"sharpenEnabled"]  ||
+             [key isEqualToString:@"sharpenPresets"] ||
+             [key isEqualToString:@"sharpenTunes"])
     {
         retval = [NSSet setWithObject:@"sharpen"];
     }

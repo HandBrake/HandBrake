@@ -25,8 +25,7 @@
 + (NSDictionary *)denoiseTypesDict;
 
 + (NSDictionary *)sharpenPresetDict;
-+ (NSDictionary *)unsharpTunesDict;
-+ (NSDictionary *)lapsharpTunesDict;
++ (NSDictionary *)sharpenTunesDict;
 + (NSDictionary *)sharpenTypesDict;
 
 - (BOOL)customDetelecineSelected;
