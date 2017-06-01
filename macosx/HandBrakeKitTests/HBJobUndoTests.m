@@ -168,6 +168,11 @@
     XCTAssertEqualObjects(self.job.filters.denoiseTune, self.modifiedJob.filters.denoiseTune);
     XCTAssertEqualObjects(self.job.filters.denoiseCustomString, self.modifiedJob.filters.denoiseCustomString);
 
+    XCTAssertEqualObjects(self.job.filters.sharpen, self.modifiedJob.filters.sharpen);
+    XCTAssertEqualObjects(self.job.filters.sharpenPreset, self.modifiedJob.filters.sharpenPreset);
+    XCTAssertEqualObjects(self.job.filters.sharpenTune, self.modifiedJob.filters.sharpenTune);
+    XCTAssertEqualObjects(self.job.filters.sharpenCustomString, self.modifiedJob.filters.sharpenCustomString);
+
     XCTAssertEqual(self.job.filters.deblock, self.modifiedJob.filters.deblock);
     XCTAssertEqual(self.job.filters.grayscale, self.modifiedJob.filters.grayscale);
 }
