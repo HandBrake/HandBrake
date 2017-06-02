@@ -326,11 +326,11 @@ static int unsharp_work_thread(hb_filter_object_t *filter,
         unsharp_plane_context_t  * ctx  = &pv->plane_ctx[c];
         unsharp_thread_context_t * tctx = &pv->thread_ctx[thread][c];
         unsharp(in->plane[c].data,
-                   out->plane[c].data,
-                   in->plane[c].width,
-                   in->plane[c].height,
-                   in->plane[c].stride,
-                   ctx, tctx);
+                out->plane[c].data,
+                in->plane[c].width,
+                in->plane[c].height,
+                in->plane[c].stride,
+                ctx, tctx);
     }
 
     out->s = in->s;
