@@ -76,6 +76,23 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom Sharpen parameters.
+        ///
+        ///Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+        ///
+        ///Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+        ///
+        ///Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+        ///
+        ///Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap.
+        /// </summary>
+        public static string FilterView_CustomSharpenParams {
+            get {
+                return ResourceManager.GetString("FilterView_CustomSharpenParams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deblock reduces blocky artifacts caused by low quality video compression..
         /// </summary>
         public static string FilterView_Deblock {
@@ -245,6 +262,43 @@ namespace HandBrakeWPF.Properties {
         public static string FilterView_Rotate {
             get {
                 return ResourceManager.GetString("FilterView_Rotate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality and by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+        ///
+        ///Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+        ///
+        ///Lapsharp sharpens by using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string FilterView_Sharpen {
+            get {
+                return ResourceManager.GetString("FilterView_Sharpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpen filter preset. Sets the strength of the filter..
+        /// </summary>
+        public static string FilterView_SharpenPreset {
+            get {
+                return ResourceManager.GetString("FilterView_SharpenPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+        ///
+        ///None uses the default preset settings.
+        ///
+        ///Unsharp can be tuned for Fine, Medium-Fine, Medium, Medium-Coarse, or Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+        ///
+        ///Lapsharp&apos;s Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharp [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string FilterView_SharpenTune {
+            get {
+                return ResourceManager.GetString("FilterView_SharpenTune", resourceCulture);
             }
         }
         

@@ -128,6 +128,7 @@
     <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
     <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
     <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
+    <Compile Include="Interop\Model\Encoding\Sharpen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />

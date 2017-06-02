@@ -11,6 +11,8 @@
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="boolComboConverter" />
         <filters:DenoisePresetConverter x:Key="DenoisePresetConverter" />
+        <filters:SharpenPresetConverter x:Key="SharpenPresetConverter" />
+        <filters:SharpenTuneConverter x:Key="SharpenTuneConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -30,6 +32,7 @@
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="10,10,0,0">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -143,22 +146,63 @@
                     </StackPanel>
 
                 </StackPanel>
+                
+                <!-- Sharpen -->
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Sharpen}" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
+                <ComboBox Width="120" Grid.Row="4" ItemsSource="{Binding SharpenOptions, Converter={StaticResource boolComboConverter}}" 
+                          SelectedItem="{Binding SelectedSharpen, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Sharpen}" />
+                
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10" 
+                            Visibility="{Binding ShowSharpenOptions, Converter={StaticResource boolToVisConverter}}">
+                    
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Preset}" Margin="0,0,5,0" />
+                    <ComboBox SelectedItem="{Binding SelectedSharpenPreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenPreset}"
+                              MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center" DisplayMemberPath="DisplayName" >
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource SharpenPresetConverter}">
+                                <Binding Path="SharpenPresets" />
+                                <Binding Path="SelectedSharpen" />
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                    </ComboBox>
 
-                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deblock}" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
-                <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowSharpenTune, Converter={StaticResource boolToVisConverter}}">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Tune}" Margin="5,0,5,0" />
+                        <ComboBox SelectedItem="{Binding SelectedSharpenTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenTune}" VerticalAlignment="Center" DisplayMemberPath="DisplayName" >
+                            <ComboBox.ItemsSource>
+                                <MultiBinding Converter="{StaticResource SharpenTuneConverter}">
+                                    <Binding Path="SharpenTunes" />
+                                    <Binding Path="SelectedSharpen" />
+                                </MultiBinding>
+                            </ComboBox.ItemsSource>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowSharpenCustom, Converter={StaticResource boolToVisConverter}}">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Custom}" Margin="5,0,5,0" />
+                        <TextBox Width="120" Margin="0" Text="{Binding CustomSharpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
+                                 ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_CustomSharpenParams}" />
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!-- Deblock -->
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deblock}" Grid.Row="5" Grid.Column="0" Margin="0,0,0,10"/>
+                <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
                         HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" />
-                <TextBlock Text="{Binding DeblockText}" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10"/>
+                <TextBlock Text="{Binding DeblockText}" Grid.Row="5" Grid.Column="2" Margin="0,0,0,10"/>
 
-                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
+                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,0,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
 
                 <!-- Rotation -->
-                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Rotate}" Grid.Row="6" Grid.Column="0" Margin="0,0,0,0"/>
-                <ComboBox Width="120" ItemsSource="{Binding RotationOptions}" Grid.Row="6" Grid.Column="1"
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Rotate}" Grid.Row="7" Grid.Column="0" Margin="0,0,0,0"/>
+                <ComboBox Width="120" ItemsSource="{Binding RotationOptions}" Grid.Row="7" Grid.Column="1"
                               SelectedItem="{Binding SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
                               HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="6" Grid.Column="2" IsChecked="{Binding FlipVideo, UpdateSourceTrigger=PropertyChanged}"
+                <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsChecked="{Binding FlipVideo, UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}"/>
             </Grid>
 

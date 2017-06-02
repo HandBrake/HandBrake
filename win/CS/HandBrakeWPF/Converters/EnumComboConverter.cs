@@ -91,6 +91,10 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<CombDetect>.GetEnumDisplayValues(typeof(CombDetect));
             }
+            if (value is IEnumerable<Sharpen>)
+            {
+                return EnumHelper<Sharpen>.GetEnumDisplayValues(typeof(Sharpen));
+            }
 
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
@@ -139,6 +143,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
             {
                 return EnumHelper<CombDetect>.GetDisplay((CombDetect)value);
+            }
+            if (targetType == typeof(Sharpen) || value.GetType() == typeof(Sharpen))
+            {
+                return EnumHelper<Sharpen>.GetDisplay((Sharpen)value);
             }
 
             return null;
@@ -209,6 +217,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(CombDetect) || value.GetType() == typeof(CombDetect))
             {
                 return EnumHelper<CombDetect>.GetValue(value.ToString());
+            }
+
+            if (targetType == typeof(Sharpen) || value.GetType() == typeof(Sharpen))
+            {
+                return EnumHelper<Sharpen>.GetValue(value.ToString());
             }
             return null;
         }

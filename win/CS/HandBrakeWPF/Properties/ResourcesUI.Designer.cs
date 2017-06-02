@@ -502,6 +502,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sharpen.
+        /// </summary>
+        public static string FiltersView_Sharpen {
+            get {
+                return ResourceManager.GetString("FiltersView_Sharpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tune:.
         /// </summary>
         public static string FiltersView_Tune {

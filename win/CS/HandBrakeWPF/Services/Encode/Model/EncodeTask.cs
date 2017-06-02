@@ -17,6 +17,7 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
@@ -33,9 +34,6 @@ namespace HandBrakeWPF.Services.Encode.Model
     using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
     using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
 
-    /// <summary>
-    /// An Encode Task
-    /// </summary>
     public class EncodeTask : PropertyChangedBase
     {
         #region Private Fields
@@ -108,6 +106,10 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.Detelecine = task.Detelecine;
             this.FlipVideo = task.FlipVideo;
             this.Rotation = task.Rotation;
+            this.Sharpen = task.Sharpen;
+            this.SharpenPreset = task.SharpenPreset;
+            this.SharpenTune = task.SharpenTune;
+            this.SharpenCustom = task.SharpenCustom;
 
             this.DisplayWidth = task.DisplayWidth;
             this.EndPoint = task.EndPoint;
@@ -368,6 +370,11 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// Flip the video.
         /// </summary>
         public bool FlipVideo { get; set; }
+
+        public Sharpen Sharpen { get; set; }
+        public FilterPreset SharpenPreset { get; set; }
+        public FilterTune SharpenTune { get; set; }
+        public string SharpenCustom { get; set; }
         #endregion
 
         #region Video

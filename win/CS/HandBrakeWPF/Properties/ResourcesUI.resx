@@ -908,4 +908,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Searching for start time</value>
   </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>Sharpen</value>
+  </data>
 </root>

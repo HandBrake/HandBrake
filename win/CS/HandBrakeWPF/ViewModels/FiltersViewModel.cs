@@ -12,11 +12,15 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
+    using System.Linq;
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -594,11 +598,131 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        #region Sharpen Filter
+
+        public IEnumerable<Sharpen> SharpenOptions
+        {
+            get
+            {
+                return EnumHelper<Sharpen>.GetEnumList();
+            }
+        }
+
+        public object SharpenPresets { get; set; }
+
+        public object SharpenTunes { get; set; }
+
+        public Sharpen SelectedSharpen
+        {
+            get
+            {
+                return this.CurrentTask.Sharpen;
+            }
+
+            set
+            {
+                if (value == this.CurrentTask.Sharpen) return;
+                this.CurrentTask.Sharpen = value;
+                this.NotifyOfPropertyChange(() => this.SelectedSharpen);
+                this.NotifyOfPropertyChange(() => this.ShowSharpenOptions);
+                this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
+                this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
+
+                // Default preset and tune.
+                switch (value)
+                {
+                    case Sharpen.LapSharp:
+                        if (this.SelectedSharpenPreset == null)
+                            this.SelectedSharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_LAPSHARP).FirstOrDefault(s => s.ShortName == "medium"));
+                        if (this.SelectedSharpenTune == null)
+                            this.SelectedSharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_LAPSHARP).FirstOrDefault(s => s.ShortName == "none"));
+                        break;
+                    case Sharpen.UnSharp:
+                        if (this.SelectedSharpenPreset == null)
+                            this.SelectedSharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_UNSHARP).FirstOrDefault(s => s.ShortName == "medium"));
+                        if (this.SelectedSharpenTune == null)
+                            this.SelectedSharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_UNSHARP).FirstOrDefault(s => s.ShortName == "none"));
+                        break;
+                }
+
+                this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
+                this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
+            }
+        }
+
+        public FilterPreset SelectedSharpenPreset
+        {
+            get
+            {
+                return this.CurrentTask.SharpenPreset;
+            }
+            set
+            {
+                if (Equals(value, this.CurrentTask.SharpenPreset)) return;
+                this.CurrentTask.SharpenPreset = value;
+                this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
+                this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
+                this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
+            }
+        }
+
+        public FilterTune SelectedSharpenTune
+        {
+            get
+            {
+                return this.CurrentTask.SharpenTune;
+            }
+            set
+            {
+                if (value == this.CurrentTask.SharpenTune) return;
+                this.CurrentTask.SharpenTune = value;
+                this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
+            }
+        }
+
+        public string CustomSharpen
+        {
+            get
+            {
+                return this.CurrentTask.SharpenCustom;
+            }
+            set
+            {
+                if (value == this.CurrentTask.SharpenCustom) return;
+                this.CurrentTask.SharpenCustom = value;
+                this.NotifyOfPropertyChange(() => this.CustomSharpen);
+            }
+        }
+
+        public bool ShowSharpenTune
+        {
+            get
+            {
+                return this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName != "Custom";
+            }
+        }
+
+        public bool ShowSharpenCustom
+        {
+            get
+            {
+                return this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName == "Custom";
+            }
+        }
+
+        public bool ShowSharpenOptions
+        {
+            get
+            {
+                return this.SelectedSharpen != Sharpen.Off;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Implemented Interfaces
-
-        #region ITabInterface
 
         /// <summary>
         /// Setup this tab for the specified preset.
@@ -640,6 +764,12 @@ namespace HandBrakeWPF.ViewModels
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
                 this.SelectedDenoisePreset = preset.Task.DenoisePreset;
                 this.SelectedDenoiseTune = preset.Task.DenoiseTune;
+
+                // Sharpen
+                this.SelectedSharpen = preset.Task.Sharpen;
+                this.SelectedSharpenPreset = preset.Task.SharpenPreset;
+                this.SelectedSharpenTune = preset.Task.SharpenTune;
+                this.CustomSharpen = preset.Task.SharpenCustom;
 
                 // Custom Values
                 this.CustomDecomb = preset.Task.CustomDecomb;
@@ -714,8 +844,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = task;
         }
-
-        #endregion
 
         #endregion
     }

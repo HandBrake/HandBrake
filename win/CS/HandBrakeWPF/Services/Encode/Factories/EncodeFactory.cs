@@ -488,6 +488,25 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
+            // Sharpen
+            if (job.Sharpen != Sharpen.Off)
+            {
+                hb_filter_ids id = job.Sharpen == Sharpen.LapSharp
+                    ? hb_filter_ids.HB_FILTER_LAPSHARP
+                    : hb_filter_ids.HB_FILTER_UNSHARP;
+
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)id, job.SharpenPreset.Key, job.SharpenTune.Key, job.SharpenCustom);
+                string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
+
+                if (!string.IsNullOrEmpty(unparsedJson))
+                {
+                    JToken settings = JObject.Parse(unparsedJson);
+
+                    Filter filterItem = new Filter { ID = (int)id, Settings = settings };
+                    filter.FilterList.Add(filterItem);
+                }
+            }
+
             // Deblock
             if (job.Deblock >= 5)
             {
