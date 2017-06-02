@@ -399,9 +399,18 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     return hb_buffer_list_clear(&list);
 }
 
-static void alignStream( sync_common_t * common, int stream_index,
-                         int64_t pts, int64_t gap )
+static void alignStream( sync_common_t * common, sync_stream_t * stream,
+                         int64_t pts )
 {
+    if (hb_list_count(stream->in_queue) <= 0 ||
+        stream->type == SYNC_TYPE_SUBTITLE)
+    {
+        return;
+    }
+
+    hb_buffer_t * buf = hb_list_item(stream->in_queue, 0);
+    int64_t gap = buf->s.start - pts;
+
     if (gap == 0)
     {
         return;
@@ -413,21 +422,23 @@ static void alignStream( sync_common_t * common, int stream_index,
         // Drop frames from other streams
         for (ii = 0; ii < common->stream_count; ii++)
         {
-            if (ii == stream_index)
+            sync_stream_t * other_stream = &common->streams[ii];
+            if (stream == other_stream)
             {
                 continue;
             }
-            sync_stream_t * stream = &common->streams[ii];
-            while (hb_list_count(stream->in_queue) > 0)
+            while (hb_list_count(other_stream->in_queue) > 0)
             {
-                hb_buffer_t * buf = hb_list_item(stream->in_queue, 0);
+                buf = hb_list_item(other_stream->in_queue, 0);
                 if (buf->s.start < pts)
                 {
-                    hb_list_rem(stream->in_queue, buf);
+                    hb_list_rem(other_stream->in_queue, buf);
                     hb_buffer_close(&buf);
                 }
                 else
                 {
+                    // Fill the partial frame gap left after dropping frames
+                    alignStream(common, other_stream, pts);
                     break;
                 }
             }
@@ -435,13 +446,16 @@ static void alignStream( sync_common_t * common, int stream_index,
     }
     else
     {
-        sync_stream_t * stream = &common->streams[stream_index];
-        hb_buffer_t * buf = NULL;
+        buf = NULL;
 
         // Insert a blank frame to fill the gap
         if (stream->type == SYNC_TYPE_AUDIO)
         {
-            buf = CreateSilenceBuf(stream, gap, pts);
+            // Can't add silence padding to passthru streams
+            if (!(stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG))
+            {
+                buf = CreateSilenceBuf(stream, gap, pts);
+            }
         }
         else if (stream->type == SYNC_TYPE_VIDEO)
         {
@@ -565,19 +579,8 @@ static void computeInitialTS( sync_common_t * common,
         {
             for (ii = 0; ii < common->stream_count; ii++)
             {
-                sync_stream_t * stream = &common->streams[ii];
-
-                if (hb_list_count(stream->in_queue) <= 0 ||
-                    stream->type == SYNC_TYPE_SUBTITLE)
-                {
-                    continue;
-                }
-
-                buf = hb_list_item(stream->in_queue, 0);
-                int64_t gap = buf->s.start - first_pts;
-
                 // Fill the gap (or drop frames for passthru audio)
-                alignStream(common, ii, first_pts, gap);
+                alignStream(common, &common->streams[ii], first_pts);
             }
         }
     }
