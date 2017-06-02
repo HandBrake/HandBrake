@@ -1,4 +1,5 @@
     {
+        "AlignAVStart": false,
         "AudioCopyMask": [
             "copy:aac",
             "copy:ac3",
