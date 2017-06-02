@@ -181,7 +181,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     if (hb_validate_filter_preset(filter_id, self.deinterlacePreset.UTF8String, NULL, NULL))
     {
-        _deinterlacePreset = @"default";
+        self.deinterlacePreset = @"default";
     }
 }
 
@@ -326,7 +326,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     if (hb_validate_filter_preset(filter_id, self.sharpenPreset.UTF8String, NULL, NULL))
     {
-        _sharpenPreset = @"medium";
+        self.sharpenPreset = @"medium";
     }
 }
 
@@ -358,7 +358,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     if (hb_validate_filter_preset(filter_id, self.sharpenPreset.UTF8String, self.sharpenTune.UTF8String, NULL))
     {
-        _sharpenTune = @"none";
+        self.sharpenTune = @"none";
     }
 }
 
