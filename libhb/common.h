@@ -1222,15 +1222,15 @@ struct hb_filter_object_s
     hb_dict_t           * settings;
 
 #ifdef __LIBHB__
-    int                (* init)     ( hb_filter_object_t *, hb_filter_init_t * );
+    int                (* init)       ( hb_filter_object_t *, hb_filter_init_t * );
     int                (* init_thread)( hb_filter_object_t *, int );
-    int                (* post_init)( hb_filter_object_t *, hb_job_t * );
-    int                (* work)     ( hb_filter_object_t *,
-                                      hb_buffer_t **, hb_buffer_t ** );
+    int                (* post_init)  ( hb_filter_object_t *, hb_job_t * );
+    int                (* work)       ( hb_filter_object_t *,
+                                        hb_buffer_t **, hb_buffer_t ** );
     int                (* work_thread)( hb_filter_object_t *,
-                                      hb_buffer_t **, hb_buffer_t **, int );
-    void               (* close)    ( hb_filter_object_t * );
-    hb_filter_info_t * (* info)     ( hb_filter_object_t * );
+                                        hb_buffer_t **, hb_buffer_t **, int );
+    void               (* close)      ( hb_filter_object_t * );
+    hb_filter_info_t * (* info)       ( hb_filter_object_t * );
 
     const char          * settings_template;
 

@@ -34,8 +34,8 @@ struct hb_filter_private_s
 
 static int mt_frame_init(hb_filter_object_t *filter, hb_filter_init_t *init);
 static int mt_frame_work(hb_filter_object_t *filter,
-                           hb_buffer_t **buf_in,
-                           hb_buffer_t **buf_out);
+                         hb_buffer_t **buf_in,
+                         hb_buffer_t **buf_out);
 static void mt_frame_close(hb_filter_object_t *filter);
 
 static void mt_frame_filter_thread(void *thread_args_v);
