@@ -1014,7 +1014,8 @@ update_title_duration(signal_user_data_t *ud)
 
 void ghb_show_container_options(signal_user_data_t *ud)
 {
-    GtkWidget *w2, *w3;
+    GtkWidget *w1, *w2, *w3;
+    w1 = GHB_WIDGET(ud->builder, "AlignAVStart");
     w2 = GHB_WIDGET(ud->builder, "Mp4HttpOptimize");
     w3 = GHB_WIDGET(ud->builder, "Mp4iPodCompatible");
 
@@ -1026,6 +1027,7 @@ void ghb_show_container_options(signal_user_data_t *ud)
 
     gint enc = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
 
+    gtk_widget_set_visible(w1, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w2, (mux->format & HB_MUX_MASK_MP4));
     gtk_widget_set_visible(w3, (mux->format & HB_MUX_MASK_MP4) &&
                                (enc == HB_VCODEC_X264_8BIT));
@@ -1648,9 +1650,15 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     g_debug("container_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
-    const char * mux = ghb_dict_get_string(ud->settings, "FileFormat");
+    const char * mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
-    ghb_dict_set_string(dest_dict, "Mux", mux);
+    ghb_dict_set_string(dest_dict, "Mux", mux_id);
+
+    const hb_container_t *mux = ghb_lookup_container_by_name(mux_id);
+    if (!(mux->format & HB_MUX_MASK_MP4))
+    {
+        ghb_ui_update(ud, "AlignAVStart", ghb_boolean_value(FALSE));
+    }
 
     ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);

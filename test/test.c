@@ -58,6 +58,7 @@
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
+static int     align_av_start      = -1;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
 static char *  output              = NULL;
@@ -2053,6 +2054,8 @@ static int ParseOptions( int argc, char ** argv )
             { "angle",       required_argument, NULL,    ANGLE },
             { "markers",     optional_argument, NULL,    'm' },
             { "no-markers",  no_argument,       &chapter_markers, 0 },
+            { "align-av",    no_argument,       &align_av_start, 1 },
+            { "no-align-av", no_argument,       &align_av_start, 0 },
             { "audio-lang-list", required_argument, NULL, AUDIO_LANG_LIST },
             { "all-audio",   no_argument,       &audio_all, 1 },
             { "first-audio", no_argument,       &audio_all, 0 },
@@ -3273,6 +3276,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (chapter_markers != -1)
     {
         hb_dict_set(preset, "ChapterMarkers", hb_value_bool(chapter_markers));
+    }
+    if (align_av_start != -1)
+    {
+        hb_dict_set(preset, "AlignAVStart", hb_value_bool(align_av_start));
     }
     hb_value_array_t *subtitle_lang_array;
     subtitle_lang_array = hb_dict_get(preset, "SubtitleLanguageList");
