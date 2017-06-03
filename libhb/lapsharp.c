@@ -19,37 +19,41 @@
 typedef struct
 {
     double strength;  // strength
-    int    kernel;    // which kernel to use; lapsharp_kernels[kernel]
+    int    kernel;    // which kernel to use; kernels[kernel]
 } lapsharp_plane_context_t;
 
 typedef struct {
     const int   *mem;
-    const double coef;
     const int    size;
-} lapsharp_kernel_t;
+    const double coef;
+} kernel_t;
 
 // 4-neighbor Laplacian kernel (lap)
 // Sharpens vertical and horizontal edges, less effective on diagonals
-static const int lapsharp_kernel_lap[] =
+static const int    kernel_lap[] =
 {
  0, -1,  0,
 -1,  5, -1,
  0, -1,  0
 };
+static const int    kernel_lap_size = 3;
+static const double kernel_lap_coef = 1.0 / 1;
 
 // Isotropic Laplacian kernel (isolap)
 // Minimial directionality, sharpens all edges similarly
-static const int lapsharp_kernel_isolap[] =
+static const int    kernel_isolap[] =
 {
 -1, -4, -1,
 -4, 25, -4,
 -1, -4, -1
 };
+static const int    kernel_isolap_size = 3;
+static const double kernel_isolap_coef = 1.0 / 5;
 
 // Laplacian of Gaussian kernel (log)
 // Slight noise and grain rejection
 // σ ~= 1
-static const int lapsharp_kernel_log[] =
+static const int    kernel_log[] =
 {
  0,  0, -1,  0,  0,
  0, -1, -2, -1,  0,
@@ -57,11 +61,13 @@ static const int lapsharp_kernel_log[] =
  0, -1, -2, -1,  0,
  0,  0, -1,  0,  0
 };
+static const int    kernel_log_size = 5;
+static const double kernel_log_coef = 1.0 / 5;
 
 // Isotropic Laplacian of Gaussian kernel (isolog)
 // Minimial directionality, plus noise and grain rejection
 // σ ~= 1.2
-static const int lapsharp_kernel_isolog[] =
+static const int    kernel_isolog[] =
 {
  0, -1, -1, -1,  0,
 -1, -3, -4, -3, -1,
@@ -69,13 +75,15 @@ static const int lapsharp_kernel_isolog[] =
 -1, -3, -4, -3, -1,
  0, -1, -1, -1,  0
 };
+static const int    kernel_isolog_size = 5;
+static const double kernel_isolog_coef = 1.0 / 15;
 
-static lapsharp_kernel_t lapsharp_kernels[] =
+static kernel_t kernels[] =
 {
-    { lapsharp_kernel_lap,    (1.0 /  1), 3 },
-    { lapsharp_kernel_isolap, (1.0 /  5), 3 },
-    { lapsharp_kernel_log,    (1.0 /  5), 5 },
-    { lapsharp_kernel_isolog, (1.0 / 15), 5 }
+    { kernel_lap,    kernel_lap_size,    kernel_lap_coef },
+    { kernel_isolap, kernel_isolap_size, kernel_isolap_coef },
+    { kernel_log,    kernel_log_size,    kernel_log_coef },
+    { kernel_isolog, kernel_isolog_size, kernel_isolog_coef }
 };
 
 struct hb_filter_private_s
@@ -116,7 +124,7 @@ static void hb_lapsharp(const uint8_t *src,
                         const int stride,
                         lapsharp_plane_context_t * ctx)
 {
-    const lapsharp_kernel_t *kernel = &lapsharp_kernels[ctx->kernel];
+    const kernel_t *kernel = &kernels[ctx->kernel];
 
     // Sharpen using selected kernel
     const int offset_min    = -((kernel->size - 1) / 2);
