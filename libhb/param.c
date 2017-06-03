@@ -85,11 +85,11 @@ static hb_filter_param_t unsharp_presets[] =
 static hb_filter_param_t unsharp_tunes[] =
 {
     { 0, "None",          "none",         NULL              },
-    { 1, "Fine",          "fine",         NULL              },
-    { 2, "Medium-Fine",   "mediumfine",   NULL              },
+    { 1, "Ultrafine",     "ultrafine",    NULL              },
+    { 2, "Fine",          "fine",         NULL              },
     { 3, "Medium",        "medium",       NULL              },
-    { 4, "Medium-Coarse", "mediumcoarse", NULL              },
-    { 5, "Coarse",        "coarse",       NULL              },
+    { 4, "Coarse",        "coarse",       NULL              },
+    { 5, "Very Coarse",   "verycoarse",   NULL              },
     { 0, NULL,            NULL,           NULL              }
 };
 
@@ -507,7 +507,7 @@ static hb_dict_t * generate_unsharp_settings(const char *preset,
                 strength[0] = strength[1] = 1.2;
             }
         }
-        else if (!strcasecmp(tune, "fine"))
+        else if (!strcasecmp(tune, "ultrafine"))
         {
             strength[0]     = 0.4; strength[1] = 0.25;
             size[0]         =      size[1]     = 3;
@@ -532,7 +532,7 @@ static hb_dict_t * generate_unsharp_settings(const char *preset,
                 strength[0] = 1.5;  strength[1] = 0.9;
             }
         }
-        else if (!strcasecmp(tune, "mediumfine"))
+        else if (!strcasecmp(tune, "fine"))
         {
             strength[0]     = 0.275; strength[1] = 0.165;
             size[0]         = 7;     size[1]     = 5;
@@ -582,7 +582,7 @@ static hb_dict_t * generate_unsharp_settings(const char *preset,
                 strength[0] = 1.35;   strength[1] = 0.9;
             }
         }
-        else if (!strcasecmp(tune, "mediumcoarse"))
+        else if (!strcasecmp(tune, "coarse"))
         {
             strength[0]     = 0.275; strength[1] = 0.165;
             size[0]         = 11;    size[1]     = 7;
@@ -607,7 +607,7 @@ static hb_dict_t * generate_unsharp_settings(const char *preset,
                 strength[0] = 1.35;   strength[1] = 0.9;
             }
         }
-        else if (!strcasecmp(tune, "coarse"))
+        else if (!strcasecmp(tune, "verycoarse"))
         {
             strength[0]     = 0.275; strength[1] = 0.165;
             size[0]         = 13;    size[1]     = 9;

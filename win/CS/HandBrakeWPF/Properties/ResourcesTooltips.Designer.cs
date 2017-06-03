@@ -292,7 +292,7 @@ namespace HandBrakeWPF.Properties {
         ///
         ///None uses the default preset settings.
         ///
-        ///Unsharp can be tuned for Fine, Medium-Fine, Medium, Medium-Coarse, or Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+        ///Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
         ///
         ///Lapsharp&apos;s Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharp [rest of string was truncated]&quot;;.
         /// </summary>
