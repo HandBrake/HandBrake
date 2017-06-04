@@ -30,29 +30,28 @@ typedef struct {
 
 // 4-neighbor Laplacian kernel (lap)
 // Sharpens vertical and horizontal edges, less effective on diagonals
+// size = 3, coef = 1.0
 static const int    kernel_lap[] =
 {
  0, -1,  0,
 -1,  5, -1,
  0, -1,  0
 };
-static const int    kernel_lap_size = 3;
-static const double kernel_lap_coef = 1.0 / 1;
 
 // Isotropic Laplacian kernel (isolap)
 // Minimial directionality, sharpens all edges similarly
+// size = 3, coef = 1.0 / 5
 static const int    kernel_isolap[] =
 {
 -1, -4, -1,
 -4, 25, -4,
 -1, -4, -1
 };
-static const int    kernel_isolap_size = 3;
-static const double kernel_isolap_coef = 1.0 / 5;
 
 // Laplacian of Gaussian kernel (log)
 // Slight noise and grain rejection
 // σ ~= 1
+// size = 5, coef = 1.0 / 5
 static const int    kernel_log[] =
 {
  0,  0, -1,  0,  0,
@@ -61,12 +60,11 @@ static const int    kernel_log[] =
  0, -1, -2, -1,  0,
  0,  0, -1,  0,  0
 };
-static const int    kernel_log_size = 5;
-static const double kernel_log_coef = 1.0 / 5;
 
 // Isotropic Laplacian of Gaussian kernel (isolog)
 // Minimial directionality, plus noise and grain rejection
 // σ ~= 1.2
+// size = 5, coef = 1.0 / 15
 static const int    kernel_isolog[] =
 {
  0, -1, -1, -1,  0,
@@ -75,15 +73,13 @@ static const int    kernel_isolog[] =
 -1, -3, -4, -3, -1,
  0, -1, -1, -1,  0
 };
-static const int    kernel_isolog_size = 5;
-static const double kernel_isolog_coef = 1.0 / 15;
 
 static kernel_t kernels[] =
 {
-    { kernel_lap,    kernel_lap_size,    kernel_lap_coef },
-    { kernel_isolap, kernel_isolap_size, kernel_isolap_coef },
-    { kernel_log,    kernel_log_size,    kernel_log_coef },
-    { kernel_isolog, kernel_isolog_size, kernel_isolog_coef }
+    { kernel_lap,    3, 1.0      },
+    { kernel_isolap, 3, 1.0 /  5 },
+    { kernel_log,    5, 1.0 /  5 },
+    { kernel_isolog, 5, 1.0 / 15 }
 };
 
 struct hb_filter_private_s
