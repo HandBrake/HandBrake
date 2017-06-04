@@ -1505,10 +1505,8 @@ This is often the feature title of a DVD.</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">Aligns the initial timestamps of all audio and video streams by
-inserting blank frames or dropping frames. This is provided as a
-work-around for players that do not honor MP4 edit lists. When
-MP4 edit lists are not properly implemented by a player, loss of
-A/V sync can occur.</property>
+inserting blank frames or dropping frames. May improve audio/video
+sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
