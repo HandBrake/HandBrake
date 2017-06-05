@@ -359,7 +359,7 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     // dts problems lead to problems with frame duration.
     double             frame_dur, next_pts, duration;
     hb_buffer_list_t   list;
-    hb_buffer_t      * buf;
+    hb_buffer_t      * buf = NULL;
 
     hb_buffer_list_clear(&list);
     duration = dur;
@@ -368,32 +368,38 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     frame_dur = 90000. * stream->common->job->title->vrate.den /
                          stream->common->job->title->vrate.num;
 
-    buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
-                               stream->common->job->title->geometry.width,
-                               stream->common->job->title->geometry.height);
-    memset(buf->plane[0].data, 0x00, buf->plane[0].size);
-    memset(buf->plane[1].data, 0x80, buf->plane[1].size);
-    memset(buf->plane[2].data, 0x80, buf->plane[2].size);
+    // Only create black buffers of frame_dur or longer
     while (duration >= frame_dur)
     {
+        if (buf == NULL)
+        {
+            buf = hb_frame_buffer_init(AV_PIX_FMT_YUV420P,
+                                   stream->common->job->title->geometry.width,
+                                   stream->common->job->title->geometry.height);
+            memset(buf->plane[0].data, 0x00, buf->plane[0].size);
+            memset(buf->plane[1].data, 0x80, buf->plane[1].size);
+            memset(buf->plane[2].data, 0x80, buf->plane[2].size);
+        }
+        else
+        {
+            buf = hb_buffer_dup(buf);
+        }
         buf->s.start     = next_pts;
         next_pts        += frame_dur;
         buf->s.stop      = next_pts;
         buf->s.duration  = frame_dur;
         duration        -= frame_dur;
         hb_buffer_list_append(&list, buf);
-        if (duration > 0)
-        {
-            buf = hb_buffer_dup(buf);
-        }
     }
-    if (duration > 0)
+    if (buf != NULL)
     {
-        buf->s.start     = next_pts;
-        next_pts        += duration;
-        buf->s.stop      = next_pts;
-        buf->s.duration  = duration;
-        hb_buffer_list_append(&list, buf);
+        if (buf->s.stop < pts + dur)
+        {
+            // Extend the duration of the last black buffer to fill
+            // the remaining gap.
+            buf->s.duration += pts + dur - buf->s.stop;
+            buf->s.stop = pts + dur;
+        }
     }
 
     return hb_buffer_list_clear(&list);
@@ -446,7 +452,7 @@ static void alignStream( sync_common_t * common, sync_stream_t * stream,
     }
     else
     {
-        buf = NULL;
+        hb_buffer_t * blank_buf = NULL;
 
         // Insert a blank frame to fill the gap
         if (stream->type == SYNC_TYPE_AUDIO)
@@ -454,23 +460,29 @@ static void alignStream( sync_common_t * common, sync_stream_t * stream,
             // Can't add silence padding to passthru streams
             if (!(stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG))
             {
-                buf = CreateSilenceBuf(stream, gap, pts);
+                blank_buf = CreateSilenceBuf(stream, gap, pts);
             }
         }
         else if (stream->type == SYNC_TYPE_VIDEO)
         {
-            buf = CreateBlackBuf(stream, gap, pts);
+            blank_buf = CreateBlackBuf(stream, gap, pts);
         }
-        if (buf != NULL)
+
+        int64_t last_stop = pts;
+        hb_buffer_t * next;
+        int           pos;
+        for (pos = 0; blank_buf != NULL; blank_buf = next, pos++)
         {
-            hb_buffer_t * next;
-            int           pos;
-            for (pos = 0; buf != NULL; buf = next, pos++)
-            {
-                next = buf->next;
-                buf->next = NULL;
-                hb_list_insert(stream->in_queue, pos, buf);
-            }
+            last_stop = blank_buf->s.stop;
+            next = blank_buf->next;
+            blank_buf->next = NULL;
+            hb_list_insert(stream->in_queue, pos, blank_buf);
+        }
+        if (stream->type == SYNC_TYPE_VIDEO && last_stop < buf->s.start)
+        {
+            // Extend the duration of the first frame to fill the remaining gap.
+            buf->s.duration += buf->s.start - last_stop;
+            buf->s.start = last_stop;
         }
     }
 }
