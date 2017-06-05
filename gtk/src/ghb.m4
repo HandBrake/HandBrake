@@ -280,7 +280,7 @@ conjunction with the "Forced" option.</property>
     <property name="page_increment">16</property>
   </object>
   <object class="GtkAdjustment" id="adjustment3">
-    <property name="upper">20000</property>
+    <property name="upper">1000000</property>
     <property name="step_increment">10</property>
     <property name="page_increment">100</property>
   </object>
