@@ -429,6 +429,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
+                    if (audioTrack.AudioEncoder == "ca_aac")
+                    {
+                        audioTrack.AudioEncoder = "av_aac"; // No Core Audio support on windows.
+                    }
+
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
                     track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
 

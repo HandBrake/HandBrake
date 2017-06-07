@@ -832,7 +832,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This preset appears to already exist. Would you like to overwrite it?.
+        ///   Looks up a localized string similar to The preset &quot;{0}&quot; already exists. Would you like to overwrite it?.
         /// </summary>
         public static string Main_PresetOverwriteWarning {
             get {

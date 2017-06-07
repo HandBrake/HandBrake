@@ -32,6 +32,11 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         public string PresetName { get; set; }
 
         /// <summary>
+        /// Description for the preset group.
+        /// </summary>
+        public string PresetDescription { get; set; }
+
+        /// <summary>
         /// Gets or sets the type.
         /// </summary>
         public int Type { get; set; }

@@ -43,6 +43,8 @@ namespace HandBrakeWPF.Services.Presets
     /// </summary>
     public class PresetService : IPresetService
     {
+        // TODO Strip out the error handling from this service and let upstream UI layer handle it.
+
         #region Private Variables
 
         public const int ForcePresetReset = 3;
@@ -195,49 +197,29 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     foreach (var objectPreset in container.PresetList)
                     {
-                        HBPreset hbPreset = JsonConvert.DeserializeObject<HBPreset>(objectPreset.ToString());
-
-                        Preset preset = null;
-                        try
+                        PresetCategory category = JsonConvert.DeserializeObject<PresetCategory>(objectPreset.ToString());
+                        if (category != null && category.ChildrenArray.Count > 0)
                         {
-                            preset = JsonPresetFactory.ImportPreset(hbPreset);
-                            preset.Category = UserPresetCatgoryName; // TODO can we get this from the preset?
-
-                            // IF we are using Source Max, Set the Max Width / Height values.
-                            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                            foreach (HBPreset hbPreset in category.ChildrenArray)
                             {
-                                preset.Task.MaxWidth = preset.Task.Height;
-                                preset.Task.MaxHeight = preset.Task.Width;
-                            }
-                        }
-                        catch (Exception exc)
-                        {
-                            this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, exc);
-                        }
-
-                        if (preset == null)
-                        {
-                            this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
-                            return;
-                        }
-
-                        if (this.CheckIfPresetExists(preset.Name))
-                        {
-                            if (!this.CanUpdatePreset(preset.Name))
-                            {
-                                MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                                return;
-                            }
-
-                            MessageBoxResult result = MessageBox.Show(Resources.Main_PresetOverwriteWarning, Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                            if (result == MessageBoxResult.Yes)
-                            {
-                                this.Update(preset);
+                                Preset preset = this.ConvertHbPreset(hbPreset);
+                                if (preset != null)
+                                {
+                                    this.AddOrUpdateImportedPreset(preset);
+                                }
                             }
                         }
                         else
                         {
-                            this.Add(preset, false);
+                            HBPreset hbPreset = JsonConvert.DeserializeObject<HBPreset>(objectPreset.ToString());
+                            if (hbPreset != null)
+                            {
+                                Preset preset = this.ConvertHbPreset(hbPreset);
+                                if (preset != null)
+                                {
+                                    this.AddOrUpdateImportedPreset(preset);
+                                }
+                            }
                         }
                     }
                 }
@@ -868,6 +850,51 @@ namespace HandBrakeWPF.Services.Presets
             {
                 Debug.WriteLine(exc);
                 throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occured.", exc);
+            }
+        }
+
+        private Preset ConvertHbPreset(HBPreset hbPreset)
+        {
+            Preset preset = null;
+
+            preset = JsonPresetFactory.ImportPreset(hbPreset);
+            preset.Category = UserPresetCatgoryName; // TODO can we get this from the preset?
+
+            // IF we are using Source Max, Set the Max Width / Height values.
+            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+            {
+                preset.Task.MaxWidth = preset.Task.Height;
+                preset.Task.MaxHeight = preset.Task.Width;
+            }
+
+            return preset;
+        }
+
+        private void AddOrUpdateImportedPreset(Preset preset)
+        {
+            if (preset == null)
+            {
+                this.errorService.ShowError(Resources.Main_PresetImportFailed, Resources.Main_PresetImportFailedSolution, string.Empty);
+                return;
+            }
+
+            if (this.CheckIfPresetExists(preset.Name))
+            {
+                if (!this.CanUpdatePreset(preset.Name))
+                {
+                    MessageBox.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                MessageBoxResult result = MessageBox.Show(string.Format(Resources.Main_PresetOverwriteWarning, preset.Name), Resources.Overwrite, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.Update(preset);
+                }
+            }
+            else
+            {
+                this.Add(preset, false);
             }
         }
 

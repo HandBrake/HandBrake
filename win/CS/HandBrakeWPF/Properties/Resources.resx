@@ -378,7 +378,7 @@ In order to use the QuickSync encoder, you must:
     <value>You can not import a preset with the same name as a built-in preset.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>This preset appears to already exist. Would you like to overwrite it?</value>
+    <value>The preset "{0}" already exists. Would you like to overwrite it?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
     <value>Presets</value>
