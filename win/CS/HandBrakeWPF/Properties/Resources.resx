@@ -419,7 +419,7 @@ The previous user_presets.xml file was backed up.</value>
     <value>You must first scan a source and setup your job before starting an encode. Click the 'Source' button on the toolbar to continue.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Please select a preset.</value>
+    <value>Please select make sure you have selected one of your own presets. Please note that you cannot export built-in presets.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
     <value>Please select a preset to update.</value>

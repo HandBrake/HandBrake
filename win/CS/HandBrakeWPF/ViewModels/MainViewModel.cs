@@ -2031,17 +2031,18 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            SaveFileDialog savefiledialog = new SaveFileDialog
+            if (this.selectedPreset != null && !this.selectedPreset.IsBuildIn)
             {
-                Filter = "json|*.json", 
-                CheckPathExists = true, 
-                AddExtension = true, 
-                DefaultExt = ".json", 
-                OverwritePrompt = true, 
-                FilterIndex = 0
-            };
-            if (this.selectedPreset != null)
-            {
+                SaveFileDialog savefiledialog = new SaveFileDialog
+                                                {
+                                                    Filter = "json|*.json",
+                                                    CheckPathExists = true,
+                                                    AddExtension = true,
+                                                    DefaultExt = ".json",
+                                                    OverwritePrompt = true,
+                                                    FilterIndex = 0
+                                                };
+
                 savefiledialog.ShowDialog();
                 string filename = savefiledialog.FileName;
 

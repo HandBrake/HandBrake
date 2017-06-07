@@ -1001,7 +1001,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select a preset..
+        ///   Looks up a localized string similar to Please select make sure you have selected one of your own presets. Please note that you cannot export built-in presets..
         /// </summary>
         public static string Main_SelectPreset {
             get {
