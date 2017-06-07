@@ -321,9 +321,6 @@ In order to use the QuickSync encoder, you must:
 - Have the HD Graphics enabled.
 - On older versions of windows before 8, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required.</value>
   </data>
-  <data name="Video_ScalingModes" xml:space="preserve">
-    <value>Requires a graphics card that supports OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use. Performance gain up to 5%. Minor decrease in quality in some cases.</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>

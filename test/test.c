@@ -1242,7 +1242,6 @@ static void ShowHelp()
 "   --queue-import-file <filename>\n"
 "                           Import an encode queue file created by the GUI\n"
 "       --no-dvdnav         Do not use dvdnav for reading DVDs\n"
-"       --no-opencl         Disable use of OpenCL\n"
 "\n"
 "\n"
 "Source Options ---------------------------------------------------------------\n"
@@ -1292,7 +1291,6 @@ static void ShowHelp()
 "       --no-optimize       Disable preset 'optimize'\n"
 "   -I, --ipod-atom         Add iPod 5G compatibility atom to MP4 container\n"
 "       --no-ipod-atom      Disable iPod 5G atom\n"
-"   -P, --use-opencl        Use OpenCL where applicable\n"
 "\n"
 "\n"
 "Video Options ----------------------------------------------------------------\n"
@@ -2039,7 +2037,6 @@ static int ParseOptions( int argc, char ** argv )
             { "describe",    no_argument,       NULL,    DESCRIBE },
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
-            { "no-opencl",   no_argument,       &use_opencl, 0 },
 
 #ifdef USE_QSV
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
@@ -2056,7 +2053,6 @@ static int ParseOptions( int argc, char ** argv )
             { "no-optimize", no_argument,       &mp4_optimize, 0 },
             { "ipod-atom",   no_argument,       NULL,        'I' },
             { "no-ipod-atom",no_argument,       &ipod_atom,    0 },
-            { "use-opencl",  no_argument,       NULL,        'P' },
 
             { "title",       required_argument, NULL,    't' },
             { "min-duration",required_argument, NULL,    MIN_DURATION },
@@ -2304,9 +2300,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'I':
                 ipod_atom = 1;
-                break;
-            case 'P':
-                use_opencl = 1;
                 break;
             case 't':
                 titleindex = atoi( optarg );

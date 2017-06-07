@@ -1925,15 +1925,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requires a graphics card that supports OpenCL 1.1 or later. It will fallback to Lanczos software scaling when it is not available for use. Performance gain up to 5%. Minor decrease in quality in some cases..
-        /// </summary>
-        public static string Video_ScalingModes {
-            get {
-                return ResourceManager.GetString("Video_ScalingModes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Reduce decoder CPU usage.
         ///
         ///Set this if your device is struggling to play the output. (i.e. dropped frames).

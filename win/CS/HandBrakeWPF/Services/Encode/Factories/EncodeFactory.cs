@@ -302,8 +302,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Turbo = job.TurboFirstPass;
             }
 
-            video.OpenCL = configuration.ScalingMode == VideoScaler.BicubicCl;
-
             video.QSV.Decode = SystemInfo.IsQsvAvailable && !configuration.DisableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.

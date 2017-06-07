@@ -261,7 +261,7 @@ namespace HandBrakeWPF.Services.Scan
                 HandBrakeUtils.SetDvdNav(!configuraiton.IsDvdNavDisabled);
 
                 this.ServiceLogMessage("Starting Scan ...");
-                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0, configuraiton.ScalingMode == VideoScaler.BicubicCl);
+                this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
 
                 if (this.ScanStarted != null)
                     this.ScanStarted(this, System.EventArgs.Empty);

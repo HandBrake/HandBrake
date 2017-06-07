@@ -19,9 +19,5 @@ namespace HandBrake.ApplicationServices.Model
         [DisplayName("Lanczos (default)")]
         [ShortName("swscale")]
         Lanczos = 0,
-
-        [DisplayName("Bicubic (OpenCL)")]
-        [ShortName("opencl")]
-        BicubicCl,
     }
 }

@@ -243,18 +243,13 @@
                                         Visibility="{Binding IsQuickSyncAvailable, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                         </StackPanel>
 
-                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Scaling}" FontSize="14" Margin="0,20,0,10" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Scaling}" FontSize="14" Margin="0,20,0,10" Visibility="Collapsed" />
 
-                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Visibility="Collapsed">
                             <TextBlock Text="{x:Static Properties:ResourcesUI.Options_Scaler}" Margin="0,0,5,0" VerticalAlignment="Center" />
                             <ComboBox  ItemsSource="{Binding ScalingOptions, Converter={StaticResource enumComboConverter}}" 
                                        SelectedItem="{Binding SelectedScalingMode, Converter={StaticResource enumComboConverter}}" 
                                        Width="120" VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Vertical" Margin="26,2,0,0" >
-                            <TextBlock Text="{x:Static Properties:Resources.Video_ScalingModes}" TextWrapping="Wrap"
-                                       Visibility="{Binding IsClScaling, Converter={StaticResource boolToVisConverter}}" />
                         </StackPanel>
 
                     </StackPanel>
