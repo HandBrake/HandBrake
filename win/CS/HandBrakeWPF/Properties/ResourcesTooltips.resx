@@ -430,11 +430,11 @@ Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c
 Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality and by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
 Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
 
-Lapsharp sharpens by using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Sharpen filter preset. Sets the strength of the filter.</value>

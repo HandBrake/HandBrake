@@ -1280,11 +1280,11 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="pYa-Af-F47">
                     <rect key="frame" x="521" y="70" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality and by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+                    <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
 Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
 
-Lapsharp sharpens by using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</string>
+Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="UuB-JC-pxu">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>

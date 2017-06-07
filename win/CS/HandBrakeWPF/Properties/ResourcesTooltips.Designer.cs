@@ -266,11 +266,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality and by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+        ///   Looks up a localized string similar to Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
         ///
         ///Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
         ///
-        ///Lapsharp sharpens by using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than [rest of string was truncated]&quot;;.
+        ///Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than [rest of string was truncated]&quot;;.
         /// </summary>
         public static string FilterView_Sharpen {
             get {
