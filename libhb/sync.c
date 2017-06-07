@@ -521,6 +521,9 @@ static void alignStreams( sync_common_t * common, int64_t pts )
             sync_stream_t * stream = &common->streams[ii];
 
             buf = hb_list_item(stream->in_queue, 0);
+
+            // P-to-P encoding will pass the start point in pts.
+            // Drop any buffers that are before the start point.
             while (buf != NULL && buf->s.start < pts)
             {
                 hb_list_rem(stream->in_queue, buf);
@@ -534,6 +537,11 @@ static void alignStreams( sync_common_t * common, int64_t pts )
             if (stream->type == SYNC_TYPE_AUDIO &&
                 stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG)
             {
+                // Find the largest initial pts of all passthru audio streams.
+                // We can not add silence to passthru audio streams.
+                // To align with a passthru audio stream, we must drop
+                // buffers from all other streams that are before
+                // the first buffer in the passthru audio stream.
                 audio_passthru = 1;
                 if (first_pts < buf->s.start)
                 {
@@ -542,6 +550,12 @@ static void alignStreams( sync_common_t * common, int64_t pts )
             }
             else if (!audio_passthru)
             {
+                // Find the smallest initial pts of all streams when
+                // there is *no* passthru audio.
+                // When there is no passthru audio stream, we insert
+                // silence or black buffers to fill any gaps between
+                // the start of any stream and the start of the stream
+                // with the smallest pts.
                 if (first_pts == AV_NOPTS_VALUE || first_pts > buf->s.start)
                 {
                     first_pts = buf->s.start;
