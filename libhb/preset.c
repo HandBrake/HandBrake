@@ -2877,39 +2877,51 @@ static void import_0_0_0(hb_value_t *preset)
     import_10_0_0(preset);
 }
 
+static int cmpVersion(int a_major, int a_minor, int a_micro,
+                      int b_major, int b_minor, int b_micro)
+{
+    if (a_major > b_major) return 1;
+    if (a_major < b_major) return -1;
+    if (a_minor > b_minor) return 1;
+    if (a_minor < b_minor) return -1;
+    if (a_micro > b_micro) return 1;
+    if (a_micro < b_micro) return -1;
+    return 0;
+}
+
 static int preset_import(hb_value_t *preset, int major, int minor, int micro)
 {
     int result = 0;
 
     if (!hb_value_get_bool(hb_dict_get(preset, "Folder")))
     {
-        if (major == 0 && minor == 0 && micro == 0)
+        if (cmpVersion(major, minor, micro, 0, 0, 0) <= 0)
         {
             // Convert legacy presets (before versioning introduced)
             import_0_0_0(preset);
             result = 1;
         }
-        else if (major == 10 && minor == 0 && micro == 0)
+        else if (cmpVersion(major, minor, micro, 10, 0, 0) <= 0)
         {
             import_10_0_0(preset);
             result = 1;
         }
-        else if (major == 11 && minor == 0 && micro == 0)
+        else if (cmpVersion(major, minor, micro, 11, 0, 0) <= 0)
         {
             import_11_0_0(preset);
             result = 1;
         }
-        else if (major == 11 && minor == 1 && micro == 0)
+        else if (cmpVersion(major, minor, micro, 11, 1, 0) <= 0)
         {
             import_11_1_0(preset);
             result = 1;
         }
-        else if (major == 12 && minor == 0 && micro == 0)
+        else if (cmpVersion(major, minor, micro, 12, 0, 0) <= 0)
         {
             import_12_0_0(preset);
             result = 1;
         }
-        else if (major == 20 && minor == 0 && micro == 0)
+        else if (cmpVersion(major, minor, micro, 20, 0, 0) <= 0)
         {
             import_20_0_0(preset);
             result = 1;
