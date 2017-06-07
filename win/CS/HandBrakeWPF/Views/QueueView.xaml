@@ -264,16 +264,18 @@
 
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="40" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <!--  Marker  -->
-                        <Image Grid.Column="0"
-                               Width="16"
-                               Height="16"
-                               Margin="10,0,10,0">
+                        <Image Grid.Column="0" Width="16" Height="16" SnapsToDevicePixels="True">
+
+                            <Image.LayoutTransform>
+                                <RotateTransform CenterX="8" CenterY="8" Angle="0"/>
+                            </Image.LayoutTransform>
+
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
@@ -282,6 +284,20 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
                                             <Setter Property="Source" Value="Images\Working0.png" />
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0:0:2" To="180" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)" RepeatBehavior="Forever" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(Image.LayoutTransform).(RotateTransform.Angle)"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
                                             <Setter Property="Source" Value="Images\Complete.png" />
@@ -407,3 +423,4 @@
 
     </Grid>
 </Window>
+
