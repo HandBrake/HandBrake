@@ -308,11 +308,11 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
         return NULL;
     }
     duration = dur;
-    frame_dur = (90000. * stream->audio.audio->config.out.samples_per_frame) /
+    frame_dur = (90000. * stream->audio.audio->config.in.samples_per_frame) /
                           stream->audio.audio->config.in.samplerate;
-    size = sizeof(float) * stream->audio.audio->config.out.samples_per_frame *
-           hb_mixdown_get_discrete_channel_count(
-                          stream->audio.audio->config.out.mixdown );
+    size = sizeof(float) * stream->audio.audio->config.in.samples_per_frame *
+           av_get_channel_layout_nb_channels(
+                          stream->audio.audio->config.in.channel_layout );
 
     hb_buffer_list_clear(&list);
     next_pts = pts;
@@ -331,8 +331,8 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
     {
         size = sizeof(float) *
                (duration * stream->audio.audio->config.in.samplerate / 90000) *
-               hb_mixdown_get_discrete_channel_count(
-                      stream->audio.audio->config.out.mixdown );
+                   av_get_channel_layout_nb_channels(
+                              stream->audio.audio->config.in.channel_layout );
         if (size > 0)
         {
             buf = hb_buffer_init(size);
@@ -403,6 +403,25 @@ static hb_buffer_t * CreateBlackBuf( sync_stream_t * stream,
     }
 
     return hb_buffer_list_clear(&list);
+}
+
+static void setNextPts( sync_common_t * common )
+{
+    int ii;
+
+    for (ii = 0; ii < common->stream_count; ii++)
+    {
+        sync_stream_t * stream = &common->streams[ii];
+        hb_buffer_t   * buf = hb_list_item(stream->in_queue, 0);
+        if (buf != NULL)
+        {
+            stream->next_pts = buf->s.start;
+        }
+        else
+        {
+            stream->next_pts = (int64_t)AV_NOPTS_VALUE;
+        }
+    }
 }
 
 static void alignStream( sync_common_t * common, sync_stream_t * stream,
@@ -487,6 +506,59 @@ static void alignStream( sync_common_t * common, sync_stream_t * stream,
     }
 }
 
+static void alignStreams( sync_common_t * common, int64_t pts )
+{
+    int           ii;
+    hb_buffer_t * buf;
+
+    if (common->job->align_av_start)
+    {
+        int64_t first_pts = AV_NOPTS_VALUE;
+        int     audio_passthru = 0;
+
+        for (ii = 0; ii < common->stream_count; ii++)
+        {
+            sync_stream_t * stream = &common->streams[ii];
+
+            buf = hb_list_item(stream->in_queue, 0);
+            while (buf != NULL && buf->s.start < pts)
+            {
+                hb_list_rem(stream->in_queue, buf);
+                hb_buffer_close(&buf);
+                buf = hb_list_item(stream->in_queue, 0);
+            }
+            if (buf == NULL)
+            {
+                continue;
+            }
+            if (stream->type == SYNC_TYPE_AUDIO &&
+                stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+            {
+                audio_passthru = 1;
+                if (first_pts < buf->s.start)
+                {
+                    first_pts = buf->s.start;
+                }
+            }
+            else if (!audio_passthru)
+            {
+                if (first_pts == AV_NOPTS_VALUE || first_pts > buf->s.start)
+                {
+                    first_pts = buf->s.start;
+                }
+            }
+        }
+        if (first_pts != AV_NOPTS_VALUE)
+        {
+            for (ii = 0; ii < common->stream_count; ii++)
+            {
+                // Fill the gap (or drop frames for passthru audio)
+                alignStream(common, &common->streams[ii], first_pts);
+            }
+        }
+    }
+}
+
 static void computeInitialTS( sync_common_t * common,
                               sync_stream_t * first_stream )
 {
@@ -555,47 +627,7 @@ static void computeInitialTS( sync_common_t * common,
             }
         }
     }
-    if (common->job->align_av_start)
-    {
-        int64_t first_pts = AV_NOPTS_VALUE;
-        int     audio_passthru = 0;
-
-        for (ii = 0; ii < common->stream_count; ii++)
-        {
-            sync_stream_t * stream = &common->streams[ii];
-
-            if (hb_list_count(stream->in_queue) <= 0)
-            {
-                continue;
-            }
-
-            buf = hb_list_item(stream->in_queue, 0);
-            if (stream->type == SYNC_TYPE_AUDIO &&
-                stream->audio.audio->config.out.codec & HB_ACODEC_PASS_FLAG)
-            {
-                audio_passthru = 1;
-                if (first_pts < buf->s.start)
-                {
-                    first_pts = buf->s.start;
-                }
-            }
-            else if (!audio_passthru)
-            {
-                if (first_pts == AV_NOPTS_VALUE || first_pts > buf->s.start)
-                {
-                    first_pts = buf->s.start;
-                }
-            }
-        }
-        if (first_pts != AV_NOPTS_VALUE)
-        {
-            for (ii = 0; ii < common->stream_count; ii++)
-            {
-                // Fill the gap (or drop frames for passthru audio)
-                alignStream(common, &common->streams[ii], first_pts);
-            }
-        }
-    }
+    alignStreams(common, AV_NOPTS_VALUE);
 }
 
 static void checkFirstPts( sync_common_t * common )
@@ -1561,6 +1593,7 @@ static void OutputBuffer( sync_common_t * common )
                 }
                 if (buf->s.start < common->start_pts)
                 {
+                    out_stream->next_pts = buf->s.start + buf->s.duration;
                     hb_list_rem(out_stream->in_queue, buf);
                     hb_buffer_close(&buf);
                 }
@@ -1570,7 +1603,18 @@ static void OutputBuffer( sync_common_t * common )
             // reset frame count to track number of frames after
             // the start position till the end of encode.
             out_stream->frame_count = 0;
+
             shiftTS(common, buf->s.start);
+            alignStreams(common, buf->s.start);
+            setNextPts(common);
+
+            buf = hb_list_item(out_stream->in_queue, 0);
+            if (buf == NULL)
+            {
+                // In case aligning timestamps causes all buffers in
+                // out_stream to be deleted...
+                continue;
+            }
         }
 
         // If pts_to_stop or frame_to_stop were specified, stop output
