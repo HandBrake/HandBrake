@@ -1039,6 +1039,12 @@ EOF
     riscv32:Linux:*:* | riscv64:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
 	exit ;;
+    ppc64le:Linux:*:*)
+	echo powerpc64le-unknown-linux-${LIBC}
+	exit ;;
+    ppcle:Linux:*:*)
+	echo powerpcle-unknown-linux-${LIBC}
+	exit ;;
     s390:Linux:*:* | s390x:Linux:*:*)
 	echo ${UNAME_MACHINE}-ibm-linux-${LIBC}
 	exit ;;
