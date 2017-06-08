@@ -38,7 +38,7 @@ namespace HandBrakeWPF
             AppDomain.CurrentDomain.UnhandledException +=
                 this.CurrentDomain_UnhandledException;
 
-            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(12000));
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
         }
 
         /// <summary>
