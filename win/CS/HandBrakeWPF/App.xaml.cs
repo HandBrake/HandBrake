@@ -13,6 +13,7 @@ namespace HandBrakeWPF
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Controls;
 
     using Caliburn.Micro;
 
@@ -36,6 +37,8 @@ namespace HandBrakeWPF
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException +=
                 this.CurrentDomain_UnhandledException;
+
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(12000));
         }
 
         /// <summary>
