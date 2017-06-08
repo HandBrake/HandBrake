@@ -10,7 +10,6 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "common.h"
-#include "opencl.h"
 
 struct hb_filter_private_s
 {
@@ -23,9 +22,6 @@ struct hb_filter_private_s
     int                 height_out;
     int                 crop[4];
     
-    /* OpenCL */
-    hb_oclscale_t      *os; //ocl scaler handler
-
     struct SwsContext * context;
 };
 
@@ -71,13 +67,6 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->height_in = init->geometry.height;
     pv->width_out = init->geometry.width - (init->crop[2] + init->crop[3]);
     pv->height_out = init->geometry.height - (init->crop[0] + init->crop[1]);
-
-    /* OpenCL */
-    if (pv->job->use_opencl && pv->job->title->opencl_support)
-    {
-        pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
-        memset( pv->os, 0, sizeof( hb_oclscale_t ) );
-    }
 
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
     hb_dict_extract_int(&pv->width_out, filter->settings, "width");
@@ -135,21 +124,6 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
         return;
     }
 
-    /* OpenCL */
-    if (pv->job->use_opencl && pv->job->title->opencl_support && pv->os)
-    {
-        if (hb_ocl != NULL)
-        {
-            HB_OCL_BUF_FREE(hb_ocl, pv->os->bicubic_x_weights);
-            HB_OCL_BUF_FREE(hb_ocl, pv->os->bicubic_y_weights);
-            if (pv->os->initialized == 1)
-            {
-                hb_ocl->clReleaseKernel(pv->os->m_kernel);
-            }
-        }
-        free(pv->os);
-    }
-
     if( pv->context )
     {
         sws_freeContext( pv->context );
@@ -159,7 +133,6 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
-/* OpenCL */
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     hb_buffer_t * out;
@@ -173,50 +146,39 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
     // correct place for cropped frame
     hb_picture_crop(crop_data, crop_stride, in, pv->crop[0], pv->crop[2]);
 
-    // Use bicubic OpenCL scaling when selected and when downsampling < 4:1;
-    if ((pv->job->use_opencl && pv->job->title->opencl_support) &&
-        (pv->width_out * 4 > pv->width_in) &&
-        (in->cl.buffer != NULL) && (out->cl.buffer != NULL))
+    if (pv->context   == NULL         ||
+        pv->width_in  != in->f.width  ||
+        pv->height_in != in->f.height ||
+        pv->pix_fmt   != in->f.fmt)
     {
-        /* OpenCL */
-        hb_ocl_scale(in, out, pv->crop, pv->os);
-    }
-    else
-    {
-        if (pv->context   == NULL         ||
-            pv->width_in  != in->f.width  ||
-            pv->height_in != in->f.height ||
-            pv->pix_fmt   != in->f.fmt)
+        // Something changed, need a new scaling context.
+        if (pv->context != NULL)
         {
-            // Something changed, need a new scaling context.
-            if (pv->context != NULL)
-            {
-                sws_freeContext(pv->context);
-            }
-            
-            pv->context = hb_sws_get_context(
-                                in->f.width  - (pv->crop[2] + pv->crop[3]),
-                                in->f.height - (pv->crop[0] + pv->crop[1]),
-                                in->f.fmt, out->f.width, out->f.height,
-                                out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND,
-                                hb_ff_get_colorspace(pv->job->title->color_matrix));
-            pv->width_in  = in->f.width;
-            pv->height_in = in->f.height;
-            pv->pix_fmt   = in->f.fmt;
+            sws_freeContext(pv->context);
         }
         
-        if (pv->context == NULL)
-        {
-            hb_buffer_close(&out);
-            return NULL;
-        }
-
-        // Scale crop into out according to the context set up above
-        sws_scale(pv->context,
-                  (const uint8_t* const*)crop_data, crop_stride,
-                  0, in->f.height - (pv->crop[0] + pv->crop[1]),
-                  out_data, out_stride);
+        pv->context = hb_sws_get_context(
+                            in->f.width  - (pv->crop[2] + pv->crop[3]),
+                            in->f.height - (pv->crop[0] + pv->crop[1]),
+                            in->f.fmt, out->f.width, out->f.height,
+                            out->f.fmt, SWS_LANCZOS|SWS_ACCURATE_RND,
+                            hb_ff_get_colorspace(pv->job->title->color_matrix));
+        pv->width_in  = in->f.width;
+        pv->height_in = in->f.height;
+        pv->pix_fmt   = in->f.fmt;
     }
+
+    if (pv->context == NULL)
+    {
+        hb_buffer_close(&out);
+        return NULL;
+    }
+
+    // Scale crop into out according to the context set up above
+    sws_scale(pv->context,
+              (const uint8_t* const*)crop_data, crop_stride,
+              0, in->f.height - (pv->crop[0] + pv->crop[1]),
+              out_data, out_stride);
 
     out->s = in->s;
     return out;

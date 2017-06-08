@@ -146,14 +146,6 @@ struct hb_buffer_s
     } qsv_details;
 #endif
 
-    /* OpenCL */
-    struct cl_data
-    {
-        cl_mem buffer;
-        cl_event last_event;
-        enum { HOST, DEVICE } buffer_location;
-    } cl;
-
     // libav may attach AV_PKT_DATA_PALETTE side data to some AVPackets
     // Store this data here when read and pass to decoder.
     hb_buffer_t * palette;

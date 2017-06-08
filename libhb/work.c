@@ -9,8 +9,6 @@
 
 #include "hb.h"
 #include "libavformat/avformat.h"
-#include "openclwrapper.h"
-#include "opencl.h"
 #include "decomb.h"
 
 #ifdef USE_QSV
@@ -1232,12 +1230,6 @@ static int sanitize_qsv( hb_job_t * job )
                         hb_dict_extract_int(&vpp_settings[5], filter->settings,
                                             "crop-right");
 
-                        // VPP crop/scale takes precedence over OpenCL scale too
-                        if (job->use_opencl)
-                        {
-                            hb_release_opencl_run_env();
-                            job->use_opencl = 0;
-                        }
                         hb_list_rem(job->list_filter, filter);
                         hb_filter_close(&filter);
                         break;
@@ -1373,28 +1365,6 @@ static void do_job(hb_job_t *job)
     job->list_work = hb_list_init();
     w = hb_get_work(job->h, WORK_READER);
     hb_list_add(job->list_work, w);
-
-    /*
-     * OpenCL
-     *
-     * Note: we delay hb_ocl_init until here, since they're no point it loading
-     * the library if we aren't going to use it. But we only call hb_ocl_close
-     * in hb_global_close, since un/reloading the library each run is wasteful.
-     */
-    if (job->use_opencl)
-    {
-        if (hb_ocl_init() || hb_init_opencl_run_env(0, NULL, "-I."))
-        {
-            hb_log("work: failed to initialize OpenCL environment, using fallback");
-            hb_release_opencl_run_env();
-            job->use_opencl = 0;
-        }
-    }
-    else
-    {
-        // we're not (re-)using OpenCL here, we can release the environment
-        hb_release_opencl_run_env();
-    }
 
     hb_log( "starting job" );
 
@@ -1847,11 +1817,6 @@ cleanup:
     }
 
     hb_buffer_pool_free();
-
-    if (job->use_opencl)
-    {
-        hb_release_opencl_run_env();
-    }
 
     hb_job_close(&job);
 }

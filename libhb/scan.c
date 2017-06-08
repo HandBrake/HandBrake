@@ -8,7 +8,6 @@
  */
 
 #include "hb.h"
-#include "opencl.h"
 #include "hbffmpeg.h"
 
 typedef struct
@@ -1013,13 +1012,6 @@ skip_preview:
 
         title->video_decode_support = vid_info.video_decode_support;
 
-        // TODO: check video dimensions
-        hb_handle_t *hb_handle = (hb_handle_t *)data->h;
-        if (hb_get_opencl_enabled(hb_handle))
-        {
-             title->opencl_support = !!hb_opencl_available();
-        }
-        
         // compute the aspect ratio based on the storage dimensions and PAR.
         hb_reduce(&title->dar.num, &title->dar.den,
                   title->geometry.par.num * title->geometry.width,

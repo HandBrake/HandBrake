@@ -626,7 +626,6 @@ struct hb_job_s
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
-    int use_opencl;
     PRIVATE int use_decomb;
     PRIVATE int use_detelecine;
 
@@ -1022,9 +1021,6 @@ struct hb_title_s
 #define         HBTF_NO_IDR (1 << 0)
 #define         HBTF_SCAN_COMPLETE (1 << 1)
 #define         HBTF_RAW_VIDEO (1 << 2)
-
-    // whether OpenCL scaling is supported for this source
-    int             opencl_support;
 };
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_state_s.cs when changing this struct

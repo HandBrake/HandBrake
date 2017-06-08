@@ -1681,15 +1681,6 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
                     hb_value_xform(value, HB_VALUE_TYPE_INT));
     }
 
-    if ((value = hb_dict_get(preset, "VideoScaler")) != NULL)
-    {
-        const char *s = hb_value_get_string(value);
-        if (!strcasecmp(s, "opencl"))
-        {
-            hb_dict_set(video_dict, "OpenCL", hb_value_bool(1));
-        }
-    }
-
     return 0;
 }
 
@@ -2219,6 +2210,11 @@ static void presets_clean(hb_value_t *presets, hb_value_t *template)
 void hb_presets_clean(hb_value_t *preset)
 {
     presets_clean(preset, hb_preset_template);
+}
+
+static void import_video_scaler_25_0_0(hb_value_t *preset)
+{
+    hb_dict_set(preset, "VideoScaler", hb_value_string("swscale"));
 }
 
 static void import_anamorphic_20_0_0(hb_value_t *preset)
@@ -2833,9 +2829,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_25_0_0(hb_value_t *preset)
+{
+    import_video_scaler_25_0_0(preset);
+}
+
 static void import_20_0_0(hb_value_t *preset)
 {
     import_anamorphic_20_0_0(preset);
+
+    import_25_0_0(preset);
 }
 
 static void import_12_0_0(hb_value_t *preset)
@@ -2929,6 +2932,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 20, 0, 0) <= 0)
         {
             import_20_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 25, 0, 0) <= 0)
+        {
+            import_25_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);

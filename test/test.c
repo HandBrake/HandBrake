@@ -33,7 +33,6 @@
 #include "hb.h"
 #include "lang.h"
 #include "parsecsv.h"
-#include "openclwrapper.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -177,7 +176,6 @@ static int      start_at_frame = 0;
 static int64_t  stop_at_pts    = 0;
 static int      stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
-static int      use_opencl         = -1;
 #ifdef USE_QSV
 static int      qsv_async_depth    = -1;
 static int      qsv_decode         = -1;
@@ -482,11 +480,6 @@ int main( int argc, char ** argv )
 
     hb_dvd_set_dvdnav( dvdnav );
     
-    if (use_opencl == 1)
-    {
-        hb_opencl_set_enable(h, use_opencl);
-    }
-
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
@@ -653,8 +646,6 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              (float)title->vrate.num / title->vrate.den );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
-
-    fprintf(stderr, "  + support opencl: %s\n", title->opencl_support ? "yes" : "no");
 
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
@@ -3820,11 +3811,6 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
     }
 #endif
-    if (use_opencl != -1)
-    {
-        hb_dict_set(preset, "VideoScaler",
-                    hb_value_string(use_opencl ? "opencl" : "swscale"));
-    }
     if (maxWidth > 0)
     {
         hb_dict_set(preset, "PictureWidth", hb_value_int(maxWidth));
