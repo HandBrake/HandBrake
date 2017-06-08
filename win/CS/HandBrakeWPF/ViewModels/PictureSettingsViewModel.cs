@@ -123,8 +123,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.PictureSettingsViewModel"/> class.
         /// </summary>
-        public PictureSettingsViewModel()
+        public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel)
         {
+            this.StaticPreviewViewModel = staticPreviewViewModel;
             this.sourceResolution = new Size(0, 0);
             this.Task = new EncodeTask();
             this.Init();
