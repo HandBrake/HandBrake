@@ -513,6 +513,25 @@ static int is_close_to( int val, int target, int thresh )
     return diff < thresh;
 }
 
+static hb_buffer_t * read_buf(hb_scan_t * data, hb_stream_t * stream)
+{
+    if (data->bd)
+    {
+        return hb_bd_read(data->bd);
+    }
+    else if (data->dvd)
+    {
+        return hb_dvd_read(data->dvd);
+    }
+    else if (stream)
+    {
+        return hb_stream_read(stream);
+    }
+
+    // This shouldn't happen
+    return NULL;
+}
+
 /***********************************************************************
  * DecodePreviews
  ***********************************************************************
@@ -674,64 +693,27 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         }
         frames = 0;
 
-        hb_buffer_t * vid_buf = NULL;
+        hb_buffer_t * vid_buf = NULL, * last_vid_buf = NULL;
 
         int packets = 0;
         vid_decoder->frame_count = 0;
         while (vid_decoder->frame_count < PREVIEW_READ_THRESH ||
               (!AllAudioOK(title) && packets < 10000))
         {
-            if (data->bd)
+            if ((buf = read_buf(data, stream)) == NULL)
             {
-                if( (buf = hb_bd_read( data->bd )) == NULL )
+                // If we reach EOF and no audio, don't continue looking for
+                // audio
+                abort_audio = 1;
+                if (vid_buf != NULL || last_vid_buf != NULL)
                 {
-                    // If we reach EOF and no audio, don't continue looking for
-                    // audio
-                    abort_audio = 1;
-                    if ( vid_buf )
-                    {
-                        break;
-                    }
-                    hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
-                    // If we reach EOF and no video, don't continue looking for
-                    // video
-                    abort = 1;
-                    goto skip_preview;
+                    break;
                 }
-            }
-            else if (data->dvd)
-            {
-                if( (buf = hb_dvd_read( data->dvd )) == NULL )
-                {
-                    abort_audio = 1;
-                    if ( vid_buf )
-                    {
-                        break;
-                    }
-                    hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
-                    abort = 1;
-                    goto skip_preview;
-                }
-            }
-            else if (stream)
-            {
-                if ( (buf = hb_stream_read(stream)) == NULL )
-                {
-                    abort_audio = 1;
-                    if ( vid_buf )
-                    {
-                        break;
-                    }
-                    hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
-                    abort = 1;
-                    goto skip_preview;
-                }
-            }
-            else
-            {
-                // Silence compiler warning
-                buf = NULL;
-                hb_error( "Error: This can't happen!" );
+                hb_log("Warning: Could not read data for preview %d, skipped",
+                       i + 1 );
+
+                // If we reach EOF and no video, don't continue looking for
+                // video
                 abort = 1;
                 goto skip_preview;
             }
@@ -795,7 +777,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                             frame_wait = 0;
                         if (frame_wait || cc_wait)
                         {
-                            hb_buffer_close(&vid_buf);
+                            hb_buffer_close(&last_vid_buf);
+                            last_vid_buf = vid_buf;
+                            vid_buf = NULL;
                             if (frame_wait) frame_wait--;
                             if (cc_wait) cc_wait--;
                         }
@@ -816,7 +800,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
         }
         hb_buffer_list_close(&list_es);
 
-        if( ! vid_buf )
+        if (vid_buf == NULL)
+        {
+            vid_buf = last_vid_buf;
+            last_vid_buf = NULL;
+        }
+        hb_buffer_close(&last_vid_buf);
+
+        if (vid_buf == NULL)
         {
             hb_log( "scan: could not get a decoded picture" );
             continue;
@@ -831,11 +822,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
              * Could not fill vid_info, don't continue and try to use vid_info
              * in this case.
              */
-            if (vid_buf)
-            {
-                hb_buffer_close( &vid_buf );
-            }
             hb_log( "scan: could not get a video information" );
+            hb_buffer_close( &vid_buf );
             continue;
         }
 
