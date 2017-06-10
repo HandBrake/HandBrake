@@ -1,0 +1,20 @@
+--- a/libavformat/movenc.c	2017-06-09 22:02:24.000000000 +0200
++++ b/libavformat/movenc.c	2016-10-16 23:10:02.000000000 +0200
+@@ -724,7 +724,7 @@
+ 
+     avio_wb32(pb, 0);
+     ffio_wfourcc(pb, "hvcC");
+-    ff_isom_write_hvcc(pb, track->vos_data, track->vos_len, 0);
++    ff_isom_write_hvcc(pb, track->vos_data, track->vos_len, 1);
+     return update_size(pb, pos);
+ }
+ 
+@@ -784,7 +784,7 @@
+         return 0;
+ 
+     if      (track->par->codec_id == AV_CODEC_ID_H264)      tag = MKTAG('a','v','c','1');
+-    else if (track->par->codec_id == AV_CODEC_ID_HEVC)      tag = MKTAG('h','e','v','1');
++    else if (track->par->codec_id == AV_CODEC_ID_HEVC)      tag = MKTAG('h','v','c','1');
+     else if (track->par->codec_id == AV_CODEC_ID_AC3)       tag = MKTAG('a','c','-','3');
+     else if (track->par->codec_id == AV_CODEC_ID_DIRAC)     tag = MKTAG('d','r','a','c');
+     else if (track->par->codec_id == AV_CODEC_ID_MOV_TEXT)  tag = MKTAG('t','x','3','g');
