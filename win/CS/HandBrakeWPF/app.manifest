@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="1.0.3.0" name="HandBrake.app"/>
+  <assemblyIdentity version="1.1.0.0" name="HandBrake.app"/>
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
@@ -27,8 +27,8 @@
            is designed to work with. Uncomment the appropriate elements and Windows will 
            automatically selected the most compatible environment. -->
 
-      <!-- Windows Vista -->
-      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}" />
+      <!-- Windows Vista 
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}" />-->
 
       <!-- Windows 7 -->
       <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}" />
