@@ -32,7 +32,6 @@ void          hb_register( hb_work_object_t * );
 void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose );
 void          hb_log_level_set(hb_handle_t *h, int level);
-void          hb_opencl_set_enable(hb_handle_t *h, int enable_opencl);
 
 /* hb_get_version() */
 const char  * hb_get_full_description();
@@ -48,8 +47,6 @@ int           hb_check_update( hb_handle_t * h, char ** version );
 
 char *        hb_dvd_name( char * path );
 void          hb_dvd_set_dvdnav( int enable );
-
-int           hb_get_opencl_enabled(hb_handle_t *h);
 
 /* hb_scan()
    Scan the specified path. Can be a DVD device, a VIDEO_TS folder or

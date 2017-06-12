@@ -8,7 +8,6 @@
  */
 
 #include "hb.h"
-#include "openclwrapper.h"
 #ifdef USE_QSV
 #include "qsv_libav.h"
 #endif
@@ -292,20 +291,7 @@ void hb_buffer_pool_free( void )
             if( b->data )
             {
                 freed += b->alloc;
-
-                if (b->cl.buffer != NULL)
-                {
-                    /* OpenCL */
-                    if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
-                    {
-                        hb_log("hb_buffer_pool_free: bad free: %p -> buffer %p map %p",
-                               b, b->cl.buffer, b->data);
-                    }
-                }
-                else
-                {
-                    free(b->data);
-                }
+                free(b->data);
             }
             free( b );
             count++;
@@ -350,7 +336,7 @@ static hb_fifo_t *size_to_pool( int size )
     return NULL;
 }
 
-hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
+hb_buffer_t * hb_buffer_init_internal( int size )
 {
     hb_buffer_t * b;
     // Certain libraries (hrm ffmpeg) expect buffers passed to them to
@@ -365,20 +351,6 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
     {
         b = hb_fifo_get( buffer_pool );
 
-        /* OpenCL */
-        if (b != NULL && needsMapped && b->cl.buffer == NULL)
-        {
-            // We need a mapped OpenCL buffer and that is not
-            // what we got out of the pool.
-            // Ditch it; it will get replaced with what we need.
-            if (b->data != NULL)
-            {
-                free(b->data);
-            }
-            free(b);
-            b = NULL;
-        }
-
         if( b )
         {
             /*
@@ -386,11 +358,6 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
              * didn't have to do this.
              */
             uint8_t *data = b->data;
-
-            /* OpenCL */
-            cl_mem buffer       = b->cl.buffer;
-            cl_event last_event = b->cl.last_event;
-            int loc             = b->cl.buffer_location;
 
             memset( b, 0, sizeof(hb_buffer_t) );
             b->alloc          = buffer_pool->buffer_size;
@@ -400,11 +367,6 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
             b->s.stop         = AV_NOPTS_VALUE;
             b->s.renderOffset = AV_NOPTS_VALUE;
             b->s.scr_sequence = -1;
-
-            /* OpenCL */
-            b->cl.buffer          = buffer;
-            b->cl.last_event      = last_event;
-            b->cl.buffer_location = loc;
 
 #if defined(HB_BUFFER_DEBUG)
             hb_lock(buffers.lock);
@@ -429,34 +391,14 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
 
     if (size)
     {
-        /* OpenCL */
-        b->cl.last_event      = NULL;
-        b->cl.buffer_location = HOST;
-
-        /* OpenCL */
-        if (needsMapped)
-        {
-            int status = hb_cl_create_mapped_buffer(&b->cl.buffer, &b->data, b->alloc);
-            if (!status)
-            {
-                hb_error("Failed to map CL buffer");
-                free(b);
-                return NULL;
-            }
-        }
-        else
-        {
-            b->cl.buffer = NULL;
-
 #if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
-            b->data  = malloc( b->alloc );
+        b->data  = malloc( b->alloc );
 #elif defined( SYS_CYGWIN )
-            /* FIXME */
-            b->data  = malloc( b->alloc + 17 );
+        /* FIXME */
+        b->data  = malloc( b->alloc + 17 );
 #else
-            b->data  = memalign( 16, b->alloc );
+        b->data  = memalign( 16, b->alloc );
 #endif
-        }
 
         if( !b->data )
         {
@@ -485,7 +427,7 @@ hb_buffer_t * hb_buffer_init_internal( int size , int needsMapped )
 
 hb_buffer_t * hb_buffer_init( int size )
 {
-    return hb_buffer_init_internal(size, 0);
+    return hb_buffer_init_internal(size);
 }
 
 hb_buffer_t * hb_buffer_eof_init(void)
@@ -637,8 +579,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
         }
     }
 
-    /* OpenCL */
-    buf = hb_buffer_init_internal(size , hb_use_buffers());
+    buf = hb_buffer_init_internal(size);
 
     if( buf == NULL )
         return NULL;
@@ -697,21 +638,11 @@ void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
     int      size  = dst->size;
     int      alloc = dst->alloc;
 
-    /* OpenCL */
-    cl_mem buffer       = dst->cl.buffer;
-    cl_event last_event = dst->cl.last_event;
-    int loc             = dst->cl.buffer_location;
-
     *dst = *src;
 
     src->data  = data;
     src->size  = size;
     src->alloc = alloc;
-
-    /* OpenCL */
-    src->cl.buffer          = buffer;
-    src->cl.last_event      = last_event;
-    src->cl.buffer_location = loc;
 }
 
 // Frees the specified buffer list.
@@ -771,19 +702,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
         // free the buf 
         if( b->data )
         {
-            if (b->cl.buffer != NULL)
-            {
-                /* OpenCL */
-                if (hb_cl_free_mapped_buffer(b->cl.buffer, b->data) == 0)
-                {
-                    hb_log("hb_buffer_close: bad free %p -> buffer %p map %p",
-                           b, b->cl.buffer, b->data);
-                }
-            }
-            else
-            {
-                free(b->data);
-            }
+            free(b->data);
             hb_lock(buffers.lock);
             buffers.allocated -= b->alloc;
             hb_unlock(buffers.lock);

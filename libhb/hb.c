@@ -8,7 +8,6 @@
  */
 
 #include "hb.h"
-#include "opencl.h"
 #include "hbffmpeg.h"
 #include "encx264.h"
 #include "libavfilter/avfilter.h"
@@ -65,8 +64,6 @@ struct hb_handle_s
 
     // power management opaque pointer
     void         * system_sleep_opaque;
-
-    int            enable_opencl;
 };
 
 hb_work_object_t * hb_objects = NULL;
@@ -141,11 +138,6 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
 
     ret = avcodec_open2(avctx, codec, av_opts);
     return ret;
-}
-
-int hb_get_opencl_enabled(hb_handle_t *h)
-{
-    return h->enable_opencl;
 }
 
 int hb_avcodec_close(AVCodecContext *avctx)
@@ -416,14 +408,6 @@ void hb_log_level_set(hb_handle_t *h, int level)
     global_verbosity_level = level;
 }
 
-/*
- * Enable or disable support for OpenCL detection.
- */
-void hb_opencl_set_enable(hb_handle_t *h, int enable_opencl)
-{
-    h->enable_opencl = enable_opencl;
-}
-
 /**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
@@ -641,12 +625,6 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_log(" - %s", cpu_type);
     }
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
-
-    /* Print OpenCL info here so that it's in all scan and encode logs */
-    if (hb_get_opencl_enabled(h))
-    {
-        hb_opencl_info_print();
-    }
 
 #ifdef USE_QSV
     /* Print QSV info here so that it's in all scan and encode logs */
@@ -1946,9 +1924,6 @@ void hb_global_close()
     struct dirent * entry;
 
     hb_presets_free();
-
-    /* OpenCL library (dynamically loaded) */
-    hb_ocl_close();
 
     /* Find and remove temp folder */
     memset( dirname, 0, 1024 );
