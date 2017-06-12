@@ -2204,7 +2204,7 @@ This allows a player to initiate playback before downloading the entire file.</p
                                           <packing>
                                             <property name="top_attach">0</property>
                                             <property name="left_attach">0</property>
-                                            <property name="width">2</property>
+                                            <property name="width">4</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
@@ -2226,13 +2226,13 @@ the required multiple.</property>
                                           <packing>
                                             <property name="top_attach">1</property>
                                             <property name="left_attach">0</property>
-                                            <property name="width">2</property>
+                                            <property name="width">4</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureLeftCrop">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2245,13 +2245,13 @@ the required multiple.</property>
                                           <packing>
                                             <property name="top_attach">2</property>
                                             <property name="left_attach">0</property>
-                                            <property name="width">1</property>
+                                            <property name="width">6</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureTopCrop">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2263,14 +2263,14 @@ the required multiple.</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
-                                            <property name="left_attach">1</property>
-                                            <property name="width">1</property>
+                                            <property name="left_attach">5</property>
+                                            <property name="width">6</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureBottomCrop">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2282,14 +2282,14 @@ the required multiple.</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">3</property>
-                                            <property name="left_attach">1</property>
-                                            <property name="width">1</property>
+                                            <property name="left_attach">5</property>
+                                            <property name="width">6</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureRightCrop">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2301,8 +2301,8 @@ the required multiple.</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">2</property>
-                                            <property name="left_attach">2</property>
-                                            <property name="width">1</property>
+                                            <property name="left_attach">10</property>
+                                            <property name="width">6</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
@@ -2317,7 +2317,7 @@ the required multiple.</property>
                                           <packing>
                                             <property name="top_attach">5</property>
                                             <property name="left_attach">0</property>
-                                            <property name="width">1</property>
+                                            <property name="width">4</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
@@ -2331,8 +2331,8 @@ the required multiple.</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">5</property>
-                                            <property name="left_attach">1</property>
-                                            <property name="width">1</property>
+                                            <property name="left_attach">4</property>
+                                            <property name="width">4</property>
                                             <property name="height">1</property>
                                           </packing>
                                         </child>
@@ -2419,7 +2419,7 @@ This will be the resolution that most closely matches the source resolution afte
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_width">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2454,7 +2454,7 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="scale_height">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2643,7 +2643,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayWidth">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2677,7 +2677,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PictureDisplayHeight">
-                                            <property name="width-chars">7</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2725,7 +2725,7 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARWidth">
-                                            <property name="width-chars">8</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2762,7 +2762,7 @@ Players will scale the image in order to achieve the specified aspect.</property
                                         </child>
                                         <child>
                                           <object class="GtkSpinButton" id="PicturePARHeight">
-                                            <property name="width-chars">8</property>
+                                            <property name="width-chars">6</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3164,8 +3164,8 @@ If your source exhibits 'blockiness', this filter may help clean it up.</propert
 ])dnl
 ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
-                            <property name="top_attach">1</property>
-                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="left_attach">3</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -3302,7 +3302,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
 ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">1</property>
+                            <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -3436,7 +3436,7 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
 ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">2</property>
+                            <property name="left_attach">1</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -3487,7 +3487,7 @@ filter_output([
 ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">2</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -3511,7 +3511,7 @@ filter_output([
 ifelse(eval(gtk_version < 312), 1, filter_output([
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="left_attach">4</property>
+                            <property name="left_attach">3</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
@@ -6384,12 +6384,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6897,8 +6891,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkTreeView" id="queue_list">
-                        <property name="width_request">900</property>
-                        <property name="height_request">300</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
