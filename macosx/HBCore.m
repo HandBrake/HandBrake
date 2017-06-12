@@ -28,7 +28,7 @@ static void hb_error_handler(const char *errmsg)
     }
 }
 
-typedef void (^HBCoreCleanupHandler)();
+typedef void (^HBCoreCleanupHandler)(void);
 
 /**
  * Private methods of HBCore.
@@ -411,6 +411,81 @@ typedef void (^HBCoreCleanupHandler)();
     }
 }
 
+- (CGColorSpaceRef)copyColorSpaceWithPrimaries:(int)primaries transfer:(int)transfer matrix:(int)matrix
+{
+    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_11)
+    {
+        return [self copyColorSpaceWithColorPrimaries:primaries];
+    }
+    
+    CFStringRef primariesKey = NULL;
+    switch (primaries)
+    {
+        case HB_COLR_PRI_EBUTECH:
+            primariesKey = kCVImageBufferColorPrimaries_EBU_3213;
+            break;
+
+        case HB_COLR_PRI_SMPTEC:
+            primariesKey = kCVImageBufferColorPrimaries_SMPTE_C;
+            break;
+
+        case HB_COLR_PRI_BT2020:
+            primariesKey = kCVImageBufferColorPrimaries_ITU_R_2020;
+            break;
+
+        case HB_COLR_PRI_BT709:
+        default:
+            primariesKey = kCVImageBufferColorPrimaries_ITU_R_709_2;
+    }
+
+    CFStringRef transferKey = NULL;
+    switch (transfer)
+    {
+        case HB_COLR_TRA_SMPTE240M:
+            transferKey = kCVImageBufferTransferFunction_SMPTE_240M_1995;
+            break;
+
+        case HB_COLR_TRA_BT2020_10:
+        case HB_COLR_TRA_BT2020_12:
+            transferKey = kCVImageBufferTransferFunction_ITU_R_2020;
+            break;
+
+        case HB_COLR_TRA_BT709:
+        default:
+            transferKey = kCVImageBufferTransferFunction_ITU_R_709_2;
+    }
+
+    CFStringRef matrixKey = NULL;
+
+    switch (matrix)
+    {
+        case HB_COLR_MAT_SMPTE170M:
+            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_601_4;
+            break;
+
+        case HB_COLR_MAT_SMPTE240M:
+            matrixKey = kCVImageBufferYCbCrMatrix_SMPTE_240M_1995;
+            break;
+
+        case HB_COLR_MAT_BT2020_NCL:
+        case HB_COLR_MAT_BT2020_CL:
+            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_2020;
+            break;
+
+        case HB_COLR_MAT_BT709:
+        default:
+            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_709_2;;
+    }
+
+    const void *keys[3] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey };
+    const void *values[3] = { primariesKey, transferKey, matrixKey};
+    CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    CGColorSpaceRef colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
+
+    return colorSpace;
+}
+        
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
@@ -440,7 +515,9 @@ typedef void (^HBCoreCleanupHandler)();
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 3 * image->width * image->height);
         CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-        CGColorSpaceRef colorSpace = [self copyColorSpaceWithColorPrimaries:title.hb_title->color_prim];
+        CGColorSpaceRef colorSpace = [self copyColorSpaceWithPrimaries:title.hb_title->color_prim
+                                                              transfer:title.hb_title->color_transfer
+                                                                matrix:title.hb_title->color_matrix];
 
         img = CGImageCreate(image->width,
                             image->height,
