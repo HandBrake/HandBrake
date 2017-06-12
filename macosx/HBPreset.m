@@ -273,7 +273,8 @@
     }
     else
     {
-        NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:NULL];
+        NSUInteger sortKeys = (1UL << 1); // NSJSONWritingSortedKeys in 10.13 sdk;
+        NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted | sortKeys error:NULL];
         success = [jsonPreset writeToURL:url atomically:atomically];
     }
 
