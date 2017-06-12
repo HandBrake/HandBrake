@@ -309,6 +309,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "AAC",                "aac",        NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC",             "haac",       NULL,                          0,                     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 0, HB_GID_ACODEC_AAC_HE,     },
     // actual encoders
+    { { "None",               "none",       "None",                        HB_ACODEC_NONE,        0,                               }, NULL, 1, HB_GID_NONE,              },
     { { "AAC (CoreAudio)",    "ca_aac",     "AAC (Apple AudioToolbox)",    HB_ACODEC_CA_AAC,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
     { { "HE-AAC (CoreAudio)", "ca_haac",    "HE-AAC (Apple AudioToolbox)", HB_ACODEC_CA_HAAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC_HE,     },
     { { "AAC (FDK)",          "fdk_aac",    "AAC (libfdk_aac)",            HB_ACODEC_FDK_AAC,     HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AAC,        },
@@ -372,6 +373,7 @@ static int hb_audio_encoder_is_enabled(int encoder)
         // the following encoders are always enabled
         case HB_ACODEC_LAME:
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_NONE:
             return 1;
 
         default:
@@ -2186,7 +2188,7 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
             break;
 
         default:
-            gid = HB_GID_NONE; // will never match an enabled encoder
+            return HB_ACODEC_INVALID;
             break;
     }
     while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
@@ -2355,8 +2357,8 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
                                                                   job->acodec_copy_mask,
                                                                   job->acodec_fallback,
                                                                   job->mux);
-            if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
-                !(audio->config.out.codec & HB_ACODEC_MASK))
+            if (audio->config.out.codec == HB_ACODEC_NONE ||
+                audio->config.out.codec == HB_ACODEC_INVALID)
             {
                 hb_log("Auto Passthru: passthru not possible and no valid fallback specified, dropping track %d",
                        audio->config.out.track );
@@ -2366,16 +2368,8 @@ void hb_autopassthru_apply_settings(hb_job_t *job)
             }
             if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
             {
-                if (audio->config.out.codec == job->acodec_fallback)
-                {
-                    hb_log("Auto Passthru: passthru not possible for track %d, using fallback",
-                           audio->config.out.track);
-                }
-                else
-                {
-                    hb_log("Auto Passthru: passthru and fallback not possible for track %d, using default encoder",
-                           audio->config.out.track);
-                }
+                hb_log("Auto Passthru: passthru not possible for track %d, using fallback",
+                       audio->config.out.track);
                 if (audio->config.out.mixdown <= 0)
                 {
                     audio->config.out.mixdown =
@@ -2506,31 +2500,36 @@ void hb_autopassthru_print_settings(hb_job_t *job)
 int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
                                 int muxer)
 {
-    int i = 0;
+    int out_codec_result_set = 0;
+    int fallback_result_set  = 0;
+    int out_codec_result = HB_ACODEC_INVALID;
+    int fallback_result  = HB_ACODEC_INVALID;
     const hb_encoder_t *audio_encoder = NULL;
     int out_codec = (copy_mask & in_codec) | HB_ACODEC_PASS_FLAG;
+
     // sanitize fallback encoder and selected passthru
     // note: invalid fallbacks are caught in hb_autopassthru_apply_settings
     while ((audio_encoder = hb_audio_encoder_get_next(audio_encoder)) != NULL)
     {
-        if (audio_encoder->codec == out_codec)
+        if (!out_codec_result_set && audio_encoder->codec == out_codec)
         {
-            i++;
-            if (!(audio_encoder->muxers & muxer))
-                out_codec = 0;
+            out_codec_result_set = 1;
+            if (audio_encoder->muxers & muxer)
+                out_codec_result = out_codec;
         }
-        else if (audio_encoder->codec == fallback)
+        else if (!fallback_result_set && audio_encoder->codec == fallback)
         {
-            i++;
-            if (!(audio_encoder->muxers & muxer))
-                fallback = hb_audio_encoder_get_default(muxer);
+            fallback_result_set  = 1;
+            if ((audio_encoder->muxers & muxer) || fallback == HB_ACODEC_NONE)
+                fallback_result = fallback;
         }
-        if (i > 1)
+        if (out_codec_result_set && fallback_result_set)
         {
             break;
         }
     }
-    return (out_codec & HB_ACODEC_PASS_MASK) ? out_codec : fallback;
+    return (out_codec_result != HB_ACODEC_INVALID) ? out_codec_result :
+                                                     fallback_result;
 }
 
 hb_container_t* hb_container_get_from_format(int format)

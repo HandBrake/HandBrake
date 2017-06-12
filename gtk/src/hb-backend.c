@@ -1250,7 +1250,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if (!(mux->format & enc->muxers))
+        if (!(mux->format & enc->muxers) && enc->codec != HB_ACODEC_NONE)
         {
             grey_builder_combo_box_item(ud->builder, "AudioEncoder",
                 enc->codec, TRUE);
@@ -1674,7 +1674,8 @@ ghb_audio_encoder_opts_set_with_mask(
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
          enc = hb_audio_encoder_get_next(enc))
     {
-        if ((mask & enc->codec) && !(neg_mask & enc->codec))
+        if ((mask & enc->codec) && !(neg_mask & enc->codec) &&
+            enc->codec != HB_ACODEC_AUTO_PASS)
         {
             gtk_list_store_append(store, &iter);
             str = g_strdup_printf("<small>%s</small>", enc->name);
@@ -1686,6 +1687,30 @@ ghb_audio_encoder_opts_set_with_mask(
                                -1);
             g_free(str);
         }
+    }
+}
+
+void
+ghb_audio_encoder_opts_add_autopass(GtkComboBox *combo)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gchar *str;
+    const hb_encoder_t *enc;
+
+    enc = hb_audio_encoder_get_from_codec(HB_ACODEC_AUTO_PASS);
+    if (enc != NULL)
+    {
+        store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
+        gtk_list_store_append(store, &iter);
+        str = g_strdup_printf("<small>%s</small>", enc->name);
+        gtk_list_store_set(store, &iter,
+                           0, str,
+                           1, TRUE,
+                           2, enc->short_name,
+                           3, (gdouble)enc->codec,
+                           -1);
+        g_free(str);
     }
 }
 
@@ -1743,7 +1768,8 @@ audio_encoder_opts_set_with_mask(
 void
 ghb_audio_encoder_opts_set(GtkComboBox *combo)
 {
-    ghb_audio_encoder_opts_set_with_mask(combo, ~0, 0);
+    ghb_audio_encoder_opts_set_with_mask(combo, ~0, HB_ACODEC_NONE);
+    ghb_audio_encoder_opts_add_autopass(combo);
 }
 
 static void
@@ -1752,31 +1778,8 @@ audio_encoder_opts_set(signal_user_data_t *ud, const gchar *name,
 {
     (void)opts; // Silence "unused variable" warning
     (void)data; // Silence "unused variable" warning
-    GtkTreeIter iter;
-    GtkListStore *store;
-    gchar *str;
-
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
-    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
-    gtk_list_store_clear(store);
-
-    const hb_encoder_t *enc;
-    for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
-         enc = hb_audio_encoder_get_next(enc))
-    {
-        if (enc->codec != HB_ACODEC_AUTO_PASS)
-        {
-            gtk_list_store_append(store, &iter);
-            str = g_strdup_printf("<small>%s</small>", enc->name);
-            gtk_list_store_set(store, &iter,
-                               0, str,
-                               1, TRUE,
-                               2, enc->short_name,
-                               3, (gdouble)enc->codec,
-                               -1);
-            g_free(str);
-        }
-    }
+    ghb_audio_encoder_opts_set_with_mask(combo, ~0, HB_ACODEC_NONE);
 }
 
 static void
