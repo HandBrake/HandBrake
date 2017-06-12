@@ -164,7 +164,7 @@
          audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
     {
         if ((audio_encoder->codec  & HB_ACODEC_PASS_FLAG) == 0 &&
-            (audio_encoder->muxers & self.container))
+            ((audio_encoder->muxers & self.container) || audio_encoder->codec == HB_ACODEC_NONE))
         {
             [fallbacks addObject:@(audio_encoder->name)];
         }

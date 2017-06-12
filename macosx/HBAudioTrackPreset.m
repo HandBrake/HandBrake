@@ -283,7 +283,10 @@
          audio_encoder != NULL;
          audio_encoder  = hb_audio_encoder_get_next(audio_encoder))
     {
-        [encoders addObject:@(audio_encoder->name)];
+        if (audio_encoder->codec != HB_ACODEC_NONE)
+        {
+            [encoders addObject:@(audio_encoder->name)];
+        }
     }
     return encoders;
 }
