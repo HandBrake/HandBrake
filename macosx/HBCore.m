@@ -456,7 +456,6 @@ typedef void (^HBCoreCleanupHandler)(void);
     }
 
     CFStringRef matrixKey = NULL;
-
     switch (matrix)
     {
         case HB_COLR_MAT_SMPTE170M:
@@ -482,6 +481,8 @@ typedef void (^HBCoreCleanupHandler)(void);
     CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
 
     CGColorSpaceRef colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
+
+    CFRelease(attachments);
 
     return colorSpace;
 }
