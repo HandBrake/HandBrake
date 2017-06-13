@@ -607,6 +607,14 @@ struct hb_job_s
     int             mux;
     char          * file;
 
+    int             align_av_start;     // align A/V stream start times.
+                                        // This is used to work around mp4
+                                        // players that do not support edit
+                                        // lists. When this option is used
+                                        // the resulting stream is not a
+                                        // faithful reproduction of the source
+                                        // stream and may have blank frames
+                                        // added or initial frames dropped.
     int             mp4_optimize;
     int             ipod_atom;
 
