@@ -270,7 +270,7 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
         ///
-        ///Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than [rest of string was truncated]&quot;;.
+        ///Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unshar [rest of string was truncated]&quot;;.
         /// </summary>
         public static string FilterView_Sharpen {
             get {
@@ -294,7 +294,7 @@ namespace HandBrakeWPF.Properties {
         ///
         ///Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
         ///
-        ///Lapsharp&apos;s Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharp [rest of string was truncated]&quot;;.
+        ///Lapsharp&apos;s Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened [rest of string was truncated]&quot;;.
         /// </summary>
         public static string FilterView_SharpenTune {
             get {

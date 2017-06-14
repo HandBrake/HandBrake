@@ -119,7 +119,7 @@ Section "HandBrake" SEC01
   ; Get .NET if required
   ${If} $InstallDotNET == "Yes"
      SetDetailsView hide
-     inetc::get /caption "Downloading Microsoft .NET Framework 4.6" /canceltext "Cancel" "http://go.microsoft.com/fwlink/?LinkId=528222" "$INSTDIR\dotnetfx.exe" /end
+     inetc::get /caption "Downloading Microsoft .NET Framework 4.6" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=49982" "$INSTDIR\dotnetfx.exe" /end
      Pop $1
 
      ${If} $1 != "OK"
