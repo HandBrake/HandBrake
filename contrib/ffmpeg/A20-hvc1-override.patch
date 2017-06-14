@@ -1,0 +1,48 @@
+From cc6cb8d44b50082ae3edfed39f484213590c8777 Mon Sep 17 00:00:00 2001
+From: John Stebbins <stebbins@jetheaddev.com>
+Date: Sun, 11 Jun 2017 10:19:14 -0700
+Subject: [PATCH] movenc: Allow use of hvc1 tag for h.265
+
+If AVCodecParameters.codec_tag is 'hvc1' use it instead of 'hev1' for
+h.265 streams.
+---
+ libavformat/movenc.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index e389029..835f588 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -726,7 +726,10 @@ static int mov_write_hvcc_tag(AVIOContext *pb, MOVTrack *track)
+ 
+     avio_wb32(pb, 0);
+     ffio_wfourcc(pb, "hvcC");
+-    ff_isom_write_hvcc(pb, track->vos_data, track->vos_len, 0);
++    if (track->tag == MKTAG('h','v','c','1'))
++        ff_isom_write_hvcc(pb, track->vos_data, track->vos_len, 1);
++    else
++        ff_isom_write_hvcc(pb, track->vos_data, track->vos_len, 0);
+     return update_size(pb, pos);
+ }
+ 
+@@ -786,6 +789,8 @@ static int mp4_get_codec_tag(AVFormatContext *s, MOVTrack *track)
+         return 0;
+ 
+     if      (track->par->codec_id == AV_CODEC_ID_H264)      tag = MKTAG('a','v','c','1');
++    else if (track->par->codec_id == AV_CODEC_ID_HEVC &&
++             tag == MKTAG('h','v','c','1'))                 ;
+     else if (track->par->codec_id == AV_CODEC_ID_HEVC)      tag = MKTAG('h','e','v','1');
+     else if (track->par->codec_id == AV_CODEC_ID_AC3)       tag = MKTAG('a','c','-','3');
+     else if (track->par->codec_id == AV_CODEC_ID_DIRAC)     tag = MKTAG('d','r','a','c');
+@@ -4496,7 +4501,7 @@ AVOutputFormat ff_mp4_muxer = {
+     .write_packet      = mov_write_packet,
+     .write_trailer     = mov_write_trailer,
+     .flags             = AVFMT_GLOBALHEADER | AVFMT_ALLOW_FLUSH | AVFMT_TS_NEGATIVE,
+-    .codec_tag         = (const AVCodecTag* const []){ ff_mp4_obj_type, 0 },
++    .codec_tag         = (const AVCodecTag* const []){ ff_codec_movvideo_tags, ff_codec_movaudio_tags, ff_codec_movsubtitle_tags, 0 },
+     .priv_class        = &mp4_muxer_class,
+ };
+ #endif
+-- 
+2.9.3
+
