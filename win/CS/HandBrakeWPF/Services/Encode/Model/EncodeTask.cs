@@ -87,6 +87,7 @@ namespace HandBrakeWPF.Services.Encode.Model
                 this.ChapterNames.Add(new ChapterMarker(track));
             }
 
+            this.AlignAVStart = task.AlignAVStart;
             this.ChapterMarkersFilePath = task.ChapterMarkersFilePath;
             this.Cropping = new Cropping(task.Cropping);
             this.CustomDecomb = task.CustomDecomb;
@@ -217,6 +218,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// Gets or sets a value indicating whether IPod5GSupport.
         /// </summary>
         public bool IPod5GSupport { get; set; }
+
+        public bool AlignAVStart { get; set; }
 
         #endregion
 

@@ -655,6 +655,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align A/V Start.
+        /// </summary>
+        public static string MainView_AlignAVStart {
+            get {
+                return ResourceManager.GetString("MainView_AlignAVStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Angle.
         /// </summary>
         public static string MainView_Angle {

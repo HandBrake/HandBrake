@@ -146,6 +146,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     Mp4Optimize = job.OptimizeMP4
                 },
                 ChapterMarkers = job.IncludeChapterMarkers,
+                AlignAVStart = job.AlignAVStart,
                 Mux = HBFunctions.hb_container_get_from_name(job.OutputFormat == OutputFormat.Mp4 ? "av_mp4" : "av_mkv"), // TODO tidy up.
                 ChapterList = new List<Chapter>()
             };

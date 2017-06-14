@@ -911,4 +911,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="FiltersView_Sharpen" xml:space="preserve">
     <value>Sharpen</value>
   </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Align A/V Start</value>
+  </data>
 </root>

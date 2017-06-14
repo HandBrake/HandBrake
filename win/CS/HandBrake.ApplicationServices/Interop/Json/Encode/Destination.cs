@@ -27,6 +27,11 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         public bool ChapterMarkers { get; set; }
 
         /// <summary>
+        /// Use Legacy A/V Alignment rather than Edit Lists.
+        /// </summary>
+        public bool AlignAVStart { get; set; }
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         public string File { get; set; }

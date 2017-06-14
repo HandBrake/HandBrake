@@ -72,6 +72,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.Task.OptimizeMP4 = importedPreset.Mp4HttpOptimize;
             preset.Task.IPod5GSupport = importedPreset.Mp4iPodCompatible;
             preset.Task.OutputFormat = GetFileFormat(importedPreset.FileFormat.Replace("file", string.Empty).Trim()); // TOOD null check.
+            preset.Task.AlignAVStart = importedPreset.AlignAVStart;
 
             /* Picture Settings */
             preset.PictureSettingsMode = (PresetPictureSettingsMode)importedPreset.UsesPictureSettings;
@@ -604,6 +605,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.FileFormat = EnumHelper<OutputFormat>.GetShortName(export.Task.OutputFormat);
             preset.Mp4HttpOptimize = export.Task.OptimizeMP4;
             preset.Mp4iPodCompatible = export.Task.IPod5GSupport;
+            preset.AlignAVStart = export.Task.AlignAVStart;
 
             // Picture Settings
             preset.PictureForceHeight = 0; // TODO

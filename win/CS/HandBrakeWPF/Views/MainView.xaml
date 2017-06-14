@@ -431,8 +431,17 @@
                               IsChecked="{Binding Path=IPod5GSupport}"
                               Visibility="{Binding IsMkv,
                                                    Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}"
-                              />
+                                                   ConverterParameter=true}" />
+
+                    <CheckBox Name="AlignAVStart"
+                              Margin="8,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="{x:Static Properties:ResourcesUI.MainView_AlignAVStart}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
+                              IsChecked="{Binding Path=AlignAVStart}"
+                              Visibility="{Binding IsMkv,
+                                                   Converter={StaticResource boolToVisConverter},
+                                                   ConverterParameter=true}" />
                 </StackPanel>
             </StackPanel>
 

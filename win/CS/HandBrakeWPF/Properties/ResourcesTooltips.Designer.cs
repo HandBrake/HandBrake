@@ -312,6 +312,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists..
+        /// </summary>
+        public static string MainView_AlignAVStart {
+            get {
+                return ResourceManager.GetString("MainView_AlignAVStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Video angle to encode. Only applicable to multi-angle DVD and Blu-ray..
         /// </summary>
         public static string MainView_Angle {

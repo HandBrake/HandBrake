@@ -16,6 +16,8 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
     /// </summary>
     public class HBPreset
     {
+        public bool AlignAVStart { get; set; }
+
         /// <summary>
         /// Gets or sets the audio copy mask.
         /// </summary>

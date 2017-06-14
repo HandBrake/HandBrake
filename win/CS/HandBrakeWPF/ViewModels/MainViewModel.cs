@@ -393,6 +393,7 @@ namespace HandBrakeWPF.ViewModels
                     this.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
                     this.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
+                    this.AlignAVStart = selectedPreset.Task.AlignAVStart;
 
                     // Tab Settings
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -455,6 +456,23 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.CurrentTask.IPod5GSupport = value;
                 this.NotifyOfPropertyChange(() => this.IPod5GSupport);
+            }
+        }
+
+        public bool AlignAVStart
+        {
+            get
+            {
+                return this.CurrentTask.AlignAVStart;
+            }
+            set
+            {
+                if (value == this.CurrentTask.AlignAVStart)
+                {
+                    return;
+                }
+                this.CurrentTask.AlignAVStart = value;
+                this.NotifyOfPropertyChange(() => this.AlignAVStart);
             }
         }
 
@@ -2218,9 +2236,11 @@ namespace HandBrakeWPF.ViewModels
                 this.IsMkv = true;
                 this.CurrentTask.OptimizeMP4 = false;
                 this.CurrentTask.IPod5GSupport = false;
+                this.CurrentTask.AlignAVStart = false;
 
                 this.NotifyOfPropertyChange(() => this.OptimizeMP4);
                 this.NotifyOfPropertyChange(() => this.IPod5GSupport);
+                this.NotifyOfPropertyChange(() => this.AlignAVStart);              
             }
 
             // Update The browse file extension display
