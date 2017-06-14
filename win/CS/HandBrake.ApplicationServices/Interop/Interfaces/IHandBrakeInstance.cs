@@ -132,10 +132,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <param name="minDuration">
         /// The min Duration.
         /// </param>
-        /// <param name="titleIndex">
-        /// The title index to scan (1-based, 0 for all titles).
-        /// </param>
-        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex, bool clEnabled = false);
+        void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
 
         /// <summary>
         /// Stops the current encode.
