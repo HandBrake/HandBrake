@@ -537,31 +537,32 @@
     self.completedItemsCount = completedCount;
 }
 
-#pragma mark -
-#pragma mark Queue Job Processing
-
-#define ALMOST_2GB 2000000000
+#pragma mark - Queue Job Processing
 
 - (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
 {
-    NSURL *volumeURL = nil;
-    NSDictionary<NSURLResourceKey, id> *attrs = [url resourceValuesForKeys:@[NSURLIsVolumeKey, NSURLVolumeURLKey] error:NULL];
-
-    volumeURL = [attrs[NSURLIsVolumeKey] boolValue] ? url : attrs[NSURLVolumeURLKey];
-
-    if (volumeURL)
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBQueuePauseIfLowSpace"])
     {
-        if ([volumeURL respondsToSelector:@selector(removeCachedResourceValueForKey:)])
-        {
-            [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
-        }
-        attrs = [volumeURL resourceValuesForKeys:@[NSURLVolumeAvailableCapacityKey] error:NULL];
+        NSURL *volumeURL = nil;
+        NSDictionary<NSURLResourceKey, id> *attrs = [url resourceValuesForKeys:@[NSURLIsVolumeKey, NSURLVolumeURLKey] error:NULL];
+        long long minCapacity = [[[NSUserDefaults standardUserDefaults] stringForKey:@"HBQueueMinFreeSpace"] longLongValue] * 1000000000;
 
-        if (attrs[NSURLVolumeAvailableCapacityKey])
+        volumeURL = [attrs[NSURLIsVolumeKey] boolValue] ? url : attrs[NSURLVolumeURLKey];
+
+        if (volumeURL)
         {
-            if ([attrs[NSURLVolumeAvailableCapacityKey] longLongValue] < ALMOST_2GB)
+            if ([volumeURL respondsToSelector:@selector(removeCachedResourceValueForKey:)])
             {
-                return YES;
+                [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
+            }
+            attrs = [volumeURL resourceValuesForKeys:@[NSURLVolumeAvailableCapacityKey] error:NULL];
+
+            if (attrs[NSURLVolumeAvailableCapacityKey])
+            {
+                if ([attrs[NSURLVolumeAvailableCapacityKey] longLongValue] < minCapacity)
+                {
+                    return YES;
+                }
             }
         }
     }

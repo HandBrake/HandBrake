@@ -77,7 +77,9 @@
         @"x264CqSliderFractional":          @"0.50",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
-        @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591))
+        @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591)),
+        @"HBQueuePauseIfLowSpace":          @YES,
+        @"HBQueueMinFreeSpace":             @"2"
         }];
 
     // Overwrite the update check interval because previous versions
