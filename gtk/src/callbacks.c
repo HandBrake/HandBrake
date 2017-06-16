@@ -1885,7 +1885,16 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
             ghb_dict_set(settings, "volume_label", ghb_value_dup(
                     ghb_dict_get_value(ud->globals, "volume_label")));
         }
-        ghb_dict_set_int(settings, "scale_width", title->geometry.width);
+
+        int crop[4];
+
+        ghb_apply_crop(settings, title);
+        crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+        crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+        crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+        crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
+        ghb_dict_set_int(settings, "scale_width",
+                 title->geometry.width - crop[2] - crop[3]);
 
         // If anamorphic or keep_aspect, the hight will
         // be automatically calculated
@@ -1898,7 +1907,8 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
             pic_par == HB_ANAMORPHIC_AUTO ||
             pic_par == HB_ANAMORPHIC_CUSTOM)
         {
-            ghb_dict_set_int(settings, "scale_height", title->geometry.height);
+            ghb_dict_set_int(settings, "scale_height",
+                title->geometry.height - crop[0] - crop[1]);
         }
 
         ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);

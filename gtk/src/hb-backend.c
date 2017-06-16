@@ -3452,11 +3452,86 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 }
 
 void
+ghb_apply_crop(GhbValue *settings, const hb_title_t * title)
+{
+    gboolean autocrop, loosecrop;
+    gint crop[4] = {0,};
+
+    autocrop = ghb_dict_get_bool(settings, "PictureAutoCrop");
+    // "PictureLooseCrop" is a flag that says we prefer to crop extra to
+    // satisfy alignment constraints rather than scaling to satisfy them.
+    loosecrop = ghb_dict_get_bool(settings, "PictureLooseCrop");
+
+    if (autocrop)
+    {
+        crop[0] = title->crop[0];
+        crop[1] = title->crop[1];
+        crop[2] = title->crop[2];
+        crop[3] = title->crop[3];
+    }
+    else
+    {
+        crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+        crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+        crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+        crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
+    }
+    if (loosecrop)
+    {
+        gint need1, need2;
+        gint crop_width, crop_height, width, height;
+        gint mod;
+
+        mod = ghb_settings_combo_int(settings, "PictureModulus");
+        if (mod <= 0)
+            mod = 16;
+
+        // Adjust the cropping to accomplish the desired width and height
+        crop_width = title->geometry.width - crop[2] - crop[3];
+        crop_height = title->geometry.height - crop[0] - crop[1];
+        width = MOD_DOWN(crop_width, mod);
+        height = MOD_DOWN(crop_height, mod);
+
+        need1 = EVEN((crop_height - height) / 2);
+        need2 = crop_height - height - need1;
+        crop[0] += need1;
+        crop[1] += need2;
+        need1 = EVEN((crop_width - width) / 2);
+        need2 = crop_width - width - need1;
+        crop[2] += need1;
+        crop[3] += need2;
+    }
+    // Prevent crop from creating too small an image
+    if (title->geometry.height - crop[0] -crop[1] < 16)
+    {
+        crop[0] = title->geometry.height - crop[1] - 16;
+        if (crop[0] < 0)
+        {
+            crop[1] += crop[0];
+            crop[0] = 0;
+        }
+    }
+    if (title->geometry.width - crop[2] - crop[3] < 16)
+    {
+        crop[2] = title->geometry.width - crop[3] - 16;
+        if (crop[2] < 0)
+        {
+            crop[3] += crop[2];
+            crop[2] = 0;
+        }
+    }
+    ghb_dict_set_int(settings, "PictureTopCrop", crop[0]);
+    ghb_dict_set_int(settings, "PictureBottomCrop", crop[1]);
+    ghb_dict_set_int(settings, "PictureLeftCrop", crop[2]);
+    ghb_dict_set_int(settings, "PictureRightCrop", crop[3]);
+}
+
+void
 ghb_set_scale_settings(GhbValue *settings, gint mode)
 {
     gboolean keep_aspect;
     gint pic_par;
-    gboolean autocrop, autoscale, loosecrop;
+    gboolean autoscale;
     gint crop[4] = {0,};
     gint width, height;
     gint crop_width, crop_height;
@@ -3499,11 +3574,7 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
     if (mod <= 0)
         mod = 16;
     keep_aspect = ghb_dict_get_bool(settings, "PictureKeepRatio");
-    autocrop = ghb_dict_get_bool(settings, "PictureAutoCrop");
     autoscale = ghb_dict_get_bool(settings, "autoscale");
-    // "PictureLooseCrop" is a flag that says we prefer to crop extra to
-    // satisfy alignment constraints rather than scaling to satisfy them.
-    loosecrop = ghb_dict_get_bool(settings, "PictureLooseCrop");
     // Align dimensions to either 16 or 2 pixels
     // The scaler crashes if the dimensions are not divisible by 2
     // x264 also will not accept dims that are not multiple of 2
@@ -3513,56 +3584,11 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
         keep_height = FALSE;
     }
 
-    if (autocrop)
-    {
-        crop[0] = title->crop[0];
-        crop[1] = title->crop[1];
-        crop[2] = title->crop[2];
-        crop[3] = title->crop[3];
-        ghb_dict_set_int(settings, "PictureTopCrop", crop[0]);
-        ghb_dict_set_int(settings, "PictureBottomCrop", crop[1]);
-        ghb_dict_set_int(settings, "PictureLeftCrop", crop[2]);
-        ghb_dict_set_int(settings, "PictureRightCrop", crop[3]);
-    }
-    else
-    {
-        crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
-        crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
-        crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
-        crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
-        // Prevent manual crop from creating too small an image
-        if (title->geometry.height - crop[0] < crop[1] + 16)
-        {
-            crop[0] = title->geometry.height - crop[1] - 16;
-        }
-        if (title->geometry.width - crop[2] < crop[3] + 16)
-        {
-            crop[2] = title->geometry.width - crop[3] - 16;
-        }
-    }
-    if (loosecrop)
-    {
-        gint need1, need2;
-
-        // Adjust the cropping to accomplish the desired width and height
-        crop_width = title->geometry.width - crop[2] - crop[3];
-        crop_height = title->geometry.height - crop[0] - crop[1];
-        width = MOD_DOWN(crop_width, mod);
-        height = MOD_DOWN(crop_height, mod);
-
-        need1 = EVEN((crop_height - height) / 2);
-        need2 = crop_height - height - need1;
-        crop[0] += need1;
-        crop[1] += need2;
-        need1 = EVEN((crop_width - width) / 2);
-        need2 = crop_width - width - need1;
-        crop[2] += need1;
-        crop[3] += need2;
-        ghb_dict_set_int(settings, "PictureTopCrop", crop[0]);
-        ghb_dict_set_int(settings, "PictureBottomCrop", crop[1]);
-        ghb_dict_set_int(settings, "PictureLeftCrop", crop[2]);
-        ghb_dict_set_int(settings, "PictureRightCrop", crop[3]);
-    }
+    ghb_apply_crop(settings, title);
+    crop[0] = ghb_dict_get_int(settings, "PictureTopCrop");
+    crop[1] = ghb_dict_get_int(settings, "PictureBottomCrop");
+    crop[2] = ghb_dict_get_int(settings, "PictureLeftCrop");
+    crop[3] = ghb_dict_get_int(settings, "PictureRightCrop");
     uiGeo.crop[0] = crop[0];
     uiGeo.crop[1] = crop[1];
     uiGeo.crop[2] = crop[2];
