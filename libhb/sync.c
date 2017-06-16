@@ -1172,8 +1172,6 @@ static void fifo_push( hb_fifo_t * fifo, hb_buffer_t * buf )
 
 static void streamFlush( sync_stream_t * stream )
 {
-    hb_lock(stream->common->mutex);
-
     while (hb_list_count(stream->in_queue) > 0)
     {
         hb_buffer_t * buf;
@@ -1301,8 +1299,6 @@ static void streamFlush( sync_stream_t * stream )
         }
     }
     fifo_push(stream->fifo_out, hb_buffer_eof_init());
-
-    hb_unlock(stream->common->mutex);
 }
 
 static void flushStreams( sync_common_t * common )
@@ -1329,6 +1325,13 @@ static void flushStreams( sync_common_t * common )
         }
         streamFlush(stream);
     }
+}
+
+static void flushStreamsLock( sync_common_t * common )
+{
+    hb_lock(common->mutex);
+    flushStreams(common);
+    hb_unlock(common->mutex);
 }
 
 static void log_chapter( sync_common_t *common, int chap_num,
@@ -1657,6 +1660,7 @@ static void OutputBuffer( sync_common_t * common )
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
+            flushStreams(common);
             signalBuffer(out_stream);
             continue;
         }
@@ -1670,6 +1674,7 @@ static void OutputBuffer( sync_common_t * common )
             out_stream->done = 1;
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
+            flushStreams(common);
             signalBuffer(out_stream);
             continue;
         }
@@ -2997,7 +3002,7 @@ static int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         pv->stream->flush = 1;
-        flushStreams(pv->common);
+        flushStreamsLock(pv->common);
         // Ideally, we would only do this subtitle scan check in
         // syncSubtitleWork, but someone might try to do a subtitle
         // scan on a source that has no subtitles :-(
@@ -3089,7 +3094,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         pv->stream->flush = 1;
-        flushStreams(pv->common);
+        flushStreamsLock(pv->common);
         return HB_WORK_DONE;
     }
 
@@ -3402,7 +3407,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // sanitizeSubtitle requires EOF buffer to recognize that
         // it needs to flush all subtitles.
         hb_list_add(pv->stream->in_queue, hb_buffer_eof_init());
-        flushStreams(pv->common);
+        flushStreamsLock(pv->common);
         if (pv->common->job->indepth_scan)
         {
             // When doing subtitle indepth scan, the pipeline ends at sync.
