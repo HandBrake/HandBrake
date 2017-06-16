@@ -758,7 +758,8 @@ subtitle_burned_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     subsettings = subtitle_get_selected_settings(ud, &index);
     if (subsettings != NULL)
     {
-        if (ghb_dict_get_bool(subsettings, "Burn"))
+        if (ghb_dict_get_bool(subsettings, "Burn") &&
+            ghb_dict_get(subsettings, "Track") != NULL)
         {
             ghb_ui_update(ud, "SubtitleDefaultTrack", ghb_boolean_value(FALSE));
             subtitle_exclusive_burn(ud, index);
