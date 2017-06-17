@@ -250,7 +250,7 @@ static void test_tty()
 #endif
 
     if (stdout_tty == 1) stdout_sep = "\r";
-    if (stdout_tty == 1) stderr_sep = "\r";
+    if (stderr_tty == 1) stderr_sep = "\r";
 }
 
 /****************************************************************************
