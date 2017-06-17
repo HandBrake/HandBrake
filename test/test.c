@@ -220,8 +220,38 @@ static int is_whole_media_service( io_service_t service );
 static int show_mux_warning = 1;
 
 /* Terminal detection */
-static char * stdout_sep = NULL;
-static char * stderr_sep = NULL;
+static int stdout_tty = 0;
+static int stderr_tty = 0;
+static char * stdout_sep = "\n";
+static char * stderr_sep = "\n";
+static void test_tty()
+{
+#if defined(__MINGW32__)
+    HANDLE handle;
+    handle = (HANDLE) _get_osfhandle(_fileno(stdout));
+    if ((handle != INVALID_HANDLE_VALUE) && (GetFileType(handle) == FILE_TYPE_CHAR))
+    {
+        stdout_tty = 1;
+    }
+    handle = (HANDLE) _get_osfhandle(_fileno(stderr));
+    if ((handle != INVALID_HANDLE_VALUE) && (GetFileType(handle) == FILE_TYPE_CHAR))
+    {
+        stderr_tty = 1;
+    }
+#else
+    if (isatty(1) == 1)
+    {
+        stdout_tty = 1;
+    }
+    if (isatty(2) == 1)
+    {
+        stderr_tty = 1;
+    }
+#endif
+
+    if (stdout_tty == 1) stdout_sep = "\r";
+    if (stdout_tty == 1) stderr_sep = "\r";
+}
 
 /****************************************************************************
  * hb_error_handler
@@ -310,7 +340,14 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
             }
         }
 #endif
-        hb_snooze( 200 );
+        if (stdout_tty == 0)
+        {
+            hb_snooze(2000);
+        }
+        else
+        {
+            hb_snooze(200);
+        }
 
         HandleEvents( h, preset_dict );
     }
@@ -390,23 +427,7 @@ int main( int argc, char ** argv )
     /* Init libhb */
     h = hb_init(4);  // Show all logging until debug level is parsed
 
-    /* Terminal detection */
-    if (isatty(1) == 1)
-    {
-        stdout_sep = strdup("\r");
-    }
-    else
-    {
-        stdout_sep = strdup("\n");
-    }
-    if (isatty(2) == 1)
-    {
-        stderr_sep = strdup("\r");
-    }
-    else
-    {
-        stderr_sep = strdup("\n");
-    }
+    test_tty(); // Terminal detection
 
     // Get utf8 command line if windows
     get_argv_utf8(&argc, &argv);
