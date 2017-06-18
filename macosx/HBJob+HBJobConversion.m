@@ -83,8 +83,12 @@
     job->mux = self.container;
     job->vcodec = self.video.encoder;
 
-    // We set http optimized mp4 here
     job->mp4_optimize = self.mp4HttpOptimize;
+
+    if (self.container & HB_MUX_MASK_MP4)
+    {
+        job->align_av_start = self.alignAVStart;
+    }
 
     // We set the chapter marker extraction here based on the format being
     // mpeg4 or mkv and the checkbox being checked.

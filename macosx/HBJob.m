@@ -98,6 +98,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     self.mp4HttpOptimize = [preset[@"Mp4HttpOptimize"] boolValue];
     self.mp4iPodCompatible = [preset[@"Mp4iPodCompatible"] boolValue];
 
+    self.alignAVStart = [preset[@"AlignAVStart"] boolValue];
+
     // Chapter Markers
     self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
 
@@ -117,6 +119,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     // MP4 specifics options.
     preset[@"Mp4HttpOptimize"] = @(self.mp4HttpOptimize);
     preset[@"Mp4iPodCompatible"] = @(self.mp4iPodCompatible);
+
+    preset[@"AlignAVStart"] = @(self.alignAVStart);
 
     [@[self.video, self.filters, self.picture, self.audio, self.subtitles] makeObjectsPerformSelector:@selector(writeToPreset:)
                                                                                                            withObject:preset];
@@ -208,6 +212,15 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     _mp4HttpOptimize = mp4HttpOptimize;
 }
 
+- (void)setAlignAVStart:(BOOL)alignAVStart
+{
+    if (alignAVStart != _alignAVStart)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setAlignAVStart:_alignAVStart];
+    }
+    _alignAVStart = alignAVStart;
+}
+
 - (void)setMp4iPodCompatible:(BOOL)mp4iPodCompatible
 {
     if (mp4iPodCompatible != _mp4iPodCompatible)
@@ -291,6 +304,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         copy->_angle = _angle;
         copy->_mp4HttpOptimize = _mp4HttpOptimize;
         copy->_mp4iPodCompatible = _mp4iPodCompatible;
+        copy->_alignAVStart = _alignAVStart;
 
         copy->_range = [_range copy];
         copy->_video = [_video copy];
@@ -357,6 +371,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     encodeInt(_angle);
     encodeBool(_mp4HttpOptimize);
     encodeBool(_mp4iPodCompatible);
+    encodeBool(_alignAVStart);
 
     encodeObject(_range);
     encodeObject(_video);
@@ -416,6 +431,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeInt(_angle);
         decodeBool(_mp4HttpOptimize);
         decodeBool(_mp4iPodCompatible);
+        decodeBool(_alignAVStart);
 
         decodeObjectOrFail(_range, HBRange);
         decodeObjectOrFail(_video, HBVideo);

@@ -70,8 +70,10 @@ typedef NS_ENUM(NSUInteger, HBJobState){
 @property (nonatomic, readwrite) int container;
 @property (nonatomic, readwrite) int angle;
 
+// Container options
 @property (nonatomic, readwrite) BOOL mp4HttpOptimize;
 @property (nonatomic, readwrite) BOOL mp4iPodCompatible;
+@property (nonatomic, readwrite) BOOL alignAVStart;
 
 @property (nonatomic, readonly) HBRange *range;
 @property (nonatomic, readonly) HBVideo *video;
