@@ -339,6 +339,58 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
                     break;
             }
         }
+#else
+        fd_set         fds;
+        struct timeval tv;
+        int            ret;
+        char           buf[257];
+
+        tv.tv_sec  = 0;
+        tv.tv_usec = 100000;
+
+        FD_ZERO( &fds );
+        FD_SET( STDIN_FILENO, &fds );
+        ret = select( STDIN_FILENO + 1, &fds, NULL, NULL, &tv );
+
+        if( ret > 0 )
+        {
+            int size = 0;
+
+            while( size < 256 &&
+                   read( STDIN_FILENO, &buf[size], 1 ) > 0 )
+            {
+                if( buf[size] == '\n' )
+                {
+                    break;
+                }
+                size++;
+            }
+
+            if( size >= 256 || buf[size] == '\n' )
+            {
+                switch( buf[0] )
+                {
+                    case 'q':
+                        fprintf( stdout, "\nEncoding Quit by user command\n" );
+                        done_error = HB_ERROR_CANCELED;
+                        die = 1;
+                        break;
+                    case 'p':
+                        fprintf(stdout,
+                                "\nEncoding Paused by user command, 'r' to resume\n");
+                        hb_pause(h);
+                        hb_system_sleep_allow(h);
+                        break;
+                    case 'r':
+                        hb_system_sleep_prevent(h);
+                        hb_resume(h);
+                        break;
+                    case 'h':
+                        ShowCommands();
+                        break;
+                }
+            }
+        }
 #endif
         if (stdout_tty == 0)
         {
