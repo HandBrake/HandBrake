@@ -1987,6 +1987,13 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
     AVPacket         avp;
     int              ret;
 
+    // libav does not supply timestamps for wmapro audio (possibly others)
+    // if there is an input timestamp, initialize next_pts
+    if (pv->next_pts     == (int64_t)AV_NOPTS_VALUE &&
+        packet_info->pts !=          AV_NOPTS_VALUE)
+    {
+        pv->next_pts = packet_info->pts;
+    }
     av_init_packet(&avp);
     if (packet_info != NULL)
     {
