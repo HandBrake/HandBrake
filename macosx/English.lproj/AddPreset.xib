@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <development version="8000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
         <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
@@ -23,12 +24,12 @@
         <window title="New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="dbZ-Wo-9nG" userLabel="AddPresetPanel">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <rect key="contentRect" x="421" y="536" width="480" height="229"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="AcO-9f-fnb">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="229"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wy7-cF-tGv">
+                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wy7-cF-tGv">
                         <rect key="frame" x="18" y="193" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset Name:" id="jhj-Et-ncF">
                             <font key="font" metaFont="smallSystem"/>
@@ -36,7 +37,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wpk-WC-aVk">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wpk-WC-aVk">
                         <rect key="frame" x="18" y="103" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Picture Size:" id="75B-xq-Qbe">
                             <font key="font" metaFont="smallSystem"/>
@@ -44,7 +45,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="YVc-5E-NjK">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="YVc-5E-NjK">
                         <rect key="frame" x="18" y="76" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Audio:" id="HKp-K9-MF4">
                             <font key="font" metaFont="smallSystem"/>
@@ -52,7 +53,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="ubZ-rD-tIS">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="ubZ-rD-tIS">
                         <rect key="frame" x="18" y="48" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Subtitles:" id="OYE-GG-Vo3">
                             <font key="font" metaFont="smallSystem"/>
@@ -60,7 +61,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="zDq-QP-LAu">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="zDq-QP-LAu">
                         <rect key="frame" x="18" y="168" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Description:" id="hc8-1h-Jye">
                             <font key="font" metaFont="smallSystem"/>
@@ -94,7 +95,7 @@ Gw
                             <action selector="cancel:" target="-2" id="Ygd-gd-Yd0"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="249" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8kl-Sh-Gh7">
+                    <textField horizontalHuggingPriority="249" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8kl-Sh-Gh7">
                         <rect key="frame" x="99" y="144" width="361" height="38"/>
                         <string key="toolTip">Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list.</string>
                         <constraints>
@@ -110,8 +111,8 @@ Gw
                         </connections>
                     </textField>
                     <button toolTip="Audio Defaults control which audio track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
-                        <rect key="frame" x="94" y="68" width="102" height="28"/>
-                        <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
+                        <rect key="frame" x="94" y="68" width="156" height="28"/>
+                        <buttonCell key="cell" type="push" title="Edit Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -119,7 +120,7 @@ Gw
                             <action selector="showAudioSettingsSheet:" target="-2" id="Rrt-QI-5hD"/>
                         </connections>
                     </button>
-                    <textField toolTip="Enter a name for the new preset. This name will be displayed in the presets list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
+                    <textField toolTip="Enter a name for the new preset. This name will be displayed in the presets list." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
                         <rect key="frame" x="99" y="190" width="361" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
                             <font key="font" metaFont="smallSystem"/>
@@ -136,7 +137,7 @@ Gw
                             <rect key="frame" x="0.0" y="0.0" width="300" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField toolTip="Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
+                                <textField toolTip="Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gOg-oO-8ar">
                                     <rect key="frame" x="5" y="4" width="52" height="19"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="T8n-Ik-Oc2"/>
@@ -149,7 +150,7 @@ Gw
                                     </textFieldCell>
                                     <accessibility description="Picture Width"/>
                                 </textField>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="25" translatesAutoresizingMaskIntoConstraints="NO" id="mQk-Ua-wzc">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="25" translatesAutoresizingMaskIntoConstraints="NO" id="mQk-Ua-wzc">
                                     <rect key="frame" x="57" y="7" width="29" height="14"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="25" id="Zwp-Kv-7lL"/>
@@ -160,7 +161,7 @@ Gw
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField toolTip="Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
+                                <textField toolTip="Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mga-dS-8BF">
                                     <rect key="frame" x="86" y="4" width="52" height="19"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="52" id="4os-w4-V7L"/>
@@ -183,8 +184,8 @@ Gw
                         </view>
                     </box>
                     <button toolTip="Subtitles Defaults control which subtitles track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
-                        <rect key="frame" x="94" y="40" width="102" height="28"/>
-                        <buttonCell key="cell" type="push" title="Edit Defaults…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
+                        <rect key="frame" x="94" y="40" width="156" height="28"/>
+                        <buttonCell key="cell" type="push" title="Edit Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -269,7 +270,7 @@ Source maximum uses the full dimensions of each source.</string>
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="407" y="255.5"/>
+            <point key="canvasLocation" x="93" y="126"/>
         </window>
     </objects>
 </document>

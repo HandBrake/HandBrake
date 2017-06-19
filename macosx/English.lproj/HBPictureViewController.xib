@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G12b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <development version="8000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPictureViewController">
@@ -505,7 +506,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="1XQ-md-5cQ">
-                    <rect key="frame" x="520" y="102" width="113" height="22"/>
+                    <rect key="frame" x="521" y="102" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
 
@@ -1348,7 +1349,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="6he-FC-h6S">
-                    <rect key="frame" x="520" y="18" width="113" height="22"/>
+                    <rect key="frame" x="521" y="18" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
