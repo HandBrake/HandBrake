@@ -361,7 +361,7 @@ static NSDictionary            *shortHeightAttr;
         [attrString appendString:summary        withAttributes:detailAttr];
         [attrString appendString:@"\n"          withAttributes:detailAttr];
     }
-    
+
     return attrString;
 }
 
@@ -370,7 +370,8 @@ static NSDictionary            *shortHeightAttr;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
     NSMutableString *videoInfo = [NSMutableString string];
 
-    [videoInfo appendFormat:@"Encoder: %@, ", @(hb_video_encoder_get_name(self.video.encoder))];
+    const char *encoderName = hb_video_encoder_get_name(self.video.encoder);
+    [videoInfo appendFormat:@"Encoder: %@, ", encoderName ? @(encoderName) : @"Unknown"];
 
     [videoInfo appendString:@"Framerate: "];
 
