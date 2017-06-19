@@ -159,9 +159,29 @@ static int hb_reader_open( hb_work_private_t * r )
             return 1;
         if (r->job->start_at_preview)
         {
-            hb_stream_seek(r->stream, (float)(r->job->start_at_preview - 1) /
-                           (r->job->seek_points ? (r->job->seek_points + 1.0)
-                                                : 11.0));
+            // First try seeking to PTS title duration / (seek_points + 1)
+            float frac = (float)(r->job->start_at_preview - 1) /
+                         (r->job->seek_points ? (r->job->seek_points + 1.0)
+                                              : 11.0);
+            int64_t start = r->title->duration * frac;
+            if (hb_stream_seek_ts(r->stream, start) >= 0)
+            {
+                // If successful, we know the video stream has been seeked
+                // to the right location. But libav does not seek all
+                // streams (e.g. audio and subtitles) to the same position
+                // for some stream types (AVI). Setting start_found = 0
+                // enables code that filters out packets that we receive
+                // before the correct start time is encountered.
+                r->start_found = 0;
+                r->job->reader_pts_offset = AV_NOPTS_VALUE;
+            }
+            else
+            {
+                // hb_stream_seek_ts only works for libav streams.
+                // TS and PS streams have not index and have timestamp
+                // discontinuities, so we seek to a byte position in these.
+                hb_stream_seek(r->stream, frac);
+            }
         }
         else if (r->job->pts_to_start)
         {
