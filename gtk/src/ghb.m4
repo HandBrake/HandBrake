@@ -4843,7 +4843,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
-                                    <property name="label" translatable="yes">Reload Defaults</property>
+                                    <property name="label" translatable="yes">Reload</property>
                                     <property name="icon_name">emblem-default</property>
                                     <property name="tooltip_text" translatable="yes">Reload all audio settings from defaults</property>
                                     <signal name="clicked" handler="audio_reset_clicked_cb" swapped="no"/>
@@ -5361,7 +5361,7 @@ segments of the audio that are in a foreign language.</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="is_important">True</property>
-                                    <property name="label" translatable="yes">Reload Defaults</property>
+                                    <property name="label" translatable="yes">Reload</property>
                                     <property name="icon_name">emblem-default</property>
                                     <property name="tooltip_text" translatable="yes">Reload all subtitle settings from defaults</property>
                                     <signal name="clicked" handler="subtitle_reset_clicked_cb" swapped="no"/>
