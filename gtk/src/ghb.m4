@@ -4781,7 +4781,7 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                       <packing>
                         <property name="position">4</property>
                         <property name="name">audio_defaults_tab</property>
-                        <property name="title" translatable="yes">Audio Defaults</property>
+                        <property name="title" translatable="yes">Audio Selection</property>
                       </packing>
                     </child>
                     <child>
@@ -5282,7 +5282,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                       <packing>
                         <property name="position">6</property>
                         <property name="name">subtitle_defaults_tab</property>
-                        <property name="title" translatable="yes">Subtitle Defaults</property>
+                        <property name="title" translatable="yes">Subtitle Selection</property>
                       </packing>
                     </child>
                     <child>
