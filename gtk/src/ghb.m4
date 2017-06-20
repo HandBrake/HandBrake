@@ -346,6 +346,11 @@ conjunction with the "Forced" option.</property>
     <property name="step_increment">0.1</property>
     <property name="page_increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="DiskFreeLimitAdjustment">
+    <property name="upper">1000000</property>
+    <property name="step_increment">500</property>
+    <property name="page_increment">1000</property>
+  </object>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
@@ -7681,6 +7686,84 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkBox" id="DiskFreeBox">
+                            <property name="orientation">vertical</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">2</property>
+                            <child>
+                              <object class="GtkCheckButton" id="DiskFreeCheck">
+                                <property name="label" translatable="yes">Monitor destination disk free space</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="DiskFreeLimitBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">4</property>
+                                <property name="margin-start">21</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="DiskFreeLimit">
+                                    <property name="width-chars">7</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
+                                    <property name="primary_icon_activatable">False</property>
+                                    <property name="secondary_icon_activatable">False</property>
+                                    <property name="valign">GTK_ALIGN_CENTER</property>
+                                    <property name="adjustment">DiskFreeLimitAdjustment</property>
+                                    <property name="width_request">55</property>
+                                    <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="DiskFreeLimitLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">MB Limit</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">2</property>
+                            <property name="left_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkBox" id="vbox2">
                             <property name="orientation">vertical</property>
                             <property name="visible">True</property>
@@ -7785,7 +7868,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             </child>
                           </object>
                           <packing>
-                            <property name="top_attach">2</property>
+                            <property name="top_attach">3</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -7802,7 +7885,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">3</property>
+                            <property name="top_attach">4</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -7820,7 +7903,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -7840,7 +7923,7 @@ on the Video tab instead.</property>
                             <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">5</property>
+                            <property name="top_attach">6</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -7859,7 +7942,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">6</property>
+                            <property name="top_attach">7</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>

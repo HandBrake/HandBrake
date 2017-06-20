@@ -1,5 +1,6 @@
 {
     "Globals": {
+        "SkipDiskFreeCheck": false,
         "show_preview": false,
         "scan_source": "",
         "volume_label": "New Video"
@@ -68,6 +69,8 @@
         "x264FastDecode": false
     },
     "Preferences": {
+        "DiskFreeCheck": true,
+        "DiskFreeLimit": 10000,
         "RemoveFinishedJobs": false,
         "HideAdvancedVideoSettings": true,
         "AutoScan": false,

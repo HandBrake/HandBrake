@@ -2955,39 +2955,6 @@ ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
     return FALSE;
 }
 
-static gint
-find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
-{
-    GhbValue *queueDict, *uiDict;
-    gint ii, count;
-    gint job_unique_id;
-
-    g_debug("find_queue_job");
-    if (job != NULL)
-    {
-        *job = NULL;
-    }
-    if (unique_id == 0)  // Invalid Id
-        return -1;
-
-    count = ghb_array_len(queue);
-    for (ii = 0; ii < count; ii++)
-    {
-        queueDict = ghb_array_get(queue, ii);
-        uiDict = ghb_dict_get(queueDict, "uiSettings");
-        job_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
-        if (job_unique_id == unique_id)
-        {
-            if (job != NULL)
-            {
-                *job = queueDict;
-            }
-            return ii;
-        }
-    }
-    return -1;
-}
-
 static void
 start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
 {
@@ -3061,7 +3028,7 @@ submit_job(signal_user_data_t *ud, GhbValue *queueDict)
     ghb_start_queue();
 
     // Start queue activity spinner
-    int index = find_queue_job(ud->queue, unique_id, NULL);
+    int index = ghb_find_queue_job(ud->queue, unique_id, NULL);
     if (index >= 0)
     {
         GtkTreeView *treeview;
@@ -3207,6 +3174,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     ghb_notify_done(ud);
     ghb_update_pending(ud);
     gtk_widget_hide(progress);
+    ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
 }
 
 gchar*
@@ -3217,7 +3185,7 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gint index;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, NULL);
+    index = ghb_find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3285,7 +3253,7 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     gint index;
 
     qcount = ghb_array_len(ud->queue);
-    index = find_queue_job(ud->queue, status->unique_id, NULL);
+    index = ghb_find_queue_job(ud->queue, status->unique_id, NULL);
     if (qcount > 1)
     {
         job_str = g_strdup_printf(_("job %d of %d, "), index+1, qcount);
@@ -3330,7 +3298,9 @@ ghb_backend_events(signal_user_data_t *ud)
     GtkTreeIter iter;
     static gint prev_scan_state = -1;
     static gint prev_queue_state = -1;
+    static gint event_sequence = 0;
 
+    event_sequence++;
     ghb_track_status();
     ghb_get_status(&status);
     if (prev_scan_state != status.scan.state ||
@@ -3451,7 +3421,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
     if (status.queue.unique_id != 0)
     {
-        index = find_queue_job(ud->queue, status.queue.unique_id, NULL);
+        index = ghb_find_queue_job(ud->queue, status.queue.unique_id, NULL);
         if (index >= 0)
         {
             treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
@@ -3476,6 +3446,11 @@ ghb_backend_events(signal_user_data_t *ud)
                 }
             }
             g_free(path);
+            if ((status.queue.state & GHB_STATE_WORKING) &&
+                (event_sequence % 50 == 0)) // check every 10 seconds
+            {
+                ghb_low_disk_check(ud);
+            }
         }
     }
 
@@ -3517,7 +3492,7 @@ ghb_backend_events(signal_user_data_t *ud)
         gint qstatus;
         const gchar *status_icon;
 
-        index = find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
+        index = ghb_find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
         treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
         store = gtk_tree_view_get_model(treeview);
         switch( status.queue.error )
@@ -3572,6 +3547,7 @@ ghb_backend_events(signal_user_data_t *ud)
         {
             ghb_uninhibit_gsm();
             gtk_widget_hide(GTK_WIDGET(progress));
+            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
         }
         ghb_save_queue(ud->queue);
         ud->cancel_encode = GHB_CANCEL_NONE;

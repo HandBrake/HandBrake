@@ -4275,18 +4275,30 @@ ghb_stop_live_encode()
 void
 ghb_pause_queue()
 {
+    hb_status.queue.state |= GHB_STATE_PAUSED;
+    hb_pause( h_queue );
+}
+
+void
+ghb_resume_queue()
+{
+    hb_status.queue.state &= ~GHB_STATE_PAUSED;
+    hb_resume( h_queue );
+}
+
+void
+ghb_pause_resume_queue()
+{
     hb_state_t s;
     hb_get_state2( h_queue, &s );
 
     if( s.state == HB_STATE_PAUSED )
     {
-        hb_status.queue.state &= ~GHB_STATE_PAUSED;
-        hb_resume( h_queue );
+        ghb_resume_queue();
     }
     else
     {
-        hb_status.queue.state |= GHB_STATE_PAUSED;
-        hb_pause( h_queue );
+        ghb_pause_queue();
     }
 }
 

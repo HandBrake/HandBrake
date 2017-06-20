@@ -103,6 +103,8 @@ void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);
 void ghb_stop_queue(void);
 void ghb_pause_queue(void);
+void ghb_resume_queue(void);
+void ghb_pause_resume_queue(void);
 
 void ghb_start_live_encode();
 void ghb_stop_live_encode();

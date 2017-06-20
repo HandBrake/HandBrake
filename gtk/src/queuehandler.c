@@ -984,6 +984,154 @@ queue_reload_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 }
 
+gint64
+ghb_dest_free_space(GhbValue *settings)
+{
+    GFile       *gfile;
+    GFileInfo   *info;
+    guint64      size;
+    const gchar *dest     = ghb_dict_get_string(settings, "destination");
+    gchar       *destdir  = g_path_get_dirname(dest);
+    gchar       *resolved = ghb_resolve_symlink(destdir);
+
+    gfile = g_file_new_for_path(resolved);
+    info  = g_file_query_filesystem_info(gfile,
+                                G_FILE_ATTRIBUTE_FILESYSTEM_FREE, NULL, NULL);
+    if (info != NULL)
+    {
+        if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_FILESYSTEM_FREE))
+        {
+            size = g_file_info_get_attribute_uint64(info,
+                                    G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
+            return size;
+        }
+        g_object_unref(info);
+    }
+    g_object_unref(gfile);
+    g_free(resolved);
+    g_free(destdir);
+
+    return -1;
+}
+
+gint
+ghb_find_queue_job(GhbValue *queue, gint unique_id, GhbValue **job)
+{
+    GhbValue *queueDict, *uiDict;
+    gint ii, count;
+    gint job_unique_id;
+
+    if (job != NULL)
+    {
+        *job = NULL;
+    }
+    if (unique_id == 0)  // Invalid Id
+        return -1;
+
+    count = ghb_array_len(queue);
+    for (ii = 0; ii < count; ii++)
+    {
+        queueDict = ghb_array_get(queue, ii);
+        uiDict = ghb_dict_get(queueDict, "uiSettings");
+        job_unique_id = ghb_dict_get_int(uiDict, "job_unique_id");
+        if (job_unique_id == unique_id)
+        {
+            if (job != NULL)
+            {
+                *job = queueDict;
+            }
+            return ii;
+        }
+    }
+    return -1;
+}
+
+void
+ghb_low_disk_check(signal_user_data_t *ud)
+{
+    GtkWindow       *hb_window;
+    GtkWidget       *dialog;
+    GtkResponseType  response;
+    ghb_status_t     status;
+    const char      *paused_msg = "";
+    const char      *dest;
+    gint64           free_size;
+    gint64           free_limit;
+    GhbValue        *qDict;
+    GhbValue        *settings;
+
+    if (ghb_dict_get_bool(ud->globals, "SkipDiskFreeCheck") ||
+        !ghb_dict_get_bool(ud->prefs, "DiskFreeCheck"))
+    {
+        return;
+    }
+
+    ghb_get_status(&status);
+    if (status.queue.unique_id <= 0)
+    {
+        // No current job
+        return;
+    }
+    ghb_find_queue_job(ud->queue, status.queue.unique_id, &qDict);
+    if (qDict == NULL)
+    {
+        // Failed to find queue setting!
+        return;
+    }
+    settings = ghb_dict_get(qDict, "uiSettings");
+    free_size = ghb_dest_free_space(settings);
+    if (free_size < 0)
+    {
+        // Failed to read free space
+        return;
+    }
+    // limit is in MB
+    free_limit = ghb_dict_get_int(ud->prefs, "DiskFreeLimit") * 1024 * 1024;
+    if (free_size > free_limit)
+    {
+        return;
+    }
+
+    if ((status.queue.state & GHB_STATE_WORKING) &&
+        !(status.queue.state & GHB_STATE_PAUSED))
+    {
+        paused_msg = "Encoding has been paused.\n\n";
+        ghb_pause_queue();
+    }
+    dest      = ghb_dict_get_string(settings, "destination");
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
+            GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+            _("%sThe destination filesystem is almost full: %"PRIu64"MB free.\n"
+              "Destination: %s\n"
+              "Encode may be incomplete if you proceed.\n"),
+            paused_msg, free_size / (1024 * 1024), dest); 
+    gtk_dialog_add_buttons( GTK_DIALOG(dialog),
+                           _("Resume, I've fixed the problem"), 1,
+                           _("Resume, Don't tell me again"), 2,
+                           _("Cancel Current and Stop"), 3, 
+                           NULL);
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    switch ((int)response)
+    {
+        case 1:
+            ghb_resume_queue();
+            break;
+        case 2:
+            ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", TRUE);
+            ghb_resume_queue();
+            break;
+        case 3:
+            ghb_stop_queue();
+            ud->cancel_encode = GHB_CANCEL_ALL;
+            break;
+        default:
+            ghb_resume_queue();
+            break;
+    }
+}
+
 static gboolean
 validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
@@ -1056,45 +1204,6 @@ validate_settings(signal_user_data_t *ud, GhbValue *settings, gint batch)
         return FALSE;
     }
 #endif
-    if (!batch)
-    {
-        GFile *gfile;
-        GFileInfo *info;
-        guint64 size;
-        gchar *resolved = ghb_resolve_symlink(destdir);
-
-        gfile = g_file_new_for_path(resolved);
-        info = g_file_query_filesystem_info(gfile,
-                            G_FILE_ATTRIBUTE_FILESYSTEM_FREE, NULL, NULL);
-        if (info != NULL)
-        {
-            if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_FILESYSTEM_FREE))
-            {
-                size = g_file_info_get_attribute_uint64(info,
-                                        G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
-
-                gint64 fsize = (guint64)10 * 1024 * 1024 * 1024;
-                if (size < fsize)
-                {
-                    message = g_strdup_printf(
-                                _("Destination filesystem is almost full: %uM free\n\n"
-                                "Encode may be incomplete if you proceed.\n"),
-                                (guint)(size / (1024L*1024L)));
-                    if (!ghb_message_dialog(hb_window, GTK_MESSAGE_QUESTION,
-                                            message, _("Cancel"), _("Proceed")))
-                    {
-                        g_free(message);
-                        g_free(destdir);
-                        return FALSE;
-                    }
-                    g_free(message);
-                }
-            }
-            g_object_unref(info);
-        }
-        g_object_unref(gfile);
-        g_free(resolved);
-    }
     g_free(destdir);
     if (g_file_test(dest, G_FILE_TEST_EXISTS))
     {
@@ -2277,7 +2386,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 queue_pause_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-    ghb_pause_queue();
+    ghb_pause_resume_queue();
 }
 
 gboolean
