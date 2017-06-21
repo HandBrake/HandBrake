@@ -1286,25 +1286,28 @@ def createCLI():
 
     h = IfHost( 'disable GTK GUI', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
+
     h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
+
     h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
-    h = IfHost( 'disable gstreamer (live preview)', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+
+    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
-    h = IfHost( 'enable use of Intel Quick Sync Video hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+
+    h = IfHost( 'enable Intel Quick Sync Video (QSV) hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
-
-    h = IfHost( 'enable use of x265 encoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-x265', default=True, action='store_true', help=h )
+    h = IfHost( 'enable x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=h )
     grp.add_option( '--disable-x265', dest="enable_x265", action='store_false' )
 
-    h = IfHost( 'enable use of fdk-aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    h = IfHost( 'enable FDK AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=h )
     grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
 
-    h = IfHost( 'enable use of libav aac encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    h = IfHost( 'enable Libav AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-libav-aac', dest="enable_libav_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
     grp.add_option( '--disable-libav-aac', dest="enable_libav_aac", action='store_false' )
 
