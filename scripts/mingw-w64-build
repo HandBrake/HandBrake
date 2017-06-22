@@ -1,8 +1,9 @@
 #!/bin/bash
 # mingw-w64-build - download and build mingw-w64 toolchain
 #
-# Project: https://github.com/bradleysepos/mingw-w64-build
-# License: MIT
+# Copyright 2017 Bradley Sepos
+# Released under the MIT License. See LICENSE for details.
+# https://github.com/bradleysepos/mingw-w64-build
 
 # checks for required external tools
 function check_dependencies {  # check_dependencies $DEP1 $DEP2 ...
@@ -142,7 +143,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="3.0.0"
+    VERSION="3.0.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -188,6 +189,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
         pkgclean)
             TARGET="pkgclean"
             PREFIX="pkgclean"
+            ;;
     esac
     if [[ "${PREFIX:-}" == "" ]]; then
         echo -e "${HELP}"
