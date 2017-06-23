@@ -4,6 +4,9 @@
 
 ## All platforms
 
+#### General
+ - New presets for YouTube and Vimeo
+
 ### Filters
  - New Sharpen / Unsharpen filter
 
