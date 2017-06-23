@@ -574,7 +574,7 @@ The Activity log may have further information.</value>
     <value>Audio Tracks</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Configure Defaults</value>
+    <value>Selection Behaviour</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>Switch Back To Tracks</value>
@@ -709,7 +709,7 @@ Please make sure VLC is installed and the directory specified in HandBrake's opt
     <value>Switch Back To Tracks</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Configure Defaults</value>
+    <value>Selection Behaviour</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archived File:</value>
