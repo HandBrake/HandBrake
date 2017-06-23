@@ -1,5 +1,48 @@
 # HandBrake News
 
+# HandBrake 1.1.0
+
+## All platforms
+
+### Filters
+ - New Sharpen / Unsharpen filter
+
+### Build system
+- Support for compiling on Windows under MSYS
+
+### Third-party libraries
+- Updated libraries
+  - libvpx 1.6.1 (VP8/VP9 video encoding)
+  - x265 2.4 (H.265/HEVC video encoding)
+  - libav 12.1 (decoding and filters)
+
+## Linux
+
+- Quicksync Video Encoder.
+- New Preference to set the low disk space warning level.
+- Miscellaneous bug fixes
+
+## Mac
+
+- Miscellaneous bug fixes
+
+## Windows
+- Intel QuickSync: 10bit Encoding support on Kaby Lake and newer.
+- Improvements to the presets bar
+  - Remember Tree state between sessions. 
+  - Place user presets on top.
+- Pause on Low-Disk Space level is now configurable. 
+- Per-Monitor DPI Awareness
+- Support for running HandBrake in a portable mode.
+- Status and Notifications
+  - Option to play sound (mp3, wav) when a single encode or queue completes.
+  - Option Show progress / pass / passcount in the Application title / Task Tray icon tooltip.
+  - More granular progress reporting (For muxing and search for start of file states)
+- Improvements to Audio Defaults. Dropdowns are now context aware and range limited with better defaulting of options.
+- Miscellaneous bug fixes
+
+
+
 ## HandBrake 1.0.7
 
 ### All platforms
