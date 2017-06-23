@@ -33,6 +33,12 @@ namespace HandBrake.ApplicationServices.Utilities
             return IsNightly() ? string.Format("Nightly {0} ({1})", instance.Version, instance.Build) : string.Format("{0} ({1})", instance.Version, instance.Build);
         }
 
+        public static string GetVersionShort()
+        {
+            IHandBrakeInstance instance = HandBrakeInstanceManager.GetScanInstance(1);
+            return string.Format("{0} {1}", instance.Version, instance.Build);
+        }
+
         /// <summary>
         /// The is nightly.
         /// </summary>
