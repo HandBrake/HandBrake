@@ -421,7 +421,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selection Behaviour.
+        ///   Looks up a localized string similar to Selection Behavior.
         /// </summary>
         public static string AudioViewModel_ConfigureDefaults {
             get {
@@ -1732,7 +1732,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selection Behaviour.
+        ///   Looks up a localized string similar to Selection Behavior.
         /// </summary>
         public static string SubtitlesViewModel_ConfigureDefaults {
             get {
