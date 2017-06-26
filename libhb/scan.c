@@ -266,20 +266,20 @@ static void ScanFunc( void * _data )
             j++;
         }
 
-        if ( data->dvd || data->bd )
+        // VOBSUB and PGS width and height needs to be set to the
+        // title width and height for any stream type that does
+        // not provide this information (DVDs, BDs, VOBs, and M2TSs).
+        // Title width and height don't get set until we decode
+        // previews, so we can't set subtitle width/height till
+        // we get here.
+        for (j = 0; j < hb_list_count(title->list_subtitle); j++)
         {
-            // The subtitle width and height needs to be set to the
-            // title widht and height for DVDs.  title width and
-            // height don't get set until we decode previews, so
-            // we can't set subtitle width/height till we get here.
-            for( j = 0; j < hb_list_count( title->list_subtitle ); j++ )
+            hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, j);
+            if ((subtitle->source == VOBSUB || subtitle->source == PGSSUB) &&
+                (subtitle->width <= 0 || subtitle->height <= 0))
             {
-                hb_subtitle_t *subtitle = hb_list_item( title->list_subtitle, j );
-                if ( subtitle->source == VOBSUB || subtitle->source == PGSSUB )
-                {
-                    subtitle->width = title->geometry.width;
-                    subtitle->height = title->geometry.height;
-                }
+                subtitle->width  = title->geometry.width;
+                subtitle->height = title->geometry.height;
             }
         }
         i++;
