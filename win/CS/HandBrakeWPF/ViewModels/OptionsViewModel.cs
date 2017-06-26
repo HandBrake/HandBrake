@@ -1542,10 +1542,11 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>True if valid</returns>
         private bool IsValidAutonameFormat(string input, bool isSilent)
         {
+            char[] invalidchars = Path.GetInvalidFileNameChars();
+            Array.Sort(invalidchars);
             foreach (var characterToTest in input)
             {
-                // we binary search for the character in the invalid set. This should be lightning fast.
-                if (Array.BinarySearch(Path.GetInvalidFileNameChars(), characterToTest) >= 0)
+                if (Array.BinarySearch(invalidchars, characterToTest) >= 0)
                 {
                     if (!isSilent)
                     {
