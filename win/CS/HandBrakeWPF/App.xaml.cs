@@ -51,8 +51,7 @@ namespace HandBrakeWPF
         {
             // We don't support Windows XP / 2003 / 2003 R2 / Vista / 2008
             OperatingSystem os = Environment.OSVersion;
-            if ((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 5) ||
-                (os.Platform == PlatformID.Win32NT) && (os.Version.Major == 6 && os.Version.Minor < 1))
+            if (((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 5)) || ((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 6 && os.Version.Minor < 1)))
             {
                 MessageBox.Show("HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
