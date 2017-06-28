@@ -11,6 +11,21 @@ NS_ASSUME_NONNULL_BEGIN
 @class HBChapter;
 @class HBPreset;
 
+@interface HBMetadata : NSObject
+
+@property (nonatomic, readonly, nullable) NSString *name;
+@property (nonatomic, readonly, nullable) NSString *artist;
+@property (nonatomic, readonly, nullable) NSString *composer;
+@property (nonatomic, readonly, nullable) NSString *releaseDate;
+@property (nonatomic, readonly, nullable) NSString *comment;
+@property (nonatomic, readonly, nullable) NSString *album;
+@property (nonatomic, readonly, nullable) NSString *albumArtist;
+@property (nonatomic, readonly, nullable) NSString *genre;
+@property (nonatomic, readonly, nullable) NSString *description;
+@property (nonatomic, readonly, nullable) NSString *longDescription;
+
+@end
+
 /**
  * HBTitles is an interface to the low-level hb_title_t.
  * the properties are lazy-loaded.
@@ -45,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *audioTracks;
 @property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *subtitlesTracks;
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapters;
+
+@property (nonatomic, readonly) HBMetadata *metadata;
 
 @end
 

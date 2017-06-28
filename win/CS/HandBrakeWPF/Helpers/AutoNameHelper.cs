@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;
+    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
@@ -86,6 +87,35 @@ namespace HandBrakeWPF.Helpers
                 if (chapterFinish != chapterStart && chapterFinish != string.Empty)
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
 
+                // Local method to check if we have a creation time in the meta data. If not, fall back to source file creation time.
+                DateTime obtainCreateDateObject()
+                {
+                    var rd = task.MetaData.ReleaseDate;
+                    if (DateTime.TryParse(rd, out var d))
+                    {
+                        return d;
+                    }
+                    try
+                    {
+                        return File.GetCreationTime(task.Source);
+                    }
+                    catch (Exception e)
+                    {
+                        if (e is UnauthorizedAccessException ||
+                            e is PathTooLongException ||
+                            e is NotSupportedException)
+                        {
+                            // Suspect the most likely concerns trying to grab the creation date in which we would want to swallow exception.
+                            return default(DateTime);
+                        }
+                        throw e;                            
+                    }
+                }
+
+                var creationDateTime = obtainCreateDateObject();
+                string createDate = creationDateTime.Date.ToShortDateString().Replace('/', '-');
+                string createTime = creationDateTime.ToString("HH-mm"); 
+
                 /*
                  * File Name
                  */
@@ -98,7 +128,9 @@ namespace HandBrakeWPF.Helpers
                             .Replace(Constants.Title, dvdTitle)
                             .Replace(Constants.Chapters, combinedChapterTag)
                             .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                            .Replace(Constants.Time, DateTime.Now.ToString("HH:mm"));
+                            .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
+                            .Replace(Constants.CretaionDate, createDate)
+                            .Replace(Constants.CreationTime, createTime);
                     // .Replace(Constants.Preset, sanitisedPresetName);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
@@ -199,7 +231,7 @@ namespace HandBrakeWPF.Helpers
 
             return autoNamePath;
         }
-
+        
         /// <summary>
         /// Check if there is a valid autoname path.
         /// </summary>
@@ -219,6 +251,6 @@ namespace HandBrakeWPF.Helpers
             return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") ||
                 (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") ||
                  Directory.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()));
-        }
+        }        
     }
 }

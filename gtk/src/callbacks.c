@@ -50,6 +50,8 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include <regex.h>
+
 #if !defined(_NO_UPDATE_CHECK)
 #if defined(_OLD_WEBKIT)
 #include <webkit.h>
@@ -1050,6 +1052,71 @@ check_name_template(signal_user_data_t *ud, const char *str)
     return FALSE;
 }
 
+static int 
+match_by_pattern(const char *string, const char *pattern)
+{
+    int status;
+    regex_t re;
+    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0)
+    {
+        return 0;
+    }
+    status = regexec(&re, string, (size_t) 0, NULL, 0);
+    regfree(&re);
+    if (status != 0) 
+    {
+        return 0;
+    }
+    return 1;
+}
+
+typedef struct {
+    const char *pattern;
+    const char *format;
+} datemap;
+
+static int
+parse_datestring(const char *src, struct tm *tm)
+{       
+    datemap ymdThmsZ = {"[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9]T[0-9]{2}:[0-9]{2}:[0-9]{2}Z", "%Y-%m-%dT%H:%M:%SZ"};  
+
+    datemap maps[1] = { ymdThmsZ };
+
+    for (int i = 0; i < sizeof(maps); i++)
+    {
+        if (match_by_pattern(src, maps[i].pattern))
+        {
+            strptime(src, maps[i].format, tm);
+            return(1);
+        }
+    }
+    return(0);
+}
+
+static char*
+get_creation_date(const char *pattern, const char *metaValue, const char *file)
+{       
+    char date[11] = "";       
+    if (metaValue != NULL && strlen(metaValue) > 1)
+    {
+        struct tm tm;
+        if (parse_datestring(metaValue, &tm))
+        {            
+            strftime(date, 11, pattern, &tm);                                                    
+        }        
+    }
+    else
+    {
+        struct stat stbuf;
+        if (g_stat(file, &stbuf) == 0){
+            struct tm *tm;
+            tm = localtime(&(stbuf.st_mtime));                                    
+            strftime(date, 11, pattern, tm);                                                    
+        }
+    }
+    return strdup(date);   
+}
+
 static void
 set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 {
@@ -1137,6 +1204,22 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 strftime(dt, 11, "%Y-%m-%d", lt);
                 g_string_append_printf(str, "%s", dt);
                 p += strlen("{date}");
+            }
+            else if (!strncmp(p, "{creation-date}", strlen("{creation-date}"))){
+                const gchar *val;
+                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");             
+                val = get_creation_date("%Y-%m-%d", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
+                g_string_append_printf(str, "%s", val);
+                p += strlen("{creation-date}");
+                g_free(val);
+            }
+            else if (!strncmp(p, "{creation-time}", strlen("{creation-time}"))){  
+                const gchar *val;  
+                const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");          
+                val = get_creation_date("%H:%M", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
+                g_string_append_printf(str, "%s", val);
+                p += strlen("{creation-time}");
+                g_free(val);
             }
             else if (!strncmp(p, "{quality}", strlen("{quality}")))
             {

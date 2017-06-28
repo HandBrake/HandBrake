@@ -25,12 +25,37 @@ extern NSString *keySubTrackName;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
 
+@interface HBMetadata ()
+
+@property (nonatomic, readonly) hb_metadata_t *hb_metadata;
+@property (nonatomic, copy) NSString *releaseDate;
+
+@end
+
+@implementation HBMetadata
+- (instancetype)initWithMetadata:(hb_metadata_t *)data
+{
+    _hb_metadata = data;
+    return self;
+}
+
+- (NSString *)releaseDate
+{
+    if (self.hb_metadata->release_date == nil)
+    {
+        return nil;
+    }
+    return @(self.hb_metadata->release_date);
+}
+
+@end
+
 @interface HBTitle ()
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
 @property (nonatomic, readonly) hb_handle_t *hb_handle;
 @property (nonatomic, readwrite, copy) NSString *name;
-
+@property (nonatomic, readwrite) HBMetadata *metadata;
 @property (nonatomic, readwrite) NSArray *audioTracks;
 @property (nonatomic, readwrite) NSArray *subtitlesTracks;
 @property (nonatomic, readwrite) NSArray *chapters;
@@ -52,12 +77,14 @@ extern NSString *keySubTrackType;
         _hb_title = title;
         _hb_handle = handle;
         _featured = featured;
+
+        _metadata = [[HBMetadata alloc] initWithMetadata:title->metadata];
     }
 
     return self;
 }
 
-- (NSString *)name
+-  (NSString *)name
 {
     if (!_name)
     {
