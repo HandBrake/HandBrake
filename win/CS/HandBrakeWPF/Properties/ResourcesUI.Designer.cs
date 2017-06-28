@@ -1645,20 +1645,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PAR Height:.
+        ///   Looks up a localized string similar to PAR:.
         /// </summary>
-        public static string PictureSettingsView_ParH {
+        public static string PictureSettingsView_PAR {
             get {
-                return ResourceManager.GetString("PictureSettingsView_ParH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PAR Width:.
-        /// </summary>
-        public static string PictureSettingsView_ParW {
-            get {
-                return ResourceManager.GetString("PictureSettingsView_ParW", resourceCulture);
+                return ResourceManager.GetString("PictureSettingsView_PAR", resourceCulture);
             }
         }
         

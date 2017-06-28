@@ -147,7 +147,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose }; // , Anamorphic.Custom   TODO Re-enable one the UI is re-worked.
+                return new List<Anamorphic> { Anamorphic.None, Anamorphic.Automatic, Anamorphic.Loose, Anamorphic.Custom };
             }
         }
 
@@ -855,7 +855,6 @@ namespace HandBrakeWPF.ViewModels
                 Height = this.sourceResolution.Height,
                 ParW = this.sourceParValues.Width,
                 ParH = this.sourceParValues.Height,
-                Aspect = 0 // TODO
             };
 
             return title;
@@ -881,8 +880,6 @@ namespace HandBrakeWPF.ViewModels
                 MaxHeight = this.MaxHeight,
                 KeepDisplayAspect = this.MaintainAspectRatio,
                 AnamorphicMode = this.SelectedAnamorphicMode,
-                DarWidth = 0,
-                DarHeight = 0,
                 Crop = new Cropping(this.CropTop, this.CropBottom, this.CropLeft, this.CropRight),
             };
 
@@ -890,6 +887,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 job.ParW = sourceParValues.Width;
                 job.ParH = sourceParValues.Height;
+            }
+
+            if (SelectedAnamorphicMode == Anamorphic.Custom)
+            {
+                job.ParW = this.DisplayWidth;  // num
+                job.ParH = this.Width; // den
             }
 
             return job;
@@ -948,9 +951,15 @@ namespace HandBrakeWPF.ViewModels
                            ? string.Empty
                            : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, dispWidth, result.OutputHeight, this.ParWidth, this.ParHeight);
 
+            if (changedField != ChangedPictureField.DisplayWidth)
+            {
+                this.Task.DisplayWidth = (int)dispWidth;
+            }
+
             // Step 4, Force an update on all the UI elements.
             this.NotifyOfPropertyChange(() => this.Width);
             this.NotifyOfPropertyChange(() => this.Height);
+            this.NotifyOfPropertyChange(() => this.DisplayWidth);
             this.NotifyOfPropertyChange(() => this.ParWidth);
             this.NotifyOfPropertyChange(() => this.ParHeight);
             this.NotifyOfPropertyChange(() => this.CropTop);
@@ -1006,8 +1015,8 @@ namespace HandBrakeWPF.ViewModels
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = true;
                     this.ShowModulus = true;
-                    this.ShowDisplaySize = false;
-                    this.ShowKeepAR = false;
+                    this.ShowDisplaySize = true;
+                    this.ShowKeepAR = true;
                     break;
             }
         }

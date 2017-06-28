@@ -90,17 +90,19 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_DisplayWitdh}" Grid.Row="0" Grid.Column="0" />
-                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_ParW}" Grid.Row="1" Grid.Column="0" />
-                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_ParH}" Grid.Row="2" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_PAR}" Grid.Row="1" Grid.Column="0" />
 
                     <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
                                     AllowEmpty="False" />
-                    <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
-                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
-                                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
-                    <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
-                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
-                                             ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                        <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
+                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
+                        <TextBlock Text="X" Margin="10,0,10,0" />
+                        <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}"  HorizontalAlignment="Left" AllowEmpty="False"
+                                                 IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
+                                                 ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_PAR}"/>
+                    </StackPanel>
                 </Grid>
 
             </StackPanel>

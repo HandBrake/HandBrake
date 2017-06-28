@@ -456,11 +456,8 @@
   <data name="PictureSettingsView_Output" xml:space="preserve">
     <value>Output</value>
   </data>
-  <data name="PictureSettingsView_ParH" xml:space="preserve">
-    <value>PAR Height:</value>
-  </data>
-  <data name="PictureSettingsView_ParW" xml:space="preserve">
-    <value>PAR Width:</value>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>PAR:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
     <value>Right</value>
