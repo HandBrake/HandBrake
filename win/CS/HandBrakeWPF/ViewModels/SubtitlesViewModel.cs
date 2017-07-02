@@ -602,7 +602,9 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetPreferredSubtitleTrackLanguage()
         {
-            return this.SubtitleBehaviours.SelectedLangauges.FirstOrDefault(w => w != Constants.Any);
+            string langName = this.SubtitleBehaviours.SelectedLangauges.FirstOrDefault(w => w != Constants.Any);
+            string langCode = LanguageUtilities.GetLanguageCode(langName);
+            return langCode;
         }
 
         /// <summary>

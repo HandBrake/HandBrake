@@ -495,9 +495,10 @@ namespace HandBrakeWPF.ViewModels
             if (this.AudioBehaviours.SelectedLangauges.Count > 0)
             {
                 string langName = this.AudioBehaviours.SelectedLangauges.FirstOrDefault(w => !w.Equals(Constants.Any));
-                if (!string.IsNullOrEmpty(langName))
+                string langCode = LanguageUtilities.GetLanguageCode(langName);
+                if (!string.IsNullOrEmpty(langCode))
                 {
-                    preferredAudioTracks = this.SourceTracks.Where(item => item.Language.Contains(langName));
+                    preferredAudioTracks = this.SourceTracks.Where(item => item.LanguageCode.Contains(langCode));
                 }
             }
 
