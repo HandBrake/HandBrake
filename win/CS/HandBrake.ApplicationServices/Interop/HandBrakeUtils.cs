@@ -304,6 +304,29 @@ namespace HandBrake.ApplicationServices.Interop
             return JsonConvert.DeserializeObject<Geometry>(result);
         }
 
+        public static void Reduce(long den, long num, out long x, out long y)
+        {
+            // find the greatest common divisor of num & den by Euclid's algorithm
+            long n = num, d = den;
+            while (d > 0)
+            {
+                long t = d;
+                d = n % d;
+                n = t;
+            }
+
+            // at this point n is the gcd. if it's non-zero remove it from num
+            // and den. Otherwise just return the original values.
+            if (n > 0)
+            {
+                num /= n;
+                den /= n;
+            }
+
+            x = num;
+            y = den;
+        }
+
         /// <summary>
         /// Sends the message logged event to any registered listeners.
         /// </summary>

@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Globalization;
 
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
@@ -428,7 +429,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets DisplayWidth.
         /// </summary>
-        public int DisplayWidth
+        public long DisplayWidth
         {
             get
             {
@@ -866,7 +867,7 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// The <see cref="PictureSize.PictureSettingsJob"/>.
         /// </returns>
-        private PictureSize.PictureSettingsJob GetPictureSettings()
+        private PictureSize.PictureSettingsJob GetPictureSettings(ChangedPictureField changedField)
         {
             PictureSize.PictureSettingsJob job = new PictureSize.PictureSettingsJob
             {
@@ -883,16 +884,23 @@ namespace HandBrakeWPF.ViewModels
                 Crop = new Cropping(this.CropTop, this.CropBottom, this.CropLeft, this.CropRight),
             };
 
-            if (this.SelectedAnamorphicMode == Anamorphic.Loose)
+            if (this.SelectedAnamorphicMode == Anamorphic.Custom)
             {
-                job.ParW = sourceParValues.Width;
-                job.ParH = sourceParValues.Height;
+                if (changedField == ChangedPictureField.DisplayWidth)
+                {
+                    var displayWidth = this.DisplayWidth;
+                    job.ParW = (int)displayWidth;  // num
+                    job.ParH = job.Width; // den
+                }
             }
 
-            if (SelectedAnamorphicMode == Anamorphic.Custom)
+            // Reduce the Par W/H if we can. Don't do it while the user is altering the PAR controls through as it will mess with the result.
+            if (changedField != ChangedPictureField.ParH && changedField != ChangedPictureField.ParW)
             {
-                job.ParW = this.DisplayWidth;  // num
-                job.ParH = this.Width; // den
+                long x, y;
+                HandBrakeUtils.Reduce(job.ParW, job.ParH, out x, out y);
+                job.ParW = (int)y;
+                job.ParH = (int)x;
             }
 
             return job;
@@ -939,22 +947,21 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Step 2, For the changed field, call hb_set_anamorphic_size and process the results.
-            PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size2(this.GetPictureSettings(), this.GetPictureTitleInfo(), setting);
+            PictureSize.AnamorphicResult result = PictureSize.hb_set_anamorphic_size2(this.GetPictureSettings(changedField), this.GetPictureTitleInfo(), setting);
+            double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
+
             this.Task.Width = result.OutputWidth;
             this.Task.Height = result.OutputHeight;
+            long x, y;
+            HandBrakeUtils.Reduce((int)Math.Round(result.OutputParWidth, 0), (int)Math.Round(result.OutputParHeight, 0), out x, out y);
             this.Task.PixelAspectX = (int)Math.Round(result.OutputParWidth, 0);
             this.Task.PixelAspectY = (int)Math.Round(result.OutputParHeight, 0);
+            this.Task.DisplayWidth = dispWidth;
 
             // Step 3, Set the display width label to indicate the output.
-            double dispWidth = Math.Round((result.OutputWidth * result.OutputParWidth / result.OutputParHeight), 0);
             this.DisplaySize = this.sourceResolution == null || this.sourceResolution.IsEmpty
                            ? string.Empty
                            : string.Format(Resources.PictureSettingsViewModel_StorageDisplayLabel, dispWidth, result.OutputHeight, this.ParWidth, this.ParHeight);
-
-            if (changedField != ChangedPictureField.DisplayWidth)
-            {
-                this.Task.DisplayWidth = (int)dispWidth;
-            }
 
             // Step 4, Force an update on all the UI elements.
             this.NotifyOfPropertyChange(() => this.Width);

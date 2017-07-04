@@ -93,7 +93,7 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_PAR}" Grid.Row="1" Grid.Column="0" />
 
                     <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
-                                    AllowEmpty="False" />
+                                    AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                         <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
                                                  IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
