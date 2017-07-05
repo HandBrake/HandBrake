@@ -311,7 +311,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the video avg bitrate.
         /// </summary>
-        public int VideoAvgBitrate { get; set; }
+        public int? VideoAvgBitrate { get; set; }
 
         /// <summary>
         /// Gets or sets the video color matrix code.
