@@ -1387,6 +1387,9 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
                 title_id = ghb_dict_get_int(ud->settings, "single_title");
             else
                 title_id = 0;
+            // ghb_do_scan replaces "scan_source" key in dict, so we must
+            // be finished with sourcename before calling ghb_do_scan
+            // since the memory it references will be freed
             if (strcmp(sourcename, filename) != 0)
             {
                 ghb_dict_set_string(ud->prefs, "default_source", filename);
@@ -1426,15 +1429,18 @@ dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
     const gchar *filename;
     const gchar *sourcename;
 
+    // ghb_do_scan replaces "scan_source" key in dict, so we must
+    // be finished with sourcename before calling ghb_do_scan
+    // since the memory it references will be freed
     sourcename = ghb_dict_get_string(ud->globals, "scan_source");
     filename = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-    ghb_do_scan(ud, filename, 0, TRUE);
     if (strcmp(sourcename, filename) != 0)
     {
         ghb_dict_set_string(ud->prefs, "default_source", filename);
         ghb_pref_save(ud->prefs, "default_source");
         ghb_dvd_set_current(filename, ud);
     }
+    ghb_do_scan(ud, filename, 0, TRUE);
 }
 
 void
