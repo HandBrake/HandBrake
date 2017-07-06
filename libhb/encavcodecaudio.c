@@ -178,7 +178,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     else if (audio->config.out.quality >= 0)
     {
         context->global_quality = audio->config.out.quality * FF_QP2LAMBDA;
-        context->flags |= CODEC_FLAG_QSCALE;
+        context->flags |= AV_CODEC_FLAG_QSCALE;
         if (audio->config.out.codec == HB_ACODEC_FDK_AAC ||
             audio->config.out.codec == HB_ACODEC_FDK_HAAC)
         {
@@ -197,7 +197,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     // so that it fills extradata with global header information.
     // If this flag is not set, it inserts the data into each
     // packet instead.
-    context->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
     {

@@ -1584,7 +1584,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
             {
                 pv->context->extradata_size = size;
                 pv->context->extradata =
-                                av_malloc(size + FF_INPUT_BUFFER_PADDING_SIZE);
+                                av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (pv->context->extradata == NULL)
                     return 1;
                 memcpy(pv->context->extradata, in->data, size);

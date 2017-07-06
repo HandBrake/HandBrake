@@ -130,7 +130,7 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
         avctx->thread_count = 1;
     }
 
-    if (codec->capabilities & CODEC_CAP_EXPERIMENTAL)
+    if (codec->capabilities & AV_CODEC_CAP_EXPERIMENTAL)
     {
         // "experimental" encoders will not open without this
         avctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;

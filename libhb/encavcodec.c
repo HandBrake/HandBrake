@@ -235,7 +235,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         /* Constant quantizer */
         // These settings produce better image quality than
         // what was previously used
-        context->flags |= CODEC_FLAG_QSCALE;
+        context->flags |= AV_CODEC_FLAG_QSCALE;
         context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
         //Set constant quality for libvpx
         if ( w->codec_param == AV_CODEC_ID_VP8 ||
@@ -278,11 +278,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if( job->mux & HB_MUX_MASK_MP4 )
     {
-        context->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     }
     if( job->grayscale )
     {
-        context->flags |= CODEC_FLAG_GRAY;
+        context->flags |= AV_CODEC_FLAG_GRAY;
     }
 
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
@@ -302,7 +302,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 ret = 1;
                 goto done;
             }
-            context->flags |= CODEC_FLAG_PASS1;
+            context->flags |= AV_CODEC_FLAG_PASS1;
         }
         else
         {
@@ -341,7 +341,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             fclose( pv->file );
             pv->file = NULL;
 
-            context->flags    |= CODEC_FLAG_PASS2;
+            context->flags    |= AV_CODEC_FLAG_PASS2;
             context->stats_in  = log;
         }
     }
