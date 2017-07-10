@@ -1,0 +1,13 @@
+--- libbluray-1.0.1/jni/win32/jni_md.h.orig	2017-03-02 08:33:49.000000000 -0500
++++ libbluray-1.0.1/jni/win32/jni_md.h	2017-08-16 12:07:43.000000000 -0400
+@@ -38,8 +38,8 @@
+ #ifndef _JNI_MD_H_
+ #define _JNI_MD_H_
+ 
+-#define JNIEXPORT __declspec(dllexport)
+-#define JNIIMPORT __declspec(dllimport)
++#define JNIEXPORT
++#define JNIIMPORT
+ #define JNICALL   __stdcall
+ 
+ typedef long jint;
