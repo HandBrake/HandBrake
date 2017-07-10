@@ -1,14 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread,PKGCONFIG))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.0-6-gcb1ae87.tar.gz
-LIBDVDREAD.FETCH.sha256 = d2e4200c3c5d5f812892f9c14851c94e2f707d54e7328946c6397ac999f15f17
-
-# TODO: libdvdread >= 5.0.3
-#LIBDVDREAD.FETCH.url    = https://download.videolan.org/pub/videolan/libdvdread/5.0.3/libdvdread-5.0.3.tar.bz2
-#LIBDVDREAD.FETCH.sha256 = 321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb28607d018ed82b
-
-LIBDVDREAD.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
+LIBDVDREAD.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.3.tar.bz2
+LIBDVDREAD.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdread/5.0.3/libdvdread-5.0.3.tar.bz2
+LIBDVDREAD.FETCH.sha256  = 321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb28607d018ed82b
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
