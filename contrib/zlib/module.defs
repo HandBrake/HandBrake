@@ -1,24 +1,15 @@
 $(eval $(call import.MODULE.defs,ZLIB,zlib))
 $(eval $(call import.CONTRIB.defs,ZLIB))
 
-ZLIB.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/zlib-1.2.3.tar.gz
-ZLIB.FETCH.sha256 = 18d648555e4fc6f64aad462e4ebb5a00a205617a2292c99a30fe157c1cec1e65
-ZLIB.EXTRACT.tarbase = zlib
-
-# TODO: Upstream archive differs
-#ZLIB.FETCH.url += https://sourceforge.net/projects/libpng/files/zlib/1.2.3/zlib-1.2.3.tar.gz
-#ZLIB.FETCH.md5 =  debc62758716a169df9f62e6ab2bc634
-#ZLIB.EXTRACT.tarbase = zlib
-#
-# TODO: zlib >= 1.2.8
-#ZLIB.FETCH.url    += https://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz
-#ZLIB.FETCH.sha256  = 36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d
-#ZLIB.EXTRACT.tarbase = zlib
+ZLIB.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/zlib-1.2.11.tar.gz
+ZLIB.FETCH.url    += https://sourceforge.net/projects/libpng/files/zlib/1.2.11/zlib-1.2.11.tar.gz
+ZLIB.FETCH.sha256  = c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
 
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    ZLIB.CONFIGURE.env.AR     = AR="$(AR.exe) rc"
-    ZLIB.CONFIGURE.env.RANLIB = RANLIB="$(RANLIB.exe)"
-    ZLIB.CONFIGURE.env.args  += !AR !RANLIB
+    ZLIB.CONFIGURE.env.AR      = AR="$(AR.exe)"
+    ZLIB.CONFIGURE.env.ARFLAGS = ARFLAGS="rc"
+    ZLIB.CONFIGURE.env.RANLIB  = RANLIB="$(RANLIB.exe)"
+    ZLIB.CONFIGURE.env.args   += !AR !ARFLAGS !RANLIB
 endif
