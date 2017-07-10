@@ -7,9 +7,9 @@ endif
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libass-0.13.2.tar.gz
-LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.13.2/libass-0.13.2.tar.gz
-LIBASS.FETCH.sha256  = 8baccf663553b62977b1c017d18b3879835da0ef79dc4d3b708f2566762f1d5e
+LIBASS.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libass-0.13.7.tar.gz
+LIBASS.FETCH.url    += https://github.com/libass/libass/releases/download/0.13.7/libass-0.13.7.tar.gz
+LIBASS.FETCH.sha256  = 008a05a4ed341483d8399c8071d57a39853cf025412b32da277e76ad8226e158
 
 # Tell configure where to find our version of freetype
 LIBASS.CONFIGURE.extra = \
