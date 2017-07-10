@@ -3,9 +3,9 @@ __deps__ := FREETYPE
 $(eval $(call import.MODULE.defs,HARFBUZZ,harfbuzz,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,HARFBUZZ))
 
-HARFBUZZ.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/harfbuzz-1.3.0.tar.bz2
-HARFBUZZ.FETCH.url    += https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.0.tar.bz2
-HARFBUZZ.FETCH.sha256  = b04be31633efee2cae1d62d46434587302554fa837224845a62565ec68a0334d
+HARFBUZZ.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/harfbuzz-1.4.6.tar.bz2
+HARFBUZZ.FETCH.url    += https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.6.tar.bz2
+HARFBUZZ.FETCH.sha256  = 21a78b81cd20cbffdb04b59ac7edfb410e42141869f637ae1d6778e74928d293
 
 # Tell configure where to find our version of freetype
 HARFBUZZ.CONFIGURE.extra = \
