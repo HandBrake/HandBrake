@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,FONTCONFIG))
-$(eval $(call import.CONTRIB.rules,FONTCONFIG))
