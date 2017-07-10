@@ -1,13 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVORBIS,libvorbis,LIBOGG))
 $(eval $(call import.CONTRIB.defs,LIBVORBIS))
 
-LIBVORBIS.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/libvorbis-aotuv_b6.03.tar.bz2
-LIBVORBIS.FETCH.sha256 = 95455420f07e4b3abdf32bda9f5921e9ed3f1afdc3739098dc090150a42fd7fd
-LIBVORBIS.EXTRACT.tarbase = aotuv-b6.03_20110424
-
-# TODO: libvorbis >= 1.3.5 (upstream variant aotuv no longer exists), tarbase unnecessary
-#LIBVORBIS.FETCH.url    = http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
-#LIBVORBIS.FETCH.sha256 = 6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce
+LIBVORBIS.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libvorbis-1.3.5.tar.gz
+LIBVORBIS.FETCH.url    += https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
+LIBVORBIS.FETCH.sha256  = 6efbcecdd3e5dfbf090341b485da9d176eb250d893e3eb378c428a2db38301ce
 
 LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
 
