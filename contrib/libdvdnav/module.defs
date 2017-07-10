@@ -1,15 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,PKGCONFIG LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
-LIBDVDNAV.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.1.tar.bz2
-LIBDVDNAV.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdnav/5.0.1/libdvdnav-5.0.1.tar.bz2
-LIBDVDNAV.FETCH.sha256  = 72b1cb8266f163d4a1481b92c7b6c53e6dc9274d2a6befb08ffc351fe7a4a2a9
-
-# TODO: libdvdnav >= 5.0.3
-#LIBDVDNAV.FETCH.url    = https://download.videolan.org/pub/videolan/libdvdnav/5.0.3/libdvdnav-5.0.3.tar.bz2
-#LIBDVDNAV.FETCH.sha256 = 5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d
-
-LIBDVDNAV.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;
+LIBDVDNAV.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.3.tar.bz2
+LIBDVDNAV.FETCH.url    += https://download.videolan.org/pub/videolan/libdvdnav/5.0.3/libdvdnav-5.0.3.tar.bz2
+LIBDVDNAV.FETCH.sha256  = 5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
