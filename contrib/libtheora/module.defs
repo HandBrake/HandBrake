@@ -1,13 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBTHEORA,libtheora,LIBOGG LIBVORBIS))
 $(eval $(call import.CONTRIB.defs,LIBTHEORA))
 
-LIBTHEORA.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libtheora-1.1.0.tar.bz2
-LIBTHEORA.FETCH.url    += http://downloads.xiph.org/releases/theora/libtheora-1.1.0.tar.bz2
-LIBTHEORA.FETCH.sha256  = 74be9fe9f85d18c45bdcbb018cebf12c74e2234aeecb4d4c4cb92d80bdd287e2
-
-# TODO: libtheora >= 1.1.1
-#LIBTHEORA.FETCH.url    = http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
-#LIBTHEORA.FETCH.sha256 = b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
+LIBTHEORA.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libtheora-1.1.1.tar.bz2
+LIBTHEORA.FETCH.url    += https://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+LIBTHEORA.FETCH.sha256  = b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
 
 LIBTHEORA.CONFIGURE.extra = \
     --disable-examples \
