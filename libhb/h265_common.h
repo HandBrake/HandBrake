@@ -23,7 +23,7 @@ static const char * const   hb_h265_qsv_profile_names_10bit[]   = { "auto", "mai
 static const char * const   hb_h265_profile_names_12bit[]       = { "auto", "main12", "main12-intra", NULL, };
 static const char * const   hb_h265_profile_names_16bit[]       = { "auto", "main16", "main16-intra", NULL, };
 static const char * const     hb_h265_level_names[] = { "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL, };
-static const int    const    hb_h265_level_values[] = {     -1,    30,    60,    63,    90,    93,   120,   123,   150,   153,   156,   180,   183,   186,     0, };
+static const int             hb_h265_level_values[] = {     -1,    30,    60,    63,    90,    93,   120,   123,   150,   153,   156,   180,   183,   186,     0, };
 
 // stolen from libx265's x265.h
 static const char * const hb_h265_fullrange_names[] = { "limited", "full", NULL, };
