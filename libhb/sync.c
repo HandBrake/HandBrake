@@ -318,10 +318,11 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
     }
     if (duration > 0)
     {
-        size = sizeof(float) *
-               (duration * stream->audio.audio->config.in.samplerate / 90000) *
-                   av_get_channel_layout_nb_channels(
-                              stream->audio.audio->config.in.channel_layout );
+        // Make certain size is even multiple of sample size * num channels
+        size = (int)(duration * stream->audio.audio->config.in.samplerate /
+                     90000) * sizeof(float) *
+               av_get_channel_layout_nb_channels(
+                              stream->audio.audio->config.in.channel_layout);
         if (size > 0)
         {
             buf = hb_buffer_init(size);
