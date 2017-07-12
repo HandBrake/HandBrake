@@ -77,7 +77,6 @@ typedef struct
     hb_list_t         * scr_delay_queue;
     int                 max_len;
     int                 min_len;
-    hb_cond_t         * cond_full;
     hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;
 
@@ -240,16 +239,6 @@ static int fillQueues( sync_common_t * common )
         }
     }
     return !wait || abort;
-}
-
-static void signalBuffer( sync_stream_t * stream )
-{
-    if (hb_list_count(stream->in_queue) <= stream->max_len ||
-        stream->done || stream->common->job->done ||
-        *stream->common->job->die)
-    {
-        hb_cond_signal(stream->cond_full);
-    }
 }
 
 static void scrSlip( sync_common_t * common, int64_t delta )
@@ -895,7 +884,6 @@ static void fixVideoOverlap( sync_stream_t * stream )
                 stream->drop_pts = buf->s.start;
             }
             hb_list_rem(stream->in_queue, buf);
-            signalBuffer(stream);
             // Video frame durations are assumed to be variable and are
             // adjusted based on the start time of the next frame before
             // we get to this point.
@@ -1089,7 +1077,6 @@ static void fixAudioOverlap( sync_stream_t * stream )
             // by just shifting the timestamps and carrying the gap
             // along.
             hb_list_rem(stream->in_queue, buf);
-            signalBuffer(stream);
             stream->drop_duration += buf->s.duration;
             stream->drop++;
             drop++;
@@ -1194,7 +1181,6 @@ static void streamFlush( sync_stream_t * stream )
         if (buf != NULL)
         {
             hb_list_rem(stream->in_queue, buf);
-            signalBuffer(stream);
             if (!stream->first_frame)
             {
                 if (buf->s.start >= 0)
@@ -1483,7 +1469,6 @@ static void terminateSubtitleStreams( sync_common_t * common )
         fifo_push(stream->fifo_out, hb_buffer_eof_init());
         fifo_push(stream->fifo_in,  hb_buffer_eof_init());
         stream->done = 1;
-        signalBuffer(stream);
     }
 }
 
@@ -1553,7 +1538,6 @@ static void OutputBuffer( sync_common_t * common )
         {
             buf = hb_list_item(out_stream->in_queue, 0);
             hb_list_rem(out_stream->in_queue, buf);
-            signalBuffer(out_stream);
             hb_buffer_close(&buf);
             continue;
         }
@@ -1614,7 +1598,6 @@ static void OutputBuffer( sync_common_t * common )
                     hb_list_rem(out_stream->in_queue, buf);
                     hb_buffer_close(&buf);
                 }
-                signalBuffer(out_stream);
                 continue;
             }
             // reset frame count to track number of frames after
@@ -1661,7 +1644,6 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             flushStreams(common);
-            signalBuffer(out_stream);
             continue;
         }
         if (out_stream->type == SYNC_TYPE_VIDEO &&
@@ -1675,7 +1657,6 @@ static void OutputBuffer( sync_common_t * common )
             fifo_push(out_stream->fifo_out, hb_buffer_eof_init());
             terminateSubtitleStreams(common);
             flushStreams(common);
-            signalBuffer(out_stream);
             continue;
         }
 
@@ -1686,7 +1667,6 @@ static void OutputBuffer( sync_common_t * common )
 
         // Out the buffer goes...
         hb_list_rem(out_stream->in_queue, buf);
-        signalBuffer(out_stream);
         if (out_stream->type == SYNC_TYPE_VIDEO)
         {
             UpdateState(common, out_stream->frame_count);
@@ -2127,16 +2107,12 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
            !stream->done && !stream->common->job->done &&
            !*stream->common->job->die)
     {
-        if (!stream->common->start_found)
-        {
-            hb_unlock(stream->common->mutex);
-            Synchronize(stream);
-            hb_lock(stream->common->mutex);
-        }
-        else
-        {
-            hb_cond_wait(stream->cond_full, stream->common->mutex);
-        }
+        // If the in_queue is full, we have to force some output to
+        // unblock it.  Blocking here would back up the pipeline and
+        // stall out reader eventually.
+        hb_unlock(stream->common->mutex);
+        Synchronize(stream);
+        hb_lock(stream->common->mutex);
     }
 
     // Reader can change job->reader_pts_offset after initialization
@@ -2232,8 +2208,6 @@ static int InitAudio( sync_common_t * common, int index )
     pv->common                  = common;
     pv->stream                  = &common->streams[1 + index];
     pv->stream->common          = common;
-    pv->stream->cond_full       = hb_cond_init();
-    if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue        = hb_list_init();
     pv->stream->scr_delay_queue = hb_list_init();
     pv->stream->max_len         = SYNC_MAX_AUDIO_QUEUE_LEN;
@@ -2280,7 +2254,6 @@ fail:
             }
             hb_list_close(&pv->stream->delta_list);
             hb_list_close(&pv->stream->in_queue);
-            hb_cond_close(&pv->stream->cond_full);
         }
     }
     free(pv);
@@ -2308,8 +2281,6 @@ static int InitSubtitle( sync_common_t * common, int index )
     pv->stream  =
         &common->streams[1 + hb_list_count(common->job->list_audio) + index];
     pv->stream->common            = common;
-    pv->stream->cond_full         = hb_cond_init();
-    if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue          = hb_list_init();
     pv->stream->scr_delay_queue   = hb_list_init();
     pv->stream->max_len           = SYNC_MAX_SUBTITLE_QUEUE_LEN;
@@ -2364,7 +2335,6 @@ fail:
         {
             hb_list_close(&pv->stream->delta_list);
             hb_list_close(&pv->stream->in_queue);
-            hb_cond_close(&pv->stream->cond_full);
         }
     }
     free(pv);
@@ -2409,8 +2379,6 @@ static int syncVideoInit( hb_work_object_t * w, hb_job_t * job)
     // Set up video sync work object
     pv->stream                  = &pv->common->streams[0];
     pv->stream->common          = pv->common;
-    pv->stream->cond_full       = hb_cond_init();
-    if (pv->stream->cond_full == NULL) goto fail;
     pv->stream->in_queue        = hb_list_init();
     pv->stream->scr_delay_queue = hb_list_init();
     pv->stream->max_len         = SYNC_MAX_VIDEO_QUEUE_LEN;
@@ -2551,7 +2519,6 @@ fail:
             {
                 hb_list_close(&pv->stream->delta_list);
                 hb_list_close(&pv->stream->in_queue);
-                hb_cond_close(&pv->stream->cond_full);
             }
             free(pv->common->streams);
             free(pv->common);
@@ -2608,7 +2575,6 @@ static void syncVideoClose( hb_work_object_t * w )
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
     hb_list_empty(&pv->stream->scr_delay_queue);
-    hb_cond_close(&pv->stream->cond_full);
 
     // Close work threads
     hb_work_object_t * work;
@@ -3065,7 +3031,6 @@ static void syncAudioClose( hb_work_object_t * w )
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
     hb_list_empty(&pv->stream->scr_delay_queue);
-    hb_cond_close(&pv->stream->cond_full);
     free(pv);
     w->private_data = NULL;
 }
@@ -3384,7 +3349,6 @@ static void syncSubtitleClose( hb_work_object_t * w )
     hb_list_close(&pv->stream->delta_list);
     hb_list_empty(&pv->stream->in_queue);
     hb_list_empty(&pv->stream->scr_delay_queue);
-    hb_cond_close(&pv->stream->cond_full);
     hb_buffer_list_close(&pv->stream->subtitle.sanitizer.list_current);
     free(pv);
     w->private_data = NULL;
