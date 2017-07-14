@@ -54,8 +54,8 @@ echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15"
 curl https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz -o "automake-1.15.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.7.0"
-curl https://cmake.org/files/v3.7/cmake-3.7.0.tar.gz -o "cmake-3.7.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.8.2"
+curl https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz -o "cmake-3.8.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
 curl https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
@@ -90,13 +90,13 @@ echo -en "${CREL}"
 
 # cmake
 cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.7.0"
+printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.8.2"
 echo "You may safely dismiss and ignore any prompt to install Java."
-tar -xf cmake-3.7.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd cmake-3.7.0 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.7.0.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../cmake-3.7.0.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../cmake-3.7.0.log 2>&1 || print_fail_and_exit
+tar -xf cmake-3.8.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+cd cmake-3.8.2 >/dev/null 2>&1 || print_fail_and_exit
+./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
+${SUDO} make install >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
 
 # libtool
 cd "${TEMP_DIR}"
