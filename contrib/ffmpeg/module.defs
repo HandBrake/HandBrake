@@ -112,20 +112,12 @@ endif
 ## enable compile verbosity
 FFMPEG.BUILD.extra = V=1
 
-##
-## llvm inline assembler (used in llvm-gcc and clang) runs out of registers
-## on darwin i386 - unclear if it is a source code or llvm bug.
-##
-ifeq (darwin-i386,$(BUILD.system)-$(BUILD.machine))
-    ## optimize mode hack: use clang
-    ifneq (none,$(FFMPEG.GCC.O))
-        FFMPEG.GCC.gcc = clang
-    endif
-
-    ## debug mode hack: omit frame pointer
-    ifneq (none,$(FFMPEG.GCC.g))
-        FFMPEG.GCC.args.extra += -fomit-frame-pointer
-    endif
+# 32-bit intel
+ifneq (,$(filter $(BUILD.machine),i386 i486 i586 i686))
+    # avoid running out of registers
+    FFMPEG.GCC.args.extra += -fomit-frame-pointer
+    # avoid 'asm' operand has impossible constraints errors
+    FFMPEG.CONFIGURE.extra += --disable-inline-asm
 endif
 
 ## For POSIX.1-2001
