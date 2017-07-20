@@ -292,16 +292,6 @@ namespace HandBrake.ApplicationServices.Interop
                 }
             };
 
-            // Sanitize the input.
-            Geometry resultGeometry = AnamorphicFactory.CreateGeometry(settings, new SourceVideoInfo(new Size(title.Geometry.Width, title.Geometry.Height), new Size(title.Geometry.PAR.Num, title.Geometry.PAR.Den)));
-            int width = resultGeometry.Width * resultGeometry.PAR.Num / resultGeometry.PAR.Den;
-            int height = resultGeometry.Height;
-
-            uiGeometry.geometry.width = width;
-            uiGeometry.geometry.height = height;
-            uiGeometry.geometry.par.num = settings.PixelAspectX;
-            uiGeometry.geometry.par.den = settings.PixelAspectY;
-
             // Fetch the image data from LibHb
             IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, 0);
             hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
@@ -314,8 +304,9 @@ namespace HandBrake.ApplicationServices.Interop
             byte[] managedBuffer = new byte[imageBufferSize];
             Marshal.Copy(image.plane[0].data, managedBuffer, 0, imageBufferSize);
 
-            var bitmap = new Bitmap(width, height);
-            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
+            var bitmap = new Bitmap(image.width, image.height);
+
+            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, image.width, image.height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
             IntPtr ptr = bitmapData.Scan0; // Pointer to the first pixel.
             for (int i = 0; i < image.height; i++)
@@ -323,7 +314,7 @@ namespace HandBrake.ApplicationServices.Interop
                 try
                 {
                     Marshal.Copy(managedBuffer, i * stride_width, ptr, stride_width);
-                    ptr = IntPtr.Add(ptr, width * 4);
+                    ptr = IntPtr.Add(ptr, image.width * 4);
                 }
                 catch (Exception exc)
                 {
