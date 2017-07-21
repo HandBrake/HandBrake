@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13156.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13156.6"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -220,7 +220,7 @@
                                 <binding destination="61" name="selectedValue" keyPath="values.DefaultMpegExtension" id="490"/>
                             </connections>
                         </popUpButton>
-                        <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="491">
+                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="491">
                             <rect key="frame" x="93" y="268" width="156" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="Notification" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="499" id="492">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -310,6 +310,7 @@
                         <constraint firstItem="244" firstAttribute="leading" secondItem="491" secondAttribute="leading" id="X9l-qe-zBa"/>
                         <constraint firstItem="Tk3-Ig-fFI" firstAttribute="top" secondItem="6aa-GX-TuM" secondAttribute="bottom" constant="8" id="Ylo-U4-kLF"/>
                         <constraint firstItem="239" firstAttribute="leading" secondItem="486" secondAttribute="leading" id="ZVo-li-WxS"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="239" secondAttribute="trailing" constant="20" symbolic="YES" id="a53-c6-s3J"/>
                         <constraint firstItem="275" firstAttribute="top" secondItem="2nU-46-chy" secondAttribute="top" constant="20" id="aoK-bz-eFO"/>
                         <constraint firstAttribute="trailing" secondItem="450" secondAttribute="trailing" constant="20" id="bST-TU-O33"/>
                         <constraint firstItem="GNx-QT-RSv" firstAttribute="leading" secondItem="fF9-Q1-vYr" secondAttribute="leading" id="c0N-JJ-FGV"/>
@@ -495,7 +496,7 @@
                             </connections>
                         </popUpButton>
                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="398">
-                            <rect key="frame" x="102" y="126" width="219" height="18"/>
+                            <rect key="frame" x="102" y="126" width="218" height="18"/>
                             <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -657,7 +658,7 @@
                             </connections>
                         </button>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ybi-46-yhY">
-                            <rect key="frame" x="102" y="235" width="254" height="18"/>
+                            <rect key="frame" x="102" y="235" width="253" height="18"/>
                             <string key="toolTip">Show the Advanced Options Panel for x264 settings.
 
 This setting is no longer supported and may be removed in a future version. Use at your own risk!</string>
@@ -698,7 +699,7 @@ This setting is no longer supported and may be removed in a future version. Use 
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-zw-opS">
+                        <textField toolTip="Minimum free space on destination disk." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-zw-opS">
                             <rect key="frame" x="340" y="16" width="40" height="19"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="uuf-kg-lmG"/>
@@ -784,7 +785,7 @@ This setting is no longer supported and may be removed in a future version. Use 
                 <constraint firstItem="4UU-uq-R9U" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="236" secondAttribute="leading" priority="750" id="iT8-1K-bUI"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4UU-uq-R9U" secondAttribute="trailing" priority="750" id="yAs-3j-mb6"/>
             </constraints>
-            <point key="canvasLocation" x="526" y="-614"/>
+            <point key="canvasLocation" x="421" y="-571"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>
     </objects>
