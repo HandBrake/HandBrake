@@ -114,7 +114,6 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
 	(cd $(STAGE.out.src/)zesty && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~zesty1_source.changes )
-	(cd $(STAGE.out.src/)yakkety && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~yakkety1_source.changes )
 	(cd $(STAGE.out.src/)xenial && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~xenial1_source.changes )
 	(cd $(STAGE.out.src/)vivid && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~vivid1_source.changes )
 	(cd $(STAGE.out.src/)trusty && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~trusty1_source.changes )
@@ -136,20 +135,6 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)zesty/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)zesty/$(PKG.src.deb.tar) -C $(STAGE.out.src/)zesty $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)zesty/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	$(MKDIR.exe) -p $(STAGE.out.src/)yakkety
-	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)yakkety/
-	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/version.txt
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)yakkety/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)yakkety/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/control.yakkety $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/control
-	$(CP.exe) $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/rules.yakkety $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~yakkety1) yakkety; urgency=low" > $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/changelog
-	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)yakkety/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)yakkety/$(PKG.src.deb.tar) -C $(STAGE.out.src/)yakkety $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)yakkety/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)xenial
 	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)xenial/
 	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)xenial/$(PKG.deb.basename)/version.txt
