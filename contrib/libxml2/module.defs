@@ -3,7 +3,7 @@ $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
 LIBXML2.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libxml2-2.9.4.tar.gz
-LIBXML2.FETCH.url    += ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz
+LIBXML2.FETCH.url    += https://download.videolan.org/pub/contrib/libxml2/libxml2-2.9.4.tar.gz
 LIBXML2.FETCH.sha256  = ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c
 
 # The Python components do not build on MinGW due to the lack of a select() call
