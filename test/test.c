@@ -4401,7 +4401,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
                 {
                     arate = hb_audio_samplerate_get_from_name(arates[ii]);
                 }
-                if (arate <= 0)
+                if (arate < 0)
                 {
                     fprintf(stderr, "Invalid sample rate %s, using input rate\n",
                             arates[ii]);
