@@ -1506,7 +1506,7 @@ static void ShowHelp()
         }
     }
     fprintf( out, " kHz)\n"
-"                           Separate tracks by commas.\n"
+"                           or \"auto\". Separate tracks by commas.\n"
 "   -D, --drc <float>       Apply extra dynamic range compression to the\n"
 "                           audio, making soft sounds louder. Range is 1.0\n"
 "                           to 4.0 (too loud), with 1.5 - 2.5 being a useful\n"
