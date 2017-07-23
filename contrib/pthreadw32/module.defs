@@ -2,7 +2,7 @@ $(eval $(call import.MODULE.defs,PTHREADW32,pthreadw32))
 $(eval $(call import.CONTRIB.defs,PTHREADW32))
 
 PTHREADW32.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/pthreads-w32-2-9-1-release.tar.gz
-PTHREADW32.FETCH.url    += ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz
+PTHREADW32.FETCH.url    += https://download.videolan.org/pub/contrib/pthreads/pthreads-w32-2-9-1-release.tar.gz
 PTHREADW32.FETCH.sha256  = e6aca7aea8de33d9c8580bcb3a0ea3ec0a7ace4ba3f4e263ac7c7b66bc95fb4d
 
 PTHREADW32.CONFIGURE = $(TOUCH.exe) $@
