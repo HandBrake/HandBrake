@@ -130,6 +130,7 @@ struct hb_filter_private_s
     int    range[3];       // spatial search window width (must be odd)
     int    nframes[3];     // temporal search depth in frames
     int    prefilter[3];   // prefilter mode, can improve weight analysis
+    int    threads;        // number of frame threads to use, 0 == auto
 
     float  exptable[3][NLMEANS_EXPSIZE];
     float  weight_fact_table[3];
@@ -142,7 +143,6 @@ struct hb_filter_private_s
     int         max_frames;
 
     taskset_t   taskset;
-    int         thread_count;
     nlmeans_thread_arg_t **thread_data;
 };
 
@@ -163,7 +163,8 @@ static const char nlmeans_template[] =
     "cb-frame-count=^"HB_INT_REG"$:cb-prefilter=^"HB_INT_REG"$:"
     "cr-strength=^"HB_FLOAT_REG"$:cr-origin-tune=^"HB_FLOAT_REG"$:"
     "cr-patch-size=^"HB_INT_REG"$:cr-range=^"HB_INT_REG"$:"
-    "cr-frame-count=^"HB_INT_REG"$:cr-prefilter=^"HB_INT_REG"$";
+    "cr-frame-count=^"HB_INT_REG"$:cr-prefilter=^"HB_INT_REG"$:"
+    "threads=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_nlmeans =
 {
@@ -800,6 +801,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
         pv->nframes[c]     = -1;
         pv->prefilter[c]   = -1;
     }
+    pv->threads = -1;
 
     // Read user parameters
     if (filter->settings != NULL)
@@ -825,6 +827,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
         hb_dict_extract_int(&pv->range[2],          dict, "cr-range");
         hb_dict_extract_int(&pv->nframes[2],        dict, "cr-frame-count");
         hb_dict_extract_int(&pv->prefilter[2],      dict, "cr-prefilter");
+
+        hb_dict_extract_int(&pv->threads,           dict, "threads");
     }
 
     // Cascade values
@@ -879,9 +883,11 @@ static int nlmeans_init(hb_filter_object_t *filter,
         exptable[NLMEANS_EXPSIZE-1] = 0;
     }
 
-    pv->thread_count = hb_get_cpu_count();
-    pv->frame = calloc(pv->thread_count + pv->max_frames, sizeof(Frame));
-    for (int ii = 0; ii < pv->thread_count + pv->max_frames; ii++)
+    // Sanitize
+    if (pv->threads < 1) { pv->threads = hb_get_cpu_count(); }
+
+    pv->frame = calloc(pv->threads + pv->max_frames, sizeof(Frame));
+    for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
     {
         for (int c = 0; c < 3; c++)
         {
@@ -889,15 +895,15 @@ static int nlmeans_init(hb_filter_object_t *filter,
         }
     }
 
-    pv->thread_data = malloc(pv->thread_count * sizeof(nlmeans_thread_arg_t*));
-    if (taskset_init(&pv->taskset, pv->thread_count,
+    pv->thread_data = malloc(pv->threads * sizeof(nlmeans_thread_arg_t*));
+    if (taskset_init(&pv->taskset, pv->threads,
                      sizeof(nlmeans_thread_arg_t)) == 0)
     {
         hb_error("NLMeans could not initialize taskset");
         goto fail;
     }
 
-    for (int ii = 0; ii < pv->thread_count; ii++)
+    for (int ii = 0; ii < pv->threads; ii++)
     {
         pv->thread_data[ii] = taskset_thread_args(&pv->taskset, ii);
         if (pv->thread_data[ii] == NULL)
@@ -952,7 +958,7 @@ static void nlmeans_close(hb_filter_object_t *filter)
         }
     }
 
-    for (int ii = 0; ii < pv->thread_count + pv->max_frames; ii++)
+    for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
     {
         for (int c = 0; c < 3; c++)
         {
@@ -1057,7 +1063,7 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
 
 static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
 {
-    if (pv->next_frame < pv->max_frames + pv->thread_count)
+    if (pv->next_frame < pv->max_frames + pv->threads)
     {
         return NULL;
     }
@@ -1067,7 +1073,7 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
     // Free buffers that are not needed for next taskset cycle
     for (int c = 0; c < 3; c++)
     {
-        for (int t = 0; t < pv->thread_count; t++)
+        for (int t = 0; t < pv->threads; t++)
         {
             // Release last frame in buffer
             if (pv->frame[t].plane[c].mem_pre != NULL &&
@@ -1088,20 +1094,20 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
     {
         // Don't move the mutex!
         Frame frame = pv->frame[f];
-        pv->frame[f] = pv->frame[f+pv->thread_count];
+        pv->frame[f] = pv->frame[f+pv->threads];
         for (int c = 0; c < 3; c++)
         {
             pv->frame[f].plane[c].mutex = frame.plane[c].mutex;
-            pv->frame[f+pv->thread_count].plane[c].mem_pre = NULL;
-            pv->frame[f+pv->thread_count].plane[c].mem = NULL;
+            pv->frame[f+pv->threads].plane[c].mem_pre = NULL;
+            pv->frame[f+pv->threads].plane[c].mem = NULL;
         }
     }
-    pv->next_frame -= pv->thread_count;
+    pv->next_frame -= pv->threads;
 
     // Collect results from taskset
     hb_buffer_list_t list;
     hb_buffer_list_clear(&list);
-    for (int t = 0; t < pv->thread_count; t++)
+    for (int t = 0; t < pv->threads; t++)
     {
         hb_buffer_list_append(&list, pv->thread_data[t]->out);
     }
