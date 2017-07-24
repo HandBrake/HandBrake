@@ -14,3 +14,7 @@ LIBTHEORA.CONFIGURE.extra = \
     --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) \
     --with-vorbis=$(call fn.ABSOLUTE,$(CONTRIB.build/)) \
     HAVE_PKG_CONFIG=no
+
+ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+    LIBTHEORA.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
+endif

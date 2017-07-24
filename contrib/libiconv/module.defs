@@ -5,7 +5,13 @@ LIBICONV.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libicon
 LIBICONV.FETCH.url    += https://ftp.gnu.org/gnu/libiconv/libiconv-1.15.tar.gz
 LIBICONV.FETCH.sha256  = ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178
 
+ifeq (1,$(BUILD.cross))
 # this contrib will not build under MinGW with -std=gnu99
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    LIBICONV.GCC.args.c_std = -std=gnu89
+    ifeq (mingw,$(BUILD.system))
+        LIBICONV.GCC.args.c_std = -std=gnu89
+    endif
+
+    ifeq (msys,$(HOST.system))
+        LIBICONV.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
+    endif
 endif
