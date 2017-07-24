@@ -8,3 +8,7 @@ LAME.FETCH.sha256  = 24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9
 ifneq (none,$(FFMPEG.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
 endif
+
+ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+    LAME.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
+endif

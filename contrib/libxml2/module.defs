@@ -10,3 +10,7 @@ LIBXML2.FETCH.sha256  = ffb911191e509b966deb55de705387f14156e1a56b21824357cdf005
 # in the MinGW environment.
 LIBXML2.CONFIGURE.extra = \
     --without-python --without-threads
+
+ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+    LIBXML2.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
+endif
