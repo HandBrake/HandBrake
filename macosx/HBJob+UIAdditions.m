@@ -198,12 +198,12 @@ static NSDictionary            *shortHeightAttr;
 
     if ((self.container & HB_MUX_MASK_MP4) && self.mp4HttpOptimize)
     {
-        [options appendString:@", Web optimized"];
+        [options appendString:@", Web Optimized"];
     }
 
     if ((self.container & HB_MUX_MASK_MP4)  && self.mp4iPodCompatible)
     {
-        [options appendString:@", iPod 5G support"];
+        [options appendString:@", iPod 5G Support"];
     }
 
     if ([options hasPrefix:@", "])
