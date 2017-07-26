@@ -63,10 +63,12 @@
     [_backLayer setShadowOpacity:0.5f];
     [_backLayer setShadowOffset:CGSizeMake(0, 0)];
     [_backLayer setAnchorPoint:CGPointMake(0, 0)];
+    _backLayer.opaque = YES;
 
     _pictureLayer = [CALayer layer];
     [_pictureLayer setBounds:CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2))];
     [_pictureLayer setAnchorPoint:CGPointMake(0, 0)];
+    _pictureLayer.opaque = YES;
 
     // Disable fade on contents change.
     NSMutableDictionary *actions = [NSMutableDictionary dictionary];
