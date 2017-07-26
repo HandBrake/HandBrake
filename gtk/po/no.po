@@ -640,7 +640,7 @@ msgstr "IPod 4G Støtte"
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "Legg til iPod Atom som brukes av noen eldre versjoner av iPod."
 
-msgid "Web optimized"
+msgid "Web Optimized"
 msgstr "Internett optimalisert"
 
 msgid ""

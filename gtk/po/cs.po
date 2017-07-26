@@ -845,7 +845,7 @@ msgstr "Podpora pro iPod 5G"
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "Přidat iPod Atom, jenž je potřeba některými staršími zařízeními iPod."
 
-msgid "Web optimized"
+msgid "Web Optimized"
 msgstr "Vyladěno pro internet"
 
 msgid ""

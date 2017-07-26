@@ -817,7 +817,7 @@ msgstr "iPod 5G サポート"
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "一部の古い iPod のための iPod Atom を追加します。"
 
-msgid "Web optimized"
+msgid "Web Optimized"
 msgstr "ウェブに最適化"
 
 msgid ""

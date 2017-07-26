@@ -640,7 +640,7 @@ msgstr ""
 msgid "Add iPod Atom needed by some older iPods."
 msgstr ""
 
-msgid "Web optimized"
+msgid "Web Optimized"
 msgstr ""
 
 msgid ""

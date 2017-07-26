@@ -1504,7 +1504,7 @@ This is often the feature title of a DVD.</property>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="Mp4HttpOptimize">
-                                <property name="label" translatable="yes">Web optimized</property>
+                                <property name="label" translatable="yes">Web Optimized</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>

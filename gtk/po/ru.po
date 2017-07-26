@@ -832,7 +832,7 @@ msgstr "Поддержка iPod 5G"
 msgid "Add iPod Atom needed by some older iPods."
 msgstr "Добавить iPod Atom, необходимый некоторым старым плеерам."
 
-msgid "Web optimized"
+msgid "Web Optimized"
 msgstr "Оптимизация для интернет-трансляции"
 
 msgid ""
