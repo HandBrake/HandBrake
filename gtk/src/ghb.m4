@@ -1503,15 +1503,14 @@ This is often the feature title of a DVD.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="AlignAVStart">
-                                <property name="label" translatable="yes">Align A/V Start</property>
+                              <object class="GtkCheckButton" id="Mp4HttpOptimize">
+                                <property name="label" translatable="yes">Web optimized</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">Aligns the initial timestamps of all audio and video streams by
-inserting blank frames or dropping frames. May improve audio/video
-sync for broken players that do not honor MP4 edit lists.</property>
+                                <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
+This allows a player to initiate playback before downloading the entire file.</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
@@ -1524,14 +1523,15 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="Mp4HttpOptimize">
-                                <property name="label" translatable="yes">Web optimized</property>
+                              <object class="GtkCheckButton" id="AlignAVStart">
+                                <property name="label" translatable="yes">Align A/V Start</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">Optimize the layout of the MP4 file for progressive download.
-This allows a player to initiate playback before downloading the entire file.</property>
+                                <property name="tooltip_text" translatable="yes">Aligns the initial timestamps of all audio and video streams by
+inserting blank frames or dropping frames. May improve audio/video
+sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
