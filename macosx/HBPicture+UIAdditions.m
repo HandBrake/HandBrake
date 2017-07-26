@@ -13,8 +13,10 @@
 @dynamic maxHeight;
 @dynamic maxWidth;
 
-@dynamic maxHorizontalCrop;
-@dynamic maxVerticalCrop;
+@dynamic maxTopCrop;
+@dynamic maxBottomCrop;
+@dynamic maxLeftCrop;
+@dynamic maxRightCrop;
 
 #pragma mark - Editable state
 

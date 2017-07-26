@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13168.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13168.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -27,6 +27,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopCrop" id="4Z9-jd-EzH"/>
                         <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="mtZ-Ty-n6s" id="HQZ-ek-iiD">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -41,8 +42,7 @@
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="W6e-6e-e0G" id="rui-ft-8qd"/>
-                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="W6e-6e-e0G"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="4Z9-jd-EzH" id="c0Z-ZT-9Cf"/>
                     </connections>
                 </stepper>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
@@ -157,6 +157,7 @@ Custom allows for manual settings.</string>
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftCrop" id="ygC-Mk-gae"/>
                         <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="erl-nf-Xs5" id="UPJ-QD-Izo">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -171,8 +172,7 @@ Custom allows for manual settings.</string>
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="tYZ-2h-zIg" id="IBB-vL-VJ7"/>
-                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="tYZ-2h-zIg"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="ygC-Mk-gae" id="YCc-wM-Iep"/>
                     </connections>
                 </stepper>
                 <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="LTu-ic-Ty9">
@@ -214,6 +214,7 @@ Custom allows for manual settings.</string>
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomCrop" id="9V7-cf-abT"/>
                         <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="ZKT-as-B7p" id="UHe-hi-SJo">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -228,8 +229,7 @@ Custom allows for manual settings.</string>
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="I1t-eF-byM" id="fjV-Mm-Iuz"/>
-                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxVerticalCrop" id="I1t-eF-byM"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="9V7-cf-abT" id="oaG-Bl-ag8"/>
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="Bmd-c8-9hp">
@@ -708,7 +708,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="FwZ-6T-zJe">
                     <rect key="frame" x="151" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -979,7 +979,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="2s0-5k-fjU">
                     <rect key="frame" x="240" y="281" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -999,6 +999,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
+                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightCrop" id="X5t-bh-W3a"/>
                         <binding destination="-2" name="enabled2" keyPath="self.picture" previousBinding="qtl-2n-uKP" id="WyG-bu-8aC">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -1013,8 +1014,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="HGA-OB-h94" id="Or7-sC-RVD"/>
-                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxHorizontalCrop" id="HGA-OB-h94"/>
+                        <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="X5t-bh-W3a" id="s5w-KS-LX0"/>
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="xKf-yr-nCk">

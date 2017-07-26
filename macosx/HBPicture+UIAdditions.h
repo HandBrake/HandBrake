@@ -19,8 +19,10 @@
 @property (nonatomic, readonly) int maxWidth;
 @property (nonatomic, readonly) int maxHeight;
 
-@property (nonatomic, readonly) int maxVerticalCrop;
-@property (nonatomic, readonly) int maxHorizontalCrop;
+@property (nonatomic, readonly) int maxTopCrop;
+@property (nonatomic, readonly) int maxBottomCrop;
+@property (nonatomic, readonly) int maxLeftCrop;
+@property (nonatomic, readonly) int maxRightCrop;
 
 @property (nonatomic, readonly, getter=isKeepDisplayAspectEditable) BOOL keepDisplayAspectEditable;
 @property (nonatomic, readonly, getter=isCustomAnamorphicEnabled) BOOL customAnamorphicEnabled;

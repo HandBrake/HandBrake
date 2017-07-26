@@ -269,52 +269,36 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 
 - (BOOL)validateCropTop:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
-    [self validateVCrop:ioValue];
+    [self validateCrop:ioValue max:self.maxTopCrop];
     return YES;
 }
 
 - (BOOL)validateCropBottom:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
-    [self validateVCrop:ioValue];
+    [self validateCrop:ioValue max:self.maxBottomCrop];
     return YES;
 }
 
 - (BOOL)validateCropLeft:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
-    [self validateHCrop:ioValue];
+    [self validateCrop:ioValue max:self.maxLeftCrop];
     return YES;
 }
 
 - (BOOL)validateCropRight:(id *)ioValue error:(NSError * __autoreleasing *)outError
 {
-    [self validateHCrop:ioValue];
+    [self validateCrop:ioValue max:self.maxRightCrop];
     return YES;
 }
 
-- (void)validateHCrop:(NSNumber **)ioValue
+- (void)validateCrop:(NSNumber **)ioValue  max:(int)maxCrop
 {
     if (nil != *ioValue)
     {
         int value = [*ioValue intValue];
-        if (value >= self.maxHorizontalCrop)
+        if (value >= maxCrop)
         {
-            *ioValue =  @(self.maxHorizontalCrop);
-        }
-        else if (value < 0)
-        {
-            *ioValue = @0;
-        }
-    }
-}
-
-- (void)validateVCrop:(NSNumber **)ioValue
-{
-    if (nil != *ioValue)
-    {
-        int value = [*ioValue intValue];
-        if (value >= self.maxVerticalCrop)
-        {
-            *ioValue =  @(self.maxVerticalCrop);
+            *ioValue =  @(maxCrop);
         }
         else if (value < 0)
         {
@@ -414,14 +398,44 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     return self.sourceHeight - self.cropTop - self.cropBottom;
 }
 
-- (int)maxVerticalCrop
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxTopCrop
 {
-    return self.sourceHeight / 2 - 2;
+    return [NSSet setWithObjects:@"cropBottom", nil];
 }
 
-- (int)maxHorizontalCrop
+- (int)maxTopCrop
 {
-    return self.sourceWidth / 2 - 2;
+    return self.sourceHeight - self.cropBottom - 32;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxBottomCrop
+{
+    return [NSSet setWithObjects:@"cropTop", nil];
+}
+
+- (int)maxBottomCrop
+{
+    return self.sourceHeight - self.cropTop - 32;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxLeftCrop
+{
+    return [NSSet setWithObjects:@"cropRight", nil];
+}
+
+- (int)maxLeftCrop
+{
+    return self.sourceWidth - self.cropRight - 32;
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingMaxRightCrop
+{
+    return [NSSet setWithObjects:@"cropLeft", nil];
+}
+
+- (int)maxRightCrop
+{
+    return self.sourceWidth - self.cropLeft - 32;
 }
 
 - (int)sourceDisplayWidth
