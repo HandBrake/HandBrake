@@ -4201,6 +4201,73 @@ Colon separated list of encoder options.</property>
                         <property name="margin_bottom">0</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+])dnl
+ifelse(eval(gtk_version < 316), 1, filter_output([
+                        <child>
+                          <object class="GtkBox" id="audio_toggle_hbox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="hexpand">False</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkBox" id="audio_toggle_vbox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <property name="hexpand">False</property>
+                                <property name="vexpand">True</property>
+                                <child>
+                                  <object class="GtkToggleButton" id="audio_list_toggle">
+                                    <property name="label" translatable="yes">Track List</property>
+                                    <property name="active">True</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Show Output Audio Track List</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="halign">fill</property>
+                                    <signal name="toggled" handler="audio_list_toggled_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="audio_selection_toggle">
+                                    <property name="label" translatable="yes">Track Selection</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Show Source Track Selection Options</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="halign">fill</property>
+                                    <signal name="toggled" handler="audio_selection_toggled_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSeparator" id="audio_separator">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+]), filter_output([
                         <child>
                           <object class="GtkStackSidebar" id="AudioStackSidebar">
                             <property name="visible">True</property>
@@ -4216,6 +4283,8 @@ Colon separated list of encoder options.</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
+]))dnl
+filter_output([
                         <child>
                           <object class="GtkStack" id="AudioStack">
                             <property name="homogeneous">True</property>
@@ -4956,6 +5025,73 @@ Colon separated list of encoder options.</property>
                         <property name="margin_bottom">0</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+])dnl
+ifelse(eval(gtk_version < 316), 1, filter_output([
+                        <child>
+                          <object class="GtkBox" id="subtitle_toggle_hbox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="hexpand">False</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkBox" id="subtitle_toggle_vbox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <property name="hexpand">False</property>
+                                <property name="vexpand">True</property>
+                                <child>
+                                  <object class="GtkToggleButton" id="subtitle_list_toggle">
+                                    <property name="label" translatable="yes">Track List</property>
+                                    <property name="active">True</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Show Output Subtitle Track List</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="halign">fill</property>
+                                    <signal name="toggled" handler="subtitle_list_toggled_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="subtitle_selection_toggle">
+                                    <property name="label" translatable="yes">Track Selection</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Show Source Track Selection Options</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="halign">fill</property>
+                                    <signal name="toggled" handler="subtitle_selection_toggled_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSeparator" id="subtitle_separator">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+]), filter_output([
                         <child>
                           <object class="GtkStackSidebar" id="SubtitleStackSidebar">
                             <property name="visible">True</property>
@@ -4971,6 +5107,8 @@ Colon separated list of encoder options.</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
+]))dnl
+filter_output([
                         <child>
                           <object class="GtkStack" id="SubtitleStack">
                             <property name="homogeneous">True</property>
@@ -5116,7 +5254,7 @@ Colon separated list of encoder options.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="subtitle_defaults_tab">
+                              <object class="GtkBox" id="subtitle_selection_tab">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -5126,13 +5264,13 @@ Colon separated list of encoder options.</property>
                                 <property name="margin_bottom">12</property>
                                 <property name="hexpand">True</property>
                                 <child>
-                                  <object class="GtkBox" id="subtitle_defaults_box1">
+                                  <object class="GtkBox" id="subtitle_selection_box1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="orientation">horizontal</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <object class="GtkBox" id="subtitle_defaults_box2">
+                                      <object class="GtkBox" id="subtitle_selection_box2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="orientation">vertical</property>

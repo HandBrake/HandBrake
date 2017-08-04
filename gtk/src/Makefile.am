@@ -114,6 +114,9 @@ data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps
 	cp $(srcdir)/internal_defaults.json .
 	glib-compile-resources --generate --target=$@ --c-name ghb_data --manual-register $<
 
+if GHB_GTK_3_16
+UI=316
+else
 if GHB_GTK_3_14
 UI=314
 else
@@ -121,6 +124,7 @@ if GHB_GTK_3_12
 UI=312
 else
 UI=300
+endif
 endif
 endif
 

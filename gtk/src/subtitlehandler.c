@@ -1609,3 +1609,30 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
     gtk_tree_path_free(tp);
 }
 
+G_MODULE_EXPORT void
+subtitle_list_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    GtkToggleButton * selection = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
+                                                "subtitle_selection_toggle"));
+    gtk_toggle_button_set_active(selection, !active);
+
+    GtkStack  * stack;
+    GtkWidget * tab;
+
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "SubtitleStack"));
+    if (active)
+        tab = GHB_WIDGET(ud->builder, "subtitle_list_tab");
+    else
+        tab = GHB_WIDGET(ud->builder, "subtitle_selection_tab");
+    gtk_stack_set_visible_child(stack, tab);
+}
+
+G_MODULE_EXPORT void
+subtitle_selection_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    GtkToggleButton * list = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
+                                                    "subtitle_list_toggle"));
+    gtk_toggle_button_set_active(list, !active);
+}

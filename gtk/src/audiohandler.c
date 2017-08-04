@@ -2446,3 +2446,31 @@ void ghb_init_audio_defaults_ui(signal_user_data_t *ud)
     list_box = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "audio_avail_lang"));
     ghb_init_lang_list_box(list_box);
 }
+
+G_MODULE_EXPORT void
+audio_list_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    GtkToggleButton * selection = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
+                                                    "audio_selection_toggle"));
+    gtk_toggle_button_set_active(selection, !active);
+
+    GtkStack  * stack;
+    GtkWidget * tab;
+
+    stack = GTK_STACK(GHB_WIDGET(ud->builder, "AudioStack"));
+    if (active)
+        tab = GHB_WIDGET(ud->builder, "audio_list_tab");
+    else
+        tab = GHB_WIDGET(ud->builder, "audio_selection_tab");
+    gtk_stack_set_visible_child(stack, tab);
+}
+
+G_MODULE_EXPORT void
+audio_selection_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    gboolean active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+    GtkToggleButton * list = GTK_TOGGLE_BUTTON(GHB_WIDGET(ud->builder,
+                                                    "audio_list_toggle"));
+    gtk_toggle_button_set_active(list, !active);
+}
