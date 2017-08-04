@@ -71,6 +71,7 @@ printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
 # autoconf
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
+sudo -v
 tar -xf autoconf-2.69.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd autoconf-2.69 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
@@ -81,6 +82,7 @@ echo -en "${CREL}"
 # automake
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15"
+sudo -v
 tar -xf automake-1.15.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd automake-1.15 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../automake-1.15.log 2>&1 || print_fail_and_exit
@@ -91,6 +93,7 @@ echo -en "${CREL}"
 # cmake
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.8.2"
+sudo -v
 echo "You may safely dismiss and ignore any prompt to install Java."
 tar -xf cmake-3.8.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd cmake-3.8.2 >/dev/null 2>&1 || print_fail_and_exit
@@ -101,6 +104,7 @@ ${SUDO} make install >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
 # libtool
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
+sudo -v
 tar -xf libtool-2.4.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd libtool-2.4.6 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
@@ -111,6 +115,7 @@ echo -en "${CREL}"
 # pkg-config
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.1"
+sudo -v
 tar -xf pkg-config-0.29.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd pkg-config-0.29.1 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.1.log 2>&1 || print_fail_and_exit
@@ -121,6 +126,7 @@ echo -en "${CREL}"
 # yasm
 cd "${TEMP_DIR}"
 printf "Building    [%02i/%02i] %s" "6" "${TOTAL}" "yasm 1.3.0"
+sudo -v
 tar -xf yasm-1.3.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd yasm-1.3.0 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
