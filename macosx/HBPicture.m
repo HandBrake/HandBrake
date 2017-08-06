@@ -725,6 +725,11 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
             self.modulus = 16;
         }
 
+        if (self.modulus <= 0 || self.modulus > 16)
+        {
+            self.modulus = 2;
+        }
+
         // Assume max picture settings initially.
         self.keepDisplayAspect = [preset[@"PictureKeepRatio"] boolValue];
 
