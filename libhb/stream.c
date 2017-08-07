@@ -5534,6 +5534,37 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 title->geometry.par.den = ic->streams[i]->sample_aspect_ratio.den;
             }
 
+            int j;
+            for (j = 0; j < ic->streams[i]->nb_side_data; j++)
+            {
+                AVPacketSideData sd = ic->streams[i]->side_data[j];
+                switch (sd.type)
+                {
+                    case AV_PKT_DATA_DISPLAYMATRIX:
+                    {
+                        int rotation = av_display_rotation_get((int32_t *)sd.data);
+                        switch (rotation) {
+                            case 90:
+                                title->rotation = HB_ROTATION_90;
+                                break;
+                            case 180:
+                            case -180:
+                                title->rotation = HB_ROTATION_180;
+                                break;
+                            case -90:
+                            case 270:
+                                title->rotation = HB_ROTATION_270;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+
             title->video_codec = WORK_DECAVCODECV;
             title->video_codec_param = codecpar->codec_id;
             if (ic->iformat->raw_codec_id != AV_CODEC_ID_NONE)
