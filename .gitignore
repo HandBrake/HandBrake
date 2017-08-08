@@ -7,6 +7,7 @@ win/CS/*.VC.db
 win/CS/**/*.Cache
 win/CS/**/*.user
 win/CS/packages/**/*
+win/CS/**/applicationhost.config
 
 # Xcode user data
 xcuserdata
