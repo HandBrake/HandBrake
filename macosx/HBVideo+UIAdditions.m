@@ -119,6 +119,10 @@
     {
         return @"CQ:";
     }
+    else if (self.encoder & HB_VCODEC_VT_MASK)
+    {
+        return @"%:";
+    }
     else
     {
         return @"QP:";

@@ -55,7 +55,7 @@ BUILD.out += $(TEST.install.exe)
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox Foundation
+    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics CoreVideo CoreMedia AudioToolbox VideoToolbox Foundation
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m

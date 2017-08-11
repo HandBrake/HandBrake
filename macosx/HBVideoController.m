@@ -31,7 +31,10 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     IBOutlet NSBox          *fDividerLine;
     IBOutlet NSBox          *fPresetsBox;
     IBOutlet NSSlider       *fPresetsSlider;
-
+    
+    // VideoToolbox Presets Box
+    IBOutlet NSView *fVideoToolboxPresetsBox;
+    
     // Text Field to show the expanded opts from unparse()
     IBOutlet NSTextField *fDisplayX264PresetsUnparseTextField;
 }
@@ -236,6 +239,10 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         {
             self.advancedController.hidden = NO;
         }
+    }
+    else if (self.video.encoder == HB_VCODEC_VT_H264)
+    {
+        fPresetsBox.contentView = fVideoToolboxPresetsBox;
     }
     else if (self.video.encoder & HB_VCODEC_FFMPEG_MASK)
     {

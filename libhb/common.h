@@ -495,7 +495,7 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          areBframes:        boolean to note if b-frames are used */
-#define HB_VCODEC_MASK         0x00FFFFF
+#define HB_VCODEC_MASK         0x0FFFFFF
 #define HB_VCODEC_INVALID      0x0000000
 #define HB_VCODEC_THEORA       0x0000002
 #define HB_VCODEC_FFMPEG_MPEG4 0x0000010
@@ -509,18 +509,21 @@ struct hb_job_s
 #define HB_VCODEC_QSV_H265_MASK     0x0000600
 #define HB_VCODEC_QSV_H265     HB_VCODEC_QSV_H265_8BIT
 #define HB_VCODEC_QSV_MASK     0x0000F00
+#define HB_VCODEC_VT_H264      0x0100000
+#define HB_VCODEC_VT_H265      0x0200000
+#define HB_VCODEC_VT_MASK      0x0F00000
 #define HB_VCODEC_X264_8BIT    0x0010000
 #define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
 #define HB_VCODEC_X264_10BIT   0x0020000
 #define HB_VCODEC_X264_MASK    0x0030000
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264)
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264|HB_VCODEC_VT_H264)
 #define HB_VCODEC_X265_8BIT    0x0001000
 #define HB_VCODEC_X265         HB_VCODEC_X265_8BIT
 #define HB_VCODEC_X265_10BIT   0x0002000
 #define HB_VCODEC_X265_12BIT   0x0004000
 #define HB_VCODEC_X265_16BIT   0x0008000
 #define HB_VCODEC_X265_MASK    0x000F000
-#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK)
+#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK|HB_VCODEC_VT_H265)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)
@@ -1193,6 +1196,7 @@ extern hb_work_object_t hb_encvorbis;
 extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
+extern hb_work_object_t hb_encvt;
 extern hb_work_object_t hb_encavcodeca;
 extern hb_work_object_t hb_reader;
 
