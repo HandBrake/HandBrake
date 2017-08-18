@@ -37,6 +37,7 @@
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Options:LogLevelConverter x:Key="LogLevelConverter" />
         <Options:FileSizeConverter x:Key="fileSizeConverter" />
+        <Converters:OptionTabConverter x:Key="optionTabConverter" />
         
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -72,7 +73,7 @@
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
             <StackPanel Orientation="Vertical" Margin="11,5,-1,0">
 
-                <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}}" SelectedItem="{Binding SelectedTab}"
+                <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
                      BorderThickness="0" Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate>

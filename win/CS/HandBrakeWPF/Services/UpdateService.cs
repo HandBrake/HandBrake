@@ -20,6 +20,8 @@ namespace HandBrakeWPF.Services
     using HandBrake.ApplicationServices.Utilities;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
+
     using AppcastReader = HandBrakeWPF.Utilities.AppcastReader;
 
     /// <summary>
@@ -61,6 +63,11 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void PerformStartupUpdateCheck(Action<UpdateCheckInformation> callback)
         {
+            if (UwpDetect.IsUWP())
+            {
+                return; // Disable Update checker if we are in a UWP container.
+            }
+
             // Make sure it's running on the calling thread
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {

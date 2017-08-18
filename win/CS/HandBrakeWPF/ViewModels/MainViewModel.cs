@@ -1254,6 +1254,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public bool IsQueueShowingInLine { get; set; } = false;
 
+        public bool IsUWP { get; } = UwpDetect.IsUWP();
+
         #endregion
 
         #region Commands 

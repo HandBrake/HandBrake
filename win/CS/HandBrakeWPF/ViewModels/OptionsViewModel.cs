@@ -162,6 +162,14 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
+        public bool IsUWP
+        {
+            get
+            {
+                return UwpDetect.IsUWP();
+            }
+        }
+
         #region General
 
         /// <summary>

@@ -159,6 +159,7 @@
     <Compile Include="Converters\Filters\SharpenPresetConverter.cs" />
     <Compile Include="Converters\Options\FileSizeConverter.cs" />
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
+    <Compile Include="Converters\OptionTabConverter.cs" />
     <Compile Include="Converters\PresetsMenuConverter.cs" />
     <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Utilities\Portable.cs" />
     <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\UwpDetect.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
