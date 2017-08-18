@@ -1,0 +1,31 @@
+From 67d5f1023e4299a5f2741e2523e559d892f1bb56 Mon Sep 17 00:00:00 2001
+From: Anton Khirnov <anton@khirnov.net>
+Date: Thu, 17 Aug 2017 12:15:58 +0200
+Subject: [PATCH] h264dec: use a large enough field for reference list
+ modification values
+
+pic_num can be at most 17-bit, so uint8_t is not sufficient.
+
+Found-By: Bradley Sepos <bradley@bradleysepos.com>
+CC: libav-stable@libav.org
+(cherry picked from commit f70f71d60c7ae88c19078a48dc6e0789b78c7300)
+Signed-off-by: Anton Khirnov <anton@khirnov.net>
+---
+ libavcodec/h264dec.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/h264dec.h b/libavcodec/h264dec.h
+index d27f98b..b815aa4 100644
+--- a/libavcodec/h264dec.h
++++ b/libavcodec/h264dec.h
+@@ -268,7 +268,7 @@ typedef struct H264SliceContext {
+                                          *   according to picture reordering in slice header */
+     struct {
+         uint8_t op;
+-        uint8_t val;
++        uint32_t val;
+     } ref_modifications[2][32];
+     int nb_ref_modifications[2];
+ 
+-- 
+2.1.4
