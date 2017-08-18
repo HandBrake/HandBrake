@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using HandBrake.ApplicationServices.Model;
 
+    using HandBrakeWPF.Utilities;
+
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
@@ -20,7 +22,7 @@ namespace HandBrakeWPF.Services.Queue.Model
     /// </summary>
     public class QueueTask : PropertyChangedBase
     {
-        private static int id = 0;
+        private static int id;
         private QueueItemStatus status;
 
         #region Properties
@@ -32,7 +34,7 @@ namespace HandBrakeWPF.Services.Queue.Model
         {
             this.Status = QueueItemStatus.Waiting;
             id = id + 1;
-            this.Id = id;
+            this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
         }
 
         /// <summary>
@@ -55,10 +57,10 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.ScannedSourcePath = scannedSourcePath;
 
             id = id + 1;
-            this.Id = id;
+            this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
         }
 
-        public int Id { get; private set; }
+        public string Id { get; }
 
         /// <summary>
         /// Gets or sets ScannedSource.
@@ -109,7 +111,7 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public override int GetHashCode()
         {
-            return this.Id;
+            return this.Id.GetHashCode();
         }
     }
 }
