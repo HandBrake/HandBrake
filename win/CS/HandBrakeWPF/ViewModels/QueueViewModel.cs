@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -452,6 +453,22 @@ namespace HandBrakeWPF.ViewModels
             mvm.EditQueueJob(new EncodeTask(task.Task));
         }
 
+        public void OpenSourceDirectory(QueueTask task)
+        {
+            if (task != null)
+            {
+                this.OpenDirectory(task.ScannedSourcePath);
+            }
+        }
+
+        public void OpenDestinationDirectory(QueueTask task)
+        {
+            if (task != null)
+            {
+                this.OpenDirectory(task.Task.Destination);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -508,6 +525,26 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
 
             base.OnDeactivate(close);
+        }
+
+        private void OpenDirectory(string directory)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    directory = Path.GetDirectoryName(directory);
+                    if (directory != null && Directory.Exists(directory))
+                    {
+                        Process.Start(directory);
+
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.MainViewModel_UnableToLaunchDestDir, Resources.MainViewModel_UnableToLaunchDestDirSolution, exc);
+            }
         }
 
         /// <summary>

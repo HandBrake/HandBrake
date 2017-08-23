@@ -962,4 +962,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
     <value>Subtitle Tracks</value>
   </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>Open Destination Directory</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>Open Source Directory</value>
+  </data>
 </root>

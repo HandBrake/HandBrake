@@ -188,13 +188,16 @@
             </i:Interaction.Triggers>
 
             <ListBox.ContextMenu>
-                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                     <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
                     <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />                 
+                    <Separator />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
                     <Separator />
                     <!--<MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" />-->
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
@@ -261,7 +264,7 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate x:Name="QueueItemTemplate">
-
+                    
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="40" />

@@ -1926,6 +1926,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Destination Directory.
+        /// </summary>
+        public static string QueueView_OpenDestDir {
+            get {
+                return ResourceManager.GetString("QueueView_OpenDestDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Source Directory.
+        /// </summary>
+        public static string QueueView_OpenSourceDir {
+            get {
+                return ResourceManager.GetString("QueueView_OpenSourceDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string QueueView_Options {
