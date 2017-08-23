@@ -968,4 +968,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
     <value>Open Source Directory</value>
   </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>Preview {0} of {1}</value>
+  </data>
 </root>

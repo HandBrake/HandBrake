@@ -42,6 +42,7 @@ namespace HandBrakeWPF.ViewModels
         private Source source;
         private Title currentTitle;
         private bool isMkv;
+        private int selectedPreview = 2;
 
         public SummaryViewModel(IScan scanService, IUserSettingService userSettingService)
         {
@@ -137,6 +138,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool IsPreviousPreviewControlVisible { get; set; } = false;
         public bool IsNextPreviewControlVisible { get; set; } = false;
+        public bool IsPreviewInfoVisible { get; set; } = false;
+        public string PreviewInfo { get; set; }
 
         #endregion
 
@@ -289,6 +292,62 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedOutputFormat = container;
         }
 
+        public void NextPreview()
+        {
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            this.selectedPreview = this.selectedPreview + 1;
+            this.UpdatePreviewFrame();
+            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
+            this.NotifyOfPropertyChange(() => this.PreviewInfo);
+
+            if (this.selectedPreview == maxPreview)
+            {
+                this.IsNextPreviewControlVisible = false;
+                this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
+            }
+        }
+
+        public void PreviousPreview()
+        {
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            this.selectedPreview = this.selectedPreview - 1;
+            this.UpdatePreviewFrame();
+            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
+            this.NotifyOfPropertyChange(() => this.PreviewInfo);
+
+            if (this.selectedPreview == 1)
+            {
+                this.IsPreviousPreviewControlVisible = false;
+                this.NotifyOfPropertyChange(() => this.IsPreviousPreviewControlVisible);
+            }
+        }
+
+        public void SetPreviewControlVisibility(bool isPreviousVisible, bool isNextVisible)
+        {
+            if (this.selectedPreview > 1)
+            {
+                this.IsPreviousPreviewControlVisible = isPreviousVisible;
+            }
+            else
+            {
+                this.IsPreviousPreviewControlVisible = false;
+            }
+
+            if (this.selectedPreview < this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount))
+            {
+                this.IsNextPreviewControlVisible = isNextVisible;
+            }
+            else
+            {
+                this.IsNextPreviewControlVisible = false;
+            }
+
+            this.NotifyOfPropertyChange(() => this.IsPreviousPreviewControlVisible);
+            this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
+        }
+
+        #region Private Methods
+
         private void UpdateSettings(Preset selectedPreset)
         {
             // Main Window Settings
@@ -368,6 +427,10 @@ namespace HandBrakeWPF.ViewModels
 
             this.AspectInfo = string.Empty;
             this.NotifyOfPropertyChange(() => this.AspectInfo);
+
+            // Preview
+            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+            this.NotifyOfPropertyChange(() => this.PreviewInfo);
         }
 
         private string GetFilterDescription()
@@ -506,6 +569,8 @@ namespace HandBrakeWPF.ViewModels
             if (this.Task.Anamorphic == Anamorphic.Loose && this.Task.Width < 32)
             {
                 this.PreviewNotAvailable = true;
+                this.IsPreviewInfoVisible = false;
+                this.NotifyOfPropertyChange(() => this.IsPreviewInfoVisible);
                 return;
             }
 
@@ -518,7 +583,7 @@ namespace HandBrakeWPF.ViewModels
             BitmapImage image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, 2, HBConfigurationFactory.Create()); // TODO make preview image configurable? 
+                image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, HBConfigurationFactory.Create()); 
             }
             catch (Exception exc)
             {
@@ -530,6 +595,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
+                this.IsPreviewInfoVisible = true;
+                this.NotifyOfPropertyChange(() => this.IsPreviewInfoVisible);
                 this.NotifyOfPropertyChange(() => this.PreviewImage);
             }
         }
@@ -538,5 +605,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.OutputFormatChanged?.Invoke(this, e);
         }
+
+        #endregion
     }
 }

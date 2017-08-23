@@ -2421,6 +2421,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview {0} of {1}.
+        /// </summary>
+        public static string SummaryView_PreviewInfo {
+            get {
+                return ResourceManager.GetString("SummaryView_PreviewInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rotation.
         /// </summary>
         public static string SummaryView_Rotation {
