@@ -115,7 +115,7 @@
             
             <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Bottom" HorizontalAlignment="Center"  
                     Background="Black" Opacity="0.66" Margin="10,5,20,5">
-                <TextBlock Text="Preview 2 of 10" FontSize="14" Foreground="White" Padding="8,3" />
+                <TextBlock Text="Preview 2 of 10" FontSize="14" Foreground="White" Padding="8,3" Visibility="Collapsed" />
             </Border>
 
             <Grid Margin="10,5,0,0" Grid.Row="1">
