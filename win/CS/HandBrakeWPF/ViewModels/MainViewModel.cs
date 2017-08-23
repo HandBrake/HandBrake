@@ -729,6 +729,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.StartEndRangeItems);
                     this.NotifyOfPropertyChange(() => this.SelectedTitle);
                     this.NotifyOfPropertyChange(() => this.Angles);
+                    this.NotifyOfPropertyChange(() => this.SourceInfo);
 
                     // Default the Start and End Point dropdowns
                     this.SelectedStartPoint = 1;
@@ -1150,6 +1151,32 @@ namespace HandBrakeWPF.ViewModels
         public bool IsQueueShowingInLine { get; set; } = false;
 
         public bool IsUWP { get; } = UwpDetect.IsUWP();
+
+        public string SourceInfo
+        {
+            get
+            {
+                if (this.SelectedTitle != null)
+                {
+                    int parW = this.SelectedTitle.ParVal.Width;
+                    int parH = this.SelectedTitle.ParVal.Height;
+                    int displayW = this.SelectedTitle.Resolution.Width * parW / parH;
+
+                    return string.Format("{0}x{1} ({2}x{3}), {4} FPS, {5} {6}, {7} {8}", 
+                        this.SelectedTitle.Resolution.Width, 
+                        this.SelectedTitle.Resolution.Height,
+                        displayW,
+                        this.SelectedTitle.Resolution.Height, 
+                        this.SelectedTitle.Fps, 
+                        this.SelectedTitle.AudioTracks.Count, 
+                        ResourcesUI.MainView_AudioTrackCount,
+                        this.SelectedTitle.Subtitles.Count,
+                        ResourcesUI.MainView_SubtitleTracksCount);
+                }
+
+                return string.Empty;
+            }
+        }
 
         #endregion
 

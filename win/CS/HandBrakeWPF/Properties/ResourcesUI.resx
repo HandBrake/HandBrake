@@ -956,4 +956,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="SummaryView_storage" xml:space="preserve">
     <value>storage</value>
   </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>Audio Tracks</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>Subtitle Tracks</value>
+  </data>
 </root>

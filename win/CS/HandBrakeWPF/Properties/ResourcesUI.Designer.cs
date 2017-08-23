@@ -682,6 +682,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audio Tracks.
+        /// </summary>
+        public static string MainView_AudioTrackCount {
+            get {
+                return ResourceManager.GetString("MainView_AudioTrackCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse.
         /// </summary>
         public static string MainView_Browser {
@@ -948,6 +957,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_SubtitlesTab {
             get {
                 return ResourceManager.GetString("MainView_SubtitlesTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle Tracks.
+        /// </summary>
+        public static string MainView_SubtitleTracksCount {
+            get {
+                return ResourceManager.GetString("MainView_SubtitleTracksCount", resourceCulture);
             }
         }
         
